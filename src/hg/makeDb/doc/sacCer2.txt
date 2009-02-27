@@ -3,12 +3,32 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.4 2009/02/12 19:50:19 hiram Exp $
+#  $Id: sacCer2.txt,v 1.5 2009/02/27 19:24:53 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
     mkdir -p /hive/data/genomes/sacCer2/download
     cd /hive/data/genomes/sacCer2/download
+    TOP=/hive/data/genomes/sacCer2/download
+    for D in gene_registry literature_curation oracle_schema protein_info \
+	protein_info/hypothetical_peptides
+do
+    mkdir -p ${D}
+    cd ${D}
+    wget -l 1 --timestamping -np -nd --cut-dirs=1 -r -X "archive" \
+	"http://downloads.yeastgenome.org/${D}/"
+    rm -f index.* robots.txt
+    cd ${TOP}
+done
+
+    mkdir sgd.chromosomes
+    for C in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 mt
+do
+    wget --timestamping \
+"http://downloads.yeastgenome.org/sequence/genomic_sequence/chromosomes/fasta/ch
+r${C}.fsa" -O sgd.chromosomes/chr${C}.fsa
+done
+
     #	convert chrom names to something reasonable, they are now roman nums
     mkdir -p chromosomes
     # bash scripting follows:
@@ -144,8 +164,8 @@ if (keepGoing) print;
 
 #########################################################################
 # CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE - 2009-02-10 - Hiram)
-    mkdir /hive/data/sacCer2/bed/sgdAnnotations
-    cd /hive/data/sacCer2/bed/sgdAnnotations
+    mkdir /hive/data/genomes/sacCer2/bed/sgdAnnotations
+    cd /hive/data/genomes/sacCer2/bed/sgdAnnotations
     #	trim the delivered S.cerevisiae.gff file to get rid of the FASTA section
     #	and fixup the chrM and 2-micron chrom names:
     awk '
@@ -233,6 +253,42 @@ close (FH);
     hgsql sacCer2 -e 'load data local infile "notes.txt" \
           into table sgdOtherDescription;'
 
+    ## Clean up some stray names:
+    cd /hive/data/genomes/sacCer2/bed/sgdAnnotations
+    hgsql -N -e "select name from sgdGene;" sacCer2 \
+	| sort -u > sacCer2.sgdGene.name.txt
+    hgsql -N -e "select name from sgdPep;" sacCer2 \
+	| sort -u > sacCer2.sgdPep.name.txt
+    comm -23 sacCer2.sgdPep.name.txt sacCer2.sgdGene.name.txt | while read N
+do
+    hgsql -e "delete from sgdPep where name=\"$N\";" sacCer2
+done
+
+    hgsql -N -e "select name from sgdDescription;" sacCer2 \
+        | sort -u > sacCer2.sgdDescription.name.txt
+    comm -23 sacCer2.sgdDescription.name.txt sacCer2.sgdGene.name.txt \
+	| while read N
+do
+    hgsql -e "delete from sgdDescription where name=\"${N}\";" sacCer2
+done
+
+############################################################################
+# catch up to other tables in sacCer1 - (DONE - 2009-02-24 - Hiram)
+    #	can simply transfer these tables across from sacCer1:
+    hgsqldump --all -c --tab=. sacCer1 sgdAbundance sgdLocalization sgdToPfam
+
+    #	hgLoadSqlTab doesn't like the comment characters:
+    grep -v "^--" sgdToPfam.sql \
+	| hgLoadSqlTab sacCer2 sgdToPfam stdin sgdToPfam.txt
+    grep -v "^--" sgdAbundance.sql \
+	| hgLoadSqlTab sacCer2 sgdAbundance stdin sgdAbundance.txt
+    grep -v "^--" sgdLocalization.sql \
+	| hgLoadSqlTab sacCer2 sgdLocalization stdin sgdLocalization.txt
+
+    hgsqldump --all -c --tab=. sacCer1 yeastP2P
+    grep -v "^--" yeastP2P.sql \
+	| hgLoadSqlTab sacCer2 yeastP2P stdin yeastP2P.txt
+
 ############################################################################
 # ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE - 2009-02-10 - Hiram)
     cd /hive/data/sacCer2/bed/sgdAnnotation
@@ -303,14 +359,13 @@ sacCer2.downloadDir = sacCer2
     #	logFile: var/dbload/hgwdev/logs/2009.02.10-14:25:48.dbload.log
     #	real    18m21.436s
 
-XXXX TBD
-    # enable daily alignment and update of hgwdev
+    # enable daily alignment and update of hgwdev (DONE - 2009-02-24 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
-    # add ce6 to:
+    # add sacCer2 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added ce6 - C. elegans WS190" \
+    cvs ci -m "Added sacCer2 - S. cerevisiae" \
 	etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
@@ -839,7 +894,7 @@ zcat SS/$chr.ss.gz \
     | /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/phastCons - \
 	ave.cons.mod,ave.noncons.mod --expected-lengths 75 \
 	--target-coverage 0.5 --quiet --seqname $chr --idpref $chr \
-	--viterbi ELEMENTS/$pref.bed --score --require-informative 0 > $tmpFile
+	--viterbi ELEMENTS/$chr.bed --score --require-informative 0 > $tmpFile
 gzip -c $tmpFile > POSTPROBS/$chr.pp.gz
 rm $tmpFile
 '_EOF_'
@@ -924,3 +979,266 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+    #	To create the tree diagram for the details page, use this tree
+    #	definition in http://genome.ucsc.edu/cgi-bin/phyloGif
+
+((((((S._cerevisiae,S._paradoxus),S._mikatae),S._kudriavzevii),S._bayanus),S._castelli),S._kluyveri)
+
+#########################################################################
+## Annotate the sacCer2 7-way sequence with genes
+    mkdir /hive/data/genomes/sacCer2/bed/multiz7way/anno
+    cd /hive/data/genomes/sacCer2/bed/multiz7way/anno
+    mkdir genes
+    # using sgdGene
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from sgdGene" sacCer2 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/sacCer2.sgdGene.gz
+
+    (cat ../maf/*.maf | genePredToMafFrames sacCer2 stdin stdout \
+sacCer2 genes/sacCer2.sgdGene.gz \
+    | gzip > multiz7way.mafFrames.gz) > frames.log 2>&1
+
+    zcat multiz7way.mafFrames.gz \
+	| sort -k1,1 -k2,2n | hgLoadMafFrames sacCer2 multiz7wayFrames stdin
+
+#########################################################################
+## simpleRepeats (DONE - 2009-02-12 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/simpleRepeat
+    cd /hive/data/genomes/sacCer2/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` -smallClusterHub=swarm \
+	-workhorse=hgwdev sacCer2 > do.log 2>&1
+
+#########################################################################
+## Regulatory Code (DONE - 2009-02-17 - Hiram)
+    #	liftOver from sacCer1
+    mkdir /hive/data/genomes/sacCer2/bed/transRegCode
+    cd /hive/data/genomes/sacCer2/bed/transRegCode
+    #	lifting sacCer1 data to this assembly
+    hgsql -N -e "select chrom,chromStart,chromEnd,name,score,chipEvidence,consSpecies from transRegCode" sacCer1 \
+    | liftOver -bedPlus=5 -tab stdin \
+/usr/local/apache/htdocs/goldenPath/sacCer1/liftOver/sacCer1ToSacCer2.over.chain.gz \
+	transRegCode.lifted.bed transRegCode.unMapped.bed
+
+    hgsql -N -e "select chrom,chromStart,chromEnd,name,tfCount,tfList,bindVals fromtransRegCodeProbe;" sacCer1 \
+    | liftOver -bedPlus=4 -tab stdin \
+/usr/local/apache/htdocs/goldenPath/sacCer1/liftOver/sacCer1ToSacCer2.over.chain.gz \
+        transRegCodeProbe.lifted.bed transRegCodeProbe.unMapped.bed
+
+
+    hgLoadBed sacCer2 transRegCode transRegCode.lifted.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
+    #	Loaded 206672 elements of size 7
+    hgLoadBed sacCer2 transRegCodeProbe transRegCodeProbe.lifted.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/transRegCodeProbe.sql -tab
+    #	Loaded 6178 elements of size 7
+
+    hgsql sacCer2 < $HOME/kent/src/hg/lib/transRegCodeCondition.sql
+    hgsql sacCer2 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
+    hgsql sacCer2 < $HOME/kent/src/hg/lib/growthCondition.sql
+
+    hgsql -N -e "select * from transRegCodeCondition;" sacCer1 \
+    | hgsql sacCer2 -e \
+'load data local infile "/dev/stdin" into table transRegCodeCondition'
+
+    hgsql -N -e "select * from transRegCodeMotif;" sacCer1 \
+    | hgsql sacCer2 -e \
+'load data local infile "/dev/stdin" into table transRegCodeMotif'
+
+    hgsql -N -e "select * from growthCondition;" sacCer1 \
+    | hgsql sacCer2 -e \
+'load data local infile "/dev/stdin" into table growthCondition'
+
+#########################################################################
+# Oreganno track - (DONE - 2009-02-17 - Hiram)
+    #	liftOver from sacCer1 database
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,id,strand,name from oreganno;" sacCer1 \
+    | liftOver -bedPlus=4 -tab stdin \
+/usr/local/apache/htdocs/goldenPath/sacCer1/liftOver/sacCer1ToSacCer2.over.chain.gz \
+        oreganno.lifted.bed oreganno.unMapped.bed
+
+    hgsql sacCer2 < $HOME/kent/src/hg/lib/oreganno.sql
+
+    hgLoadBed -oldTable sacCer2 oreganno oreganno.lifted.bed -tab
+    #	Loaded 7302 elements of size 6
+
+    #	and load non-positional tracks from sacCer1:
+    hgsql -N -e "select * from oregannoAttr;" sacCer1 \
+	| hgLoadSqlTab -oldTable sacCer2 oregannoAttr \
+	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
+    hgsql -N -e "select * from oregannoLink;" sacCer1 \
+	| hgLoadSqlTab -oldTable sacCer2 oregannoLink \
+	    ~/humPhen/kent/src/hg/lib/oreganno.sql stdin
+
+#########################################################################
+# Regulatory Module - (DONE - 2009-02-17 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/regModule
+    cd /hive/data/genomes/sacCer2/bed/regModule
+    #	liftOver data from sacCer1
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,score,strand from esRegUpstreamRegion;" \
+	sacCer1 | liftOver -bedPlus=6 -tab stdin \
+/usr/local/apache/htdocs/goldenPath/sacCer1/liftOver/sacCer1ToSacCer2.over.chain.gz \
+        esRegUpstreamRegion.lifted.bed esRegUpstreamRegion.unMapped.bed
+
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,score,strand,gene from esRegGeneToMotif;" \
+	sacCer1 | liftOver -bedPlus=6 -tab stdin \
+/usr/local/apache/htdocs/goldenPath/sacCer1/liftOver/sacCer1ToSacCer2.over.chain.gz \
+        esRegGeneToMotif.lifted.bed esRegGeneToMotif.unMapped.bed
+
+    #	I do not see instructions in sacCer1 to create these tables,
+    #	so, dump their schemas:
+    hgsqldump --all -c -d --tab=. sacCer1 esRegUpstreamRegion esRegGeneToMotif
+    #	and data for these other two:
+    hgsqldump --all -c --tab=. sacCer1 esRegGeneToModule esRegMotif
+
+    hgLoadBed sacCer2 esRegGeneToMotif -sqlTable=esRegGeneToMotif.sql -tab \
+	esRegGeneToMotif.lifted.bed
+    #	Loaded 4002 elements of size 7
+    hgLoadBed sacCer2 esRegUpstreamRegion -sqlTable=esRegUpstreamRegion.sql \
+	-tab esRegUpstreamRegion.lifted.bed
+    #	Loaded 1670 elements of size 6
+    hgsql sacCer2 < esRegMotif.sql
+    hgsql sacCer2 -e \
+'load data local infile "esRegMotif.txt" into table esRegMotif;'
+    hgsql sacCer2 < esRegGeneToModule.sql
+    hgsql sacCer2 -e \
+'load data local infile "esRegGeneToModule.txt" into table esRegGeneToModule;'
+
+#########################################################################
+# creating tables for Gene Sorter (DONE - 2009-02-17 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/hgNear
+    cd /hive/data/genomes/sacCer2/bed/hgNear
+    hgClusterGenes sacCer2 sgdGene sgdIsoforms sgdCanonical
+    #	Got 6550 clusters, from 6717 genes in 18 chromosomes
+
+    # Make self mapping table for expression. 
+    hgsql -N -e 'select name from sgdGene;' sacCer2 \
+         | awk '{printf("%s\t%s\n", $1, $1);}' > sgdToSgd.tab
+    hgsql sacCer2 -e 'create table sgdToSgd ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  UNIQUE (value));'
+    hgsql sacCer2 \
+	-e 'load data local infile "sgdToSgd.tab" into table sgdToSgd'
+
+    # Make expression similarity table. 
+    hgExpDistance sacCer2 hgFixed.yeastChoCellCycle \
+	hgFixed.yeastChoCellCycleExps choExpDistance 
+    #	Have 6259 elements in hgFixed.yeastChoCellCycle
+    #	Got 6259 unique elements in hgFixed.yeastChoCellCycle
+    #	Made choExpDistance.tab
+
+#########################################################################
+# running the blastP operation to the other genomes for the gene sorter
+#	(DONE - 2009-02-18 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/hgNearBlastp
+    cd /hive/data/genomes/sacCer2/bed/hgNearBlastp
+    mkdir tmp 090218
+    pepPredToFa sacCer2 sgdPep 090218/sgdPep.faa
+
+    pepPredToFa hg18 knownGenePep 090218/hg18.known.faa
+    pepPredToFa mm9 knownGenePep 090218/mm9.known.faa
+    pepPredToFa rn4 knownGenePep 090218/rn4.known.faa
+    pepPredToFa danRer5 ensPep 090218/danRer5.ensPep.faa
+    pepPredToFa dm3 flyBasePep 090218/dm3.flyBasePep.faa
+    pepPredToFa ce6 sangerPep 090218/ce6.sangerPep.faa
+
+    # sanity check, number of lines in each faa file
+
+    cd 090218
+    cat << '_EOF_' > config.ra
+# Latest Yeast vs. other Gene Sorter orgs:
+# human, mouse, rat, zebrafish, fly, worm
+
+targetGenesetPrefix known
+targetDb sacCer2
+queryDbs hg18 mm9 rn4 danRer5 dm3 ce6
+
+sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
+hg18Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/hg18.known.faa
+mm9Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/mm9.known.faa
+rn4Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/rn4.known.faa
+danRer5Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/danRer5.ensPep.faa
+dm3Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/dm3.flyBasePep.faa
+ce6Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/ce6.sangerPep.faa
+
+buildDir /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218
+scratchDir /hive/data/genomes/sacCer2/bed/hgNearBlastp/tmp
+'_EOF_'
+    # << happy emacs
+    #	takes about an hour
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doHgNearBlastp.pl \
+	config.ra > do.log 2>&1 &
+    #	real    21m32.343s
+
+    #	one name seems to have snuck in here:
+    cd /hive/data/genomes/sacCer2/bed/hgNearBlastp
+    hgsql -N -e "select query from mmBlastTab;" sacCer2 \
+	| sort -u > sacCer2.mmBlastTab.query.txt
+    hgsql -N -e "select name from sgdGene;" sacCer2 \
+	| sort -u > sacCer2.sgdGene.name.txt
+    #	the single one is:
+    comm -23 sacCer2.mmBlastTab.query.txt sacCer2.sgdGene.name.txt
+    #	YDL038C
+    #	it was the same in all of them:
+    hgsql -e "delete from mmBlastTab where query=\"YDL038C\";" sacCer2
+    hgsql -e "delete from drBlastTab where query=\"YDL038C\";" sacCer2
+    hgsql -e "delete from dmBlastTab where query=\"YDL038C\";" sacCer2
+    hgsql -e "delete from ceBlastTab where query=\"YDL038C\";" sacCer2
+
+    hgsql -N -e "select query from knownBlastTab;" sacCer2 \
+	| sort -u > sacCer2.knownBlastTab.query.txt
+    comm -23 sacCer2.knownBlastTab.query.txt sacCer2.sgdGene.name.txt \
+	| while read N
+do
+    hgsql -e "delete from knownBlastTab where query=\"${N}\";" sacCer2
+done
+
+#########################################################################
+#  creating download files and pushQ (DONE - 2009-02-24 - Hiram)
+    cd /hive/data/genoems/sacCer2
+    #	there aren't any repeats on 2micron
+    touch bed/simpleRepeat/trfMaskChrom/2micron.bed
+    #	and, there are no RM files:
+    makeDownloads.pl -ignoreRepeatMasker sacCer2
+    #	edit the README files in:
+    #	./goldenPath/bigZips/README.txt
+    #	./goldenPath/database/README.txt
+    #	./goldenPath/liftOver/README.txt
+    #	./goldenPath/chromosomes/README.txt
+
+    mkdir pushQ
+    makePushQSql.pl sacCer2 > sacCer2.pushQ.sql
+    #	one warning:
+    #	sacCer2 does not have seq
+    #	it could not identify the following tables:
+    #	2micron_est
+    #	2micron_gap
+    #	2micron_gold
+    #	2micron_intronEst
+    #	2micron_mrna
+    #	growthCondition
+    #	sgdToPfam
+    #	yeastP2P
+    scp -p sacCer2.pushQ.sql hiram@hgwbeta:/tmp
+
+    ssh hgwbeta
+    hgsql qapushq < sacCer2.pushQ.sql
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-06-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("sacCer2", "blat10", "17792", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("sacCer2", "blat10", "17793", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
