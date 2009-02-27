@@ -456,6 +456,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-28312
 orderUrl http://www.scbt.com/product.php?datasheet=28312
 
+term GATA-1
+type Antibody
+targetDescription GATA binding protein 1 (globin transcription factor 1)
+antibodyDescription Rabbit polyclonal
+vendorName Donated by Dr. E.H. Bresnick, UW Madison
+vendorId
+orderUrl
+
 term GR
 type Antibody
 targetDescription Glucocorticoid Receptor
@@ -544,6 +552,14 @@ orderUrl http://www.abcam.com/index.html?datasheet=9051
 vendorName Abcam
 vendorId ab9051
 
+term JunD
+type Antibody
+antibodyDescription rabbit polyclonal IgG
+targetDescription TBD
+vendorName Santa Cruz Biotech
+vendorId sc-74
+orderUrl http://www.scbt.com/product.php?datasheet=74
+
 term KAP1
 type Antibody
 antibodyDescription rabbit polyclonal
@@ -592,6 +608,22 @@ orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
 
+term SREBP1
+type Antibody
+targetDescription Sterol regulatory element binding transcription factor 1
+antibodyDescription Rabbit polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-8984
+orderUrl http://www.scbt.com/product.php?datasheet=8984
+
+term SREBP2
+type Antibody
+targetDescription Sterol regulatory element binding transcription factor 2
+antibodyDescription Rabbit polyclonal
+vendorName 	 Cayman Chemical
+vendorId 10007663
+orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
+
 term SRF
 type Antibody
 targetDescription Serum response transcription factor
@@ -619,7 +651,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=735
 term TCF4
 type Antibody
 targetDescription TCF4 is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
-antibodyDescription Rabbit monoclonal 
+antibodyDescription Rabbit monoclonal
 vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
