@@ -42,7 +42,6 @@
 #define RANGE_CMD   "range"
 #define SEARCH_CMD  "search"
 #define META_SEARCH_CMD "meta_search"
-#define JSON_EXT    "" //".json"
 #define CMD_ARG     "cmd"
 
 #define GENOME_VAR "{genome}"
@@ -58,8 +57,8 @@
 #define END_VAR "{end}"
 #define END_ARG "end"
 #define FORMAT_ARG "format"
-#define ANNOJ_FLAT_FMT "annoj_model_flat"
-#define ANNOJ_NESTED_FMT "annoj_model_nested"
+#define ANNOJ_FLAT_FMT ".annoj-flat"
+#define ANNOJ_NESTED_FMT ".annoj-nested"
 #define ALLCHROMS_ARG "all_chroms"
 
 #define ALLCHROMS_ARG "all_chroms"
@@ -78,7 +77,7 @@
 //#define okSendHeader(format) fprintf(stdout,"Content-type: %s\n\n", ((format) ? (format) : "application/json"))
 
 // Error responses
-#define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
+#define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request [%s]", (cmd))
 #define ERR_NO_GENOME	errClientStatus(420, "Request error", "Genome required")
 #define ERR_NO_TRACK	errClientStatus(420, "Request error", "Track required")
 #define ERR_NO_GENOME_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to genome database %s", (db))
@@ -91,7 +90,7 @@
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in genome %s", (track), (db))
 #define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
 #define ERR_TABLE_INFO_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table information for %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
-#define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s is not supported", (format))
+#define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s unknown", (format))
 #define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in genome %s", (action), (track), (db))
 #define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
 #define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "Not implemented: %s", (feature))
@@ -212,14 +211,14 @@ void printItem(char *db, char *track, char *type, char *term);
 void jsonAddTableInfoOneTrack(struct json_object *o, struct hTableInfo *hti);
 // Add table info such as columns names keyed off 'table_properties'
 
-void printGenomes(struct dbDbClade *db, struct chromInfo *ci, time_t modified);
+void printGenomes(char *genome, char *chrom, struct dbDbClade *db, struct chromInfo *ci, time_t modified);
 // print an array of all genomes in list,
 // print genome hierarchy for all genomes
 // if only one genome in list, 
 //   print array of chromosomes in ci list (or empty list if null)
 // modified is latest update (unix) time of all relevant tables 
 
-void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti, time_t modified);
+void printTrackInfo(char *genome, char *track, struct trackDb *tdb, struct hTableInfo *hti, time_t modified);
 // Print genome and track information for the genome
 // If only one track is specified, print full details including html description page
 //
@@ -251,13 +250,16 @@ struct json_object *addCountUrl(struct json_object *o, char *url_name, char *tra
 // If start or end not required specify -1 
 // Returns object o
 
-struct json_object *addRangeChromUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom);
+void addRangeUrls(struct json_object *d, char *track, char *genome, char *chrom, int start, int end);
+// generic range URL templates
+
+struct json_object *addRangeChromUrl(struct json_object *o, char *url_name, char *extension, char *track, char *genome, char *chrom);
 // Add a range url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
 // Chrom can be NULL
 // Returns object o
 
-struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end);
+struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *extension, char *track, char *genome, char *chrom, int start, int end);
 // Add a range url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
 // Chrom can be NULL
