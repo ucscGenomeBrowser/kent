@@ -12,25 +12,15 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.38 2008/10/20 17:27:29 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.39 2009/02/28 00:36:42 angie Exp $";
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
  * otherwise just return 0 */
 {
 int thisSize = 0;
-
-/* first check to see if we can connect to the database */
-struct sqlConnection *conn = sqlMayConnect(db);
-
-if (conn != NULL)
-    {
-    sqlDisconnect(&conn);
-
-    /* we know there is a db out there */
+if (sqlDatabaseExists(db))
     thisSize = hChromSize(db, chromName);
-    }
-
 return thisSize;
 }
 
@@ -252,7 +242,7 @@ else
 hgSeqOptionsHtiCart(hti, cart);
 }
 
-static void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
+static void hgSeqConcatRegionsDb(char *db, char *chrom, int chromSize, char strand, char *name,
 			  int rCount, unsigned *rStarts, unsigned *rSizes,
 			  boolean *exonFlags, boolean *cdsFlags)
 /* Concatenate and print out dna for a series of regions. */
@@ -268,7 +258,6 @@ char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
-int chromSize = hgSeqChromSize(db, chrom);
 boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
 boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
 int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
@@ -387,7 +376,7 @@ freeDnaSeq(&cSeq);
 }
 
 
-static void hgSeqRegionsAdjDb(char *db, char *chrom, char strand, char *name,
+static void hgSeqRegionsAdjDb(char *db, char *chrom, int chromSize, char strand, char *name,
 		       boolean concatRegions, boolean concatAdjacent,
 		       int rCount, unsigned *rStarts, unsigned *rSizes,
 		       boolean *exonFlags, boolean *cdsFlags)
@@ -396,7 +385,7 @@ static void hgSeqRegionsAdjDb(char *db, char *chrom, char strand, char *name,
 {
 if (concatRegions || (rCount == 1))
     {
-    hgSeqConcatRegionsDb(db, chrom, strand, name,
+    hgSeqConcatRegionsDb(db, chrom, chromSize, strand, name,
 			 rCount, rStarts, rSizes, exonFlags, cdsFlags);
     }
 else
@@ -426,20 +415,20 @@ else
 	    }
 	len = (isRc ? (j - jEnd) : (jEnd - j));
 	lo  = (isRc ? (jEnd + 1) : j);
-	hgSeqConcatRegionsDb(db, chrom, strand, rName,
+	hgSeqConcatRegionsDb(db, chrom, chromSize, strand, rName,
 			     len, &rStarts[lo], &rSizes[lo], &exonFlags[lo],
 			     &cdsFlags[lo]);
 	}
     }
 }
 
-static void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
+static void hgSeqRegionsDb(char *db, char *chrom, int chromSize, char strand, char *name,
 		    boolean concatRegions,
 		    int rCount, unsigned *rStarts, unsigned *rSizes,
 		    boolean *exonFlags, boolean *cdsFlags)
 /* Concatenate and print out dna for a series of regions. */
 {
-hgSeqRegionsAdjDb(db, chrom, strand, name, concatRegions, FALSE,
+hgSeqRegionsAdjDb(db, chrom, chromSize, strand, name, concatRegions, FALSE,
 		  rCount, rStarts, rSizes, exonFlags, cdsFlags);
 }
 
@@ -482,7 +471,7 @@ maxStartsOffset = 0;
 addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 	   chromStart, chromEnd - chromStart, FALSE, FALSE, chromSize);
 
-hgSeqRegionsDb(db, chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
+hgSeqRegionsDb(db, chrom, chromSize, strand, name, FALSE, count, starts, sizes, exonFlags,
                cdsFlags);
 }
 
@@ -771,7 +760,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 		   bedItem->chromEnd, promoterSize, FALSE, FALSE, chromSize);
 	}
     snprintf(itemName, sizeof(itemName), "%s_%s", hti->rootName, bedItem->name);
-    hgSeqRegionsAdjDb(db, bedItem->chrom, bedItem->strand[0], itemName,
+    hgSeqRegionsAdjDb(db, bedItem->chrom, chromSize, bedItem->strand[0], itemName,
 		      concatRegions, concatAdjacent,
 		      count, starts, sizes, exonFlags, cdsFlags);
     totalCount += count;
