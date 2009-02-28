@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.127 2009/02/23 23:38:08 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.128 2009/02/28 00:34:00 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -31,6 +31,7 @@ static long sqlTotalQueries = 0;            /* total number of queries */
 static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
 static unsigned traceIndent = 0;            /* how much to indent */
 static char *indentStr = "                                                       ";
+static boolean sqlParanoid = FALSE;         /* extra squawking */
 
 struct sqlProfile
 /* a configuration profile for connecting to a server */
@@ -664,10 +665,10 @@ if (mysql_real_connect(
     if (abort)
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
 	    database, host, user, mysql_error(conn));
-    else
+    else if (sqlParanoid)
 	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
-		"pid=%ld\nASH: mysql: %s  pid=%ld\n", 
-	    database, host, user, (long)getpid(), mysql_error(conn), (long)getpid());
+		"mysql: %s  pid=%ld\n", 
+		database, host, user, mysql_error(conn), (long)getpid());
     return NULL;
     }
 
@@ -2416,3 +2417,8 @@ for (i=0; ;i++)
 return cloneString(tableName);
 }
 
+void sqlSetParanoid(boolean beParanoid)
+/* If set to TRUE, will make more diagnostic stderr messages. */
+{
+sqlParanoid = beParanoid;
+}

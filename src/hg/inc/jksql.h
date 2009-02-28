@@ -479,4 +479,7 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
  * uniqueness between different processes at least.  FreeMem the result
  * when you are done. */
 
+void sqlSetParanoid(boolean beParanoid);
+/* If set to TRUE, will make more diagnostic stderr messages. */
+
 #endif /* JKSQL_H */
