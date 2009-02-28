@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.395 2009/02/18 22:11:45 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.396 2009/02/28 00:38:09 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -536,6 +536,7 @@ static void hCentralMkCache()
 {
 centralDb = cfgOption2("central", "db");
 centralCc = sqlConnCacheNewProfile("central");
+sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
 if ((conn == NULL) || !cartTablesOk(conn))
     {
@@ -553,6 +554,7 @@ if ((conn == NULL) || !cartTablesOk(conn))
                  "specify.");
     }
 sqlConnCacheDealloc(centralCc, &conn);
+sqlSetParanoid(FALSE);
 }
 
 struct sqlConnection *hConnectCentral()
