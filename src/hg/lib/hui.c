@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.160 2009/02/27 19:07:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.161 2009/02/28 00:45:36 kate Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3845,7 +3845,8 @@ for (ix = 0; ix < membersOfView->count; ix++)
         }
     }
 
-printf("<EM><B>Select %s:</EM></B><BR>\n", membersOfView->title);
+toLowerN(membersOfView->title, 1);
+printf("<B>Select %s:</B><BR>\n", membersOfView->title);
 puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
