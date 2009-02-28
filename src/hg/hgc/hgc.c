@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1510 2009/02/27 19:05:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1511 2009/02/28 00:06:51 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -277,6 +277,9 @@ char *gvPrevType = NULL;
 
 /* initialized by getCtList() if necessary: */
 struct customTrack *theCtList = NULL;
+
+/* getDNA stuff actually works when the database doesn't exist! */
+boolean dbIsFound = FALSE;
 
 /* forwards */
 char *getPredMRnaProtSeq(struct genePred *gp);
@@ -3591,7 +3594,6 @@ struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
 char rootName[256];
 char parsedChrom[32];
-boolean dbIsFound = sqlDatabaseExists(database);
 if (dbIsFound)
     {
     hParseTableName(database, tbl, rootName, parsedChrom);
@@ -3639,7 +3641,7 @@ if (dbIsFound)
     cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
 if (dbIsFound)
-puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
+    puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
 }
 
 boolean dnaIgnoreTrack(char *track)
@@ -4108,7 +4110,6 @@ char *pos = NULL;
 char *chrom = NULL;
 int start = 0;
 int end = 0;
-boolean dbIsFound = sqlDatabaseExists(database);
 
 if (sameString(action, EXTENDED_DNA_BUTTON))
     {
@@ -20805,7 +20806,7 @@ scientificName = hScientificName(database);
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
 
-boolean dbIsFound = sqlDatabaseExists(database);
+dbIsFound = sqlDatabaseExists(database);
 
 if (dbIsFound)
     seqName = hgOfficialChromName(database, cartString(cart, "c"));
