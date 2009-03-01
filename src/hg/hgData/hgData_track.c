@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.13 2009/02/27 11:29:15 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.14 2009/03/01 08:50:03 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -227,12 +227,15 @@ if (*track)
     addRangeUrls(i, tdb->tableName, genome, NULL, -1, -1);
     }
 else
+    {
     addTrackUrl(i, "url_self", genome, NULL);
+    }
 addTrackUrl(i, "url_track_list", genome, NULL);
 addGenomeUrl(i, "url_genome_list", NULL, NULL);
 addGenomeUrl(i, "url_genome_chroms", genome, NULL);
 // add a genome object under the main 'tracks' and 'genome' objects
 // add tracks and groups under their genome object
+json_object_object_add(i,"track_count", json_object_new_int(slCount(tdb)));
 json_object_object_add(i, "tracks", trackGen);
 json_object_object_add(i, "groups", groupGen);
 json_object_object_add(trackGen, genome, trackArr);
