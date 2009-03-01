@@ -34,6 +34,7 @@
 #define TRACK_EXPIRES 15*60   // 15 minutes for track data & metadata
 #define GENOME_EXPIRES 60*60  // 60 minutes for genomes 
 #define INDEX_EXPIRES 60*60   // 60 minutes for index page
+#define SEARCH_EXPIRES 0      // dont put expires header for search for now
 
 #define PREFIX      "/g/"
 #define GENOMES_CMD "genomes"

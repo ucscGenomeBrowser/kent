@@ -5,7 +5,124 @@
 #include "bedGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.17 2009/02/27 11:30:39 mikep Exp $";
+#include "cart.h"
+#include "hgFind.h"
+#include "hgFindSpec.h"
+
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.18 2009/03/01 08:54:25 mikep Exp $";
+struct cart *cart; /* The cart where we keep persistent variables. */
+
+struct json_object *addSearchGenomeUrl(struct json_object *o, char *url_name, char *genome, char *term)
+// Add a search url to object o with name 'url_name'.
+// Genome can be NULL
+// Item can be NULL
+// Returns object o
+{
+char url[1024];
+safef(url, sizeof(url), PREFIX SEARCH_CMD "/%s/%s", 
+    (genome && *genome) ? genome : GENOME_VAR,
+    (term && *term) ? term : TERM_VAR);
+json_object_object_add(o, url_name, json_object_new_string(url));
+return o;
+}
+
+struct json_object *addSearchGenomeTrackUrl(struct json_object *o, char *url_name, char *genome, char *track, char *term)
+// Add a search url to object o with name 'url_name'.
+// Genome must be supplied if track is supplied, otherwise can be NULL
+// Track can be NULL
+// Item can be NULL
+// Returns object o
+{
+char url[1024];
+safef(url, sizeof(url), PREFIX SEARCH_CMD "/%s/%s/%s", 
+    (genome && *genome) ? genome : GENOME_VAR,
+    (track && *track) ? track : TRACK_VAR,
+    (term && *term) ? term : TERM_VAR);
+json_object_object_add(o, url_name, json_object_new_string(url));
+return o;
+}
+
+static struct json_object *jsonHgPos(struct hgPos *pos, char *genome, char *track)
+{
+struct json_object *a = json_object_new_array();
+struct json_object *o;
+struct hgPos *p;
+if (pos)
+    for (p = pos ; p ; p = p->next)
+	{
+	o = json_object_new_object();
+	json_object_array_add(a, o);
+	json_object_object_add(o, "chrom", p->chrom ? json_object_new_string(p->chrom) : NULL);
+	json_object_object_add(o, "start", json_object_new_int(p->chromStart));
+	json_object_object_add(o, "end", json_object_new_int(p->chromEnd));
+	json_object_object_add(o, "name", p->name ? json_object_new_string(p->name) : NULL);
+	json_object_object_add(o, "description", p->description ? json_object_new_string(p->description) : NULL);
+	json_object_object_add(o, "id", p->browserName ? json_object_new_string(p->browserName) : NULL);
+	addRangeUrl(o, "url_range", "", track, genome, p->chrom, p->chromStart, p->chromEnd);
+	addRangeUrl(o, "url_range_annoj_nested", ANNOJ_NESTED_FMT, track, genome, p->chrom, p->chromStart, p->chromEnd);
+	addRangeUrl(o, "url_range_annoj_flat", ANNOJ_FLAT_FMT, track, genome, p->chrom, p->chromStart, p->chromEnd);
+	addCountUrl(o, "url_count", track, genome, p->chrom, p->chromStart, p->chromEnd);
+	}
+return a;
+}
+
+static struct json_object *jsonHgPosTable(struct hgPosTable *pos, char *genome, char *track)
+{
+struct json_object *a = json_object_new_array();
+struct json_object *o;
+struct hgPosTable *p;
+for (p = pos ; p ; p = p->next)
+    {
+    o = json_object_new_object();
+    json_object_array_add(a, o);
+    json_object_object_add(o, "track", p->name ? json_object_new_string(p->name) : NULL);
+    json_object_object_add(o, "description", p->description ? json_object_new_string(p->description) : NULL);
+    json_object_object_add(o, "hits", jsonHgPos(p->posList, genome, track));
+    }
+return a;
+}
+
+static struct json_object *jsonFindPos(struct hgPositions *p, char *genome, char *track, char *query)
+{
+struct json_object *o = json_object_new_object();
+json_object_object_add(o, "genome", json_object_new_string(genome));
+if (track && *track)
+    json_object_object_add(o, "track", json_object_new_string(track));
+json_object_object_add(o, "query", json_object_new_string(query));
+json_object_object_add(o, "result_count", json_object_new_int(p->posCount));
+addSearchGenomeUrl(o, "url_search_item_genome", genome, query);
+addSearchGenomeTrackUrl(o, "url_search_item_genome_track", genome, track, query);
+json_object_object_add(o, "tracks", jsonHgPosTable(p->tableList, genome, track));
+json_object_object_add(o, "single_hit", jsonHgPos(p->singlePos, genome, track));
+return o;
+}
+
+void searchTracks(time_t modified, char *genome, char *track, char *query)
+{
+char where[512];
+struct hgPositions *p, *hgp = NULL;
+struct json_object *o = json_object_new_object();
+struct json_object *a = json_object_new_array();
+json_object_object_add(o, "positions", a);
+if (query && *query)
+    {
+    if (track && *track)
+	{
+	safef(where, sizeof(where), "searchTable = '%s'", track);
+	hgp = hgPositionsFindWhere(genome, query, "extraCgi", "hgAppName", NULL, TRUE, where);
+	}
+    else
+	hgp = hgPositionsFind(genome, query, "extraCgi", "hgAppName", NULL, TRUE);
+    }
+for ( p = hgp ; p ; p = p->next)
+    {
+    json_object_array_add(a, jsonFindPos(p, genome, track, query));
+    }
+okSendHeader(0, SEARCH_EXPIRES);
+printf(json_object_to_json_string(o));
+json_object_put(o);
+}
+
 
 void doGet()
 {
@@ -24,7 +141,7 @@ char *cmd = cgiUsualString(CMD_ARG, "");
 char *format = cgiUsualString(FORMAT_ARG, "");
 char *genome = cgiUsualString(GENOME_ARG, "");
 char *track = cgiUsualString(TRACK_ARG, "");
-//char *term = cgiOptionalString(TERM_ARG);
+char *term = cgiUsualString(TERM_ARG, "");
 char *chrom = cgiUsualString(CHROM_ARG, "");
 int start = cgiOptionalInt(START_ARG, 0);
 int end = cgiOptionalInt(END_ARG, 0);
@@ -117,6 +234,9 @@ else if (sameOk(TRACKS_CMD, cmd))
     }
 else if (sameOk(SEARCH_CMD, cmd))
     {
+    if (!*genome)
+	ERR_NO_GENOME;
+    searchTracks(modified, genome, track, term);
     }
 else if (sameOk(META_SEARCH_CMD, cmd))
     {
