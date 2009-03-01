@@ -31,7 +31,8 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.214 2008/10/22 18:19:15 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.214.12.1 2009/03/01 23:52:00 mikep Exp $";
+
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2590,7 +2591,9 @@ touppers(upcTerm);
 if (sameString(hfs->searchType, "knownGene"))
     {
     if (gotFullText(db))
+	{
 	found = findKnownGeneFullText(db, term, hgp);
+	}
     else	/* NOTE, in a few months (say by April 1 2006) get rid of else -JK */
 	{
 	if (!found && hTableExists(db, "kgAlias"))
@@ -2725,7 +2728,6 @@ int padding = isEmpty(paddingStr) ? 0 : atoi(paddingStr);
 boolean found = FALSE;
 char *description = NULL;
 char buf[2048];
-
 if (isNotEmpty(termPrefix) && startsWith(termPrefix, term))
     term += strlen(termPrefix);
 if (isEmpty(term))
@@ -2790,7 +2792,6 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    }
 	slAddHead(&table->posList, pos);
 	}
-
     }
 if (table != NULL)
     slReverse(&table->posList);
@@ -2951,6 +2952,14 @@ struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
 /* Return table of positions that match term or NULL if none such. */
 {
+return hgPositionsFindWhere(db, term, extraCgi, hgAppNameIn, cart, multiTerm, NULL);
+}
+
+struct hgPositions *hgPositionsFindWhere(char *db, char *term, char *extraCgi,
+	char *hgAppNameIn, struct cart *cart, boolean multiTerm, char *where)
+/* Return table of positions that match term or NULL if none such.
+ * Consult only hgFindSpec rows matching where clause */
+{
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
 regmatch_t substrs[4];
 boolean canonicalSpec = FALSE;
@@ -3047,7 +3056,10 @@ else
     struct hgFindSpec *hfs;
     boolean done = FALSE;
 
-    hgFindSpecGetAllSpecs(db, &shortList, &longList);
+    if (where)
+	longList = loadFindSpecs(db, where);
+    else
+	hgFindSpecGetAllSpecs(db, &shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	{
 	if (hgFindUsingSpec(db, hfs, term, hgp, relativeFlag, relStart, relEnd,

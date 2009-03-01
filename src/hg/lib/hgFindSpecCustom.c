@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.15 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.15.18.1 2009/03/01 23:52:00 mikep Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -518,7 +518,7 @@ hFreeConn(&conn);
 return(hfsList);
 }
 
-static struct hgFindSpec *loadFindSpecs(char *db, char *where)
+struct hgFindSpec *loadFindSpecs(char *db, char *where)
 /* Load find specs for the given where. */
 {
 struct hgFindSpec *hfsList = NULL;

@@ -102,6 +102,9 @@ struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit);
 /* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */
 
+struct hgFindSpec *loadFindSpecs(char *db, char *where);
+/* Load find specs for the given where. */
+
 void hgFindSpecGetAllSpecs(char *db,
                            struct hgFindSpec **retShortCircuitList,
 			   struct hgFindSpec **retAdditiveList);

@@ -15,6 +15,11 @@ struct hgPositions *hgPositionsFind(char *db, char *query, char *extraCgi,
 	char *hgAppName, struct cart *cart, boolean multiTerm);
 /* Return table of positions that match query or NULL if none such. */
 
+struct hgPositions *hgPositionsFindWhere(char *db, char *term, char *extraCgi,
+	char *hgAppNameIn, struct cart *cart, boolean multiTerm, char *where);
+/* Return table of positions that match term or NULL if none such.
+ * Consult only hgFindSpec rows matching where clause */
+
 struct hgPositions *findGenomePos(char *db, char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
 /* Search for positions in genome that match user query.   
  * Return an hgp if the query results in a unique position.  
