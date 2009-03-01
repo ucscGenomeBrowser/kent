@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.15 2009/02/27 11:29:33 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.16 2009/03/01 08:50:34 mikep Exp $";
 
 static struct json_object *addRangeOrCountFullUrl(struct json_object *o, boolean isCount, char *url_name, char *extension, char *track, char *genome, char *chrom, boolean addStartEnd, int start, int end)
 // Add a count url to object o with name 'url_name'.
@@ -266,18 +266,18 @@ addRangeChromUrl(d, "url_range_chrom_annoj_flat", ANNOJ_FLAT_FMT, track, genome,
 static void addRangeNavigationUrls(struct json_object *d, char *track, char *genome, char *chrom, int start, int end, struct coords *c)
 // Navigation range URLs
 {
-addRangeUrl(d, "url_range_left", "", track, genome, chrom, c->left, start);
-addRangeUrl(d, "url_range_right", "", track, genome, chrom, end, c->right);
+addRangeUrl(d, "url_range_prev", "", track, genome, chrom, c->left, start);
+addRangeUrl(d, "url_range_next", "", track, genome, chrom, end, c->right);
 addRangeUrl(d, "url_range_zoom_in10x", "", track, genome, chrom, c->leftIn10x, c->rightIn10x);
 addRangeUrl(d, "url_range_zoom_out10x", "", track, genome, chrom, c->leftOut10x, c->rightOut10x);
 
-addRangeUrl(d, "url_range_left_annoj_nested", ANNOJ_NESTED_FMT, track, genome, chrom, c->left, start);
-addRangeUrl(d, "url_range_right_annoj_nested", ANNOJ_NESTED_FMT, track, genome, chrom, end, c->right);
+addRangeUrl(d, "url_range_prev_annoj_nested", ANNOJ_NESTED_FMT, track, genome, chrom, c->left, start);
+addRangeUrl(d, "url_range_next_annoj_nested", ANNOJ_NESTED_FMT, track, genome, chrom, end, c->right);
 addRangeUrl(d, "url_range_zoom_in10x_annoj_nested", ANNOJ_NESTED_FMT, track, genome, chrom, c->leftIn10x, c->rightIn10x);
 addRangeUrl(d, "url_range_zoom_out10x_annoj_nested", ANNOJ_NESTED_FMT, track, genome, chrom, c->leftOut10x, c->rightOut10x);
 
-addRangeUrl(d, "url_range_left_annoj_flat", ANNOJ_FLAT_FMT, track, genome, chrom, c->left, start);
-addRangeUrl(d, "url_range_right_annoj_flat", ANNOJ_FLAT_FMT, track, genome, chrom, end, c->right);
+addRangeUrl(d, "url_range_prev_annoj_flat", ANNOJ_FLAT_FMT, track, genome, chrom, c->left, start);
+addRangeUrl(d, "url_range_next_annoj_flat", ANNOJ_FLAT_FMT, track, genome, chrom, end, c->right);
 addRangeUrl(d, "url_range_zoom_in10x_annoj_flat", ANNOJ_FLAT_FMT, track, genome, chrom, c->leftIn10x, c->rightIn10x);
 addRangeUrl(d, "url_range_zoom_out10x_annoj_flat", ANNOJ_FLAT_FMT, track, genome, chrom, c->leftOut10x, c->rightOut10x);
 }
@@ -292,8 +292,8 @@ addCountUrl(d, "url_self", track, genome, chrom, start, end);
 addCountUrl(d, "url_count", track, genome, NULL, -1, -1);
 addCountChromUrl(d, "url_count_chrom", track, genome, NULL);
 // navigation count URL templates
-addCountUrl(d, "url_count_left", track, genome, chrom, c.left, start);
-addCountUrl(d, "url_count_right", track, genome, chrom, end, c.right);
+addCountUrl(d, "url_count_prev", track, genome, chrom, c.left, start);
+addCountUrl(d, "url_count_next", track, genome, chrom, end, c.right);
 addCountUrl(d, "url_count_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
 addCountUrl(d, "url_count_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
 // range URLs
@@ -319,8 +319,8 @@ addRangeUrl(d, "url_self", format, track, genome, chrom, start, end);
 addCountUrl(d, "url_count", track, genome, NULL, -1, -1);
 addCountChromUrl(d, "url_count_chrom", track, genome, NULL);
 // Navigation count URL templates
-addCountUrl(d, "url_count_left", track, genome, chrom, c.left, start);
-addCountUrl(d, "url_count_right", track, genome, chrom, end, c.right);
+addCountUrl(d, "url_count_prev", track, genome, chrom, c.left, start);
+addCountUrl(d, "url_count_next", track, genome, chrom, end, c.right);
 addCountUrl(d, "url_count_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
 addCountUrl(d, "url_count_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
 // Range URLs
