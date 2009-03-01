@@ -4,7 +4,7 @@
 //#include "dystring.h"
 
 
-static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.9 2009/02/27 11:27:43 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.10 2009/03/01 08:49:29 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -47,7 +47,7 @@ return opts;
 void printUsage(char *reqEtag, time_t reqModified)
 {
 // dont need to continue if this changes to this file have not been committed
-char *version = "$Date: 2009/02/27 11:27:43 $"; // local time, not GMT
+char *version = "$Date: 2009/03/01 08:49:29 $"; // local time, not GMT
 time_t modified = strToTime(version, "$" "Date: %Y/%m/%d %T " "$");// careful CVS doesnt mangle format
 if (notModifiedResponse(reqEtag, reqModified, modified))
     return;
@@ -152,7 +152,7 @@ addResource(res, "search_item_genome",
 	PREFIX SEARCH_CMD "/" GENOME_VAR "/" TERM_VAR,
         "List of items matching " TERM_VAR " in genome " GENOME_VAR " (NOT IMPLEMENTED)", NULL);
 addResource(res, "search_item_genome_track", 
-	PREFIX SEARCH_CMD "/" TRACK_VAR "/" GENOME_VAR "/" TERM_VAR,
+	PREFIX SEARCH_CMD "/" GENOME_VAR "/" TRACK_VAR "/" TERM_VAR,
         "List of items matching " TERM_VAR " in track " TRACK_VAR " in genome " GENOME_VAR, NULL);
 
 // Details for one item in a track in a genome, or a list of all items matching a term
