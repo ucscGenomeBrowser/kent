@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.161 2009/02/28 00:45:36 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.162 2009/03/02 23:58:03 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3020,7 +3020,7 @@ if (scoreMinStr != NULL)
     puts("\n<P><B>Shade of lowest-scoring items: </B>");
     // Add javascript to select so that its color is consistent with option colors:
     int level = 255 - (255*minGrayLevel / maxShade);
-    printf("<SELECT NAME=\"%s.%s\" STYLE='color: #%02x%02x%02x' onchange=\"",
+    printf("<SELECT NAME=\"%s.%s\" STYLE='color: #%02x%02x%02x' class='normalText' onchange=\"",
 	   prefix, MIN_GRAY_LEVEL, level, level, level);
     int i;
     for (i = 1;  i < maxShade;  i++)
@@ -3283,18 +3283,33 @@ if(setting)
         opened = TRUE;
         }
     char varName[256];
-    char *min = strSwapChar(cloneString(setting),':',0);
-    char *max = min + strlen(min) + 1;
+    char *min=setting;
+    char *max = strrchr(setting,':');
+    if(max != NULL)
+        {
+        max += 1;
+        min = strSwapChar(cloneString(setting),':',0);
+        }
+    //char *min = strSwapChar(cloneString(setting),':',0);
+    //char *max = min + strlen(min) + 1;
     puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
     safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MIN);
     cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), min), 4);
-    puts("<TD align='right'><B>max:</B><TD align='left'>");
-    safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MAX);
-    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), max), 4);
+    if(max != NULL)
+        {
+        puts("<TD align='right'><B>max:</B><TD align='left'>");
+        safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MAX);
+        cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), max), 4);
+        freeMem(min);
+        }
     showScoreLimits(tdb, "<TD align='left' colspan=3> ",SCORE_FILTER,"0:1000");
     puts("</TR>");
     if(trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL)
+        {
+        printf("<TR><TD align='right'colspan=5>");
         scoreGrayLevelCfgUi(cart, tdb, name, 1000);
+        puts("</TR>");
+        }
     }
 if(opened)
     {
