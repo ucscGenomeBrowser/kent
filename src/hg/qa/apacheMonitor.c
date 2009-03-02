@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.13 2009/02/26 17:45:48 angie Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.14 2009/03/02 17:53:06 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -207,11 +207,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     status = sqlUnsigned(row[2]);
     logStatus(status);
     logMachine(row[1]);
-    if (sameString(row[7], "-")) robotcount++;
+    if (isEmpty(row[7]) || sameString(row[7], "-")) robotcount++;
     total++;
     if (status == 500 && write500)
+	{
+	if (row[6] == NULL) row[6] = "";
+	if (row[7] == NULL) row[7] = "";
         fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
 	        row[0], row[1], row[3], row[4], row[5], row[6], row[7], row[8]);
+	}
     } 
 sqlFreeResult(&sr);
 if (write500) carefulClose(&outputFileHandle);
