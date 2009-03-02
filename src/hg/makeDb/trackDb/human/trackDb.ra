@@ -737,49 +737,49 @@ type bedGraph 4
     shortLabel HGDP Hzy Bantu
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Bantu populations in Africa)
     color 224, 0, 0
-    priority 1.5
+    priority 2
 
     track hgdpHzyMideast
     subTrack hgdpHzy
     shortLabel HGDP Hzy Mideast
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Mideast)
     color 0,0,200
-    priority 2
+    priority 3
 
     track hgdpHzyEurope
     subTrack hgdpHzy
     shortLabel HGDP Hzy Europe
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Europe)
     color 240,144,0
-    priority 3
+    priority 4
 
     track hgdpHzySAsia
     subTrack hgdpHzy
     shortLabel HGDP Hzy S. Asia
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (S. Asia)
     color 0,0,0
-    priority 4
+    priority 5
 
     track hgdpHzyEAsia
     subTrack hgdpHzy
     shortLabel HGDP Hzy E. Asia
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (E. Asia)
     color 0,200,0
-    priority 5
+    priority 6
 
     track hgdpHzyOceania
     subTrack hgdpHzy
     shortLabel HGDP Hzy Oceania
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Oceania)
     color 0,200,200
-    priority 6
+    priority 7
 
     track hgdpHzyAmericas
     subTrack hgdpHzy
     shortLabel HGDP Hzy Americas
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Americas)
     color 224,192,0
-    priority 7
+    priority 8
 
 track hgdpIhs
 compositeTrack on
