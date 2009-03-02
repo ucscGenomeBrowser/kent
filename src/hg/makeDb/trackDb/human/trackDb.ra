@@ -732,6 +732,13 @@ type bedGraph 4
     color 224, 0, 0
     priority 1
 
+    track hgdpHzyBantu
+    subTrack hgdpHzy
+    shortLabel HGDP Hzy Bantu
+    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Bantu populations in Africa)
+    color 224, 0, 0
+    priority 1.5
+
     track hgdpHzyMideast
     subTrack hgdpHzy
     shortLabel HGDP Hzy Mideast
@@ -787,10 +794,10 @@ autoScaleDefault Off
 maxHeightPixels 100:20:10
 type bedGraph 4
 
-    track hgdpIhsAfrica
+    track hgdpIhsBantu
     subTrack hgdpIhs
-    shortLabel HGDP iHS Africa
-    longLabel Human Genome Diversity Project iHS (Africa)
+    shortLabel HGDP iHS Bantu
+    longLabel Human Genome Diversity Project iHS (Bantu populations in Africa)
     color 224, 0, 0
     priority 1
 
@@ -849,10 +856,10 @@ autoScaleDefault Off
 maxHeightPixels 100:20:10
 type bedGraph 4
 
-    track hgdpXpehhAfrica
+    track hgdpXpehhBantu
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH Africa
-    longLabel Human Genome Diversity Project XP-EHH (Africa)
+    shortLabel HGDP XP-EHH Bantu
+    longLabel Human Genome Diversity Project XP-EHH (Bantu populations in Africa)
     color 224, 0, 0
     priority 1
 
@@ -1237,41 +1244,83 @@ visibility hide
 type bed 6 + 
 exonArrows off
 
+    track hapmapSnpsASW
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs ASW
+    longLabel HapMap SNPs from the ASW Population (African Ancestry in SouthWestern United States)
+    priority 1
+
     track hapmapSnpsCEU
     subTrack hapmapSnps
-    shortLabel SNPs CEU
-    longLabel SNPs from the CEU Population
-    priority 1
+    shortLabel HapMap SNPs CEU
+    longLabel HapMap SNPs from the CEU Population (Northern and Western European Ancestry in Utah, US - CEPH)
+    priority 2
 
     track hapmapSnpsCHB
     subTrack hapmapSnps
-    shortLabel SNPs CHB
-    longLabel SNPs from the CHB Population
-    priority 2
+    shortLabel HapMap SNPs CHB
+    longLabel HapMap SNPs from the CHB Population (Han Chinese in Beijing, China)
+    priority 3
+
+    track hapmapSnpsCHD
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs CHD
+    longLabel HapMap SNPs from the CHD Population (Chinese Ancestry in Metropolitan Denver, CO, US)
+    priority 4
+
+    track hapmapSnpsGIH
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs GIH
+    longLabel HapMap SNPs from the GIH Population (Gujarati Indians in Houston, TX, US)
+    priority 5
 
     track hapmapSnpsJPT
     subTrack hapmapSnps
-    shortLabel SNPs JPT
-    longLabel SNPs from the JPT Population
-    priority 3
+    shortLabel HapMap SNPs JPT
+    longLabel HapMap SNPs from the JPT Population (Japanese in Tokyo, Japan)
+    priority 6
+
+    track hapmapSnpsLWK
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs LWK
+    longLabel HapMap SNPs from the LWK Population (Luhya in Webuye, Kenya)
+    priority 7
+
+    track hapmapSnpsMEX
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs MEX
+    longLabel HapMap SNPs from the MEX Population (Mexican Ancestry in Los Angeles, CA, US)
+    priority 8
+
+    track hapmapSnpsMKK
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs MKK
+    longLabel HapMap SNPs from the MKK Population (Masai in Kinyawa, Kenya)
+    priority 9
+
+    track hapmapSnpsTSI
+    subTrack hapmapSnps
+    shortLabel HapMap SNPs TSI
+    longLabel HapMap SNPs from the TSI Population (Toscani in Italia)
+    priority 10
 
     track hapmapSnpsYRI
     subTrack hapmapSnps
-    shortLabel SNPs YRI
-    longLabel SNPs from the YRI Population
-    priority 4
+    shortLabel HapMap SNPs YRI
+    longLabel HapMap SNPs from the YRI Population (Yoruba in Ibadan, Nigeria)
+    priority 11
 
     track hapmapAllelesChimp
     subTrack hapmapSnps
     shortLabel Chimp Alleles
     longLabel Orthologous Alleles from Chimp (panTro2)
-    priority 5
+    priority 100
 
     track hapmapAllelesMacaque
     subTrack hapmapSnps
     shortLabel Macaque Alleles
     longLabel Orthologous Alleles from Macaque (rheMac2)
-    priority 6
+    priority 101
 
 
 track mrna
