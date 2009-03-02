@@ -748,4 +748,180 @@ posSelAEModel8.bed
 hgLoadBed hivVax003Vax004 posSelAEModel8 posSelAEModel8.bed
 
 ##########################################################################
+# BUILD THE POSITIVE SELECTION TRACKS FOR VAX004 (Done Fan, 3/2/09)
 
+cd /cluster/hive/groups/gsid/medical/hiv/posSelection
+
+mkdir vax004
+cd vax004
+
+# Since there are large number (12) of subclasses and 4 HIV genomes,
+# this has to be automated.  So create the do1, do2, do3 script first. 
+# Please note that the do3 script works on all 4 HIV genomes.
+
+cat << '_EOF_' >do1
+#do1.1
+
+mkdir -p $1
+# start with clean slate
+rm $1/*
+
+cp -p /hive/groups/gsid/medical/vaxGen/fromKeith/posSelection/073008/PAML-outfiles/VAX004-$1-sites.paml $1
+
+cp /hive/groups/gsid/medical/vaxGen/fromKeith/posSelection/073008/data/$1.nex $1
+
+cp /hive/groups/gsid/medical/vaxGen/fromKeith/posSelection/073008/PAML-outfiles/VAX004-$1-sites.paml $1
+
+#do1.2
+
+cd $1
+cat VAX004-$1-sites.paml|grep "+-" >j.tmp
+get1stHalf j.tmp >$1Model2.paml
+cat $1Model2.paml |\
+sed -e 's/+-//g'|\
+sed -e 's/ \* / xxx /g'|\
+sed -e 's/\*//g'|\
+sed -e 's/xxx/\*/g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/ //'|\
+sed -e 's/ /\t/g' > vax004$1Model2.tab
+
+hgLoadSqlTab -notOnServer hgFixed vax004$1Model2 ~/src/hg/lib/posSelectModel.sql vax004$1Model2.tab
+
+get2ndHalf j.tmp >$1Model8.paml
+cat $1Model8.paml |\
+sed -e 's/+-//g'|\
+sed -e 's/ \* / xxx /g'|\
+sed -e 's/\*//g'|\
+sed -e 's/xxx/\*/g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/  / /g'|\
+sed -e 's/ //'|\
+sed -e 's/ /\t/g' > vax004$1Model8.tab
+
+hgLoadSqlTab -notOnServer hgFixed vax004$1Model8 ~/src/hg/lib/posSelectModel.sql vax004$1Model8.tab
+
+rm j.tmp
+
+#do1.3
+
+cat $1.nex|grep 'U\.'|\
+    sed -e 's/  / /g'|\
+    sed -e 's/  / /g'|\
+    sed -e 's/  / /g'|\
+    sed -e 's/  / /g'|\
+    sed -e 's/  / /g'|\
+    sed -e 's/ /\t/g' >vax004$1Msa.tab
+chmod +rx *.tab
+
+hgLoadSqlTab -notOnServer hgFixed vax004$1Msa /hive/groups/gsid/medical/hiv/posSelection/vax004/dnaSeq.sql vax004$1Msa.tab
+cd ..
+
+#do1.4
+
+hgsql -N -e "select concat('do2 ${1} ', id) from hgFixed.vax004${1}Msa limit 1" >doit
+chmod +x doit
+doit
+'_EOF_'
+
+chmod +x do1
+
+cat << '_EOF_' >do2
+gsidAaMsa2 hgFixed vax004$1Msa $2 1 $1/$1Msa.wig $1/$1MsaAaConsensus.fa
+'_EOF_'
+chmod +x do2
+
+cat << '_EOF_' >do3
+# process hivVax003Vax004
+hgsql hgcentralhiv1 -N -e "select concat('blatit ${1} hivVax003Vax004 ', port) from blatServers where db='hivVax003Vax004' and isTrans=1" >doBlat
+chmod +x doBlat
+./doBlat
+
+cd $1
+gsidPosSelect hivVax003Vax004 vax004$1MsaPsl hgFixed vax004$1Model2 posSelVax004$1Model2.bed
+hgLoadBed     hivVax003Vax004 posSelVax004$1Model2                  posSelVax004$1Model2.bed
+
+gsidPosSelect hivVax003Vax004 vax004$1MsaPsl hgFixed vax004$1Model8 posSelVax004$1Model8.bed
+hgLoadBed     hivVax003Vax004 posSelVax004$1Model8                  posSelVax004$1Model8.bed
+cd ..
+
+# process hivmn2
+hgsql hgcentralhiv1 -N -e "select concat('blatit ${1} hivmn2 ', port) from blatServers where db='hivmn2' and isTrans=1" >doBlat
+chmod +x doBlat
+./doBlat
+
+cd $1
+gsidPosSelect hivmn2 vax004$1MsaPsl hgFixed vax004$1Model2 posSelVax004$1Model2.bed
+hgLoadBed     hivmn2 posSelVax004$1Model2                  posSelVax004$1Model2.bed
+
+gsidPosSelect hivmn2 vax004$1MsaPsl hgFixed vax004$1Model8 posSelVax004$1Model8.bed
+hgLoadBed     hivmn2 posSelVax004$1Model8                  posSelVax004$1Model8.bed
+cd ..
+
+# process hivgne8v2
+hgsql hgcentralhiv1 -N -e "select concat('blatit ${1} hivgne8v2 ', port) from blatServers where db='hivgne8v2' and isTrans=1" >doBlat
+chmod +x doBlat
+./doBlat
+
+cd $1
+gsidPosSelect hivgne8v2 vax004$1MsaPsl hgFixed vax004$1Model2 posSelVax004$1Model2.bed
+hgLoadBed     hivgne8v2 posSelVax004$1Model2                  posSelVax004$1Model2.bed
+
+gsidPosSelect hivgne8v2 vax004$1MsaPsl hgFixed vax004$1Model8 posSelVax004$1Model8.bed
+hgLoadBed     hivgne8v2 posSelVax004$1Model8                  posSelVax004$1Model8.bed
+cd ..
+
+# process hiva244
+hgsql hgcentralhiv1 -N -e "select concat('blatit ${1} hiva244 ', port) from blatServers where db='hiva244' and isTrans=1" >doBlat
+chmod +x doBlat
+./doBlat
+
+cd $1
+gsidPosSelect hiva244 vax004$1MsaPsl hgFixed vax004$1Model2 posSelVax004$1Model2.bed
+hgLoadBed     hiva244 posSelVax004$1Model2                  posSelVax004$1Model2.bed
+
+gsidPosSelect hiva244 vax004$1MsaPsl hgFixed vax004$1Model8 posSelVax004$1Model8.bed
+hgLoadBed     hiva244 posSelVax004$1Model8                  posSelVax004$1Model8.bed
+cd ..
+'_EOF_'
+
+chmod +x do3
+
+# Now run the scripts for all subclasses.
+
+do1 Hispanic
+do1 Midwest
+do1 Northeast
+do1 Other
+do1 South
+do1 Southwest
+do1 Westcoast
+do1 White
+do1 Asian
+do1 Black
+do1 pla
+do1 vac
+
+# BTW, do1 calls do2
+
+do3 Hispanic
+do3 Midwest
+do3 Northeast
+do3 Other
+do3 South
+do3 Southwest
+do3 Westcoast
+do3 White
+do3 Asian
+do3 Black
+do3 pla
+do3 vac
+
+##########################################################################
