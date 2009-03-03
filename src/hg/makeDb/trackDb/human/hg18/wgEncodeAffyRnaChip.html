@@ -1,7 +1,39 @@
 <H2>General Description</H2>
 
-<P>The Signal track shows an estimate of abundance of RNA molecules and the Transfrags track 
-shows the locations of sites corresponding to these molecules. RNA molecules longer than 200 nt 
+<P>This track is produced as part of the ENCODE Transcriptome Project. 
+Transcription of different <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=rnaExtract">RNA extracts</A> 
+from different <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=localization">sub-cellular localizations</A> 
+in different <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>
+is compared in companion experiements using three different technologies; tiling arrays (here), 
+and RNA-seq using Solexa and SOLiD platforms. 
+The <strong>Raw Signal</strong> view shows an estimate of abundance of RNA molecules and the <strong>Transfrags</strong> view 
+shows the locations of sites corresponding to these molecules. 
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+
+<P>To show only selected views, uncheck the boxes next to the one that you wish to hide.</P>
+ 
+<P>Color differences among the views are arbitrary. They provide a visual cue for 
+distinguishing between the different cell types and compartments.</P>
+
+<DL>
+<DT><strong>Transfrags</strong>
+<DD>The Transfrags view includes all transfrags before filtering.
+<DT><strong>Filtered Transfrags</strong>
+<DD>The Filtered Transfrags view excludes repeats and other known annotations including: 
+tRNAs and rRNAs, mi/snoRNAs, things mapping to the mitochondrial or Y chromosomes, 
+and many predicted snoRNAs and miRNAs.
+<DT><strong>Raw Signal</strong>
+<DD>The Raw Signal view shows the probe intensity based on all probes.
+<DT><strong>Filtered Raw Signal</strong>
+<DD>The Filtered Raw Signal view shows the probe intensity based on the filtered set of probes.
+</DL>
+
+<H2>Methods</H2>
+
+<P>
+RNA molecules longer than 200 nt 
 and present in RNA population isolated from different subcellular compartments 
 (such as cytosol, nucleus, polysomes and others) were fractionated into polyA+ and polyA- 
 fractions. Each RNA fraction was converted into double-stranded cDNA using random hexamers, 
@@ -9,30 +41,8 @@ labeled and hybridized to a tiling 91-array set containing probes against the no
 portion of the human genome tiled on average every 5 bp (center-to-center of each 
 consecutive 25-mers). </P>
 
-<H2>Display Conventions and Configuration</H2>
-
-<P>To show only selected subtracks, uncheck the boxes next to the tracks that you wish to hide.</P>
- 
-<P>Color differences among the subtracks are arbitrary. They provide a visual cue for 
-distinguishing between the different cell types and compartments.</P>
-
-<DL>
-<DT><strong>Transfrags</strong>
-<DD>The Transfrags track includes all transfrags before filtering.
-<DT><strong>Filtered Transfrags</strong>
-<DD>The Filtered Transfrags track excludes repeats and other known annotations including: 
-tRNAs and rRNAs, mi/snoRNAs, things mapping to the mitochondrial or Y chromosomes, 
-and many predicted snoRNAs and miRNAs.
-<DT><strong>Raw Signal</strong>
-<DD>The Raw Signal track shows the probe intensity based on all probes.
-<DT><strong>Filtered Raw Signal</strong>
-<DD>The Filtered Raw Signal track shows the probe intensity based on the filtered set of probes.
-</DL>
-
-<H2>Methods</H2>
-
 <P>All arrays were scaled to a median array intensity of 330. Within a sliding 61 bp window 
-centered on each probe, an estimate of RNA abundance (signal; see the Affy RNA Signal track) 
+centered on each probe, an estimate of RNA abundance (signal; see the <strong>Raw Signal</strong> view) 
 was found by calculating the median of all pairwise average PM-MM values, where PM is a 
 perfect match and MM is a mismatch. Kapranov <EM>et al.</EM> (2002), Cheng <EM>et al.</EM> 
 (2005) , Kapranov <EM>et al.</EM> (2007), and Cawley <EM>et al.</EM> (2004) 
@@ -45,8 +55,8 @@ also describes the analytical methods.
 technical replicates were generated from the same RNA pool for each RNA preparation and 
 hybridized to duplicate arrays (two technical replicates) that contain the ENCODE regions. 
 Labeled RNA samples were then pooled and hybridized to the tiling 91-array set spanning 
-the whole genome. Transcribed regions (transfrags; see the Affy RNA Transfrag track) were 
-generated from the composite signal track by merging genomic positions to which probes 
+the whole genome. Transcribed regions (transfrags; see the <strong>Transfrags</strong> view) were 
+generated from the <strong>Raw Signal</strong> by merging genomic positions to which probes 
 are mapped. This merging was based on a 5% false positive rate cutoff in negative 
 bacterial controls, a maximum gap (MaxGap) of 40 base-pairs and minimum run (MinRun) 
 of 40 base-pairs. </P>
