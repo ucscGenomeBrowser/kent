@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.21 2009/01/27 21:29:32 angie Exp $
+# $Id: makePushQSql.pl,v 1.22 2009/03/03 21:46:23 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -107,6 +107,9 @@ sub getAllTables($) {
 	if ($maybeChr =~ /^chr/) {
 	  $prefix = 'chr*_';
 	  $prefixPattern = 'chr\*_';
+	} elsif ($maybeChr =~ /^2micron/) {
+	  $prefix = '2micron_';
+	  $prefixPattern = '2micron_';
 	} else {
 	  die "\nSorry, I don't know what prefix (usually chr*_) to use for " .
 	    $maybeChr;
