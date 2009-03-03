@@ -5616,7 +5616,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
