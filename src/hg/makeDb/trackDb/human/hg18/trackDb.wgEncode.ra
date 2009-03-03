@@ -5609,9 +5609,9 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg HepG2=HepG2 K562=K562 NB4=NB4
-subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NF-E2=NF-E2 Pol2=Pol2 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 TCF4=TCF4 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
+subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NF-E2=NF-E2 Pol2=Pol2 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 TCF4=TCF4 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder view=+ cellType=+ factor=+
+sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
@@ -5687,7 +5687,6 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     cell GM12878
     antibody Max
-    minScore 0
 
     track wgEncodeYaleChIPseqSignalGm12878Max
     release alpha
