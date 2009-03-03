@@ -11,36 +11,11 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.14 2009/03/01 08:50:03 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.15 2009/03/03 07:44:28 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
 // /tracks/{track}/{genome}                           [track details for {track} in {genome}]
-
-time_t oneTrackDbUpdateTime(char *db, char *tblSpec)
-/* get latest update time for a trackDb table, including handling profiles:tbl. 
- * Returns 0 if table doesnt exist
-  */
-{
-char *tbl;
-struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
-time_t latest = sqlTableUpdateTime(conn, tbl);
-hFreeConn(&conn);
-return latest;
-}
-
-time_t trackDbLatestUpdateTime(char *db)
-/* Get latest update time from each trackDb table. */
-{
-struct slName *tableList = hTrackDbList(), *one;
-time_t latest = 0;
-for (one = tableList; one != NULL; one = one->next)
-    {
-    latest = max(latest, oneTrackDbUpdateTime(db, one->name));
-    }
-slNameFreeList(&tableList);
-return latest;
-}
 
 
 struct json_object *addTrackUrl(struct json_object *o, char *url_name, char *genome, char *track)
