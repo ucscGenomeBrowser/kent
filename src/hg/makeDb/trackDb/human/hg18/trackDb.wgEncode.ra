@@ -2732,7 +2732,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase Pk
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in GM12878 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=DNase cellType=GM12878
     type narrowPeak
     dateSubmitted 2008-11-04
@@ -2745,7 +2745,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in GM12878 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=DNase cellType=GM12878
     type wig 0.00 2.54
     dateSubmitted 2008-11-04
@@ -3012,7 +3012,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 DNase Pk
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in K562 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
     subGroups view=Peaks EXP=DNase cellType=K562
     type narrowPeak
     dateSubmitted 2008-12-06
@@ -3025,7 +3025,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in K562 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
     subGroups view=Signal EXP=DNase cellType=K562
     type wig 0.00 1.56
     dateSubmitted 2008-12-06
@@ -3091,7 +3091,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in K562 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
     subGroups view=Peaks EXP=FAIRE cellType=K562
     type narrowPeak
     dateSubmitted 2008-12-06
@@ -3104,7 +3104,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in K562 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
     subGroups view=Signal EXP=FAIRE cellType=K562
     type wig 0.00 1.10
     dateSubmitted 2008-12-06
@@ -3170,7 +3170,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Pk
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in K562 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-27
@@ -3183,7 +3183,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in K562 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=K562
     type wig 0.00 6.78
     dateSubmitted 2009-02-27
@@ -3197,7 +3197,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF BO
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=K562
     type wig 0.00 3339.00
     dateSubmitted 2009-02-27
@@ -3211,7 +3211,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 1 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.00
     dateSubmitted 2009-02-27
@@ -3225,7 +3225,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 2 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.01
     dateSubmitted 2009-02-27
@@ -3239,7 +3239,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Raw3
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 3 (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 3 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 23.06
     dateSubmitted 2009-02-27
@@ -3253,7 +3253,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Pk
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in K562 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-27
@@ -3266,7 +3266,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in K562 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=K562
     type wig 0.00 1.97
     dateSubmitted 2009-02-27
@@ -3280,7 +3280,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=K562
     type wig 0.00 1925.00
     dateSubmitted 2009-02-27
@@ -3294,7 +3294,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 1 (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 1 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 38.44
     dateSubmitted 2009-02-27
@@ -3308,7 +3308,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 2 (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 2 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 30.71
     dateSubmitted 2009-02-27
@@ -3322,7 +3322,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Raw3
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 3 (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 3 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 34.69
     dateSubmitted 2009-02-27
@@ -5624,7 +5624,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (JunD in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
     subGroups view=Peaks factor=JunD cellType=GM12878
     type narrowPeak
     dateSubmitted 2009-02-27
@@ -5637,7 +5637,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (JunD in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in GM12878 cells)
     subGroups view=Signal factor=JunD cellType=GM12878
     type wig 0.00 3399.00
     dateSubmitted 2009-02-27
@@ -5651,7 +5651,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (JunD in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in GM12878 cells)
     subGroups view=zRAW factor=JunD cellType=GM12878
     type wig 1.00 2799.00
     dateSubmitted 2009-02-27
@@ -5665,7 +5665,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (JunD in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in GM12878 cells)
     subGroups view=zRAW factor=JunD cellType=GM12878
     type wig 1.00 3680.00
     dateSubmitted 2009-02-27
@@ -5679,7 +5679,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Max in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
     subGroups view=Peaks factor=Max cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
@@ -5693,7 +5693,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Max in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
     subGroups view=Signal factor=Max cellType=GM12878
     type wig 0.00 4334.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -5707,7 +5707,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 4163.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -5721,7 +5721,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 3671.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -5735,7 +5735,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Pol2 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
     subGroups view=Peaks factor=Pol2 cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5748,7 +5748,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Pol2 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
     subGroups view=Signal factor=Pol2 cellType=GM12878
     type wig 0.00 9844.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5762,7 +5762,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
     type wig 1.00 2874.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5776,7 +5776,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
     type wig 1.00 1832.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5790,7 +5790,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
     subGroups view=Peaks factor=c-Fos cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5803,7 +5803,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
     subGroups view=Signal factor=c-Fos cellType=GM12878
     type wig 0.00 4648.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5817,7 +5817,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1507.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5831,7 +5831,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1828.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5845,7 +5845,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1740.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5859,7 +5859,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type wig 0.00 7237.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5873,7 +5873,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in GM12878 cells)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 7237.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5887,7 +5887,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HCT116 TCF4 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (TCF4 in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
     subGroups view=Peaks factor=TCF4 cellType=HCT116
     type narrowPeak
     dateSubmitted 2009-02-24
@@ -5900,7 +5900,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HCT116 TCF4 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (TCF4 in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF4 in HCT-116 cells)
     subGroups view=Signal factor=TCF4 cellType=HCT116
     type wig 0.00 4900.00
     dateSubmitted 2009-02-24
@@ -5914,7 +5914,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HCT116 TCF4 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (TCF4 in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
     subGroups view=zRAW factor=TCF4 cellType=HCT116
     type wig 1.00 5626.00
     dateSubmitted 2009-02-24
@@ -5928,7 +5928,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HCT116 TCF4 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (TCF4 in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
     subGroups view=zRAW factor=TCF4 cellType=HCT116
     type wig 1.00 2567.00
     dateSubmitted 2009-02-24
@@ -5942,7 +5942,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HCT116 Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (Input in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
     subGroups view=Signal factor=zCTRL cellType=HCT116
     type wig 0.00 3439.00
     dateSubmitted 2009-02-24
@@ -5956,7 +5956,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HCT116 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal (Input in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HCT-116 cells)
     subGroups view=zRAW factor=zCTRL cellType=HCT116
     type wig 1.00 6763.00
     dateSubmitted 2009-02-24
@@ -5970,7 +5970,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
     subGroups view=Peaks factor=Pol2 cellType=HEK293b
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
@@ -5983,7 +5983,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HEK293 cells)
     subGroups view=Signal factor=Pol2 cellType=HEK293b
     type wig 0.00 5116.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -5997,7 +5997,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 2217.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6011,7 +6011,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1345.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6025,7 +6025,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 2119.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6039,7 +6039,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
     subGroups view=Signal factor=zCTRL cellType=HEK293b
     type wig 0.00 4758.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6053,7 +6053,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HEK293 cells)
     subGroups view=zRAW factor=zCTRL cellType=HEK293b
     type wig 1.00 13075.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6067,7 +6067,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Pol2 in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa cells)
     subGroups view=Peaks factor=Pol2 cellType=HeLa
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -6082,7 +6082,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Pol2 in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HeLa cells)
     subGroups view=Signal factor=Pol2 cellType=HeLa
     type wig 0.00 14600.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6099,7 +6099,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 3673.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6115,7 +6115,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 6153.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6131,7 +6131,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 4989.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6147,7 +6147,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa
     type wig 0.00 8316.00
     defaultViewLimits 2:2000
@@ -6165,7 +6165,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HeLa cells)
     subGroups view=zRAW factor=zCTRL cellType=HeLa
     type wig 1.00 8316.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6181,7 +6181,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Large_Frag in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Frag Control in HeLa cells)
     subGroups view=Peaks factor=zLarge cellType=HeLa
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
@@ -6194,7 +6194,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Large_Frag in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Frag Control in HeLa cells)
     subGroups view=Signal factor=zLarge cellType=HeLa
     type wig 0.00 5906.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6208,7 +6208,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Large_Frag in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Frag Control in HeLa)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 4879.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6222,7 +6222,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Large_Frag in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Frag Control in HeLa)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 3795.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6236,7 +6236,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (MNase in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (MNase Control in HeLa cells)
     subGroups view=Signal factor=zMNase cellType=HeLa
     type wig 0.00 13908.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6250,7 +6250,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (MNase in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (MNase Control in HeLa)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 9859.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6264,7 +6264,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (MNase in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (MNase Control in HeLa)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 12929.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6278,7 +6278,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Mouse_IgG in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (mIgG Control in HeLa cells)
     subGroups view=Peaks factor=zMouseIG cellType=HeLa
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
@@ -6291,7 +6291,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Mouse_IgG in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (mIgG Control in HeLa cells)
     subGroups view=Signal factor=zMouseIG cellType=HeLa
     type wig 0.00 6717.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6305,7 +6305,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Mouse_IgG in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (mIgG Controlin HeLa)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 5841.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6319,7 +6319,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Mouse_IgG in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (mIgG Control in HeLa)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 7220.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6333,7 +6333,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Naked_DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA in HeLa cells)
     subGroups view=Signal factor=zNaked cellType=HeLa
     type wig 0.00 8487.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6347,7 +6347,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 1
-    longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Naked_DNA in HeLa cells)
+    longLabel ENCODE Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 7798.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6361,7 +6361,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 2
-    longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Naked_DNA in HeLa cells)
+    longLabel ENCODE Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 5002.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6375,7 +6375,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 3
-    longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Naked_DNA in HeLa cells)
+    longLabel ENCODE Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 4462.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6389,7 +6389,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (STAT1 in HeLa_IFNg cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in HeLa_IFN cells)
     subGroups view=Peaks factor=STAT1 cellType=HeLa-IF
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -6404,7 +6404,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Sg
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (STAT1 in HeLa_IFNg cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in HeLa_IFN cells)
     subGroups view=Signal factor=STAT1 cellType=HeLa-IF
     type wig 0.00 20910.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6421,7 +6421,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (STAT1 in HeLa_IFNg cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (STAT1, HeLa_IFN cells)
     subGroups view=zRAW factor=STAT1 cellType=HeLa-IF
     type wig 1.00 14648.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6437,7 +6437,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (STAT1 in HeLa_IFNg cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (STAT1, HeLa_IFN cells)
     subGroups view=zRAW factor=STAT1 cellType=HeLa-IF
     type wig 1.00 6262.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6453,7 +6453,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Sg
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in HeLa_IFNg cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa-IF
     type wig 0.00 11690.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6470,7 +6470,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Rw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in HeLa_IFNg cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HeLa_IFN cells)
     subGroups view=zRAW factor=zCTRL cellType=HeLa-IF
     type wig 1.00 11690.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6486,7 +6486,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Pol2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2 cells)
     subGroups view=Peaks factor=Pol2 cellType=HepG2
     type narrowPeak
     dateSubmitted 2009-02-28
@@ -6499,7 +6499,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Pol2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
     subGroups view=Signal factor=Pol2 cellType=HepG2
     type wig 0.00 2790.00
     dateSubmitted 2009-02-28
@@ -6513,7 +6513,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 627.00
     dateSubmitted 2009-02-28
@@ -6527,7 +6527,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 1574.00
     dateSubmitted 2009-02-28
@@ -6541,7 +6541,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Pol2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 2595.00
     dateSubmitted 2009-02-28
@@ -6555,7 +6555,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP1A Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1A in HepG2 cells)
     subGroups view=Peaks factor=SREBP1A cellType=HepG2
     type narrowPeak
     dateSubmitted 2009-02-28
@@ -6568,7 +6568,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP1A Sg
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1A in HepG2 cells)
     subGroups view=Signal factor=SREBP1A cellType=HepG2
     type wig 0.00 632.00
     dateSubmitted 2009-02-28
@@ -6582,7 +6582,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP1A 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 2116.00
     dateSubmitted 2009-02-28
@@ -6596,7 +6596,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP1A 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 3660.00
     dateSubmitted 2009-02-28
@@ -6610,7 +6610,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP1A 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 4781.00
     dateSubmitted 2009-02-28
@@ -6624,7 +6624,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP2 in HepG2 cells)
     subGroups view=Peaks factor=SREBP2 cellType=HepG2
     type narrowPeak
     dateSubmitted 2009-02-27
@@ -6637,7 +6637,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP2 in HepG2 cells)
     subGroups view=Signal factor=SREBP2 cellType=HepG2
     type wig 0.00 893.00
     dateSubmitted 2009-02-27
@@ -6651,7 +6651,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 1037.00
     dateSubmitted 2009-02-27
@@ -6665,7 +6665,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 2076.00
     dateSubmitted 2009-02-27
@@ -6679,7 +6679,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 SREBP2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 2524.00
     dateSubmitted 2009-02-27
@@ -6693,7 +6693,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
     subGroups view=Signal factor=zCTRL cellType=HepG2
     type wig 0.00 43.00
     dateSubmitted 2009-02-28
@@ -6707,7 +6707,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Input 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 1247.00
     dateSubmitted 2009-02-28
@@ -6721,7 +6721,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Input 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 4646.00
     dateSubmitted 2009-02-28
@@ -6735,7 +6735,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel HepG2 Input 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 4750.00
     dateSubmitted 2009-02-28
@@ -6749,7 +6749,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (GATA-1 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562 cells)
     subGroups view=Peaks factor=GATA1 cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-27
@@ -6765,7 +6765,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (GATA-1 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562 cells)
     subGroups view=Signal factor=GATA1 cellType=K562
     type wig 0.00 5724.00
     dateSubmitted 2009-02-27
@@ -6779,7 +6779,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (GATA-1 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 2385.00
     dateSubmitted 2009-02-27
@@ -6793,7 +6793,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (GATA-1 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 7115.00
     dateSubmitted 2009-02-27
@@ -6807,7 +6807,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (JunD in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
     subGroups view=Peaks factor=JunD cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-27
@@ -6820,7 +6820,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (JunD in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in K562 cells)
     subGroups view=Signal factor=JunD cellType=K562
     type wig 0.00 6160.00
     dateSubmitted 2009-02-27
@@ -6834,7 +6834,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (JunD in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in K562 cells)
     subGroups view=zRAW factor=JunD cellType=K562
     type wig 1.00 4981.00
     dateSubmitted 2009-02-27
@@ -6848,7 +6848,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (JunD in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in K562 cells)
     subGroups view=zRAW factor=JunD cellType=K562
     type wig 1.00 5553.00
     dateSubmitted 2009-02-27
@@ -6862,7 +6862,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (Max in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
     subGroups view=Peaks factor=Max cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-25
@@ -6875,7 +6875,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (Max in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in K562 cells)
     subGroups view=Signal factor=Max cellType=K562
     type wig 0.00 8817.00
     dateSubmitted 2009-02-25
@@ -6889,7 +6889,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Max in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in K562 cells)
     subGroups view=zRAW factor=Max cellType=K562
     type wig 1.00 6997.00
     dateSubmitted 2009-02-25
@@ -6903,7 +6903,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Max in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in K562 cells)
     subGroups view=zRAW factor=Max cellType=K562
     type wig 1.00 4951.00
     dateSubmitted 2009-02-25
@@ -6917,7 +6917,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (NF-E2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
     subGroups view=Peaks factor=NF-E2 cellType=K562
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
@@ -6930,7 +6930,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (NF-E2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
     subGroups view=Signal factor=NF-E2 cellType=K562
     type wig 0.00 15242.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6944,7 +6944,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 10629.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6958,7 +6958,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 9043.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6972,7 +6972,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Pol2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
     subGroups view=Peaks factor=Pol2 cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -6985,7 +6985,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Pol2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562 cells)
     subGroups view=Signal factor=Pol2 cellType=K562
     type wig 0.00 18226.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7000,7 +7000,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 9783.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7014,7 +7014,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 8446.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7028,7 +7028,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Z263 Pk
-    longLabel ENCODE Yale ChIP-Seq Peaks (ZNF263 in K562 cells)
+    longLabel ENCODE Yale ChIP-seq Peaks (ZNF263 in K562 cells)
     subGroups view=Peaks factor=ZNF263 cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-11
@@ -7041,7 +7041,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Z263 Sig
-    longLabel ENCODE Yale ChIP-Seq Signal (ZNF263 in K562 cells)
+    longLabel ENCODE Yale ChIP-seq Signal (ZNF263 in K562 cells)
     subGroups view=Signal factor=ZNF263 cellType=K562
     type wig 0.00 2435.00
     dateSubmitted 2009-02-11
@@ -7055,7 +7055,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Z263 1
-    longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (ZNF263 in K562 cells)
+    longLabel ENCODE Yale ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2478.00
     dateSubmitted 2009-02-11
@@ -7069,7 +7069,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Z263 2
-    longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (ZNF263 in K562 cells)
+    longLabel ENCODE Yale ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2247.00
     dateSubmitted 2009-02-11
@@ -7083,7 +7083,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (c-Fos in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
     subGroups view=Peaks factor=c-Fos cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -7096,7 +7096,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (c-Fos in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in K562 cells)
     subGroups view=Signal factor=c-Fos cellType=K562
     type wig 0.00 13555.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7110,7 +7110,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Fos in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 6107.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7124,7 +7124,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Fos in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3561.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7138,7 +7138,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (c-Fos in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3921.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7152,7 +7152,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (c-Jun in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
     subGroups view=Peaks factor=c-Jun cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -7165,7 +7165,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (c-Jun in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562 cells)
     subGroups view=Signal factor=c-Jun cellType=K562
     type wig 0.00 16981.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7179,7 +7179,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Jun in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Jun in K562 cells)
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 11614.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7193,7 +7193,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Jun in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Jun in K562 cells)
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 5368.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7207,7 +7207,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (c-Myc in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
     subGroups view=Peaks factor=c-Myc cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -7220,7 +7220,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (c-Myc in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562 cells)
     subGroups view=Signal factor=c-Myc cellType=K562
     type wig 0.00 2983.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7234,7 +7234,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1590.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7248,7 +7248,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1603.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7262,7 +7262,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 4661.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7277,7 +7277,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in K562 cells)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 4661.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7291,7 +7291,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Peaks (Pol2 in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
     subGroups view=Peaks factor=Pol2 cellType=NB4
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -7304,7 +7304,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Pol2 in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
     subGroups view=Signal factor=Pol2 cellType=NB4
     type wig 0.00 20774.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7318,7 +7318,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 10895.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7332,7 +7332,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 5847.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7346,7 +7346,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 4034.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7360,7 +7360,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
     subGroups view=Signal factor=zCTRL cellType=NB4
     type wig 0.00 2842.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -7374,7 +7374,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in NB4 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in NB4 cells)
     subGroups view=zRAW factor=zCTRL cellType=NB4
     type wig 1.00 2842.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8715,7 +8715,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsProstateCellShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel prostate cell
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in prostate cell using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in prostate cell using )
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:45
@@ -8729,7 +8729,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8743,7 +8743,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8757,7 +8757,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8771,7 +8771,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8785,7 +8785,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8799,7 +8799,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8813,7 +8813,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8827,7 +8827,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8841,7 +8841,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -8855,7 +8855,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8869,7 +8869,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8883,7 +8883,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8897,7 +8897,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8911,7 +8911,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8925,7 +8925,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8939,7 +8939,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8953,7 +8953,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -8967,7 +8967,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -8981,7 +8981,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -8995,7 +8995,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9009,7 +9009,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9023,7 +9023,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9037,7 +9037,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9051,7 +9051,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9065,7 +9065,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9079,7 +9079,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9093,7 +9093,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9107,7 +9107,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9121,7 +9121,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9135,7 +9135,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9149,7 +9149,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9163,7 +9163,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9177,7 +9177,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9191,7 +9191,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9205,7 +9205,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9219,7 +9219,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9233,7 +9233,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9247,7 +9247,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9261,7 +9261,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 polysome
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 18:4:26
@@ -9275,7 +9275,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 polysome
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 18:4:26
@@ -9289,7 +9289,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 polysome
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 18:4:26
@@ -9303,7 +9303,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 18:14:52
@@ -9337,7 +9337,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel HCT-116 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HCT-116 cells)
     subGroups view=Regions cellType=HCT-116
     type bed 9
     dateSubmitted 2009-02-10
@@ -9352,7 +9352,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel HCT-116 2
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HCT-116 cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in HCT-116 cells)
     subGroups view=Regions cellType=HCT-116
     type bed 9
     dateSubmitted 2009-02-10
@@ -9367,7 +9367,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES cells)
     subGroups view=Regions cellType=H9ES
     type bed 9
     dateSubmitted 2009-02-10
@@ -9381,7 +9381,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-E 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-E cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-E cells)
     subGroups view=Regions cellType=H9ES-E
     type bed 9
     dateSubmitted 2009-02-10
@@ -9395,7 +9395,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-AFP+ 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP+ cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP+ cells)
     subGroups view=Regions cellType=H9ES-AFP+
     type bed 9
     dateSubmitted 2009-02-10
@@ -9409,7 +9409,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-AFP- 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP- cells)
     subGroups view=Regions cellType=H9ES-AFP-
     type bed 9
     dateSubmitted 2009-02-10
@@ -9423,7 +9423,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-AFP- 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP- cells)
     subGroups view=Regions cellType=H9ES-AFP-
     type bed 9
     dateSubmitted 2009-02-10
@@ -9437,7 +9437,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-EB 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EB cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-EB cells)
     subGroups view=Regions cellType=H9ES-EB
     type bed 9
     dateSubmitted 2009-02-10
@@ -9451,7 +9451,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-CM 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-CM cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-CM cells)
     subGroups view=Regions cellType=H9ES-CM
     type bed 9
     dateSubmitted 2009-02-10
@@ -9465,7 +9465,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-EBD 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EBD cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-EBD cells)
     subGroups view=Regions cellType=H9ES-EBD
     type bed 9
     dateSubmitted 2009-02-10
@@ -9479,7 +9479,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel BG02ES 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in BG02ES cells)
     subGroups view=Regions cellType=BG02ES
     type bed 9
     dateSubmitted 2009-02-10
@@ -9493,7 +9493,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel BG02ES-EBD 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES-EBD cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in BG02ES-EBD cells)
     subGroups view=Regions cellType=BG02ES-EBD
     type bed 9
     dateSubmitted 2009-02-10
@@ -9507,7 +9507,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel BG02ES-EBD 2
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in BG02ES-EBD cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in BG02ES-EBD cells)
     subGroups view=Regions cellType=BG02ES-EBD
     type bed 9
     dateSubmitted 2009-02-10
@@ -9521,7 +9521,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel HFL11W 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL11W cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HFL11W cells)
     subGroups view=Regions cellType=HFL11W
     type bed 9
     dateSubmitted 2009-02-10
@@ -9536,7 +9536,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel HFL24W 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL24W cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HFL24W cells)
     subGroups view=Regions cellType=HFL24W
     type bed 9
     dateSubmitted 2009-02-10
@@ -9551,7 +9551,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel HAL 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HAL cells)
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HAL cells)
     subGroups view=Regions cellType=HAL
     type bed 9
     dateSubmitted 2009-02-10
@@ -9585,7 +9585,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bow098 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 1 (longPolyA in GM12878 cell using bow098)
     subGroups view=Alignments cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9602,7 +9602,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bow098 2
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 2 (longPolyA in GM12878 cell using bow098)
     subGroups view=Alignments cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9619,7 +9619,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bow098 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 1 (longPolyA in K562 cell using bow098)
     subGroups view=Alignments cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9636,7 +9636,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bow098 2
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 2 (longPolyA in K562 cell using bow098)
     subGroups view=Alignments cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9653,7 +9653,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bow098 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using bow098)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9670,7 +9670,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bow098 2
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in GM12878 cell using bow098)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9687,7 +9687,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bow098 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using bow098)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9704,7 +9704,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bow098 2
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in K562 cell using bow098)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9721,7 +9721,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell erng3b Raw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1GM12878CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9741,7 +9741,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell erng3b Raw 2
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in GM12878 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in GM12878 cell using erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2GM12878CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9761,7 +9761,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell erng3b Raw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in K562 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in K562 cell using erng3b)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9781,7 +9781,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell erng3b Raw 2
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in K562 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in K562 cell using erng3b)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2K562CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9801,7 +9801,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bowblt1 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in GM12878 cell using bowblt1)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in GM12878 cell using bowblt1)
     subGroups view=PairedAligns cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9818,7 +9818,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bowblt1 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in K562 cell using bowblt1)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in K562 cell using bowblt1)
     subGroups view=PairedAligns cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9835,7 +9835,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bowblt1 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using bowblt1)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using bowblt1)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9852,7 +9852,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell blat34 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using blat34)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using blat34)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=blat34 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9869,7 +9869,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bowblt1 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using bowblt1)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using bowblt1)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9886,7 +9886,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell blat34 1
-    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using blat34)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using blat34)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=blat34 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -9903,7 +9903,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bowblt1 Raw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using bowblt1)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using bowblt1)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type wig 0.00 2446.53
     dateSubmitted 2009-02-13
@@ -9923,7 +9923,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bowblt1 Raw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in K562 cell using bowblt1)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in K562 cell using bowblt1)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYABOWBLT1_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9943,7 +9943,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bow098 Raw 2
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in GM12878 cell using bow098)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2GM12878CELLLONGPOLYABOW098_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9963,7 +9963,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bow098 Raw 2
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in K562 cell using bow098)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2K562CELLLONGPOLYABOW098_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -9983,7 +9983,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA GM12878 cell bow098 Raw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using bow098)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig 1.00 27138.00
     dateSubmitted 2009-02-13
@@ -10003,7 +10003,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel longPolyA K562 cell bow098 Raw 1
-    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in K562 cell using bow098)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYABOW098_MINMAXRANGE
     dateSubmitted 2009-02-13
