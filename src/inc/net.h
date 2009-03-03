@@ -120,6 +120,7 @@ struct netParsedUrl
 void netParseUrl(char *url, struct netParsedUrl *parsed);
 /* Parse a URL into components.   A full URL is made up as so:
  *   http://user:password@hostName:port/file;byterange=0-499
+ * User and password may be cgi-encoded.
  * This is set up so that the http:// and the port are optional. 
  */
 

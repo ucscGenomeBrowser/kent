@@ -13,8 +13,9 @@
 #include "net.h"
 #include "linefile.h"
 #include "base64.h"
+#include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.68 2009/02/18 00:33:25 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.69 2009/03/03 08:09:46 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -241,6 +242,7 @@ if (in != NULL)
 void netParseUrl(char *url, struct netParsedUrl *parsed)
 /* Parse a URL into components.   A full URL is made up as so:
  *   http://user:password@hostName:port/file;byterange=0-499
+ * User and password may be cgi-encoded.
  * This is set up so that the http:// and the port are optional. 
  */
 {
@@ -335,6 +337,8 @@ else
 	strncpy(parsed->user, s, sizeof(parsed->user));
 	strncpy(parsed->password, w+1, sizeof(parsed->password));
 	}
+    cgiDecode(parsed->user,parsed->user,strlen(parsed->user));
+    cgiDecode(parsed->password,parsed->password,strlen(parsed->password));
     s = v+1;
     }
 
