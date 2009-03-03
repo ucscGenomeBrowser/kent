@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.41 2009/01/29 09:06:25 aamp Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.42 2009/03/03 23:29:02 aamp Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -65,7 +65,7 @@ return expCellVal(gp, conn, col->table, conn, col->posTable,
 static boolean expRatioExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if relevant tables exist. */
 {
-boolean tableOk = sqlTableExists(conn, col->table);
+boolean tableOk = sameWord(col->table, "null") || sqlTableExists(conn, col->table);
 boolean posTableOk = sqlTableExists(conn, col->posTable);
 boolean expTableOk = sqlTableExists(conn, col->experimentTable);
 return tableOk && posTableOk && expTableOk;
@@ -256,8 +256,8 @@ struct genePos *expAdvFilter(struct column *col, char *subName,
 if (expAdvFilterUsed(col, subName))
     {
     struct hash *expHash = expValHash(dataConn, dataTable);
-    struct hash *nameExpHash = getNameExpHash(lookupConn, lookupTable, 
-    	"name", "value", expHash);
+    struct hash *nameExpHash = sameWord(lookupTable,"null") ? expHash :
+	getNameExpHash(lookupConn, lookupTable, "name", "value", expHash);
     boolean orLogic = advFilterOrLogic(col, "logic", FALSE);
     int isMax;
     int repIx;
@@ -723,14 +723,16 @@ static float expMaxVal(struct column *col, struct genePos *gp,
 char query[256];
 char expName[64];
 float maxVal = -10000;
-
-safef(query, sizeof(query), "select value from %s where name = '%s'", 
-	col->table, gp->name);
-if (sqlQuickQuery(conn, query, expName, sizeof(expName)) != NULL)
+boolean noLookup = sameWord(col->table, "null");
+if (!noLookup)
+    safef(query, sizeof(query), "select value from %s where name = '%s'", 
+	  col->table, gp->name);
+if (noLookup || 
+    (sqlQuickQuery(conn, query, expName, sizeof(expName)) != NULL))
     {
     char *commaString = NULL;
     safef(query, sizeof(query), "select expScores from %s where name = '%s'",
-    	col->posTable, expName);
+	  col->posTable, (noLookup) ? gp->name : expName);
     if ((commaString = sqlQuickString(fConn, query)) != NULL)
         {
 	float *vals = NULL;

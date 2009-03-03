@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.17 2009/01/31 07:28:55 aamp Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.18 2009/03/03 23:29:06 aamp Exp $";
 
 static int expSubcellWidth = 21;
 
@@ -144,12 +144,18 @@ char expName[64];
 struct sqlResult *sr;
 char **row;
 boolean ok = FALSE;
-safef(query, sizeof(query), "select value from %s where name = '%s'", 
-	lookupTable, name);
-if (sqlQuickQuery(lookupConn, query, expName, sizeof(expName)) == NULL)
-    return FALSE;
-safef(query, sizeof(query), "select expScores from %s where name = '%s'",
-	dataTable, expName);
+if (!sameWord(lookupTable, "null"))
+    {
+    safef(query, sizeof(query), "select value from %s where name = '%s'", 
+	  lookupTable, name);
+    if (sqlQuickQuery(lookupConn, query, expName, sizeof(expName)) == NULL)
+	return FALSE;
+    safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+	  dataTable, expName);
+    }
+else
+    safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+	  dataTable, name);    
 sr = sqlGetResult(dataConn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
