@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.163 2009/03/03 18:32:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.164 2009/03/03 22:02:34 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3020,19 +3020,21 @@ if (scoreMinStr != NULL)
     puts("\n<P><B>Shade of lowest-scoring items: </B>");
     // Add javascript to select so that its color is consistent with option colors:
     int level = 255 - (255*minGrayLevel / maxShade);
-    printf("<SELECT NAME=\"%s.%s\" STYLE='color: #%02x%02x%02x' class='normalText' onchange=\"",
+    printf("<SELECT NAME=\"%s.%s\" STYLE='color: #%02x%02x%02x' class='normalText'",
 	   prefix, MIN_GRAY_LEVEL, level, level, level);
     int i;
+#ifdef OMIT
+    // IE works without this code and FF doesn't work with it.
+    printf(" onchange=\"switch(this.value) {");
     for (i = 1;  i < maxShade;  i++)
         {
         level = 255 - (255*i / maxShade);
-        if (i > 1)
-            printf("else ");
-        printf ("if (this.value == '%d') {this.style.color = '#%02x%02x%02x';} ",
-            i, level, level, level);
+        printf ("case '%d': $(this).css('color','#%02x%02x%02x'); break; ",i, level, level, level);
         }
     level = 255 - (255*i / maxShade);
-    printf("else {this.style.color = '#%02x%02x%02x';};>\"\n", level, level, level);
+    printf("default: $(this).css('color','#%02x%02x%02x'); }\"", level, level, level);
+#endif//def OMIT
+    puts(">\n");
     // Use class to set color of each option:
     for (i = 1;  i <= maxShade;  i++)
         {
