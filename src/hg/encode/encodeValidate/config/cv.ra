@@ -914,7 +914,7 @@ description Control raw signal which may be subtracted from experimental raw sig
 
 term Large_Fragment
 type control
-description Control signal from large fragment Sono-Seq DNA (350-800 bp).
+description Control signal from sonication into large fragments of DNA (350-800 bp).
 
 term MNase
 type control
