@@ -669,5 +669,8 @@ gsidPosSelect hivmn2 AEMsaPsl posSelBuild pSelectAEModel8  posSelAEModel8.bed
 hgLoadBed hivmn2 posSelAEModel8 posSelAEModel8.bed
 
 ##########################################################################
+# BUILD THE POSITIVE SELECTION TRACKS FOR VAX004 (Done Fan, 3/2/09)
 
+# Please see the corresponding section in hivVax003Vax004.txt for details.
+##########################################################################
 
