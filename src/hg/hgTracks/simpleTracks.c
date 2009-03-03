@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.65 2009/03/03 20:28:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.66 2009/03/03 20:49:49 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5802,13 +5802,13 @@ static float newScoreMin = 0;
 
 if (tdb->tableName != prevTrackName)
     {
-    scoreMinGrayLevel = scoreMin/scoreMax * maxShade;
+    scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
     cartMinGrayLevel = cartUsualIntClosestToHome(cart, tdb, FALSE, "minGrayLevel", scoreMinGrayLevel);
     newScoreMin = cartMinGrayLevel * scoreMax/maxShade;
     prevTrackName = tdb->tableName;
     }
-//if (cartMinGrayLevel != scoreMinGrayLevel)
+if (cartMinGrayLevel != scoreMinGrayLevel)
     {
     float realScore = (float)(bed->score - scoreMin) / (scoreMax - scoreMin);
     bed->score = newScoreMin + (realScore * (scoreMax - newScoreMin)) + 0.5;
