@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.18 2008/12/02 17:36:44 angie Exp $
+# $Id: makeDownloads.pl,v 1.19 2009/03/03 21:46:55 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -17,6 +17,9 @@ use HgStepManager;
 # Option variable names:
 use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
+use vars qw/
+    $opt_ignoreRepeatMasker
+    /;
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
@@ -30,6 +33,7 @@ my $defaultBigClusterHub = 'most available';
 my $defaultSmallClusterHub = 'n/a';
 my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
+
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -45,6 +49,7 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 					'workhorse' => $defaultWorkhorse);
+  print STDERR "    -ignoreRepeatMasker   do not look for RM .out files\n";
   print STDERR "
 Automates generation of assembly download files for genome database \$db:
     compress: Create compressed download files, md5sum.txt and README.txt in
@@ -78,6 +83,7 @@ my ($chromBased, @chroms, %chromRoots, $chromGz, $geneTable);
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
+		      'ignoreRepeatMasker',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -147,8 +153,12 @@ sub compressChromFiles {
 	# It is OK to lack RepeatMasker output for chrM too.
 	$rmFudge++;
       } else {
-	warn "Missing RepeatMasker $outFile\n";
-	$problems++;
+	if (!$opt_ignoreRepeatMasker) {
+	    warn "Missing RepeatMasker $outFile\n";
+	    $problems++;
+	} else {
+	    $rmFudge++;
+	}
       }
       if (-e "$trfRunDir/$trfFile") {
 	push @chromTrfFiles, $trfFile;
@@ -184,8 +194,19 @@ end
 cd $topDir
 
 tar cvzf $runDir/bigZips/chromAgp.tar.gz @chromAgpFiles
+_EOF_
+  );
+
+if (! $opt_ignoreRepeatMasker) {
+  $bossScript->add(<<_EOF_
 
 tar cvzf $runDir/bigZips/chromOut.tar.gz @chromOutFiles
+
+_EOF_
+  );
+}
+
+  $bossScript->add(<<_EOF_
 
 cd $runDir/$chromGz
 tar cvzf $runDir/bigZips/chromFa.tar.gz *.fa
