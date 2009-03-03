@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1556 2009/02/27 18:47:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1557 2009/03/03 19:38:52 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -196,19 +196,24 @@ for (group = groupList; group != NULL; group = group->next)
 	    if (changeVis == -1)
                 {
                 /* restore defaults */
-                if (tdbIsSuperTrackChild(tdb))
+                if (tdbIsSuperTrackChild(tdb) || tdbIsCompositeChild(tdb))
                     {
+                    //if(tdb->parentName == NULL || differentString(tdb->parentName,tdb->parent->tableName))
+                    //    tdb->parentName = tdb->parent->tableName;
                     /* removing the supertrack parent's cart variables
                      * restores defaults */
-                    assert(tdb->parentName != NULL);
-                    cartRemove(cart, tdb->parentName);
+                    //assert(tdb->parentName != NULL);
+                    //cartRemove(cart, tdb->parentName);
+                    assert(tdb->parent != NULL && tdb->parent->tableName);
+                    cartRemove(cart, tdb->parent->tableName);
                     if (withPriorityOverride)
                         {
-                        safef(pname, sizeof(pname), "%s.priority",
-                                    tdb->parentName);
+                        //safef(pname, sizeof(pname), "%s.priority",tdb->parentName);
+                        safef(pname, sizeof(pname), "%s.priority",tdb->parent->tableName);
                         cartRemove(cart, pname);
                         }
                     }
+
                 track->visibility = tdb->visibility;
                 cartRemove(cart, track->mapName);
 
@@ -2168,7 +2173,7 @@ else if (sameWord(scientificName, "Ciona intestinalis"))
     {
     if (stringIn("chr0", chrName))
 	{
-	char *fixupName = replaceChars(chrName, "chr0", "chr"); 
+	char *fixupName = replaceChars(chrName, "chr0", "chr");
 	name = fixupName;
 	}
     }

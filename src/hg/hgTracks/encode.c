@@ -10,7 +10,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.18 2009/02/27 19:08:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.19 2009/03/03 19:38:52 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -181,9 +181,10 @@ char *filterConstraints = NULL;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
 enum encodePeakType pt = 0;
-struct trackDb *parentTdb = tg->tdb->parent ? tg->tdb->parent : tg->tdb;
-int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(parentTdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(parentTdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+scoreMin = cartUsualIntClosestToHome(cart,tg->tdb, FALSE, "scoreMin", scoreMin);
+scoreMax = cartUsualIntClosestToHome(cart,tg->tdb, FALSE, "scoreMax", scoreMax);
 if (ct)
     {
     db = CUSTOM_TRASH;
@@ -202,10 +203,10 @@ sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &r
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, parentTdb,
-						 scoreMin, scoreMax);
+    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
+
     if (lf)
-	slAddHead(&lfList, lf);
+	   slAddHead(&lfList, lf);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

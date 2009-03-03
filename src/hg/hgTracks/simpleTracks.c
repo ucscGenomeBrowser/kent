@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.63 2009/02/23 22:57:30 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.64 2009/03/03 19:38:52 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -4890,8 +4890,10 @@ if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 else if (tg->colorShades)
     {
-    int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-    int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+    int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+    int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+    scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
+    scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
     color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
 if (color)
@@ -5859,8 +5861,10 @@ int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
+scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 char *directUrl = trackDbSetting(tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
 //boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
@@ -9219,8 +9223,10 @@ struct bed *bed = item;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int y2 = y + tg->heightPer-1;
 struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
+scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
@@ -10079,8 +10085,10 @@ void loadBed12Source(struct track *tg)
  * Sort items by source. */
 {
 struct linkedFeatures *list = NULL;
-int scoreMin = atoi(trackDbSettingOrDefault(tg->tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tg->tdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+scoreMin = cartUsualIntClosestToHome(cart,tg->tdb, FALSE, "scoreMin", scoreMin);
+scoreMax = cartUsualIntClosestToHome(cart,tg->tdb, FALSE, "scoreMax", scoreMax);
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
