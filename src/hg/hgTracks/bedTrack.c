@@ -203,8 +203,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
-scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 boolean useItemRgb = FALSE;
 
 useItemRgb = bedItemRgb(tdb);
@@ -255,8 +253,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
-scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 boolean useItemRgb = FALSE;
 
 useItemRgb = bedItemRgb(tdb);
@@ -458,8 +454,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
-scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 boolean useItemRgb = FALSE;
 
 useItemRgb = bedItemRgb(tdb);
@@ -519,8 +513,6 @@ int w;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
-scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 char *directUrl = trackDbSetting(tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
 boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);

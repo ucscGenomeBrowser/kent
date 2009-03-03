@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.7 2009/03/03 19:38:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.8 2009/03/03 21:11:25 tdreszer Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -170,8 +170,6 @@ int w;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-scoreMin = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMin", scoreMin);
-scoreMax = cartUsualIntClosestToHome(cart,tdb, FALSE, "scoreMax", scoreMax);
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, rnaSecStr, hvg);

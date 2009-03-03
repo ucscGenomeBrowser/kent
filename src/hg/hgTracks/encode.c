@@ -10,7 +10,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.19 2009/03/03 19:38:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.20 2009/03/03 21:11:25 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -183,8 +183,6 @@ struct linkedFeatures *lfList = NULL;
 enum encodePeakType pt = 0;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
-scoreMin = cartUsualIntClosestToHome(cart,tg->tdb, FALSE, "scoreMin", scoreMin);
-scoreMax = cartUsualIntClosestToHome(cart,tg->tdb, FALSE, "scoreMax", scoreMax);
 if (ct)
     {
     db = CUSTOM_TRASH;
