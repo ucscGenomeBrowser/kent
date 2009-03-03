@@ -25,6 +25,10 @@
 #include "cheapcgi.h"
 #endif
 
+#ifndef HGFIND_H
+#include "hgFind.h"
+#endif
+
 #ifdef boolean
 #undef boolean
 // common.h defines boolean as int; json.h typedefs boolean as int.
@@ -94,7 +98,7 @@
 #define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s unknown", (format))
 #define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in genome %s", (action), (track), (db))
 #define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
-#define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "Not implemented: %s", (feature))
+#define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "%s not implemented", (feature))
 
 /* Global Variables */
 char quoteBuf[1024];
@@ -201,6 +205,9 @@ time_t oneTrackDbUpdateTime(char *db, char *tblSpec);
 time_t trackDbLatestUpdateTime(char *db);
 /* Get latest update time from each trackDb table. */
 
+time_t findSpecLatestUpdateTime(char *db);
+/* Get latest update time from each hgFindSpec table. */
+
 ////////////////////////
 void printItemAsAnnoj(char *db, char *track, char *type, char *term);
 // print out a description for a track item
@@ -276,5 +283,20 @@ struct coords navigate(int start, int end, int chromSize);
 
 void printUsage(char *reqEtag, time_t reqModified);
 
+struct json_object *addSearchGenomeUrl(struct json_object *o, char *url_name, char *genome, char *term);
+// Add a search url to object o with name 'url_name'.
+// Genome can be NULL
+// Item can be NULL
+// Returns object o
+
+struct json_object *addSearchGenomeTrackUrl(struct json_object *o, char *url_name, char *genome, char *track, char *term);
+// Add a search url to object o with name 'url_name'.
+// Genome must be supplied if track is supplied, otherwise can be NULL
+// Track can be NULL
+// Item can be NULL
+// Returns object o
+
+void searchTracks(time_t modified, struct hgPositions *hgp, char *genome, char *track, char *query);
+// search for data within tracks or whole genomes
 
 #endif /* HGDATA_H */
