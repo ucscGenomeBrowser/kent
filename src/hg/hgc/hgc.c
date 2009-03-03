@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1511 2009/02/28 00:06:51 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1512 2009/03/03 01:01:04 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14800,15 +14800,44 @@ sqlFreeResult(&sr);
 
 void checkForHapmap(struct sqlConnection *conn, struct trackDb *tdb, char *itemName)
 {
+boolean gotHapMap = FALSE;
 char query[512];
-if (!hTableExists(database, "hapmapAllelesSummary"))
-    return;
-safef(query, sizeof(query),
-      "select count(*) from hapmapAllelesSummary where name = '%s'", itemName);
-if (sqlQuickNum(conn, query) != 1)
-    return;
-printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B><BR>\n",
-       hgTracksPathAndSettings());
+if (sqlTableExists(conn, "hapmapAllelesSummary"))
+    {
+    safef(query, sizeof(query),
+	  "select count(*) from hapmapAllelesSummary where name = '%s'", itemName);
+    if (sqlQuickNum(conn, query) > 0)
+	gotHapMap = TRUE;
+    }
+else
+    {
+    int i;
+    for (i = 0;  hapmapPhaseIIIPops[i] != NULL;  i++)
+	{
+	char table[HDB_MAX_TABLE_STRING];
+	safef(table, sizeof(table), "hapmapSnps%s", hapmapPhaseIIIPops[i]);
+	if (sqlTableExists(conn, table))
+	    {
+	    safef(query, sizeof(query),
+		  "select count(*) from %s where name = '%s'", table, itemName);
+	    if (sqlQuickNum(conn, query) > 0)
+		{
+		gotHapMap = TRUE;
+		break;
+		}
+	    }
+	}
+    }
+struct trackDb *hsTdb = hashFindVal(trackHash, "hapmapSnps");
+if (gotHapMap && hsTdb != NULL)
+    {
+    printf("<BR><B><A HREF=\"%s", hgTracksPathAndSettings());
+    // If hapmapSnps is hidden, make it dense; if it's pack etc., leave it alone.
+    if (sameString("hide", cartUsualString(cart, "hapmapSnps",
+					   trackDbSettingOrDefault(hsTdb, "visibility", "hide"))))
+	printf("&hapmapSnps=dense");
+    printf("\"> HapMap SNP</A> </B><BR>\n");
+    }
 }
 
 static void printLsSnpPdb(struct sqlConnection *conn, char *pdbId, char *snpId)
@@ -18297,29 +18326,31 @@ printf("<TR>");
 printf("<TD>%s</TD>", pop);
 if (count1 > count2)
     {
-    printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD bgcolor = \"lightgrey\" align=right>%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD align=right>%d (%3.2f%%)</TD>", count2, freq2);
     }
 else if (count1 < count2)
     {
-    printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD align=right>%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD bgcolor = \"lightgrey\" align=right>%d (%3.2f%%)</TD>", count2, freq2);
     }
 else
     {
-    printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD align=right>%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD align=right>%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
 }
 
 
-void doHapmapSnpsSummary(struct trackDb *tdb, char *itemName, boolean showOrtho)
+void doHapmapSnpsSummaryTable(struct sqlConnection *conn, struct trackDb *tdb, char *itemName,
+			      boolean showOrtho)
+/* Use the hapmapAllelesSummary table (caller checks for existence) to display allele
+ * frequencies for the 4 HapMap Phase II populations. */
 {
 char *table = tdb->tableName;
 struct hapmapAllelesSummary *summaryItem;
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -18327,13 +18358,11 @@ int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 float het = 0.0;
 
-if (!hTableExists(database, "hapmapAllelesSummary")) return;
 safef(query, sizeof(query), "select * from hapmapAllelesSummary where chrom = '%s' and "
       "chromStart=%d and name = '%s'", seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 summaryItem = hapmapAllelesSummaryLoad(row+rowOffset);
-
 
 printf("<BR><B>Allele frequencies in each population (major allele highlighted):</B><BR>\n");
 printf("<TABLE BORDER=1>\n");
@@ -18360,9 +18389,8 @@ het = summaryItem->score / 10.0;
 printf("<BR><B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
 
 
-if (showOrtho &&
-    (differentString(summaryItem->chimpAllele, "none") ||
-    differentString(summaryItem->macaqueAllele, "none")))
+if (showOrtho && (differentString(summaryItem->chimpAllele, "none") ||
+		  differentString(summaryItem->macaqueAllele, "none")))
     {
     printf("<BR><B>Orthologous alleles:</B><BR>\n");
     printf("<TABLE BORDER=1>\n");
@@ -18387,14 +18415,141 @@ if (showOrtho &&
     }
 
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+}
+
+void doHapmapSnpsAllPops(struct sqlConnection *conn, struct trackDb *tdb, char *itemName,
+			 boolean showOrtho)
+/* Show item's SNP allele frequencies for each of the 11 HapMap Phase III 
+ * populations, as well as chimp and macaque if showOrtho. */
+{
+int i;
+printf("<BR><B>Allele frequencies in each population (major allele highlighted):</B><BR>\n");
+printf("<TABLE BORDER=1>\n");
+// Do a first pass to gather up alleles and counts:
+char *majorAlleles[HAP_PHASEIII_POPCOUNT];
+int majorCounts[HAP_PHASEIII_POPCOUNT], haploCounts[HAP_PHASEIII_POPCOUNT];
+int totalA1Count = 0, totalA2Count = 0, totalHaploCount = 0;
+int totalScore = 0, scoreCount = 0;
+char *allele1 = NULL, *allele2 = NULL;
+for (i=0;  i < HAP_PHASEIII_POPCOUNT;  i++)
+    {
+    char *popCode = hapmapPhaseIIIPops[i];
+    struct hapmapSnps *item = NULL;
+    char table[HDB_MAX_TABLE_STRING];
+    safef(table, sizeof(table), "hapmapSnps%s", popCode);
+    if (sqlTableExists(conn, table))
+	{
+	char query[512];
+	safef(query, sizeof(query), "select * from %s where name = '%s' and chrom = '%s'",
+	      table, itemName, seqName);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int rowOffset = hOffsetPastBin(database, seqName, table);
+	    item = hapmapSnpsLoad(row+rowOffset);
+	    }
+	sqlFreeResult(&sr);
+	}
+    majorAlleles[i] = "";
+    majorCounts[i] = 0;
+    haploCounts[i] = 0;
+    if (item != NULL)
+	{
+	majorAlleles[i] = item->allele1;
+        majorCounts[i] = 2*item->homoCount1 + item->heteroCount;
+	if (item->homoCount1 < item->homoCount2)
+	    {
+	    majorAlleles[i] = item->allele2;
+	    majorCounts[i] = 2*item->homoCount2 + item->heteroCount;
+	    }
+	haploCounts[i] = 2*(item->homoCount1 + item->homoCount2 + item->heteroCount);
+	if (allele1 == NULL)
+	    {
+	    allele1 = item->allele1;
+	    allele2 = item->allele2;
+	    }
+	else if (!sameString(allele1, item->allele1) || !sameString(allele2, item->allele2))
+	    warn("Allele order in hapmapSnps%s is different from earlier table(s)", popCode);
+	totalA1Count += 2*item->homoCount1 + item->heteroCount;
+	totalA2Count += 2*item->homoCount2 + item->heteroCount;
+	totalHaploCount += haploCounts[i];
+	totalScore += item->score;
+	scoreCount++;
+	}
+    }
+printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", allele1, allele2);
+for (i=0;  i < HAP_PHASEIII_POPCOUNT;  i++)
+    showOneHapmapRow(hapmapPhaseIIIPops[i], allele1, allele2, majorAlleles[i],
+		     majorCounts[i], haploCounts[i]);
+char *totalMajorAllele = (totalA1Count >= totalA2Count) ? allele1 : allele2;
+int totalMajorCount = max(totalA1Count, totalA2Count);
+showOneHapmapRow("Total", allele1, allele2, totalMajorAllele, totalMajorCount, totalHaploCount);
+printf("</TABLE>\n");
+
+printf("<BR><B>Heterozygosity (average of all populations' het):</B> %3.2f%%<BR>\n",
+       ((float)totalScore/scoreCount)/10.0);
+
+if (showOrtho)
+    {
+    boolean showedHeader = FALSE;
+    int i;
+    for (i = 0;  hapmapOrthoSpecies[i] != NULL; i++)
+	{
+	char table[HDB_MAX_TABLE_STRING];
+	safef(table, sizeof(table), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+	if (sqlTableExists(conn, table))
+	    {
+	    if (!showedHeader)
+		{
+		printf("<BR><B>Orthologous alleles from reference genome assemblies:</B><BR>\n");
+		printf("<TABLE BORDER=1>\n");
+		printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Quality Score</TH></TR>\n");
+		showedHeader = TRUE;
+		}
+	    boolean gotQual = (sqlFieldIndex(conn, table, "orthoQual") >= 0);
+	    char query[512];
+	    if (gotQual)
+		safef(query, sizeof(query),
+		      "select orthoAllele, orthoQual from %s where name = '%s' and chrom = '%s'",
+		      table, itemName, seqName);
+	    else
+		safef(query, sizeof(query),
+		      "select orthoAllele from %s where name = '%s' and chrom = '%s'",
+		      table, itemName, seqName);
+	    struct sqlResult *sr = sqlGetResult(conn, query);
+	    char **row;
+	    if ((row = sqlNextRow(sr)) != NULL)
+		{
+		char *allele = row[0];
+		char *qual = gotQual ? row[1] : "N/A";
+		printf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD></TR>",
+		       hapmapOrthoSpecies[i], allele, qual);
+		}
+	    else
+		printf("<TR><TD>%s</TD><TD>N/A</TD><TD>N/A</TD></TR>", hapmapOrthoSpecies[i]);
+	    sqlFreeResult(&sr);
+	    }
+	}
+    if (showedHeader)
+	printf("</TABLE>\n");
+    }
+}
+
+void doHapmapSnpsSummary(struct sqlConnection *conn, struct trackDb *tdb, char *itemName,
+			 boolean showOrtho)
+/* Display per-population allele frequencies. */
+{
+if (sqlTableExists(conn, "hapmapAllelesSummary"))
+    doHapmapSnpsSummaryTable(conn, tdb, itemName, TRUE);
+else
+    doHapmapSnpsAllPops(conn, tdb, itemName, TRUE);
 }
 
 void doHapmapSnps(struct trackDb *tdb, char *itemName)
 /* assume just one hapmap snp at a given location */
 {
 char *table = tdb->tableName;
-struct hapmapSnps *thisItem;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -18405,6 +18560,7 @@ int majorCount = 0;
 int minorCount = 0;
 char *majorAllele = NULL;
 char *minorAllele = NULL;
+char *popCode = table + strlen("hapmapSnps");
 
 genericHeader(tdb, itemName);
 
@@ -18413,75 +18569,47 @@ safef(query, sizeof(query),
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-thisItem = hapmapSnpsLoad(row+rowOffset);
-printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank> %s</A><BR>\n", itemName, itemName);
-printf("<B>Human Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-      hgTracksPathAndSettings(), database, thisItem->chrom, thisItem->chromStart+1, thisItem->chromEnd);
-printf("%s:%d-%d</A><BR>\n", thisItem->chrom, thisItem->chromStart+1, thisItem->chromEnd);
-printf("<B>Strand:</B> %s<BR>\n", thisItem->strand);
-printf("<B>Polymorphism type:</B> %s<BR>\n", thisItem->observed);
-if (thisItem->homoCount1 >= thisItem->homoCount2)
+struct hapmapSnps *item = hapmapSnpsLoad(row+rowOffset);
+printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?"
+       "type=rs&rs=%s\" TARGET=_blank> %s</A><BR>\n", itemName, itemName);
+printf("<B>Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
+       hgTracksPathAndSettings(), database, item->chrom, item->chromStart+1, item->chromEnd,
+       item->chrom, item->chromStart+1, item->chromEnd);
+printf("<B>Strand:</B> %s<BR>\n", item->strand);
+printf("<B>Polymorphism type:</B> %s<BR>\n", item->observed);
+if (item->homoCount1 >= item->homoCount2)
     {
-    majorAllele = cloneString(thisItem->allele1);
-    majorCount = thisItem->homoCount1;
-    minorCount = thisItem->homoCount2;
-    minorAllele = cloneString(thisItem->allele2);
+    majorAllele = cloneString(item->allele1);
+    majorCount = item->homoCount1;
+    minorCount = item->homoCount2;
+    minorAllele = cloneString(item->allele2);
     }
 else
     {
-    majorAllele = cloneString(thisItem->allele2);
-    majorCount = thisItem->homoCount2;
-    minorCount = thisItem->homoCount1;
-    minorAllele = cloneString(thisItem->allele1);
+    majorAllele = cloneString(item->allele2);
+    majorCount = item->homoCount2;
+    minorCount = item->homoCount1;
+    minorAllele = cloneString(item->allele1);
     }
 
-printf("<BR><B>Genotype counts for ");
-if (sameString(table, "hapmapSnpsCEU"))
-    printf("CEU:</B><BR>\n");
-if (sameString(table, "hapmapSnpsCHB"))
-    printf("CHB:</B><BR>\n");
-if (sameString(table, "hapmapSnpsJPT"))
-    printf("JPT:</B><BR>\n");
-if (sameString(table, "hapmapSnpsYRI"))
-    printf("YRI:</B><BR>\n");
+printf("<BR><B>Genotype counts for %s:</B><BR>\n", popCode);
 printf("<TABLE BORDER=1>\n");
-
-printf("<TR>");
-printf("<TD>Major allele (%s) homozygotes</TD>", majorAllele);
-printf("<TD>%d individuals</TD>", majorCount);
-printf("</TR>");
-
+printf("<TR><TD>Major allele (%s) homozygotes</TD><TD align=right>%d individuals</TD></TR>\n",
+       majorAllele, majorCount);
 if (minorCount > 0)
-    {
-    printf("<TR>");
-    printf("<TD>Minor allele (%s) homozygotes</TD>", minorAllele);
-    printf("<TD>%d individuals</TD>", minorCount);
-    printf("</TR>");
-    }
-
-if (thisItem->heteroCount > 0)
-    {
-    printf("<TR>");
-    if (strcasecmp(majorAllele, minorAllele) < 0)
-        printf("<TD>Heterozygotes (%s/%s)</TD>", majorAllele, minorAllele);
-    else
-        printf("<TD>Heterozygotes (%s/%s)</TD>", minorAllele, majorAllele);
-    printf("<TD>%d individuals</TD>", thisItem->heteroCount);
-    printf("</TR>");
-    }
-
-printf("<TR>");
-printf("<TD>Total</TD>");
-printf("<TD>%d individuals</TD>", majorCount + minorCount + thisItem->heteroCount);
-printf("</TR>");
-
+    printf("<TR><TD>Minor allele (%s) homozygotes</TD><TD align=right>%d individuals</TD></TR>\n",
+	   minorAllele, minorCount);
+if (item->heteroCount > 0)
+    printf("<TR><TD>Heterozygotes (%s)</TD><TD align=right>%d individuals</TD></TR>\n",
+	   item->observed, item->heteroCount);
+printf("<TR><TD>Total</TD><TD align=right>%d individuals</TD></TR>\n",
+       majorCount + minorCount + item->heteroCount);
 printf("</TABLE>\n");
 
 sqlFreeResult(&sr);
 
-/* get summary data here */
-doHapmapSnpsSummary(tdb, itemName, TRUE);
+/* Show allele frequencies for all populations */
+doHapmapSnpsSummary(conn, tdb, itemName, TRUE);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -18548,9 +18676,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 printf("<BR>\n");
-/* get summary data here */
+/* get summary data (allele frequencies) here */
 /* don't repeat ortho display */
-doHapmapSnpsSummary(tdb, itemName, FALSE);
+doHapmapSnpsSummary(conn, tdb, itemName, FALSE);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -21736,10 +21864,7 @@ else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
     }
-else if (sameString("hapmapSnpsCEU", track) ||
-         sameString("hapmapSnpsCHB", track) ||
-	 sameString("hapmapSnpsJPT", track) ||
-	 sameString("hapmapSnpsYRI", track))
+else if (startsWith("hapmapSnps", track) && strlen(track) == 13)
     {
     doHapmapSnps(tdb, item);
     }
