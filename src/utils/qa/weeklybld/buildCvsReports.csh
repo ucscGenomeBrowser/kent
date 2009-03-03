@@ -75,27 +75,43 @@ endif
 #     'CVS_REPORTS_BASE=/hive/groups/qa/cvs-reports-latest'
 set CVS_REPORTS_ROOT=/hive/groups/qa/
 cd $CVS_REPORTS_ROOT
-set CVS_REPORT_HIST=cvs-reports-history/v${BRANCHNN}
-if ( ! -d $CVS_REPORT_HIST ) then
-    mkdir $CVS_REPORT_HIST
-    if ( $status ) then
-	echo "Error: [mode=$mode] could not make directory [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
-	exit 1
+
+if ( "$mode" == "review") then
+    # Preview is for BRANCHNN+1
+    # Make the history directories and change the 'latest' link
+    @ NEXTNN=$BRANCHNN + 1
+    set CVS_REPORT_HIST=cvs-reports-history/v${NEXTNN}
+    set CVS_REPORT_OLD_HIST=cvs-reports-history/v${BRANCHNN}
+    if ( ! -d $CVS_REPORT_HIST ) then
+        mkdir $CVS_REPORT_HIST
+        if ( $status ) then
+	    echo "Error: [mode=$mode] could not make directory [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
+	    exit 1
+        endif
+        mkdir $CVS_REPORT_HIST/branch
+        mkdir $CVS_REPORT_HIST/review
+        mkdir $CVS_REPORT_HIST/kent
+        echo "Copying previous cvs for update by cvs-reports-d [from $CVS_REPORT_OLD_HIST/kent/* -> $CVS_REPORT_HIST/kent/] on $HOST [${0}: `date`]"
+	cp -r $CVS_REPORT_OLD_HIST/kent/* $CVS_REPORT_HIST/kent/
+	echo "Created  dirs $CVS_REPORT_HIST/{branch,review,kent} on $HOST [${0}: `date`]"
     endif
-    mkdir $CVS_REPORT_HIST/branch
-    mkdir $CVS_REPORT_HIST/review
-    mkdir $CVS_REPORT_HIST/kent
+else
+    # For branches, history is BRANCHNN
+    set CVS_REPORT_HIST=cvs-reports-history/v${BRANCHNN}
 endif
+# check history dir exists
 if ( ! -d $CVS_REPORT_HIST ) then
     echo "Error: [mode=$mode] directory does not exist [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
     exit 1
 endif
+# check the 'lastest' link points to right place
 rm cvs-reports-latest
 ln -s $CVS_REPORT_HIST cvs-reports-latest
 if ( -L cvs-reports-latest != "${CVS_REPORT_HIST}" ) then
     echo "Error: [mode=$mode] could not make symlink [cvs-reports-latest -> $CVS_REPORTS_ROOT/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
     exit 1
 endif
+echo "Using history dir $PWD/$CVS_REPORT_HIST/ and symlink cvs-reports-latest on $HOST [${0}: `date`]"
 
 # it will shove itself off into the background anyway!
 cd $WEEKLYBLD
