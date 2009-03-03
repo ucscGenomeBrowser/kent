@@ -5623,7 +5623,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqPeaksGm12878Jund
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM12878 JunD Pk
+    shortLabel GM128 JunD Pk
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (JunD in GM12878 cells)
     subGroups view=Peaks factor=JunD cellType=GM12878
     type narrowPeak
@@ -5636,7 +5636,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqSignalGm12878Jund
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM12878 JunD Sig
+    shortLabel GM128 JunD Sig
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (JunD in GM12878 cells)
     subGroups view=Signal factor=JunD cellType=GM12878
     type wig 0.00 3399.00
@@ -5650,7 +5650,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Jund
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM12878 JunD Raw1
+    shortLabel GM128 JunD 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (JunD in GM12878 cells)
     subGroups view=zRAW factor=JunD cellType=GM12878
     type wig 1.00 2799.00
@@ -5664,7 +5664,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Jund
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM12878 JunD Raw2
+    shortLabel GM128 JunD 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (JunD in GM12878 cells)
     subGroups view=zRAW factor=JunD cellType=GM12878
     type wig 1.00 3680.00
@@ -5706,7 +5706,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Max
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Max Raw1
+    shortLabel GM128 Max 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 4163.00
@@ -5720,7 +5720,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Max
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Max Raw2
+    shortLabel GM128 Max 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 3671.00
@@ -5761,7 +5761,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Pol2 Raw1
+    shortLabel GM128 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
     type wig 1.00 2874.00
@@ -5775,7 +5775,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Pol2 Raw2
+    shortLabel GM128 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
     type wig 1.00 1832.00
@@ -5816,7 +5816,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 c-Fos Raw1
+    shortLabel GM128 c-Fos 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1507.00
@@ -5830,7 +5830,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 c-Fos Raw2
+    shortLabel GM128 c-Fos 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1828.00
@@ -5844,7 +5844,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 c-Fos Raw3
+    shortLabel GM128 c-Fos 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1740.00
@@ -5913,7 +5913,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HCT116 TCF4 Raw1
+    shortLabel HCT116 TCF4 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (TCF4 in HCT-116 cells)
     subGroups view=zRAW factor=TCF4 cellType=HCT116
     type wig 1.00 5626.00
@@ -5927,7 +5927,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HCT116 TCF4 Raw2
+    shortLabel HCT116 TCF4 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (TCF4 in HCT-116 cells)
     subGroups view=zRAW factor=TCF4 cellType=HCT116
     type wig 1.00 2567.00
@@ -5996,7 +5996,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HEK293 Pol2 Raw1
+    shortLabel HEK293 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 2217.00
@@ -6010,7 +6010,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HEK293 Pol2 Raw2
+    shortLabel HEK293 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1345.00
@@ -6024,7 +6024,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HEK293 Pol2 Raw3
+    shortLabel HEK293 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 2119.00
@@ -6098,7 +6098,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Pol2 Raw1
+    shortLabel HeLa Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 3673.00
@@ -6114,7 +6114,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Pol2 Raw2
+    shortLabel HeLa Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 6153.00
@@ -6130,7 +6130,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Pol2 Raw3
+    shortLabel HeLa Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 4989.00
@@ -6207,7 +6207,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa LgFrag Raw1
+    shortLabel HeLa LgFrag 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Large_Frag in HeLa cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 4879.00
@@ -6221,7 +6221,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa LgFrag Raw2
+    shortLabel HeLa LgFrag 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Large_Frag in HeLa cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 3795.00
@@ -6249,7 +6249,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MNase Raw1
+    shortLabel HeLa MNase 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (MNase in HeLa cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 9859.00
@@ -6263,7 +6263,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MNase Raw2
+    shortLabel HeLa MNase 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (MNase in HeLa cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 12929.00
@@ -6304,7 +6304,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MusIgG Raw1
+    shortLabel HeLa MusIgG 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Mouse_IgG in HeLa cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 5841.00
@@ -6318,7 +6318,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MusIgG Raw2
+    shortLabel HeLa MusIgG 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Mouse_IgG in HeLa cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 7220.00
@@ -6346,7 +6346,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa DNA Raw1
+    shortLabel HeLa DNA 1
     longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Naked_DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 7798.00
@@ -6360,7 +6360,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa DNA Raw2
+    shortLabel HeLa DNA 2
     longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Naked_DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 5002.00
@@ -6374,7 +6374,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa DNA Raw3
+    shortLabel HeLa DNA 3
     longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Naked_DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 4462.00
@@ -6512,7 +6512,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 Pol2 Raw1
+    shortLabel HepG2 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 627.00
@@ -6526,7 +6526,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 Pol2 Raw2
+    shortLabel HepG2 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 1574.00
@@ -6540,7 +6540,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 Pol2 Raw3
+    shortLabel HepG2 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 2595.00
@@ -6567,7 +6567,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqSignalHepg2Srebp1a
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP1A Sig
+    shortLabel HepG2 SREBP1A Sg
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (SREBP1A in HepG2 cells)
     subGroups view=Signal factor=SREBP1A cellType=HepG2
     type wig 0.00 632.00
@@ -6581,7 +6581,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP1A Raw1
+    shortLabel HepG2 SREBP1A 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 2116.00
@@ -6595,7 +6595,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp1a
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP1A Raw2
+    shortLabel HepG2 SREBP1A 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 3660.00
@@ -6609,7 +6609,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp1a
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP1A Raw3
+    shortLabel HepG2 SREBP1A 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 4781.00
@@ -6650,7 +6650,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP2 Raw1
+    shortLabel HepG2 SREBP2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 1037.00
@@ -6664,7 +6664,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP2 Raw2
+    shortLabel HepG2 SREBP2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 2076.00
@@ -6678,7 +6678,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 SREBP2 Raw3
+    shortLabel HepG2 SREBP2 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 2524.00
@@ -6706,7 +6706,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Input
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 Input Raw1
+    shortLabel HepG2 Input 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 1247.00
@@ -6720,7 +6720,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Input
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 Input Raw2
+    shortLabel HepG2 Input 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 4646.00
@@ -6734,7 +6734,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Input
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel HepG2 Input Raw3
+    shortLabel HepG2 Input 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 3 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 4750.00
@@ -6778,7 +6778,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Gata1
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 GATA1 Raw1
+    shortLabel K562 GATA1 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 2385.00
@@ -6792,7 +6792,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Gata1
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 GATA1 Raw2
+    shortLabel K562 GATA1 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 7115.00
@@ -6833,7 +6833,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Jund
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 JunD Raw1
+    shortLabel K562 JunD 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (JunD in K562 cells)
     subGroups view=zRAW factor=JunD cellType=K562
     type wig 1.00 4981.00
@@ -6847,7 +6847,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Jund
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 JunD Raw2
+    shortLabel K562 JunD 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (JunD in K562 cells)
     subGroups view=zRAW factor=JunD cellType=K562
     type wig 1.00 5553.00
@@ -6888,7 +6888,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Max
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Max Raw1
+    shortLabel K562 Max 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Max in K562 cells)
     subGroups view=zRAW factor=Max cellType=K562
     type wig 1.00 6997.00
@@ -6902,7 +6902,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Max
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Max Raw2
+    shortLabel K562 Max 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Max in K562 cells)
     subGroups view=zRAW factor=Max cellType=K562
     type wig 1.00 4951.00
@@ -6943,7 +6943,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Nfe2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 NF-E2 Raw1
+    shortLabel K562 NF-E2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 10629.00
@@ -6957,7 +6957,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Nfe2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 NF-E2 Raw2
+    shortLabel K562 NF-E2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 9043.00
@@ -6999,7 +6999,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Pol2 Raw1
+    shortLabel K562 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 9783.00
@@ -7013,7 +7013,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Pol2 Raw2
+    shortLabel K562 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 8446.00
@@ -7054,7 +7054,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Z263 Raw1
+    shortLabel K562 Z263 1
     longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2478.00
@@ -7068,7 +7068,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Z263 Raw2
+    shortLabel K562 Z263 2
     longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2247.00
@@ -7109,7 +7109,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Fos Raw1
+    shortLabel K562 c-Fos 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 6107.00
@@ -7123,7 +7123,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Fos Raw2
+    shortLabel K562 c-Fos 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3561.00
@@ -7137,7 +7137,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3K562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Fos Raw3
+    shortLabel K562 c-Fos 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3921.00
@@ -7178,7 +7178,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Cjun
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Jun Raw1
+    shortLabel K562 c-Jun 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Jun in K562 cells)
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 11614.00
@@ -7192,7 +7192,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Cjun
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Jun Raw2
+    shortLabel K562 c-Jun 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Jun in K562 cells)
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 5368.00
@@ -7233,7 +7233,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Myc Raw1
+    shortLabel K562 c-Myc 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1590.00
@@ -7247,7 +7247,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Myc Raw2
+    shortLabel K562 c-Myc 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1603.00
@@ -7317,7 +7317,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel NB4 Pol2 Raw1
+    shortLabel NB4 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 10895.00
@@ -7331,7 +7331,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel NB4 Pol2 Raw2
+    shortLabel NB4 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 5847.00
@@ -7345,7 +7345,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel NB4 Pol2 Raw3
+    shortLabel NB4 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 4034.00
@@ -8583,7 +8583,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     itemRgb on
-    cell GM12878
+    cell GM128
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
     release alpha
