@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.4 2009/02/25 11:22:56 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.5 2009/03/03 07:44:05 mikep Exp $";
 
 static struct dbDbClade *dbDbCladeLoad(char **row)
 /* Load a dbDbClade from row fetched with select * from dbDb
@@ -57,7 +57,6 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-
 struct dbDbClade *hGetIndexedDbClade(char *genome)
 /* Get list of active genome databases and clade
  * Only get details for one 'genome' unless NULL
@@ -99,6 +98,64 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct chromInfo *getAllChromInfo(char *db)
+/* Query db.chromInfo for all chrom info. */
+{
+struct chromInfo *ci = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+struct sqlResult *sr = NULL;
+char **row = NULL;
+sr = sqlGetResult(conn, "select * from chromInfo order by chrom desc");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    slSafeAddHead(&ci, chromInfoLoad(row));
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ci;
+}
+
+// //////////////////////////////////////
+//  Update times for databases and tables
+
+time_t oneTrackDbUpdateTime(char *db, char *tblSpec)
+/* get latest update time for a trackDb table, including handling profiles:tbl. 
+ * Returns 0 if table doesnt exist
+  */
+{
+char *tbl;
+struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
+time_t latest = sqlTableUpdateTime(conn, tbl);
+hFreeConn(&conn);
+return latest;
+}
+
+time_t trackDbLatestUpdateTime(char *db)
+/* Get latest update time from each trackDb table. */
+{
+struct slName *tableList = hTrackDbList(), *one;
+time_t latest = 0;
+for (one = tableList; one != NULL; one = one->next)
+    {
+    latest = max(latest, oneTrackDbUpdateTime(db, one->name));
+    }
+slNameFreeList(&tableList);
+return latest;
+}
+
+time_t findSpecLatestUpdateTime(char *db)
+/* Get latest update time from each hgFindSpec table. */
+{
+struct slName *specList = hgFindSpecNameList(db), *one;
+time_t latest = 0;
+for (one = specList; one != NULL; one = one->next)
+    {
+    latest = max(latest, oneTrackDbUpdateTime(db, one->name));
+    }
+slNameFreeList(&specList);
+return latest;
+}
+
 time_t hGetLatestUpdateTimeDbClade()
 // return the latest time that any of the relevant tables were changed
 {
@@ -118,22 +175,5 @@ struct sqlConnection *conn = hAllocConn(db);
 time_t latest = sqlTableUpdateTime(conn, "chromInfo");
 hFreeConn(&conn);
 return latest;
-}
-
-struct chromInfo *getAllChromInfo(char *db)
-/* Query db.chromInfo for all chrom info. */
-{
-struct chromInfo *ci = NULL;
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = NULL;
-char **row = NULL;
-sr = sqlGetResult(conn, "select * from chromInfo order by chrom desc");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slSafeAddHead(&ci, chromInfoLoad(row));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ci;
 }
 
