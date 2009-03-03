@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.473 2009/02/23 22:55:04 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.474 2009/03/03 01:02:46 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1983,158 +1983,120 @@ void hapmapSnpsUi(struct trackDb *tdb)
 /* snp track also sets global variables, don't actually need this? */
 /* Consider using radio buttons */
 {
-char **menu;
-int menuSize = 0;
-int menuPos = 0;
-float minFreq = 0.0;
-float maxFreq = 0.0;
-float minHet = 0.0;
-float maxHet = 0.0;
-int minChimpQual = 0;
-int minMacaqueQual = 0;
+struct sqlConnection *conn = hAllocConn(database);
+boolean isPhaseIII = (! sqlTableExists(conn, "hapmapAllelesSummary"));
 
 puts("<P>");
 puts("<B>Display filters (applied to all subtracks):</B>");
 puts("<BR>\n");
 
 puts("<BR><B>Population availability:</B>&nbsp;");
-menuSize = 3;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "all 4 populations";
-menu[menuPos++] = "1-3 populations";
-cgiMakeDropList(HAP_POP_COUNT, menu, menuSize,
-    cartCgiUsualString(cart, HAP_POP_COUNT, HAP_POP_COUNT_DEFAULT));
-freez(&menu);
+static char *popAvailMenuPhaseIII[] = 
+    { "no filter",
+      "all 11 Phase III populations",
+      "all 4 Phase II populations" };
+static char *popAvailMenuPhaseII[] =
+    { "no filter",
+      "all 4 populations",
+      "1-3 populations" };
+char **menu = isPhaseIII ? popAvailMenuPhaseIII : popAvailMenuPhaseII;
+cgiMakeDropList(HAP_POP_COUNT, menu, 3,
+		cartUsualString(cart, HAP_POP_COUNT, HAP_FILTER_DEFAULT));
 
 puts("<BR><B>Major allele mixture between populations:</B>&nbsp;");
-menuSize = 3;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "mixed";
-menu[menuPos++] = "not mixed";
-cgiMakeDropList(HAP_POP_MIXED, menu, menuSize,
-    cartCgiUsualString(cart, HAP_POP_MIXED, HAP_POP_MIXED_DEFAULT));
-freez(&menu);
+static char *mixedMenu[] = { "no filter", "mixed", "not mixed" };
+cgiMakeDropList(HAP_POP_MIXED, mixedMenu, 3,
+		cartUsualString(cart, HAP_POP_MIXED, HAP_FILTER_DEFAULT));
 
-puts("<BR><B>Monomorphism:</B>&nbsp;");
-puts("<B>CEU:</B>&nbsp;");
-menuSize = 3;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "yes";
-menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_CEU, menu, menuSize,
-    cartCgiUsualString(cart, HAP_MONO_CEU, HAP_MONO_DEFAULT));
-freez(&menu);
-puts("<B>CHB:</B>&nbsp;");
-menuSize = 3;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "yes";
-menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_CHB, menu, menuSize,
-    cartCgiUsualString(cart, HAP_MONO_CHB, HAP_MONO_DEFAULT));
-freez(&menu);
-puts("<B>JPT:</B>&nbsp;");
-menuSize = 3;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "yes";
-menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_JPT, menu, menuSize,
-    cartCgiUsualString(cart, HAP_MONO_JPT, HAP_MONO_DEFAULT));
-freez(&menu);
-puts("<B>YRI:</B>&nbsp;");
-menuSize = 3;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "yes";
-menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_YRI, menu, menuSize,
-    cartCgiUsualString(cart, HAP_MONO_YRI, HAP_MONO_DEFAULT));
-freez(&menu);
+puts("<BR><B>Monomorphism:</B><BR>");
+static char *noYesNoMenu[] = { "no filter", "yes", "no" };
+char **pops = isPhaseIII ? hapmapPhaseIIIPops : hapmapPhaseIIPops;
+int popCount = isPhaseIII ? HAP_PHASEIII_POPCOUNT : HAP_PHASEII_POPCOUNT;
+puts("<TABLE BORDERWITH=0>");
+int cellCount = 0, i;
+char cartVar[128];
+for (i = 0;  i < popCount;  i++)
+    {
+    char table[HDB_MAX_TABLE_STRING];
+    safef(table, sizeof(table), "hapmapSnps%s", pops[i]);
+    if (sqlTableExists(conn, table))
+	{
+	if (cellCount == 0)
+	    puts("<TR>");
+	printf("<TD align=right><B>%s:</B></TD><TD>", pops[i]);
+	safef(cartVar, sizeof(cartVar), "%s_%s", HAP_MONO_PREFIX, pops[i]);
+	cgiMakeDropList(cartVar, noYesNoMenu, 3,
+			cartUsualString(cart, HAP_MONO_PREFIX, HAP_FILTER_DEFAULT));
+	printf("</TD>\n");
+	cellCount += 2;
+	if (cellCount == 12)
+	    {
+	    puts("</TR>");
+	    cellCount = 0;
+	    }
+	}
+    }
+if (cellCount != 0)
+    {
+    while (cellCount++ < 12)
+	puts("</TD>");
+    puts("</TR>");
+    }
+puts("</TABLE>");
 
-puts("<BR><BR><B>Polymorphism type:</B>&nbsp;");
-menuSize = 5;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "bi-allelic";
-menu[menuPos++] = "transition";
-menu[menuPos++] = "transversion";
-menu[menuPos++] = "complex";
-cgiMakeDropList(HAP_TYPE, menu, menuSize,
-    cartCgiUsualString(cart, HAP_TYPE, HAP_TYPE_DEFAULT));
-freez(&menu);
+puts("<BR><B>Polymorphism type:</B>&nbsp;");
+static char *typeMenu[] = { "no filter", "bi-allelic", "transition", "transversion", "complex" };
+cgiMakeDropList(HAP_TYPE, typeMenu, 5,
+		cartUsualString(cart, HAP_TYPE, HAP_FILTER_DEFAULT));
 
 puts("<BR><BR><B>Minor allele frequency in any population:  min:</B>&nbsp;");
-minFreq = atof(cartUsualString(cart, HAP_MIN_FREQ, HAP_MIN_FREQ_DEFAULT));
+float minFreq = atof(cartUsualString(cart, HAP_MIN_FREQ, HAP_MIN_FREQ_DEFAULT));
 cgiMakeDoubleVar(HAP_MIN_FREQ, minFreq, 6);
 
 puts("<B>max:</B>&nbsp;");
-maxFreq = atof(cartUsualString(cart, HAP_MAX_FREQ, HAP_MAX_FREQ_DEFAULT));
+float maxFreq = atof(cartUsualString(cart, HAP_MAX_FREQ, HAP_MAX_FREQ_DEFAULT));
 cgiMakeDoubleVar(HAP_MAX_FREQ, maxFreq, 6);
-puts("(range: 0.0 to 0.5)\n");
+puts("&nbsp;(range: 0.0 to 0.5)\n");
 
 puts("<BR><B>Overall heterozygosity: </B>");
 puts("<B>min:</B>&nbsp;");
-minHet = atof(cartUsualString(cart, HAP_MIN_HET, HAP_MIN_HET_DEFAULT));
+float minHet = atof(cartUsualString(cart, HAP_MIN_HET, HAP_MIN_HET_DEFAULT));
 cgiMakeDoubleVar(HAP_MIN_HET, minHet, 6);
 
 puts("<B>max:</B>&nbsp;");
-maxHet = atof(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
+float maxHet = atof(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
 cgiMakeDoubleVar(HAP_MAX_HET, maxHet, 6);
-puts("(range: 0.0 to 0.5)\n");
+puts("&nbsp;(range: 0.0 to 0.5)\n");
 
-puts("<BR><BR><B>Chimp allele:</B>&nbsp;");
-menuSize = 5;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "available";
-menu[menuPos++] = "matches major human allele";
-menu[menuPos++] = "matches minor human allele";
-menu[menuPos++] = "matches neither human allele";
-cgiMakeDropList(HAP_CHIMP, menu, menuSize,
-    cartCgiUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT));
-freez(&menu);
+static char *orthoMenu[] =
+    { "no filter", 
+      "available",
+      "matches major human allele",
+      "matches minor human allele",
+      "matches neither human allele" };
 
-minChimpQual = atoi(cartUsualString(cart, HAP_CHIMP_QUAL, HAP_CHIMP_QUAL_DEFAULT));
-printf("<B>Minimum quality score:</B>&nbsp;");
-cgiMakeIntVar(HAP_CHIMP_QUAL, minChimpQual, 4);
-puts("(range: 0 to 100)\n");
-
-puts("<BR><B>Macaque allele:</B>&nbsp;");
-menuSize = 5;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "no filter";
-menu[menuPos++] = "available";
-menu[menuPos++] = "matches major human allele";
-menu[menuPos++] = "matches minor human allele";
-menu[menuPos++] = "matches neither human allele";
-cgiMakeDropList(HAP_MACAQUE, menu, menuSize,
-    cartCgiUsualString(cart, HAP_MACAQUE, HAP_MACAQUE_DEFAULT));
-freez(&menu);
-
-minMacaqueQual = atoi(cartUsualString(cart, HAP_MACAQUE_QUAL, HAP_MACAQUE_QUAL_DEFAULT));
-printf("<B>Minimum quality score:</B>&nbsp;");
-cgiMakeIntVar(HAP_MACAQUE_QUAL, minMacaqueQual, 4);
-puts("(range: 0 to 100)\n");
-
+puts("<P><TABLE>");
+for (i = 0;  hapmapOrthoSpecies[i] != NULL;  i++)
+    {
+    printf("<TR><TD><B>%s allele:</B></TD>\n<TD>", hapmapOrthoSpecies[i]);
+    safef(cartVar, sizeof(cartVar), "%s_%s", HAP_ORTHO_PREFIX, hapmapOrthoSpecies[i]);
+    cgiMakeDropList(cartVar, orthoMenu, 5,
+		    cartUsualString(cart, cartVar, HAP_FILTER_DEFAULT));
+    puts("</TD>");
+    safef(cartVar, sizeof(cartVar), "%s_%s", HAP_ORTHO_QUAL_PREFIX, hapmapOrthoSpecies[i]);
+    int minQual = atoi(cartUsualString(cart, cartVar, HAP_ORTHO_QUAL_DEFAULT));
+    puts("<TD><B>Minimum quality score:</B></TD>\n<TD>");
+    cgiMakeIntVar(cartVar, minQual, 4);
+    puts("&nbsp;(range: 0 to 100)</TD></TR>\n");
+    }
+puts("</TABLE>");
 puts("</P>\n");
-
-printf("<P><B>Select subtracks to display:</B></P>\n");
+printf("<B>Select subtracks to display:</B><BR>\n");
+hFreeConn(&conn);
 }
 
 void pcrResultUi(struct trackDb *tdb)
+/* Result from hgPcr query. */
 {
 struct targetDb *target;
 if (! pcrResultParseCart(database, cart, NULL, NULL, &target))
