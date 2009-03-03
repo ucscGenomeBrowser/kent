@@ -1,5 +1,16 @@
 <H2>Description</H2>
 
+<P>This track is produced as part of the ENCODE Transcriptome Project.
+Expression of different target
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=ripTgtProtein">RNA binding proteins (RBPs)</A>
+is measured by RNA Immunoprecipitation and Affymetrix Exon Arrays 
+(RIP-chip) using different
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=ripAntibody">RIP antibodies</A>
+in different 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
+The <strong>RBP Assoc RNA</strong> view shows the genomic location of the transcripts associated with the array probes.
+</P>
+
 <P>In eukaryotic organisms gene regulatory networks require an additional 
 level of coordination that links transcriptional and post-transcriptional 
 processes. Messenger RNAs have traditionally been viewed as passive 
@@ -28,8 +39,8 @@ as determined for K562 and GM12878 cell lines.  Microarray analysis
 was performed using the Affymetrix Human Exon 1.0 ST Arrays. 
 </P>
 
-<P> Targeted RNA-Binding Proteins</P>
 <TABLE BORDER=1>
+<CAPTION>Targeted RNA-Binding Proteins</CAPTION>
 <THEAD>
 <TR><TH>Protein</TH><TH>Description</TH></TR>
 </THEAD>
@@ -65,7 +76,7 @@ binary provided by Affymetrix. One qualitative (DABG) and two quantitative
 metaprobeset on the chips using the command line parameters given 
 below (for a detailed explanation of the parameters please see 
 Affymetrix documentation for apt-probeset-summarize 
-<A HREF="http://www.affymetrix.com/support/developer/powertools/changelog/apt-probeset-summarize.html">here</A>):
+<A TARGET=_BLANK HREF="http://www.affymetrix.com/support/developer/powertools/changelog/apt-probeset-summarize.html">here</A>):
 </P>
 
 <PRE>
@@ -116,10 +127,14 @@ field containing -log10 of our maximum p-value. The q-value is left at the defau
 from different cell types and tissues.  The graphical configuration options 
 are shown at the top of the track description page, followed by a list of 
 subtracks. To display only selected subtracks, uncheck the boxes next to 
-the tracks you wish to hide. For more information about the graphical 
-configuration options, click the 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html">Graph configuration help</A> link.
+the tracks you wish to hide. 
 </P>
+
+<DL>
+<DT><strong>RBP Assoc RNA</strong>
+<DD>The RBP Assoc RNA view shows the genomic extent of the transcripts associated with 
+the Affymetrix Exon Array probes, shaded according to score.
+</DL>
 
 <H2>Credits</H2>
 
@@ -128,55 +143,116 @@ with the Scott Tenenabum group at the University at Albany-SUNY, Gen*NY*Sis
 Center For Excellence in Cancer Genomics and the Luiz Penalva group at the 
 Children's Cancer Research Institute - UTHSCSA.
 </P>
+<P>Contact: 
+<A HREF="mailto:&#115;&#116;&#101;n&#101;&#110;&#98;&#97;u&#109;&#64;&#97;l&#98;&#97;&#110;&#121;.&#101;&#100;&#117;">
+Scott Tenenbaum</A>
+</P>
+<!-- above address is stenenbaum at albany.edu -->
 
 <H2>References</H2>
 
-<P>Tenenbaum SA, Lager PJ, Carson CC, Keene JD., Ribonomics: identifying mRNA subsets in mRNP complexes using antibodies to RNA-binding proteins and genomic arrays. 
+<P>Tenenbaum SA, Lager PJ, Carson CC, Keene JD. 
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12054896">
+Ribonomics: identifying mRNA subsets in mRNP complexes using antibodies to RNA-binding proteins and genomic arrays. 
+</A>
 <EM>Methods</EM>. 2002 Feb;26(2):191-8.
 </P>
-<P>Baroni TE, Chittur SV, George AD, Tenenbaum SA., Advances in RIP-chip analysis : RNA-binding protein immunoprecipitation-microarray profiling.
+
+<P>Baroni TE, Chittur SV, George AD, Tenenbaum SA.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/18369977">
+Advances in RIP-chip analysis : RNA-binding protein immunoprecipitation-microarray profiling.
+</A>
 <EM>Methods Mol Biol</EM>. 2008;419:93-108.
 </P>
-<P>Penalva LO, Tenenbaum SA, Keene JD., Gene expression analysis of messenger RNP complexes. 
+
+<P>Penalva LO, Tenenbaum SA, Keene JD.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/14770002">
+Gene expression analysis of messenger RNP complexes. 
+</A>
 <EM>Methods Mol Biol</EM>. 2004;257:125-34.
 </P>
-<P>Keene JD, Tenenbaum SA., Eukaryotic mRNPs may represent posttranscriptional operons.
+
+<P>Keene JD, Tenenbaum SA.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12086614">
+Eukaryotic mRNPs may represent posttranscriptional operons.
+</A>
 <EM>Mol Cell</EM>. 2002;9(6):1161-7.
 </P>
-<P>George AD, Tenenbaum SA., MicroRNA modulation of RNA-binding protein regulatory elements.
+
+<P>George AD, Tenenbaum SA.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/17114943">
+MicroRNA modulation of RNA-binding protein regulatory elements.
+</A>
 <EM>RNA Biol</EM>. 2006;3(2):57-9. Epub 2006 Apr 1.
 </P>
-<P>Good, P.J., The role of elav-like genes, a conserved family encoding RNA-binding proteins, in growth and development.
+
+<P>Good PJ. 
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/9642172">
+The role of elav-like genes, a conserved family encoding RNA-binding proteins, in growth and development.
+</A>
 <EM>Semin Cell Dev Biol</EM>. 1997. 8(6): p. 577-84.
 </P>
-<P>Good, P.J., et al., A family of human RNA-binding proteins related to the Drosophila Bruno translational regulator.
+
+<P>Good PJ, et al. 
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/10893231">
+A family of human RNA-binding proteins related to the Drosophila Bruno translational regulator.
+</A>
 <EM>J Biol Chem</EM>. 2000. 275(37): p. 28583-92.
 </P>
-<P>Lopez de Silanes, I., et al., Role of the RNA-binding protein HuR in colon carcinogenesis.
+
+<P>Lopez de Silanes I, et al.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/14562043">
+Role of the RNA-binding protein HuR in colon carcinogenesis.
+</A>
 <EM>Oncogene</EM>. 2003. 22(46): p. 7146-54.
 </P>
-<P>Lopez de Silanes, I., et al., Identification of a target RNA motif for RNA-binding protein HuR.
+
+<P>Lopez de Silanes I, et al.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/14981256">
+Identification of a target RNA motif for RNA-binding protein HuR.
+</A>
 <EM>Proc Natl Acad Sci U S A</EM>. 2004. 101(9): p. 2987-92.
 </P>
-<P>Nielsen FC, Nielsen J, Christiansen J., A family of IGF-II mRNA binding proteins (IMP) involved in RNA trafficking.
+
+<P>Nielsen FC, Nielsen J, Christiansen J.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/11713986">
+A family of IGF-II mRNA binding proteins (IMP) involved in RNA trafficking.
+</A>
 <EM>Scand J Clin Lab Invest Suppl.</EM>. 2001;234:93-9. 
 </P>
-<P>Yisraeli JK., VICKZ proteins: a multi-talented family of regulatory RNA-binding proteins. 
+
+<P>Yisraeli JK.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/15601260">
+VICKZ proteins: a multi-talented family of regulatory RNA-binding proteins. 
+</A>
 <EM>Biol Cell</EM>. 2005 Jan;97(1):87-96. 
 </P>
-<P>Oberman F, Rand K, Maizels Y, Rubinstein AM, Yisraeli JK., VICKZ proteins mediate cell migration via their RNA binding activity.
+
+<P>Oberman F, Rand K, Maizels Y, Rubinstein AM, Yisraeli JK.
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/17652133">
+VICKZ proteins mediate cell migration via their RNA binding activity.
+</A>
 <EM>RNA</EM>. 2007 Sep;13(9):1558-69. Epub 2007 Jul 24.
 </P>
-<P>Yaniv, K., et al., The RNA-binding protein Vg1 RBP is required for cell migration during early neural development.
+
+<P>Yaniv K, et al. 
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/14522877">
+The RNA-binding protein Vg1 RBP is required for cell migration during early neural development.
+</A>
 <EM>Development</EM>. 2003. 130(23): p. 5649-61.
 </P>
-<P>Penalva, L.O., S.A. Tenenbaum, and J.D. Keene, Gene Expression Analysis of Messenger RNP Complexes.
-<EM>Methods Mol Biol</EM>. 2004. 257: p. 125-34.
-</P>
-<P>Mangus DA, Evans MC, Jacobson A., Poly(A)-binding proteins: multifunctional scaffolds for the post-transcriptional control of gene expression.
+
+<P>Mangus DA, Evans MC, Jacobson A. 
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12844354">
+Poly(A)-binding proteins: multifunctional scaffolds for the post-transcriptional control of gene expression.
+</A>
 <EM>Genome Biol</EM>. 2003;4(7):223. Epub 2003 Jul 1.
 </P>
-<P>LinksKahvejian A, Roy G, Sonenberg N., The mRNA closed-loop model: the function of PABP and PABP-interacting proteins in mRNA translation.
+
+<P>Kahvejian A, Roy G, Sonenberg N. 
+<A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12762031">
+The mRNA closed-loop model: the function of PABP and PABP-interacting proteins in mRNA translation.
+</A>
 <EM>Cold Spring Harb Symp Quant Biol</EM>. 2001;66:293-300.
 </P>
 
