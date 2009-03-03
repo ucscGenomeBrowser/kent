@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.162 2009/03/02 23:58:03 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.163 2009/03/03 18:32:33 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3166,62 +3166,74 @@ if(setting)
 return FALSE;
 }
 struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
-       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and)
+       struct dyString *extraWhere,char *filter,char *defaultLimits, char*field, boolean *and)
 /* creates the where clause condition to support numeric int filter range.
    Filters are expected to follow
-        {fiterName}: trackDb min:max values
+        {fiterName}: trackDb min[:max] values
         {filterName}Min: cart variable
         {filterName}Max: cart variable Optional (and considered non-existent if -99)
         {filterName}Limits: trackDb allowed range "0:1000" Optional
-   The and param allows stringing multiple where clauses together */
+   The 'and' param allows stringing multiple where clauses together */
 {
+#define NO_VALUE -999
 char *setting = trackDbSettingClosestToHome(tdb, filter);
 if(setting)
     {
     boolean invalid = FALSE;
     char filterLimitName[64];
+    int minValueTdb = 0,maxValueTdb = NO_VALUE;
+    if(strchr(setting,':') != NULL)
+        {
+        char *minStr = strSwapChar(cloneString(setting),':',0);
+        minValueTdb = atoi(minStr);
+        maxValueTdb = atoi(minStr + strlen(minStr) + 1);
+        freeMem(minStr);
+        }
+    else
+        minValueTdb = atoi(setting);
     safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _LIMITS);
-    setting = trackDbSettingClosestToHomeOrDefault(tdb, filterLimitName,defaultVal);
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, filterLimitName,defaultLimits);
     safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
-    int max = cartUsualIntClosestToHome(cart,tdb,FALSE,filterLimitName, 0);
+    int max = cartUsualIntClosestToHome(cart,tdb,FALSE,filterLimitName, maxValueTdb);
     safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MIN);
-    int min = cartUsualIntClosestToHome(cart,tdb,FALSE,filterLimitName, -99);
+    int min = cartUsualIntClosestToHome(cart,tdb,FALSE,filterLimitName, minValueTdb);
     if(setting)
         {
         char *minStr = strSwapChar(cloneString(setting),':',0);
         char *maxStr = minStr + strlen(minStr) + 1;
-        if(min < atof(minStr) || min > atof(maxStr)
-        || (max != -99 && (max < atof(minStr) || max > atof(maxStr))))
+        if((min != minValueTdb && (min < atoi(minStr) || min > atoi(maxStr)) && min != 0)
+        || (max != maxValueTdb && (max < atoi(minStr) || max > atoi(maxStr))))
             {
             invalid = TRUE;
-            if(max == -99)
+            if(max == NO_VALUE) // min only is allowed, but max only is not
                 warn("invalid filter by %s: %d is outside of range (%s to %s) for track %s", field, min, minStr, maxStr, tdb->tableName);
             else
                 warn("invalid filter by %s: min:%d and max:%d is outside of range (%s to %s) for track %s", field, min, max, minStr, maxStr, tdb->tableName);
             }
         freeMem(minStr);
-        if(invalid)
-            {
-            cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
-            safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);  // Remake name
-            cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
-            }
+        }
+    // else no default limits!
+    if(invalid)
+        {
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);  // Remake name
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        }
+    else if(min != 0) // Assumes 0 is no filter!
+        {
+        if(max == NO_VALUE)
+            dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);
         else
-            {
-            if(max == -99)
-                    dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);
-            else
-                    dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max);
-            *and=TRUE;
-            }
+            dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max);
+        *and=TRUE;
         }
     }
 return extraWhere;
 }
 
 struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
-       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and)
-/* creates the where clause condition to support  numeric double filters.
+       struct dyString *extraWhere,char *filter,char *defaultLimits, char*field, boolean *and)
+/* creates the where clause condition to support numeric double filters.
    Filters are expected to follow
         {fiterName}: trackDb min value;
         {filterName}Min: cart variable;
@@ -3231,31 +3243,35 @@ struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
 char *setting = trackDbSettingClosestToHome(tdb, filter);
 if(setting)
     {
+    double minValueTdb = atof(setting);
     boolean invalid = FALSE;
     char filterLimitName[64];
     safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _LIMITS);
-    setting = trackDbSettingClosestToHomeOrDefault(tdb, filterLimitName,defaultVal);
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, filterLimitName,defaultLimits);
     safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MIN);
-    double value = cartUsualDoubleClosestToHome(cart,tdb,FALSE,filterLimitName, 0);
-    if(setting)
+    double value = cartUsualDoubleClosestToHome(cart,tdb,FALSE,filterLimitName, minValueTdb);
+    if(value != minValueTdb && value != 0) // assume tdb min value is within range! (don't give user errors that have no consequence)
         {
-        char *minStr = strSwapChar(cloneString(setting),':',0);
-        char *maxStr = minStr + strlen(minStr) + 1;
-        if(value < atof(minStr) || value > atof(maxStr))
+        if(setting)
+            {
+            char *minStr = strSwapChar(cloneString(setting),':',0);
+            char *maxStr = minStr + strlen(minStr) + 1;
+            if(value < atof(minStr) || value > atof(maxStr))
+                {
+                invalid = TRUE;
+                warn("invalid filter by %s: %lf is outside of range (%s to %s) for track %s", field, value, minStr, maxStr, tdb->tableName);
+                }
+            freeMem(minStr);
+            }
+        else if (value < 0)  // No range specified: must be non-negative
             {
             invalid = TRUE;
-            warn("invalid filter by %s: %lf is outside of range (%s to %s) for track %s", field, value, minStr, maxStr, tdb->tableName);
+            warn("invalid filter by %s: %lf is less than 0 for track %s", field,value, tdb->tableName);
             }
-        freeMem(minStr);
-        }
-    else if (value < 0)
-        {
-        warn("invalid filter by %s: %lf is less than 0 for track %s", field,value, tdb->tableName);
-        invalid = TRUE;
         }
     if(invalid)
         cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
-    else
+    else if(value != 0) // Assume zero is no filter in all cases
         {
         dyStringPrintf(extraWhere, "%s((%s >= %f) or (%s = -1))", (*and?" and ":""),field,value,field);
         *and=TRUE;
@@ -3290,8 +3306,6 @@ if(setting)
         max += 1;
         min = strSwapChar(cloneString(setting),':',0);
         }
-    //char *min = strSwapChar(cloneString(setting),':',0);
-    //char *max = min + strlen(min) + 1;
     puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
     safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MIN);
     cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), min), 4);
