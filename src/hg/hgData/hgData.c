@@ -1,128 +1,47 @@
 /* hgData - simple RESTful interface to genome data. */
 #include "common.h"
 #include "hgData.h"
-#include "dystring.h"
-#include "bedGraph.h"
-#include "bed.h"
+// #include "dystring.h"
+// #include "bedGraph.h"
+// #include "bed.h"
 
-#include "cart.h"
-#include "hgFind.h"
-#include "hgFindSpec.h"
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.19 2009/03/03 07:46:16 mikep Exp $";
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.18 2009/03/01 08:54:25 mikep Exp $";
-struct cart *cart; /* The cart where we keep persistent variables. */
-
-struct json_object *addSearchGenomeUrl(struct json_object *o, char *url_name, char *genome, char *term)
-// Add a search url to object o with name 'url_name'.
-// Genome can be NULL
-// Item can be NULL
-// Returns object o
+time_t validateGenome(char *genome)
+// Validate that genome is active (must not be null)
+// Return update time of chromInfo table in genome database
 {
-char url[1024];
-safef(url, sizeof(url), PREFIX SEARCH_CMD "/%s/%s", 
-    (genome && *genome) ? genome : GENOME_VAR,
-    (term && *term) ? term : TERM_VAR);
-json_object_object_add(o, url_name, json_object_new_string(url));
-return o;
+if (!hDbIsActive(genome))
+    ERR_GENOME_NOT_FOUND(genome);
+return hGetLatestUpdateTimeChromInfo(genome);
 }
 
-struct json_object *addSearchGenomeTrackUrl(struct json_object *o, char *url_name, char *genome, char *track, char *term)
-// Add a search url to object o with name 'url_name'.
-// Genome must be supplied if track is supplied, otherwise can be NULL
-// Track can be NULL
-// Item can be NULL
-// Returns object o
+void validateChrom(char *genome, char *chrom, struct chromInfo **pCi)
 {
-char url[1024];
-safef(url, sizeof(url), PREFIX SEARCH_CMD "/%s/%s/%s", 
-    (genome && *genome) ? genome : GENOME_VAR,
-    (track && *track) ? track : TRACK_VAR,
-    (term && *term) ? term : TERM_VAR);
-json_object_object_add(o, url_name, json_object_new_string(url));
-return o;
+// Validate that chrom exists (must not be null)
+// Return chrom info for chrom
+struct chromInfo *ci = hGetChromInfo(genome, chrom);
+if (!ci)
+    ERR_CHROM_NOT_FOUND(genome, chrom);
+*pCi = ci;
 }
 
-static struct json_object *jsonHgPos(struct hgPos *pos, char *genome, char *track)
+time_t validateLoadTrackDb(char *genome, char *track, struct trackDb **pTdb)
+// Validate that track exists by loading track Db to find track
+// Genome and track must not be null
+// Return update time of table in genome database, and trackDb data
 {
-struct json_object *a = json_object_new_array();
-struct json_object *o;
-struct hgPos *p;
-if (pos)
-    for (p = pos ; p ; p = p->next)
-	{
-	o = json_object_new_object();
-	json_object_array_add(a, o);
-	json_object_object_add(o, "chrom", p->chrom ? json_object_new_string(p->chrom) : NULL);
-	json_object_object_add(o, "start", json_object_new_int(p->chromStart));
-	json_object_object_add(o, "end", json_object_new_int(p->chromEnd));
-	json_object_object_add(o, "name", p->name ? json_object_new_string(p->name) : NULL);
-	json_object_object_add(o, "description", p->description ? json_object_new_string(p->description) : NULL);
-	json_object_object_add(o, "id", p->browserName ? json_object_new_string(p->browserName) : NULL);
-	addRangeUrl(o, "url_range", "", track, genome, p->chrom, p->chromStart, p->chromEnd);
-	addRangeUrl(o, "url_range_annoj_nested", ANNOJ_NESTED_FMT, track, genome, p->chrom, p->chromStart, p->chromEnd);
-	addRangeUrl(o, "url_range_annoj_flat", ANNOJ_FLAT_FMT, track, genome, p->chrom, p->chromStart, p->chromEnd);
-	addCountUrl(o, "url_count", track, genome, p->chrom, p->chromStart, p->chromEnd);
-	}
-return a;
+struct trackDb *tdb = NULL;
+struct sqlConnection *conn;
+time_t latest = 0;
+if (!(tdb = hTrackDbForTrackProfile(genome, track, TRUE)))
+    ERR_TRACK_INFO_NOT_FOUND(track, genome);
+conn = hAllocConn(genome);
+latest = sqlTableUpdateTime(conn, track); 
+hFreeConn(&conn);
+*pTdb = tdb; 
+return latest;
 }
-
-static struct json_object *jsonHgPosTable(struct hgPosTable *pos, char *genome, char *track)
-{
-struct json_object *a = json_object_new_array();
-struct json_object *o;
-struct hgPosTable *p;
-for (p = pos ; p ; p = p->next)
-    {
-    o = json_object_new_object();
-    json_object_array_add(a, o);
-    json_object_object_add(o, "track", p->name ? json_object_new_string(p->name) : NULL);
-    json_object_object_add(o, "description", p->description ? json_object_new_string(p->description) : NULL);
-    json_object_object_add(o, "hits", jsonHgPos(p->posList, genome, track));
-    }
-return a;
-}
-
-static struct json_object *jsonFindPos(struct hgPositions *p, char *genome, char *track, char *query)
-{
-struct json_object *o = json_object_new_object();
-json_object_object_add(o, "genome", json_object_new_string(genome));
-if (track && *track)
-    json_object_object_add(o, "track", json_object_new_string(track));
-json_object_object_add(o, "query", json_object_new_string(query));
-json_object_object_add(o, "result_count", json_object_new_int(p->posCount));
-addSearchGenomeUrl(o, "url_search_item_genome", genome, query);
-addSearchGenomeTrackUrl(o, "url_search_item_genome_track", genome, track, query);
-json_object_object_add(o, "tracks", jsonHgPosTable(p->tableList, genome, track));
-json_object_object_add(o, "single_hit", jsonHgPos(p->singlePos, genome, track));
-return o;
-}
-
-void searchTracks(time_t modified, char *genome, char *track, char *query)
-{
-char where[512];
-struct hgPositions *p, *hgp = NULL;
-struct json_object *o = json_object_new_object();
-struct json_object *a = json_object_new_array();
-json_object_object_add(o, "positions", a);
-if (query && *query)
-    {
-    if (track && *track)
-	{
-	safef(where, sizeof(where), "searchTable = '%s'", track);
-	hgp = hgPositionsFindWhere(genome, query, "extraCgi", "hgAppName", NULL, TRUE, where);
-	}
-    else
-	hgp = hgPositionsFind(genome, query, "extraCgi", "hgAppName", NULL, TRUE);
-    }
-for ( p = hgp ; p ; p = p->next)
-    {
-    json_object_array_add(a, jsonFindPos(p, genome, track, query));
-    }
-okSendHeader(0, SEARCH_EXPIRES);
-printf(json_object_to_json_string(o));
-json_object_put(o);
-}
-
 
 void doGet()
 {
@@ -133,8 +52,10 @@ struct trackDb *tdb = NULL;
 struct dbDbClade *dbs = NULL;
 struct hTableInfo *hti = NULL;
 struct bed *b = NULL;
+struct hgPositions *hgp = NULL;
+//struct sqlConnection *conn = NULL;
 //char *authorization = getenv("Authorization");
-//verboseSetLevel(2);
+verboseSetLevel(2);
 char *reqEtag = getenv("ETag");
 time_t reqModified = strToTime(getenv("Modified"), "%a, %d %b %Y %H:%M:%S GMT");// Thu, 08 Jan 2009 17:45:18 GMT
 char *cmd = cgiUsualString(CMD_ARG, "");
@@ -149,10 +70,19 @@ char rootName[HDB_MAX_TABLE_STRING];
 char parsedChrom[HDB_MAX_CHROM_STRING];
 char *trackType[4] = {NULL,NULL,NULL,NULL};
 int typeWords;
-time_t modified = 0;
+time_t modified = 0, genomeMod = 0, trackMod = 0;
 AllocVar(thisTime);
 AllocVar(latestTime);
 // list information about all active genome databases
+MJP(2); verbose(2,"cmd=[%s] genome=[%s] track=[%s] chrom=[%s]\n", cmd, genome, track, chrom);
+if (*genome)
+    {
+    genomeMod = validateGenome(genome);
+    if (*track)
+	trackMod = validateLoadTrackDb(genome, track, &tdb);
+    if (*chrom)
+	validateChrom(genome, chrom, &ci);
+    }
 if (!*cmd)
     {
     // get modified time from CVS $Date field in file where code resides
@@ -160,57 +90,47 @@ if (!*cmd)
     }
 else if (sameOk(GENOMES_CMD, cmd)) 
     {
+    // no genome -> get all genomes
+    // genome, no chrom => get genome & all chroms
+    // genome, chrom => get genome & one chrom
     // check for changes in dbDb, genomeClade, clade
     modified = hGetLatestUpdateTimeDbClade();
     if (*genome)
 	{
-	if (!hDbIsActive(genome))
-	    ERR_GENOME_NOT_FOUND(genome);
-	modified = max(modified, hGetLatestUpdateTimeChromInfo(genome));
-	}
-    // send 304 not modified if all looks OK
-    if (!notModifiedResponse(reqEtag, reqModified, modified))
-	{
-	if (*genome)
+	modified = max(modified, genomeMod);
+	if (!notModifiedResponse(reqEtag, reqModified, modified))
 	    {
 	    if (!(dbs = hGetIndexedDbClade(genome)))
-		ERR_GENOME_NOT_FOUND(genome);
-	    if (*chrom)
-		{
-		if (!(ci = hGetChromInfo(genome, chrom)))
-		    ERR_CHROM_NOT_FOUND(genome, chrom);
-		}
-	    else
+		errAbort("Db and clade not found for genome [%s]\n", genome);
+	    if (!*chrom)
 		{
 		if (!(ci = getAllChromInfo(genome)))
 		    ERR_NO_CHROMS_FOUND(genome);
+		// TEST FOR number of chroms 
+		// if (hChromCount(genome) < MAX_CHROM_COUNT || cgiBoolean(ALLCHROMS_ARG)
 		}
+	    printGenomes(genome, chrom, dbs, ci, modified);
 	    }
-	else
+	}
+    else
+	{
+	if (!notModifiedResponse(reqEtag, reqModified, modified))
+	    {
 	    if (!(dbs = hGetIndexedDbClade(NULL)))
 		ERR_NO_GENOMES_FOUND;
-	// TEST FOR number of chroms 
-	// if (hChromCount(genome) < MAX_CHROM_COUNT || cgiBoolean(ALLCHROMS_ARG)
-	printGenomes(genome, chrom, dbs, ci, modified);
+	    printGenomes(genome, chrom, dbs, ci, modified);
+	    }
 	}
     }
 else if (sameOk(TRACKS_CMD, cmd))
     {
     if (*genome)
 	{
-	if (!hDbIsActive(genome))
-	    ERR_GENOME_NOT_FOUND(genome);
+	// validate genome & track
 	// modified date is greatest of all trackDb dates or genome.chromInfo 
-	modified = max(trackDbLatestUpdateTime(genome), hGetLatestUpdateTimeChromInfo(genome));
+	modified = max(genomeMod, trackDbLatestUpdateTime(genome));
 	if (*track)
-	    {
-	    struct sqlConnection *conn = hAllocConn(genome);
-	    if (!conn)
-		ERR_NO_GENOME_DB_CONNECTION(genome);
-	    if (!(tdb = hTrackInfo(conn, track)))
-		ERR_TRACK_INFO_NOT_FOUND(track, genome);
-	    modified = max(modified, sqlTableUpdateTime(conn, track)); // check if track has changed
-	    }
+	    modified = max(modified, trackMod);
 	if (!notModifiedResponse(reqEtag, reqModified, modified))
 	    {
 	    if (*track)
@@ -234,9 +154,34 @@ else if (sameOk(TRACKS_CMD, cmd))
     }
 else if (sameOk(SEARCH_CMD, cmd))
     {
-    if (!*genome)
-	ERR_NO_GENOME;
-    searchTracks(modified, genome, track, term);
+    if (*genome)
+	{
+	// If no search term, send empty result
+	if (!*term)
+	    searchTracks(0, NULL, NULL, NULL, NULL);
+	// if a track was specified just search that
+	if (*track)
+	    { // check if genome, track, or spec table(s) have changed
+	    modified = max(genomeMod, trackMod);
+	    modified = max(modified, findSpecLatestUpdateTime(genome));
+	    if (!notModifiedResponse(reqEtag, reqModified, modified))
+		{
+		char where[512];
+		safef(where, sizeof(where), "searchTable = '%s'", track);
+		hgp = hgPositionsFindWhere(genome, term, "dummyCgi", "dummyApp", NULL, TRUE, where);
+		//hgp = hgPositionsFindWhere(genome, term, NULL, NULL, NULL, TRUE, where);
+		searchTracks(modified, hgp, genome, track, term);
+		}
+	    }
+	else // we are searching through many tracks, so dont use cache (dont set last-modified)
+	    {
+	    hgp = hgPositionsFind(genome, term, "dummyCgi", "dummyApp", NULL, TRUE);
+	    //hgp = hgPositionsFind(genome, term, NULL, NULL, NULL, TRUE);
+	    searchTracks(0, hgp, genome, track, term);
+	    }
+	}
+    else
+	ERR_NOT_IMPLEMENTED("Search over all genomes");
     }
 else if (sameOk(META_SEARCH_CMD, cmd))
     {
@@ -245,20 +190,15 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
     {
     if (!*genome)
 	ERR_NO_GENOME;
-    if (!hDbIsActive(genome))
-	ERR_GENOME_NOT_FOUND(genome);
+    if (!*track)
+	ERR_NO_TRACK;
     if (*format && 
 	  (differentString(format, ANNOJ_FLAT_FMT) && 
 	   differentString(format, ANNOJ_NESTED_FMT)))
 	ERR_BAD_FORMAT(format);
-    // check all trackDbs and genome.chromInfo for changes
-    modified = max(trackDbLatestUpdateTime(genome), hGetLatestUpdateTimeChromInfo(genome));
-    if (!*track)
-	ERR_NO_TRACK;
-    if (!(tdb = hTrackDbForTrack(genome, track)))
-	ERR_TRACK_NOT_FOUND(track, genome);
-    struct sqlConnection *conn = hAllocConn(genome);
-    modified = max(modified, sqlTableUpdateTime(conn, track)); // check if track is modified
+    // check genome.chromInfo, the track, or the trackDbs for changes
+    modified = max(genomeMod, trackMod);
+    modified = max(modified, trackDbLatestUpdateTime(genome));
     if (!notModifiedResponse(reqEtag, reqModified, modified))
 	{
 	hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
@@ -306,6 +246,7 @@ chromInfoFreeList(&ci);
 trackDbFree(&tdb);
 freez(&hti);
 bedFreeList(&b);
+hgPositionsFree(&hgp);
 }
 
 int main(int argc, char *argv[])
