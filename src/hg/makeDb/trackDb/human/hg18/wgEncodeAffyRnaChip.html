@@ -16,6 +16,19 @@ consecutive 25-mers). </P>
 <P>Color differences among the subtracks are arbitrary. They provide a visual cue for 
 distinguishing between the different cell types and compartments.</P>
 
+<DL>
+<DT><strong>Transfrags</strong>
+<DD>The Transfrags track includes all transfrags before filtering.
+<DT><strong>Filtered Transfrags</strong>
+<DD>The Filtered Transfrags track excludes repeats and other known annotations including: 
+tRNAs and rRNAs, mi/snoRNAs, things mapping to the mitochondrial or Y chromosomes, 
+and many predicted snoRNAs and miRNAs.
+<DT><strong>Raw Signal</strong>
+<DD>The Raw Signal track shows the probe intensity based on all probes.
+<DT><strong>Filtered Raw Signal</strong>
+<DD>The Filtered Raw Signal track shows the probe intensity based on the filtered set of probes.
+</DL>
+
 <H2>Methods</H2>
 
 <P>All arrays were scaled to a median array intensity of 330. Within a sliding 61 bp window 
@@ -32,7 +45,7 @@ also describes the analytical methods.
 technical replicates were generated from the same RNA pool for each RNA preparation and 
 hybridized to duplicate arrays (two technical replicates) that contain the ENCODE regions. 
 Labeled RNA samples were then pooled and hybridized to the tiling 91-array set spanning 
-the whole genome. Transcribed regions (transfrags; see the Affy RNA Tranfrag track) were 
+the whole genome. Transcribed regions (transfrags; see the Affy RNA Transfrag track) were 
 generated from the composite signal track by merging genomic positions to which probes 
 are mapped. This merging was based on a 5% false positive rate cutoff in negative 
 bacterial controls, a maximum gap (MaxGap) of 40 base-pairs and minimum run (MinRun) 
