@@ -1,5 +1,4 @@
-# Genome-wide ENCODE tracks
-
+# Genome-wide ENCODE tracks 
 # GIS RNA and Chip-PET
 
 track wgEncodeGisRnaPet
@@ -238,6 +237,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalGm12878Ctcf
@@ -252,6 +252,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
@@ -266,6 +267,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
@@ -280,6 +282,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me1
@@ -293,6 +296,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me1
@@ -307,6 +311,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1
@@ -321,6 +326,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1
@@ -335,6 +341,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
@@ -348,6 +355,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
@@ -362,6 +370,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2
@@ -376,6 +385,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2
@@ -390,6 +400,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me3
@@ -403,6 +414,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me3
@@ -417,6 +429,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3
@@ -431,6 +444,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3
@@ -445,6 +459,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
@@ -458,6 +473,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalGm12878H3k9ac
@@ -472,6 +488,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
@@ -486,6 +503,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
@@ -500,6 +518,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
@@ -513,6 +532,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
@@ -527,6 +547,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
@@ -541,6 +562,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
@@ -555,6 +577,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k27ac
@@ -568,6 +591,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27ac
@@ -582,6 +606,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac
@@ -596,6 +621,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac
@@ -610,6 +636,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
@@ -623,6 +650,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27me3
@@ -637,6 +665,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
@@ -651,6 +680,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
@@ -665,6 +695,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
@@ -678,6 +709,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-04
     dateUnrestricted 2009-10-04
     cell GM12878
+    color 153,38,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k36me3
@@ -692,6 +724,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
@@ -706,6 +739,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
@@ -720,6 +754,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
+    color 153,38,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalGm12878Control
@@ -734,6 +769,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
+    color 153,38,0
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
@@ -748,6 +784,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
+    color 153,38,0
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
@@ -762,6 +799,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
+    color 153,38,0
     antibody control
 
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
@@ -1422,6 +1460,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalK562Ctcf
@@ -1436,6 +1475,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
@@ -1450,6 +1490,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
@@ -1464,6 +1505,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me1
@@ -1477,6 +1519,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell K562
+    color 46,0.184
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalK562H3k4me1
@@ -1491,6 +1534,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
@@ -1505,6 +1549,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
@@ -1519,6 +1564,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me2
@@ -1532,6 +1578,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell K562
+    color 46,0.184
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalK562H3k4me2
@@ -1546,6 +1593,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
@@ -1560,6 +1608,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
@@ -1574,6 +1623,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me3
@@ -1587,6 +1637,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell K562
+    color 46,0.184
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalK562H3k4me3
@@ -1601,6 +1652,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell K562
+    color 46,0.184
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
@@ -1615,6 +1667,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell K562
+    color 46,0.184
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
@@ -1629,6 +1682,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell K562
+    color 46,0.184
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksK562H3k9ac
@@ -1642,6 +1696,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalK562H3k9ac
@@ -1656,6 +1711,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
@@ -1670,6 +1726,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
@@ -1684,6 +1741,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksK562H3k9me1
@@ -1697,6 +1755,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalK562H3k9me1
@@ -1711,6 +1770,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
@@ -1725,6 +1785,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
@@ -1739,6 +1800,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksK562H3k27ac
@@ -1752,6 +1814,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalK562H3k27ac
@@ -1766,6 +1829,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
@@ -1780,6 +1844,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
@@ -1794,6 +1859,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksK562H3k27me3
@@ -1807,6 +1873,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell K562
+    color 46,0.184
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalK562H3k27me3
@@ -1821,6 +1888,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
@@ -1835,6 +1903,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
@@ -1849,6 +1918,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksK562H3k36me3
@@ -1862,6 +1932,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalK562H3k36me3
@@ -1876,6 +1947,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
@@ -1890,6 +1962,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
@@ -1904,6 +1977,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksK562H4k20me1
@@ -1917,6 +1991,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalK562H4k20me1
@@ -1931,6 +2006,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
@@ -1945,6 +2021,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
@@ -1959,6 +2036,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksK562Pol2b
@@ -1972,6 +2050,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell K562
+    color 46,0.184
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalK562Pol2b
@@ -1986,6 +2065,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
@@ -2000,6 +2080,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
@@ -2014,6 +2095,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalK562Control
@@ -2028,6 +2110,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell K562
+    color 46,0.184
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Control
@@ -2042,6 +2125,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Control
@@ -2056,6 +2140,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList 1
     cell K562
+    color 46,0.184
     antibody control
 
     track wgEncodeBroadChipSeqPeaksNhekCtcf
@@ -2740,6 +2825,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     #dataVersion ENCODE Nov 2008 Freeze
     cell GM12878
+    color 153,38,0
 
     track wgEncodeDukeDNaseSeqSignalGm12878
     release alpha
@@ -2754,6 +2840,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList first
     cell GM12878
+    color 153,38,0
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
     release alpha
@@ -2768,6 +2855,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
     release alpha
@@ -2781,6 +2869,7 @@ wgEncode 1
     dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
     release alpha
@@ -2794,6 +2883,7 @@ wgEncode 1
     dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
     release alpha
@@ -2807,6 +2897,7 @@ wgEncode 1
     dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUncFAIREseqPeaksGm12878
     release alpha
@@ -2820,6 +2911,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     #dataVersion ENCODE Nov 2008 Freeze
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUncFAIREseqSignalGm12878
     release alpha
@@ -2834,6 +2926,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUncFAIREseqBaseOverlapSignalGm12878
     release alpha
@@ -2848,6 +2941,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUncFAIREseqRawSignalRep1Gm12878
     release alpha
@@ -2862,6 +2956,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
     release alpha
@@ -2876,6 +2971,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
     release alpha
@@ -2890,6 +2986,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
 
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
     release alpha
@@ -2903,6 +3000,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     #dataVersion ENCODE Nov 2008 Freeze
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeUtaChIPseqSignalGm12878Ctcf
@@ -2918,6 +3016,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf
@@ -2933,6 +3032,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
@@ -2948,6 +3048,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
@@ -2963,6 +3064,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
@@ -2978,6 +3080,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody CTCF
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
@@ -2992,6 +3095,7 @@ wgEncode 1
     dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Input
 
     track wgEncodeUtaustinChIPseqRawSignalGm12878Input
@@ -3006,6 +3110,7 @@ wgEncode 1
     dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Input
 
     track wgEncodeDukeDNaseSeqPeaksK562
@@ -3020,6 +3125,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     #dataVersion ENCODE Nov 2008 Freeze
     cell K562
+    color 46,0.184
 
     track wgEncodeDukeDNaseSeqSignalK562
     release alpha
@@ -3034,6 +3140,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList first
     cell K562
+    color 46,0.184
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
     release alpha
@@ -3047,6 +3154,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeDukeDNaseSeqRawSignalRep1K562
     release alpha
@@ -3060,6 +3168,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeDukeDNaseSeqRawSignalRep2K562
     release alpha
@@ -3073,6 +3182,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeDukeDNaseSeqRawSignalRep3K562
     release alpha
@@ -3086,6 +3196,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeUncFAIREseqPeaksK562
     release alpha
@@ -3099,6 +3210,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     #dataVersion ENCODE Nov 2008 Freeze
     cell K562
+    color 46,0.184
 
     track wgEncodeUncFAIREseqSignalK562
     release alpha
@@ -3113,6 +3225,7 @@ wgEncode 1
     #dataVersion ENCODE Nov 2008 Freeze
     spanList first
     cell K562
+    color 46,0.184
 
     track wgEncodeUncFAIREseqBaseOverlapSignalK562
     release alpha
@@ -3126,6 +3239,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeUncFAIREseqRawSignalRep1K562
     release alpha
@@ -3139,6 +3253,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeUncFAIREseqRawSignalRep2K562
     release alpha
@@ -3152,6 +3267,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeUncFAIREseqRawSignalRep3K562
     release alpha
@@ -3165,6 +3281,7 @@ wgEncode 1
     dateUnrestricted 2009-09-06
     spanList 1
     cell K562
+    color 46,0.184
 
     track wgEncodeUtaChIPseqPeaksK562Ctcf
     release alpha
@@ -3177,6 +3294,7 @@ wgEncode 1
     dateUnrestricted 2009-11-27
     dataVersion ENCODE Feb 2009 Freeze
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeUtaChIPseqSignalK562Ctcf
@@ -3191,6 +3309,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf
@@ -3205,6 +3324,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep1K562Ctcf
@@ -3219,6 +3339,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
@@ -3233,6 +3354,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
@@ -3247,6 +3369,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody CTCF
 
     track wgEncodeUtaChIPseqPeaksK562Cmyc
@@ -3260,6 +3383,7 @@ wgEncode 1
     dateUnrestricted 2009-11-27
     dataVersion ENCODE Feb 2009 Freeze
     cell K562
+    color 46,0.184
     antibody c-Myc
 
     track wgEncodeUtaChIPseqSignalK562Cmyc
@@ -3274,6 +3398,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody c-Myc
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc
@@ -3288,6 +3413,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
@@ -3302,6 +3428,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
@@ -3316,6 +3443,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
@@ -3330,6 +3458,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0.184
     antibody c-Myc
 
     track wgEncodeUtaustinChIPseqSignalK562Input
@@ -3344,6 +3473,7 @@ wgEncode 1
     dateUnrestricted 2009-09-04
     spanList 1401
     cell K562
+    color 46,0.184
     antibody input
 
     track wgEncodeUtaustinChIPseqRawSignalK562Input
@@ -3358,6 +3488,7 @@ wgEncode 1
     dateUnrestricted 2009-09-04
     spanList 1
     cell K562
+    color 46,0.184
     antibody input
 
     track wgEncodeDukeDNaseSeqRegionsExcludedGm12878
@@ -3463,6 +3594,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     promoter G-gamma
     cell K562
+    color 46,0.184
 
     track wgEncodeNhgriNREEnhancerBlockersK562Ggamma
     release alpha
@@ -3476,6 +3608,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     promoter G-gamma
     cell K562
+    color 46,0.184
 
     track wgEncodeNhgriNRESilencersK562Sv40
     release alpha
@@ -3489,6 +3622,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     promoter SV40
     cell K562
+    color 46,0.184
 
     track wgEncodeNhgriNREEnhancerBlockersK562Sv40
     release alpha
@@ -3502,6 +3636,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     promoter SV40
     cell K562
+    color 46,0.184
 
 
 # Riken CAGE (wrangler: mikep)
@@ -3551,6 +3686,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
     release alpha
@@ -3564,6 +3700,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
     release alpha
@@ -3603,6 +3740,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
     release alpha
@@ -3616,6 +3754,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
     release alpha
@@ -3629,6 +3768,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
     release alpha
@@ -3642,6 +3782,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562CytosolLongnonpolya
     release alpha
@@ -3656,6 +3797,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562CytosolLongnonpolya
     release alpha
@@ -3670,6 +3812,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalProstateCellLongnonpolya
     release alpha
@@ -3712,6 +3855,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562NucleusLongnonpolya
     release alpha
@@ -3726,6 +3870,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
     release alpha
@@ -3742,6 +3887,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
     release alpha
@@ -3758,6 +3904,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
     release alpha
@@ -3774,6 +3921,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
     release alpha
@@ -3790,6 +3938,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongpolya
     release alpha
@@ -3806,6 +3955,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
     release alpha
@@ -3822,6 +3972,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562CytosolLongpolya
     release alpha
@@ -3841,6 +3992,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562CytosolLongpolya
     release alpha
@@ -3860,6 +4012,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562NucleusLongpolya
     release alpha
@@ -3879,6 +4032,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562NucleusLongpolya
     release alpha
@@ -3898,6 +4052,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562PolysomeLongpolya
     release alpha
@@ -3914,6 +4069,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562PolysomeLongpolya
     release alpha
@@ -3930,6 +4086,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
     release alpha
@@ -3946,6 +4103,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562NucleolusTotal
     release alpha
@@ -3962,6 +4120,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
     release alpha
@@ -3978,6 +4137,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
     release alpha
@@ -3994,6 +4154,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusClustersK562ChromatinTotal
     release alpha
@@ -4010,6 +4171,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusClustersK562ChromatinTotal
     release alpha
@@ -4026,6 +4188,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
     release alpha
@@ -4042,6 +4205,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
     release alpha
@@ -4058,6 +4222,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
     release alpha
@@ -4074,6 +4239,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageAlignmentsK562ChromatinTotal
     release alpha
@@ -4090,6 +4256,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562ChromatinTotal
     release alpha
@@ -4109,6 +4276,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562ChromatinTotal
     release alpha
@@ -4128,6 +4296,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562PolysomeLongpolya
     release alpha
@@ -4147,6 +4316,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562PolysomeLongpolya
     release alpha
@@ -4166,6 +4336,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562NucleoplasmTotal
     release alpha
@@ -4185,6 +4356,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562NucleoplasmTotal
     release alpha
@@ -4204,6 +4376,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCagePlusRawSignalK562NucleolusTotal
     release alpha
@@ -4223,6 +4396,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeRikenCageMinusRawSignalK562NucleolusTotal
     release alpha
@@ -4242,6 +4416,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
 
 # U. Washington DNAse-seq (wrangler: mikep)
@@ -4284,6 +4459,7 @@ scoreMin 500
     maxHeightPixels 100:50:16
     viewLimits 1:150
     cell HepG2
+    color 189,0,157
 
     track wgEncodeUwDnaseSeqHotspotsRep2Hepg2
     release alpha
@@ -4298,6 +4474,7 @@ scoreMin 500
     priority 13
     noInherit on
     cell HepG2
+    color 189,0,157
 
     track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
     release alpha
@@ -4348,6 +4525,7 @@ scoreMin 500
     maxHeightPixels 100:50:16
     viewLimits 1:150
     cell K562
+    color 46,0.184
 
     track wgEncodeUwDnaseSeqRawSignalRep2K562
     release alpha
@@ -4366,6 +4544,7 @@ scoreMin 500
     maxHeightPixels 100:50:16
     viewLimits 1:150
     cell K562
+    color 46,0.184
 
     track wgEncodeUwDnaseSeqPeaksK562
     release alpha
@@ -4380,6 +4559,7 @@ scoreMin 500
     priority 14
     noInherit on
     cell K562
+    color 46,0.184
 
     track wgEncodeUwDnaseSeqHotspotsRep1K562
     release alpha
@@ -4394,6 +4574,7 @@ scoreMin 500
     priority 13
     noInherit on
     cell K562
+    color 46,0.184
 
     track wgEncodeUwDnaseSeqHotspotsRep2K562
     release alpha
@@ -4408,6 +4589,7 @@ scoreMin 500
     priority 13
     noInherit on
     cell K562
+    color 46,0.184
 
     track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
     release alpha
@@ -4472,6 +4654,7 @@ scoreMin 500
     maxHeightPixels 100:50:16
     viewLimits 1:150
     cell HepG2
+    color 189,0,157
 
     track wgEncodeUwDnaseSeqPeaksHepg2
     release alpha
@@ -4486,6 +4669,7 @@ scoreMin 500
     priority 14
     noInherit on
     cell HepG2
+    color 189,0,157
 
     track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
     release alpha
@@ -4500,6 +4684,7 @@ scoreMin 500
     priority 13
     noInherit on
     cell HepG2
+    color 189,0,157
 
     track wgEncodeUwDnaseSeqRawSignalRep1Th1
     release alpha
@@ -4564,6 +4749,7 @@ scoreMin 500
     maxHeightPixels 100:50:16
     viewLimits 1:150
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeUwDnaseSeqPeaksHelas3
     release alpha
@@ -4578,6 +4764,7 @@ scoreMin 500
     priority 14
     noInherit on
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
     release alpha
@@ -4592,6 +4779,7 @@ scoreMin 500
     priority 13
     noInherit on
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
     release alpha
@@ -4791,6 +4979,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongnonpolya
     release alpha
@@ -4805,6 +4994,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
     release alpha
@@ -4820,6 +5010,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya
     release alpha
@@ -4835,6 +5026,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562CellTotal
     release alpha
@@ -4849,6 +5041,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562CellTotal
     release alpha
@@ -4863,6 +5056,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal
     release alpha
@@ -4878,6 +5072,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562CellTotal
     release alpha
@@ -4893,6 +5088,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
     release alpha
@@ -4907,6 +5103,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongpolya
     release alpha
@@ -4921,6 +5118,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
     release alpha
@@ -4936,6 +5134,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya
     release alpha
@@ -4951,6 +5150,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongnonpolya
     release alpha
@@ -4965,6 +5165,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
     release alpha
@@ -4979,6 +5180,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
     release alpha
@@ -4994,6 +5196,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya
     release alpha
@@ -5009,6 +5212,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongpolya
     release alpha
@@ -5023,6 +5227,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
     release alpha
@@ -5037,6 +5242,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya
     release alpha
@@ -5052,6 +5258,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
     release alpha
@@ -5067,6 +5274,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562PolysomeLongnonpolya
     release alpha
@@ -5081,6 +5289,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
     release alpha
@@ -5095,6 +5304,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
     release alpha
@@ -5110,6 +5320,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562PolysomeLongnonpolya
     release alpha
@@ -5125,6 +5336,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusLongnonpolya
     release alpha
@@ -5139,6 +5351,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
     release alpha
@@ -5153,6 +5366,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
     release alpha
@@ -5168,6 +5382,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya
     release alpha
@@ -5183,6 +5398,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
     release alpha
@@ -5197,6 +5413,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CytosolLongpolya
     release alpha
@@ -5211,6 +5428,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
     release alpha
@@ -5226,6 +5444,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongpolya
     release alpha
@@ -5241,6 +5460,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CytosolLongnonpolya
     release alpha
@@ -5255,6 +5475,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
     release alpha
@@ -5269,6 +5490,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
     release alpha
@@ -5284,6 +5506,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongnonpolya
     release alpha
@@ -5299,6 +5522,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
     release alpha
@@ -5315,6 +5539,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562ChromatinTotal
     release alpha
@@ -5331,6 +5556,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562ChromatinTotal
     release alpha
@@ -5350,6 +5576,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
     release alpha
@@ -5369,6 +5596,7 @@ wgEncode 1
     rnaExtract total
     localization chromatin
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
     release alpha
@@ -5385,6 +5613,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
     release alpha
@@ -5401,6 +5630,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
     release alpha
@@ -5420,6 +5650,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
     release alpha
@@ -5439,6 +5670,7 @@ wgEncode 1
     rnaExtract total
     localization nucleolus
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
     release alpha
@@ -5455,6 +5687,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
     track wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
     release alpha
@@ -5474,6 +5707,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0.184
 
 
 # SUNY Albany genechp (wrangler: mikep)
@@ -5510,6 +5744,7 @@ wgEncode 1
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
     cell GM12878
+    color 153,38,0
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
     release alpha
@@ -5524,6 +5759,7 @@ wgEncode 1
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
     cell K562
+    color 46,0.184
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
     release alpha
@@ -5538,6 +5774,7 @@ wgEncode 1
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
     cell GM12878
+    color 153,38,0
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
     release alpha
@@ -5552,6 +5789,7 @@ wgEncode 1
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
     cell K562
+    color 46,0.184
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
     release alpha
@@ -5566,6 +5804,7 @@ wgEncode 1
     ripTgtProtein IGF2BP1
     ripAntibody SC_21027
     cell K562
+    color 46,0.184
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
     release alpha
@@ -5580,6 +5819,7 @@ wgEncode 1
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
     cell GM12878
+    color 153,38,0
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
     release alpha
@@ -5594,6 +5834,7 @@ wgEncode 1
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
     cell K562
+    color 46,0.184
 
 
 # Yale ChIP-seq (wrangler: tdreszer)
@@ -7494,6 +7735,7 @@ wgEncode 1
     color 46,0,184
     antibody Input
 
+
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: larrym)
 
 track wgEncodeHudsonalphaChipSeq
@@ -7529,6 +7771,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-23
     dateUnrestricted 2009-08-23
     cell GM12878
+    color 153,38,0
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
@@ -7542,6 +7785,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-23
     dateUnrestricted 2009-08-23
     cell GM12878
+    color 153,38,0
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
@@ -7556,6 +7800,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-23
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
@@ -7570,6 +7815,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-23
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
@@ -7583,6 +7829,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell GM12878
+    color 153,38,0
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
@@ -7596,6 +7843,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell GM12878
+    color 153,38,0
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
@@ -7610,6 +7858,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
@@ -7624,6 +7873,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
@@ -7637,6 +7887,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
@@ -7650,6 +7901,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
@@ -7664,6 +7916,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
@@ -7678,6 +7931,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
@@ -7691,6 +7945,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-22
     dateUnrestricted 2009-08-22
     cell GM12878
+    color 153,38,0
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
@@ -7704,6 +7959,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-22
     dateUnrestricted 2009-08-22
     cell GM12878
+    color 153,38,0
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
@@ -7718,6 +7974,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
@@ -7732,6 +7989,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii
@@ -7745,6 +8003,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-12-11
     dateUnrestricted 2009-09-11
     cell GM12878
+    color 153,38,0
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii
@@ -7759,6 +8018,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-09-11
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
@@ -7773,6 +8033,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody control
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
@@ -7787,6 +8048,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody control
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
@@ -7800,6 +8062,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-23
     dateUnrestricted 2009-08-23
     cell K562
+    color 46,0.184
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
@@ -7813,6 +8076,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-23
     dateUnrestricted 2009-08-23
     cell K562
+    color 46,0.184
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
@@ -7827,6 +8091,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-23
     spanList 1
     cell K562
+    color 46,0.184
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
@@ -7841,6 +8106,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-23
     spanList 1
     cell K562
+    color 46,0.184
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf
@@ -7854,6 +8120,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell K562
+    color 46,0.184
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
@@ -7867,6 +8134,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell K562
+    color 46,0.184
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
@@ -7881,6 +8149,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell K562
+    color 46,0.184
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
@@ -7895,6 +8164,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell K562
+    color 46,0.184
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
@@ -7908,6 +8178,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell K562
+    color 46,0.184
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
@@ -7921,6 +8192,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell K562
+    color 46,0.184
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
@@ -7935,6 +8207,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell K562
+    color 46,0.184
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
@@ -7949,6 +8222,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-25
     spanList 1
     cell K562
+    color 46,0.184
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
@@ -7962,6 +8236,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-22
     dateUnrestricted 2009-08-22
     cell K562
+    color 46,0.184
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
@@ -7975,6 +8250,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-11-22
     dateUnrestricted 2009-08-22
     cell K562
+    color 46,0.184
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
@@ -7989,6 +8265,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell K562
+    color 46,0.184
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
@@ -8003,6 +8280,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell K562
+    color 46,0.184
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii
@@ -8016,6 +8294,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateSubmitted 2008-12-11
     dateUnrestricted 2009-09-11
     cell K562
+    color 46,0.184
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii
@@ -8030,6 +8309,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-09-11
     spanList 1
     cell K562
+    color 46,0.184
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
@@ -8044,6 +8324,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell K562
+    color 46,0.184
     antibody control
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
@@ -8058,6 +8339,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dateUnrestricted 2009-08-22
     spanList 1
     cell K562
+    color 46,0.184
     antibody control
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
@@ -8192,6 +8474,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     cell SK-N-MC
     antibody control
 
+
 #  GENCODE genes (wrangler: tdreszer)
 
 track wgEncodeSangerGencode
@@ -8310,6 +8593,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetTagsK562NucleusLongpolya
     release alpha
@@ -8324,6 +8608,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetTagsK562PolysomeLongpolya
     release alpha
@@ -8338,6 +8623,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetAlignmentsProstateCellLongpolya
     release alpha
@@ -8368,6 +8654,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetAlignmentsK562NucleusLongpolya
     release alpha
@@ -8383,6 +8670,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetAlignmentsK562PolysomeLongpolya
     release alpha
@@ -8398,6 +8686,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetPlusRawSignalK562CytosolLongpolya
     release alpha
@@ -8413,6 +8702,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetMinusRawSignalK562CytosolLongpolya
     release alpha
@@ -8428,6 +8718,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetPlusRawSignalProstateCellLongpolya
     release alpha
@@ -8473,6 +8764,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetMinusRawSignalK562PolysomeLongpolya
     release alpha
@@ -8488,6 +8780,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetPlusRawSignalK562NucleusLongpolya
     release alpha
@@ -8503,6 +8796,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetMinusRawSignalK562NucleusLongpolya
     release alpha
@@ -8518,6 +8812,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
     release alpha
@@ -8536,6 +8831,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetPlusRawSignalGm12878NucleusLongpolya
     release alpha
@@ -8556,6 +8852,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetMinusRawSignalGm12878NucleusLongpolya
     release alpha
@@ -8576,6 +8873,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetAlignmentsGm12878CytosolLongpolya
     release alpha
@@ -8594,6 +8892,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetPlusRawSignalGm12878CytosolLongpolya
     release alpha
@@ -8614,6 +8913,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetMinusRawSignalGm12878CytosolLongpolya
     release alpha
@@ -8634,6 +8934,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
 
 # HudsonAlpha Methyl27 (wrangler: larrym)
@@ -8669,6 +8970,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell HepG2
+    color 189,0,157
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
     release alpha
@@ -8681,7 +8983,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell HepG2
-
+    color 189,0,157
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
     release alpha
@@ -8706,6 +9008,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell GM12878
+    color 153,38,0
 
     track wgEncodeHudsonalphaMethyl27K562r1
     release alpha
@@ -8718,6 +9021,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell K562
+    color 46,0.184
 
     track wgEncodeHudsonalphaMethyl27K562r2
     release alpha
@@ -8730,6 +9034,8 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell K562
+    color 46,0.184
+
 
 # HudsonAlpha CNV (wrangler: kate)
 
@@ -8755,6 +9061,7 @@ type bed 9 +
     longLabel ENCODE Copy Number Variation (GM12878 cells, Rep1)
     subGroups replicate=Rep1 cellType=GM12878
     cell GM12878
+    color 153,38,0
     itemRgb on
     priority 1
 
@@ -8765,6 +9072,7 @@ type bed 9 +
     longLabel ENCODE Copy Number Variation (GM12878 cells, Rep2)
     subGroups replicate=Rep2 cellType=GM12878
     cell GM12878
+    color 153,38,0
     priority 2
 
     track wgEncodeHudsonalphaCnvK562Rep1
@@ -8774,6 +9082,7 @@ type bed 9 +
     subTrack wgEncodeHudsonalphaCnv
     subGroups replicate=Rep1 cellType=K562
     cell K562
+    color 46,0.184
     priority 3
 
     track wgEncodeHudsonalphaCnvK562Rep2
@@ -8783,6 +9092,7 @@ type bed 9 +
     subTrack wgEncodeHudsonalphaCnv
     subGroups replicate=Rep2 cellType=K562
     cell K562
+    color 46,0.184
     priority 4
 
     track wgEncodeHudsonalphaCnvHepG2Rep1
@@ -8803,6 +9113,8 @@ type bed 9 +
     cell HepG2
     priority 6
 
+
+# CSHL RNA-Seq (wrangler: mikep)
 
 track wgEncodeCshlRnaSeq
 compositeTrack on
@@ -8849,6 +9161,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8863,6 +9176,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8877,6 +9191,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8891,6 +9206,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8905,6 +9221,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8919,6 +9236,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8933,6 +9251,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8947,6 +9266,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -8961,6 +9281,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -8975,6 +9296,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -8989,6 +9311,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9003,6 +9326,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9017,6 +9341,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9031,6 +9356,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9045,6 +9371,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9059,6 +9386,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9073,6 +9401,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9087,6 +9416,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9101,6 +9431,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9115,6 +9446,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9129,6 +9461,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9143,6 +9476,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9157,6 +9491,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9171,6 +9506,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9185,6 +9521,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9199,6 +9536,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9213,6 +9551,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9227,6 +9566,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9241,6 +9581,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9255,6 +9596,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9269,6 +9611,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9283,6 +9626,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9297,6 +9641,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9311,6 +9656,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9325,6 +9671,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9339,6 +9686,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9353,6 +9701,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
@@ -9367,6 +9716,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
@@ -9381,6 +9731,7 @@ wgEncode 1
     rnaExtract short
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
@@ -9395,6 +9746,7 @@ wgEncode 1
     rnaExtract short
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
@@ -9409,6 +9761,7 @@ wgEncode 1
     rnaExtract short
     localization polysome
     cell K562
+    color 46,0.184
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
@@ -9423,7 +9776,10 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
+
+# HudsonAlpha Methyl-seq (wrangler: larrym)
 
 track wgEncodeHudsonalphaMethylSeq
 compositeTrack on
@@ -9455,8 +9811,8 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     itemRgb on
-    color 127,0,0
     cell HCT-116
+    color 0,55,219
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
     release alpha
@@ -9470,8 +9826,8 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     itemRgb on
-    color 127,0,0
     cell HCT-116
+    color 0,55,219
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
     release alpha
@@ -9639,7 +9995,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     itemRgb on
-    color 0,100,0
     cell HFL11W
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
@@ -9654,7 +10009,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     itemRgb on
-    color 0,100,0
     cell HFL24W
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
@@ -9669,8 +10023,10 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     itemRgb on
-    color 0,100,0
     cell HAL
+
+
+# Wold Lab (Caltech) RNA-Seq (wrangler: mikep)
 
 track wgEncodeCaltechRnaSeq
 compositeTrack on
@@ -9707,6 +10063,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqAlignmentsRep2Gm12878CellLongpolyaBow098
     release alpha
@@ -9724,6 +10081,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqAlignmentsRep1K562CellLongpolyaBow098
     release alpha
@@ -9741,6 +10099,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqAlignmentsRep2K562CellLongpolyaBow098
     release alpha
@@ -9758,6 +10117,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow098
     release alpha
@@ -9775,6 +10135,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow098
     release alpha
@@ -9792,6 +10153,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow098
     release alpha
@@ -9809,6 +10171,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow098
     release alpha
@@ -9826,6 +10189,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b
     release alpha
@@ -9846,6 +10210,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b
     release alpha
@@ -9866,6 +10231,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b
     release alpha
@@ -9886,6 +10252,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b
     release alpha
@@ -9906,6 +10273,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqPairedAlignsRep1Gm12878CellLongpolyaBowblt1
     release alpha
@@ -9923,6 +10291,7 @@ wgEncode 1
     mapAlgorithm bowblt1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqPairedAlignsRep1K562CellLongpolyaBowblt1
     release alpha
@@ -9940,6 +10309,7 @@ wgEncode 1
     mapAlgorithm bowblt1
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBowblt1
     release alpha
@@ -9957,6 +10327,7 @@ wgEncode 1
     mapAlgorithm bowblt1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat34
     release alpha
@@ -9974,6 +10345,7 @@ wgEncode 1
     mapAlgorithm blat34
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBowblt1
     release alpha
@@ -9991,6 +10363,7 @@ wgEncode 1
     mapAlgorithm bowblt1
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat34
     release alpha
@@ -10008,6 +10381,7 @@ wgEncode 1
     mapAlgorithm blat34
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBowblt1
     release alpha
@@ -10028,6 +10402,7 @@ wgEncode 1
     mapAlgorithm bowblt1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBowblt1
     release alpha
@@ -10048,6 +10423,7 @@ wgEncode 1
     mapAlgorithm bowblt1
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBow098
     release alpha
@@ -10068,6 +10444,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBow098
     release alpha
@@ -10088,6 +10465,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0.184
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBow098
     release alpha
@@ -10108,6 +10486,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBow098
     release alpha
@@ -10128,4 +10507,5 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0.184
 
