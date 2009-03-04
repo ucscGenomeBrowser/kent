@@ -5,14 +5,10 @@ factors (TFs) in the given cell types as determined by chromatin
 immunoprecipitation followed by high throughput sequencing (ChIP-Seq). 
 Included for each cell type is the input signal, which represents the control 
 condition where no antibody targeting was performed.
-For each experiment (cell type vs. antibody), the subtracks show one or
-more of the following:
-<UL>
-<LI><I>Peaks</I> that represent sites with the greatest evidence of transcription factor binding.
-<LI><I>Signal</I> of enrichment for TF binding derived from processed data (pooled replicates
-normalized to control).
-<LI><I>Raw Signal</I> of aligned read density for an individual replicate.
-</UL>
+For each experiment (cell type vs. antibody) this track shows
+a graph of enrichment for TF binding (<I>Signal</I>), along with
+sites that have the greatest evidence of transcription factor binding (<I>Peaks</I>).
+<P>
 The sequence reads, quality scores, and alignment coordinates are available from
 the <I>Downloads</I> link, above.
 </P>
@@ -23,10 +19,10 @@ This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
 tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-</P>
 ENCODE tracks typically contain one or more of the following views:
 <DL>
-<DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data (usually normalized data from pooled replicates). ENCODE Peaks tables contain fields for statistical significance, including FDR (qValue).</DD>
+<DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data (usually normalized data from pooled replicates). ENCODE Peaks tables contain fields for statistical significance, including FDR 
+(<A HREF="../../goldenPath/help/qValue.html" TARGET=_BLANK>qValue</A>).</DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on processed data.</DD>
 <DT><I>Raw Signal</I></DT><DD>Density graph (wiggle) of signal from raw data (single replicates, no control). For high-throughput sequencing data,
 this reflects the aligned read density.</DD>
