@@ -6,7 +6,7 @@ from different <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=localization">
 in different <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>
 is compared in companion experiements using three different technologies; tiling arrays (here), 
 and RNA-seq using Solexa and SOLiD platforms. 
-The <strong>Raw Signal</strong> view shows an estimate of abundance of RNA molecules and the <strong>Transfrags</strong> view 
+The <i>Raw Signal</i> view shows an estimate of abundance of RNA molecules and the <i>Transfrags</i> view 
 shows the locations of sites corresponding to these molecules. 
 </P>
 
@@ -18,21 +18,23 @@ shows the locations of sites corresponding to these molecules.
 distinguishing between the different cell types and compartments.</P>
 
 <DL>
-<DT><strong>Transfrags</strong>
+<DT><i>Transfrags</i>
 <DD>The Transfrags view includes all transfrags before filtering.
-<DT><strong>Filtered Transfrags</strong>
+<DT><i>Filtered Transfrags</i>
 <DD>The Filtered Transfrags view excludes repeats and other known annotations including: 
 tRNAs and rRNAs, mi/snoRNAs, things mapping to the mitochondrial or Y chromosomes, 
 and many predicted snoRNAs and miRNAs.
-<DT><strong>Raw Signal</strong>
+<DT><i>Raw Signal</i>
 <DD>The Raw Signal view shows the probe intensity based on all probes.
-<DT><strong>Filtered Raw Signal</strong>
+<DT><i>Filtered Raw Signal</i>
 <DD>The Filtered Raw Signal view shows the probe intensity based on the filtered set of probes.
 </DL>
 
 <H2>Methods</H2>
 
 <P>
+Cells were grown according to the approved 
+<A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 RNA molecules longer than 200 nt 
 and present in RNA population isolated from different subcellular compartments 
 (such as cytosol, nucleus, polysomes and others) were fractionated into polyA+ and polyA- 
@@ -42,7 +44,7 @@ portion of the human genome tiled on average every 5 bp (center-to-center of eac
 consecutive 25-mers). </P>
 
 <P>All arrays were scaled to a median array intensity of 330. Within a sliding 61 bp window 
-centered on each probe, an estimate of RNA abundance (signal; see the <strong>Raw Signal</strong> view) 
+centered on each probe, an estimate of RNA abundance (signal; see the <i>Raw Signal</i> view) 
 was found by calculating the median of all pairwise average PM-MM values, where PM is a 
 perfect match and MM is a mismatch. Kapranov <EM>et al.</EM> (2002), Cheng <EM>et al.</EM> 
 (2005) , Kapranov <EM>et al.</EM> (2007), and Cawley <EM>et al.</EM> (2004) 
@@ -55,8 +57,8 @@ also describes the analytical methods.
 technical replicates were generated from the same RNA pool for each RNA preparation and 
 hybridized to duplicate arrays (two technical replicates) that contain the ENCODE regions. 
 Labeled RNA samples were then pooled and hybridized to the tiling 91-array set spanning 
-the whole genome. Transcribed regions (transfrags; see the <strong>Transfrags</strong> view) were 
-generated from the <strong>Raw Signal</strong> by merging genomic positions to which probes 
+the whole genome. Transcribed regions (transfrags; see the <i>Transfrags</i> view) were 
+generated from the <i>Raw Signal</i> by merging genomic positions to which probes 
 are mapped. This merging was based on a 5% false positive rate cutoff in negative 
 bacterial controls, a maximum gap (MaxGap) of 40 base-pairs and minimum run (MinRun) 
 of 40 base-pairs. </P>
@@ -89,3 +91,14 @@ Sementchenko V, Cheng J, Williams AJ, <EM>et al</EM>.
 <P>Kapranov P, Cawley SE, Drenkow J, Bekiranov S, Strausberg RL, Fodor SP, and Gingeras TR.
 <A TARGET=_BLANK HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=11988577">Large-scale transcriptional activity in chromosomes 21 and 22</A>
 <EM>Science</EM>. 2002 May 3;296:916-919.</P>
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior 
+consent, submit publications that use an unpublished ENCODE dataset until 
+nine months following the release of the dataset.  This date is listed in 
+the <EM>Restricted Until</EM> column, above.  The full data release policy 
+for ENCODE is available 
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P> 
+
+
