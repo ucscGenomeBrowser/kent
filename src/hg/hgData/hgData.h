@@ -208,6 +208,19 @@ time_t trackDbLatestUpdateTime(char *db);
 time_t findSpecLatestUpdateTime(char *db);
 /* Get latest update time from each hgFindSpec table. */
 
+time_t validateGenome(char *genome);
+// Validate that genome is active (must not be null)
+// Return update time of chromInfo table in genome database
+
+void validateChrom(char *genome, char *chrom, struct chromInfo **pCi);
+// Validate that chrom exists (must not be null)
+// Return chrom info for chrom
+
+time_t validateLoadTrackDb(char *genome, char *track, struct trackDb **pTdb);
+// Validate that track exists by loading track Db to find track
+// Genome and track must not be null
+// Return update time of table in genome database, and trackDb data
+
 ////////////////////////
 void printItemAsAnnoj(char *db, char *track, char *type, char *term);
 // print out a description for a track item
