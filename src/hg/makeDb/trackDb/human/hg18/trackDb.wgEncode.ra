@@ -1,4 +1,4 @@
-# Genome-wide ENCODE tracks 
+# Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
 
 track wgEncodeGisRnaPet
@@ -2807,7 +2807,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,useScore=0 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:4163,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:4163,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 useScore 0
 priority 0
 type bed 3
@@ -3471,7 +3471,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008
     dateSubmitted 2008-12-04
     dateUnrestricted 2009-09-04
-    spanList 1401
+    spanList 1
     cell K562
     color 46,0,184
     antibody input
