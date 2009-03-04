@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.164 2009/03/03 22:02:34 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.165 2009/03/04 01:29:46 kate Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3308,7 +3308,10 @@ if(setting)
         max += 1;
         min = strSwapChar(cloneString(setting),':',0);
         }
-    puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
+    if(max != NULL)
+        puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
+    else
+        puts("<TR><TD align='right'><B>Minimum score:</B><TD align='left'>");
     safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MIN);
     cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), min), 4);
     if(max != NULL)
