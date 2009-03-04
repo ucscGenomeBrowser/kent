@@ -36,7 +36,7 @@ Cells were grown according to the approved
 Further preparations were similar to those previously published 
 (Euskirchen <EM>et al.</EM>, 2007) with the exceptions that the cells 
 were unstimulated and sodium orthovanadate was omitted from the buffers.
-For details on the chromatin immunoprecipitation protocol used see 
+For details on the chromatin immunoprecipitation protocol used, see 
 Euskirchen <EM>et al.</EM> (2007) and Rozowsky <EM>et al.</EM> (2009).
 </P>
 <P>
@@ -44,19 +44,20 @@ DNA recovered from the precipitated chromatin was sequenced on the Illumina (Sol
 sequencing platform and mapped to the genome using the Eland alignment program.
 ChIP-seq data was scored based on sequence reads (length ~30 bps) that align uniquely
 to the human genome. From the mapped tags a signal map of ChIP DNA fragments 
-(average fragment length ~ 200 bps) was constructed where the signal height is the number of
+(average fragment length ~ 200 bp) was constructed where the signal height is the number of
 overlapping fragments at each nucleotide position in the genome. 
 </P>
 <P>
-For each 1Mb segment of each chromosome a peak height threshold was 
+For each 1 Mb segment of each chromosome a peak height threshold was 
 determined by requiring a false discovery rate &lt;= 0.05 when comparing the
 number of peaks above threshold as compared the number obtained from multiple
 simulations of a random null background with the same number of mapped
 reads (also accounting for the fraction of mapable bases
-for sequence tags in that 1Mb segment). The number of mapped tags in a putative 
-binding region is compared against the normalized (normalized by correlating tag counts 
-in genomic 10 Kb windows) number of mapped tags in the same region from an input DNA control. 
-Using a binomial test only regions that have a p-value &lt;= 0.05 are considered to be 
+for sequence tags in that 1 Mb segment). The number of mapped tags in a putative 
+binding region is compared to the normalized (normalized by correlating tag 
+counts 
+in genomic 10 kb windows) number of mapped tags in the same region from an input DNA control. 
+Using a binomial test, only regions that have a p-value &lt;= 0.05 are considered to be 
 significantly enriched compared to the input DNA control.
 </p>
 
