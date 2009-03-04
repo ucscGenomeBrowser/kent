@@ -5,43 +5,8 @@
 // #include "bedGraph.h"
 // #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.19 2009/03/03 07:46:16 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.20 2009/03/04 10:12:45 mikep Exp $";
 
-time_t validateGenome(char *genome)
-// Validate that genome is active (must not be null)
-// Return update time of chromInfo table in genome database
-{
-if (!hDbIsActive(genome))
-    ERR_GENOME_NOT_FOUND(genome);
-return hGetLatestUpdateTimeChromInfo(genome);
-}
-
-void validateChrom(char *genome, char *chrom, struct chromInfo **pCi)
-{
-// Validate that chrom exists (must not be null)
-// Return chrom info for chrom
-struct chromInfo *ci = hGetChromInfo(genome, chrom);
-if (!ci)
-    ERR_CHROM_NOT_FOUND(genome, chrom);
-*pCi = ci;
-}
-
-time_t validateLoadTrackDb(char *genome, char *track, struct trackDb **pTdb)
-// Validate that track exists by loading track Db to find track
-// Genome and track must not be null
-// Return update time of table in genome database, and trackDb data
-{
-struct trackDb *tdb = NULL;
-struct sqlConnection *conn;
-time_t latest = 0;
-if (!(tdb = hTrackDbForTrackProfile(genome, track, TRUE)))
-    ERR_TRACK_INFO_NOT_FOUND(track, genome);
-conn = hAllocConn(genome);
-latest = sqlTableUpdateTime(conn, track); 
-hFreeConn(&conn);
-*pTdb = tdb; 
-return latest;
-}
 
 void doGet()
 {
