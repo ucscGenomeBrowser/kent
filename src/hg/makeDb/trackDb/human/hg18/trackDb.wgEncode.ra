@@ -214,7 +214,7 @@ shortLabel Broad Histone
 longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 Kera=Keratinocyte 
+subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 Kera=Keratinocyte
 subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -3437,7 +3437,7 @@ shortLabel NHGRI NRE
 longLabel ENCODE NHGRI Negative Regulatory Elements
 group regulation
 subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
-subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3 
+subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3
 subGroup3 promoter Promoter SV40=SV40 Ggam=G-gamma
 dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
@@ -5484,7 +5484,7 @@ shortLabel SUNY-Albany RIP
 longLabel ENCODE SUNY-Albany RNA Binding Proteins by RIP
 group regulation
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 ripAntibody RIP_Antibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_5261=SC_5261 SC_21027=SC_21027
 subGroup4 ripTgtProtein RIP_Target_Protein T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1
 dimensions dimensionX=cellType dimensionY=ripAntibody dimensionZ=ripTgtProtein
@@ -6346,7 +6346,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 1
-    longLabel ENCODE Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 7798.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6360,7 +6360,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 2
-    longLabel ENCODE Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 5002.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6374,7 +6374,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 3
-    longLabel ENCODE Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 4462.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -7026,7 +7026,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 Pk
-    longLabel ENCODE Yale ChIP-seq Peaks (ZNF263 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562 cells)
     subGroups view=Peaks factor=ZNF263 cellType=K562
     type narrowPeak
     dateSubmitted 2009-02-11
@@ -7039,7 +7039,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 Sig
-    longLabel ENCODE Yale ChIP-seq Signal (ZNF263 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
     subGroups view=Signal factor=ZNF263 cellType=K562
     type wig 0.00 2435.00
     dateSubmitted 2009-02-11
@@ -7053,7 +7053,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 1
-    longLabel ENCODE Yale ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2478.00
     dateSubmitted 2009-02-11
@@ -7067,7 +7067,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 2
-    longLabel ENCODE Yale ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2247.00
     dateSubmitted 2009-02-11
@@ -8532,7 +8532,7 @@ shortLabel HAIB Methyl27
 longLabel ENCODE HudsonAlpha CpG Methylation by Illumina Methyl27
 group regulation
 subGroup1 view Views Peaks=Peaks
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2 
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
 subGroup3 replicate Replicate RP1=RP1 RP2=RP2
 dimensions dimensionX=cellType dimensionY=replicate
 sortOrder cellType=+ replicate=+ view=+
@@ -8629,7 +8629,7 @@ group varRep
 itemRgb on
 wgEncode 1
 dateSubmitted 2008-12-04
-subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2 
+subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
 subGroup2 replicate Replicate Rep1=Rep1 Rep2=Rep2
 dimensions dimensionX=cellType dimensionY=replicate
 dragAndDrop subTracks
