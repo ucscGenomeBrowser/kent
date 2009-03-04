@@ -1,37 +1,16 @@
 <H2>Description</H2>
 
-<P>This track shows DNaseI sensitivity measured genome-wide using the 
-Digital DNaseI methodology (see below), and DNaseI hypersensitive sites.  
+<P>This track is produced as part of the ENCODE Project.
+This track shows DNaseI sensitivity measured genome-wide in different
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
+using the Digital DNaseI methodology (see below), and DNaseI hypersensitive sites.  
 DNaseI has long been used to map general chromatin accessibility and 
 DNaseI hypersensitivity is a universal feature of active 
 <EM>cis</EM>-regulatory sequences. The use of this method has led 
 to the discovery of functional regulatory elements that include enhancers, 
-insulators, promotors, locus control regions and novel elements.</P>
-
-<P>DNaseI-treated chromatin samples from the following cell types were studied: 
-<TABLE BORDER=1>
-<THEAD>
-<TR><TH>Cell Type</TH><TH>Description</TH><TH>Source<SUP>*</SUP></TH></TR>
-</THEAD>
-<TBODY>
-<TR><TD>Th1</TD><TD>CD4+ T-cells, Th1 subtype</TD><TD>Primary</TD></TR>
-<TR><TD>GM06990</TD><TD>EBV-transformed B-lymphoblast</TD><TD>Coriell</TD></TR>
-<TR><TD>HeLaS3</TD><TD>Cervical carcinoma</TD><TD>ATCC</TD></TR>
-<TR><TD>HepG2</TD><TD>Hepatic / hepatoblastoma</TD><TD>ATCC</TD></TR>
-<TR><TD>K562</TD><TD>Erythroid</TD><TD>ATCC</TD></TR>
-<TR><TD>SKnSH</TD><TD>Neuroblasts (harvested following 72hr differentiation 
-with trans-retinoic acid)</TD><TD>ATCC</TD></TR>
-</TBODY>
-<TFOOT>
-<TR><TD COLSPAN=3><SUP>*</SUP>Key for Source column:
-<UL>
-<LI><A HREF="http://www.atcc.org/">ATCC</A>: American Type Culture Collection</LI> 
-<LI><A HREF="http://www.cambrex.com/">Lonza</A>: Cambrex Corporation</LI> 
-<LI><A HREF="http://cellbank.nibio.go.jp/">Coriell</A>: Coriell Institute </LI>
-</UL>
-</TD></TR>
-</TFOOT>
-</TABLE>
+insulators, promotors, locus control regions and novel elements.
+For each experiment (cell type) this track shows DNaseI hypersensitive zones (<I>HotSpots</I>),
+hypersensitive sites (<I>Peaks</I>) based on the sequencing tag density (<I>Signal</I>).
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -49,21 +28,33 @@ display only selected subtracks, uncheck the boxes next to the tracks you wish t
 hide. For more information about the graphical configuration options, click 
 the <A HREF="http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html">Graph configuration help</A> link.</P>
 
+<DL>
+<DT><I>HotSpots</I>
+<DD> DNaseI hypersensitive zones identified using the HotSpot algorithm.
+<DT><I>Peaks</I>
+<DD> DNaseI hypersensitive sites (DHSs) identified as signal peaks within FDR 0.5% hypersensitive zones.
+<DT><I>Signal</I>
+<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+</DL>
+
 <H2>Methods</H2>
 
-<P>Digital DNaseI was performed by performing DNaseI digestion of intact 
+<P>
+Cells were grown according to the approved
+<A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
+Digital DNaseI was performed by performing DNaseI digestion of intact 
 nuclei, isolating DNaseI 'double-hit' fragments as described in 
 Sabo <EM>et al.</EM> (2006), and direct sequencing of fragment 
 ends (which correspond to <EM>in vivo</EM> DNaseI cleavage sites) 
 using the Solexa platform (27 bp reads).  Uniquely mapping high-quality reads 
 were mapped to the genome.  DNaseI sensitivity is directly reflected in 
-raw tag density, which is shown in the track as density of tags 
+raw tag density (<I>Signal</I>), which is shown in the track as density of tags 
 mapping within a 150 bp sliding window (at a 20 bp step across the genome).  
-DNaseI hypersensitive zones were identified using the HotSpot algorithm 
+DNaseI hypersensitive zones (<I>HotSpots</I>) were identified using the HotSpot algorithm 
 described in Sabo <EM>et al.</EM> (2004).  0.5% false discovery 
 rate thresholds (FDR 0.005) were computed for each cell type by 
 applying the HotSpot algorithm to an equivalent number of random 
-uniquely mapping 27mers.  DNaseI hypersensitive sites (DHSs) 
+uniquely mapping 27mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>) 
 were identified as signal peaks within FDR 0.5% hypersensitive 
 zones using a peak-finding algorithm.</P>
 
@@ -87,3 +78,13 @@ blotting method. </P>
 <P>Sabo PJ, Hawrylycz M, Wallace JC, Humbert R, Yu M, Shafer A, Kawamoto J, Hall R, Mack J, Dorschner MO, McArthur M, Stamatoyannopoulos JA.
 <A HREF="http://www.pnas.org/content/101/48/16837">Discovery of functional noncoding elements by digital analysis of chromatin structure.</A>
 <EM>PNAS</EM>. 2004;101:16837-16842.</P>
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
+
