@@ -9,7 +9,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: hgData_search.c,v 1.1.2.1 2009/03/03 07:42:33 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_search.c,v 1.1.2.2 2009/03/04 10:11:42 mikep Exp $";
 struct cart *cart; /* The cart where we keep persistent variables. */
 
 struct json_object *addSearchGenomeUrl(struct json_object *o, char *url_name, char *genome, char *term)
@@ -53,6 +53,8 @@ if (pos)
 	{
 	o = json_object_new_object();
 	json_object_array_add(a, o);
+	json_object_object_add(o, "id", p->browserName ? json_object_new_string(p->browserName) : NULL);
+	json_object_object_add(o, "name", p->name ? json_object_new_string(p->name) : NULL);
 	if (p->chrom)
 	    {
 	    json_object_object_add(o, "chrom", json_object_new_string(p->chrom));
@@ -69,19 +71,45 @@ if (pos)
 		errAbort("Error: chromStart (%d) and/or chromEnd (%d) specified without chrom\n", p->chromStart, p->chromEnd);
 	    if (p->browserName == NULL)
 		errAbort("Error: no chrom position and no item name returned from search\n");
-	    addSearchGenomeUrl(o, "url_search_item_genome_track", genome, p->browserName);
+	    addSearchGenomeUrl(o, "url_search_item_genome", genome, p->browserName);
 	    }
-	json_object_object_add(o, "name", p->name ? json_object_new_string(p->name) : NULL);
-
-	chopbywhyate 12
-	//url could be PSL file 
-	// Strip off URL from description
-	if ( (desc = rStringIn("</A> - ", p->description)) )
-	    desc += strlen("</A> - ");
+	if ( startsWith("<A HREF=\"dummyApp?position=", p->description) && 
+	      endsWith(p->description, "</A>\n") && 
+	      (desc = rStringIn("dummyCgi\">", p->description)) )
+	    {
+	    //url could be PSL file : 
+	    //"<A HREF=\"dummyApp?position=chr6:36672533-36677547&xenoMrna=full&dummyCgi\">
+	    //  417   75.6% 6     ++  36672533  36677547  BC071322   172   639  1040</A>\n"
+	    char buf[1024], chrom[124], strand[124], qName[1024];
+	    int size, start, end, qStart, qEnd, total;
+	    double ident;
+	    safecpy(buf, sizeof(buf), desc + strlen("dummyCgi\">") ); 
+	    (*rStringIn("</A>", buf)) = '\0'; // remove the trailing A
+	    desc = buf;
+	    // provide a parsed PSL line if possible
+	    if (sscanf(buf, " %d %lf%% %s %s %d %d %s %d %d %d", &size, &ident, chrom, strand, &start, &end, qName, &qStart, &qEnd, &total) == 10)
+		{
+		struct json_object *psl = json_object_new_array();
+		json_object_object_add(o, "psl", psl);
+		json_object_array_add(psl, json_object_new_int(size));
+		json_object_array_add(psl, json_object_new_double(ident));
+		json_object_array_add(psl, json_object_new_string(chrom));
+		json_object_array_add(psl, json_object_new_string(strand));
+		json_object_array_add(psl, json_object_new_int(start));
+		json_object_array_add(psl, json_object_new_int(end));
+		json_object_array_add(psl, json_object_new_string(qName));
+		json_object_array_add(psl, json_object_new_int(qStart));
+		json_object_array_add(psl, json_object_new_int(qEnd));
+		json_object_array_add(psl, json_object_new_int(total));
+		}
+	    }
+	else if ( (desc = rStringIn("</A> - ", p->description)) )
+	    {
+	    desc += strlen("</A> - "); // strip off link to genome browser
+	    }
 	else
 	    desc = p->description;
 	json_object_object_add(o, "description", desc ? json_object_new_string(desc) : NULL);
-	json_object_object_add(o, "id", p->browserName ? json_object_new_string(p->browserName) : NULL);
 	}
 return a;
 }
@@ -97,7 +125,7 @@ for (p = pos ; p ; p = p->next)
     json_object_array_add(a, o);
     json_object_object_add(o, "track", p->name ? json_object_new_string(p->name) : NULL);
     json_object_object_add(o, "description", p->description ? json_object_new_string(p->description) : NULL);
-    json_object_object_add(o, "hits", jsonHgPos(p->posList, genome, track));
+    json_object_object_add(o, "hits", jsonHgPos(p->posList, genome, *track ? track : p->name));
     //json_object_object_add(o, "hits", jsonHgPos(p->posList, genome, p->name));
     }
 return a;
