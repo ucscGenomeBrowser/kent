@@ -80,7 +80,7 @@ if (row != NULL)
     if (pValue >= 0)
 	printf("<B>P-value (-log10):</B> %.3f<BR>\n", pValue);
     if (qValue >= 0)
-	printf("<B>Quality value: </B> %.3f<BR>\n", qValue);	
+	printf("<B>Q-value (FDR): </B> %.3f<BR>\n", qValue);	
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
