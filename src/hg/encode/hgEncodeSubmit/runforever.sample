@@ -1,0 +1,19 @@
+#!/bin/tcsh
+if ("$USER" != "qateam") then
+    echo "must be qateam"
+    exit 1
+endif
+cd /hive/groups/encode/dcc/pipeline/hgEncodeSubmit
+@ sleepTime = 60
+while(1)
+    echo "--------------------------" >> log/runner.log
+    date >> log/runner.log
+    ./pipeline_runner.rb prod >>& log/runner.log
+    if ( $status ) then
+	echo "pineline_runner.rb prod terminated, will sleep $sleepTime and then try to restart it." | mail -s 'pipeline_runner.rb terminated' galt
+    else
+	exit 0
+    endif
+    sleep $sleepTime
+    @ sleepTime = $sleepTime + $sleepTime
+end
