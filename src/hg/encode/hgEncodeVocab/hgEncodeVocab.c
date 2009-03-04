@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.18 2009/02/25 18:26:03 kate Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.19 2009/03/04 06:57:34 mikep Exp $";
 
 static char *cv_file()
 {
@@ -57,7 +57,7 @@ else if (sameString(type,"ripAntibody"))
     }
 else if (sameString(type,"ripTgtProtein"))
     {
-    puts("  <TH>Term</TH><TH>Alternative Symbols</TH><TH>Description</TH><TH>URL</TH>");
+    puts("  <TH>Term</TH><TH>Alternative Symbols</TH><TH>Description</TH>");
     }
 else if (sameString(type,"localization"))
     {
@@ -142,16 +142,15 @@ else if (sameString(type,"ripTgtProtein"))
     {
     ++(*total);
     puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "url");
+    if (s)
+	printf("  <TD><A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=\"%s\">%s</A></TD>\n", s, term);
+    else
+	printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "alternativeSymbols");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-    s = hashFindVal(ra, "url");
-    if (s)
-	printf("  <TD><A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=\"%s\">Source URL</A></TD>\n", s);
-    else
-	printf("  <TD>&nbsp;</TD>\n");
     puts("</TR>");
     }
 else if (sameString(type,"localization"))
