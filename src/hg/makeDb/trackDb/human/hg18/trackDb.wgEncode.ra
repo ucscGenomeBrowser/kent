@@ -5631,6 +5631,7 @@ wgEncode 1
     dateUnrestricted 2009-11-27
     dataVersion ENCODE Feb 2009 Freeze
     cell GM12878
+    color 153,38,0
     antibody JunD
 
     track wgEncodeYaleChIPseqSignalGm12878Jund
@@ -5645,6 +5646,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell GM12878
+    color 153,38,0
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Jund
@@ -5659,6 +5661,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell GM12878
+    color 153,38,0
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Jund
@@ -5673,6 +5676,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell GM12878
+    color 153,38,0
     antibody JunD
 
     track wgEncodeYaleChIPseqPeaksGm12878Max
@@ -5686,6 +5690,7 @@ wgEncode 1
     dateSubmitted 2009-01-09
     dateUnrestricted 2009-10-09
     cell GM12878
+    color 153,38,0
     antibody Max
 
     track wgEncodeYaleChIPseqSignalGm12878Max
@@ -5700,6 +5705,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     spanList first
     cell GM12878
+    color 153,38,0
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Max
@@ -5714,6 +5720,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     spanList first
     cell GM12878
+    color 153,38,0
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Max
@@ -5728,6 +5735,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     spanList first
     cell GM12878
+    color 153,38,0
     antibody Max
 
     track wgEncodeYaleChIPseqPeaksGm12878Pol2
@@ -5741,6 +5749,7 @@ wgEncode 1
     dateSubmitted 2008-11-26
     dateUnrestricted 2009-08-26
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalGm12878Pol2
@@ -5755,6 +5764,7 @@ wgEncode 1
     dateUnrestricted 2009-08-26
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
@@ -5769,6 +5779,7 @@ wgEncode 1
     dateUnrestricted 2009-08-26
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
@@ -5783,6 +5794,7 @@ wgEncode 1
     dateUnrestricted 2009-08-26
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksGm12878Cfos
@@ -5796,6 +5808,7 @@ wgEncode 1
     dateSubmitted 2008-11-24
     dateUnrestricted 2009-08-24
     cell GM12878
+    color 153,38,0
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalGm12878Cfos
@@ -5810,6 +5823,7 @@ wgEncode 1
     dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
@@ -5824,6 +5838,7 @@ wgEncode 1
     dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
@@ -5838,6 +5853,7 @@ wgEncode 1
     dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
@@ -5852,6 +5868,7 @@ wgEncode 1
     dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalGm12878Input
@@ -5866,6 +5883,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalGm12878Input
@@ -5880,6 +5898,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
+    color 153,38,0
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHct116Tcf4
@@ -5893,6 +5912,7 @@ wgEncode 1
     dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
     cell HCT-116
+    color 0,55,219
     antibody TCF4
 
     track wgEncodeYaleChIPseqSignalHct116Tcf4
@@ -5907,6 +5927,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HCT-116
+    color 0,55,219
     antibody TCF4
 
     track wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4
@@ -5921,6 +5942,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HCT-116
+    color 0,55,219
     antibody TCF4
 
     track wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4
@@ -5935,6 +5957,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HCT-116
+    color 0,55,219
     antibody TCF4
 
     track wgEncodeYaleChIPseqSignalHct116Input
@@ -5949,6 +5972,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HCT-116
+    color 0,55,219
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalHct116Input
@@ -5963,6 +5987,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HCT-116
+    color 0,55,219
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHek293Pol2
@@ -5976,6 +6001,7 @@ wgEncode 1
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
     cell HEK293(b)
+    color 153,0,125
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Pol2
@@ -5990,6 +6016,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
+    color 153,0,125
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
@@ -6004,6 +6031,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
+    color 153,0,125
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
@@ -6018,6 +6046,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
+    color 153,0,125
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
@@ -6032,6 +6061,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
+    color 153,0,125
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Input
@@ -6046,6 +6076,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
+    color 153,0,125
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalHek293Input
@@ -6060,6 +6091,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
+    color 153,0,125
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHelas3Pol2
@@ -6073,8 +6105,8 @@ wgEncode 1
     dateSubmitted 2008-10-01
     dateUnrestricted 2009-07-01
     cell HeLa-S3
+    color 0,119,158
     antibody Pol2
-    color 112,63,174
     accession GSE12781
 
     track wgEncodeYaleChIPseqSignalHelas3Pol2
@@ -6090,8 +6122,8 @@ wgEncode 1
     visibility full
     spanList 1
     cell HeLa-S3
+    color 0,119,158
     antibody Pol2
-    color 112,63,174
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
@@ -6106,9 +6138,9 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
+    color 0,119,158
     antibody Pol2
     accession GSE12781
-    color 112,63,174
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
     release alpha
@@ -6122,8 +6154,8 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
+    color 0,119,158
     antibody Pol2
-    color 112,63,174
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
@@ -6138,8 +6170,8 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
+    color 0,119,158
     antibody Pol2
-    color 112,63,174
     accession GSE12781
 
     track wgEncodeYaleChIPseqSignalHelas3Input
@@ -6156,8 +6188,8 @@ wgEncode 1
     visibility full
     spanList 1
     cell HeLa-S3
+    color 0,119,158
     antibody Input
-    color 112,63,174
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalHelas3Input
@@ -6172,8 +6204,8 @@ wgEncode 1
     dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3
+    color 0,119,158
     antibody Input
-    color 112,63,174
     accession GSE12781
 
     track wgEncodeYaleChIPseqPeaksHelas3Largefragment
@@ -6187,6 +6219,7 @@ wgEncode 1
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
     cell HeLa-S3
+    color 0,119,158
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqSignalHelas3Largefragment
@@ -6201,6 +6234,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
@@ -6215,6 +6249,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
@@ -6229,6 +6264,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqSignalHelas3Mnase
@@ -6243,6 +6279,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody MNase
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
@@ -6257,6 +6294,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody MNase
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
@@ -6271,6 +6309,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody MNase
 
     track wgEncodeYaleChIPseqPeaksHelas3Mouseigg
@@ -6284,6 +6323,7 @@ wgEncode 1
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
     cell HeLa-S3
+    color 0,119,158
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqSignalHelas3Mouseigg
@@ -6298,6 +6338,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
@@ -6312,6 +6353,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
@@ -6326,6 +6368,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqSignalHelas3Nakeddna
@@ -6340,6 +6383,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
@@ -6354,6 +6398,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
@@ -6368,6 +6413,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
@@ -6382,6 +6428,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqPeaksHelas3ifngStat1
@@ -6395,8 +6442,8 @@ wgEncode 1
     dateSubmitted 2008-10-01
     dateUnrestricted 2009-07-01
     cell HeLa-S3_IFNg
+    color 0,119,158
     antibody STAT1
-    color 112,103,174
     accession GSE12782
 
     track wgEncodeYaleChIPseqSignalHelas3ifngStat1
@@ -6412,8 +6459,8 @@ wgEncode 1
     visibility full
     spanList 1
     cell HeLa-S3_IFNg
+    color 0,119,158
     antibody STAT1
-    color 112,103,174
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
@@ -6428,8 +6475,8 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
+    color 0,119,158
     antibody STAT1
-    color 112,103,174
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1
@@ -6444,8 +6491,8 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
+    color 0,119,158
     antibody STAT1
-    color 112,103,174
     accession GSE12782
 
     track wgEncodeYaleChIPseqSignalHelas3ifngInput
@@ -6461,8 +6508,8 @@ wgEncode 1
     visibility full
     spanList 1
     cell HeLa-S3_IFNg
+    color 0,119,158
     antibody Input
-    color 112,103,174
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalHelas3ifngInput
@@ -6477,8 +6524,8 @@ wgEncode 1
     dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3_IFNg
+    color 0,119,158
     antibody Input
-    color 112,103,174
     accession GSE12782
 
     track wgEncodeYaleChIPseqPeaksHepg2Pol2
@@ -6492,6 +6539,7 @@ wgEncode 1
     dateUnrestricted 2009-11-28
     dataVersion ENCODE Feb 2009 Freeze
     cell HepG2
+    color 189,0,157
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHepg2Pol2
@@ -6506,6 +6554,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2
@@ -6520,6 +6569,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Pol2
@@ -6534,6 +6584,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Pol2
@@ -6548,6 +6599,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksHepg2Srebp1a
@@ -6561,6 +6613,7 @@ wgEncode 1
     dateUnrestricted 2009-11-28
     dataVersion ENCODE Feb 2009 Freeze
     cell HepG2
+    color 189,0,157
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqSignalHepg2Srebp1a
@@ -6575,6 +6628,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a
@@ -6589,6 +6643,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp1a
@@ -6603,6 +6658,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp1a
@@ -6617,6 +6673,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqPeaksHepg2Srebp2
@@ -6630,6 +6687,7 @@ wgEncode 1
     dateUnrestricted 2009-11-27
     dataVersion ENCODE Feb 2009 Freeze
     cell HepG2
+    color 189,0,157
     antibody SREBP2
 
     track wgEncodeYaleChIPseqSignalHepg2Srebp2
@@ -6644,6 +6702,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2
@@ -6658,6 +6717,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp2
@@ -6672,6 +6732,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp2
@@ -6686,6 +6747,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody SREBP2
 
     track wgEncodeYaleChIPseqSignalHepg2Input
@@ -6700,6 +6762,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Input
@@ -6714,6 +6777,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Input
@@ -6728,6 +6792,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Input
@@ -6742,6 +6807,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksK562Gata1
@@ -6757,6 +6823,7 @@ wgEncode 1
     priority 95
     noInherit on
     cell K562
+    color 46,0,184
     antibody GATA-1
 
     track wgEncodeYaleChIPseqSignalK562Gata1
@@ -6771,6 +6838,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody GATA-1
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Gata1
@@ -6785,6 +6853,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody GATA-1
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Gata1
@@ -6799,6 +6868,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody GATA-1
 
     track wgEncodeYaleChIPseqPeaksK562Jund
@@ -6812,6 +6882,7 @@ wgEncode 1
     dateUnrestricted 2009-11-27
     dataVersion ENCODE Feb 2009 Freeze
     cell K562
+    color 46,0,184
     antibody JunD
 
     track wgEncodeYaleChIPseqSignalK562Jund
@@ -6826,6 +6897,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Jund
@@ -6840,6 +6912,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Jund
@@ -6854,6 +6927,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody JunD
 
     track wgEncodeYaleChIPseqPeaksK562Max
@@ -6867,6 +6941,7 @@ wgEncode 1
     dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
     cell K562
+    color 46,0,184
     antibody Max
 
     track wgEncodeYaleChIPseqSignalK562Max
@@ -6881,6 +6956,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Max
@@ -6895,6 +6971,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Max
@@ -6909,6 +6986,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody Max
 
     track wgEncodeYaleChIPseqPeaksK562Nfe2
@@ -6922,6 +7000,7 @@ wgEncode 1
     dateSubmitted 2009-01-09
     dateUnrestricted 2009-10-09
     cell K562
+    color 46,0,184
     antibody NF-E2
 
     track wgEncodeYaleChIPseqSignalK562Nfe2
@@ -6936,6 +7015,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     spanList first
     cell K562
+    color 46,0,184
     antibody NF-E2
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Nfe2
@@ -6950,6 +7030,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     spanList first
     cell K562
+    color 46,0,184
     antibody NF-E2
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Nfe2
@@ -6964,6 +7045,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     spanList first
     cell K562
+    color 46,0,184
     antibody NF-E2
 
     track wgEncodeYaleChIPseqPeaksK562Pol2
@@ -6977,6 +7059,7 @@ wgEncode 1
     dateSubmitted 2008-10-14
     dateUnrestricted 2009-07-14
     cell K562
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalK562Pol2
@@ -6992,6 +7075,7 @@ wgEncode 1
     visibility full
     spanList 1
     cell K562
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Pol2
@@ -7006,6 +7090,7 @@ wgEncode 1
     dateUnrestricted 2009-07-27
     spanList 1
     cell K562
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Pol2
@@ -7020,6 +7105,7 @@ wgEncode 1
     dateUnrestricted 2009-07-27
     spanList 1
     cell K562
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksK562Znf263
@@ -7033,6 +7119,7 @@ wgEncode 1
     dateUnrestricted 2009-11-11
     dataVersion ENCODE Feb 2009 Freeze
     cell K562
+    color 46,0,184
     antibody ZNF263
 
     track wgEncodeYaleChIPseqSignalK562Znf263
@@ -7047,6 +7134,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody ZNF263
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
@@ -7061,6 +7149,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody ZNF263
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
@@ -7075,6 +7164,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell K562
+    color 46,0,184
     antibody ZNF263
 
     track wgEncodeYaleChIPseqPeaksK562Cfos
@@ -7088,6 +7178,7 @@ wgEncode 1
     dateSubmitted 2008-11-21
     dateUnrestricted 2009-08-21
     cell K562
+    color 46,0,184
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalK562Cfos
@@ -7102,6 +7193,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cfos
@@ -7116,6 +7208,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cfos
@@ -7130,6 +7223,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep3K562Cfos
@@ -7144,6 +7238,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Fos
 
     track wgEncodeYaleChIPseqPeaksK562Cjun
@@ -7157,6 +7252,7 @@ wgEncode 1
     dateSubmitted 2008-11-21
     dateUnrestricted 2009-08-21
     cell K562
+    color 46,0,184
     antibody c-Jun
 
     track wgEncodeYaleChIPseqSignalK562Cjun
@@ -7171,6 +7267,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Jun
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cjun
@@ -7185,6 +7282,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Jun
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cjun
@@ -7199,6 +7297,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Jun
 
     track wgEncodeYaleChIPseqPeaksK562Cmyc
@@ -7212,6 +7311,7 @@ wgEncode 1
     dateSubmitted 2008-11-21
     dateUnrestricted 2009-08-21
     cell K562
+    color 46,0,184
     antibody c-Myc
 
     track wgEncodeYaleChIPseqSignalK562Cmyc
@@ -7226,6 +7326,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Myc
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
@@ -7240,6 +7341,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Myc
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
@@ -7254,6 +7356,7 @@ wgEncode 1
     dateUnrestricted 2009-08-21
     spanList 1
     cell K562
+    color 46,0,184
     antibody c-Myc
 
     track wgEncodeYaleChIPseqSignalK562Input
@@ -7269,6 +7372,7 @@ wgEncode 1
     visibility full
     spanList 1
     cell K562
+    color 46,0,184
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalK562Input
@@ -7283,6 +7387,7 @@ wgEncode 1
     dateUnrestricted 2009-07-14
     spanList 1
     cell K562
+    color 46,0,184
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksNb4Pol2
@@ -7296,6 +7401,7 @@ wgEncode 1
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
     cell NB4
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalNb4Pol2
@@ -7310,6 +7416,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
@@ -7324,6 +7431,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
@@ -7338,6 +7446,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
@@ -7352,6 +7461,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
+    color 46,0,184
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalNb4Input
@@ -7366,6 +7476,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
+    color 46,0,184
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalNb4Input
@@ -7380,6 +7491,7 @@ wgEncode 1
     dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
+    color 46,0,184
     antibody Input
 
 # HudsonAlpha (was Stanford) ChIP-seq (wrangler: larrym)
