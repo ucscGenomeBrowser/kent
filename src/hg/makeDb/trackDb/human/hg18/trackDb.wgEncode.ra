@@ -8996,6 +8996,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell GM128
+    color 153,38,0
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
     release alpha
