@@ -350,7 +350,8 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
 
-term SK-N-SH(+RA)
+# In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
+term SK-N-SH_RA
 type Cell Line
 description neuroblastoma cell line differentiated w/ retinoic acid
 vendorName ATCC
