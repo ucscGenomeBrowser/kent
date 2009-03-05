@@ -1,0 +1,142 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how we made the browser database on
+# NCBI build 37 (February 2009 freeze) aka:
+#	GRCh37 - Genome Reference Consortium Human Reference 37
+#	Assembly Accession: GCA_000001405.1
+
+#	"$Id: hg19.txt,v 1.1 2009/03/05 19:52:55 hiram Exp $";
+
+#############################################################################
+# Download sequence (DONE - 2009-02-04 - Hiram)
+    mkdir -p /hive/data/genomes/hg19/download
+    cd /hive/data/genomes/hg19/download
+    mkdir -p assembled_chromosomes
+    wget --cut-dirs=8 --no-parent --timestamping --no-remove-listing -m \
+        --directory-prefix=assembled_chromosomes \
+        -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/Primary_Assembly/assembled_chromosomes
+
+    mkdir -p alternate_loci
+for N in 1 2 3 4 5 6 7 8 9
+do
+wget --cut-dirs=6 --no-parent --timestamping --no-remove-listing -m \
+    --directory-prefix=alternate_loci \
+        -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/ALT_REF_LOCI_${N}
+done
+
+    mkdir -p unlocalized_scaffolds
+    wget --cut-dirs=8 --no-parent --timestamping --no-remove-listing -m \
+        --directory-prefix=unlocalized_scaffolds \
+	    -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/Primary_Assembly/unlocalized_scaffolds
+
+    mkdir -p unplaced_scaffolds
+    wget --cut-dirs=8 --no-parent --timestamping --no-remove-listing -m \
+        --directory-prefix=unplaced_scaffolds \
+	    -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/Primary_Assembly/unplaced_scaffolds
+
+    mkdir -p placed_scaffolds
+    wget --cut-dirs=8 --no-parent --timestamping --no-remove-listing -m \
+        --directory-prefix=placed_scaffolds \
+	    -nH --ftp-user=anonymous --ftp-password=hiram@soe.ucsc.edu \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/Primary_Assembly/placed_scaffolds
+
+    mkdir ucscChr
+    cd ucscChr
+    for F in ../assembled_chromosomes/FASTA/chr*.fa
+do
+    C=`basename $F`
+    C=${C/.fa}
+    echo -n "${C} "
+    H=`head -1 "${F}"`
+    chrN=`echo $H | sed -e "s/.*Homo sapiens chromosome /chr/; s/, .*//"`
+    A=`echo $H | sed -e "s/. Homo.*//; s/.*gb.//"`
+    echo $chrN $A
+    grep -v "^#" ../assembled_chromosomes/AGP/${chrN}.comp.agp \
+        | sed -e "s/^${A}/${chrN}/" > ${chrN}.agp
+    echo ">${chrN}" > ${chrN}.fa
+    grep -v "^>" ../assembled_chromosomes/FASTA/${chrN}.fa >> ${chrN}.fa
+done
+
+    rm -f scaffolds.agp
+    find ../alternate_loci -type f | grep ".agp$" | while read F
+do
+    grep "^GL" $F | sed -e \
+"s/^GL000250.1/chr6_apd_hap1/" -e \
+"s/^GL000251.1/chr6_cox_hap2/" -e \
+"s/^GL000252.1/chr6_dbb_hap3/" -e \
+"s/^GL000253.1/chr6_mann_hap4/" -e \ 
+"s/^GL000254.1/chr6_mcf_hap5/" -e \
+"s/^GL000255.1/chr6_qbl_hap6/" -e \
+"s/^GL000256.1/chr6_ssto_hap6/" -e \
+"s/^GL000257.1/chr4_ctg9_hap1/" -e \
+"s/^GL000258.1/chr17_ctg5_hap1/"
+done > scaffolds.agp
+
+    find ../unlocalized_scaffolds -type f | grep ".agp$" \
+| while read F
+do
+    C=`basename ${F}`   
+    C=${C/.unlocalized.scaf.agp}
+    grep "^GL" ${F} | sed -e "s/^GL\([0-9]*\).1/${C}_gl\1_random/"
+done >> scaffolds.agp
+
+    find ../unplaced_scaffolds -type f | grep ".agp$" \
+| while read F
+do
+    grep "^GL" ${F} | sed -e "s/^GL\([0-9]*\).1/chrUn_gl\1/"
+done >> scaffolds.agp
+
+    rm -f scaffolds.fa
+    find ../alternate_loci -type f | grep ".fa$" | while read F
+do  
+    sed -e \
+"s/>.*GL000250.*/>chr6_apd_hap1/" -e \
+"s/>.*GL000251.*/>chr6_cox_hap2/" -e \
+"s/>.*GL000252.*/>chr6_dbb_hap3/" -e \
+"s/>.*GL000253.*/>chr6_mann_hap4/" -e \
+"s/>.*GL000254.*/>chr6_mcf_hap5/" -e \
+"s/>.*GL000255.*/>chr6_qbl_hap6/" -e \
+"s/>.*GL000256.*/>chr6_ssto_hap6/" -e \
+"s/>.*GL000257.*/>chr4_ctg9_hap1/" -e \
+"s/>.*GL000258.*/>chr17_ctg5_hap1/" ${F}
+done > scaffolds.fa
+
+    find ../unlocalized_scaffolds -type f | grep ".fa$" | while read F
+do
+    sed -e \
+"s/^>.*GL\([0-9]*\).* chromosome \([0-9]*\).*/>chr\2_gl\1_random/" ${F}
+done >> scaffolds.fa
+
+    find ../unplaced_scaffolds -type f | grep ".fa$" | while read F
+do
+    sed -e "s/.*\(GL[0-9]*\).*/\1/; s/GL/>chrUn_gl/" $F
+done >> scaffolds.fa
+
+############################################################################
+## Create database (DONE - 2009-03-04 - Hiram)
+    cd /hive/data/genomes/hg19
+    cat << '_EOF_' > hg19.config.ra
+# Config parameters for makeGenomeDb.pl:
+db hg19
+scientificName Homo sapiens
+commonName Human
+assemblyDate Feb. 2009
+assemblyLabel GRCh37 Genome Reference Consortium Human Reference 37 (GCA_000001405.1)
+orderKey 14
+mitoAcc NC_001807
+fastaFiles /hive/data/genomes/hg19/download/ucscChr/*.fa
+agpFiles /hive/data/genomes/hg19/download/ucscChr/*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+taxId	9606
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl hg19.config.ra > makeGenomeDb.log 2>&1
+    #	real    14m8.958s
+
+############################################################################
