@@ -19,7 +19,9 @@ if ($#argv < 2 || $#argv > 3) then
   echo "  determines if table is in split format "
   echo "    and returns split name if so."
   echo
-  echo "    usage:  db tablename [machine: hgwdev|beta] defaults to beta"
+  echo "    usage:  db tablename [hgwdev|hgwbeta]"
+  echo
+  echo "      third argument accepts machine, defaults to beta"
   echo
   exit
 else
