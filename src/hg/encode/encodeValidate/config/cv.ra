@@ -769,7 +769,7 @@ description Single 32 n.t. read
 
 term 2x75
 type readType
-description Paird 75 n.t. reads
+description Paired 75 n.t. reads
 
 # fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
