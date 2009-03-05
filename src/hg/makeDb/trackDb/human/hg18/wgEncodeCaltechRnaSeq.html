@@ -1,13 +1,17 @@
 <H2>General Description</H2>
 
-<P>RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly.
+<P>
+This track is produced as part of the ENCODE Transcriptome Project.
+RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly.
 RNA-Seq is performed by reverse-transcribing an RNA sample into cDNA, followed by high throughput DNA sequencing, which 
 was done here on an Illumina Genome Analyzer (GA2) (Mortazavi <EM>et al.</EM>, 2008).  
-The transcriptome measurements shown on these tracks were performed on polyA selected RNA from total cellular RNA.  
+The transcriptome measurements shown on these tracks were performed on 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?term=longPolyA&amp;type=rnaExtract">polyA selected RNA</A>
+ from <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?term=cell&amp;type=localization">total cellular RNA</A>.  
 Data have been produced in two formats: single reads, each of which comes from one end of a randomly primed cDNA molecule; 
 and paired-end reads, which are obtained as pairs from both ends cDNAs resulting from random priming. 
-The resulting sequence reads are then informatically mapped onto the genome sequence, which has been informatically
-"expanded" to also contain known RNA splice junctions.  These mapped reads are then counted to determine their 
+The resulting sequence reads are then informatically mapped onto the genome sequence (<I>Alignments</I>), which has been informatically
+"expanded" to also contain known RNA splice junctions (<I>Splice Sites</I>).  These mapped reads are then counted to determine their 
 frequency of occurrence at known gene models.  Sequence reads that cluster at genome locations that lack an existing
 transcript model are also identified informatically and they are quantified.  RNA-Seq is especially suited for giving 
 information about RNA splicing patterns and for determining unequivocally the presence or absence of lower abundance class RNAs.  
@@ -18,16 +22,19 @@ This is inferred from a sequence bias in the first residues of the read populati
 observed unevenness in sequence coverage across transcripts. </P>
 
 <P>These tracks show 1x32 n.t. or 2x75 n.t. sequence reads of cDNA obtained from biological replicate samples 
-(different culture plates) of the GM12878, K562 and HepG2 cell lines.  The 32 n.t. sequences were aligned to the
- human genome (hg18) and UCSC known-gene splice junctions using the bowtie software program (Langmead <EM>et al.</EM>, 2009). 
-The 2x75 n.t. reads were mapped serially, first with bowtie against the genome and UCSC known-gene splice junctions. 
-Bowtie-unmapped reads were then mapped using blat to find evidence of novel splicing, by requiring at least 10 bp 
+(different culture plates) of the ENCODE 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
+ The 32 n.t. sequences were aligned to the human genome (hg18) and UCSC known-gene splice junctions using different
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=mapAlgorithm">sequence alignment programs</A>.
+The 2x75 n.t. reads were mapped serially, first with the Bowtie program (Langmead <EM>et al.</EM>, 2009) 
+against the genome and UCSC known-gene splice junctions (<I>Splice Sites</I>). 
+Bowtie-unmapped reads were then mapped using BLAT to find evidence of novel splicing, by requiring at least 10 bp 
 on the short-side of the splice. </P>
 
-<P>Reads that map uniquely in the genome are displayed in black.  Reads that map to low copy number multiple sites 
+<P>Reads that map uniquely in the genome are displayed in black (<I>Alignments</I>).  Reads that map to low copy number multiple sites 
 (2-10 occurrences in the genome) were allocated among the possible sites by ERANGE, as described previously 
-(Mortazavi <EM>et al.</EM>, 2008).  These multi-reads are displayed in grey. In addition to tracks of 
-individual reads, bedgraph files summarize the data in units of RPM (reads passing over a base 
+(Mortazavi <EM>et al.</EM>, 2008).  These multi-reads (<I>Alignments</I>) are displayed in grey. In addition to tracks of 
+individual reads, bedgraph files (<I>Raw Signal</I>) summarize the data in units of RPM (reads passing over a base 
 normalized per million mapped reads in the measurement).  The RPM measure assists in visualizing 
 the relative amount of a given transcript across multiple samples. </P>
 
@@ -37,6 +44,17 @@ the relative amount of a given transcript across multiple samples. </P>
  
 <P>Color differences among the subtracks are arbitrary. They provide a visual cue for 
 distinguishing between the different cell types and compartments.</P>
+
+<DL>
+<DT><I>Alignments</I>
+<DD>RNA-seq tag alignments.
+<DT><I>Raw Signal</I>
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (RPKM).
+<DT><I>Paired Alignments</I>
+<DD>Alignments of left and right end of paired tags.
+<DT><I>Splice Sites</I>
+<DD>RNA-seq tags aligning to mRNA splice sites.
+</DL>
 
 <H2>Methods</H2>
 
