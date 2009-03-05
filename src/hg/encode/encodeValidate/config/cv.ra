@@ -884,6 +884,10 @@ term 2008-10-01
 type freezeDate
 description 2008-10-01 freeze
 
+term 2009-01-01
+type freezeDate
+description 2009-01-01 rel2 January freeze
+
 # Species
 term hg18
 type species
