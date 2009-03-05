@@ -3876,7 +3876,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell cytosol using )
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ K562 cell cytosol using )
     subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
@@ -3893,7 +3893,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell cytosol using )
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ K562 cell cytosol using )
     subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
@@ -3910,7 +3910,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell nucleus using )
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ K562 cell nucleus using )
     subGroups view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
@@ -3927,7 +3927,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell nucleus using )
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ K562 cell nucleus using )
     subGroups view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
@@ -3944,7 +3944,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell cytosol using )
+    longLabel ENCODE RIKEN CAGE Tags (PolyA+ K562 cell cytosol using )
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
     dateSubmitted 2009-02-04
@@ -3961,7 +3961,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell nucleus using )
+    longLabel ENCODE RIKEN CAGE Tags (PolyA+ K562 cell nucleus using )
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
     dateSubmitted 2009-02-04
@@ -3978,7 +3978,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 pA+ cyto +
-    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell cytosol using )
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (PolyA+ K562 cell cytosol using )
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 64144.00
     dateSubmitted 2009-02-04
@@ -3998,7 +3998,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 pA+ cyto -
-    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell cytosol using )
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (PolyA+ K562 cell cytosol using )
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 65162.00
     dateSubmitted 2009-02-04
@@ -4018,7 +4018,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 pA+ nucl +
-    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell nucleus using )
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (PolyA+ K562 cell nucleus using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 65282.00
     dateSubmitted 2009-02-04
@@ -4038,7 +4038,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 pA+ nucl -
-    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell nucleus using )
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (PolyA+ K562 cell nucleus using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 49208.00
     dateSubmitted 2009-02-04
@@ -4058,7 +4058,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ psom
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ K562 cell polysome using )
     subGroups view=PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-19
@@ -4075,7 +4075,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ psom
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ K562 cell polysome using )
     subGroups view=MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-19
@@ -4194,7 +4194,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 polyA+ psom
-    longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell polysome using )
+    longLabel ENCODE RIKEN CAGE Tags (PolyA+ K562 cell polysome using )
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
     dateSubmitted 2009-02-19
@@ -4302,7 +4302,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 pA+ psom +
-    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell polysome using )
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (PolyA+ K562 cell polysome using )
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 1588.00
     dateSubmitted 2009-02-19
@@ -4322,7 +4322,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 pA+ psom -
-    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell polysome using )
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (PolyA+ K562 cell polysome using )
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 954.00
     dateSubmitted 2009-02-19
@@ -4854,7 +4854,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros polyA- cell
-    longLabel ENCODE Affy Filtered Transfrags (Long Non-PolyA RNA in prostate cells)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA from prostate whole cell)
     subGroups view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -4868,7 +4868,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros pA- cell Rw
-    longLabel ENCODE Affy Transfrags (Long Non-PolyA RNA in prostate cells)
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA from prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -4882,7 +4882,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros polyA- cell
-    longLabel ENCODE Affy Filtered Signal (Long Non-PolyA RNA in prostate cells)
+    longLabel ENCODE Affy Filtered Signal (PolyA- RNA from prostate whole cell))
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig -62124.00 54385.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -4897,7 +4897,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros pA- cell Rw
-    longLabel ENCODE Affy Raw Signal (Long Non-PolyA RNA in prostate cells)
+    longLabel ENCODE Affy Raw Signal (PolyA- RNA from prostate whole cell)
     subGroups view=RawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig -62124.00 50627.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -4912,7 +4912,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros pA+ cell Rw
-    longLabel ENCODE Affy Transfrags (from longPolyA in prostate cell)
+    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA from prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -4926,7 +4926,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros polyA+ cell
-    longLabel ENCODE Affy Filtered Transfrags (from longPolyA in prostate cell)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA from prostate whole cell)
     subGroups view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -4940,7 +4940,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros pA+ cell Rw
-    longLabel ENCODE Affy Raw Signal (from longPolyA in prostate cell)
+    longLabel ENCODE Affy Raw Signal (PolyA+ RnA from prostate whole cell)
     subGroups view=RawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig -62728.00 58726.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -4955,7 +4955,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros polyA+ cell
-    longLabel ENCODE Affy Filtered Signal (from longPolyA in prostate cell)
+    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA from prostate whole cell)
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig -62728.00 56449.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -4970,7 +4970,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA- nucl Rw
-    longLabel ENCODE Affy Transfrags (from longNonPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA from K562 nucleus)
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -4985,7 +4985,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- nucl
-    longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA from K562 nucleus)
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5000,7 +5000,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA- nucl Rw
-    longLabel ENCODE Affy Raw Signal (from longNonPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Raw Signal (PolyA- RNA from K562 nucleus)
     subGroups view=RawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig -56486.00 59077.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5016,7 +5016,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- nucl
-    longLabel ENCODE Affy Filtered Signal (from longNonPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Filtered Signal (PolyA- RNA from K562 nucleus)
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig -56486.00 45415.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5032,7 +5032,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot cell Rw
-    longLabel ENCODE Affy Transfrags (from total in K562 cell)
+    longLabel ENCODE Affy Raw Transfrags (Total RNA from K562 whole cell)
     subGroups view=Transfrags cellType=K562 localization=cell rnaExtract=total
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5047,7 +5047,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 total cell
-    longLabel ENCODE Affy Filtered Transfrags (from total in K562 cell)
+    longLabel ENCODE Affy Filtered Transfrags (Total RNA from K562 whole cell)
     subGroups view=FilteredTransfrags cellType=K562 localization=cell rnaExtract=total
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5062,7 +5062,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 total cell
-    longLabel ENCODE Affy Filtered Signal (from total in K562 cell)
+    longLabel ENCODE Affy Filtered Signal (Total RNA from K562 whole cell)
     subGroups view=FilteredRawSignal cellType=K562 localization=cell rnaExtract=total
     type wig -40989.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5078,7 +5078,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot cell Rw
-    longLabel ENCODE Affy Raw Signal (from total in K562 cell)
+    longLabel ENCODE Affy Raw Signal (Total RNA from K562 whole cell)
     subGroups view=RawSignal cellType=K562 localization=cell rnaExtract=total
     type wig -43345.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5094,7 +5094,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA+ nucl Rw
-    longLabel ENCODE Affy Transfrags (from longPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA K562 cell nucleus)
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5109,7 +5109,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE Affy Filtered Transfrags (from longPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA from K562 nucleus)
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5124,7 +5124,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA+ nucl Rw
-    longLabel ENCODE Affy Raw Signal (from longPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Raw Signal (PolyA+ RNA from K562 nucleus)
     subGroups view=RawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig -47465.00 52826.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5140,7 +5140,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE Affy Filtered Signal (from longPolyA in K562 cell nucleus)
+    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA from K562 nucleus)
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig -49290.00 43018.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5156,7 +5156,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- cyto
-    longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA from K562 cytosol)
     subGroups view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5171,7 +5171,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA- cyto Rw
-    longLabel ENCODE Affy Transfrags (from longNonPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA from K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5186,7 +5186,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA- cyto Rw
-    longLabel ENCODE Affy Raw Signal (from longNonPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Raw Signal (PolyA- RNA from K562 cytosol)
     subGroups view=RawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig -52894.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5202,7 +5202,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- cyto
-    longLabel ENCODE Affy Filtered Signal (from longNonPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Filtered Signal (PolyA- RNA from  K562 cytosol)
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig -55473.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5218,7 +5218,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE Affy Filtered Transfrags (from longPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA from K562 cytosol)
     subGroups view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5233,7 +5233,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA+ cyto Rw
-    longLabel ENCODE Affy Transfrags (from longPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA from K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5248,7 +5248,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE Affy Filtered Signal (from longPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA from K562 cytosol)
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig -42328.00 61956.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5264,7 +5264,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA+ cyto Rw
-    longLabel ENCODE Affy Raw Signal (from longPolyA in K562 cell cytosol)
+    longLabel ENCODE Affy Raw Signal (PolyA+ RNA from K562 cytosol)
     subGroups view=RawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig -58407.00 60582.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5280,7 +5280,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- psom
-    longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell polysome)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA from K562 polysome)
     subGroups view=FilteredTransfrags cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5295,7 +5295,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA- psom Rw
-    longLabel ENCODE Affy Transfrags (from longNonPolyA in K562 cell polysome)
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA from K562 polysome)
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5310,7 +5310,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 pA- psom Rw
-    longLabel ENCODE Affy Raw Signal (from longNonPolyA in K562 cell polysome)
+    longLabel ENCODE Affy Raw Signal (nPolyA- from K562 polysome)
     subGroups view=RawSignal cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type wig -50161.00 55400.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5326,7 +5326,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- psom
-    longLabel ENCODE Affy Filtered Signal (from longNonPolyA in K562 cell polysome)
+    longLabel ENCODE Affy Filtered Signal (PolyA- from K562 polysome)
     subGroups view=FilteredRawSignal cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type wig -52880.00 48739.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5342,7 +5342,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- nucl
-    longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in GM12878 cell nucleus)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA from GM12878 nucleus)
     subGroups view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5357,7 +5357,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- nuc Rw
-    longLabel ENCODE Affy Transfrags (from longNonPolyA in GM12878 cell nucleus)
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA from GM12878 nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5372,7 +5372,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- nuc Rw
-    longLabel ENCODE Affy Raw Signal (from longNonPolyA in GM12878 cell nucleus)
+    longLabel ENCODE Affy Raw Signal (PolyA- RNA from GM12878 nucleus)
     subGroups view=RawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig -59319.00 55161.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5388,7 +5388,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- nucl
-    longLabel ENCODE Affy Filtered Signal (from longNonPolyA in GM12878 cell nucleus)
+    longLabel ENCODE Affy Filtered Signal (nPolyA- RNA from GM12878 nucleus)
     subGroups view=FilteredRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig -52768.00 58546.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5404,7 +5404,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA+ cyt Rw
-    longLabel ENCODE Affy Transfrags (from longPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA from GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5419,7 +5419,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA+ cyto
-    longLabel ENCODE Affy Filtered Transfrags (from longPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA GM12878 cytosol)
     subGroups view=FilteredTransfrags cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5434,7 +5434,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA+ cyt Rw
-    longLabel ENCODE Affy Raw Signal (from longPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Raw Signal (PolyA+ RNA from GM12878 cytosol)
     subGroups view=RawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig -61519.00 60416.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5450,7 +5450,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA+ cyto
-    longLabel ENCODE Affy Filtered Signal (from longPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA from GM12878 cytosol)
     subGroups view=FilteredRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig -61519.00 60470.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5466,7 +5466,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- cyto
-    longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA from GM12878 cytosol)
     subGroups view=FilteredTransfrags cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5481,7 +5481,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- cyt Rw
-    longLabel ENCODE Affy Transfrags (from longNonPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA from GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5496,7 +5496,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- cyt Rw
-    longLabel ENCODE Affy Raw Signal (from longNonPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Raw Signal (PolyA- RNA from GM12878 cytosol)
     subGroups view=RawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type wig -58491.00 56453.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5512,7 +5512,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 pA- cyto
-    longLabel ENCODE Affy Filtered Signal (from longNonPolyA in GM12878 cell cytosol)
+    longLabel ENCODE Affy Filtered Signal (PolyA- RNA from GM12878 cytosol)
     subGroups view=FilteredRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type wig -58491.00 61097.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5528,7 +5528,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot chrm Rw
-    longLabel ENCODE Affy Transfrags (total in K562 cell chromatin using )
+    longLabel ENCODE Affy Raw Transfrags (Total RNA from K562 chromatin)
     subGroups view=Transfrags cellType=K562 localization=chromatin rnaExtract=total
     type broadPeak
     dateSubmitted 2009-02-04
@@ -5545,7 +5545,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 total chrm
-    longLabel ENCODE Affy Filtered Transfrags (total in K562 cell chromatin using )
+    longLabel ENCODE Affy Filtered Transfrags (Total RNA from K562 chromatin)
     subGroups view=FilteredTransfrags cellType=K562 localization=chromatin rnaExtract=total
     type broadPeak
     dateSubmitted 2009-02-04
@@ -5562,7 +5562,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 total chrm
-    longLabel ENCODE Affy Filtered Signal (total in K562 cell chromatin using )
+    longLabel ENCODE Affy Filtered Signal (Total RNA from K562 chromatin)
     subGroups view=FilteredRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig -61688.00 49221.00
     dateSubmitted 2009-02-04
@@ -5582,7 +5582,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot chrm Rw
-    longLabel ENCODE Affy Raw Signal (total in K562 cell chromatin using )
+    longLabel ENCODE Affy Raw Signal (Total RNA from K562 chromatin)
     subGroups view=RawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig -61688.00 55955.00
     dateSubmitted 2009-02-04
@@ -5602,7 +5602,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot nlus Rw
-    longLabel ENCODE Affy Transfrags (total in K562 cell nucleolus using )
+    longLabel ENCODE Affy Raw Transfrags (Total RNA from K562 nucleolus)
     subGroups view=Transfrags cellType=K562 localization=nucleolus rnaExtract=total
     type broadPeak
     dateSubmitted 2009-02-04
@@ -5619,7 +5619,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot nlus Rw
-    longLabel ENCODE Affy Transfrags (total in K562 cell nucleolus using )
+    longLabel ENCODE Affy Raw Transfrags (Total RNA from K562 nucleolus)
     subGroups view=Transfrags cellType=K562 localization=nucleolus rnaExtract=total
     type broadPeak
     dateSubmitted 2009-02-04
@@ -5636,7 +5636,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot nlus Rw
-    longLabel ENCODE Affy Raw Signal (total in K562 cell nucleolus using )
+    longLabel ENCODE Affy Raw Signal (Total RNA from K562 nucleolus)
     subGroups view=RawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig -63262.00 58632.00
     dateSubmitted 2009-02-04
@@ -5656,7 +5656,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot nlus Rw
-    longLabel ENCODE Affy Raw Signal (total in K562 cell nucleolus using )
+    longLabel ENCODE Affy Raw Signal (Total RNA from K562 nucleolus)
     subGroups view=RawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig -63262.00 58632.00
     dateSubmitted 2009-02-04
@@ -5676,7 +5676,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot nplm Rw
-    longLabel ENCODE Affy Transfrags (total in K562 cell nucleoplasm using )
+    longLabel ENCODE Affy Raw Transfrags (Total RNA from K562 nucleoplasm)
     subGroups view=Transfrags cellType=K562 localization=nucleoplasm rnaExtract=total
     type broadPeak
     dateSubmitted 2009-02-04
@@ -5693,7 +5693,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 tot nplm Rw
-    longLabel ENCODE Affy Raw Signal (total in K562 cell nucleoplasm using )
+    longLabel ENCODE Affy Raw Signal (Total RNA from K562 nucleoplasm)
     subGroups view=RawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig -52041.00 55384.00
     dateSubmitted 2009-02-04
@@ -6616,7 +6616,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA, HeLa cells)
     subGroups view=Signal factor=zNaked cellType=HeLa
     type wig 0.00 8487.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6631,7 +6631,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA, HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 7798.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6646,7 +6646,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA, HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 5002.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -6661,7 +6661,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA in HeLa cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA, HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 4462.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -8570,7 +8570,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel pros polyA+ cell
-    longLabel ENCODE GIS PET Tags (longPolyA in prostate cell)
+    longLabel ENCODE GIS PET Tags (PolyA+ prostate cell)
     subGroups view=Tags cellType=prostate localization=cell rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -8584,7 +8584,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE GIS PET Tags (longPolyA in K562 cell cytosol)
+    longLabel ENCODE GIS PET Tags (PolyA+ K562 cell cytosol)
     subGroups view=Tags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -8599,7 +8599,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE GIS PET Tags (longPolyA in K562 cell nucleus)
+    longLabel ENCODE GIS PET Tags (PolyA+ K562 cell nucleus)
     subGroups view=Tags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -8614,7 +8614,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 polyA+ psom
-    longLabel ENCODE GIS PET Tags (longPolyA in K562 cell polysome)
+    longLabel ENCODE GIS PET Tags (PolyA+ K562 cell polysome)
     subGroups view=Tags cellType=K562 localization=polysome rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -8629,7 +8629,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel pros polyA+ cell
-    longLabel ENCODE GIS PET Alignments (longPolyA in prostate cell)
+    longLabel ENCODE GIS PET Alignments (PolyA+ prostate cell)
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
     type bed 6
 	#MJP type		pairedTagAlign
@@ -8644,7 +8644,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 polyA+ cyto
-    longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol)
+    longLabel ENCODE GIS PET Alignments (PolyA+ K562 cell cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
 	#MJP type		pairedTagAlign
@@ -8660,7 +8660,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 polyA+ nucl
-    longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus)
+    longLabel ENCODE GIS PET Alignments (PolyA+ K562 cell nucleus)
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
 	#MJP type		pairedTagAlign
@@ -8676,7 +8676,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 polyA+ psom
-    longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell polysome)
+    longLabel ENCODE GIS PET Alignments (PolyA+ K562 cell polysome)
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
 	#MJP type		pairedTagAlign
@@ -8692,7 +8692,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 pA+ cyto +
-    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell cytosol)
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (PolyA+ K562 cell cytosol)
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 4523.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8708,7 +8708,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 pA+ cyto -
-    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell cytosol)
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (PolyA+ K562 cell cytosol)
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 10978.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8724,7 +8724,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel pros pA+ cell +
-    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in prostate cell)
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (PolyA+ prostate cell)
     subGroups view=PlusRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig 1.00 5889.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8739,7 +8739,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel pros pA+ cell -
-    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in prostate cell)
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (PolyA+ prostate cell)
     subGroups view=MinusRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig 1.00 5693.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8754,7 +8754,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 pA+ psom +
-    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell polysome)
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (PolyA+ K562 cell polysome)
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 9657.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8770,7 +8770,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 pA+ psom -
-    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell polysome)
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (PolyA+ K562 cell polysome)
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 14175.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8786,7 +8786,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 pA+ nucl +
-    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell nucleus)
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (PolyA+ K562 cell nucleus)
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 2902.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8802,7 +8802,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel K562 pA+ nucl -
-    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell nucleus)
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (PolyA+ K562 cell nucleus)
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 3938.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -8818,7 +8818,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 pA+ nucl
-    longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell nucleus using )
+    longLabel ENCODE GIS PET Alignments (PolyA+ GM12878 cell nucleus using )
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     type bed 6
     # MJP: FIX WHEN THIS IS IMPLEMENTED: type pairedTagAlign
@@ -8837,7 +8837,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 pA+ nucl +
-    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell nucleus using )
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (PolyA+ GM12878 cell nucleus using )
     subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 4978.00
     dateSubmitted 2009-02-16
@@ -8858,7 +8858,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 pA+ nucl -
-    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell nucleus using )
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (PolyA+ GM12878 cell nucleus using )
     subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 9289.00
     dateSubmitted 2009-02-16
@@ -8879,7 +8879,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 pA+ cyto
-    longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell cytosol using )
+    longLabel ENCODE GIS PET Alignments (PolyA+ GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type bed 6
     # MJP: FIX WHEN THIS IS IMPLEMENTED: type pairedTagAlign
@@ -8898,7 +8898,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 pA+ cyto +
-    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell cytosol using )
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (PolyA+ GM12878 cell cytosol using )
     subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 7729.00
     dateSubmitted 2009-02-17
@@ -8919,7 +8919,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 pA+ cyto -
-    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell cytosol using )
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (PolyA+ GM12878 cell cytosol using )
     subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 8516.00
     dateSubmitted 2009-02-17
@@ -9138,7 +9138,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsProstateCellShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel pros cell
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in prostate cell using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (Short RNA from prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:45
@@ -9152,127 +9152,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
-    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:13:14
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (Short RNA from K562 nucleus)
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:13:14
@@ -9287,112 +9167,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:45:29
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (Short RNA from GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:45:29
@@ -9407,172 +9182,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
-    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 15:7:2
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell cytosol using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (Short RNA from K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 15:7:2
@@ -9587,127 +9197,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
-    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 16:27:44
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization nucleus
-    cell GM12878
-    color 153,38,0
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 nucleus
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell nucleus using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (Short RNA from GM12878 nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 16:27:44
@@ -9722,7 +9212,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
     shortLabel K562 polysome
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell polysome using )
+    longLabel ENCODE CSHL RNA-seq Transfrags (Short RNA from K562 polysome)
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
     dateSubmitted 2008-12-18 18:4:26
@@ -9733,51 +9223,6 @@ wgEncode 1
     localization polysome
     cell K562
     color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 polysome
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell polysome using )
-    subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 18:4:26
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization polysome
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel K562 polysome
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell polysome using )
-    subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 18:4:26
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization polysome
-    cell K562
-    color 46,0,184
-
-    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel GM12878 cytosol
-    longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell cytosol using )
-    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-    type broadPeak
-    dateSubmitted 2008-12-18 18:14:52
-    dateReleased 2009-09-18
-    priority 1
-    noInherit on
-    rnaExtract short
-    localization cytosol
-    cell GM12878
-    color 153,38,0
 
 
 # HudsonAlpha Methyl-seq (wrangler: larrym)
@@ -10052,7 +9497,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 bow 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 1 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Rep 1 (GM12878 cells, bowtie)
     subGroups view=Alignments cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10070,7 +9515,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 bow 2
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 2 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Rep 2 (GM12878 cells, bowtie)
     subGroups view=Alignments cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10088,7 +9533,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 bow 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 1 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Rep 1 (K562 cells, bowtie)
     subGroups view=Alignments cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10106,7 +9551,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 bow 2
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Replicate 2 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Alignments Rep 2 (K562 cells, bowtie)
     subGroups view=Alignments cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10124,7 +9569,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 bow 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 1 (GM12878 cells, bowtie)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10142,7 +9587,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 bow 2
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 2 (GM12878 cells, bow098)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10160,7 +9605,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 bow 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 1 (K562 cells, bowtie)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10178,7 +9623,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 bow 2
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 2 (K562 cells, bowtie))
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10196,7 +9641,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 erng Raw 1
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (GM12878 cells, erange)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1GM12878CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10217,7 +9662,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 erng Raw 2
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in GM12878 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (GM12878 cells, erng3b)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2GM12878CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10238,7 +9683,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 erng Raw 1
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in K562 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (K562 cells, erange)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10259,7 +9704,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 erng Raw 2
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in K562 cell using erng3b)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (K562 cells, erange)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2K562CELLLONGPOLYAERNG3B_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10279,8 +9724,8 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqPairedAlignsRep1Gm12878CellLongpolyaBowblt1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel GM128 bw-bl 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in GM12878 cell using bowblt1)
+    shortLabel GM128 bw+bl 1
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Aligns Rep 1 (GM12878 cells, bowtie+blat)
     subGroups view=PairedAligns cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10297,8 +9742,8 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqPairedAlignsRep1K562CellLongpolyaBowblt1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 bw-bl 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in K562 cell using bowblt1)
+    shortLabel K562 bw+bl 1
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Paired Aligns Rep 1 (K562 cells, bowtie+blat)
     subGroups view=PairedAligns cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10315,8 +9760,8 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBowblt1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel GM128 bw-bl 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using bowblt1)
+    shortLabel GM128 bw+bl 1
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 1 (GM12878 cells, bowtie+blat)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10334,7 +9779,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 blat 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell using blat34)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 1 (GM12878 cells, blat)
     subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=blat34 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10351,8 +9796,8 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBowblt1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 bw-bl 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using bowblt1)
+    shortLabel K562 bw+bl 1
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 1 (K562 cells, bowtie+blat)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10370,7 +9815,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 blat 1
-    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell using blat34)
+    longLabel ENCODE Caltech RNA-seq Map Algorithm Splice Alignments Rep 1 (K562 cells, blat)
     subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=blat34 rnaExtract=longPolyA
     type bed 12
     dateSubmitted 2009-02-13
@@ -10387,8 +9832,8 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBowblt1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel GM128 bw-bl Rw 1
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using bowblt1)
+    shortLabel GM128 bw+bl Rw 1
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (GM12878 cells, bowtie+blat)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type wig 0.00 2446.53
     dateSubmitted 2009-02-13
@@ -10408,8 +9853,8 @@ wgEncode 1
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBowblt1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 bw-bl Raw 1
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in K562 cell using bowblt1)
+    shortLabel K562 bw+bl Raw 1
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (K562 cells, bowtie+blat))
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYABOWBLT1_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10430,7 +9875,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 bow Raw 2
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (GM12878 cells, bowtie)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2GM12878CELLLONGPOLYABOW098_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10451,7 +9896,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 bow Raw 2
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 2 (K562 cells, bowtie)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP2K562CELLLONGPOLYABOW098_MINMAXRANGE
     dateSubmitted 2009-02-13
@@ -10472,7 +9917,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 bow Raw 1
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in GM12878 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (GM12878 cells, bowtie)
     subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig 1.00 27138.00
     dateSubmitted 2009-02-13
@@ -10493,7 +9938,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 bow Raw 1
-    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (longPolyA in K562 cell using bow098)
+    longLabel ENCODE Caltech RNA-seq Raw Signal Replicate 1 (K562 cells, bowtie)
     subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
     type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYABOW098_MINMAXRANGE
     dateSubmitted 2009-02-13
