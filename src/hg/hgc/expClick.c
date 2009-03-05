@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.22 2008/12/23 20:18:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.23 2009/03/05 10:09:22 aamp Exp $";
 
 /* global flag to indicate if the track is a cancer genomics track */
 boolean isCancerGenomicsTrack = FALSE;
@@ -455,7 +455,11 @@ if (!ct)
     bedList = loadMsBed(tdb, tdb->tableName, seqName, winStart, winEnd);
     }
 else if (ct->dbTrack)
+    {
+    genericHeader(tdb, itemName);
+    printCustomUrl(tdb, itemName, TRUE);
     bedList = ctLoadMultScoresBedDb(ct, seqName, winStart, winEnd);
+    }
 else
     bedList = bedFilterListInRange(ct->bedList, NULL, seqName, winStart, winEnd);
 if (bedList == NULL)
