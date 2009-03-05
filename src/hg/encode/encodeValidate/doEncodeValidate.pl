@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.159 2009/03/05 02:57:16 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.160 2009/03/05 21:30:39 mikep Exp $
 
 use warnings;
 use strict;
@@ -944,7 +944,8 @@ sub validateRpkm
         chomp;
         $lineNumber++;
         next if m/^#/;
-	my $cols = split;
+	my @fields = split /\s+/;
+	my $cols = scalar(@fields);
         die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
 	    unless $cols == 3 or $cols == 5 or $cols == 7;
 #            unless m/^([^\t]+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
