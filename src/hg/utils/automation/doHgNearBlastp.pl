@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.5 2007/10/02 05:10:56 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.6 2009/03/05 18:37:03 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -40,7 +40,7 @@ my $clusterHub = 'pk';
 my $distrHost = 'pk';
 my $dbHost = 'hgwdev';
 my $workhorse = 'least loaded';
-my $blastPath = '/san/sanvol1/scratch/blast64/blast-2.2.11';
+my $blastPath = '/scratch/data/blast229';
 my $defaultVerbose = 1;
 
 sub usage {
