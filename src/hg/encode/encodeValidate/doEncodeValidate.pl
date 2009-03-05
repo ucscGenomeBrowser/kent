@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.158 2009/03/04 17:55:10 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.159 2009/03/05 02:57:16 mikep Exp $
 
 use warnings;
 use strict;
@@ -919,10 +919,22 @@ sub validateFasta
 sub validateRpkm
 # Wold lab format, has gene name and 2 floats 
 #   Allowing Gene name to be composed of any characters but <tab>
-# Example lines:-
-#HBG2    0.583   1973.85
-#RPS20   0.523   1910.01
-#RPLP0   1.312   1800.51
+#
+# Example format 1 (3 cols):-
+# HBG2    0.583   1973.85
+# RPS20   0.523   1910.01
+# RPLP0   1.312   1800.51
+#
+# Example format 2 (7 cols):- (*.accepted.rpkm)
+# ENSG00000003056 chr12   8989051 8989354 2.43    303     M6PR
+# ENSG00000006015 chr19   18560887        18561077        1.10    190     C19orf60
+# ENSG00000008516 chr16   3047223 3047380 0.61    157     MMP25
+#
+# Example format 3 (5 cols): (*.final.rpkm)
+#GID    gene    len_kb  RPKM    multi/all
+# OTTHUMG00000151214      IGLC2   0.722   3579.34 0.84
+# FAR3664 FAR3664 0.200   3216.32 0.94
+# OTTHUMG00000021144      TMSB4X  3.551   2767.52 0.35
 {
     my ($path, $file, $type) = @_;
     doTime("beginning validateRpkm") if $opt_timing;
@@ -931,8 +943,11 @@ sub validateRpkm
     while(<$fh>) {
         chomp;
         $lineNumber++;
+        next if m/^#/;
+	my $cols = split;
         die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
-            unless m/^([^\t]+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
+	    unless $cols == 3 or $cols == 5 or $cols == 7;
+#            unless m/^([^\t]+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
