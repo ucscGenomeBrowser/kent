@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.162 2009/03/06 20:36:18 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.163 2009/03/06 20:47:31 mikep Exp $
 
 use warnings;
 use strict;
@@ -812,13 +812,18 @@ sub validateCsfasta
     # T203033330010111011221200302001
     # >461_19_209_F3
     # T022213002230311203200200322000
+
+    # Files from GIS have this header:
+    # >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
+    # T01301010111200210102321210100112312
+
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsfasta") if $opt_timing;
     my $fh = openUtil($path, $file);
     my $line = 0;
     my $state = 'header';
     my $seqName;
-    my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+", NEXT => 'seq'},
+    my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+.*", NEXT => 'seq'},
                   seq => {REGEX => "^T\\d+", NEXT => 'header'},
                   };
     while(<$fh>) {
