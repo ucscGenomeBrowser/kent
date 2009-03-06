@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2;
 char query2[256];
-struct sqlResult *sr, *sr2;
+struct sqlResult *sr2;
 char **row2;
 char cond_str[255];
 char *proteinDatabaseName;	/* example: sp031112 */
@@ -295,7 +295,6 @@ while (row2 != NULL)
     cCountDouble[icnt] = (double)cCnt;
     avgHydro[icnt] = hydroSum/(double)len; 
     icnt++;
-    sqlFreeResult(&sr);
     row2 = sqlNextRow(sr2);
     }
 
