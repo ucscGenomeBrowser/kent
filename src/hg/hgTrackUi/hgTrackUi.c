@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.474 2009/03/03 01:02:46 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.475 2009/03/06 23:19:40 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1984,7 +1984,11 @@ void hapmapSnpsUi(struct trackDb *tdb)
 /* Consider using radio buttons */
 {
 struct sqlConnection *conn = hAllocConn(database);
-boolean isPhaseIII = (! sqlTableExists(conn, "hapmapAllelesSummary"));
+boolean isPhaseIII = sameString(trackDbSettingOrDefault(tdb, "hapmapPhase", "II"), "III");
+
+if ((isPhaseIII && !sqlTableExists(conn, "hapmapPhaseIIISummary")) ||
+    (!isPhaseIII & !sqlTableExists(conn, "hapmapAllelesSummary")))
+    return;
 
 puts("<P>");
 puts("<B>Display filters (applied to all subtracks):</B>");
@@ -2026,7 +2030,7 @@ for (i = 0;  i < popCount;  i++)
 	printf("<TD align=right><B>%s:</B></TD><TD>", pops[i]);
 	safef(cartVar, sizeof(cartVar), "%s_%s", HAP_MONO_PREFIX, pops[i]);
 	cgiMakeDropList(cartVar, noYesNoMenu, 3,
-			cartUsualString(cart, HAP_MONO_PREFIX, HAP_FILTER_DEFAULT));
+			cartUsualString(cart, cartVar, HAP_FILTER_DEFAULT));
 	printf("</TD>\n");
 	cellCount += 2;
 	if (cellCount == 12)
@@ -2058,15 +2062,27 @@ float maxFreq = atof(cartUsualString(cart, HAP_MAX_FREQ, HAP_MAX_FREQ_DEFAULT));
 cgiMakeDoubleVar(HAP_MAX_FREQ, maxFreq, 6);
 puts("&nbsp;(range: 0.0 to 0.5)\n");
 
-puts("<BR><B>Overall heterozygosity: </B>");
+if (isPhaseIII)
+    puts("<BR><B>Average of populations' observed heterozygosities: </B>");
+else
+    puts("<BR><B>Expected heterozygosity (from total allele frequencies): </B>");
 puts("<B>min:</B>&nbsp;");
 float minHet = atof(cartUsualString(cart, HAP_MIN_HET, HAP_MIN_HET_DEFAULT));
 cgiMakeDoubleVar(HAP_MIN_HET, minHet, 6);
 
 puts("<B>max:</B>&nbsp;");
-float maxHet = atof(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
-cgiMakeDoubleVar(HAP_MAX_HET, maxHet, 6);
-puts("&nbsp;(range: 0.0 to 0.5)\n");
+if (isPhaseIII)
+    {
+    float maxHet = atof(cartUsualString(cart, HAP_MAX_OBSERVED_HET, HAP_MAX_OBSERVED_HET_DEFAULT));
+    cgiMakeDoubleVar(HAP_MAX_OBSERVED_HET, maxHet, 6);
+    puts("&nbsp;(range: 0.0 to 1.0)\n");
+    }
+else
+    {
+    float maxHet = atof(cartUsualString(cart, HAP_MAX_EXPECTED_HET, HAP_MAX_EXPECTED_HET_DEFAULT));
+    cgiMakeDoubleVar(HAP_MAX_EXPECTED_HET, maxHet, 6);
+    puts("&nbsp;(range: 0.0 to 0.5)\n");
+    }
 
 static char *orthoMenu[] =
     { "no filter", 

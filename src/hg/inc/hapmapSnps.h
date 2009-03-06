@@ -75,36 +75,19 @@ void hapmapSnpsOutput(struct hapmapSnps *el, FILE *f, char sep, char lastSep);
 #define HAP_MIN_FREQ "hapmapSnps_minorAlleleFreqMinimum"
 #define HAP_MAX_FREQ "hapmapSnps_minorAlleleFreqMaximum"
 #define HAP_MIN_HET "hapmapSnps_hetMinimum"
-#define HAP_MAX_HET "hapmapSnps_hetMaximum"
+#define HAP_MAX_OBSERVED_HET "hapmapSnps_obsHetMaximum"
+#define HAP_MAX_EXPECTED_HET "hapmapSnps_expHetMaximum"
 #define HAP_MONO_PREFIX "hapmapSnps_monomorphic"
 #define HAP_ORTHO_PREFIX "hapmapSnps_ortho"
 #define HAP_ORTHO_QUAL_PREFIX "hapmapSnps_orthoQual"
-
-/* OLD -- Keeping these until I can check in the changes to hgTracks/hapmapTrack.c. */
-#define HAP_MONO_CEU "hapmapSnps.monomorphic.ceu"
-#define HAP_MONO_CHB "hapmapSnps.monomorphic.chb"
-#define HAP_MONO_JPT "hapmapSnps.monomorphic.jpt"
-#define HAP_MONO_YRI "hapmapSnps.monomorphic.yri"
-#define HAP_CHIMP "hapmapSnps.chimp"
-#define HAP_CHIMP_QUAL "hapmapSnps.chimpQualScore"
-#define HAP_MACAQUE "hapmapSnps.macaque"
-#define HAP_MACAQUE_QUAL "hapmapSnps.macaqueQualScore"
-#define HAP_POP_MIXED_DEFAULT "no filter"
-#define HAP_POP_COUNT_DEFAULT "no filter"
-#define HAP_TYPE_DEFAULT      "no filter"
-#define HAP_MONO_DEFAULT      "no filter"
-#define HAP_CHIMP_DEFAULT     "no filter"
-#define HAP_CHIMP_QUAL_DEFAULT "0"
-#define HAP_MACAQUE_DEFAULT   "no filter"
-#define HAP_MACAQUE_QUAL_DEFAULT "0"
-/* End of old stuff. */
 
 #define HAP_FILTER_DEFAULT "no filter"
 
 #define HAP_MIN_FREQ_DEFAULT  "0.0"
 #define HAP_MAX_FREQ_DEFAULT  "0.5"
 #define HAP_MIN_HET_DEFAULT   "0.0"
-#define HAP_MAX_HET_DEFAULT   "0.5"
+#define HAP_MAX_EXPECTED_HET_DEFAULT   "0.5"
+#define HAP_MAX_OBSERVED_HET_DEFAULT   "1.0"
 
 #define HAP_ORTHO_QUAL_DEFAULT "0"
 
