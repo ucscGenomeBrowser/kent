@@ -5868,7 +5868,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
     track wgEncodeYaleChIPseqPeaksGm12878Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
@@ -5882,7 +5882,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqSignalGm12878Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in GM12878 cells)
@@ -5897,7 +5897,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in GM12878 cells)
@@ -5912,7 +5912,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in GM12878 cells)
@@ -5927,7 +5927,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqPeaksGm12878Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
@@ -5941,7 +5941,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqSignalGm12878Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
@@ -5956,7 +5956,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
@@ -5971,7 +5971,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
@@ -5986,7 +5986,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqPeaksGm12878Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
@@ -6000,7 +6000,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalGm12878Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
@@ -6015,7 +6015,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
@@ -6030,7 +6030,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
@@ -6045,7 +6045,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksGm12878Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
@@ -6059,7 +6059,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalGm12878Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
@@ -6074,7 +6074,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
@@ -6089,7 +6089,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
@@ -6104,7 +6104,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
@@ -6119,7 +6119,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalGm12878Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
@@ -6134,7 +6134,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalGm12878Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in GM12878 cells)
@@ -6149,7 +6149,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHct116Tcf4
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
@@ -6163,7 +6163,7 @@ wgEncode 1
     antibody TCF4
 
     track wgEncodeYaleChIPseqSignalHct116Tcf4
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF4 in HCT-116 cells)
@@ -6178,7 +6178,7 @@ wgEncode 1
     antibody TCF4
 
     track wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
@@ -6193,7 +6193,7 @@ wgEncode 1
     antibody TCF4
 
     track wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
@@ -6208,7 +6208,7 @@ wgEncode 1
     antibody TCF4
 
     track wgEncodeYaleChIPseqSignalHct116Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
@@ -6223,7 +6223,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalHct116Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HCT-116 cells)
@@ -6238,7 +6238,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHek293Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
@@ -6252,7 +6252,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HEK293 cells)
@@ -6267,7 +6267,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
@@ -6282,7 +6282,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
@@ -6297,7 +6297,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
@@ -6312,7 +6312,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
@@ -6327,7 +6327,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalHek293Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HEK293 cells)
@@ -6342,7 +6342,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHelas3Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa cells)
@@ -6357,7 +6357,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqSignalHelas3Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HeLa cells)
@@ -6374,7 +6374,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HeLa cells)
@@ -6390,7 +6390,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HeLa cells)
@@ -6406,7 +6406,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HeLa cells)
@@ -6422,7 +6422,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqSignalHelas3Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
@@ -6440,7 +6440,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalHelas3Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HeLa cells)
@@ -6456,7 +6456,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqPeaksHelas3Largefragment
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Frag Control in HeLa cells)
@@ -6470,7 +6470,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqSignalHelas3Largefragment
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Frag Control in HeLa cells)
@@ -6485,7 +6485,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Frag Control in HeLa)
@@ -6500,7 +6500,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Frag Control in HeLa)
@@ -6515,7 +6515,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqSignalHelas3Mnase
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (MNase Control in HeLa cells)
@@ -6530,7 +6530,7 @@ wgEncode 1
     antibody MNase
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (MNase Control in HeLa)
@@ -6545,7 +6545,7 @@ wgEncode 1
     antibody MNase
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (MNase Control in HeLa)
@@ -6560,7 +6560,7 @@ wgEncode 1
     antibody MNase
 
     track wgEncodeYaleChIPseqPeaksHelas3Mouseigg
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (mIgG Control in HeLa cells)
@@ -6574,7 +6574,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqSignalHelas3Mouseigg
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (mIgG Control in HeLa cells)
@@ -6589,7 +6589,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (mIgG Controlin HeLa)
@@ -6604,7 +6604,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (mIgG Control in HeLa)
@@ -6619,7 +6619,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqSignalHelas3Nakeddna
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA, HeLa cells)
@@ -6634,7 +6634,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA, HeLa cells)
@@ -6649,7 +6649,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA, HeLa cells)
@@ -6664,7 +6664,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA, HeLa cells)
@@ -6679,7 +6679,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqPeaksHelas3ifngStat1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in HeLa_IFN cells)
@@ -6694,7 +6694,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqSignalHelas3ifngStat1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in HeLa_IFN cells)
@@ -6711,7 +6711,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (STAT1, HeLa_IFN cells)
@@ -6727,7 +6727,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (STAT1, HeLa_IFN cells)
@@ -6743,7 +6743,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqSignalHelas3ifngInput
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
@@ -6760,7 +6760,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalHelas3ifngInput
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Rw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HeLa_IFN cells)
@@ -6776,7 +6776,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqPeaksHepg2Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2 cells)
@@ -6790,7 +6790,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHepg2Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
@@ -6805,7 +6805,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HepG2 cells)
@@ -6820,7 +6820,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HepG2 cells)
@@ -6835,7 +6835,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HepG2 cells)
@@ -6850,7 +6850,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksHepg2Srebp1a
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1A in HepG2 cells)
@@ -6864,7 +6864,7 @@ wgEncode 1
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqSignalHepg2Srebp1a
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1A in HepG2 cells)
@@ -6879,7 +6879,7 @@ wgEncode 1
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP1A in HepG2 cells)
@@ -6894,7 +6894,7 @@ wgEncode 1
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp1a
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP1A in HepG2 cells)
@@ -6909,7 +6909,7 @@ wgEncode 1
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp1a
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP1A in HepG2 cells)
@@ -6924,7 +6924,7 @@ wgEncode 1
     antibody SREBP1A
 
     track wgEncodeYaleChIPseqPeaksHepg2Srebp2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP2 in HepG2 cells)
@@ -6938,7 +6938,7 @@ wgEncode 1
     antibody SREBP2
 
     track wgEncodeYaleChIPseqSignalHepg2Srebp2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP2 in HepG2 cells)
@@ -6953,7 +6953,7 @@ wgEncode 1
     antibody SREBP2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP2 in HepG2 cells)
@@ -6968,7 +6968,7 @@ wgEncode 1
     antibody SREBP2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP2 in HepG2 cells)
@@ -6983,7 +6983,7 @@ wgEncode 1
     antibody SREBP2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP2 in HepG2 cells)
@@ -6998,7 +6998,7 @@ wgEncode 1
     antibody SREBP2
 
     track wgEncodeYaleChIPseqSignalHepg2Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
@@ -7013,7 +7013,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Input in HepG2 cells)
@@ -7028,7 +7028,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Input in HepG2 cells)
@@ -7043,7 +7043,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Input in HepG2 cells)
@@ -7058,7 +7058,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksK562Gata1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 GATA1 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562 cells)
@@ -7074,7 +7074,7 @@ wgEncode 1
     antibody GATA-1
 
     track wgEncodeYaleChIPseqSignalK562Gata1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 GATA1 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562 cells)
@@ -7089,7 +7089,7 @@ wgEncode 1
     antibody GATA-1
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Gata1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 GATA1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (GATA-1 in K562 cells)
@@ -7104,7 +7104,7 @@ wgEncode 1
     antibody GATA-1
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Gata1
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 GATA1 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (GATA-1 in K562 cells)
@@ -7119,7 +7119,7 @@ wgEncode 1
     antibody GATA-1
 
     track wgEncodeYaleChIPseqPeaksK562Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 JunD Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
@@ -7133,7 +7133,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqSignalK562Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 JunD Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in K562 cells)
@@ -7148,7 +7148,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 JunD 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in K562 cells)
@@ -7163,7 +7163,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Jund
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 JunD 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in K562 cells)
@@ -7178,7 +7178,7 @@ wgEncode 1
     antibody JunD
 
     track wgEncodeYaleChIPseqPeaksK562Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Max Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
@@ -7192,7 +7192,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqSignalK562Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Max Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in K562 cells)
@@ -7207,7 +7207,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Max 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in K562 cells)
@@ -7222,7 +7222,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Max
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Max 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in K562 cells)
@@ -7237,7 +7237,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqPeaksK562Nfe2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 NF-E2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
@@ -7251,7 +7251,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqSignalK562Nfe2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 NF-E2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
@@ -7266,7 +7266,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Nfe2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 NF-E2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
@@ -7281,7 +7281,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Nfe2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 NF-E2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
@@ -7296,7 +7296,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqPeaksK562Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
@@ -7310,7 +7310,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalK562Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562 cells)
@@ -7326,7 +7326,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
@@ -7341,7 +7341,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
@@ -7356,7 +7356,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksK562Znf263
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562 cells)
@@ -7370,7 +7370,7 @@ wgEncode 1
     antibody ZNF263
 
     track wgEncodeYaleChIPseqSignalK562Znf263
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
@@ -7385,7 +7385,7 @@ wgEncode 1
     antibody ZNF263
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
@@ -7400,7 +7400,7 @@ wgEncode 1
     antibody ZNF263
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Z263 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
@@ -7415,7 +7415,7 @@ wgEncode 1
     antibody ZNF263
 
     track wgEncodeYaleChIPseqPeaksK562Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Fos Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
@@ -7429,7 +7429,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalK562Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Fos Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in K562 cells)
@@ -7444,7 +7444,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Fos 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in K562 cells)
@@ -7459,7 +7459,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Fos 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in K562 cells)
@@ -7474,7 +7474,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep3K562Cfos
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Fos 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (c-Fos in K562 cells)
@@ -7489,7 +7489,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqPeaksK562Cjun
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Jun Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
@@ -7503,7 +7503,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqSignalK562Cjun
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Jun Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562 cells)
@@ -7518,7 +7518,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cjun
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Jun 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Jun in K562 cells)
@@ -7533,7 +7533,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cjun
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Jun 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Jun in K562 cells)
@@ -7548,7 +7548,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqPeaksK562Cmyc
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Myc Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
@@ -7562,7 +7562,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqSignalK562Cmyc
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Myc Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562 cells)
@@ -7577,7 +7577,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Myc 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
@@ -7592,7 +7592,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 c-Myc 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
@@ -7607,7 +7607,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqSignalK562Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
@@ -7623,7 +7623,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalK562Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel K562 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in K562 cells)
@@ -7638,7 +7638,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksNb4Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
@@ -7652,7 +7652,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalNb4Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
@@ -7667,7 +7667,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in NB4 cells)
@@ -7682,7 +7682,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in NB4 cells)
@@ -7697,7 +7697,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in NB4 cells)
@@ -7712,7 +7712,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalNb4Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
@@ -7727,7 +7727,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalNb4Input
-    release alpha
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in NB4 cells)
