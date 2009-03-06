@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.4 $
+# Data Agreement File for RNA-seq project $Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -93,17 +93,5 @@ required         no
 view             RawData7
 type             rpkm
 hasReplicates    yes
-required         no
-
-# hg18splice75.fa
-view             RawData8
-type             fasta
-hasReplicates    no
-required         no
-
-# spikes.fa
-view             RawData9
-type             fasta
-hasReplicates    no
 required         no
 
