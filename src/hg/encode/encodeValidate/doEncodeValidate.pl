@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.161 2009/03/05 21:33:21 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.162 2009/03/06 20:36:18 mikep Exp $
 
 use warnings;
 use strict;
@@ -1082,8 +1082,9 @@ sub isDownloadOnly {
     # Dont load any RawData* or Comparative views, 
     # Dont load Alignments unless they are from Gingeras or Wold labs (RNA folks like to  see their RNAs)
     # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
-    # Wold group have RawData, RawData2, RawData3, RawData4 
-    return ($view =~ m/^RawData[0-9]?$/ or $view eq 'Comparative' 
+    # Wold group have RawData, RawData[2-7]
+    # Wold group alignments are called 'Aligns', 'Splices', 'Paired'
+    return ($view =~ m/^RawData\d*$/ or $view eq 'Comparative' 
 	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold")) ? 1 : 0;
 }
 
