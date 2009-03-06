@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.21 2009/02/18 18:20:00 hiram Exp $
+# $Id: HgAutomate.pm,v 1.22 2009/03/06 23:32:44 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -70,9 +70,13 @@ my @allClusters = (keys %cluster);
         { root => '/scratch/hg', clusterLocality => 1.0,
 	  distrHost => [], distrCommand => '',
 	  inputFor => \@allClusters, outputFor => [], },
+      'hive' =>
+        { root => '/hive/data/genomes', clusterLocality => 0.3,
+	  distrHost => ['pk', 'swarm'], distrCommand => '',
+	  inputFor => ['pk', 'memk', 'swarm'], outputFor => ['pk', 'memk', 'swarm'], },
       'san' =>
         { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
-	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
+	  distrHost => ['pk'], distrCommand => '',
 	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
     );
 
@@ -354,15 +358,16 @@ sub chooseFilesystemsForCluster {
   confess "Unrecognized cluster $cluster" if (! $clusterInfo);
   confess "Second arg must be either \"in\" or \"out\""
     if ($inOrOut ne 'in' && $inOrOut ne 'out');
-  my @filesystems = ('/hive/data/genomes');
+  my @filesystems;
   foreach my $fs (keys %clusterFilesystem) {
     my $fsInfo = $clusterFilesystem{$fs};
     my @okClusters = ($inOrOut eq 'in') ?
        @{$fsInfo->{'inputFor'}} :  @{$fsInfo->{'outputFor'}};
     if (scalar(grep /^$cluster$/, @okClusters)) {
-      push @filesystems, $fsInfo->{'root'};
+      push @filesystems, $fsInfo->{'root'} if (-d $fsInfo->{'root'});
     }
   }
+  push @filesystems, '/hive/data/genomes' if (scalar(@filesystems)<1);
   return @filesystems;
 }
 
