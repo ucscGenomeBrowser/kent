@@ -4,10 +4,17 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = snpNcbiToUcsc
-${A}: ${A}.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/${A} ${A}.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${A}${EXE}
+all: snpNcbiToUcsc hapmapPhaseIIISummary
+
+S = snpNcbiToUcsc
+${S}: ${S}.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/${S} ${S}.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${S}${EXE}
+
+H = hapmapPhaseIIISummary
+${H}: ${H}.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/${H} ${H}.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${H}${EXE}
 
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o hapmapLookup.o hapmapMixed.o \
@@ -29,7 +36,7 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
     snpSort.o snpSplitByChrom.o snpSplitByChrom2.o snpSNP.o \
     subSnpCondense.o trimHeader.o
 
-all: affyLookup cnpLookup fetchSeq \
+old: affyLookup cnpLookup fetchSeq \
      hapmap1 hapmap2 hapmapLookup hapmapMixed \
      hapmapOrtho hapmapSummary hapmapValidate \
      illuminaLookup \
