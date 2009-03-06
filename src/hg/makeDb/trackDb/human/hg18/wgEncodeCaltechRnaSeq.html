@@ -121,6 +121,28 @@ and the identification of novel transcribed regions of the genome using either
 a 20 kb radius for 
 the 1x32 datasets or paired-end information for 2x75 datasets.</P>
 
+<P>
+For 2x75 datasets, raw Illumina reads (<I>RawData</I> files on the download 
+page, fasta format)
+are run through bowtie 0.9.8.1 with up to 2 mismatches
+and the resulting mappings are stored (<I>RawData2 files</I>, bowtie format)
+for up to ten matches per-read to the genome,
+spiked controls and UCSC knownGene splice junctions. Reads that were
+not mapped by bowtie (<I>RawData3</I> files, fasta format)
+are then mapped onto the genome using blat and filtered using pslReps
+(<I>RawData4</I> files, psl format).
+The bowtie and blat mappings are then analyzed by ERANGE3.0.2 to
+generate wiggles (<I>RawSignal</I> view, wiggle format),
+bed files of all reads and splices (<I>Aligns</I> and <I>Paired</I> views, 
+bed format),
+all bowtie and blat splices (<I>Splices</I> view, bed format)
+and blat-only splices (<I>Splices</I> view, bed format),
+as well as RPKM expression level measurements at the gene-level
+(<I>RawData5</I> files, rpkm format),
+exon-level (<I>RawData6</I> files, rpkm format), and candidate
+novel exons (<I>RawData7</I> files, rpkm format).
+</P>
+
 <H2>Verification</H2>
 
 <UL>
