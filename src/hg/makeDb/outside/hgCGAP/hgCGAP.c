@@ -353,7 +353,7 @@ int do1Record()
     	    if ((line[0] != '>') || (line[1] != '>'))
 		{
 		printf("CGAP ID line not found:\n%s\n", line);
-	    	exit(1);
+	    	break;
 		}
 	    else
 		{
