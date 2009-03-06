@@ -289,6 +289,10 @@ priority 54.5
 visibility hide
 type psl .
 
+track hapmapSnps override
+dataVersion rel27
+hapmapPhase III
+
 track hapmapLd
 compositeTrack on
 shortLabel HapMap LD Unph.
@@ -348,6 +352,18 @@ type ld2
     shortLabel Ph JPT+CHB
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
+
+track hapmapRecombRate
+shortLabel Hapmap Recomb
+longLabel Hapmap Recombination Rate (phase II, release 22)
+group varRep
+priority 144.4921
+visibility hide
+type bedGraph 4
+minLimit 0
+maxLimit 90.6690141023
+autoScaleDefault Off
+maxHeightPixels 128:32:11
 
 track tajdSnp
 compositeTrack on
