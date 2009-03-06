@@ -2798,16 +2798,18 @@ compositeTrack on
 shortLabel Open Chromatin
 longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
-subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
+#subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
+subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded uniq=Uniqueness
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 zzRG=Reference_Genome
-subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzREF=Extra_Tracks
+#subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzREF=Extra_Tracks
+subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzRE=Regions_Excluded zzU20=Uniqueness_20_bp zzU24=Uniqueness_24_bp zzU35=Uniqueness_35_bp
 sortOrder cellType=+ EXP=+ view=+
 dimensions dimensionX=cellType dimensionY=EXP
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
+visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide sXREG=hide uniq=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:4163,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:4163,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:16:16
 useScore 0
 priority 0
 type bed 3
@@ -3496,7 +3498,8 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel Excluded Regions
     longLabel ENCODE Open Chromatin, Regions Excluded
-    subGroups view=sXREG EXP=zzREF cellType=zzRG
+    #subGroups view=sXREG EXP=zzREF cellType=zzRG
+    subGroups view=sXREG EXP=zzRE cellType=zzRG
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -3508,7 +3511,8 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel Uniqueness 20bp
     longLabel ENCODE Reference Genome Uniqueness of 20bp Windows
-    subGroups view=u20 EXP=zzREF cellType=zzRG
+    #subGroups view=u20 EXP=zzREF cellType=zzRG
+    subGroups view=uniq EXP=zzU20 cellType=zzRG
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -3521,7 +3525,8 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel Uniqueness 24bp
     longLabel ENCODE Reference Genome Uniqueness of 24bp Windows
-    subGroups view=u24 EXP=zzREF cellType=zzRG
+    #subGroups view=u24 EXP=zzREF cellType=zzRG
+    subGroups view=uniq EXP=zzU24 cellType=zzRG
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -3534,7 +3539,8 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel Uniqueness 35bp
     longLabel ENCODE Reference Genome Uniqueness of 35bp Windows
-    subGroups view=u35 EXP=zzREF cellType=zzRG
+    #subGroups view=u35 EXP=zzREF cellType=zzRG
+    subGroups view=uniq EXP=zzU35 cellType=zzRG
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -8493,7 +8499,8 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
 cdsDrawDefault genomic\ codons
-itemClassTbl wgEncodeGencodeClasses
+#itemClassTbl wgEncodeGencodeClasses
+itemClassTbl wgEncodeGencodeClassesRel2
 geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_RNA Ensembl_pseudogene
 gClass_Validated_coding 0,0,255
 gClass_Validated_processed 51,153,255
@@ -8519,7 +8526,8 @@ gClass_Ensembl_RNA 254,46,46
 gClass_Ensembl_pseudogene 153,0,102
 filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_nonsense,Havana_non_coding,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Havana_polyA,Ensembl_coding,Ensembl_RNA,Ensembl_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,C_segment,IG_gene,IG_pseudogene,J_segment,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,non_coding,nonsense_mediated_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,V_segment,unitary_pseudogene,unprocessed_pseudogene,Ensembl_pseudogene
 
-    track wgEncodeSangerGencodeGencodeAuto20081001
+    #track wgEncodeSangerGencodeGencodeAuto20081001
+    track wgEncodeGencodeAutoRel2
     release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Auto (Oct08)
@@ -8531,7 +8539,8 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 1
     freezeDate 2008-10-01
 
-    track wgEncodeSangerGencodeGencodeManual20081001
+    #track wgEncodeSangerGencodeGencodeManual20081001
+    track wgEncodeGencodeManualRel2
     release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Manual (Oct08)
