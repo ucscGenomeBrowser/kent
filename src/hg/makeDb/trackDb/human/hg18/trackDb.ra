@@ -290,6 +290,7 @@ visibility hide
 type psl .
 
 track hapmapSnps override
+longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
 dataVersion rel27
 hapmapPhase III
 
