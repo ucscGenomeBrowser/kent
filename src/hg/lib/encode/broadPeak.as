@@ -8,6 +8,6 @@ table broadPeak
     uint   score;        "Optional. Indicates how dark the peak will be displayed in the browser (1-1000). If '0', the DCC will assign this based on signal value. Ideally average signalValue per base spread between 100-1000."
     char[2]   strand;       "Optional. +/- to denote strand or orientation (whenever applicable). Use '.' if no orientation is assigned."
     float  signalValue;  "Measurement of average enrichment for the region"
-    float  pValue;       "Within dataset statistical significance of signal value (-log10)"
-    float  qValue;       "Cross-dataset statistical significance of signal value (-log10)"
+    float  pValue;       "Statistical significance of signal value (-log10). Set to -1 if not used."
+    float  qValue;       "Statistical significance with multiple-test correction applied (FDR). Set to -1 if not used."
 )
