@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.19 2009/03/04 06:57:34 mikep Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.20 2009/03/06 21:10:05 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -206,7 +206,7 @@ else if (sameString(type,"Cell Line"))
     /* add link to protocol doc if it exists */
 #define PROTOCOL_DIR "/ENCODE/protocols/cell/"
     char protocolUrl[PATH_LEN];
-    safef(protocolUrl, sizeof(protocolUrl), "%s/%s_protocol.doc", PROTOCOL_DIR, term);
+    safef(protocolUrl, sizeof(protocolUrl), "%s/%s_protocol.pdf", PROTOCOL_DIR, term);
     char protocolFile[PATH_LEN];
     safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
     if (fileExists(protocolFile))
