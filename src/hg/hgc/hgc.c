@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1512 2009/03/03 01:01:04 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1513 2009/03/06 04:54:21 kate Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2508,6 +2508,15 @@ if ((version = trackDbSetting(tdb, "dataVersion")) != NULL)
     printf("<B>Data version:</B> %s <BR>\n", version);
 }
 
+void printDataRestrictionDate(struct trackDb *tdb)
+/* If this annotation has a dateUnrestricted trackDb setting, print it */
+{
+char *restrictionDate;
+if ((restrictionDate = trackDbSetting(tdb, "dateUnrestricted")) != NULL)
+    printf("<A HREF=\"/ENCODE/terms.html\" TARGET=_BLANK><B>Restricted until</A>:</B> %s <BR>\n", 
+                restrictionDate);
+}
+
 void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
@@ -2547,6 +2556,7 @@ if (!isCustomTrack(tdb->tableName))
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
 	hFreeConn(&conn);
 	}
+    printDataRestrictionDate(tdb);
     }
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
@@ -20305,8 +20315,7 @@ if ((tableName = hTableForTrack(database, tdb->tableName)) != NULL)
     if (date != NULL)
         printf("<B>Data last updated:</B> %s<BR>\n", date);
     hFreeConn(&conn);
-}
-
+    }
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
