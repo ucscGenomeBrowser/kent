@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.19 2009/02/04 18:34:25 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.20 2009/03/06 23:33:26 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -43,6 +43,10 @@ options:
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
 					        'fileServer' => '');
+print STDERR <<_EOF_
+    -noGoldGapSplit       do not split the gold/gap tables even when chrom based
+_EOF_
+  ;
   print STDERR "
 Automates the first steps of building a genome database:
     seq:     Translates fasta into /hive/data/genomes/\$db/\$db.unmasked.2bit .
@@ -164,6 +168,11 @@ my $CONFIG;
 # Command line option vars:
 use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
+# specific command line options
+use vars qw/
+    $opt_noGoldGapSplit
+    /;
+
 # Required config parameters:
 my ($db, $scientificName, $assemblyDate, $assemblyLabel, $orderKey,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
@@ -180,6 +189,7 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      @HgAutomate::commonOptionSpec,
+		      "noGoldGapSplit",
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -664,9 +674,13 @@ foreach chr (`awk '{print \$1;}' chrom.sizes`)
 end
 sort -u chrom.lst.tmp > chrom.lst
 rm chrom.lst.tmp
-hgGoldGapGl -noGl -chromLst=chrom.lst $db $topDir .
 _EOF_
     );
+    if ($opt_noGoldGapSplit) {
+      $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
+    } else {
+      $bossScript->add("hgGoldGapGl -noGl -chromLst=chrom.lst $db $topDir .\n");
+    }
   } else {
     $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
   }
@@ -680,7 +694,7 @@ _EOF_
     # should always cover the entire mitochondrial genome (typically ~16k).
     my $bin = 585;
     my $mitoGold = ($mitoAcc =~ /^\d+$/) ? "gi|$mitoAcc" : $mitoAcc;
-    if ($chromBased || $opt_debug) {
+    if (!$opt_noGoldGapSplit && ($chromBased || $opt_debug)) {
       my $defaultChrom = `head -1 $topDir/chrom.sizes | cut -f 1`;
       chomp $defaultChrom;
       $bossScript->add(<<_EOF_
