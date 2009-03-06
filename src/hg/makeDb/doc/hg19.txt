@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.1 2009/03/05 19:52:55 hiram Exp $";
+#	"$Id: hg19.txt,v 1.2 2009/03/06 23:27:05 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -138,5 +138,150 @@ taxId	9606
 
     time makeGenomeDb.pl hg19.config.ra > makeGenomeDb.log 2>&1
     #	real    14m8.958s
+     featureBits -countGaps hg19 gap
+    #	239845127 bases of 3137161264 (7.645%) in intersection
+    featureBits -noRandom -noHap -countGaps hg19 gap
+    #	234344806 bases of 3095693983 (7.570%) in intersection
+    #	verify featureBits is properly ignorning haps and randoms:
+    egrep -v "_" chrom.sizes | awk '{sum+=$2;print sum,$0}'
+    #	3095693983 chrM 16571
+    #	same total as in featureBits
+
+
+############################################################################
+# running repeat masker (DONE - 2009-03-05 - Hiram)
+    screen # use screen to manage this day-long job
+    mkdir /hive/data/genomes/hg19/bed/repeatMasker
+    cd /hive/data/genomes/hg19/bed/repeatMasker
+    time doRepeatMasker.pl -bigClusterHub=swarm -buildDir=`pwd` hg19 \
+	> do.log 2>&1
+    #	real    525m23.521s
+    cat faSize.rmsk.txt
+    #	3137161264 bases (239850802 N's 2897310462 real 1431585691
+    #	upper 1465724771 lower) in 93 sequences in 1 files
+    #	%46.72 masked total, %50.59 masked real
+    featureBits -countGaps hg19 rmsk
+    #	1465724774 bases of 3137161264 (46.721%) in intersection
+    #	this is odd, 3 bases more in featureBits than were masked ?
+    #	check it out, make a bed file from the featureBits:
+    featureBits -countGaps -bed=rmsk.bed hg19 rmsk
+    #	went down a sequence of intersections with this idea, but could
+    #	not get it resolved.  It appears there are 75 bases in the rmsk
+    #	table that were not masked in the 2bit file ?
+    #	Later on, realized that featureBits does not count lower case N's
+    #	in the "lower" category, but only in the N's category.
+
+    #	trying a non-split table:
+    hgsql -e "show tables;" hg19 | grep _rmsk | while read T
+do
+    hgsql -e "drop table ${T};" hg19
+done
+    hgLoadOut -nosplit -verbose=2 -table=rmsk hg19 hg19.fa.out
+bad rep range [4385, 4384] line 1348605 of hg19.fa.out 
+bad rep range [5563, 5562] line 1563988 of hg19.fa.out 
+bad rep range [4539, 4538] line 3111186 of hg19.fa.out 
+    #	featureBits still reports 1465724774 bases in rmsk table
+    #	cleaning the hg19.fa.out file:
+    cp hg19.fa.out hg19.clean.out
+    # edit hg19.clean.out and remove the three lines:
+# 1467  20.7  1.2 17.6  chr14     35056767 35056794 (72292746) +  L1ME1          LINE/L1               4385 4384 (1761) 1120962
+# 1943  23.8  5.0 12.6  chr15     65775909 65775924 (36755468) +  L1MC4          LINE/L1               5563 5562 (2480) 1299299
+# 2463  25.1  5.0 11.6  chr3      121291056 121291083 (76731347) +  L1M3           LINE/L1               4539 4538 (1608) 2589267
+
+    #	reload the table
+    hgsql -e "drop table rmsk;" hg19
+    hgLoadOut -nosplit -verbose=2 -table=rmsk hg19 hg19.clean.out
+
+    #	try masking with this clean file:
+    twoBitMask /hive/data/genomes/hg19/hg19.unmasked.2bit hg19.clean.out \
+	hg19.clean.2bit
+    twoBitToFa hg19.clean.2bit stdout | faSize stdin > faSize.clean.txt
+    cat faSize.clean.txt
+    #	this gives the lower by 75 bases result:
+    #	3137161264 bases (239850802 N's 2897310462 real 1431585763 upper
+    #	1465724699 lower) in 93 sequences in 1 files
+    #	%46.72 masked total, %50.59 masked real
+    featureBits -countGaps hg19 rmsk
+    #	1465724774 bases of 3137161264 (46.721%) in intersection
+    #	is the countGaps interferring ?
+    featureBits hg19 rmsk
+    #	1465724774 bases of 2897316137 (50.589%) in intersection
+    #	nope, lets' see what the .out file has:
+    grep chr hg19.clean.out | sed -e "s/^  *//" | awk '{print $5,$6-1,$7}' \
+	| sort -k1,1 -k2,2n > hg19.clean.out.bed
+    featureBits -countGaps hg19 hg19.clean.out.bed
+    #	1465724774 bases of 3137161264 (46.721%) in intersection
+    #	is it perhaps not masking N's ?
+    twoBitToFa hg19.clean.2bit stdout | grep n | less
+    #	that does find some lower case n's, find all N's:
+    findMotif -strand=+ -motif=gattaca -verbose=4 hg19.clean.2bit \
+	2> findMotif.out
+    grep "^#GAP" findMotif.out | sed -e "s/#GAP //" > nLocations.bed
+    #	which cover:
+    featureBits -countGaps hg19 nLocations.bed
+    #	251299071 bases of 3137161264 (8.010%) in intersection
+    #	overlapping rmsk business with these N locations:
+    featureBits -countGaps hg19 hg19.clean.out.bed nLocations.bed
+    #	6494740 bases of 3137161264 (0.207%) in intersection
+    #	and overlapping with gap:
+    featureBits -countGaps hg19 gap nLocations.bed
+    #	239845127 bases of 3137161264 (7.645%) in intersection
+
+############################################################################
+# running TRF simple repeats (DONE - 2009-03-05 - Hiram)
+    screen # use screen to manage this day-long job
+    mkdir /hive/data/genomes/hg19/bed/simpleRepeat
+    cd /hive/data/genomes/hg19/bed/simpleRepeat
+    time doSimpleRepeat.pl -bigClusterHub=pk -workhorse=hgwdev \
+	-smallClusterHub=pk -buildDir=`pwd` hg19 > do.log 2>&1
+    #	real    33m25.815s
+
+    twoBitMask bed/repeatMasker/hg19.clean.2bit \
+	-add bed/simpleRepeat/trfMask.bed hg19.2bit
+    twoBitToFa hg19.2bit stdout | faSize stdin > faSize.hg19.2bit.txt
+# 3137161264 bases (239850802 N's 2897310462 real 1430387259 upper
+# 1466923203 lower) in 93 sequences in 1 files
+# %46.76 masked total, %50.63 masked real
+
+############################################################################
+#	prepare cluster data (DONE - 2009-03-06 - Hiram)
+    cd /hive/data/genomes/hg19
+    rm /gbdb/hg19/hg19.2bit
+    ln -s `pwd`/hg19.2bit /gbdb/hg19/hg19.2bit
+
+    time blat hg19.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1024
+    #	Wrote 30675 overused 11-mers to 11.ooc
+    #	real    3m11.302s
+
+    mkdir /hive/data/staging/data/hg19
+    cp -p hg19.2bit /hive/data/staging/data/hg19
+    cp -p 11.ooc /hive/data/staging/data/hg19
+    cp -p chrom.sizes /hive/data/staging/data/hg19
+
+    mkdir separateChrs
+    cd separateChrs
+    grep -v "_" ../chrom.sizes | awk '{print $1}' | while read C
+do
+    twoBitToFa -seq="${C}" ../hg19.2bit stdout
+done | faToTwoBit stdin hg19.chrOnly.2bit
+    twoBitInfo hg19.chrOnly.2bit stdout | sort -k2,2nr > chrOnly.chrom.sizes
+
+    grep "_hap" ../chrom.sizes | awk '{print $1}' | while read C
+do
+    twoBitToFa -seq="${C}" ../hg19.2bit stdout
+done | faToTwoBit stdin hg19.hapOnly.2bit
+    twoBitInfo hg19.hapOnly.2bit stdout | sort -k2,2nr > hapOnly.chrom.sizes
+
+    grep "_" ../chrom.sizes | grep -v "_hap" | awk '{print $1}' | while read C
+do
+    twoBitToFa -seq="${C}" ../hg19.2bit stdout
+done | faToTwoBit stdin hg19.scaffolds.2bit
+    twoBitInfo hg19.scaffolds.2bit stdout | sort -k2,2nr > scaffolds.chrom.sizes
+
+    cp -p *.2bit *.sizes /hive/data/staging/data/hg19
+
+    # ask admin to sync this directory: /hive/data/staging/data/hg19/
+    #	to the kluster nodes /scratch/data/hg19/
 
 ############################################################################
