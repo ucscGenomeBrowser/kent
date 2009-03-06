@@ -9,7 +9,8 @@ is measured by RNA Immunoprecipitation and Affymetrix Exon Arrays
 in different 
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
 This initial version of the track contains a single view, 
-<i>RBP Assoc RNA</i>, showing the genomic location of the transcripts associated with the array probes.
+<i>RBP Assoc RNA</i>, showing the genomic location of the transcripts 
+associated with the array probes.
 </P>
 
 <P>In eukaryotic organisms gene regulatory networks require an additional 
@@ -20,7 +21,8 @@ it is now clear that RNA-binding proteins play a major role in
 regulating multiple mRNAs in order to facilitate gene expression patterns. 
 These tracks show the associated mRNAs that co-precipitated with the 
 targeted RNA-binding proteins using RIP-Chip (Ribonomic) profiling
-(Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008;Penalva <EM>et al.</EM> 2004).
+(Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008;Penalva 
+<EM>et al.</EM> 2004).
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -34,7 +36,8 @@ the tracks you wish to hide.
 
 <DL>
 <DT><i>RBP Assoc RNA</i>
-<DD>The RBP Assoc RNA view shows the genomic extent of the transcripts associated with 
+<DD>The RBP Assoc RNA view shows the genomic extent of the transcripts 
+associated with 
 the Affymetrix Exon Array probes, shaded according to score.
 </DL>
 
@@ -47,13 +50,14 @@ We used previously described methods for purifying endogenously formed RBP-mRNA
 complexes from cellular extracts and identifying the associated messages using 
 genome-scale, microarray technology; a method called RNA-Binding protein 
 Immunoprecipitation-Microarray (Chip) profiling or RIP-Chip 
-(Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008;Penalva <EM>et al.</EM> 2004). 
+(Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008;Penalva 
+<EM>et al.</EM> 2004). 
 The use of the RIP-Chip methods has provided great insight into the 
 infrastructure of coordinated eukaryotic post-transcriptional 
 gene expression, which could not have been obtained using 
 traditional RNA expression profiling approaches 
 (Keene <EM>et al.</EM> 2002; George <EM>et al.</EM> 2006). 
-Microarray analysis was performed using the Affymetrix Human Exon 1.0 ST Arrays. 
+Microarray analysis was performed using the Affymetrix Human Exon 1.0 ST Arrays.
 </P>
 
 <H2>Processing</H2>
@@ -78,7 +82,8 @@ descriptions so that the following steps could be performed.
 <OL>
 <LI> A conservative DABG p-value cutoff for presence was established at p &lt; 
 1e-256 (neglog10 value = 256). Visual inspection of DABG score distribution 
-across all HuEx10ST chips bear this out as a natural bipartite division point for the data.
+across all HuEx10ST chips bear this out as a natural bipartite division point 
+for the data.
 </LI>
 <LI> Probesets at or below the DABG p-val cutoff for all replicates were marked 
 as present in the given condition &amp; cell-line.
@@ -91,20 +96,25 @@ both the rma and plier expression scores.
 <LI> P-values for significant overexpression in IP replicates over total 
 replicates are taken for rma and plier scores.
 </LI>
-<LI> The minimum of the rma &amp; plier fold-changes is used as the overall fold-change.
+<LI> The minimum of the rma &amp; plier fold-changes is used as the overall 
+fold-change.
 </LI>
-<LI> The maximum of the rma &amp; plier p-values is used as the overall overexpression p-value.
+<LI> The maximum of the rma &amp; plier p-values is used as the overall 
+overexpression p-value.
 </LI>
 <LI> A default score of -10 is set and for all probesets present in IP, 
-scores are replaced by -log10(max.p-value)*(min.log2.fold-change) [ranging from ~-.5 to ~15]
+scores are replaced by -log10(max.p-value)*(min.log2.fold-change) [ranging 
+from ~-.5 to ~15]
 </LI>
 <LI> Scores are scaled according to: x = 10*(x+10)+1 &mdash; now absent in 
-IP probesets have a score of 1 and present in IP probesets range from ~100 to ~1000.
+IP probesets have a score of 1 and present in IP probesets range from ~100 
+to ~1000.
 </LI>
 <LI> A broadPeak bed file is created corresponding to the core gene-level 
 probesets for each cell-line with the score field containing our scaled score, 
 the signal field containing our minimum log2 fold-change, and the p-value 
-field containing -log10 of our maximum p-value. The q-value is left at the default of -1.
+field containing -log10 of our maximum p-value. The q-value is left at the 
+default of -1.
 </LI>
 </OL>
 </P>
