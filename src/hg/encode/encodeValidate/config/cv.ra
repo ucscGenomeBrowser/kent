@@ -758,7 +758,7 @@ term bow098
 type mapAlgorithm
 description bowtie v0.981
 
-term bowblt1
+term BB1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
 

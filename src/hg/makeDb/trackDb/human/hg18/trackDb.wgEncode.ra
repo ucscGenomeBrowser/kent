@@ -9483,7 +9483,7 @@ subGroup1 view Views Alignments=Alignments RawSignal=Raw_Signal PairedAligns=Pai
 subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878
 subGroup3 localization Localization cell=cell
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
-subGroup5 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 bow098=Bowtie_0.981 NA=NA erng3b=Erange_3.0b bowblt1=Bowtie+BLAT
+subGroup5 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 bow098=Bowtie_0.981 NA=NA erng3b=Erange_3.0b BB1=Bowtie+BLAT
 dimensions dimensionX=cellType dimensionY=mapAlgorithm
 sortOrder cellType=+ localization=+ rnaExtract=+ mapAlgorithm=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
