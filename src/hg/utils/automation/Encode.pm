@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.34 2009/01/26 23:29:51 kate Exp $
+# $Id: Encode.pm,v 1.35 2009/03/07 22:59:58 mikep Exp $
 
 package Encode;
 
@@ -403,6 +403,13 @@ sub isTarZipped
 {
     my ($filePath) = @_;
     return $filePath =~ m/\.(tar\.|t)gz$/;
+}
+
+sub isTar
+# true if file ends in [.tar]
+{
+    my ($filePath) = @_;
+    return $filePath =~ m/\.tar$/;
 }
 
 sub isZipped
