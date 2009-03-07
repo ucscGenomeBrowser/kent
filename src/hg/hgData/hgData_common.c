@@ -4,7 +4,7 @@
 #include "hdb.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.7 2009/02/26 21:17:44 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.8 2009/03/07 06:01:38 mikep Exp $";
 
 struct coords navigate(int start, int end, int chromSize)
 // Calculate navigation coordinates including window left, window right
@@ -78,3 +78,19 @@ char *valOrVariable(char *val, char *variable)
 {
     return val ? val : variable;
 }
+
+int stripToInt(char *string)
+// Convert a string with digits, commas, and decimals into an integer
+// by stripping the commas and decimals
+{
+char c;
+if (!string || !*string)
+    return 0;
+c = *string;
+stripChar(string, ',');
+stripChar(string, '.');
+if (!(isdigit(c) || (c == '-' && isdigit(string[1]))))
+     errAbort("Expecting number in stripToInt, got \"%s\"\n", string);
+return atoi(string);
+}
+
