@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.163 2009/03/06 20:47:31 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.164 2009/03/07 23:04:19 mikep Exp $
 
 use warnings;
 use strict;
@@ -351,13 +351,14 @@ our %formatCheckers = (
 
 sub openUtil
 {
-# Handles opening gzipped, tar gzipped, as well as plain files
+# Handles opening gzipped, tar gzipped, tar, as well as plain files
     my ($path, $file) = @_;
     my $fh = new IO::File;
     my $filePath = defined($path) ? "$path/$file" : $file;
-    open($fh, Encode::isTarZipped($filePath) ? "/bin/tar -Ozxf $filePath |"
-	      : ( Encode::isZipped($filePath) ? "/bin/gunzip -c $filePath |"
-		  : $filePath )
+    open($fh, Encode::isTar($filePath) ? "/bin/tar -Oxf $filePath |"
+	      : ( Encode::isTarZipped($filePath) ? "/bin/tar -Ozxf $filePath |"
+	          : ( Encode::isZipped($filePath) ? "/bin/gunzip -c $filePath |"
+		      : $filePath ))
 	) or die "Couldn't open file '$file'; error: $!\n";
     return $fh;
 }
