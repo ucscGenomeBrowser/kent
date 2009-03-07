@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doWindowMasker.pl instead.
 
-# $Id: doWindowMasker.pl,v 1.6 2007/08/13 20:45:19 angie Exp $
+# $Id: doWindowMasker.pl,v 1.7 2009/03/07 00:06:33 aamp Exp $
 
 use Getopt::Long;
 use warnings;
@@ -35,7 +35,7 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
-my $unmaskedSeq = "$HgAutomate::clusterData/\$db/\$db.unmasked.2bit";
+my $unmaskedSeq = "$HgAutomate::hiveDataGenomes/\$db/\$db.unmasked.2bit";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -51,7 +51,7 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
-                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/WindowMasker.\$date
+                          $HgAutomate::hiveDataGenomes/\$db/$HgAutomate::trackBuild/WindowMasker.\$date
                           (necessary when continuing at a later date).
 _EOF_
   ;
@@ -65,12 +65,12 @@ Automates UCSC's WindowMasker process for genome database \$db.  Steps:
     twobit: Make masked twobit files.
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
-$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/WindowMasker.\$date unless -buildDir is given.
+$HgAutomate::hiveDataGenomes/\$db/$HgAutomate::trackBuild/WindowMasker.\$date unless -buildDir is given.
 ";
   # Detailed help (-help):
   print STDERR "
 Assumptions:
-1. $HgAutomate::clusterData/\$db/\$db.unmasked.2bit contains sequence for
+1. $HgAutomate::hiveDataGenomes/\$db/\$db.unmasked.2bit contains sequence for
    database/assembly \$db.  (This can be overridden with -unmaskedSeq.)
 " if ($detailed);
   print "\n";
@@ -252,9 +252,9 @@ $opt_verbose = 3 if ($opt_verbose < 3);
 my $date = `date +%Y-%m-%d`;
 chomp $date;
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/WindowMasker.$date";
+  "$HgAutomate::hiveDataGenomes/$db/$HgAutomate::trackBuild/WindowMasker.$date";
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
-  "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
+  "$HgAutomate::hiveDataGenomes/$db/$db.unmasked.2bit";
 
 # Do everything.
 $stepper->execute();

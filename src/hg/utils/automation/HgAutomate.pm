@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.22 2009/03/06 23:32:44 hiram Exp $
+# $Id: HgAutomate.pm,v 1.23 2009/03/07 00:06:33 aamp Exp $
 package HgAutomate;
 
 use warnings;
@@ -36,7 +36,7 @@ use File::Basename;
       ),
     # Hardcoded paths/commands/constants:
     qw( $gensub2 $para $paraRun $centralDbSql $cvs
-	$clusterData $trackBuild $goldenPath $images $gbdb
+	$clusterData $hiveDataGenomes $trackBuild $goldenPath $images $gbdb
 	$splitThreshold $setMachtype
       ),
 );
@@ -475,10 +475,10 @@ sub processCommonOptions {
 #########################################################################
 # Hardcoded paths/command sequences:
 use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
-		$clusterData $trackBuild $goldenPath $images $gbdb
+		$clusterData $hiveDataGenomes $trackBuild $goldenPath $images $gbdb
 		$splitThreshold $setMachtype
 	   );
-use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
+use vars qw( $gensub2 $para $paraRun $clusterData $hiveDataGenomes $trackBuild
 	     $goldenPath $gbdb $centralDbSql $splitThreshold );
 $gensub2 = '/parasol/bin/gensub2';
 $para = '/parasol/bin/para';
@@ -489,6 +489,7 @@ $paraRun = ("$para make jobList\n" .
 $centralDbSql = "hgsql -h genome-testdb -A -N hgcentraltest";
 $cvs = "/usr/bin/cvs";
 
+$hiveDataGenomes = '/hive/data/genomes';
 $clusterData = '/hive/data/genomes';
 $trackBuild = 'bed';
 my $apacheRoot = '/usr/local/apache';
