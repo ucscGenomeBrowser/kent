@@ -1,11 +1,8 @@
 /* hgData - simple RESTful interface to genome data. */
 #include "common.h"
 #include "hgData.h"
-// #include "dystring.h"
-// #include "bedGraph.h"
-// #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.20 2009/03/04 10:12:45 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.21 2009/03/07 06:04:05 mikep Exp $";
 
 
 void doGet()
@@ -20,7 +17,7 @@ struct bed *b = NULL;
 struct hgPositions *hgp = NULL;
 //struct sqlConnection *conn = NULL;
 //char *authorization = getenv("Authorization");
-verboseSetLevel(2);
+//verboseSetLevel(2);
 char *reqEtag = getenv("ETag");
 time_t reqModified = strToTime(getenv("Modified"), "%a, %d %b %Y %H:%M:%S GMT");// Thu, 08 Jan 2009 17:45:18 GMT
 char *cmd = cgiUsualString(CMD_ARG, "");
@@ -28,9 +25,12 @@ char *format = cgiUsualString(FORMAT_ARG, "");
 char *genome = cgiUsualString(GENOME_ARG, "");
 char *track = cgiUsualString(TRACK_ARG, "");
 char *term = cgiUsualString(TERM_ARG, "");
+char *strand = cgiUsualString(STRAND_ARG, "+");
+if (!*strand)
+    strand = "+";
 char *chrom = cgiUsualString(CHROM_ARG, "");
-int start = cgiOptionalInt(START_ARG, 0);
-int end = cgiOptionalInt(END_ARG, 0);
+int start = stripToInt(cgiUsualString(START_ARG, NULL));
+int end = stripToInt(cgiUsualString(END_ARG, NULL));
 char rootName[HDB_MAX_TABLE_STRING];
 char parsedChrom[HDB_MAX_CHROM_STRING];
 char *trackType[4] = {NULL,NULL,NULL,NULL};
@@ -39,7 +39,7 @@ time_t modified = 0, genomeMod = 0, trackMod = 0;
 AllocVar(thisTime);
 AllocVar(latestTime);
 // list information about all active genome databases
-MJP(2); verbose(2,"cmd=[%s] genome=[%s] track=[%s] chrom=[%s]\n", cmd, genome, track, chrom);
+MJP(2); verbose(2,"cmd=[%s] genome=[%s] track=[%s] pos=[%s:%c:%d-%d]\n", cmd, genome, track, chrom, *strand, start, end);
 if (*genome)
     {
     genomeMod = validateGenome(genome);
@@ -190,10 +190,15 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 	else if (sameOk(RANGE_CMD, cmd))
 	    {
 	    typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
-	    if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  // need to test table type is supported format
+	    // handle different track types
+	    if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  
 		{
 		b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
 		printBed(genome, track, tdb->type, chrom, start, end, ci->size, hti, n, b, format, modified);
+		}
+	    else if (sameOk(trackType[0], "wigMaf"))  
+		{
+		printMaf(genome, track, chrom, ci->size, start, end, strand);
 		}
 	    else
 		{
