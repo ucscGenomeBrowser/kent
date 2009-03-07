@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.164 2009/03/07 23:04:19 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.165 2009/03/07 23:24:29 mikep Exp $
 
 use warnings;
 use strict;
@@ -825,7 +825,7 @@ sub validateCsfasta
     my $state = 'header';
     my $seqName;
     my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+.*", NEXT => 'seq'},
-                  seq => {REGEX => "^T\\d+", NEXT => 'header'},
+                  seq => {REGEX => "^[GT]\\d+", NEXT => 'header'},
                   };
     while(<$fh>) {
         chomp;
