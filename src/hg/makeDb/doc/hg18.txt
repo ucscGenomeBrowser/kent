@@ -16514,6 +16514,7 @@ hgLoadBed -sqlTable=cgapSage.sql -tab hg18 cgapSage final.bed
 #########################################################################
 # HapMap SNPs (DONE 2007-05-23 Andy)
 # rel22
+# OBSOLETED by Phase II+III SNPs 3/09 angie (see HAPMAP REL27 GENOTYPES)
 ssh hgwdev
 bash
 cd /cluster/data/hg18/bed
@@ -22268,85 +22269,22 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 
     ssh kolossus
     cd /cluster/data/hg18/bed/snp129Ortho
-    # Here is a script that looks up the base value in the ortho species
-    # and swizzles columns to prepare for the joining and re-swizzling
-    # of both ortho species' columns into the final product.  If it is
-    # used more than once, should be checked in, perhaps in hg/snp/snpLoad.
-    cat > getOrthoSeq.pl <<'_EOF_'
-#!/usr/bin/env perl
-# Dig up orthologous alleles and swizzle columns so the glommed name that
-# includes human position info etc. is first.  It will be used as a key for
-# joining up multiple other-species' ortho data.  Also swizzle columns so
-# that the remaining columns are in order of appearance in the final result,
-# snp129OrthoPanTro2RheMac2.  Upcase ortho alleles for consistency w/dbSNP.
-use warnings;
-use strict;
-
-my $twoBitFName = shift @ARGV
-  || die "usage: getOrthoSeq.pl orthoDb.2bit [file(s)]\n";
-
-sub getOChrSeq($$) {
-  # Slurp in fasta sequence using twoBitToFa.
-  my ($twoBitFName, $oChr) = @_;
-  open(P, "twoBitToFa -noMask $twoBitFName -seq=$oChr stdout |")
-    || die "Can't open pipe from twoBitToFa $twoBitFName -seq=$oChr: $!\n";
-  <P> =~ /^>\w+/
-    || die "Doesn't look like we got fasta -- first line is this:\n$_";
-  # From man perlfaq5: trick to slurp entire contents:
-  my $c = 0;
-  my $seq = do { local $/; my $data = <P>; $c = ($data =~ s/\n//g); $data; };
-  close(P);
-  return $seq;
-}
-
-my %rc = ( "a" => "t", "c" => "g", "g" => "c", "t" => "a",
-           "A" => "T", "C" => "G", "G" => "C", "T" => "A", );
-sub revComp($) {
-  # Reverse-complement fasta input.  (Pass through non-agtc chars.)
-  my ($seq) = @_;
-  my $rcSeq = reverse $seq;
-  for (my $i = 0;  $i < length($rcSeq);  $i++) {
-    my $base = substr($rcSeq, $i, 1);
-    my $cBase = $rc{$base} || $base;
-    substr($rcSeq, $i, 1, $cBase);
-  }
-  return $rcSeq;
-}
-
-my $prevOChr;
-my ($oChrSeq, $oChrSize);
-while (<>) {
-  chomp;
-  my ($oChr, $oStart, $oEnd, $nameGlom, undef, $oStrand) = split;
-  if (! defined $prevOChr || $oChr ne $prevOChr) {
-    $oChrSeq = &getOChrSeq($twoBitFName, $oChr);
-    $oChrSize = length($oChrSeq);
-  }
-  die "Coords out of range, input line $.: $oEnd > $oChr size $oChrSize\n\t"
-    if ($oEnd > $oChrSize);
-  my $oAllele = substr($oChrSeq, $oStart, $oEnd - $oStart);
-  $oAllele = &revComp($oAllele) if ($oStrand eq "-");
-  print join("\t", $nameGlom, $oChr, $oStart, $oEnd, $oAllele, $oStrand) .
-        "\n";
-  $prevOChr = $oChr;
-}
-'_EOF_'
-    # << emacs
-    chmod a+x getOrthoSeq.pl
+    # Note: the formerly inlined script getOrthoSeq.pl has been checked in
+    # as kent/src/hg/snp/snpLoad/getOrthoSeq.pl.
 
     # Concatenate the chimp results, sorting by chimp pos in order to
-    # efficiently access 2bit sequence in ./getOrthoSeq.  The output of
+    # efficiently access 2bit sequence in getOrthoSeq.  The output of
     # that is then sorted by the glommed human info field, so that we
     # can use join to combine chimp and macaque results in the next step.
     # Ditto for macaque and orangutan.
     sort -k1,1 -k2n,2n run.liftOChimp/out/panTro2.chunk*.bed \
-    | ./getOrthoSeq.pl /cluster/data/panTro2/panTro2.2bit \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/panTro2/panTro2.2bit \
     | sort > panTro2.orthoGlom.txt
     sort -k1,1 -k2n,2n run.liftOPon/out/ponAbe2.chunk*.bed \
-    | ./getOrthoSeq.pl /cluster/data/ponAbe2/ponAbe2.2bit \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/ponAbe2/ponAbe2.2bit \
     | sort > ponAbe2.orthoGlom.txt
     sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
-    | ./getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
     | sort > rheMac2.orthoGlom.txt
     # The whole pipeline takes ~5-7 minutes each.
     wc -l panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac2.orthoGlom.txt
@@ -26790,15 +26728,17 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 
 
 #############################################################################
-# HGDP HETEROZYGOSITY (DONE 2/12/09 angie)
+# HGDP HETEROZYGOSITY (DONE 2/12/09 angie, except for Bantu 3/02/09)
     mkdir /hive/data/genomes/hg18/bed/hgdpHzy
     cd /hive/data/genomes/hg18/bed/hgdpHzy
     foreach continent (african americas easia european mideast oceania sasia)
       wget --timestamping http://hgdp.uchicago.edu/data/hzy/$continent.gff.gz
     end
-    foreach continent (african americas easia european mideast oceania sasia)
+    wget --timestamping http://hgdp.uchicago.edu/data/hzy/allbantu.hzy.gff.gz
+#*** waiting to hear back from Joe about whether that's the right file
+    foreach continent (african allbantu americas easia european mideast oceania sasia)
       set bedGraph = `echo $continent \
-                      | sed -re 's/can$/ca/; s/pean$/pe/; s/asia/Asia/; \
+                      | sed -re 's/can$/ca/; s/pean$/pe/; s/asia/Asia/; s/allbantu/bantu/; \
                                  s/(.*)/hgdpHzy\u\1.bedGraph/'`
       echo $bedGraph
       zcat $continent.gff.gz \
@@ -26810,8 +26750,10 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     foreach f (*.bedGraph)
       hgLoadBed hg18 $f:r $f -bedGraph=4
     end
-    # All 7 have same size:
+    # All have same size:
 #Loaded 640676 elements of size 4
+    # except for Bantu:
+#Loaded 640698 elements of size 4
 
 
 #############################################################################
@@ -26835,7 +26777,7 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
       wget --timestamping \
         http://hgdp.uchicago.edu/data/iHS/smoothed$continent.iHS.gff.gz
       set bedGraph = `echo $continent \
-                      | sed -re 's/Bantu/Africa/; s/pean$/pe/; s/\.Asian?/Asia/; \
+                      | sed -re 's/pean$/pe/; s/\.Asian?/Asia/; \
                                  s/MiddleEast/Mideast/; s/(.*)/hgdpIhs\1.bedGraph/'`
       echo $bedGraph
       zcat smoothed$continent.iHS.gff.gz \
@@ -26846,7 +26788,7 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     foreach f (*.bedGraph)
       hgLoadBed hg18 $f:r $f -bedGraph=4
     end
-#Reading hgdpIhsAfrica.bedGraph
+#Reading hgdpIhsBantu.bedGraph
 #Loaded 540438 elements of size 4
 #Reading hgdpIhsAmericas.bedGraph
 #Loaded 422167 elements of size 4
@@ -26870,8 +26812,7 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
       wget --timestamping \
         http://hgdp.uchicago.edu/data/XPEHH/$continent.xpehh.forbrowser.gff.gz
       set bedGraph = `echo $continent \
-                      | sed -re 's/Bantu/Africa/; s/\.Asia?/Asia/; \
-                                 s/(.*)/hgdpXpehh\1.bedGraph/'`
+                      | sed -re 's/\.Asia?/Asia/; s/(.*)/hgdpXpehh\1.bedGraph/'`
       echo $bedGraph
       zcat $continent.xpehh.forbrowser.gff.gz \
       | awk 'BEGIN{OFS="\t";} {print $1, ($4-1), $5, $6;}' \
@@ -26880,7 +26821,7 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     foreach f (*.bedGraph)
       hgLoadBed hg18 $f:r $f -bedGraph=4
     end
-#Reading hgdpXpehhAfrica.bedGraph
+#Reading hgdpXpehhBantu.bedGraph
 #Loaded 636680 elements of size 4
 #Reading hgdpXpehhAmericas.bedGraph
 #Loaded 636143 elements of size 4
@@ -26894,6 +26835,287 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 #Loaded 637418 elements of size 4
 #Reading hgdpXpehhSAsia.bedGraph
 #Loaded 636773 elements of size 4
+
+
+#############################################################################
+# HAPMAP REL22 RECOMBINATION RATES (PHASE II)  (DONE 2/24/09 angie)
+    mkdir -p /hive/data/outside/hapmap/recombination/2008-03_rel22_B36/rates
+    cd /hive/data/outside/hapmap/recombination/2008-03_rel22_B36/
+    wget --timestamping \
+      ftp://ftp.hapmap.org/pub/hapmap/public/recombination/2008-03_rel22_B36/00README.txt
+    cd rates
+    wget --timestamping \
+      ftp://ftp.hapmap.org/pub/hapmap/public/recombination/2008-03_rel22_B36/rates/\*
+
+    # Make bedGraph-formatted files.
+    mkdir -p /hive/data/genomes/hg18/bed/hapmap/recombination/2008-03_rel22_B36
+    cd /hive/data/genomes/hg18/bed/hapmap/recombination/2008-03_rel22_B36
+    cp /dev/null hapmapRecombRate.bed
+    foreach f (/hive/data/outside/hapmap/recombination/2008-03_rel22_B36/rates/*.txt)
+      set chr = `echo $f:t:r | sed -e 's/^.*chr/chr/; s/_b36.*//;'`
+      echo $f $chr
+      perl -wpe 's/^position .*\n// && next; \
+                 m/^(\d+) (\d+\.?\d*) .*/ || die $_; $end=$1; $rate=$2; \
+                 $start=$end-100 unless (defined $start); \
+                 $_ = "'$chr'\t$start\t$end\t$rate\n";  $start = $end;' \
+        $f >> hapmapRecombRate.bedGraph
+    end
+    # Some items are over the 10Mbase wiggle item size limit, so use bedGraph.
+    time hgLoadBed hg18 hapmapRecombRate hapmapRecombRate.bedGraph -bedGraph=4
+#Loaded 3281323 elements of size 4
+#14.688u 1.796s 0:31.99 51.4%    0+0k 0+0io 0pf+0w
+
+    # There are >3M items...  try bigWig!  :)
+    wigToBigWig hapmapRecombRate.bedGraph /hive/data/genomes/hg18/chrom.sizes \
+      hapmapRecombRate.bw
+    ln -s `pwd`/hapmapRecombRate.bw /gbdb/hg18/bbi/
+    hgsql hg18 -e 'drop table if exists hapmapRecombRateBW; \
+            create table hapmapRecombRateBW (fileName varchar(255) not null); \
+            insert into hapmapRecombRateBW values ("/gbdb/hg18/bbi/hapmapRecombRate.bw");'
+
+
+#############################################################################
+# HAPMAP REL27 GENOTYPES (MERGED PHASE II+III)  (DONE 2/25/09 angie)
+    # First, download release to /hive/data/outside...
+    mkdir -p /hive/data/outside/hapmap/genotypes/2009-02_phaseII+III/{excluded,forward}
+    cd /hive/data/outside/hapmap/genotypes/2009-02_phaseII+III
+    wget --timestamping \
+      ftp://ftp.hapmap.org/pub/hapmap/public/genotypes/2009-02_phaseII+III/00README.txt
+    cd excluded
+    wget --timestamping \
+      ftp://ftp.hapmap.org/pub/hapmap/public/genotypes/2009-02_phaseII+III/excluded/\*
+    cd ../forward
+    wget --timestamping \
+      ftp://ftp.hapmap.org/pub/hapmap/public/genotypes/2009-02_phaseII+III/forward/\*
+
+    # This directory's README refers to the README from the
+    # phaseIII-only 2009_01, which gives the file format and explains
+    # the population codes:
+    wget --timestamping -o 00README_2009-01_phaseIII.txt \
+      ftp://ftp.hapmap.org/pub/hapmap/public/genotypes/2009-01_phaseIII/00README.txt
+
+    # For details page... this is Coriell's NHGRI panel (all HapMap except 
+    # CEPH): http://ccr.coriell.org/Sections/Collections/NHGRI/?SsId=11
+    # http://www.broad.mit.edu/mpg/hapmap3/
+    # Broad, BCM and Sanger have a nice phase3 writeup.  Here is Broad's
+    # copy: http://www.broad.mit.edu/mpg/hapmap3/
+
+    # Now translate those into hapmapSnps* tables.
+    # NOTE FOR NEXT TIME: make this a cluster job.  It takes ~half hour each pop!
+    # Could run the script on each downloaded file as a separate job, and then
+    # concatenate results (or just feed chr*_$pop to hgLoadBed).
+    mkdir -p /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III
+    cd /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III
+    set sourceDir = /hive/data/outside/hapmap/genotypes/2009-02_phaseII+III/forward
+    foreach pop (ASW CEU CHB CHD GIH JPT LWK MEX MKK TSI YRI)
+      echo $pop
+      zcat $sourceDir/genotypes_chr*_${pop}_r27_nr.b36_fwd.txt.gz \
+      | perl -wpe 'chomp; \
+          if (/^rs# alleles c\w+ pos s\w+ a\w+# c\w+ protLSID assayLSID panelLSID QCcode NA/) { \
+            $_ = "";  # skip header lines  \
+          } elsif (s/^(rs\d+) ([ACGT])\/([ACGT]) (chr\w+) (\d+) \+ ncbi_[bB]?36 .* QC\+ //) { \
+            ($rsId, $obs1, $obs2, $chr, $end) = ($1, $2, $3, $4, $5); \
+            %compl = (A=>"T", C=>"G", G=>"C", T=>"A"); \
+            %hom = ();  %het = (); \
+      # NOTE: one trouble-maker (other pop files have A/C with AC genotypes): \
+            if ($rsId eq "rs7059622" && "'$pop'" eq "YRI") { warn "Tweaking YRI rs7059622.\n"; } \
+            foreach my $al (split()) { \
+              next if ($al eq "NN"); \
+              $al =~ /^([ACGT])([ACGT])$/ || die "Unrecognized allele string $al"; \
+              ($a1, $a2) = ($1, $2); \
+      # NOTE: one trouble-maker (other pop files have A/C with AC genotypes): \
+              if ($rsId eq "rs7059622" && "'$pop'" eq "YRI") \
+                { $a1 = $compl{$a1}; $a2 = $compl{$a2}; } \
+      # The error that the trouble-maker triggered: \
+              if (($a1 !~ /^[$obs1$obs2]$/) || ($a2 !~ /^[$obs1$obs2]$/)) \
+                { die "$rsId (${chr}_'$pop'): obs $obs1/$obs2 !~ $a1$a2!\n\t"; } \
+              if ($a1 eq $a2) { $hom{$a1}++; } else { $het{$a1}++; $het{$a2}++; } \
+            } \
+            $start = $end - 1; \
+            $hom1 = $hom{$obs1} || 0; $hom2 = $hom{$obs2} || 0; \
+            $het = $het{$obs1} || 0;  $het2 = $het{$obs2} || 0; \
+            $score = (1000 * (2*$hom2 + $het) / (2*($hom1 + $hom2 + $het))); \
+            if ($score >= 500) { $score = 1000 - $score; } \
+            $score = int($score + 0.5); \
+            if ($het != $het2) { die "het{$obs1} ($het{$obs1}) != het{$obs2} ($het{$obs2})"; } \
+            $_ = "$chr\t$start\t$end\t$rsId\t$score\t+\t$obs1/$obs2\t$obs1\t$hom1\t$obs2\t$hom2\t$het\n"; \
+          } else { \
+            die "Unrecognized format:\n$_\n\t"; \
+          }' > hapmapSnps$pop.bed
+    end
+    wc -l hapmapSnps*.bed
+#   1561453 hapmapSnpsASW.bed
+#   4030774 hapmapSnpsCEU.bed
+#   4052336 hapmapSnpsCHB.bed
+#   1306196 hapmapSnpsCHD.bed
+#   1407877 hapmapSnpsGIH.bed
+#   4052423 hapmapSnpsJPT.bed
+#   1529764 hapmapSnpsLWK.bed
+#   1410265 hapmapSnpsMEX.bed
+#   1537638 hapmapSnpsMKK.bed
+#   1419921 hapmapSnpsTSI.bed
+#   3984356 hapmapSnpsYRI.bed
+    foreach pop (ASW CEU CHB CHD GIH JPT LWK MEX MKK TSI YRI)
+      hgLoadBed hg18 hapmapSnps$pop hapmapSnps$pop.bed -renameSqlTable \
+        -sqlTable=$HOME/kent/src/hg/lib/hapmapSnps.sql
+    end
+#Reading hapmapSnpsASW.bed
+#Loaded 1561453 elements of size 12
+#Reading hapmapSnpsCEU.bed
+#Loaded 4030774 elements of size 12
+#Reading hapmapSnpsCHB.bed
+#Loaded 4052336 elements of size 12
+#Reading hapmapSnpsCHD.bed
+#Loaded 1306196 elements of size 12
+#Reading hapmapSnpsGIH.bed
+#Loaded 1407877 elements of size 12
+#Reading hapmapSnpsJPT.bed
+#Loaded 4052423 elements of size 12
+#Reading hapmapSnpsLWK.bed
+#Loaded 1529764 elements of size 12
+#Reading hapmapSnpsMEX.bed
+#Loaded 1410265 elements of size 12
+#Reading hapmapSnpsMKK.bed
+#Loaded 1537638 elements of size 12
+#Reading hapmapSnpsTSI.bed
+#Loaded 1419921 elements of size 12
+#Reading hapmapSnpsYRI.bed
+#Loaded 3984356 elements of size 12
+    rm bed.tab; nice gzip *.bed
+
+
+#############################################################################
+# HAPMAP REL27 ORTHOLOGOUS ALLELES (DONE 3/4/09 angie)
+    # Similar procedure to snp129Ortho, but we make one table per species
+    # because they are independent subtracks of HapMap SNPs.
+    cd /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III
+    # Glom all human info that we need for the final table onto the
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|strand
+    awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $7 "|" $6, \
+               0, $6;}' \
+      hapmapSnps???.bed \
+    | sort -u -k1,1 -k2n,2n \
+      > hapmapSnpsForLiftOver.bed
+    wc -l hapmapSnpsForLiftOver.bed
+#4165831 hapmapSnpsCombined.bed
+
+    # Orthologous allele locations:
+    mkdir run.liftOChimp
+    cd run.liftOChimp
+    mkdir split out
+    splitFile ../hapmapSnpsForLiftOver.bed 25000 split/chunk
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToPanTro2.over.chain.gz \
+        \{check out exists out/panTro2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    ssh pk
+    cd /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III/run.liftOChimp
+    para make jobList
+#Completed: 167 of 167 jobs
+#CPU time in finished jobs:      31364s     522.74m     8.71h    0.36d  0.001 y
+#IO & Wait Time:                   800s      13.33m     0.22h    0.01d  0.000 y
+#Average job time:                 193s       3.21m     0.05h    0.00d
+#Longest finished job:             431s       7.18m     0.12h    0.00d
+#Submission to last job:           442s       7.37m     0.12h    0.01d
+    mkdir ../run.liftOMac
+    cd ../run.liftOMac
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToRheMac2.over.chain.gz \
+        \{check out exists out/rheMac2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 167 of 167 jobs
+#CPU time in finished jobs:       2482s      41.36m     0.69h    0.03d  0.000 y
+#IO & Wait Time:                  1361s      22.69m     0.38h    0.02d  0.000 y
+#Average job time:                  23s       0.38m     0.01h    0.00d
+#Longest finished job:              33s       0.55m     0.01h    0.00d
+#Submission to last job:            97s       1.62m     0.03h    0.00d
+
+    # Concatenate the liftOver results, sorting by ortho pos in order to
+    # efficiently access 2bit sequence in getOrthoSeq.  The output of
+    # that is swizzled so that a glom of ortho coords is the first column,
+    # and then we sort by that for joining with base quality info.
+    # Ditto for macaque.  ~5 minutes per species:
+    cd /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III
+    sort -k1,1 -k2n,2n run.liftOChimp/out/panTro2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /hive/data/genomes/panTro2/panTro2.2bit \
+    | awk 'BEGIN{OFS="\t";} {print $2 ":" $3 ":" $4, $5, $6, $1;}' \
+    | sort > panTro2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /hive/data/genomes/rheMac2/rheMac2.2bit \
+    | awk 'BEGIN{OFS="\t";} {print $2 ":" $3 ":" $4, $5, $6, $1;}' \
+    | sort > rheMac2.orthoGlom.txt
+    wc -l panTro2.orthoGlom.txt rheMac2.orthoGlom.txt
+#  4057739 panTro2.orthoGlom.txt
+#  3750076 rheMac2.orthoGlom.txt
+    # Get base qualities -- ~12-16min per species.
+    cut -f 1 panTro2.orthoGlom.txt | sed -e 's/:/\t/g' \
+    | hgWiggle -db=panTro2 -lift=1 -doAscii -bedFile=stdin quality \
+    | varStepToBedGraph.pl stdin \
+    | awk 'BEGIN{OFS="\t";} {print $1 ":" $2 ":" $3, int($4+0.5);}' \
+    | sort > panTro2.baseQuals.txt
+#Processed 4003968 lines input, 4003685 data lines, 47 variable step declarations
+    cut -f 1 rheMac2.orthoGlom.txt | sed -e 's/:/\t/g' \
+    | hgWiggle -db=rheMac2 -lift=1 -doAscii -bedFile=stdin quality \
+    | varStepToBedGraph.pl stdin \
+    | awk 'BEGIN{OFS="\t";} {print $1 ":" $2 ":" $3, int($4+0.5);}' \
+    | sort > rheMac2.baseQuals.txt
+#Processed 3749772 lines input, 3749645 data lines, 21 variable step declarations
+
+    # Join the allele-glom with the base qual-glom and swizzle columns into
+    # the right order for a hapmapAllelesOrtho table.
+    join -a 1 -e 0 panTro2.orthoGlom.txt panTro2.baseQuals.txt \
+    | perl -wpe 'chomp; ($oG, $oA, $oStr, $hG, $bQ) = split; \
+        ($oC, $oS, $oE) = split(":", $oG); \
+        ($rs, $hC, $hS, $hE, $hO, $hStr) = split(/\|/, $hG); \
+        unless (defined $bQ) { \
+          if ($oC =~ /^chr(21|Y|Y_random)$/) { $bQ = 98; } # per panTro2 quality track desc \
+          elsif ($oC eq "chrM") { $bQ = 0; } \
+          else { die "missing qual for $oC: $_\n\t"; } } \
+        $_ = "$hC\t$hS\t$hE\t$rs\t$bQ\t$hStr\t\t$hO\t$oC\t$oS\t$oE\t$oStr\t$oA\n";' \
+    | sort -k1,1 -k2n,2n \
+        > hapmapAllelesChimp.bed
+    wc -l hapmapAllelesChimp.bed
+#4057739 hapmapAllelesChimp.bed
+    join -a 1 -e 0 rheMac2.orthoGlom.txt rheMac2.baseQuals.txt \
+    | perl -wpe 'chomp; ($oG, $oA, $oStr, $hG, $bQ) = split; \
+        ($oC, $oS, $oE) = split(":", $oG); \
+        ($rs, $hC, $hS, $hE, $hO, $hStr) = split(/\|/, $hG); \
+        unless (defined $bQ) { die "missing qual for $oC: $_\n\t"; } \
+        $_ = "$hC\t$hS\t$hE\t$rs\t$bQ\t$hStr\t\t$hO\t$oC\t$oS\t$oE\t$oStr\t$oA\n";' \
+    | sort -k1,1 -k2n,2n \
+        > hapmapAllelesMacaque.bed
+    wc -l hapmapAllelesMacaque.bed
+#3750076 hapmapAllelesMacaque.bed
+
+    # Load tables.
+    cd /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III
+    hgLoadBed hg18 hapmapAllelesChimp hapmapAllelesChimp.bed \
+      -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/hapmapAllelesOrtho.sql
+#Loaded 4057739 elements of size 13
+    hgLoadBed hg18 hapmapAllelesMacaque hapmapAllelesMacaque.bed \
+      -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/hapmapAllelesOrtho.sql
+
+
+#############################################################################
+# HAPMAP REL27 SUMMARY FOR HGTRACKS FILTERING (DONE 3/5/09 angie)
+    cd /hive/data/genomes/hg18/bed/hapmap/genotypes/2009-02_phaseII+III
+    time hapmapPhaseIIISummary .
+#115.244u 5.009s 2:10.08 92.4%   0+0k 0+0io 2pf+0w
+    time hgLoadBed hg18 hapmapPhaseIIISummary hapmapPhaseIIISummary.bed \
+      -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/hapmapPhaseIIISummary.sql
+#Loaded 4166007 elements of size 18
+#33.401u 3.275s 1:46.95 34.2%    0+0k 0+0io 0pf+0w
 
 
 #############################################################################
