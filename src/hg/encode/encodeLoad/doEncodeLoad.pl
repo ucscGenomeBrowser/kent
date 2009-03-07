@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.56 2009/02/13 23:36:19 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.57 2009/03/07 07:22:06 mikep Exp $
 
 # Usage:
 #
@@ -164,7 +164,7 @@ sub loadBed
     HgAutomate::verbose(2, "loadBed ($assembly, $tableName, $fileList, $pushQ)\n");
     if(!$opt_skipLoad) {
         my $catCmd = makeCatCmd("loadBed", $fileList);
-        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir");
         HgAutomate::verbose(2, "loadBed cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
         if(my $err = $safe->exec()) {
@@ -182,7 +182,7 @@ sub loadBedGraph
     HgAutomate::verbose(2, "loadBedGraph ($assembly, $tableName, $fileList, $pushQ)\n");
     if(!$opt_skipLoad) {
         my $catCmd = makeCatCmd("loadBedGraph", $fileList);
-        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
         HgAutomate::verbose(2, "loadBedGraph cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
         if(my $err = $safe->exec()) {
@@ -213,7 +213,7 @@ sub loadBedFromSchema
 	    $fillInArg .= "-minScore=500 " if $tableName =~ /^wgEncodeUwDnaseSeq/;
         }
         my $catCmd = makeCatCmd("loadBedFromSchema", $fileList);
-        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
         HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
 
