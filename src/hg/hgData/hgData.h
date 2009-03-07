@@ -57,6 +57,8 @@
 #define TERM_ARG "term"
 #define CHROM_VAR "{chrom}"
 #define CHROM_ARG "chrom"
+#define STRAND_VAR "{strand}"
+#define STRAND_ARG "strand"
 #define START_VAR "{start}"
 #define START_ARG "start"
 #define END_VAR "{end}"
@@ -130,6 +132,10 @@ char *nullOrVal(char *val);
 
 char *valOrVariable(char *val, char *variable);
 // Return val if not NULL, else return variable
+
+int stripToInt(char *string);
+// Convert a string with digits, commas, and decimals into an integer
+// by stripping the commas and decimals
 
 char *etag(time_t modified);
 // Convert modification time to ETag
@@ -289,6 +295,9 @@ struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *ext
 
 void printBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, time_t modified);
 void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, struct bed *b, char *format, time_t modified);
+
+void printMaf(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand);
+// print maf records which intersect this start-end range
 
 struct coords navigate(int start, int end, int chromSize);
 // Calculate navigation coordinates including window left, window right
