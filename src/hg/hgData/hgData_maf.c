@@ -4,7 +4,7 @@
 #include "maf.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgData_maf.c,v 1.1.2.1 2009/03/07 06:04:27 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_maf.c,v 1.1.2.2 2009/03/08 10:01:55 mikep Exp $";
 
 static struct json_object *jsonAddMafComp(struct json_object *o, struct mafComp *c)
 {
@@ -73,10 +73,6 @@ void printMaf(char *genome, char *track, char *chrom, int chromSize, int start, 
 time_t modified = 0;
 struct mafAli *maf;
 struct json_object *m;
-if (end <= start)
-    errAbort("end before start!");
-if (end > chromSize)
-   errAbort("End past chromSize (%d > %d)", end, chromSize);
 maf = hgMafFrag(genome, track, chrom, start, end, *strand, NULL, NULL);
 m = jsonMafAli(maf);
 mafAliFree(&maf);
