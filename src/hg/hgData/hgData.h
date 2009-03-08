@@ -93,6 +93,7 @@
 #define ERR_NO_CHROM errClientStatus(420, "Request error", "Chrom required")
 #define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in genome %s", (chrom), (db))
 #define ERR_NO_CHROMS_FOUND(db) errClientStatus(420, "Request error", "No chroms found in genome %s", (db))
+#define ERR_START_AFTER_END(start, end) errClientStatus(420, "Request error", "Start position %d after end %d", (start), (end))
 #define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in genome %s", (track), (db))
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in genome %s", (track), (db))
 #define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
