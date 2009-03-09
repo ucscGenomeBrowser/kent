@@ -10,7 +10,7 @@
 #include "hapmapAllelesSummary.h"
 #include "hapmapPhaseIIISummary.h"
 
-static char const rcsid[] = "$Id: hapmapTrack.c,v 1.46 2009/03/09 19:10:16 angie Exp $";
+static char const rcsid[] = "$Id: hapmapTrack.c,v 1.47 2009/03/09 21:17:52 angie Exp $";
 
 // These values are all overwritten in loadFilters() below.
 char *mixedFilter = HAP_FILTER_DEFAULT;
@@ -202,7 +202,10 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
     if (sameString(tg->mapName, orthoTable))
 	{
 	struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
@@ -605,7 +608,10 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
     if (sameString(tg->mapName, orthoTable))
 	{
 	struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
@@ -825,7 +831,10 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
     if (sameString(tg->mapName, orthoTable))
 	{
 	struct hapmapAllelesOrtho *thisItem = item;
@@ -888,7 +897,10 @@ int i;
 char orthoTable[HDB_MAX_TABLE_STRING];
 for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
     if (sameString(tg->mapName, orthoTable))
 	{
 	struct hapmapAllelesOrtho *thisItem = item;
