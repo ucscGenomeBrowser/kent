@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.12 2009/01/24 00:01:17 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.13 2009/03/09 18:35:29 tdreszer Exp $
 
 var debug = false;
 
@@ -42,33 +42,6 @@ function setCheckBoxesThatContain(nameOrId, state, force, sub1)
         clickIt(list[ix],state,force);
     }
     return true;
-}
-
-function getViewsSelected(nameMatches,on)
-{
-// Returns an array of all views that are on or off (hide)
-// views are "select" drop downs containing 'hide','dense',...
-// To be clear, an array of strings with the view suffix are returned.
-// name="broadChromatinChIPSeq_dd_WIN" nameMatches='_dd_' returns 'WIN'
-   var views = new Array();
-
-   if (document.getElementsByTagName) {
-        var list = document.getElementsByTagName('select');
-        var vIx=0;
-        for (var ix=0;ix<list.length;ix++) {
-            var ele = list[ix];
-            var nameIx = ele.name.indexOf(nameMatches);
-            if(nameIx >= 0) {
-                if((on && ele.selectedIndex>0) || (!on && ele.selectedIndex==0)) {
-                    views[vIx] = ele.name.substring(nameIx+nameMatches.length,ele.name.length);
-                    vIx++;
-                }
-            }
-        }
-        if(debug)
-            alert("getViewsSelected() returns "+views);
-   }
-   return( views );
 }
 
 function inputArrayThatMatches(inpType,nameOrId,prefix,suffix)
