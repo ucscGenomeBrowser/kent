@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.166 2009/03/04 01:52:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.167 2009/03/09 18:33:28 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3849,8 +3849,8 @@ int ix;
 struct trackDb *subtrack;
 char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
-#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(title),(tbl),(name),((open)?"on":"off"))
+#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -3894,7 +3894,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         printf("<B>%s</B>\n",membersOfView->values[ix]);
     puts("</TD>");
 
-    safef(objName, sizeof(objName), "%s_dd_%s", parentTdb->tableName,membersOfView->names[ix]);
+    safef(objName, sizeof(objName), "%s.%s.vis", parentTdb->tableName,membersOfView->names[ix]);
     enum trackVisibility tv =
         hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
 
@@ -3920,7 +3920,11 @@ if(makeCfgRows)
             boolean open = cartUsualBoolean(cart,objName,FALSE);
             if(!open && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
                 printf(" style=\"display:none\"");
-            printf("><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>");
+            printf("><TD width=10>&nbsp;</TD>");
+            int ix2=ix;
+            while(0 < ix2--)
+                printf("<TD width=100>&nbsp;</TD>");
+            printf("<TD colspan=%d>",membersOfView->count+1);
             safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
             cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
             if(configurable[ix] != cfgNone)
