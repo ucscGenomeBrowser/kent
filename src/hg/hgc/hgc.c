@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1515 2009/03/09 18:59:59 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1516 2009/03/09 21:43:44 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18571,7 +18571,9 @@ int majorCount = 0;
 int minorCount = 0;
 char *majorAllele = NULL;
 char *minorAllele = NULL;
-char *popCode = table + strlen("hapmapSnps");
+char popCode[4];
+safencpy(popCode, sizeof(popCode), table + strlen("hapmapSnps"), 3);
+popCode[3] = '\0';
 
 genericHeader(tdb, itemName);
 
@@ -18656,12 +18658,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR>");
     printf("<B>Polymorphism type:</B> %s<BR>\n", ortho->observed);
 
-    if (sameString(table, "hapmapAllelesChimp"))
+    if (startsWith("hapmapAllelesChimp", table))
         {
         otherDb = "panTro2";
 	otherDbName = "Chimp";
 	}
-    if (sameString(table, "hapmapAllelesMacaque"))
+    if (startsWith("hapmapAllelesMacaque", table))
         {
         otherDb = "rheMac2";
 	otherDbName = "Macaque";
@@ -21874,12 +21876,14 @@ else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
     }
-else if (startsWith("hapmapSnps", track) && strlen(track) == 13)
+else if (startsWith("hapmapSnps", track) &&
+	 (strlen(track) == 13 ||
+	  (endsWith(track, "PhaseII") && strlen(track) == 20)))
     {
     doHapmapSnps(tdb, item);
     }
-else if (sameString("hapmapAllelesChimp", track) ||
-         sameString("hapmapAllelesMacaque", track))
+else if (startsWith("hapmapAllelesChimp", track) ||
+         startsWith("hapmapAllelesMacaque", track))
     {
     doHapmapOrthos(tdb, item);
     }

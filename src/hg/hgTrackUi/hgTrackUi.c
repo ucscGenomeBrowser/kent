@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.475 2009/03/06 23:19:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.476 2009/03/09 21:42:42 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2022,7 +2022,10 @@ char cartVar[128];
 for (i = 0;  i < popCount;  i++)
     {
     char table[HDB_MAX_TABLE_STRING];
-    safef(table, sizeof(table), "hapmapSnps%s", pops[i]);
+    if (endsWith(tdb->tableName, "PhaseII"))
+	safef(table, sizeof(table), "hapmapSnps%sPhaseII", pops[i]);
+    else
+	safef(table, sizeof(table), "hapmapSnps%s", pops[i]);
     if (sqlTableExists(conn, table))
 	{
 	if (cellCount == 0)
@@ -2356,7 +2359,7 @@ else if (sameString(track, "tfbsConsSites"))
     tfbsConsSitesUi(tdb);
 else if (sameString(track, "CGHBreastCancerUCSF"))
     ucsfdemoUi(tdb);
-else if (sameString(track, "hapmapSnps"))
+else if (startsWith("hapmapSnps", track))
     hapmapSnpsUi(tdb);
 else if (sameString(track, "switchDbTss"))
     switchDbScoreUi(tdb);
