@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1514 2009/03/06 22:59:30 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1515 2009/03/09 18:59:59 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18397,7 +18397,7 @@ if (differentString(summaryItem->allele2, "none"))
 printf("</TABLE>\n");
 
 het = summaryItem->score / 10.0;
-printf("<BR><B>Expected Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
+printf("<BR><B>Expected Heterozygosity (from total allele frequencies):</B> %3.2f%%<BR>\n", het);
 
 
 if (showOrtho && (differentString(summaryItem->chimpAllele, "none") ||
@@ -18500,7 +18500,7 @@ int totalMajorCount = max(totalA1Count, totalA2Count);
 showOneHapmapRow("Total", allele1, allele2, totalMajorAllele, totalMajorCount, totalHaploCount);
 printf("</TABLE>\n");
 
-printf("<BR><B>Heterozygosity (average of all populations' observed het):</B> %3.2f%%<BR>\n",
+printf("<BR><B>Average of populations' observed heterozygosities:</B> %3.2f%%<BR>\n",
        (100.0 * sumHet/popCount));
 
 if (showOrtho)
