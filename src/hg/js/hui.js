@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.20 2009/02/26 03:56:15 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.21 2009/03/09 18:37:42 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -31,21 +31,25 @@ function matSelectViewForSubTracks(obj,view)
             //    $("input.matrixCB").filter(":checked").each( function (i) { matChkBoxNormalize(this); } );
         }
         matEnableSubtrackCheckBoxes(false,view);
+        hideConfigControls(view);
+        //enableViewCfgLink(false,view);  // Could "disable" view cfg when hidden!
     } else {
+        //enableViewCfgLink(true,view);   // Would need to reeanble view cfg when visible
+
         // Make main display dropdown show full if currently hide
-        var trackName = obj.name.substring(0,obj.name.indexOf("_dd_"))
-        var displayDD = document.getElementsByName(trackName);
-        if(displayDD.length >= 1 && displayDD[0].selectedIndex < (displayDD[0].options.length - 1)) { // Composite vis display not already full
-            var list = inputArrayThatMatches('select','name',trackName+"_dd_",'');
+        var trackName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
+        var compositeDD = $("select[name='"+trackName+"']");
+        if($(compositeDD).attr('selectedIndex') < ($(compositeDD).children('option').length - 1)) { // Composite vis display not already full
+            var list = $(".viewDd");
             var maxVis = obj.selectedIndex;
-            for (var ix=0;ix<list.length;ix++) {
-                if(maxVis < list[ix].selectedIndex)
-                    maxVis = list[ix].selectedIndex;
-            }
-            if(displayDD[0].options.length - 1 < maxVis)
-                displayDD[0].selectedIndex = displayDD[0].options.length - 1;
-            else if(displayDD[0].selectedIndex < maxVis)
-                displayDD[0].selectedIndex = maxVis;
+            $(list).each(function (i) {
+                if( maxVis < this.selectedIndex)
+                    maxVis = this.selectedIndex;
+            });
+                 if($(compositeDD).children('option').length - 1 < maxVis)
+                    $(compositeDD).attr('selectedIndex') = $(compositeDD).options.length - 1;
+            else if($(compositeDD).attr('selectedIndex') < maxVis)
+                    $(compositeDD).attr('selectedIndex',maxVis);
         }
         // if matrix used then: essentially reclick all 'checked' matrix checkboxes
         if(viewDDtoSubCB) {
@@ -82,6 +86,24 @@ function matSelectViewForSubTracks(obj,view)
     }
 }
 
+// Obsolete because matCBwithViewDD is not true
+//function getViewNamesSelected(on)
+//{
+//// Returns an array of all views that are on or off (hide)
+//// views are "select" drop downs containing 'hide','dense',...
+//// To be clear, an array of strings with the view name is returned.
+//    var views = new Array();
+//    var list = $(".viewDd");
+//    if(on)
+//        list = $(list).filter("[selectedIndex!=0]")
+//    else
+//        list = $(list).filter("[selectedIndex=0]")
+//    $(list).each( function (i) {
+//        views.push(this.name.substring(this.name.indexOf('.') + 1, this.name.lastIndexOf('.')));
+//    });
+//   return( views );
+//}
+
 function matSetMatrixCheckBoxes(state)
 {
 // Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
@@ -105,7 +127,7 @@ function matSetMatrixCheckBoxes(state)
     }
     //if(matCBwithViewDD) {
     //    if(state) { // further filter by view
-    //        views = getViewsSelected("_dd_",false); // get views (strings) that are off
+    //        views = getViewNamesSelected(false); // get views (strings) that are off
     //        for(var vIx=0;vIx<views.length;vIx++) {
     //            CBs = CBs.not("."+views[vIx]);  // Successively limit list by additional classes.
     //        }
@@ -125,7 +147,7 @@ function matSetSubtrackCheckBoxes(state)
     }
     //if(matCBwithViewDD) {
     //    if(state) { // further filter by view
-    //        views = getViewsSelected("_dd_",false); // get views (strings) that are off
+    //        views = getViewNamesSelected(false); // get views (strings) that are off
     //        for(var vIx=0;vIx<views.length;vIx++) {
     //            CBs = CBs.filter(":not(."+views[vIx]+")");  // Successively limit list by additional classes.
     //        }
@@ -145,7 +167,7 @@ function matEnableSubtrackCheckBoxes(state)
     }
     //if(matCBwithViewDD) {
     //    if(state) { // further filter by view
-    //        views = getViewsSelected("_dd_",false); // get views (strings) that are off
+    //        views = getViewNamesSelected(false); // get views (strings) that are off
     //        for(var vIx=0;vIx<views.length;vIx++) {
     //            CBs = CBs.filter(":not(."+views[vIx]+")");  // Successively limit list by additional classes.
     //        }
@@ -193,17 +215,16 @@ function compositeCfgRegisterOnchangeAction(prefix)
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
     var count=0;
-    var list = inputArrayThatMatches("","name",prefix,"");
+    var list = $("input[name^='"+prefix+"']").not("[name$='.vis']");
+
     for (var ix=0;ix<list.length;ix++) {
         list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
         count++;
     }
-    var list = document.getElementsByTagName('select');
+    var list = $("select[name^='"+prefix+"']").not("[name$='.vis']");
     for (var ix=0;ix<list.length;ix++) {
-        if(list[ix].name.indexOf(prefix) == 0) {
-            list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
-            count++;
-        }
+        list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
+        count++;
     }
 }
 
@@ -238,10 +259,40 @@ function subtrackCfgShow(anchor)
     return true;
 }
 
+function enableViewCfgLink(enable,view)
+{
+// Enables or disables a single configuration link.
+    var link = $('#a_cfg_'+view);
+    if(enable)
+        $(link).attr('href','#'+$(link).attr('id'));
+    else
+        $(link).removeAttr('href');
+}
+
+function enableAllViewCfgLinks()
+{
+    $( ".viewDd").each( function (i) {
+        var view = this.name.substring(this.name.indexOf(".") + 1,lastIndexOf(".vis"));
+        enableViewCfgLink((this.selectedIndex > 0),view);
+    });
+}
+
+function hideConfigControls(view)
+{
+// Will hide the configuration controls associated with one name
+    $("input[name$='"+view+".showCfg']").val("off");      // Set cart variable
+    $("tr[id^='tr_cfg_"+view+"']").css('display','none'); // Hide controls
+}
+
 function showConfigControls(name)
 {
-// Will show configuration controls
+// Will show configuration controls for name= {tableName}.{view}
 // Config controls not matching name will be hidden
+    //if($( ".viewDd[name$='" + name + ".vis']").attr("selectedIndex") == 0) {
+    //    $("input[name$='.showCfg']").val("off");
+    //    $("tr[id^='tr_cfg_']").css('display','none');  // hide cfg controls when view is hide
+    //    return true;
+    //}
     var trs  = $("tr[id^='tr_cfg_']")
     $("input[name$='.showCfg']").val("off"); // Turn all off
     $( trs ).each( function (i) {
@@ -671,9 +722,10 @@ function matChkBoxesNormalized()
     $("input.matrixCB").each( function (i) { matChkBoxNormalize(this); } );
 
     // For each viewDD not selected, disable associated subtracks
-    $('select.viewDd').not('[@selectedIndex]').each( function (i) {
-        var viewClass = this.name.substring(this.name.lastIndexOf("_") + 1);
-        matEnableSubtrackCheckBoxes(false,viewClass); } );
+    $('select.viewDd').not("[selectedIndex]").each( function (i) {
+        var viewClass = this.name.substring(this.name.indexOf(".") + 1,this.name.lastIndexOf("."));
+        matEnableSubtrackCheckBoxes(false,viewClass);
+    });
 }
 
 function showOrHideSelectedSubtracks(inp)
@@ -712,6 +764,7 @@ function matInitializeMatrix()
     if (document.getElementsByTagName) {
         matChkBoxesNormalized();  // Note that this needs to be done when the page is first displayed.  But ideally only on clean cart!
         showOrHideSelectedSubtracks();
+        //enableAllViewCfgLinks();
     }
     else if(debugLevel>2) {
         alert("matInitializeMatrix is unimplemented for this browser)");
