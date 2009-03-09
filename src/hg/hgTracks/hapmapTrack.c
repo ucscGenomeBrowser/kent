@@ -10,7 +10,7 @@
 #include "hapmapAllelesSummary.h"
 #include "hapmapPhaseIIISummary.h"
 
-static char const rcsid[] = "$Id: hapmapTrack.c,v 1.45 2009/03/06 23:19:40 angie Exp $";
+static char const rcsid[] = "$Id: hapmapTrack.c,v 1.46 2009/03/09 19:10:16 angie Exp $";
 
 // These values are all overwritten in loadFilters() below.
 char *mixedFilter = HAP_FILTER_DEFAULT;
@@ -706,6 +706,7 @@ for (i = 0;  i < HAP_ORTHO_COUNT; i++)
 	summary->orthoAlleles[i] != summary->overallMajorAllele)
 	return TRUE;
     if (sameString(orthoFilter[i], "matches minor human allele") &&
+	summary->maxFreq > 0 &&  // make sure minor allele has been observed
 	summary->orthoAlleles[i] != summary->overallMinorAllele)
 	return TRUE;
     /* mismatches */
