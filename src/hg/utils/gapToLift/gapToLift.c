@@ -158,16 +158,18 @@ verbose(2,"#\tfound %d gaps\n", gapCount);
 return (gapList);
 }
 
-static void liftOutLine(FILE *out, char *chr, int start, int end,
+static int liftOutLine(FILE *out, char *chr, int start, int end,
     int count, int chrSize)
 {
 if ((end-start) > 0)
     {
-    fprintf(out, "%d\t%s.%d\t%d\t%s\t%d\n", start, chr,
+    fprintf(out, "%d\t%s.%02d\t%d\t%s\t%d\n", start, chr,
 	count, end-start, chr, chrSize);
     if (bedFile)
-	fprintf(bedFile, "%s\t%d\t%d\t%s.%d\n", chr, start, end, chr, count);
+	fprintf(bedFile, "%s\t%d\t%d\t%s.%02d\n", chr, start, end, chr, count);
+    count += 1;
     }
+return count;
 }
 
 static void gapToLift(char *db, char *outFile)
@@ -201,7 +203,7 @@ for (gap = gapList; gap; gap = gap->next)
 	if (sameWord("no",gap->bridge) || (gap->chromEnd == chrSize))
 	    {
 	    end = gap->chromStart;
-	    liftOutLine(out, gap->chrom, start, end, liftCount++, chrSize);
+	    liftCount = liftOutLine(out, gap->chrom, start, end, liftCount, chrSize);
 	    start = gap->chromEnd;
 	    end = start;
 	    }
@@ -213,8 +215,9 @@ for (gap = gapList; gap; gap = gap->next)
 	if (prevChr && differentWord(prevChr, gap->chrom))
 	    {
 	    if (end < chrSize)
-		liftOutLine(out, prevChr, start, chrSize, liftCount++, chrSize);
+		liftCount = liftOutLine(out, prevChr, start, chrSize, liftCount, chrSize);
 	    }
+	liftCount = 0;
 	chrSize = hashIntVal(cInfoHash, gap->chrom);
 	if (gap->chromStart > 0)
 	    {	/* starting first segment at position 0 */
@@ -223,7 +226,7 @@ for (gap = gapList; gap; gap = gap->next)
 	    /* does the first gap break it ?  Or gap goes to end of chrom. */
 	    if (sameWord("no",gap->bridge) || (gap->chromEnd == chrSize))
 		{
-		liftOutLine(out, gap->chrom, start, end, liftCount++, chrSize);
+		liftCount = liftOutLine(out, gap->chrom, start, end, liftCount, chrSize);
 		start = gap->chromEnd;
 		end = start;
 		}
@@ -238,7 +241,7 @@ for (gap = gapList; gap; gap = gap->next)
     }
 /* potentially a last one */
 if (end < chrSize)
-    liftOutLine(out, prevChr, start, chrSize, liftCount++, chrSize);
+    liftCount = liftOutLine(out, prevChr, start, chrSize, liftCount, chrSize);
 carefulClose(&out);
 sqlDisconnect(&conn);
 }
