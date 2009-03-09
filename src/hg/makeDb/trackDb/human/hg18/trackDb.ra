@@ -294,6 +294,52 @@ longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
 dataVersion rel27
 hapmapPhase III
 
+track hapmapSnpsPhaseII
+compositeTrack on
+shortLabel HapMap SNPs Old
+longLabel Outdated HapMap SNPs (rel22, Phase II genotypes)
+group varRep
+priority 144.49
+visibility hide
+type bed 6 + 
+exonArrows off
+
+    track hapmapSnpsCEUPhaseII
+    subTrack hapmapSnpsPhaseII
+    shortLabel HM r22 SNPs CEU
+    longLabel Outdated HapMap SNPs from the CEU Population (Northern and Western European Ancestry in Utah, US - CEPH)
+    priority 2
+
+    track hapmapSnpsCHBPhaseII
+    subTrack hapmapSnpsPhaseII
+    shortLabel HM r22 SNPs CHB
+    longLabel Outdated HapMap SNPs from the CHB Population (Han Chinese in Beijing, China)
+    priority 3
+
+    track hapmapSnpsJPTPhaseII
+    subTrack hapmapSnpsPhaseII
+    shortLabel HM r22 SNPs JPT
+    longLabel Outdated HapMap SNPs from the JPT Population (Japanese in Tokyo, Japan)
+    priority 6
+
+    track hapmapSnpsYRIPhaseII
+    subTrack hapmapSnpsPhaseII
+    shortLabel HM r22 SNPs YRI
+    longLabel Outdated HapMap SNPs from the YRI Population (Yoruba in Ibadan, Nigeria)
+    priority 11
+
+    track hapmapAllelesChimpPhaseII
+    subTrack hapmapSnpsPhaseII
+    shortLabel Chimp Alleles
+    longLabel Outdated HapMap SNPs Orthologous Alleles from Chimp (panTro2)
+    priority 100
+
+    track hapmapAllelesMacaquePhaseII
+    subTrack hapmapSnpsPhaseII
+    shortLabel Macaque Alleles
+    longLabel Outdated HapMap SNPs Orthologous Alleles from Macaque (rheMac2)
+    priority 101
+
 track hapmapLd
 compositeTrack on
 shortLabel HapMap LD Unph.
@@ -353,6 +399,17 @@ type ld2
     shortLabel Ph JPT+CHB
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
+
+track hapmapRecombRateBW
+shortLabel Hapmap Recomb BW
+longLabel BigWig - Hapmap Recombination Rate (phase II, release 22) - BigWig
+group varRep
+priority 144.492
+visibility hide
+type bigWig 0 90.6690141023
+#viewLimits 0 90 -- ignored for bigWig!
+autoScaleDefault Off
+maxHeightPixels 128:32:11
 
 track hapmapRecombRate
 shortLabel Hapmap Recomb
@@ -2005,6 +2062,7 @@ chimpOrangMacOrthoTable snp129OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
 macaqueDb rheMac2
+hapmapPhase III
 type bed 6 +
 
 track snp128
