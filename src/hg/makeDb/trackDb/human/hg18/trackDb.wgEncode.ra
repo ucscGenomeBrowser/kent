@@ -3653,7 +3653,7 @@ shortLabel RIKEN CAGE Loc
 longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
+subGroup2 cellType Cell_Line K562=K562 prostate=Prostate GM12878=GM12878
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ longNonPolyA=Long_PolyA- total=Total_RNA
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
@@ -4423,6 +4423,188 @@ wgEncode 1
     localization nucleolus
     cell K562
     color 46,0,184
+
+    track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 cytosol 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cell cytosol using )
+    subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+    type bedGraph 4
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 47
+    noInherit on
+    configurable on
+    rnaExtract longNonPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 cytosol 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cell cytosol using )
+    subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+    type bedGraph 4
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 46
+    noInherit on
+    configurable on
+    rnaExtract longNonPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 nucleus 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cell nucleus using )
+    subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+    type bedGraph 4
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 47
+    noInherit on
+    configurable on
+    rnaExtract longNonPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 nucleus 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cell nucleus using )
+    subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+    type bedGraph 4
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 46
+    noInherit on
+    configurable on
+    rnaExtract longNonPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 cytosol 
+    longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in GM12878 cell cytosol using )
+    subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+    type bed 6
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 50
+    noInherit on
+    configurable on
+    rnaExtract longNonPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 nucleus 
+    longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in GM12878 cell nucleus using )
+    subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+    type bed 6
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 50
+    noInherit on
+    configurable on
+    rnaExtract longNonPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeRikenCagePlusRawSignalGm12878NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 nucleus  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longNonPolyA in GM12878 cell nucleus using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+    type wig 1.00 65151.00
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 48
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longNonPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeRikenCageMinusRawSignalGm12878NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 nucleus  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longNonPolyA in GM12878 cell nucleus using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+    type wig 1.00 65526.00
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 49
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longNonPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeRikenCagePlusRawSignalGm12878CytosolLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 cytosol  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longNonPolyA in GM12878 cell cytosol using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+    type wig 1.00 63912.00
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 48
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longNonPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeRikenCageMinusRawSignalGm12878CytosolLongnonpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longNonPolyA GM12878 cytosol  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longNonPolyA in GM12878 cell cytosol using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+    type wig 1.00 64907.00
+    dateSubmitted 2009-03-08
+    dateUnrestricted 2009-12-08
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 49
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longNonPolyA
+    localization cytosol
+    cell GM12878
 
 
 # U. Washington DNAse-seq (wrangler: mikep)
