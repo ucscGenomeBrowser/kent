@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.112 2009/01/28 21:44:44 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.113 2009/03/09 20:53:19 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2594,7 +2594,7 @@ for(i=0;i<=l;i++)
 safef(s, l+1, "%s", ss);
 }
 
-#define BLSIZE 4096  /* size of strings for processing big lists of tables and files */
+#define BLSIZE 32768  /* size of strings for processing big lists of tables and files */
 
 void doShowSizes()
 /* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
