@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1557 2009/03/03 19:38:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1558 2009/03/09 18:34:55 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -195,20 +195,25 @@ for (group = groupList; group != NULL; group = group->next)
             struct trackDb *tdb = track->tdb;
 	    if (changeVis == -1)
                 {
+                if(tdbIsComposite(tdb))
+                    {
+                    safef(pname, sizeof(pname),"%s.*",track->mapName); //to remove all settings associated with this composite!
+                    cartRemoveLike(cart,pname);
+                    struct track *subTrack;
+                    for(subTrack = track->subtracks;subTrack != NULL; subTrack = subTrack->next)
+                        {
+                        subTrack->visibility = tdb->visibility;
+                        cartRemove(cart, subTrack->mapName);
+                        }
+                    }
+
                 /* restore defaults */
                 if (tdbIsSuperTrackChild(tdb) || tdbIsCompositeChild(tdb))
                     {
-                    //if(tdb->parentName == NULL || differentString(tdb->parentName,tdb->parent->tableName))
-                    //    tdb->parentName = tdb->parent->tableName;
-                    /* removing the supertrack parent's cart variables
-                     * restores defaults */
-                    //assert(tdb->parentName != NULL);
-                    //cartRemove(cart, tdb->parentName);
                     assert(tdb->parent != NULL && tdb->parent->tableName);
                     cartRemove(cart, tdb->parent->tableName);
                     if (withPriorityOverride)
                         {
-                        //safef(pname, sizeof(pname), "%s.priority",tdb->parentName);
                         safef(pname, sizeof(pname), "%s.priority",tdb->parent->tableName);
                         cartRemove(cart, pname);
                         }
@@ -1495,7 +1500,7 @@ if(tdbIsCompositeChild(subtrack->tdb))
         {
         int len = strlen(subtrack->tdb->parent->tableName) + strlen(stView) + 10;
         char *ddName = needMem(len);
-        safef(ddName,len,"%s_dd_%s",subtrack->tdb->parent->tableName,stView); // If not found takes "usual"
+        safef(ddName,len,"%s.%s.vis",subtrack->tdb->parent->tableName,stView);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
             vis = hTvFromString(fromParent);
@@ -2181,7 +2186,7 @@ else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
     {
     if (stringIn("2micron", chrName))
 	{
-	char *fixupName = replaceChars(chrName, "2micron", "2-micron"); 
+	char *fixupName = replaceChars(chrName, "2micron", "2-micron");
 	name = fixupName;
 	}
     }
