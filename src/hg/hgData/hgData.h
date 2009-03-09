@@ -89,7 +89,7 @@
 #define ERR_NO_TRACK	errClientStatus(420, "Request error", "Track required")
 #define ERR_NO_GENOME_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to genome database %s", (db))
 #define ERR_NO_GENOMES_FOUND errClientStatus(420, "Request error", "No genome databases found") // maybe this should be a server error
-#define ERR_GENOME_NOT_FOUND(db) errClientStatus(420, "Request error", "Genome %s not found", (db))
+#define ERR_GENOME_NOT_FOUND(db) errClientStatus(404, "Request error", "Genome %s not found", (db))
 #define ERR_NO_CHROM errClientStatus(420, "Request error", "Chrom required")
 #define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in genome %s", (chrom), (db))
 #define ERR_NO_CHROMS_FOUND(db) errClientStatus(420, "Request error", "No chroms found in genome %s", (db))
