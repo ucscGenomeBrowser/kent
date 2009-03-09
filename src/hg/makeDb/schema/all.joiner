@@ -3106,6 +3106,11 @@ tablesIgnored $hg
     geneTests
     genomicSuperDups
     haplotype
+    hgdpGeo
+    hgdpFst
+    hgdpHzy%
+    hgdpIhs%
+    hgdpXpehh%
     laminB1
     laminB1Lads
     mammalPsg
