@@ -5897,6 +5897,191 @@ wgEncode 1
     cell K562
     color 46,0,184
 
+    track wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 nucleus 
+    longLabel ENCODE Affy Filtered Transfrags (total in GM12878 cell nucleus using )
+    subGroups view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=total
+    type broadPeak
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 54
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 nucleus 
+    longLabel ENCODE Affy Transfrags (total in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=total
+    type broadPeak
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 53
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 nucleus 
+    longLabel ENCODE (total in GM12878 cell nucleus using )
+    subGroups view=FilteredRawSignal cellType=GM12878 localization=nucleus rnaExtract=total
+    type wig -56831.00 59145.00
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 55
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 nucleus  Raw
+    longLabel ENCODE (total in GM12878 cell nucleus using )
+    subGroups view=RawSignal cellType=GM12878 localization=nucleus rnaExtract=total
+    type wig -53310.00 54732.00
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 56
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeAffyRnaChipFilteredTransfragsGm12878CellTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 cell 
+    longLabel ENCODE Affy Filtered Transfrags (total in GM12878 cell cell using )
+    subGroups view=FilteredTransfrags cellType=GM12878 localization=cell rnaExtract=total
+    type broadPeak
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 54
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization cell
+    cell GM12878
+
+    track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 cell 
+    longLabel ENCODE Affy Transfrags (total in GM12878 cell cell using )
+    subGroups view=Transfrags cellType=GM12878 localization=cell rnaExtract=total
+    type broadPeak
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 53
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization cell
+    cell GM12878
+
+    track wgEncodeAffyRnaChipFilteredRawSignalGm12878CellTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 cell 
+    longLabel ENCODE (total in GM12878 cell cell using )
+    subGroups view=FilteredRawSignal cellType=GM12878 localization=cell rnaExtract=total
+    type wig -48860.00 60644.00
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 55
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization cell
+    cell GM12878
+
+    track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total GM12878 cell  Raw
+    longLabel ENCODE (total in GM12878 cell cell using )
+    subGroups view=RawSignal cellType=GM12878 localization=cell rnaExtract=total
+    type wig -50917.00 62561.00
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 56
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization cell
+    cell GM12878
+
+    track wgEncodeAffyRnaChipFilteredTransfragsK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total K562 nucleoplasm 
+    longLabel ENCODE Affy Filtered Transfrags (total in K562 cell nucleoplasm using )
+    subGroups view=FilteredTransfrags cellType=K562 localization=nucleoplasm rnaExtract=total
+    type broadPeak
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 54
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
+    track wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip
+    shortLabel total K562 nucleoplasm 
+    longLabel ENCODE (total in K562 cell nucleoplasm using )
+    subGroups view=FilteredRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
+    type wig -54090.00 55745.00
+    dateSubmitted 2009-03-10
+    dateUnrestricted 2009-12-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 55
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
 
 # SUNY Albany genechp (wrangler: mikep)
 
