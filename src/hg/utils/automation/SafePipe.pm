@@ -7,7 +7,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/SafePipe.pm instead.
 
-# $Id: SafePipe.pm,v 1.4 2009/03/10 18:35:37 mikep Exp $
+# $Id: SafePipe.pm,v 1.5 2009/03/10 19:27:47 larrym Exp $
 
 package SafePipe;
 
@@ -68,15 +68,19 @@ sub exec
 
     my $stderrCreated = 0;
     my $stderrFile = $obj->{STDERR};
+    my $tmpDir = $ENV{TMPDIR} || "/data/tmp";
+    if(!(defined($tmpDir) && -d $tmpDir)) {
+        $tmpDir = "/tmp";
+    }
     if(!(defined($stderrFile))) {
-        $stderrFile = "/data/tmp/SafePipe$$.err";
+        $stderrFile = "$tmpDir/SafePipe$$.err";
         $stderrCreated = 1;
         unlink($stderrFile);
     }
     my $stdoutCreated = 0;
     my $stdoutFile = $obj->{STDOUT};
     if(!(defined($stdoutFile))) {
-        $stdoutFile = "/data/tmp/SafePipe$$.out";
+        $stdoutFile = "$tmpDir/SafePipe$$.out";
         $stdoutCreated = 1;
         unlink($stdoutFile);
     }
