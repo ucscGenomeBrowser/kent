@@ -4427,7 +4427,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol 
+    shortLabel longNonPolyA GM12878 cytosol
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4444,7 +4444,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol 
+    shortLabel longNonPolyA GM12878 cytosol
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4461,7 +4461,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus 
+    shortLabel longNonPolyA GM12878 nucleus
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4478,7 +4478,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus 
+    shortLabel longNonPolyA GM12878 nucleus
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4495,7 +4495,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol 
+    shortLabel longNonPolyA GM12878 cytosol
     longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
@@ -4512,7 +4512,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus 
+    shortLabel longNonPolyA GM12878 nucleus
     longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
@@ -8771,27 +8771,27 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodeAutoRel2
     release alpha
     subTrack wgEncodeSangerGencode
-    shortLabel Auto (Oct08)
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct-08)
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-21
-    dateUnrestricted 2009-09-08
-    accession 2008-10-01
+    shortLabel Auto (Feb09)
+    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
+    dataVersion ENCODE Feb 2009 Freeze
+    dateSubmitted 2009-02-28
+    dateUnrestricted 2009-11-27
+    #accession 2008-10-01
     priority 1
-    freezeDate 2008-10-01
+    freezeDate 2009-02-16
 
     #track wgEncodeSangerGencodeGencodeManual20081001
     track wgEncodeGencodeManualRel2
     release alpha
     subTrack wgEncodeSangerGencode
-    shortLabel Manual (Oct08)
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08)
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-21
-    dateUnrestricted 2009-09-08
-    accession 2008-10-01
+    shortLabel Manual (Feb09)
+    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
+    dataVersion ENCODE Feb 2009 Freeze
+    dateSubmitted 2009-02-28
+    dateUnrestricted 2009-11-27
+    #accession 2008-10-01
     priority 2
-    freezeDate 2008-10-01
+    freezeDate 2009-02-16
 
 
 # GIS PET (wrangler: mikep)
