@@ -7,7 +7,7 @@ ERLIBS  = -lpthread ${ERMAPPER}/lib/libecwj2.a /usr/lib64/libjpeg.a
 
 CFLAGS = -pipe -Wall -W -O2 -DLINUX -DUNICODE -D_REENTRANT -DPOSIX
 
-L = -lm
+L += -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a ${ERLIBS}
 

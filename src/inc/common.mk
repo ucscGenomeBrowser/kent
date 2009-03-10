@@ -1,10 +1,25 @@
 CC=gcc
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
-    COPT=-O
+    COPT=-O -g
 endif
 CFLAGS=
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
+
+#global external libraries 
+L=
+
+#default to using ssl
+ifeq (${USE_SSL},)
+    USE_SSL=1
+endif
+
+ifeq (${USE_SSL},1)
+    L+=-lssl
+    HG_DEFS+=-DUSE_SSL
+endif
+
+# change this or make it configurable based on some other setting, test, or value
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
 ifeq (${HG_WARN},)

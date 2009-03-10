@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-L = -lm $(MYSQLLIBS)
+L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../zooLib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/zoo.a
 

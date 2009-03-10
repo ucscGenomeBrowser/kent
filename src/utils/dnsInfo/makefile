@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-L = -lm -lsocket -lresolv
+L += -lm -lsocket -lresolv
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 

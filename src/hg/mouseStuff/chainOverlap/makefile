@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-L = -lm
+L += -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 BINDIR = ${BINDIR}

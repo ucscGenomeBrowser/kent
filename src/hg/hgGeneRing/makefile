@@ -6,7 +6,7 @@ include ../../inc/common.mk
 
 A = hgGeneRing
 
-L = $(MYSQLLIBS) -lm -lcrypt
+L += $(MYSQLLIBS) -lm -lcrypt
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 

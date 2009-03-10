@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 
 
-L = $(MYSQLLIBS) -lm
+L += $(MYSQLLIBS) -lm
 
 O = newSang6.o
 

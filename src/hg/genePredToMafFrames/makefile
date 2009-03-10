@@ -2,7 +2,7 @@ include ../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 
 MYLIBDIR = ../../lib/$(MACHTYPE)
-L = $(MYSQLLIBS) -lm
+L += $(MYSQLLIBS) -lm
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O =  orgGenes.o mkMafFrames.o splitMultiMappings.o finishMafFrames.o genePredToMafFrames.o

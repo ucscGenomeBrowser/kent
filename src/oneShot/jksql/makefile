@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 
 
-L = /usr/lib/mysql/libmysqlclient.a -lm
+L += /usr/lib/mysql/libmysqlclient.a -lm
 O = jksql.o 
 
 jksql: $(O)

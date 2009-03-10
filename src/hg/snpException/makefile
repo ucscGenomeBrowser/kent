@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-L = ${MYSQLLIBS} -lm
+L += ${MYSQLLIBS} -lm
 
 A = snpException
 O = ${A}.o

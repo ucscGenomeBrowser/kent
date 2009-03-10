@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 CFLAGS= ${COPT} ${HG_WARN}
 
-L = ${MYSQLLIBS} -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 

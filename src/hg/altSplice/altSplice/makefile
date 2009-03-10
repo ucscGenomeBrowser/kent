@@ -1,12 +1,12 @@
 
 include ../../../inc/common.mk
 
-L = ${MYSQLLIBS} -lm 
+L += ${MYSQLLIBS} -lm -lz
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceGraph.a 
 
 % : %.c
-	${CC} ${COPT} -I../inc -I../../inc  -I../../../inc  -o ${BINDIR}/$@ ${addsuffix .c,$@} -Wall ${MYLIBS} ${MYSQLLIBS} -lm -lz
+	${CC} ${COPT} -I../inc -I../../inc  -I../../../inc  -o ${BINDIR}/$@ ${addsuffix .c,$@} -Wall ${MYLIBS} ${L}
 
 %Test: %Test.c 
 	${CC} ${COPT} -gp  -I../../inc -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}

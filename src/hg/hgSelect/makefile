@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 
-L = $(MYSQLLIBS) -lm 
+L += $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
 

@@ -1,8 +1,8 @@
 include ../../inc/common.mk
 
-#	$Id: makefile,v 1.3 2006/12/19 23:35:37 angie Exp $
+#	$Id: makefile,v 1.4 2009/03/10 00:34:50 galt Exp $
 
-L = -lm 
+L += -lm 
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 

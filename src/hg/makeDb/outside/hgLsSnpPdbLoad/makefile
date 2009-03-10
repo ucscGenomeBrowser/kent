@@ -1,7 +1,7 @@
 ROOT=../../../..
 include ${ROOT}/inc/common.mk
 
-L = $(MYSQLLIBS) -lm
+L += $(MYSQLLIBS) -lm
 MYLIBDIR = ${ROOT}/lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 

@@ -1,8 +1,8 @@
 include ../../inc/common.mk
 
-#	$Id: makefile,v 1.4 2007/03/26 18:01:56 angie Exp $";
+#	$Id: makefile,v 1.5 2009/03/10 00:33:46 galt Exp $";
 
-L = ${MYSQLLIBS} -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 

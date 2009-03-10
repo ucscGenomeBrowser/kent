@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 CC = gcc34
 
 XINC = -I/usr/include
-L = $(MYSQLLIBS) -lm -lcrypt -lssl
+L += $(MYSQLLIBS) -lm -lcrypt -lssl
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = pwdtest

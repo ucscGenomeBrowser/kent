@@ -1,7 +1,7 @@
 include ../inc/common.mk
 
 
-L = $(MYSQLLIBS)
+L += $(MYSQLLIBS)
 MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 

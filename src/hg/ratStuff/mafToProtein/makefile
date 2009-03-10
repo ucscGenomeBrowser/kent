@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 CFLAGS= -ggdb
 
-L =  ${MYSQLLIBS} -lm
+L +=  ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkhgap.a   ${MYLIBDIR}/jkweb.a
 

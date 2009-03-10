@@ -3,7 +3,7 @@ include ../../inc/common.mk
 JKSRCDIR = /cluster/home/ctrople/kent/src
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 
-L = $(MYSQLLIBS) -lm 
+L += $(MYSQLLIBS) -lm 
 MYLIBS =  $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a
 
 O = makeSeqs.o

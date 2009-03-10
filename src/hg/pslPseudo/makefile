@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 
 
-L = -lm $(MYSQLLIBS)
+L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 DEBUGOPTIONS = -skipExciseRepeats -minAli=0.98 -nearTop=0.005 

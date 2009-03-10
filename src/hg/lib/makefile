@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-L = -lm $(MYSQLLIBS)
+L += -lm $(MYSQLLIBS)
 
 O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
