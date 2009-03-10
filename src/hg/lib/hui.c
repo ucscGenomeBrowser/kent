@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.167 2009/03/09 18:33:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.168 2009/03/10 00:18:14 kate Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3907,6 +3907,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
     //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
     //    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
     }
+puts("<TD><A HREF=\"../../goldenPath/help/multiView.html\" TARGET=_BLANK>Help on views</A></TD>");
 puts("</TR>");
 if(makeCfgRows)
     {
@@ -4432,11 +4433,11 @@ if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
 boolean makeDownloadsLink(struct trackDb *tdb)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-#define DOWNLOADS_LINK "<P><A HREF=\"../goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n"
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    printf(DOWNLOADS_LINK,
+    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n",
+            cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
            (trackDbSetting(tdb, "origAssembly") != NULL ?trackDbSetting(tdb, "origAssembly"):"hg18"),
             tdb->tableName);
     return TRUE;
