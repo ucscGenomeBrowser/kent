@@ -71,6 +71,7 @@
 #define ALLCHROMS_ARG "all_chroms"
 
 #define MAX_CHROM_COUNT 10000 // max number of chromosomes to display automatically in genome query
+#define MAX_WIG_LINES 500000  // max number of wiggle records to return
 
 
 #ifndef MJP
@@ -234,6 +235,12 @@ void printItemAsAnnoj(char *db, char *track, char *type, char *term);
 
 void printItem(char *db, char *track, char *type, char *term);
 // print out a description for a track item
+
+void printWigCount(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand);
+// print count of wig records which intersect this start-end range
+
+void printWig(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand);
+// print wig records which intersect this start-end range
 
 //////////////////
 void jsonAddTableInfoOneTrack(struct json_object *o, struct hTableInfo *hti);
