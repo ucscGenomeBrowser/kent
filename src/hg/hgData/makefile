@@ -1,8 +1,9 @@
+XINC = -I${HOME}/include/
 include ../../inc/common.mk
 
-L = $(MYSQLLIBS) -lm /usr/local/lib/libjson.a
+L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a ${HOME}/lib/libjson.a
 
 A = hgData
 
