@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.214.12.1 2009/03/01 23:52:00 mikep Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.214.12.2 2009/03/10 19:01:40 mikep Exp $";
 
 
 extern struct cart *cart;
@@ -94,7 +94,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-static void hgPositionsFree(struct hgPositions **pEl)
+void hgPositionsFree(struct hgPositions **pEl)
 /* Free up hgPositions. */
 {
 struct hgPositions *el;

@@ -79,5 +79,8 @@ void hgPositionsHelpHtml(char *organism, char *database);
 /* Display contents of dbDb.htmlPath for database, or print an HTML comment 
  * explaining what's missing. */
 
+void hgPositionsFree(struct hgPositions **pEl);
+/* Free up hgPositions. */
+
 #endif /* HGFIND_H */
 

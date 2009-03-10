@@ -111,5 +111,8 @@ void hgFindSpecGetAllSpecs(char *db,
 /* Load all search specs from the current db, separated according to 
  * shortCircuit and sorted by searchPriority. */
 
+struct slName *hgFindSpecNameList(char *db);
+/* Return the hgFindSpec table name(s) to use (based on trackDb name). */
+
 #endif /* HGFINDSPEC_H */
 
