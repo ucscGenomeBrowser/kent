@@ -7,7 +7,7 @@
 
 # Directories
 set dir = /cluster/data/hg18/bed/ucsc.11
-set scratchDir = /san/sanvol1/scratch
+set scratchDir = /hive/scratch
 
 # Databases
 set db = hg18
@@ -628,6 +628,9 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
 hgLoadSqlTab $tempDb kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
 
+# add NR_... RefSeq IDs into kgXref table.
+hgsql fanKgTemp2 -e 'update kgXref set refseq=mRNA where mRNA like "NR_%" and refseq=""'
+
 # Make up and load kgColor table. Takes about a minute.
 txGeneColor $spDb ucscGenes.info ucscGenes.picks ucscGenes.color
 hgLoadSqlTab $tempDb kgColor ~/kent/src/hg/lib/kgColor.sql ucscGenes.color
@@ -669,6 +672,9 @@ if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
     hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds
     knownToHprd $tempDb /cluster/data/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+
+
+if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
 	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
@@ -677,22 +683,17 @@ if ($db =~ hg*) then
     # All exon array.
     mkdir affyAllExon
     cd affyAllExon
-    overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
-       ../../affyHumanExon/affyHuEx1.bed ../ucscGenes.gp ids.txt
-    echo "select * from affyHumanExon" | hgsql hgFixed | tail +2 > expData.txt
+    hgsql hg18 -N -e "select * from affyExonTissues" | cut -f2-6 > probes.bed
+    overlapSelect -inFmt=genePred -selectFmt=bed -idOutput probes.bed ../ucscGenes.gp ids.txt
+    hgsql hg18 -N -e "select name,expCount,expScores from affyExonTissues" > expData.txt
     affyAllExonGSColumn expData.txt ids.txt column.txt
-    hgLoadSqlTab $tempDb affyHumanExonGs ~/kent/src/hg/lib/expData.sql column.txt
+    hgLoadSqlTab $tempDb affyExonTissuesGs ~/kent/src/hg/lib/expData.sql column.txt
     ln -s ~/kent/src/hg/makeDb/hgRatioMicroarray/affyHumanExon.ra .
-    hgRatioMicroarray -database=$tempDb -clump=affyHumanExon.ra -minAbsVal=0.01 \
-       affyHumanExonGs affyHumanExonGsRatio
-    hgMedianMicroarray $tempDb affyHumanExonGs affyHumanExonExps \
-       affyHumanExon.ra affyHumanExonGsMedian affyHumanExonMedianExps
-    hgMedianMicroarray $tempDb affyHumanExonGsRatio \
-       affyHumanExonExps affyHumanExon.ra affyHumanExonGsRatioMedian \
-       affyHumanExonMedianExps
-    hgExpDistance tmpFoo2 affyHumanExonGsRatioMedian \
-       affyHumanExonGsMedianExps affyHumanExonGsRatioMedianDist
-
+    echo "create table affyExonTissuesGsExps select * from hg18.affyExonTissuesGsExps" | hgsql $tempDb
+    hgMedianMicroarray $tempDb affyExonTissuesGs hg18.affyExonTissuesGsExps \
+       affyHumanExon.ra affyExonTissuesGsMedian affyExonTissuesGsMedianExps
+    hgExpDistance $tempDb affyExonTissuesGsMedian \
+       affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
 endif
 if ($db =~ mm*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
@@ -706,6 +707,7 @@ if ($db =~ mm*) then
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
+
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 
