@@ -531,6 +531,15 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track pgSnpHgwdev
+compositeTrack on
+shortLabel GenomeVarsHgwdev
+longLabel Personal Genome Variants - Hgwdev only
+group varRep
+priority 500.01
+visibility hide
+type bed 4 +
+
 track pgSnp
 compositeTrack on
 shortLabel Genome Variants
@@ -538,7 +547,7 @@ longLabel Personal Genome Variants
 group varRep
 priority 500
 visibility hide
-type bed 4 .
+type bed 4 +
 
     track pgVenter
     subTrack pgSnp
@@ -556,17 +565,17 @@ type bed 4 .
     priority 2
     color 153,0,0
 
-#    track pgYoruban2
-#    subTrack pgSnp
-#    shortLabel YRI '8507, SOLiD
-#    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
-#    group varRep
-#    priority 4
-#    color 128,0,128
+    track pgYoruban2
+    subTrack pgSnpHgwdev
+    shortLabel YRI '8507, SOLiD
+    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
+    group varRep
+    priority 4
+    color 128,0,128
 
     track pgYoruban3
     subTrack pgSnp
-    shortLabel YRI '8507
+    shortLabel YRI NA18507
     longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
     group varRep
     priority 5
@@ -581,7 +590,7 @@ type bed 4 .
     color 0,128,128
 
     track pgNA12878
-    subTrack pgSnp
+    subTrack pgSnpHgwdev
     shortLabel CEU daught '2878
     longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
     group varRep
@@ -589,7 +598,7 @@ type bed 4 .
     color 128,64,0
 
     track pgNA12891
-    subTrack pgSnp
+    subTrack pgSnpHgwdev
     shortLabel CEU father '2891
     longLabel CEU Trio Father NA12891 (1000 Genomes Project)
     group varRep
@@ -597,7 +606,7 @@ type bed 4 .
     color 128,64,0
 
     track pgNA12892
-    subTrack pgSnp
+    subTrack pgSnpHgwdev
     shortLabel CEU mother '2892
     longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
     group varRep
@@ -605,7 +614,7 @@ type bed 4 .
     color 128,64,0
 
     track pgNA19240
-    subTrack pgSnp
+    subTrack pgSnpHgwdev
     shortLabel YRI daught '9240
     longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
     group varRep
