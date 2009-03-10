@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.52 2008/10/09 00:04:32 aamp Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.53 2009/03/10 01:25:24 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -566,7 +566,7 @@ static void showSchemaCt(char *table)
 {
 struct customTrack *ct = lookupCt(table);
 char *type = ct->tdb->type;
-if (startsWithWord("wig", type))
+if (startsWithWord("wig", type) || startsWithWord("bigWig", type))
     showSchemaCtWiggle(table, ct);
 else if (startsWithWord("chromGraph", type))
     showSchemaCtChromGraph(table, ct);

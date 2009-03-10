@@ -18,10 +18,13 @@
 #include "trackDb.h"
 #include "customTrack.h"
 #include "wiggle.h"
+#include "hmmstats.h"
 #include "correlate.h"
+#include "bbiFile.h"
+#include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.66 2009/01/14 18:54:54 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.67 2009/03/10 01:25:24 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -458,6 +461,27 @@ dataVectorFree(&dv);
 return resultCount;
 }
 
+static int bigWigOutRegion(char *table, struct sqlConnection *conn,
+			     struct region *region, int maxOut,
+			     enum wigOutputType wigOutType)
+/* Read in bigWig as dataVector (filtering is handled there), 
+ * intersect if necessary, and print it out. */
+{
+int resultCount = 0;
+char *wigFileName = bigWigFileName(table, conn);
+if (wigFileName)
+    {
+    struct bbiFile *bwf = bigWigFileOpen(wigFileName);
+    if (bwf)
+	resultCount = bigWigIntervalDump(bwf, region->chrom, region->start, region->end, 
+		maxOut, stdout);
+    bbiFileClose(&bwf);
+    }
+freeMem(wigFileName);
+return resultCount;
+}
+
+
 static struct trackDb *trackDbWithWiggleSettings(char *table)
 /* Get trackDb for a table in the database -- or if it has a parent/composite 
  * track, then return that because it contains the wiggle settings. */
@@ -478,13 +502,13 @@ if (curTrack != NULL)
     }
 /* OK, table is not curTrack nor any of its subtracks -- look it up (and its 
  * parent if there is one): */
-{
-struct trackDb *tdb = hTrackDbForTrack(database, table);
-struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
-if (cTdb != NULL)
-    return cTdb;
-return tdb;
-}
+    {
+    struct trackDb *tdb = hTrackDbForTrack(database, table);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
+    if (cTdb != NULL)
+	return cTdb;
+    return tdb;
+    }
 }
 
 static int wigOutRegion(char *table, struct sqlConnection *conn,
@@ -685,9 +709,11 @@ for (region = regionList; region != NULL; region = region->next)
     if (anySubtrackMerge(database, table))
 	outCount = mergedWigOutRegion(table, conn, region, curMaxOut,
 				      wigOutType);
-    else if (startsWith("bedGraph ", track->type))
+    else if (startsWithWord("bedGraph", track->type))
 	outCount = bedGraphOutRegion(table, conn, region, curMaxOut,
 				     wigOutType);
+    else if (startsWithWord("bigWig", track->type))
+        outCount = bigWigOutRegion(table, conn, region, curMaxOut, wigOutType);
     else
 	outCount = wigOutRegion(table, conn, region, curMaxOut,
 				wigOutType, NULL, 0);
@@ -701,6 +727,26 @@ if (curOut >= maxOut)
 
 
 /***********   PUBLIC ROUTINES  *********************************/
+
+char *bigWigFileName(char *table, struct sqlConnection *conn)
+/* Return file name associated with bigWig.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+{
+char *fileName = NULL;
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    if (ct != NULL)
+        fileName = cloneString(trackDbSetting(ct->tdb, "dataUrl"));
+    }
+else
+    {
+    char query[256];
+    safef(query, sizeof(query), "select fileName from %s", table);
+    fileName = sqlQuickString(conn, query);
+    }
+return fileName;
+}
 
 struct dataVector *bedGraphDataVector(char *table,
 	struct sqlConnection *conn, struct region *region)
@@ -732,6 +778,29 @@ else
     }
 return dv;
 }
+
+#ifdef SOON
+struct dataVector *bigWigDataVector(char *table,
+	struct sqlConnection *conn, struct region *region)
+/* Read in bigWig as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+{
+struct dataVector *dv = NULL;
+
+if (anySubtrackMerge(database, table))
+    dv = mergedWigDataVector(table, conn, region);
+else
+    {
+    char *fileName = bigWigFileName(table, conn);
+    struct dataVector *allocDataVector(char *chrom, int size)
+    struct trackTable *tt1 = trackTableNew(tdb, table, conn);
+    dv = dataVectorFetchOneRegion(tt1, region, conn);
+    intersectDataVector(table, dv, region, conn);
+    }
+return dv;
+}
+#endif /* SOON */
+
 
 struct dataVector *wiggleDataVector(struct trackDb *tdb, char *table,
 	struct sqlConnection *conn, struct region *region)
@@ -791,7 +860,7 @@ if (db != NULL && table != NULL)
     if (isCustomTrack(table))
 	{
 	struct customTrack *ct = lookupCt(table);
-	if (ct->wiggle)
+	if (ct != NULL && ct->wiggle)
 	    typeWiggle = TRUE;
 	}
     else
@@ -803,18 +872,17 @@ if (db != NULL && table != NULL)
 return(typeWiggle);
 }
 
+boolean isBigWig(char *table)
+/* Return TRUE if table corresponds to a bigWig file. */
+{
+return trackIsType(table, "bigWig");
+}
+
 boolean isBedGraph(char *table)
 /* Return TRUE if table is specified as a bedGraph in the current database's 
  * trackDb. */
 {
-if (curTrack && sameString(curTrack->tableName, table))
-    return startsWith("bedGraph", curTrack->type);
-else
-    {
-    struct trackDb *tdb = hTrackDbForTrack(database, table);
-    return (tdb && startsWith("bedGraph", tdb->type));
-    }
-return FALSE;
+return trackIsType(table, "bedGraph");
 }
 
 struct bed *getWiggleAsBed(
@@ -1246,6 +1314,54 @@ stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
 htmlClose();
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
+
+void doSummaryStatsBigWig(struct sqlConnection *conn)
+/* Put up page showing summary stats for bigWig track. */
+{
+struct trackDb *track = curTrack;
+char *table = curTable;
+char *shortLabel = (track == NULL ? table : track->shortLabel);
+char *fileName = bigWigFileName(table, conn);
+struct bbiFile *bwf = bigWigFileOpen(fileName);
+
+htmlOpen("%s (%s) Big Wig Summary Statistics", shortLabel, table);
+
+struct region *region, *regionList = getRegions();
+double sumData = 0, sumSquares = 0, minVal = 0, maxVal = 0;
+bits64 validCount = 0;
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct bbiSummaryElement sum;
+    if (bbiSummaryArrayExtended(bwf, region->chrom, region->start, region->end, bigWigIntervalQuery, 
+    	1, &sum))
+        {
+	if (validCount == 0)
+	    {
+	    minVal = sum.minVal;
+	    maxVal = sum.maxVal;
+	    }
+	sumData += sum.sumData;
+	sumSquares += sum.sumSquares;
+	validCount += sum.validCount;
+	}
+    }
+
+
+hTableStart();
+floatStatRow("mean", sumData/validCount);
+floatStatRow("min", minVal);
+floatStatRow("max", maxVal);
+floatStatRow("standard deviation", calcStdFromSums(sumData, sumSquares, validCount));
+numberStatRow("bases with data", validCount);
+bits64 regionSize = basesInRegion(regionList, 0);
+bits64 gapTotal = gapsInRegion(conn, regionList, 0);
+numberStatRow("bases with sequence", regionSize - gapTotal);
+numberStatRow("bases in region", regionSize);
+hTableEnd();
+
+bbiFileClose(&bwf);
+htmlClose();
+}
 
 void wigShowFilter(struct sqlConnection *conn)
 /* print out wiggle data value filter */

@@ -593,12 +593,23 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
 
 #define	MAX_REGION_DISPLAY	1000
 
+boolean trackIsType(char *table, char *type);
+/* Return TRUE track is a specific type.  Type should be something like "bed" or
+ * "bigBed" or "bigWig" */
+
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
 boolean isBedGraph(char *table);
 /* Return TRUE if table is specified as a bedGraph in the current database's 
  * trackDb. */
+
+boolean isBigWig(char *table);
+/* Return TRUE if table is bedGraph in current database's trackDb. */
+
+char *bigWigFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with bigWig.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
 
 struct bed *getWiggleAsBed(
     char *db, char *table, 	/* Database and table. */
@@ -640,6 +651,10 @@ void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn
 
 void doSummaryStatsWiggle(struct sqlConnection *conn);
 /* Put up page showing summary stats for wiggle track. */
+
+void doSummaryStatsBigWig(struct sqlConnection *conn);
+/* Put up page showing summary stats for bigWig track. */
+
 void wigShowFilter(struct sqlConnection *conn);
 /* print out wiggle data value filter */
 

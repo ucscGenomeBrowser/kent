@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.70 2009/01/09 00:58:26 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.71 2009/03/10 01:25:23 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -171,15 +171,16 @@ boolean correlateTrackTableOK(struct trackDb *tdb, char *table)
 {
 if (!tdb)
     return FALSE;
-if (startsWith("bedGraph", tdb->type) ||
-    startsWith("bed5FloatScore",tdb->type) ||
+if (startsWithWord("bedGraph", tdb->type) ||
+    startsWithWord("bed5FloatScore",tdb->type) ||
     startsWith("wig ",tdb->type) ||
-    startsWith("genePred",tdb->type) ||
-    startsWith("psl",tdb->type) ||
-    startsWith("narrowPeak",tdb->type) ||
-    startsWith("broadPeak",tdb->type) ||
-    startsWith("gappedPeak",tdb->type) ||
-    startsWith("bed ",tdb->type))
+    startsWithWord("genePred",tdb->type) ||
+    startsWithWord("psl",tdb->type) ||
+    startsWithWord("narrowPeak",tdb->type) ||
+    startsWithWord("broadPeak",tdb->type) ||
+    startsWithWord("gappedPeak",tdb->type) ||
+    startsWithWord("bigWig", tdb->type) || 
+    startsWithWord("bed",tdb->type))
         return TRUE;
 if (startsWith("wigMaf ",tdb->type))
     {
@@ -800,7 +801,10 @@ vector = allocDataVector(region->chrom, regionSize);
  *	    intersections and data value limits will
  *	    function in getWiggleData().
  */
-if (table->isWig)
+if (isBigWig(table->tableName))
+    {
+    }
+else if (table->isWig)
     {
     int span = 1;
     struct wigAsciiData *wigData = NULL;

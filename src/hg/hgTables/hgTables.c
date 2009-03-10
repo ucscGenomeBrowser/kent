@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.171 2009/01/09 00:58:26 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.172 2009/03/10 01:25:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -172,6 +172,27 @@ if (s != NULL)
     *s++ = 0;
     *pTable = s;
     }
+}
+
+boolean trackIsType(char *table, char *type)
+/* Return TRUE track is a specific type.  Type should be something like "bed" or
+ * "bigBed" or "bigWig" */
+{
+struct trackDb *tdb = NULL;
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    if (ct != NULL)
+        tdb = ct->tdb;
+    }
+else
+    {
+    if (curTrack && sameString(curTrack->tableName, table))
+	tdb = curTrack;
+    else
+	tdb = hTrackDbForTrack(database, table);
+    }
+return tdb != NULL && startsWithWord(type, tdb->type);
 }
 
 struct trackDb *findCompositeTdb(struct trackDb *track, char *table)
