@@ -306,7 +306,7 @@ float pslQueryAligned(struct psl *psl);
 /* compute fraction of query that was aligned */
 
 INLINE unsigned pslQEnd(struct psl *psl, int blkIdx)
-/* return query target end for the given block */
+/* return query end for the given block */
 {
 return psl->qStarts[blkIdx] + psl->blockSizes[blkIdx];
 }
