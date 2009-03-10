@@ -10,10 +10,9 @@ expScale 1.0
 expStep 0.2
 groupings COSMICsummaryGroups
 
-
-track COSMIClung
-shortLabel COSMIC Lung Data
-longLabel COSMIC Lung Data
+track cutler2007
+shortLabel Inbred Mice CGH
+longLabel Inbred Mice CGH
 group x
 priority 45
 visibility hide
@@ -21,69 +20,7 @@ type expRatio
 logicalDb localDb
 expScale 1.0
 expStep 0.2
-groupings COSMIClungGroups
-
-track COSMICbreast
-shortLabel COSMIC Breast Data
-longLabel COSMIC Breast Data
-group x
-priority 45
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings COSMICbreastGroups
-
-track COSMICbrain
-shortLabel COSMIC Brain Data
-longLabel COSMIC Brain Data
-group x
-priority 45
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings COSMICbrainGroups
-
-track COSMICovary
-shortLabel COSMIC Ovary Data
-longLabel COSMIC Ovary Data
-group x
-priority 45
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings COSMICOvaryGroups
-
-track COSMICpancreas
-shortLabel COSMIC Pancreas Data
-longLabel COSMIC Pancreas Data
-group x
-priority 45
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings COSMICpancreasGroups
-
-track COSMICskin
-shortLabel COSMIC Skin Data
-longLabel COSMIC Skin Data
-group x
-priority 45
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings COSMICskinGroups
-
-##########################
+groupings cutler2007Groups
 
 track ispyMipCGH
 shortLabel ispy CGH by MIP
@@ -404,6 +341,18 @@ expScale 2.0
 expStep 0.2
 groupings ding2008Groups
 
+track harada2008
+shortLabel CGH (Harada et al. 2008)
+longLabel CGH (Harada et al. 2008)
+group cancerGenomics
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings harada2008Groups
+
 track jones2008cgh
 shortLabel CGH (Jones et al. 2008)
 longLabel CGH (Jones et al. 2008)
@@ -427,3 +376,15 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings parsons2008cghGroups
+
+track mullighan2008_500K
+shortLabel CGH (Mullighan et al. 2008)
+longLabel CGH (Mullighan et al. 2008)
+group cancerGenomics
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings mullighan2008_500KGroups
