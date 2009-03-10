@@ -1,5 +1,6 @@
 include ../inc/common.mk
 
+
 O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     base64.o bbiRead.o bbiWrite.o bigBed.o binRange.o bits.o blastOut.o \
     blastParse.o boxClump.o boxLump.o bPlusTree.o bwgCreate.o bwgQuery.o \
@@ -14,7 +15,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     gfNet.o gff.o gfxPoly.o gifLabel.o gifcomp.o \
     gifdecomp.o gifread.o gifwrite.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
-    intExp.o intValTree.o internet.o itsa.o \
+    https.o intExp.o intValTree.o internet.o itsa.o \
     jointalign.o jpegSize.o \
     keys.o kxTok.o \
     linefile.o localmem.o log.o \

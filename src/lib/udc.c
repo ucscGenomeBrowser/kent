@@ -218,7 +218,7 @@ int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer)
 {
 verbose(2, "reading http data - %d bytes at %lld - on %s\n", size, offset, url);
 char rangeUrl[1024];
-if (!startsWith("http://",url))
+if (!(startsWith("http://",url) || startsWith("https://",url)))
     errAbort("Invalid protocol in url [%s] in udcDataViaHttp, only http supported", url); 
 safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
   , url
@@ -486,7 +486,7 @@ else if (sameString(upToColon, "slow"))
     prot->fetchData = udcDataViaSlow;
     prot->fetchInfo = udcInfoViaSlow;
     }
-else if (sameString(upToColon, "http"))
+else if (sameString(upToColon, "http") || sameString(upToColon, "https"))
     {
     prot->fetchData = udcDataViaHttp;
     prot->fetchInfo = udcInfoViaHttp;

@@ -14,8 +14,9 @@
 #include "linefile.h"
 #include "base64.h"
 #include "cheapcgi.h"
+#include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.69 2009/03/03 08:09:46 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.70 2009/03/10 00:31:04 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -72,6 +73,7 @@ if (!isdigit(portName[0]))
     errAbort("netConnectTo: ports must be numerical, not %s", portName);
 return netMustConnect(hostName, atoi(portName));
 }
+
 
 int netAcceptingSocketFrom(int port, int queueSize, char *host)
 /* Create a socket that can accept connections from a 
@@ -310,7 +312,8 @@ else
 v = strchr(s, '@');
 if (v == NULL)
     {
-    if (sameWord(parsed->protocol,"http"))
+    if (sameWord(parsed->protocol,"http") ||
+        sameWord(parsed->protocol,"https"))
 	{
 	strcpy(parsed->user, "");
 	strcpy(parsed->password, "");
@@ -337,6 +340,7 @@ else
 	strncpy(parsed->user, s, sizeof(parsed->user));
 	strncpy(parsed->password, w+1, sizeof(parsed->password));
 	}
+    
     cgiDecode(parsed->user,parsed->user,strlen(parsed->user));
     cgiDecode(parsed->password,parsed->password,strlen(parsed->password));
     s = v+1;
@@ -349,6 +353,8 @@ if (t == NULL)
     {
     if (sameWord(parsed->protocol,"http"))
 	strcpy(parsed->port, "80");
+    if (sameWord(parsed->protocol,"https"))
+	strcpy(parsed->port, "443");
     if (sameWord(parsed->protocol,"ftp"))
 	strcpy(parsed->port, "21");
     }
@@ -818,9 +824,17 @@ int sd;
 
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
-if (!sameString(npu.protocol, "http"))
+if (sameString(npu.protocol, "http"))
+    sd = netMustConnect(npu.host, atoi(npu.port));
+else if (sameString(npu.protocol, "https"))
+    {
+    sd = netMustConnectHttps(npu.host, atoi(npu.port));
+    }
+else
+    {
     errAbort("Sorry, can only netOpen http's currently");
-sd = netMustConnect(npu.host, atoi(npu.port));
+    return -1;  /* never gets here, fixes compiler complaint */
+    }
 
 /* Ask remote server for a file. */
 dyStringPrintf(dy, "%s %s %s\r\n", method, npu.file, protocol);
@@ -917,7 +931,7 @@ int netUrlOpen(char *url)
 /* Return unix low-level file handle for url. 
  * Just close(result) when done. */
 {
-if (startsWith("http://",url) || (stringIn("://", url) == NULL))
+if (startsWith("http://",url) || startsWith("https://",url) || (stringIn("://", url) == NULL))
     return netGetOpenHttp(url);
 else if (startsWith("ftp://",url))
     return netGetOpenFtp(url);
