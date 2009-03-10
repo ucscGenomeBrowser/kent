@@ -424,6 +424,16 @@ struct trackDb *hTrackDbForTrack(char *db, char *track);
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found. */
 
+struct trackDb *hTrackDbForTrackProfile(char *db, char *track, boolean useProfile);
+/* Load trackDb object for a track. If track is composite, its subtracks
+ * will also be loaded and inheritance will be handled; if track is a
+ * subtrack then inheritance will be handled.  (Unless a subtrack has
+ * "noInherit on"...).
+ * If useProfile then scans list of trackDb's in profile for first one containing
+ *   track, or dies if none have track.
+ * Otherwise, will die if the database does not have
+ * a trackDb, but will return NULL if track is not found. */
+
 struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
 /* Given a trackDb that may be for a subtrack of a composite track, 
  * return the trackDb for the composite track if we can find it, else NULL.

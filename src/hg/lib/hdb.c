@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.388 2009/01/06 23:41:32 mikep Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.388.2.1 2009/03/10 19:01:01 mikep Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3631,15 +3631,46 @@ hFreeConn(&conn);
 }
 
 struct trackDb *hTrackDbForTrack(char *db, char *track)
-/* Load trackDb object for a track. If track is composite, its subtracks 
- * will also be loaded and inheritance will be handled; if track is a 
- * subtrack then inheritance will be handled.  (Unless a subtrack has 
+/* Load trackDb object for a track. If track is composite, its subtracks
+ * will also be loaded and inheritance will be handled; if track is a
+ * subtrack then inheritance will be handled.  (Unless a subtrack has
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found. */
 {
-struct sqlConnection *conn = hAllocConn(db);
-struct trackDb *tdb = loadTrackDbForTrack(conn, track);
-hFreeConn(&conn);
+return hTrackDbForTrackProfile(db, track, FALSE);
+}
+
+struct trackDb *hTrackDbForTrackProfile(char *db, char *track, boolean useProfile)
+/* Load trackDb object for a track. If track is composite, its subtracks 
+ * will also be loaded and inheritance will be handled; if track is a 
+ * subtrack then inheritance will be handled.  (Unless a subtrack has 
+ * "noInherit on"...).
+ * If useProfile then scans list of trackDb's in profile for first one containing 
+ *   track, or dies if none have track.
+ * Otherwise, will die if the database does not have
+ * a trackDb, but will return NULL if track is not found. */
+{
+struct sqlConnection *conn;
+struct trackDb *tdb = NULL;
+struct slName *tableList, *one;
+char *tbl = NULL;
+if (useProfile)
+    {
+    tableList = hTrackDbList();
+    for (one = tableList; one != NULL; one = one->next)
+	{
+	conn = hAllocConnProfileTbl(db, one->name, &tbl);
+	tdb = loadTrackDbForTrack(conn, track);
+	hFreeConn(&conn);
+	}
+    slNameFreeList(&tableList);
+    }
+else
+    {
+    conn = hAllocConn(db);
+    tdb = loadTrackDbForTrack(conn, track);
+    hFreeConn(&conn);
+    }
 return tdb;
 }
 
