@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.68 2009/03/09 21:17:52 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.69 2009/03/10 20:47:20 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -11023,6 +11023,7 @@ registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("pgSnp", pgSnpMethods);
+registerTrackHandler("pgSnpHgwdev", pgSnpMethods);
 registerTrackHandler("pgPop", pgSnpMethods);
 registerTrackHandler("pgTest", pgSnpMethods);
 registerTrackHandler("protVarPos", protVarMethods);
