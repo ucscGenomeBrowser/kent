@@ -41,6 +41,11 @@ struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32
 	struct lm *lm);
 /* Get data for interval.  Return list allocated out of lm. */
 
+int bigWigIntervalDump(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end, int maxCount,
+	FILE *out);
+/* Print out info on bigWig parts that intersect chrom:start-end.   Set maxCount to 0 if you 
+ * don't care how many are printed.  Returns number printed. */
+
 boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.

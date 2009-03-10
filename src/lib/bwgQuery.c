@@ -19,7 +19,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.20 2009/02/25 09:25:55 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.21 2009/03/10 01:14:53 kent Exp $";
 
 struct bbiFile *bigWigFileOpen(char *fileName)
 /* Open up big wig file. */
@@ -69,8 +69,9 @@ head->itemCount = memReadBits16(&pt, isSwapped);
 *pPt = pt;
 }
 
-void bigWigBlockDump(struct bbiFile *bwf, char *chrom, FILE *out)
-/* Print out info on block starting at current position. */
+static int bigWigBlockDumpIntersectingRange(struct bbiFile *bwf, char *chrom, 
+	bits32 rangeStart, bits32 rangeEnd, int maxCount, FILE *out)
+/* Print out info on parts of block that intersect start-end, block starting at current position. */
 {
 boolean isSwapped = bwf->isSwapped;
 struct udcFile *udc = bwf->udc;
@@ -78,6 +79,7 @@ struct bwgSectionHead head;
 bwgSectionHeadRead(bwf, &head);
 bits16 i;
 float val;
+int outCount = 0;
 
 switch (head.type)
     {
@@ -89,7 +91,13 @@ switch (head.type)
 	    bits32 start = udcReadBits32(udc, isSwapped);
 	    bits32 end = udcReadBits32(udc, isSwapped);
 	    udcMustReadOne(udc, val);
-	    fprintf(out, "%s\t%u\t%u\t%g\n", chrom, start, end, val);
+	    if (rangeIntersection(rangeStart, rangeEnd, start, end) > 0)
+		{
+		fprintf(out, "%s\t%u\t%u\t%g\n", chrom, start, end, val);
+		++outCount;
+		if (maxCount != 0 && outCount >= maxCount)
+		    break;
+		}
 	    }
 	break;
 	}
@@ -100,18 +108,37 @@ switch (head.type)
 	    {
 	    bits32 start = udcReadBits32(udc, isSwapped);
 	    udcMustReadOne(udc, val);
-	    fprintf(out, "%u\t%g\n", start+1, val);
+	    if (rangeIntersection(rangeStart, rangeEnd, start, start+head.itemSpan) > 0)
+		{
+		fprintf(out, "%u\t%g\n", start+1, val);
+		++outCount;
+		if (maxCount != 0 && outCount >= maxCount)
+		    break;
+		}
 	    }
 	break;
 	}
     case bwgTypeFixedStep:
 	{
-	fprintf(out, "fixedStep chrom=%s start=%u step=%u span=%u\n", 
-		chrom, head.start, head.itemStep, head.itemSpan);
+	boolean gotStart = FALSE;
+	bits32 start = head.start;
 	for (i=0; i<head.itemCount; ++i)
 	    {
 	    udcMustReadOne(udc, val);
-	    fprintf(out, "%g\n", val);
+	    if (rangeIntersection(rangeStart, rangeEnd, start, start+head.itemSpan) > 0)
+	        {
+		if (!gotStart)
+		    {
+		    fprintf(out, "fixedStep chrom=%s start=%u step=%u span=%u\n", 
+			    chrom, start, head.itemStep, head.itemSpan);
+		    gotStart = TRUE;
+		    }
+		fprintf(out, "%g\n", val);
+		++outCount;
+		if (maxCount != 0 && outCount >= maxCount)
+		    break;
+		}
+	    start += head.itemStep;
 	    }
 	break;
 	}
@@ -119,6 +146,13 @@ switch (head.type)
         internalErr();
 	break;
     }
+return outCount;
+}
+
+void bigWigBlockDump(struct bbiFile *bwf, char *chrom, FILE *out)
+/* Print out info on block starting at current position. */
+{
+bigWigBlockDumpIntersectingRange(bwf, chrom, 0, BIGNUM, 0, out);
 }
 
 
@@ -227,6 +261,35 @@ slReverse(&list);
 return list;
 }
 
+int bigWigIntervalDump(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end, int maxCount,
+	FILE *out)
+/* Print out info on bigWig parts that intersect chrom:start-end.   Set maxCount to 0 if you 
+ * don't care how many are printed.  Returns number printed. */
+{
+if (bwf->typeSig != bigWigSig)
+   errAbort("Trying to do bigWigIntervalDump on a non big-wig file.");
+bbiAttachUnzoomedCir(bwf);
+struct fileOffsetSize *blockList = bbiOverlappingBlocks(bwf, bwf->unzoomedCir, 
+	chrom, start, end, NULL);
+struct fileOffsetSize *block;
+struct udcFile *udc = bwf->udc;
+int printCount = 0;
+
+for (block = blockList; block != NULL; block = block->next)
+    {
+    udcSeek(udc, block->offset);
+    int oneCount = bigWigBlockDumpIntersectingRange(bwf, chrom, start, end, maxCount, out);
+    printCount += oneCount;
+    if (maxCount != 0)
+        {
+	if (oneCount >= maxCount)
+	    break;
+	maxCount -= oneCount;
+	}
+    }
+slFreeList(&blockList);
+return printCount;
+}
 
 boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
