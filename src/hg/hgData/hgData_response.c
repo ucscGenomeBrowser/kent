@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.8 2009/02/26 08:37:34 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.9 2009/03/10 07:30:24 mikep Exp $";
 
 char *http_status1xx[] = {"Continue", "Switching Protocols"};
 
@@ -95,10 +95,13 @@ static void errClientArgs(int code, char *status, char *format, va_list args)
 char msg[2048];
 struct json_object *err = json_object_new_object();
 fprintf(stdout, "Status: %u %s\n", code, status);
+/*fprintf(stdout, "Content-type: text/xml\n\n");
+fprintf(stdout, "<html><head><title>Error %u %s</title></head><body>\n<h1>Error %u: %s</h1>\n", code, status, code, status);*/
 fprintf(stdout, "Content-type: application/json\n\n");
 if (format != NULL) {
     vsnprintf(msg, sizeof(msg), format, args);
     }
+// fprintf(stdout, "<msg>%s\n</msg></body></html>\n", msg);
 json_object_object_add(err, "error", json_object_new_string(msg));
 fprintf(stdout, json_object_to_json_string(err));
 fprintf(stdout, "\n");
