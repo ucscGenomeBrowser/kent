@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.476 2009/03/09 21:42:42 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.477 2009/03/10 19:05:42 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1530,7 +1530,7 @@ char *filterVal = "";
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
 snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
-cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
