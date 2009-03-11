@@ -3,8 +3,29 @@
 #include "hgData.h"
 #include "hdb.h"
 #include "chromInfo.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.8 2009/03/07 06:01:38 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.9 2009/03/11 08:58:09 mikep Exp $";
+
+void logTime(char *label, ...)
+/* Print stderr label and how long it's been since last call.  Call with
+ * a NULL label to initialize. */
+{
+static long lastTime = 0;
+long time;
+if (!TIMING) 
+    return;
+time = clock1000();
+va_list args;
+va_start(args, label);
+if (label != NULL)
+    {
+    vfprintf(stderr, label, args);
+    fprintf(stderr, ": %ld millis\n", time - lastTime);
+    }
+lastTime = time;
+va_end(args);
+}
 
 struct coords navigate(int start, int end, int chromSize)
 // Calculate navigation coordinates including window left, window right
