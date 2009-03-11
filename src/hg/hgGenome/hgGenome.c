@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.62 2008/09/03 19:18:54 markd Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.63 2009/03/11 19:24:31 galt Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -492,10 +492,12 @@ else if (cartVarExists(cart, hggCorrelate))
     }
 else if (cartVarExists(cart, hggBrowse))
     {
+    cartRemove(cart, hggBrowse);  // just in case of errAbort
     browseRegions(conn);
     }
 else if (cartVarExists(cart, hggSort))
     {
+    cartRemove(cart, hggSort);  // just in case of errAbort
     sortGenes(conn);
     }
 else
