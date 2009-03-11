@@ -9,6 +9,6 @@ table narrowPeak
     char[2]   strand;       "Optional. +/- to denote strand or orientation (whenever applicable). Use '.' if no orientation is assigned."
     float  signalValue;  "Measurement of average enrichment for the region"
     float  pValue;       "Statistical significance of signal value (-log10). Set to -1 if not used."
-    float  qValue;       "Statistical significance with multiple-test correction applied (FDR). Set to -1 if not used."
+    float  qValue;       "Statistical significance with multiple-test correction applied (FDR -log10). Set to -1 if not used."
     int    peak;         "Point-source called for this peak; 0-based offset from chromStart (use -1 if no point-source called)"
 )
