@@ -737,6 +737,7 @@ type bedGraph 4
     shortLabel HGDP Hzy Bantu
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Bantu populations in Africa)
     color 224, 0, 0
+    release alpha
     priority 2
 
     track hgdpHzyMideast
@@ -957,8 +958,7 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report: 
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v6
-
+dataVersion v7
 
 track kiddEichlerDisc
 compositeTrack on
