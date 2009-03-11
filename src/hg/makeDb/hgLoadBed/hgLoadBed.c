@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.66 2008/12/04 17:21:13 mikep Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.67 2009/03/11 22:30:11 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -24,6 +24,7 @@ boolean noHistory = FALSE;	/* Do not add history table comments */
 boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
+boolean allowStartEqualEnd = FALSE;  /* Even if strict-checking is on, allow zero-length items. */
 int minScore = 0;		/* minimum score for fillInScore option */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
@@ -39,7 +40,7 @@ boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
 char *fillInScoreColumn = NULL;      /* column to use to fill-in score column */
 boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
                                     * turns on: noNameIx, ignoreEmpty, allowNegativeScores
-                                    * -verbose=0 */
+                                    * -verbose=0, allowStartEqualEnd */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -60,6 +61,7 @@ static struct optionSpec optionSpecs[] = {
     {"notItemRgb", OPTION_BOOLEAN},
     {"noStrict", OPTION_BOOLEAN},
     {"nostrict", OPTION_BOOLEAN},
+    {"allowStartEqualEnd", OPTION_BOOLEAN},
     {"maxChromNameLength", OPTION_INT},
     {"tmpDir", OPTION_STRING},
     {"noNameIx", OPTION_BOOLEAN},
@@ -100,10 +102,12 @@ errAbort(
   "   -noNameIx  - no index for the name column (default creates index)\n"
   "   -ignoreEmpty  - no error on empty input file\n"
   "   -noStrict  - don't perform coord sanity checks\n"
-  "              - by default we abort when: chromStart > chromEnd\n"
+  "              - by default we abort when: chromStart >= chromEnd\n"
+  "   -allowStartEqualEnd  - even when doing strict checks, allow\n"
+  "                          chromStart==chromEnd (zero-length e.g. insertion)\n"
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
-  "                         -allowNegativeScores -verbose=0\n"
+  "                         -allowStartEqualEnd, -allowNegativeScores, -verbose=0\n"
   "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (from minScore-1000)\n"
   "   -minScore=N - minimum value for score field for -fillInScore option (default 100)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
@@ -194,6 +198,10 @@ while (lineFileNextReal(lf, &line))
 	if (bed->chromEnd < 1)
 	    errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
 		     lf->lineIx, dupe);
+	if (bed->chromStart == bed->chromEnd && !allowStartEqualEnd)
+	    errAbort("ERROR: line %d:'%s'\nchromStart == chromEnd (%d) (zero-length item)\n"
+		     "Use -allowStartEqualEnd if that is legit (e.g. for insertion point).\n",
+		     lf->lineIx, dupe, bed->chromStart);
 	if (bed->chromStart > bed->chromEnd)
 	    errAbort("ERROR: line %d:'%s'\nchromStart after chromEnd (%d > %d)\n",
 		     lf->lineIx, dupe, bed->chromStart, bed->chromEnd);
@@ -584,18 +592,20 @@ notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
 noStrict = optionExists("noStrict") || optionExists("nostrict");
+allowStartEqualEnd = optionExists("allowStartEqualEnd");
 tmpDir = optionVal("tmpDir", tmpDir);
 nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
-/* turns on: noNameIx, ignoreEmpty, allowNegativeScores
+/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores
  * -verbose=0 */
 if (customTrackLoader)
     {
     ignoreEmpty = TRUE;
     noHistory = TRUE;
     nameIx = FALSE;
+    allowStartEqualEnd = TRUE;
     allowNegativeScores = TRUE;
     verboseSetLevel(0);
     }
