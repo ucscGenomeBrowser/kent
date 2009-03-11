@@ -2800,7 +2800,7 @@ longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
 #subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
 subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded uniq=Uniqueness
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 zzRG=Reference_Genome
+subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 zzRG=Reference_Genome
 #subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzREF=Extra_Tracks
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzRE=Regions_Excluded zzU20=Uniqueness_20_bp zzU24=Uniqueness_24_bp zzU35=Uniqueness_35_bp
 sortOrder cellType=+ EXP=+ view=+
@@ -3114,6 +3114,89 @@ wgEncode 1
     cell GM12878
     color 153,38,0
     antibody Input
+
+    track wgEncodeDukeDNaseSeqPeaksHepg2
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 DNase Pk
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HepG2 cells)
+    subGroups view=Peaks EXP=DNase cellType=HepG2
+    type narrowPeak
+    dateSubmitted 2009-03-11
+    dateUnrestricted 2009-12-11
+    dataVersion ENCODE Feb 2009 Freeze
+    color 189,0,157
+    cell HepG2
+
+    track wgEncodeDukeDNaseSeqSignalHepg2
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 DNase Sig
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HepG2 cells)
+    subGroups view=Signal EXP=DNase cellType=HepG2
+    type wig 0.00 2.70
+    dateSubmitted 2009-03-11
+    dateUnrestricted 2009-12-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
+
+    track wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 DNase BO
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HepG2 cells)
+    subGroups view=SignalBO EXP=DNase cellType=HepG2
+    type wig 0.00 288.00
+    dateSubmitted 2009-03-11
+    dateUnrestricted 2009-12-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
+
+    track wgEncodeDukeDNaseSeqRawSignalRep1Hepg2
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 DNase 1
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 1 (in HepG2 cells)
+    subGroups view=rRAW EXP=DNase cellType=HepG2
+    type wig 0.00 4.70
+    dateSubmitted 2009-03-11
+    dateUnrestricted 2009-12-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
+
+    track wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 DNase 2
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 2 (in HepG2 cells)
+    subGroups view=rRAW EXP=DNase cellType=HepG2
+    type wig 0.00 4.48
+    dateSubmitted 2009-03-11
+    dateUnrestricted 2009-12-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
+
+    track wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 DNase 3
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 3 (in HepG2 cells)
+    subGroups view=rRAW EXP=DNase cellType=HepG2
+    type wig 0.00 8.15
+    dateSubmitted 2009-03-11
+    dateUnrestricted 2009-12-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
 
     track wgEncodeDukeDNaseSeqPeaksK562
     release alpha
@@ -5900,7 +5983,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 nucleus 
+    shortLabel total GM12878 nucleus
     longLabel ENCODE Affy Filtered Transfrags (total in GM12878 cell nucleus using )
     subGroups view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=total
     type broadPeak
@@ -5917,7 +6000,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 nucleus 
+    shortLabel total GM12878 nucleus
     longLabel ENCODE Affy Transfrags (total in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=total
     type broadPeak
@@ -5934,7 +6017,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 nucleus 
+    shortLabel total GM12878 nucleus
     longLabel ENCODE (total in GM12878 cell nucleus using )
     subGroups view=FilteredRawSignal cellType=GM12878 localization=nucleus rnaExtract=total
     type wig -56831.00 59145.00
@@ -5974,7 +6057,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 cell 
+    shortLabel total GM12878 cell
     longLabel ENCODE Affy Filtered Transfrags (total in GM12878 cell cell using )
     subGroups view=FilteredTransfrags cellType=GM12878 localization=cell rnaExtract=total
     type broadPeak
@@ -5991,7 +6074,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 cell 
+    shortLabel total GM12878 cell
     longLabel ENCODE Affy Transfrags (total in GM12878 cell cell using )
     subGroups view=Transfrags cellType=GM12878 localization=cell rnaExtract=total
     type broadPeak
@@ -6008,7 +6091,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 cell 
+    shortLabel total GM12878 cell
     longLabel ENCODE (total in GM12878 cell cell using )
     subGroups view=FilteredRawSignal cellType=GM12878 localization=cell rnaExtract=total
     type wig -48860.00 60644.00
@@ -6048,7 +6131,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total K562 nucleoplasm 
+    shortLabel total K562 nucleoplasm
     longLabel ENCODE Affy Filtered Transfrags (total in K562 cell nucleoplasm using )
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleoplasm rnaExtract=total
     type broadPeak
@@ -6065,7 +6148,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total K562 nucleoplasm 
+    shortLabel total K562 nucleoplasm
     longLabel ENCODE (total in K562 cell nucleoplasm using )
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig -54090.00 55745.00
