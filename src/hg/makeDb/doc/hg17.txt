@@ -24336,20 +24336,21 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V6 (DATABASE OF GENOMIC VARIANTS) (DONE 2/23/09 angie)
+# DGV V7 (DATABASE OF GENOMIC VARIANTS) (DONE 3/11/09 angie)
+# DGV V6 thin regions dropped 2/23/09
 # DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 8/11/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /cluster/data/hg17/bed/dgv.v6
-    cd /cluster/data/hg17/bed/dgv.v6
+    mkdir /hive/data/genomes/hg17/bed/dgv.v7
+    cd /hive/data/genomes/hg17/bed/dgv.v7
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg17.v6.nov.2008.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg17.v7.mar.2009.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg17.v6.nov.2008.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg17.v7.mar.2009.txt
     # shuffle fields into bed8+ (input has one start coord==0, but min 
     # nonzero size of 99 not 100 implies most coords are 1-based):
-    foreach f (*.v6.*.txt)
+    foreach f (*.v7.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -24366,10 +24367,10 @@ See hg18.txt for details.
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    hgsql hg17 -e 'rename table dgv to dgvV5'
+    hgsql hg17 -e 'rename table dgv to dgvV6'
     hgLoadBed hg17 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 17479 elements of size 15
+#Loaded 17473 elements of size 15
 
 
 ############################################################################
