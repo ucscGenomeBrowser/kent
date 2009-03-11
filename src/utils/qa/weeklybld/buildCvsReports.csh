@@ -147,7 +147,8 @@ else
     echo "<li><a href="branch/index.html">Biweekly Branch - Day 9</a> ($REVIEWDAY to $TODAY)" >> index.html
     echo "<li><a href="review/index.html">Design/Review - Day 2</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
 endif    
-echo "</ul></body></html>" >> index.html
+echo "</ul><a href="/cvs-reports-history/">Reports history</a>." >> index.html
+echo "</body></html>" >> index.html
 cd $WEEKLYBLD
 
 echo "success CVS Reports v${BRANCHNN} $mode [${0}: START=${ScriptStart} END=`date`]" > CvsReports.ok
