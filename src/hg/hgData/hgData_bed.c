@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.16 2009/03/01 08:50:34 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.17 2009/03/11 09:36:54 mikep Exp $";
 
 static struct json_object *addRangeOrCountFullUrl(struct json_object *o, boolean isCount, char *url_name, char *extension, char *track, char *genome, char *chrom, boolean addStartEnd, int start, int end)
 // Add a count url to object o with name 'url_name'.
@@ -304,9 +304,13 @@ addGenomeUrl(d, "url_genome", genome, NULL);
 addGenomeUrl(d, "url_genomes", NULL, NULL);
 addTrackUrl(d, "url_track", genome, track);
 addTrackUrl(d, "url_tracks", genome, NULL);
+logTime("%s: built json struct", __func__);
 okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(d));
 json_object_put(d);
+logTime("%s(%s,%s,%s,%d,%d,chromSize=%d,hti=%p,n=%d,%d) complete.", __func__,
+    genome, track, chrom, start, end, 
+    chromSize, hti, n, (int)modified);
 }
 
 void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, struct bed *b, char *format, time_t modified)
@@ -342,8 +346,12 @@ else if (sameString(format, ANNOJ_NESTED_FMT))
     json_object_object_add(d, "data", jsonBedAsAnnojNested(hti, b));
 else
     ERR_BAD_FORMAT(format);
+logTime("%s: built json struct", __func__);
 okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(d));
 json_object_put(d);
+logTime("%s(%s,%s,%s,%s,%d,%d,chromSize=%d,hti=%p,n=%d,bed=%p,format=%s,%d) complete.", __func__,
+    genome, track, type, chrom, start, end, 
+    chromSize, hti, n, b, format, (int)modified);
 }
 
