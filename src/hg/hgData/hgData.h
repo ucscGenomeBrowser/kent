@@ -29,6 +29,10 @@
 #include "hgFind.h"
 #endif
 
+#ifndef WIGGLE_H
+#include "wiggle.h"
+#endif
+
 #ifdef boolean
 #undef boolean
 // common.h defines boolean as int; json.h typedefs boolean as int.
@@ -203,6 +207,17 @@ struct dbDbClade *hGetIndexedDbClade(char *db);
  * in which case get all genome databases.
  * Dispose of this with dbDbCladeFreeList. */
 
+struct wiggleDataStream *wigOutRegion(char *genome, char *track, char *chrom, int start, int end, int maxOut,
+    int operations, int *count);
+// operations: wigFetchNoOp || wigFetchStats || wigFetchRawStats || wigFetchBed || wigFetchDataArray ||
+// wigFetchAscii
+//     doAscii = operations & wigFetchAscii;
+//     doDataArray = operations & wigFetchDataArray;
+//     doBed = operations & wigFetchBed;
+//     doRawStats = operations & wigFetchRawStats;
+//     doStats = (operations & wigFetchStats) || doRawStats;
+//     doNoOp = operations & wigFetchNoOp;
+
 time_t hGetLatestUpdateTimeDbClade();
 // return the latest time that any of the relevant tables were changed
 
@@ -243,7 +258,7 @@ void printItem(char *db, char *track, char *type, char *term);
 void printWigCount(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand);
 // print count of wig records which intersect this start-end range
 
-void printWig(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand);
+void printWig(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand, int count, struct wiggleDataStream *wds);
 // print wig records which intersect this start-end range
 
 //////////////////
@@ -332,5 +347,6 @@ struct json_object *addSearchGenomeTrackUrl(struct json_object *o, char *url_nam
 
 void searchTracks(time_t modified, struct hgPositions *hgp, char *genome, char *track, char *query);
 // search for data within tracks or whole genomes
+
 
 #endif /* HGDATA_H */

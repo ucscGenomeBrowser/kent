@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.24 2009/03/11 08:56:17 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.25 2009/03/11 09:38:16 mikep Exp $";
 
 void doGet()
 {
@@ -15,6 +15,7 @@ struct dbDbClade *dbs = NULL;
 struct hTableInfo *hti = NULL;
 struct bed *b = NULL;
 struct hgPositions *hgp = NULL;
+struct wiggleDataStream *wds = NULL;
 //struct sqlConnection *conn = NULL;
 //char *authorization = getenv("Authorization");
 //verboseSetLevel(2);
@@ -199,10 +200,10 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 	    ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
 	logTime("hFindTableInfo(%s,%s,%s)", genome, chrom, rootName);
 	// test how many rows we are about to receive
-	int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
-	logTime("hGetBedRangeCount(%s,%s,%s,%d,%d,NULL) -> %d", genome, tdb->tableName, chrom, start, end, n);
 	if (sameOk(COUNT_CMD, cmd))
 	    {
+	    int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
+	    logTime("hGetBedRangeCount(%s,%s,%s,%d,%d,NULL) -> %d", genome, tdb->tableName, chrom, start, end, n);
 	    if (differentString(track, tdb->tableName))
 		errAbort("track name (%s) does not match table name (%s)\n", track, tdb->tableName);
 	    printBedCount(genome, track, chrom, start, end, ci->size, hti, n, modified);
@@ -213,6 +214,8 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 	    // handle different track types
 	    if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  
 		{
+		int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
+		logTime("hGetBedRangeCount(%s,%s,%s,%d,%d,NULL) -> %d", genome, tdb->tableName, chrom, start, end, n);
 		b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
 		logTime("hGetBedRange(%s,%s,%s,%d,%d,NULL) -> %d", genome, tdb->tableName, chrom, start, end);
 		printBed(genome, track, tdb->type, chrom, start, end, ci->size, hti, n, b, format, modified);
@@ -223,7 +226,15 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 		}
 	    else if (sameOk(trackType[0], "wig"))  
 		{
-		printWig(genome, track, chrom, ci->size, start, end, strand);
+		int n;
+		// options: wigFetchStats || wigFetchRawStats || wigFetchBed || wigFetchDataArray || wigFetchAscii
+		wds = wigOutRegion(genome, track, chrom, start, end, MAX_WIG_LINES, 
+			wigFetchDataArray|wigFetchAscii|wigFetchBed, &n);
+		// ascii: asciiData->count
+		// bed:   slCount(wds->bed)
+		logTime("wigOutRegion(%s,%s,%s,%d,%d,%d,options=%p) -> %d", genome, track, chrom, start, end, 
+			MAX_WIG_LINES, wigFetchDataArray|wigFetchAscii|wigFetchBed, n);
+		printWig(genome, track, chrom, ci->size, start, end, strand, n, wds);
 		}
 	    else
 		{
@@ -242,6 +253,7 @@ trackDbFree(&tdb);
 freez(&hti);
 bedFreeList(&b);
 hgPositionsFree(&hgp);
+wiggleDataStreamFree(&wds);
 logTime("complete.");
 }
 

@@ -1,41 +1,9 @@
 /* hgData - simple RESTful interface to genome data. */
 #include "common.h"
 #include "hgData.h"
-#include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgData_wig.c,v 1.1.2.1 2009/03/10 07:32:41 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_wig.c,v 1.1.2.2 2009/03/11 09:38:17 mikep Exp $";
 
-static struct wiggleDataStream *wigOutRegion(char *genome, char *track, char *chrom, int start, int end, int maxOut, 
-    int operations, int *count)
-// operations: wigFetchNoOp || wigFetchStats || wigFetchRawStats || wigFetchBed || wigFetchDataArray || wigFetchAscii
-//     doAscii = operations & wigFetchAscii;
-//     doDataArray = operations & wigFetchDataArray;
-//     doBed = operations & wigFetchBed;
-//     doRawStats = operations & wigFetchRawStats;
-//     doStats = (operations & wigFetchStats) || doRawStats;
-//     doNoOp = operations & wigFetchNoOp;
-{
-int n;
-boolean hasBin = FALSE;
-/*struct bed *intersectBedList = NULL;
-char *table2 = NULL;*/
-char splitTableOrFileName[256];
-struct wiggleDataStream *wds = wiggleDataStreamNew();
-wds->setMaxOutput(wds, maxOut);
-wds->setChromConstraint(wds, chrom);
-wds->setPositionConstraint(wds, start, end);
-if (!hFindSplitTable(genome, chrom, track, splitTableOrFileName, &hasBin))
-    ERR_TRACK_NOT_FOUND(track, genome);
-n = wds->getData(wds, genome, splitTableOrFileName, operations);
-if (count)
-    *count = n;
-return wds;
-}
-
-//struct asciiDatum
-/* a single instance of a wiggle data value (trying float here to save space */
-//    unsigned chromStart;    /* Start position in chromosome, 0 relative */
-//    float value;
 
 static struct json_object *jsonAddWigAsciiData(struct json_object *o, int count, struct asciiDatum *data)
 {
@@ -53,15 +21,6 @@ for ( i = 0; i < count; ++i)
     }
 return o;
 }
-
-//struct wigAsciiData
-/* linked list of wiggle data in ascii form */
-//    struct wigAsciiData *next;  /*      next in singly linked list      */
-//    char *chrom;                /*      chrom name for this set of data */
-//    unsigned span;              /*      span for this set of data       */
-//    unsigned count;             /*      number of values in this block */
-//    double dataRange;           /*      for resolution calculation */
-//    struct asciiDatum *data;    /*      individual data items here */
 
 static struct json_object *jsonWigAscii(int count, struct wiggleDataStream *wds, struct wigAsciiData *ascii)
 {
@@ -116,19 +75,16 @@ struct wiggleDataStream *wds = wigOutRegion(genome, track, chrom, start, end, MA
 wiggleDataStreamFree(&wds);
 }
 
-void printWig(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand)
+void printWig(char *genome, char *track, char *chrom, int chromSize, int start, int end, char *strand, int count, struct wiggleDataStream *wds)
 // print wig records which intersect this start-end range
 {
 time_t modified = 0;
-int count;
-// options: wigFetchStats || wigFetchRawStats || wigFetchBed || wigFetchDataArray || wigFetchAscii
-struct wiggleDataStream *wds = wigOutRegion(genome, track, chrom, start, end, MAX_WIG_LINES, wigFetchDataArray|wigFetchAscii|wigFetchBed, &count);
-// ascii: asciiData->count
-// bed:   slCount(wds->bed)
 struct json_object *w = jsonWigAscii(count, wds, wds->ascii);
-wiggleDataStreamFree(&wds);
+logTime("%s: built json struct", __func__);
 okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(w));
 json_object_put(w);
+logTime("%s(%s,%s,%s,chromSize=%d,%d,%d,%s) complete.", __func__,
+    genome, track, chrom, chromSize, start, end, strand);
 }
 

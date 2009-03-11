@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.6 2009/03/04 10:12:04 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.7 2009/03/11 09:38:17 mikep Exp $";
 
 static struct dbDbClade *dbDbCladeLoad(char **row)
 /* Load a dbDbClade from row fetched with select * from dbDb
@@ -212,3 +212,32 @@ hFreeConn(&conn);
 *pTdb = tdb; 
 return latest;
 }
+
+struct wiggleDataStream *wigOutRegion(char *genome, char *track, char *chrom, int start, int end, int maxOut,
+    int operations, int *count)
+// operations: wigFetchNoOp || wigFetchStats || wigFetchRawStats || wigFetchBed || wigFetchDataArray ||
+// wigFetchAscii
+//     doAscii = operations & wigFetchAscii;
+//     doDataArray = operations & wigFetchDataArray;
+//     doBed = operations & wigFetchBed;
+//     doRawStats = operations & wigFetchRawStats;
+//     doStats = (operations & wigFetchStats) || doRawStats;
+//     doNoOp = operations & wigFetchNoOp;
+{
+int n;
+boolean hasBin = FALSE;
+/*struct bed *intersectBedList = NULL;
+char *table2 = NULL;*/
+char splitTableOrFileName[256];
+struct wiggleDataStream *wds = wiggleDataStreamNew();
+wds->setMaxOutput(wds, maxOut);
+wds->setChromConstraint(wds, chrom);
+wds->setPositionConstraint(wds, start, end);
+if (!hFindSplitTable(genome, chrom, track, splitTableOrFileName, &hasBin))
+    ERR_TRACK_NOT_FOUND(track, genome);
+n = wds->getData(wds, genome, splitTableOrFileName, operations);
+if (count)
+    *count = n;
+return wds;
+}
+
