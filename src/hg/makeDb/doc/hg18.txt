@@ -16515,6 +16515,7 @@ hgLoadBed -sqlTable=cgapSage.sql -tab hg18 cgapSage final.bed
 # HapMap SNPs (DONE 2007-05-23 Andy)
 # rel22
 # OBSOLETED by Phase II+III SNPs 3/09 angie (see HAPMAP REL27 GENOTYPES)
+# Tables renamed to [originalName]PhaseII 3/9/09
 ssh hgwdev
 bash
 cd /cluster/data/hg18/bed
@@ -16666,6 +16667,7 @@ hgLoadBed -tab -sqlTable=hapmapAllelesMacaque.sql hg18 hapmapAllelesMacaque hapm
 ~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg18 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 ln -s ~/kent/src/hg/lib/hapmapAllelesSummary.sql
 hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapmapSummary.tab
+
 
 #############################################################################
 # RE-BUILD WGRNA TRACK (DONE, 2007-05-31, Fan)
@@ -26675,6 +26677,115 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     zip -j bigZips/chromOut.RM3.2.7.zip */chr*.RM327.fa.out
     ln -s /hive/data/genomes/hg18/bigZips/chromOut.RM3.2.7.zip \
       /usr/local/apache/htdocs/goldenPath/hg18/bigZips/
+
+
+#############################################################################
+# GENOME VARIANTS - 1000 GENOMES (DONE 1/7/2009 giardine, adapted from an email to angie)
+    # December release from 1000 Genomes: SNP calls on four of the 6 high-cov
+    # individuals: a CEU trio and a YRI daughter.
+    # see ftp://ftp-trace.ncbi.nih.gov/1000genomes/release/2008_12/README_December2008_release
+    cd /hive/data/genomes/hg18/bed/pgSnp/
+    cat > trio2pg.pl <<'EOF'
+#!/usr/bin/perl -w
+use strict;
+
+#split out individual SNPs from trio file
+#format:chr     loc     ref     alleles snp.Q   av.max.map.Q    depth.cov       NA12891 NA12891.Q        NA12892
+NA12892.Q       NA12878 NA12878.Q       hwe     maf    tdt      display
+
+my $ac = shift @ARGV; #allele column, zero based
+if (!$ac) {
+   print "Usage: trio2pg.pl alleleColumn# < infile > outfile\n";
+   exit;
+}
+while (<>) { 
+   chomp;
+   my @f = split(/\t/);
+   if ($f[0] eq 'chr') { next; }
+   $f[$ac] =~ s/([ATGC])\/\1/$1/;
+   if ($f[$ac] eq uc($f[2])) { next; } #reference allele only
+   print "chr$f[0]\t", ($f[1]-1), "\t$f[1]\t$f[$ac]\t";
+   my $c = ($f[$ac] =~ tr/\//\//) + 1;
+   my $s = $f[$ac+1];
+   if ($s !~ /\//) { 
+      for (my $i = 1; $c > $i; $i++) { $s .= ",$f[$ac+1]"; }
+   }else {
+      $s =~ s/\//,/g;
+      if ($c == 1) { $s =~ s/,.*//; }
+   }
+   my $n = "0";
+   for (my $i = 1; $c > $i; $i++) { $n .= ",0"; } #allele count
+   print "$c\t$n\t$s\n";
+}
+
+exit;
+'EOF'
+    # << emacs
+    chmod a+x trio2pg.pl
+
+    #convert to pgSnp
+    set relDir = /hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/release/2008_12/
+    zcat $relDir/CEU.trio.dec.with.x.with.rs.calls.gz | trio2pg.pl 7 > NA12891.pgSnp
+    zcat $relDir/CEU.trio.dec.with.x.with.rs.calls.gz | trio2pg.pl 9 > NA12892.pgSnp
+    zcat $relDir/CEU.trio.dec.with.x.with.rs.calls.gz | trio2pg.pl 11 > NA12878.pgSnp
+    zcat $relDir/YRI.child.dec.intersect.calls.gz | trio2pg.pl 7 > NA19240.pgSnp
+    #gff for indels does not give nts, can't put in pgSnp format
+
+    hgLoadBed hg18 pgNA12878 NA12878.pgSnp \
+      -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+    hgLoadBed hg18 pgNA12891 NA12891.pgSnp \
+      -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+    hgLoadBed hg18 pgNA12892 NA12892.pgSnp \
+      -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+    hgLoadBed hg18 pgNA19240 NA19240.pgSnp \
+      -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+
+
+#############################################################################
+# GENOME VARIANTS - (DONE 1/7/09 giardine, adapted by angie from pgSnp/README)
+    # File pgVenter.bed placed in /hive/data/genomes/hg18/bed/pgSnp/ by 
+    # Belinda.
+    cd /hive/data/genomes/hg18/bed/pgSnp/
+    grep "^chr" pgVenter.bed | sort -k1,1 -k2,2n \
+    | hgLoadBed hg18 pgVenter stdin \
+      -noSort -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+    # 3/11/09: fetching this file because I think it's the original data (angie)
+    wget ftp://ftp.jcvi.org/pub/data/huref/HuRef.InternalHuRef-NCBI.gff
+
+
+#############################################################################
+# GENOME VARIANTS - YRI NA18507 (DONE 1/9/07 giardine, adapted by angie from pgSnp/README)
+    # SNP calls made by Aakrosh Ratan at PSU.
+    # Files pgYri{2,3}.txt placed in /hive/data/genomes/hg18/bed/pgSnp/ by 
+    # Belinda.
+    # yoruban snp calls (using solid software instead of maq)
+    # Loaded 11/4/08 according to hg18.history, but table status says created
+    # 1/7/09:
+    cd /hive/data/genomes/hg18/bed/pgSnp/
+    grep "^chr" pgYri2.txt | sort -k1,1 -k2,2n \
+    | hgLoadBed hg18 pgYoruban2 stdin \
+      -noSort -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+    #Another yoruban SNP set, same individual, Solexa reads, includes indels
+    # Loaded 11/7/08 according to hg18.history, but table status says created
+    # 1/7/09:
+    grep "^chr" pgYri3.txt | sort -k1,1 -k2,2n \
+    | hgLoadBed hg18 pgYoruban3 stdin \
+      -noSort -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+
+
+#############################################################################
+# GENOME VARIANTS - YH (DONE 2/24/09 giardine, adapted by angie from pgSnp/README)
+    #Asian individual (YH1) from Nature paper
+    #http://yh.genomics.org.cn/index.jsp
+    # File pgSnpYh.txt placed in /hive/data/genomes/hg18/bed/pgSnp/ by 
+    # Belinda.
+    cd /hive/data/genomes/hg18/bed/pgSnp/
+    grep "^chr" pgSnpYh.txt | sort -k1,1 -k2,2n \
+    | hgLoadBed hg18 pgYh1 stdin \
+      -noSort -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+    # 3/11/09: fetching this file because I think it's the original data (angie)
+    wget -O "yhsnp_add.gff" \
+      'http://yh.genomics.org.cn/do.downServlet?file=data/snps/yhsnp_add.gff'
 
 
 #############################################################################
