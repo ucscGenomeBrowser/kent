@@ -68,11 +68,10 @@
 #define ANNOJ_NESTED_FMT ".annoj-nested"
 #define ALLCHROMS_ARG "all_chroms"
 
-#define ALLCHROMS_ARG "all_chroms"
-
 #define MAX_CHROM_COUNT 10000 // max number of chromosomes to display automatically in genome query
 #define MAX_WIG_LINES 500000  // max number of wiggle records to return
 
+#define TIMING 0
 
 #ifndef MJP
 #define MJP(v) verbose((v),"%s[%3d]: ", __func__, __LINE__)
@@ -129,6 +128,11 @@ struct dbDbClade
     };
 
 /* functions */
+
+void logTime(char *label, ...);
+/* Print stderr label and how long it's been since last call.  Call with
+ * a NULL label to initialize. */
+
 char *nullOrVal(char *val);
 // return the value if not null, or else the string "(null)"
 
