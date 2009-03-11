@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.477 2009/03/10 19:05:42 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.478 2009/03/11 16:57:06 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2046,7 +2046,7 @@ for (i = 0;  i < popCount;  i++)
 if (cellCount != 0)
     {
     while (cellCount++ < 12)
-	puts("</TD>");
+	puts("<TD></TD>");
     puts("</TR>");
     }
 puts("</TABLE>");
