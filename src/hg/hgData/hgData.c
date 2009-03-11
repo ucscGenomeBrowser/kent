@@ -2,11 +2,12 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.23 2009/03/10 07:32:11 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.24 2009/03/11 08:56:17 mikep Exp $";
 
 void doGet()
 {
 // these optional cgi strings are set to NULL if not present
+logTime(NULL);
 struct tm *thisTime, *latestTime;
 struct chromInfo *ci = NULL;
 struct trackDb *tdb = NULL;
@@ -38,6 +39,7 @@ time_t modified = 0, genomeMod = 0, trackMod = 0;
 AllocVar(thisTime);
 AllocVar(latestTime);
 // list information about all active genome databases
+logTime("init(%s,%s,%s,%s:%c:%d-%d)", cmd, genome, track, chrom, *strand, start, end);
 MJP(2); verbose(2,"cmd=[%s] genome=[%s] track=[%s] pos=[%s:%c:%d-%d]\n", cmd, genome, track, chrom, *strand, start, end);
 if (*genome)
     {
@@ -54,6 +56,7 @@ if (!*cmd)
     }
 else if (sameOk(GENOMES_CMD, cmd)) 
     {
+    logTime("%s(genome=%s)", cmd, genome);
     // no genome -> get all genomes
     // genome, no chrom => get genome & all chroms
     // genome, chrom => get genome & one chrom
@@ -88,11 +91,13 @@ else if (sameOk(GENOMES_CMD, cmd))
     }
 else if (sameOk(TRACKS_CMD, cmd))
     {
+    logTime("%s(genome=%s,track=%s)", cmd, genome, track);
     if (*genome)
 	{
 	// validate genome & track
 	// modified date is greatest of all trackDb dates or genome.chromInfo 
 	modified = max(genomeMod, trackDbLatestUpdateTime(genome));
+	logTime("trackDbLatestUpdateTime(%s)", genome);
 	if (*track)
 	    modified = max(modified, trackMod);
 	if (!notModifiedResponse(reqEtag, reqModified, modified))
@@ -102,11 +107,13 @@ else if (sameOk(TRACKS_CMD, cmd))
 		hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
 		if (!(hti = hFindTableInfo(genome, chrom, rootName)))
 		    ERR_TABLE_INFO_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
+		logTime("hFindTableInfo(%s,%s,%s)", genome, chrom, rootName);
 		}
 	    else 
 		{
 		if ( !(tdb = hTrackDb(genome, NULL)) )
 		    ERR_TRACK_INFO_NOT_FOUND("<any>", genome);
+		logTime("hTrackDb(%s,NULL)",genome);
 		}
 	    printTrackInfo(genome, track, tdb, hti, modified);
 	    }
@@ -118,6 +125,7 @@ else if (sameOk(TRACKS_CMD, cmd))
     }
 else if (sameOk(SEARCH_CMD, cmd))
     {
+    logTime("%s(genome=%s)", cmd, genome);
     if (*genome)
 	{
 	// If no search term, send empty result
@@ -128,11 +136,13 @@ else if (sameOk(SEARCH_CMD, cmd))
 	    { // check if genome, track, or spec table(s) have changed
 	    modified = max(genomeMod, trackMod);
 	    modified = max(modified, findSpecLatestUpdateTime(genome));
+	    logTime("findSpecLatestUpdateTime(%s)", genome);
 	    if (!notModifiedResponse(reqEtag, reqModified, modified))
 		{
 		char where[512];
 		safef(where, sizeof(where), "searchTable = '%s'", track);
 		hgp = hgPositionsFindWhere(genome, term, "dummyCgi", "dummyApp", NULL, TRUE, where);
+		logTime("hgPositionsFindWhere(%s,%s,dummyCgi,dummyApp,NULL,TRUE,where=%s)", genome, term, where);
 		//hgp = hgPositionsFindWhere(genome, term, NULL, NULL, NULL, TRUE, where);
 		searchTracks(modified, hgp, genome, track, term);
 		}
@@ -140,6 +150,7 @@ else if (sameOk(SEARCH_CMD, cmd))
 	else // we are searching through many tracks, so dont use cache (dont set last-modified)
 	    {
 	    hgp = hgPositionsFind(genome, term, "dummyCgi", "dummyApp", NULL, TRUE);
+	    logTime("hgPositionsFind(%s,%s,dummyCgi,dummyApp,NULL,TRUE)", genome, term);
 	    //hgp = hgPositionsFind(genome, term, NULL, NULL, NULL, TRUE);
 	    searchTracks(0, hgp, genome, track, term);
 	    }
@@ -152,6 +163,7 @@ else if (sameOk(META_SEARCH_CMD, cmd))
     }
 else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
     {
+    logTime("%s(genome=%s,track=%s)", cmd, genome, track);
     if (!*genome)
 	ERR_NO_GENOME;
     if (!*track)
@@ -163,6 +175,7 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
     // check genome.chromInfo, the track, or the trackDbs for changes
     modified = max(genomeMod, trackMod);
     modified = max(modified, trackDbLatestUpdateTime(genome));
+    logTime("trackDbLatestUpdateTime(%s)", genome);
     if (!notModifiedResponse(reqEtag, reqModified, modified))
 	{
 	hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
@@ -170,6 +183,7 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 	    ERR_NO_CHROM;
 	if (!(ci = hGetChromInfo(genome, chrom)))
 	    ERR_CHROM_NOT_FOUND(genome, chrom);
+	logTime("hGetChromInfo(%s,%s)", genome, chrom);
 	if (end<start)
 	    ERR_START_AFTER_END(start, end);
 	if (start<0) // MJP FIXME: should do redirect to the new url with start d set to 0
@@ -183,8 +197,10 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 
 	if (!(hti = hFindTableInfo(genome, chrom, rootName)))
 	    ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
+	logTime("hFindTableInfo(%s,%s,%s)", genome, chrom, rootName);
 	// test how many rows we are about to receive
 	int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
+	logTime("hGetBedRangeCount(%s,%s,%s,%d,%d,NULL) -> %d", genome, tdb->tableName, chrom, start, end, n);
 	if (sameOk(COUNT_CMD, cmd))
 	    {
 	    if (differentString(track, tdb->tableName))
@@ -198,6 +214,7 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
 	    if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  
 		{
 		b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
+		logTime("hGetBedRange(%s,%s,%s,%d,%d,NULL) -> %d", genome, tdb->tableName, chrom, start, end);
 		printBed(genome, track, tdb->type, chrom, start, end, ci->size, hti, n, b, format, modified);
 		}
 	    else if (sameOk(trackType[0], "wigMaf"))  
@@ -225,6 +242,7 @@ trackDbFree(&tdb);
 freez(&hti);
 bedFreeList(&b);
 hgPositionsFree(&hgp);
+logTime("complete.");
 }
 
 int main(int argc, char *argv[])
