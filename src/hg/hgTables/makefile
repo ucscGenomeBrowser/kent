@@ -8,7 +8,7 @@ A = hgTables
 
 T = tstbug.o
 
-O = $A.o asObj.o bedList.o chromGraph.o compositeTrack.o custom.o filterFields.o \
+O = $A.o asObj.o bedList.o bigWig.o chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o maf.o mainPage.o rangeHistogram.o schema.o pal.o \
     seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o userRegions.o
@@ -42,6 +42,7 @@ compile: $O
 
 asObj.o:	hgTables.h
 bedList.o:	hgTables.h correlate.h
+bigWig.o:	hgTables.h
 custom.o:	hgTables.h
 compositeTrack.o:	hgTables.h
 filterFields.o:	hgTables.h

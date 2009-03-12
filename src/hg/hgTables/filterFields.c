@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.63 2009/01/16 21:11:10 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.64 2009/03/12 16:45:15 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -728,7 +728,7 @@ boolean isWig = FALSE;
 boolean isBedGr = isBedGraph(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
 
-isWig = isWiggle(db, table);
+isWig = isWiggle(db, table) || isBigWig(table);
 
 if (isBedGr)
     {

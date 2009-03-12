@@ -300,8 +300,19 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
 
+char *intersectOp();
+/* Get intersect op from CGI var and make sure it's ok. */
+
 boolean intersectionIsBpWise();
 /* Return TRUE if the intersection/union operation is base pair-wise. */
+
+Bits *bitsForIntersectingTable(struct sqlConnection *conn, struct region *region, 
+	int chromSize, boolean isBpWise);
+/* Get a bitmap that corresponds to the table we are intersecting with. 
+ * Consult CGI vars to figure out what table it is. */
+
+boolean intersectOverlapFilter(char *op, double moreThresh, double lessThresh, double overlap);
+/* Return TRUE if have enough (or not too much) overlap according to thresholds and op. */
 
 /* --------- Functions related to correlation. --------------- */
 boolean anyCorrelation();
@@ -561,6 +572,9 @@ void floatStatRow(char *label, double x);
 void stringStatRow(char *label, char *val);
 /* Print label, string value. */
 
+void wigFilterStatRow(struct sqlConnection *conn);
+/* Put row in statistics table that says what wig filter is on. */
+
 /* ----------- ChromGraph stuff in chromGraph.c. */
 boolean isChromGraph(struct trackDb *track);
 /* Return TRUE if it's a chromGraph track */
@@ -593,6 +607,11 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
 
 #define	MAX_REGION_DISPLAY	1000
 
+enum wigOutputType 
+/*	type of output requested from static int wigOutRegion()	*/
+    {
+    wigOutData, wigOutBed, wigDataNoPrint,
+    };
 boolean trackIsType(char *table, char *type);
 /* Return TRUE track is a specific type.  Type should be something like "bed" or
  * "bigBed" or "bigWig" */
@@ -603,13 +622,6 @@ boolean isWiggle(char *db, char *table);
 boolean isBedGraph(char *table);
 /* Return TRUE if table is specified as a bedGraph in the current database's 
  * trackDb. */
-
-boolean isBigWig(char *table);
-/* Return TRUE if table is bedGraph in current database's trackDb. */
-
-char *bigWigFileName(char *table, struct sqlConnection *conn);
-/* Return file name associated with bigWig.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
 
 struct bed *getWiggleAsBed(
     char *db, char *table, 	/* Database and table. */
@@ -652,11 +664,27 @@ void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn
 void doSummaryStatsWiggle(struct sqlConnection *conn);
 /* Put up page showing summary stats for wiggle track. */
 
+void wigShowFilter(struct sqlConnection *conn);
+/* print out wiggle data value filter */
+
+/* ----------- BigWig business in bigWig.c -------------------- */
+
+boolean isBigWig(char *table);
+/* Return TRUE if table is bedGraph in current database's trackDb. */
+
+char *bigWigFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with bigWig.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+
+
+int bigWigOutRegion(char *table, struct sqlConnection *conn,
+			     struct region *region, int maxOut,
+			     enum wigOutputType wigOutType);
+/* Write out bigWig for region, doing intersecting and filtering as need be. */
+
 void doSummaryStatsBigWig(struct sqlConnection *conn);
 /* Put up page showing summary stats for bigWig track. */
 
-void wigShowFilter(struct sqlConnection *conn);
-/* print out wiggle data value filter */
 
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();

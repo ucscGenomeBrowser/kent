@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.71 2009/03/10 01:25:23 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.72 2009/03/12 16:45:15 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -2409,6 +2409,7 @@ tmpString = cloneString(windowingSizeStr);
 stripChar(tmpString, ',');
 windowingSize = sqlUnsigned(tmpString);
 freeMem(tmpString);
+
 
 /*	limit total data points and window size	options */
 hPrintf("<TABLE BORDER=0><TR><TD>Limit total data points in result:&nbsp\n");

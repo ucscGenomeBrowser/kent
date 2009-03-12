@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.23 2009/03/10 01:25:24 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.24 2009/03/12 16:45:16 kent Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -239,6 +239,16 @@ void stringStatRow(char *label, char *val)
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%s</TD></TR>\n", label, val);
 }
 
+void wigFilterStatRow(struct sqlConnection *conn)
+/* Put row in statistics table that says what wig filter is on. */
+{
+hPrintf("<TR><TD>filter</TD><TD ALIGN=RIGHT>");
+if (anyFilter())
+    wigShowFilter(conn);
+else
+    hPrintf("off");
+hPrintf("</TD>\n");
+}
 
 void doSummaryStatsBed(struct sqlConnection *conn)
 /* Put up page showing summary stats for track that is in database

@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "localmem.h"
 #include "portable.h"
 #include "obscure.h"
 #include "jksql.h"
@@ -20,19 +21,11 @@
 #include "wiggle.h"
 #include "hmmstats.h"
 #include "correlate.h"
-#include "bbiFile.h"
-#include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.67 2009/03/10 01:25:24 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.68 2009/03/12 16:45:16 kent Exp $";
 
 extern char *maxOutMenu[];
-
-enum wigOutputType 
-/*	type of output requested from static int wigOutRegion()	*/
-    {
-    wigOutData, wigOutBed, wigDataNoPrint,
-    };
 
 
 /*	a common set of stuff is accumulating in the various
@@ -80,6 +73,11 @@ char varPrefix[128];
 struct hashEl *varList, *var;
 char *pat = NULL;
 char *cmp = NULL;
+if (constraint != NULL)
+    *constraint = NULL;	// Make sure return variable gets set to something at least. 
+
+if (isCustomTrack(table))
+    db = "ct";
 
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 
@@ -149,6 +147,7 @@ if (cmp && pat)
 else
     return FALSE;
 }	/*	static boolean checkWigDataFilter()	*/
+
 
 static void wigDataHeader(char *name, char *description, char *visibility,
 	enum wigOutputType wigOutType)
@@ -242,6 +241,14 @@ static struct bed *bedTable2(struct sqlConnection *conn,
 	struct region *region, char *table2)
 /*	get a bed list, possibly complement, for table2	*/
 {
+/* This use of bedTable rather than a bitmap is not really working. The
+ * rest of the table browser does intersection at the exon level, while
+ * the wig code, which this is part of, does it at the gene level.  I
+ * noticed it while working on the corresponding routines for bigWig,
+ * which I'm building to work with bitmaps at the exon level.  I'm not
+ * sure it's worth fixing this code since nobody has complained, and we're
+ * probably going to be doing mostly bigWig rather than wig in the future. 
+ *    -JK */
 boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
 char *op = cartString(cart, hgtaIntersectOp);
 struct bed *bedList = NULL;
@@ -458,26 +465,6 @@ static int bedGraphOutRegion(char *table, struct sqlConnection *conn,
 struct dataVector *dv =bedGraphDataVector(table, conn, region);
 int resultCount = printDataVectorOut(dv, wigOutType, maxOut, NULL);
 dataVectorFree(&dv);
-return resultCount;
-}
-
-static int bigWigOutRegion(char *table, struct sqlConnection *conn,
-			     struct region *region, int maxOut,
-			     enum wigOutputType wigOutType)
-/* Read in bigWig as dataVector (filtering is handled there), 
- * intersect if necessary, and print it out. */
-{
-int resultCount = 0;
-char *wigFileName = bigWigFileName(table, conn);
-if (wigFileName)
-    {
-    struct bbiFile *bwf = bigWigFileOpen(wigFileName);
-    if (bwf)
-	resultCount = bigWigIntervalDump(bwf, region->chrom, region->start, region->end, 
-		maxOut, stdout);
-    bbiFileClose(&bwf);
-    }
-freeMem(wigFileName);
 return resultCount;
 }
 
@@ -728,26 +715,6 @@ if (curOut >= maxOut)
 
 /***********   PUBLIC ROUTINES  *********************************/
 
-char *bigWigFileName(char *table, struct sqlConnection *conn)
-/* Return file name associated with bigWig.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
-{
-char *fileName = NULL;
-if (isCustomTrack(table))
-    {
-    struct customTrack *ct = lookupCt(table);
-    if (ct != NULL)
-        fileName = cloneString(trackDbSetting(ct->tdb, "dataUrl"));
-    }
-else
-    {
-    char query[256];
-    safef(query, sizeof(query), "select fileName from %s", table);
-    fileName = sqlQuickString(conn, query);
-    }
-return fileName;
-}
-
 struct dataVector *bedGraphDataVector(char *table,
 	struct sqlConnection *conn, struct region *region)
 /* Read in bedGraph as dataVector and return it.  Filtering, subtrack merge 
@@ -778,28 +745,6 @@ else
     }
 return dv;
 }
-
-#ifdef SOON
-struct dataVector *bigWigDataVector(char *table,
-	struct sqlConnection *conn, struct region *region)
-/* Read in bigWig as dataVector and return it.  Filtering, subtrack merge 
- * and intersection are handled. */
-{
-struct dataVector *dv = NULL;
-
-if (anySubtrackMerge(database, table))
-    dv = mergedWigDataVector(table, conn, region);
-else
-    {
-    char *fileName = bigWigFileName(table, conn);
-    struct dataVector *allocDataVector(char *chrom, int size)
-    struct trackTable *tt1 = trackTableNew(tdb, table, conn);
-    dv = dataVectorFetchOneRegion(tt1, region, conn);
-    intersectDataVector(table, dv, region, conn);
-    }
-return dv;
-}
-#endif /* SOON */
 
 
 struct dataVector *wiggleDataVector(struct trackDb *tdb, char *table,
@@ -870,12 +815,6 @@ if (db != NULL && table != NULL)
 	}
     }
 return(typeWiggle);
-}
-
-boolean isBigWig(char *table)
-/* Return TRUE if table corresponds to a bigWig file. */
-{
-return trackIsType(table, "bigWig");
 }
 
 boolean isBedGraph(char *table)
@@ -1309,59 +1248,11 @@ stringStatRow("region", regionName);
 numberStatRow("bases in region", regionSize);
 numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
-stringStatRow("filter", (anyFilter() ? "on" : "off"));
-stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
+wigFilterStatRow(conn);
+stringStatRow("intersection", cartUsualString(cart, hgtaIntersectTable, "off"));
 hTableEnd();
 htmlClose();
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
-
-void doSummaryStatsBigWig(struct sqlConnection *conn)
-/* Put up page showing summary stats for bigWig track. */
-{
-struct trackDb *track = curTrack;
-char *table = curTable;
-char *shortLabel = (track == NULL ? table : track->shortLabel);
-char *fileName = bigWigFileName(table, conn);
-struct bbiFile *bwf = bigWigFileOpen(fileName);
-
-htmlOpen("%s (%s) Big Wig Summary Statistics", shortLabel, table);
-
-struct region *region, *regionList = getRegions();
-double sumData = 0, sumSquares = 0, minVal = 0, maxVal = 0;
-bits64 validCount = 0;
-for (region = regionList; region != NULL; region = region->next)
-    {
-    struct bbiSummaryElement sum;
-    if (bbiSummaryArrayExtended(bwf, region->chrom, region->start, region->end, bigWigIntervalQuery, 
-    	1, &sum))
-        {
-	if (validCount == 0)
-	    {
-	    minVal = sum.minVal;
-	    maxVal = sum.maxVal;
-	    }
-	sumData += sum.sumData;
-	sumSquares += sum.sumSquares;
-	validCount += sum.validCount;
-	}
-    }
-
-
-hTableStart();
-floatStatRow("mean", sumData/validCount);
-floatStatRow("min", minVal);
-floatStatRow("max", maxVal);
-floatStatRow("standard deviation", calcStdFromSums(sumData, sumSquares, validCount));
-numberStatRow("bases with data", validCount);
-bits64 regionSize = basesInRegion(regionList, 0);
-bits64 gapTotal = gapsInRegion(conn, regionList, 0);
-numberStatRow("bases with sequence", regionSize - gapTotal);
-numberStatRow("bases in region", regionSize);
-hTableEnd();
-
-bbiFileClose(&bwf);
-htmlClose();
-}
 
 void wigShowFilter(struct sqlConnection *conn)
 /* print out wiggle data value filter */
@@ -1369,9 +1260,7 @@ void wigShowFilter(struct sqlConnection *conn)
 double ll, ul;
 char *constraint;
 
-if ( (isCustomTrack(curTable) &&
-	checkWigDataFilter("ct", curTable, &constraint, &ll, &ul))
-	|| checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
+if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
     {
     if (constraint && sameWord(constraint, "in range"))
 	{
