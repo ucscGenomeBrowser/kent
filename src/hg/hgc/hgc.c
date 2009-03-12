@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1516 2009/03/09 21:43:44 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1517 2009/03/12 19:22:32 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2550,7 +2550,8 @@ if (!isCustomTrack(tdb->tableName))
     printOrigAssembly(tdb);
     if ((tableName = hTableForTrack(database, tdb->tableName)) != NULL)
 	{
-	struct sqlConnection *conn = hAllocConn(database);
+	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+
 	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
 	if (date != NULL)
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
