@@ -1,5 +1,6 @@
 /* hgGene - A CGI script to display the gene details page.. */
 #include "common.h"
+#include "hCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "dystring.h"
@@ -17,7 +18,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.113 2009/02/13 02:38:28 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.114 2009/03/12 21:51:26 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -351,7 +352,8 @@ struct section *sectionList = NULL;
 
 readRa("section.ra", &sectionRa);
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
+/* disable ortherOrg section for CGB servers for the time being */
+if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
 
