@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.84 2008/09/03 19:19:27 markd Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.85 2009/03/12 20:56:40 kent Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -723,6 +723,31 @@ if (wds->stats)
 wds->stats = NULL;
 }
 
+enum wigCompare wigCompareFromString(char *string)
+/* Given a string return corresponding cmp code. */
+{
+if (sameWord(string,"<"))
+    return wigLessThan_e;
+else if (sameWord(string,"<="))
+    return wigLessEqual_e;
+else if (sameWord(string,"="))
+    return wigEqual_e;
+else if (sameWord(string,"!="))
+    return wigNotEqual_e;
+else if (sameWord(string,">="))
+    return wigGreaterEqual_e;
+else if (sameWord(string,">"))
+    return wigGreaterThan_e;
+else if (sameWord(string,"in range"))
+    return wigInRange_e;
+else
+    {
+    errAbort("wigSetCompareFunctions: unknown constraint: '%s'", string);
+    return wigLessThan_e;
+    }
+}
+
+
 /*	the double comparison functions
  *	used to check the wiggle SQL rows which are a bucket of values
  *	between *lower and *upper.  Therefore, the value to be checked
@@ -763,25 +788,7 @@ static void wigSetCompareFunctions(struct wiggleDataStream *wds)
 {
 if (!wds->dataConstraint)
     return;
-
-if (sameWord(wds->dataConstraint,"<"))
-    wds->wigCmpSwitch = wigLessThan_e;
-else if (sameWord(wds->dataConstraint,"<="))
-    wds->wigCmpSwitch = wigLessEqual_e;
-else if (sameWord(wds->dataConstraint,"="))
-    wds->wigCmpSwitch = wigEqual_e;
-else if (sameWord(wds->dataConstraint,"!="))
-    wds->wigCmpSwitch = wigNotEqual_e;
-else if (sameWord(wds->dataConstraint,">="))
-    wds->wigCmpSwitch = wigGreaterEqual_e;
-else if (sameWord(wds->dataConstraint,">"))
-    wds->wigCmpSwitch = wigGreaterThan_e;
-else if (sameWord(wds->dataConstraint,"in range"))
-    wds->wigCmpSwitch = wigInRange_e;
-else
-    errAbort("wigSetCompareFunctions: unknown constraint: '%s'",
-	wds->dataConstraint);
-verbose(VERBOSE_CHR_LEVEL, "#\twigSetCompareFunctions: set to '%s'\n", wds->dataConstraint);
+wds->wigCmpSwitch = wigCompareFromString(wds->dataConstraint);
 }
 
 static void setDataConstraint(struct wiggleDataStream *wds,
@@ -812,6 +819,44 @@ else
     }
 wigSetCompareFunctions(wds);
 wds->useDataConstraint = TRUE;
+}
+
+boolean wigCompareValFilter(double val, enum wigCompare cmp, double ll, double ul)
+/* Return TRUE if val passes comparison filter. */
+{
+boolean takeIt = FALSE;
+switch (cmp)
+    {
+    case wigNoOp_e:
+	takeIt = TRUE;
+	break;
+    case wigInRange_e:
+	takeIt = (val < ul) &&
+	    (val >= ll);
+	break;
+    case wigLessThan_e:
+	takeIt = val < ll;
+	break;
+    case wigLessEqual_e:
+	takeIt = val <= ll;
+	break;
+    case wigEqual_e:
+	takeIt = val == ll;
+	break;
+    case wigNotEqual_e:
+	takeIt = val != ll;
+	break;
+    case wigGreaterEqual_e:
+	takeIt = val >= ll;
+	break;
+    case wigGreaterThan_e:
+	takeIt = val > ll;
+	break;
+    default:
+	errAbort("wigCmpValFilter: illegal wigCmpSwitch ? %#x", cmp);
+	break;
+    }
+return takeIt;
 }
 
 static unsigned long long getData(struct wiggleDataStream *wds, char *db,

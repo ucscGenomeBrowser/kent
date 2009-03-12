@@ -312,6 +312,12 @@ enum wigCompare
 	wigNotEqual_e, wigGreaterEqual_e, wigGreaterThan_e,
     };
 
+enum wigCompare wigCompareFromString(char *string);
+/* Given a string return corresponding cmp code. */
+
+boolean wigCompareValFilter(double val, enum wigCompare cmp, double ll, double ul);
+/* Return TRUE if val passes comparison filter. */
+
 enum wigDataFetchType
 /*	bit masks to specify type of data to fetch via getData()	*/
     {
