@@ -14,7 +14,8 @@
 #define SCORE_COLORS "Normalized Score"
 #define NO_COLORS "Black"
 
-extern enum chainColorEnum chainFetchColorOption(struct trackDb *tdb,
-        char **optString);
+extern enum chainColorEnum chainFetchColorOption(struct cart *cart,
+    struct trackDb *tdb, char **optString);
+/******	ColorOption - Chrom colors by default **************************/
 
 #endif /* CHAINCART_H */

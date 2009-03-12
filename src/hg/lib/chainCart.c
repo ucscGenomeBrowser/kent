@@ -10,21 +10,18 @@
 #include "hui.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainCart.c,v 1.1 2004/07/19 22:45:54 hiram Exp $";
+static char const rcsid[] = "$Id: chainCart.c,v 1.2 2009/03/12 00:05:45 hiram Exp $";
 
-extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
-
+enum chainColorEnum chainFetchColorOption(struct cart *cart,
+    struct trackDb *tdb, char **optString)
 /******	ColorOption - Chrom colors by default **************************/
-enum chainColorEnum chainFetchColorOption(struct trackDb *tdb,
-	char **optString)
 {
 char *Default = chainColorEnumToString(chainColorChromColors);
-char option[MAX_OPT_STRLEN]; /* .color  */
 char *chainColor = NULL;
 enum chainColorEnum ret;
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
-chainColor = cloneString(cartOptionalString(cart, option));
+chainColor = cloneString(cartOptionalStringClosestToHome(cart, tdb, FALSE,
+	 OPT_CHROM_COLORS));
 
 /*	If chainColor is a string, it came from the cart, otherwise
  *	see if it is specified in the trackDb option, finally
@@ -33,7 +30,7 @@ chainColor = cloneString(cartOptionalString(cart, option));
 if (!chainColor)
     {
     char * tdbDefault = 
-	trackDbSettingOrDefault(tdb, OPT_CHROM_COLORS, Default);
+	trackDbSettingClosestToHomeOrDefault(tdb, OPT_CHROM_COLORS, Default);
 
     freeMem(chainColor);
     if (differentWord(Default,tdbDefault))

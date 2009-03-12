@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.58 2009/02/09 23:14:11 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.59 2009/03/12 00:05:45 hiram Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -657,6 +657,11 @@ else if(startsWith("bigWig", tdb->type))
     cType = cfgWig;
 else if(startsWith("bedGraph", tdb->type))
     cType = cfgWig;
+else if(startsWith("netAlign", tdb->type))
+    {
+    cType = cfgNone;
+    warnIfNecessary = FALSE;
+    }
 else if(sameWord("bed5FloatScore",       tdb->type)
      || sameWord("bed5FloatScoreWithFdr",tdb->type))
     cType = cfgBedScore;
@@ -674,6 +679,8 @@ else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so f
     if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }
+else if(startsWith("chain",tdb->type))
+    cType = cfgChain;
 
 if(cType == cfgNone && warnIfNecessary)
     {

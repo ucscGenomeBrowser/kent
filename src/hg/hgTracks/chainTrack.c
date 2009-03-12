@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.30 2008/09/03 19:19:01 markd Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.31 2009/03/12 00:05:48 hiram Exp $";
 
 
 struct cartOptions
@@ -377,18 +377,15 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 
 boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
-char scoreOption[256];
 
 AllocVar(chainCart);
 
 normScoreAvailable = chainDbNormScoreAvailable(database, chromName, tg->mapName, NULL);
 
 /*	what does the cart say about coloring option	*/
-chainCart->chainColor = chainFetchColorOption(tdb, (char **) NULL);
-
-snprintf( scoreOption, sizeof(scoreOption), "%s.scoreFilter", tdb->tableName);
-chainCart->scoreFilter = cartUsualInt(cart, scoreOption, 0);
-
+chainCart->chainColor = chainFetchColorOption(cart, tdb, (char **) NULL);
+chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
+	FALSE, SCORE_FILTER, 0);
 
 linkedFeaturesMethods(tg);
 tg->itemColor = lfChromColor;	/*	default coloring option */
@@ -412,11 +409,9 @@ if (normScoreAvailable)
     }
 else
     {
-    char option[128]; /* Option -  rainbow chromosome color */
     char *optionStr;	/* this old option was broken before */
 
-    snprintf(option, sizeof(option), "%s.color", tg->mapName);
-    optionStr = cartUsualString(cart, option, "on");
+    optionStr = cartUsualStringClosestToHome(cart, tdb, FALSE, "color", "on");
     if (differentWord("on",optionStr))
 	{
 	setNoColor(tg);

@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.478 2009/03/11 16:57:06 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.479 2009/03/12 00:05:46 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1664,7 +1664,7 @@ if (chainDbNormScoreAvailable(database, chromosome, tdb->tableName, NULL))
     {
     char options[1][256];	/*	our option strings here	*/
     char *colorOpt;
-    (void) chainFetchColorOption(tdb, &colorOpt);
+    (void) chainFetchColorOption(cart, tdb, &colorOpt);
     snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
     printf("<p><b>Color chains by:&nbsp;</b>");
     chainColorDropDown(&options[0][0], colorOpt);

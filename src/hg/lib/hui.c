@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.171 2009/03/11 23:08:28 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.172 2009/03/12 00:05:45 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2536,12 +2536,12 @@ static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trac
 switch(cType)
     {
     case cfgBedScore:
-                        {
-                        char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
-                        int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-                        scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
-                        }
-                        break;
+	{
+	char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+	int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+	scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+	}
+	break;
     case cfgPeak:
                         encodePeakCfgUi(cart,tdb,prefix,title,boxed);
                         break;
@@ -2550,6 +2550,8 @@ switch(cType)
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
                         break;
     case cfgGenePred:   genePredCfgUi(cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites.");
                         break;
@@ -3127,6 +3129,34 @@ if (scoreCtString != NULL)
     if (!compositeLevel)
         printf("&nbsp; (range: 1 to 100000, total items: %d)",getTableSize(db, tdb->tableName));
     }
+cfgEndBox(boxed);
+}
+
+void chainCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+/* Put up UI for chain tracks */
+{
+cfgBeginBoxAndTitle(boxed, title);
+
+char options[1][256];	/*	our option strings here	*/
+char *colorOpt;
+(void) chainFetchColorOption(cart, tdb, &colorOpt);
+snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
+printf("<p><b>Color chains by:&nbsp;</b>");
+chainColorDropDown(&options[0][0], colorOpt);
+
+freeMem (colorOpt);
+
+char *filterSetting;
+char filterVar[256];
+char *filterVal = "";
+
+printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
+filterSetting = cartUsualString(cart, filterVar, filterVal);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
+
+scoreCfgUi(db, cart,tdb,tdb->tableName,NULL,2000000000,FALSE);
+
 cfgEndBox(boxed);
 }
 
