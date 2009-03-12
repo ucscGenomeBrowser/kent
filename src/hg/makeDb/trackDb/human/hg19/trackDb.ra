@@ -23,208 +23,167 @@ track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
 longLabel Haplotype regions, chain and net tracks
-subGroup1 view Views region=Regions chain=Chains net=Nets
+subGroup1 view Views chain=Chains net=Nets
 subGroup2 refChr Reference_chromosome chr4=chr4 chr6=chr6 chr17=chr17 haps=haplotypes
-dimensions dimensionX=view dimensionY=refChr
+subGroup3 hapReg Haplotype_locus region=Regions
+dimensions dimensionX=refChr
 dragAndDrop subTracks
 visibility hide
 visibilityViewDefaults region=pack+ chain=squish net=dense
 group x
+noInherit on
 priority 398
 chromosomes chr4,chr6,chr17,chr6_ssto_hap7,chr6_mcf_hap5,chr6_cox_hap2,chr6_mann_hap4,chr6_apd_hap1,chr6_qbl_hap6,chr6_dbb_hap3,chr17_ctg5_hap1,chr4_ctg9_hap1
 color 0,0,0
 altColor 255,255,0
-spectrum on
-type chain hg19
 otherDb hg19
-chainColor Black
+type bed 3
+settingsByView chain:chainColor=Black,spectrum=on
+sortOrder refChr=+ view=+
 
     track hapRegions
     subTrack hapChainNet off
-    noInherit on
-    subGroups view=region
-    shortLabel Hap Region
-    longLabel Haplotype regions
-    visibility hide
+    subGroups hapReg=region
+    shortLabel Hap Locus
+    longLabel Haplotype locus on reference chromosomes
     type bed 4
-    priority 1
 
     track chain_apd_hap1
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel APD Chain
     longLabel chr6 haplotype APD Chain
-    priority 2
-    chainColor Black
+    type chain hg19
 
     track chain_cox_hap2
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel COX Chain
     longLabel chr6 haplotype COX Chain
-    priority 3
-    chainColor Black
+    type chain hg19
 
     track chain_dbb_hap3
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel DBB Chain
     longLabel chr6 haplotype DBB Chain
-    priority 4
-    chainColor Black
+    type chain hg19
 
     track chain_mann_hap4
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel MANN Chain
     longLabel chr6 haplotype MANN Chain
-    priority 5
-    chainColor Black
+    type chain hg19
 
     track chain_mcf_hap5
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel MCF Chain
     longLabel chr6 haplotype MCF Chain
-    priority 6
-    chainColor Black
+    type chain hg19
 
     track chain_qbl_hap6
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel QBL Chain
     longLabel chr6 haplotype QBL Chain
-    priority 7
-    chainColor Black
+    type chain hg19
 
     track chain_ssto_hap7
     subTrack hapChainNet off
     subGroups view=chain refChr=chr6
     shortLabel SSTO Chain
     longLabel chr6 haplotype SSTO Chain
-    priority 8
-    chainColor Black
+    type chain hg19
 
     track chain_chr17_ctg5_hap1
     subTrack hapChainNet off
     subGroups view=chain refChr=chr17
     shortLabel chr17 CTG5 Chain
     longLabel chr17 haplotype CTG5 Chain
-    priority 9
-    chainColor Black
+    type chain hg19
 
     track chain_chr4_ctg9_hap1
     subTrack hapChainNet off
     subGroups view=chain refChr=chr4
     shortLabel chr4 CTG9 Chain
     longLabel chr4 haplotype CTG9 Chain
-    priority 10
-    chainColor Black
+    type chain hg19
 
     track chain_haplotypes
     subTrack hapChainNet off
     subGroups view=chain refChr=haps
     shortLabel Hap Chains
     longLabel Reference chromosome chains on haplotypes
-    priority 11
-    chainColor Black
+    type chain hg19
 
     track net_apd_hap1
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel APD Net
     longLabel chr6 haplotype APD net
-    priority 12
     type netAlign hg19 chain_apd_hap1
-    otherDb hg19
 
     track net_cox_hap2
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel COX Net
     longLabel chr6 haplotype COX net
     type netAlign hg19 chain_cox_hap2
-    otherDb hg19
-    priority 13
 
     track net_dbb_hap3
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel DBB Net
     longLabel chr6 haplotype DBB net
     type netAlign hg19 chain_dbb_hap3
-    otherDb hg19
-    priority 14
 
     track net_mann_hap4
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel MANN Net
     longLabel chr6 haplotype MANN net
     type netAlign hg19 chain_mann_hap4
-    otherDb hg19
-    priority 15
 
     track net_mcf_hap5
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel MCF Net
     longLabel chr6 haplotype MCF net
     type netAlign hg19 chain_mcf_hap5
-    otherDb hg19
-    priority 16
 
     track net_qbl_hap6
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel QBL Net
     longLabel chr6 haplotype QBL net
     type netAlign hg19 chain_qbl_hap6
-    otherDb hg19
-    priority 17
 
     track net_ssto_hap7
     subTrack hapChainNet off
     subGroups view=net refChr=chr6
-    noInherit on
     shortLabel SSTO Net
     longLabel chr6 haplotype SSTO net
     type netAlign hg19 chain_ssto_hap7
-    otherDb hg19
-    priority 18
 
     track net_chr17_ctg5_hap1
     subTrack hapChainNet off
     subGroups view=net refChr=chr17
-    noInherit on
     shortLabel chr17 CTG5 Net
     longLabel chr17 haplotype CTG5 net
     type netAlign hg19 chain_chr17_ctg5_hap1
-    otherDb hg19
-    priority 19
 
     track net_chr4_ctg9_hap1
     subTrack hapChainNet off
     subGroups view=net refChr=chr4
-    noInherit on
     shortLabel chr4 CTG9 Net
     longLabel chr4 haplotype CTG9 net
     type netAlign hg19 chain_chr4_ctg9_hap1
-    otherDb hg19
-    priority 20
 
     track net_haplotypes
     subTrack hapChainNet off
     subGroups view=net refChr=haps
-    noInherit on
     shortLabel Hap Nets
     longLabel Reference chromosome nets on haplotypes
     type netAlign hg19 chain_haplotypes
-    otherDb hg19
-    priority 21
