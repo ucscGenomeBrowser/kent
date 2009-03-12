@@ -44,9 +44,9 @@ sortOrder refChr=+ view=+
     track hapRegions
     subTrack hapChainNet off
     subGroups hapReg=region
-    shortLabel Hap Locus
-    longLabel Haplotype locus on reference chromosomes
-    type bed 4
+    shortLabel Hap Mapping
+    longLabel Linear mapping of haplotype to reference chromosome
+    type bed 12
 
     track chain_apd_hap1
     subTrack hapChainNet off
