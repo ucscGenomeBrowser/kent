@@ -7,14 +7,16 @@
 #include "xAli.h"
 #include "hdb.h"
 #include "hgRelate.h"
+#include "pipeline.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.33 2008/09/03 19:19:44 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.34 2009/03/12 17:40:33 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"noTNameIx", OPTION_BOOLEAN},
     {"tNameIx", OPTION_BOOLEAN},  /* default now, but allow for backw.compat.*/
     {"nobin", OPTION_BOOLEAN},
+    {"noBin", OPTION_BOOLEAN},
     {"xa", OPTION_BOOLEAN},
     {"fastLoad", OPTION_BOOLEAN},
     {"onServer", OPTION_BOOLEAN},   /* this is now the default, leave in for compat */
@@ -22,6 +24,7 @@ static struct optionSpec optionSpecs[] = {
     {"append", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {"table", OPTION_STRING},
+    {"noSort", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -30,6 +33,7 @@ unsigned pslLoadOpts = 0;
 boolean append = FALSE;
 boolean keep = FALSE;
 char *clTableName = NULL;
+boolean noSort = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -54,6 +58,7 @@ errAbort(
   "   -append  Append data, don't drop tables before loading\n"
   "   -nobin Repress binning\n"
   "   -keep  Don't remove intermediate tab file/s after load\n"
+  "   -noSort  don't sort (you better be sorting before this)\n"
 );
 }
 
@@ -106,12 +111,30 @@ else
 freez(&sqlCmd);
 }
 
+/* Sort output -- different field offsets depending on whether or not a
+ * bin column is included in the output. */
+static char *sortNoBinCmd[] = {"sort", "-k14,14", "-k16n,16n", NULL};
+static char **outPipeNoBin[] = {sortNoBinCmd, NULL};
+static char *sortBinCmd[] = {"sort", "-k15,15", "-k17n,17n", NULL};
+static char **outPipeBin[] = {sortBinCmd, NULL};
+
 void copyPslToTab(char *pslFile, char *tabFile)
 /* copy a single PSL to the tab file */
 {
 struct psl *psl;
 struct lineFile *lf = pslFileOpen(pslFile);
-FILE *tabFh = mustOpen(tabFile, "w");
+struct pipeline *pl = NULL;
+FILE *tabFh = NULL;
+if (noSort)
+    tabFh = mustOpen(tabFile, "w");
+else
+    {
+    if (pslCreateOpts & PSL_WITH_BIN)
+	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL);
+    else
+	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL);
+    tabFh = pipelineFile(pl);
+    }
 while ((psl = pslNext(lf)) != NULL)
     {
     if (pslCreateOpts & PSL_WITH_BIN)
@@ -120,7 +143,13 @@ while ((psl = pslNext(lf)) != NULL)
     pslFree(&psl);
     }
 lineFileClose(&lf);
-carefulClose(&tabFh);
+if (noSort)
+    carefulClose(&tabFh);
+else
+    {
+    pipelineWait(pl);
+    pipelineFree(&pl);
+    }
 }
 
 void copyPslXaToTab(char *pslFile, char *tabFile)
@@ -129,7 +158,18 @@ void copyPslXaToTab(char *pslFile, char *tabFile)
 struct xAli *xa;
 char *row[23];
 struct lineFile *lf = lineFileOpen(pslFile, TRUE);
-FILE *tabFh = mustOpen(tabFile, "w");
+struct pipeline *pl = NULL;
+FILE *tabFh = NULL;
+if (noSort)
+    tabFh = mustOpen(tabFile, "w");
+else
+    {
+    if (pslCreateOpts & PSL_WITH_BIN)
+	pl = pipelineOpen(outPipeBin, pipelineWrite, tabFile, NULL);
+    else
+	pl = pipelineOpen(outPipeNoBin, pipelineWrite, tabFile, NULL);
+    tabFh = pipelineFile(pl);
+    }
 while (lineFileRow(lf, row))
     {
     xa = xAliLoad(row);
@@ -138,8 +178,14 @@ while (lineFileRow(lf, row))
     xAliTabOut(xa, tabFh);
     xAliFree(&xa);
     }
-carefulClose(&tabFh);
 lineFileClose(&lf);
+if (noSort)
+    carefulClose(&tabFh);
+else
+    {
+    pipelineWait(pl);
+    pipelineFree(&pl);
+    }
 }
 
 void loadPslTable(char *database, struct sqlConnection *conn, char *pslFile)
@@ -172,7 +218,7 @@ setupTable(database, conn, table);
 
 /* if a bin column is being added or if the input file is
  * compressed, we must copy to an intermediate tab file */
-indirectLoad = ((pslCreateOpts & PSL_WITH_BIN) != 0) || endsWith(pslFile, ".gz");
+indirectLoad = ((pslCreateOpts & PSL_WITH_BIN) != 0) || endsWith(pslFile, ".gz") || !noSort;
 
 if (indirectLoad)
     {
@@ -214,7 +260,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (! optionExists("noTNameIx"))
     pslCreateOpts |= PSL_TNAMEIX;
-if (!optionExists("nobin"))
+if (! (optionExists("nobin") || optionExists("noBin")))
     pslCreateOpts |= PSL_WITH_BIN;
 if (optionExists("xa"))
     pslCreateOpts |= PSL_XA_FORMAT;
@@ -227,6 +273,7 @@ if (!optionExists("clientLoad"))
 clTableName = optionVal("table", NULL);
 append = optionExists("append");
 keep = optionExists("keep");
+noSort = optionExists("noSort");
 if (argc < 3)
     usage();
 if ((clTableName != NULL) && (argc > 3))
