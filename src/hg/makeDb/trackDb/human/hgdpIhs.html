@@ -1,18 +1,14 @@
 <H2>Description</H2>
 <P>
 This track shows per-continent integrated haplotype score (iHS, 
-Voight <em>et al.</em>)
-calculated using SNPs genotyped in 53 populations worldwide by the 
+Voight <em>et al.</em>), a measure of very recent positive selection.
+Scores were calculated using SNPs genotyped in 53 populations worldwide by the 
 <A HREF="http://www.stanford.edu/group/morrinst/hgdp.html" TARGET=_BLANK>Human 
 Genome Diversity Project</A> in collaboration with the
 <A HREF="http://www.cephb.fr/en/cephdb/" TARGET=_BLANK>Centre d'Etude 
 du Polymorphisme Humain</A> (HGDP-CEPH).
 This track and several others are available from the 
 <A HREF="http://hgdp.uchicago.edu/" TARGET=_BLANK>HGDP Selection Browser</A>.
-</P>
-<P>
-The score shown for each SNP is -log<sub>10</sub> of the SNP's position 
-in the distribution of windowed iHS scores.
 </P>
 
 <H2>Methods</H2>
@@ -26,8 +22,11 @@ Middle East, Europe, South Asia, East Asia, Oceania and the Americas.
 Bantu populations in Africa were chosen instead of all African populations
 because a more closely related group was desired for comparison with 
 other continental groups.
-iHS was then calculated for each population group as described in 
-(Voight <em>et al.</em>).
+iHS was then calculated for each population group using the program ihs
+(<A HREF="http://hgdp.uchicago.edu/Software/ihs.tar" 
+TARGET=_BLANK>source code available</A>) and then normalizing the 
+resulting unstandardized iHS scores in derived allele frequency bins
+as described in (Voight <em>et al.</em>).
 Per-SNP iHS scores were smoothed in windows of 31 SNPs, centered on 
 each SNP.  The final score is -log<sub>10</sub> of the proportion of 
 smoothed scores higher than each SNP's smoothed score.
