@@ -15,7 +15,7 @@
 #include "customTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.110 2009/02/03 23:42:57 markd Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.111 2009/03/12 15:44:31 fanhsu Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -152,7 +152,9 @@ puts("<TR>");
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
 puts("<TD VALIGN=\"TOP\">");
-if (!hIsGsidServer())
+
+/* disable CT for CGB servers for the time being */
+if (!hIsGsidServer() && !hIsCgbServer())
     {
     printf(
 	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
