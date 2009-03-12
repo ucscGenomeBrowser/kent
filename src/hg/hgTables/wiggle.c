@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.68 2009/03/12 16:45:16 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.69 2009/03/12 19:44:21 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -352,7 +352,7 @@ if (anyIntersection() && !isWiggle(database, table))
     }
 }
 
-static int printDataVectorOut(struct dataVector *dataVectorList,
+int wigPrintDataVectorOut(struct dataVector *dataVectorList,
 			      enum wigOutputType wigOutType, int maxOut,
 			      char *description)
 /* Print out bed or data points from list of dataVectors. */
@@ -375,7 +375,7 @@ switch (wigOutType)
 return count;
 }
 
-static struct dataVector *mergedWigDataVector(char *table,
+struct dataVector *mergedWigDataVector(char *table,
 	struct sqlConnection *conn, struct region *region)
 /* Perform the specified subtrack merge wiggle-operation on table and 
  * all other selected subtracks and intersect if necessary. */
@@ -450,7 +450,7 @@ static int mergedWigOutRegion(char *table, struct sqlConnection *conn,
 {
 struct dataVector *dv = mergedWigDataVector(table, conn, region);
 int resultCount = 
-    printDataVectorOut(dv, wigOutType, maxOut, describeSubtrackMerge("#\t"));
+    wigPrintDataVectorOut(dv, wigOutType, maxOut, describeSubtrackMerge("#\t"));
 dataVectorFree(&dv);
 return resultCount;
 }
@@ -463,7 +463,7 @@ static int bedGraphOutRegion(char *table, struct sqlConnection *conn,
  * intersect if necessary, and print it out. */
 {
 struct dataVector *dv =bedGraphDataVector(table, conn, region);
-int resultCount = printDataVectorOut(dv, wigOutType, maxOut, NULL);
+int resultCount = wigPrintDataVectorOut(dv, wigOutType, maxOut, NULL);
 dataVectorFree(&dv);
 return resultCount;
 }

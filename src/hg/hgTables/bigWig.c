@@ -20,7 +20,7 @@
 #include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigWig.c,v 1.1 2009/03/12 16:45:14 kent Exp $";
+static char const rcsid[] = "$Id: bigWig.c,v 1.2 2009/03/12 19:44:21 kent Exp $";
 
 boolean isBigWig(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
@@ -154,6 +154,7 @@ int bigWigOutRegion(char *table, struct sqlConnection *conn,
 			     enum wigOutputType wigOutType)
 /* Write out bigWig for region, doing intersecting and filtering as need be. */
 {
+boolean isMerged = anySubtrackMerge(table, database);
 int resultCount = 0;
 char *wigFileName = bigWigFileName(table, conn);
 if (wigFileName)
@@ -161,10 +162,12 @@ if (wigFileName)
     struct bbiFile *bwf = bigWigFileOpen(wigFileName);
     if (bwf)
 	{
-	if (!anyFilter() && !anyIntersection())
+	/* Easy case, just dump out data. */
+	if (!anyFilter() && !anyIntersection() && !isMerged && wigOutType == wigOutData)
 	    resultCount = bigWigIntervalDump(bwf, region->chrom, region->start, region->end, 
 		    maxOut, stdout);
-	else
+	/* Pretty easy case, still do it ourselves. */
+	else if (!isMerged && wigOutType == wigOutData)
 	    {
 	    double ll, ul;
 	    enum wigCompare cmp;
@@ -177,6 +180,13 @@ if (wigFileName)
 		fprintf(stdout, "%s\t%d\t%d\t%g\n", region->chrom, iv->start, iv->end, iv->val);
 		}
 	    lmCleanup(&lm);
+	    }
+	/* Harder cases - resort to making a data vector and letting that machinery handle it. */
+	else
+	    {
+	    struct dataVector *dv = bigWigDataVector(table, conn, region);
+	    resultCount = wigPrintDataVectorOut(dv, wigOutType, maxOut, NULL);
+	    dataVectorFree(&dv);
 	    }
 	}
     bbiFileClose(&bwf);
@@ -263,4 +273,58 @@ hTableEnd();
 bbiFileClose(&bwf);
 htmlClose();
 }
+
+void bigWigFillDataVector(char *table, struct region *region, 
+	struct sqlConnection *conn, struct dataVector *vector)
+/* Fill in data vector with bigWig info on region.  Handles filters and intersections. */
+{
+uglyf("bigWigFillDataVector table=%s region=%s:%d-%d<BR>\n", table, region->chrom, region->start, region->end);
+
+/* Figure out filter values if any. */
+double ll, ul;
+enum wigCompare cmp;
+getWigFilter(database, curTable, &cmp, &ll, &ul);
+
+/* Get intervals that pass filter and intersection. */
+struct lm *lm = lmInit(0);
+char *fileName = bigWigFileName(table, conn);
+struct bbiFile *bwf = bigWigFileOpen(fileName);
+struct bbiInterval *iv, *ivList;
+ivList = intersectedFilteredBbiIntervalsOnRegion(conn, bwf, region, cmp, ll, ul, lm);
+int vIndex = 0;
+for (iv = ivList; iv != NULL; iv = iv->next)
+    {
+    int start = max(iv->start, region->start);
+    int end = min(iv->end, region->end);
+    double val = iv->val;
+    int i;
+    for (i=start; i<end && vIndex < vector->maxCount; ++i)
+        {
+	vector->value[vIndex] = val;
+	vector->position[vIndex] = i;
+	++vIndex;
+	}
+    }
+vector->count = vIndex;
+bbiFileClose(&bwf);
+freeMem(fileName);
+lmCleanup(&lm);
+}
+
+struct dataVector *bigWigDataVector(char *table,
+	struct sqlConnection *conn, struct region *region)
+/* Read in bigWig as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+{
+uglyf("bigWigDataVector table=%s region=%s:%d-%d<BR>\n", table, region->chrom, region->start, region->end);
+if (anySubtrackMerge(database, table))
+    return mergedWigDataVector(table, conn, region);
+else
+    {
+    struct dataVector *dv = dataVectorNew(region->chrom, region->end - region->start);
+    bigWigFillDataVector(table, region, conn, dv);
+    return dv;
+    }
+}
+
 

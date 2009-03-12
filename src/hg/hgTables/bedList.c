@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.60 2008/09/03 19:18:58 markd Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.61 2009/03/12 19:44:21 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -507,6 +507,7 @@ int fields = hTableInfoBedFieldCount(hti);
 boolean gotResults = FALSE;
 struct region *region, *regionList = getRegions();
 boolean isBedGr = isBedGraph(curTable);
+boolean isBgWg = isBigWig(curTable);
 boolean needSubtrackMerge = anySubtrackMerge(database, curTable);
 boolean doDataPoints = FALSE;
 boolean isWig = isWiggle(database, table);
@@ -518,7 +519,7 @@ if (!doCt)
     textOpen();
     }
 
-if ((isWig || isBedGr) && sameString(outWigData, ctWigOutType))
+if ((isWig || isBedGr || isBgWg) && sameString(outWigData, ctWigOutType))
     doDataPoints = TRUE;
 
 for (region = regionList; region != NULL; region = region->next)
@@ -561,7 +562,13 @@ for (region = regionList; region != NULL; region = region->next)
 	if (dv != NULL)
 	    slAddHead(&dataVectorList, dv);
 	}
-    else if (isWig)
+    else if (isBgWg && doDataPoints)
+        {
+	dv = bigWigDataVector(curTable, conn, region);
+	if (dv != NULL)
+	    slAddHead(&dataVectorList, dv);
+	}
+    else if (isWig || isBgWg)
 	{
 	dv = wiggleDataVector(curTrack, curTable, conn, region);
 	bedList = dataVectorToBedList(dv);
@@ -585,7 +592,7 @@ for (region = regionList; region != NULL; region = region->next)
 	 (dataVectorList != NULL)))
 	{
 	ctNew = beginCustomTrack(table, fields,
-				 doCt, (isWig || isBedGr), doDataPoints);
+				 doCt, (isWig || isBedGr || isBgWg), doDataPoints);
 	}
 
     if (doDataPoints && (wigDataList || dataVectorList))
@@ -680,16 +687,16 @@ else if (doCt)
 	removeNamedCustom(&ctList, ctNew->tdb->tableName);
 	if (doDataPoints)
 	    {
-	    if (needSubtrackMerge || isBedGr)
+	    if (needSubtrackMerge || isBedGr || isBgWg)
 		{
 		slReverse(&dataVectorList);
-		wigDataSize =
-	      dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
+		wigDataSize = dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
 				      0, NULL);
+		// TODO: see if can make prettier wig output here that
+		// doesn't necessarily have one value per base
 		}
 	    else
 		{
-		struct asciiDatum *aData;
 		struct wiggleDataStream *wds = NULL;
 		/* create an otherwise empty wds so we can print out the list */
 		wds = wiggleDataStreamNew();
@@ -699,7 +706,6 @@ else if (doCt)
 		/* allow file readability for debug */
 		chmod(ctNew->wigAscii, 0666);
 #endif
-		aData = wds->ascii->data;
 		wiggleDataStreamFree(&wds);
 		}
 	    }
@@ -741,7 +747,7 @@ else if (doCt)
     }
 else if (doDataPoints)
     {
-    if (needSubtrackMerge || isBedGr)
+    if (needSubtrackMerge || isBedGr || isBgWg)
 	{
 	slReverse(&dataVectorList);
 	dataVectorWriteWigAscii(dataVectorList, "stdout", 0, NULL);

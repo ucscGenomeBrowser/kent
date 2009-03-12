@@ -140,6 +140,9 @@ struct dataVector *dataVectorFetchOneRegion(struct trackTable *table,
 /*	Return a dataVector containing all the data for this track and table 
  *	in the given region */
 
+struct dataVector *dataVectorNew(char *chrom, int size);
+/* allocate a dataVector for 'size' number of data points on specified chrom */
+
 void freeDataVector(struct dataVector **v);
 /*	free up space belonging to a dataVector	*/
 #define dataVectorFree(x) freeDataVector(x)
@@ -200,5 +203,25 @@ struct dataVector *wiggleDataVector(struct trackDb *tdb, char *table,
 	struct sqlConnection *conn, struct region *region);
 /* Read in wiggle as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */
+
+struct dataVector *bigWigDataVector(char *table,
+	struct sqlConnection *conn, struct region *region);
+/* Read in bigWig as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+
+void bigWigFillDataVector(char *table, struct region *region, 
+	struct sqlConnection *conn, struct dataVector *vector);
+/* Fill in data vector with bigWig info on region.  Handles filters and 
+ * intersections, but not merging. */
+
+struct dataVector *mergedWigDataVector(char *table,
+	struct sqlConnection *conn, struct region *region);
+/* Perform the specified subtrack merge wiggle-operation on table and 
+ * all other selected subtracks and intersect if necessary. */
+
+int wigPrintDataVectorOut(struct dataVector *dataVectorList,
+			      enum wigOutputType wigOutType, int maxOut,
+			      char *description);
+/* Print out bed or data points from list of dataVectors. */
 
 #endif /* CORRELATE_H */

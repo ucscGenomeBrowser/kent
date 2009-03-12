@@ -685,7 +685,6 @@ int bigWigOutRegion(char *table, struct sqlConnection *conn,
 void doSummaryStatsBigWig(struct sqlConnection *conn);
 /* Put up page showing summary stats for bigWig track. */
 
-
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
 /* Get custom track list. */

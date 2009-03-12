@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.72 2009/03/12 16:45:15 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.73 2009/03/12 19:44:21 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -36,7 +36,7 @@ static char *maxResultsMenu[] =
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 
-static struct dataVector *allocDataVector(char *chrom, int size)
+struct dataVector *dataVectorNew(char *chrom, int size)
 /* allocate a dataVector for 'size' number of data points on specified chrom */
 {
 struct dataVector *v;
@@ -782,6 +782,7 @@ else
     vector->end = vector->start;
 }	/*	static void correlateReadBed()	*/
 
+
 struct dataVector *dataVectorFetchOneRegion(struct trackTable *table,
 	struct region *region, struct sqlConnection *conn)
 /*	fetch all the data for this track and table in the given region */
@@ -795,7 +796,7 @@ if (! correlateTrackOK(table->actualTdb))
 
 startTime = clock1000();
 /*	assume entire region is going to produce numbers	*/
-vector = allocDataVector(region->chrom, regionSize);
+vector = dataVectorNew(region->chrom, regionSize);
 
 /*	wiggle tables work properly from database or custom tracks,
  *	    intersections and data value limits will
@@ -803,6 +804,7 @@ vector = allocDataVector(region->chrom, regionSize);
  */
 if (isBigWig(table->tableName))
     {
+    bigWigFillDataVector(table->tableName, region, conn, vector);
     }
 else if (table->isWig)
     {
@@ -1188,7 +1190,7 @@ struct dataVector *dataVectorInvert(struct dataVector *dv, int start, int end)
 /* Return a new dataVector that has a value of 1 where dv has no value, 
  * and no value where dv has any value, with positions in [start,end). */
 {
-struct dataVector *dvNew = allocDataVector("inv", end-start);
+struct dataVector *dvNew = dataVectorNew("inv", end-start);
 if (dv == NULL || dv->count < 1)
     {
     int i=0;
@@ -1238,7 +1240,7 @@ struct dataVector *dataVectorBoolComp(struct dataVector *dv, int start, int end)
  * and a value of 0 where dv has any nonzero value, with positions in 
  * [start,end). */
 {
-struct dataVector *dvNew = allocDataVector("comp", end-start);
+struct dataVector *dvNew = dataVectorNew("comp", end-start);
 if (dv == NULL || dv->count < 1)
     {
     int i=0;
@@ -2117,7 +2119,7 @@ for (x = xTable->vSet; x != NULL; x = x->next)
  *	relationship between the result vector and the y data set
  *	positions.
  */
-result = allocDataVector("result", totalBases);
+result = dataVectorNew("result", totalBases);
 rIndex = 0;		/* index for result vector data values	*/
 
 /*	This loop walks through all the regions in the data vectors.
