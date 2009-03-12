@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1558 2009/03/09 18:34:55 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1559 2009/03/12 15:49:04 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2942,10 +2942,15 @@ if (hIsGsidServer())
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
-       database, chromName, winStart+1, winEnd, cartSessionVarName(),
-       cartSessionId(cart), "Tables");
+    /* disable TB for CGB servers */
+    if (!hIsCgbServer())
+	{
+    	hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
+       	database, chromName, winStart+1, winEnd, cartSessionVarName(),
+       	cartSessionId(cart), "Tables");
+    	}		
     }
+
 if (hgNearOk(database))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
