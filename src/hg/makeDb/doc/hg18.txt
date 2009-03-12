@@ -27247,3 +27247,33 @@ exit;
 
 
 #############################################################################
+
+############################################################################
+# VEGA GENES UPDATE (BUILD 33) (DONE 2008-03-11 Andy)
+    mkdir  /cluster/data/hg18/bed/vega33
+    cd  /cluster/data/hg18/bed/vega33
+    wget --timestamping "ftp://ftp.sanger.ac.uk/pub/vega/human/*" \
+         "ftp://ftp.sanger.ac.uk/pub/vega/human/pep/*.tot.fa.gz"
+    zcat gtf_file.gz | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/" \
+        | grep "^chr" > nonHaps.gtf
+    zcat gtf_file.gz | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/" \
+        | grep -v "^chr" > haps.gtf
+    awk 'BEGIN{OFS="\t";FS="\t";}{ if ($1 == "c6_COX") { if (($4 >= 28688544) && ($5 <= 33420241)) print; } else if ($1 == "c6_QBL") { if (($4 >= 28885510) && ($5 <= 33451440)) print;}}' haps.gtf > keeptHaps.gtf
+    liftUp -type=.gtf lifted.gtf /cluster/data/hg18/jkStuff/ensGene.haplotype.lift carry keeptHaps.gtf
+    cat nonHaps.gtf lifted.gtf > all.gtf
+    gzip all.gtf
+    rm *.gtf
+    gtfToGenePred -infoOut=infoOut.txt -genePredExt all.gtf.gz stdout | gzip > all.gp.gz
+    /cluster/home/hiram/kent/src/hg/utils/automation/extractGtf.pl infoOut.txt > ensGtp.tab
+    genePredCheck -db=hg18 all.gp.gz 
+#checked: 69859 failed: 0
+    zcat all.gtf.gz | grep -i pseudo > pseudo.gtf
+    zcat all.gtf.gz | grep -v -i pseudo > not.pseudo.gtf
+    gtfToGenePred -genePredExt pseudo.gtf pseudo.gp
+    gtfToGenePred -genePredExt not.pseudo.gtf not.pseudo.gp
+    genePredCheck -db=hg18 pseudo.gp
+#checked: 6901 failed: 0
+    genePredCheck -db=hg18 not.pseudo.gp
+#checked: 62958 failed: 0
+    hgLoadGenePred -genePredExt hg18 vegaGene not.pseudo.gp
+    hgLoadGenePred -genePredExt hg18 vegaPseudoGene pseudo.gp
