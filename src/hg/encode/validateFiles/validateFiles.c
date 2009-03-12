@@ -6,8 +6,8 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.1 2009/03/12 22:24:18 mikep Exp $";
-static char *version = "$Revision: 1.1 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.2 2009/03/12 22:41:01 mikep Exp $";
+static char *version = "$Revision: 1.2 $";
 
 #define MAX_ERRORS 10
 int maxErrors;
@@ -23,7 +23,7 @@ void usage()
 errAbort(
   "validateFiles - validate format of different track input files\n"
   "usage:\n"
-  "   validateFiles file1 [file2 [...]]\n"
+  "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
   "options:\n"
   "   -type=(tagAlign|pairedTagAlign)\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
