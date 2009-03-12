@@ -26842,14 +26842,13 @@ exit;
 
 
 #############################################################################
-# HGDP HETEROZYGOSITY (DONE 2/12/09 angie, except for Bantu 3/02/09)
+# HGDP HETEROZYGOSITY (DONE 2/12/09 angie, except for Bantu 3/12/09)
     mkdir /hive/data/genomes/hg18/bed/hgdpHzy
     cd /hive/data/genomes/hg18/bed/hgdpHzy
     foreach continent (african americas easia european mideast oceania sasia)
       wget --timestamping http://hgdp.uchicago.edu/data/hzy/$continent.gff.gz
     end
     wget --timestamping http://hgdp.uchicago.edu/data/hzy/allbantu.hzy.gff.gz
-#*** waiting to hear back from Joe about whether that's the right file
     foreach continent (african allbantu americas easia european mideast oceania sasia)
       set bedGraph = `echo $continent \
                       | sed -re 's/can$/ca/; s/pean$/pe/; s/asia/Asia/; s/allbantu/bantu/; \
@@ -26859,6 +26858,23 @@ exit;
       | awk 'BEGIN{OFS="\t";} {print $1, ($4-1), $5, $6;}' \
         > $bedGraph
     end
+
+    # 3/12/09: All of the original files' coords were intervals between SNPs,
+    # but the Bantu file had SNP coordinates, and one more line per chrom than
+    # the others.  So (after getting OK from Joe) I am going to transform the
+    # Bantu SNP coords to intervals like the others.
+    perl -we 'while (<>) { \
+      chomp; ($c, $s, undef, $h) = split; \
+      if (defined $lastC) { \
+        if ($lastC eq $c) { \
+          print "$c\t$lastS\t$s\t$lastH\n"; \
+        } # Discarding last SNP on each chrom \
+      } \
+      ($lastC, $lastS, $lastH) = ($c, $s, $h); \
+    }' \
+      hgdpHzyBantu.bedGraph > tmp
+    mv tmp hgdpHzyBantu.bedGraph
+
     # Using bedGraph, not wig, because there are only 640k datapoints and 
     # some are over the 10Mbase wiggle item size limit.
     foreach f (*.bedGraph)
@@ -26866,8 +26882,6 @@ exit;
     end
     # All have same size:
 #Loaded 640676 elements of size 4
-    # except for Bantu:
-#Loaded 640698 elements of size 4
 
 
 #############################################################################
