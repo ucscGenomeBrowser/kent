@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.158 2009/02/13 02:38:27 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.159 2009/03/12 17:38:30 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -302,7 +302,8 @@ else
 	       "class=\"topbar\">\n",
 	       uiState, theCart ? "&" : "?" );
     }
-    if (!isGsid) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
+    /* disable TB for both GSID and CGB servers */
+    if (!isGsid && !hIsCgbServer()) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
         if (db != NULL && hgNearOk(db))
