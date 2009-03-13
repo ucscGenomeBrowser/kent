@@ -6,8 +6,8 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.4 2009/03/13 08:22:13 mikep Exp $";
-static char *version = "$Revision: 1.4 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.5 2009/03/13 16:39:21 mikep Exp $";
+static char *version = "$Revision: 1.5 $";
 
 #define MAX_ERRORS 10
 int maxErrors;
@@ -338,17 +338,17 @@ warn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", fi
 return FALSE;
 }
 
-int validateTagOrPairedTagAlign(char *file, boolean paired)
+int validateTagOrPairedTagAlign(struct lineFile *lf, char *file, boolean paired)
 {
 char *row;
 char buf[1024];
 char *words[9];
-struct lineFile *lf = lineFileOpen(file, TRUE);
 int line = 0;
 int errs = 0;
 unsigned chromSize;
+int size;
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
-while (lineFileNextReal(lf, &row))
+while (lineFileNext(lf, &row, &size))
     {
     ++line;
     safecpy(buf, sizeof(buf), row);
@@ -378,7 +378,6 @@ while (lineFileNextReal(lf, &row))
 	    errAbort("Aborting .. found %d errors\n", errs);
 	}
     }
-lineFileClose(&lf);
 return errs;
 }
 
@@ -386,18 +385,18 @@ return errs;
 // chr1     6082    6117    TCTACTGGCTCTGTGTGTACCAGTCTGTCACTGAG     1000    -
 // chr1     7334    7369    AGCCAGGGGGTGACGTTGTTAGATTAGATTTCTTA     1000    +
 
-int validateTagAlign(char *file)
+int validateTagAlign(struct lineFile *lf, char *file)
 {
-return validateTagOrPairedTagAlign(file, FALSE);
+return validateTagOrPairedTagAlign(lf, file, FALSE);
 }
 
 // pairedTagAlign
 // chr10    96316360        96310862        9       1000    +       TCTCACCCGATAACGACCCCCTCCC       TGATCCTTGACTCACTTGCTAATTT
 // chr8    126727657       126721865       10      1000    +       AATTCTTCACCTCTCCTGTTCAAAG       TGTGTGAGATCCAAGAATCCTCTCT
 
-int validatePairedTagAlign(char *file)
+int validatePairedTagAlign(struct lineFile *lf, char *file)
 {
-return validateTagOrPairedTagAlign(file, TRUE);
+return validateTagOrPairedTagAlign(lf, file, TRUE);
 }
 
 // fastq:
@@ -406,36 +405,29 @@ return validateTagOrPairedTagAlign(file, TRUE);
 // +NINA_1_FC30G3VAAXX:5:1:110:908
 // aa`]`a`XQ^VQQ^`aaaaaaa^[[ZG[aXUX[[[X
 
-int validateFastq(char *file)
+int validateFastq(struct lineFile *lf, char *file)
 {
-char *seqName = NULL;
-char *seq = NULL; 
-char *qName = NULL;
-char *qual = NULL;
+char *seqName, *seq, *qName, *qual;
 int line = 0;
 int errs = 0;
 boolean startOfFile = TRUE;
-FILE *f = mustOpen(file, "rb");
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
-while ( (seqName = readLine(f)) )
+while ( lineFileNext(lf, &seqName, NULL))
     {
     ++line;
     if (startOfFile)
 	{
 	if (*seqName == '#')
-	    {
-	    freez(&seqName);
 	    continue;
-	    }
 	else
 	    startOfFile = FALSE;
 	}
     if (checkSeqName(file, line, seqName, '@', "sequence name")
-	&& (seq = readLine(f))
+	&& (lineFileNext(lf, &seq, NULL))
 	&& checkSeq(file, ++line, seq, seq, "sequence")
-	&& (qName = readLine(f))
+	&& (lineFileNext(lf, &qName, NULL))
 	&& checkSeqName(file, ++line, qName, '+', "quality name")
-	&& (qual = readLine(f))
+	&& (lineFileNext(lf, &qual, NULL))
 	&& checkQual(file, ++line, qual) )
 	{
 	if (printOkLines)
@@ -448,12 +440,7 @@ while ( (seqName = readLine(f)) )
 	if (++errs >= maxErrors)
 	    errAbort("Aborting .. found %d errors\n", errs);
 	}
-    freez(&seqName);
-    freez(&seq);
-    freez(&qName);
-    freez(&qual);
     }
-carefulClose(&f);
 return errs;
 }
 
@@ -463,30 +450,26 @@ return errs;
 // >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
 // T01301010111200210102321210100112312
 
-int validateCsfasta(char *file)
+int validateCsfasta(struct lineFile *lf, char *file)
 {
 char *seqName = NULL;
 char *seq = NULL; 
 int line = 0;
 int errs = 0;
 boolean startOfFile = TRUE;
-FILE *f = mustOpen(file, "rb");
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
-while ( (seqName = readLine(f)) )
+while (lineFileNext(lf, &seqName, NULL))
     {
     ++line;
     if (startOfFile)
 	{
 	if (*seqName == '#')
-	    {
-	    freez(&seqName);
 	    continue;
-	    }
 	else
 	    startOfFile = FALSE;
 	}
     if (checkCsSeqName(file, line, seqName)
-	&& (seq = readLine(f))
+	&& (lineFileNext(lf, &seq, NULL))
 	&& checkSeq(file, ++line, seq, seq, "sequence") )
 	{
 	if (printOkLines)
@@ -499,14 +482,11 @@ while ( (seqName = readLine(f)) )
 	if (++errs >= maxErrors)
 	    errAbort("Aborting .. found %d errors\n", errs);
 	}
-    freez(&seqName);
-    freez(&seq);
     }
-carefulClose(&f);
 return errs;
 }
 
-void validateFiles(int (*validate)(char *file), int numFiles, char *files[])
+void validateFiles(int (*validate)(struct lineFile *lf, char *file), int numFiles, char *files[])
 /* validateFile - validate format of different track input files. */
 {
 int i;
@@ -514,12 +494,25 @@ int errs = 0;
 verbose(2,"[%s %3d] numFiles=%d \n", __func__, __LINE__, numFiles);
 for (i = 0; i < numFiles ; ++i)
     {
-    errs += validate(files[i]);
+    struct lineFile *lf = lineFileOpen(files[i], TRUE);
+    errs += validate(lf, files[i]);
+    lineFileClose(&lf);
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
 if (errs > 0) 
     errAbort("Aborting ... found %d errors in total\n", errs);
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
+}
+
+int testFunc(char *f)
+{
+char *row;
+int size;
+struct lineFile *lf = lineFileOpen(f, TRUE);
+while (lineFileNext(lf, &row, &size))
+    printf("size=%d [%s]\n", size, row);
+printf("done.\n");
+return 0;
 }
 
 int main(int argc, char *argv[])
@@ -557,6 +550,7 @@ hashAdd(funcs, "tagAlign", &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
 hashAdd(funcs, "fastq", &validateFastq);
 hashAdd(funcs, "csfasta", &validateCsfasta);
+//hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
 validateFiles(func, argc, argv);
