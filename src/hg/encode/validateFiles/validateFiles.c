@@ -6,11 +6,12 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.5 2009/03/13 16:39:21 mikep Exp $";
-static char *version = "$Revision: 1.5 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.6 2009/03/13 16:45:26 mikep Exp $";
+static char *version = "$Revision: 1.6 $";
 
 #define MAX_ERRORS 10
 int maxErrors;
+boolean colorSpace;
 boolean zeroSizeOk;
 boolean printOkLines;
 boolean printFailLines;
@@ -33,6 +34,7 @@ errAbort(
   "   -type=(fastq|csfasta|tagAlign|pairedTagAlign)\n"
   "                                csfasta = Colorspace fasta (SOLiD platform)\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
+  "   -colorSpace                  Sequences are colorspace 0-3 values\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
   "                                  stopping (default %d)\n"
   "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
@@ -47,6 +49,7 @@ static struct optionSpec options[] = {
    {"type", OPTION_STRING},
    {"chromInfo", OPTION_STRING},
    {"maxErrors", OPTION_INT},
+   {"colorSpace", OPTION_BOOLEAN},
    {"zeroSizeOk", OPTION_BOOLEAN},
    {"printOkLines", OPTION_BOOLEAN},
    {"printFailLines", OPTION_BOOLEAN},
@@ -56,7 +59,7 @@ static struct optionSpec options[] = {
 
 void initArrays()
 // Set up array of chars
-// dnaChars:  or DNA chars include colorspace 0-3 as valid dna sequences for SOLiD data
+// dnaChars:  DNA chars ACGTNacgtn, and optionally include colorspace 0-3
 // qualChars: fastq quality scores as ascii [!-~] (ord(!)=33, ord(~)=126)
 // seqName:   fastq sequence name chars [A-Za-z0-9_.:/-]
 {
@@ -65,7 +68,10 @@ for (i=0 ; i < 256 ; ++i)
     dnaChars[i] = qualChars[i] = seqName[i] = csSeqName[i] = digits[i] = alpha[i] = 0;
 dnaChars['a'] = dnaChars['c'] = dnaChars['g'] = dnaChars['t'] = dnaChars['n'] = 1;
 dnaChars['A'] = dnaChars['C'] = dnaChars['G'] = dnaChars['T'] = dnaChars['N'] = 1;
-dnaChars['0'] = dnaChars['1'] = dnaChars['2'] = dnaChars['3'] = 1;
+if (colorSpace)
+    {
+    dnaChars['0'] = dnaChars['1'] = dnaChars['2'] = dnaChars['3'] = 1;
+    }
 for (i= (int)'A' ; i <= (int)'Z' ; ++i)
     seqName[i] = seqName[i+(int)('a'-'A')] = alpha[i] = alpha[i+(int)('a'-'A')] = 1;
 for (i= (int)'0' ; i <= (int)'9' ; ++i)
@@ -525,7 +531,6 @@ struct hash *funcs = newHash(0);
 optionInit(&argc, argv, options);
 ++argv; 
 --argc;
-initArrays();
 if (optionExists("version"))
     errAbort(version);
 if (argc==0)
@@ -537,6 +542,8 @@ maxErrors      = optionInt("maxErrors", MAX_ERRORS);
 zeroSizeOk     = optionExists("zeroSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
+colorSpace     = optionExists("colorSpace");
+initArrays();
 if (strlen(optionVal("chromInfo", "")) > 0)
     {
     if (!(ci = chromInfoLoadAll(optionVal("chromInfo", ""))))
