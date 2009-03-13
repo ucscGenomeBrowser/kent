@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.110 2009/02/26 04:01:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.111 2009/03/13 23:00:34 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -998,14 +998,13 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-static void cgiCommonMakeCheckBox(char *name, boolean checked, char *id, char *moreHtml)
+static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled, char *id, char *moreHtml)
 /* Make check box - designed to be called by the variously overloaded
  * cgiMakeCheckBox functions, and should NOT be called directly.
  * moreHtml: optional additional html like javascript call or mouseover msg (may be NULL)
  * id: button id (may be NULL)
- * Also make a shadow hidden variable so we
- * can distinguish between variable not present and
- * variable set to false. */
+ * Also make a shadow hidden variable and support 2 boolean states:
+ *    checked/unchecked and enabled/disabled. */
 {
 char buf[256], idBuf[256];
 
@@ -1014,10 +1013,12 @@ if(id)
 else
     idBuf[0] = 0;
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s %s>", name, idBuf,
-    (moreHtml ? moreHtml : ""), (checked ? "CHECKED" : ""));
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
+    (moreHtml ? moreHtml : ""),
+    (checked ? " CHECKED" : ""),
+    (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "1");
+cgiMakeHiddenVar(buf, ( enabled ? (checked ? "1" : "0") : (checked ? "-1" : "-2")));
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
@@ -1033,36 +1034,43 @@ if(msg)
 else
     buf[0] = 0;
 
-cgiCommonMakeCheckBox(name, checked, id, buf);
+cgiMakeCheckBox2Bool(name, checked, TRUE, id, buf);
 }
 
 void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
 {
-cgiCommonMakeCheckBox(name, checked, NULL, msg);
+cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, msg);
 }
 
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id)
 /* Make check box, which includes an ID. */
 {
-cgiCommonMakeCheckBox(name, checked, id, NULL);
+cgiMakeCheckBox2Bool(name, checked, TRUE, id, NULL);
 }
 
 void cgiMakeCheckBox(char *name, boolean checked)
 /* Make check box. */
 {
-cgiCommonMakeCheckBox(name, checked, NULL, NULL);
+cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, NULL);
 }
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
 /* Make check box with javascript. */
 {
-cgiCommonMakeCheckBox(name,checked,NULL,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,NULL,javascript);
 }
 
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript)
 /* Make check box with ID and javascript. */
 {
-cgiCommonMakeCheckBox(name,checked,id,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,id,javascript);
+}
+
+void cgiMakeCheckBox2BoolWithIdAndJS(char *name, boolean checked, boolean enabled,char *id, char *javascript)
+/* Make check box supporting 2 boolean state: checke/unchecked and enabled/disabled
+   Also support ID and javascript.*/
+{
+cgiMakeCheckBox2Bool(name,checked,enabled,id,javascript);
 }
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
