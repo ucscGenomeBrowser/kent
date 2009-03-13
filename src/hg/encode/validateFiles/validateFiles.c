@@ -6,8 +6,8 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.3 2009/03/13 04:52:28 mikep Exp $";
-static char *version = "$Revision: 1.3 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.4 2009/03/13 08:22:13 mikep Exp $";
+static char *version = "$Revision: 1.4 $";
 
 #define MAX_ERRORS 10
 int maxErrors;
@@ -18,6 +18,9 @@ struct hash *chrHash = NULL;
 char dnaChars[256];
 char qualChars[256];
 char seqName[256];
+char digits[256];
+char alpha[256];
+char csSeqName[256];
 
 void usage()
 /* Explain usage and exit. */
@@ -27,7 +30,8 @@ errAbort(
   "usage:\n"
   "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
   "options:\n"
-  "   -type=(fastq|tagAlign|pairedTagAlign)\n"
+  "   -type=(fastq|csfasta|tagAlign|pairedTagAlign)\n"
+  "                                csfasta = Colorspace fasta (SOLiD platform)\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
   "                                  stopping (default %d)\n"
@@ -58,15 +62,16 @@ void initArrays()
 {
 int i;
 for (i=0 ; i < 256 ; ++i)
-    dnaChars[i] = qualChars[i] = seqName[i] = 0;
+    dnaChars[i] = qualChars[i] = seqName[i] = csSeqName[i] = digits[i] = alpha[i] = 0;
 dnaChars['a'] = dnaChars['c'] = dnaChars['g'] = dnaChars['t'] = dnaChars['n'] = 1;
 dnaChars['A'] = dnaChars['C'] = dnaChars['G'] = dnaChars['T'] = dnaChars['N'] = 1;
 dnaChars['0'] = dnaChars['1'] = dnaChars['2'] = dnaChars['3'] = 1;
 for (i= (int)'A' ; i <= (int)'Z' ; ++i)
-    seqName[i] = seqName[i+(int)('a'-'A')] = 1;
+    seqName[i] = seqName[i+(int)('a'-'A')] = alpha[i] = alpha[i+(int)('a'-'A')] = 1;
 for (i= (int)'0' ; i <= (int)'9' ; ++i)
-    seqName[i] = 1;
+    seqName[i] = digits[i] = csSeqName[i] = 1;
 seqName['_'] = seqName['.'] = seqName[':'] = seqName['/'] = seqName['-'] = 1;
+csSeqName[','] = csSeqName['.'] = csSeqName['-'] = csSeqName['#'] = 1;
 for (i= (int)'!' ; i <= (int)'~' ; ++i)
     qualChars[i] = 1;
 }
@@ -177,6 +182,69 @@ for ( i = 1; s[i] ; ++i)
 	}
     }
 return TRUE;
+}
+
+char *getDigits(char *s)
+// Consume 1 or more digits from s, return pointer to next non-digit
+// Return NULL if no digits consumed
+{
+char *s0 = s;
+while (digits[(int) *s])
+    ++s;
+if (s > s0)
+    return s;
+else
+    return NULL;
+}
+
+boolean checkTrailingCsSeqName(char *s)
+// Return true if all chars in s (if any) are csSeqName chars 
+// Return false otherwise
+{
+while (csSeqName[(int) *s])
+    ++s;
+if (*s == 0)
+    return TRUE;
+else
+    return FALSE;
+}
+
+//     >461_19_209_F3
+//     T022213002230311203200200322000
+//     >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
+//     T01301010111200210102321210100112312
+
+boolean checkCsSeqName(char *file, int line, char *s)
+// Return TRUE if string has non-zero length, matches CS name pattern contains only csSeqName[] chars 
+// Othewise print warning that seqName is empty and return FALSE
+{
+char *s0;
+if (s[0] == 0)
+    {
+    warn("Error [file=%s, line=%d]: sequence name empty [%s]", file, line, s);
+    return FALSE;
+    }
+else if (s[0] != '>')
+    {
+    warn("Error [file=%s, line=%d]: sequence name first char invalid (got '%c', wanted '>') [%s]", 
+	file, line, s[0], s);
+    return FALSE;
+    }
+if ( (s0 = getDigits(s+1)) 
+      && (*(s0++) == '_') 
+      && (s0 = getDigits(s0)) && (*(s0++) == '_') 
+      && (s0 = getDigits(s0)) && (*(s0++) == '_') 
+      && alpha[(int) *(s0++)] && digits[(int) *(s0++)] 
+      && checkTrailingCsSeqName(s0) )
+    {
+    verbose(2,"[%s %3d] OK [%s] file(%s) line=%d\n", __func__, __LINE__, s, file, line);
+    return TRUE;
+    }
+else
+    {
+    warn("Error [file=%s, line=%d]: invalid sequence name [%s]", file, line, s);
+    return FALSE;
+    }
 }
 
 boolean checkQual(char *file, int line, char *s)
@@ -346,15 +414,21 @@ char *qName = NULL;
 char *qual = NULL;
 int line = 0;
 int errs = 0;
+boolean startOfFile = TRUE;
 FILE *f = mustOpen(file, "rb");
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while ( (seqName = readLine(f)) )
     {
     ++line;
-    if (*seqName == '#')
+    if (startOfFile)
 	{
-	freez(&seqName);
-	continue;
+	if (*seqName == '#')
+	    {
+	    freez(&seqName);
+	    continue;
+	    }
+	else
+	    startOfFile = FALSE;
 	}
     if (checkSeqName(file, line, seqName, '@', "sequence name")
 	&& (seq = readLine(f))
@@ -378,6 +452,55 @@ while ( (seqName = readLine(f)) )
     freez(&seq);
     freez(&qName);
     freez(&qual);
+    }
+carefulClose(&f);
+return errs;
+}
+
+// CS Fasta:
+// >461_19_209_F3
+// T022213002230311203200200322000
+// >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
+// T01301010111200210102321210100112312
+
+int validateCsfasta(char *file)
+{
+char *seqName = NULL;
+char *seq = NULL; 
+int line = 0;
+int errs = 0;
+boolean startOfFile = TRUE;
+FILE *f = mustOpen(file, "rb");
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+while ( (seqName = readLine(f)) )
+    {
+    ++line;
+    if (startOfFile)
+	{
+	if (*seqName == '#')
+	    {
+	    freez(&seqName);
+	    continue;
+	    }
+	else
+	    startOfFile = FALSE;
+	}
+    if (checkCsSeqName(file, line, seqName)
+	&& (seq = readLine(f))
+	&& checkSeq(file, ++line, seq, seq, "sequence") )
+	{
+	if (printOkLines)
+	    printf("%s\n%s\n", seqName, seq);
+	}
+    else
+	{
+	if (printFailLines)
+	    printf("%s\n%s\n", seqName, seq);
+	if (++errs >= maxErrors)
+	    errAbort("Aborting .. found %d errors\n", errs);
+	}
+    freez(&seqName);
+    freez(&seq);
     }
 carefulClose(&f);
 return errs;
@@ -433,6 +556,7 @@ verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
 hashAdd(funcs, "tagAlign", &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
 hashAdd(funcs, "fastq", &validateFastq);
+hashAdd(funcs, "csfasta", &validateCsfasta);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
 validateFiles(func, argc, argv);
