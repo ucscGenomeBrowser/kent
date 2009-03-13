@@ -1,129 +1,207 @@
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=290 HEIGHT=290>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
-    TARGET=_blank>
-    <IMG SRC="/images/Homo_sapiens.jpg" WIDTH=*** HEIGHT=*** ALT="Human"></A>
+    <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
+	TARGET=_blank>
+    <IMG SRC="/images/human.jpg" WIDTH=275 HEIGHT=275 ALT="human"></A>
   </TD></TR>
-  <TR><TD ALIGN=RIGHT> 
-    <FONT SIZE=-1><em>Homo sapiens</em><BR> 
+  <TR><TD ALIGN=RIGHT>
+    <FONT SIZE=-1> <EM>Homo sapiens</EM><BR>
     </FONT>
-    <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+    <FONT SIZE=-2> (Graphic courtesy of 
+      <A HREF="http://www.cbse.ucsc.edu/" TARGET=_blank>CBSE</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
+
 <P>
-The Feb. 2009 <em>Homo sapiens</em> draft assembly 
-(Genome Reference Consortium Human Reference 37) was produced by the *** sequencing center.
+The Feb. 2006 human reference sequence (GRCh37) was produced by the
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
+	TARGET=_blank>Genome Reference Consortium.</A></P>
 
 <H3>Sample position queries</H3>
 <P>
 A genome position can be specified by the accession number of a
-sequenced genomic region, an mRNA or EST, a chromosomal coordinate
-range, or keywords from the GenBank description of an mRNA. The
-following list shows examples of valid position queries for the
-Human genome.  See the
-<A HREF="../goldenPath/help/hgTracksHelp.html"
-    TARGET=_blank>User's Guide</A> for more information.
+sequenced genomic clone, an mRNA or EST or STS marker, or
+a cytological band, a chromosomal coordinate range, or keywords from 
+the GenBank description of an mRNA. The following list shows 
+examples of valid position queries for the human genome.
+See the
+<A HREF="../goldenPath/help/hgTracksHelp.html" TARGET=_blank>
+User's Guide</A> for more information.
 <P>
-<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
-    <TR><TH ALIGN=LEFT>Request:</TH>
-        <TH WIDTH=14>&nbsp;</TH>
-       	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+
+<TABLE  border=0 CELLPADDING=1 CELLSPACING=0>
+    <TR><TD VALIGN=Top NOWRAP><B>Request:</B><BR></TD>
+       	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
+    <TR><TD VALIGN=Top><BR></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>chr7</TD>
+        <TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays all of chromosome 7</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>20p13</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+    <TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p-arm telomere</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-      	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000 </TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays a region of chr3 that spans 2000 bases, starting with position 1000000 </TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
-        <TD WIDTH=14>&nbsp;</TD>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>RH18061;RH80175 <BR>15q11;15q13</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region between STS markers RH18061 and RH80175
+                      or chromsome bands 15q11 to 15q13.
+                      This syntax may also be used for other range queries, such
+		      as between uniquely-determined ESTs, mRNAs,
+		      refSeqs, etc.</TD>
+    </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>D16S3046</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps.
+                      Includes 100,000 bases on each side as well.</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>AA205474</TD>
+       	<TD WIDTH=14></TD>
+      	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer 
+                      gene on chr 17</TD>
+    </TR>
+<!-- 
+    <TR><TD VALIGN=Top NOWRAP>ctgchr7_ctg</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of the clone contig ctgchr7_ctg 
+                       (set "Map contigs" track to "dense" and refresh to see contigs)</TD>
+    </TR> 
+-->
+    <TR><TD VALIGN=Top NOWRAP>AC008101</TD>
+    	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of clone with GenBank accession AC008101</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>AF083811</TD>
+       	<TD WIDTH=14></TD>
+   	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number AF083811</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>PRNP</TD>
+       	<TD WIDTH=14></TD>
+       	<TD>Displays region of genome with HUGO Gene Nomenclature Committee identifier PRNP</TD>
+    </TR>
+    <TR>
+	<TD VALIGN=Top NOWRAP>NM_017414</TD>
+	<TD><BR></TD>
+	<TD VALIGN=Top>Displays the region of genome with RefSeq identifier NM_017414</TD>
+    </TR>
+    <TR>
+	<TD VALIGN=Top NOWRAP>NP_059110</TD> 
+	<TD><BR></TD>
+ 	<TD VALIGN=Top NOWRAP> Displays the region of genome with protein accession number NP_059110</TD>
+    </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
+       	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
     </TR>
-    <TR><TD VALIGN=Top>homeobox caudal</TD>
-        <TD WIDTH=14>&nbsp;</TD>
+    <TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
+       	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
     </TR>
-    <TR><TD VALIGN=Top>zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
+    <TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
+       	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
     </TR>
-    <TR><TD VALIGN=Top>kruppel zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
+    <TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
+       	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+    <TR><TD VALIGN=Top NOWRAP>huntington</TD>
+       	<TD WIDTH=14></TD>
+ 	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD>
     </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
+    <TR><TD VALIGN=Top NOWRAP>zahler</TD>
+       	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+    <TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD>
+    </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD COLSPAN="3"> Use this last format for author queries. Although GenBank 
+			requires the search format <em>Evans JE</em>, internally it uses 
+			the format <em>Evans,J.E.</em>.</TD>
     </TR>
 </TABLE>
+<P>
+<HR>
+<H3>Assembly Details</H3>
+<P>
+The GRCh37 build reference 
+sequence is considered to be &quot;finished&quot;, a technical term indicating
+that the sequence is highly accurate (with fewer than one error per 10,000
+bases) and highly contiguous (with the only remaining gaps corresponding 
+to regions whose sequence cannot be reliably resolved with current
+technology). Future work on the reference sequence will focus on improving 
+accuracy and reducing gaps in the sequence. Statistics for the GRCh37 build
+assembly can be found on the NCBI 
+<A HREF="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=9606&build=37&ver=1"
+TARGET=_blank>Build 37.1 Statistics</A> web page.</P>
+<P>
 
 <HR>
-<H3>Assembly details</H3>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
+This browser contains nine haplotypes for this assembly:
+<TABLE BORDER=1><TR><TH>name</TH><TH>accession</TH><TH>UCSC chr name</TH></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_APD_CTG1</TD><TD>GL000250.1</TD><TD ALIGN=LEFT>chr6_apd_hap1</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_COX_CTG1</TD><TD>GL000251.1</TD><TD ALIGN=LEFT>chr6_cox_hap2</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_DBB_CTG1</TD><TD>GL000252.1</TD><TD ALIGN=LEFT>chr6_dbb_hap3</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_MANN_CTG1</TD><TD>GL000253.1</TD><TD ALIGN=LEFT>chr6_mann_hap4</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_MCF_CTG1</TD><TD>GL000254.1</TD><TD ALIGN=LEFT>chr6_mcf_hap5</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_QBL_CTG1</TD><TD>GL000255.1</TD><TD ALIGN=LEFT>chr6_qbl_hap6</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR6_MHC_SSTO_CTG1</TD><TD>GL000256.1</TD><TD ALIGN=LEFT>chr6_ssto_hap7</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR4_1_CTG9</TD><TD>GL000257.1</TD><TD ALIGN=LEFT>chr4_ctg9_hap1</TD></TR>
+<TR><TD ALIGN=LEFT>HSCHR17_1_CTG5</TD><TD>GL000258.1</TD><TD ALIGN=LEFT>chr17_ctg5_hap1</TD></TR>
+</TABLE>
 </P>
-
-
 <P>
-Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/">FTP
-server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#human">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#human_use">specific 
-conditions for use</A>. 
-
-The Human browser annotation tracks were generated by UCSC and 
+See the 
+<A HREF="http://www.sanger.ac.uk/HGP/Chr6/MHC/"
+TARGET=_blank>Wellcome Trust Sanger Institute MHC Haplotype 
+Project</A> web site for additional information on the 
+chr6 alternate haplotype assemblies.</P>
+<P> <B>*** TO BE CONFIRMED AND CORRECTED ***</B>
+The Y chromosome in this assembly contains two pseudoautosomal regions (PARs) at
+chrY:1-2709520 and chrY:57443438-57772954. These sequences were taken from 
+the corresponding regions in the X chromosome and are exact duplications of 
+the X chromosome sequences at chrX:1-2709520 and chrX:154584237-154913754, 
+respectively.</P>
+<P>
+For further information on GRCh37 build see the NCBI 
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html"
+TARGET=_blank>GRCh37 release notes</A>.</P>
+<P>
+Bulk downloads of the data are available from the UCSC downloads server via 
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19" TARGET=_blank>ftp</A> 
+or <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#human"
+TARGET=_blank>http</A>. We recommend that you use rsync or ftp for downloading 
+large or multiple files. </P>
+<P>
+The hg19 annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#human_credits">Credits</A> 
+<A HREF="../goldenPath/credits.html#human_credits">Credits</A> 
 page for a detailed list of the organizations and individuals who contributed 
-to the success of this release. 
-</P>
+to this release. </P>
+<P>
+<HR>
+<H3>Statistical information</H3>
+<UL>
+<!--Commented out til we get these
+<LI><A HREF="../goldenPath/certificates/">Non-Standard Join Certificates</A>
+-->
+<LI><A HREF="../goldenPath/stats.html#hg19">Summary Statistics</A>
+</UL>
