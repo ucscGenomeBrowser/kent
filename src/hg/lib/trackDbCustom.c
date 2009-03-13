@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.59 2009/03/12 00:05:45 hiram Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.60 2009/03/13 23:02:08 hiram Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -659,7 +659,7 @@ else if(startsWith("bedGraph", tdb->type))
     cType = cfgWig;
 else if(startsWith("netAlign", tdb->type))
     {
-    cType = cfgNone;
+    cType = cfgNetAlign;
     warnIfNecessary = FALSE;
     }
 else if(sameWord("bed5FloatScore",       tdb->type)

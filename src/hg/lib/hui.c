@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.172 2009/03/12 00:05:45 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.173 2009/03/13 23:02:08 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2553,6 +2553,8 @@ switch(cType)
                         break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
+    case cfgNetAlign:
+                        break;
     default:            warn("Track type is not known to multi-view composites.");
                         break;
     }
@@ -3140,7 +3142,7 @@ cfgBeginBoxAndTitle(boxed, title);
 char options[1][256];	/*	our option strings here	*/
 char *colorOpt;
 (void) chainFetchColorOption(cart, tdb, &colorOpt);
-snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
+snprintf( &options[0][0], 256, "%s.%s", prefix, OPT_CHROM_COLORS );
 printf("<p><b>Color chains by:&nbsp;</b>");
 chainColorDropDown(&options[0][0], colorOpt);
 
@@ -3151,11 +3153,11 @@ char filterVar[256];
 char *filterVal = "";
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", prefix);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
-cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, filterSetting), 15);
 
-scoreCfgUi(db, cart,tdb,tdb->tableName,NULL,2000000000,FALSE);
+scoreCfgUi(db, cart,tdb,prefix,NULL,2000000000,FALSE);
 
 cfgEndBox(boxed);
 }
