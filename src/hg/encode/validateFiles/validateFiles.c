@@ -6,8 +6,8 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.6 2009/03/13 16:45:26 mikep Exp $";
-static char *version = "$Revision: 1.6 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.7 2009/03/13 20:15:25 mikep Exp $";
+static char *version = "$Revision: 1.7 $";
 
 #define MAX_ERRORS 10
 int maxErrors;
@@ -18,6 +18,7 @@ boolean printFailLines;
 struct hash *chrHash = NULL;
 char dnaChars[256];
 char qualChars[256];
+char csQualChars[256];
 char seqName[256];
 char digits[256];
 char alpha[256];
@@ -27,12 +28,21 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "validateFiles - validate format of different track input files\n"
+  "validateFiles - Validate format of different track input files\n"
+  "                Program exits with non-zero status if any errors detected\n"
+  "                  otherwise exits with zero status\n"
+  "                Use filename 'stdin' to read from stdin\n"
+  "                Files can be in .gz, .bz2, .zip, .Z format and are \n"
+  "                  automatically decompressed\n"
+  "                Multiple input files of the same type can be listed\n"
+  "                Error messages are written to stderr\n"
+  "                OK or failing file lines can be optionally written to stdout\n"
   "usage:\n"
   "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
   "options:\n"
-  "   -type=(fastq|csfasta|tagAlign|pairedTagAlign)\n"
-  "                                csfasta = Colorspace fasta (SOLiD platform)\n"
+  "   -type=(fastq|csfasta|csqual|tagAlign|pairedTagAlign)\n"
+  "                                csfasta = Colorspace fasta (SOLiD platform) (implies -colorSpace)\n"
+  "                                csqual  = Colorspace quality lines (SOLiD platform)\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences are colorspace 0-3 values\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
@@ -61,11 +71,12 @@ void initArrays()
 // Set up array of chars
 // dnaChars:  DNA chars ACGTNacgtn, and optionally include colorspace 0-3
 // qualChars: fastq quality scores as ascii [!-~] (ord(!)=33, ord(~)=126)
+// csQualChars: csfasta quality scores are decimals separated by spaces
 // seqName:   fastq sequence name chars [A-Za-z0-9_.:/-]
 {
 int i;
 for (i=0 ; i < 256 ; ++i)
-    dnaChars[i] = qualChars[i] = seqName[i] = csSeqName[i] = digits[i] = alpha[i] = 0;
+    dnaChars[i] = qualChars[i] = csQualChars[i] = seqName[i] = csSeqName[i] = digits[i] = alpha[i] = 0;
 dnaChars['a'] = dnaChars['c'] = dnaChars['g'] = dnaChars['t'] = dnaChars['n'] = 1;
 dnaChars['A'] = dnaChars['C'] = dnaChars['G'] = dnaChars['T'] = dnaChars['N'] = 1;
 if (colorSpace)
@@ -75,9 +86,10 @@ if (colorSpace)
 for (i= (int)'A' ; i <= (int)'Z' ; ++i)
     seqName[i] = seqName[i+(int)('a'-'A')] = alpha[i] = alpha[i+(int)('a'-'A')] = 1;
 for (i= (int)'0' ; i <= (int)'9' ; ++i)
-    seqName[i] = digits[i] = csSeqName[i] = 1;
+    seqName[i] = digits[i] = csSeqName[i] = csQualChars[i] = 1;
 seqName['_'] = seqName['.'] = seqName[':'] = seqName['/'] = seqName['-'] = 1;
 csSeqName[','] = csSeqName['.'] = csSeqName['-'] = csSeqName['#'] = 1;
+csQualChars[' '] = 1;
 for (i= (int)'!' ; i <= (int)'~' ; ++i)
     qualChars[i] = 1;
 }
@@ -151,13 +163,19 @@ for ( i = 0; s[i] ; ++i)
     {
     if (!dnaChars[(int)s[i]])
 	{
-	warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", file, line, name, s, row);
+	if (s==row)
+	    warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", file, line, name, s);
+	else
+	    warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", file, line, name, s, row);
 	return FALSE;
 	}
     }
 if (i == 0)
     {
-    warn("Error [file=%s, line=%d]: %s column empty [%s]", file, line, name, row);
+    if (s==row)
+	warn("Error [file=%s, line=%d]: %s empty", file, line, name);
+    else
+	warn("Error [file=%s, line=%d]: %s empty in line [%s]", file, line, name, row);
     return FALSE;
     }
 return TRUE;
@@ -274,6 +292,27 @@ if (i == 0)
 return TRUE;
 }
 
+boolean checkCsQual(char *file, int line, char *s)
+// Return TRUE if string has non-zero length and contains quality scores
+// Othewise print warning that quality is empty and return FALSE
+{
+int i;
+for ( i = 0; s[i] ; ++i)
+    {
+    if (!csQualChars[(int)s[i]])
+	{
+	warn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]", file, line, s);
+	return FALSE;
+	}
+    }
+if (i == 0)
+    {
+    warn("Error [file=%s, line=%d]: colorspace quality empty [%s]", file, line, s);
+    return FALSE;
+    }
+return TRUE;
+}
+
 boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, char *chrom, unsigned chromSize)
 // Return TRUE if start and end are both >= 0,
 // and if zeroSizeOk then start <= end 
@@ -344,6 +383,27 @@ warn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", fi
 return FALSE;
 }
 
+boolean wantNewLine(struct lineFile *lf, char *file, int line, char **row, char *msg)
+{
+boolean res = lineFileNext(lf, row, NULL);
+if (!res)
+    warn("Error [file=%s, line=%d]: %s not found", file, line, msg);
+return res;
+}
+
+boolean checkColumns(char *file, int line, char *row, char *buf, char *words[], int wordSize, int expected)
+// Split buf into wordSize columns in words[] array
+// Return TRUE if number of columns == expected, otherwise FALSE
+{
+int n = chopByWhite(buf, words, wordSize);
+if ( n != expected)
+    {
+    warn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", file, line, n, expected, row);
+    return FALSE;
+    }
+return TRUE;
+}
+
 int validateTagOrPairedTagAlign(struct lineFile *lf, char *file, boolean paired)
 {
 char *row;
@@ -356,12 +416,9 @@ int size;
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
-    ++line;
     safecpy(buf, sizeof(buf), row);
-    int n = chopByWhite(buf, words, 9);
-    if ( n != (paired ? 8 : 6))
-	errAbort("Error: found %d columns, expected %d [%s]\n", n, (paired ? 8 : 6), row);
-    if (checkChrom(file, line, row, words[0], &chromSize)
+    if ( checkColumns(file, ++line, row, buf, words, 9, (paired ? 8 : 6))
+	&& checkChrom(file, line, row, words[0], &chromSize)
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
 	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
 	&& checkStrand(file, line, row, words[5])
@@ -429,12 +486,12 @@ while ( lineFileNext(lf, &seqName, NULL))
 	    startOfFile = FALSE;
 	}
     if (checkSeqName(file, line, seqName, '@', "sequence name")
-	&& (lineFileNext(lf, &seq, NULL))
-	&& checkSeq(file, ++line, seq, seq, "sequence")
-	&& (lineFileNext(lf, &qName, NULL))
-	&& checkSeqName(file, ++line, qName, '+', "quality name")
-	&& (lineFileNext(lf, &qual, NULL))
-	&& checkQual(file, ++line, qual) )
+	&& (wantNewLine(lf, file, ++line, &seq, "fastq sequence line"))
+	&& checkSeq(file, line, seq, seq, "sequence")
+	&& (wantNewLine(lf, file, ++line, &qName, "fastq sequence name (quality line)"))
+	&& checkSeqName(file, line, qName, '+', "quality name")
+	&& (wantNewLine(lf, file, ++line, &qual, "quality line"))
+	&& checkQual(file, line, qual) )
 	{
 	if (printOkLines)
 	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
@@ -450,13 +507,16 @@ while ( lineFileNext(lf, &seqName, NULL))
 return errs;
 }
 
-// CS Fasta:
-// >461_19_209_F3
-// T022213002230311203200200322000
-// >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
-// T01301010111200210102321210100112312
+/*    Syntax per http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm
+CS Fasta:
+>461_19_209_F3
+T022213002230311203200200322000
+>920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
+T01301010111200210102321210100112312
+*/
 
 int validateCsfasta(struct lineFile *lf, char *file)
+// Validate Colorspace fasta files
 {
 char *seqName = NULL;
 char *seq = NULL; 
@@ -475,8 +535,8 @@ while (lineFileNext(lf, &seqName, NULL))
 	    startOfFile = FALSE;
 	}
     if (checkCsSeqName(file, line, seqName)
-	&& (lineFileNext(lf, &seq, NULL))
-	&& checkSeq(file, ++line, seq, seq, "sequence") )
+	&& (wantNewLine(lf, file, ++line, &seq, "colorspace sequence name"))
+	&& checkSeq(file, line, seq, seq, "colorspace sequence") )
 	{
 	if (printOkLines)
 	    printf("%s\n%s\n", seqName, seq);
@@ -485,6 +545,55 @@ while (lineFileNext(lf, &seqName, NULL))
 	{
 	if (printFailLines)
 	    printf("%s\n%s\n", seqName, seq);
+	if (++errs >= maxErrors)
+	    errAbort("Aborting .. found %d errors\n", errs);
+	}
+    }
+return errs;
+}
+
+
+/*    Syntax per http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm
+    Sample:-
+
+# Cwd: /home/pipeline
+# Title: S0033_20080723_2_I22_EA_
+>461_19_90_F3
+20 10 8 13 8 10 20 7 7 24 15 22 21 14 14 8 11 15 5 20 6 5 8 22 6 24 3 16 7 11
+>461_19_209_F3
+16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9
+*/
+
+int validateCsqual(struct lineFile *lf, char *file)
+// Validate Colorspace quality files
+{
+char *seqName = NULL;
+char *qual = NULL; 
+int line = 0;
+int errs = 0;
+boolean startOfFile = TRUE;
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+while (lineFileNext(lf, &seqName, NULL))
+    {
+    ++line;
+    if (startOfFile)
+	{
+	if (*seqName == '#')
+	    continue;
+	else
+	    startOfFile = FALSE;
+	}
+    if (checkCsSeqName(file, line, seqName)
+	&& (wantNewLine(lf, file, ++line, &qual, "colorspace quality line"))
+	&& checkCsQual(file, line, qual) )
+	{
+	if (printOkLines)
+	    printf("%s\n%s\n", seqName, qual);
+	}
+    else
+	{
+	if (printFailLines)
+	    printf("%s\n%s\n", seqName, qual);
 	if (++errs >= maxErrors)
 	    errAbort("Aborting .. found %d errors\n", errs);
 	}
@@ -542,7 +651,7 @@ maxErrors      = optionInt("maxErrors", MAX_ERRORS);
 zeroSizeOk     = optionExists("zeroSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
-colorSpace     = optionExists("colorSpace");
+colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 initArrays();
 if (strlen(optionVal("chromInfo", "")) > 0)
     {
@@ -557,6 +666,7 @@ hashAdd(funcs, "tagAlign", &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
 hashAdd(funcs, "fastq", &validateFastq);
 hashAdd(funcs, "csfasta", &validateCsfasta);
+hashAdd(funcs, "csqual", &validateCsqual);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
