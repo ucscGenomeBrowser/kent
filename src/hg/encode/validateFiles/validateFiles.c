@@ -6,14 +6,14 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.9 2009/03/13 21:36:00 mikep Exp $";
-static char *version = "$Revision: 1.9 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.10 2009/03/13 23:00:02 mikep Exp $";
+static char *version = "$Revision: 1.10 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
 
-enum peakType {BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK};
+enum bedType {BED_GRAPH = 0, BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK};
 
 int maxErrors;
 boolean colorSpace;
@@ -28,6 +28,7 @@ char seqName[256];
 char digits[256];
 char alpha[256];
 char csSeqName[256];
+char bedTypeCols[10];
 
 void usage()
 /* Explain usage and exit. */
@@ -45,9 +46,14 @@ errAbort(
   "usage:\n"
   "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
   "options:\n"
-  "   -type=(fastq|csfasta|csqual|tagAlign|pairedTagAlign|broadPeak|narrowPeak|gappedPeak)\n"
-  "                                csfasta = Colorspace fasta (SOLiD platform) (implies -colorSpace)\n"
-  "                                csqual  = Colorspace quality lines (SOLiD platform)\n"
+  "   -type=(a value from the list below)\n"
+  "         tagAlign|pairedTagAlign|broadPeak|narrowPeak|gappedPeak|bedGraph\n"
+  "                   : see http://genomewiki.cse.ucsc.edu/EncodeDCC/index.php/File_Formats\n"
+  "         fastq     : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)\n"
+  "         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)\n"
+  "         csqual    : Colorspace quality (see link below)\n"
+  "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
+  "\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences are colorspace 0-3 values\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
@@ -80,6 +86,12 @@ void initArrays()
 // seqName:   fastq sequence name chars [A-Za-z0-9_.:/-]
 {
 int i;
+// number of columns to expect in bedType files
+bedTypeCols[BED_GRAPH] = 4;
+bedTypeCols[BROAD_PEAK] = 9;
+bedTypeCols[NARROW_PEAK] = 10;
+bedTypeCols[GAPPED_PEAK] = 15;
+
 for (i=0 ; i < 256 ; ++i)
     dnaChars[i] = qualChars[i] = csQualChars[i] = seqName[i] = csSeqName[i] = digits[i] = alpha[i] = 0;
 dnaChars['a'] = dnaChars['c'] = dnaChars['g'] = dnaChars['t'] = dnaChars['n'] = 1;
@@ -497,7 +509,7 @@ int validatePairedTagAlign(struct lineFile *lf, char *file)
 return validateTagOrPairedTagAlign(lf, file, TRUE);
 }
 
-int validatePeakFormat(struct lineFile *lf, char *file, enum peakType type)
+int validateBedVariant(struct lineFile *lf, char *file, enum bedType type)
 {
 char *row;
 char buf[1024];
@@ -511,17 +523,23 @@ verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNext(lf, &row, &size))
     {
     safecpy(buf, sizeof(buf), row);
-    if ( checkColumns(file, ++line, row, buf, words, PEAK_WORDS, 9)
+    if ( checkColumns(file, ++line, row, buf, words, PEAK_WORDS, bedTypeCols[type])
 	&& checkChrom(file, line, row, words[0], &chromSize)
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
-	&& checkString(file, line, row, words[3], "name")
-	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
-	&& checkStrand(file, line, row, words[5])
-//	&& ((type != GAPPED_PEAK) || ()) // for now dont check all the BED 12 gapped fields
-	&& checkFloat(file, line, row, words[6 + gappedOffset], "signalValue")
-	&& checkFloat(file, line, row, words[7 + gappedOffset], "pValue")
-	&& checkFloat(file, line, row, words[8 + gappedOffset], "qValue")
-	&& ((type != NARROW_PEAK) || (checkPeak(file, line, row, words[4], words[1], words[2]))))
+	&& ( type == BED_GRAPH ? 
+	      (checkFloat(file, line, row, words[3], "value")) // canonical bedGraph has float in 4th column 
+	   : // otherwise BROAD_, NARROW_, or GAPPED_PEAK
+	      (checkString(file, line, row, words[3], "name")
+		  && checkIntBetween(file, line, row, words[4], "score", 0, 1000)
+		  && checkStrand(file, line, row, words[5])
+		  // && ((type != GAPPED_PEAK) || ()) // for now dont check all the BED 12 gapped fields
+		  && checkFloat(file, line, row, words[6 + gappedOffset], "signalValue")
+		  && checkFloat(file, line, row, words[7 + gappedOffset], "pValue")
+		  && checkFloat(file, line, row, words[8 + gappedOffset], "qValue")
+		  && ((type != NARROW_PEAK) || (checkPeak(file, line, row, words[4], words[1], words[2])))
+	      )
+	    )
+	)
 	{
 	if (printOkLines)
 	    printf("%s\n", row);
@@ -539,17 +557,22 @@ return errs;
 
 int validateBroadPeak(struct lineFile *lf, char *file)
 {
-return validatePeakFormat(lf, file, BROAD_PEAK);
+return validateBedVariant(lf, file, BROAD_PEAK);
 }
 
 int validateNarrowPeak(struct lineFile *lf, char *file)
 {
-return validatePeakFormat(lf, file, NARROW_PEAK);
+return validateBedVariant(lf, file, NARROW_PEAK);
 }
 
 int validateGappedPeak(struct lineFile *lf, char *file)
 {
-return validatePeakFormat(lf, file, GAPPED_PEAK);
+return validateBedVariant(lf, file, GAPPED_PEAK);
+}
+
+int validateBedGraph(struct lineFile *lf, char *file)
+{
+return validateBedVariant(lf, file, BED_GRAPH);
 }
 
 // fastq:
@@ -760,6 +783,7 @@ hashAdd(funcs, "csqual",         &validateCsqual);
 hashAdd(funcs, "broadPeak",      &validateBroadPeak);
 hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
+hashAdd(funcs, "bedGraph",       &validateBedGraph);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
