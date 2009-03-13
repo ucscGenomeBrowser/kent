@@ -26966,6 +26966,19 @@ exit;
 
 
 #############################################################################
+# LIFTOVER TO Hg19 (DONE - 2009-03-06 - Hiram )
+    mkdir /hive/data/genomes/hg18/bed/blat.hg19.2009-03-06
+    cd /hive/data/genomes/hg18/bed/blat.hg19.2009-03-06
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug hg18 hg19
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	 hg18 hg19 > do.log 2>&1
+    #	real    85m8.064s
+
+#############################################################################
+
 # HAPMAP REL22 RECOMBINATION RATES (PHASE II)  (DONE 2/24/09 angie)
     mkdir -p /hive/data/outside/hapmap/recombination/2008-03_rel22_B36/rates
     cd /hive/data/outside/hapmap/recombination/2008-03_rel22_B36/
@@ -27244,9 +27257,6 @@ exit;
       -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/hapmapPhaseIIISummary.sql
 #Loaded 4166007 elements of size 18
 #33.401u 3.275s 1:46.95 34.2%    0+0k 0+0io 0pf+0w
-
-
-#############################################################################
 
 ############################################################################
 # VEGA GENES UPDATE (BUILD 33) (DONE 2008-03-11 Andy)
