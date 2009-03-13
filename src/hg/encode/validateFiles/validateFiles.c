@@ -6,12 +6,14 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.8 2009/03/13 20:52:41 mikep Exp $";
-static char *version = "$Revision: 1.8 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.9 2009/03/13 21:36:00 mikep Exp $";
+static char *version = "$Revision: 1.9 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
+
+enum peakType {BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK};
 
 int maxErrors;
 boolean colorSpace;
@@ -116,11 +118,9 @@ boolean checkString(char *file, int line, char *row, char *s, char *name)
 // Return TRUE if string has non-zero length
 // Othewise print warning that name column is empty and return FALSE
 {
+verbose(3,"[%s %3d] %s(%s)\n", __func__, __LINE__, name, s);
 if (strlen(s) > 0)
-    {
-    verbose(2,"[%s %3d] %s(%s)\n", __func__, __LINE__, name, s);
     return TRUE;
-    }
 warn("Error [file=%s, line=%d]: %s column empty [%s]", file, line, name, row);
 return FALSE;
 }
@@ -161,6 +161,7 @@ boolean checkSeq(char *file, int line, char *row, char *s, char *name)
 // Return TRUE if string has non-zero length and contains only chars [ACGTNacgtn0-3]
 // Othewise print warning that name column is empty and return FALSE
 {
+verbose(3,"[%s %3d] inputLine=%d %s seq(%s) [%s]\n", __func__, __LINE__, line, name, s, row);
 int i;
 for ( i = 0; s[i] ; ++i)
     {
@@ -322,9 +323,9 @@ boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, c
 //        otherwise  then start < end
 // Othewise print warning and return FALSE
 {
+verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, chrom, chromSize, row);
 unsigned s = sqlUnsigned(start);
 unsigned e = sqlUnsigned(end);
-verbose(2,"[%s %3d] inputLine=%d [%s..%s] -> [%u..%u] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, s, e, chrom, chromSize, row);
 if (chromSize > 0)
     {
     if (e > chromSize)
@@ -356,6 +357,22 @@ else
 	warn("Error [file=%s, line=%d]: start(%u) >= end(%u) [%s]", file, line, s, e, row);
     }
 return FALSE;
+}
+
+boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char *end)
+// Return TRUE if peak is >= 0 and <= (end-start)
+// Othewise print warning and return FALSE
+{
+verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
+unsigned p = sqlUnsigned(peak);
+unsigned s = sqlUnsigned(start);
+unsigned e = sqlUnsigned(end);
+if (p > e - s)
+    {
+    warn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", file, line, p, e - s, row);
+    return FALSE;
+    }
+return TRUE;
 }
 
 boolean checkIntBetween(char *file, int line, char *row, char *val, char *name, int min, int max)
@@ -480,7 +497,7 @@ int validatePairedTagAlign(struct lineFile *lf, char *file)
 return validateTagOrPairedTagAlign(lf, file, TRUE);
 }
 
-int validateBroadPeak(struct lineFile *lf, char *file)
+int validatePeakFormat(struct lineFile *lf, char *file, enum peakType type)
 {
 char *row;
 char buf[1024];
@@ -489,6 +506,7 @@ int line = 0;
 int errs = 0;
 unsigned chromSize;
 int size;
+int gappedOffset = (type == GAPPED_PEAK ? 6 : 0);
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNext(lf, &row, &size))
     {
@@ -499,9 +517,11 @@ while (lineFileNext(lf, &row, &size))
 	&& checkString(file, line, row, words[3], "name")
 	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
 	&& checkStrand(file, line, row, words[5])
-	&& checkFloat(file, line, row, words[6], "signalValue")
-	&& checkFloat(file, line, row, words[7], "pValue")
-	&& checkFloat(file, line, row, words[8], "qValue"))
+//	&& ((type != GAPPED_PEAK) || ()) // for now dont check all the BED 12 gapped fields
+	&& checkFloat(file, line, row, words[6 + gappedOffset], "signalValue")
+	&& checkFloat(file, line, row, words[7 + gappedOffset], "pValue")
+	&& checkFloat(file, line, row, words[8 + gappedOffset], "qValue")
+	&& ((type != NARROW_PEAK) || (checkPeak(file, line, row, words[4], words[1], words[2]))))
 	{
 	if (printOkLines)
 	    printf("%s\n", row);
@@ -515,6 +535,21 @@ while (lineFileNext(lf, &row, &size))
 	}
     }
 return errs;
+}
+
+int validateBroadPeak(struct lineFile *lf, char *file)
+{
+return validatePeakFormat(lf, file, BROAD_PEAK);
+}
+
+int validateNarrowPeak(struct lineFile *lf, char *file)
+{
+return validatePeakFormat(lf, file, NARROW_PEAK);
+}
+
+int validateGappedPeak(struct lineFile *lf, char *file)
+{
+return validatePeakFormat(lf, file, GAPPED_PEAK);
 }
 
 // fastq:
@@ -717,14 +752,14 @@ if (strlen(optionVal("chromInfo", "")) > 0)
     }
 verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
 // Setup the function hash keyed by type
-hashAdd(funcs, "tagAlign", &validateTagAlign);
+hashAdd(funcs, "tagAlign",       &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
-hashAdd(funcs, "fastq", &validateFastq);
-hashAdd(funcs, "csfasta", &validateCsfasta);
-hashAdd(funcs, "csqual", &validateCsqual);
-hashAdd(funcs, "broadPeak", &validateBroadPeak);
-//hashAdd(funcs, "narrowPeak", &validateNarrowPeak);
-//hashAdd(funcs, "gappedPeak", &validateGappedPeak);
+hashAdd(funcs, "fastq",          &validateFastq);
+hashAdd(funcs, "csfasta",        &validateCsfasta);
+hashAdd(funcs, "csqual",         &validateCsqual);
+hashAdd(funcs, "broadPeak",      &validateBroadPeak);
+hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
+hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
