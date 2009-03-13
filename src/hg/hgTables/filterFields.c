@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.64 2009/03/12 16:45:15 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.65 2009/03/13 21:40:33 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -814,7 +814,8 @@ else
     }
 
 /* Printf free-form query row. */
-    if (!(isWig||isBedGr)) {
+if (!(isWig||isBedGr)) 
+    {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
@@ -824,11 +825,6 @@ else
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
     hPrintf("</TD></TR></TABLE>\n");
-    }
-
-if (isWig || isBedGr)
-    {
-    char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
     name = filterFieldVarName(db, rootTable, "_", filterMaxOutputVar);
     cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,

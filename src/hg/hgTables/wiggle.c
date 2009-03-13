@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.69 2009/03/12 19:44:21 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.70 2009/03/13 21:40:33 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -332,7 +332,7 @@ static void intersectDataVector(char *table, struct dataVector *dataVector1,
  * performed on each input (other selected subtracks must be the same type 
  * as table).  
  * Otherwise, handle intersection here. */
-if (anyIntersection() && !isWiggle(database, table))
+if (anyIntersection() && !isWiggle(database, table) && !isBigWig(table))
     {
     char *track2 = cartString(cart, hgtaIntersectTrack);
     char *table2 = cartString(cart, hgtaIntersectTable);
@@ -343,7 +343,7 @@ if (anyIntersection() && !isWiggle(database, table))
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
 	char *op = cartString(cart, hgtaIntersectOp);
-	boolean dv2IsWiggle = (isWiggle(database, table2) ||
+	boolean dv2IsWiggle = (isWiggle(database, table2) || isBigWig(table2) ||
 			       isBedGraph(table2));
 	dataVectorIntersect(dataVector1, dataVector2,
 			    dv2IsWiggle, sameString(op, "none"));

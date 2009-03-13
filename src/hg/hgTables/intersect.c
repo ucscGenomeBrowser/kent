@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.45 2009/03/12 16:45:15 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.46 2009/03/13 21:40:33 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -126,7 +126,7 @@ char *name = curTableLabel();
 char *iName, *iTable;
 char *onChange = onChangeEither();
 char *op, *setting;
-boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable));
+boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable));
 struct hTableInfo *hti1 = maybeGetHti(database, curTable), *hti2 = NULL;
 htmlOpen("Intersect with %s", name);
 

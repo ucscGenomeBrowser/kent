@@ -94,6 +94,7 @@ struct trackTable
     char *longLabel;
     boolean isBedGraph;		/* type of data in table	*/
     boolean isWig;		/* type of data in table	*/
+    boolean isBigWig;		/* type of data in table        */
     boolean isCustom;		/* might be a custom track	*/
     int bedGraphColumnNum;	/* the column where the dataValue is */
     char *bedGraphColumnName;	/* the name of the bedGraph column */

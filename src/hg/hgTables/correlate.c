@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.73 2009/03/12 19:44:21 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.74 2009/03/13 21:40:33 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -328,6 +328,7 @@ table->actualTdb = tdb;
 table->actualTable = cloneString(tdb->tableName);
 table->isBedGraph = FALSE;
 table->isWig = FALSE;
+table->isBigWig = FALSE;
 table->dbTableName = NULL;
 
 if (isCustomTrack(table->actualTable))
@@ -337,7 +338,7 @@ if (isCustomTrack(table->actualTable))
     isCustomDbTable = TRUE;
     }
 
-if (startsWith("bedGraph", tdb->type))
+if (startsWithWord("bedGraph", tdb->type))
     {
     table->isBedGraph = TRUE;
     /*	find the column name that belongs to the specified numeric
@@ -383,6 +384,10 @@ if (startsWith("bedGraph", tdb->type))
 	if (isCustomDbTable)
 	    hFreeConn(&conn);
 	}
+    }
+else if (startsWithWord("bigWig", tdb->type))
+    {
+    table->isBigWig = TRUE;
     }
 else if (sameString("cpgIsland", tdb->tableName))
     {
