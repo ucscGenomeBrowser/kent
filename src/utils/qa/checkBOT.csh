@@ -67,8 +67,8 @@ if ($mode == "terse") then
 endif
 
 echo "  hits    = total number of accesses since started tracking"
-echo "  time    = last seen hit was N seconds ago"
-echo "  max     = the most delay time slapped on this source IP"
+echo "  time    = seconds since last hit"
+echo "  max     = the most delay time slapped on this source IP, in ms"
 echo "  current = the current delay in milliseconds."
 echo
 echo "  delay decays at the rate of 10 milliseconds per second"
