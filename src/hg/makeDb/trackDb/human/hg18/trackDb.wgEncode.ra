@@ -3160,7 +3160,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel HepG2 DNase 1
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 1 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 0.00 4.70
     dateSubmitted 2009-03-11
@@ -3174,7 +3174,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel HepG2 DNase 2
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 2 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 0.00 4.48
     dateSubmitted 2009-03-11
@@ -3188,7 +3188,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel HepG2 DNase 3
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 3 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 0.00 8.15
     dateSubmitted 2009-03-11
@@ -3197,6 +3197,36 @@ wgEncode 1
     spanList first
     color 189,0,157
     cell HepG2
+
+    track wgEncodeUtaustinChIPseqSignalHepg2Input
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 Input Sig
+    longLabel ENCODE Open Chromatin, UT Input Signal (Input in HepG2 cells)
+    subGroups view=Signal EXP=zCTRL cellType=HepG2
+    type wig 0.00 2.78
+    dateSubmitted 2009-03-12
+    dateUnrestricted 2009-12-12
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
+    antibody Input
+
+    track wgEncodeUtaustinChIPseqRawSignalHepg2Input
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HepG2 Input Raw
+    longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in HepG2 cells)
+    subGroups view=rRAW EXP=zCTRL cellType=HepG2
+    type wig 0.00 26.71
+    dateSubmitted 2009-03-12
+    dateUnrestricted 2009-12-12
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    color 189,0,157
+    cell HepG2
+    antibody Input
 
     track wgEncodeDukeDNaseSeqPeaksK562
     release alpha
@@ -3416,7 +3446,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 1 (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.00
     dateSubmitted 2009-02-27
@@ -3431,7 +3461,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 2 (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.01
     dateSubmitted 2009-02-27
@@ -3446,7 +3476,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Raw3
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 3 (CTCF in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 23.06
     dateSubmitted 2009-02-27
@@ -3505,7 +3535,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 1 (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 38.44
     dateSubmitted 2009-02-27
@@ -3520,7 +3550,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 2 (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 30.71
     dateSubmitted 2009-02-27
@@ -3535,7 +3565,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Raw3
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Replicate 3 (c-Myc in K562 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 34.69
     dateSubmitted 2009-02-27
@@ -3550,7 +3580,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 Input Sig
-    longLabel ENCODE Open Chromatin, UT Input Signal (input in K562 cells)
+    longLabel ENCODE Open Chromatin, UT Input Signal (Input in K562 cells)
     subGroups view=Signal EXP=zCTRL cellType=K562
     type wig 0.00 2.98
     dataVersion ENCODE Nov 2008
@@ -3559,13 +3589,13 @@ wgEncode 1
     spanList 1
     cell K562
     color 46,0,184
-    antibody input
+    antibody Input
 
     track wgEncodeUtaustinChIPseqRawSignalK562Input
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 Input Raw
-    longLabel ENCODE Open Chromatin, UT Input Raw Signal (input in K562 cells)
+    longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in K562 cells)
     subGroups view=rRAW EXP=zCTRL cellType=K562
     type wig 0.00 37.78
     dataVersion ENCODE Nov 2008
@@ -3574,7 +3604,7 @@ wgEncode 1
     spanList 1
     cell K562
     color 46,0,184
-    antibody input
+    antibody Input
 
     track wgEncodeDukeDNaseSeqRegionsExcludedGm12878
     release alpha
