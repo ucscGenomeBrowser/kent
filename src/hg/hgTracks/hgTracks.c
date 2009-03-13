@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1559 2009/03/12 15:49:04 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1560 2009/03/13 16:31:57 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2964,6 +2964,8 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
 
+/* disable Convert function for CGB servers for the time being */
+if (!hIsCgbServer())
 if (liftOverChainForDb(database) != NULL)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"");
