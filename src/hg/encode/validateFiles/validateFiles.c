@@ -6,10 +6,13 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.7 2009/03/13 20:15:25 mikep Exp $";
-static char *version = "$Revision: 1.7 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.8 2009/03/13 20:52:41 mikep Exp $";
+static char *version = "$Revision: 1.8 $";
 
 #define MAX_ERRORS 10
+#define PEAK_WORDS 16
+#define TAG_WORDS 9
+
 int maxErrors;
 boolean colorSpace;
 boolean zeroSizeOk;
@@ -40,7 +43,7 @@ errAbort(
   "usage:\n"
   "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
   "options:\n"
-  "   -type=(fastq|csfasta|csqual|tagAlign|pairedTagAlign)\n"
+  "   -type=(fastq|csfasta|csqual|tagAlign|pairedTagAlign|broadPeak|narrowPeak|gappedPeak)\n"
   "                                csfasta = Colorspace fasta (SOLiD platform) (implies -colorSpace)\n"
   "                                csqual  = Colorspace quality lines (SOLiD platform)\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
@@ -370,8 +373,23 @@ warn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]", file, line,
 return FALSE;
 }
 
+boolean checkFloat(char *file, int line, char *row, char *val, char *name)
+// Return TRUE if val is floating point number
+// Othewise print warning and return FALSE
+// taken from sqlNum.c
+{
+char* end;
+strtod(val, &end);
+if ((end == val) || (*end != '\0'))
+    {
+    warn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", file, line, name, val, row);
+    return FALSE;
+    }
+return TRUE;
+}
+
 boolean checkStrand(char *file, int line, char *row, char *strand)
-// Return TRUE if strand == '+' or '-',
+// Return TRUE if strand == '+' or '-' or '.',
 // Othewise print warning and return FALSE
 {
 if (strlen(strand) == 1 && (*strand == '+' || *strand == '-' || *strand == '.'))
@@ -408,7 +426,7 @@ int validateTagOrPairedTagAlign(struct lineFile *lf, char *file, boolean paired)
 {
 char *row;
 char buf[1024];
-char *words[9];
+char *words[TAG_WORDS];
 int line = 0;
 int errs = 0;
 unsigned chromSize;
@@ -417,7 +435,7 @@ verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
     safecpy(buf, sizeof(buf), row);
-    if ( checkColumns(file, ++line, row, buf, words, 9, (paired ? 8 : 6))
+    if ( checkColumns(file, ++line, row, buf, words, TAG_WORDS, (paired ? 8 : 6))
 	&& checkChrom(file, line, row, words[0], &chromSize)
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
 	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
@@ -460,6 +478,43 @@ return validateTagOrPairedTagAlign(lf, file, FALSE);
 int validatePairedTagAlign(struct lineFile *lf, char *file)
 {
 return validateTagOrPairedTagAlign(lf, file, TRUE);
+}
+
+int validateBroadPeak(struct lineFile *lf, char *file)
+{
+char *row;
+char buf[1024];
+char *words[PEAK_WORDS];
+int line = 0;
+int errs = 0;
+unsigned chromSize;
+int size;
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+while (lineFileNext(lf, &row, &size))
+    {
+    safecpy(buf, sizeof(buf), row);
+    if ( checkColumns(file, ++line, row, buf, words, PEAK_WORDS, 9)
+	&& checkChrom(file, line, row, words[0], &chromSize)
+	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
+	&& checkString(file, line, row, words[3], "name")
+	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
+	&& checkStrand(file, line, row, words[5])
+	&& checkFloat(file, line, row, words[6], "signalValue")
+	&& checkFloat(file, line, row, words[7], "pValue")
+	&& checkFloat(file, line, row, words[8], "qValue"))
+	{
+	if (printOkLines)
+	    printf("%s\n", row);
+	}
+    else
+	{
+	if (printFailLines)
+	    printf("%s\n", row);
+	if (++errs >= maxErrors)
+	    errAbort("Aborting .. found %d errors\n", errs);
+	}
+    }
+return errs;
 }
 
 // fastq:
@@ -667,6 +722,9 @@ hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
 hashAdd(funcs, "fastq", &validateFastq);
 hashAdd(funcs, "csfasta", &validateCsfasta);
 hashAdd(funcs, "csqual", &validateCsqual);
+hashAdd(funcs, "broadPeak", &validateBroadPeak);
+//hashAdd(funcs, "narrowPeak", &validateNarrowPeak);
+//hashAdd(funcs, "gappedPeak", &validateGappedPeak);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
