@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.48 2008/11/18 20:18:35 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.49 2009/03/13 21:07:50 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1182,6 +1182,9 @@ if (gotSettings)
     }
 if (isEmpty(dyMessage->string))
     dyStringPrintf(dyMessage, "No changes to session <B>%s</B>.\n", sessionName);
+dyStringPrintf(dyMessage, "%s %s",
+	       getSessionLink(encUserName, encSessionName),
+	       getSessionEmailLink(encUserName, encSessionName));
 return dyStringCannibalize(&dyMessage);
 }
 
