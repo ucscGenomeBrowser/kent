@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.8 2008/09/30 17:55:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.9 2009/03/13 05:22:46 mikep Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -201,6 +201,7 @@ for (i=0; i<fileCount; ++i)
             counts[i]++;
         }
 	outputToDo = TRUE;
+	bedFree(&bed); // plug the memory leak
 	}
     verbose(2,"#\tchrom %s done, size %d\n", prevChrom, thisChromSize);
     lineFileClose(&bf);
