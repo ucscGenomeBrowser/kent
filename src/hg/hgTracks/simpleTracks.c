@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.69 2009/03/10 20:47:20 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.70 2009/03/13 23:33:45 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -8658,8 +8658,12 @@ char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->mapName);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
 /* Remove redundant cart settings to avoid cart bloat. */
-if (cartOptionalString(cart, option) && enabled == enabledInTdb)
-    cartRemove(cart, option);
+if (enabled == enabledInTdb)
+    {
+    char *var = cartOptionalString(cart, option);
+    if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
+        cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
+    }
 return enabled;
 }
 
@@ -8726,6 +8730,8 @@ if (track->visibility == tvHide)
 /* Count visible subtracks; if all subtracks are de-selected in cart,
  * remove cart settings to restore trackDb defaults.  Otherwise use
  * selections from cart. */
+//#define BLOCK_REVERSION_TO_DEFAULT_SUBTRACKS_WHEN_NO_SUBTRACKS_VISIBLE
+#ifndef BLOCK_REVERSION_TO_DEFAULT_SUBTRACKS_WHEN_NO_SUBTRACKS_VISIBLE
 int subtrackCt = subtrackCount(track->subtracks);
 if (subtrackCt == 0)
     for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -8734,6 +8740,7 @@ if (subtrackCt == 0)
 	safef(option, sizeof(option), "%s_sel", subtrack->mapName);
 	cartRemove(cart, option);
 	}
+#endif//ndef BLOCK_REVERSION_TO_DEFAULT_SUBTRACKS_WHEN_NO_SUBTRACKS_VISIBLE
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (!subtrack->limitedVisSet)
 	{

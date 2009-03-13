@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.173 2009/03/13 23:02:08 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.174 2009/03/13 23:29:09 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2703,18 +2703,25 @@ else
 
 for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    boolean alreadySet = TRUE;
+    boolean checkedCB = TRUE;
+    boolean enabledCB = TRUE;
     boolean isPrimary = FALSE;
     char *setting;
     int ix;
 
-    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s_sel", subtrack->tableName);
     if ((setting = trackDbSetting(subtrack, "subTrack")) != NULL)
         {
         if (chopLine(cloneString(setting), words) >= 2)
-            alreadySet = differentString(words[1], "off");
+            checkedCB = differentString(words[1], "off");
         }
-    alreadySet = cartUsualBoolean(cart, htmlIdentifier, alreadySet);
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s_sel", subtrack->tableName);
+    setting = cartOptionalString(cart, htmlIdentifier);
+    if(setting != NULL)
+        {
+        int state = atoi(setting);
+        checkedCB = (state == 1 || state == -1);  // checked/eanbled:1 unchecked/enabled:0 checked/disabled:-1 unchecked/disabled:-2
+        enabledCB = (state >= 0);
+        }
     isPrimary = (primarySubtrack &&
          sameString(subtrack->tableName, primarySubtrack));
 
@@ -2732,7 +2739,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                      hTableExists(db, subtrack->tableName))
             {
             puts("<TR><TD>");
-            cgiMakeCheckBox(htmlIdentifier, alreadySet);
+            cgiMakeCheckBox(htmlIdentifier, checkedCB && enabledCB);
             printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
             }
         }
@@ -2767,7 +2774,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
                 }
             dyStringAppendC(dyHtml,'"');
-            cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,dyStringContents(dyHtml));
+            cgiMakeCheckBox2BoolWithIdAndJS(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml));
             if(sortOrder != NULL || useDragAndDrop)
                 {
                 safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->tableName);
@@ -4380,8 +4387,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
                 if (sameString(subName, subGroup) && sameString(subValue, name))
                     {
                     boolean newVal = FALSE;
-                            safef(option, sizeof(option),
-                                    "%s_sel", subtrack->tableName);
+                    safef(option, sizeof(option),"%s_sel", subtrack->tableName);
                     newVal = sameString(button, ADD_BUTTON_LABEL);
                     if (primarySubtrack)
                         {
@@ -4472,7 +4478,7 @@ if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
     printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n",
             cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
-           (trackDbSetting(tdb, "origAssembly") != NULL ?trackDbSetting(tdb, "origAssembly"):"hg18"),
+            trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
             tdb->tableName);
     return TRUE;
     }

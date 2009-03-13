@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.103 2009/02/09 17:01:06 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.104 2009/03/13 23:25:43 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -312,7 +312,8 @@ for (cv = cvList; cv != NULL; cv = cv->next)
     if (startsWith(booShadow, cv->name))
         {
 	char *booVar = cv->name + booSize;
-	char *val = (cgiVarExists(booVar) ? "1" : "0");
+    // Support for 2 boolean CBs: checked/unchecked (1/0) and enabled/disabled:(-1/-2)
+	char *val = (cgiVarExists(booVar) ? "1" : cv->val);
 	storeInOldVars(cart, oldVars, booVar);
 	cartRemove(cart, booVar);
 	hashAdd(cgiHash, booVar, val);
@@ -954,7 +955,7 @@ boolean cartBoolean(struct cart *cart, char *var)
 /* Retrieve cart boolean. */
 {
 char *s = cartString(cart, var);
-if (sameString(s, "on") || atoi(s) != 0)
+if (sameString(s, "on") || atoi(s) > 0)
     return TRUE;
 else
     return FALSE;
@@ -966,10 +967,7 @@ boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
 char *s = cartOptionalString(cart, var);
 if (s == NULL)
     return usual;
-if (sameString(s, "on") || atoi(s) != 0)
-    return TRUE;
-else
-    return FALSE;
+return (sameString(s, "on") || atoi(s) > 0);
 }
 
 boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual)
@@ -985,7 +983,7 @@ return(usual);
 void cartSetBoolean(struct cart *cart, char *var, boolean val)
 /* Set boolean value. */
 {
-cartSetInt(cart,var,val);
+cartSetInt(cart,var,(val?1:0)); // Be explicit because some cartBools overloaded with negative "disabled" values
 }
 
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize)
@@ -1689,7 +1687,7 @@ boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
 char *setting = cartStringClosestToHome(cart,tdb,compositeLevel,suffix);
-return (sameString(setting, "on") || atoi(setting) != 0);
+return (sameString(setting, "on") || atoi(setting) > 0);
 }
 
 boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,boolean usual)
@@ -1699,7 +1697,7 @@ boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, bo
 char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
 if(setting == NULL)
     return usual;
-return (sameString(setting, "on") || atoi(setting) != 0);
+return (sameString(setting, "on") || atoi(setting) > 0);
 }
 
 

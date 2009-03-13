@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.21 2009/03/09 18:37:42 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.22 2009/03/13 23:35:43 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -70,7 +70,11 @@ function matSelectViewForSubTracks(obj,view)
                                 while(classes.length > 0) {
                                     JustTheseCBs = JustTheseCBs.filter("."+classes.pop());
                                 }
-                                JustTheseCBs.each( function (i) { this.checked = true; hideOrShowSubtrack(this); } );
+                                JustTheseCBs.each( function (i) {
+                                    this.checked = true;
+                                    setCheckBoxShadow(this);
+                                    hideOrShowSubtrack(this);
+                                });
                             }
                         }
                     }
@@ -133,7 +137,11 @@ function matSetMatrixCheckBoxes(state)
     //        }
     //    }
     //}
-    CBs.each( function (i) { this.checked = state; hideOrShowSubtrack(this); } )
+    CBs.each( function (i) {
+        this.checked = state;
+        setCheckBoxShadow(this);
+        hideOrShowSubtrack(this);
+    });
 
     return true;
 }
@@ -153,9 +161,24 @@ function matSetSubtrackCheckBoxes(state)
     //        }
     //    }
     //}
-    CBs.each( function (i) { this.checked = state; hideOrShowSubtrack(this);} )
+    CBs.each( function (i) {
+        this.checked = state;
+        setCheckBoxShadow(this);
+        hideOrShowSubtrack(this);
+    });
 
     return true;
+}
+
+function setCheckBoxShadow(CB)
+{
+// Since CBs only get into cart when enabled/checked, the shadow control enables cart to know other states
+    var shadowState = 0;
+    if(CB.checked)
+        shadowState = 1;
+    if(CB.disabled)
+        shadowState -= 2;
+    $("input[name='boolshad."+CB.name+"']").val(shadowState);
 }
 
 function matEnableSubtrackCheckBoxes(state)
@@ -173,7 +196,11 @@ function matEnableSubtrackCheckBoxes(state)
     //        }
     //    }
     //}
-    CBs.each( function (i) { this.disabled = !state; hideOrShowSubtrack(this); } )
+    CBs.each( function (i) {
+        this.disabled = !state;
+        setCheckBoxShadow(this);
+        hideOrShowSubtrack(this);
+    });
 
     return true;
 }
@@ -185,6 +212,7 @@ function matSubtrackCbClick(subCb)
 // subtrack may be hidden as a result.
     //if(subCBtoMatCB)
     //    matChkBoxNormalizeMatching(subCb);
+    setCheckBoxShadow(subCb);
     hideOrShowSubtrack(subCb);
 }
 

@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1560 2009/03/13 16:31:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1561 2009/03/13 23:30:13 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2232,17 +2232,15 @@ for (hel = hels; hel != NULL; hel = hel->next)
 	for (subtrack = track->tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    {
 	    if (sameString(subtrack->tableName, table))
-		{
-		char selName[SMALLBUF];
-		char selVal[2];
-		track->visibility = tvFull;
-		track->tdb->visibility = tvFull;
-		cartSetString(cart, track->tdb->tableName, "full");
-		subtrack->visibility = tvFull;
-		safef(selName, sizeof(selName), "%s_sel", table);
-		safef(selVal, sizeof(selVal), "%d", tvFull);
-		cartSetString(cart, selName, selVal);
-		}
+            {
+            char selName[SMALLBUF];
+            track->visibility = tvFull;
+            cartSetString(cart, track->tdb->tableName, "full");
+            track->tdb->visibility = tvFull;
+            subtrack->visibility = tvFull;
+            safef(selName, sizeof(selName), "%s_sel", table);
+            cartSetBoolean(cart, selName, TRUE);
+            }
 	    }
 	}
     }
@@ -2948,7 +2946,7 @@ else
     	hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
        	database, chromName, winStart+1, winEnd, cartSessionVarName(),
        	cartSessionId(cart), "Tables");
-    	}		
+    	}
     }
 
 if (hgNearOk(database))
