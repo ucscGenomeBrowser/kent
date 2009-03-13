@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.26 2009/01/23 22:07:32 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.27 2009/03/13 22:33:13 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -55,6 +55,7 @@ use vars qw/
     $opt_ignoreSelf
     $opt_syntenicNet
     $opt_noDbNameCheck
+    $opt_inclHap
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -116,6 +117,7 @@ print STDERR <<_EOF_
     -ignoreSelf           Do not assume self alignments even if tDb == qDb
     -syntenicNet          Perform optional syntenicNet step
     -noDbNameCheck        ignore Db name format
+    -inclHap              include haplotypes *_hap* in chain/net, default not
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -242,7 +244,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $splitRef);
+my ($swapDir, $splitRef, $inclHap);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -281,7 +283,8 @@ sub checkOptions {
 		      "readmeOnly",
 		      "ignoreSelf",
                       "syntenicNet",
-                      "noDbNameCheck"
+                      "noDbNameCheck",
+                      "inclHap"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -406,6 +409,14 @@ sub getDbFromPath {
   } else {
     die "Error: $DEF variable $var=$val must be a full path with " .
       "a recognizable database as one of its elements.\n"
+  }
+  if (! defined($db)) {
+    if ($val =~ m#^/hive/data/genomes/#) {
+	$val =~ s#^/hive/data/genomes/##;
+	$val =~ s#/.*##;
+	$db = $val;
+	warn "Warning: assuming database $db from /hive/data/genomes/<db>/ path\n";
+    }
   }
 return $db;
 }
@@ -870,8 +881,8 @@ $dbHost) from chains, and generates axt, maf and .over.chain from the nets.";
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
-chainPreNet $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
-| chainNet stdin -minSpace=1 $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout /dev/null \\
+chainPreNet $inclHap $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
+| chainNet $inclHap stdin -minSpace=1 $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout /dev/null \\
 | netSyntenic stdin noClass.net
 
 # Make liftOver chains:
@@ -1472,6 +1483,8 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 1);
 ($DEF) = @ARGV;
 
+$inclHap = "";
+$inclHap = "-inclHap" if ($opt_inclHap);
 &loadDef($DEF);
 &checkDef();
 
