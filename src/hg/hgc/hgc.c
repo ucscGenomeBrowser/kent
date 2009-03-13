@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1517 2009/03/12 19:22:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1518 2009/03/13 21:29:22 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5728,11 +5728,14 @@ if (otherPsls != NULL)
     puts("<HR>");
     printf("<B>Other matches for these primers:</B><BR>\n");
     for (psl = otherPsls;  psl != NULL;  psl = psl->next)
+	{
+	puts("<BR>");
 	if (target != NULL)
 	    printPcrTargetMatch(target, psl, FALSE);
 	else
 	    printPosOnChrom(psl->tName, psl->tStart, psl->tEnd,
 			    psl->strand, FALSE, NULL);
+	}
     puts("<HR>");
     }
 printPcrSequence(target, itemPsl, fPrimer, rPrimer);
@@ -18316,7 +18319,7 @@ float freq2 = 0.0;
 
 if (majorCount == 0)
     {
-    printf("<TR><TD>%s</TD><TD>not available</TD><TD>not available</TD></TR>\n", pop);
+    printf("<TR><TD>%s</TD><TD align=center>-</TD><TD align=center>-</TD></TR>\n", pop);
     return;
     }
 
@@ -18355,6 +18358,27 @@ printf("</TR>\n");
 
 }
 
+void showHapmapAverageRow(char *label, float freq1)
+{
+float freq2 = 1.0 - freq1;
+printf("<TR><TD>%s</TD>", label);
+if (freq1 > 0.5)
+    {
+    printf("<TD bgcolor = \"lightgrey\" align=right>(%3.2f%%)</TD>", freq1*100);
+    printf("<TD align=right>(%3.2f%%)</TD>", freq2*100);
+    }
+else if (freq1 < 0.5)
+    {
+    printf("<TD align=right>(%3.2f%%)</TD>", freq1*100);
+    printf("<TD bgcolor = \"lightgrey\" align=right>(%3.2f%%)</TD>", freq2*100);
+    }
+else
+    {
+    printf("<TD align=right>(%3.2f%%)</TD>", freq1*100);
+    printf("<TD align=right>(%3.2f%%)</TD>", freq2*100);
+    }
+printf("</TR>\n");
+}
 
 void doHapmapSnpsSummaryTable(struct sqlConnection *conn, struct trackDb *tdb, char *itemName,
 			      boolean showOrtho)
@@ -18442,6 +18466,7 @@ char *majorAlleles[HAP_PHASEIII_POPCOUNT];
 int majorCounts[HAP_PHASEIII_POPCOUNT], haploCounts[HAP_PHASEIII_POPCOUNT];
 int totalA1Count = 0, totalA2Count = 0, totalHaploCount = 0;
 float sumHet = 0.0;
+int sumA1A1 = 0, sumA1A2 = 0, sumA2A2 = 0;
 int popCount = 0;
 char *allele1 = NULL, *allele2 = NULL;
 for (i=0;  i < HAP_PHASEIII_POPCOUNT;  i++)
@@ -18489,6 +18514,9 @@ for (i=0;  i < HAP_PHASEIII_POPCOUNT;  i++)
 	totalHaploCount += haploCounts[i];
 	sumHet += ((float)item->heteroCount /
 		   (item->homoCount1 + item->homoCount2 + item->heteroCount));
+	sumA1A1 += item->homoCount1;
+	sumA1A2 += item->heteroCount;
+	sumA2A2 += item->homoCount2;
 	popCount++;
 	}
     }
@@ -18496,9 +18524,7 @@ printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", allele1, allele
 for (i=0;  i < HAP_PHASEIII_POPCOUNT;  i++)
     showOneHapmapRow(hapmapPhaseIIIPops[i], allele1, allele2, majorAlleles[i],
 		     majorCounts[i], haploCounts[i]);
-char *totalMajorAllele = (totalA1Count >= totalA2Count) ? allele1 : allele2;
-int totalMajorCount = max(totalA1Count, totalA2Count);
-showOneHapmapRow("Total", allele1, allele2, totalMajorAllele, totalMajorCount, totalHaploCount);
+showHapmapAverageRow("Average", (float)totalA1Count / totalHaploCount);
 printf("</TABLE>\n");
 
 printf("<BR><B>Average of populations' observed heterozygosities:</B> %3.2f%%<BR>\n",
