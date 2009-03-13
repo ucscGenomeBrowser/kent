@@ -6,8 +6,8 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.10 2009/03/13 23:00:02 mikep Exp $";
-static char *version = "$Revision: 1.10 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.11 2009/03/13 23:23:51 mikep Exp $";
+static char *version = "$Revision: 1.11 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -55,11 +55,12 @@ errAbort(
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
   "\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
-  "   -colorSpace                  Sequences are colorspace 0-3 values\n"
+  "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
+  "                                  with formats such as tagAlign and pairedTagAlign)\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
   "                                  stopping (default %d)\n"
   "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
-  "                                  otherwise require start < end\n"
+  "                                  otherwise require strictly start < end\n"
   "   -printOkLines                Print lines which pass validation to stdout\n"
   "   -printFailLines              Print lines which fail validation to stdout\n"
   "   -version                     Print version\n"
