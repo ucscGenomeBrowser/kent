@@ -6701,7 +6701,7 @@ wgEncode 1
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Pol2
@@ -6715,7 +6715,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
@@ -6729,7 +6729,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
@@ -6743,7 +6743,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
@@ -6757,7 +6757,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Input
@@ -6771,7 +6771,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalHek293Input
@@ -6785,7 +6785,7 @@ wgEncode 1
     dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
-    color 153,0,125
+    color 133,0,173
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHelas3Pol2
