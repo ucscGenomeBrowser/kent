@@ -2646,3 +2646,31 @@ done >> galGal3.agp
         | wigEncode stdin qual.wig qual.wib
     ln -s `pwd`/qual.wib /gbdb/galGal3/wib
     hgLoadWiggle -pathPrefix=/gbdb/galGal3/wib galGal3 quality qual.wig
+
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2009-03-13 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/galGal3/bed/nscan/
+    http://mblab.wustl.edu/predictions/chicken/galGal3/
+
+    wget -nv http://mblab.wustl.edu/predictions/chicken/galGal3/galGal3.gtf
+    wget -nv http://mblab.wustl.edu/predictions/chicken/galGal3/galGal3.fa
+    wget -nv http://mblab.wustl.edu/predictions/chicken/galGal3/README
+    bzip2 galGal3.*
+    chmod a-w *
+    # load track
+    ldHgGene -bin -gtf -genePredExt galGal3 nscanGene galGal3.gtf.bz2
+    hgPepPred galGal3 generic nscanPep  galGal3.fa.bz2
+    rm *.tab
+
+    # chicken/galGal3/trackDb.ra, add:
+    track nscanGene override
+    informant Chicken N-SCAN uses Zerba Finch (taeGut1) as the informant, updated with PASA clusters of chicken cDNAs.
+
+    searchTable nscanGene
+    searchType genePred
+    termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)\.[0-9]+(\.[0-9a-z]+)?
+    searchPriority 50
+

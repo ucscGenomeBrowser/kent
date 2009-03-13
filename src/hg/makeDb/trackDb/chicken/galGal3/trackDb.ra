@@ -82,3 +82,11 @@ spectrum on
 type chain cavPor3
 otherDb cavPor3
 
+track nscanGene override
+informant Chicken N-SCAN uses Zerba Finch (taeGut1) as the informant, updated with PASA clusters of chicken cDNAs.
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)\.[0-9]+(\.[0-9a-z]+)?
+searchPriority 50
+
