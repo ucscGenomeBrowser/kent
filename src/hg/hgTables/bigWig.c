@@ -20,7 +20,7 @@
 #include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigWig.c,v 1.2 2009/03/12 19:44:21 kent Exp $";
+static char const rcsid[] = "$Id: bigWig.c,v 1.3 2009/03/13 23:04:52 kent Exp $";
 
 boolean isBigWig(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
@@ -205,6 +205,11 @@ char *fileName = bigWigFileName(table, conn);
 long startTime = clock1000();
 
 htmlOpen("%s (%s) Big Wig Summary Statistics", shortLabel, table);
+
+if (anySubtrackMerge(database, curTable))
+    hPrintf("<P><EM><B>Note:</B> subtrack merge is currently ignored on this "
+	    "page (not implemented yet).  Statistics shown here are only for "
+	    "the primary table %s (%s).</EM>", shortLabel, table);
 
 struct bbiFile *bwf = bigWigFileOpen(fileName);
 struct region *region, *regionList = getRegions();
