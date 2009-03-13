@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.2 2009/03/06 23:27:05 hiram Exp $";
+#	"$Id: hg19.txt,v 1.3 2009/03/13 19:14:27 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -71,7 +71,7 @@ do
 "s/^GL000253.1/chr6_mann_hap4/" -e \ 
 "s/^GL000254.1/chr6_mcf_hap5/" -e \
 "s/^GL000255.1/chr6_qbl_hap6/" -e \
-"s/^GL000256.1/chr6_ssto_hap6/" -e \
+"s/^GL000256.1/chr6_ssto_hap7/" -e \
 "s/^GL000257.1/chr4_ctg9_hap1/" -e \
 "s/^GL000258.1/chr17_ctg5_hap1/"
 done > scaffolds.agp
@@ -283,5 +283,154 @@ done | faToTwoBit stdin hg19.scaffolds.2bit
 
     # ask admin to sync this directory: /hive/data/staging/data/hg19/
     #	to the kluster nodes /scratch/data/hg19/
+
+############################################################################
+# running cpgIsland business (DONE - 2009-03-06 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/cpgIsland
+    cd /hive/data/genomes/hg19/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    # comment out the following two lines if it compiles cleanly
+    # some day  (there were some other fixups too, adding include lines)
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../ 
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../hg19.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out line results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+mv /scratch/tmp/$1.$$ $2
+'_EOF_'
+    # << happy emacs
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:        172s       2.86m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                  1748s      29.14m     0.49h    0.02d  0.000 y
+# Average job time:                  21s       0.34m     0.01h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:            83s       1.38m     0.02h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    cd /hive/data/genomes/hg19/bed/cpgIsland
+    hgLoadBed hg19 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+
+# Reading cpgIsland.bed
+# Loaded 28226 elements of size 10
+# Sorted
+# Saving bed.tab
+# Loading hg18
+
+############################################################################
+# create lift file on unBridged gaps for genbank splits (2009-03-09 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/gap
+    cd /hive/data/genomes/hg19/bed/gap
+    gapToLift hg19 hg19.unBridged.lift -bedFile=unBridged.lift.bed
+    cp -p hg19.unBridged.lift ../../jkStuff
+    cp -p hg19.unBridged.lift /hive/data/staging/data/hg19
+
+############################################################################
+# AUTO UPDATE GENBANK RUN  (DONE - 2009-03-07,13 - Hiram)
+    # align with latest genbank process.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add hg19 just after hg18
+
+# hg19 - GRCh37 - Genome Reference Consortium Human Reference 37
+#       Assembly Accession: GCA_000001405.1
+hg19.serverGenome = /hive/data/genomes/hg19/hg19.2bit
+hg19.clusterGenome = /scratch/data/hg19/hg19.2bit
+hg19.ooc = /scratch/data/hg19/11.ooc
+hg19.lift = /scratch/data/hg19/hg19.unBridged.lift
+# hg19.hapRegions = /hive/data/genomes/hg19/bed/haplotypePos/haplotypePos.psl
+hg19.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+hg19.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+hg19.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+hg19.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+hg19.genbank.est.native.pslCDnaFilter = ${finished.genbank.est.native.pslCDnaFilter}
+hg19.genbank.est.xeno.pslCDnaFilter   = ${finished.genbank.est.xeno.pslCDnaFilter}
+hg19.genbank.est.xeno.load = yes
+hg19.refseq.mrna.xeno.load  = yes
+hg19.refseq.mrna.xeno.loadDesc = yes
+hg19.mgc = yes
+hg19.orfeome = yes
+hg19.downloadDir = hg19
+# hg19.ccds.ncbiBuild = 36.3
+# hg19.upstreamGeneTbl = refGene
+# hg19.upstreamMaf = multiz28way
+# /hive/data/genomes/hg19/bed/multiz28way/species.lst multiz44way
+# /hive/data/genomes/hg19/bed/multiz44way/species.list
+hg19.genbank.mrna.blatTargetDb = yes
+
+    cvs ci -m "Added hg19." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial hg19 &
+    #	logFile: var/build/logs/2009.03.10-20:28:44.hg19.initalign.log
+    #	real    2761m13.680s
+    #	that ran on the swarm with little interference and no problems
+
+    # load database when finished
+    ssh hgwdev
+    screen	# use screen to manage this long running command
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad hg19 &
+    # logFile: var/dbload/hgwdev/logs/2009.03.12-21:10:02.dbload.log
+    #	real    369m11.941s
+
+    # enable daily alignment and update of hgwdev (DONE - 2009-02-24 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add hg19 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added hg19 - Human - GRCh37" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-03-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg19", "blat13", "17778", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg19", "blat13", "17779", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
 
 ############################################################################
