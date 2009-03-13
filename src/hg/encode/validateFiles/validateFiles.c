@@ -6,8 +6,8 @@
 #include "sqlNum.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.2 2009/03/12 22:41:01 mikep Exp $";
-static char *version = "$Revision: 1.2 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.3 2009/03/13 04:52:28 mikep Exp $";
+static char *version = "$Revision: 1.3 $";
 
 #define MAX_ERRORS 10
 int maxErrors;
@@ -16,6 +16,8 @@ boolean printOkLines;
 boolean printFailLines;
 struct hash *chrHash = NULL;
 char dnaChars[256];
+char qualChars[256];
+char seqName[256];
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +27,7 @@ errAbort(
   "usage:\n"
   "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
   "options:\n"
-  "   -type=(tagAlign|pairedTagAlign)\n"
+  "   -type=(fastq|tagAlign|pairedTagAlign)\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
   "                                  stopping (default %d)\n"
@@ -48,16 +50,25 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void initDnaChars()
-// Set up array of dna chars
-// Include colorspace 0-3 as valid dna sequences for SOLiD data
+void initArrays()
+// Set up array of chars
+// dnaChars:  or DNA chars include colorspace 0-3 as valid dna sequences for SOLiD data
+// qualChars: fastq quality scores as ascii [!-~] (ord(!)=33, ord(~)=126)
+// seqName:   fastq sequence name chars [A-Za-z0-9_.:/-]
 {
 int i;
 for (i=0 ; i < 256 ; ++i)
-    dnaChars[i] = 0;
+    dnaChars[i] = qualChars[i] = seqName[i] = 0;
 dnaChars['a'] = dnaChars['c'] = dnaChars['g'] = dnaChars['t'] = dnaChars['n'] = 1;
 dnaChars['A'] = dnaChars['C'] = dnaChars['G'] = dnaChars['T'] = dnaChars['N'] = 1;
 dnaChars['0'] = dnaChars['1'] = dnaChars['2'] = dnaChars['3'] = 1;
+for (i= (int)'A' ; i <= (int)'Z' ; ++i)
+    seqName[i] = seqName[i+(int)('a'-'A')] = 1;
+for (i= (int)'0' ; i <= (int)'9' ; ++i)
+    seqName[i] = 1;
+seqName['_'] = seqName['.'] = seqName[':'] = seqName['/'] = seqName['-'] = 1;
+for (i= (int)'!' ; i <= (int)'~' ; ++i)
+    qualChars[i] = 1;
 }
 
 struct hash *chromHash(struct chromInfo *ci)
@@ -136,6 +147,54 @@ for ( i = 0; s[i] ; ++i)
 if (i == 0)
     {
     warn("Error [file=%s, line=%d]: %s column empty [%s]", file, line, name, row);
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean checkSeqName(char *file, int line, char *s, char firstChar, char *name)
+// Return TRUE if string has non-zero length and contains only seqName[] chars 
+// Othewise print warning that seqName is empty and return FALSE
+{
+int i;
+if (s[0] == 0)
+    {
+    warn("Error [file=%s, line=%d]: %s empty [%s]", file, line, name, s);
+    return FALSE;
+    }
+else if (s[0] != firstChar)
+    {
+    warn("Error [file=%s, line=%d]: %s first char invalid (got '%c', wanted '%c') [%s]", 
+	file, line, name, s[0], firstChar, s);
+    return FALSE;
+    }
+for ( i = 1; s[i] ; ++i)
+    {
+    if (!seqName[(int)s[i]])
+	{
+	warn("Error [file=%s, line=%d]: invalid %s chars in [%s]", file, line, name, s);
+	return FALSE;
+	}
+    }
+return TRUE;
+}
+
+boolean checkQual(char *file, int line, char *s)
+// Return TRUE if string has non-zero length and contains only qualChars[] chars 
+// Othewise print warning that quality is empty and return FALSE
+{
+int i;
+for ( i = 0; s[i] ; ++i)
+    {
+    if (!qualChars[(int)s[i]])
+	{
+	warn("Error [file=%s, line=%d]: invalid quality chars in [%s]", file, line, s);
+	return FALSE;
+	}
+    }
+if (i == 0)
+    {
+    warn("Error [file=%s, line=%d]: quality empty [%s]", file, line, s);
     return FALSE;
     }
 return TRUE;
@@ -273,6 +332,57 @@ int validatePairedTagAlign(char *file)
 return validateTagOrPairedTagAlign(file, TRUE);
 }
 
+// fastq:
+// @NINA_1_FC30G3VAAXX:5:1:110:908
+// ATCGTCAGGTGGGATAATCCTTACCTTTTCCTCCTC
+// +NINA_1_FC30G3VAAXX:5:1:110:908
+// aa`]`a`XQ^VQQ^`aaaaaaa^[[ZG[aXUX[[[X
+
+int validateFastq(char *file)
+{
+char *seqName = NULL;
+char *seq = NULL; 
+char *qName = NULL;
+char *qual = NULL;
+int line = 0;
+int errs = 0;
+FILE *f = mustOpen(file, "rb");
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+while ( (seqName = readLine(f)) )
+    {
+    ++line;
+    if (*seqName == '#')
+	{
+	freez(&seqName);
+	continue;
+	}
+    if (checkSeqName(file, line, seqName, '@', "sequence name")
+	&& (seq = readLine(f))
+	&& checkSeq(file, ++line, seq, seq, "sequence")
+	&& (qName = readLine(f))
+	&& checkSeqName(file, ++line, qName, '+', "quality name")
+	&& (qual = readLine(f))
+	&& checkQual(file, ++line, qual) )
+	{
+	if (printOkLines)
+	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
+	}
+    else
+	{
+	if (printFailLines)
+	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
+	if (++errs >= maxErrors)
+	    errAbort("Aborting .. found %d errors\n", errs);
+	}
+    freez(&seqName);
+    freez(&seq);
+    freez(&qName);
+    freez(&qual);
+    }
+carefulClose(&f);
+return errs;
+}
+
 void validateFiles(int (*validate)(char *file), int numFiles, char *files[])
 /* validateFile - validate format of different track input files. */
 {
@@ -299,7 +409,7 @@ struct hash *funcs = newHash(0);
 optionInit(&argc, argv, options);
 ++argv; 
 --argc;
-initDnaChars();
+initArrays();
 if (optionExists("version"))
     errAbort(version);
 if (argc==0)
@@ -322,6 +432,7 @@ verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
 // Setup the function hash keyed by type
 hashAdd(funcs, "tagAlign", &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
+hashAdd(funcs, "fastq", &validateFastq);
 if (!(func = hashFindVal(funcs, type)))
     errAbort("Cannot validate %s type files\n", type);
 validateFiles(func, argc, argv);
