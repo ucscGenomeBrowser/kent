@@ -34,7 +34,7 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'kolossus';
-my $maskedSeq = "$HgAutomate::hiveDataGenomes/\$db/\$db.2bit";
+my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -50,7 +50,7 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
-                          $HgAutomate::hiveDataGenomes/\$db/$HgAutomate::trackBuild/cpgIslands
+                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/cpgIslands
                           (necessary when continuing at a later date).
     -maskedSeq seq.2bit   Use seq.2bit as the masked input sequence instead
                           of default ($maskedSeq).
@@ -67,12 +67,12 @@ Automates UCSC's CpG Island finder for genome database \$db.  Steps:
     load:      Load cpgIsland.bed into \$db.
     cleanup:   Removes hard-masked fastas and output from cpglh.exe.
 All operations are performed in the build directory which is
-$HgAutomate::hiveDataGenomes/\$db/$HgAutomate::trackBuild/cpgIslands unless -buildDir is given.
+$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/cpgIslands unless -buildDir is given.
 ";
   # Detailed help (-help):
   print STDERR "
 Assumptions:
-1. $HgAutomate::hiveDataGenomes/\$db/\$db.2bit contains RepeatMasked sequence for
+1. $HgAutomate::clusterData/\$db/\$db.2bit contains RepeatMasked sequence for
    database/assembly \$db.
 " if ($detailed);
   print "\n";
@@ -246,9 +246,9 @@ _EOF_
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::hiveDataGenomes/$db/$HgAutomate::trackBuild/cpgIslands";
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/cpgIslands";
 $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
-  "$HgAutomate::hiveDataGenomes/$db/$db.2bit";
+  "$HgAutomate::clusterData/$db/$db.2bit";
 
 # Do everything.
 $stepper->execute();
