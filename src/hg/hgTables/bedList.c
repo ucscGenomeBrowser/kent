@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.61 2009/03/12 19:44:21 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.62 2009/03/13 22:51:55 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -345,7 +345,7 @@ safef(buf, sizeof(buf), "table browser query on %s%s%s",
 setting = cgiUsualString(hgtaCtDesc, buf);
 cgiMakeTextVar(hgtaCtDesc, setting, 50);
 hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");
-if (isWiggle(database, table))
+if (isWiggle(database, table) || isBigWig(table))
     {
     setting = cartCgiUsualString(cart, hgtaCtVis, ctVisWigMenu[2]);
     cgiMakeDropList(hgtaCtVis, ctVisWigMenu, ctVisWigMenuSize, setting);
@@ -361,7 +361,7 @@ cgiMakeTextVar(hgtaCtUrl, setting, 50);
 hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>");
 hPrintf("%s\n", "</TD></TR></TABLE>");
 
-if (isWiggle(database, table) || isBedGraph(table))
+if (isWiggle(database, table) || isBedGraph(table) || isBigWig(table) )
     {
     char *setting = NULL;
     hPrintf("<P> <B> Select type of data output: </B> <BR>\n");
