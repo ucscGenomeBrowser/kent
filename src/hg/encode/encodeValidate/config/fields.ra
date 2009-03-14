@@ -105,3 +105,13 @@ field order
 file dafList
 type in
 required no
+
+field noAutoCreate
+file dafHeader
+type bool
+required no
+
+field downloadOnly
+file dafList
+type bool
+required no
