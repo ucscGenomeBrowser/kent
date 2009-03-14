@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.165 2009/03/07 23:24:29 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.166 2009/03/14 00:12:54 mikep Exp $
 
 use warnings;
 use strict;
@@ -66,10 +66,10 @@ our $quickCount=100;
 our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
-our $maxBedRows=50_000_000; # number of rows to allow in a bed-type file
+our $maxBedRows=80_000_000; # number of rows to allow in a bed-type file
 our %tableNamesUsed;
 our ($grants, $fields, $daf);
-
+our $SORT_BUF = " -S 5G ";
 
 sub usage {
     print STDERR <<END;
@@ -519,6 +519,7 @@ sub validateWig
         push(@cmds, "head -1000 $filePath");
         push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin /dev/null /dev/null");
     }
+    # This can produce /data/tmp/SafePipe_NNN_.err files
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose - 1);
     if(my $err = $safe->exec()) {
         my $err = $safe->stderr();
@@ -1506,12 +1507,12 @@ if(!@errors) {
                     # Unzip any zipped files - only works if they are with .gz suffix
                     my ($fbase,$dir,$suf) = fileparse($file, ".gz");
                     if ($suf eq ".gz") {
-                        # If the zipped file exists and has not already been unzipped then unzip it
+                        # If the zipped file exists then unzip it (do this each time, in case zip file is updated
                         # This check is also done above at the stage where we are testign the files in the ddf exist
-                        if (-s $file and ! -s "$dir/$fbase") {
-                            my $err = system("gunzip $file");
+                        if (-s $file) {
+                            my $err = system("gunzip -c $file > $dir/$fbase");
                             if ($err) {
-                                die ("File \'$file\' failed gunzip $file\n");
+                                die ("File \'$file\' failed gunzip $file to [$dir/$fbase]\n");
                             }
                             HgAutomate::verbose(2, "File \'$file\' gunzipped to \'$fbase\'\n");
                         }
@@ -1540,10 +1541,22 @@ if(!@errors) {
                         if(defined($daf->{medianFragmentLength})) {
                             push(@cmds, "/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianFragmentLength} $files");
                             $sortFiles = " -";
+			    # sorting stdin, so have to sort in mem (and control how much mem we use)
+			    push @cmds, "sort $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
                         } else {
                             $sortFiles = $files;
+			    # sort each file in place, controling mem usage, then do merge sort
+			    my @sortList = split(/\s+/, $sortFiles);
+			    foreach my $f (@sortList) {
+				my $err = system("sort $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n -o $f $f ");
+				if ($err) {
+				    die ("File \'$f\' failed sort\n");
+				}
+				HgAutomate::verbose(2, "File \'$f\' sorted\n");
+			    }
+			    # Now do the mergesort in the pipeline
+			    push @cmds, "sort -m $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
                         }
-                        push @cmds, "sort -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
 			push @cmds, "grep -v -E \"^track\" ";
 			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
 			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
