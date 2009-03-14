@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.166 2009/03/14 00:12:54 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.167 2009/03/14 07:26:56 mikep Exp $
 
 use warnings;
 use strict;
@@ -30,6 +30,7 @@ use Carp qw(cluck);
 use Cwd;
 use IO::File;
 use File::Basename;
+use Data::Dumper; # MJP
 
 use lib "/cluster/bin/scripts";
 use Encode;
@@ -674,30 +675,26 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    # MJP: for now, allow colorspace sequences as well as DNA + dot
-    my @list = ({TYPE => "chrom", NAME => "chrom"},
-                {TYPE => "uint", NAME => "chromStart"},
-                {TYPE => "uint", NAME => "chromEnd"},
-                {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
-                {TYPE => "uint", NAME => "score"},
-                {REGEX => "[+-\\.]", NAME => "strand"});
-    # MJP: for now, allow 10x more tagAlign records for Cshl project as we are not loading them
-    return validateWithList($path, $file, $type, 10*$maxBedRows, "validateTagAlign", \@list);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -type=tagAlign $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateTagAlign : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateTagAlign for '$file'");
+    }
+    return ();
 }
 
 sub validatePairedTagAlign
 # This is like tag align but with two additional sequence fields appended; seq1 and seq2
 {
     my ($path, $file, $type) = @_;
-    my @list = ({TYPE => "chrom", NAME => "chrom"},
-                {TYPE => "uint", NAME => "chromStart"},
-                {TYPE => "uint", NAME => "chromEnd"},
-                {TYPE => "string", NAME => "sequence"},
-                {TYPE => "uint", NAME => "score"},
-                {REGEX => "[+-\\.]", NAME => "strand"},
-                {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
-                {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
-    return validateWithList($path, $file, $type, $maxBedRows, "validatePairedTagAlign", \@list);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -type=pairedTagAlign $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validatePairedTagAlign for '$file'");
+    }
+    return ();
 }
 
 sub validateNarrowPeak
@@ -719,16 +716,13 @@ sub validateNarrowPeak
 sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
-    my @list = ({TYPE => "chrom", NAME => "chrom"},
-                {TYPE => "uint", NAME => "chromStart"},
-                {TYPE => "uint", NAME => "chromEnd"},
-                {TYPE => "string", NAME => "name"},
-                {TYPE => "uint", NAME => "score"},
-                {REGEX => "[+-\\.]", NAME => "strand"},
-                {TYPE => "float", NAME => "signalValue"},
-                {TYPE => "float", NAME => "pValue"},
-                {TYPE => "float", NAME => "qValue"});
-    return validateWithList($path, $file, $type, $maxBedRows, "validateBroadPeak", \@list);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -type=broadPeak $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateBroadPeak for '$file'");
+    }
+    return ();
 }
 
 sub validateGappedPeak
@@ -766,39 +760,12 @@ sub validateFastQ
     # - fastq defined by Sanger has a 'PHRED' quality score
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
-    HgAutomate::verbose(2, "validateFastQ($path,$file,$type)\n");
-    return () if $opt_skipValidateFastQ;
-    doTime("beginning validateFastQ") if $opt_timing;
-    my $fh = openUtil($path, $file);
-    my $line = 0;
-    my $state = 'firstLine';
-    my $seqName;
-    my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
-    my $seqRegEx = "[A-Za-z\n\.~]+";
-    my $qualRegEx = "[!-~\n]+"; # ord(!)=33, ord(~)=126
-    my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
-                  seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
-                  plusLine => {REGEX => "\\\+([A-Za-z0-9_.:/-]*)", NEXT => 'qualLine'},
-                  qualLine => {REGEX => $qualRegEx, NEXT => 'firstLine'}};
-    while(<$fh>) {
-        chomp;
-        $line++;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateFastQ]";
-        my $regex = $states->{$state}{REGEX};
-        if(/^${regex}$/) {
-	        $seqName = $1 if($state eq 'firstLine');
-                if($state eq 'plusLine' && defined($1) && $1 && $1 ne $seqName) {
-                    return("$errorPrefix: seqence name '$1' does not match previous seqence name '$seqName'\nline: $_");
-                }
-	        $state = $states->{$state}{NEXT};
-        } else {
-	         return("$errorPrefix (expecting $state):\nline: $_");
-        }
-        last if($opt_quick && $line >= $quickCount);
-     }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateFastQ", $line) if $opt_timing;
+    my $safe = SafePipe->new(CMDS => ["validateFiles -type=fastq $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateFastQ for '$file'");
+    }
     return ();
 }
 
@@ -1085,14 +1052,15 @@ sub ddfKey
 }
 
 sub isDownloadOnly {
-    my ($view, $grant, $lab) = @_;
+    my ($view, $grant, $lab, $daf) = @_;
+    # Added 'downloadOnly' bool to DAF views so these rules can be explicit not hardcoded
     # Dont load any RawData* or Comparative views, 
     # Dont load Alignments unless they are from Gingeras or Wold labs (RNA folks like to  see their RNAs)
     # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
     # Wold group have RawData, RawData[2-7]
     # Wold group alignments are called 'Aligns', 'Splices', 'Paired'
-    return ($view =~ m/^RawData\d*$/ or $view eq 'Comparative' 
-	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold")) ? 1 : 0;
+    return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative' 
+	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
 }
 
 sub printCompositeTdbSettings {
@@ -1111,7 +1079,7 @@ sub printCompositeTdbSettings {
     for my $view (keys %{$daf->{TRACKS}}) {
         for my $key (keys %ddfSets) {
             if(defined($ddfSets{$key}{VIEWS}{$view})) {
-                my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab});
+                my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab}, $daf);
                 if(!$downloadOnly) {
                     $setting = $setting . " " . $view . "=" . $view;
                     $visDefault = $visDefault . " " . $view . "=";
@@ -1472,8 +1440,7 @@ if(!@errors) {
 	# Also note that any project (like transcriptome) that doesnt have replicates should also use
 	# this for their auto-create signals.
 	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
-
-        if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
+        if($daf->{noAutoCreate} ne "yes" && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
@@ -1736,7 +1703,7 @@ foreach my $ddfLine (@ddfLines) {
     # XXXX Move the decision about which views have tracks into the DAF?
     # Already this is used in 2 places so made it a function, 
     # would be better in the DAF except we'd have to go change all the DAFs :(
-    my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab});
+    my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab}, $daf);
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
