@@ -72,9 +72,10 @@ bbi->unzoomedDataOffset = udcReadBits64(udc, isSwapped);
 bbi->unzoomedIndexOffset = udcReadBits64(udc, isSwapped);
 bbi->fieldCount = udcReadBits16(udc, isSwapped);
 bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
+bbi->asOffset = udcReadBits64(udc, isSwapped);
 
 /* Skip over reserved area. */
-udcSeek(udc, udcTell(udc) + 28);
+udcSeek(udc, udcTell(udc) + 20);
 
 /* Read zoom headers. */
 int i;

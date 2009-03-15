@@ -10,6 +10,7 @@
 #include "rangeTree.h"
 #include "cirTree.h"
 #include "bPlusTree.h"
+#include "asParse.h"
 #include "sig.h"
 #include "udc.h"
 #include "bbiFile.h"
@@ -209,6 +210,7 @@ void bigBedFileCreate(
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
+	char *asFileName, /* If non-null points to a .as file that describes fields. */
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
@@ -226,6 +228,7 @@ bits64 reserved64 = 0;
 bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
+bits64 asOffset = 0, asOffsetPos;
 bits32 sig = bigBedSig;
 struct bbiSummary *reduceSummaries[10];
 bits32 reductionAmounts[10];
@@ -318,7 +321,9 @@ indexOffsetPos = ftell(f);
 writeOne(f, indexOffset);
 writeOne(f, fieldCount);
 writeOne(f, definedFieldCount);
-for (i=0; i<7; ++i)
+asOffsetPos = ftell(f);
+writeOne(f, asOffset);
+for (i=0; i<5; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers */
@@ -329,6 +334,19 @@ for (i=0; i<summaryCount; ++i)
     reductionDataOffsetPos[i] = ftell(f);
     writeOne(f, reserved64);	// Fill in with data offset later
     writeOne(f, reserved64);	// Fill in with index offset later
+    }
+
+/* Optionally write out as file. */
+if (asFileName != NULL)
+    {
+    /* Parse it and do sanity check. */
+    struct asObject *as = asParseFile(asFileName);
+    if (as->next != NULL)
+        errAbort("Can only handle .as files containing a single object.");
+    asOffset = ftell(f);
+    FILE *asFile = mustOpen(asFileName, "r");
+    copyOpenFile(asFile, f);
+    fputc(0, f);
     }
 
 /* Write chromosome bPlusTree */
@@ -383,6 +401,12 @@ fseek(f, indexOffsetPos, SEEK_SET);
 writeOne(f, indexOffset);
 fseek(f, chromTreeOffsetPos, SEEK_SET);
 writeOne(f, chromTreeOffset);
+if (asOffset != 0)
+    {
+    uglyf("asOffsetPos = %lld, asOffset=%lld\n", asOffsetPos, asOffset);
+    fseek(f, asOffsetPos, SEEK_SET);
+    writeOne(f, asOffset);
+    }
 
 /* Also fill in offsets in zoom headers. */
 for (i=0; i<summaryCount; ++i)
@@ -502,19 +526,16 @@ rangeTreeFree(&rangeTree);
 return bwiList;
 }
 
-boolean bigBedSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	int summarySize, struct bbiSummaryElement *summary)
 /* Get extended summary information for summarySize evenely spaced elements into
  * the summary array. */
 {
-struct bbiFile *bbi = bigBedFileOpen(fileName);
-boolean ret = bbiSummaryArrayExtended(bbi, chrom, start, end, bigBedCoverageIntervals,
+return bbiSummaryArrayExtended(bbi, chrom, start, end, bigBedCoverageIntervals,
 	summarySize, summary);
-bbiFileClose(&bbi);
-return ret;
 }
 
-boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bigBedSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
 /* Fill in summaryValues with  data from indicated chromosome range in bigBed file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
@@ -522,11 +543,22 @@ boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
 {
-struct bbiFile *bbi = bigBedFileOpen(fileName);
-boolean ret = bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
+return bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
 	summaryType, summarySize, summaryValues);
-bbiFileClose(&bbi);
-return ret;
 }
 
 
+struct asObject *bigBedAs(struct bbiFile *bbi)
+/* Get autoSql object definition if any associated with file. */
+{
+if (bbi->asOffset == 0)
+    return NULL;
+struct udcFile *f = bbi->udc;
+bits64 curPos = udcTell(f);
+udcSeek(f, bbi->asOffset);
+char *asText = udcReadStringAndZero(f);
+udcSeek(f, curPos);
+struct asObject *as = asParseText(asText);
+freeMem(asText);
+return as;
+}

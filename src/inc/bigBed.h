@@ -32,7 +32,7 @@ int bigBedIntervalToRow(struct bigBedInterval *interval, char *chrom, char *star
  * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect. 
  * Returns number of fields in row.  */
 
-boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bigBedSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigBed file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
@@ -40,10 +40,13 @@ boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
 
-boolean bigBedSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	int summarySize, struct bbiSummaryElement *summary);
 /* Get extended summary information for summarySize evenely spaced elements into
  * the summary array. */
+
+struct asObject *bigBedAs(struct bbiFile *bbi);
+/* Get autoSql object definition if any associated with file. */
 
 void bigBedFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
@@ -52,6 +55,7 @@ void bigBedFileCreate(
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
+	char *asFileName, /* If non-null points to a .as file that describes fields. */
 	char *outName);   /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 

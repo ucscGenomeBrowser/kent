@@ -13,12 +13,14 @@
  *	   fullIndexOffset	8 bytes
  *         fieldCount           2 bytes (bigBed only)
  *         definedFieldCount    2 bytes (bigBed only)
- *         reserved            28 bytes
+ *         autoSqlOffset             8 bytes (bigBed only)
+ *         reserved            20 bytes
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
  *	   dataOffset		8 bytes
  *         indexOffset          8 bytes
+ *     autoSql string (zero terminated)
  *     chromosome b+ tree       bPlusTree index
  *     full data
  *         sectionCount		4 bytes
@@ -70,6 +72,7 @@ struct bbiFile
     bits64 unzoomedIndexOffset;	/* Start of unzoomed index. */
     bits16 fieldCount;		/* Number of columns in bed version. */
     bits16 definedFieldCount;   /* Number of columns using bed standard definitions. */
+    bits64 asOffset;		/* Offset to embedded null-terminated AutoSQL file. */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
     };
