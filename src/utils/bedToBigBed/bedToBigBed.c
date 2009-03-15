@@ -5,11 +5,12 @@
 #include "options.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.2 2009/02/10 22:11:00 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.3 2009/03/15 18:03:03 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 64;
 int bedFields = 0;
+char *as = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +27,8 @@ errAbort(
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "   -bedFields=N - Number of fields that fit standard bed definition.  If undefined\n"
   "                  assumes all fields in bed are defined.\n"
+  "   -as=fields.as - If have non-standard fields, it's great to put a definition of\n"
+  "                   each field in a row in AutoSql format here.\n"
   , blockSize, itemsPerSlot
   );
 }
@@ -34,13 +37,14 @@ static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
    {"bedFields", OPTION_INT},
+   {"as", OPTION_STRING},
    {NULL, 0},
 };
 
 void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
-bigBedFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, outName);
+bigBedFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, as, outName);
 }
 
 int main(int argc, char *argv[])
@@ -50,6 +54,7 @@ optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 bedFields = optionInt("bedFields", bedFields);
+as = optionVal("as", as);
 if (argc != 4)
     usage();
 bedToBigBed(argv[1], argv[2], argv[3]);
