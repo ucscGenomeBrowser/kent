@@ -5,8 +5,9 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "bigBed.h"
+#include "asParse.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.3 2009/02/05 20:49:48 kent Exp $";
+static char const rcsid[] = "$Id: bigBedSummary.c,v 1.4 2009/03/15 00:18:23 kent Exp $";
 
 char *summaryType = "coverage";
 
@@ -25,11 +26,15 @@ errAbort(
   "         mean - average depth of covered regions\n"
   "         min - minimum depth of covered regions\n"
   "         max - maximum depth of covered regions\n"
+  "   -fields - print out information on fields in file.\n"
+  "      If fields option is used, the chrom, start, end, dataPoints\n"
+  "      parameters may be omitted\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
+   {"fields", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -43,7 +48,8 @@ int i;
 for (i=0; i<dataPoints; ++i)
     summaryValues[i] = nan0;
 
-if (bigBedSummaryArray(fileName, chrom, start, end, bbiSummaryTypeFromString(summaryType), 
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+if (bigBedSummaryArray(bbi, chrom, start, end, bbiSummaryTypeFromString(summaryType), 
       dataPoints, summaryValues))
     {
     for (i=0; i<dataPoints; ++i)
@@ -62,15 +68,46 @@ else
     {
     errAbort("no data in region %s:%d-%d in %s\n", chrom, start, end, fileName);
     }
+bbiFileClose(&bbi);
+}
+
+
+void bigBedFields(char *fileName)
+/* Print out info about fields in bed file. */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+printf("%d bed definition fields, %d total fields\n", bbi->definedFieldCount, bbi->fieldCount);
+struct asObject *as = bigBedAs(bbi);
+if (as != NULL)
+    {
+    struct asColumn *col;
+    for (col = as->columnList; col != NULL; col = col->next)
+        {
+	printf("\t%s\t%s\n", col->name, col->comment);
+	}
+    }
+else
+    {
+    printf("No additional field information included.\n");
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-summaryType = optionVal("type", summaryType);
-if (argc != 6)
-    usage();
-bigBedSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
+if (optionExists("fields"))
+    {
+    if (argc < 2)
+        usage();
+    bigBedFields(argv[1]);
+    }
+else
+    {
+    summaryType = optionVal("type", summaryType);
+    if (argc != 6)
+	usage();
+    bigBedSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
+    }
 return 0;
 }
