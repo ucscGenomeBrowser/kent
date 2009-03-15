@@ -54,6 +54,9 @@ bits16 udcReadBits16(struct udcFile *file, boolean isSwapped);
 int udcGetChar(struct udcFile *file);
 /* Get next character from file or die trying. */
 
+char *udcReadStringAndZero(struct udcFile *file);
+/* Read in zero terminated string from file.  Do a freeMem of result when done. */
+
 void udcSeek(struct udcFile *file, bits64 offset);
 /* Seek to a particular (absolute) position in file. */
 

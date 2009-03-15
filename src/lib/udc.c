@@ -948,6 +948,34 @@ if (isSwapped)
 return val;
 }
 
+char *udcReadStringAndZero(struct udcFile *file)
+/* Read in zero terminated string from file.  Do a freeMem of result when done. */
+{
+char shortBuf[2], *longBuf = NULL, *buf = shortBuf;
+int i, bufSize = sizeof(shortBuf);
+for (i=0; ; ++i)
+    {
+    /* See if need to expand buffer, which is initially on stack, but if it gets big goes into 
+     * heap. */
+    if (i >= bufSize)
+        {
+	int newBufSize = bufSize*2;
+	char *newBuf = needLargeMem(newBufSize);
+	memcpy(newBuf, buf, bufSize);
+	freeMem(longBuf);
+	buf = longBuf = newBuf;
+	bufSize = newBufSize;
+	}
+    char c = udcGetChar(file);
+    buf[i] = c;
+    if (c == 0)
+        break;
+    }
+char *retString = cloneString(buf);
+freeMem(longBuf);
+return retString;
+}
+
 
 
 void udcSeek(struct udcFile *file, bits64 offset)
