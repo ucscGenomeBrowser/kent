@@ -247,7 +247,8 @@ typedef enum _eCfgType
     cfgWigMaf   =3,
     cfgPeak     =4,
     cfgGenePred =5,
-    cfgChain =6
+    cfgChain =6,
+    cfgNetAlign =7
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
