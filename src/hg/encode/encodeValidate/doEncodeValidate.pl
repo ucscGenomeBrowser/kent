@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.167 2009/03/14 07:26:56 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.168 2009/03/15 02:00:04 larrym Exp $
 
 use warnings;
 use strict;
@@ -512,14 +512,8 @@ sub validateWig
 
     HgAutomate::verbose(2, "validateWig($file,$type) -> wigEncode\n");
     my @cmds;
-    if(Encode::isZipped($filePath)) {
-        # wigEncode knows how to handle zipped files.
-        push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData $filePath /dev/null /dev/null");
-    } else {
-        # XXXX why not do the whole thing, rather than just 1000 lines?
-        push(@cmds, "head -1000 $filePath");
-        push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin /dev/null /dev/null");
-    }
+    # wigEncode knows how to handle zipped files so we do not need to special case them.
+    push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData $filePath /dev/null /dev/null");
     # This can produce /data/tmp/SafePipe_NNN_.err files
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose - 1);
     if(my $err = $safe->exec()) {
