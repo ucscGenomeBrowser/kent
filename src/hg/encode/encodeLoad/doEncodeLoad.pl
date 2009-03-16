@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.58 2009/03/13 19:04:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.59 2009/03/16 22:28:00 mikep Exp $
 
 # Usage:
 #
@@ -28,7 +28,7 @@ use RAFile;
 use SafePipe;
 use HgDb;
 
-use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad/;
+use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
 my $loadRa = "out/$Encode::loadFile";
 my $unloadRa = "out/$Encode::unloadFile";
@@ -58,6 +58,10 @@ options:
                         (default: submission-dir/out)
     -skipLoad           Skip table loading (useful if you just want to generate other
                         side-effects, like re-populating the download directory)
+    -skipDownload       Skip setting up download files (useful if you want to skip
+                        the data loading and table loading and just do the final
+                        PushQ entries etc. 
+                        (implies -skipLoad so that loaded data is not unloaded)
 END
 }
 
@@ -232,10 +236,11 @@ sub loadBedFromSchema
 
 my $wd = cwd();
 
-GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i", "debug", "skipLoad") || usage();
+GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i", "debug", "skipLoad", "skipDownload") || usage();
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_noEmail = 0 if (!defined $opt_noEmail);
 $opt_debug = 0 if (!defined $opt_debug);
+$opt_skipLoad = 1 if $opt_skipDownload; # dont unload tables if not doing downloads
 if($opt_outDir) {
     $loadRa = "$opt_outDir/$Encode::loadFile";
     $unloadRa = "$opt_outDir/$Encode::unloadFile";
@@ -337,7 +342,7 @@ HgAutomate::verbose(2, "loadRa ($loadRa) has: " . scalar(keys %ra) . " records\n
 
 my $compositeTrack = Encode::compositeTrackName($daf);
 my $downloadDir = Encode::downloadDir($daf);
-if(!(-d $downloadDir)) {
+if(!$opt_skipDownload and !(-d $downloadDir)) {
     # Change of plans: simlink to /cluster/data/encode/pipeline/downloads
     if(!(-d "/cluster/data/encode/pipeline/downloads/$compositeTrack")) {
         mkdir "/cluster/data/encode/pipeline/downloads/$compositeTrack" || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
@@ -400,7 +405,7 @@ for my $key (keys %ra) {
         die "ERROR: unknown type: $type in $Encode::loadFile ($PROG)\n";
     }
     HgAutomate::verbose(2, "Done loading. Now making links and copies. hgdownload=[$hgdownload]\n");
-    if($hgdownload) {
+    if(!$opt_skipDownload and $hgdownload) {
         # soft link file(s) into download dir - gzip files as appropriate
         my $target = "$downloadDir/$tablename.$type.gz";
         $target =~ s/ //g;  # removes space in ".bed 6.gz" for example
@@ -440,7 +445,7 @@ for my $key (keys %ra) {
     }
 }
 
-if(!$opt_skipLoad) {
+if(!$opt_skipDownload and !$opt_skipLoad) {
     # Send "data is ready" email to email contact assigned to $daf{lab}
     if($email) {
         if(!$opt_noEmail) {
