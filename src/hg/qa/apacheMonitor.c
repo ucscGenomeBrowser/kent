@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.14 2009/03/02 17:53:06 angie Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.15 2009/03/16 21:40:39 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -251,10 +251,11 @@ struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
 
-if (status500 <= 20)
+if (status500)
     {
-    safef(query, sizeof(query), "select remote_host, machine_id, request_uri, referer from access_log "
-                                "where time_stamp > %d and status = 500\n", startTime);
+    safef(query, sizeof(query),
+	  "select remote_host, machine_id, request_uri, referer from access_log "
+	  "where time_stamp > %d and status = 500 order by timestamp desc limit 20\n", startTime);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         verbose(1, "%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3]);
