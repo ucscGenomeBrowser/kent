@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.172 2009/03/10 01:25:24 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.173 2009/03/16 05:08:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -74,6 +74,68 @@ for (i=0; i<count; ++i)
     hPrintf("&nbsp;");
 }
 
+static void stripHtmlTags(char *text)
+/* remove HTML tags from text string, replacing in place by moving
+ * the text up to take their place
+ */
+{
+char *s = text;
+char *e = text;
+char c = *text;
+for ( ; c != 0 ; )
+    {
+    c = *s++;
+    if (c == 0)
+	/*	input string is NULL, or it ended with '>' without any
+	 *	opening '>'
+	 */
+	{
+	*e = 0;
+	break;
+	}
+    /* stays in the while loop for adjacent tags <TR><TD> ... etc */
+    while (c == '<' && c != 0)
+	{
+	s = strchr(s,'>');
+	if (s != NULL)
+	    {
+	    if (*s == '>') ++s; /* skip closing bracket > */
+	    c = *s++;		/* next char after the closing bracket > */
+	    }
+	else
+	    c = 0;	/* no closing bracket > found, end of string */
+	}
+    *e++ = c;	/*	copies all text outside tags, including ending NULL */
+    }
+}
+
+void writeHtmlCell(char *text)
+/* Write out a cell in an HTML table, making text not too big, 
+ * and stripping html tags and breaking spaces.... */
+{
+int maxLen = 128;
+if (strlen(text) > maxLen)
+    {
+    char *s = cloneStringZ(text,maxLen);
+    char *r;
+    stripHtmlTags(s);
+    eraseTrailingSpaces(s);
+    r = replaceChars(s, " ", "&nbsp;");
+    hPrintf("<TD>%s&nbsp;...</TD>", r);
+    freeMem(s);
+    freeMem(r);
+    }
+else
+    {
+    char *r;
+    stripHtmlTags(text);
+    eraseTrailingSpaces(text);
+    r = replaceChars(text, " ", "&nbsp;");
+    hPrintf("<TD>%s</TD>", r);
+    freeMem(r);
+    }
+}
+
 static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
@@ -94,6 +156,7 @@ void htmlClose()
 {
 cartWebEnd();
 }
+
 
 void explainWhyNoResults(FILE *f)
 /* Put up a little explanation to user of why they got nothing. */

@@ -50,6 +50,10 @@ struct joiner *allJoiner;	/* Info on how to join tables. */
 void hPrintSpaces(int count);
 /* Print a number of non-breaking spaces. */
 
+void writeHtmlCell(char *text);
+/* Write out a cell in an HTML table, making text not too big, 
+ * and stripping html tags and breaking spaces.... */
+
 void htmlOpen(char *format, ...);
 /* Start up a page that will be in html format. */
 
@@ -684,6 +688,18 @@ int bigWigOutRegion(char *table, struct sqlConnection *conn,
 
 void doSummaryStatsBigWig(struct sqlConnection *conn);
 /* Put up page showing summary stats for bigWig track. */
+
+/* ----------- BigBed business in bigBed.c -------------------- */
+
+boolean isBigBed(char *table);
+/* Return TRUE if table corresponds to a bigBed file. */
+
+char *bigBedFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with bigBed.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+
+void showSchemaBigBed(char *table);
+/* Show schema on bigBed. */
 
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
