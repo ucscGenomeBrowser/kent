@@ -4339,4 +4339,26 @@ searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
 
+track chainVenter1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 250
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+spectrum on
+type chain venter1
+otherDb venter1
 
+track netVenter1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 250.1
+visibility dense
+spectrum on
+type netAlign venter1 chainVenter1
+otherDb venter1
