@@ -9634,23 +9634,6 @@ wgEncode 1
     localization polysome
     cell K562
 
-    track wgEncodeCshlRnaSeqTransfragsK562PolysomeShortdeplrrna
-    release alpha
-    subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna K562 polysome 
-    longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in K562 cell polysome using )
-    subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=shortDeplRrna
-    type broadPeak
-    dateSubmitted 2009-03-14
-    dateUnrestricted 2009-12-14
-    dataVersion ENCODE Feb 2009 Freeze
-    priority 1
-    noInherit on
-    configurable on
-    rnaExtract shortDeplRrna
-    localization polysome
-    cell K562
-
     track wgEncodeCshlRnaSeqTransfragsProstateCellShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
