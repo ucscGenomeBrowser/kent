@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.173 2009/03/16 05:08:48 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.174 2009/03/16 17:44:24 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1534,7 +1534,18 @@ void dispatch(struct sqlConnection *conn)
  * By default head to the main page. */
 {
 struct hashEl *varList;
-if (cartVarExists(cart, hgtaDoTest))
+
+/* only allows view table schema function for CGB servers for the time being */
+if (hIsCgbServer())
+    {
+    if (cartVarExists(cart, hgtaDoSchema))
+    	doSchema(conn);
+    else
+	{
+	errAbort("Sorry, currently only the \"View Table Schema\" function of the Table Browser is available on this server.");
+	}
+    }
+else if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
