@@ -46,6 +46,9 @@ boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 star
 /* Get extended summary information for summarySize evenely spaced elements into
  * the summary array. */
 
+bits64 bigBedItemCount(struct bbiFile *bbi);
+/* Return total items in file. */
+
 struct asObject *bigBedAs(struct bbiFile *bbi);
 /* Get autoSql object definition if any associated with file. */
 

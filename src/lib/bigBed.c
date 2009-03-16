@@ -565,11 +565,16 @@ struct asObject *bigBedAs(struct bbiFile *bbi)
 if (bbi->asOffset == 0)
     return NULL;
 struct udcFile *f = bbi->udc;
-bits64 curPos = udcTell(f);
 udcSeek(f, bbi->asOffset);
 char *asText = udcReadStringAndZero(f);
-udcSeek(f, curPos);
 struct asObject *as = asParseText(asText);
 freeMem(asText);
 return as;
+}
+
+bits64 bigBedItemCount(struct bbiFile *bbi)
+/* Return total items in file. */
+{
+udcSeek(bbi->udc, bbi->unzoomedDataOffset);
+return udcReadBits64(bbi->udc, bbi->isSwapped);
 }
