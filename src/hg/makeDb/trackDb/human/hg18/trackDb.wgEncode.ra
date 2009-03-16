@@ -7737,7 +7737,7 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqPeaksK562Znf263
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Z263 Pk
+    shortLabel K562 ZNF263 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562 cells)
     subGroups view=Peaks factor=ZNF263 cellType=K562
     type narrowPeak
@@ -7750,7 +7750,7 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqSignalK562Znf263
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Z263 Sig
+    shortLabel K562 ZNF263 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
     subGroups view=Signal factor=ZNF263 cellType=K562
     type wig 0.00 2435.00
@@ -7764,7 +7764,7 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Z263 1
+    shortLabel K562 ZNF263 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2478.00
@@ -7778,7 +7778,7 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Z263 2
+    shortLabel K562 ZNF263 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 2247.00
