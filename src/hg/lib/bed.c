@@ -12,7 +12,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.61 2009/03/16 01:01:12 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.62 2009/03/16 18:23:06 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1584,11 +1584,13 @@ slReverse(&outList);
 return outList;
 }
 
-char *bedAsDef(int fieldCount)
-/* Return an autoSql definition for a bed of given number of fields. */
+char *bedAsDef(int bedFieldCount, int totalFieldCount)
+/* Return an autoSql definition for a bed of given number of fields. 
+ * Normally totalFieldCount is equal to bedFieldCount.  If there are extra
+ * fields they are just given the names field16, field17, etc and type string. */
 {
-if (fieldCount < 3 || fieldCount > 15)
-    errAbort("fieldCount is %d, but must be between %d and %d in bedAsDef", fieldCount, 3, 15);
+if (bedFieldCount < 3 || bedFieldCount > 15)
+    errAbort("bedFieldCount is %d, but must be between %d and %d in bedAsDef", bedFieldCount, 3, 15);
 struct dyString *dy = dyStringNew(0);
 dyStringAppend(dy, 
     "table bed\n"
@@ -1598,30 +1600,33 @@ dyStringAppend(dy,
     "   uint   chromStart;  \"Start position in chromosome\"\n"
     "   uint   chromEnd;    \"End position in chromosome\"\n"
     );
-if (fieldCount >= 4)
+if (bedFieldCount >= 4)
     dyStringAppend(dy, "   string name;        \"Name of item.\"\n");
-if (fieldCount >= 5)
+if (bedFieldCount >= 5)
     dyStringAppend(dy, "   int score;          \"Score (0-1000)\"\n");
-if (fieldCount >= 6)
+if (bedFieldCount >= 6)
     dyStringAppend(dy, "   char[1] strand;     \"+ or - for strand\"\n");
-if (fieldCount >= 7)
+if (bedFieldCount >= 7)
     dyStringAppend(dy, "   uint thickStart;   \"Start of where display should be thick (start codon)\"\n");
-if (fieldCount >= 8)
+if (bedFieldCount >= 8)
     dyStringAppend(dy, "   uint thickEnd;     \"End of where display should be thick (stop codon)\"\n");
-if (fieldCount >= 9)
+if (bedFieldCount >= 9)
     dyStringAppend(dy, "   uint reserved;     \"Used as itemRgb as of 2004-11-22\"\n");
-if (fieldCount >= 10)
+if (bedFieldCount >= 10)
     dyStringAppend(dy, "   int blockCount;    \"Number of blocks\"\n");
-if (fieldCount >= 11)
+if (bedFieldCount >= 11)
     dyStringAppend(dy, "   int[blockCount] blockSizes; \"Comma separated list of block sizes\"\n");
-if (fieldCount >= 12)
+if (bedFieldCount >= 12)
     dyStringAppend(dy, "   int[blockCount] chromStarts; \"Start positions relative to chromStart\"\n");
-if (fieldCount >= 13)
+if (bedFieldCount >= 13)
     dyStringAppend(dy, "   int expCount;	\"Experiment count\"\n");
-if (fieldCount >= 14)
+if (bedFieldCount >= 14)
     dyStringAppend(dy, "   int[expCount] expIds;	\"Comma separated list of experiment ids. Always 0,1,2,3....\"\n");
-if (fieldCount >= 15)
+if (bedFieldCount >= 15)
     dyStringAppend(dy, "   float[expCount] expScores; \"Comma separated list of experiment scores.\"\n");
+int i;
+for (i=bedFieldCount+1; i<=totalFieldCount; ++i)
+    dyStringPrintf(dy, "string field%d;	\"Undocumented field\"\n", i+1);
 dyStringAppend(dy, "   )\n");
 return dyStringCannibalize(&dy);
 }

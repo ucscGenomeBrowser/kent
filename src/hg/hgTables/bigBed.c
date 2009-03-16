@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.1 2009/03/16 05:08:48 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.2 2009/03/16 18:23:06 kent Exp $";
 
 boolean isBigBed(char *table)
 /* Return TRUE if table corresponds to a bigBed file. */
@@ -55,7 +55,7 @@ struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chromList->name, 0, chr
 /* Get description of columns, making it up from BED records if need be. */
 struct asObject *as = bigBedAs(bbi);
 if (as == NULL)
-    as = asParseText(bedAsDef(bbi->definedFieldCount));
+    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
 
 
 /* Put up table that describes fields. */
