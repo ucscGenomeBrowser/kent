@@ -22,124 +22,124 @@
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-		    <P>
-		    The wiggle (WIG) format allows display of
-		    continuous-valued data in track format.  This display type is
-		    useful for GC percent, probability scores, and
-		    transcriptome data.<BR>
-		    See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
-		    TARGET=_blank>Selecting a graphing track data format.</A>
+<P>
+The wiggle (WIG) format allows display of
+continuous-valued data in track format.  This display type is
+useful for GC percent, probability scores, and
+transcriptome data.<BR>
+See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
+TARGET=_blank>Selecting a graphing track data format.</A>
 
-		    <P><B>General Structure</B><P> The .wig format is
-		    line-oriented.  <!-- The first section begins with <A
-		    HREF="customTrack.html#BROWSER">browser
-		    lines</A> that configure the overall display of
-		    the Genome Browser window when your annotation
-		    file is uploaded. Each line defines one display
-		    attribute. 
+<P><B>General Structure</B><P> The .wig format is
+line-oriented.  <!-- The first section begins with <A
+HREF="customTrack.html#BROWSER">browser
+lines</A> that configure the overall display of
+the Genome Browser window when your annotation
+file is uploaded. Each line defines one display
+attribute. 
 
-		    <P> The browser lines are followed by a <A
-		    <P> The browser lines are followed -->
-		    Wiggle data are preceeded by a <A
-		    HREF="customTrack.html#TRACK">
-		    track definition line</A>, which
-		    adds a number of options for
-		    controlling the default display of this track.
+<P> The browser lines are followed by a <A
+<P> The browser lines are followed -->
+Wiggle data are preceeded by a <A
+HREF="customTrack.html#TRACK">
+track definition line</A>, which
+adds a number of options for
+controlling the default display of this track.
 
-		    <P> Following the track definition line are the
-		    track data, which can be entered in several
-		    different formats described below.  Three
-		    formats were developed to allow the file to be
-		    written most compactly, depending on the density of
-		    the data.  When possible, please use the
-		    <B>variableStep</B> or <B>fixedStep</B> data types.
-		    The <B>BED</B> format is the most inefficient format and
-		    is not capable of loading as many data points as the other
-		    two formats.
-		    <UL>
+<P> Following the track definition line are the
+track data, which can be entered in several
+different formats described below.  Three
+formats were developed to allow the file to be
+written most compactly, depending on the density of
+the data.  When possible, please use the
+<B>variableStep</B> or <B>fixedStep</B> data types.
+The <B>BED</B> format is the most inefficient format and
+is not capable of loading as many data points as the other
+two formats.
+<UL>
 
-		    <LI> <B>variableStep</B> two column data; started by a
-		    declaration line and followed with chromosome positions and data values:
+<LI> <B>variableStep</B> two column data; started by a
+declaration line and followed with chromosome positions and data values:
 <FONT color="#0000FF"><PRE>  <B>variableStep</B>  <B>chrom=</B><I>chrN</I>  <B>[span=</B><I>windowSize</I><B>]</B>
   <I>chromStartA</I>  <I>dataValueA</I>
   <I>chromStartB</I>  <I>dataValueB</I>
   <I>... etc ...</I>  <I>... etc ...</I></PRE></FONT>
 
-		    <LI> <B>fixedStep</B> single column data; started by a
-		    declaration line and followed with data values:
+<LI> <B>fixedStep</B> single column data; started by a
+declaration line and followed with data values:
 <FONT color="#0000FF"><PRE>  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>windowSize</I><B>]</B>
   <I>dataValue1</I>
   <I>dataValue2</I>
   <I>... etc ...</I></PRE></FONT>
 
-		    <LI> <B>BED</B> format with no declaration line and four columns of data (<B>recommended instead to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format</B>)
+<LI> <B>BED</B> format with no declaration line and four columns of data (<B>recommended instead to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format</B>)
 <FONT color="#0000FF"><PRE>  <I>chromA</I>  <I>chromStartA</I>  <I>chromEndA</I>  <I>dataValueA</I>
   <I>chromB</I>  <I>chromStartB</I>  <I>chromEndB</I>  <I>dataValueB</I></PRE></FONT>
-		    </UL>
-		    <P><B>Data Values</B></P>
+</UL>
+<P><B>Data Values</B></P>
 
-		    Wiggle track data values can be integer or real,
-		    positive or negative values. Chromosome positions
-		    are specified as 1-relative.  The first chromosome
-		    position is 1.  The last position in a chromosome
-		    of length N would be N.  Only positions specified
-		    have data.  Positions not specified do not have
-		    data and will not be graphed. All positions specified 
-		    in the input data must be in numerical order. 
+Wiggle track data values can be integer or real,
+positive or negative values. Chromosome positions
+are specified as 1-relative.  The first chromosome
+position is 1.  The last position in a chromosome
+of length N would be N.  Only positions specified
+have data.  Positions not specified do not have
+data and will not be graphed. All positions specified 
+in the input data must be in numerical order. 
 
-		    <UL>
-		    <LI>The <B>variableStep</B> two column data format is the most commonly used
-		    data format.  It begins with a declaration line:
+<UL>
+<LI>The <B>variableStep</B> two column data format is the most commonly used
+data format.  It begins with a declaration line:
 <FONT color="#0000FF"><PRE>  <B>variableStep chrom=</B><I>chrN</I> <B>[span=</B><I>windowSize</I><B>]</B></PRE></FONT>
-		    and is followed with two column data representing
-		    chromosome position and data value.  The declaration line starts with the word
-		    <B>variableStep</B> and is followed by a
-		    specification for chromosome.  The optional <B>span</B>
-		    (default: span=1) allows more efficient encoding of a
-		    single value for a contiguous run of bases
-		    beginning at the specified position.  The <B>windowSize</B>
-		    indicates how many bases each data value should cover,
-		    this number should be the same for each variableStep
-		    section of data.  Do not mix up different spans of data
-		    in the same data set.  The default span is one when not
-		    specified.
+and is followed with two column data representing
+chromosome position and data value.  The declaration line starts with the word
+<B>variableStep</B> and is followed by a
+specification for chromosome.  The optional <B>span</B>
+(default: span=1) allows more efficient encoding of a
+single value for a contiguous run of bases
+beginning at the specified position.  The <B>windowSize</B>
+indicates how many bases each data value should cover,
+this number should be the same for each variableStep
+section of data.  Do not mix up different spans of data
+in the same data set.  The default span is one when not
+specified.
 <P>
-		    <LI>The <B>fixedStep</B> format takes a single
-		    column data, and is used when there is a regular
-		    interval between new data values.  This is used for
-		    data values that apply to a constant size run of bases.  The fixedStep
-		    single column data format begins with the
-		    declaration line: 
+<LI>The <B>fixedStep</B> format takes a single
+column data, and is used when there is a regular
+interval between new data values.  This is used for
+data values that apply to a constant size run of bases.  The fixedStep
+single column data format begins with the
+declaration line: 
 <FONT color="#0000FF"><PRE>  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I>windowSize</I>]</PRE></FONT>
-		    and is followed by a single column of data values.
-		    The declaration line starts with the keyword
-		    <TT><B>fixedStep</B></TT>, and it must include specifications for
-		    chrom, start, and step.  The <B>span</B> specification has
-		    the same meaning as mentioned in variableStep above.  Do
-		    not mix up different spans of data in the same data set.
+and is followed by a single column of data values.
+The declaration line starts with the keyword
+<TT><B>fixedStep</B></TT>, and it must include specifications for
+chrom, start, and step.  The <B>span</B> specification has
+the same meaning as mentioned in variableStep above.  Do
+not mix up different spans of data in the same data set.
 <P>
-		    <LI>The BED format uses four columns of data:
-		    (<B>recommended instead to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format</B>)
+<LI>The BED format uses four columns of data:
+(<B>recommended instead to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format</B>)
 <FONT color="#0000FF"><PRE> <I>chrom chromStart chromEnd dataValue</I></PRE></FONT> 
-		    <B>Note:</B> These BED coordinates are
-		    <A HREF="../../FAQ/FAQtracks#tracks1">zero-based,
-		    half-open,</A> unlike the 1-relative coordinates for the
-		    <B>variableStep</B> and <B>fixedStep</B> formats.
-		    <P>
-		    In many cases this format will be too verbose to
-		    conveniently specify a large number of data values.
-		    When possible, please use the <B>variableStep</B> or
-		    <B>fixedStep</B> data types.  The <B>BED</B> format
-		    is the most inefficient format and is not capable of
-		    loading as many data points as the other two formats.
-		    Two other methods of specifying data were developed to
-		    be more space efficient.
-                   (<B>recommended instead to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format</B>)
-		    </LI>
-		    </UL>
+<B>Note:</B> These BED coordinates are
+<A HREF="../../FAQ/FAQtracks#tracks1">zero-based,
+half-open,</A> unlike the 1-relative coordinates for the
+<B>variableStep</B> and <B>fixedStep</B> formats.
+<P>
+In many cases this format will be too verbose to
+conveniently specify a large number of data values.
+When possible, please use the <B>variableStep</B> or
+<B>fixedStep</B> data types.  The <B>BED</B> format
+is the most inefficient format and is not capable of
+loading as many data points as the other two formats.
+Two other methods of specifying data were developed to
+be more space efficient.
+(<B>recommended instead to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format</B>)
+</LI>
+</UL>
 
-		    <P><B>Parameters for wiggle track definition lines</B></P>
-		    All options are placed in a single line separated by spaces:
+<P><B>Parameters for wiggle track definition lines</B></P>
+All options are placed in a single line separated by spaces:
 <FONT color="#0000FF"><PRE>  <B>track type=wiggle_0 name=</B><I>track_label</I> <B>description=</B><I>center_label</I>
 <B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I>
 <B>        priority=</B><I>priority</I> <B>autoScale=</B><I>on|off</I>
@@ -150,10 +150,10 @@
 </I></PRE></FONT>
 <p>(Note if you copy/paste the above example, you have to remove the carriage returns.)
 </p>
-		    The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I>:
-		    <FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
-		    The remaining values are OPTIONAL:
-		    <FONT color="#0000FF"><PRE>  <B>name</B>              <I>trackLabel</I>           # default is "User Track"
+The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I>:
+<FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
+The remaining values are OPTIONAL:
+<FONT color="#0000FF"><PRE>  <B>name</B>              <I>trackLabel</I>           # default is "User Track"
   <B>description       </B><I>centerlabel         </I> # default is "User Supplied Track"
   <B>visibility        </B><I>full|dense|hide     </I> # default is hide (will also take numeric values 2|1|0)
   <B>color             </B><I>RRR,GGG,BBB         </I> # default is 255,255,255
@@ -169,20 +169,19 @@
   <B>windowingFunction </B><I>maximum|mean|minimum</I> # default is maximum
   <B>smoothingWindow   </B><I>off|[2-16]          </I> # default is off</PRE></FONT>
 
-		    A functional description of these options can be
-		    seen in the <A target=_blank
-		    HREF="hgWiggleTrackHelp.html">Wiggle 
-		   track configuration<A> description. (Custom tracks do not 
-		   have interactive configuration options).
-
-		    <P><B>Examples</B></P>
-		    This example specifies 28 separate data points in three 
-		    tracks on chr19 in the region 59,302,001 to 59,311,000.
-		    To view this example as a custom track in the Genome
-		    Browser, copy the <A HREF="wiggleExample.txt">text</A>
-		    and paste it into the browser annotation track text box.
-		    <P>
-		    <FONT color="#0000FF"><PRE>
+A functional description of these options can be
+seen in the <A target=_blank
+HREF="hgWiggleTrackHelp.html">Wiggle 
+track configuration<A> description. (Custom tracks do not 
+have interactive configuration options).
+<P><B>Examples</B></P>
+This example specifies 28 separate data points in three 
+tracks on chr19 in the region 59,302,001 to 59,311,000.
+To view this example as a custom track in the Genome
+Browser, copy the <A HREF="wiggleExample.txt">text</A>
+and paste it into the browser annotation track text box.
+<P>
+<FONT color="#0000FF"><PRE>
 browser position chr19:59302001-59311000
 browser hide all
 browser pack refGene encodeRegions
@@ -246,7 +245,7 @@ from a wiggle track (e.g. with output format "data points" or "bed format" withi
 The <a href='bedgraph.html'>bedGraph</a> format should be used instead if
 it is important to retain exact data when exporting.
 <HR>
-This page last updated: $Date: 2009/03/11 23:57:39 $
+This page last updated: $Date: 2009/03/16 21:17:16 $
 <HR>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
