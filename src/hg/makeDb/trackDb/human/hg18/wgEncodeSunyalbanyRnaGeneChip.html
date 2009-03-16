@@ -1,16 +1,18 @@
 <H2>Description</H2>
 
-<P>This track is produced as part of the ENCODE Project.
-Expression of different 
-<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=ripTgtProtein">target RNA binding proteins (RBPs)</A>
-is measured by RNA Immunoprecipitation and Affymetrix Exon Arrays 
+<P>This track shows expression of 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=ripTgtProtein">
+target RNA binding proteins (RBPs)</A>
+as measured by RNA Immunoprecipitation and Affymetrix Exon Arrays 
 (RIP-chip) using different
-<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=ripAntibody">RIP antibodies</A>
-in different 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=ripAntibody">
+RIP antibodies</A>
+in multiple 
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
-This initial version of the track contains a single view, 
-<i>RBP Assoc RNA</i>, showing the genomic location of the transcripts 
-associated with the array probes.
+The <i>RBP Assoc RNA</i> view shows the genomic location of the transcripts 
+associated with the array probes.  Data for this track was produced as part of the
+<A TARGET=_BLANK HREF="/ENCODE/index.html">
+Encyclopedia of DNA Elements (ENCODE) Project</A>,
 </P>
 
 <P>In eukaryotic organisms gene regulatory networks require an additional 
@@ -24,51 +26,54 @@ targeted RNA-binding proteins using RIP-Chip (Ribonomic) profiling
 (Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008;Penalva 
 <EM>et al.</EM> 2004).
 </P>
+<P>
 
 <H2>Display Conventions and Configuration</H2>
 
-<P>The subtracks within this composite annotation track correspond to data 
-from different cell types and tissues.  The graphical configuration options 
-are shown at the top of the track description page, followed by a list of 
-subtracks. To display only selected subtracks, uncheck the boxes next to 
-the tracks you wish to hide. 
+<P>This track is a multi-view composite track. For each view there
+are multiple subtracks that display individually in the browser.
+The subtracks within this track correspond to different antibodies/target
+proteins tested in different cell lines.
+This track is initially released with a single view:
 </P>
-
 <DL>
 <DT><i>RBP Assoc RNA</i>
-<DD>The RBP Assoc RNA view shows the genomic extent of the transcripts 
+<DD>The RBP Assoc RNA view shows the genomic extent of transcripts 
 associated with 
 the Affymetrix Exon Array probes, shaded according to score.
 </DL>
+Instructions for configuring multi-view
+tracks are 
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 
 <H2>Methods</H2>
 
 <P>
 Cells were grown according to the approved 
-<A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
-We used previously described methods for purifying endogenously formed RBP-mRNA 
-complexes from cellular extracts and identifying the associated messages using 
+<A HREF="../../ENCODE/protocols/cell" 
+TARGET=_BLANK>ENCODE cell culture protocols</A>.
+Endogenously formed RBP-mRNA complexes were purified from 
+cellular extracts and the associated messages were identified using 
 genome-scale, microarray technology; a method called RNA-Binding protein 
 Immunoprecipitation-Microarray (Chip) profiling or RIP-Chip 
 (Tenenbaum <EM>et al.</EM> 2002; Baroni <EM>et al.</EM> 2008;Penalva 
 <EM>et al.</EM> 2004). 
-The use of the RIP-Chip methods has provided great insight into the 
+The use of RIP-Chip methods has provided great insight into the 
 infrastructure of coordinated eukaryotic post-transcriptional 
 gene expression, which could not have been obtained using 
 traditional RNA expression profiling approaches 
 (Keene <EM>et al.</EM> 2002; George <EM>et al.</EM> 2006). 
 Microarray analysis was performed using the Affymetrix Human Exon 1.0 ST Arrays.
 </P>
-
-<H2>Processing</H2>
-
 <P> CEL files for each sample were processed using the apt-probeset-summarize 
 binary provided by Affymetrix. One qualitative (DABG) and two quantitative 
 (RMA, PLIER) measures of expression were derived for each gene-level 
 metaprobeset on the chips using the command line parameters given 
 below (for a detailed explanation of the parameters please see 
 Affymetrix documentation for apt-probeset-summarize 
-<A TARGET=_BLANK HREF="http://www.affymetrix.com/support/developer/powertools/changelog/apt-probeset-summarize.html">here</A>):
+<A TARGET=_BLANK 
+HREF="http://www.affymetrix.com/support/developer/powertools/changelog/apt-probeset-summarize.html">
+here</A>):
 </P>
 
 <PRE>
@@ -88,7 +93,8 @@ for the data.
 <LI> Probesets at or below the DABG p-val cutoff for all replicates were marked 
 as present in the given condition &amp; cell-line.
 </LI>
-<LI> Lists of core probesets present in IP, in Total, and in Either are generated.
+<LI> Lists of core probesets present in IP, in Total, and in Either are 
+generated.
 </LI>
 <LI> Average log2 fold-changes for IP over total are taken for 
 both the rma and plier expression scores.
@@ -136,14 +142,16 @@ Scott Tenenbaum</A>
 
 <P>Tenenbaum SA, Lager PJ, Carson CC, Keene JD. 
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/12054896">
-Ribonomics: identifying mRNA subsets in mRNP complexes using antibodies to RNA-binding proteins and genomic arrays. 
+Ribonomics: identifying mRNA subsets in mRNP complexes using 
+antibodies to RNA-binding proteins and genomic arrays. 
 </A>
 <EM>Methods</EM>. 2002 Feb;26(2):191-8.
 </P>
 
 <P>Baroni TE, Chittur SV, George AD, Tenenbaum SA.
 <A TARGET=_BLANK" HREF="http://www.ncbi.nlm.nih.gov/pubmed/18369977">
-Advances in RIP-chip analysis : RNA-binding protein immunoprecipitation-microarray profiling.
+Advances in RIP-chip analysis : RNA-binding protein 
+immunoprecipitation-microarray profiling.
 </A>
 <EM>Methods Mol Biol</EM>. 2008;419:93-108.
 </P>
