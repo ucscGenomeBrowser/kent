@@ -343,6 +343,10 @@ if (asFileName != NULL)
     struct asObject *as = asParseFile(asFileName);
     if (as->next != NULL)
         errAbort("Can only handle .as files containing a single object.");
+    int colCount = slCount(as->columnList);
+    if (colCount != fieldCount)
+        errAbort("%d columns in %s, %d columns in %s. These must match!",
+		colCount, asFileName, fieldCount, inName);
     asOffset = ftell(f);
     FILE *asFile = mustOpen(asFileName, "r");
     copyOpenFile(asFile, f);
@@ -403,7 +407,6 @@ fseek(f, chromTreeOffsetPos, SEEK_SET);
 writeOne(f, chromTreeOffset);
 if (asOffset != 0)
     {
-    uglyf("asOffsetPos = %lld, asOffset=%lld\n", asOffsetPos, asOffset);
     fseek(f, asOffsetPos, SEEK_SET);
     writeOne(f, asOffset);
     }
@@ -421,9 +424,11 @@ freez(&chromInfoArray);
 }
 
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
-	bits32 start, bits32 end, struct lm *lm)
-/* Get data for interval.  Return list allocated out of lm. */
+	bits32 start, bits32 end, int maxItems, struct lm *lm)
+/* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum
+ * number of items to return, or to 0 for all items. */
 {
+int itemCount = 0;
 bbiAttachUnzoomedCir(bbi);
 struct bigBedInterval *el, *list = NULL;
 bits32 chromId;
@@ -439,6 +444,10 @@ for (block = blockList; block != NULL; block = block->next)
     udcSeek(f, block->offset);
     while (udcTell(f) < endPos)
         {
+	++itemCount;
+	if (maxItems > 0 && itemCount > maxItems)
+	    break;
+
 	/* Read next record into local variables. */
 	bits32 chr = udcReadBits32(f, isSwapped);	// Read and discard chromId
 	bits32 s = udcReadBits32(f, isSwapped);
@@ -463,6 +472,8 @@ for (block = blockList; block != NULL; block = block->next)
 	    slAddHead(&list, el);
 	    }
 	}
+    if (maxItems > 0 && itemCount > maxItems)
+        break;
     }
 slFreeList(&blockList);
 slReverse(&list);
@@ -495,7 +506,7 @@ struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi,
 /* Return intervals where the val is the depth of coverage. */
 {
 /* Get list of overlapping intervals */
-struct bigBedInterval *bi, *biList = bigBedIntervalQuery(bbi, chrom, start, end, lm);
+struct bigBedInterval *bi, *biList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 if (biList == NULL)
     return NULL;
 

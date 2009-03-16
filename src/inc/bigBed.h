@@ -21,9 +21,10 @@ struct bigBedInterval
 struct bbiFile *bigBedFileOpen(char *fileName);
 /* Open up big bed file.   Free this up with bbiFileFree */
 
-struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bwf, 
-	char *chrom, bits32 start, bits32 end, struct lm *lm);
-/* Get data for interval.  Return list allocated out of lm. */
+struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
+	bits32 start, bits32 end, int maxItems, struct lm *lm);
+/* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum
+ * number of items to return, or to 0 for all items. */
 
 int bigBedIntervalToRow(struct bigBedInterval *interval, char *chrom, char *startBuf, char *endBuf,
 	char **row, int rowSize);

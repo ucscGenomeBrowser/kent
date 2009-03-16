@@ -28,7 +28,7 @@ char *fileName = track->bbiFileName;
 if (fileName == NULL)
     track->bbiFileName = fileName = bbiNameFromTable(conn, track->mapName);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
-struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, lm);
+struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 bbiFileClose(&bbi);
 return result;
 }
