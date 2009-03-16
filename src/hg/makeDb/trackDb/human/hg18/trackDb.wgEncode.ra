@@ -6200,15 +6200,15 @@ wgEncode 1
 
 track wgEncodeSunyalbanyRnaGeneChip
 compositeTrack on
-shortLabel SUNY-Albany RIP
-longLabel ENCODE SUNY-Albany RNA Binding Proteins by RIP
+shortLabel SUNY RBPS
+longLabel ENCODE SUNY Albany RNA Binding Proteins by RIP-chip
 group regulation
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 ripAntibody RIP_Antibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_5261=SC_5261 SC_21027=SC_21027
 subGroup4 ripTgtProtein RIP_Target_Protein T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1
-dimensions dimensionX=cellType dimensionY=ripAntibody dimensionZ=ripTgtProtein
-sortOrder cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
+dimensions dimensionX=cellType dimensionY=ripTgtProtein
+sortOrder cellType=+ ripTgtProtein=+
 controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=ripTgtProtein
 dragAndDrop subTracks
 visibilityViewDefaults RbpAssocRna=dense
