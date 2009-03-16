@@ -673,3 +673,14 @@ droMoj2.perChromTables = no
     | ldHgGene -gtf droMoj2 geneMapper stdin
 
 
+###########################################################################
+# LIFTOVER TO DROMOJ3 (DONE 3/16/09 angie)
+    doSameSpeciesLiftOver.pl droMoj2 droMoj3 -debug \
+      -ooc=/hive/data/staging/data/droMoj2/11.ooc -workhorse=kolossus
+# *** Steps were performed in /hive/data/genomes/droMoj2/bed/blat.droMoj3.2009-03-16
+    cd /hive/data/genomes/droMoj2/bed/blat.droMoj3.2009-03-16/
+    doSameSpeciesLiftOver.pl droMoj2 droMoj3 \
+      -ooc=/hive/data/staging/data/droMoj2/11.ooc -workhorse=kolossus
+
+
+###########################################################################
