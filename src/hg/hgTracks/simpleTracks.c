@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.70 2009/03/13 23:33:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.71 2009/03/16 19:06:11 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -8727,20 +8727,7 @@ struct track *subtrack;
 if (track->visibility == tvHide)
     return;
 
-/* Count visible subtracks; if all subtracks are de-selected in cart,
- * remove cart settings to restore trackDb defaults.  Otherwise use
- * selections from cart. */
-//#define BLOCK_REVERSION_TO_DEFAULT_SUBTRACKS_WHEN_NO_SUBTRACKS_VISIBLE
-#ifndef BLOCK_REVERSION_TO_DEFAULT_SUBTRACKS_WHEN_NO_SUBTRACKS_VISIBLE
-int subtrackCt = subtrackCount(track->subtracks);
-if (subtrackCt == 0)
-    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-	{
-	char option[SMALLBUF];
-	safef(option, sizeof(option), "%s_sel", subtrack->mapName);
-	cartRemove(cart, option);
-	}
-#endif//ndef BLOCK_REVERSION_TO_DEFAULT_SUBTRACKS_WHEN_NO_SUBTRACKS_VISIBLE
+/* Count visible subtracks. */
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (!subtrack->limitedVisSet)
 	{
