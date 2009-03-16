@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hdb.h"
 #include "trackDb.h"
-#include "customTrack.h"
+#include "obscure.h"
 #include "hmmstats.h"
 #include "correlate.h"
 #include "asParse.h"
@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.2 2009/03/16 18:23:06 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.3 2009/03/16 18:35:13 kent Exp $";
 
 boolean isBigBed(char *table)
 /* Return TRUE if table corresponds to a bigBed file. */
@@ -57,6 +57,11 @@ struct asObject *as = bigBedAs(bbi);
 if (as == NULL)
     as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
 
+hPrintf("<B>Big Bed File:</B> %s", fileName);
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
+printLongWithCommas(stdout, bigBedItemCount(bbi));
+hPrintf("<BR>\n");
+hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 
 /* Put up table that describes fields. */
 hTableStart();
