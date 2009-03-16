@@ -5,12 +5,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "bed.h"
+#include "asParse.h"
 #include "jksql.h"
-#include "binRange.h"
-#include "hdb.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.86 2009/02/12 00:20:38 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.87 2009/03/16 01:01:20 kent Exp $";
 
 void usage()
 {
@@ -18,35 +17,15 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen file\n");
 }
 
-void writeChars(int f, char c, int count)
-/* Write a char to a low level file repeatedly followed by a new line. */
-{
-int i;
-for (i=0; i<count; ++i)
-    write(f, &c, 1);
-c = '\n';
-write(f, &c, 1);
-}
 
-void freen(char *fileName)
+void freen(char *s)
 /* Test some hair-brained thing. */
 {
-int f = open(fileName, O_RDWR);
-if (f <= 0)
-    errAbort("Coulen't open %s", fileName);
-// lseek(f, 0, SEEK_SET);
-writeChars(f, '1', 49);
-getchar();
-// lseek(f, 50, SEEK_SET);
-writeChars(f, '2', 49);
-getchar();
-// lseek(f, 100, SEEK_SET);
-writeChars(f, '3', 49);
-getchar();
-// lseek(f, 150, SEEK_SET);
-writeChars(f, '4', 49);
-getchar();
-close(f);
+int count = atoi(s);
+char *asDef = bedAsDef(count);
+printf("%s",  bedAsDef(count));
+struct asObject *as = asParseText(asDef);
+printf("%d rows\n", slCount(as->columnList));
 }
 
 int main(int argc, char *argv[])
