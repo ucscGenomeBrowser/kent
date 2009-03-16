@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.174 2009/03/13 23:29:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.175 2009/03/16 22:23:11 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2116,7 +2116,7 @@ void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items)
 if(items != NULL && *items != NULL)
     {
     slSort(items, sortableTdbItemsCmp);
-    int priority=1;
+    int priority=10001; // Setting priorities high allows new subtracks without cart entries to fall after existing subtracks
     sortableTdbItem *item;
     for (item = *items; item != NULL; item = item->next)
         item->tdb->priority = (float)priority++;
