@@ -361,5 +361,8 @@ struct bed *bedThickOnly(struct bed *in);
 struct bed *bedThickOnlyList(struct bed *inList);
 /* Return a list of beds that only are the thick part of input. */
 
+char *bedAsDef(int fieldCount);
+/* Return an autoSql definition for a bed of given number of fields. */
+
 #endif /* BED_H */
 

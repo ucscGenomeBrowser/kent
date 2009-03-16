@@ -12,7 +12,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.60 2009/02/02 04:19:38 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.61 2009/03/16 01:01:12 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1582,5 +1582,47 @@ for (in = inList; in != NULL; in = in->next)
     }
 slReverse(&outList);
 return outList;
+}
+
+char *bedAsDef(int fieldCount)
+/* Return an autoSql definition for a bed of given number of fields. */
+{
+if (fieldCount < 3 || fieldCount > 15)
+    errAbort("fieldCount is %d, but must be between %d and %d in bedAsDef", fieldCount, 3, 15);
+struct dyString *dy = dyStringNew(0);
+dyStringAppend(dy, 
+    "table bed\n"
+    "\"Browser Extensible Data\"\n"
+    "   (\n"
+    "   string chrom;       \"Reference sequence chromosome or scaffold\"\n"
+    "   uint   chromStart;  \"Start position in chromosome\"\n"
+    "   uint   chromEnd;    \"End position in chromosome\"\n"
+    );
+if (fieldCount >= 4)
+    dyStringAppend(dy, "   string name;        \"Name of item.\"\n");
+if (fieldCount >= 5)
+    dyStringAppend(dy, "   int score;          \"Score (0-1000)\"\n");
+if (fieldCount >= 6)
+    dyStringAppend(dy, "   char[1] strand;     \"+ or - for strand\"\n");
+if (fieldCount >= 7)
+    dyStringAppend(dy, "   uint thickStart;   \"Start of where display should be thick (start codon)\"\n");
+if (fieldCount >= 8)
+    dyStringAppend(dy, "   uint thickEnd;     \"End of where display should be thick (stop codon)\"\n");
+if (fieldCount >= 9)
+    dyStringAppend(dy, "   uint reserved;     \"Used as itemRgb as of 2004-11-22\"\n");
+if (fieldCount >= 10)
+    dyStringAppend(dy, "   int blockCount;    \"Number of blocks\"\n");
+if (fieldCount >= 11)
+    dyStringAppend(dy, "   int[blockCount] blockSizes; \"Comma separated list of block sizes\"\n");
+if (fieldCount >= 12)
+    dyStringAppend(dy, "   int[blockCount] chromStarts; \"Start positions relative to chromStart\"\n");
+if (fieldCount >= 13)
+    dyStringAppend(dy, "   int expCount;	\"Experiment count\"\n");
+if (fieldCount >= 14)
+    dyStringAppend(dy, "   int[expCount] expIds;	\"Comma separated list of experiment ids. Always 0,1,2,3....\"\n");
+if (fieldCount >= 15)
+    dyStringAppend(dy, "   float[expCount] expScores; \"Comma separated list of experiment scores.\"\n");
+dyStringAppend(dy, "   )\n");
+return dyStringCannibalize(&dy);
 }
 
