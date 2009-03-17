@@ -66,6 +66,9 @@ struct asObject
     bool isSimple;	        /* True if a simple object. */
     };
 
+struct dyString *asColumnToSqlType(struct asColumn *col);
+/* Convert column to a sql type spec in returned dyString */
+
 struct asObject *asParseFile(char *fileName);
 /* Parse autoSql .as file. */
 

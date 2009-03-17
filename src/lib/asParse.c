@@ -3,9 +3,10 @@
 #include "common.h"
 #include "linefile.h"
 #include "tokenizer.h"
+#include "dystring.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.6 2007/02/11 21:43:15 kent Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.7 2009/03/17 18:25:47 kent Exp $";
 
 /* n.b. switched double/float from %f to %g to partially address losing
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
@@ -45,6 +46,36 @@ for (i=0; i<ArraySize(asTypes); ++i)
     }
 tokenizerErrAbort(tkz, "Unknown type '%s'", s);
 return NULL;
+}
+
+static void sqlSymDef(struct asColumn *col, struct dyString *dy)
+/* print symbolic column definition for sql */
+{
+dyStringPrintf(dy, "%s(", col->lowType->sqlName);
+struct slName *val;
+for (val = col->values; val != NULL; val = val->next)
+    {
+    dyStringPrintf(dy, "\"%s\"", val->name);
+    if (val->next != NULL)
+        dyStringAppend(dy, ", ");
+    }
+dyStringPrintf(dy, ") ");
+}
+
+struct dyString *asColumnToSqlType(struct asColumn *col)
+/* Convert column to a sql type spec in returned dyString */
+{
+struct asTypeInfo *lt = col->lowType;
+struct dyString *type = dyStringNew(32);
+if ((lt->type == t_enum) || (lt->type == t_set))
+    sqlSymDef(col, type);
+else if (col->isList || col->isArray)
+    dyStringPrintf(type, "longblob");
+else if (lt->type == t_char)
+    dyStringPrintf(type, "char(%d)", col->fixedSize ? col->fixedSize : 1);
+else
+    dyStringPrintf(type, "%s", lt->sqlName);
+return type;
 }
 
 static struct asColumn *mustFindColumn(struct asObject *table, char *colName)
