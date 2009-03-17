@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.70 2009/03/13 21:40:33 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.71 2009/03/17 04:28:39 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -810,7 +810,7 @@ if (db != NULL && table != NULL)
 	}
     else
 	{
-	struct hTableInfo *hti = maybeGetHti(db, table);
+	struct hTableInfo *hti = maybeGetHtiOnDb(db, table);
 	typeWiggle = (hti != NULL && HTI_IS_WIGGLE);
 	}
     }

@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.47 2009/03/13 23:04:52 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.48 2009/03/17 04:28:39 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -129,7 +129,7 @@ char *op, *setting;
 boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable));
 // Note - bigWig is purposely left out of wigOptions.   It supports more intersection options
 // than wig does.
-struct hTableInfo *hti1 = maybeGetHti(database, curTable), *hti2 = NULL;
+struct hTableInfo *hti1 = maybeGetHti(database, curTable, conn), *hti2 = NULL;
 htmlOpen("Intersect with %s", name);
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
@@ -144,7 +144,7 @@ iName = iTrack->shortLabel;
 
 hPrintf("<TR><TD>\n");
 iTable = showTableField(iTrack, hgtaNextIntersectTable, FALSE);
-hti2 = maybeGetHti(database, iTable);
+hti2 = maybeGetHti(database, iTable, conn);
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 
@@ -487,7 +487,7 @@ Bits *bitsForIntersectingTable(struct sqlConnection *conn, struct region *region
 {
 boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
 char *table2 = cartString(cart, hgtaIntersectTable);
-struct hTableInfo *hti2 = getHti(database, table2);
+struct hTableInfo *hti2 = getHti(database, table2, conn);
 struct lm *lm2 = lmInit(64*1024);
 Bits *bits2 = bitAlloc(chromSize+8);
 struct bed *bedList2 = getFilteredBeds(conn, table2, region, lm2, NULL);
@@ -540,7 +540,7 @@ int chromSize = hChromSize(database, region->chrom);
 boolean isBpWise = (sameString("and", op) || sameString("or", op));
 Bits *bits2 = bitsForIntersectingTable(conn, region, chromSize, isBpWise);
 /* Set up some other local vars. */
-struct hTableInfo *hti1 = getHti(database, table1);
+struct hTableInfo *hti1 = getHti(database, table1, conn);
 struct bed *intersectedBedList = NULL;
 
 /* Produce intersectedBedList. */
@@ -614,7 +614,7 @@ if (! anySubtrackMerge(db, table))
     return getRegionAsBed(db, table, region, filter, idHash, lm, retFieldCount);
 else
     {
-    struct hTableInfo *hti = getHti(database, table);
+    struct hTableInfo *hti = getHtiOnDb(database, table);
     int chromSize = hChromSize(database, region->chrom);
     Bits *bits1 = NULL;
     Bits *bits2 = NULL;
@@ -667,7 +667,7 @@ else
 	    isSubtrackMerged(subtrack->tableName) &&
 	    sameString(subtrack->type, primaryType))
 	    {
-	    struct hTableInfo *hti2 = getHti(database, subtrack->tableName);
+	    struct hTableInfo *hti2 = getHtiOnDb(database, subtrack->tableName);
 	    struct lm *lm2 = lmInit(64*1024);
 	    struct bed *bedList2 =
 		getRegionAsBed(db, subtrack->tableName, region, NULL, idHash,

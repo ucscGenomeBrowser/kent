@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.137 2009/03/12 16:45:15 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.138 2009/03/17 04:28:39 kent Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -610,7 +610,7 @@ hPrintf("<TABLE BORDER=0>\n");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
-	hti = getHti(database, curTable);
+	hti = getHti(database, curTable, conn);
 	isPositional = htiIsPositional(hti);
 	}
     isWig = isWiggle(database, curTable);

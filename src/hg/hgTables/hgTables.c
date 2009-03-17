@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.174 2009/03/16 17:44:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.175 2009/03/17 04:28:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -602,12 +602,16 @@ if (!sqlTableExists(conn, table))
 freeMem(splitTable);
 }
 
-struct hTableInfo *maybeGetHti(char *db, char *table)
-/* Return primary table info. */
+struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn)
+/* Return primary table info, but don't abort if table not there. Conn should be open to db. */
 {
 struct hTableInfo *hti = NULL;
 
-if (isCustomTrack(table))
+if (isBigBed(table))
+    {
+    hti = bigBedToHti(table, conn);
+    }
+else if (isCustomTrack(table))
     {
     struct customTrack *ct = lookupCt(table);
     hti = ctToHti(ct);
@@ -628,10 +632,10 @@ else
 return(hti);
 }
 
-struct hTableInfo *getHti(char *db, char *table)
+struct hTableInfo *getHti(char *db, char *table, struct sqlConnection *conn)
 /* Return primary table info. */
 {
-struct hTableInfo *hti = maybeGetHti(db, table);
+struct hTableInfo *hti = maybeGetHti(db, table, conn);
 
 if (hti == NULL)
     {
@@ -640,6 +644,25 @@ if (hti == NULL)
     }
 return(hti);
 }
+
+struct hTableInfo *getHtiOnDb(char *db, char *table)
+/* Return primary table info. */
+{
+struct sqlConnection *conn = hAllocConn(db);
+struct hTableInfo *hti = getHti(db, table, conn);
+hFreeConn(&conn);
+return hti;
+}
+
+struct hTableInfo *maybeGetHtiOnDb(char *db, char *table)
+/* Return primary table info, but don't abort if table not there. */
+{
+struct sqlConnection *conn = hAllocConn(db);
+struct hTableInfo *hti = maybeGetHti(db, table, conn);
+hFreeConn(&conn);
+return hti;
+}
+
 
 boolean isPositional(char *db, char *table)
 /* Return TRUE if it looks to be a positional table. */
@@ -988,7 +1011,7 @@ if (hti != NULL && hti->nameField[0] != 0)
     idField = cloneString(hti->nameField);
 else if (track != NULL)
     {
-    struct hTableInfo *trackHti = maybeGetHti(db, track->tableName);
+    struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->tableName);
     if (trackHti != NULL && isCustomTrack(table))
 	idField = cloneString(trackHti->nameField);
     else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
@@ -1131,7 +1154,7 @@ boolean showItemRgb = FALSE;
 int itemRgbCol = -1;	/*	-1 means not found	*/
 boolean printedColumns = FALSE;
 
-hti = getHti(db, table);
+hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
 showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
 					/*	instead of "reserved" */

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.19 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.20 2009/03/17 04:28:39 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -214,7 +214,7 @@ lmCleanup(&lm);
 void genomicFormatPage(struct sqlConnection *conn)
 /* Put up page asking for what sort of genomic sequence. */
 {
-struct hTableInfo *hti = getHti(database, curTable);
+struct hTableInfo *hti = getHti(database, curTable, conn);
 htmlOpen("%s Genomic Sequence", curTableLabel());
 if (doGalaxy())
     startGalaxyForm();
@@ -243,7 +243,7 @@ void doGenomicDna(struct sqlConnection *conn)
 /* Get genomic sequence (UI has already told us how). */
 {
 struct region *region, *regionList = getRegions();
-struct hTableInfo *hti = getHti(database, curTable);
+struct hTableInfo *hti = getHti(database, curTable, conn);
 int fieldCount;
 textOpen();
 for (region = regionList; region != NULL; region = region->next)

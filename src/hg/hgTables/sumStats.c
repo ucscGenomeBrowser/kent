@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.24 2009/03/12 16:45:16 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.25 2009/03/17 04:28:39 kent Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -262,7 +262,7 @@ long startTime, midTime, endTime;
 long loadTime = 0, calcTime = 0, freeTime = 0;
 struct covStats *itemCovList = NULL, *blockCovList = NULL, *cov;
 int itemCount = 0;
-struct hTableInfo *hti = getHti(database, curTable);
+struct hTableInfo *hti = getHti(database, curTable, conn);
 int minScore = BIGNUM, maxScore = -BIGNUM;
 long long sumScores = 0;
 boolean hasBlocks = hti->hasBlocks;

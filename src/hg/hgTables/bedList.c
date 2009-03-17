@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.62 2009/03/13 22:51:55 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.63 2009/03/17 04:28:38 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -309,7 +309,7 @@ void doBedOrCtOptions(char *table, struct sqlConnection *conn,
 /* (Taken from hgText.c/doBedCtOptions) */
 {
 char *table2 = NULL;	/* For now... */
-struct hTableInfo *hti = getHti(database, table);
+struct hTableInfo *hti = getHti(database, table, conn);
 char buf[256];
 char *setting;
 htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
@@ -495,7 +495,7 @@ boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt,
 {
 char *db = sqlGetDatabase(conn);
 char *table = curTable;
-struct hTableInfo *hti = getHti(db, table);
+struct hTableInfo *hti = getHti(db, table, conn);
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
 boolean doCtHdr = (cartUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE) 

@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.3 2009/03/16 18:35:13 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.4 2009/03/17 04:28:38 kent Exp $";
 
 boolean isBigBed(char *table)
 /* Return TRUE if table corresponds to a bigBed file. */
@@ -36,10 +36,62 @@ char *bigBedFileName(char *table, struct sqlConnection *conn)
 return bigWigFileName(table, conn);
 }
 
-void bigBedDescribeFields(char *table, struct sqlConnection *conn)
-/* Print out an HTML table showing table fields and types for bigBed file. */
+struct hash *asColumnHash(struct asObject *as)
+/* Return a hash full of the object's columns, keyed by colum name */
 {
+struct hash *hash = hashNew(6);
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    hashAdd(hash, col->name, col);
+return hash;
 }
+
+static void fillField(struct hash *colHash, char *key, char output[HDB_MAX_FIELD_STRING])
+/* If key is in colHash, then copy key to output. */
+{
+if (hashLookup(colHash, key))
+    strncpy(output, key, HDB_MAX_FIELD_STRING-1);
+}
+
+struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
+/* Get fields of bigBed into hti structure. */
+{
+char *fileName = bigBedFileName(table, conn);
+/* Get columns in asObject format, from file or failing that as bed-standard. */
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *as = bigBedAs(bbi);
+if (as == NULL) 
+    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
+
+/* Allocate hTableInfo structure and fill in info about bed fields. */
+struct hash *colHash = asColumnHash(as);
+struct hTableInfo *hti;
+AllocVar(hti);
+hti->rootName = cloneString(table);
+hti->isPos= TRUE;
+fillField(colHash, "chrom", hti->chromField);
+fillField(colHash, "chromStart", hti->startField);
+fillField(colHash, "chromEnd", hti->endField);
+fillField(colHash, "name", hti->nameField);
+fillField(colHash, "score", hti->scoreField);
+fillField(colHash, "strand", hti->strandField);
+fillField(colHash, "thickStart", hti->cdsStartField);
+fillField(colHash, "thickEnd", hti->cdsEndField);
+fillField(colHash, "blockCount", hti->countField);
+fillField(colHash, "chromStarts", hti->startsField);
+fillField(colHash, "blockSizes", hti->endsSizesField);
+hti->hasCDS = (bbi->definedFieldCount >= 8);
+hti->hasBlocks = (bbi->definedFieldCount >= 12);
+char type[256];
+safef(type, sizeof(type), "bed %d %c", bbi->definedFieldCount,
+	(bbi->definedFieldCount == bbi->fieldCount ? '.' : '+'));
+hti->type = cloneString(type);
+
+hashFree(&colHash);
+bbiFileClose(&bbi);
+return hti;
+}
+
 
 void showSchemaBigBed(char *table)
 /* Show schema on bigBed. */
@@ -50,7 +102,8 @@ char *fileName = bigBedFileName(table, conn);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chromList->name, 0, chromList->size, 10, lm);
+struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chromList->name, 0, 
+					 	    chromList->size, 10, lm);
 
 /* Get description of columns, making it up from BED records if need be. */
 struct asObject *as = bigBedAs(bbi);
@@ -58,7 +111,7 @@ if (as == NULL)
     as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
 
 hPrintf("<B>Big Bed File:</B> %s", fileName);
-hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Item Count:</B> ");
 printLongWithCommas(stdout, bigBedItemCount(bbi));
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);

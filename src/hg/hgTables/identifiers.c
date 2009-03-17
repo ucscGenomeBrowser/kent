@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.26 2009/01/09 00:58:27 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.27 2009/03/17 04:28:39 kent Exp $";
 
 
 static boolean forCurTable()
@@ -142,7 +142,7 @@ if (sameWord(curTable, WIKI_TRACK_TABLE))
 
 char *oldPasted = forCurTable() ?
     cartUsualString(cart, hgtaPastedIdentifiers, "") : "";
-struct hTableInfo *hti = maybeGetHti(actualDb, curTable);
+struct hTableInfo *hti = maybeGetHti(actualDb, curTable, conn);
 char *idField = getIdField(actualDb, curTrack, curTable, hti);
 htmlOpen("Paste In Identifiers for %s", curTableLabel());
 if (idField == NULL)
@@ -170,7 +170,7 @@ if (sameWord(curTable, WIKI_TRACK_TABLE))
 void doUploadIdentifiers(struct sqlConnection *conn)
 /* Respond to upload identifiers button. */
 {
-struct hTableInfo *hti = maybeGetHti(database, curTable);
+struct hTableInfo *hti = maybeGetHti(database, curTable, conn);
 char *idField = getIdField(database, curTrack, curTable, hti);
 htmlOpen("Upload Identifiers for %s", curTableLabel());
 if (idField == NULL)
@@ -340,7 +340,7 @@ if (isNotEmpty(idText))
     char *actualDb = database;
     if (sameWord(curTable, WIKI_TRACK_TABLE))
 	actualDb = wikiDbName();
-    struct hTableInfo *hti = maybeGetHti(actualDb, curTable);
+    struct hTableInfo *hti = maybeGetHti(actualDb, curTable, conn);
     char *idField = getIdField(actualDb, curTrack, curTable, hti);
     if (idField == NULL)
 	{

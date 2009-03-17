@@ -243,10 +243,16 @@ struct bed *cookedBedsOnRegions(struct sqlConnection *conn,
 	int *retFieldCount);
 /* Get cooked beds on all regions. */
 
-struct hTableInfo *getHti(char *db, char *table);
+struct hTableInfo *getHtiOnDb(char *db, char *table);
 /* Return primary table info. */
 
-struct hTableInfo *maybeGetHti(char *db, char *table);
+struct hTableInfo *getHti(char *db, char *table, struct sqlConnection *conn);
+/* Return primary table info. Conn should be open to db. */
+
+struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn);
+/* Return primary table info, but don't abort if table not there. Conn should be open to db. */
+
+struct hTableInfo *maybeGetHtiOnDb(char *db, char *table);
 /* Return primary table info, but don't abort if table not there. */
 
 boolean htiIsPositional(struct hTableInfo *hti);
@@ -697,6 +703,9 @@ boolean isBigBed(char *table);
 char *bigBedFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigBed.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
+
+struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
+/* Get fields of bigBed into hti structure. */
 
 void showSchemaBigBed(char *table);
 /* Show schema on bigBed. */

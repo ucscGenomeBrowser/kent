@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.51 2009/01/09 00:58:27 angie Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.52 2009/03/17 04:28:39 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -681,7 +681,7 @@ struct joinedTables *tjLoadFirst(struct region *regionList,
 struct joinedTables *joined = joinedTablesNew(totalFieldCount, 
 	totalKeyCount, maxRowCount);
 struct hash *idHash = NULL;
-struct hTableInfo *hti = getHti(tj->database, tj->table);
+struct hTableInfo *hti = getHtiOnDb(tj->database, tj->table);
 char *idField = getIdField(tj->database, curTrack, tj->table, hti);
 if (idField != NULL)
     idHash = identifierHash(tj->database, tj->table);
@@ -1109,7 +1109,7 @@ struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
 /* Get list of beds from database, in all regions, that pass filtering. */
 {
 /* A joining query may be required if the filter incorporates linked tables. */
-struct hTableInfo *hti = getHti(database, table);
+struct hTableInfo *hti = getHti(database, table, conn);
 struct slName *fieldList = getBedFieldSlNameList(hti, database, table);
 struct joinerDtf *dtfList = NULL;
 struct joinerDtf *filterTables = NULL;
