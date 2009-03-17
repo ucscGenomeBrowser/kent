@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.2 2009/02/10 22:17:39 kent Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.3 2009/03/17 16:28:02 kent Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -20,7 +20,7 @@ char *chrom = cartString(cart, "c");
 /* Open BigWig file and get interval list. */
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, winStart, winEnd, lm);
+struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, winStart, winEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
