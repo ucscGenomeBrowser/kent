@@ -29,7 +29,15 @@ regularly spaced and equally sized. If you need to display irregularly spaced
 data, or data elements of varying size, use the <A HREF="bedgraph.html"
 TARGET=_blank>BedGraph</A> format instead.
 <P>
-See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
+For speed and efficiency, wiggle data is compressed and stored internally in
+128 unique bins. This compression means that there is a minor loss of precision
+when data is exported from a wiggle track (<em>i.e.</em>, with output format
+&quot;data points&quot; or &quot;bed format&quot; within the table browser).
+The <a href='bedgraph.html'>bedGraph</a> format should be used instead if it
+is important to retain exact data when exporting.
+<P>
+See also:
+<A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
 TARGET=_blank>Selecting a graphing track data format</A>.
 <P>
 <B>General Structure</B><P> Wiggle format is line-oriented. The first line
@@ -188,13 +196,6 @@ fixedStep chrom=chr19 start=59307401 step=300 span=200
  200
  100</PRE></FONT>
 
-<P><B>Notes</B></P>
-For speed and efficiency, wiggle data is compressed and stored internally in
-128 unique bins. This compression means that there is a loss of precision when
-the data is exported from a wiggle track (<em>i.e.</em>, with output format &quot;data
-points&quot; or &quot;bed format&quot; within the table browser). The
-<a href='bedgraph.html'>bedGraph</a> format should be used instead if it is
-important to retain exact data when exporting.
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	</TD></TR></TABLE>
