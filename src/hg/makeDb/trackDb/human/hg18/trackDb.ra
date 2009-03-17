@@ -3884,3 +3884,82 @@ priority 100
     color 40,120,40
     altColor 120,40,40
     priority 13
+
+# PhyloP lineage-specific conservation
+track phyloPConsLs44way
+shortLabel Lineage Cons
+compositeTrack on
+longLabel Lineage-specific Basewise Conservation by PhyloP for 44-Species Multiz Align.
+spanList 1
+maxHeightPixels 100:50:11
+autoScaleDefault on
+windowingFunction mean
+group compGeno
+priority 103.292
+#altColor 70,130,70
+#color 0,90,20
+type wig -10 4
+
+    track phyloP44wayPrimateLs
+    subTrack phyloPConsLs44way
+    shortLabel Primate Ls Cons
+    longLabel Primate Lineage-Specific Basewise Conservation by PhyloP
+    type wig -9.28 3.91
+    maxHeightPixels 100:50:11
+    noInherit on
+    autoScale on
+    spanList 1
+    windowingFunction mean
+    color 10,10,70
+    altColor 70,10,10
+    priority 1
+
+    track phyloP44wayGlireLs
+    subTrack phyloPConsLs44way
+    shortLabel Glire Ls Cons
+    longLabel Glire (Rodent, Rabbit and Pika) Lineage-Specific Basewise Conservation by PhyloP
+    type wig -6.99 5.95
+    maxHeightPixels 100:50:11
+    noInherit on
+    autoScale on
+    spanList 1
+    windowingFunction mean
+    color 25,25,95
+    altColor 95,25,25
+    priority 2
+
+track ensembl31wayGerp
+compositeTrack on
+shortLabel GERP Conserved
+longLabel GERP Conservation for Ensembl PECAN Alignments (31 Mammal Species)
+subGroup1 view Views scores=Basewise_Conservation elements=Conserved_Elements 
+visibilityViewDefaults scores=full elements=dense
+settingsByView elements:pValueFilter=0.0,pValueFilterLimits=0:100 scores:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean 
+type bed 4
+group compGeno
+priority 110
+
+    track ensembl31wayGerpScores
+    subTrack ensembl31wayGerp on
+    subGroups view=score s
+    shortLabel GERP Scores
+    longLabel GERP Conservation for 31-Mammal Ensembl PECAN Alignments
+    noInherit on
+    type wig -14.42 3.46
+    maxHeightPixels 100:50:11
+    viewLimits -.3:2
+    autoScale off
+    spanList 1
+    windowingFunction mean
+    color 0, 10, 100
+    altColor 0,90,10
+    type wigMaf 0.0 1.0
+
+    track ensembl31wayGerpElements
+    subTrack ensembl31wayGerp on
+    subGroups view=elements
+    shortLabel GERP Elements
+    longLabel GERP Conserved Elements for 31-Mammal Ensembl PECAN Alignments
+    noInherit on
+    color 170,100,50
+    type broadPeak
