@@ -23,8 +23,8 @@
  *     autoSql string (zero terminated)
  *     chromosome b+ tree       bPlusTree index
  *     full data
- *         sectionCount		4 bytes
- *         section data		section count sections, of three types
+ *         sectionCount		4 bytes (item count for bigBeds)
+ *         section data		section count sections, of three types (bed data for bigBeds)
  *     full index               cirTree index
  *     zoom info             one of these for each zoom level
  *         zoom data
