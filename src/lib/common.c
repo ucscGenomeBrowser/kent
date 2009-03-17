@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.127 2009/02/24 03:29:10 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.128 2009/03/17 11:20:15 mikep Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -922,7 +922,7 @@ while((name = nextWord(&word)))
     char *val = strchr(name,'=');
     if (!val)
 	{
-	warn("missing equals sign in name=value pair: [%s]\n", name);
+	warn("missing equals sign in name=value pair: name=[%s] in string=[%s]\n", name, s);
 	return NULL;
 	}
     *val++ = 0;
