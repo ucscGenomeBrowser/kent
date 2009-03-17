@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.397 2009/03/17 04:24:28 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.398 2009/03/17 05:56:38 hiram Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -268,6 +268,17 @@ boolean hDbExists(char *database)
   Function to check if this is a valid db name
 */
 {
+static struct hash *dbsChecked = NULL;
+
+if (dbsChecked)
+    {
+    void *hashDb = hashFindVal(dbsChecked, database);
+    if (hashDb)
+	return(hashIntVal(dbsChecked, database));
+    }
+else
+    dbsChecked = newHash(0);
+
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
@@ -276,12 +287,24 @@ safef(query, sizeof(query), "select name from dbDb where name = '%s'",
       database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
+hashAddInt(dbsChecked, database, res);
 return res;
 }
 
 boolean hDbIsActive(char *database)
 /* Function to check if this is a valid and active db name */
 {
+static struct hash *dbsChecked = NULL;
+
+if (dbsChecked)
+    {
+    void *hashDb = hashFindVal(dbsChecked, database);
+    if (hashDb)
+	return(hashIntVal(dbsChecked, database));
+    }
+else
+    dbsChecked = newHash(0);
+
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
@@ -290,6 +313,7 @@ safef(query, sizeof(query),
       "select name from dbDb where name = '%s' and active = 1", database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
+hashAddInt(dbsChecked, database, res);
 return res;
 }
 
