@@ -1,31 +1,20 @@
 <H2>Description</H2>
 
-<P>This track shows the starts and ends of mRNA transcripts determined by 
-paired-end ditag (PET) sequencing. PETs are composed of 18 bases from both 
+<P>This track is produced as part of the ENCODE Transcriptome Project, 
+It shows the starts and ends of mRNA transcripts determined by 
+paired-end ditag (PET) sequencing using 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=rnaExtract">RNA extracts</A> 
+from different 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=localization">sub-cellular localizations</A> 
+in different 
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
+PETs are composed of 18 bases from both 
 ends of a cDNA; 36 bp PETs were dimerized together and ligated by Illumina 
 GA adaptor as sequencing templates. The diPET templates were amplified on 
 the Illumina Cluster station and subjected to sequencing by synthesis. 
 See the Methods and References sections below for more details on PET sequencing
 (Ng <EM>et al.</EM> 2006).
 </P>
-
-<P>The PET sequences in this track are full-length transcripts derived 
-from 4 different polyA+ RNA sources:
-</P>
-<UL>
-<LI>The prostate tissues (RNA prepared by Ambion with catalog number ???)
-</LI>
-<LI>K562 cell line cytoplasmic fraction (K562-Cyt)
-</LI>
-<LI>K562 cell line nucleus fraction (K562-Nuc)
-</LI>
-<LI>K562 cell line polysome fraction (K562-Poly)
-</LI>
-</UL>
-
-<P>For different tissue source, growth condition and sub-compartment 
-isolation, please refer to the general description for the ENCODE cell lines 
-at ????.</P>
 
 <P>In the graphical display, the ends are represented by blocks connected by a 
 horizontal line. In full and packed display modes, the arrowheads on the 
@@ -42,10 +31,25 @@ complexity or repetitive sequences.
 
 <H2>Display Conventions and Configuration</H2>
 
-<P></P>
+<P>To show only selected views, uncheck the boxes next to the one that 
+you wish to hide.</P>
+ 
+<P>Color differences among the views are arbitrary. They provide a 
+visual cue for 
+distinguishing between the different cell types and compartments.</P>
+
+<DL>
+<DT><i>Tags</i>
+<DD>???.
+<DT><i>Alignments</i>
+<DD>The Alignments view shows alignment of individual PET sequences.
+</DL>
 
 <H2>Methods</H2>
 
+<P>
+Cells were grown according to the approved 
+<A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 <P>PolyA+ RNA was isolated from the cells. A full-length cDNA library was 
 constructed and 
 converted into a PET library for Gene Identification Signature analysis
@@ -117,3 +121,11 @@ loci discovered through comprehensive transcriptome analysis using Paired-End
 diTags (PETs). 
 <EM>Genome Res</EM>. 2007;17:828-838.
 
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior 
+consent, submit publications that use an unpublished ENCODE dataset until 
+nine months following the release of the dataset.  This date is listed in 
+the <EM>Restricted Until</EM> column, above.  The full data release policy 
+for ENCODE is available 
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P> 
