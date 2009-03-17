@@ -273,6 +273,27 @@ boolean isSqlSetType(char *type);
 boolean isSqlNumType(char *type);
 /* Return TRUE if it is a numerical SQL type. */
 
+struct sqlFieldType
+/* List field names and types */
+    {
+    struct sqlFieldType *next;
+    char *name;		/* Name of field. */
+    char *type;		/* Type of field (MySQL notion) */
+    };
+
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
+/* Create a new sqlFieldType */
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt);
+/* Free resources used by sqlFieldType */
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList);
+/* Free a list of dynamically allocated sqlFieldType's */
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table);
+/* Get list of fields including their names and types.  The type currently is just
+ * a MySQL type string. */
+
 /* ------------- Functions related to joining and filtering ------------*/
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
@@ -714,6 +735,9 @@ struct asObject *bigBedAsForTable(char *table, struct sqlConnection *conn);
 
 struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as simple name list. */
+
+struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
+/* Get fields of bigBed as list of sqlFieldType. */
 
 void bigBedTabOut(char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */

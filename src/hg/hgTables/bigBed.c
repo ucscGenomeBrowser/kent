@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.5 2009/03/17 17:24:50 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.6 2009/03/17 20:48:36 kent Exp $";
 
 boolean isBigBed(char *table)
 /* Return TRUE if table corresponds to a bigBed file. */
@@ -135,6 +135,34 @@ struct slName *names = asColNames(as);
 freeMem(fileName);
 bbiFileClose(&bbi);
 return names;
+}
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
+/* Convert asObject to list of sqlFieldTypes */
+{
+struct sqlFieldType *ft, *list = NULL;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    struct dyString *type = asColumnToSqlType(col);
+    ft = sqlFieldTypeNew(col->name, type->string);
+    slAddHead(&list, ft);
+    dyStringFree(&type);
+    }
+slReverse(&list);
+return list;
+}
+
+struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn)
+/* Get fields of bigBed as list of sqlFieldType. */
+{
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct sqlFieldType *list = sqlFieldTypesFromAs(as);
+freeMem(fileName);
+bbiFileClose(&bbi);
+return list;
 }
 
 void bigBedTabOut(char *table, struct sqlConnection *conn, char *fields, FILE *f)

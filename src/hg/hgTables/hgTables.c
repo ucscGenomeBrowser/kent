@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.178 2009/03/17 18:10:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.179 2009/03/17 20:48:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -709,6 +709,62 @@ boolean isSqlNumType(char *type)
 {
 return strstr(type, "int") || strstr(type, "float") || strstr(type, "double");
 }
+
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
+/* Create a new sqlFieldType */
+{
+struct sqlFieldType *ft;
+AllocVar(ft);
+ft->name = cloneString(name);
+ft->type = cloneString(type);
+return ft;
+}
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt)
+/* Free resources used by sqlFieldType */
+{
+struct sqlFieldType *ft = *pFt;
+if (ft != NULL)
+    {
+    freeMem(ft->name);
+    freeMem(ft->type);
+    freez(pFt);
+    }
+}
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList)
+/* Free a list of dynamically allocated sqlFieldType's */
+{
+struct sqlFieldType *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    sqlFieldTypeFree(&el);
+    }
+*pList = NULL;
+}
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table)
+/* Get list of fields including their names and types.  The type currently is just
+ * a MySQL type string. */
+{
+struct sqlFieldType *ft, *list = NULL;
+char query[512];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ft = sqlFieldTypeNew(row[0], row[1]);
+    slAddHead(&list, ft);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
 
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
 	struct grp *group)

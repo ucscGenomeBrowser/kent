@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.66 2009/03/17 17:24:51 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.67 2009/03/17 20:48:36 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -720,9 +720,6 @@ static void filterControlsForTableDb(char *db, char *rootTable)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
-char query[256];
-struct sqlResult *sr;
-char **row;
 boolean gotFirst = FALSE;
 boolean isWig = FALSE;
 boolean isBedGr = isBedGraph(rootTable);
@@ -762,13 +759,20 @@ else
     {
     int fieldNum = 0;
     int noBinBedGraphColumn = bedGraphColumn;
-    safef(query, sizeof(query), "describe %s", table);
-    sr = sqlGetResult(conn, query);
+    struct sqlFieldType *ft, *ftList;
+    if (isBigBed(table))
+        {
+	ftList = bigBedListFieldsAndTypes(table, conn);
+	}
+    else
+        {
+	ftList = sqlListFieldsAndTypes(conn, table);
+	}
     hPrintf("<TABLE BORDER=0>\n");
-    while ((row = sqlNextRow(sr)) != NULL)
+    for (ft = ftList; ft != NULL; ft = ft->next)
 	{
-	char *field = row[0];
-	char *type = row[1];
+	char *field = ft->name;
+	char *type = ft->type;
 	char *logic = "";
 
 	if ((0 == fieldNum) && (!sameWord(field,"bin")))
