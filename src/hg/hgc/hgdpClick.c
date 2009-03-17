@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.5 2009/02/09 22:30:25 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.6 2009/03/17 19:05:58 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -336,6 +336,10 @@ printf("<A HREF=\"%s\" TARGET=_BLANK><IMG SRC=\"%s\" WIDTH=677 HEIGHT=490></A><B
 printf("<A HREF=\"%s\" TARGET=_BLANK>PDF</A>&nbsp;&nbsp;", geoSnpPdfFile);
 printf("<A HREF=\"%s\" TARGET=_BLANK>EPS</A>&nbsp;&nbsp;", geoSnpEpsFile);
 printf("<A HREF=\"%s\" TARGET=_BLANK>PNG</A><BR>\n", geoSnpPngFile);
+printf("Population key:\n");
+printf("<A HREF=\"../images/hgdpGeoPopKey.pdf\" TARGET=_BLANK>PDF</A>&nbsp;&nbsp;");
+printf("<A HREF=\"../images/hgdpGeoPopKey.eps\" TARGET=_BLANK>EPS</A>&nbsp;&nbsp;");
+printf("<A HREF=\"../images/hgdpGeoPopKey.png\" TARGET=_BLANK>PNG</A><BR>\n");
 }
 
 void hgdpGeoFreqTable(struct hgdpGeo *geo)
