@@ -18,7 +18,7 @@
 #include "asParse.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.36 2008/12/24 14:59:43 lslater Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.37 2009/03/17 23:31:45 kent Exp $";
 
 boolean withNull = FALSE;
 boolean makeJson = FALSE;
@@ -54,58 +54,17 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-void sqlSymDef(struct asColumn *col, FILE *f)
-/* print symbolic column definition for sql */
-{
-fprintf(f, "%s(", col->lowType->sqlName);
-struct slName *val;
-for (val = col->values; val != NULL; val = val->next)
-    {
-    fprintf(f, "\"%s\"", val->name);
-    if (val->next != NULL)
-        fputs(", ", f);
-    }
-if (withNull)
-    {
-    fprintf(f, ") ");
-    }
-else
-    {
-    fprintf(f, ") not null");
-    }
-}
-
 void sqlColumn(struct asColumn *col, FILE *f)
 /* Print out column in SQL. */
 {
-struct asTypeInfo *lt = col->lowType;
 fprintf(f, "    %s ", col->name);
-
+struct dyString *type = asColumnToSqlType(col);
+fprintf(f, "%s", type->string);
 if (!withNull)
-    {
-    if ((lt->type == t_enum) || (lt->type == t_set))
-    	sqlSymDef(col, f);
-    else if (col->isList || col->isArray)
-    	fprintf(f, "longblob not null");
-    else if (lt->type == t_char)
-    	fprintf(f, "char(%d) not null", col->fixedSize ? col->fixedSize : 1);
-    else
-    	fprintf(f, "%s not null", lt->sqlName);
-    }
-else
-    {
-    if ((lt->type == t_enum) || (lt->type == t_set))
-    	sqlSymDef(col, f);
-    else if (col->isList || col->isArray)
-    	fprintf(f, "longblob");
-    else if (lt->type == t_char)
-    	fprintf(f, "char(%d)", col->fixedSize ? col->fixedSize : 1);
-    else
-    	fprintf(f, "%s", lt->sqlName);
-    }
-
+    fprintf(f, " not null");
 fputc(',', f);
 fprintf(f, "\t# %s\n", col->comment);
+dyStringFree(&type);
 }
 
 void sqlTable(struct asObject *table, FILE *f)
