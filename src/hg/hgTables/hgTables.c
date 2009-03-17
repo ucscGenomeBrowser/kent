@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.176 2009/03/17 10:13:26 aamp Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.177 2009/03/17 17:24:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1256,7 +1256,9 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
-if (isCustomTrack(table))
+if (isBigBed(table))
+    bigBedTabOut(table, conn, fields, f);
+else if (isCustomTrack(table))
     {
     struct trackDb *track = findTrack(table, fullTrackList);
     doTabOutCustomTracks(track, conn, fields, f);
@@ -1271,7 +1273,13 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
-if (isCustomTrack(table))
+if (isBigBed(table))
+    {
+    conn = hAllocConn(db);
+    fieldList = bigBedGetFields(table, conn);
+    hFreeConn(&conn);
+    }
+else if (isCustomTrack(table))
     {
     struct customTrack *ct = lookupCt(table);
     if ((ct!= NULL) && (ct->dbTrackType != NULL) &&
@@ -1290,11 +1298,11 @@ else
     {
     char *splitTable;
     dbOverrideFromTable(dtBuf, &db, &table);
-    conn = sqlConnect(db);
+    conn = hAllocConn(db);
     splitTable = chromTable(conn, table);
     fieldList = sqlListFields(conn, splitTable);
     freez(&splitTable);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 for (field = fieldList; field != NULL; field = field->next)
     {

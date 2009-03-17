@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.4 2009/03/17 04:28:38 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.5 2009/03/17 17:24:50 kent Exp $";
 
 boolean isBigBed(char *table)
 /* Return TRUE if table corresponds to a bigBed file. */
@@ -53,15 +53,33 @@ if (hashLookup(colHash, key))
     strncpy(output, key, HDB_MAX_FIELD_STRING-1);
 }
 
-struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
-/* Get fields of bigBed into hti structure. */
+static struct asObject *bigBedAsOrDefault(struct bbiFile *bbi)
+/* Get asObject associated with bigBed - if none exists in file make it up from field counts. */
 {
-char *fileName = bigBedFileName(table, conn);
-/* Get columns in asObject format, from file or failing that as bed-standard. */
-struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct asObject *as = bigBedAs(bbi);
 if (as == NULL) 
     as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
+return as;
+}
+
+struct asObject *bigBedAsForTable(char *table, struct sqlConnection *conn)
+/* Get asObject associated with bigBed table. */
+{
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *as = bigBedAsOrDefault(bbi);
+bbiFileClose(&bbi);
+freeMem(fileName);
+return as;
+}
+
+struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
+/* Get fields of bigBed into hti structure. */
+{
+/* Get columns in asObject format. */
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *as = bigBedAsOrDefault(bbi);
 
 /* Allocate hTableInfo structure and fill in info about bed fields. */
 struct hash *colHash = asColumnHash(as);
@@ -87,11 +105,103 @@ safef(type, sizeof(type), "bed %d %c", bbi->definedFieldCount,
 	(bbi->definedFieldCount == bbi->fieldCount ? '.' : '+'));
 hti->type = cloneString(type);
 
+freeMem(fileName);
 hashFree(&colHash);
 bbiFileClose(&bbi);
 return hti;
 }
 
+struct slName *asColNames(struct asObject *as)
+/* Get list of column names. */
+{
+struct slName *list = NULL, *el;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    el = slNameNew(col->name);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+return list;
+}
+
+struct slName *bigBedGetFields(char *table, struct sqlConnection *conn)
+/* Get fields of bigBed as simple name list. */
+{
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct slName *names = asColNames(as);
+freeMem(fileName);
+bbiFileClose(&bbi);
+return names;
+}
+
+void bigBedTabOut(char *table, struct sqlConnection *conn, char *fields, FILE *f)
+/* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
+{
+if (f == NULL)
+    f = stdout;
+
+/* Convert comma separated list of fields to array. */
+int fieldCount = chopByChar(fields, ',', NULL, 0);
+char **fieldArray;
+AllocArray(fieldArray, fieldCount);
+chopByChar(fields, ',', fieldArray, fieldCount);
+
+/* Get list of all fields in big bed and turn it into a hash of column indexes keyed by
+ * column name. */
+struct hash *fieldHash = hashNew(0);
+struct slName *bb, *bbList = bigBedGetFields(table, conn);
+int i;
+for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
+    hashAddInt(fieldHash, bb->name, i);
+
+/* Create an array of column indexes corresponding to the selected field list. */
+int *columnArray;
+AllocArray(columnArray, fieldCount);
+for (i=0; i<fieldCount; ++i)
+    {
+    columnArray[i] = hashIntVal(fieldHash, fieldArray[i]);
+    }
+
+/* Output row of labels */
+fprintf(f, "#%s", fieldArray[0]);
+for (i=1; i<fieldCount; ++i)
+    fprintf(f, "\t%s", fieldArray[i]);
+fprintf(f, "\n");
+
+/* Open up bigBed file. */
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+
+/* Loop through outputting each region */
+struct region *region, *regionList = getRegions();
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *iv, *ivList = bigBedIntervalQuery(bbi, region->chrom,
+    	region->start, region->end, 0, lm);
+    char *row[bbi->fieldCount];
+    char startBuf[16], endBuf[16];
+    for (iv = ivList; iv != NULL; iv = iv->next)
+        {
+	bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
+	int i;
+	fprintf(f, "%s", row[columnArray[0]]);
+	for (i=1; i<fieldCount; ++i)
+	    fprintf(f, "\t%s", row[columnArray[i]]);
+	fprintf(f, "\n");
+	}
+    lmCleanup(&lm);
+    }
+
+/* Clean up and exit. */
+bbiFileClose(&bbi);
+hashFree(&fieldHash);
+freeMem(fieldArray);
+freeMem(columnArray);
+}
 
 void showSchemaBigBed(char *table)
 /* Show schema on bigBed. */

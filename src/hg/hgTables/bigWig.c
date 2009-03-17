@@ -20,7 +20,7 @@
 #include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigWig.c,v 1.3 2009/03/13 23:04:52 kent Exp $";
+static char const rcsid[] = "$Id: bigWig.c,v 1.4 2009/03/17 17:24:50 kent Exp $";
 
 boolean isBigWig(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
@@ -283,8 +283,6 @@ void bigWigFillDataVector(char *table, struct region *region,
 	struct sqlConnection *conn, struct dataVector *vector)
 /* Fill in data vector with bigWig info on region.  Handles filters and intersections. */
 {
-uglyf("bigWigFillDataVector table=%s region=%s:%d-%d<BR>\n", table, region->chrom, region->start, region->end);
-
 /* Figure out filter values if any. */
 double ll, ul;
 enum wigCompare cmp;
@@ -321,7 +319,6 @@ struct dataVector *bigWigDataVector(char *table,
 /* Read in bigWig as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */
 {
-uglyf("bigWigDataVector table=%s region=%s:%d-%d<BR>\n", table, region->chrom, region->start, region->end);
 if (anySubtrackMerge(database, table))
     return mergedWigDataVector(table, conn, region);
 else

@@ -709,6 +709,15 @@ char *bigBedFileName(char *table, struct sqlConnection *conn);
 struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed into hti structure. */
 
+struct asObject *bigBedAsForTable(char *table, struct sqlConnection *conn);
+/* Get asObject associated with bigBed table. */
+
+struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
+/* Get fields of bigBed as simple name list. */
+
+void bigBedTabOut(char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
+
 void showSchemaBigBed(char *table);
 /* Show schema on bigBed. */
 

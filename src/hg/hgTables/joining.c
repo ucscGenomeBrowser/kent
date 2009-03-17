@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.52 2009/03/17 04:28:39 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.53 2009/03/17 17:24:51 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -319,6 +319,18 @@ static void makeCtOrderedCommaFieldList(struct joinerDtf *dtfList,
 struct slName *fieldList = getBedFields(15);
 makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
+}
+
+static void makeBigBedOrderedCommaFieldList(struct joinerDtf *dtfList,
+	struct dyString *dy)
+/* Make comma-separated field list in same order as fields are in
+ * big bed. */
+{
+struct sqlConnection *conn = hAllocConn(dtfList->database);
+struct slName *fieldList = bigBedGetFields(dtfList->table, conn);
+makeOrderedCommaFieldList(fieldList, dtfList, dy);
+slFreeList(&fieldList);
+hFreeConn(&conn);
 }
 
 struct tableJoiner
@@ -959,7 +971,9 @@ if (! doJoin)
     struct sqlConnection *conn = sqlConnect(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
-    if (isCustomTrack(dtfList->table))
+    if (isBigBed(dtfList->table))
+	makeBigBedOrderedCommaFieldList(dtfList, dy);
+    else if (isCustomTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);

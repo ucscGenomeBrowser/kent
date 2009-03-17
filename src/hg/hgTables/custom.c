@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.37 2008/09/03 19:18:58 markd Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.38 2009/03/17 17:24:51 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -192,6 +192,7 @@ slReverse(&fieldList);
 return fieldList;
 }
 
+#ifdef UNUSED
 static void tabBedRow(struct bed *bed, struct slName *fieldList)
 /* Print out named fields from bed. */
 {
@@ -259,6 +260,7 @@ for (field = fieldList; field != NULL; field = field->next)
     }
 hPrintf("\n");
 }
+#endif /* UNUSED */
 
 static void tabBedRowFile(struct bed *bed, struct slName *fieldList, FILE *f)
 /* Print out to a file named fields from bed. */
@@ -666,27 +668,15 @@ else
     chosenFields = commaSepToSlNames(fields);
 
 if (f == NULL)
+    f = stdout;
+fprintf(f, "#");
+for (field = chosenFields; field != NULL; field = field->next)
     {
-    hPrintf("#");
-    for (field = chosenFields; field != NULL; field = field->next)
-        {
-        if (field != chosenFields)
-            hPrintf("\t");
-        hPrintf("%s", field->name);
-        }
-    hPrintf("\n");
+    if (field != chosenFields)
+	fprintf(f, "\t");
+    fprintf(f, "%s", field->name);
     }
-else
-    {
-    fprintf(f, "#");
-    for (field = chosenFields; field != NULL; field = field->next)
-        {
-        if (field != chosenFields)
-            fprintf(f, "\t");
-        fprintf(f, "%s", field->name);
-        }
-    fprintf(f, "\n");
-    }
+fprintf(f, "\n");
 
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -695,11 +685,7 @@ for (region = regionList; region != NULL; region = region->next)
     	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
-        if (f == NULL)
-	    tabBedRow(bed, chosenFields);
-        else
-            tabBedRowFile(bed, chosenFields, f);
-	++count;
+	tabBedRowFile(bed, chosenFields, f);
 	}
     lmCleanup(&lm);
     }

@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.65 2009/03/13 21:40:33 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.66 2009/03/17 17:24:51 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -262,22 +262,22 @@ static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
-char query[256];
-struct sqlResult *sr;
-char **row;
 struct asObject *asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
 
 showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
 					/*	instead of "reserved" */
 
-safef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+struct slName *fieldName, *fieldList;
+if (isBigBed(table))
+    fieldList = bigBedGetFields(table, conn);
+else
+    fieldList = sqlListFields(conn, table);
 
 hTableStart();
-while ((row = sqlNextRow(sr)) != NULL)
+for (fieldName = fieldList; fieldName != NULL; fieldName = fieldName->next)
     {
-    char *field = row[0];
+    char *field = fieldName->name;
     char *var = checkVarName(db, rootTable, field);
     struct asColumn *asCol;
     hPrintf("<TR>");

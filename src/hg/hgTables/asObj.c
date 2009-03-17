@@ -7,37 +7,44 @@
 #include "errCatch.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: asObj.c,v 1.2 2008/05/30 18:38:45 hiram Exp $";
+static char const rcsid[] = "$Id: asObj.c,v 1.3 2009/03/17 17:24:50 kent Exp $";
 
 static struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
 /* Get autoSQL description if any associated with table.   Abort if
  * there's a problem*/
 {
 struct asObject *asObj = NULL;
-if (sqlTableExists(conn, "tableDescriptions"))
+if (isBigBed(table))
     {
-    char query[256];
-    char *asText = NULL;
-
-    /* Try split table first. */
-    safef(query, sizeof(query), 
-    	"select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
-	table);
-    asText = sqlQuickString(conn, query);
-
-    /* If no result try unsplit table. */
-    if (asText == NULL)
+    asObj = bigBedAsForTable(table, conn);
+    }
+else
+    {
+    if (sqlTableExists(conn, "tableDescriptions"))
 	{
+	char query[256];
+	char *asText = NULL;
+
+	/* Try split table first. */
 	safef(query, sizeof(query), 
-	    "select autoSqlDef from tableDescriptions where tableName='%s'",
+	    "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
 	    table);
 	asText = sqlQuickString(conn, query);
+
+	/* If no result try unsplit table. */
+	if (asText == NULL)
+	    {
+	    safef(query, sizeof(query), 
+		"select autoSqlDef from tableDescriptions where tableName='%s'",
+		table);
+	    asText = sqlQuickString(conn, query);
+	    }
+	if (asText != NULL && asText[0] != 0)
+	    {
+	    asObj = asParseText(asText);
+	    }
+	freez(&asText);
 	}
-    if (asText != NULL && asText[0] != 0)
-	{
-	asObj = asParseText(asText);
-	}
-    freez(&asText);
     }
 return asObj;
 }
