@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.396 2009/02/28 00:38:09 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.397 2009/03/17 04:24:28 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2522,7 +2522,7 @@ hFreeConn(&conn);
 return(gotIndex);
 }
 
-boolean hFindBed12FieldsAndBinWithConn(struct sqlConnection *conn, char *table,
+static boolean hFindBed12FieldsAndBinWithConn(struct sqlConnection *conn, char *table,
 	char retChrom[HDB_MAX_FIELD_STRING],
 	char retStart[HDB_MAX_FIELD_STRING],
 	char retEnd[HDB_MAX_FIELD_STRING],
@@ -2549,6 +2549,8 @@ char *db;
 db = sqlGetDatabase(conn);
 
 /* Set field names to empty strings */
+retChrom[0] = 0;
+retStart[0] = 0;
 retEnd[0] = 0;
 retName[0] = 0;
 retScore[0] = 0;
