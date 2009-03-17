@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1519 2009/03/17 18:29:43 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1520 2009/03/17 18:57:07 giardine Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20387,7 +20387,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     int i = 0;
     printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
     printf("Alleles are shown as in plus strand<br>\n");
-    printf("<table border=1><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
+    printf("<table border=1 cellpadding=3><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
     chopByChar(name, '/', all, el->alleleCount);
     chopByChar(fr, ',', freq, el->alleleCount);
     chopByChar(sc, ',', score, el->alleleCount);
