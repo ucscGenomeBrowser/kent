@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.479 2009/03/12 00:05:46 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.480 2009/03/17 04:35:44 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1678,7 +1678,6 @@ else
 
 }
 
-
 void chromGraphUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
@@ -2323,6 +2322,8 @@ else if (sameString(track, "humMusL") ||
  * For crossSpeciesUi, the
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
+else if (startsWith("net", track))
+    netAlignCfgUi(database, cart, tdb, tdb->tableName, "Net options:", FALSE);
 else if (startsWith("chain", track) || endsWith("chainSelf", track))
     chainColorUi(tdb);
 else if (sameString(track, "orthoTop4"))

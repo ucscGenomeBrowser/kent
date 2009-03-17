@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.175 2009/03/16 22:23:11 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.176 2009/03/17 04:35:41 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1024,6 +1024,33 @@ void rosettaExonDropDown(char *var, char *curVal)
 /* Make drop down of exon type options. */
 {
 cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
+}
+
+/****** Options for the net track color options *******/
+static char *netColorOptions[] = {
+    CHROM_COLORS,
+    GRAY_SCALE
+    };
+
+enum netColorEnum netColorStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, netColorOptions);
+if (x < 0)
+   errAbort("hui::netColorStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *netColorEnumToString(enum netColorEnum x)
+/* Convert from enum to string representation. */
+{
+return netColorOptions[x];
+}
+
+void netColorDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, netColorOptions, ArraySize(netColorOptions), curVal);
 }
 
 /****** Options for the chain track color options *******/
@@ -2553,7 +2580,7 @@ switch(cType)
                         break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
-    case cfgNetAlign:
+    case cfgNetAlign:	netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites.");
                         break;
@@ -3138,6 +3165,40 @@ if (scoreCtString != NULL)
     if (!compositeLevel)
         printf("&nbsp; (range: 1 to 100000, total items: %d)",getTableSize(db, tdb->tableName));
     }
+cfgEndBox(boxed);
+}
+
+void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+/* Put up UI for net tracks */
+{
+cfgBeginBoxAndTitle(boxed, title);
+
+boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
+
+char * netColor = trackDbSettingClosestToHomeOrDefault(tdb, NET_COLOR, CHROM_COLORS);
+/* allow cart to override trackDb */
+netColor = cartUsualStringClosestToHome(cart, tdb, compositeLevel, NET_COLOR, netColor);
+
+char options[1][256];	/*	our option strings here	*/
+snprintf( &options[0][0], 256, "%s.%s", prefix, NET_COLOR );
+printf("<p><b>Color nets by:&nbsp;</b>");
+netColorDropDown(&options[0][0], netColor);
+#ifdef NOT
+
+freeMem (colorOpt);
+
+char *filterSetting;
+char filterVar[256];
+char *filterVal = "";
+
+printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", prefix);
+filterSetting = cartUsualString(cart, filterVar, filterVal);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, filterSetting), 15);
+
+scoreCfgUi(db, cart,tdb,prefix,NULL,2000000000,FALSE);
+#endif
+
 cfgEndBox(boxed);
 }
 

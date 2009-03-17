@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.31 2009/03/12 00:05:48 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.32 2009/03/17 04:35:42 hiram Exp $";
 
 
 struct cartOptions
@@ -256,15 +256,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
 int qs;
-char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr;
 char extraWhere[128] ;
 struct cartOptions *chainCart;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
-optionChrStr = cartUsualString(cart, optionChr, "All");
+optionChrStr = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+	"chromFilter", "All");
 if (startsWith("chr",optionChrStr)) 
     {
     snprintf(extraWhere, sizeof(extraWhere), 

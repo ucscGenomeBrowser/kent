@@ -378,6 +378,25 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+#define NET_COLOR	"netColor"
+#define GRAY_SCALE	"Gray scale"
+/* trackDb and cart option string */
+
+/*	net track color options	*/
+enum netColorEnum {
+   netColorChromColors = 0,
+   netColorGrayScale = 1,
+};
+
+enum netColorEnum netColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *netColorEnumToString(enum netColorEnum x);
+/* Convert from enum to string representation. */
+
+void netColorDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	chain track color options	*/
 enum chainColorEnum {
    chainColorChromColors = 0,
@@ -845,6 +864,9 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
+
+void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
+/* Put up UI for net tracks */
 
 void chainCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
 /* Put up UI for chain tracks */
