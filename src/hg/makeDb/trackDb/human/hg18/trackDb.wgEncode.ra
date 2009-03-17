@@ -6363,14 +6363,15 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg HepG2=HepG2 K562=K562 NB4=NB4
-subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NF-E2=NF-E2 Pol2=Pol2 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 TCF4=TCF4 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
+subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NF-E2=NF-E2 Pol2=Pol2 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 TCF4=TCF4 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc yRNAseq=RNA-seq_PolyA zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder view=+ cellType=+ factor=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+#settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
@@ -7997,6 +7998,31 @@ wgEncode 1
     color 46,0,184
     antibody c-Myc
 
+    track wgEncodeYaleRnaSeqPolyaSignalK562
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 RNAseq Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
+    subGroups view=Signal factor=yRNAseq cellType=K562
+    type bedGraph 4
+    dateSubmitted 2009-03-17
+    dateUnrestricted 2009-12-17
+    dataVersion ENCODE Feb 2009 Freeze
+    cell K562
+
+    track wgEncodeYaleRnaSeqPolyaRawSignalK562
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 RNAseq Raw
+    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Raw Signal (in K562 cells)
+    subGroups view=zRAW factor=yRNAseq cellType=K562
+    type wig 1.00 65499.00
+    dateSubmitted 2009-03-17
+    dateUnrestricted 2009-12-17
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+
     track wgEncodeYaleChIPseqSignalK562Input
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Input Sig
@@ -8955,11 +8981,11 @@ noInherit on
 priority 0
 type bed 3
 wgEncode 1
-# MJP: CHANGE 
+# MJP: CHANGE
 # type pairedTagAlign
 # TO:-
 #    type bed 6
-# AND THEN FIX WHEN IT PAIREDTAGALIGN VIEW IS IMPLEMENTED 
+# AND THEN FIX WHEN IT PAIREDTAGALIGN VIEW IS IMPLEMENTED
 
 
 
