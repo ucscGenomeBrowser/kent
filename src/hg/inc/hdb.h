@@ -281,9 +281,8 @@ aaSeq *hPepSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl);
 /* Get a peptide sequence from the specified seq and extFile tables. Abort if
  * not found. */
 
-int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn);
-/* Return sequence for RNA, it's database ID, and optionally genbank 
- * modification date. Return -1 if not found. */
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, struct sqlConnection *conn);
+/* Return sequence for RNA and  it's database ID. Return -1 if not found. */
 
 char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId);
 /* Return sequence as a fasta record in a string and it's database ID, or 
@@ -780,5 +779,9 @@ struct slName *getPfamDomainList(struct sqlConnection *conn, char *ucscGeneId);
 
 boolean isUnknownChrom(char *dataBase, char *chromName);
 /* Return true if chrom is one of our "unknown" chromomsomes (e.g. chrUn). */
+
+char *hGenbankModDate(char *acc, struct sqlConnection *conn);
+/* Get string for genbank last modification date, or NULL if not found..
+ * Free resulting string. */
 
 #endif /* HDB_H */

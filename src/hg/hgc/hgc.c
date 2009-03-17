@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1520 2009/03/17 18:57:07 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1521 2009/03/17 19:54:55 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6443,9 +6443,8 @@ if (sameString("mrnaBlastz", type) || sameString("pseudoMrna", type))
     {
     struct sqlConnection *conn = hAllocConn(database);
     unsigned retId = 0;
-    char *gbdate = NULL;
     sprintf(accTmp,"bz-%s",acc);
-    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
+    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, conn) == -1)
         rnaSeq = hRnaSeq(database, acc);
     hFreeConn(&conn);
     }

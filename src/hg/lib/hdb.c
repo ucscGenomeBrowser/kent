@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.398 2009/03/17 05:56:38 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.399 2009/03/17 19:54:56 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1314,65 +1314,53 @@ aaSeq *hPepSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
 return seqMustGet(db, acc, FALSE, seqTbl, extFileTbl);
 }
 
-static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId, char *gbDate)
+static boolean querySeqInfo(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileFld,
+                            HGID *retId, HGID *retExtId, size_t *retSize, off_t *retOffset)
+/* lookup information in the seq or gbSeq table */
+{
+boolean gotIt = FALSE;
+if (sqlTableExists(conn, seqTbl))
+    {
+    char query[256];
+    safef(query, sizeof(query),
+       "select id, %s, file_offset, file_size from %s where acc = '%s'",
+          extFileFld, seqTbl, acc);
+    struct sqlResult *sr = sqlMustGetResult(conn, query);
+    char **row = sqlNextRow(sr);
+    if (row != NULL) 
+        {
+        if (retId != NULL)
+            *retId = sqlUnsigned(row[0]);
+        if (retExtId != NULL)
+            *retExtId = sqlUnsigned(row[1]);
+        if (retOffset != NULL)
+            *retOffset = sqlLongLong(row[2]);
+        if (retSize != NULL)
+            *retSize = sqlUnsigned(row[3]);
+        gotIt = TRUE;
+        }
+    sqlFreeResult(&sr);
+    }
+return gotIt;
+}
+
+static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
 /* Return sequence as a fasta record in a string and it's database ID, or
  * NULL if not found. Optionally get genbank modification date. */
 {
-struct sqlResult *sr = NULL;
-char **row;
-char query[256];
 HGID extId;
 size_t size;
 off_t offset;
-char *buf;
-int seqTblSet = SEQ_TBL_SET;
-struct largeSeqFile *lsf;
-
-row = NULL;
-if (sqlTableExists(conn, "seq"))
-    {
-    safef(query, sizeof(query),
-       "select id,extFile,file_offset,file_size,gb_date from seq where acc = '%s'",
-       acc);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    }
-
-if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
-    {
-    /* try gbSeq table */
-    if (sr)
-	sqlFreeResult(&sr);
-    if (gbDate != NULL)
-        safef(query, sizeof(query),
-                "select gbSeq.id,gbExtFile,file_offset,file_size,moddate from gbSeq,gbCdnaInfo where (gbSeq.acc = '%s') and (gbCdnaInfo.acc = gbSeq.acc)",
-                acc);
-    else
-        safef(query, sizeof(query),
-                "select id,gbExtFile,file_offset,file_size from gbSeq where acc = '%s'",
-                acc);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    seqTblSet = GBSEQ_TBL_SET;
-    }
-if (row == NULL)
-    {
-    sqlFreeResult(&sr);
+char *extTable = NULL;
+/* try gbExtFile table first, as it tends to be  more performance sensitive */
+if (querySeqInfo(conn, acc, "gbSeq", "gbExtFile", retId, &extId, &size, &offset))
+    extTable = "gbExtFile";
+else if (querySeqInfo(conn, acc, "seq", "extFile", retId, &extId, &size, &offset))
+    extTable = "extFile";
+else
     return NULL;
-    }
-if (retId != NULL)
-    *retId = sqlUnsigned(row[0]);
-extId = sqlUnsigned(row[1]);
-offset = sqlLongLong(row[2]);
-size = sqlUnsigned(row[3]);
-if (gbDate != NULL)
-    strcpy(gbDate, row[4]);
-
-sqlFreeResult(&sr);
-
-char *extTable = (seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile";
-lsf = largeFileHandle(conn, extId, extTable);
-buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
+struct largeSeqFile *lsf = largeFileHandle(conn, extId, extTable);
+char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return buf;
 }
 
@@ -1381,7 +1369,7 @@ static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
 /* Return sequence as a fasta record in a string and it's database ID,
  * abort if not found */
 {
-char *buf= getSeqAndId(conn, acc, retId, NULL);
+char *buf= getSeqAndId(conn, acc, retId);
 if (buf == NULL)
     errAbort("No sequence for %s in seq or gbSeq tables", acc);
 return buf;
@@ -1391,14 +1379,13 @@ char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
 /* Return sequence as a fasta record in a string and it's database ID, or
  * NULL if not found. */
 {
-return getSeqAndId(conn, acc, retId, NULL);
+return getSeqAndId(conn, acc, retId);
 }
 
-int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
-/* Return sequence for RNA, it's database ID, and optionally genbank
- * modification date. Return -1 if not found. */
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, struct sqlConnection *conn)
+/* Return sequence for RNA and it's database ID. Return -1 if not found. */
 {
-char *buf = getSeqAndId(conn, acc, retId, gbdate);
+char *buf = getSeqAndId(conn, acc, retId);
 if (buf == NULL)
     return -1;
 *retSeq = faFromMemText(buf);
@@ -1534,7 +1521,7 @@ if ((compatTable != NULL) && sqlTableExists(conn, compatTable))
     }
 else
     {
-    char *buf = getSeqAndId(conn, acc, NULL, NULL);
+    char *buf = getSeqAndId(conn, acc, NULL);
     if (buf != NULL)
         seq = faFromMemText(buf);
     }
@@ -1580,7 +1567,7 @@ if ((compatTable != NULL) && sqlTableExists(conn, compatTable))
     }
 else
     {
-    char *buf = getSeqAndId(conn, acc, NULL, NULL);
+    char *buf = getSeqAndId(conn, acc, NULL);
     if (buf != NULL)
         seq = faSeqFromMemText(buf, FALSE);
     }
@@ -4531,4 +4518,14 @@ boolean isUnknownChrom(char *dataBase, char *chromName)
 /* Return true if chrom is one of our "unknown" chromomsomes (e.g. chrUn). */
 {
 return  endsWith(chromName, "_random") || startsWith("chrUn", chromName);
+}
+
+char *hGenbankModDate(char *acc, struct sqlConnection *conn)
+/* Get string for genbank last modification date, or NULL if not found..
+ * Free resulting string. */
+{
+char query[128];
+safef(query, sizeof(query),
+      "select moddate from gbCdnaInfo where (acc = '%s')", acc);
+return sqlQuickString(conn, query);
 }

@@ -163,7 +163,7 @@ char **row2;
 char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
      *exonCount, *exonStarts, *exonEnds;
 
-char mrnaDate[500];
+char *mrnaDate;
 char *pdbID;
 
 char *genomeDBname;
@@ -176,9 +176,6 @@ char *proteinDbSource;
 int itxStart, itxEnd;
 int transcriptLength;
 int priority;    
-
-bioSeq *mSeq;
-HGID id;
 
 if (argc != 4) usage();
 
@@ -222,7 +219,7 @@ while (fgets(line, 1000, inf) != NULL)
 	}
 
     // get mRNA date
-    if (hRnaSeqAndIdx(mrnaName, &mSeq, &id, mrnaDate, conn2)== -1)
+    if ((mrnaDate = hGenbankModDate(mrnaName, conn2)) == NULL)
         {
         fprintf(stderr, "%s could not be found!!!\n", mrnaName);
         exit(1);

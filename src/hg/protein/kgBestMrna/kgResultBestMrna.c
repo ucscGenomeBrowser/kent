@@ -5,8 +5,6 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-extern int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn);
-
 char proteinName[20], mrnaName[20];
 char mrnaNames[500][20];
 int  mrnaScore[500];

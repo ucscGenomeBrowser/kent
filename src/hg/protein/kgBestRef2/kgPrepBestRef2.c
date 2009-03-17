@@ -6,8 +6,6 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-extern int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn);
-
 char proteinName[20], mrnaName[20];
 char mrnaNames[500][20];
 int  mrnaScore[500];
@@ -185,7 +183,7 @@ while (fgets(line, 1000, IN) != NULL)
 	printf("%s\t%s\n", proteinID, mrnaID);fflush(stdout);
 	sprintf(cond_str, "name='%s'", mrnaID);
 
-        if (hRnaSeqAndIdx(mrnaID, &mSeq, &id, mrnaDate, conn3)== -1)
+        if (hRnaSeqAndIdx(mrnaID, &mSeq, &id, conn3)== -1)
 	        {
 		printf("%s could not be found!!!\n", mrnaID);fflush(stdout);
 		}
