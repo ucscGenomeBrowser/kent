@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.177 2009/03/17 17:24:51 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.178 2009/03/17 18:10:47 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1568,11 +1568,13 @@ void dispatch(struct sqlConnection *conn)
 {
 struct hashEl *varList;
 
-/* only allows view table schema function for CGB servers for the time being */
-if (hIsCgbServer())
+/* only allows view table schema function for CGB or GSID servers for the time being */
+if (hIsCgbServer() || hIsGsidServer())
     {
     if (cartVarExists(cart, hgtaDoSchema))
-    	doSchema(conn);
+	{    
+	doSchema(conn);
+	}
     else
 	{
 	errAbort("Sorry, currently only the \"View Table Schema\" function of the Table Browser is available on this server.");
