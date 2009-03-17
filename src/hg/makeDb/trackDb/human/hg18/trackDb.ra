@@ -3941,7 +3941,7 @@ priority 110
 
     track ensembl31wayGerpScores
     subTrack ensembl31wayGerp on
-    subGroups view=score s
+    subGroups view=scores
     shortLabel GERP Scores
     longLabel GERP Conservation for 31-Mammal Ensembl PECAN Alignments
     noInherit on
