@@ -2798,9 +2798,8 @@ compositeTrack on
 shortLabel Open Chromatin
 longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
-#subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
 subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded uniq=Uniqueness
-subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 zzRG=Reference_Genome
+subGroup2 cellType Cell_Line GM12878=GM12878 HeLaS3=HeLa-S3 HepG2=HepG2 K562=K562 zzRG=Reference_Genome
 #subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzREF=Extra_Tracks
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input zzRE=Regions_Excluded zzU20=Uniqueness_20_bp zzU24=Uniqueness_24_bp zzU35=Uniqueness_35_bp
 sortOrder cellType=+ EXP=+ view=+
@@ -3113,6 +3112,34 @@ wgEncode 1
     spanList 1
     cell GM12878
     color 153,38,0
+    antibody Input
+
+    track wgEncodeUtaustinChIPseqSignalHelas3Input
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa-S3 Input Sig
+    longLabel ENCODE Open Chromatin, UT-Austin Input Signal (Input in HeLa-S3 cells)
+    subGroups view=Signal EXP=zCTRL cellType=HeLaS3
+    type wig 0.00 3.70
+    dateSubmitted 2009-03-16
+    dateUnrestricted 2009-12-16
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
+    antibody Input
+
+    track wgEncodeUtaustinChIPseqRawSignalHelas3Input
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa-S3 Input Raw
+    longLabel ENCODE Open Chromatin, UT-Austin Input Raw Signal (Input in HeLa-S3 cells)
+    subGroups view=rRAW EXP=zCTRL cellType=HeLaS3
+    type wig 0.00 29.73
+    dateSubmitted 2009-03-16
+    dateUnrestricted 2009-12-16
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
     antibody Input
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
@@ -9501,7 +9528,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol 
+    shortLabel short K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -9518,7 +9545,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort1940
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short19-40 K562 cytosol 
+    shortLabel short19-40 K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short19-40 in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short19-40
     type broadPeak
@@ -9535,7 +9562,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort4060
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short40-60 K562 cytosol 
+    shortLabel short40-60 K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short40-60 in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short40-60
     type broadPeak
@@ -9552,7 +9579,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort60200
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short60-200 K562 cytosol 
+    shortLabel short60-200 K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short60-200 in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short60-200
     type broadPeak
@@ -9569,7 +9596,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleolus 
+    shortLabel short K562 nucleolus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleolus using )
     subGroups view=Transfrags cellType=K562 localization=nucleolus rnaExtract=short
     type broadPeak
@@ -9586,7 +9613,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus 
+    shortLabel short K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -9603,7 +9630,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleoplasm 
+    shortLabel short K562 nucleoplasm
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleoplasm using )
     subGroups view=Transfrags cellType=K562 localization=nucleoplasm rnaExtract=short
     type broadPeak
@@ -9620,7 +9647,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 polysome 
+    shortLabel short K562 polysome
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
@@ -9637,7 +9664,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsProstateCellShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna prostate cell 
+    shortLabel shortDeplRrna prostate cell
     longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in prostate cell cell using )
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=shortDeplRrna
     type broadPeak
@@ -9654,7 +9681,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsProstateCellShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short prostate cell 
+    shortLabel short prostate cell
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in prostate cell cell using )
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=short
     type broadPeak
@@ -9671,7 +9698,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol 
+    shortLabel short GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -9688,7 +9715,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna GM12878 cytosol 
+    shortLabel shortDeplRrna GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=shortDeplRrna
     type broadPeak
@@ -9705,7 +9732,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna GM12878 nucleus 
+    shortLabel shortDeplRrna GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=shortDeplRrna
     type broadPeak
@@ -9722,7 +9749,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus 
+    shortLabel short GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -9739,7 +9766,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 chromatin 
+    shortLabel short K562 chromatin
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell chromatin using )
     subGroups view=Transfrags cellType=K562 localization=chromatin rnaExtract=short
     type broadPeak
