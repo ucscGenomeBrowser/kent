@@ -537,6 +537,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outWigData "wigData"
 #define outWigBed "wigBed"
 #define outChromGraphData "chromGraphData"
+#define outMicroarrayNames "microarrayNames"
+#define outMicroarrayGroupings "microarrayGroupings"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 #define outPalOptions "fasta"
@@ -961,7 +963,14 @@ struct bed *wikiTrackGetFilteredBeds(char *name, struct region *regionList,
 /* Get list of beds from the wikiTrack * in current regions and that pass
  *	filters.  You can bedFree this when done.  */
 
+/* --------------- microarray track functions ------------- */
+
+boolean isMicroarray(struct trackDb *curTrack, char *table);
+/* Return TRUE if table is specified as a microarray in the current database's 
+ * trackDb. */
+
+void doOutMicroarrayNames(struct trackDb *tdb);
+/* Show the microarray names from .ra file */
+
 #define uglyw warn	/* Warn for debugging purposes. */
 #endif /* HGTABLES_H */
-
-

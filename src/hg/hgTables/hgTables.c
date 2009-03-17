@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.175 2009/03/17 04:28:38 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.176 2009/03/17 10:13:26 aamp Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1500,6 +1500,8 @@ else if (sameString(output, outSelectedFields))
     doOutSelectedFields(table, conn);
 else if (sameString(output, outSequence))
     doOutSequence(conn);
+else if (sameString(output, outMicroarrayNames))
+    doOutMicroarrayNames(track);
 else if (sameString(output, outBed))
     doOutBed(table, conn);
 else if (sameString(output, outCustomTrack))

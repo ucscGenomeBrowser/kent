@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.138 2009/03/17 04:28:39 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.139 2009/03/17 10:13:26 aamp Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -476,11 +476,16 @@ struct outputType otMaf = { NULL,
 struct outputType otChromGraphData = { NULL, 
      outChromGraphData, 
     "data points", };
-
+struct outputType otMicroarrayNames = { NULL, 
+     outMicroarrayNames,
+    "microarray names", };
+struct outputType otMicroarrayGroupings = { NULL, 
+     outMicroarrayGroupings,
+    "microarray groupings", };
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
-    boolean isPal)
+    boolean isPal, boolean isMicroarray)
 /* Print output line. */
 {
 struct outputType *otList = NULL, *otDefault = NULL;
@@ -514,6 +519,12 @@ else if (isMaf)
 else if (isChromGraphCt)
     {
     slAddTail(&otList, &otChromGraphData);
+    }
+else if (isMicroarray)
+    {
+    slAddTail(&otList, &otMicroarrayNames);
+    slAddTail(&otList, &otAllFields);
+    slAddTail(&otList, &otSelected);
     }
 else if (isPositional)
     {
@@ -553,7 +564,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-	isChromGraphCt = FALSE, isPal = FALSE;
+      isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -621,6 +632,7 @@ hPrintf("<TABLE BORDER=0>\n");
 	}
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
+    isArray = isMicroarray(curTrack, curTable);
     isPal = isPalCompatible(conn, curTrack, curTable);
     nbSpaces(1);
     if (isCustomTrack(curTable))
@@ -706,6 +718,9 @@ if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     hPrintf("</TD></TR>\n");
     }
 }
+
+/* microarray options */
+/*   button for option page here (median/log-ratio, etc)  */
 
 /* Filter line. */
 {
@@ -807,7 +822,7 @@ if (curTrack && curTrack->type)		/*	dbg	*/
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal);
+showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray);
 
 /* Print output destination line. */
     {
