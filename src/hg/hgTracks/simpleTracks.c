@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.71 2009/03/16 19:06:11 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.72 2009/03/17 19:49:12 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -450,12 +450,12 @@ for (tg = trackList; tg != NULL; tg = tg->next)
     if (tg == toggleGroup)
 	{
 	char *encodedMapName = cgiEncode(tg->mapName);
-	if (vis == tvDense)
-	    {
-	    if (tg->canPack)
-		vis = tvPack;
-	    else
-		vis = tvFull;
+    if (vis == tvDense)
+        {
+        if(!tg->canPack || (tdbIsComposite(tg->tdb) && subgroupingExists(tg->tdb,"view")))
+            vis = tvFull;
+        else
+            vis = tvPack;
 	    }
 	else if (vis == tvFull || vis == tvPack || vis == tvSquish)
 	    vis = tvDense;
