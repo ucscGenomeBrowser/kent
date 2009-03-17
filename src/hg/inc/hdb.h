@@ -444,21 +444,6 @@ boolean hFindChromStartEndFields(char *db, char *table,
 	char retEnd[HDB_MAX_FIELD_STRING]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
 
-boolean hFindBed12Fields(char *table, 
-	char retChrom[HDB_MAX_FIELD_STRING],
-	char retStart[HDB_MAX_FIELD_STRING],
-	char retEnd[HDB_MAX_FIELD_STRING], char retName[HDB_MAX_FIELD_STRING],
-	char retScore[HDB_MAX_FIELD_STRING],
-	char retStrand[HDB_MAX_FIELD_STRING],
-        char retCdsStart[HDB_MAX_FIELD_STRING],
-	char retCdsEnd[HDB_MAX_FIELD_STRING],
-	char retCount[HDB_MAX_FIELD_STRING],
-	char retStarts[HDB_MAX_FIELD_STRING],
-	char retEndsSizes[HDB_MAX_FIELD_STRING]);
-/* Given a table return the fields corresponding to all the bed 12 
- * fields, if they exist.  Fields that don't exist in the given table 
- * will be set to "". */
-
 boolean hIsBinned(char *db, char *table);
 /* Return TRUE if a table is binned. */
 
