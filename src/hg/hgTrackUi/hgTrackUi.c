@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.480 2009/03/17 04:35:44 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.481 2009/03/18 18:30:42 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1662,14 +1662,12 @@ void chainColorUi(struct trackDb *tdb)
 {
 if (chainDbNormScoreAvailable(database, chromosome, tdb->tableName, NULL))
     {
-    char options[1][256];	/*	our option strings here	*/
-    char *colorOpt;
-    (void) chainFetchColorOption(cart, tdb, &colorOpt);
-    snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
+    char optString[256];
+    enum chainColorEnum chainColor = chainFetchColorOption(cart, tdb, FALSE);
+    safef(optString, ArraySize(optString), tdb->tableName, OPT_CHROM_COLORS);
     printf("<p><b>Color chains by:&nbsp;</b>");
-    chainColorDropDown(&options[0][0], colorOpt);
+    chainColorDropDown(optString, chainColorEnumToString(chainColor));
 
-    freeMem (colorOpt);
     filterByChrom(tdb);
     scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,2000000000,FALSE);
     }
@@ -2323,7 +2321,7 @@ else if (sameString(track, "humMusL") ||
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
 else if (startsWith("net", track))
-    netAlignCfgUi(database, cart, tdb, tdb->tableName, "Net options:", FALSE);
+    netAlignCfgUi(database, cart, tdb, tdb->tableName, NULL, FALSE);
 else if (startsWith("chain", track) || endsWith("chainSelf", track))
     chainColorUi(tdb);
 else if (sameString(track, "orthoTop4"))
