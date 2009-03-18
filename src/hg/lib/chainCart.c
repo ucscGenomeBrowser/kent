@@ -10,55 +10,24 @@
 #include "hui.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainCart.c,v 1.2 2009/03/12 00:05:45 hiram Exp $";
+static char const rcsid[] = "$Id: chainCart.c,v 1.3 2009/03/18 18:27:00 hiram Exp $";
 
 enum chainColorEnum chainFetchColorOption(struct cart *cart,
-    struct trackDb *tdb, char **optString)
+    struct trackDb *tdb, boolean compositeLevel)
 /******	ColorOption - Chrom colors by default **************************/
 {
-char *Default = chainColorEnumToString(chainColorChromColors);
 char *chainColor = NULL;
 enum chainColorEnum ret;
 
-chainColor = cloneString(cartOptionalStringClosestToHome(cart, tdb, FALSE,
-	 OPT_CHROM_COLORS));
-
-/*	If chainColor is a string, it came from the cart, otherwise
- *	see if it is specified in the trackDb option, finally
- *	return the default.
- */
-if (!chainColor)
-    {
-    char * tdbDefault = 
-	trackDbSettingClosestToHomeOrDefault(tdb, OPT_CHROM_COLORS, Default);
-
-    freeMem(chainColor);
-    if (differentWord(Default,tdbDefault))
-	chainColor = cloneString(tdbDefault);
-    else
-	{
-	struct hashEl *hel;
-	/*	no chainColor from trackDb, maybe it is in tdb->settings
-	 *	(custom tracks keep settings here)
-	 */
-	chainColor = cloneString(Default);
-	if ((tdb->settings != (char *)NULL) &&
-	    (tdb->settingsHash != (struct hash *)NULL))
-	    {
-	    if ((hel =hashLookup(tdb->settingsHash, OPT_CHROM_COLORS)) !=NULL)
-		if (differentWord(Default,(char *)hel->val))
-		    {
-		    freeMem(chainColor);
-		    chainColor = cloneString((char *)hel->val);
-		    }
-	    }
-	}
-    }
-
-if (optString)
-    *optString = cloneString(chainColor);
-
-ret = chainColorStringToEnum(chainColor);
-freeMem(chainColor);
+chainColor = trackDbSettingClosestToHomeOrDefault(tdb, OPT_CHROM_COLORS,
+    CHROM_COLORS);
+/* trackDb can be chainColor=normalizedScore, translate into pull-down
+	menu equivalent */
+if (sameWord(TDB_NORMALIZE_SCORE,chainColor))
+    chainColor = SCORE_COLORS;
+/* allow cart to override trackDb setting */
+ret = chainColorStringToEnum(
+	cartUsualStringClosestToHome(cart, tdb, compositeLevel,
+	    OPT_CHROM_COLORS, chainColor));
 return(ret);
 }	/*	enum chainColorEnum chainFetchColorOption()	*/

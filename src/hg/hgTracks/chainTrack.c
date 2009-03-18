@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.32 2009/03/17 04:35:42 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.33 2009/03/18 18:27:00 hiram Exp $";
 
 
 struct cartOptions
@@ -382,7 +382,7 @@ AllocVar(chainCart);
 normScoreAvailable = chainDbNormScoreAvailable(database, chromName, tg->mapName, NULL);
 
 /*	what does the cart say about coloring option	*/
-chainCart->chainColor = chainFetchColorOption(cart, tdb, (char **) NULL);
+chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);
 chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
 	FALSE, SCORE_FILTER, 0);
 

@@ -8,16 +8,15 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
-#include "chainNet.h"
-#include "chainCart.h"
+#include "netCart.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.24 2009/03/17 04:35:42 hiram Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.25 2009/03/18 18:27:00 hiram Exp $";
 
 struct cartOptions
     {
     enum netColorEnum netColor; /*  ChromColors, GrayScale */
-    int levelFilter ; /* filter chains by level 1 thru 6 */
+    enum netLevelEnum netLevel; /* filter chains by level 1 thru 6 (0==All) */
     };
 
 struct netItem
@@ -279,12 +278,8 @@ struct cartOptions *netCart;
 
 AllocVar(netCart);
 
-netCart->netColor = netColorStringToEnum(
-	trackDbSettingClosestToHomeOrDefault(tg->tdb, NET_COLOR, CHROM_COLORS));
-/* allow cart to override trackDb */
-netCart->netColor = netColorStringToEnum(
-	cartUsualStringClosestToHome(cart, tg->tdb, FALSE, NET_COLOR,
-	netColorEnumToString(netCart->netColor)));
+netCart->netColor = netFetchColorOption(cart, tg->tdb, FALSE);
+netCart->netLevel = netFetchLevelOption(cart, tg->tdb, FALSE);
 
 tg->loadItems = netLoad;
 tg->freeItems = netFree;

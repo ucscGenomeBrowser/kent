@@ -13,6 +13,7 @@
 #include "hCommon.h"
 #include "hgConfig.h"
 #include "chainCart.h"
+#include "netCart.h"
 #include "obscure.h"
 #include "wiggle.h"
 #include "phyloTree.h"
@@ -20,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.176 2009/03/17 04:35:41 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.177 2009/03/18 18:27:00 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1024,6 +1025,38 @@ void rosettaExonDropDown(char *var, char *curVal)
 /* Make drop down of exon type options. */
 {
 cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
+}
+
+/****** Options for the net track level display options *******/
+static char *netLevelOptions[] = {
+    NET_LEVEL_0,
+    NET_LEVEL_1,
+    NET_LEVEL_2,
+    NET_LEVEL_3,
+    NET_LEVEL_4,
+    NET_LEVEL_5,
+    NET_LEVEL_6
+    };
+
+enum netLevelEnum netLevelStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, netLevelOptions);
+if (x < 0)
+   errAbort("hui::netLevelStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *netLevelEnumToString(enum netLevelEnum x)
+/* Convert from enum to string representation. */
+{
+return netLevelOptions[x];
+}
+
+void netLevelDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, netLevelOptions, ArraySize(netLevelOptions), curVal);
 }
 
 /****** Options for the net track color options *******/
@@ -3175,29 +3208,18 @@ cfgBeginBoxAndTitle(boxed, title);
 
 boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
 
-char * netColor = trackDbSettingClosestToHomeOrDefault(tdb, NET_COLOR, CHROM_COLORS);
-/* allow cart to override trackDb */
-netColor = cartUsualStringClosestToHome(cart, tdb, compositeLevel, NET_COLOR, netColor);
+enum netColorEnum netColor = netFetchColorOption(cart, tdb, compositeLevel);
 
-char options[1][256];	/*	our option strings here	*/
-snprintf( &options[0][0], 256, "%s.%s", prefix, NET_COLOR );
+char optString[256];	/*	our option strings here	*/
+safef(optString, ArraySize(optString), "%s.%s", prefix, NET_COLOR );
 printf("<p><b>Color nets by:&nbsp;</b>");
-netColorDropDown(&options[0][0], netColor);
-#ifdef NOT
+netColorDropDown(optString, netColorEnumToString(netColor));
 
-freeMem (colorOpt);
+enum netLevelEnum netLevel = netFetchLevelOption(cart, tdb, compositeLevel);
 
-char *filterSetting;
-char filterVar[256];
-char *filterVal = "";
-
-printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", prefix);
-filterSetting = cartUsualString(cart, filterVar, filterVal);
-cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, filterSetting), 15);
-
-scoreCfgUi(db, cart,tdb,prefix,NULL,2000000000,FALSE);
-#endif
+safef( optString, ArraySize(optString), "%s.%s", prefix, NET_LEVEL );
+printf("<p><b>Limit display of nets to:&nbsp;</b>");
+netLevelDropDown(optString, netLevelEnumToString(netLevel));
 
 cfgEndBox(boxed);
 }
@@ -3207,23 +3229,21 @@ void chainCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, 
 {
 cfgBeginBoxAndTitle(boxed, title);
 
-char options[1][256];	/*	our option strings here	*/
-char *colorOpt;
-(void) chainFetchColorOption(cart, tdb, &colorOpt);
-snprintf( &options[0][0], 256, "%s.%s", prefix, OPT_CHROM_COLORS );
+boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
+
+enum chainColorEnum chainColor =
+	chainFetchColorOption(cart, tdb, compositeLevel);
+
+char optString[256];
+safef(optString, ArraySize(optString), "%s.%s", prefix, OPT_CHROM_COLORS );
 printf("<p><b>Color chains by:&nbsp;</b>");
-chainColorDropDown(&options[0][0], colorOpt);
+chainColorDropDown(optString, chainColorEnumToString(chainColor));
 
-freeMem (colorOpt);
-
-char *filterSetting;
-char filterVar[256];
-char *filterVal = "";
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", prefix);
-filterSetting = cartUsualString(cart, filterVar, filterVal);
-cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, filterSetting), 15);
+safef(optString, ArraySize(optString), "%s.chromFilter", prefix);
+cgiMakeTextVar(optString,
+    cartUsualStringClosestToHome(cart, tdb, compositeLevel, optString, ""), 15);
 
 scoreCfgUi(db, cart,tdb,prefix,NULL,2000000000,FALSE);
 

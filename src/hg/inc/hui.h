@@ -378,9 +378,25 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-#define NET_COLOR	"netColor"
-#define GRAY_SCALE	"Gray scale"
-/* trackDb and cart option string */
+/*	net track level display options	*/
+enum netLevelEnum {
+   netLevel0 = 0,
+   netLevel1 = 1,
+   netLevel2 = 2,
+   netLevel3 = 3,
+   netLevel4 = 4,
+   netLevel5 = 5,
+   netLevel6 = 6,
+};
+
+enum netLevelEnum netLevelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *netLevelEnumToString(enum netLevelEnum x);
+/* Convert from enum to string representation. */
+
+void netLevelDropDown(char *var, char *curVal);
+/* Make drop down of options. */
 
 /*	net track color options	*/
 enum netColorEnum {
