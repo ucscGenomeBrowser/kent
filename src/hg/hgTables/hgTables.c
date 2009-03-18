@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.179 2009/03/17 20:48:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.180 2009/03/18 01:34:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1313,7 +1313,7 @@ void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, 
 /* Do tab-separated output on fields of a single table. */
 {
 if (isBigBed(table))
-    bigBedTabOut(table, conn, fields, f);
+    bigBedTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     struct trackDb *track = findTrack(table, fullTrackList);

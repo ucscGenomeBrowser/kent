@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.38 2009/03/17 17:24:51 kent Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.39 2009/03/18 01:34:52 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -328,135 +328,6 @@ for (field = fieldList; field != NULL; field = field->next)
         errAbort("Unrecognized bed field %s", type);
     }
 fprintf(f, "\n");
-}
-
-static void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
-		     char **retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
- * retCft, retVals and retInv to make a filter. */
-{
-char *vals, *ptrs[32];
-int numWords;
-int i;
-
-assert(retCft != NULL);
-assert(retVals != NULL);
-assert(retInv != NULL);
-assert(sameString(dd, "does") || sameString(dd, "doesn't"));
-
-/* catch null-constraint cases.  ? will be treated as a literal match, 
- * which would make sense for bed strand and maybe other single-char things: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*"))
-    {
-    *retCft = cftIgnore;
-    return;
-    }
-
-*retCft = cftMultiLiteral;
-numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
-vals = needMem((numWords+1) * sizeof(char));
-for (i=0;  i < numWords;  i++)
-    vals[i] = ptrs[i][0];
-vals[i] = 0;
-*retVals = vals;
-*retInv = sameString("doesn't", dd);
-}
-
-static void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
-		       char ***retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in 
- * retCft, retVals and retInv to make a filter. */
-{
-char **vals, *ptrs[32];
-int numWords;
-int i;
-
-assert(retSft != NULL);
-assert(retVals != NULL);
-assert(retInv != NULL);
-assert(sameString(dd, "does") || sameString(dd, "doesn't"));
-
-/* catch null-constraint cases: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*"))
-    {
-    *retSft = sftIgnore;
-    return;
-    }
-
-*retSft = sftMultiRegexp;
-numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
-vals = needMem((numWords+1) * sizeof(char *));
-for (i=0;  i < numWords;  i++)
-    vals[i] = cloneString(ptrs[i]);
-vals[i] = NULL;
-*retVals = vals;
-*retInv = sameString("doesn't", dd);
-}
-
-static void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
-		    int **retVals)
-/* Given a comparison operator and a (pair of) integers from CGI, fill in 
- * retNft and retVals to make a filter. */
-{
-char *ptrs[3];
-int *vals;
-int numWords;
-
-assert(retNft != NULL);
-assert(retVals != NULL);
-
-/* catch null-constraint cases: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*") || sameString(cmp, "ignored"))
-    {
-    *retNft = nftIgnore;
-    return;
-    }
-else if (sameString(cmp, "in range"))
-    {
-    *retNft = nftInRange;
-    numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
-    if (numWords != 2)
-	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
-    vals = needMem(2 * sizeof(int)); 
-    vals[0] = atoi(ptrs[0]);
-    vals[1] = atoi(ptrs[1]);
-    if (vals[0] > vals[1])
-	{
-	int tmp = vals[0];
-	vals[0] = vals[1];
-	vals[1] = tmp;
-	}
-    *retVals = vals;
-   }
-else
-    {
-    if (sameString(cmp, "<"))
-	*retNft = nftLessThan;
-    else if (sameString(cmp, "<="))
-	*retNft = nftLTE;
-    else if (sameString(cmp, "="))
-	*retNft = nftEqual;
-    else if (sameString(cmp, "!="))
-	*retNft = nftNotEqual;
-    else if (sameString(cmp, ">="))
-	*retNft = nftGTE;
-    else if (sameString(cmp, ">"))
-	*retNft = nftGreaterThan;
-    else
-	errAbort("Unrecognized comparison operator %s", cmp);
-    vals = needMem(sizeof(int));
-    vals[0] = atoi(pat);
-    *retVals = vals;
-    }
 }
 
 struct bedFilter *bedFilterForCustomTrack(char *ctName)

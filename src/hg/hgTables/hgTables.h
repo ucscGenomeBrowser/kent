@@ -608,7 +608,35 @@ void stringStatRow(char *label, char *val);
 void wigFilterStatRow(struct sqlConnection *conn);
 /* Put row in statistics table that says what wig filter is on. */
 
-/* ----------- ChromGraph stuff in chromGraph.c. */
+/* ----------- Filter stuff in filterFields.c. -------- */
+
+void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
+		     char **retVals, boolean *retInv);
+/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
+ * retCft, retVals and retInv to make a filter. */
+
+void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
+		       char ***retVals, boolean *retInv);
+/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in 
+ * retCft, retVals and retInv to make a filter. */
+
+void cgiToDoubleFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    double **retVals);
+/* Given a comparison operator and a (pair of) integers from CGI, fill in 
+ * retNft and retVals to make a filter. */
+
+void cgiToLongFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    long long **retVals);
+/* Given a comparison operator and a (pair of) integers from CGI, fill in 
+ * retNft and retVals to make a filter. */
+
+void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    int **retVals);
+/* Given a comparison operator and a (pair of) integers from CGI, fill in 
+ * retNft and retVals to make a filter. */
+
+
+/* ----------- ChromGraph stuff in chromGraph.c. --------- */
 boolean isChromGraph(struct trackDb *track);
 /* Return TRUE if it's a chromGraph track */
 
@@ -739,7 +767,7 @@ struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as list of sqlFieldType. */
 
-void bigBedTabOut(char *table, struct sqlConnection *conn, char *fields, FILE *f);
+void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 
 void showSchemaBigBed(char *table);
