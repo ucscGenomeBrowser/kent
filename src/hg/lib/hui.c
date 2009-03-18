@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.178 2009/03/18 20:18:03 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.179 2009/03/18 21:06:31 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3241,11 +3241,12 @@ chainColorDropDown(optString, chainColorEnumToString(chainColor));
 
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-safef(optString, ArraySize(optString), "%s.chromFilter", prefix);
+safef(optString, ArraySize(optString), "%s.%s", prefix, OPT_CHROM_FILTER);
 cgiMakeTextVar(optString,
-    cartUsualStringClosestToHome(cart, tdb, compositeLevel, optString, ""), 15);
+    cartUsualStringClosestToHome(cart, tdb, compositeLevel,
+	OPT_CHROM_FILTER, ""), 15);
 
-scoreCfgUi(db, cart,tdb,prefix,NULL,2000000000,FALSE);
+scoreCfgUi(db, cart,tdb,prefix,NULL,CHAIN_SCORE_MAXIMUM,FALSE);
 
 cfgEndBox(boxed);
 }
