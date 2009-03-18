@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.177 2009/03/18 18:27:00 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.178 2009/03/18 20:18:03 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4003,29 +4003,32 @@ printf("<B>Select %s:</B><BR>\n", membersOfView->title);
 puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
-    printf("<TD>");
-    if(configurable[ix] != cfgNone)
+    if(matchedSubtracks[ix] != NULL)
         {
-        safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
-        boolean open = cartUsualBoolean(cart,objName,FALSE);
-        MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,open);
+        printf("<TD>");
+        if(configurable[ix] != cfgNone)
+            {
+            safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
+            boolean open = cartUsualBoolean(cart,objName,FALSE);
+            MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,open);
+            }
+        else
+            printf("<B>%s</B>\n",membersOfView->values[ix]);
+        puts("</TD>");
+
+        safef(objName, sizeof(objName), "%s.%s.vis", parentTdb->tableName,membersOfView->names[ix]);
+        enum trackVisibility tv =
+            hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
+
+        safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
+
+        printf("<TD>");
+        hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,"viewDd normalText",javascript);
+        puts(" &nbsp; &nbsp; &nbsp;</TD>");
+        // Until the cfg boxes are inserted here, this divorces the relationship
+        //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
+        //    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
         }
-    else
-        printf("<B>%s</B>\n",membersOfView->values[ix]);
-    puts("</TD>");
-
-    safef(objName, sizeof(objName), "%s.%s.vis", parentTdb->tableName,membersOfView->names[ix]);
-    enum trackVisibility tv =
-        hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
-
-    safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
-
-    printf("<TD>");
-    hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,"viewDd normalText",javascript);
-    puts(" &nbsp; &nbsp; &nbsp;</TD>");
-    // Until the cfg boxes are inserted here, this divorces the relationship
-    //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
-    //    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
     }
 puts("<TD><A HREF=\"../../goldenPath/help/multiView.html\" TARGET=_BLANK>Help on views</A></TD>");
 puts("</TR>");
@@ -4285,7 +4288,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
                           (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
                     }
-                alreadySet = cartUsualBoolean(cart, objName, alreadySet);
+                alreadySet = cartUsualBoolean(cart, objName, FALSE);
                 puts("<TD>");
                 struct dyString *dyJS = newDyString(100);
                 dyStringPrintf(dyJS, javascript);
@@ -4305,22 +4308,27 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         }
     if(dimensionZ)
         {
-        printf("<TR align='center' valign='bottom' BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-        printf("<TH class='greenRoof' colspan=50><EM><B>%s</EM></B>:",dimensionZ->title);
-        //PLUS_BUTTON( "name","plus_all_dimZ", "mat_","_dimZ_cb");
-        //MINUS_BUTTON("name","minus_all_dimZ","mat_","_dimZ_cb");
+        printf("<TR align='center' valign='bottom' BGCOLOR='%s''>",COLOR_BG_ALTDEFAULT);
+        printf("<TH class='greenRoof' STYLE='font-size: 2' colspan=50>&nbsp;</TH>");
+        printf("<TR BGCOLOR='%s'><TH valign=top align=left colspan=2 rowspan=20><B><EM>%s</EM></B>:",
+               COLOR_BG_ALTDEFAULT,dimensionZ->title);
         for(ixZ=0;ixZ<sizeOfZ;ixZ++)
             if(cellsZ[ixZ]>0)
                 {
-                printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                if(ixZ > 0 && (ixZ % sizeOfX) == 0)
+                    {
+                    printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
+                    }
+                printf("<TH align=left nowrap>");
                 safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
                 safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
-                alreadySet = cartUsualBoolean(cart, objName, alreadySet);
+                alreadySet = cartUsualBoolean(cart, objName, FALSE);
                 struct dyString *dyJS = newDyString(100);
                 dyStringPrintf(dyJS, javascript);
                 dyStringPrintf(dyJS, " class=\"matrixCB %s\"",dimensionZ->names[ixZ]);
                 cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
                 printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
+                puts("</TH>");
                 }
         }
     puts("</TD></TR></TABLE>");
@@ -4491,9 +4499,11 @@ static void commonCssStyles()
 /* Defines a few common styles to use through CSS */
 {
     printf("<style type='text/css'>");
-    //printf(".tDnD_whileDrag {background-color:%s;}",COLOR_BG_GHOST);
     printf(".trDrag {background-color:%s;} .pale {background-color:%s;}",COLOR_BG_GHOST,COLOR_BG_PALE);
     printf(".greenRoof {border-top: 3px groove %s;}",COLOR_DARKGREEN);
+    //printf(".greenFloor {border-bottom: 3px ridge %s;}",COLOR_DARKGREEN);      // Unused
+    //printf(".hiddenRoof {border-top: 0px solid %s;}",COLOR_BG_ALTDEFAULT);     // Doesn't work
+    //printf(".hiddenFloor {border-bottom: 0px solid %s;}",COLOR_BG_ALTDEFAULT); // Doesn't work
     printf(".greenBox {border: 5px outset %s;}",COLOR_DARKGREEN);
     printf(".blueBox {border: 4px inset %s;}",COLOR_DARKBLUE);
     puts("</style>");
