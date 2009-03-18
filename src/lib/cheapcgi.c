@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.111 2009/03/13 23:00:34 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.112 2009/03/18 17:51:53 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1018,7 +1018,7 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
     (checked ? " CHECKED" : ""),
     (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVar(buf, ( enabled ? (checked ? "1" : "0") : (checked ? "-1" : "-2")));
+cgiMakeHiddenVar(buf, ( enabled ? "0" : (checked ? "-1" : "-2")));
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
