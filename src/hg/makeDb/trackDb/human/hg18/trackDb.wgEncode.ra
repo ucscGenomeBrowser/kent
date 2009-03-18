@@ -6227,7 +6227,7 @@ wgEncode 1
 
 track wgEncodeSunyalbanyRnaGeneChip
 compositeTrack on
-shortLabel SUNY RBPS
+shortLabel SUNY RBP
 longLabel ENCODE SUNY Albany RNA Binding Proteins by RIP-chip
 group regulation
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
