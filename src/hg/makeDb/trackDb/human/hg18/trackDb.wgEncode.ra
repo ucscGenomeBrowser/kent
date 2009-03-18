@@ -6091,25 +6091,25 @@ wgEncode 1
     localization nucleus
     cell GM12878
 
-    track wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal
-    release alpha
-    subTrack wgEncodeAffyRnaChip
-    shortLabel total GM12878 nucleus  Raw
-    longLabel ENCODE (total in GM12878 cell nucleus using )
-    subGroups view=RawSignal cellType=GM12878 localization=nucleus rnaExtract=total
-    type wig -53310.00 54732.00
-    dateSubmitted 2009-03-10
-    dateUnrestricted 2009-12-10
-    dataVersion ENCODE Feb 2009 Freeze
-    priority 56
-    noInherit on
-    configurable on
-    spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    rnaExtract total
-    localization nucleus
-    cell GM12878
+#    track wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal
+#    release alpha
+#    subTrack wgEncodeAffyRnaChip
+#    shortLabel total GM12878 nucleus  Raw
+#    longLabel ENCODE (total in GM12878 cell nucleus using )
+#    subGroups view=RawSignal cellType=GM12878 localization=nucleus rnaExtract=total
+#    type wig -53310.00 54732.00
+#    dateSubmitted 2009-03-10
+#    dateUnrestricted 2009-12-10
+#    dataVersion ENCODE Feb 2009 Freeze
+#    priority 56
+#    noInherit on
+#    configurable on
+#    spanList first
+#    windowingFunction mean
+#    maxHeightPixels 100:16:16
+#    rnaExtract total
+#    localization nucleus
+#    cell GM12878
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CellTotal
     release alpha
