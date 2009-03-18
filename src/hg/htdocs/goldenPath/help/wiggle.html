@@ -33,63 +33,43 @@ For speed and efficiency, wiggle data is compressed and stored internally in
 128 unique bins. This compression means that there is a minor loss of precision
 when data is exported from a wiggle track (<em>i.e.</em>, with output format
 &quot;data points&quot; or &quot;bed format&quot; within the table browser).
-The <a href='bedgraph.html'>bedGraph</a> format should be used instead if it
+The <a href='bedgraph.html'>bedGraph</a> format should be used if it
 is important to retain exact data when exporting.
 <P>
 See also:
 <A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
 TARGET=_blank>Selecting a graphing track data format</A>.
-<P>
-<B>General Structure</B><P> Wiggle format is line-oriented. The first line
-must be a <A HREF="customTrack.html#TRACK" TARGET=_BLANK>track definition line</A>, which
+
+<P><B>General Structure</B></P> Wiggle format is line-oriented. For wiggle custom
+tracks, the first line must be a <A HREF="customTrack.html#TRACK"
+TARGET=_BLANK>track definition line</A>, which
 designates the track as a wiggle track and adds a number of options for
 controlling the default display.
 <P>
-Following the track definition line are the track data, which can be entered
-in one of two formats: <B>variableStep</B> and <B>fixedStep</B>. These formats
-were developed to allow the file to be written as compactly as possible.
+Wiggle format is composed of declaration lines and data lines. There are
+two options for formatting wiggle data: <B>variableStep</B> and <B>fixedStep</B>.
+These formats were developed to allow the file to be written as compactly as
+possible.
 <UL>
 
-<LI> <B>variableStep</B> format starts with a declaration line and is
-comprised of two data columns that contain chromosome positions and data
-values:
+<LI> <B>variableStep</B> is for data with irregular intervals between new
+data points and is the more commonly used wiggle format. It begins with a
+declaration line and is followed by two columns containing chromosome positions
+and data values:
 <FONT color="#0000FF"><PRE>
   <B>variableStep</B>  <B>chrom=</B><I>chrN</I>  <B>[span=</B><I>windowSize</I><B>]</B>
   <I>chromStartA</I>  <I>dataValueA</I>
   <I>chromStartB</I>  <I>dataValueB</I>
   <I>... etc ...</I>  <I>... etc ...</I></PRE></FONT>
-
-<LI> <B>fixedStep</B> format is started by a declaration line and is comprised
-of a single column of data values:
-<FONT color="#0000FF"><PRE>
-  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>windowSize</I><B>]</B>
-  <I>dataValue1</I>
-  <I>dataValue2</I>
-  <I>... etc ...</I></PRE></FONT>
-
-</UL>
-<P><B>Declaration Lines and Data Values</B></P>
-
-Wiggle track data values can be integer or real, positive or negative values.
-Chromosome positions are specified as 1-relative.  For a chromosome of length
-N, the first position is 1 and the last position is N.  Only positions
-specified have data.  Positions not specified do not have data and will not
-be graphed. All positions specified in the input data must be in numerical
-order.
-
-<UL>
-<LI>The <B>variableStep</B> two-column data format is the most commonly used
-data format, and is for data with an irregular interval between new data
-points.  The declaration line:
-<FONT color="#0000FF"><PRE>  <B>variableStep chrom=</B><I>chrN</I> <B>[span=</B><I>windowSize</I><B>]</B></PRE></FONT>
-starts with the word <B>variableStep</B> and is followed by a specification
+The declaration line starts with the word <B>variableStep</B> and is followed
+by a specification
 for a chromosome. The optional <B>span</B> parameter (default: span=1)
 allows data composed of contiguous runs of bases with the same data value
 to be specified more succinctly. The span begins at each chromosome position
 specified and indicates the number of bases that data value should cover.
 For example, this variableStep specification:
 <FONT color="#0000FF"><PRE>
-variableStep chrom=chr1
+variableStep chrom=chr2
 300701 12.5
 300702 12.5
 300703 12.5
@@ -98,23 +78,58 @@ variableStep chrom=chr1
 </PRE></FONT>
 is equivalent to:
 <FONT color="#0000FF"><PRE>
-variableStep chrom=chr1 span=5
+variableStep chrom=chr2 span=5
 300701 12.5
 </PRE></FONT>
-Note that the same span must be used throughout the dataset. If no span is
-specified, the default span of one is used.
+Both versions display a value of 12.5 at position 300701-300705 on
+chromosome 2.
 <P>
-<LI>The <B>fixedStep</B> single-column data format is used when there is a
-regular interval between new data values. The declaration line: 
+
+<LI> <B>fixedStep</B> is for data with regular intervals between new data
+values and is the more compact wiggle format. It begins with a declaration
+line and is followed by a single column of data values:
 <FONT color="#0000FF"><PRE>
-  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I>windowSize</I>]</PRE></FONT>
-starts with the word <B>fixedStep</B>, and it must include specifications
-for chromosome, start coordinate, and step size.  The <B>span</B> specification
-has the same meaning as in variableStep format. 
-</LI>
+  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>windowSize</I><B>]</B>
+  <I>dataValue1</I>
+  <I>dataValue2</I>
+  <I>... etc ...</I></PRE></FONT>
+The declaration line starts with the word <B>fixedStep</B> and includes
+specifications for chromosome, start coordinate, and step size.  The
+<B>span</B> specification has the same meaning as in variableStep format.
+For example, this fixedStep specification:
+<FONT color="#0000FF"><PRE>
+fixedStep chrom=chr3 start=400601 step=100
+11
+22
+33
+</PRE></FONT>
+displays the values 11, 22, and 33 as single-base regions on chromosome 3
+at positions 400601, 400701, and 400801, respectively. Adding span=5 to the
+declaration line:
+<FONT color="#0000FF"><PRE>
+fixedStep chrom=chr3 start=400601 step=100 span=5
+11
+22
+33
+</PRE></FONT>
+causes the values 11, 22, and 33 to be displayed as 5-base regions on
+chromosome 3 at positions 400601-400605, 400701-400705, and 400801-400805,
+respectively.
+<P>
+Note that for both variableStep and fixedStep formats, the same span must be
+used throughout the dataset. If no span is specified, the default span of one
+is used.
 </UL>
 
-<P><B>Parameters for wiggle track definition lines</B></P>
+<P><B>Data Values</B></P>
+Wiggle track data values can be integer or real, positive or negative values.
+Chromosome positions are specified as 1-relative.  For a chromosome of length
+N, the first position is 1 and the last position is N.  Only positions
+specified have data.  Positions not specified do not have data and will not
+be graphed. All positions specified in the input data must be in numerical
+order.
+
+<P><B>Parameters for custom wiggle track definition lines</B></P>
 All options are placed in a single line separated by spaces:
 <FONT color="#0000FF"><PRE>  <B>track type=wiggle_0 name=</B><I>track_label</I> <B>description=</B><I>center_label</I>
 <B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I>
