@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.179 2009/03/18 21:06:31 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.180 2009/03/18 23:40:53 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3215,11 +3215,13 @@ safef(optString, ArraySize(optString), "%s.%s", prefix, NET_COLOR );
 printf("<p><b>Color nets by:&nbsp;</b>");
 netColorDropDown(optString, netColorEnumToString(netColor));
 
+#ifdef NOT_YET
 enum netLevelEnum netLevel = netFetchLevelOption(cart, tdb, compositeLevel);
 
 safef( optString, ArraySize(optString), "%s.%s", prefix, NET_LEVEL );
 printf("<p><b>Limit display of nets to:&nbsp;</b>");
 netLevelDropDown(optString, netLevelEnumToString(netLevel));
+#endif
 
 cfgEndBox(boxed);
 }
