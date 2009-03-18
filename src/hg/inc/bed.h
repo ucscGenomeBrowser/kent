@@ -312,6 +312,25 @@ struct bed *bedFilterByWildNames(struct bed *bedList, struct slName *wildNames);
 /* Given a bed list and a list of names that may include wildcard characters,
  * return the list of bed items whose name matches at least one wildName. */
 
+boolean bedFilterInt(int value, enum numericFilterType nft, int *filterValues);
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+
+boolean bedFilterLong(long long value, enum numericFilterType nft, long long *filterValues);
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+
+boolean bedFilterDouble(double value, enum numericFilterType nft, double *filterValues);
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+
+boolean bedFilterString(char *value, enum stringFilterType sft, char **filterValues, 
+	boolean invert);
+/* Return TRUE if value passes the filter. */
+
+boolean bedFilterChar(char value, enum charFilterType cft,
+			  char *filterValues, boolean invert);
+/* Return TRUE if value passes the filter. */
 
 struct bed *bedCommaInN(char **pS, struct bed *ret, int fieldCount);
 /* Create a bed out of a comma separated string looking for fieldCount

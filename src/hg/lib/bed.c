@@ -12,7 +12,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.62 2009/03/16 18:23:06 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.63 2009/03/18 01:34:07 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -946,7 +946,7 @@ return bedListOut;
 }
 
 
-static boolean filterChar(char value, enum charFilterType cft,
+boolean bedFilterChar(char value, enum charFilterType cft,
 			  char *filterValues, boolean invert)
 /* Return TRUE if value passes the filter. */
 {
@@ -975,8 +975,7 @@ switch (cft)
 return(FALSE ^ invert);
 }
 
-static boolean filterString(char *value, enum stringFilterType sft,
-			    char **filterValues, boolean invert)
+boolean bedFilterString(char *value, enum stringFilterType sft, char **filterValues, boolean invert)
 /* Return TRUE if value passes the filter. */
 {
 char *thisVal;
@@ -1011,8 +1010,91 @@ switch (sft)
 return(FALSE ^ invert);
 }
 
-static boolean filterInt(int value, enum numericFilterType nft,
-			 int *filterValues)
+boolean bedFilterInt(int value, enum numericFilterType nft, int *filterValues)
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+{
+if (filterValues == NULL)
+    return(TRUE);
+switch (nft)
+    {
+    case (nftIgnore):
+	return(TRUE);
+	break;
+    case (nftLessThan):
+	return(value < *filterValues);
+	break;
+    case (nftLTE):
+	return(value <= *filterValues);
+	break;
+    case (nftEqual):
+	return(value == *filterValues);
+	break;
+    case (nftNotEqual):
+	return(value != *filterValues);
+	break;
+    case (nftGTE):
+	return(value >= *filterValues);
+	break;
+    case (nftGreaterThan):
+	return(value > *filterValues);
+	break;
+    case (nftInRange):
+	return((value >= *filterValues) && (value < *(filterValues+1)));
+	break;
+    case (nftNotInRange):
+	return(! ((value >= *filterValues) && (value < *(filterValues+1))));
+	break;
+    default:
+	errAbort("illegal numericFilterType: %d", nft);
+	break;
+    }
+return(FALSE);
+}
+
+boolean bedFilterDouble(double value, enum numericFilterType nft, double *filterValues)
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+{
+if (filterValues == NULL)
+    return(TRUE);
+switch (nft)
+    {
+    case (nftIgnore):
+	return(TRUE);
+	break;
+    case (nftLessThan):
+	return(value < *filterValues);
+	break;
+    case (nftLTE):
+	return(value <= *filterValues);
+	break;
+    case (nftEqual):
+	return(value == *filterValues);
+	break;
+    case (nftNotEqual):
+	return(value != *filterValues);
+	break;
+    case (nftGTE):
+	return(value >= *filterValues);
+	break;
+    case (nftGreaterThan):
+	return(value > *filterValues);
+	break;
+    case (nftInRange):
+	return((value >= *filterValues) && (value < *(filterValues+1)));
+	break;
+    case (nftNotInRange):
+	return(! ((value >= *filterValues) && (value < *(filterValues+1))));
+	break;
+    default:
+	errAbort("illegal numericFilterType: %d", nft);
+	break;
+    }
+return(FALSE);
+}
+
+boolean bedFilterLong(long long value, enum numericFilterType nft, long long *filterValues)
 /* Return TRUE if value passes the filter. */
 /* This could probably be turned into a macro if performance is bad. */
 {
@@ -1060,40 +1142,40 @@ boolean bedFilterOne(struct bedFilter *bf, struct bed *bed)
 int cmpValues[2];
 if (bf == NULL)
     return TRUE;
-if (!filterString(bed->chrom, bf->chromFilter, bf->chromVals, bf->chromInvert))
+if (!bedFilterString(bed->chrom, bf->chromFilter, bf->chromVals, bf->chromInvert))
     return FALSE;
-if (!filterInt(bed->chromStart, bf->chromStartFilter, bf->chromStartVals))
+if (!bedFilterInt(bed->chromStart, bf->chromStartFilter, bf->chromStartVals))
     return FALSE;
-if (!filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals))
+if (!bedFilterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals))
     return FALSE;
-if (!filterString(bed->name, bf->nameFilter, bf->nameVals, bf->nameInvert))
+if (!bedFilterString(bed->name, bf->nameFilter, bf->nameVals, bf->nameInvert))
     return FALSE;
-if (!filterInt(bed->score, bf->scoreFilter, bf->scoreVals))
+if (!bedFilterInt(bed->score, bf->scoreFilter, bf->scoreVals))
     return FALSE;
-if (!filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
+if (!bedFilterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
 		    bf->strandInvert))
     return FALSE;
-if (!filterInt(bed->thickStart, bf->thickStartFilter,
+if (!bedFilterInt(bed->thickStart, bf->thickStartFilter,
 		    bf->thickStartVals))
     return FALSE;
-if (!filterInt(bed->thickEnd, bf->thickEndFilter,
+if (!bedFilterInt(bed->thickEnd, bf->thickEndFilter,
 		    bf->thickEndVals))
     return FALSE;
-if (!filterInt(bed->blockCount, bf->blockCountFilter,
+if (!bedFilterInt(bed->blockCount, bf->blockCountFilter,
 		    bf->blockCountVals))
     return FALSE;
-if (!filterInt((bed->chromEnd - bed->chromStart),
+if (!bedFilterInt((bed->chromEnd - bed->chromStart),
 		    bf->chromLengthFilter, bf->chromLengthVals))
     return FALSE;
-if (!filterInt((bed->thickEnd - bed->thickStart),
+if (!bedFilterInt((bed->thickEnd - bed->thickStart),
 		    bf->thickLengthFilter, bf->thickLengthVals))
     return FALSE;
 cmpValues[0] = cmpValues[1] = bed->thickStart;
-if (!filterInt(bed->chromStart, bf->compareStartsFilter,
+if (!bedFilterInt(bed->chromStart, bf->compareStartsFilter,
 		    cmpValues))
     return FALSE;
 cmpValues[0] = cmpValues[1] = bed->thickEnd;
-if (!filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues))
+if (!bedFilterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues))
     return FALSE;
 return TRUE;
 }
