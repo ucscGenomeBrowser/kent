@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainCart.c,v 1.3 2009/03/18 18:27:00 hiram Exp $";
+static char const rcsid[] = "$Id: chainCart.c,v 1.4 2009/03/18 21:16:31 hiram Exp $";
 
 enum chainColorEnum chainFetchColorOption(struct cart *cart,
     struct trackDb *tdb, boolean compositeLevel)
@@ -21,10 +21,6 @@ enum chainColorEnum ret;
 
 chainColor = trackDbSettingClosestToHomeOrDefault(tdb, OPT_CHROM_COLORS,
     CHROM_COLORS);
-/* trackDb can be chainColor=normalizedScore, translate into pull-down
-	menu equivalent */
-if (sameWord(TDB_NORMALIZE_SCORE,chainColor))
-    chainColor = SCORE_COLORS;
 /* allow cart to override trackDb setting */
 ret = chainColorStringToEnum(
 	cartUsualStringClosestToHome(cart, tdb, compositeLevel,
