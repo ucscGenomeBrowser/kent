@@ -27,7 +27,6 @@ int mrnaCount;
 int proteinCount;
 
 char mrnaNames[500][20];
-char mrnaDates[500][20];
 int  mrnaScore[500];
 int  diffIdent[500];
 

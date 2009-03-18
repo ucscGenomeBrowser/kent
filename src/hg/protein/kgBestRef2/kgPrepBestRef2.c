@@ -70,7 +70,6 @@ char proteinID[20];
 FILE *IN, *OUT;
 
 char line[2000];
-char mrnaDate[20];
 int  imrna;
 char dirName[1000];
 char protName[1000];
