@@ -7,6 +7,13 @@ SpecialUserlogoutUCSC.php
 Are installed in the Mediawiki version 1.13.0 source in the directory:
 	includes/specials/
 
+The files:
+configuration.SpecialUserloginUCSC.php
+configuration.SpecialUserlogoutUCSC.php
+
+Are installed in $IP/extensions/ as names:
+SpecialUserloginUCSC.php
+SpecialUserlogoutUCSC.php
 
 The template file:
 UserloginUCSC.php
@@ -18,6 +25,10 @@ This business is used in the wiki by adding the lines:
 
 require_once( "$IP/extensions/SpecialUserloginUCSC.php" );
 require_once( "$IP/extensions/SpecialUserlogoutUCSC.php" );
+
+These require statements are referring to:
+configuration.SpecialUserloginUCSC.php
+configuration.SpecialUserlogoutUCSC.php
 
 To the LocalSettings.php configuration file in the Wiki
 
