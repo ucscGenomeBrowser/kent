@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "psl.h"
-#include "cds.h"
 
 #ifndef GBROWSE
 #include "../gsid/gsidTable/gsidTable.h"
@@ -249,54 +248,15 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int sizeMul)
         return(sfList);
 }
 
-
-
-
-/* If useful elsewhere someday, could libify: */
-static struct psl *pslClone(struct psl *pslIn)
-/* Return a newly allocated copy of pslIn's contents. */
-{
-struct psl *pslOut = cloneMem(pslIn, sizeof(*pslIn));
-pslOut->next = NULL;
-pslOut->tName = cloneString(pslIn->tName);
-pslOut->qName = cloneString(pslIn->qName);
-pslOut->blockSizes = cloneMem(pslIn->blockSizes, sizeof(pslIn->blockSizes[0]) *
-			      pslIn->blockCount);
-pslOut->qStarts = cloneMem(pslIn->qStarts, sizeof(pslIn->qStarts[0]) *
-			   pslIn->blockCount);
-pslOut->tStarts = cloneMem(pslIn->tStarts, sizeof(pslIn->tStarts[0]) *
-			   pslIn->blockCount);
-if (pslIn->qSequence != NULL)
-    {
-    int i;
-    pslOut->qSequence = needMem(sizeof(pslIn->qSequence[0]) *
-				       pslIn->blockCount);
-    pslOut->tSequence = needMem(sizeof(pslIn->qSequence[0]) *
-				       pslIn->blockCount);
-    for (i = 0;  i < pslIn->blockCount;  i++)
-	{
-	pslOut->qSequence[i] = cloneString(pslIn->qSequence[i]);
-	pslOut->tSequence[i] = cloneString(pslIn->tSequence[i]);
-	}
-    }
-return pslOut;
-}
-
-
 struct linkedFeatures *lfFromPslx(struct psl *psl, 
 	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg)
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
- * sizeMul=3 for protein. */
+ * sizeMul=3 for protein.
+ * Don't free psl afterwards! */
 {
-struct simpleFeature *sfList = NULL;
 int grayIx = pslGrayIx(psl, isXeno, maxShade);
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
-enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
-boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
-
-indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
-	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
@@ -316,39 +276,19 @@ lf->orientation = orientFromChar(psl->strand[0]);
 if (rcTarget)
     lf->orientation = -lf->orientation;
 
-sfList = sfFromPslX(psl, grayIx, sizeMul);
-slReverse(&sfList);
-lf->components = sfList;
+lf->components = sfFromPslX(psl, grayIx, sizeMul);
+lf->start = lf->tallStart = psl->tStart;
+lf->end = lf->tallEnd = psl->tEnd;
 
-/*if we are coloring by codon and zoomed in close 
-  enough, then split simple feature by the psl record
-  and the mRNA sequence. Otherwise do the default conversion
-  from psl to simple feature.*/
-if (drawOpt == baseColorDrawItemCodons ||
-    drawOpt == baseColorDrawDiffCodons ||
-    drawOpt == baseColorDrawGenomicCodons)
-    {
-    baseColorCodonsFromPsl(chromName, lf, psl, sizeMul, isXeno, maxShade,
-			   drawOpt, tg);
-    lf->grayIx = lfCalcGrayIx(lf);
-    }
-else
-    {
-    linkedFeaturesBoundsAndGrays(lf);
-    if (drawOpt == baseColorDrawCds)
-        baseColorSetCdsBounds(lf, psl, tg);
-    }
-/* If we are drawing anything special, stash psl for use in drawing phase: */
-if (drawOpt > baseColorDrawOff || indelShowQueryInsert || indelShowPolyA)
-    lf->original = pslClone(psl);
-lf->start = psl->tStart;	/* Correct for rounding errors... */
-lf->end = psl->tEnd;
+/* Hang on to psl for use in drawing phase (this is why caller must not free psl!): */
+lf->original = psl;
 
 return lf;
 }
 
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
-/* Create a linked feature item from psl. */
+/* Create a linked feature item from psl.
+ * Don't free psl afterwards! */
 {
 return lfFromPslx(psl, 1, isXeno, FALSE, NULL);
 }
@@ -459,17 +399,6 @@ char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
 char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128];
-boolean checkSelected;  /* flag indicating if checking for selection of an entry is needed */
-
-checkSelected = FALSE;
-
-#ifndef GBROWSE
-/* if this is a GSID track, check if we need to check for inclusion of the item */
-if (hIsGsidServer())
-    {
-    checkSelected = gsidCheckSelected(tg);
-    }
-#endif /* GBROWSE */
 
 safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
@@ -491,17 +420,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
     lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
-    if (checkSelected)
-	{
 #ifndef GBROWSE
-    	if (isSelected(lf->name)) slAddHead(&lfList, lf);
-#endif /* GBROWSE */
+    /* if this is a GSID track, check if we need to check for inclusion of the item */
+    if (hIsGsidServer() && gsidCheckSelected(tg))
+	{
+    	if (isSelected(lf->name))
+	    slAddHead(&lfList, lf);
 	}
     else
-	{
+#endif /* GBROWSE */
     	slAddHead(&lfList, lf);
-	}
-    pslFree(&psl);
+    // Don't free psl - may be used by baseColor code (and freeing is slow)
     }
 slReverse(&lfList);
 if (tg->visibility != tvDense)

@@ -753,14 +753,16 @@ void loadProteinPsl(struct track *tg);
 struct linkedFeatures *lfFromPslx(struct psl *psl,
 	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg);
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA,
- * sizeMul=3 for protein. */
+ * sizeMul=3 for protein. 
+ * Don't free psl afterwards!  (may be used by baseColor code) */
 
 
 struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int
                 sizeMul);
 
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
-/* Create a linked feature item from psl. */
+/* Create a linked feature item from psl.
+ * Don't free psl afterwards!  (may be used by baseColor code) */
 
 struct linkedFeatures *lfFromPslsWScoresInRange(char *table, int start, int end, char *chromName, boolean isXeno, float maxScore);
 /* Return linked features from range of table with the scores scaled appropriately */

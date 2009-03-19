@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.89 2008/12/22 21:03:54 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.90 2009/03/19 22:21:05 angie Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -601,8 +601,7 @@ else
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, NULL, useExonFrames,
-				  colorStopStart);
+    sfList = baseColorCodonsFromGenePred(lf, gp, useExonFrames, colorStopStart);
     genePredFree(&gp);
     }
 return(sfList);
@@ -610,23 +609,20 @@ return(sfList);
 
 
 
-void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf, 
-			    struct psl *psl, int sizeMul, boolean
-                            isXeno, int maxShade,
-			    enum baseColorDrawOpt drawOpt, struct track *tg)
-/*divide a pslX record into a linkedFeature, where each simple feature
- * is a 3-base codon (or a partial codon if on a boundary). Uses
- * GenBank to get the CDS start/stop of the psl record and also grabs
- * the sequence. This takes care of hidden gaps in the alignment, that
- * alter the frame. Therefore this function relies on the mRNA
- * sequence (rather than the genomic) to determine the frame.*/
+struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf, 
+        struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
+        enum baseColorDrawOpt drawOpt, struct track *tg)
+/* Given an lf and the psl from which the lf was constructed, 
+ * return a list of simpleFeature elements, one per codon (or partial 
+ * codon if the codon falls on a gap boundary.  sizeMul, isXeno and maxShade
+ * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 {
 boolean colorStopStart = (drawOpt != baseColorDrawDiffCodons);
-struct simpleFeature *sfList = splitPslByCodon(chromName, lf, psl, sizeMul,
+struct simpleFeature *sfList = splitPslByCodon(psl->tName, lf, psl, sizeMul,
                                                isXeno, maxShade, drawOpt,
 					       colorStopStart, tg);
 slReverse(&sfList);
-lf->codons = sfList;
+return sfList;
 }
 
 
@@ -937,12 +933,9 @@ slReverse(&sfList);
 return sfList;
 }
 
-static struct simpleFeature *splitByCodon( char *chrom, 
-        struct linkedFeatures *lf, 
-        unsigned *starts, unsigned *ends, 
-        int blockCount, unsigned
-        cdsStart, unsigned cdsEnd,
-        unsigned *gaps, int *exonFrames, boolean colorStopStart)
+static struct simpleFeature *splitByCodon(struct linkedFeatures *lf, 
+        unsigned *starts, unsigned *ends, int blockCount, unsigned cdsStart, unsigned cdsEnd,
+        int *exonFrames, boolean colorStopStart)
 {
     int codon = 0;
     int frame = 0;
@@ -1030,7 +1023,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
           than getting it for each linked feature*/
 	if (thisStart < cdsStart) thisStart = cdsStart;
 	if (thisEnd > cdsEnd) thisEnd = cdsEnd;
-        codonDna = hDnaFromSeq(database, chrom, thisStart, thisEnd, dnaUpper );
+        codonDna = hDnaFromSeq(database, chromName, thisStart, thisEnd, dnaUpper );
         base = thisStart;
 
         //break each block by codon and set color code to denote codon
@@ -1075,12 +1068,12 @@ static struct simpleFeature *splitByCodon( char *chrom,
 
                 /*accumulate partial codon in case of 
                   one base exon, or start a new one.*/
-                updatePartialCodon(partialCodonSeq, chrom, sf->start,
+                updatePartialCodon(partialCodonSeq, chromName, sf->start,
                                 sf->end, !posStrand, codonDna, base);
 
                 /*get next 'frame' nt's to see what codon will be 
                   (skipping intron sequence)*/
-                getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
+                getCodonDna(theRestOfCodon, chromName, frame, starts, ends, 
                         blockCount, cdsStart, cdsEnd, i, !posStrand, NULL);
 
                 /* This code doesn't really work right in all cases of a
@@ -1120,7 +1113,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
             /*start of a coding block with less than 3 bases*/
             else if (currentSize < 3)
             {
-                updatePartialCodon(partialCodonSeq,chrom,sf->start,
+                updatePartialCodon(partialCodonSeq,chromName,sf->start,
                         sf->end,!posStrand,codonDna, base);
                 if (strlen(partialCodonSeq) == 3) 
                     sf->grayIx = setColorByCds(partialCodonSeq,codon,
@@ -1164,9 +1157,8 @@ static struct simpleFeature *splitByCodon( char *chrom,
     return(sfList);
 }
 
-struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
-	struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps,
-	boolean useExonFrames, boolean colorStopStart)
+struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf, 
+	struct genePred *gp, boolean useExonFrames, boolean colorStopStart)
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary.  If useExonFrames is true, 
@@ -1174,12 +1166,11 @@ struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
  * otherwise determine frame from genomic sequence. */
 {
     if(useExonFrames)
-        return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
-			    gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames,
-			    colorStopStart));
+        return(splitByCodon(lf, gp->exonStarts, gp->exonEnds, gp->exonCount,
+			    gp->cdsStart, gp->cdsEnd, gp->exonFrames, colorStopStart));
     else
-        return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
-                    gp->cdsStart,gp->cdsEnd,gaps,NULL, colorStopStart));
+        return(splitByCodon(lf, gp->exonStarts, gp->exonEnds, gp->exonCount,
+			    gp->cdsStart, gp->cdsEnd, NULL, colorStopStart));
 }
 
 
@@ -1698,16 +1689,9 @@ void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
 			  struct psl **pPsl)
 /* Free structures allocated just for base/cds coloring. */
 {
-if (lf->original != NULL)
-    {
-    /* Currently, lf->original is used only for coloring PSL's.  If it is 
-     * used to color some other type in the future, this will remind the 
-     * programmer to free it here. */
-    assert(pPsl != NULL);
-    assert(lf->original == *pPsl);
-    }
-if (pPsl != NULL)
-    pslFree(pPsl);
+// We could free lf->original here (either genePredFree or pslFree, depending
+// on the type -- but save time by skipping that.  Maybe we should save time
+// by skipping this free too:
 if (pMrnaSeq != NULL)
     dnaSeqFree(pMrnaSeq);
 }

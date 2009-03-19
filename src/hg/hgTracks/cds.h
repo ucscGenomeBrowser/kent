@@ -92,20 +92,19 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg);
  * in trackDb/cart, and gate with zoom level. */
 
 
-struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
-	struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps,
-	boolean useExonFrames, boolean colorStopStart);
+struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf,
+	struct genePred *gp, boolean useExonFrames, boolean colorStopStart);
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary.  If useExonFrames is true, 
  * use the frames portion of gp (which should be from a genePredExt);
  * otherwise determine frame from genomic sequence. */
 
-void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf, 
+struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
         enum baseColorDrawOpt drawOpt, struct track *tg);
 /* Given an lf and the psl from which the lf was constructed, 
- * set lf->codons to a list of simpleFeature elements, one per codon (or partial 
+ * return a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary.  sizeMul, isXeno and maxShade
  * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 

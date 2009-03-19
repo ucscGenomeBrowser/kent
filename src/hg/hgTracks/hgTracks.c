@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1561 2009/03/13 23:30:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1562 2009/03/19 22:21:06 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -594,6 +594,7 @@ struct targetDb *target;
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return;
 
+/* Don't free psl -- used in drawing phase by baseColor code. */
 struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
 if (target != NULL)
@@ -639,9 +640,7 @@ if (target != NULL)
 		      (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
 		lf->extra = cloneString(extraInfo);
 		slAddHead(&itemList, lf);
-		pslFree(&trimmed);
 		}
-	    pslFree(&gpsl);
 	    }
 	}
     hFreeConn(&conn);
@@ -657,7 +656,6 @@ else
 	    lf->extra = cloneString("");
 	    slAddHead(&itemList, lf);
 	    }
-pslFreeList(&pslList);
 slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }
@@ -740,7 +738,7 @@ return fileExists(pslFileName) && fileExists(faFileName);
 }
 
 void loadUserPsl(struct track *tg)
-/* Load up rnas from table into track items. */
+/* Load up hgBlat results from table into track items. */
 {
 char *ss = userSeqString;
 char buf2[3*512];
@@ -750,11 +748,6 @@ struct psl *psl;
 struct linkedFeatures *lfList = NULL, *lf;
 enum gfType qt, tt;
 int sizeMul = 1;
-enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
-boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
-
-indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
-	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 parseSs(ss, &pslFileName, &faFileName);
 pslxFileOpen(pslFileName, &qt, &tt, &f);
@@ -773,11 +766,7 @@ while ((psl = pslNext(f)) != NULL)
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
-	if (drawOpt > baseColorDrawOff ||
-	    indelShowQueryInsert || indelShowPolyA)
-	    lf->original = psl;
-	else
-	    pslFree(&psl);
+	/* Don't free psl -- used in drawing phase by baseColor code. */
 	}
     else
 	pslFree(&psl);

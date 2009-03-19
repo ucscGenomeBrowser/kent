@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.72 2009/03/17 19:49:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.73 2009/03/19 22:21:06 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2424,6 +2424,27 @@ lfColors(tg, lf, hvg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
+if (psl && (drawOpt == baseColorDrawItemCodons || drawOpt == baseColorDrawDiffCodons ||
+	    drawOpt == baseColorDrawGenomicCodons))
+    {
+    boolean isXeno = ((tg->subType == lfSubXeno) || (tg->subType == lfSubChain) ||
+		      startsWith("mrnaBla", tg->mapName));
+    int sizeMul = pslIsProtein(psl) ? 3 : 1;
+    lf->codons = baseColorCodonsFromPsl(lf, psl, sizeMul, isXeno, maxShade, drawOpt, tg);
+    }
+else if (drawOpt > baseColorDrawOff)
+    {
+    struct genePred *gp = NULL;
+    if (startsWith("genePred", tg->tdb->type))
+	gp = (struct genePred *)(lf->original);
+    if (gp && gp->cdsStart != gp->cdsEnd)
+	lf->codons = baseColorCodonsFromGenePred(lf, gp,
+						 (gp->optFields >= genePredExonFramesFld),
+						 (drawOpt != baseColorDrawDiffCodons));
+    }
+if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
+    baseColorSetCdsBounds(lf, psl, tg);
+
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
 if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->mapName, "jaxQTL3"))
@@ -3346,7 +3367,6 @@ for (i = 0; i < lfsbed->lfCount; i++)
 	struct psl *psl = pslLoad(row+rowOffset);
 	lf = lfFromPsl(psl, FALSE);
 	slAddHead(&lfList, lf);
-	pslFree(&psl);
 	}
     sqlFreeResult(&sr);
     }
@@ -3731,16 +3751,12 @@ safef(varName, sizeof(varName), "%s.%s", table, HIDE_NONCODING_SUFFIX);
 boolean hideNoncoding = cartUsualBoolean(cart, varName, HIDE_NONCODING_DEFAULT);  // TODO: Use cartUsualBooleanClosestToHome if tableName == tg->tdb->tableName
 boolean doNmd = FALSE;
 char buff[256];
-enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 safef(buff, sizeof(buff), "hgt.%s.nmdFilter",  tg->mapName);
 
 /* Should we remove items that appear to be targets for nonsense
  * mediated decay? */
 if(nmdTrackFilter)
     doNmd = cartUsualBoolean(cart, buff, FALSE);
-
-if (table != NULL)
-    drawOpt = baseColorGetDrawOpt(tg);
 
 if (tg->itemAttrTbl != NULL)
     itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
@@ -3761,11 +3777,6 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->extra = cloneString(gp->name2);
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if (drawOpt > baseColorDrawOff && gp->cdsStart != gp->cdsEnd)
-        lf->codons = baseColorCodonsFromGenePred(chrom, lf, gp, NULL,
-                (gp->optFields >= genePredExonFramesFld),
-		(drawOpt != baseColorDrawDiffCodons));
-
     lf->components = sfFromGenePred(gp, grayIx);
 
     if (tg->itemAttrTbl != NULL)
@@ -3784,9 +3795,9 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->tallStart = gp->cdsStart;
         lf->tallEnd = gp->cdsEnd;
         }
-
+    // Don't free gp; it might be used in the drawing phase by baseColor code.
+    lf->original = gp;
     slAddHead(&lfList, lf);
-    genePredFree(&gp);
     }
 slReverse(&lfList);
 genePredReaderFree(&gpr);
