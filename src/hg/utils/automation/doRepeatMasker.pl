@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.13 2009/02/05 16:29:36 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.14 2009/03/19 16:15:29 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -28,6 +28,7 @@ use vars qw/
     $opt_species
     $opt_unmaskedSeq
     $opt_customLib
+    $opt_noSplit
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -67,6 +68,7 @@ options:
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
     -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
+    -noSplit              Do not load split _rmsk tables even if chrom based.
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -109,6 +111,7 @@ sub checkOptions {
 		      'species=s',
 		      'unmaskedSeq=s',
 		      'customLib=s',
+		      'noSplit',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -352,6 +355,7 @@ sub doInstall {
   &HgAutomate::checkExistsUnlessDebug('cat', 'install', "$buildDir/$db.fa.out");
 
   my $split = $chromBased ? " (split)" : "";
+  $split = "" if ($opt_noSplit);
   my $whatItDoes =
 "It loads $db.fa.out into the$split rmsk table and $db.nestedRepeats.bed\n" .
 "into the nestedRepeats table.  It also installs the masked 2bit.";
@@ -359,6 +363,7 @@ sub doInstall {
 				      $runDir, $whatItDoes);
 
   $split = $chromBased ? "-split" : "-nosplit";
+  $split = "-nosplit" if ($opt_noSplit);
   my $installDir = "$HgAutomate::clusterData/$db";
   $bossScript->add(<<_EOF_
 hgLoadOut -table=rmsk $split $db $db.fa.out

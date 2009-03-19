@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.27 2009/03/13 22:33:13 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.28 2009/03/19 16:15:29 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -56,6 +56,7 @@ use vars qw/
     $opt_syntenicNet
     $opt_noDbNameCheck
     $opt_inclHap
+    $opt_noLoadChainSplit
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -118,6 +119,7 @@ print STDERR <<_EOF_
     -syntenicNet          Perform optional syntenicNet step
     -noDbNameCheck        ignore Db name format
     -inclHap              include haplotypes *_hap* in chain/net, default not
+    -noLoadChainSplit     do not load split chain tables even if chrom based
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -284,7 +286,8 @@ sub checkOptions {
 		      "ignoreSelf",
                       "syntenicNet",
                       "noDbNameCheck",
-                      "inclHap"
+                      "inclHap",
+                      "noLoadChainSplit"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -965,7 +968,7 @@ and loads the net table.";
 # Load chains:
 _EOF_
     );
-  if ($splitRef) {
+  if ((! $opt_noLoadChainSplit) && $splitRef) {
     $bossScript->add(<<_EOF_
 cd $runDir/chain
 foreach c (`awk '{print \$1;}' $defVars{SEQ1_LEN}`)
