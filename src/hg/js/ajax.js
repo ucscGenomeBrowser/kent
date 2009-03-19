@@ -73,3 +73,18 @@ function setCartVar(name, value)
     loc = loc + "?submit=1&noDisplay=1&cartDump.varName=" + escape(name) + "&cartDump.newValue=" + escape(value) + "&hgsid=" + hgsid;
     loadXMLDoc(loc);
 }
+
+function submitMain()
+{
+    $('form[name="mainForm"]').submit();
+}
+function setCartVarAndRefresh(name,val)
+{
+    setCartVar(name,val);
+    var main=$('form[name="mainForm"]')
+    $(main).attr('action',window.location.href);
+    setTimeout("submitMain()",50);  // Delay in submit helps ensure that cart var has gotten there first.
+
+    return false;
+}
+
