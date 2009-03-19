@@ -485,5 +485,12 @@ double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, bool
 struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
 /* Return slName list (possibly with multiple values for the same var) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+void cartRemoveAllForTdb(struct cart *cart, struct trackDb *tdb);
+/* Remove all variables from cart that are associated with this tdb. */
+
+void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb);
+/* Remove all variables from cart that are associated
+   with this tdb and it's children. */
 #endif /* CART_H */
 

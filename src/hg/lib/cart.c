@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.104 2009/03/13 23:25:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.105 2009/03/19 21:02:59 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1733,5 +1733,26 @@ if(var == NULL)
 struct slName *slNames = cartOptionalSlNameList(cart,var);
 freeMem(var);
 return slNames;
+}
+
+void cartRemoveAllForTdb(struct cart *cart, struct trackDb *tdb)
+/* Remove all variables from cart that are associated with this tdb. */
+{
+char setting[128];
+safef(setting,sizeof(setting),"%s.",tdb->tableName);
+cartRemovePrefix(cart,setting);
+safef(setting,sizeof(setting),"%s_",tdb->tableName); // TODO: All should be {tableName}.{varName}... Fix {tableName}_sel
+cartRemovePrefix(cart,setting);
+cartRemove(cart,tdb->tableName);
+}
+
+void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb)
+/* Remove all variables from cart that are associated
+   with this tdb and it's children. */
+{
+cartRemoveAllForTdb(cart,tdb);
+struct trackDb *subTdb;
+for(subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
+    cartRemoveAllForTdb(cart,subTdb);
 }
 
