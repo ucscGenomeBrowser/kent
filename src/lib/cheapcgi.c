@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.112 2009/03/18 17:51:53 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.113 2009/03/19 21:41:00 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1238,7 +1238,7 @@ if ((i % tableColumns) != 0)
 puts("</TR></TABLE>");
 char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "1");
+cgiMakeHiddenVar(buf, "0");
 }
 
 void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName *checked,
