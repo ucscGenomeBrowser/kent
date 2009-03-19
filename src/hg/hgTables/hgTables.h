@@ -767,6 +767,11 @@ struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as list of sqlFieldType. */
 
+struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *db, char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount);
+/* Get list of beds from bigBed, in all regions, that pass filtering. */
+
 void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 

@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.63 2009/03/17 04:28:38 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.64 2009/03/19 00:42:38 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -273,7 +273,11 @@ struct region *oldNext = region->next;
 struct bed *bedList = NULL;
 region->next = NULL;
 
-if (isCustomTrack(table))
+if (isBigBed(table))
+    {
+    bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
+    }
+else if (isCustomTrack(table))
     bedList = customTrackGetFilteredBeds(table, region, lm, retFieldCount);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     bedList = wikiTrackGetFilteredBeds(table, region, lm, retFieldCount);

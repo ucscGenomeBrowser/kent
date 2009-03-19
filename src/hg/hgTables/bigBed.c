@@ -20,7 +20,7 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.7 2009/03/18 01:34:52 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.8 2009/03/19 00:42:38 kent Exp $";
 
 boolean isBigBed(char *table)
 /* Return TRUE if table corresponds to a bigBed file. */
@@ -452,6 +452,57 @@ for (col = as->columnList; col != NULL; col = col->next, ++colIx)
 slReverse(&asFilter->columnList);
 return asFilter;
 }
+
+static void addFilteredBedsOnRegion(struct bbiFile *bbi, struct region *region, 
+	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList)
+/* Add relevant beds in reverse order to pBedList */
+{
+struct lm *bbLm = lmInit(0);
+struct bigBedInterval *ivList = NULL, *iv;
+ivList = bigBedIntervalQuery(bbi, region->chrom, region->start, region->end, 0, bbLm);
+char *row[bbi->fieldCount];
+char startBuf[16], endBuf[16];
+for (iv = ivList; iv != NULL; iv = iv->next)
+    {
+    bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
+    if (asFilterOnRow(filter, row))
+        {
+	struct bed *bed = bedLoadN(row, bbi->definedFieldCount);
+	struct bed *lmBed = lmCloneBed(bed, bedLm);
+	slAddHead(pBedList, lmBed);
+	bedFree(&bed);
+	}
+    }
+
+lmCleanup(&bbLm);
+}
+
+struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *db, char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount)
+/* Get list of beds from bigBed, in all regions, that pass filtering. */
+{
+/* Connect to big bed and get metadata and filter. */
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct asFilter *filter = asFilterFromCart(cart, db, table, as);
+
+/* Get beds a region at a time. */
+struct bed *bedList = NULL;
+struct region *region;
+for (region = regionList; region != NULL; region = region->next)
+    addFilteredBedsOnRegion(bbi, region, table, filter, lm, &bedList);
+slReverse(&bedList);
+
+/* Clean up and return. */
+if (retFieldCount != NULL) 
+	*retFieldCount = bbi->definedFieldCount;
+bbiFileClose(&bbi);
+freeMem(fileName);
+return bedList;
+}
+
 
 void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
