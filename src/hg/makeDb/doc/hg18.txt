@@ -26599,6 +26599,8 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 # Livia (apache@vital-it.ch ) from ExPASy.
 
     hgsql hg18 -e 'update omimGene set name="611016" where name="608636"'
+    hgsql hg18 -e 'update omimToKnownCanonical set omimId="611016" where omimId="608636"'
+
 #############################################################################
 # fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
     mkdir /hive/data/genomes/hg18/bed/fox2ClipSeq
