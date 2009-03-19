@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.482 2009/03/18 21:10:26 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.483 2009/03/19 21:13:00 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1983,7 +1983,7 @@ puts("<B>Display filters (applied to all subtracks):</B>");
 puts("<BR>\n");
 
 puts("<BR><B>Population availability:</B>&nbsp;");
-static char *popAvailMenuPhaseIII[] = 
+static char *popAvailMenuPhaseIII[] =
     { "no filter",
       "all 11 Phase III populations",
       "all 4 Phase II populations" };
@@ -2076,7 +2076,7 @@ else
     }
 
 static char *orthoMenu[] =
-    { "no filter", 
+    { "no filter",
       "available",
       "matches major human allele",
       "matches minor human allele",
@@ -2430,9 +2430,29 @@ if (!ct)
 makeDownloadsLink(tdb);
 }
 
+
 void trackUi(struct trackDb *tdb, struct customTrack *ct)
 /* Put up track-specific user interface. */
 {
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js",NULL);
+jsIncludeFile("ajax.js", NULL);
+#define SUPPORT_RESET_TO_DEFAULTS
+#ifdef SUPPORT_RESET_TO_DEFAULTS
+#define RESET_TO_DEFAULTS "defaults"
+char setting[128];
+// NOTE: Currently only composite multi-view tracks because
+// reset relies upon all cart vars following naming convention:
+//   {tableName}.{varName}...  ( One exception supported: {tableName}_sel ).
+if(tdbIsComposite(tdb) && subgroupingExists(tdb,"view"))
+    {
+    safef(setting,sizeof(setting),"%s.%s",tdb->tableName,RESET_TO_DEFAULTS);
+    // NOTE: if you want track vis to not be reset, move to after vis dropdown
+    if(1 == cartUsualInt(cart, setting, 0))
+        cartRemoveAllForTdbAndChildren(cart,tdb);
+    }
+#endif//def SUPPORT_RESET_TO_DEFAULTS
+
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
@@ -2477,6 +2497,12 @@ else
     }
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
+
+#ifdef SUPPORT_RESET_TO_DEFAULTS
+if(tdbIsComposite(tdb) && subgroupingExists(tdb,"view"))
+    printf("\n&nbsp;&nbsp;<a href='#' onclick='setCartVarAndRefresh(\"%s\",\"1\"); return false;'>Reset to defaults</a>\n",setting);
+#endif//def SUPPORT_RESET_TO_DEFAULTS
+
 if (ct)
     {
     puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
