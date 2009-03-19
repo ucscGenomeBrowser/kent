@@ -23,11 +23,11 @@
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 		    <P>
-The wiggle (WIG) format is for display of continuous data such as GC percent,
-probability scores, and transcriptome data. Wiggle data elements must be
-regularly spaced and equally sized. If you need to display irregularly spaced
-data, or data elements of varying size, use the <A HREF="bedgraph.html"
-TARGET=_blank>BedGraph</A> format instead.
+The wiggle (WIG) format is for display of dense, continuous data such as GC
+percent, probability scores, and transcriptome data. Wiggle data elements must
+be equally sized. If you need to display continuous data that is 
+<A HREF="#sparse">sparse</A> or contains elements of varying size, use the
+<A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format instead.
 <P>
 For speed and efficiency, wiggle data is compressed and stored internally in
 128 unique bins. This compression means that there is a minor loss of precision
@@ -211,6 +211,13 @@ fixedStep chrom=chr19 start=59307401 step=300 span=200
  200
  100</PRE></FONT>
 
+<A NAME="sparse"></A>
+<P><B>Caution for sparse variableStep data</B></P>
+The wiggle format was designed for quickly displaying data that is quite
+dense.  The variableStep format, in particular, becomes very inefficient when
+there are only a few data points per 1,024 bases.  If variableStep data points
+(<em>i.e.</em>, chromStarts) are greater than about 100 bases apart, it is
+advisable to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format.
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	</TD></TR></TABLE>
