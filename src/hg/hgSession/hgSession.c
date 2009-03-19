@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.49 2009/03/13 21:07:50 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.50 2009/03/19 21:38:36 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,7 +50,7 @@ return decStr;
 
 
 void welcomeUser(char *wikiUserName)
-/* Tell the user they are not logged in to the wiki and tell them how to 
+/* Tell the user they are not logged in to the wiki and tell them how to
  * do so. */
 {
 char *wikiHost = wikiLinkHost();
@@ -66,7 +66,7 @@ printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
 }
 
 void offerLogin()
-/* Tell the user they are not logged in to the wiki and tell them how to 
+/* Tell the user they are not logged in to the wiki and tell them how to
  * do so. */
 {
 char *wikiHost = wikiLinkHost();
@@ -99,7 +99,7 @@ printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
 
 char *destAppScriptName()
 /* Return the complete path (/cgi-bin/... on our systems) of the destination
- * CGI for share-able links.  Currently hardcoded; there might be a way to 
+ * CGI for share-able links.  Currently hardcoded; there might be a way to
  * offer the user a choice. */
 {
 static char *thePath = NULL;
@@ -122,7 +122,7 @@ return thePath;
 
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 		    boolean encode)
-/* Add to dy an URL that tells hgSession to load a saved session.  
+/* Add to dy an URL that tells hgSession to load a saved session.
  * If encode, cgiEncodeFull the URL. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
@@ -141,7 +141,7 @@ dyStringFree(&dyTmp);
 }
 
 char *getSessionLink(char *encUserName, char *encSessionName)
-/* Form a link that will take the user to a bookmarkable page that 
+/* Form a link that will take the user to a bookmarkable page that
  * will load the given session. */
 {
 struct dyString *dy = dyStringNew(1024);
@@ -152,7 +152,7 @@ return dyStringCannibalize(&dy);
 }
 
 char *getSessionEmailLink(char *encUserName, char *encSessionName)
-/* Invoke mailto: with a cgi-encoded link that will take the user to a 
+/* Invoke mailto: with a cgi-encoded link that will take the user to a
  * bookmarkable page that will load the given session. */
 {
 struct dyString *dy = dyStringNew(1024);
@@ -166,7 +166,7 @@ return dyStringCannibalize(&dy);
 }
 
 void addUrlLink(struct dyString *dy, char *url, boolean encode)
-/* Add to dy an URL that tells hgSession to load settings from the given url. 
+/* Add to dy an URL that tells hgSession to load settings from the given url.
  * If encode, cgiEncodeFull the whole thing. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
@@ -183,10 +183,10 @@ else
     }
 freeMem(encodedUrl);
 dyStringFree(&dyTmp);
-}	       
+}
 
 char *getUrlLink(char *url)
-/* Form a link that will take the user to a bookmarkable page that 
+/* Form a link that will take the user to a bookmarkable page that
  * will load the given url. */
 {
 struct dyString *dy = dyStringNew(1024);
@@ -197,7 +197,7 @@ return dyStringCannibalize(&dy);
 }
 
 char *getUrlEmailLink(char *url)
-/* Invoke mailto: with a cgi-encoded link that will take the user to a 
+/* Invoke mailto: with a cgi-encoded link that will take the user to a
  * bookmarkable page that will load the given url. */
 {
 struct dyString *dy = dyStringNew(1024);
@@ -210,7 +210,7 @@ return dyStringCannibalize(&dy);
 }
 
 static char *getSetting(char *settings, char *name)
-/* Dig out one setting from a settings string that we're only going to 
+/* Dig out one setting from a settings string that we're only going to
  * look at once (so we don't keep the hash around). */
 {
 if (isEmpty(settings))
@@ -222,7 +222,7 @@ return val;
 }
 
 void showExistingSessions(char *userName)
-/* Print out a table with buttons for sharing/unsharing/loading/deleting 
+/* Print out a table with buttons for sharing/unsharing/loading/deleting
  * previously saved sessions. */
 {
 struct sqlConnection *conn = hConnectCentral();
@@ -313,7 +313,7 @@ printf("</TABLE>\n");
 }
 
 void showLoadingOptions(char *userName, boolean savedSessionsSupported)
-/* Show options for loading settings from another user's session, a file 
+/* Show options for loading settings from another user's session, a file
  * or URL. */
 {
 printf("<H3>Restore Settings</H3>\n");
@@ -398,8 +398,8 @@ cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
-cgiMakeDropListFull(hgsSaveLocalFileCompress, 
-	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize, 
+cgiMakeDropListFull(hgsSaveLocalFileCompress,
+	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize,
 	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
 	NULL);
 printf("</TD><TD>");
@@ -414,7 +414,7 @@ printf("</TABLE>\n");
 
 void showSessionControls(char *userName, boolean savedSessionsSupported,
 			 boolean webStarted)
-/* If userName is non-null, show sessions that belong to user and allow 
+/* If userName is non-null, show sessions that belong to user and allow
  * saving of named sessions.
  * If savedSessionsSupported, allow import of named sessions.
  * Allow export/import of settings from file/URL. */
@@ -554,7 +554,7 @@ void checkForCustomTracks(struct dyString *dyMessage);
 
 #define INITIAL_USE_COUNT 0
 char *doNewSession()
-/* Save current settings in a new named session.  
+/* Save current settings in a new named session.
  * Return a message confirming what we did. */
 {
 struct dyString *dyMessage = dyStringNew(2048);
@@ -657,7 +657,7 @@ return dyStringCannibalize(&dyMessage);
 }
 
 void checkForCustomTracks(struct dyString *dyMessage)
-/* Scan cart for ctfile_<db> variables.  Tally up the databases that have 
+/* Scan cart for ctfile_<db> variables.  Tally up the databases that have
  * live custom tracks and those that have expired custom tracks. */
 /* While we're at it, also look for saved blat results. */
 {
@@ -671,10 +671,10 @@ if (helList != NULL)
 	{
 	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
-	/* If the file doesn't exist, just remove the cart variable so it 
+	/* If the file doesn't exist, just remove the cart variable so it
 	 * doesn't get copied from session to session.  If it does exist,
-	 * leave it up to customFactoryTestExistence to parse the file for 
-	 * possible customTrash table references, some of which may exist 
+	 * leave it up to customFactoryTestExistence to parse the file for
+	 * possible customTrash table references, some of which may exist
 	 * and some not. */
 	if (!fileExists(hel->val))
 	    {
@@ -756,9 +756,9 @@ if (isNotEmpty(ss))
 }
 
 char *doUpdateSessions()
-/* Look for cart variables matching prefixes for sharing/unsharing, 
- * loading or deleting a previously saved session.  
- * Return a message confirming what we did, or NULL if no such variables 
+/* Look for cart variables matching prefixes for sharing/unsharing,
+ * loading or deleting a previously saved session.
+ * Return a message confirming what we did, or NULL if no such variables
  * were in the cart. */
 {
 struct dyString *dyMessage = dyStringNew(1024);
@@ -847,7 +847,7 @@ else
 }
 
 char *doOtherUser(char *actionVar)
-/* Load settings from another user's named session.  
+/* Load settings from another user's named session.
  * Return a message confirming what we did. */
 {
 struct sqlConnection *conn = hConnectCentral();
@@ -869,7 +869,7 @@ return dyStringCannibalize(&dyMessage);
 }
 
 void doSaveLocal()
-/* Output current settings to be saved as a file on the user's machine.  
+/* Output current settings to be saved as a file on the user's machine.
  * Return a message confirming what we did. */
 {
 char *fileName = trimSpaces(cartString(cart, hgsSaveLocalFileName));
@@ -883,7 +883,7 @@ textOutClose(&compressPipe);
 }
 
 char *doLoad(boolean fromUrl, char *actionVar)
-/* Load settings from a file or URL sent by the user.  
+/* Load settings from a file or URL sent by the user.
  * Return a message confirming what we did. */
 {
 struct dyString *dyMessage = dyStringNew(1024);
@@ -1027,7 +1027,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
 		   "onChange=\"%s\" onClick=\"%s\">\n"
-		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=1><BR>\n",
+		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
 		   hgsSharePrefix, encSessionName, (shared ? " CHECKED" : ""),
 		   highlightAccChanges, highlightAccChanges,
 		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
@@ -1196,7 +1196,7 @@ void hgSession()
 {
 struct hash *oldVars = hashNew(10);
 
-/* Sometimes we output HTML and sometimes plain text; let each outputter 
+/* Sometimes we output HTML and sometimes plain text; let each outputter
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
