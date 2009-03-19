@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.180 2009/03/18 23:40:53 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.181 2009/03/19 21:48:50 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4524,8 +4524,6 @@ boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
 
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js",NULL);
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
 commonCssStyles();
