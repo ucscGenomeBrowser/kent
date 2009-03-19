@@ -1,6 +1,6 @@
-/* javascript - some little helper routines  to manage our javascript.  
+/* javascript - some little helper routines  to manage our javascript.
  * We don't do much javascript - just occassionally use it so that
- * when they select something from a pull-down, it will go hit the server to 
+ * when they select something from a pull-down, it will go hit the server to
  * figure out how to reload other control options based on the choice.
  * (For instance if they change the group, which items in the track
  * drop-down need to change).
@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.24 2009/02/09 18:16:37 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.25 2009/03/19 18:29:52 tdreszer Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -174,13 +174,13 @@ dyStringPrintf(dy, "[document.mainForm.%s.selectedIndex].value; ", var);
 void jsTextCarryOver(struct dyString *dy, char *var)
 /* Add statement to carry-over text item to dy. */
 {
-dyStringPrintf(dy, 
+dyStringPrintf(dy,
     "document.hiddenForm.%s.value=document.mainForm.%s.value; ",
     var, var);
 }
 
 void jsTrackingVar(char *jsVar, char *val)
-/* Emit a little Javascript to keep track of a variable. 
+/* Emit a little Javascript to keep track of a variable.
  * This helps especially with radio buttons. */
 {
 hPrintf("<SCRIPT>\n");
@@ -188,7 +188,7 @@ hPrintf("var %s='%s';\n", jsVar, val);
 hPrintf("</SCRIPT>\n");
 }
 
-void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar, 
+void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar,
 	char *val, char *selVal)
 /* Make a radio button that also sets tracking variable
  * in javascript. */
@@ -215,7 +215,7 @@ if (oldVal)
 hPrintf(" onClick=\"%s=%d;\"", jsVar, !oldVal);
 hPrintf(">");
 sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), cgiVar);
-cgiMakeHiddenVar(buf, "1");
+cgiMakeHiddenVar(buf, "0");
 }
 
 void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar)
@@ -252,7 +252,7 @@ puts("</FORM>");
 
 char *jsSetVerticalPosition(char *form)
 /* Returns a javascript statement for storing the vertical position of the
- * page; typically this would go just before a document submit.  
+ * page; typically this would go just before a document submit.
  * jsInit must be called first.
  * Do not free return value!   */
 {
@@ -268,10 +268,10 @@ void jsMakeSetClearButton(struct cart *cart,
 			  char *form, char *buttonVar, char *buttonLabel,
 			  char *cartVarPrefix, struct slName *cartVarSuffixList,
 			  char *anchor, boolean currentPos, boolean isSet)
-/* Make a button for setting or clearing all of a list of boolean 
- * cart variables (i.e. checkboxes).  If this button was just pressed, 
+/* Make a button for setting or clearing all of a list of boolean
+ * cart variables (i.e. checkboxes).  If this button was just pressed,
  * set or clear those cart variables.
- * Optional html anchor is appended to the form's action if given. 
+ * Optional html anchor is appended to the form's action if given.
  * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
  * that the new page gets the same vertical offset as the current page. */
 {
@@ -307,7 +307,7 @@ if (isNotEmpty(cgiOptionalString(buttonVar)))
 }
 
 void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet)
-/* Make a button for setting or clearing a set of checkboxes with the same name. 
+/* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */
 {
 char javascript[256];
@@ -320,7 +320,7 @@ cgiMakeOnClickButton(javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_
 char *jsPressOnEnter(char *button)
 /* Returns a javascript statement that clicks button when the Enter key
  * has been pressed; typically this would go in a text input.
- * jsInit must be called first. 
+ * jsInit must be called first.
  * Do not free return value!  */
 {
 if (! jsInited)
@@ -388,7 +388,7 @@ if(hashLookup(includedFiles, fileName) == NULL)
 
 char *jsCheckAllOnClickHandler(char *idPrefix, boolean state)
 /* Returns javascript for use as an onclick attribute value to check all/uncheck all
- * all checkboxes with given idPrefix. 
+ * all checkboxes with given idPrefix.
  * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). */
 {
 static char buf[512];
@@ -402,7 +402,7 @@ return buf;
 void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPrefix, boolean state)
 /* Make submit button which uses javascript to apply check all or uncheck all to all
  * checkboxes with given idPrefix.
- * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). 
+ * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all").
  * id parameter may be NULL */
 {
 cgiMakeOnClickSubmitButton(jsCheckAllOnClickHandler(idPrefix, state), name, value);
@@ -437,11 +437,11 @@ return dyStringCannibalize(&dy);
 char *jsStripJavascript(char *str)
 /* Strip out anything that looks like javascript in html string.
    This function is designed to cleanup user input (e.g. to avoid XSS attacks).
-   In reality, we cannot remove javascript with 100% accuracy, b/c there are many browser 
+   In reality, we cannot remove javascript with 100% accuracy, b/c there are many browser
    specific ways of embedding javascript; see http://ha.ckers.org/xss.html for many, many examples.
    Returned string should be free'ed after use. */
 {
-char *regExs[] = {"<script\\s*>[^<]*</script\\s*>", 
+char *regExs[] = {"<script\\s*>[^<]*</script\\s*>",
                    "<script[^>]*>" // handles case where they have an un-closed script tag with a src attribute
 			};
 int i;
