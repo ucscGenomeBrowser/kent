@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.19 2009/03/03 21:46:55 hiram Exp $
+# $Id: makeDownloads.pl,v 1.20 2009/03/19 16:14:35 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -18,6 +18,8 @@ use HgStepManager;
 use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
+    $opt_allowMissedTrfs
+    $opt_noChromRoot
     $opt_ignoreRepeatMasker
     /;
 
@@ -49,8 +51,11 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 					'workhorse' => $defaultWorkhorse);
-  print STDERR "    -ignoreRepeatMasker   do not look for RM .out files\n";
-  print STDERR "
+  print STDERR <<_EOF_
+    -allowMissedTrfs      tolerate missing trfMaskChrom/*.bed files
+    -noChromRoot          find RM .out files for chr*_hap in actual hap chrom name
+    -ignoreRepeatMasker   do not look for RM .out files
+
 Automates generation of assembly download files for genome database \$db:
     compress: Create compressed download files, md5sum.txt and README.txt in
               $HgAutomate::clusterData/\$db/goldenPath/*/
@@ -60,7 +65,8 @@ This will blow away any existing README.txt files and any files that are
 already in bigZips etc.  So if you have added files specially for this
 release (include README.txt sections), and then need to run this again,
 be sure to back them up in a different directory first.
-";
+_EOF_
+  ;
   # Detailed help (-help):
   print STDERR "
 Assumptions:
@@ -83,6 +89,8 @@ my ($chromBased, @chroms, %chromRoots, $chromGz, $geneTable);
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
+		      'allowMissedTrfs',
+		      'noChromRoot',
 		      'ignoreRepeatMasker',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -165,8 +173,12 @@ sub compressChromFiles {
       } elsif ($trfFile =~ /chrM\.bed$/) {
 	$trfFudge++;
       } else {
-	warn "Missing TRF $trfFile\n";
-	$problems++;
+	if ($opt_allowMissedTrfs) {
+	    $trfFudge++;
+	} else {
+	    warn "Missing TRF $trfFile\n";
+	    $problems++;
+	}
       }
     }
     if ($problems > 15) {
@@ -1026,9 +1038,11 @@ $chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold);
 if ($chromBased) {
   foreach my $chr (@chroms) {
     my $chrRoot = $chr;
-    $chrRoot =~ s/^chr//;
-    $chrRoot =~ s/_random$//;
-    $chrRoot =~ s/_\w+_hap\d+//;
+	$chrRoot =~ s/^chr//;
+	$chrRoot =~ s/_random$//;
+    if (! $opt_noChromRoot) {
+	$chrRoot =~ s/_\w+_hap\d+//;
+    }
     push @{$chromRoots{$chrRoot}}, $chr;
   }
   $chromGz = "chromosomes";
