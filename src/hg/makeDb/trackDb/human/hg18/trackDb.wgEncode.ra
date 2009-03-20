@@ -206,7 +206,6 @@ priority 300
 
 
 # BROAD ChIP-seq (wrangler: tdreszer)
-
 track wgEncodeBroadChipSeq
 compositeTrack on
 shortLabel Broad Histone
@@ -227,7 +226,6 @@ noInherit on
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in GM12878 cells)
@@ -241,7 +239,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalGm12878Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in GM12878 cells)
@@ -256,7 +253,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
@@ -271,7 +267,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
@@ -286,7 +281,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in GM12878 cells)
@@ -300,7 +294,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in GM12878 cells)
@@ -315,7 +308,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in GM12878 cells)
@@ -330,7 +322,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in GM12878 cells)
@@ -345,7 +336,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in GM12878 cells)
@@ -359,7 +349,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in GM12878 cells)
@@ -374,7 +363,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in GM12878 cells)
@@ -389,7 +377,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in GM12878 cells)
@@ -404,7 +391,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in GM12878 cells)
@@ -418,7 +404,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in GM12878 cells)
@@ -433,7 +418,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in GM12878 cells)
@@ -448,7 +432,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in GM12878 cells)
@@ -463,7 +446,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in GM12878 cells)
@@ -477,7 +459,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalGm12878H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
@@ -492,7 +473,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in GM12878 cells)
@@ -507,7 +487,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in GM12878 cells)
@@ -522,7 +501,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in GM12878 cells)
@@ -536,7 +514,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in GM12878 cells)
@@ -551,7 +528,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in GM12878 cells)
@@ -566,7 +542,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in GM12878 cells)
@@ -581,7 +556,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in GM12878 cells)
@@ -595,7 +569,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in GM12878 cells)
@@ -610,7 +583,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in GM12878 cells)
@@ -625,7 +597,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in GM12878 cells)
@@ -640,7 +611,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in GM12878 cells)
@@ -654,7 +624,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
@@ -669,7 +638,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in GM12878 cells)
@@ -684,7 +652,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in GM12878 cells)
@@ -699,7 +666,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in GM12878 cells)
@@ -713,7 +679,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in GM12878 cells)
@@ -728,7 +693,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in GM12878 cells)
@@ -743,7 +707,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in GM12878 cells)
@@ -758,7 +721,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalGm12878Control
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 Control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (GM12878 control)
@@ -773,7 +735,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 Control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (GM12878 control)
@@ -788,7 +749,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM128 Control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (GM12878 control)
@@ -803,7 +763,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HUVEC cells)
@@ -817,7 +776,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalHuvecCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HUVEC cells)
@@ -832,7 +790,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in HUVEC cells)
@@ -847,7 +804,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in HUVEC cells)
@@ -862,7 +818,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in HUVEC cells)
@@ -876,7 +831,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in HUVEC cells)
@@ -891,7 +845,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in HUVEC cells)
@@ -906,7 +859,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in HUVEC cells)
@@ -921,7 +873,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HUVEC cells)
@@ -935,7 +886,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HUVEC cells)
@@ -950,7 +900,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in HUVEC cells)
@@ -965,7 +914,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in HUVEC cells)
@@ -980,7 +928,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HUVEC cells)
@@ -994,7 +941,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HUVEC cells)
@@ -1009,7 +955,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in HUVEC cells)
@@ -1024,7 +969,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in HUVEC cells)
@@ -1039,7 +983,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HUVEC cells)
@@ -1053,7 +996,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalHuvecH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HUVEC cells)
@@ -1068,7 +1010,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in HUVEC cells)
@@ -1083,7 +1024,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in HUVEC cells)
@@ -1098,7 +1038,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in HUVEC cells)
@@ -1112,7 +1051,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalHuvecH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in HUVEC cells)
@@ -1127,7 +1065,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in HUVEC cells)
@@ -1142,7 +1079,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in HUVEC cells)
@@ -1157,7 +1093,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HUVEC cells)
@@ -1171,7 +1106,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalHuvecH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HUVEC cells)
@@ -1186,7 +1120,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in HUVEC cells)
@@ -1201,7 +1134,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in HUVEC cells)
@@ -1216,7 +1148,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in HUVEC cells)
@@ -1230,7 +1161,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in HUVEC cells)
@@ -1245,7 +1175,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in HUVEC cells)
@@ -1260,7 +1189,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in HUVEC cells)
@@ -1275,7 +1203,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HUVEC cells)
@@ -1289,7 +1216,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HUVEC cells)
@@ -1304,7 +1230,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in HUVEC cells)
@@ -1319,7 +1244,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in HUVEC cells)
@@ -1334,7 +1258,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HUVEC cells)
@@ -1348,7 +1271,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalHuvecH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HUVEC cells)
@@ -1363,7 +1285,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in HUVEC cells)
@@ -1378,7 +1299,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in HUVEC cells)
@@ -1393,7 +1313,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksHuvecPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in HUVEC cells)
@@ -1407,7 +1326,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalHuvecPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in HUVEC cells)
@@ -1422,7 +1340,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in HUVEC cells)
@@ -1437,7 +1354,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in HUVEC cells)
@@ -1452,7 +1368,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalHuvecControl
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (HUVEC control)
@@ -1467,7 +1382,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecControl
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (HUVEC control)
@@ -1482,7 +1396,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecControl
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (HUVEC control)
@@ -1497,7 +1410,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqPeaksK562Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in K562 cells)
@@ -1511,7 +1423,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalK562Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in K562 cells)
@@ -1526,7 +1437,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in K562 cells)
@@ -1541,7 +1451,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in K562 cells)
@@ -1556,7 +1465,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in K562 cells)
@@ -1570,7 +1478,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalK562H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in K562 cells)
@@ -1585,7 +1492,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in K562 cells)
@@ -1600,7 +1506,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in K562 cells)
@@ -1615,7 +1520,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in K562 cells)
@@ -1629,7 +1533,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalK562H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in K562 cells)
@@ -1644,7 +1547,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in K562 cells)
@@ -1659,7 +1561,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in K562 cells)
@@ -1674,7 +1575,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in K562 cells)
@@ -1688,7 +1588,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalK562H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in K562 cells)
@@ -1703,7 +1602,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in K562 cells)
@@ -1718,7 +1616,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in K562 cells)
@@ -1733,7 +1630,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksK562H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in K562 cells)
@@ -1747,7 +1643,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalK562H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in K562 cells)
@@ -1762,7 +1657,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in K562 cells)
@@ -1777,7 +1671,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in K562 cells)
@@ -1792,7 +1685,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksK562H3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in K562 cells)
@@ -1806,7 +1698,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalK562H3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in K562 cells)
@@ -1821,7 +1712,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in K562 cells)
@@ -1836,7 +1726,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in K562 cells)
@@ -1851,7 +1740,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksK562H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in K562 cells)
@@ -1865,7 +1753,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalK562H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in K562 cells)
@@ -1880,7 +1767,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in K562 cells)
@@ -1895,7 +1781,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in K562 cells)
@@ -1910,7 +1795,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksK562H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in K562 cells)
@@ -1924,7 +1808,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalK562H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in K562 cells)
@@ -1939,7 +1822,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in K562 cells)
@@ -1954,7 +1836,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in K562 cells)
@@ -1969,7 +1850,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksK562H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in K562 cells)
@@ -1983,7 +1863,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalK562H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in K562 cells)
@@ -1998,7 +1877,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in K562 cells)
@@ -2013,7 +1891,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in K562 cells)
@@ -2028,7 +1905,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksK562H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in K562 cells)
@@ -2042,7 +1918,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalK562H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in K562 cells)
@@ -2057,7 +1932,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in K562 cells)
@@ -2072,7 +1946,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in K562 cells)
@@ -2087,7 +1960,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksK562Pol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in K562 cells)
@@ -2101,7 +1973,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalK562Pol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in K562 cells)
@@ -2116,7 +1987,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in K562 cells)
@@ -2131,7 +2001,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in K562 cells)
@@ -2146,7 +2015,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalK562Control
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal ( K562 control)
@@ -2161,7 +2029,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Control
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (K562 control)
@@ -2176,7 +2043,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Control
-    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (K562 control)
@@ -2191,7 +2057,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqPeaksNhekCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in Keratin cells)
@@ -2205,7 +2070,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalNhekCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in Keratin cells)
@@ -2220,7 +2084,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in Keratin cells)
@@ -2235,7 +2098,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel CTCF Kera 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in Keratin cells)
@@ -2250,7 +2112,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in Keratin cells)
@@ -2264,7 +2125,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in Keratin cells)
@@ -2279,7 +2139,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in Keratin cells)
@@ -2294,7 +2153,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in Keratin cells)
@@ -2309,7 +2167,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in Keratin cells)
@@ -2323,7 +2180,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in Keratin cells)
@@ -2338,7 +2194,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in Keratin cells)
@@ -2353,7 +2208,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in Keratin cells)
@@ -2368,7 +2222,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in Keratin cells)
@@ -2382,7 +2235,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in Keratin cells)
@@ -2397,7 +2249,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in Keratin cells)
@@ -2412,7 +2263,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in Keratin cells)
@@ -2427,7 +2277,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in Keratin cells)
@@ -2441,7 +2290,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalNhekH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in Keratin cells)
@@ -2456,7 +2304,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in Keratin cells)
@@ -2471,7 +2318,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in Keratin cells)
@@ -2486,7 +2332,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in Keratin cells)
@@ -2500,7 +2345,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalNhekH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in Keratin cells)
@@ -2515,7 +2359,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in Keratin cells)
@@ -2530,7 +2373,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in Keratin cells)
@@ -2545,7 +2387,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in Keratin cells)
@@ -2559,7 +2400,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalNhekH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in Keratin cells)
@@ -2574,7 +2414,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in Keratin cells)
@@ -2589,7 +2428,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in Keratin cells)
@@ -2604,7 +2442,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in Keratin cells)
@@ -2618,7 +2455,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in Keratin cells)
@@ -2633,7 +2469,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in Keratin cells)
@@ -2648,7 +2483,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in Keratin cells)
@@ -2663,7 +2497,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksNhekH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in Keratin cells)
@@ -2677,7 +2510,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in Keratin cells)
@@ -2692,7 +2524,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in Keratin cells)
@@ -2707,7 +2538,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in Keratin cells)
@@ -2722,7 +2552,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksNhekH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in Keratin cells)
@@ -2736,7 +2565,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalNhekH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in Keratin cells)
@@ -2751,7 +2579,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in Keratin cells)
@@ -2766,7 +2593,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in Keratin cells)
@@ -2781,7 +2607,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksNhekPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in Keratin cells)
@@ -2795,7 +2620,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalNhekPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in Keratin cells)
@@ -2810,7 +2634,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in Keratin cells)
@@ -2825,7 +2648,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekPol2b
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
@@ -2840,7 +2662,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalNhekControl
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in Keratin cells)
@@ -2855,7 +2676,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekControl
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (control in Keratin cells)
@@ -2870,7 +2690,6 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekControl
-    release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel Kera control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (control in Keratin cells)
@@ -6341,7 +6160,6 @@ type bed 3
 wgEncode 1
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel GM12878 Control
     longLabel ENCODE SUNY Albany RBP Associated RNA (T7Tag Control in GM12878 cells)
@@ -6356,7 +6174,6 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel K562 Control
     longLabel ENCODE SUNY Albany RBP Associated RNA (T7Tag Control in K562 cells)
@@ -6370,7 +6187,6 @@ wgEncode 1
     cell K562
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel GM12878 ELAVL1
     longLabel ENCODE SUNY Albany RBP Associated RNA (ELAVL1 in GM12878 cells)
@@ -6385,7 +6201,6 @@ wgEncode 1
     color 0,107,27
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel K562 ELAVL1
     longLabel ENCODE SUNY Albany RBP Associated RNA (ELAVL1 in K562 cells)
@@ -6400,7 +6215,6 @@ wgEncode 1
     color 0,107,27
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel K562 IGF2BP1
     longLabel ENCODE SUNY Albany RBP Associated RNA (IGF2BP1 in K562 cells)
@@ -6415,7 +6229,6 @@ wgEncode 1
     color 0,40,158
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel GM12878 PABPC1
     longLabel ENCODE SUNY Albany RBP Associated RNA (PABPC1 in GM12878 cells)
@@ -6430,7 +6243,6 @@ wgEncode 1
     color 133,0,33
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
-    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel K562 PABPC1
     longLabel ENCODE SUNY Albany RBP Associated RNA (PABPC1 in K562 cells)
