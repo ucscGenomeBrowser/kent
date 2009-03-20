@@ -118,9 +118,15 @@ sub getTableFields {
   my $db = shift;
   confess "Too few arguments"  if (! defined $db);
   confess "Too many arguments" if (defined shift);
+  my $host = $hgConf->lookup('db.host');
+  if ($host && $host ne 'localhost') {
+    $host = ";host=$host";
+  } else {
+    $host = "";
+  }
   my $username = $hgConf->lookup('db.user');
   my $password = $hgConf->lookup('db.password');
-  my $dbh = DBI->connect("DBI:mysql:$db", $username, $password);
+  my $dbh = DBI->connect("DBI:mysql:database=$db$host", $username, $password);
   my %tableFields = ();
   my %tableNamesInsens = ();
   my $tables = $dbh->selectcol_arrayref("show tables;");
@@ -352,6 +358,14 @@ $noLoad   = 1 if (defined $opt_noLoad);
 $verbose  = $opt_verbose if (defined $opt_verbose);
 $verbose  = 1 if ($debug);
 
+# If -hgConf is given, set HGDB_CONF environment variable so our call to
+# hgsql uses the correct file.
+if ($opt_hgConf) {
+  if (! -e $opt_hgConf) {
+    die "Error: -hgConf file \"$opt_hgConf\" does not exist.\n";
+  }
+  $ENV{HGDB_CONF} = $opt_hgConf;
+}
 
 ############################################################################
 # MAIN
