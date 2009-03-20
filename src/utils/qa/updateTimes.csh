@@ -79,15 +79,15 @@ if ( $#argv == 4  || $#argv == 5) then
 endif
 
 if ( $mach1 == "hgwbeta" ) then
-  set host1="-h hgwbeta"
+  set host1="-h hgofbeta"
 endif
 
 if ( $mach2 == "hgwbeta" ) then
-  set host2="-h hgwbeta"
+  set host2="-h hgofbeta"
 endif
  
 if ( $mach3 == "hgwbeta" ) then
-  set host3="-h hgwbeta"
+  set host3="-h hgofbeta"
 endif
 
 # set flags for RR queries
