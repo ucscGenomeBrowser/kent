@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.113 2009/03/09 20:53:19 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.114 2009/03/20 01:50:47 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2484,7 +2484,7 @@ if ((sameString(utsName.nodename,"hgwbeta")) && (sameString(rhost,"hgwdev")))
     }
 	
 if ((sameString(utsName.nodename,"hgwdev")) && (sameString(rhost,"hgwbeta")))
-    {
+    {  // inaccurate but doesn't matter since we only use it to test qaPushQ cgi on dev.
     host     = cfgOption("central.host"    );
     user     = cfgOption("central.user"    );
     password = cfgOption("central.password");
@@ -3607,7 +3607,8 @@ exit(0);
 
 if (crossPost)  // support showSizes across machines
     {
-    host = sameString(utsName.nodename, "hgwdev") ? "hgwbeta.cse.ucsc.edu" : "hgwdev.cse.ucsc.edu";
+    //host = sameString(utsName.nodename, "hgwdev") ? "hgwbeta.cse.ucsc.edu" : "hgwdev.cse.ucsc.edu";
+    host = cfgOption("pq.crossHost");
     }
 
 newRandState = randDigits(20);
