@@ -53,13 +53,12 @@ track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
 longLabel Haplotype regions, chain and net tracks
-subGroup1 view Views chain=Chains net=Nets
-subGroup2 refChr Reference_chromosome chr4=chr4 chr6=chr6 chr17=chr17 haps=haplotypes
-subGroup3 hapReg Haplotype_locus region=Regions
+subGroup1 view Views chain=Chains net=Nets chr6map=chr6Map
+subGroup2 refChr Reference_chromosome chr4=chr4 chr6=chr6 chr17=chr17 haps=haplotypes chr6map=chr6Map
 dimensions dimensionX=refChr
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults region=pack+ chain=squish net=dense
+visibilityViewDefaults chain=squish net=dense
 group x
 noInherit on
 priority 398
@@ -73,7 +72,8 @@ sortOrder refChr=+ view=+
 
     track hapRegions
     subTrack hapChainNet off
-    subGroups hapReg=region
+    subGroups refChr=chr6map view=chr6map
+    configurable off
     shortLabel Hap Mapping
     longLabel Linear mapping of haplotype to reference chromosome
     type bed 12
@@ -267,3 +267,21 @@ sortOrder refChr=+ view=+
     longLabel chr6 haplotype SSTO syntenic net
     type netAlign hg19 chain_ssto_hap7
 
+track multizMHC
+shortLabel Multiz MHC
+longLabel Multiz Alignment of MHC haplotypes
+# irows on
+summary multizMHCSummary
+#frames multizMHCFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+speciesGroups Human Chimp
+sGroup_Human venter1 ssto apd mcf dbb qbl mann cox
+sGroup_Chimp panTro2
+speciesDefaultOff panTro2
+itemFirstCharCase noChange
+treeImage phylo/hg19_MHC.gif
+priority 399
