@@ -219,7 +219,7 @@ dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
+visibilityViewDefaults Peaks=pack+ Signal=full zRAW=hide
 priority 0
 type bed 3
 wgEncode 1
@@ -229,7 +229,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF
+    shortLabel GM12878 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=Peaks factor=CTCF cellType=GM12878
     type broadPeak
@@ -243,7 +243,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF
+    shortLabel GM12878 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal factor=CTCF cellType=GM12878
     type wig 0.00 14530.00
@@ -258,7 +258,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF 1
+    shortLabel GM12878 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 10017.00
@@ -273,7 +273,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF 2
+    shortLabel GM12878 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 6886.00
@@ -288,7 +288,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me1
+    shortLabel GM12878 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me1 cellType=GM12878
     type broadPeak
@@ -302,7 +302,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me1
+    shortLabel GM12878 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in GM12878 cells)
     subGroups view=Signal factor=H3K04me1 cellType=GM12878
     type wig 0.00 9323.50
@@ -347,7 +347,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me2
+    shortLabel GM12878 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=GM12878
     type broadPeak
@@ -361,7 +361,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me2
+    shortLabel GM12878 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in GM12878 cells)
     subGroups view=Signal factor=H3K04me2 cellType=GM12878
     type wig 0.00 15071.00
@@ -406,7 +406,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me3
+    shortLabel GM12878 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me3 cellType=GM12878
     type broadPeak
@@ -420,7 +420,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me3
+    shortLabel GM12878 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in GM12878 cells)
     subGroups view=Signal factor=H3K04me3 cellType=GM12878
     type wig 0.00 100593.50
@@ -465,7 +465,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac
+    shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in GM12878 cells)
     subGroups view=Peaks factor=H3K09ac cellType=GM12878
     type broadPeak
@@ -479,7 +479,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac
+    shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
     subGroups view=Signal factor=H3K09ac cellType=GM12878
     type wig 0.00 8338.25
@@ -494,7 +494,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac 1
+    shortLabel GM12878 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 5305.00
@@ -509,7 +509,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac 2
+    shortLabel GM12878 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 4291.00
@@ -524,7 +524,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1
+    shortLabel GM12878 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in GM12878 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=GM12878
     type broadPeak
@@ -538,7 +538,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1
+    shortLabel GM12878 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in GM12878 cells)
     subGroups view=Signal factor=H4K20me1 cellType=GM12878
     type wig 0.00 10750.00
@@ -583,7 +583,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27ac
+    shortLabel GM12878 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in GM12878 cells)
     subGroups view=Peaks factor=H3K27ac cellType=GM12878
     type broadPeak
@@ -597,7 +597,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27ac
+    shortLabel GM12878 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in GM12878 cells)
     subGroups view=Signal factor=H3K27ac cellType=GM12878
     type wig 0.00 473622.75
@@ -642,7 +642,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3
+    shortLabel GM12878 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K27me3 cellType=GM12878
     type broadPeak
@@ -656,7 +656,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3
+    shortLabel GM12878 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
     subGroups view=Signal factor=H3K27me3 cellType=GM12878
     type wig 0.00 60338.25
@@ -701,7 +701,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3
+    shortLabel GM12878 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K36me3 cellType=GM12878
     type broadPeak
@@ -715,7 +715,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3
+    shortLabel GM12878 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in GM12878 cells)
     subGroups view=Signal factor=H3K36me3 cellType=GM12878
     type wig 0.00 15797.75
@@ -760,8 +760,8 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalGm12878Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 WCE
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (GM12878 WCE Control)
+    shortLabel GM12878 Control
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (GM12878 control)
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type wig 0.00 13725.50
     dataVersion ENCODE Feb 2009 Freeze
@@ -775,8 +775,8 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 WCE 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (GM12878 WCE Control)
+    shortLabel GM128 Control 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (GM12878 control)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 8512.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -790,8 +790,8 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 WCE 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (GM12878 WCE Control)
+    shortLabel GM128 Control 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (GM12878 control)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 7182.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -804,7 +804,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
 
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HUVEC cells)
     subGroups view=Peaks factor=CTCF cellType=HUVEC
@@ -813,11 +813,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalHuvecCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HUVEC cells)
     subGroups view=Signal factor=CTCF cellType=HUVEC
@@ -827,11 +828,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in HUVEC cells)
     subGroups view=zRAW factor=CTCF cellType=HUVEC
@@ -841,11 +843,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in HUVEC cells)
     subGroups view=zRAW factor=CTCF cellType=HUVEC
@@ -855,11 +858,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in HUVEC cells)
     subGroups view=Peaks factor=H3K04me1 cellType=HUVEC
@@ -868,11 +872,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in HUVEC cells)
     subGroups view=Signal factor=H3K04me1 cellType=HUVEC
@@ -882,11 +887,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me1 cellType=HUVEC
@@ -896,11 +902,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me1 cellType=HUVEC
@@ -910,11 +917,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HUVEC cells)
     subGroups view=Peaks factor=H3K04me2 cellType=HUVEC
@@ -923,11 +931,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HUVEC cells)
     subGroups view=Signal factor=H3K04me2 cellType=HUVEC
@@ -937,11 +946,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
@@ -951,11 +961,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
@@ -965,11 +976,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HUVEC cells)
     subGroups view=Peaks factor=H3K04me3 cellType=HUVEC
@@ -978,11 +990,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HUVEC cells)
     subGroups view=Signal factor=H3K04me3 cellType=HUVEC
@@ -992,11 +1005,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me3 cellType=HUVEC
@@ -1006,11 +1020,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me3 cellType=HUVEC
@@ -1020,11 +1035,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HUVEC cells)
     subGroups view=Peaks factor=H3K09ac cellType=HUVEC
@@ -1033,11 +1049,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalHuvecH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HUVEC cells)
     subGroups view=Signal factor=H3K09ac cellType=HUVEC
@@ -1047,11 +1064,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in HUVEC cells)
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
@@ -1061,11 +1079,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in HUVEC cells)
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
@@ -1075,11 +1094,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in HUVEC cells)
     subGroups view=Peaks factor=H3K09me1 cellType=HUVEC
@@ -1088,11 +1108,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalHuvecH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in HUVEC cells)
     subGroups view=Signal factor=H3K09me1 cellType=HUVEC
@@ -1102,11 +1123,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K09me1 cellType=HUVEC
@@ -1116,11 +1138,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K09me1 cellType=HUVEC
@@ -1130,11 +1153,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HUVEC cells)
     subGroups view=Peaks factor=H3K27ac cellType=HUVEC
@@ -1143,11 +1167,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalHuvecH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HUVEC cells)
     subGroups view=Signal factor=H3K27ac cellType=HUVEC
@@ -1157,11 +1182,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in HUVEC cells)
     subGroups view=zRAW factor=H3K27ac cellType=HUVEC
@@ -1171,11 +1197,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in HUVEC cells)
     subGroups view=zRAW factor=H3K27ac cellType=HUVEC
@@ -1185,11 +1212,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in HUVEC cells)
     subGroups view=Peaks factor=H3K27me3 cellType=HUVEC
@@ -1198,11 +1226,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in HUVEC cells)
     subGroups view=Signal factor=H3K27me3 cellType=HUVEC
@@ -1212,11 +1241,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K27me3 cellType=HUVEC
@@ -1226,11 +1256,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K27me3 cellType=HUVEC
@@ -1240,11 +1271,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HUVEC cells)
     subGroups view=Peaks factor=H3K36me3 cellType=HUVEC
@@ -1253,11 +1285,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HUVEC cells)
     subGroups view=Signal factor=H3K36me3 cellType=HUVEC
@@ -1267,11 +1300,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K36me3 cellType=HUVEC
@@ -1281,11 +1315,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K36me3 cellType=HUVEC
@@ -1295,11 +1330,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HUVEC cells)
     subGroups view=Peaks factor=H4K20me1 cellType=HUVEC
@@ -1308,11 +1344,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-05
     dateUnrestricted 2009-10-05
     cell HUVEC
+    color 224,75,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalHuvecH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HUVEC cells)
     subGroups view=Signal factor=H4K20me1 cellType=HUVEC
@@ -1322,11 +1359,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in HUVEC cells)
     subGroups view=zRAW factor=H4K20me1 cellType=HUVEC
@@ -1336,11 +1374,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in HUVEC cells)
     subGroups view=zRAW factor=H4K20me1 cellType=HUVEC
@@ -1350,11 +1389,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksHuvecPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in HUVEC cells)
     subGroups view=Peaks factor=Pol2b cellType=HUVEC
@@ -1363,11 +1403,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell HUVEC
+    color 224,75,0
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalHuvecPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in HUVEC cells)
     subGroups view=Signal factor=Pol2b cellType=HUVEC
@@ -1377,11 +1418,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in HUVEC cells)
     subGroups view=zRAW factor=Pol2b cellType=HUVEC
@@ -1391,11 +1433,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in HUVEC cells)
     subGroups view=zRAW factor=Pol2b cellType=HUVEC
@@ -1405,13 +1448,14 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalHuvecControl
     release alpha
-    subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC control
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in HUVEC cells)
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HUVEC Control
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (HUVEC control)
     subGroups view=Signal factor=zCTRL cellType=HUVEC
     type wig 0.00 16710.75
     dataVersion ENCODE Feb 2009 Freeze
@@ -1419,13 +1463,14 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecControl
     release alpha
-    subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC control 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (control in HUVEC cells)
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HUVEC Control 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (HUVEC control)
     subGroups view=zRAW factor=zCTRL cellType=HUVEC
     type wig 1.00 17736.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -1433,13 +1478,14 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecControl
     release alpha
-    subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC control 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (control in HUVEC cells)
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HUVEC Control 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (HUVEC control)
     subGroups view=zRAW factor=zCTRL cellType=HUVEC
     type wig 1.00 2790.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -1447,6 +1493,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell HUVEC
+    color 224,75,0
     antibody control
 
     track wgEncodeBroadChipSeqPeaksK562Ctcf
@@ -2101,8 +2148,8 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqSignalK562Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 control
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in K562 cells)
+    shortLabel K562 Control
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal ( K562 control)
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 23372.25
     dataVersion ENCODE Feb 2009 Freeze
@@ -2116,8 +2163,8 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep1K562Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 control 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (K562 WCE control)
+    shortLabel K562 Control 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (K562 control)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 15525.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -2132,7 +2179,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 control 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (K562 WCE control)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (K562 control)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 10925.00
     dataVersion ENCODE Feb 2009 Freeze
@@ -2145,7 +2192,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
 
     track wgEncodeBroadChipSeqPeaksNhekCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in Keratin cells)
     subGroups view=Peaks factor=CTCF cellType=Kera
@@ -2154,11 +2201,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalNhekCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in Keratin cells)
     subGroups view=Signal factor=CTCF cellType=Kera
@@ -2168,11 +2216,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in Keratin cells)
     subGroups view=zRAW factor=CTCF cellType=Kera
@@ -2182,11 +2231,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel CTCF Kera 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in Keratin cells)
     subGroups view=zRAW factor=CTCF cellType=Kera
@@ -2196,11 +2246,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in Keratin cells)
     subGroups view=Peaks factor=H3K04me1 cellType=Kera
@@ -2209,11 +2260,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in Keratin cells)
     subGroups view=Signal factor=H3K04me1 cellType=Kera
@@ -2223,11 +2275,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in Keratin cells)
     subGroups view=zRAW factor=H3K04me1 cellType=Kera
@@ -2237,11 +2290,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in Keratin cells)
     subGroups view=zRAW factor=H3K04me1 cellType=Kera
@@ -2251,11 +2305,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in Keratin cells)
     subGroups view=Peaks factor=H3K04me2 cellType=Kera
@@ -2264,11 +2319,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-07
     dateUnrestricted 2009-10-07
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in Keratin cells)
     subGroups view=Signal factor=H3K04me2 cellType=Kera
@@ -2278,11 +2334,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in Keratin cells)
     subGroups view=zRAW factor=H3K04me2 cellType=Kera
@@ -2292,11 +2349,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in Keratin cells)
     subGroups view=zRAW factor=H3K04me2 cellType=Kera
@@ -2306,11 +2364,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in Keratin cells)
     subGroups view=Peaks factor=H3K04me3 cellType=Kera
@@ -2319,11 +2378,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-07
     dateUnrestricted 2009-10-07
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in Keratin cells)
     subGroups view=Signal factor=H3K04me3 cellType=Kera
@@ -2333,11 +2393,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in Keratin cells)
     subGroups view=zRAW factor=H3K04me3 cellType=Kera
@@ -2347,11 +2408,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in Keratin cells)
     subGroups view=zRAW factor=H3K04me3 cellType=Kera
@@ -2361,11 +2423,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in Keratin cells)
     subGroups view=Peaks factor=H3K09ac cellType=Kera
@@ -2374,11 +2437,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalNhekH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in Keratin cells)
     subGroups view=Signal factor=H3K09ac cellType=Kera
@@ -2388,11 +2452,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in Keratin cells)
     subGroups view=zRAW factor=H3K09ac cellType=Kera
@@ -2402,11 +2467,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in Keratin cells)
     subGroups view=zRAW factor=H3K09ac cellType=Kera
@@ -2416,11 +2482,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in Keratin cells)
     subGroups view=Peaks factor=H3K09me1 cellType=Kera
@@ -2429,11 +2496,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalNhekH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in Keratin cells)
     subGroups view=Signal factor=H3K09me1 cellType=Kera
@@ -2443,11 +2511,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in Keratin cells)
     subGroups view=zRAW factor=H3K09me1 cellType=Kera
@@ -2457,11 +2526,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in Keratin cells)
     subGroups view=zRAW factor=H3K09me1 cellType=Kera
@@ -2471,11 +2541,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in Keratin cells)
     subGroups view=Peaks factor=H3K27ac cellType=Kera
@@ -2484,11 +2555,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalNhekH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in Keratin cells)
     subGroups view=Signal factor=H3K27ac cellType=Kera
@@ -2498,11 +2570,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in Keratin cells)
     subGroups view=zRAW factor=H3K27ac cellType=Kera
@@ -2512,11 +2585,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in Keratin cells)
     subGroups view=zRAW factor=H3K27ac cellType=Kera
@@ -2526,11 +2600,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in Keratin cells)
     subGroups view=Peaks factor=H3K27me3 cellType=Kera
@@ -2539,11 +2614,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in Keratin cells)
     subGroups view=Signal factor=H3K27me3 cellType=Kera
@@ -2553,11 +2629,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in Keratin cells)
     subGroups view=zRAW factor=H3K27me3 cellType=Kera
@@ -2567,11 +2644,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in Keratin cells)
     subGroups view=zRAW factor=H3K27me3 cellType=Kera
@@ -2581,11 +2659,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksNhekH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in Keratin cells)
     subGroups view=Peaks factor=H3K36me3 cellType=Kera
@@ -2594,11 +2673,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in Keratin cells)
     subGroups view=Signal factor=H3K36me3 cellType=Kera
@@ -2608,11 +2688,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in Keratin cells)
     subGroups view=zRAW factor=H3K36me3 cellType=Kera
@@ -2622,11 +2703,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in Keratin cells)
     subGroups view=zRAW factor=H3K36me3 cellType=Kera
@@ -2636,11 +2718,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksNhekH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in Keratin cells)
     subGroups view=Peaks factor=H4K20me1 cellType=Kera
@@ -2649,11 +2732,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-06
     dateUnrestricted 2009-10-06
     cell Keratinocyte
+    color 179,0,134
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalNhekH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in Keratin cells)
     subGroups view=Signal factor=H4K20me1 cellType=Kera
@@ -2663,11 +2747,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in Keratin cells)
     subGroups view=zRAW factor=H4K20me1 cellType=Kera
@@ -2677,11 +2762,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in Keratin cells)
     subGroups view=zRAW factor=H4K20me1 cellType=Kera
@@ -2691,11 +2777,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksNhekPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in Keratin cells)
     subGroups view=Peaks factor=Pol2b cellType=Kera
@@ -2704,11 +2791,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateSubmitted 2009-01-07
     dateUnrestricted 2009-10-07
     cell Keratinocyte
+    color 179,0,134
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalNhekPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in Keratin cells)
     subGroups view=Signal factor=Pol2b cellType=Kera
@@ -2718,11 +2806,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in Keratin cells)
     subGroups view=zRAW factor=Pol2b cellType=Kera
@@ -2732,11 +2821,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekPol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
     subGroups view=zRAW factor=Pol2b cellType=Kera
@@ -2746,11 +2836,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalNhekControl
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in Keratin cells)
     subGroups view=Signal factor=zCTRL cellType=Kera
@@ -2760,11 +2851,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekControl
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (control in Keratin cells)
     subGroups view=zRAW factor=zCTRL cellType=Kera
@@ -2774,11 +2866,12 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekControl
     release alpha
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel Kera control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (control in Keratin cells)
     subGroups view=zRAW factor=zCTRL cellType=Kera
@@ -2788,6 +2881,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
+    color 179,0,134
     antibody control
 
 
