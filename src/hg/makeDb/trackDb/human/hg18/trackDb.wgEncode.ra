@@ -214,9 +214,9 @@ longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 Kera=Keratinocyte
-subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
+subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view=+
+sortOrder view=+ cellType=+ factor=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=pack+ Signal=full zRAW=hide
@@ -9075,11 +9075,11 @@ noInherit on
 priority 0
 type bed 3
 wgEncode 1
-# MJP: For now, change 
+# MJP: For now, change
 # type pairedTagAlign
 # to:-
 #    type bed 6
-# and 
+# and
 # type pairedTagAlign
 # to:-
 #    type bed 12 +
@@ -9088,7 +9088,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsK562NucleolusTotal
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel total K562 nucleolus 
+    shortLabel total K562 nucleolus
     longLabel ENCODE GIS PET Alignments (total in K562 cell nucleolus using )
     subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total
     #type pairedTagAlign
@@ -9107,7 +9107,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 cytosol 
+    shortLabel longPolyA GM12878 cytosol
     longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -9126,7 +9126,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 nucleus 
+    shortLabel longPolyA GM12878 nucleus
     longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell nucleus using )
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -9145,7 +9145,7 @@ wgEncode 1
     track wgEncodeGisPetTagsProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA prostate cell 
+    shortLabel longPolyA prostate cell
     longLabel ENCODE GIS PET Tags (longPolyA in prostate cell cell using )
     subGroups view=Tags cellType=prostate localization=cell rnaExtract=longPolyA
     #type gappedPeak
@@ -9163,7 +9163,7 @@ wgEncode 1
     track wgEncodeGisPetTagsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 cytosol 
+    shortLabel longPolyA K562 cytosol
     longLabel ENCODE GIS PET Tags (longPolyA in K562 cell cytosol using )
     subGroups view=Tags cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type gappedPeak
@@ -9181,7 +9181,7 @@ wgEncode 1
     track wgEncodeGisPetTagsK562NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 nucleus 
+    shortLabel longPolyA K562 nucleus
     longLabel ENCODE GIS PET Tags (longPolyA in K562 cell nucleus using )
     subGroups view=Tags cellType=K562 localization=nucleus rnaExtract=longPolyA
     #type gappedPeak
@@ -9199,7 +9199,7 @@ wgEncode 1
     track wgEncodeGisPetTagsK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 polysome 
+    shortLabel longPolyA K562 polysome
     longLabel ENCODE GIS PET Tags (longPolyA in K562 cell polysome using )
     subGroups view=Tags cellType=K562 localization=polysome rnaExtract=longPolyA
     #type gappedPeak
@@ -9217,7 +9217,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA prostate cell 
+    shortLabel longPolyA prostate cell
     longLabel ENCODE GIS PET Alignments (longPolyA in prostate cell cell using )
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
     #type pairedTagAlign
@@ -9235,7 +9235,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 cytosol 
+    shortLabel longPolyA K562 cytosol
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol using )
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -9253,7 +9253,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsK562NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 nucleus 
+    shortLabel longPolyA K562 nucleus
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus using )
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -9271,7 +9271,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 polysome 
+    shortLabel longPolyA K562 polysome
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell polysome using )
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     #type pairedTagAlign
