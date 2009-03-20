@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.22 2009/03/03 21:46:23 hiram Exp $
+# $Id: makePushQSql.pl,v 1.23 2009/03/20 23:01:23 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -582,7 +582,7 @@ sub printMainPushQEntry {
   my $date = `date +%Y-%m-%d`;
   my $size = 0;
   chomp $date;
-  my $qapushqSql = 'ssh -x hgwbeta hgsql -N qapushq';
+  my $qapushqSql = 'ssh -x hgwbeta hgsql -h hgofbeta -N qapushq';
   my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
   my $rank = `echo $rankQuery | $qapushqSql`;
   $rank += 1;
@@ -649,12 +649,12 @@ _EOF_
         has any composite tracks, you should manually merge the separate
         per-table entries into one entry.
  *** 6. Make sure that qapushq does not already have a table named $db:
-          ssh hgwbeta hgsql qapushq -NBe "'desc $db;'"
+          ssh hgwbeta hgsql -h hgofbeta qapushq -NBe "'desc $db;'"
         You *should* see this error:
           ERROR 1146 at line 1: Table 'qapushq.$db' doesn't exist
         If it already has that table, talk to QA and figure out whether
         it can be dropped or fixed up (by sql or the Push Queue web app).
- *** When everything is complete and correct, use hgsql on hgwbeta to
+ *** When everything is complete and correct, use hgsql -h hgofbeta to
      execute the sql file.  Then use the Push Queue web app to check the
      contents of all entries.
  *** If you haven't already, please add $db to makeDb/schema/all.joiner !
