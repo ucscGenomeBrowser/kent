@@ -217,3 +217,53 @@ sortOrder refChr=+ view=+
     shortLabel Hap Nets
     longLabel Reference chromosome nets on haplotypes
     type netAlign hg19 chain_haplotypes
+
+    track netSyn_apd_hap1
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel APD SynNet
+    longLabel chr6 haplotype APD syntenic net
+    type netAlign hg19 chain_apd_hap1
+
+    track netSyn_cox_hap2
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel COX SynNet
+    longLabel chr6 haplotype COX syntenic net
+    type netAlign hg19 chain_cox_hap2
+
+    track netSyn_dbb_hap3
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel DBB SynNet
+    longLabel chr6 haplotype DBB syntenic net
+    type netAlign hg19 chain_dbb_hap3
+
+    track netSyn_mann_hap4
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel MANN SynNet
+    longLabel chr6 haplotype MANN syntenic net
+    type netAlign hg19 chain_mann_hap4
+
+    track netSyn_mcf_hap5
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel MCF SynNet
+    longLabel chr6 haplotype MCF syntenic net
+    type netAlign hg19 chain_mcf_hap5
+
+    track netSyn_qbl_hap6
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel QBL SynNet
+    longLabel chr6 haplotype QBL syntenic net
+    type netAlign hg19 chain_qbl_hap6
+
+    track netSyn_ssto_hap7
+    subTrack hapChainNet off
+    subGroups view=net refChr=chr6
+    shortLabel SSTO SynNet
+    longLabel chr6 haplotype SSTO syntenic net
+    type netAlign hg19 chain_ssto_hap7
+
