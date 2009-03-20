@@ -624,41 +624,34 @@ type bed 4 +
 
 track pgPop
 compositeTrack on
-shortLabel Population Vars
+shortLabel Pop Vars
 longLabel Population Genome Variants
 group varRep
 priority 500.2
 visibility hide
 color 0,153,0
-type bed 4 .
+type bed 4 +
 
-    track pgYri
+    track pgPopYRI
     subTrack pgPop
-    shortLabel YRI SNPs
-    longLabel YRI Population SNPs from HapMap
+    shortLabel YRI variants
+    longLabel YRI variants from the 1000 genomes low coverage data
     group varRep
     priority 1
 
-    track pgCeu
+    track pgPopCEU
     subTrack pgPop
-    shortLabel CEU SNPs
-    longLabel CEU Population SNPs from HapMap
+    shortLabel CEU variants
+    longLabel CEU variants from the 1000 genomes low coverage data
     group varRep
     priority 2
 
-    track pgChb
+    track pgPopJPTCHB
     subTrack pgPop
-    shortLabel CHB SNPs
-    longLabel CHB Population SNPs from HapMap
+    shortLabel JPTCHB variants
+    longLabel JPT and CHB variants from the 1000 genomes low coverage data
     group varRep
     priority 3
-
-    track pgJpt
-    subTrack pgPop
-    shortLabel JPT SNPs
-    longLabel JPT Population SNPs from HapMap
-    group varRep
-    priority 4
 
 
 track augustus
@@ -2191,7 +2184,7 @@ group varRep
 priority 147
 visibility hide
 yLineOnOff Off
-subGroup1 specRec Species_reckoned_with ch=chimp rh=rhesus
+subGroup1 specRec Species_reckoned_with ch=chimp or=orangutan
 type wig
 
     track divChimpRpd
@@ -2222,35 +2215,6 @@ type wig
     maxHeightPixels 128:64:11
     color 25,150,25
     priority 3
-
-    track divRhesusRpd
-    subTrack divMKAR
-    shortLabel log2 r_pd
-    longLabel log2 (r_pd) divergence from rhesus
-    subGroups specRec=rh
-    color 200,100,0
-    altcolor 0,0,250
-    priority 4
-
-    track divRhesusFet
-    subTrack divMKAR
-    shortLabel -log10 p-value
-    longLabel -log10 (p-value) divergence from rhesus
-    subGroups specRec=rh
-    priority 5
-
-    track divRhesusFdr
-    subTrack divMKAR
-    shortLabel -log10 FDR
-    longLabel -log10 (FDR) divergence from rhesus
-    subGroups specRec=rh
-    noInherit on
-    type wig
-    yLineOnOff On
-    yLineMark 1.0
-    maxHeightPixels 128:64:11
-    color 25,150,25
-    priority 6
 
     track divChimpRpd129
     subTrack divMKAR
@@ -2309,6 +2273,64 @@ type wig
     maxHeightPixels 128:64:11
     color 25,150,25
     priority 12
+
+    track divChimpRpdPg8plus
+    subTrack divMKAR
+    shortLabel pg8+ log2 r_pd
+    longLabel 8+ Personal Genomes log2 (r_pd) divergence from chimp
+    subGroups specRec=ch
+    color 200,100,0
+    altcolor 0,0,250
+    priority 13
+
+    track divChimpFetPg8plus
+    subTrack divMKAR
+    shortLabel pg8+ -log10 p-value
+    longLabel 8+ Personal Genomes -log10 (p-value) divergence from chimp
+    subGroups specRec=ch
+    priority 14
+
+    track divChimpFdrPg8plus
+    subTrack divMKAR
+    shortLabel pg8+ -log10 FDR
+    longLabel 8+ Personal Genomes -log10 (FDR) divergence from chimp
+    subGroups specRec=ch
+    noInherit on
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 128:64:11
+    color 25,150,25
+    priority 15
+
+    track divOrangRpdPg8plus
+    subTrack divMKAR
+    shortLabel pg8+ log2 r_pd
+    longLabel 8+ Personal Genomes log2 (r_pd) divergence from orangutan
+    subGroups specRec=or
+    color 200,100,0
+    altcolor 0,0,250
+    priority 16
+
+    track divOrangFetPg8plus
+    subTrack divMKAR
+    shortLabel pg8+ -log10 p-value
+    longLabel 8+ Personal Genomes -log10 (p-value) divergence from orangutan
+    subGroups specRec=or
+    priority 17
+
+    track divOrangFdrPg8plus
+    subTrack divMKAR
+    shortLabel pg8+ -log10 FDR
+    longLabel 8+ Personal Genomes -log10 (FDR) divergence from orangutan
+    subGroups specRec=or
+    noInherit on
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 128:64:11
+    color 25,150,25
+    priority 18
 
 
 
