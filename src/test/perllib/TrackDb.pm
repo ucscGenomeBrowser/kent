@@ -10,6 +10,10 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT_OK);
 use Exporter;
 
+use FindBin qw($Bin);
+use lib $Bin;
+use HgConf;
+
 use DBI;
 use Carp;
 
@@ -21,8 +25,6 @@ $VERSION = '0.01';
 # Some parameters...
 #
 my $defaultDb = 'hg10';
-my $username  = 'hguser';
-my $password  = 'hguserstuff';
 
 #
 # new: create a TrackDb object.
@@ -34,7 +36,16 @@ sub new {
     my $dbName = shift;
     confess "Too many arguments" if (defined shift);
     $dbName = $defaultDb if (! defined $dbName);
-    my $dbh = DBI->connect("DBI:mysql:$dbName", $username, $password);
+    my $hgConf = HgConf->new($main::opt_hgConf);
+    my $host = $hgConf->lookup('db.host');
+    if ($host && $host ne 'localhost') {
+        $host = ";host=$host";
+    } else {
+        $host = "";
+    }
+    my $username = $hgConf->lookup('db.user');
+    my $password = $hgConf->lookup('db.password');
+    my $dbh = DBI->connect("DBI:mysql:database=$dbName$host", $username, $password);
     confess "Can't connect to mysql database $dbName!" if (! $dbh);
     my $this = {
 	'dbh' => $dbh,
