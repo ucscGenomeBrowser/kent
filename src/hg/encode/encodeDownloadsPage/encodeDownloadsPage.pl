@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.5 2008/12/02 22:09:12 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.6 2009/03/20 21:46:03 larrym Exp $
 
 use warnings;
 use strict;
@@ -24,8 +24,6 @@ use lib "/cluster/bin/scripts";
 use Encode;
 use HgAutomate;
 use HgDb;
-#use RAFile;
-#use SafePipe;
 
 use vars qw/
     $opt_fileType
@@ -33,7 +31,6 @@ use vars qw/
     $opt_db
     $opt_verbose
     /;
-#    $opt_timing
 
 sub usage {
     print STDERR <<END;
@@ -132,9 +129,9 @@ my $preamble = "preamble.html";
 usage() if (scalar(@ARGV) < 1);
 
 # Get command-line args
-my $indexHtml = $ARGV[0];	# currently not used
+my $indexHtml = $ARGV[0];
 my $downloadsDir = cwd();
-   $downloadsDir = $ARGV[1] if (scalar(@ARGV) > 1);
+$downloadsDir = $ARGV[1] if (scalar(@ARGV) > 1);
 
 # Now find some files
 my @fileList = `ls -hog  --time-style=long-iso $downloadsDir/$fileMask 2> /dev/null`;
@@ -149,6 +146,12 @@ my $db = HgDb->new(DB => $opt_db);
 
 open( OUT_FILE, "> $downloadsDir/$indexHtml") || die "SYS ERROR: Can't write to \'$downloadsDir/$indexHtml\' file; error: $!\n";
 #print OUT_FILE @fileList;
+
+my @readme;
+if(open(README, "$downloadsDir/README.txt")) {
+    @readme = <README>;
+    close(README);
+}
 
 # Start the page
 htmlStartPage(*OUT_FILE,$downloadsDir,$indexHtml,$preamble);
@@ -166,11 +169,12 @@ for my $line (@fileList) {
 #print OUT_FILE "Path:$file[5]  File:$fileName  Table:$tableName\n";
 
     my $releaseDate = "";
-    my $metaData = "";
+    my %metaData;
+    my $typePrefix = "";
     my $results = $db->quickQuery("select type from trackDb where tableName = '$tableName'");
     if($results) {
         my ($type) = split(/\s+/, $results);    # White space
-        $metaData = "Type:$type ";
+        $metaData{type} = $type;
         $results = $db->quickQuery("select settings from trackDb where tableName = '$tableName'");
 #print OUT_FILE "Settings:$results\n";
         if( $results ) {
@@ -185,7 +189,7 @@ for my $line (@fileList) {
                         while (@parent) {
                             my @par = split(/\s+/, (shift @parent));
                             if( $par[0] eq "wgEncode" ) {
-                                $metaData = "ENCODE $metaData";
+                                $typePrefix = "ENCODE ";
                             }
                         }
                     }
@@ -198,20 +202,48 @@ for my $line (@fileList) {
                     $rMon = $rMon + 1;
                     $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
                 } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
-                    $metaData .= "$pair[0]:$pair[1] ";
+                    $metaData{$pair[0]} = $pair[1];
                 }
             }
         }
     } else {
         if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
-            $metaData = "ENCODE Type:$dataType";
+            $metaData{type} = $dataType;
+            $typePrefix = "ENCODE ";
             my ($YYYY,$MM,$DD) = split('-',$file[3]);
             $MM = $MM - 1;
             my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
             $rMon = $rMon + 1;
             $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
         }
+
+        # pull metadata out of README.txt (if any is available).
+        my $active = 0;
+        for my $line (@readme) {
+            chomp $line;
+            if($line =~ /file: $fileName/) {
+                $active = 1;
+            } elsif($active) {
+                if($line =~ /(.*):(.*)/) {
+                    my ($name, $var) = ($1, $2);
+                    $metaData{$name} = $var if($name !~ /restricted/i);
+                } else {
+                    last;
+                }
+            }
+        }
     }
+    my @tmp;
+    if(my $type = $metaData{type}) {
+        push(@tmp, "${typePrefix}type: $type");
+        delete $metaData{type};
+    }
+    if(my $cell = $metaData{cell}) {
+        push(@tmp, "cell: $cell");
+        delete $metaData{cell};
+    }
+    push(@tmp, "$_: " . $metaData{$_}) for (sort keys %metaData);
+    my $metaData = join("; ", @tmp);
     # Now file contains: [file without path] [tableName] [size] [date] [releaseDate] [fullpath/file]
     htmlTableRow(*OUT_FILE,$fileName,$file[2],$file[3],$releaseDate,$metaData);
 }
