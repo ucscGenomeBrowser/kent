@@ -270,7 +270,7 @@ sortOrder refChr=+ view=+
 track multizMHC
 shortLabel Multiz MHC
 longLabel Multiz Alignment of MHC haplotypes
-# irows on
+irows on
 summary multizMHCSummary
 #frames multizMHCFrames
 group x
