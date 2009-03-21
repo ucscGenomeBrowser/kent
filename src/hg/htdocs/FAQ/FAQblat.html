@@ -280,8 +280,12 @@
 			<em>standalone blat</em>: 
 			<UL>
 			<LI>blat search:<BR>
-			&nbsp;&nbsp;&nbsp;<TT>blat -stepSize=5 -minScore=0 -minIdentity=0 database.2bit query.fa output.psl </TT><br>
+			&nbsp;&nbsp;&nbsp;<TT>blat -stepSize=5 -repMatch=2253 -minScore=0 -minIdentity=0 database.2bit query.fa output.psl </TT><br>
 			</UL></P>
+			<br>Note on repMatch: 
+			<br>gfServer dna default repMatch = 1024 * (tileSize/stepSize) 
+			<br>blat dna default repMatch = 1024 if tileSize=11
+			<br>which requires for equivalence that repMatch be specified on the blat commandline
 			<P>
 			For more information on the parameters available for
 			blat, gfServer, and gfClient, see the 
