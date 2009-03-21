@@ -36,7 +36,7 @@ foreach machine ( $machine1 $machine2 )
   else
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
-      set host="-h hgwbeta"
+      set host="-h hgofbeta"
     else
       set cent=""
       set host="-h genome-centdb"
@@ -80,12 +80,12 @@ set tableRow=""
 if ( $field == "searchSettings" ) then
   rm -f $machine1.$db.$table
   rm -f $machine2.$db.$table
-  set specs=`hgsql -N -h hgwbeta -e "SELECT searchName FROM hgFindSpec" $db`
+  set specs=`hgsql -N -h hgofbeta -e "SELECT searchName FROM hgFindSpec" $db`
   foreach row ( $specs )
     set tableRow=$row
     foreach machX ( $machine1 $machine2 )
       if ( $machX == "hgwbeta" ) then
-        hgsql -h hgwbeta -e 'SELECT '$field' FROM hgFindSpec \
+        hgsql -h hgofbeta -e 'SELECT '$field' FROM hgFindSpec \
           WHERE searchName = "'$tableRow'"' $db > $machX.$db.$table.$field
       else
         set pubMySqlFlag=1
@@ -104,7 +104,7 @@ else
   foreach mach ( $machine1 $machine2 )
     rm -f $mach.$db.$table 
     if ( $mach == "hgwbeta" ) then
-      hgsql -h hgwbeta -e 'SELECT '$field' FROM hgFindSpec' $db \
+      hgsql -h hgofbeta -e 'SELECT '$field' FROM hgFindSpec' $db \
          > $mach.$db.$table
     else
       set pubMySqlFlag=1

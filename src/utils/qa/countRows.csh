@@ -54,7 +54,7 @@ rm -f $db.$outname.rowcounts
 rm -f $db.$outname.badcounts
 foreach table (`cat $tablelist`)
   set dev=`hgsql -N -e "SELECT COUNT(*) FROM $table" $db`
-  set beta=`hgsql -h hgwbeta -N -e "SELECT COUNT(*) FROM $table" $db`
+  set beta=`hgsql -h hgofbeta -N -e "SELECT COUNT(*) FROM $table" $db`
   if ($dev != $beta) then
     echo $table >> $db.$outname.badcounts
     echo $table >> $db.$outname.rowcounts

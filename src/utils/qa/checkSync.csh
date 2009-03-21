@@ -79,7 +79,7 @@ cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
 echo gbLoaded >> genbank.local
 
 # 
-set active=`hgsql -h hgwbeta -Ne "SELECT name FROM dbDb where active = 1" hgcentralbeta \
+set active=`hgsql -h hgofbeta -Ne "SELECT name FROM dbDb where active = 1" hgcentralbeta \
   | grep $db`
 foreach machine ( $mach1 $mach2 )
   # check if db is for active assembly on beta

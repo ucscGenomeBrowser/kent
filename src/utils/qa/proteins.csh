@@ -66,7 +66,7 @@ foreach db ("$db1" "$db2" "$db3")
     echo $table
     echo "============="
     hgsql -N -e "SELECT COUNT(*) FROM $table" $dev
-    hgsql -N -h hgwbeta -e "SELECT COUNT(*) FROM $table" $beta
+    hgsql -N -h hgofbeta -e "SELECT COUNT(*) FROM $table" $beta
     echo
   end
   echo
@@ -81,7 +81,7 @@ foreach db ("$db1" "$db2" "$db3")
          blank if the same:"
   foreach table (`cat $dev.tables`)
     echo $table
-    hgsql -h hgwbeta -N  -e "DESCRIBE $table" $beta >  $beta.beta.$table.desc
+    hgsql -h hgofbeta -N  -e "DESCRIBE $table" $beta >  $beta.beta.$table.desc
     hgsql -N  -e "DESCRIBE $table" $dev > $dev.dev.$table.desc
     diff $beta.beta.$table.desc $dev.dev.$table.desc
     echo
@@ -101,7 +101,7 @@ foreach db ("$db1" "$db2" "$db3")
   foreach table (`cat $dev.tables`)
     set indexNumDev=`hgsql -N -e "SHOW INDEX FROM $table" $dev \
        | wc -l | gawk '{print $1}'`
-    set indexNumBeta=`hgsql -h hgwbeta -N -e "SHOW INDEX FROM $table" $beta \
+    set indexNumBeta=`hgsql -h hgofbeta -N -e "SHOW INDEX FROM $table" $beta \
        | wc -l | gawk '{print $1}'`
     echo $table
     if ($indexNumDev != $indexNumBeta) then
@@ -114,7 +114,7 @@ foreach db ("$db1" "$db2" "$db3")
       hgsql -t -e "SHOW INDEX FROM $table" $dev
       echo
       echo "on beta, ${beta}:"
-      hgsql -t -h hgwbeta -e "SHOW INDEX FROM $table" $beta
+      hgsql -t -h hgofbeta -e "SHOW INDEX FROM $table" $beta
       echo
     endif
     echo
@@ -127,7 +127,7 @@ foreach db ("$db1" "$db2" "$db3")
   echo
 end
   
-hgsql -N -h hgwbeta -e "SHOW TABLES" go > go.tables.push
+hgsql -N -h hgofbeta -e "SHOW TABLES" go > go.tables.push
 
   echo  "-------------------------------------------------"
   echo  "    list of go tables for pushing to beta is in file:  "

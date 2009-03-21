@@ -40,7 +40,7 @@ endif
 
 if ($machine == 'hgwbeta') then
  set central='hgcentralbeta'
- set host='-h hgwbeta'
+ set host='-h hgofbeta'
 endif
 if ($machine == 'hgwdev') then
  set central='hgcentraltest'

@@ -39,7 +39,7 @@ echo
 echo "                               hgwdev:hgwbeta"
 echo "   Name                Label         Priority"
 echo
-hgsql -h hgwbeta -N  -e "select * from $table_a" $db_old | sort  > $db_old.beta.$table_a.txt
+hgsql -h hgofbeta -N  -e "select * from $table_a" $db_old | sort  > $db_old.beta.$table_a.txt
 hgsql -N  -e "select * from $table_a" $db_new | sort > $db_new.dev.$table_a.txt
 diff $db_new.dev.$table_a.txt $db_old.beta.$table_a.txt
 echo

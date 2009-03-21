@@ -59,7 +59,7 @@ if ( ! $status ) then
 else
   if ( $db == "all" ) then
     set list="true"
-    set db=`hgsql -h hgwbeta -N -e "SELECT name FROM dbDb \
+    set db=`hgsql -h hgofbeta -N -e "SELECT name FROM dbDb \
      WHERE active != 0" hgcentralbeta | sed -e "s/\t/\n/" | sort`
   else
     set url2="?hgta_doMetaData=1&hgta_metaDatabases=1"
