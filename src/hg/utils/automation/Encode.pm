@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.35 2009/03/07 22:59:58 mikep Exp $
+# $Id: Encode.pm,v 1.36 2009/03/22 02:38:12 larrym Exp $
 
 package Encode;
 
@@ -12,6 +12,7 @@ use warnings;
 use strict;
 
 use File::stat;
+use IO::File;
 use Cwd;
 
 use RAFile;
@@ -422,6 +423,21 @@ sub isControlInput
 {
     my ($str) = @_;
     return lc($str) eq 'control' || lc($str) eq 'input';
+}
+
+sub openUtil
+{
+# Handles opening gzipped, tar gzipped, tar, as well as plain files
+# $path is the optional path of $file.
+    my ($file, $path) = @_;
+    my $fh = new IO::File;
+    my $filePath = defined($path) ? "$path/$file" : $file;
+    open($fh, Encode::isTar($filePath) ? "/bin/tar -Oxf $filePath |"
+	      : ( Encode::isTarZipped($filePath) ? "/bin/tar -Ozxf $filePath |"
+	          : ( Encode::isZipped($filePath) ? "/bin/gunzip -c $filePath |"
+		      : $filePath ))
+	) or die "Couldn't open file '$file'; error: $!\n";
+    return $fh;
 }
 
 1;
