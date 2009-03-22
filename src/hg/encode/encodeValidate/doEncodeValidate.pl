@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.168 2009/03/15 02:00:04 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.169 2009/03/22 02:37:47 larrym Exp $
 
 use warnings;
 use strict;
@@ -350,20 +350,6 @@ our %formatCheckers = (
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     );
 
-sub openUtil
-{
-# Handles opening gzipped, tar gzipped, tar, as well as plain files
-    my ($path, $file) = @_;
-    my $fh = new IO::File;
-    my $filePath = defined($path) ? "$path/$file" : $file;
-    open($fh, Encode::isTar($filePath) ? "/bin/tar -Oxf $filePath |"
-	      : ( Encode::isTarZipped($filePath) ? "/bin/tar -Ozxf $filePath |"
-	          : ( Encode::isZipped($filePath) ? "/bin/gunzip -c $filePath |"
-		      : $filePath ))
-	) or die "Couldn't open file '$file'; error: $!\n";
-    return $fh;
-}
-
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|[eE]{1}?[+-]{1}?\\d+))";  # Tim's attempt
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";                      # Original
@@ -450,7 +436,7 @@ sub validateWithList
 # $name is the caller's subroutine name (used in error and debug messages).
     my ($path, $file, $type, $maxRows, $name, $validateList) = @_;
     my $lineNumber = 0;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     my $regexp = listToRegExp($validateList);
     my $hasChrom = 0;
     for my $rec (@{$validateList}) {
@@ -489,7 +475,7 @@ sub validateFreepass
 {
     my ($path, $file, $type) = @_;
     doTime("beginning validateFreepass") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     #my $lineNumber = 0;
     #while(<$fh>) {
     #    chomp;
@@ -532,7 +518,7 @@ sub validateBed {
     my ($path, $file, $type) = @_;
     my $lineNumber = 0;
     doTime("beginning validateBed") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     while(<$fh>) {
         chomp;
         $lineNumber++;
@@ -577,7 +563,7 @@ sub validateBedGraph {
     my ($path, $file, $type) = @_;
     my $lineNumber = 0;
     doTime("beginning validateBedGraph") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     while(<$fh>) {
         chomp;
         $lineNumber++;
@@ -782,7 +768,7 @@ sub validateCsfasta
 
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsfasta") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     my $line = 0;
     my $state = 'header';
     my $seqName;
@@ -823,7 +809,7 @@ sub validateCsqual
 
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsqual") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     my $line = 0;
     my $state = 'header';
     my $seqName;
@@ -864,7 +850,7 @@ sub validateFasta
     HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
     return () if $opt_skipValidateFastQ;
     doTime("beginning validateFasta") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     my $line = 0;
     my $state = 'firstLine';
     my $seqName;
@@ -913,7 +899,7 @@ sub validateRpkm
     my ($path, $file, $type) = @_;
     doTime("beginning validateRpkm") if $opt_timing;
     my $lineNumber = 0;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     while(<$fh>) {
         chomp;
         $lineNumber++;
@@ -943,7 +929,7 @@ sub validateBowtie
     doTime("beginning validateBowtie") if $opt_timing;
     my $lineNumber = 0;
     doTime("beginning validateBedGraph") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     while(<$fh>) {
         chomp;
         $lineNumber++;
@@ -976,7 +962,7 @@ sub validatePsl
     my ($path, $file, $type) = @_;
     my $lineNumber = 0;
     doTime("beginning validatePsl") if $opt_timing;
-    my $fh = openUtil($path, $file);
+    my $fh = Encode::openUtil($file, $path);
     while(<$fh>) {
         chomp;
         $lineNumber++;
