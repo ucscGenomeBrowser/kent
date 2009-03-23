@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/makeExclusionList.pl instead.
 
-# $Id: makeExclusionList.pl,v 1.3 2008/06/26 18:35:09 angie Exp $
+# $Id: makeExclusionList.pl,v 1.4 2009/03/23 18:24:47 angie Exp $
 
 # Scan the -verbose=4 output of refreshNamedSessionCustomTracks for
 # names of existing files that need to be ignored by the script that
@@ -15,7 +15,7 @@ use strict;
 
 my $apacheRoot = "/usr/local/apache";
 my $outRoot = "/export";
-my $doNotRmFile = "$apacheRoot/trash/ctDoNotRm.txt";
+my $doNotRmFile = "$apacheRoot/trash/ctDoNotRmNext.txt";
 open(OUT, ">$doNotRmFile") || die "Couldn't open >$doNotRmFile: $!";
 
 while (<>) {
