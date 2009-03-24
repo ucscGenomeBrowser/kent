@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.53 2008/09/03 19:18:31 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.54 2009/03/24 20:48:34 mikep Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -118,7 +118,7 @@ errAbort(
   );
 }
 
-static struct chromInfo *createChromInfoList(char *name, char *database)
+static struct chromInfo *fbCreateChromInfoList(char *name, char *database)
 /* Load up all chromosome infos. */
 {
 struct sqlConnection *conn = sqlConnect(database);
@@ -797,7 +797,7 @@ if (faName)
 if (chromSizes != NULL)
     chromInfoList = chromInfoLoadAll(chromSizes);
 else
-    chromInfoList = createChromInfoList(clChrom, database);
+    chromInfoList = fbCreateChromInfoList(clChrom, database);
 
 conn = hAllocConn(database);
 checkInputExists(conn, database, chromInfoList, tableCount, tables);
