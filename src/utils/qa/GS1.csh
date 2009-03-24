@@ -74,7 +74,7 @@ foreach table (`cat $tablelist`)
   echo $table
   echo "================="
   rm -f junk 
-  set old=`hgsql -h hgofbeta -N  -e "SELECT COUNT(*) FROM $table" $betaDb`
+  set old=`hgsql -h hgwbeta -N  -e "SELECT COUNT(*) FROM $table" $betaDb`
   set new=`hgsql -N  -e "SELECT COUNT(*) FROM $table" $db`
   if ($old != "") then
     set newRows=`expr $new - $old`
@@ -96,7 +96,7 @@ echo
 echo "compare description of all tables with previous (shows diffs):"
 foreach table (`cat $tablelist`)
   echo $table
-  hgsql -h hgofbeta -N  -e "DESCRIBE $table" $betaDb >  $betaDb.beta.$table.desc
+  hgsql -h hgwbeta -N  -e "DESCRIBE $table" $betaDb >  $betaDb.beta.$table.desc
   hgsql -N  -e "DESCRIBE $table" $db > $db.dev.$table.desc
   diff $betaDb.beta.$table.desc $db.dev.$table.desc
   echo
@@ -160,12 +160,12 @@ echo
 echo
 echo
 echo "check that there are more in new release:"
-hgsql -h hgofbeta -N -e "SELECT name FROM knownGene" $betaDb \
+hgsql -h hgwbeta -N -e "SELECT name FROM knownGene" $betaDb \
   > beta.$betaDb.KG.name
 sort beta.$betaDb.KG.name | uniq > beta.$betaDb.KG.name.uniq
-hgsql -h hgofbeta -N -e "SELECT transcript FROM knownCanonical" $betaDb \
+hgsql -h hgwbeta -N -e "SELECT transcript FROM knownCanonical" $betaDb \
   > beta.$betaDb.knCanonical.transcript
-hgsql -h hgofbeta -N -e "SELECT transcript FROM knownIsoforms" $betaDb \
+hgsql -h hgwbeta -N -e "SELECT transcript FROM knownIsoforms" $betaDb \
   > beta.$betaDb.knIsoforms.transcript
 sort beta.$betaDb.knCanonical.transcript | uniq \
   > beta.$betaDb.knCanonical.transcript.uniq
@@ -281,11 +281,11 @@ foreach table (`cat $db.knownTo`)
   hgsql -t -e "SELECT * FROM $table LIMIT 1" $db
   if ($table == "knownToSuper") then
   # ?? they are the same -- where were you going with this?
-    set old=`hgsql -h hgofbeta -N -e "SELECT gene FROM $table" $betaDb \
+    set old=`hgsql -h hgwbeta -N -e "SELECT gene FROM $table" $betaDb \
         | sort | uniq | wc -l`
     set this=`hgsql -N -e "SELECT gene FROM $table" $db | sort | uniq | wc -l`
   else
-    set old=`hgsql -h hgofbeta -N -e "SELECT name FROM $table" $betaDb \
+    set old=`hgsql -h hgwbeta -N -e "SELECT name FROM $table" $betaDb \
         | sort | uniq | wc -l`
     set this=`hgsql -N -e "SELECT name FROM $table" $db | sort | uniq | wc -l`
   endif

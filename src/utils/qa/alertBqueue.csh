@@ -44,11 +44,11 @@ endif
 # echo "testing \n \n sending only to ann and bob right now \n \n "  > Bfile
 echo "greetings. \n\n  you have content in the B-queue that someone should look at." > Bfile
 echo "  this is a periodic reminder from a QA cronjob.\n" >> Bfile
-hgsql -h hgofbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
+hgsql -h hgwbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
   qadate FROM pushQ WHERE priority = 'B' ORDER BY qadate" qapushq >> Bfile
 
 # get list of all developers and QA involved in B-queue tracks
-set contacts=`hgsql -N -h hgofbeta -e "SELECT sponsor, reviewer, sponsor FROM pushQ \
+set contacts=`hgsql -N -h hgwbeta -e "SELECT sponsor, reviewer, sponsor FROM pushQ \
   WHERE priority = 'B'" qapushq`
 # clean up list to get unique names
 set contacts=`echo $contacts | sed "s/,/ /g" | sed "s/ /\n/g" \

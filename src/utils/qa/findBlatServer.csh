@@ -51,7 +51,7 @@ endif
 
 echo $machine | grep hgwbeta > /dev/null
 if ( ! $status ) then
-  set machine='-h hgofbeta hgcentralbeta'
+  set machine='-h hgwbeta hgcentralbeta'
 endif
   
 echo $machine | grep hgwdev > /dev/null

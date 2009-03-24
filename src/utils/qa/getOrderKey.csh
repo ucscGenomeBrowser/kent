@@ -34,7 +34,7 @@ set dev=`hgsql -N -e "SELECT name FROM dbDb \
   WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
   hgcentraltest`
 
-set beta=`hgsql -N -h hgofbeta -e "SELECT name FROM dbDb \
+set beta=`hgsql -N -h hgwbeta -e "SELECT name FROM dbDb \
   WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
   hgcentralbeta`
 
@@ -57,7 +57,7 @@ foreach db ( $all )
   set rr=0
   set dev=`hgsql -N -e 'SELECT orderKey FROM dbDb \
     WHERE name = "'$db'"' hgcentraltest`
-  set beta=`hgsql -N -h hgofbeta -e 'SELECT orderKey FROM dbDb \
+  set beta=`hgsql -N -h hgwbeta -e 'SELECT orderKey FROM dbDb \
     WHERE name = "'$db'"' hgcentralbeta`
   set rr=`hgsql -N -h genome-centdb -e 'SELECT orderKey FROM dbDb \
     WHERE name = "'$db'"' hgcentral`

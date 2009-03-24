@@ -11,7 +11,7 @@
 
 set tablename=""
 set machine="hgwbeta"
-set host="-h hgofbeta"
+set host="-h hgwbeta"
 set db=""
 set dbs=""
 set all=0

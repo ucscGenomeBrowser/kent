@@ -9,7 +9,7 @@
 set db=""
 set field=""
 set machine="beta"
-set host="-h hgofbeta"
+set host="-h hgwbeta"
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo

@@ -9,7 +9,7 @@
 
 set tablename=""
 set machine="hgwbeta"
-set host="-h hgofbeta"
+set host="-h hgwbeta"
 set found=0
 set dbs=""
 set rr="false"

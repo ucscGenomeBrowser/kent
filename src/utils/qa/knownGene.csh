@@ -98,7 +98,7 @@ if ($db != $oldDb) then
   echo
 endif
 hgsql -N -e "SELECT name from knownGene" $db | sort | uniq > $db.KG.name.dev
-hgsql -N -h hgofbeta -e "SELECT name from knownGene" $oldDb | sort |uniq > $oldDb.KG.name.beta.uniq
+hgsql -N -h hgwbeta -e "SELECT name from knownGene" $oldDb | sort |uniq > $oldDb.KG.name.beta.uniq
 comm -23 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $db.KG.name.devOnly
 comm -13 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $oldDb.KG.name.betaOnly
 comm -12 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $db.KG.name.commonOnly
@@ -411,11 +411,11 @@ echo "dev first"
 echo
 echo "Pep"
 hgsql -N -e "SELECT COUNT(*) FROM knownGenePep" $db
-hgsql -h hgofbeta -N -e "SELECT COUNT(*) FROM knownGenePep" $oldDb
+hgsql -h hgwbeta -N -e "SELECT COUNT(*) FROM knownGenePep" $oldDb
 echo
 echo "Mrna"
 hgsql -N -e "SELECT COUNT(*) FROM knownGeneMrna" $db
-hgsql -h hgofbeta -N -e "SELECT COUNT(*) FROM knownGeneMrna" $oldDb
+hgsql -h hgwbeta -N -e "SELECT COUNT(*) FROM knownGeneMrna" $oldDb
 echo "should be some new ones"
 echo
 
@@ -431,10 +431,10 @@ echo "----"
 echo
 echo "beta, format: {MIN, MAX}Mrna, {MIN, MAX}Pep:"
 echo "----"
- hgsql -h hgofbeta -N -e "SELECT MIN(LENGTH(seq)) FROM knownGeneMrna" $oldDb
- hgsql -h hgofbeta -N -e "SELECT MAX(LENGTH(seq)) FROM knownGeneMrna" $oldDb
- hgsql -h hgofbeta -N -e "SELECT MIN(LENGTH(seq)) FROM knownGenePep" $oldDb
- hgsql -h hgofbeta -N -e "SELECT MAX(LENGTH(seq)) FROM knownGenePep" $oldDb
+ hgsql -h hgwbeta -N -e "SELECT MIN(LENGTH(seq)) FROM knownGeneMrna" $oldDb
+ hgsql -h hgwbeta -N -e "SELECT MAX(LENGTH(seq)) FROM knownGeneMrna" $oldDb
+ hgsql -h hgwbeta -N -e "SELECT MIN(LENGTH(seq)) FROM knownGenePep" $oldDb
+ hgsql -h hgwbeta -N -e "SELECT MAX(LENGTH(seq)) FROM knownGenePep" $oldDb
 echo "sometimes the same on dev as beta:  no new proteins at extremes "
 echo
 
@@ -703,7 +703,7 @@ if ($db != $oldDb) then
   echo
 endif
 foreach table (`cat kgTablesAll`)
-  hgsql -h hgofbeta -N  -e "DESCRIBE $table" $oldDb >  $db.beta.$table.desc
+  hgsql -h hgwbeta -N  -e "DESCRIBE $table" $oldDb >  $db.beta.$table.desc
   hgsql -N  -e "DESCRIBE $table" $db > $db.dev.$table.desc
   echo $table
   diff $db.dev.$table.desc $db.beta.$table.desc
@@ -716,7 +716,7 @@ echo
 
 # hgsql -N -e 'SELECT name FROM knownGeneLink WHERE name = "NM_198864"' $db 
 # found: therefore "<" in a diff means it is in the first file named
-# hgsql -h hgofbeta -N -e 'SELECT name FROM knownGeneLink \
+# hgsql -h hgwbeta -N -e 'SELECT name FROM knownGeneLink \
 #       WHERE name = "NM_198864"' $db 
 # not found: therefore "<" in a diff means it is in the first file named
 
@@ -736,7 +736,7 @@ if ($db != $oldDb) then
   echo
 endif
 foreach table (`cat kgTablesAll`)
-  set old=`hgsql -h hgofbeta -N  -e "SELECT COUNT(*) FROM $table" $oldDb`
+  set old=`hgsql -h hgwbeta -N  -e "SELECT COUNT(*) FROM $table" $oldDb`
   set new=`hgsql -N  -e "SELECT COUNT(*) FROM $table" $db`
   set newRows=`expr $new - $old`
   set percent = 0
@@ -778,7 +778,7 @@ if ($db != $oldDb) then
   echo
 endif
 hgsql -N -e "SELECT * FROM kgAlias" $db | sort > $db.dev.kgAlias.sort
-hgsql -h hgofbeta -N -e "SELECT * FROM kgAlias" $oldDb | sort > $oldDb.beta.kgAlias.sort
+hgsql -h hgwbeta -N -e "SELECT * FROM kgAlias" $oldDb | sort > $oldDb.beta.kgAlias.sort
 wc -l *kgAlias.sort | grep -v total
 echo
 

@@ -63,7 +63,7 @@ if ( 'all' == $runOn ) then
   exit 1
  else # updates for this ensGene version exist
   foreach db ($dbs)
-   set onBeta=`hgsql -h hgofbeta -Ne "SELECT name FROM dbDb \
+   set onBeta=`hgsql -h hgwbeta -Ne "SELECT name FROM dbDb \
    WHERE name = '$db' AND active = 1" hgcentralbeta`
 
    if ( "" == "$onBeta" ) then

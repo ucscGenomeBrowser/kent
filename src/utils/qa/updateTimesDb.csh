@@ -45,7 +45,7 @@ endif
 # these files of table names are used by other programs, 
 # including proteins.csh:
 hgsql -N -e "SHOW TABLES" $db | sort > $db.tables
-hgsql -N -h hgofbeta -e "SHOW TABLES" $dbBeta | sort > $dbBeta.beta.tables
+hgsql -N -h hgwbeta -e "SHOW TABLES" $dbBeta | sort > $dbBeta.beta.tables
 echo "getting update times: $db"
 echo "getting update times: $dbBeta"
 echo
@@ -60,7 +60,7 @@ foreach table (`cat $db.tables`)
   else
     echo "using databases:  dev: $db  beta: $dbBeta"
   endif
-  set beta=`hgsql -h hgofbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
+  set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
       $dbBeta | awk '{print $13, $14}'`
   echo "."$dev
   echo "."$beta
@@ -85,11 +85,11 @@ if ($betaOnly != 0) then
         | awk '{print $13, $14}'`
     if ($dbBeta == "") then
       echo "using same database name for beta as for dev: " $db
-      set beta=`hgsql -h hgofbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
+      set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
           $db | awk '{print $13, $14}'`
     else
       echo "using databases:  dev: $db  beta: $dbBeta"
-      set beta=`hgsql -h hgofbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
+      set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
           $dbBeta | awk '{print $13, $14}'`
     endif
     echo "."$dev

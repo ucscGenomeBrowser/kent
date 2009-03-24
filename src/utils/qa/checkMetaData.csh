@@ -33,7 +33,7 @@ set mach2="hgwbeta"
 set centdb1="hgcentraltest"
 set centdb2="hgcentralbeta"
 set host1=""
-set host2="-h hofbeta"
+set host2="-h hgwbeta"
 
 # check if asssembly database exits on dev.
 set orgCheck=`hgsql -N -e 'SELECT COUNT(*) FROM dbDb WHERE name = "'$db'"' \
@@ -72,12 +72,12 @@ endif
 # set machines to beta where needed
 if ( $mach1 == "hgwbeta" ) then
   set centdb1="hgcentralbeta"
-  set host1="-h hgofbeta"
+  set host1="-h hgwbeta"
 endif
 
 if ( $mach2 == "hgwbeta" ) then
   set centdb2="hgcentralbeta"
-  set host2="-h hgofbeta"
+  set host2="-h hgwbeta"
 endif
 
 

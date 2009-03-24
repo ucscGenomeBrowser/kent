@@ -35,7 +35,7 @@ foreach machine ( $machine1 $machine2 )
   else
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
-      set host="-h hgofbeta"
+      set host="-h hgwbeta"
     else
       set cent=""
       set host="-h genome-centdb"

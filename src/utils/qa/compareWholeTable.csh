@@ -57,11 +57,11 @@ if ( $status ) then
 endif
 
 if ( $mach1 == "hgwbeta" ) then
-  set host1="-h hgofbeta"
+  set host1="-h hgwbeta"
 endif
 
 if ( $mach2 == "hgwbeta" ) then
-  set host2="-h hgofbeta"
+  set host2="-h hgwbeta"
 endif
  
 # set flags for RR queries
