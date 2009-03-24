@@ -5,9 +5,10 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "chromInfo.h"
+#include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.11 2009/03/13 23:23:51 mikep Exp $";
-static char *version = "$Revision: 1.11 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.12 2009/03/24 15:51:04 mikep Exp $";
+static char *version = "$Revision: 1.12 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -54,6 +55,7 @@ errAbort(
   "         csqual    : Colorspace quality (see link below)\n"
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
   "\n"
+  "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names and sizes\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
   "                                  with formats such as tagAlign and pairedTagAlign)\n"
@@ -69,6 +71,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
+   {"chromDb", OPTION_STRING},
    {"chromInfo", OPTION_STRING},
    {"maxErrors", OPTION_INT},
    {"colorSpace", OPTION_BOOLEAN},
@@ -767,7 +770,15 @@ printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 initArrays();
-if (strlen(optionVal("chromInfo", "")) > 0)
+// Get chromInfo from DB or file
+if (strlen(optionVal("chromDb", "")) > 0)
+    {
+    if (!(ci = createChromInfoList(NULL, optionVal("chromDb", ""))))
+        errAbort("could not load chromInfo from DB %s\n", optionVal("chromDb", ""));
+    chrHash = chromHash(ci);
+    chromInfoFree(&ci);
+    }
+else if (strlen(optionVal("chromInfo", "")) > 0)
     {
     if (!(ci = chromInfoLoadAll(optionVal("chromInfo", ""))))
 	errAbort("could not load chromInfo file %s\n", optionVal("chromInfo", ""));

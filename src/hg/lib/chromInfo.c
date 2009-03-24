@@ -6,9 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: chromInfo.c,v 1.6 2007/11/26 22:39:44 hartera Exp $";
+static char const rcsid[] = "$Id: chromInfo.c,v 1.7 2009/03/24 15:51:04 mikep Exp $";
 
 void chromInfoStaticLoad(char **row, struct chromInfo *ret)
 /* Load a row from chromInfo table into ret.  The contents of ret will
@@ -160,3 +161,49 @@ if (res != NULL)
     }
 return exists;
 }
+
+
+struct chromInfo *createChromInfoList(char *name, char *database)
+/* Load up chromosome information for chrom 'name'.
+ * If name is NULL or "all" then load all chroms.
+ * Similar to featureBits.c - could be moved to library */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr = NULL;
+char **row;
+int loaded=0;
+struct chromInfo *ret = NULL;
+unsigned totalSize = 0;
+/* do the query */
+if (!name || sameWord(name, "all"))
+    sr = sqlGetResult(conn, "select * from chromInfo");
+else
+    {
+    char select[256];
+    safef(select, ArraySize(select), "select * from chromInfo where chrom='%s'", name);
+    sr = sqlGetResult(conn, select);
+    }
+/* read the rows and build the chromInfo list */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chromInfo *el;
+    struct chromInfo *ci;
+    AllocVar(ci);
+    el = chromInfoLoad(row);
+    ci->chrom = cloneString(el->chrom);
+    ci->size = el->size;
+    totalSize += el->size;
+    slAddHead(&ret, ci);
+    ++loaded;
+    }
+if (loaded < 1)
+    errAbort("ERROR: can not find chrom name: '%s'\n", name ? name : "NULL");
+slReverse(&ret);
+if (!name || sameWord(name, "all"))
+    verbose(2, "#\tloaded size info for %d chroms, total size: %u\n",
+        loaded, totalSize);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ret;
+}
+

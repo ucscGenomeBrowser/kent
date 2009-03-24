@@ -6,53 +6,8 @@
 #include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
-static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.7 2008/09/18 03:51:57 mikep Exp $";
+static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.8 2009/03/24 15:51:04 mikep Exp $";
 
-//#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
-
-static struct chromInfo *createChromInfoList(char *name, char *database)
-/* Load up all chromosome information. 
- * Similar to featureBits.c - maybe could be moved to library ? */
-{
-struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr = NULL;
-char **row;
-int loaded=0;
-struct chromInfo *ret = NULL;
-unsigned totalSize = 0;
-/* do the query */
-if (sameWord(name, "all"))
-    sr = sqlGetResult(conn, "select * from chromInfo");
-else
-    {
-    char select[256];
-    safef(select, ArraySize(select), "select * from chromInfo where chrom='%s'",
-        name);
-    sr = sqlGetResult(conn, select);
-    }
-/* read the rows and build the chromInfo list */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct chromInfo *el;
-    struct chromInfo *ci;
-    AllocVar(ci);
-    el = chromInfoLoad(row);
-    ci->chrom = cloneString(el->chrom);
-    ci->size = el->size;
-    totalSize += el->size;
-    slAddHead(&ret, ci);
-    ++loaded;
-    }
-if (loaded < 1)
-    errAbort("ERROR: can not find chrom name: '%s'\n", name);
-slReverse(&ret);
-if (sameWord(name, "all"))
-    verbose(2, "#\tloaded size info for %d chroms, total size: %u\n",
-        loaded, totalSize);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
 
 static char *chromTable(char *db, char *table, char *chromDb)
 /* Get chr1_table if it exists, otherwise table. 
