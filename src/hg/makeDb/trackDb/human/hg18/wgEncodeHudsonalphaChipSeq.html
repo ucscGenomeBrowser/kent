@@ -22,7 +22,10 @@ type. Included for each cell type is a control signal, which represents the
 control condition where no antibody targeting was performed. Within a grouping
 there will be one or more of the following:
 <ul>
-<li>Raw Signal of aligned read density</li>
+<li>Raw Signal: a continuous signal which indicates density of aligned reads. The short reads (25 bp) 
+produced by the sequencer are extended to the size-selected length (225 bp), and the read density is computed
+by the UCSC bedItemOverlapCount utility.
+</li>
 <li>Called Peaks which represent the sites with the greatest evidence of
 transcription factor binding</li>
 </ul>
