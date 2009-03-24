@@ -50,12 +50,12 @@ blatSuite: topLibs
 	cd isPcr && ${MAKE}
 	cd blatz && ${MAKE}
 
-UTILS_APPLIST = bigBedSummary bigBedToBed bedToBigBed bigWigSummary \
+UTILS_APPLIST = bedToBigBed bigBedSummary bigBedToBed bigWigSummary \
 	bigWigToBedGraph faSize faFrag faRandomize faOneRecord faSomeRecords \
 	faToNib faToTwoBit gtfToGenePred htmlCheck nibFrag textHistogram \
 	twoBitInfo twoBitToFa wigToBigWig
 
-userApps:
+userApps: topLibs
 	@for P in ${UTILS_APPLIST}; do \
 	    ( cd utils/$${P} && echo utils/$${P} && $(MAKE) ) ; \
 	done
