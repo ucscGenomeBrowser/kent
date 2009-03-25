@@ -2705,7 +2705,7 @@ type bed 4 +
 
 track omimGene
 shortLabel OMIM Genes
-longLabel OMIM-Related Genes
+longLabel OMIM-Associated Genes
 group phenDis
 priority 29.6
 visibility hide
