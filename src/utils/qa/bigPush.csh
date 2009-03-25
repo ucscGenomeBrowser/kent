@@ -45,7 +45,7 @@ echo
 rm -f $db.$trackName.push
 foreach table (`cat $tablelist`)
   echo pushing "$table"
-  sudo mypush $db "$table" hgofbeta >> $db.$trackName.push
+  sudo mypush $db "$table" hgwbeta >> $db.$trackName.push
   echo "$table" >> $db.$trackName.push
   # tail -f $db.$trackName.push
 end
