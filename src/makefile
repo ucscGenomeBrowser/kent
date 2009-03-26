@@ -50,10 +50,13 @@ blatSuite: topLibs
 	cd isPcr && ${MAKE}
 	cd blatz && ${MAKE}
 
+# all of these application makefiles have been updated to include use
+#	of DESTDIR and BINDIR
+
 UTILS_APPLIST = bedToBigBed bigBedSummary bigBedToBed bigWigSummary \
 	bigWigToBedGraph faSize faFrag faRandomize faOneRecord faSomeRecords \
 	faToNib faToTwoBit gtfToGenePred htmlCheck nibFrag textHistogram \
-	twoBitInfo twoBitToFa wigToBigWig
+	twoBitInfo twoBitToFa userApps wigToBigWig
 
 userApps: topLibs
 	@for P in ${UTILS_APPLIST}; do \
