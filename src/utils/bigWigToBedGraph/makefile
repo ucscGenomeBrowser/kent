@@ -2,13 +2,15 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${L}
 
-O = bigWigToBedGraph.o 
+A = bigWigToBedGraph
+O = bigWigToBedGraph.o
 
-bigWigToBedGraph: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/bigWigToBedGraph $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/bigWigToBedGraph${EXE}
+bigWigToBedGraph: ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

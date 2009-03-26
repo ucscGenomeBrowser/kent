@@ -2,16 +2,18 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${L}
 
+A = twoBitInfo
 O = twoBitInfo.o
 
-twoBitInfo: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/twoBitInfo $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/twoBitInfo${EXE}
+twoBitInfo: ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}
 
 # reuse twoFitToFa input files. for tests
 TEST_IN = ../twoBitToFa/tests/input

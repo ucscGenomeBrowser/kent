@@ -1,18 +1,21 @@
 include ../../inc/common.mk
 
 L += -lm ${MYSQLLIBS}
-MYLIBDIR = ../../../src/lib/$(MACHTYPE)
-MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${L}
 HG_INC=-I../../inc -I../../hg/inc
 
+A = gtfToGenePred
 O = gtfToGenePred.o
 
-gtfToGenePred: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(BINDIR)/gtfToGenePred${EXE} $O $(MYLIBS) $L
+gtfToGenePred: $O ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 test:
 	(cd tests && ${MAKE} test)
 
-clean:
-	rm $O
+clean::
+	rm -f ${O}
 	(cd tests && ${MAKE} clean)

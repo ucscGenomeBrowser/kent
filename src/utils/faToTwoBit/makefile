@@ -2,16 +2,18 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${L}
 
+A = faToTwoBit
 O = faToTwoBit.o
 
-faToTwoBit: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/faToTwoBit $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/faToTwoBit${EXE}
+faToTwoBit: ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}
 
 test:
 	${MKDIR} tests/output

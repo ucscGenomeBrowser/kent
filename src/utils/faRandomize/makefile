@@ -1,8 +1,15 @@
 include ../../inc/common.mk
 
-O = faRandomize.o 
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-faNoise: $(O)
-	${CC} ${COPT} ${CFLAGS} -o faRandomize $O ../../lib/$(MACHTYPE)/jkweb.a
-	cp faRandomize ${BINDIR}/
+A = faRandomize
+O = faRandomize.o
 
+faRandomize: ${O}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+clean::
+	rm -f ${O}

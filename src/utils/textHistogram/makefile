@@ -1,14 +1,16 @@
 include ../../inc/common.mk
 
 L += -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkweb.a
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${L}
 
+A = textHistogram
 O = textHistogram.o
 
-textHistogram: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/textHistogram $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/textHistogram${EXE}
+textHistogram: $O ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
+clean::
 	rm -f ${O}

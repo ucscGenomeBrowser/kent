@@ -2,13 +2,15 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${L}
 
+A = wigToBigWig
 O = wigToBigWig.o
 
-wigToBigWig: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/wigToBigWig $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/wigToBigWig${EXE}
+wigToBigWig: ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

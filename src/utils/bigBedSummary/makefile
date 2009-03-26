@@ -2,13 +2,15 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${L}
 
+A = bigBedSummary
 O = bigBedSummary.o
 
-bigBedSummary: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/bigBedSummary $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/bigBedSummary${EXE}
+bigBedSummary: ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

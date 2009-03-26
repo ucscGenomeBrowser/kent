@@ -1,9 +1,15 @@
 include ../../inc/common.mk
 
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = faOneRecord.o 
+A = faOneRecord
+O = faOneRecord.o
 
-faOneRecord: $(O)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faOneRecord $O ../../lib/$(MACHTYPE)/jkweb.a
+faOneRecord: ${O}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-
+clean::
+	rm -f ${O}

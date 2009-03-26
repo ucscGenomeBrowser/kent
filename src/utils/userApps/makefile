@@ -5,7 +5,13 @@ INST_LIST = fetchChromSizes
 all::
 	@${MKDIR} "${DESTDIR}${BINDIR}"
 	@for P in ${INST_LIST}; do \
-	    ( rm -f "${DESTDIR}${BINDIR}/$${P}" && cp -p $${P} "${DESTDIR}${BINDIR}" && echo "installed $${P}" ) ; \
+	    ( rm -f "${DESTDIR}${BINDIR}/$${P}" && \
+		cp -p $${P} "${DESTDIR}${BINDIR}" && \
+		chmod +x "${DESTDIR}${BINDIR}/$${P}" && \
+		echo "installed ${DESTDIR}${BINDIR}/$${P}" ) ; \
 	done
 
-# "$Id: makefile,v 1.1 2009/03/26 19:04:17 hiram Exp $"
+clean::
+	@echo "nothing to clean in userApps"
+
+# "$Id: makefile,v 1.2 2009/03/26 20:18:41 hiram Exp $"
