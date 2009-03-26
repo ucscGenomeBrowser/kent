@@ -3,7 +3,7 @@
 # fetchChromSizes - script to grab chrom.sizes from UCSC via either of:
 #	mysql, wget or ftp
 
-# "$Id: fetchChromSizes,v 1.1 2009/03/26 18:29:49 hiram Exp $"
+# "$Id: fetchChromSizes,v 1.2 2009/03/26 18:40:09 hiram Exp $"
 
 usage() {
     echo "usage: fetchChromSizes <db> > <db>.chrom.sizes"
@@ -38,7 +38,7 @@ export DONE
 if [ -n "${MYSQL}" ]; then
     echo "INFO: trying MySQL ${MYSQL} for database ${DB}" 1>&2
     ${MYSQL} -N --user=genome --host=genome-mysql.cse.ucsc.edu -A -e \
-	"select chrom,size from chromInfo;" ${DB} 
+	"SELECT chrom,size FROM chromInfo ORDER BY size DESC;" ${DB} 
     if [ $? -ne 0 ]; then
 	echo "WARNING: mysql command failed" 1>&2
     else
@@ -60,7 +60,7 @@ if [ -n "${WGET}" ]; then
 	echo "WARNING: wget command failed" 1>&2
 	rm -f "${tmpResult}"
     else
-	zcat ${tmpResult} 2> /dev/null | cut -f1,2
+	zcat ${tmpResult} 2> /dev/null | cut -f1,2 | sort -k2nr
 	rm -f "${tmpResult}"
 	DONE=1
     fi
@@ -77,12 +77,12 @@ if [ -n "${FTP}" ]; then
     echo "cd goldenPath/${DB}/database" >> ${tmpFtpRsp}
     echo "get chromInfo.txt.gz ${tmpResult}" >> ${tmpFtpRsp}
     echo "bye" >> ${tmpFtpRsp}
-    ${FTP} -u -n -i hgdownload.cse.ucsc.edu < ${tmpFtpRsp} 2> /dev/null
+    ${FTP} -u -n -i hgdownload.cse.ucsc.edu < ${tmpFtpRsp} > /dev/null 2>&1
     if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
 	echo "ERROR: ftp command failed" 1>&2
 	rm -f "${tmpFtpRsp}" "${tmpResult}"
     else
-	zcat ${tmpResult} | cut -f1,2
+	zcat ${tmpResult} | cut -f1,2 | sort -k2nr
 	rm -f "${tmpFtpRsp}" "${tmpResult}"
 	DONE=1
     fi
