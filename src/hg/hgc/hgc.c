@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1521 2009/03/17 19:54:55 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1522 2009/03/26 17:33:59 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8563,10 +8563,23 @@ printGadDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
+char *gbCdnaGetDescription(struct sqlConnection *conn, char *acc)
+/* return mrna description, or NULL if not available. freeMem result */
+{
+char query[128];
+safef(query, sizeof(query),
+      "select description.name from gbCdnaInfo,description where (acc = '%s') and (gbCdnaInfo.description = description.id)", acc);
+char *desc = sqlQuickString(conn, query);
+if ((desc == NULL) || sameString(desc, "n/a") || (strlen(desc) == 0))
+    freez(&desc);
+return desc;
+}
+
 void printOmimGeneDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an OMIM Gene entry. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -8576,6 +8589,8 @@ char *title1 = NULL;
 char *title2 = NULL;
 char *geneSymbols = NULL;
 char *chrom, *chromStart, *chromEnd;
+char *kgDescription = NULL;
+char *refSeq;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
@@ -8596,7 +8611,7 @@ if (url != NULL && url[0] != 0)
 
     /* get corresponding KG ID */
     safef(query, sizeof(query),
-          "select k.name from kgXref x, knownGene k where k.chrom='%s' and k.txStart=%s and k.txEnd=%s and k.name=x.kgId ",
+	  "select k.transcript from knownCanonical k where k.chrom='%s' and k.chromStart=%s and k.chromEnd=%s",
 	  chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -8668,7 +8683,20 @@ if (url != NULL && url[0] != 0)
     	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
 	       "../cgi-bin/hgGene?hgg_gene=", kgId);
     	printf("%s</A></B>: ", kgId);
+    	
+	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+	    {
+	    refSeq = strdup(row[0]);
+	    kgDescription = gbCdnaGetDescription(conn2, refSeq);
+	    }
+	sqlFreeResult(&sr);
+        hFreeConn(&conn2);
 
+	if (kgDescription == NULL)
+	{
     	safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -8678,6 +8706,12 @@ if (url != NULL && url[0] != 0)
 	    }
 
 	sqlFreeResult(&sr);
+	}
+	else
+    	    {
+	    printf("%s", kgDescription);
+	    }
+
         printf("<BR>\n");
 	}
     }
@@ -9046,18 +9080,6 @@ if (hHasField(database, "gbCdnaInfo", "version"))
     ver = sqlQuickNum(conn, query);
     }
 return ver;
-}
-
-char *gbCdnaGetDescription(struct sqlConnection *conn, char *acc)
-/* return mrna description, or NULL if not available. freeMem result */
-{
-char query[128];
-safef(query, sizeof(query),
-      "select description.name from gbCdnaInfo,description where (acc = '%s') and (gbCdnaInfo.description = description.id)", acc);
-char *desc = sqlQuickString(conn, query);
-if ((desc == NULL) || sameString(desc, "n/a") || (strlen(desc) == 0))
-    freez(&desc);
-return desc;
 }
 
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
