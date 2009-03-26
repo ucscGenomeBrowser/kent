@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.169 2009/03/22 02:37:47 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.170 2009/03/26 07:01:20 mikep Exp $
 
 use warnings;
 use strict;
@@ -30,7 +30,6 @@ use Carp qw(cluck);
 use Cwd;
 use IO::File;
 use File::Basename;
-use Data::Dumper; # MJP
 
 use lib "/cluster/bin/scripts";
 use Encode;
@@ -655,7 +654,8 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    my $safe = SafePipe->new(CMDS => ["validateFiles -type=tagAlign $file"]);
+    # validate chroms, chromSize, etc. Assume hg18 like elsewhere
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromDb=hg18 -type=tagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -668,7 +668,8 @@ sub validatePairedTagAlign
 # This is like tag align but with two additional sequence fields appended; seq1 and seq2
 {
     my ($path, $file, $type) = @_;
-    my $safe = SafePipe->new(CMDS => ["validateFiles -type=pairedTagAlign $file"]);
+    # validate chroms, chromSize, etc. Assume hg18 like elsewhere
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromDb=hg18 -type=pairedTagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -696,7 +697,8 @@ sub validateNarrowPeak
 sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
-    my $safe = SafePipe->new(CMDS => ["validateFiles -type=broadPeak $file"]);
+    # validate chroms, chromSize, etc. Assume hg18 like elsewhere
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromDb=hg18 -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
