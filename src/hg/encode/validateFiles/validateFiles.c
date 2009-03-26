@@ -3,12 +3,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "sqlNum.h"
 #include "chromInfo.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.12 2009/03/24 15:51:04 mikep Exp $";
-static char *version = "$Revision: 1.12 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.13 2009/03/26 06:55:39 mikep Exp $";
+static char *version = "$Revision: 1.13 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -128,6 +127,62 @@ for ( ; ci ; ci = ci->next )
     hashAdd(h, ci->chrom, size);
     }
 return h;
+}
+
+boolean checkUnsigned(char *file, int line, char *row, char *s, unsigned *val, char *name)
+/* Convert series of digits to unsigned integer about
+ * twice as fast as atoi (by not having to skip white
+ * space or stop except at the null byte.) 
+ * Returns true if conversion possible, and value is returned in 'val'
+ * Otherwise prints warning and returns false */
+{
+unsigned res = 0;
+char *p = s;
+char c;
+
+while (((c = *(p++)) >= '0') && (c <= '9'))
+    {
+    res *= 10;
+    res += c - '0';
+    }
+if (c != '\0')
+    {
+    warn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]", file, line, name, s, row);
+    return FALSE;
+    }
+*val = res;
+return TRUE;
+}
+
+boolean checkSigned(char *file, int line, char *row, char *s, int *val, char *name)
+/* Convert string to signed integer.  Unlike atol assumes
+ * all of string is number. 
+ * Returns true if conversion possible, and value is returned in 'val'
+ * Otherwise prints warning and returns false */
+{
+int res = 0;
+char *p, *p0 = s;
+
+if (*p0 == '-')
+    p0++;
+p = p0;
+while ((*p >= '0') && (*p <= '9'))
+    {
+    res *= 10;
+    res += *p - '0';
+    p++;
+    }
+/* test for invalid character, empty, or just a minus */
+if ((*p != '\0') || (p == p0))
+    {
+    warn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]", file, line, name, s, row);
+    return FALSE;
+    }
+if (*s == '-')
+    *val = -res;
+else
+    *val = res;
+return TRUE;
 }
 
 boolean checkString(char *file, int line, char *row, char *s, char *name)
@@ -340,8 +395,10 @@ boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, c
 // Othewise print warning and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, chrom, chromSize, row);
-unsigned s = sqlUnsigned(start);
-unsigned e = sqlUnsigned(end);
+unsigned s, e; 
+if (   !checkUnsigned(file, line, row, start, &s, "chromStart")
+    || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
+    return FALSE;
 if (chromSize > 0)
     {
     if (e > chromSize)
@@ -380,9 +437,11 @@ boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char
 // Othewise print warning and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
-unsigned p = sqlUnsigned(peak);
-unsigned s = sqlUnsigned(start);
-unsigned e = sqlUnsigned(end);
+unsigned p, s, e;
+if (   !checkUnsigned(file, line, row, peak, &p, "peak") 
+    || !checkUnsigned(file, line, row, start, &s, "chromStart")
+    || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
+    return FALSE;
 if (p > e - s)
     {
     warn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", file, line, p, e - s, row);
@@ -395,7 +454,9 @@ boolean checkIntBetween(char *file, int line, char *row, char *val, char *name, 
 // Return TRUE if val is integer between min and max
 // Othewise print warning and return FALSE
 {
-int i = sqlSigned(val);
+int i;
+if (!checkSigned(file, line, row, val, &i, name))
+    return FALSE;
 verbose(2,"[%s %3d] inputLine=%d [%s] -> [%d] [%s,%d..%d]\n", __func__, __LINE__, line, val, i, name, min, max);
 if (i >= min && i <= max)
     {
@@ -464,6 +525,9 @@ int line = 0;
 int errs = 0;
 unsigned chromSize;
 int size;
+// Dot in place of N for tagaligns from Larry's group. Maybe remove this later.
+int savedot = dnaChars[(int)'.'];
+dnaChars[(int)'.'] = 1; 
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
@@ -492,6 +556,7 @@ while (lineFileNext(lf, &row, &size))
 	    errAbort("Aborting .. found %d errors\n", errs);
 	}
     }
+dnaChars[(int)'.'] = savedot;
 return errs;
 }
 
