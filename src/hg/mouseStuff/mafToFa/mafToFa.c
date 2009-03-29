@@ -5,7 +5,9 @@
 #include "maf.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: mafToFa.c,v 1.1 2009/03/28 20:48:10 mikep Exp $";
+static char const rcsid[] = "$Id: mafToFa.c,v 1.2 2009/03/29 05:16:57 mikep Exp $";
+
+boolean stripDotsDashes;
 
 void usage()
 /* Explain usage and exit. */
@@ -15,11 +17,12 @@ errAbort(
   "usage:\n"
   "   mafToFa in.maf out.fa\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -stripDotsDashes     : remove dot and dash (.-) characters from aligned sequences\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"stripDotsDashes", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -34,7 +37,7 @@ else
 }
 
 
-void mafAliToFa(struct mafAli *maf, FILE *pslFh)
+void mafAliToFa(struct mafAli *maf, FILE *of)
 /* convert a MAF alignment to a fa */
 {
 struct mafComp *c;
@@ -42,10 +45,15 @@ for (c = maf->components ; c ; c = c->next )
     {
     int start = c->start;
     int end   = c->start+c->size;
+    if (stripDotsDashes)
+	{
+	stripChar(c->text, '.');
+	stripChar(c->text, '-');
+	}
     reverseIntRange(&start, &end, c->srcSize);
-    fprintf(pslFh, ">%s.%d.%d.%c.%d\n%s\n", c->src, start, end, c->strand, c->srcSize, c->text);
+    fprintf(of, ">%s.%d.%d.%c.%d\n%s\n", c->src, start, end, c->strand, c->srcSize, c->text);
     }
-fprintf(pslFh,"\n");
+fprintf(of,"\n");
 }
 
 void mafToFa(char *inName, char *outName)
@@ -72,6 +80,7 @@ optionInit(&argc, argv, options);
 --argc;
 if (argc != 2)
     usage();
+stripDotsDashes = optionExists("stripDotsDashes");
 mafToFa(argv[0], argv[1]);
 return 0;
 }
