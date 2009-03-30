@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.20 2006/07/05 06:50:34 jill Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.21 2009/03/30 23:25:21 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -210,14 +210,14 @@ if (types != NULL)
     if (t == NULL)
         return FALSE;  /* not found in list of types */
     }
-if (fill->qSize < minSizeQ)
-    return FALSE;
-if (fill->tSize < minSizeT)
-    return FALSE;
 if (fill->chainId)
     {
     if (gapOnly)
         return FALSE;
+    if (fill->qSize < minSizeQ)
+	return FALSE;
+    if (fill->tSize < minSizeT)
+	return FALSE;
     if (fill->score < minScore || fill->score > maxScore)
 	return FALSE;
     if (fill->ali < minAli)
