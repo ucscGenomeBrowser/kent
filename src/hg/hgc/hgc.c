@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1523 2009/03/30 22:06:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1524 2009/03/30 22:15:49 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8743,9 +8743,9 @@ if (url != NULL && url[0] != 0)
     	    	printf("%s</A></B>", row[0]);
 	    	printedCnt++;
 		}
+            if (printedCnt >= 1) printf("<BR>\n");
 	    }
 	sqlFreeResult(&sr);
-        printf("<BR>\n");
 	}
     }
 
