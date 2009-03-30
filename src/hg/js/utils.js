@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.13 2009/03/09 18:35:29 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.14 2009/03/30 21:12:19 tdreszer Exp $
 
 var debug = false;
 
@@ -188,3 +188,65 @@ function getURLParam()
     }
     return unescape(strReturn);
 }
+
+function makeHiddenInput(theForm,aName,aValue)
+{   // Create a hidden input to hold a value
+    $(theForm).find("input:last").after("<input type=hidden name='"+aName+"' value='"+aValue+"'>");
+}
+
+function updateOrMakeNamedVariable(theForm,aName,aValue)
+{   // Store a value to a named input.  Will make the input if necessary
+    var inp = $(theForm).find("input[name='"+aName+"']:last");
+    if(inp != undefined && inp.length > 0)
+        inp.val(aValue);
+    else
+        makeHiddenInput(theForm,aName,aValue);
+}
+
+function parseUrlAndUpdateVars(theForm,href)
+{   // Parses the URL and converts GET vals to POST vals
+    var url = href;
+    var extraIx = url.indexOf("?");
+    if(extraIx > 0) {
+        var extra = url.substring(extraIx+1);
+        url = url.substring(0,extraIx);
+        // now extra must be repeatedly broken into name=var
+        extraIx = extra.indexOf("=");
+        for(;extraIx > 0;extraIx = extra.indexOf("=")) {
+            var aValue;
+            var aName = extra.substring(0,extraIx);
+            var endIx = extra.indexOf("&");
+            if( endIx>0) {
+                aValue = extra.substring(extraIx+1,endIx);
+                extra  = extra.substring(endIx+1);
+            } else {
+                aValue = extra.substring(extraIx+1);
+                extra  = "";
+            }
+            if(aName.length>0 && aValue.length>0)
+                updateOrMakeNamedVariable(theForm,aName,aValue);
+        }
+    }
+    return url;
+}
+
+function postTheForm(formName,href)
+{   // posts the form converting GET vars to Post vars first
+    // Need to parse out vars and ensure doing post!
+    var goodForm=$("form[name='"+formName+"']");
+    if(goodForm.length == 1) {
+        var url = parseUrlAndUpdateVars(goodForm,href);
+        $(goodForm).attr('action',url);
+        $(goodForm).submit();
+    }
+    return false; // Meaning do not continue with anything else
+}
+function setVarAndPostForm(aName,aValue,formName)
+{   // Sets a specific variable then posts
+    var goodForm=$("form[name='"+formName+"']");
+    if(goodForm.length == 1) {
+        updateOrMakeNamedVariable(goodForm,aName,aValue);
+    }
+    return postTheForm(formName,window.location.href);
+}
+
