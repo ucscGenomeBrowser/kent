@@ -16,12 +16,14 @@ steps for creating a bigWig track are:
 3) Create wig format files following the definitions in:
 	http://genome.ucsc.edu/goldenPath/help/wiggle.html
 4) Run the command line
-       wigToBigWig input.wig chrom.sizes myBigWig.bw
+	wigToBigWig input.wig.gz chrom.sizes myBigWig.bw
+    if your input.wig.gz file has 'track' and 'browser' lines:
+	zcat input.wig.gz | egrep -v "^track|^browser" \
+	    wigToBigWig stdin chrom.sizes myBigWig.bw
 5) Move the output bigWig file to a http, https, or ftp site.
 6) Create a custom track with just the track line.
 	This will look something like:
-       track type=bigWig name="My Big Wig" description="A Graph of Cool
-Data from My Lab" dataUrl=http://myorg.edu/mylab/myBigWig.bw
+       track type=bigWig name="My Big Wig" description="A Graph of Cool Data from My Lab" dataUrl=http://myorg.edu/mylab/myBigWig.bw
 
    (track lines are single lines, no line breaks are allowed)
 
@@ -49,12 +51,14 @@ are:
 3) Create bed format files following the definitions in:
 	http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED
 4) Run the command line
-       bedToBigBed input.wig chrom.sizes myBigBed.bb
+       bedToBigBed input.bed.gz chrom.sizes myBigBed.bb
+    if your input.bed.gz file has 'track' and 'browser' lines:
+	zcat input.bed.gz | egrep -v "^track|^browser" \
+	    bedToBigBed stdin chrom.sizes myBigWig.bb
 5) Move the output bigBed file to a http, https, or ftp site.
 6) Create a custom track with just the track line.
 	This will look something like:
-       track type=bigBed name="My Big Bed" description="Cool Genome
-Annotations from My Lab" dataUrl=http://myorg.edu/mylab/myBigBed.bb
+       track type=bigBed name="My Big Bed" description="Cool Genome Annotations from My Lab" dataUrl=http://myorg.edu/mylab/myBigBed.bb
 
    (track lines are single lines, no line breaks are allowed)
 
@@ -67,5 +71,5 @@ case you should include a .as (AutoSQL) format file describing the fields.
 See http://www.linuxjournal.com/article/5949 for information on AutoSQL 
 
 ========================================================================
-	$Id: bigBedWigs.txt,v 1.1 2009/03/26 23:15:45 hiram Exp $
+	$Id: bigBedWigs.txt,v 1.2 2009/03/30 17:37:01 hiram Exp $
 ========================================================================
