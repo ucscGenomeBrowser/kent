@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.7 2007/09/04 20:21:42 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.8 2009/03/30 22:14:25 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -84,8 +84,9 @@ while (isNotEmpty(namePt))
 	    }
 	else
 	    {
+	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 	    dyStringAppend(newContents, oneSetting->string);
-	    customFactoryTestExistence(dataPt,
+	    customFactoryTestExistence(db, dataPt,
 				       &thisGotLiveCT, &thisGotExpiredCT);
 	    }
 	if (thisGotLiveCT && pLiveCount != NULL)
