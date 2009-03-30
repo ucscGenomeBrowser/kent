@@ -124,4 +124,11 @@
     # used in psxy so I think we will have to just run that in hgc.c, oh
     # well.
 
+
+###########################################################################
+# Make population key (done 3/17/09 angie)
+    # Made script plotKey.sh that plots the map background (no lines),
+    # small circles at all of the un-tweaked locations in
+    # HGDP_HapMap.coords.txt, and population labels.
+
 ###########################################################################
