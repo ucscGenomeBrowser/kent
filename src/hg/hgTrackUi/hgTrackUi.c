@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.483 2009/03/19 21:13:00 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.484 2009/03/30 21:13:57 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2436,7 +2436,6 @@ void trackUi(struct trackDb *tdb, struct customTrack *ct)
 {
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js",NULL);
-jsIncludeFile("ajax.js", NULL);
 #define SUPPORT_RESET_TO_DEFAULTS
 #ifdef SUPPORT_RESET_TO_DEFAULTS
 #define RESET_TO_DEFAULTS "defaults"
@@ -2500,7 +2499,7 @@ cgiMakeButton("Submit", "Submit");
 
 #ifdef SUPPORT_RESET_TO_DEFAULTS
 if(tdbIsComposite(tdb) && subgroupingExists(tdb,"view"))
-    printf("\n&nbsp;&nbsp;<a href='#' onclick='setCartVarAndRefresh(\"%s\",\"1\"); return false;'>Reset to defaults</a>\n",setting);
+    printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
 #endif//def SUPPORT_RESET_TO_DEFAULTS
 
 if (ct)
