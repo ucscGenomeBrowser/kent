@@ -23,12 +23,15 @@ sub new {
     my $filename = shift;
     confess "Too many arguments" if (defined shift);
     if (! defined $filename) {
-      $filename = $ENV{'HOME'} . "/.hg.conf";
-      if (! -e $filename) {
-	$filename = "./hg.conf";
+      $filename = $ENV{HGDB_CONF};
+      if (! defined $filename) {
+	$filename = $ENV{'HOME'} . "/.hg.conf";
 	if (! -e $filename) {
-	  die "HgConf::new: Error: can't find .hg.conf or hg.conf, and no filename given.\n";
+	  $filename = "./hg.conf";
 	}
+      }
+      if (! -e $filename) {
+	die "HgConf::new: Error: can't find .hg.conf or hg.conf, and no filename given.\n";
       }
     }
     my $this = {};
