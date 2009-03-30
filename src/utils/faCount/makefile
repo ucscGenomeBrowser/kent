@@ -1,9 +1,18 @@
 include ../../inc/common.mk
 
-O = faCount.o 
+L += -lm
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
+
+A = faCount
+O = faCount.o
 
 faCount: ${O}
-	${CC} -o ${BINDIR}/faCount $O ../../lib/${MACHTYPE}/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile::
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 clean::
-	rm -f ${O}
+	rm -f ${A} ${O}
