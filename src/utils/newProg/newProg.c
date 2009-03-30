@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.26 2008/06/27 18:46:54 markd Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.27 2009/03/30 17:21:33 hiram Exp $";
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
@@ -139,7 +139,7 @@ if (cgi)
     fprintf(f, "#include \"hui.h\"\n");
     }
 fprintf(f, "\n");
-fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.26 2008/06/27 18:46:54 markd Exp $\";\n");
+fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.27 2009/03/30 17:21:33 hiram Exp $\";\n");
 fprintf(f, "\n");
 
 if (cgi)
@@ -191,9 +191,10 @@ fprintf(f,
 "MYLIBDIR = %s/lib/${MACHTYPE}\n"
 "%s\n"
 "\n"
+"A = %s\n"
 "O = %s.o\n"
 "\n"
-, upLevel, L, upLevel, myLibs, progName);
+, upLevel, L, upLevel, myLibs, progName, progName);
 
 if (cgi)
     {
@@ -204,7 +205,7 @@ if (cgi)
     "\n"
     , progName, upLevel);
     fprintf(f,
-    "compile: $O \n"
+    "compile:: $O\n"
     "\t${CC} $O ${MYLIBS} ${L}\n"
     "\tmv ${AOUT} $A${EXE}\n"
     "\n");
@@ -212,13 +213,15 @@ if (cgi)
 else
     {
     fprintf(f, 
-    "%s: $O ${MYLIBS}\n"
-    "\t${CC} ${COPT} -o ${BINDIR}/%s $O ${MYLIBS} $L\n"
-    "\t${STRIP} ${BINDIR}/%s${EXE}\n"
+    "%s: ${O} ${MYLIBS}\n"
+    "\t${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L\n"
+    "\t${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}\n"
     "\n"
-    "clean:\n"
-    "\trm -f $O\n"
-    , progName, progName, progName);
+    "compile:: ${O}\n"
+    "\t${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L\n"
+    "\n"
+    "clean::\n"
+    "\trm -f ${A} ${O}\n", progName);
     }
 
 
