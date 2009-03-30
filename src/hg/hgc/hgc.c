@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1522 2009/03/26 17:33:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1523 2009/03/30 22:06:21 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8638,20 +8638,32 @@ if (url != NULL && url[0] != 0)
     	sqlFreeResult(&sr);
 	}
     else
-    	{
-	/* get gene symbol from kgXref if the entry is not in morbidmap */
-    	safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
-
-        sr = sqlMustGetResult(conn, query);
+	{
+	/* display gene symbol(s) from omimGenemap  */
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
-    	if (row != NULL)
+        if (row != NULL)
     	    {
- 	    printf("<B>Gene Symbol:</B> %s", row[0]);
+ 	    printf("<B>OMIM Gene Symbol:</B> %s", row[0]);
 	    printf("<BR>\n");
+    	    sqlFreeResult(&sr);
 	    }
-    	sqlFreeResult(&sr);
-    	}
+	else
+    	    {
+	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
+    	    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
 
+            sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+ 	    	printf("<B>UCSC Gene Symbol:</B> %s", row[0]);
+	    	printf("<BR>\n");
+	    	}
+    	    sqlFreeResult(&sr);
+    	    }
+	}
     printf("<B>OMIM Database ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
@@ -8679,7 +8691,7 @@ if (url != NULL && url[0] != 0)
 
     if (kgId != NULL)
     	{
-    	printf("<B>UCSC Gene ");
+    	printf("<B>UCSC Canonical Gene ");
     	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
 	       "../cgi-bin/hgGene?hgg_gene=", kgId);
     	printf("%s</A></B>: ", kgId);
@@ -8696,22 +8708,43 @@ if (url != NULL && url[0] != 0)
         hFreeConn(&conn2);
 
 	if (kgDescription == NULL)
-	{
-    	safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
-    	sr = sqlMustGetResult(conn, query);
-    	row = sqlNextRow(sr);
-    	if (row != NULL)
-    	    {
-	    printf("%s", row[0]);
-	    }
+	    {
+    	    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
+    	    sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+	    	printf("%s", row[0]);
+	    	}
 
-	sqlFreeResult(&sr);
-	}
+	    sqlFreeResult(&sr);
+	    }
 	else
     	    {
 	    printf("%s", kgDescription);
 	    }
-
+        printf("<BR>\n");
+	
+	safef(query, sizeof(query),
+	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'", 
+	      kgId, kgId);
+    	sr = sqlMustGetResult(conn, query);
+	if (sr != NULL)
+	    {
+	    int printedCnt;
+	    printedCnt = 0;
+	    while ((row = sqlNextRow(sr)) != NULL)
+	    	{
+	        if (printedCnt < 1) 
+		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
+		else
+		    printf(", ");
+    	    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
+    	    	printf("%s</A></B>", row[0]);
+	    	printedCnt++;
+		}
+	    }
+	sqlFreeResult(&sr);
         printf("<BR>\n");
 	}
     }
