@@ -6365,7 +6365,7 @@ subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NF-E2=NF-E2 Pol2=Pol2 S
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
+visibilityViewDefaults Peaks=pack+ Signal=full zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
