@@ -7,9 +7,10 @@
 #include "portable.h"
 #include "hgConfig.h"
 #include "cheapcgi.h"
+#include "hui.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: botDelay.c,v 1.13 2008/11/13 19:41:30 galt Exp $";
+static char const rcsid[] = "$Id: botDelay.c,v 1.14 2009/03/31 22:38:57 galt Exp $";
 
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
@@ -61,7 +62,7 @@ static char *getCookieUser()
 /* get user from hguid cookie */
 {
 char *user = NULL;
-char *centralCookie = cfgOption("central.cookie");
+char *centralCookie = hUserCookie();
 
 if (centralCookie)
     user = findCookieData(centralCookie);
