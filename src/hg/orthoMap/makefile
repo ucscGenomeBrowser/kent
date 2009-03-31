@@ -10,7 +10,7 @@ E = mgcFastaForBed agxToIntronBeds bedToFrames orthoMap orthoEvaluate orthoPickI
 O = orthoEval.o
 
 ${BINDIR}/%: %.c $(O)
-	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $< $(O) $(MYLIBS) $(MYSQLLIBS) -lm -lz
+	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $< $(O) $(MYLIBS) $L -lm -lz
 
 %Test: %Test.c 
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
