@@ -215,7 +215,7 @@ subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 Kera=Keratinocyte
 subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view+
+sortOrder cellType=+ factor=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=pack+ Signal=full zRAW=hide
@@ -6363,7 +6363,7 @@ subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg HepG2=HepG2 K562=K562 NB4=NB4
 subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NF-E2=NF-E2 Pol2=Pol2 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 TCF4=TCF4 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc yRNAseq=RNA-seq_PolyA zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor= +view=+ 
+sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
