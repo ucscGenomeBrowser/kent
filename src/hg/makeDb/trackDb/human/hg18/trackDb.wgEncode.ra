@@ -2169,7 +2169,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     track wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel CTCF Kera 2
+    shortLabel Kera CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in Keratin cells)
     subGroups view=zRAW factor=CTCF cellType=Kera
     type wig 1.00 1316.00
