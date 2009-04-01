@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.159 2009/03/12 17:38:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.160 2009/04/01 19:59:39 tdreszer Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -69,7 +69,7 @@ void webSetStyle(char *style)
 /* set a style to add to the header */
 {
 extraStyle = style;
-} 
+}
 
 void webStartText()
 /* output the head for a text page */
@@ -150,6 +150,7 @@ if (withHtmlHeader)
     printf("</HEAD>" "\n"
            "<BODY BGCOLOR=\"#%s\" LINK=\"#0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">",
            hgColOutside());
+    commonCssStyles();
     }
 puts(
     "<A NAME=\"TOP\"></A>" "\n"
@@ -181,7 +182,7 @@ if (theCart)
     getDbAndGenome(theCart, &db, &theGenome, NULL);
     genomeEnc = cgiEncode(theGenome);
 
-    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
 	     orgCgiName, genomeEnc,
 	     dbCgiName, db,
 	     cartSessionVarName(), cartSessionId(theCart));
@@ -193,7 +194,7 @@ else
     }
 
 /* Put up the hot links bar. */
-if (isGsid) 
+if (isGsid)
     {
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
@@ -208,12 +209,12 @@ if (isGsid)
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
 
     /* Sequence View */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", 
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>",
 	   uiState);
 
     /* Table View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
-    
+
     /* Help */
 
     if (endsWith(scriptName, "hgBlat"))
@@ -221,7 +222,7 @@ if (isGsid)
 	printf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#BLAT\" TARGET=_blank class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
     	}
     else
-	{    
+	{
     	printf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/sequenceViewHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
 	}
     printf("</TR></TABLE>");
@@ -236,7 +237,7 @@ puts(
        "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
        "<tr bgcolor=\"#"HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
        "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"#"HG_COL_HOTLINKS"\" height=\"24\"><TR>" "\n	"
-       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
+       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n"
        );
 
 if (isEncode)
@@ -248,7 +249,7 @@ else
     {
     printf("&nbsp;<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
     puts("           Home</A> &nbsp;&nbsp;&nbsp;");
-    if (isGsid) 
+    if (isGsid)
 	{
     	printf("       <A HREF=\"../cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
 	       uiState);
@@ -271,7 +272,7 @@ else
 	}
     if (!endsWith(scriptName, "hgBlat"))
 	{
-    	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
+    	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">",
 		theCart ? "&" : "", uiState+1 );
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
@@ -304,7 +305,7 @@ else
     }
     /* disable TB for both GSID and CGB servers */
     if (!isGsid && !hIsCgbServer()) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
-    if (!endsWith(scriptName, "hgNear")) 
+    if (!endsWith(scriptName, "hgNear"))
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
         if (db != NULL && hgNearOk(db))
 	{
@@ -349,7 +350,7 @@ else
 	}
 #endif /* GBROWSE */
     if (!isGsid) puts("       <A HREF=\"../FAQ/\" class=\"topbar\">" "\n"
-	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
+	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n"
 	 );
     if (!isGsid)
 	{
@@ -367,7 +368,7 @@ else
 	    puts("       <A HREF=\"../goldenPath/help/hgSessionHelp.html\"");
     	else if (endsWith(scriptName, "hgVisiGene"))
 	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#VisiGeneHelp\"");
-    	else 
+    	else
 	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html\"");
 	puts("       class=\"topbar\">");
     	puts("           Help</A> ");
@@ -376,7 +377,7 @@ else
 puts("&nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
-     "</TD></TR>	" "\n"	
+     "</TD></TR>	" "\n"
      "" "\n"
      );
 
@@ -456,7 +457,7 @@ void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args,
 {
 webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
 			     withLogo, FALSE);
-}	
+}
 
 void webStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when not
@@ -469,7 +470,7 @@ va_end(args);
 }
 
 void webStartHeader(struct cart *theCart, char *db, char *headerText, char *format, ...)
-/* Print out pretty wrapper around things when not from cart. 
+/* Print out pretty wrapper around things when not from cart.
  * Include headerText in the html header. */
 {
 va_list args;
@@ -604,17 +605,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 	internalErr();
     }
 
-cgiMakeDropListFull(cladeCgiName, labels, clades, numClades, 
+cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
 		    defaultLabel, onChangeText);
 }
 
 static void printSomeGenomeListHtmlNamedMaybeCheck(char *customOrgCgiName,
 	 char *db, struct dbDb *dbList, char *onChangeText, boolean doCheck)
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 {
 char *orgList[1024];
@@ -640,17 +641,17 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     }
 
 cgiName = (customOrgCgiName != NULL) ? customOrgCgiName : orgCgiName;
-cgiMakeDropListFull(cgiName, orgList, values, numGenomes, 
+cgiMakeDropListFull(cgiName, orgList, values, numGenomes,
                     selGenome, onChangeText);
 hashFree(&hash);
 }
 
 void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *onChangeText)
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 {
 return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
@@ -659,12 +660,12 @@ return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
 
 void printLiftOverGenomeList(char *customOrgCgiName, char *db,
 			     struct dbDb *dbList, char *onChangeText)
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * Databases in dbList do not have to exist.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 {
 return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
@@ -678,22 +679,22 @@ printSomeGenomeListHtmlNamed(NULL, db, dbList, onChangeText);
 }
 
 void printGenomeListHtml(char *db, char *onChangeText)
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 {
 printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
 }
 
 void printBlatGenomeListHtml(char *db, char *onChangeText)
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 {
 printSomeGenomeListHtml(db, hGetBlatIndexedDatabases(), onChangeText);
@@ -701,22 +702,22 @@ printSomeGenomeListHtml(db, hGetBlatIndexedDatabases(), onChangeText);
 
 
 void printGenomeListForCladeHtml(char *db, char *onChangeText)
-/* Prints to stdout the HTML to render a dropdown list containing 
- * a list of the possible genomes from selOrganism's clade to choose from.  
+/* Prints to stdout the HTML to render a dropdown list containing
+ * a list of the possible genomes from selOrganism's clade to choose from.
  * selOrganism is the default for the select.
  */
 {
 printSomeGenomeListHtml(db, hGetIndexedDatabasesForClade(db), onChangeText);
 }
 
-void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList,
                             char *dbCgi, bool allowInactive, char *javascript)
-/* Prints to stdout the HTML to render a dropdown list containing the list 
+/* Prints to stdout the HTML to render a dropdown list containing the list
  * of assemblies for the current genome to choose from.  By default,
  * this includes only active assemblies with a database (with the
  * exception of the default assembly, which will be included even
  * if it isn't active).
- *  param db - The default assembly (the database name) to choose as selected. 
+ *  param db - The default assembly (the database name) to choose as selected.
  *             If NULL, no default selection.
  *  param allowInactive - if set, print all assemblies for this genome,
  *                        even if they're inactive or have no database
@@ -733,7 +734,7 @@ char *selAssembly = NULL;
 if (genome == NULL)
 #ifdef LOWELAB
     genome = "Pyrococcus furiosus";
-#else 
+#else
     genome = "Human";
 #endif
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -747,7 +748,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         selAssembly = cur->name;
 
     if (allowInactive ||
-        ((cur->active || sameWord(cur->name, db)) 
+        ((cur->active || sameWord(cur->name, db))
                 && sqlDatabaseExists(cur->name)))
         {
         assemblyList[numAssemblies] = cur->description;
@@ -758,35 +759,35 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         }
 
     }
-cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, 
+cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies,
                                 selAssembly, javascript);
 }
 
-void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList,
                                         char *dbCgi, char *javascript)
 /* Find all the assemblies from the list that are active.
- * Prints to stdout the HTML to render a dropdown list containing the list 
+ * Prints to stdout the HTML to render a dropdown list containing the list
  * of the possible assemblies to choose from.
- * param db - The default assembly (the database name) to choose as selected. 
+ * param db - The default assembly (the database name) to choose as selected.
  *    If NULL, no default selection.  */
 {
 
     printAllAssemblyListHtmlParm(db, dbList, dbCgi, TRUE, javascript);
 }
- 
+
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
 /* Find all assemblies from the list that are active, and print
- * HTML to render dropdown list 
+ * HTML to render dropdown list
  * param db - default assembly.  If NULL, no default selection */
 {
 printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
 }
 
 void printAssemblyListHtml(char *db, char *javascript)
-/* Find all the assemblies that pertain to the selected genome 
- * Prints to stdout the HTML to render a dropdown list containing 
+/* Find all the assemblies that pertain to the selected genome
+ * Prints to stdout the HTML to render a dropdown list containing
  * a list of the possible assemblies to choose from.
- * Param db - The assembly (the database name) to choose as selected. 
+ * Param db - The assembly (the database name) to choose as selected.
  * If NULL, no default selection.  */
 {
 struct dbDb *dbList = hGetIndexedDatabases();
@@ -795,11 +796,11 @@ printSomeAssemblyListHtml(db, dbList, javascript);
 
 void printAssemblyListHtmlExtra(char *db, char *javascript)
 {
-/* Find all the assemblies that pertain to the selected genome 
+/* Find all the assemblies that pertain to the selected genome
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
 assemblies to choose from.
 
-param curDb - The assembly (the database name) to choose as selected. 
+param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 struct dbDb *dbList = hGetIndexedDatabases();
@@ -808,11 +809,11 @@ printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
 
 void printBlatAssemblyListHtml(char *db)
 {
-/* Find all the assemblies that pertain to the selected genome 
+/* Find all the assemblies that pertain to the selected genome
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
 assemblies to choose from.
 
-param curDb - The assembly (the database name) to choose as selected. 
+param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 struct dbDb *dbList = hGetBlatIndexedDatabases();
@@ -820,7 +821,7 @@ printSomeAssemblyListHtml(db, dbList, NULL);
 }
 
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
-/* Find all the organisms/assemblies that are referenced in axtInfo, 
+/* Find all the organisms/assemblies that are referenced in axtInfo,
  * and print the dropdown list. */
 {
 struct dbDb *dbList = hGetAxtInfoDbs(dbCgi);
@@ -858,7 +859,7 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 static char *getDbForGenome(char *genome, struct cart *cart)
 /*
   Function to find the default database for the given Genome.
-It looks in the cart first and then, if that database's Genome matches the 
+It looks in the cart first and then, if that database's Genome matches the
 passed-in Genome, returns it. If the Genome does not match, it returns the default
 database that does match that Genome.
 
@@ -888,7 +889,7 @@ return retDb;
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars)
 /* Examine CGI and cart variables to determine which db, genome, or clade
- *  has been selected, and then adjust as necessary so that all three are 
+ *  has been selected, and then adjust as necessary so that all three are
  * consistent.  Detect changes and reset db-specific cart variables.
  * Save db, genome and clade in the cart so it will be consistent hereafter.
  * The order of preference here is as follows:
@@ -1040,7 +1041,7 @@ printf("</TD></TR></TABLE>\n");
 }
 
 void webPrintLinkOutCellStart()
-/* Print link cell that goes out of our site. End with 
+/* Print link cell that goes out of our site. End with
  * webPrintLinkTableEnd. */
 {
 printf("<TD BGCOLOR=\"#"HG_COL_LOCAL_TABLE"\">");
