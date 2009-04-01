@@ -6245,7 +6245,10 @@ controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtPr
 dragAndDrop subTracks
 visibilityViewDefaults RbpAssocRna=pack+
 useScore 1
-settingsByView RbpAssocRna:pValueFilter=0.0,pValueFilterLimits=0:5,scoreFilter=2,scoreFilterLimits=1:800,scoreMin=95,scoreMax=500
+# MJP: setting scoreMax=500 (or anything but 1000?) causes the problem that
+# If black is selected from the config menu it displays as grey. (reported by Pauline)
+#settingsByView RbpAssocRna:pValueFilter=0.0,pValueFilterLimits=0:5,scoreFilter=2,scoreFilterLimits=1:800,scoreMin=95,scoreMax=500
+settingsByView RbpAssocRna:pValueFilter=0.0,pValueFilterLimits=0:5,scoreFilter=2,scoreFilterLimits=1:800,scoreMin=95
 noInherit on
 priority 0
 type bed 3
