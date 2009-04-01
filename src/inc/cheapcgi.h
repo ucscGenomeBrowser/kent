@@ -17,6 +17,13 @@
 #include "hash.h"
 #endif
 
+#define COLOR_BG_DEFAULT        "#FFFEE8"
+#define COLOR_BG_ALTDEFAULT     "#FFF9D2"
+#define COLOR_BG_GHOST          "#EEEEEE"
+#define COLOR_BG_PALE           "#F8F8F8"
+#define COLOR_DARKGREEN         "#008800"
+#define COLOR_DARKBLUE          "#000088"
+#define COLOR_LTGREY            "#CCCCCC"
 
 void initSigHandlers();
 /* set handler for various terminal signals for logging purposes */
@@ -213,8 +220,28 @@ void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */
 
+void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max);
+/* Make a integer control filled with initial value.
+   If min and/or max are non-NULL will enforce range
+   Requires utils.js jQuery.js and inputBox class */
+void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, int min, int max);
+void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min);
+void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max);
+#define cgiMakeIntVarNoLimits(varName,initialVal,title,width) cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,NULL)
+/* All four of these call cgiMakeIntVarInRange() and therefore require utils.js */
+
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
+
+void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, char *min, char *max);
+/* Make a floating point control filled with initial value.
+   If min and/or max are non-NULL will enforce range
+   Requires utils.js jQuery.js and inputBox class */
+void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max);
+void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min);
+void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max);
+#define cgiMakeDoubleVarNoLimits(varName,initialVal,title,width) cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,NULL)
+/* All four of these call cgiMakeDoubleVarInRange() and therefore require utils.js */
 
 void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class);
 /* Make a drop-down list with names and style sheet class. */
@@ -365,5 +392,8 @@ void logCgiToStderr();
 void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
+
+void commonCssStyles();
+/* Defines a few common styles to use through CSS */
 
 #endif /* CHEAPCGI_H */

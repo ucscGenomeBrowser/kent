@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.114 2009/04/01 06:56:42 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.115 2009/04/01 19:57:06 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -434,7 +434,7 @@ struct cgiVar *list = *retList, *el;
 
 if (!hash)
   hash = newHash(6);
-slReverse(&list); 
+slReverse(&list);
 
 namePt = input;
 while (namePt != NULL && namePt[0] != 0)
@@ -1155,6 +1155,55 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 	maxDigits, initialVal);
 }
 
+void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max)
+/* Make a integer control filled with initial value.
+   If min and/or max are non-NULL will enforce range
+   Requires utils.js jQuery.js and inputBox class */
+{
+if(width==0)
+    {
+    if(max)
+        width=strlen(max)*10;
+    else
+        {
+        int sz=initialVal+1000;
+        if(min)
+            sz=atoi(min) + 1000;
+        width = 10;
+        while(sz/=10)
+            width+=10;
+        }
+    }
+if (width < 65)
+    width = 65;
+
+printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%d",varName,width,initialVal);
+printf(" onChange='return validateInt(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
+if(title)
+    printf(" title='%s'",title);
+printf(">\n");
+}
+void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, int min, int max)
+{
+char minLimit[20];
+char maxLimit[20];
+safef(minLimit,sizeof(minLimit),"%d",min);
+safef(maxLimit,sizeof(maxLimit),"%d",max);
+cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+}
+void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min)
+{
+char minLimit[20];
+safef(minLimit,sizeof(minLimit),"%d",min);
+cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,NULL);
+}
+void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max)
+{
+char maxLimit[20];
+safef(maxLimit,sizeof(maxLimit),"%d",max);
+cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxLimit);
+}
+
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
 /* Make a text control filled with initial floating-point value.  */
 {
@@ -1162,6 +1211,46 @@ if (maxDigits == 0) maxDigits = 4;
 
 printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
 	maxDigits, initialVal);
+}
+
+void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, char *min, char *max)
+/* Make a floating point control filled with initial value.
+   If min and/or max are non-NULL will enforce range
+   Requires utils.js jQuery.js and inputBox class */
+{
+if(width==0)
+    {
+    if(max)
+        width=strlen(max)*10;
+    }
+if (width < 65)
+    width = 65;
+
+printf("<INPUT TYPE=TEXT  class='inputBox' name=\"%s\" style='width: %dpx' value=%.0lf",varName,width,initialVal);
+printf(" onChange='return validateFloat(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
+if(title)
+    printf(" title='%s'",title);
+printf(">\n");
+}
+void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max)
+{
+char minLimit[20];
+char maxLimit[20];
+safef(minLimit,sizeof(minLimit),"%g",min);
+safef(maxLimit,sizeof(maxLimit),"%g",max);
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+}
+void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min)
+{
+char minLimit[20];
+safef(minLimit,sizeof(minLimit),"%g",min);
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,NULL);
+}
+void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max)
+{
+char maxLimit[20];
+safef(maxLimit,sizeof(maxLimit),"%g",max);
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxLimit);
 }
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
@@ -1577,5 +1666,20 @@ if (cookieHash != NULL)
     hashFree(&cookieHash);
 cookieHash = NULL;
 cookieList = NULL;
+}
+
+void commonCssStyles()
+/* Defines a few common styles to use through CSS */
+{
+    printf("\n<style type='text/css'>\n");
+    printf(".trDrag {background-color:%s;} .pale {background-color:%s;}\n",COLOR_BG_GHOST,COLOR_BG_PALE);
+    printf(".inputBox {border: 2px inset %s;}\n",COLOR_LTGREY);
+    printf(".greenRoof {border-top: 3px groove %s;}\n",COLOR_DARKGREEN);
+    //printf(".greenFloor {border-bottom: 3px ridge %s;}\n",COLOR_DARKGREEN);      // Unused
+    //printf(".hiddenRoof {border-top: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT);     // Doesn't work
+    //printf(".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
+    printf(".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN);
+    printf(".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);
+    puts("</style>");
 }
 
