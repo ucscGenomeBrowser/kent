@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.181 2009/03/19 21:48:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.182 2009/04/01 21:51:32 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2359,11 +2359,13 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         printf("<B>Filter by %s</B> (select multiple items)<BR>\n",filterBy->title);
     else
         printf("<B>%s</B><BR>\n",filterBy->title);
-    int openSize = min(20,slCount(filterBy->slValues)+1);
-    int size = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
-//#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onfucus='this.size=%d;' onblur='var ix; for(ix=this.selectedIndex+1;ix<this.options.length;ix++) {if(this.options[ix].selected) break;} if(ix == this.options.length) this.size=1; return true;'><BR>\n"
-#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='this.size=%d;'class='normalText filterBy'><BR>\n"
-    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,size,openSize);
+    int fullSize = slCount(filterBy->slValues)+1;
+    int openSize = min(20,fullSize);
+    int closedSize = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
+//#define MULTI_SELECT_WITH_JS "<div class='multiSelectContainer'><SELECT name='%s.filterBy.%s' multiple=true size=%d openSize=%d style='display: none' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this,%d);' class='normalText filterBy'></div><BR>\n"
+//    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize,openSize,openSize);
+#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this);' class='filterBy'><BR>\n"
+    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize);
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
@@ -2385,21 +2387,14 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         }
     }
     // The following is needed to make msie scroll to selected option.
-    //printf("<script type='text/javascript'>$(document).ready(function () { $( 'select[name^=%s.filterBy.]' ).children('option[selected]').each( function(i) { this.selected=true; }); });</script>\n",tdb->tableName);
     printf("<script type='text/javascript'>onload=function(){ $( 'select[name^=%s.filterBy.]' ).children('option[selected]').each( function(i) { this.selected=true; }); }</script>\n",tdb->tableName);
 puts("</TR></TABLE>");
 
 return;
 }
 
-#define COLOR_BG_DEFAULT        "#FFFEE8"
-#define COLOR_BG_ALTDEFAULT     "#FFF9D2"
-#define COLOR_BG_GHOST          "#EEEEEE"
-#define COLOR_BG_PALE           "#F8F8F8"
 #define COLOR_BG_DEFAULT_IX     0
 #define COLOR_BG_ALTDEFAULT_IX  1
-#define COLOR_DARKGREEN         "#008800"
-#define COLOR_DARKBLUE          "#000088"
 #define DIVIDING_LINE "<TR valign=\"CENTER\" line-height=\"1\" BGCOLOR=\"%s\"><TH colspan=\"5\" align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"
 #define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
 
@@ -3009,62 +3004,66 @@ freeMem(typeLine);
 (void) wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
-puts("<TABLE BORDER=0><TR><TD ALIGN=LEFT>");
-printf("<b>Type of graph:&nbsp;</b>");
+printf("<TABLE BORDER=0>");
+
+printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
 snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
 wiggleGraphDropDown(option, lineBar);
-puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
+if(boxed)
+    {
+    printf("</td><td align=right colspan=2>");
+    printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
+    }
+puts("</td></TR>");
 
-puts("<b>y&nbsp;=&nbsp;0.0 line:&nbsp;</b>");
-snprintf(option, sizeof(option), "%s.%s", name, HORIZGRID );
-wiggleGridDropDown(option, horizontalGrid);
-puts(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
-
-printf("<b>Track height:&nbsp;</b>");
+printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
 snprintf(option, sizeof(option), "%s.%s", name, HEIGHTPER );
-cgiMakeIntVar(option, defaultHeight, 5);
-printf("&nbsp;pixels&nbsp;&nbsp;(range: %d to %d)",
+cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
+printf("pixels&nbsp;(range: %d to %d)",
     minHeightPixels, maxHeightPixels);
-puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
+puts("</TD></TR>");
 
-printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
+printf("<TR valign=center><th align=right>Vertical viewing range:</th><td align=left>&nbsp;min:&nbsp;");
 snprintf(option, sizeof(option), "%s.%s", name, MIN_Y );
-cgiMakeDoubleVar(option, minY, 6);
-printf("&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
+cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, tDbMinY, tDbMaxY);
+printf("</td><td align=leftv colspan=2>max:&nbsp;");
 snprintf(option, sizeof(option), "%s.%s", name, MAX_Y );
-cgiMakeDoubleVar(option, maxY, 6);
+cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, tDbMinY, tDbMaxY);
 printf("&nbsp;(range: %g to %g)",
     tDbMinY, tDbMaxY);
-puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
+puts("</TD></TR>");
 
-printf("<b>Data view scaling:&nbsp;</b>");
+printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 snprintf(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 wiggleScaleDropDown(option, autoScale);
-puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
+puts("</TD></TR>");
 
-printf("<b>Windowing function:&nbsp;</b>");
+printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
 snprintf(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
 wiggleWindowingDropDown(option, windowingFunction);
-puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
-printf("<b>Smoothing window:&nbsp;</b>");
+printf("<th align=right>Smoothing window:</th><td align=left>");
 snprintf(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
 wiggleSmoothingDropDown(option, smoothingWindow);
-puts("&nbsp;pixels</TD></TR><TR><TD ALIGN=LEFT COLSPAN=1>");
+puts("&nbsp;pixels</TD></TR>");
 
-puts("<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;");
+printf("<TR valign=center><td align=right><b>Draw y indicator lines:</b><td align=left colspan=2>");
+printf("at y = 0.0:");
+snprintf(option, sizeof(option), "%s.%s", name, HORIZGRID );
+wiggleGridDropDown(option, horizontalGrid);
+printf("&nbsp;&nbsp;&nbsp;at y =");
 snprintf(option, sizeof(option), "%s.%s", name, YLINEMARK );
-cgiMakeDoubleVar(option, yLineMark, 6);
-printf("&nbsp;&nbsp;");
+cgiMakeDoubleVarWithLimits(option, yLineMark, "Indicator at Y", 0, tDbMinY, tDbMaxY);
+printf("</td><td align=left>");
 snprintf(option, sizeof(option), "%s.%s", name, YLINEONOFF );
 wiggleYLineMarkDropDown(option, yLineMarkOnOff);
 if(boxed)
-    printf("</TD><TD align=\"RIGHT\">");
+    puts("</TD></TR></TABLE>");
 else
+    {
     puts("</TD></TR></TABLE>");
-printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
-if(boxed)
-    puts("</TD></TR></TABLE>");
+    printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
+    }
 
 cfgEndBox(boxed);
 }
@@ -3121,10 +3120,27 @@ if (scoreMinStr != NULL)
     }
 }
 
+static boolean getScoreLimits(struct trackDb *tdb, char *scoreName,char *defaults,char**min,char**max)
+{ // returns TRUE if limits exist and sets the string pointer (because they may be float or int)
+char scoreLimitName[128];
+safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _LIMITS);
+char *setting = trackDbSettingClosestToHomeOrDefault(tdb, scoreLimitName,defaults);
+if(setting)
+    {
+    *min = strSwapChar(cloneString(setting),':',0);
+    *max = cloneString(*min + strlen(*min) + 1);
+    return TRUE;
+    }
+    *min = NULL;
+    *max = NULL;
+    return FALSE;
+}
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
+int val=0;
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
@@ -3147,11 +3163,23 @@ if (scoreFilterOk)
         max = cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MAX, max);
         puts("<B>Filter score range:  min:</B>");
         safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MIN);
-        cgiMakeTextVar(option,(atoi(min)<0?"0":min), 4);
+        val = atoi(min);
+        if( val < 0)
+            val = 0;
+        char *rangeMin=NULL;
+        char *rangeMax=NULL;
+        getScoreLimits(tdb,SCORE_FILTER,"0:1000",&rangeMin,&rangeMax);
+        cgiMakeIntVarInRange(option, val, "Minimum score",0,rangeMin,rangeMax);
+
         puts("<B>max:</B>");
         safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MAX);
-        cgiMakeTextVar(option,(atoi(max)>1000?"1000":max), 4);
-        puts("(0 to 1000)");
+        val = atoi(max);
+        if( val > 1000)
+            val = 1000;
+        cgiMakeIntVarInRange(option, val, "Maximum score",0,rangeMin,rangeMax);
+        printf("(%s to %s)\n",rangeMin,rangeMax);
+        freeMem(rangeMin);
+        freeMem(rangeMax);
         }
     else
         {
@@ -3167,7 +3195,8 @@ if (scoreFilterOk)
                 scoreVal = 1000;
         printf("<b>Show only items with score at or above:</b> ");
         snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
-        cgiMakeIntVar(option, cartUsualIntClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER,  scoreVal), 11);
+        val = cartUsualIntClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER,  scoreVal);
+        cgiMakeIntVarWithLimits(option, val, "Minimum score",0, 0,maxScore);
         printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
         }
     }
@@ -3193,10 +3222,12 @@ if (scoreCtString != NULL)
     scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, compositeLevel, "filterTopScorersCt", words[1]);
 
     puts("&nbsp; <B> Show only items in top-scoring </B>");
-    cgiMakeTextVar(option, scoreFilterCt, 5);
+    cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
     /* Only check size of table if track does not have subtracks */
-    if (!compositeLevel)
-        printf("&nbsp; (range: 1 to 100000, total items: %d)",getTableSize(db, tdb->tableName));
+    if ( !compositeLevel && hTableExists(db, tdb->tableName))
+        printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->tableName));
+    else
+        printf("&nbsp; (range: 1 to 100,000)\n");
     }
 cfgEndBox(boxed);
 }
@@ -3253,19 +3284,6 @@ scoreCfgUi(db, cart,tdb,prefix,NULL,CHAIN_SCORE_MAXIMUM,FALSE);
 cfgEndBox(boxed);
 }
 
-static void showScoreLimits(struct trackDb *tdb, char *preText,char *scoreName,char *defaults)
-{
-char scoreLimitName[64];
-safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _LIMITS);
-char *setting = trackDbSettingClosestToHomeOrDefault(tdb, scoreLimitName,defaults);
-if(setting)
-    {
-    char *min = strSwapChar(cloneString(setting),':',0);
-    char *max = min + strlen(min) + 1;
-    printf("%s(%s to %s)",(preText!=NULL?preText:""),min,max);
-    freeMem(min);
-    }
-}
 static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
                                boolean compositeLevel,char *name, char *title, char *label,
                                char *scoreName,char *defaults,char *limitsDefault)
@@ -3283,9 +3301,22 @@ if(setting)
     printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
     char varName[256];
     safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
-    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), setting), 4);
-    showScoreLimits(tdb,"<TD align='left' colspan=3> ",scoreName,limitsDefault);
+    double val = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), atof(setting));
+    char *rangeMin=NULL;
+    char *rangeMax=NULL;
+    getScoreLimits(tdb, scoreName,limitsDefault,&rangeMin,&rangeMax);
+    cgiMakeDoubleVarInRange(varName,val, label, 0,rangeMin, rangeMax);
+    if(rangeMin && rangeMax)
+        printf("<TD align='left' colspan=3> (%s to %s)",rangeMin, rangeMax);
+    else if(rangeMin)
+        printf("<TD align='left' colspan=3> (minimum %s)",rangeMin);
+    else if(rangeMax)
+        printf("<TD align='left' colspan=3> (maximum %s)",rangeMax);
+    else
+        printf("<TD align='left' colspan=3>&nbsp;");
     puts("</TR>");
+    freeMem(rangeMin);
+    freeMem(rangeMax);
     return TRUE;
     }
 return FALSE;
@@ -3435,15 +3466,23 @@ if(setting)
     else
         puts("<TR><TD align='right'><B>Minimum score:</B><TD align='left'>");
     safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MIN);
-    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), min), 4);
+    int val = cartUsualIntClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), atoi(min));
+    char *rangeMin=NULL;
+    char *rangeMax=NULL;
+    getScoreLimits(tdb, SCORE_FILTER,"0:1000",&rangeMin,&rangeMax);
+
+    cgiMakeIntVarInRange(varName, val, "Minimum score", 0, rangeMin, rangeMax);
     if(max != NULL)
         {
         puts("<TD align='right'><B>max:</B><TD align='left'>");
         safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MAX);
-        cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), max), 4);
+        val = cartUsualIntClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), atoi(max));
+        cgiMakeIntVarInRange(varName, val, "Maximum score", 0, rangeMin, rangeMax);
         freeMem(min);
         }
-    showScoreLimits(tdb, "<TD align='left' colspan=3> ",SCORE_FILTER,"0:1000");
+    printf("<TD align='left' colspan=3> (%s to %s)",rangeMin,rangeMax);
+    freeMem(rangeMin);
+    freeMem(rangeMax);
     puts("</TR>");
     if(trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL)
         {
@@ -4498,19 +4537,6 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     }
     return TRUE;
 }
-static void commonCssStyles()
-/* Defines a few common styles to use through CSS */
-{
-    printf("<style type='text/css'>");
-    printf(".trDrag {background-color:%s;} .pale {background-color:%s;}",COLOR_BG_GHOST,COLOR_BG_PALE);
-    printf(".greenRoof {border-top: 3px groove %s;}",COLOR_DARKGREEN);
-    //printf(".greenFloor {border-bottom: 3px ridge %s;}",COLOR_DARKGREEN);      // Unused
-    //printf(".hiddenRoof {border-top: 0px solid %s;}",COLOR_BG_ALTDEFAULT);     // Doesn't work
-    //printf(".hiddenFloor {border-bottom: 0px solid %s;}",COLOR_BG_ALTDEFAULT); // Doesn't work
-    printf(".greenBox {border: 5px outset %s;}",COLOR_DARKGREEN);
-    printf(".blueBox {border: 4px inset %s;}",COLOR_DARKBLUE);
-    puts("</style>");
-}
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName)
@@ -4526,7 +4552,6 @@ boolean isMatrix = dimensionsExist(tdb);
 
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
-commonCssStyles();
 jsIncludeFile("hui.js",NULL);
 
 puts("<P>");
