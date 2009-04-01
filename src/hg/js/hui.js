@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.23 2009/04/01 20:12:50 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.24 2009/04/01 23:08:30 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -807,18 +807,33 @@ function multiSelectLoad(div,sizeWhenOpen)
 
 function multiSelectBlur(obj)
 {
-    if(obj.value == undefined || obj.value == "")
+    if(obj.value == undefined || obj.value == "") {
         obj.value = "All";
-    if(obj.value == "All") // Close if selected index is 1
+        obj.selectedIndex = 0;
+    }
+    //if(obj.value == "All") // Close if selected index is 1
+    if(obj.selectedIndex == 0) // Close if selected index is 1
         obj.size=1;
+    /*else if($.browser.msie == false && $(obj).children('option[selected]').length==1) {
+        var ix;
+        for(ix=0;ix<obj.options.length;ix++) {
+            if(obj.options[ix].value == obj.value) {
+                //obj.options[ix].selected = true;
+                obj.selectedIndex = ix;
+                obj.size=1;
+                $(obj).trigger('change');
+                break;
+            }
+        }
+    }*/
 }
 
 function multiSelectClick(obj,sizeWhenOpen)
 {
     if(obj.size == 1)
         obj.size=sizeWhenOpen;
-    else
-        multiSelectBlur(obj);
+    else if(obj.selectedIndex == 0)
+        obj.size=1;
 }
 
 // The following js depends upon the jQuery library

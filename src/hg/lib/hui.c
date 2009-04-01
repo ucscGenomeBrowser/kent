@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.182 2009/04/01 21:51:32 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.183 2009/04/01 23:07:50 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2364,8 +2364,8 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     int closedSize = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
 //#define MULTI_SELECT_WITH_JS "<div class='multiSelectContainer'><SELECT name='%s.filterBy.%s' multiple=true size=%d openSize=%d style='display: none' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this,%d);' class='normalText filterBy'></div><BR>\n"
 //    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize,openSize,openSize);
-#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this);' class='filterBy'><BR>\n"
-    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize);
+#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onkeydown='this.size=%d' onclick='multiSelectClick(this,%d);' onblur='multiSelectBlur(this);' class='filterBy'><BR>\n"
+    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,closedSize,openSize,openSize);
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
