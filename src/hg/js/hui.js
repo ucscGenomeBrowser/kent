@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.22 2009/03/13 23:35:43 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.23 2009/04/01 20:12:50 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -242,18 +242,11 @@ function compositeCfgRegisterOnchangeAction(prefix)
 {
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
-    var count=0;
     var list = $("input[name^='"+prefix+"']").not("[name$='.vis']");
+    $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 
-    for (var ix=0;ix<list.length;ix++) {
-        list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
-        count++;
-    }
     var list = $("select[name^='"+prefix+"']").not("[name$='.vis']");
-    for (var ix=0;ix<list.length;ix++) {
-        list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
-        count++;
-    }
+    $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
 
@@ -800,10 +793,42 @@ function matInitializeMatrix()
    // alert("Time stamped ");
 }
 
+function multiSelectLoad(div,sizeWhenOpen)
+{
+    //var div = $(obj);//.parent("div.multiSelectContainer");
+    var sel = $(div).children("select:first");
+    if(div != undefined && sel != undefined && sizeWhenOpen <= $(sel).length) {
+        $(div).css('width', ( $(sel).clientWidth ) +"px");
+        $(div).css('overflow',"hidden");
+        $(div).css('borderRight',"2px inset");
+    }
+    $(sel).show();
+}
+
+function multiSelectBlur(obj)
+{
+    if(obj.value == undefined || obj.value == "")
+        obj.value = "All";
+    if(obj.value == "All") // Close if selected index is 1
+        obj.size=1;
+}
+
+function multiSelectClick(obj,sizeWhenOpen)
+{
+    if(obj.size == 1)
+        obj.size=sizeWhenOpen;
+    else
+        multiSelectBlur(obj);
+}
+
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
     //matInitializeMatrix();
+    //$("div.multiSelectContainer").each( function (i) {
+    //    var sel = $(this).children("select:first");
+    //    multiSelectLoad(this,sel.openSize);
+    //});
 
     // Allows rows to have their positions updated after a drag event
     if($(".tableWithDragAndDrop").length > 0) {
