@@ -17,7 +17,7 @@ endif
 
 # cd ~
 
-set host = "hgofbeta"
+set host = "hgwbeta"
 set hhost = "-h $host"
 # just for testing, use dev:
 #set host = "hgwdev"
