@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.25 2009/03/17 04:28:39 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.26 2009/04/01 19:31:59 angie Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -247,7 +247,7 @@ if (anyFilter())
     wigShowFilter(conn);
 else
     hPrintf("off");
-hPrintf("</TD>\n");
+hPrintf("</TD></TR>\n");
 }
 
 void doSummaryStatsBed(struct sqlConnection *conn)
