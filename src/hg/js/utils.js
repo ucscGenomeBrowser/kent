@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.14 2009/03/30 21:12:19 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.15 2009/04/01 20:02:59 tdreszer Exp $
 
 var debug = false;
 
@@ -235,8 +235,9 @@ function postTheForm(formName,href)
     // Need to parse out vars and ensure doing post!
     var goodForm=$("form[name='"+formName+"']");
     if(goodForm.length == 1) {
-        var url = parseUrlAndUpdateVars(goodForm,href);
-        $(goodForm).attr('action',url);
+        var url = parseUrlAndUpdateVars(goodForm,href);  // TODO: when Galt checks in hist post and get togther solution
+        $(goodForm).attr('action',url);                  // then
+        //$(goodForm).attr('action',href);               // just attach the straight href
         $(goodForm).submit();
     }
     return false; // Meaning do not continue with anything else
@@ -250,3 +251,131 @@ function setVarAndPostForm(aName,aValue,formName)
     return postTheForm(formName,window.location.href);
 }
 
+function isInteger(s)
+{
+    return (!isNaN(parseInt(s)) && isFinite(s) && s.toString().indexOf('.') < 0);
+}
+function isFloat(s)
+{
+    return (!isNaN(parseFloat(s)) && isFinite(s));
+}
+
+function validateInt(obj,min,max)
+{   // validates an integer which may be restricted to a range (if min and/or max are numbers)
+    var title = obj.title;
+    var rangeMin=parseInt(min);
+    var rangeMax=parseInt(max);
+    if(title.length == 0)
+        title = "Value";
+    var popup=( $.browser.msie == false );
+    for(;;) {
+        if((obj.value == undefined || obj.value == "") && isInteger(obj.defaultValue))
+            obj.value = obj.defaultValue;
+        if(!isInteger(obj.value)) {
+            if(popup) {
+                obj.value = prompt(title +" is invalid!\nMust be an integer.\n(min:"+isInteger(min)+" max:"+isInteger(max)+")",obj.value);
+                continue;
+            } else {
+                alert(title +" of '"+obj.value +"' is invalid!\nMust be an integer."); // try a prompt box!
+                obj.value = obj.defaultValue;
+                return false;
+            }
+        }
+        var val = parseInt(obj.value);
+        if(isInteger(min) && isInteger(max)) {
+            if(val < rangeMin || val > rangeMax) {
+                if(popup) {
+                    obj.value = prompt(title +" is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
+                    continue;
+                } else {
+                    alert(title +" of '"+obj.value +"' is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".");
+                    obj.value = obj.defaultValue;
+                    return false;
+                }
+            }
+        } else if(isInteger(min)) {
+            if(val < rangeMin) {
+                if(popup) {
+                    obj.value = prompt(title +" is invalid!\nMust be no less than "+rangeMin+".",obj.value);
+                    continue;
+                } else {
+                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no less than "+rangeMin+".");
+                    obj.value = obj.defaultValue;
+                    return false;
+                }
+            }
+        } else if(isInteger(max)) {
+            if(val > rangeMax) {
+                if(popup) {
+                    obj.value = prompt(title +" is invalid!\nMust be no greater than "+rangeMax+".",obj.value);
+                    continue;
+                } else {
+                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no greater than "+rangeMax+".");
+                    obj.value = obj.defaultValue;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+function validateFloat(obj,min,max)
+{   // validates an float which may be restricted to a range (if min and/or max are numbers)
+    var title = obj.title;
+    var rangeMin=parseFloat(min);
+    var rangeMax=parseFloat(max);
+    if(title.length == 0)
+        title = "Value";
+    var popup=( $.browser.msie == false );
+    for(;;) {
+        if((obj.value == undefined || obj.value == "") && isFloat(obj.defaultValue))
+            obj.value = obj.defaultValue;
+        if(!isFloat(obj.value)) {
+            if(popup) {
+                obj.value = prompt(title +" is invalid!\nMust be a number.",obj.value);
+                continue;
+            } else {
+                alert(title +" of '"+obj.value +"' is invalid!\nMust be a number."); // try a prompt box!
+                obj.value = obj.defaultValue;
+                return false;
+            }
+        }
+        var val = parseFloat(obj.value);
+        if(isFloat(min) && isFloat(max)) {
+            if(val < rangeMin || val > rangeMax) {
+                if(popup) {
+                    obj.value = prompt(title +" is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
+                    continue;
+                } else {
+                    alert(title +" of '"+obj.value +"' is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".");
+                    obj.value = obj.defaultValue;
+                    return false;
+                }
+            }
+        } else if(isFloat(min)) {
+            if(val < rangeMin) {
+                if(popup) {
+                    obj.value = prompt(title +" is invalid!\nMust be no less than "+rangeMin+".",obj.value);
+                    continue;
+                } else {
+                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no less than "+rangeMin+".");
+                    obj.value = obj.defaultValue;
+                    return false;
+                }
+            }
+        } else if(isFloat(max)) {
+            if(val > rangeMax) {
+                if(popup) {
+                    obj.value = prompt(title +" is invalid!\nMust be no greater than "+rangeMax+".",obj.value);
+                    continue;
+                } else {
+                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no greater than "+rangeMax+".");
+                    obj.value = obj.defaultValue;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
