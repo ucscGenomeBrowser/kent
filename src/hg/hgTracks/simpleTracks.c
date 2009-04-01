@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.73 2009/03/19 22:21:06 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.74 2009/04/01 01:33:18 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2438,9 +2438,7 @@ else if (drawOpt > baseColorDrawOff)
     if (startsWith("genePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
-	lf->codons = baseColorCodonsFromGenePred(lf, gp,
-						 (gp->optFields >= genePredExonFramesFld),
-						 (drawOpt != baseColorDrawDiffCodons));
+	lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons));
     }
 if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
     baseColorSetCdsBounds(lf, psl, tg);
@@ -2957,6 +2955,8 @@ void genericDrawItems(struct track *tg,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
+if (vis != tvDense)
+    baseColorInitTrack(hvg, tg);
 if (vis == tvPack || vis == tvSquish)
     genericDrawItemsPackSquish(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                                font, color, vis);

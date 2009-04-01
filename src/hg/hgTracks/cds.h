@@ -93,12 +93,10 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg);
 
 
 struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf,
-	struct genePred *gp, boolean useExonFrames, boolean colorStopStart);
+	struct genePred *gp, boolean colorStopStart);
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
- * codon if the codon falls on a gap boundary.  If useExonFrames is true, 
- * use the frames portion of gp (which should be from a genePredExt);
- * otherwise determine frame from genomic sequence. */
+ * codon if the codon falls on a gap boundary. */
 
 struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
@@ -109,13 +107,20 @@ struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf,
  * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 
 
+void baseColorInitTrack(struct hvGfx *hvg, struct track *tg);
+/* Set up base coloring state (e.g. cache genomic sequence) for tg.
+ * This must be called by tg->drawItems if baseColorDrawSetup is used 
+ * in tg->drawItemAt.  Assumes tg->items is linkedFeatures. */
+
 enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
 			struct dnaSeq **retMrnaSeq, struct psl **retPsl);
 /* Returns the CDS coloring option, allocates colors if necessary, and 
  * returns the sequence and psl record for the given item if applicable. 
  * Note: even if base coloring is not enabled, this will return psl and 
- * mrna seq if query insert/polyA display is enabled. */
+ * mrna seq if query insert/polyA display is enabled.
+ * baseColorInitTrack must be called before this (in tg->drawItems) --
+ * this is meant to be called by tg->drawItemAt (i.e. linkedFeaturesDrawAt). */
 
 void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
         int grayIx, struct hvGfx *hvg, int xOff, int y,
