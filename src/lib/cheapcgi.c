@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.113 2009/03/19 21:41:00 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.114 2009/04/01 06:56:42 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -78,21 +78,36 @@ char *_cgiRawInput()
 return inputString;
 }
 
-static void getQueryInput()
+static void getQueryInputExt(boolean abortOnErr)
 /* Get query string from environment if they've used GET method. */
 {
 inputString = getenv("QUERY_STRING");
 if (inputString == NULL)
-    errAbort("No QUERY_STRING in environment.");
+    {
+    if (abortOnErr)
+	errAbort("No QUERY_STRING in environment.");
+    inputString = cloneString("");
+    return;
+    }
 inputString = cloneString(inputString);
 }
 
+static void getQueryInput()
+/* Get query string from environment if they've used GET method. */
+{
+getQueryInputExt(TRUE);
+}
+
 static void getPostInput()
-/* Get input from file if they've used POST method. */
+/* Get input from file if they've used POST method.
+ * Grab any GET QUERY_STRING input first. */
 {
 char *s;
 long i;
 int r;
+
+getQueryInputExt(FALSE);
+int getSize = strlen(inputString);
 
 s = getenv("CONTENT_LENGTH");
 if (s == NULL)
@@ -103,18 +118,26 @@ s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
     {
     /* use MIME parse on input stream instead, can handle large uploads */
-    inputString = "";  // must not be NULL so it knows it was set
+    /* inputString must not be NULL so it knows it was set */
     return;
     }
-inputString = needMem((size_t)inputSize+1);
+int len = getSize + inputSize;
+if (getSize > 0)
+    ++len;
+char *temp = needMem((size_t)len+1);
 for (i=0; i<inputSize; ++i)
     {
     r = getc(stdin);
     if (r == EOF)
 	errAbort("Short POST input.");
-    inputString[i] = r;
+    temp[i] = r;
     }
-inputString[inputSize] = 0;
+if (getSize > 0)
+  temp[i++] = '&';
+strncpy(temp+i, inputString, getSize);
+temp[len] = 0;
+freeMem(inputString);
+inputString = temp;
 }
 
 #define memmem(hay, haySize, needle, needleSize) \
@@ -376,12 +399,9 @@ if (s != NULL)
 qs = getenv("QUERY_STRING");
 if (qs == NULL)
     return "POST";
-if (qs[0] == 0)
-    {
-    char *cl = getenv("CONTENT_LENGTH");
-    if (cl != NULL && atoi(cl) > 0)
-	return "POST";
-    }
+char *cl = getenv("CONTENT_LENGTH");
+if (cl != NULL && atoi(cl) > 0)
+    return "POST";
 return "QUERY";
 }
 
@@ -409,8 +429,12 @@ static void cgiParseInputAbort(char *input, struct hash **retHash,
  * the hash. Prints message aborts if there's an error.*/
 {
 char *namePt, *dataPt, *nextNamePt;
-struct hash *hash = newHash(6);
-struct cgiVar *list = NULL, *el;
+struct hash *hash = *retHash;
+struct cgiVar *list = *retList, *el;
+
+if (!hash)
+  hash = newHash(6);
+slReverse(&list); 
 
 namePt = input;
 while (namePt != NULL && namePt[0] != 0)
@@ -527,11 +551,9 @@ if (s != NULL && startsWith("multipart/form-data", s))
     {
     cgiParseMultipart(&inputHash, &inputList);
     }
-else
 #endif /* GBROWSE */
-    {
-    cgiParseInputAbort(inputString, &inputHash, &inputList);
-    }
+
+cgiParseInputAbort(inputString, &inputHash, &inputList);
 
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
