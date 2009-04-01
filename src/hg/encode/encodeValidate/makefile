@@ -54,7 +54,7 @@ cgi:
 ${CONFIG_DIR}/%: config/%
 	@mkdir -p $(dir $@)
 	cp -p $< $@.tmp
-        mv -f $@.tmp $@
+	mv -f $@.tmp $@
 
 test:
 	cd test && ${MAKE}
