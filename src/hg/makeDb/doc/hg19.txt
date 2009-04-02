@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.3 2009/03/13 19:14:27 hiram Exp $";
+#	"$Id: hg19.txt,v 1.4 2009/04/02 20:58:37 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -434,3 +434,359 @@ hg19.genbank.mrna.blatTargetDb = yes
     #	test it with some sequence
 
 ############################################################################
+# Making download files (DONE - 2009-03-13 - Hiram)
+    cd /hive/data/genomes/hg19
+    makeDownloads.pl -allowMissedTrfs -noChromRoot hg19 \
+	> downloads.log 2>&1
+############################################################################
+# Venter1 chain, net experiment (DONE - Hiram - 2009-03-15)
+doBlastzChainNet.pl `pwd`/DEF \
+        -stop=partition -bigClusterHub=swarm \
+        -smallClusterHub=swarm -chainMinScore=1000 -chainLinearGap=medium \
+        -workhorse=hgwdev -fileServer=hgwdev > partition.log 2>&1
+
+doBlastzChainNet.pl `pwd`/DEF \
+        -continue=blastz -stop=blastz -bigClusterHub=swarm \
+        -smallClusterHub=swarm -chainMinScore=1000 -chainLinearGap=medium \
+        -workhorse=hgwdev -fileServer=hgwdev > blastz.log 2>&1
+
+doBlastzChainNet.pl `pwd`/DEF \
+        -continue=cat -stop=net -bigClusterHub=swarm \
+        -smallClusterHub=swarm -chainMinScore=1000 -chainLinearGap=medium \
+        -workhorse=hgwdev -fileServer=hgwdev > net.log 2>&1
+real    163m28.438s
+
+    # to load, run it in debug, then check the load script
+doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -continue=load -stop=load -bigClusterHub=swarm \
+	-debug -smallClusterHub=swarm -chainMinScore=1000 \
+	-chainLinearGap=medium \
+	-workhorse=hgwdev -fileServer=hgwdev > load.log 2>&1
+
+    # and create a synNet for multiz, run in debug, and examine script
+    #	to make sure it works correctly
+doBlastzChainNet.pl `pwd`/DEF \
+	-syntenicNet -continue=syntenicNet -stop=syntenicNet \
+	-debug -bigClusterHub=swarm \
+	-smallClusterHub=swarm -chainMinScore=1000 -chainLinearGap=medium \
+	-workhorse=hgwdev -fileServer=hgwdev > synNet.log 2>&1
+    #	real    31m11.216s
+
+############################################################################
+# reset position to chr6 haplotype situation
+    hgsql -e \
+'update dbDb set defaultPos="chr6:28343766-33555363" where name="hg19";' \
+	hgcentraltest
+
+############################################################################
+# Self Lastz run (WORKING - 2009-03-19 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
+    cd /hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
+    cat << '_EOF_'
+# human vs human
+BLASTZ=lastz
+# maximum M allowed with lastz is only 255
+BLASTZ_M=255
+# lastz does not like the O= and E= lines in the matrix file 
+#       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
+BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from hg18 vs venter1 lastz on advice from Webb
+BLASTZ_K=10000
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+    
+# QUERY: Human Hg19
+SEQ2_DIR=/scratch/data/hg19/hg19.2bit
+SEQ2_LEN=/scratch/data/hg19/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+    
+BASE=/hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev \
+	-stop=net -smallClusterHub=pk -bigClusterHub=swarm > do.log 2>&1 &
+    #	cluster difficulties, finished manually, then:
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-continue=cat -workhorse=hgwdev \
+	-stop=net -smallClusterHub=pk -bigClusterHub=swarm > cat.log 2>&1 &
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-continue=load -debug -workhorse=hgwdev \
+	-stop=load -smallClusterHub=pk -bigClusterHub=swarm > load.debug.log 2>&1 &
+    #	that indicates it would do:
+    hgLoadChain -tIndex hg19 chainSelf hg19.hg19.all.chain.gz
+    #	adding -normScore
+    hgLoadChain -normScore -tIndex hg19 chainSelf hg19.hg19.all.chain.gz
+
+############################################################################
+# Chimp Lastz run (WORKING - 2009-03-19 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro2.2009-03-19
+    cd /hive/data/genomes/hg19/bed/lastzPanTro2.2009-03-19
+    cat << '_EOF_'
+# human vs chimp
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+# lastz does not like the O= and E= lines in the matrix file
+#       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
+BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro2
+SEQ2_DIR=/scratch/data/panTro2/panTro2.2bit
+SEQ2_LEN=/scratch/data/panTro2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro2.2009-03-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    173m22.880s
+    #	cluster problems, continuing after lastz done:
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 -continue=cat \
+	-stop=net -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> net.log 2>&1 &
+    #	real    81m20.209s
+    #	continuing with the load and adding syntenicNet
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 -continue=load \
+	-syntenicNet -noLoadChainSplit -chainMinScore=5000 \
+	-chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> load.log 2>&1 &
+    #	real    47m17.871s
+
+############################################################################
+# Creating the pushQ entry (DONE - 2009-03-20 - Hiram)
+    mkdir /hive/data/genomes/hg19/pushQ
+    cd /hive/data/genomes/hg19/pushQ
+    makePushQSql.pl hg19 > hg19.pushQ.sql 2> make.err
+    # many complaints about the chain and net tables from the haplotype
+    #	experiments, and this table:
+    #	orfeomeGenes
+    #	which is probably in genbank, and these usual ones:
+    #	hg19 does not have seq
+    #	hg19 does not have extFile
+
+############################################################################
+# Determine PAR region of X and Y (DONE - 2009-03-20 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/parRegion
+    cd /hive/data/genomes/hg19/bed/parRegion
+    awk '$5 != "N"' ../../X/chrX.agp | awk '{print $6}' | sort > chrX.cloneList
+    awk '$5 != "N"' ../../Y/chrY.agp | awk '{print $6}' | sort > chrY.cloneList
+    comm -12 chrX.cloneList chrY.cloneList > chrXY.par.clone.list
+    cat chrXY.par.clone.list \
+	| while read C; do grep "${C}" ../../X/chrX.agp; done \
+	| sort -k1,1 -k2,2n >> chrX.par.region.agp
+    cat chrXY.par.clone.list \
+	| while read C; do grep "${C}" ../../Y/chrY.agp; done \
+	| sort -k1,1 -k2,2n >> chrY.par.region.agp
+    awk '{printf "%s\t%d\t%d\t%s\n", $1, $2-1, $3, $6}' chrY.par.region.agp \
+	> chrY.par.region.bed
+    awk '{printf "%s\t%d\t%d\t%s\n", $1, $2-1, $3, $6}' chrX.par.region.agp \
+	> chrX.par.region.bed
+    #	use those bed files in custom tracks on hg19 to verify that they
+    #	are two continuous regions with only gaps between these items
+    #	these location extents are: (zero relative)
+    #	chrX 60000 2722842
+    #	chrX 154906585 155260560
+    #	chrY 10000 2649520
+    #	chrY 59034049 59363566
+
+############################################################################
+# Gorilla Lastz run (WORKING - 2009-03-21 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGorGor1.2009-03-21
+    cd /hive/data/genomes/hg19/bed/lastzGorGor1.2009-03-21
+    cat << '_EOF_'
+# human vs gorilla
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+# lastz does not like the O= and E= lines in the matrix file
+#       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
+BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Gorilla gorGor1
+SEQ2_DIR=/scratch/data/gorGor1/gorGor1.2bit
+SEQ2_LEN=/scratch/data/gorGor1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzGorGor1.2009-03-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+# XXX running 
+Sat Mar 21 22:22:18 PDT 2009
+
+############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2009-04-02 - Hiram)
+    ssh pk
+    mkdir /hive/data/genomes/hg19/bed/linSpecRep
+    cd /hive/data/genomes/hg19/bed/linSpecRep
+    #	create individual .out files from the master record in ../repeatMasker
+    mkdir splitOut
+    cat << '_EOF_' > split.csh
+#!/bin/csh -fe
+set C = $1
+head -3 ../repeatMasker/hg19.clean.out > splitOut/${C}.out
+grep "${C} " ../repeatMasker/hg19.clean.out >> splitOut/${C}.out
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > template
+#LOOP
+split.csh $(root1) {check out line+ splitOut/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 ../../chrom.sizes > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:        127s       2.12m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                 17154s     285.90m     4.76h    0.20d  0.001 y
+# Average job time:                 186s       3.10m     0.05h    0.00d
+# Longest finished job:             224s       3.73m     0.06h    0.00d
+# Submission to last job:           280s       4.67m     0.08h    0.00d
+    
+    #	now, we can date and process each of those .out files
+    #	this really should be a single creation of notInOthers
+    #	These four different ones all end up to be the same anyhow
+    #	the notInMouse becomes notInOthers below and the others are removed.
+    mkdir dateRepeats
+    cd dateRepeats
+    cat << '_EOF_' > mkLSR
+#!/bin/csh -fe
+rm -f $1.out_mus-musculus_rattus_canis-familiaris_bos-taurus
+ln -s ../splitOut/$1.out .
+/scratch/data/RepeatMasker/DateRepeats \
+    $1.out -query human -comp mouse -comp rat -comp dog -comp cow
+rm $1.out
+mkdir -p ../notInMouse ../notInRat ../notInDog ../notInCow
+/cluster/bin/scripts/extractRepeats 1 $1.out_mus*-taurus \
+	> ../notInMouse/$1.out.spec
+/cluster/bin/scripts/extractRepeats 2 $1.out_mus*-taurus \
+	> ../notInRat/$1.out.spec
+/cluster/bin/scripts/extractRepeats 3 $1.out_mus*-taurus \
+	> ../notInDog/$1.out.spec
+/cluster/bin/scripts/extractRepeats 4 $1.out_mus*-taurus \
+	> ../notInCow/$1.out.spec
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ $(path1).out_mus-musculus_rattus_canis-familiaris_bos-taurus}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 ../chrom.list single template jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:       2441s      40.69m     0.68h    0.03d  0.000 y
+# IO & Wait Time:                   332s       5.53m     0.09h    0.00d  0.000 y
+# Average job time:                  30s       0.50m     0.01h    0.00d
+# Longest finished job:             125s       2.08m     0.03h    0.00d
+# Submission to last job:           454s       7.57m     0.13h    0.01d
+
+    done
+
+    #	these four types of out.spec results all turn out to be identical
+    #	To check identical
+    cd /hive/data/genomes/hg19/bed/linSpecRep
+    find . -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3 | sed -e "s#./notIn.*/##" \
+	| sort | uniq -c | less
+    #	You will see they are all a count of 4
+    #	Set them up on scratch data and get to all the kluster nodes:
+    mkdir /hive/data/staging/data/hg19/lineageSpecificRepeats
+    cd notInMouse
+    rsync -a --progress ./ /hive/data/staging/data/hg19/lineageSpecificRepeats
+    cd ..
+    mv notInMouse notInOthers
+    #	do not need to keep all of these
+    rm -fr notInRat notInDog notInCow
+
+    # We also need the nibs for blastz runs with lineage specific repeats
+    mkdir /hive/data/genomes/hg19/bed/nibs
+    cd /hive/data/genomes/hg19/bed/nibs
+    cut -f1 ../../chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} ../../hg19.2bit stdout \
+	| faToNib -softMask stdin ${C}.nib
+    echo "${C} done"
+done
+    mkdir /hive/data/staging/data/hg19/nib
+    rsync -a --progress ./ /hive/data/staging/data/hg19/nib
+
+    # Ask cluster-admin to sync /scratch/ filesystem to kluster nodes
+
+#############################################################################
