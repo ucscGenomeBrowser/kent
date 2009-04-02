@@ -1,4 +1,19 @@
 
+INTRODUCTION:  Where is this bigWig and bigBed system useful ?
+
+    Your wiggle data or bed track files are too large to load as
+    custom tracks in the normal custom track submission system.
+    This system will convert your very large file into a much larger
+    file which can be used without transferring it to the genome browser.
+    Place this special file on your WEB server or FTP server and supply
+    a URL to it for your custom track submission.  Rather than trying
+    to transfer the entire file, only small parts of it will transfer
+    as you view the track in the genome browser.  The small parts transferred
+    will accumulate at UCSC as a cache for later reuse without any
+    additional transfer.
+
+========================================================================
+
 BIGWIG - BigWig files store continuous data that is displayed as a graph
 in the Genome Browser, much as wig files do.  BigWig files in fact are
 created initially from wig files, using the program wigToBigWig.  The
@@ -20,6 +35,7 @@ steps for creating a bigWig track are:
     if your input.wig.gz file has 'track' and 'browser' lines:
 	zcat input.wig.gz | egrep -v "^track|^browser" \
 	    wigToBigWig stdin chrom.sizes myBigWig.bw
+    make sure you do not have more than one track of data in your input file.
 5) Move the output bigWig file to a http, https, or ftp site.
 6) Create a custom track with just the track line.
 	This will look something like:
@@ -55,6 +71,7 @@ are:
     if your input.bed.gz file has 'track' and 'browser' lines:
 	zcat input.bed.gz | egrep -v "^track|^browser" \
 	    bedToBigBed stdin chrom.sizes myBigWig.bb
+    make sure you do not have more than one track of data in your input file.
 5) Move the output bigBed file to a http, https, or ftp site.
 6) Create a custom track with just the track line.
 	This will look something like:
@@ -71,5 +88,5 @@ case you should include a .as (AutoSQL) format file describing the fields.
 See http://www.linuxjournal.com/article/5949 for information on AutoSQL 
 
 ========================================================================
-	$Id: bigBedWigs.txt,v 1.2 2009/03/30 17:37:01 hiram Exp $
+	$Id: bigBedWigs.txt,v 1.3 2009/04/02 23:38:25 hiram Exp $
 ========================================================================
