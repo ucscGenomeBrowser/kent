@@ -6,8 +6,8 @@
 #include "chromInfo.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.14 2009/04/02 04:27:21 mikep Exp $";
-static char *version = "$Revision: 1.14 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.15 2009/04/02 22:49:46 mikep Exp $";
+static char *version = "$Revision: 1.15 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -49,6 +49,7 @@ errAbort(
   "   -type=(a value from the list below)\n"
   "         tagAlign|pairedTagAlign|broadPeak|narrowPeak|gappedPeak|bedGraph\n"
   "                   : see http://genomewiki.cse.ucsc.edu/EncodeDCC/index.php/File_Formats\n"
+  "         fasta     : Fasta files (only one line of sequence, and no quality scores)\n"
   "         fastq     : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)\n"
   "         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)\n"
   "         csqual    : Colorspace quality (see link below)\n"
@@ -644,6 +645,47 @@ int validateBedGraph(struct lineFile *lf, char *file)
 return validateBedVariant(lf, file, BED_GRAPH);
 }
 
+// fasta:
+// >VHE-245683051005-13-1-2-1704
+// GTGTTAATTTTCTTGATCTTTCGTTC
+// >VHE-245683051005-13-1-2-1704
+// CTTGCTTTCTAGTTCTTTTAATTGTG
+
+int validateFasta(struct lineFile *lf, char *file)
+{
+char *seqName, *seq;
+int line = 0;
+int errs = 0;
+boolean startOfFile = TRUE;
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+while ( lineFileNext(lf, &seqName, NULL))
+    {
+    ++line;
+    if (startOfFile)
+	{
+	if (*seqName == '#')
+	    continue;
+	else
+	    startOfFile = FALSE;
+	}
+    if (checkSeqName(file, line, seqName, '>', "sequence name")
+	&& (wantNewLine(lf, file, ++line, &seq, "fastq sequence line"))
+	&& checkSeq(file, line, seq, seq, "sequence") )
+	{
+	if (printOkLines)
+	    printf("%s\n%s\n", seqName, seq);
+	}
+    else
+	{
+	if (printFailLines)
+	    printf("%s\n%s\n", seqName, seq);
+	if (++errs >= maxErrors)
+	    errAbort("Aborting .. found %d errors\n", errs);
+	}
+    }
+return errs;
+}
+
 // fastq:
 // @NINA_1_FC30G3VAAXX:5:1:110:908
 // ATCGTCAGGTGGGATAATCCTTACCTTTTCCTCCTC
@@ -855,6 +897,7 @@ verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
 // Setup the function hash keyed by type
 hashAdd(funcs, "tagAlign",       &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
+hashAdd(funcs, "fasta",          &validateFasta);
 hashAdd(funcs, "fastq",          &validateFastq);
 hashAdd(funcs, "csfasta",        &validateCsfasta);
 hashAdd(funcs, "csqual",         &validateCsqual);
