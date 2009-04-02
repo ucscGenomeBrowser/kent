@@ -6,8 +6,8 @@
 #include "chromInfo.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.13 2009/03/26 06:55:39 mikep Exp $";
-static char *version = "$Revision: 1.13 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.14 2009/04/02 04:27:21 mikep Exp $";
+static char *version = "$Revision: 1.14 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -819,6 +819,7 @@ char *type;
 void *func;
 struct chromInfo *ci = NULL;
 struct hash *funcs = newHash(0);
+char *chromDb, *chromInfo;
 optionInit(&argc, argv, options);
 ++argv; 
 --argc;
@@ -836,17 +837,17 @@ printFailLines = optionExists("printFailLines");
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 initArrays();
 // Get chromInfo from DB or file
-if (strlen(optionVal("chromDb", "")) > 0)
+if ( (chromDb = optionVal("chromDb", NULL)) != NULL)
     {
-    if (!(ci = createChromInfoList(NULL, optionVal("chromDb", ""))))
-        errAbort("could not load chromInfo from DB %s\n", optionVal("chromDb", ""));
+    if (!(ci = createChromInfoList(NULL, chromDb)))
+        errAbort("could not load chromInfo from DB %s\n", chromDb);
     chrHash = chromHash(ci);
     chromInfoFree(&ci);
     }
-else if (strlen(optionVal("chromInfo", "")) > 0)
+else if ( (chromInfo=optionVal("chromInfo", NULL)) != NULL)
     {
-    if (!(ci = chromInfoLoadAll(optionVal("chromInfo", ""))))
-	errAbort("could not load chromInfo file %s\n", optionVal("chromInfo", ""));
+    if (!(ci = chromInfoLoadAll(chromInfo)))
+	errAbort("could not load chromInfo file %s\n", chromInfo);
     chrHash = chromHash(ci);
     chromInfoFree(&ci);
     }
