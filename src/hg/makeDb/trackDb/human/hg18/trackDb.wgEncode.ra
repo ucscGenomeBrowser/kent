@@ -3110,6 +3110,7 @@ wgEncode 1
     dateUnrestricted 2009-12-20
     dataVersion ENCODE Feb 2009 Freeze
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeDukeDNaseSeqSignalHelas3
     release alpha
@@ -3123,6 +3124,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3
     release alpha
@@ -3136,12 +3138,13 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Helas3
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa Open Chromatin, DNase Raw1
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
+    shortLabel HeLa DNase 1
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 0.00 8.96
     dateSubmitted 2009-03-20
@@ -3149,12 +3152,13 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Helas3
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa DNase Raw2
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 2 (in HeLa-S3 cells)
+    shortLabel HeLa DNase 2
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 0.00 6.80
     dateSubmitted 2009-03-20
@@ -3162,12 +3166,13 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Helas3
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa DNase Raw3
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Replicate 3 (in HeLa-S3 cells)
+    shortLabel HeLa DNase 3
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 0.00 6.34
     dateSubmitted 2009-03-20
@@ -3175,6 +3180,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
 
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
     release alpha
@@ -3187,6 +3193,7 @@ wgEncode 1
     dateUnrestricted 2009-12-20
     dataVersion ENCODE Feb 2009 Freeze
     cell HeLa-S3
+    color 0,119,158
     antibody CTCF
 
     track wgEncodeUtaChIPseqSignalHelas3Ctcf
@@ -3201,6 +3208,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody CTCF
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf
@@ -3215,13 +3223,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa CTCF Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 1 (CTCF in HeLa-S3 cells)
+    shortLabel HeLa CTCF 1
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 0.00 32.31
     dateSubmitted 2009-03-20
@@ -3229,13 +3238,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa CTCF Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 2 (CTCF in HeLa-S3 cells)
+    shortLabel HeLa CTCF 2
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 0.00 23.96
     dateSubmitted 2009-03-20
@@ -3243,6 +3253,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody CTCF
 
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
@@ -3256,6 +3267,7 @@ wgEncode 1
     dateUnrestricted 2009-12-21
     dataVersion ENCODE Feb 2009 Freeze
     cell HeLa-S3
+    color 0,119,158
     antibody c-Myc
 
     track wgEncodeUtaChIPseqSignalHelas3Cmyc
@@ -3270,6 +3282,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody c-Myc
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc
@@ -3284,13 +3297,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa c-Myc Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 1 (c-Myc in HeLa-S3 cells)
+    shortLabel HeLa c-Myc 1
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 0.00 42.31
     dateSubmitted 2009-03-21
@@ -3298,13 +3312,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa c-Myc Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 2 (c-Myc in HeLa-S3 cells)
+    shortLabel HeLa c-Myc 2
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 0.00 40.05
     dateSubmitted 2009-03-21
@@ -3312,6 +3327,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody c-Myc
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
@@ -3326,6 +3342,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Input
 
     track wgEncodeUtaustinChIPseqRawSignalHelas3Input
@@ -3340,6 +3357,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HeLa-S3
+    color 0,119,158
     antibody Input
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
@@ -3436,6 +3454,7 @@ wgEncode 1
     dateUnrestricted 2009-12-21
     dataVersion ENCODE Feb 2009 Freeze
     cell HepG2
+    color 189,0,157
     antibody CTCF
 
     track wgEncodeUtaChIPseqSignalHepg2Ctcf
@@ -3450,6 +3469,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody CTCF
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf
@@ -3464,13 +3484,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel HepG2 CTCF Raw 1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 1 (CTCF in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
     type wig 0.00 30.86
     dateSubmitted 2009-03-21
@@ -3478,13 +3499,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HepG2 CTCF Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 2 (CTCF in HepG2 cells)
+    shortLabel HepG2 CTCF 2
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
     type wig 0.00 22.20
     dateSubmitted 2009-03-21
@@ -3492,6 +3514,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody CTCF
 
     track wgEncodeUtaChIPseqPeaksHepg2Cmyc
@@ -3505,6 +3528,7 @@ wgEncode 1
     dateUnrestricted 2009-12-21
     dataVersion ENCODE Feb 2009 Freeze
     cell HepG2
+    color 189,0,157
     antibody c-Myc
 
     track wgEncodeUtaChIPseqSignalHepg2Cmyc
@@ -3519,6 +3543,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody c-Myc
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc
@@ -3533,13 +3558,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HepG2 c-Myc Raw1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 1 (c-Myc in HepG2 cells)
+    shortLabel HepG2 c-Myc 1
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 0.00 29.38
     dateSubmitted 2009-03-21
@@ -3547,13 +3573,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HepG2 c-Myc Raw2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 2 (c-Myc in HepG2 cells)
+    shortLabel HepG2 c-Myc 2
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 0.00 35.97
     dateSubmitted 2009-03-21
@@ -3561,13 +3588,14 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody c-Myc
 
     track wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HepG2 c-Myc Raw3
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Replicate 3 (c-Myc in HepG2 cells)
+    shortLabel HepG2 c-Myc 3
+    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 3 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 0.00 28.82
     dateSubmitted 2009-03-21
@@ -3575,6 +3603,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
     cell HepG2
+    color 189,0,157
     antibody c-Myc
 
     track wgEncodeUtaustinChIPseqSignalHepg2Input
@@ -3590,6 +3619,7 @@ wgEncode 1
     spanList first
     color 189,0,157
     cell HepG2
+    color 189,0,157
     antibody Input
 
     track wgEncodeUtaustinChIPseqRawSignalHepg2Input
@@ -3605,6 +3635,7 @@ wgEncode 1
     spanList first
     color 189,0,157
     cell HepG2
+    color 189,0,157
     antibody Input
 
     track wgEncodeDukeDNaseSeqPeaksK562
@@ -3824,7 +3855,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep1K562Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 CTCF Raw1
+    shortLabel K562 CTCF 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.00
@@ -3839,7 +3870,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 CTCF Raw2
+    shortLabel K562 CTCF 2
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.01
@@ -3854,7 +3885,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 CTCF Raw3
+    shortLabel K562 CTCF 3
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 23.06
@@ -3913,7 +3944,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 c-Myc Raw1
+    shortLabel K562 c-Myc 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 38.44
@@ -3928,7 +3959,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 c-Myc Raw2
+    shortLabel K562 c-Myc 2
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 30.71
@@ -3943,7 +3974,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 c-Myc Raw3
+    shortLabel K562 c-Myc 3
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 34.69
@@ -6957,7 +6988,25 @@ wgEncode 1
     color 153,38,0
     antibody c-Fos
 
+    track wgEncodeYaleChIPseqSignalGm12878InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
+    subGroups view=Signal factor=zCTRL cellType=GM12878
+    type bedGraph 4
+    dateSubmitted 2008-11-25
+    dateUnrestricted 2009-08-25
+    dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell GM12878
+    color 153,38,0
+    antibody Input
+
     track wgEncodeYaleChIPseqSignalGm12878Input
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
@@ -7040,7 +7089,25 @@ wgEncode 1
     color 0,55,219
     antibody TCF4
 
+    track wgEncodeYaleChIPseqSignalHct116InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HCT116 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
+    subGroups view=Signal factor=zCTRL cellType=HCT116
+    type bedGraph 4
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell HCT-116
+    color 0,55,219
+    antibody Input
+
     track wgEncodeYaleChIPseqSignalHct116Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
@@ -7137,7 +7204,25 @@ wgEncode 1
     color 133,0,173
     antibody Pol2
 
+    track wgEncodeYaleChIPseqSignalHek293InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HEK293 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
+    subGroups view=Signal factor=zCTRL cellType=HEK293b
+    type bedGraph 4
+    dataVersion ENCODE Feb 2009 Freeze
+    dateSubmitted 2009-01-14
+    dateUnrestricted 2009-10-14
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell HEK293
+    color 133,0,173
+    antibody Input
+
     track wgEncodeYaleChIPseqSignalHek293Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
@@ -7240,7 +7325,26 @@ wgEncode 1
     antibody Pol2
     accession GSE12781
 
+    track wgEncodeYaleChIPseqSignalHelas3InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
+    subGroups view=Signal factor=zCTRL cellType=HeLa
+    type bedGraph 4
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-09-29
+    dateUnrestricted 2009-06-29
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell HeLa-S3
+    color 0,119,158
+    antibody Input
+    accession GSE12781
+
     track wgEncodeYaleChIPseqSignalHelas3Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
@@ -7540,7 +7644,26 @@ wgEncode 1
     antibody STAT1
     accession GSE12782
 
+    track wgEncodeYaleChIPseqSignalHelas3ifngInputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-IF Input Sg
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
+    subGroups view=Signal factor=zCTRL cellType=HeLa-IF
+    type bedGraph 4
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-09-29
+    dateUnrestricted 2009-06-29
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell HeLa-S3_IFNg
+    color 0,119,158
+    antibody Input
+    accession GSE12782
+
     track wgEncodeYaleChIPseqSignalHelas3ifngInput
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
@@ -7778,7 +7901,25 @@ wgEncode 1
     color 189,0,157
     antibody SREBP2
 
+    track wgEncodeYaleChIPseqSignalHepg2InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
+    subGroups view=Signal factor=zCTRL cellType=HepG2
+    type bedGraph 4
+    dateSubmitted 2009-02-28
+    dateUnrestricted 2009-11-28
+    dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell HepG2
+    color 189,0,157
+    antibody Input
+
     track wgEncodeYaleChIPseqSignalHepg2Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
@@ -8371,7 +8512,25 @@ wgEncode 1
     spanList first
     cell K562
 
+    track wgEncodeYaleChIPseqSignalK562InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
+    subGroups view=Signal factor=zCTRL cellType=K562
+    type bedGraph 4
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-14
+    dateUnrestricted 2009-07-14
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell K562
+    color 46,0,184
+    antibody Input
+
     track wgEncodeYaleChIPseqSignalK562Input
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
@@ -8469,7 +8628,25 @@ wgEncode 1
     color 46,0,184
     antibody Pol2
 
+    track wgEncodeYaleChIPseqSignalNb4InputBg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel NB4 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
+    subGroups view=Signal factor=zCTRL cellType=NB4
+    type bedGraph 4
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-25
+    dateUnrestricted 2009-08-25
+    #dateSubmitted 2009-03-21
+    #dateUnrestricted 2009-12-21
+    #dataVersion ENCODE Feb 2009 Freeze
+    cell NB4
+    color 46,0,184
+    antibody Input
+
     track wgEncodeYaleChIPseqSignalNb4Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
