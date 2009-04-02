@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.170 2009/03/26 07:01:20 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.171 2009/04/02 22:50:33 mikep Exp $
 
 use warnings;
 use strict;
@@ -839,42 +839,24 @@ sub validateCsqual
 }
 
 sub validateFasta
-# Wold lab fasta files; they dont have fastq format. 
+# Wold lab & Helicos have fasta files; no quality, one line per sequence
 # Sample fasta lines are:
 #>HWI-EAS229_75_30DY0AAXX:7:1:0:949/1
 #NGCGGATGTTCTCAGTGTCCACAGCGCAGGTGAAATAAGGGAAGCAGTAGCGACGCCCATCTCCACGCGCAGCGC
 #>HWI-EAS229_75_30DY0AAXX:7:1:0:1739/1
 #NAGCCATCAGGAAAGCAAGGAGGGGGCATTAAAGGACAATCAAGGGGTTTGGAGGAAGGAGCAGGCCGGAGGCAA
 {
-    # Wold lab has fasta files, like fastq format without quality
     my ($path, $file, $type) = @_;
     doTime("beginning validateFasta") if $opt_timing;
     HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
-    return () if $opt_skipValidateFastQ;
-    doTime("beginning validateFasta") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    my $line = 0;
-    my $state = 'firstLine';
-    my $seqName;
-    my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
-    my $seqRegEx = "[A-Za-z\n\.~]+";
-    my $states = {firstLine => {REGEX => ">($seqNameRegEx)", NEXT => 'seqLine'},
-                  seqLine => {REGEX => $seqRegEx, NEXT => 'firstLine'}};
-    while(<$fh>) {
-        chomp;
-        $line++;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateFasta]";
-        my $regex = $states->{$state}{REGEX};
-        if(/^${regex}$/) {
-	        $state = $states->{$state}{NEXT};
-        } else {
-	         return("$errorPrefix (expecting $state):\nline: $_");
-        }
-        last if($opt_quick && $line >= $quickCount);
-     }
-    $fh->close();
+    my $safe = SafePipe->new(CMDS => ["validateFiles -type=fasta $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateFasta : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateFasta for '$file'");
+    }
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateFasta", $line) if $opt_timing;
+    doTime("done validateFasta") if $opt_timing;
     return ();
 }
 
@@ -1422,7 +1404,7 @@ if(!@errors) {
 	# Also note that any project (like transcriptome) that doesnt have replicates should also use
 	# this for their auto-create signals.
 	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
-        if($daf->{noAutoCreate} ne "yes" && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
+        if( ( !defined($daf->{noAutoCreate}) || $daf->{noAutoCreate} ne "yes") && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
