@@ -126,7 +126,7 @@ TR.transMapLeft TD {
 TABLE.hgcLsSnp {
     border: 2px black solid;
     border-collapse: collapse;
-    white-space: nowrap inherit;
+    white-space: nowrap;
 }
 TABLE.hgcLsSnp TD.hgcLsSnpSep {
     border-right: 2px black solid;
