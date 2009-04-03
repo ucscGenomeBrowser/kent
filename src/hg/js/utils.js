@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.15 2009/04/01 20:02:59 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.16 2009/04/03 22:40:36 tdreszer Exp $
 
 var debug = false;
 
@@ -231,13 +231,11 @@ function parseUrlAndUpdateVars(theForm,href)
 }
 
 function postTheForm(formName,href)
-{   // posts the form converting GET vars to Post vars first
-    // Need to parse out vars and ensure doing post!
+{   // posts the form with a passed in href
     var goodForm=$("form[name='"+formName+"']");
     if(goodForm.length == 1) {
-        var url = parseUrlAndUpdateVars(goodForm,href);  // TODO: when Galt checks in hist post and get togther solution
-        $(goodForm).attr('action',url);                  // then
-        //$(goodForm).attr('action',href);               // just attach the straight href
+        if(href != undefined && href.length > 0)
+            $(goodForm).attr('action',href); // just attach the straight href
         $(goodForm).submit();
     }
     return false; // Meaning do not continue with anything else
