@@ -6,29 +6,32 @@ AE or subtype B HIV-1 gp120 nucleotide sequences.
 <H2>Methods</H2>
 <P>Levels of selection in each subtype and placebo and vaccine samples were 
 compared using methods implemented in PAML v3.14.  The nonsynonymous/synonymous
-substitution rate ratio (w = <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub>) and 
-the proportion of sites (<i>p</i>) with w &gt; 1 were estimated under the 
+substitution rate ratio (&omega; = <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub>) and 
+the proportion of sites (<i>p</i>) with &omega; &gt; 1 were estimated under the 
 site-specific models of Goldman (2005) and Yang (2000). Tests of positive 
 selection were performed by comparing likelihood scores (likelihood ratio 
 test) between the M1 (neutral) and M2 (selection) and between the M7 (beta) 
-and M8 (beta&amp;w) per-site nested models. Selection levels per-gene (M0) 
+and M8 (beta&amp;&omega;) per-site nested models. Selection levels per-gene (M0) 
 were also estimated for comparison. We also applied the Bayesian test 
 developed by Yang (2005) and implemented in PAML to identify the potential 
 sites under diversifying selection as indicated by a posterior probability 
 &gt; 0.95. Maximum likelihood trees were estimated for each subtype using 
 PhyML under the best-fit substitution models. Each analysis was run 
-twice under w = 1.5 and 0.5. 
+twice under &omega; = 1.5 and 0.5. 
 </P>
 
 <P>
 A new coalescent model has been recently described that estimates the 
 <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio and the recombination 
-rate (p) simultaneously using Bayesian inference (Wilson and McVean 2006). 
+rate (&rho;) simultaneously using Bayesian inference (Wilson and McVean 2006). 
 Such a model is implemented in Omegamap (Wilson and McVean 2006) and has 
 been applied to all of our datasets. We ran Omegamap under a constant model 
-for variation (i.e., all sites are assumed to share common w and p) and 
-the following parameter settings: Nº orders = 10, Nº iterations = 
-10<super>6</super>, thinning = 100; priors = improper inverse.
+for variation (i.e., all sites are assumed to share common &omega; and &rho;) and 
+the following parameter settings: 
+<LI>N&#176; orders = 10</LI>
+<LI>N&#176; iterations = 10<super>6</super></LI>
+<LI>thinning = 100</LI>
+<LI>priors = improper inverse</LI>
 </P>
 
 <H3>Results</H3>
@@ -43,7 +46,7 @@ observed in subtA/E than in subtB. These differences are probably a
 consequence of the uneven sample sizes of these two datasets (181 
 and 29 sequences, respectively). Simultaneous estimates of selection 
 and recombination also showed higher <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub>  
-estimates for subtB than for subtA/E; the recombination rate (p), 
+estimates for subtB than for subtA/E; the recombination rate (&rho;), 
 however, was almost four times higher for subtA/E than for subtB 
 (Table 1). Subtype A/E is of recombinant origin, so one should expect 
 higher recombination rates for this subtype than for subtB. Despite this, 
@@ -58,10 +61,12 @@ place ~25 years ago.
 <P><B>Table 1.</B>Test of adaptive selection for the Thailand HIV-1 
 subtypes B and A/E from placebo and vaccinated individuals in PAML 
 and Omegamap. All model comparisons in PAML were significant 
-(<i>P</i> &lt; 0.001). The recombination rate (<i>p</i>) under 
+(<i>P</i> &lt; 0.001). The recombination rate (&rho;) under 
 selection (Omegamap) is also provided. 95% HPD intervals are 
 indicated between parentheses.
 </P>
+
+
 
 <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
  style='border-collapse:collapse;mso-padding-alt:0in .7pt 0in .7pt'>
