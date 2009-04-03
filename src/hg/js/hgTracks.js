@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.19 2009/02/24 22:47:21 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.20 2009/04/03 22:42:51 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -223,7 +223,7 @@ function toggleTrackGroupVisibility(obj, prefix)
 	// Send a message to hgTracks to record every user choice, so
 	// they get stored into their cart, even if the user then navigates with a link.
 	// XXXX Currently dead code
-	// setCartVar("hgtgroup_" + prefix + "_close", newVal);
+	//setCartVar("hgtgroup_" + prefix + "_close", newVal);
 
 	var list = document.getElementsByTagName('tr');
 	for (var i=0;i<list.length;i++) {
@@ -302,7 +302,7 @@ function setAllTrackGroupVisibility(newState)
 	        // Send a message to hgTracks to record every user choice, so
 	        // they get stored into their cart, even if the user then navigates with a link.
 	        // XXXX Currently dead code
-	        // setCartVar("hgtgroup_" + prefix + "_close", newVal);
+  	        //setCartVar("hgtgroup_" + prefix + "_close", newVal);
 
 	        for (var j=0;j<trList.length;j++) {
 	            var ele = trList[j];
@@ -322,3 +322,14 @@ function setAllTrackGroupVisibility(newState)
     }
     return retval;
 }
+
+$(document).ready(function()
+{
+    $('a,area').not("[href*='#']").bind("click",function(i) {
+        var mainForm=$(this).parents('form');
+        if(mainForm != undefined || mainForm.length != 1)
+            return postTheForm($(mainForm).attr('name'),this.href);
+
+        return false;
+    });
+});
