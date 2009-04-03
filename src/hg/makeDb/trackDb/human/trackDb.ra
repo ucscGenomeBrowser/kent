@@ -717,7 +717,7 @@ type bedGraph 4
 track hgdpHzy
 compositeTrack on
 shortLabel HGDP Hetrzygsty
-longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity on 7 Continents
+longLabel Human Genome Diversity Project 3-SNP Average of Heterozygosity on 7 Continents
 group varRep
 priority 102.02
 visibility hide
@@ -731,57 +731,57 @@ type bedGraph 4
 
     track hgdpHzyAfrica
     subTrack hgdpHzy
-    shortLabel HGDP Hzy Africa
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Africa)
+    shortLabel Hetzgty Africa
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpHzyBantu
     subTrack hgdpHzy
-    shortLabel HGDP Hzy Bantu
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Bantu populations in Africa)
+    shortLabel Hetzgty Bantu
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Bantu pops. in Africa)
     color 224, 0, 0
     priority 2
 
     track hgdpHzyMideast
     subTrack hgdpHzy
-    shortLabel HGDP Hzy Mideast
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Mideast)
+    shortLabel Hetzgty Mideast
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Mideast)
     color 0,0,200
     priority 3
 
     track hgdpHzyEurope
     subTrack hgdpHzy
-    shortLabel HGDP Hzy Europe
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Europe)
+    shortLabel Hetzgty Europe
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Europe)
     color 240,144,0
     priority 4
 
     track hgdpHzySAsia
     subTrack hgdpHzy
-    shortLabel HGDP Hzy S. Asia
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (S. Asia)
+    shortLabel Hetzgty S. Asia
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (S. Asia)
     color 0,0,0
     priority 5
 
     track hgdpHzyEAsia
     subTrack hgdpHzy
-    shortLabel HGDP Hzy E. Asia
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (E. Asia)
+    shortLabel Hetzgty E. Asia
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (E. Asia)
     color 0,200,0
     priority 6
 
     track hgdpHzyOceania
     subTrack hgdpHzy
-    shortLabel HGDP Hzy Oceania
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Oceania)
+    shortLabel Hetzgty Oceania
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Oceania)
     color 0,200,200
     priority 7
 
     track hgdpHzyAmericas
     subTrack hgdpHzy
-    shortLabel HGDP Hzy Americas
-    longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Americas)
+    shortLabel Hetzgty Americas
+    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Americas)
     color 224,192,0
     priority 8
 
@@ -802,49 +802,49 @@ type bedGraph 4
 
     track hgdpIhsBantu
     subTrack hgdpIhs
-    shortLabel HGDP iHS Bantu
+    shortLabel iHS Bantu
     longLabel Human Genome Diversity Project iHS (Bantu populations in Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpIhsMideast
     subTrack hgdpIhs
-    shortLabel HGDP iHS Mideast
+    shortLabel iHS Mideast
     longLabel Human Genome Diversity Project iHS (Mideast)
     color 0,0,200
     priority 2
 
     track hgdpIhsEurope
     subTrack hgdpIhs
-    shortLabel HGDP iHS Europe
+    shortLabel iHS Europe
     longLabel Human Genome Diversity Project iHS (Europe)
     color 240,144,0
     priority 3
 
     track hgdpIhsSAsia
     subTrack hgdpIhs
-    shortLabel HGDP iHS S. Asia
+    shortLabel iHS S. Asia
     longLabel Human Genome Diversity Project iHS (South Asia)
     color 0,0,0
     priority 4
 
     track hgdpIhsEAsia
     subTrack hgdpIhs
-    shortLabel HGDP iHS E. Asia
+    shortLabel iHS E. Asia
     longLabel Human Genome Diversity Project iHS (East Asia)
     color 0,200,0
     priority 5
 
     track hgdpIhsOceania
     subTrack hgdpIhs
-    shortLabel HGDP iHS Oceania
+    shortLabel iHS Oceania
     longLabel Human Genome Diversity Project iHS (Oceania)
     color 0,200,200
     priority 6
 
     track hgdpIhsAmericas
     subTrack hgdpIhs
-    shortLabel HGDP iHS Americas
+    shortLabel iHS Americas
     longLabel Human Genome Diversity Project iHS (Americas)
     color 224,192,0
     priority 7
@@ -852,7 +852,7 @@ type bedGraph 4
 track hgdpXpehh
 compositeTrack on
 shortLabel HGDP XP-EHH
-longLabel Human Genome Diversity Project Cross Population Extended Haplotype Homozogysity (XP-EHH) on 7 Continents
+longLabel Human Genome Diversity Proj Cross-Pop Ext Haplo Homzgty (XP-EHH) on 7 Continents
 group varRep
 priority 102.04
 visibility hide
@@ -866,49 +866,49 @@ type bedGraph 4
 
     track hgdpXpehhBantu
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH Bantu
+    shortLabel XP-EHH Bantu
     longLabel Human Genome Diversity Project XP-EHH (Bantu populations in Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpXpehhMideast
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH Mideast
+    shortLabel XP-EHH Mideast
     longLabel Human Genome Diversity Project XP-EHH (Mideast)
     color 0,0,200
     priority 2
 
     track hgdpXpehhEurope
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH Europe
+    shortLabel XP-EHH Europe
     longLabel Human Genome Diversity Project XP-EHH (Europe)
     color 240,144,0
     priority 3
 
     track hgdpXpehhSAsia
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH S. Asia
+    shortLabel XP-EHH S. Asia
     longLabel Human Genome Diversity Project XP-EHH (South Asia)
     color 0,0,0
     priority 4
 
     track hgdpXpehhEAsia
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH E. Asia
+    shortLabel XP-EHH E. Asia
     longLabel Human Genome Diversity Project XP-EHH (East Asia)
     color 0,200,0
     priority 5
 
     track hgdpXpehhOceania
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH Oceania
+    shortLabel XP-EHH Oceania
     longLabel Human Genome Diversity Project XP-EHH (Oceania)
     color 0,200,200
     priority 6
 
     track hgdpXpehhAmericas
     subTrack hgdpXpehh
-    shortLabel HGDP XP-EHH Americas
+    shortLabel XP-EHH Americas
     longLabel Human Genome Diversity Project XP-EHH (Americas)
     color 224,192,0
     priority 7
