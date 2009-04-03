@@ -37,7 +37,7 @@ if ($#argv < 2 ||  $#argv > 4) then
   echo "  check to see if there are genes on all chroms."
   echo "    will check to see if chrom field is named tName or genoName."
   echo
-  echo "    usage:  database, table, [oldDb], [other machine]"
+  echo "    usage:  database table [oldDb] [other machine]"
   echo "      where oldDb must be specified if other machine is used"
   echo "      oldDb will be checked on other machine"
   echo "      defaults to hgwdev"
