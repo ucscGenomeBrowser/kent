@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.115 2009/04/01 19:57:06 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.116 2009/04/03 23:25:30 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1226,7 +1226,7 @@ if(width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT  class='inputBox' name=\"%s\" style='width: %dpx' value=%.0lf",varName,width,initialVal);
+printf("<INPUT TYPE=TEXT  class='inputBox' name=\"%s\" style='width: %dpx' value=%15g",varName,width,initialVal);
 printf(" onChange='return validateFloat(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
 if(title)
     printf(" title='%s'",title);
