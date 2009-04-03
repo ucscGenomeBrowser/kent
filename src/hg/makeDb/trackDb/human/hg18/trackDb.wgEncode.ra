@@ -9795,7 +9795,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel K562 Methyl27 1
-    longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
+    longLabel ENCODE HudsonAlpha Methyl27 K562 replicate 1
     subGroups view=Peaks replicate=RP1 cellType=K562
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
@@ -9808,7 +9808,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel K562 Methyl27 2
-    longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
+    longLabel ENCODE HudsonAlpha Methyl27 K562 replicate 2
     subGroups view=Peaks replicate=RP2 cellType=K562
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
