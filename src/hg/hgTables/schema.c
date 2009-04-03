@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.55 2009/03/17 18:01:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.58 2009/04/03 19:08:34 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -335,7 +335,12 @@ if (tdb != NULL && isNotEmpty(tdb->html))
 static void showSchemaDb(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct trackDb *tdbForConn = tdb ? tdb : curTrack;
+struct sqlConnection *conn;
+if (tdbForConn == NULL)
+    conn = hAllocConn(db);
+else
+    conn = hAllocConnTrack(db, tdbForConn);
 struct joiner *joiner = allJoiner;
 struct joinerPair *jpList, *jp;
 struct asObject *asObj = asForTable(conn, table);
