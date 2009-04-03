@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.171 2009/04/02 22:50:33 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.172 2009/04/03 17:16:41 mikep Exp $
 
 use warnings;
 use strict;
@@ -63,6 +63,7 @@ our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
+our $quickOpt = "";     # option to pass to validateFiles prog
 our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
@@ -655,7 +656,7 @@ sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $safe = SafePipe->new(CMDS => ["validateFiles -chromDb=hg18 -type=tagAlign $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -chromDb=hg18 -type=tagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -669,7 +670,7 @@ sub validatePairedTagAlign
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $safe = SafePipe->new(CMDS => ["validateFiles -chromDb=hg18 -type=pairedTagAlign $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -chromDb=hg18 -type=pairedTagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -698,7 +699,7 @@ sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $safe = SafePipe->new(CMDS => ["validateFiles -chromDb=hg18 -type=broadPeak $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -chromDb=hg18 -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -742,7 +743,7 @@ sub validateFastQ
     # - fastq defined by Sanger has a 'PHRED' quality score
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
-    my $safe = SafePipe->new(CMDS => ["validateFiles -type=fastq $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=fastq $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -849,7 +850,7 @@ sub validateFasta
     my ($path, $file, $type) = @_;
     doTime("beginning validateFasta") if $opt_timing;
     HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
-    my $safe = SafePipe->new(CMDS => ["validateFiles -type=fasta $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=fasta $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFasta : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -1139,6 +1140,7 @@ my $ok = GetOptions("allowReloads",
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_sendEmail = 0 if (!defined $opt_sendEmail);
+$quickOpt = " -quick " if defined ($opt_quick);
 
 if($opt_skipAll) {
     $opt_skipAutoCreation = $opt_skipOutput = $opt_skipValidateFiles = 1;
