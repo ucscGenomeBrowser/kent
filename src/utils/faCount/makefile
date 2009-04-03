@@ -8,6 +8,7 @@ A = faCount
 O = faCount.o
 
 faCount: ${O}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
