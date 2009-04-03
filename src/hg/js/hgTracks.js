@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.20 2009/04/03 22:42:51 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.21 2009/04/03 23:17:11 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -325,7 +325,8 @@ function setAllTrackGroupVisibility(newState)
 
 $(document).ready(function()
 {
-    $('a,area').not("[href*='#']").bind("click",function(i) {
+    //$('a,area').not("[href*='#']").bind("click",function(i) {
+    $('a,area').bind("click",function(i) {
         var mainForm=$(this).parents('form');
         if(mainForm != undefined || mainForm.length != 1)
             return postTheForm($(mainForm).attr('name'),this.href);
