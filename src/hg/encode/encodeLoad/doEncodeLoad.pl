@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.59 2009/03/16 22:28:00 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.60 2009/04/03 18:26:53 larrym Exp $
 
 # Usage:
 #
@@ -495,7 +495,7 @@ print PUSHQ <<_EOF_;
 LOCK TABLES pushQ WRITE;
 SELECT \@rank := max(rank)+1 FROM pushQ WHERE priority = 'A';
 SELECT \@qid := right(concat("00000",convert(max(qid)+1,CHAR)),6) FROM pushQ;
-INSERT INTO pushQ VALUES (\@qid,'','A',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}/$daf->{lab}','','','N',now(),'',0,'','','$releaseLog','','$releaseLogUrl');
+INSERT INTO pushQ VALUES (\@qid,'','B',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}/$daf->{lab}','','','N',now(),'',0,'','','$releaseLog','','$releaseLogUrl');
 UNLOCK TABLES;
 _EOF_
 close(PUSHQ);
