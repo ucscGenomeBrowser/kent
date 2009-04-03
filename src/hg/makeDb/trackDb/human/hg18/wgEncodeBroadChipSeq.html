@@ -13,6 +13,7 @@ the immunoprecipitated DNA is sequenced and mapped to the human reference
 genome. The relative enrichment of each antibody-target (epitope) across the
 genome is inferred from the density of mapped fragments.</p>
 
+
 <H2> Display Conventions and Configuration </H2>
 <P>
 This track is a multi-view composite track that contains multiple data types
@@ -23,8 +24,8 @@ ENCODE tracks typically contain one or more of the following views:
 <DL>
 <DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
 (usually normalized data from pooled replicates). ENCODE Peaks tables contain
-fields for statistical significance, including FDR
-(<A HREF="../../goldenPath/help/qValue.html" TARGET=_BLANK>qValue</A>).</DD>
+fields for statistical significance.
+</DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
 processed data.</DD>
 <DT><I>Raw Signal</I></DT><DD>Density graph (wiggle) of signal from raw data
@@ -32,6 +33,19 @@ processed data.</DD>
 this reflects the aligned read density.</DD>
 <DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome.<DD>
 </DL>
+</P>
+<P>
+<EM>Peaks</EM> for this track include a signalValue and pValue.
+The signalValue represents the fold enrichment of reads across the 
+length of the interval, relative to random expectation. 
+The pValue reflects the likelihood of observing an interval of the given 
+length and signalValue at random. A long interval with a moderate signalValue 
+and a short interval with a high signalValue can therefore have the same pValue.
+<P>
+The <EM>Raw Signal</EM> for this track was generated at UCSC, by extending reads in
+the appropriate direction to the median fragment size (300 bp)
+and then counting overlapping tags at each base using the UCSC bedItemOverlapCount utility.
+</P>
 
 <h2>Methods</h2>
 
@@ -48,7 +62,7 @@ genome (hg18) using MAQ.  Discrete intervals of ChIP-seq fragment enrichment
 were identified using a scan statistics approach, assuming a uniform 
 background signal.</P>
 
-<P>More details 
+<P>More details of the experimental protocol and analysis are available
 <A HREF="../../ENCODE/protocols/general/wgEncodeBroadChipSeq.txt">here</A>.</P>
 
 <h2>Credits</h2>
