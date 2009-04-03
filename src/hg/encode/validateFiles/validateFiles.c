@@ -6,20 +6,23 @@
 #include "chromInfo.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.15 2009/04/02 22:49:46 mikep Exp $";
-static char *version = "$Revision: 1.15 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.16 2009/04/03 17:11:08 mikep Exp $";
+static char *version = "$Revision: 1.16 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
+#define QUICK_DEFAULT 1000
 
 enum bedType {BED_GRAPH = 0, BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK};
 
 int maxErrors;
 boolean colorSpace;
 boolean zeroSizeOk;
+boolean chrMSizeOk;
 boolean printOkLines;
 boolean printFailLines;
+int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
 char qualChars[256];
@@ -64,6 +67,7 @@ errAbort(
   "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
   "                                  otherwise require strictly start < end\n"
   "   -printOkLines                Print lines which pass validation to stdout\n"
+  "   -quick[=N]                   Just test the first N lines of each file (default 1000)\n"
   "   -printFailLines              Print lines which fail validation to stdout\n"
   "   -version                     Print version\n"
   , MAX_ERRORS);
@@ -76,8 +80,10 @@ static struct optionSpec options[] = {
    {"maxErrors", OPTION_INT},
    {"colorSpace", OPTION_BOOLEAN},
    {"zeroSizeOk", OPTION_BOOLEAN},
+   {"chrMSizeOk", OPTION_BOOLEAN},
    {"printOkLines", OPTION_BOOLEAN},
    {"printFailLines", OPTION_BOOLEAN},
+   {"quick", OPTION_INT},
    {"version", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -393,6 +399,7 @@ boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, c
 // Return TRUE if start and end are both >= 0,
 // and if zeroSizeOk then start <= end 
 //        otherwise  then start < end
+// Also check end <= chromSize (as a special case, ignore chrM end if chrMSizeOk)
 // Othewise print warning and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, chrom, chromSize, row);
@@ -402,7 +409,7 @@ if (   !checkUnsigned(file, line, row, start, &s, "chromStart")
     return FALSE;
 if (chromSize > 0)
     {
-    if (e > chromSize)
+    if (e > chromSize && !(chrMSizeOk && sameString(chrom, "chrM")))
 	{
 	warn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", file, line, e, chrom, chromSize, row);
 	return FALSE;
@@ -532,8 +539,11 @@ dnaChars[(int)'.'] = 1;
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
+    ++line;
+    if (quick && line > quick)
+	break;
     safecpy(buf, sizeof(buf), row);
-    if ( checkColumns(file, ++line, row, buf, words, TAG_WORDS, (paired ? 8 : 6))
+    if ( checkColumns(file, line, row, buf, words, TAG_WORDS, (paired ? 8 : 6))
 	&& checkChrom(file, line, row, words[0], &chromSize)
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
 	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
@@ -592,8 +602,11 @@ int gappedOffset = (type == GAPPED_PEAK ? 6 : 0);
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNext(lf, &row, &size))
     {
+    ++line;
+    if (quick && line > quick)
+	break;
     safecpy(buf, sizeof(buf), row);
-    if ( checkColumns(file, ++line, row, buf, words, PEAK_WORDS, bedTypeCols[type])
+    if ( checkColumns(file, line, row, buf, words, PEAK_WORDS, bedTypeCols[type])
 	&& checkChrom(file, line, row, words[0], &chromSize)
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
 	&& ( type == BED_GRAPH ? 
@@ -661,6 +674,8 @@ verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while ( lineFileNext(lf, &seqName, NULL))
     {
     ++line;
+    if (quick && line > quick)
+	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -702,6 +717,8 @@ verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while ( lineFileNext(lf, &seqName, NULL))
     {
     ++line;
+    if (quick && line > quick)
+	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -751,6 +768,8 @@ verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNext(lf, &seqName, NULL))
     {
     ++line;
+    if (quick && line > quick)
+	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -800,6 +819,8 @@ verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNext(lf, &seqName, NULL))
     {
     ++line;
+    if (quick && line > quick)
+	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -874,8 +895,10 @@ if (strlen(type) == 0)
     errAbort("please specify type");
 maxErrors      = optionInt("maxErrors", MAX_ERRORS);
 zeroSizeOk     = optionExists("zeroSizeOk");
+chrMSizeOk     = optionExists("chrMSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
+quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 initArrays();
 // Get chromInfo from DB or file
