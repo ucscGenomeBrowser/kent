@@ -11002,7 +11002,7 @@ compositeTrack	on
 shortLabel	Gis RnaSeq
 longLabel	ENCODE Gis Gingeras RnaSeq
 group		regulation
-subGroup1	view Views Alignments=Alignments
+subGroup1	view Views Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
 subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3	localization Localization cytosol=cytosol
 subGroup4	rnaExtract RnaExtract longPolyA=longPolyA
