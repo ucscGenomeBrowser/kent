@@ -1428,3 +1428,32 @@ nice bin/gbDbLoadStep -drop -initialLoad sacCer1
     #	real    3m21.840s
 
 #############################################################################
+# uwFootprints: (2009-03-11 markd)
+# obtained from Nobel lab
+#   William Stafford Noble <noble@gs.washington.edu>
+#   Xiaoyu Chen <xchen@cs.washington.edu>
+
+    mkdir /hive/data/genomes/sacCer1/bed/uwFootprints
+    cd /hive/data/genomes/sacCer1/bed/uwFootprints
+
+
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.wig
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.mappability.bed
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.footprints.bed
+    chmod a-w yeast.*
+
+    wigEncode yeast.dnaseI.tagCounts.wig uwFootprintsTagCounts.wig uwFootprintsTagCounts.wib
+    # Converted yeast.dnaseI.tagCounts.wig, upper limit 13798.00, lower limit 1.00
+
+    ln -sf /hive/data/genomes/sacCer1/bed/uwFootprints/uwFootprintsTagCounts.wib /gbdb/sacCer1/wib
+    hgLoadWiggle -tmpDir=/data/tmp sacCer1 uwFootprintsTagCounts uwFootprintsTagCounts.wig 
+
+    hgLoadBed -tab -tmpDir=/data/tmp sacCer1 uwFootprintsMappability yeast.mappability.bed
+    # drop yeast.footprints.bed and truncate name to three decimal places
+    tawk 'NR>1{print $1,$2,$3,sprintf("%0.3f",$4)}' yeast.footprints.bed | hgLoadBed -tmpDir=/data/tmp sacCer1 uwFootprintsPrints stdin
+
+    # lift counts to sacSer2 and give back to UW
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.bed
+    liftOver yeast.dnaseI.tagCounts.bed /hive/data/genomes/sacCer1/bed/blat.sacCer2.2009-02-04/sacCer1ToSacCer2.over.chain.gz /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer2.bed  /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer2.nolift.bed
+
+#############################################################################

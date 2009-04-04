@@ -152,3 +152,40 @@ searchTable sgdOther
 searchType bed
 searchPriority 20
 
+track uwFootprints
+superTrack on
+shortLabel UW Footprints
+longLabel UW Protein/DNA Interaction Footprints
+group regulation
+priority 130
+
+    track uwFootprintsTagCounts
+    superTrack uwFootprints full
+    shortLabel Tag Counts
+    longLabel UW Footprints Tag Counts
+    type wig
+    color 25,25,150
+    group regulation
+    priority 1
+    html uwFootprints
+
+    track uwFootprintsMappability
+    superTrack uwFootprints dense
+    shortLabel Mappability
+    longLabel UW Footprints Mappability
+    type bed 3
+    color 25,25,150
+    group regulation
+    priority 2
+    html uwFootprints
+
+    track uwFootprintsPrints
+    superTrack uwFootprints pack
+    shortLabel Footprints
+    longLabel UW Protein-binding Footprints
+    type bed 4
+    color 25,25,150
+    group regulation
+    priority 3
+    html uwFootprints
+
