@@ -10996,3 +10996,136 @@ wgEncode 1
     localization cell
     cell GM12878
 
+
+track		wgEncodeGisRnaSeq
+compositeTrack	on
+shortLabel	Gis RnaSeq
+longLabel	ENCODE Gis Gingeras RnaSeq
+group		regulation
+subGroup1	view Views Alignments=Alignments
+subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup3	localization Localization cytosol=cytosol
+subGroup4	rnaExtract RnaExtract longPolyA=longPolyA
+dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
+sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
+controlledVocabulary	encode/cv.ra cellType localization rnaExtract
+dragAndDrop	subTracks
+visibilityViewDefaults	 Alignments=hide
+priority	0
+type		bed 3
+wgEncode	1
+
+    track wgEncodeGisRnaSeqAlignmentsGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel longPolyA GM12878 cytosol 
+    longLabel ENCODE GIS RNA-Seq Tags (longPolyA in GM12878 cell cytosol using )
+    subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type bed 6
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisRnaSeqPlusRawSignalGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel longPolyA GM12878 cytosol  PlusRaw
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal (longPolyA in GM12878 cell cytosol using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 24775.00
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisRnaSeqMinusRawSignalGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel longPolyA GM12878 cytosol  MinusRaw
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal (longPolyA in GM12878 cell cytosol using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 14099.00
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisRnaSeqAlignmentsK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel longPolyA K562 cytosol 
+    longLabel ENCODE GIS RNA-Seq Tags (longPolyA in K562 cell cytosol using )
+    subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type bed 6
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeGisRnaSeqPlusRawSignalK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel longPolyA K562 cytosol  PlusRaw
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal (longPolyA in K562 cell cytosol using )
+    subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 18950.00
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeGisRnaSeqMinusRawSignalK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel longPolyA K562 cytosol  MinusRaw
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal (longPolyA in K562 cell cytosol using )
+    subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 11491.00
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
