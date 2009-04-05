@@ -15,4 +15,7 @@ CREATE TABLE pairedTagAlign (
     seq2 varchar(255) not null,	# Sequence of second read
               #Indices
     INDEX chromStart (chrom(8), chromStart)
-);
+)
+AVG_ROW_LENGTH = 100
+MAX_ROWS = 10000000000
+;
