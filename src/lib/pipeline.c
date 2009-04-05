@@ -281,6 +281,9 @@ if ((proc->pid = fork()) < 0)
     errnoAbort("can't fork");
 if (proc->pid == 0)
     {
+    // child
+    if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+        errnoAbort("error ignoring SIGPIPE");
     if (otherEndBuf != NULL)
         plProcMemWrite(proc, procStdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
     else
