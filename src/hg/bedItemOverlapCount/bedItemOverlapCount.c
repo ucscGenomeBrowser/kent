@@ -12,16 +12,22 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.9 2009/03/13 05:22:46 mikep Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.10 2009/04/06 18:40:21 larrym Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
 		/* this is not implemented, the user can filter + and - */
 
 static struct hash *chromHash = NULL;
+static char *host = NULL;
+static char *user = NULL;
+static char *password = NULL;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"host", OPTION_STRING},
+    {"user", OPTION_STRING},
+    {"password", OPTION_STRING},
     {"strand", OPTION_STRING},
     {NULL, 0}
 };
@@ -39,7 +45,10 @@ errAbort(
   "     | bedItemOverlapCount [options] <database> stdin \\\n"
   "         | wigEncode stdin data.wig data.wib\n"
   "options:\n"
-  "   (none at this time - you will want to separate your + and - strand\n"
+  "   -host\tmysql host\n"
+  "   -user\tmysql user\n"
+  "   -password\tmysql password\n\n"
+  "\tYou will want to separate your + and - strand\n"
   "\titems before sending into this program as it only looks at\n"
   "\tthe chrom, start and end columns of the bed file.\n"
   "\tIt wants a <database> connection to lookup chrom sizes for a sanity\n"
@@ -55,11 +64,20 @@ static struct hash *loadAllChromInfo(char *database, unsigned *largest)
 /* Load up all chromosome infos, return largest one if asked to do so. */
 {
 struct chromInfo *el;
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 struct hash *ret;
 char **row;
 unsigned max = 0;
+
+if(host)
+    {
+    conn = sqlConnectRemote(host, user, password, database);
+    }
+else
+    {
+    conn = hAllocConn(database);
+    }
 
 ret = newHash(0);
 
@@ -217,6 +235,9 @@ optionInit(&argc, argv, optionSpecs);
 
 if (argc < 2)
     usage();
+host = optionVal("host", NULL);
+user = optionVal("user", NULL);
+password = optionVal("password", NULL);
 verbose(2, "#\tworking on database: %s\n", argv[1]);
 bedItemOverlapCount(argv[1], argc-2, argv+2);
 return 0;
