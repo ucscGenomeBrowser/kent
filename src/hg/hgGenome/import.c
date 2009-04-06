@@ -17,6 +17,7 @@
 #include "customTrack.h"
 #include "trashDir.h"
 #include "hgGenome.h"
+#include "genoLay.h"
 
 #include "jsHelper.h"
 #include "grp.h"
@@ -26,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.13 2008/09/17 18:36:35 galt Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.14 2009/04/06 05:31:18 galt Exp $";
 
 /* from hgTables.c */
 
@@ -48,20 +49,11 @@ else
     return "hgGenome";
 }
 
-struct slName *getChroms()
+struct genoLayChrom *getChroms()
 /* Get a chrom list. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr;
-char **row;
-struct slName *chromList = NULL;
-sr = sqlGetResult(conn, "select chrom from chromInfo");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slNameAddHead(&chromList, cloneString(row[0]));
-    }
-slReverse(&chromList);
-sqlFreeResult(&sr);
+struct genoLayChrom *chromList = genoLayDbChromsExt(conn, FALSE, FALSE);
 hFreeConn(&conn);
 return chromList;
 }
@@ -1146,7 +1138,7 @@ struct dyString *dy = dyStringNew(0);
 struct rbTree *tree = NULL;
 char *chrom = "";
 int chromSize = 0;
-struct slName *chr, *chromList = getChroms();
+struct genoLayChrom *chr, *chromList = getChroms();
 for (chr = chromList; chr != NULL; chr = chr->next)
     {
     char *table = curTable;
@@ -1154,7 +1146,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     int fields = hTableInfoBedFieldCount(hti);
     struct bed *bedList = NULL, *bed;
     struct lm *lm = lmInit(64*1024);
-    chrom = chr->name;
+    chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
     if (!bedList)
@@ -1208,7 +1200,7 @@ int windowSize = 10000;
 int numWindows = 0;
 double *depth = NULL;
 int overlap = 0;
-struct slName *chr, *chromList = getChroms();
+struct genoLayChrom *chr, *chromList = getChroms();
 for (chr = chromList; chr != NULL; chr = chr->next)
     {
     char *table = curTable;
@@ -1216,7 +1208,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     int fields = hTableInfoBedFieldCount(hti);
     struct bed *bedList = NULL, *bed;
     struct lm *lm = lmInit(64*1024);
-    chrom = chr->name;
+    chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
     if (!bedList)
@@ -1273,7 +1265,7 @@ int windowSize = 10000;
 int numWindows = 0;
 double *depth = NULL;
 int overlap = 0;
-struct slName *chr, *chromList = getChroms();
+struct genoLayChrom *chr, *chromList = getChroms();
 for (chr = chromList; chr != NULL; chr = chr->next)
     {
     char *table = curTable;
@@ -1281,7 +1273,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     int fields = hTableInfoBedFieldCount(hti);
     struct bed *bedList = NULL, *bed;
     struct lm *lm = lmInit(64*1024);
-    chrom = chr->name;
+    chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
     if (!bedList)
@@ -1343,11 +1335,11 @@ double *depth = NULL;
 bool *hit = NULL;
 int overlap = 0;
 unsigned long long grandTotalValues=0;
-struct slName *chr, *chromList = getChroms();
+struct genoLayChrom *chr, *chromList = getChroms();
 for (chr = chromList; chr != NULL; chr = chr->next)
     {
     int totalValues=0;
-    chrom = chr->name;
+    chrom = chr->fullName;
     struct wiggleDataStream *wds = wigChromRawStats(chrom);
     struct wiggleStats *stats=NULL, *statsList = wds->stats;
 
