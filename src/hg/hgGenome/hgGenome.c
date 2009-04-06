@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.63 2009/03/11 19:24:31 galt Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.64 2009/04/06 05:32:09 galt Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -457,47 +457,56 @@ addPadToBed3(bedList, -pad, pad);
 return bedList;
 }
 
+boolean checkAndClear(char *cartVar)
+/* If cart var exists, clear it and return TRUE */
+{
+if (cartVarExists(cart, cartVar))
+    {
+    cartRemove(cart, cartVar);  /* in case of errAbort */
+    return TRUE;
+    }
+return FALSE;
+}
+
 void dispatchPage()
 /* Look at command variables in cart and figure out which
  * page to draw. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-if (cartVarExists(cart, hggConfigure))
+if (checkAndClear(hggConfigure))
     {
     configurePage();
     }
-else if (cartVarExists(cart, hggConfigureOne))
+else if (checkAndClear(hggConfigureOne))
     {
     configureOnePage();
     }
-else if (cartVarExists(cart, hggUpload))
+else if (checkAndClear(hggUpload))
     {
     uploadPage();
     }
-else if (cartVarExists(cart, hggSubmitUpload))
+else if (checkAndClear(hggSubmitUpload))
     {
     submitUpload(conn);
     }
-else if (cartVarExists(cart, hggImport))
+else if (checkAndClear(hggImport))
     {
     importPage(conn);
     }
-else if (cartVarExists(cart, hggSubmitImport))
+else if (checkAndClear(hggSubmitImport))
     {
     submitImport(conn);
     }
-else if (cartVarExists(cart, hggCorrelate))
+else if (checkAndClear(hggCorrelate))
     {
     correlatePage(conn);
     }
-else if (cartVarExists(cart, hggBrowse))
+else if (checkAndClear(hggBrowse))
     {
-    cartRemove(cart, hggBrowse);  // just in case of errAbort
     browseRegions(conn);
     }
-else if (cartVarExists(cart, hggSort))
+else if (checkAndClear(hggSort))
     {
-    cartRemove(cart, hggSort);  // just in case of errAbort
     sortGenes(conn);
     }
 else
