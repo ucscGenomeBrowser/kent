@@ -9,7 +9,7 @@
 #include "hCytoBand.h"
 #include "genoLay.h"
 
-static char const rcsid[] = "$Id: genoLay.c,v 1.10 2008/09/17 18:10:13 kent Exp $";
+static char const rcsid[] = "$Id: genoLay.c,v 1.11 2009/04/06 05:34:52 galt Exp $";
 
 void genoLayDump(struct genoLay *gl)
 /* Print out info on genoLay */
@@ -73,43 +73,68 @@ else
     return strcmp(aName, bName);
 }
 
-struct genoLayChrom *genoLayDbChroms(struct sqlConnection *conn, 
-	boolean withRandom)
+struct genoLayChrom *genoLayDbChromsExt(struct sqlConnection *conn, 
+	boolean withRandom, boolean abortOnErr)
 /* Get chrom info list. */
 {
 struct sqlResult *sr;
 char **row;
 struct genoLayChrom *chrom, *chromList = NULL;
-int count = sqlQuickNum(conn, "select count(*) from chromInfo");
-if (count > 500)
-    errAbort("Sorry, can only do genome layout on assemblies mapped to chromosomes. This one has %d contigs. Please select another organism or assembly.", count);
 sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+long chrMinSize = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
-    if (withRandom || (startsWith("chr", name) && 
-    	!strchr(name, '_') && !sameString("chrM", name) 
-	))
+    if (withRandom || 
+        (
+        (startsWith("chr", name))
+     && (!startsWith("chrUn", name))
+     && (!sameString("chrM", name))
+     && (!strchr(name, '_'))   // avoiding _random and _hap*
+	)
+       )
         {
-	AllocVar(chrom);
-	chrom->fullName = cloneString(name);
-	chrom->shortName = chrom->fullName+3;
-	chrom->size = sqlUnsigned(row[1]);
-	slAddHead(&chromList, chrom);
+	long chrSize = sqlUnsigned(row[1]);
+        if ((chrMinSize==0) || (chrSize >= chrMinSize))
+	    {
+	    AllocVar(chrom);
+	    chrom->fullName = cloneString(name);
+	    chrom->shortName = chrom->fullName+3;
+	    chrom->size = chrSize;
+	    slAddHead(&chromList, chrom);
+	    }
+	if (chrMinSize==0)
+	    { // assumes first chr is largest
+	    chrMinSize=chrSize/800;   // scaled to default screen size
+	    }
 	}
     }
-if (slCount(chromList) > 1)
-    {
-    struct genoLayChrom *chrUn = slNameFind(chromList, "chrUn");
-    if (chrUn)
-	slRemoveEl(chromList, chrUn);
-    }
 if (chromList == NULL)
-    errAbort("No chromosomes starting with chr in chromInfo.");
+    {
+    if (abortOnErr)
+    	errAbort("No chromosomes found in chromInfo.");
+    return NULL;
+    }
+int count = slCount(chromList);
+if (count > 500)
+    {
+    if (abortOnErr)
+	errAbort("Sorry, cannot do genome layout on an assembly "
+    	    "with too many (%d) chromosomes exceeds 500. "
+    	    "Please select another organism or assembly.", count);
+    }
 slReverse(&chromList);
 slSort(&chromList, genoLayChromCmpName);
 return chromList;
 }
+
+struct genoLayChrom *genoLayDbChroms(struct sqlConnection *conn, 
+	boolean withRandom)
+/* Get chrom info list. */
+{
+return genoLayDbChromsExt(conn, withRandom, TRUE);
+}
+
 
 static void separateSexChroms(struct slRef *in,
 	struct slRef **retAutoList, struct slRef **retSexList)
