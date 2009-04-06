@@ -10,13 +10,19 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.2 2008/10/07 00:04:41 larrym Exp $";
+static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.3 2009/04/06 18:13:51 larrym Exp $";
 
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static struct hash *chromHash = NULL;
+char *host = NULL;
+char *user = NULL;
+char *password = NULL;
 
 static struct optionSpec optionSpecs[] = {
     {"tab", OPTION_BOOLEAN},
+    {"host", OPTION_STRING},
+    {"user", OPTION_STRING},
+    {"password", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -30,10 +36,14 @@ errAbort(
   "usage:\n"
   "   bedExtendRanges database length files(s)\n\n"
   "options:\n"
+  "   -host\tmysql host\n"
+  "   -user\tmysql user\n"
+  "   -password\tmysql password\n"
   "   -tab\t\tSeparate by tabs rather than space\n"
   "   -verbose=N - verbose level for extra information to STDERR\n\n"
   "example:\n\n"
   "   bedExtendRanges hg18 250 stdin\n\n"
+  "   bedExtendRanges -user=genome -host=mysql.cse.ucsc.edu hg18 250 stdin\n\n"
   "will transform:\n"
   "    chr1 500 525 . 100 +\n" 
   "    chr1 1000 1025 . 100 -\n" 
@@ -51,8 +61,17 @@ struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 struct hash *ret;
 char **row;
+boolean localDb = TRUE;
 
-conn = hAllocConn(database);
+if(host)
+    {
+    conn = sqlConnectRemote(host, user, password, database);
+    localDb = FALSE;
+    }
+else
+    {
+    conn = hAllocConn(database);
+    }
 ret = newHash(0);
 
 sr = sqlGetResult(conn, "select * from chromInfo");
@@ -63,7 +82,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(ret, el->chrom, (void *)(& el->size));
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+if(localDb)
+    hFreeConn(&conn);
 return ret;
 }
 
@@ -177,6 +197,9 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 strictTab = optionExists("tab");
+host = optionVal("host", NULL);
+user = optionVal("user", NULL);
+password = optionVal("password", NULL);
 
 bedExtendRanges(argv[1], atoi(argv[2]), argc-3, argv+3);
 return 0;
