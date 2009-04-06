@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.172 2009/04/03 17:16:41 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.173 2009/04/06 05:08:40 mikep Exp $
 
 use warnings;
 use strict;
@@ -768,33 +768,17 @@ sub validateCsfasta
     # Files from GIS have this header:
     # >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
     # T01301010111200210102321210100112312
-
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsfasta") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    my $line = 0;
-    my $state = 'header';
-    my $seqName;
-    my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+.*", NEXT => 'seq'},
-                  seq => {REGEX => "^[GT]\\d+", NEXT => 'header'},
-                  };
-    while(<$fh>) {
-        chomp;
-        $line++;
-        next if m/^#/;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateCsfasta]";
-        my $regex = $states->{$state}{REGEX};
-        if(/^${regex}$/) {
-	        $seqName = $1 if($state eq 'header');
-	        $state = $states->{$state}{NEXT};
-        } else {
-	         return("$errorPrefix (expecting $state):\nline: $_");
-        }
-        last if($opt_quick && $line >= $quickCount);
-     }
-    $fh->close();
+    HgAutomate::verbose(2, "validateCsfasta($path,$file,$type)\n");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=csfasta $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateCsfasta : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateCsfasta for '$file'");
+    }
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateCsfasta", $line) if $opt_timing;
+    doTime("done validateCsfasta") if $opt_timing;
     return ();
 }
 
@@ -809,33 +793,17 @@ sub validateCsqual
     # 20 10 8 13 8 10 20 7 7 24 15 22 21 14 14 8 11 15 5 20 6 5 8 22 6 24 3 16 7 11
     # >461_19_209_F3
     # 16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9
-
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsqual") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    my $line = 0;
-    my $state = 'header';
-    my $seqName;
-    my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+", NEXT => 'qual'},
-                  qual => {REGEX => "^(\\d+ )+", NEXT => 'header'},
-                  };
-    while(<$fh>) {
-        chomp;
-        $line++;
-        next if m/^#/;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateCsqual]";
-        my $regex = $states->{$state}{REGEX};
-        if(/^${regex}$/) {
-	        $seqName = $1 if($state eq 'header');
-	        $state = $states->{$state}{NEXT};
-        } else {
-	         return("$errorPrefix (expecting $state) [regex=$regex]:\nline: [$_]");
-        }
-        last if($opt_quick && $line >= $quickCount);
-     }
-    $fh->close();
+    HgAutomate::verbose(2, "validateCsqual($path,$file,$type)\n");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=csqual $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateCsqual : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateCsqual for '$file'");
+    }
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateCsqual", $line) if $opt_timing;
+    doTime("done validateCsqual") if $opt_timing;
     return ();
 }
 
