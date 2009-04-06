@@ -1,6 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Drosophila pseudoobscura -- Baylor "CAF1" via Eisen's 12-fly site
+# (Identical to FlyBase dpse_r2.1_FB2008_02)
 
 # THIS IS ONLY TO GET MASKED SEQUENCE -- NOT A BROWSER AT THIS POINT
 
