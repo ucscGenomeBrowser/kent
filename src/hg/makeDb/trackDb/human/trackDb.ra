@@ -717,14 +717,14 @@ type bedGraph 4
 track hgdpHzy
 compositeTrack on
 shortLabel HGDP Hetrzygsty
-longLabel Human Genome Diversity Project 3-SNP Average of Heterozygosity on 7 Continents
+longLabel Human Genome Diversity Project Smoothed Expected Heterozygosity on 7 Continents
 group varRep
 priority 102.02
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,
 defaultViewLimits 0:0.25
 minLimit 0
-maxLimit 0.5
+maxLimit 0.25
 autoScaleDefault Off
 maxHeightPixels 100:20:10
 type bedGraph 4
@@ -732,56 +732,56 @@ type bedGraph 4
     track hgdpHzyAfrica
     subTrack hgdpHzy
     shortLabel Hetzgty Africa
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Africa)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Africa)
     color 224, 0, 0
     priority 1
 
     track hgdpHzyBantu
     subTrack hgdpHzy
     shortLabel Hetzgty Bantu
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Bantu pops. in Africa)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Bantu pops. in Africa)
     color 224, 0, 0
     priority 2
 
     track hgdpHzyMideast
     subTrack hgdpHzy
     shortLabel Hetzgty Mideast
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Mideast)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Mideast)
     color 0,0,200
     priority 3
 
     track hgdpHzyEurope
     subTrack hgdpHzy
     shortLabel Hetzgty Europe
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Europe)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Europe)
     color 240,144,0
     priority 4
 
     track hgdpHzySAsia
     subTrack hgdpHzy
     shortLabel Hetzgty S. Asia
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (S. Asia)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (S. Asia)
     color 0,0,0
     priority 5
 
     track hgdpHzyEAsia
     subTrack hgdpHzy
     shortLabel Hetzgty E. Asia
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (E. Asia)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (E. Asia)
     color 0,200,0
     priority 6
 
     track hgdpHzyOceania
     subTrack hgdpHzy
     shortLabel Hetzgty Oceania
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Oceania)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Oceania)
     color 0,200,200
     priority 7
 
     track hgdpHzyAmericas
     subTrack hgdpHzy
     shortLabel Hetzgty Americas
-    longLabel Human Genome Diversity Project 3-SNP Avg. Heterozygosity (Americas)
+    longLabel Human Genome Diversity Proj Smoothd Expec Heterozygosity (Americas)
     color 224,192,0
     priority 8
 
