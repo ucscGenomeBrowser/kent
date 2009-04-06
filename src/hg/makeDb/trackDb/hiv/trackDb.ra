@@ -266,16 +266,6 @@ visibility pack
 color 0,0,255
 type bed 5
 
-track posSelVax004plaModel8
-    subTrack vax004PosSelVac
-shortLabel VAX004 pla Pos Sel M8
-longLabel VAX004 placebo Postive Selection (Model 8)
-group posSel
-priority 101
-visibility pack
-color 0,0,255
-type bed 5
-
 track vax003PosSel
 compositeTrack on
 shortLabel VAX003 Pos Sel
