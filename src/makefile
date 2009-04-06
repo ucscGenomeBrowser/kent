@@ -58,7 +58,9 @@ UTILS_APPLIST = bedToBigBed bigBedSummary bigBedToBed bigWigSummary \
 	faSomeRecords faToNib faToTwoBit gtfToGenePred htmlCheck nibFrag \
 	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
 
-HG_APPLIST = liftOver
+HG_APPLIST = liftOver bedItemOverlapCount
+
+HG_UTILS_APPLIST = bedExtendRanges
 
 userApps: topLibs
 	@for P in ${UTILS_APPLIST}; do \
@@ -66,6 +68,9 @@ userApps: topLibs
 	done
 	@for P in ${HG_APPLIST}; do \
 	    ( cd hg/$${P} && echo hg/$${P} && $(MAKE) ) ; \
+	done
+	@for P in ${HG_UTILS_APPLIST}; do \
+	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && $(MAKE) ) ; \
 	done
 
 clean:
