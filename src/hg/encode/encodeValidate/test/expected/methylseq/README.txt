@@ -1,5 +1,5 @@
-file: wgEncodeHudsonalphaMethylSeqAlignmentsRep1Htc116.tagAlign.gz
-cell: HTC116
+file: wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hct116.tagAlign.gz
+cell: HCT-116
 replicate: 1
-data RESTRICTED UNTIL: 2009-11-06
+data RESTRICTED UNTIL: 2010-01-06
 
