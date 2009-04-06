@@ -9,7 +9,7 @@
 #include "hCytoBand.h"
 #include "genoLay.h"
 
-static char const rcsid[] = "$Id: genoLay.c,v 1.11 2009/04/06 05:34:52 galt Exp $";
+static char const rcsid[] = "$Id: genoLay.c,v 1.12 2009/04/06 05:40:29 galt Exp $";
 
 void genoLayDump(struct genoLay *gl)
 /* Print out info on genoLay */
@@ -81,7 +81,6 @@ struct sqlResult *sr;
 char **row;
 struct genoLayChrom *chrom, *chromList = NULL;
 sr = sqlGetResult(conn, "select chrom,size from chromInfo");
-long chrMinSize = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
@@ -93,20 +92,12 @@ while ((row = sqlNextRow(sr)) != NULL)
      && (!strchr(name, '_'))   // avoiding _random and _hap*
 	)
        )
-        {
-	long chrSize = sqlUnsigned(row[1]);
-        if ((chrMinSize==0) || (chrSize >= chrMinSize))
-	    {
-	    AllocVar(chrom);
-	    chrom->fullName = cloneString(name);
-	    chrom->shortName = chrom->fullName+3;
-	    chrom->size = chrSize;
-	    slAddHead(&chromList, chrom);
-	    }
-	if (chrMinSize==0)
-	    { // assumes first chr is largest
-	    chrMinSize=chrSize/800;   // scaled to default screen size
-	    }
+	{
+	AllocVar(chrom);
+	chrom->fullName = cloneString(name);
+	chrom->shortName = chrom->fullName+3;
+	chrom->size = sqlUnsigned(row[1]);
+	slAddHead(&chromList, chrom);
 	}
     }
 if (chromList == NULL)
