@@ -11129,3 +11129,74 @@ wgEncode	1
     localization cytosol
     cell K562
 
+
+track		wgEncodeGisDnaPet
+compositeTrack	on
+shortLabel	Gis DnaPet
+longLabel	ENCODE Gis Gingeras DnaPet
+group		regulation
+subGroup1	view Views Alignments=Alignments
+subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup3	fragSize FragSize 1k=1k 10k=10k
+dimensions	dimensionX=cellType	dimensionY=fragSize
+sortOrder	cellType=+ fragSize=+ view=+
+controlledVocabulary	encode/cv.ra cellType fragSize
+dragAndDrop	subTracks
+visibilityViewDefaults	 Alignments=hide
+priority	0
+type		bed 3
+wgEncode	1
+# MJP: Change 'type bed 6' back to 'type pairedTagAlign' once the
+# display code is done
+
+    track wgEncodeGisDnaPetAlignmentsGm1287810k
+    release alpha
+    subTrack wgEncodeGisDnaPet
+    shortLabel GM12878
+    longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+    subGroups view=Alignments cellType=GM12878 fragSize=10k
+    #type pairedTagAlign
+    type bed 6
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    fragSize 10k
+    cell GM12878
+
+    track wgEncodeGisDnaPetAlignmentsK5621k
+    release alpha
+    subTrack wgEncodeGisDnaPet
+    shortLabel K562
+    longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+    subGroups view=Alignments cellType=K562 fragSize=1k
+    #type pairedTagAlign
+    type bed 6
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    fragSize 1k
+    cell K562
+
+    track wgEncodeGisDnaPetAlignmentsK56210k
+    release alpha
+    subTrack wgEncodeGisDnaPet
+    shortLabel K562
+    longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+    subGroups view=Alignments cellType=K562 fragSize=10k
+    #type pairedTagAlign
+    type bed 6
+    dateSubmitted 2009-04-04
+    dateUnrestricted 2010-01-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    fragSize 10k
+    cell K562
+
