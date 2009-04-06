@@ -3182,6 +3182,89 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
 
+    track wgEncodeUncFAIREseqPeaksHelas3
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa FAIRE Pk
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HeLa-S3 cells)
+    subGroups view=Peaks EXP=FAIRE cellType=HeLa
+    type narrowPeak
+    dateSubmitted 2009-03-22
+    dateUnrestricted 2009-12-22
+    dataVersion ENCODE Feb 2009 Freeze
+    cell HeLa-S3
+    color 0,119,158
+
+    track wgEncodeUncFAIREseqSignalHelas3
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa FAIRE Sig
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HeLa-S3 cells)
+    subGroups view=Signal EXP=FAIRE cellType=HeLa
+    type wig 0.00 0.74
+    dateSubmitted 2009-03-22
+    dateUnrestricted 2009-12-22
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
+    color 0,119,158
+
+    track wgEncodeUncFAIREseqBaseOverlapSignalHelas3
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa FAIRE BO
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HeLa-S3 cells)
+    subGroups view=SignalBO EXP=FAIRE cellType=HeLa
+    type wig 0.00 3729.00
+    dateSubmitted 2009-03-22
+    dateUnrestricted 2009-12-22
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
+    color 0,119,158
+
+    track wgEncodeUncFAIREseqRawSignalRep1Helas3
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa FAIRE  1
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=HeLa
+    type wig 0.00 94.88
+    dateSubmitted 2009-03-22
+    dateUnrestricted 2009-12-22
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
+    color 0,119,158
+
+    track wgEncodeUncFAIREseqRawSignalRep2Helas3
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa FAIRE 2
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HeLa-S3 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=HeLa
+    type wig 0.00 73.57
+    dateSubmitted 2009-03-22
+    dateUnrestricted 2009-12-22
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
+    color 0,119,158
+
+    track wgEncodeUncFAIREseqRawSignalRep3Helas3
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel HeLa FAIRE 3
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HeLa-S3 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=HeLa
+    type wig 0.00 96.69
+    dateSubmitted 2009-03-22
+    dateUnrestricted 2009-12-22
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HeLa-S3
+    color 0,119,158
+
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
@@ -11018,7 +11101,7 @@ wgEncode	1
     track wgEncodeGisRnaSeqAlignmentsGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq
-    shortLabel longPolyA GM12878 cytosol 
+    shortLabel longPolyA GM12878 cytosol
     longLabel ENCODE GIS RNA-Seq Tags (longPolyA in GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type bed 6
@@ -11075,7 +11158,7 @@ wgEncode	1
     track wgEncodeGisRnaSeqAlignmentsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq
-    shortLabel longPolyA K562 cytosol 
+    shortLabel longPolyA K562 cytosol
     longLabel ENCODE GIS RNA-Seq Tags (longPolyA in K562 cell cytosol using )
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
