@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.25 2008/09/03 19:18:54 markd Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.26 2009/04/06 05:33:50 galt Exp $";
 
 
 static char *allColors[] = {
@@ -386,10 +386,12 @@ char *curVal = graphColorAt(row, col);
 cgiMakeDropListFull(varName, allColors, allColors, ArraySize(allColors), curVal, js);
 }
 
-static void addThresholdGraphCarries(struct dyString *dy, int graphRows, int graphCols)
+static void addThresholdGraphCarries(struct dyString *dy, int graphRows, int graphCols, boolean cgaOnly)
 /* Add javascript that carries over threshold and graph vars
  * to new form. */
 {
+if (cgaOnly)
+    return;
 jsTextCarryOver(dy, getThresholdName());
 int i,j;
 for (i=0; i<graphRows; ++i)
@@ -400,40 +402,40 @@ for (i=0; i<graphRows; ++i)
 	}
 }
 
-static struct dyString *onChangeStart(int graphRows, int graphCols)
+static struct dyString *onChangeStart(int graphRows, int graphCols, boolean cgaOnly)
 /* Return common prefix to onChange javascript string */
 {
 struct dyString *dy = jsOnChangeStart();
-addThresholdGraphCarries(dy, graphRows, graphCols);
+addThresholdGraphCarries(dy, graphRows, graphCols, cgaOnly);
 return dy;
 }
 
-static char *onChangeClade(int graphRows, int graphCols)
+static char *onChangeClade(int graphRows, int graphCols, boolean cgaOnly)
 /* Return javascript executed when they change clade. */
 {
-struct dyString *dy = onChangeStart(graphRows, graphCols);
+struct dyString *dy = onChangeStart(graphRows, graphCols, cgaOnly);
 jsDropDownCarryOver(dy, "clade");
 dyStringAppend(dy, " document.hiddenForm.org.value=0;");
 dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return jsOnChangeEnd(&dy);
 }
 
-static char *onChangeOrg(int graphRows, int graphCols)
+static char *onChangeOrg(int graphRows, int graphCols, boolean cgaOnly)
 /* Return javascript executed when they change organism. */
 {
-struct dyString *dy = onChangeStart(graphRows, graphCols);
+struct dyString *dy = onChangeStart(graphRows, graphCols, cgaOnly);
 jsDropDownCarryOver(dy, "clade");
 jsDropDownCarryOver(dy, "org");
 dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return jsOnChangeEnd(&dy);
 }
 
-static void saveOnChangeOtherFunction(int graphRows, int graphCols)
+static void saveOnChangeOtherFunction(int graphRows, int graphCols, boolean cgaOnly)
 /* Write out Javascript function to save vars in hidden
  * form and submit. */
 {
 struct dyString *dy = dyStringNew(0);
-addThresholdGraphCarries(dy, graphRows, graphCols);
+addThresholdGraphCarries(dy, graphRows, graphCols, cgaOnly);
 jsDropDownCarryOver(dy, "clade");
 jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, "db");
@@ -539,52 +541,64 @@ cartWebStart(cart, database, "%s Genome Graphs", genome);
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
 cartSaveSession(cart);
 
-/* notify if appears to be non-chrom based assembly */
-int count = sqlQuickNum(conn, "select count(*) from chromInfo");
-if (count > 500)
+
+
+/* it might be a non-chrom based assembly */
+
+// defined externally in import.c at the moment
+extern struct slName *getChroms();
+/* Get a chrom list. */
+
+
+struct slName *chromList = getChroms();
+int count = slCount(chromList);
+boolean cgaOnly = FALSE;
+if ((count > 500) || (count == 0))
     {
-    graphRows = 0;
-    graphCols = 0;
+    cgaOnly = TRUE;
     }
+
 
 /* Write some javascript functions */
 jsWriteFunctions();
-saveOnChangeOtherFunction(graphRows, graphCols);
+saveOnChangeOtherFunction(graphRows, graphCols, cgaOnly);
+char *jsOther = onChangeOther(graphRows, graphCols);
 
 /* Print clade, genome and assembly line. */
+hPrintf("<TABLE>");
 boolean gotClade = hGotClade();
-char *jsOther = onChangeOther(graphRows, graphCols);
+if (gotClade)
     {
-    hPrintf("<TABLE>");
-    if (gotClade)
-	{
-	hPrintf("<TR><TD><B>clade:</B>\n");
-	printCladeListHtml(hGenome(database), onChangeClade(graphRows, graphCols));
-	htmlNbSpaces(3);
-	hPrintf("<B>genome:</B>\n");
-	printGenomeListForCladeHtml(database, onChangeOrg(graphRows, graphCols));
-	}
-    else
-	{
-	hPrintf("<TR><TD><B>genome:</B>\n");
-	printGenomeListHtml(database, onChangeOrg(graphRows, graphCols));
-	}
+    hPrintf("<TR><TD><B>clade:</B>\n");
+    printCladeListHtml(hGenome(database), onChangeClade(graphRows, graphCols, cgaOnly));
     htmlNbSpaces(3);
-    hPrintf("<B>assembly:</B>\n");
-    printAssemblyListHtml(database, jsOther);
-    hPrintf("</TD></TR>\n");
-    hPrintf("</TABLE>");
+    hPrintf("<B>genome:</B>\n");
+    printGenomeListForCladeHtml(database, onChangeOrg(graphRows, graphCols, cgaOnly));
     }
-
-if (count > 500)  /* non-chrom assembly */
+else
     {
-    warn("Sorry, can only do genome layout on assemblies mapped to chromosomes. "
-	"This one has %d contigs. Please select another organism or assembly.", count);
-    /* dummy hidden variable to make javascript happy */
-    hPrintf("<INPUT TYPE=\"HIDDEN\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
-	    getThresholdName(), 3, getThreshold());
-    hPrintf(" onchange=\"changeOther();\" "
-	"onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
+    hPrintf("<TR><TD><B>genome:</B>\n");
+    printGenomeListHtml(database, onChangeOrg(graphRows, graphCols, cgaOnly));
+    }
+htmlNbSpaces(3);
+hPrintf("<B>assembly:</B>\n");
+printAssemblyListHtml(database, jsOther);
+hPrintf("</TD></TR>\n");
+hPrintf("</TABLE>");
+
+
+if (cgaOnly)
+    {
+    if (count > 500)  /* Too-many-chrom assembly */
+	{
+	warn("Sorry, too many chromosomes. "
+	    "This one has %d. Please select another organism or assembly.", count);
+	}
+    else if (count == 0)  /* non-chrom assembly */
+	{
+	warn("Sorry, can only do genome layout on assemblies mapped to chromosomes. "
+	    "This one has no usable chromosomes. Please select another organism or assembly.");
+	}
     }
 else
     {
