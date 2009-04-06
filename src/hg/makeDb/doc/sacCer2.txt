@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.5 2009/02/27 19:24:53 hiram Exp $
+#  $Id: sacCer2.txt,v 1.6 2009/04/06 05:42:22 markd Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1242,3 +1242,32 @@ done
     #	test it with some sequence
 
 ############################################################################
+# uwFootprints: (2009-04-04 markd)
+# lifted sacCer1 tag count data and set to Nobel lab
+#   William Stafford Noble <noble@gs.washington.edu>
+#   Xiaoyu Chen <xchen@cs.washington.edu>
+
+    # lift counts to sacSer2 and give back to UW
+    cd /hive/data/genomes/sacCer1/bed/uwFootprintsxi
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.bed
+    liftOver yeast.dnaseI.tagCounts.bed /hive/data/genomes/sacCer1/bed/blat.sacCer2.2009-02-04/sacCer1ToSacCer2.over.chain.gz /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer2.bed  /cluster/home/markd/public_html/tmp/yeast/yeast.dnaseI.tagCounts.sacCer2.nolift.bed
+    
+    mkdir /hive/data/genomes/sacCer2/bed/uwFootprints
+    cd /hive/data/genomes/sacCer2/bed/uwFootprints
+
+    # get back wig
+    wget http://noble.gs.washington.edu/proj/footprinting/yeast.dnaseI.tagCounts.sacCer2.lifted.wig
+
+    # lift other BEDs
+    liftOver /hive/data/genomes/sacCer1/bed/uwFootprints/yeast.mappability.bed /hive/data/genomes/sacCer1/bed/blat.sacCer2.2009-02-04/sacCer1ToSacCer2.over.chain.gz yeast.mappability.bed yeast.mappability.nolift.bed
+    # drop yeast.footprints.bed and truncate name to three decimal places
+    tawk 'NR>1{print $1,$2,$3,sprintf("%0.3f",$4)}'  /hive/data/genomes/sacCer1/bed/uwFootprints/yeast.footprints.bed | liftOver stdin /hive/data/genomes/sacCer1/bed/blat.sacCer2.2009-02-04/sacCer1ToSacCer2.over.chain.gz yeast.footprints.bed yeast.footprints.nolift.bed
+
+    wigEncode yeast.dnaseI.tagCounts.sacCer2.lifted.wig uwFootprintsTagCounts.wig uwFootprintsTagCounts.wib
+    # Converted yeast.dnaseI.tagCounts.sacCer2.lifted.wig, upper limit 13798.00, lower limit 1.00
+
+    ln -sf /hive/data/genomes/sacCer2/bed/uwFootprints/uwFootprintsTagCounts.wib /gbdb/sacCer2/wib
+    hgLoadWiggle -tmpDir=/data/tmp sacCer2 uwFootprintsTagCounts uwFootprintsTagCounts.wig 
+
+    hgLoadBed -tab -tmpDir=/data/tmp sacCer2 uwFootprintsMappability yeast.mappability.bed
+    hgLoadBed -tmpDir=/data/tmp sacCer2 uwFootprintsPrints yeast.footprints.bed

@@ -1428,7 +1428,7 @@ nice bin/gbDbLoadStep -drop -initialLoad sacCer1
     #	real    3m21.840s
 
 #############################################################################
-# uwFootprints: (2009-03-11 markd)
+# uwFootprints: (2009-04-04 markd)
 # obtained from Nobel lab
 #   William Stafford Noble <noble@gs.washington.edu>
 #   Xiaoyu Chen <xchen@cs.washington.edu>
