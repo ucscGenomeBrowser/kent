@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.60 2009/04/03 18:26:53 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.61 2009/04/06 05:07:22 mikep Exp $
 
 # Usage:
 #
@@ -71,6 +71,13 @@ sub dieFile
     my ($file) = @_;
     open(FILE, $file);
     die join("", <FILE>) . "\n";
+}
+
+sub pingMysql
+{
+    my $db = shift;
+    HgAutomate::verbose(2, "pinging mysql (".scalar(localtime()).")\n");
+    $db->execute("select 1");
 }
 
 sub makeCatCmd
@@ -362,6 +369,7 @@ for my $key (keys %ra) {
             $str .= "$field: " . $h->{$field} . "\n";
         }
     }
+    pingMysql($db);
     HgAutomate::verbose(3, "key=[$key] tablename=[$tablename] str=[$str]\n");
     $str .= "\n";
 
