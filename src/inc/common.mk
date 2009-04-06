@@ -9,9 +9,9 @@ HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MA
 #global external libraries 
 L=
 
-#default to using ssl
+#default to not using ssl
 ifeq (${USE_SSL},)
-    USE_SSL=1
+    USE_SSL=0
 endif
 
 ifeq (${USE_SSL},1)
