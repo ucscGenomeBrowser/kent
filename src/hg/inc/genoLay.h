@@ -59,6 +59,10 @@ int genoLayChromCmpName(const void *va, const void *vb);
 /* Compare two chromosome names so as to sort numerical part
  * by number.. */
 
+struct genoLayChrom *genoLayDbChromsExt(struct sqlConnection *conn, 
+	boolean withRandom, boolean abortOnErr);
+/* Get chrom info list. */
+
 struct genoLayChrom *genoLayDbChroms(struct sqlConnection *conn, 
 	boolean withRandom);
 /* Get chrom info list. */
