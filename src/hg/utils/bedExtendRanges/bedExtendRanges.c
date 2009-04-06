@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.3 2009/04/06 18:13:51 larrym Exp $";
+static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.4 2009/04/06 18:36:36 larrym Exp $";
 
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static struct hash *chromHash = NULL;
@@ -43,7 +43,7 @@ errAbort(
   "   -verbose=N - verbose level for extra information to STDERR\n\n"
   "example:\n\n"
   "   bedExtendRanges hg18 250 stdin\n\n"
-  "   bedExtendRanges -user=genome -host=mysql.cse.ucsc.edu hg18 250 stdin\n\n"
+  "   bedExtendRanges -user=genome -host=genome-mysql.cse.ucsc.edu hg18 250 stdin\n\n"
   "will transform:\n"
   "    chr1 500 525 . 100 +\n" 
   "    chr1 1000 1025 . 100 -\n" 
