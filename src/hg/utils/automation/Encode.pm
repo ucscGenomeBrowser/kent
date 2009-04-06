@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.36 2009/03/22 02:38:12 larrym Exp $
+# $Id: Encode.pm,v 1.37 2009/04/06 20:38:38 larrym Exp $
 
 package Encode;
 
@@ -346,7 +346,7 @@ sub compositeTrackName
 sub downloadDir
 {
     my ($daf) = @_;
-    return "/usr/local/apache/htdocs/goldenPath/$daf->{assembly}/" . compositeTrackName($daf);
+    return "/usr/local/apache/htdocs/goldenPath/$daf->{assembly}/dcc/" . compositeTrackName($daf);
 }
 
 sub daysInMonth
