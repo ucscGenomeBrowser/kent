@@ -281,7 +281,7 @@ track posSelBModel2
 shortLabel VAX003 B Pos Sel M2
 longLabel VAX003 Subtype B Postive Selection (Model 2)
 group posSel
-priority 101
+priority 93
 visibility pack
 color 0,0,255
 type bed 5
@@ -291,7 +291,7 @@ track posSelBModel8
 shortLabel VAX003 B Pos Sel M8
 longLabel VAX003 Subtype B Postive Selection (Model 8)
 group posSel
-priority 101
+priority 94
 visibility pack
 color 0,0,255
 type bed 5
