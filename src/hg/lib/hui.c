@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.183 2009/04/01 23:07:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.184 2009/04/06 20:54:47 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4092,9 +4092,11 @@ if(makeCfgRows)
                 printf("<TD width=100>&nbsp;</TD>");
             printf("<TD colspan=%d>",membersOfView->count+1);
             safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
-            cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
             if(configurable[ix] != cfgNone)
+                {
+                cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
                 printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",objName);
+                }
             }
         }
     }
