@@ -4,7 +4,7 @@ shortLabel	HudsonAlpha MethylSeq
 longLabel	ENCODE HudsonAlpha Myers MethylSeq
 group		regulation
 subGroup1	view Views Regions=Regions
-subGroup2	cellType Cell_Line HTC116=HTC116
+subGroup2	cellType Cell_Line HCT-116=HCT-116
 dimensions	dimensionX=cellType
 sortOrder	cellType=+ view=+
 controlledVocabulary	encode/cv.ra cellType
@@ -17,9 +17,9 @@ wgEncode	1
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Htc116
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
-    shortLabel HTC116 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HTC116 cells)
-    subGroups view=Regions cellType=HTC116
+    shortLabel HCT-116 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
+    subGroups view=Regions cellType=HCT-116
     type bed 9
     dateSubmitted 2009-02-06
     dateUnrestricted 2009-11-06
@@ -27,5 +27,5 @@ wgEncode	1
     priority 1
     noInherit on
     configurable on
-    cell HTC116
+    cell HCT-116
 
