@@ -197,3 +197,15 @@ BASE=/cluster/data/droVir3/bed/blastz.droGri2.2006-10-23
     ln -s blastz.droGri2.2006-10-23 /cluster/data/droVir3/bed/blastz.droGri2
 
 
+#########################################################################
+# SWAP DM3 CHAIN/NET (DONE 4/6/09 angie)
+    mkdir /hive/data/genomes/droVir3/bed/blastz.dm3.swap
+    cd /hive/data/genomes/droVir3/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap -bigClusterHub swarm -smallClusterHub memk \
+      -workhorse kolossus \
+      /hive/data/genomes/dm3/bed/blastz.droVir3/DEF.hive >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /hive/data/genomes/droVir3/bed/blastz.dm3
+
+
+#########################################################################

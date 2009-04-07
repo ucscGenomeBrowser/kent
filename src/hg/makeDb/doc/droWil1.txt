@@ -150,3 +150,15 @@ EOF
     rm tmp.fa
 
 
+#########################################################################
+# SWAP DM3 CHAIN/NET (DONE 4/6/09 angie)
+    mkdir /hive/data/genomes/droWil1/bed/blastz.dm3.swap
+    cd /hive/data/genomes/droWil1/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap -bigClusterHub swarm -smallClusterHub memk \
+      -workhorse kolossus \
+      /hive/data/genomes/dm3/bed/blastz.droWil1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /hive/data/genomes/droWil1/bed/blastz.dm3
+
+
+#########################################################################
