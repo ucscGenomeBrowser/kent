@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.90 2009/02/18 03:07:03 angie Exp $"
+#	"$Id: mm9.txt,v 1.91 2009/04/07 14:37:10 braney Exp $"
 #
 
 #######################################################################
@@ -9176,3 +9176,170 @@ TMPDIR=/scratch/tmp
     ##    details about the lift and how many didn't lift.
 
 #############################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2009-04-07)
+    # bash  if not using bash shell already
+    ssh kolossus
+    mkdir /cluster/data/mm9/blastDb
+    cd /cluster/data/mm9
+    awk '{if ($2 > 1000000) print $1}' mm9Chroms_RandomContigs.hard.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  mm9Chroms_RandomContigs.hard.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' mm9Chroms_RandomContigs.hard.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  mm9Chroms_RandomContigs.hard.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 2712
+
+    mkdir -p /cluster/data/mm9/bed/tblastn.hg18KG
+    cd /cluster/data/mm9/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+
+# 2712 query.lst
+
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(250000/`wc query.lst | awk '{print $1}'`\)
+
+# 36727/(250000/2712) = 398.414496
+
+   mkdir -p kgfa
+   split -l 398 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/mm9/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/mm9/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/mm9/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+
+# Completed: 252216 of 252216 jobs
+# CPU time in finished jobs:   14882096s  248034.93m  4133.92h  172.25d  0.472 y
+# IO & Wait Time:               1019014s   16983.57m   283.06h   11.79d  0.032 y
+# Average job time:                  63s       1.05m     0.02h    0.00d
+# Longest finished job:             184s       3.07m     0.05h    0.00d
+# Submission to last job:         15667s     261.12m     4.35h    0.18d
+
+    ssh swarm
+    cd /cluster/data/mm9/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:       5736s      95.59m     1.59h    0.07d  0.000 y
+# IO & Wait Time:                 21289s     354.82m     5.91h    0.25d  0.001 y
+# Average job time:                 291s       4.84m     0.08h    0.00d
+# Longest finished job:             472s       7.87m     0.13h    0.01d
+# Submission to last job:           496s       8.27m     0.14h    0.01d
+
+
+    cd /cluster/data/mm9/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq > ../unliftBlastHg18KG.psl
+    cd ..
+    pslCheck unliftBlastHg18KG.psl
+    liftUp -nohead temp.psl ../../jkStuff/mm9.contigs.lift carry unliftBlastHg18KG.psl 
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n temp.psl  > blastHg18KG.psl
+    rm temp.psl
+    pslCheck blastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/tblastn.hg18KG
+    hgLoadPsl mm9 blastHg18KG.psl
+
+    # check coverage
+    featureBits mm9 blastHg18KG 
+# 30285278 bases of 2620346127 (1.156%) in intersection
+
+    featureBits mm9 knownGene:cds blastHg18KG  -enrichment
+# knownGene:cds 1.278%, blastHg18KG 1.156%, both 0.969%, cover 75.86%, enrich  65.64x
+
+    featureBits mm9 refGene:cds blastHg18KG  -enrichment
+# refGene:cds 1.205%, blastHg18KG 1.156%, both 0.940%, cover 78.04%, enrich 67.52x
+
+    rm -rf blastOut
+#end tblastn
