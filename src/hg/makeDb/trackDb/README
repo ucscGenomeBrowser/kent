@@ -288,9 +288,9 @@ may have the following variables, which will be substituted:
      $blurb - If there is a blurb field in the .ra file this echos it.
      $matrix - content of the matrix and optional matrixHeader trackDb setting
                which will be converted to an HTML table. If there is no matrix
-               setting, an empty string is. substitute.
-In addition if there is a $otherDb field set in the .ra file these
-variables are available
+               setting, an empty string is substituted.
+In addition, if there is an $otherDb field set in the .ra file, these
+variables are available:
      $o_ORGANISM - all upper case other organism, like 'MOUSE'
      $o_Organism - initial capped other organism, like 'Mouse'
      $o_organism - all lower case other organism, like 'mouse'
