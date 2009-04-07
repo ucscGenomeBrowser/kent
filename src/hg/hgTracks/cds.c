@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.91 2009/04/01 01:33:18 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.92 2009/04/07 17:31:01 angie Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -1462,7 +1462,7 @@ if ((showDiffBasesMaxZoom >= 0.0)
     && ((basesPerPixel > showDiffBasesMaxZoom) || (showDiffBasesMaxZoom == 0.0)))
     enabled = FALSE;
 
-if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && enabled)
+if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && lf->codons && enabled)
     {
     drawCdsDiffCodonsOnly(tg, lf, hvg, xOff, y, scale,
 			  heightPer, mrnaSeq, psl, winStart);
