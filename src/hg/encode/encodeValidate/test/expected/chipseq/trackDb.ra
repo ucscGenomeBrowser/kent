@@ -1,6 +1,6 @@
     track wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SK-N-MC Sig
     longLabel ENCODE HudsonAlpha ChIP-Seq Signal (FOXP2 in SK-N-MC cells)
     subGroups view=Signal factor=FOXP2 cellType=SK-N-MC
@@ -10,7 +10,6 @@
     dataVersion ENCODE Feb 2009 Freeze
     priority 102
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -19,7 +18,7 @@
 
     track wgEncodeHudsonalphaChipSeqPeaksSknmcFoxp2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SK-N-MC Pk
     longLabel ENCODE HudsonAlpha ChIP-Seq Peaks (FOXP2 in SK-N-MC cells)
     subGroups view=Peaks factor=FOXP2 cellType=SK-N-MC
@@ -29,13 +28,12 @@
     dataVersion ENCODE Feb 2009 Freeze
     priority 101
     noInherit on
-    configurable on
     cell SK-N-MC
     antibody FOXP2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SK-N-MC Raw 1
     longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
     subGroups view=RawSignal factor=FOXP2 cellType=SK-N-MC
@@ -45,7 +43,6 @@
     dataVersion ENCODE Feb 2009 Freeze
     priority 103
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16

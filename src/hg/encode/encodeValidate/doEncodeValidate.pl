@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.175 2009/04/07 18:15:57 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.176 2009/04/07 18:21:30 kate Exp $
 
 use warnings;
 use strict;
@@ -1701,11 +1701,13 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "    priority " . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
         print TRACK_RA "    noInherit on\n";
-        if($view eq 'RawSignal' and 0) { # Sorry tim, you will have to list your projects here
-            print TRACK_RA "    configurable off\n";
-        } else {
-            print TRACK_RA "    configurable on\n";
-        }
+        # removing default individual subtrack configurability, for performance reasons
+        # add back as needed, by wrangler discretion
+        #if($view eq 'RawSignal' and 0) { # Sorry tim, you will have to list your projects here
+            #print TRACK_RA "    configurable off\n";
+        #} else {
+            #print TRACK_RA "    configurable on\n";
+        #}
         if($type eq 'wig') {
             print TRACK_RA <<END;
     spanList first

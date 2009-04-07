@@ -10,7 +10,6 @@
     dataVersion ENCODE Feb 2009 Freeze
     priority 10017
     noInherit on
-    configurable on
     cell HCT-116
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
@@ -21,6 +20,5 @@
     subGroups view=Regions cellType=GM12878
     type bed 9
     noInherit on
-    configurable on
     cell GM12878
 
