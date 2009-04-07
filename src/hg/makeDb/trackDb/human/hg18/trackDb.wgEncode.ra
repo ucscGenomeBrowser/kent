@@ -9505,6 +9505,7 @@ shortLabel Gencode Genes
 longLabel ENCODE Gencode Gene Annotations
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
+dragAndDrop subTracks
 priority 34
 visibility pack
 color 12,12,120
@@ -9540,20 +9541,7 @@ gClass_Havana_polyA 0,0,0
 gClass_Ensembl_coding 223,1,1
 gClass_Ensembl_RNA 254,46,46
 gClass_Ensembl_pseudogene 153,0,102
-filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_nonsense,Havana_non_coding,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Havana_polyA,Ensembl_coding,Ensembl_RNA,Ensembl_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,C_segment,IG_gene,IG_pseudogene,J_segment,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,non_coding,nonsense_mediated_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,V_segment,unitary_pseudogene,unprocessed_pseudogene,Ensembl_pseudogene
-
-    #track wgEncodeSangerGencodeGencodeAuto20081001
-    track wgEncodeGencodeAutoRel2
-    release alpha
-    subTrack wgEncodeSangerGencode
-    shortLabel Auto (Feb09)
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
-    dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-02-28
-    dateUnrestricted 2009-11-27
-    #accession 2008-10-01
-    priority 1
-    freezeDate 2009-02-16
+filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_nonsense,Havana_non_coding,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Havana_polyA,Ensembl_coding,Ensembl_RNA,Ensembl_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,C_segment,IG_gene,IG_pseudogene,J_segment,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,non_coding,nonsense_mediated_decay,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,V_segment,unitary_pseudogene,unprocessed_pseudogene
 
     #track wgEncodeSangerGencodeGencodeManual20081001
     track wgEncodeGencodeManualRel2
@@ -9565,9 +9553,32 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     dateSubmitted 2009-02-28
     dateUnrestricted 2009-11-27
     #accession 2008-10-01
+    priority 1
+    freezeDate 2009-02-16
+
+    track wgEncodeGencodeAutoRel2
+    release alpha
+    subTrack wgEncodeSangerGencode
+    shortLabel Auto (Feb09)
+    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
+    dataVersion ENCODE Feb 2009 Freeze
+    dateSubmitted 2009-02-28
+    dateUnrestricted 2009-11-27
+    #accession 2008-10-01
     priority 2
     freezeDate 2009-02-16
 
+    track wgEncodeGencodePolyaRel2
+    release alpha
+    subTrack wgEncodeSangerGencode off
+    shortLabel PolyA (Feb09)
+    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
+    dataVersion ENCODE Feb 2009 Freeze
+    dateSubmitted 2009-02-28
+    dateUnrestricted 2009-11-27
+    #accession 2008-10-01
+    priority 3
+    freezeDate 2009-02-16
 
 # GIS PET (wrangler: mikep)
 
