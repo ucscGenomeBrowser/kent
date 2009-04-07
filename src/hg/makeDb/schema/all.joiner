@@ -2228,6 +2228,7 @@ identifier blastHg18KGPep04Id
      taeGut1.blastHg18KG.qName
      oryLat2.blastHg18KG.qName
      sacCer2.blastHg18KG.qName
+     mm9.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -2257,6 +2258,7 @@ identifier blastHg18KGRef04Id
      tetNig1.blastHg18KG.qName
      taeGut1.blastHg18KG.qName
      oryLat2.blastHg18KG.qName
+     mm9.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
