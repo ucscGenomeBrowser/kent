@@ -34,6 +34,64 @@ the following parameter settings:
 <LI>priors = improper inverse</LI>
 </P>
 
+<H3>Details</H3>
+<P>The standard method for detecting adaptive molecular evolution in 
+protein-coding DNA sequences is through comparison of nonsynonymous 
+(amino acid changing; <i>d</i><sub>N</sub>) and synonymous 
+(silent; <i>d</i><sub>S</sub>) substitution rates through the 
+<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio [&omega; or acceptance rate]. 
+&omega; measures the difference between both rates based on a codon
+substitution model. If an amino acid substitution is neutral, it will be fixed
+at the same rate as a synonymous mutation, with &omega; = 1.  If the amino 
+acid change is deleterious, purifying or negative selection (i.e., natural 
+selection against deleterious mutations with negative selection coefficients) 
+will reduce its fixation rate, thus &omega; &lt; 1.  Only when the amino acid 
+change offers a selective advantage is it fixed at higher rate than a 
+synonymous mutation, with &omega; &gt; 1.  Therefore, an &omega; ratio 
+significantly higher than one is convincing evidence for adaptive or 
+diversifying selection. In the HIV context, this is the
+principle means of identifying changes and therefore sites under antigenic
+selection and therefore most important in vaccine targets. Here 
+<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratios in each subtype and 
+placebo and vaccine samples were compared using methods implemented in 
+PAML v3.14.  &omega; and the proportion of sites (&rho;) with &omega;
+&gt; 1 were estimated under the site-specific models of
+Goldman <em> et al.</em> (1994) and Yang.
+Tests of positive selection were performed by comparing likelihood scores 
+(likelihood ratio test) between the M1 (neutral) and M2 (selection) and 
+between the M7 (beta) and M8 (beta&&omega;) per-site nested models. 
+More stringent models in PAML (M0) of per-gene selection were also 
+estimated for comparison. If adaptive selection was identified, we then 
+applied the Bayesian test developed by Yang <em>et al.</em> and implemented 
+in PAML to identify the potential sites under diversifying selection as 
+indicated by a posterior probability &gt; 0.95. Maximum likelihood trees 
+were estimated for each subtype using PhyML under the best-fit substitution 
+models. Each analysis was run twice under &omega; = 1.5 and 0.5. 
+</P>
+
+<P>
+Simulations published by Anisimova <em>et al.</em> (2003) and Shriner 
+<em>et al.</em> (2003) assessed the accuracy and power of the LRT and Bayes 
+test implemented in PAML in the presence of recombination. General conclusions 
+from these analyses indicate that excessive recombination (&rho; = 0.01), 
+like usually observed in HIV sequences, can cause false positives in the Bayes 
+test and makes the LRT unrealistic as it often mistakes recombination as 
+evidence for positive selection. The LRT test that compares models M7 and M8 
+seems to be more robust to recombination and the detection of sites under 
+positive selection seems to be less affected by recombination. 
+Nevertheless, a new coalescent model has been recently described that estimates 
+the <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio in the presence of 
+recombination and hence generates simultaneous estimates of &omega; and &rho; 
+using Bayesian inference. Such a model is implemented in Omegamap  and has been 
+applied to our subtype and vaccine and placebo samples. We ran Omegamap under 
+a constant model for variation (i.e., all sites are assumed to share common 
+&omega; and &rho;) and the following parameter settings: 
+<LI>N&#176; orders = 10</LI>
+<LI>N&#176; iterations = 10<super>6</super></LI>
+<LI>thinning = 100</LI>
+<LI>priors = improper inverse</LI>
+</P>
+
 <H3>Results</H3>
 <P>
 Selection pressure, as indicated by the <i>d</i><sub>N</sub>/<i>d</i>
@@ -68,7 +126,7 @@ indicated between parentheses.
 
 <TABLE>
  <TR>
-  <TD>&npsb;</TD>
+  <TD>&nbsp;</TD>
   <TD>Ns</TD>
   <TD>&omega;<sub>MO</sub></TD>
   <TD>-lnL<sub>M1</sub></TD>
@@ -193,64 +251,6 @@ indicated between parentheses.
   <TD>1.9 (1.55-2.34)</TD>
  </TR>
 </TABLE>
-
-<H3>More Details</H3>
-<P>The standard method for detecting adaptive molecular evolution in 
-protein-coding DNA sequences is through comparison of nonsynonymous 
-(amino acid changing; <i>d</i><sub>N</sub>) and synonymous 
-(silent; <i>d</i><sub>S</sub>) substitution rates through the 
-<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio [&omega; or acceptance rate]. 
-&omega; measures the difference between both rates based on a codon
-substitution model. If an amino acid substitution is neutral, it will be fixed
-at the same rate as a synonymous mutation, with &omega; = 1.  If the amino 
-acid change is deleterious, purifying or negative selection (i.e., natural 
-selection against deleterious mutations with negative selection coefficients) 
-will reduce its fixation rate, thus &omega; &lt; 1.  Only when the amino acid 
-change offers a selective advantage is it fixed at higher rate than a 
-synonymous mutation, with &omega; &gt; 1.  Therefore, an &omega; ratio 
-significantly higher than one is convincing evidence for adaptive or 
-diversifying selection. In the HIV context, this is the
-principle means of identifying changes and therefore sites under antigenic
-selection and therefore most important in vaccine targets. Here 
-<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratios in each subtype and 
-placebo and vaccine samples were compared using methods implemented in 
-PAML v3.14.  &omega; and the proportion of sites (&rho;) with &omega;
-&gt; 1 were estimated under the site-specific models of
-Goldman <em> et al.</em> (1994) and Yang.
-Tests of positive selection were performed by comparing likelihood scores 
-(likelihood ratio test) between the M1 (neutral) and M2 (selection) and 
-between the M7 (beta) and M8 (beta&&omega;) per-site nested models. 
-More stringent models in PAML (M0) of per-gene selection were also 
-estimated for comparison. If adaptive selection was identified, we then 
-applied the Bayesian test developed by Yang <em>et al.</em> and implemented 
-in PAML to identify the potential sites under diversifying selection as 
-indicated by a posterior probability &gt; 0.95. Maximum likelihood trees 
-were estimated for each subtype using PhyML under the best-fit substitution 
-models. Each analysis was run twice under &omega; = 1.5 and 0.5. 
-</P>
-
-<P>
-Simulations published by Anisimova <em>et al.</em> (2003) and Shriner 
-<em>et al.</em> (2003) assessed the accuracy and power of the LRT and Bayes 
-test implemented in PAML in the presence of recombination. General conclusions 
-from these analyses indicate that excessive recombination (&rho; = 0.01), 
-like usually observed in HIV sequences, can cause false positives in the Bayes 
-test and makes the LRT unrealistic as it often mistakes recombination as 
-evidence for positive selection. The LRT test that compares models M7 and M8 
-seems to be more robust to recombination and the detection of sites under 
-positive selection seems to be less affected by recombination. 
-Nevertheless, a new coalescent model has been recently described that estimates 
-the <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio in the presence of 
-recombination and hence generates simultaneous estimates of &omega; and &rho; 
-using Bayesian inference. Such a model is implemented in Omegamap  and has been 
-applied to our subtype and vaccine and placebo samples. We ran Omegamap under 
-a constant model for variation (i.e., all sites are assumed to share common 
-&omega; and &rho;) and the following parameter settings: 
-<LI>N&#176; orders = 10</LI>
-<LI>N&#176; iterations = 10<super>6</super></LI>
-<LI>thinning = 100</LI>
-<LI>priors = improper inverse</LI>
-</P>
 
 <H2>References</H2>
 <P>Anisimova M, Nielsen R, Yang Z.
