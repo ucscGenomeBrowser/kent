@@ -701,8 +701,8 @@ urlLabel HGDP Selection Browser:
 type bed 4 +
 
 track hgdpFst
-shortLabel HGDP FST
-longLabel Human Genome Diversity Project Relative FST (Fixation Index)
+shortLabel HGDP Smoothd FST
+longLabel Human Genome Diversity Project Smoothed Relative FST (Fixation Index)
 group varRep
 priority 102.01
 visibility hide
