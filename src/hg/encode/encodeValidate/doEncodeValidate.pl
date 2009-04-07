@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.174 2009/04/07 00:15:53 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.175 2009/04/07 18:15:57 kate Exp $
 
 use warnings;
 use strict;
@@ -1550,6 +1550,7 @@ foreach my $ddfLine (@ddfLines) {
     my $additional = "\n";
     my $pushQDescription = "";
     my $species;
+    my $tier1 = 0;
     if (@variables) {
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
@@ -1591,6 +1592,7 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = "$hash{'cell'}";
             $shortSuffix = "$hash{'cell'}";
             $longSuffix = "in $hash{'cell'} cells";
+            $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562');
         } else {
 	    warn "Warning: variables undefined for pushQDescription,shortSuffix,longSuffix\n";
 	}
@@ -1670,7 +1672,13 @@ foreach my $ddfLine (@ddfLines) {
     if(!$downloadOnly) {
         print TRACK_RA "    track $tableName\n";
         print TRACK_RA "    release alpha\n";
-        print TRACK_RA "    subTrack $compositeTrack\n";
+        if ($tier1 eq 1) {
+            # default to only Tier1 subtracks visible.  Wrangler should review if this is 
+            #   correct for the track
+            print TRACK_RA "    subTrack $compositeTrack\n";
+        } else {
+            print TRACK_RA "    subTrack $compositeTrack off\n";
+        }
         print TRACK_RA "    shortLabel $shortLabel\n";
         print TRACK_RA "    longLabel $longLabel\n";
         print TRACK_RA "    subGroups $subGroups\n";

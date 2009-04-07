@@ -1,6 +1,6 @@
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
     release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq
+    subTrack wgEncodeHudsonalphaMethylSeq off
     shortLabel HCT-116 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
     subGroups view=Regions cellType=HCT-116
@@ -12,4 +12,15 @@
     noInherit on
     configurable on
     cell HCT-116
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel GM12878 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
+    subGroups view=Regions cellType=GM12878
+    type bed 9
+    noInherit on
+    configurable on
+    cell GM12878
 
