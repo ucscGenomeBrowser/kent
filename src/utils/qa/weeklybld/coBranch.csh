@@ -33,6 +33,7 @@ if ( $err ) then
  echo "error running cvs co kent in $BUILDDIR/$dir : $err [${0}: `date`]" 
  exit 1
 endif 
+sed -i -e 's/USE_SSL=0/USE_SSL=1/' kent/src/inc/common.mk
 echo "Done checking out branch $BRANCHNN in $BUILDDIR/$dir [${0}: `date`]" 
 echo "Now you should go and do build on beta! [${0}: `date`]"
 
