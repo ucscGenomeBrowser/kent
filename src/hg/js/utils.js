@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.16 2009/04/03 22:40:36 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.17 2009/04/07 16:46:25 tdreszer Exp $
 
 var debug = false;
 
@@ -235,6 +235,7 @@ function postTheForm(formName,href)
     var goodForm=$("form[name='"+formName+"']");
     if(goodForm.length == 1) {
         if(href != undefined && href.length > 0)
+            $(goodForm).attr('method','POST');
             $(goodForm).attr('action',href); // just attach the straight href
         $(goodForm).submit();
     }
