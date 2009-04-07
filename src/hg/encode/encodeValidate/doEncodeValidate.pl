@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.173 2009/04/06 05:08:40 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.174 2009/04/07 00:15:53 kate Exp $
 
 use warnings;
 use strict;
@@ -1003,11 +1003,11 @@ sub printCompositeTdbSettings {
 
     my $compositeTrack = Encode::compositeTrackName($daf);
 
-    print OUT_FILE "track\t\t$compositeTrack\n";
-    print OUT_FILE "compositeTrack\ton\n";
+    print OUT_FILE "track $compositeTrack\n";
+    print OUT_FILE "compositeTrack on\n";
 
-    my $setting    = "subGroup1\tview Views";
-    my $visDefault = "visibilityViewDefaults\t";
+    my $setting    = "subGroup1 view Views";
+    my $visDefault = "visibilityViewDefaults ";
     # Cycle through to get best view to default labels and to get all views and terms
     for my $view (keys %{$daf->{TRACKS}}) {
         for my $key (keys %ddfSets) {
@@ -1027,17 +1027,17 @@ sub printCompositeTdbSettings {
             }
         }
     }
-    print OUT_FILE "shortLabel\t" . $daf->{lab} . " " . $daf->{dataType} . "\n"; # Default to  lab datatype
-    print OUT_FILE "longLabel\tENCODE " . $daf->{lab} . " " . $daf->{grant} . " " . $daf->{dataType} . "\n";  # Default to lab grant datatype
-    print OUT_FILE "group\t\tregulation\n";   # This is just a guess.  Buyer beware
-    print OUT_FILE $setting . "\n"; # "subGroup1\tview Views Peaks=Peaks Signal=Signal RawSignal=Raw_Signal\n";
+    print OUT_FILE "shortLabel " . $daf->{lab} . " " . $daf->{dataType} . "\n"; # Default to  lab datatype
+    print OUT_FILE "longLabel ENCODE " . $daf->{lab} . " " . $daf->{grant} . " " . $daf->{dataType} . "\n";  # Default to lab grant datatype
+    print OUT_FILE "group regulation\n";   # This is just a guess.  Buyer beware
+    print OUT_FILE $setting . "\n"; # "subGroup1 view Views Peaks=Peaks Signal=Signal RawSignal=Raw_Signal\n";
 
     # Need to create N subgroups with M members each
     if (defined($daf->{variables})) {
         my $grpNo = 1;
-        my $sortOrder = "sortOrder\t";
+        my $sortOrder = "sortOrder ";
         my $dimensions = "dimensions";
-        my $controlledVocab = "controlledVocabulary\tencode/cv.ra";
+        my $controlledVocab = "controlledVocabulary encode/cv.ra";
         if (defined($daf->{variables})) {
             my @variables = @{$daf->{variableArray}};
             for my $variable (@variables) {
@@ -1046,12 +1046,12 @@ sub printCompositeTdbSettings {
 	            $groupVar = "factor" if $variable eq "antibody";
                 $groupVar = "cellType" if $variable eq "cell";
                 if($grpNo < 5) {
-                    $dimensions .= "\tdimension" . chr(86 + $grpNo) . "=" . $groupVar;
+                    $dimensions .= " dimension" . chr(86 + $grpNo) . "=" . $groupVar;
                 }
                 $sortOrder = "$sortOrder$groupVar=+ ";
                 $controlledVocab = "$controlledVocab $groupVar";
-                $setting = "subGroup$grpNo\t$groupVar " . ucfirst($groupVar);
-                $setting = "subGroup$grpNo\t$groupVar " . "Cell_Line" if $variable eq "cell";
+                $setting = "subGroup$grpNo $groupVar " . ucfirst($groupVar);
+                $setting = "subGroup$grpNo $groupVar " . "Cell_Line" if $variable eq "cell";
                 for my $key (keys %ddfSets) {
                     my @pairs = split(';', $key);
                     for my $pair (@pairs) {
@@ -1066,14 +1066,14 @@ sub printCompositeTdbSettings {
         }
         $setting = $sortOrder . "view=+";
         print OUT_FILE $dimensions . "\n";         # "dimensions  dimensionX=cellType dimensionY=factor"
-        print OUT_FILE $setting . "\n";         # "sortOrder\tcellType=+ factor=+ view=+\n";
-        print OUT_FILE $controlledVocab . "\n"; # "controlledVocabulary\tencode/cv.ra cellType factor\n";
+        print OUT_FILE $setting . "\n";         # "sortOrder cellType=+ factor=+ view=+\n";
+        print OUT_FILE $controlledVocab . "\n"; # "controlledVocabulary encode/cv.ra cellType factor\n";
     }
-    print OUT_FILE "dragAndDrop\tsubTracks\n";
-    print OUT_FILE $visDefault . "\n";          #"visibilityViewDefaults\tPeaks=dense Signal=full RawSignal=hide\n";
-    print OUT_FILE "priority\t0\n";
-    print OUT_FILE "type\t\tbed 3\n";
-    print OUT_FILE "wgEncode\t1\n\n";
+    print OUT_FILE "dragAndDrop subTracks\n";
+    print OUT_FILE $visDefault . "\n";          #"visibilityViewDefaults Peaks=dense Signal=full RawSignal=hide\n";
+    print OUT_FILE "priority 0\n";
+    print OUT_FILE "type bed 3\n";
+    print OUT_FILE "wgEncode 1\n\n";
 }
 
 ############################################################################
