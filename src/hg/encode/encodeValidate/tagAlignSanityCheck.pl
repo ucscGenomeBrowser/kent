@@ -1,7 +1,6 @@
 #!/usr/local/bin/perl
 
-# check 10 random sequences from tagAlign files to make sure the
-# corresponding fastq contains those sequences.
+# check random sequences from tagAlign files to make sure the corresponding fastq contains those sequences.
 
 use strict;
 
@@ -9,6 +8,7 @@ use Getopt::Long;
 
 use lib "/cluster/bin/scripts";
 use Encode;
+use SafePipe;
 
 sub usage
 {
@@ -30,8 +30,6 @@ Options:
 -num       number of tags to check (default is 10)
 
 -touch     Touch fastq file so it has the same mtime as tagAlign file.
-
-
 END
     exit(0);
 }
@@ -40,8 +38,11 @@ my $useReverseLogic;
 my $num=10;
 my $help;
 my $verbose;
+my $debug;
 my $touch;
-GetOptions("reverse" => \$useReverseLogic, "help" => \$help, "num=i" => \$num, "verbose" => \$verbose, "touch" => \$touch);
+my $maxLines;       # this is a debugging hack
+GetOptions("reverse" => \$useReverseLogic, "help" => \$help, "num=i" => \$num, "verbose" => \$verbose,
+           "touch" => \$touch, "debug" => \$debug, "maxLines=i" => \$maxLines);
 
 if($help) {
     usage();
@@ -73,22 +74,40 @@ for my $file (@ARGV) {
                         $list[$i] = {SEQ => $seq, STRAND => $strand};
                     }
                 }
+                last if(defined($maxLines) && $lineNumber >= $maxLines);
             }
             $fh->close();
-            my $errors = 0;
             if($touch) {
                 `/bin/touch -r $file $fastq`;
             }
+            # XXXX add smart auto-sensing reverse logic
+
+            # For efficiency, we zgrep all $num tags at once; %uniq stuff is to handle
+            # edge case where we have less than $num unique tags because the tagAlign is very short.
+            my %uniq;
             for my $rec (@list) {
-                my $seq = $rec->{SEQ};
-                # XXXX add smart auto-sensing reverse logic
-                if(system("/usr/bin/zgrep -q $seq $fastq")) {
-                    print STDERR "Couldn't find $seq from $file in $fastq\n";
-                    $errors++;
-                    last;
-                }
+                $uniq{$rec->{SEQ}}++;
             }
-            if(!$errors) {
+            my @uniq = keys %uniq;
+            my $str = join("|", @uniq);
+            my @cmds;
+            push(@cmds, "/usr/bin/zgrep -e '\($str\)' $fastq");
+            my $safe = SafePipe->new(CMDS => \@cmds, DEBUG => $debug);
+            my @missed;
+            if(my $err = $safe->exec()) {
+                @missed = keys %uniq;
+            } else {
+                for (split(/\n/, $safe->{STDOUT})) {
+                    # should be just the sequence, but I'm trying to be safe here.
+                    if(/([A-Za-z]+)/) {
+                        delete $uniq{$1};
+                    }
+                }
+                @missed = keys %uniq;
+            }
+            if(@missed) {
+                print STDERR "Couldn't find the following sequences from $file in $fastq\n" . join("\n", @missed) . "\n";
+            } else {
                 print STDERR "$file is ok\n";
             }
         } else {
