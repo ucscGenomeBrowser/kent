@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.25 2009/04/07 19:58:54 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.26 2009/04/07 20:17:02 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -232,6 +232,6 @@ $(document).ready(function()
         if(thisForm != undefined && thisForm.length == 1)
             return postTheForm($(thisForm).attr('name'),this.href);
 
-        return false;
+        return true;
     });
 });
