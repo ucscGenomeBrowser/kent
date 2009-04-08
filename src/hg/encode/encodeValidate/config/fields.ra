@@ -115,3 +115,9 @@ field downloadOnly
 file dafList
 type bool
 required no
+
+field options
+file dafList
+type string
+required no
+
