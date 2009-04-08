@@ -11229,12 +11229,12 @@ wgEncode	1
 
 track		wgEncodeGisDnaPet
 compositeTrack	on
-shortLabel	Gis DnaPet
-longLabel	ENCODE Gis Gingeras DnaPet
+shortLabel	GIS gDNA PET
+longLabel	ENCODE GIS gDNA PET
 group		regulation
 subGroup1	view Views Alignments=Alignments
 subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3	fragSize FragSize 1k=1k 10k=10k
+subGroup3	fragSize FragSize 1k=1k 5k=5k 10k=10k
 dimensions	dimensionX=cellType	dimensionY=fragSize
 sortOrder	cellType=+ fragSize=+ view=+
 controlledVocabulary	encode/cv.ra cellType fragSize
@@ -11251,7 +11251,7 @@ wgEncode	1
     subTrack wgEncodeGisDnaPet
     shortLabel GM12878
     longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
-    subGroups view=Alignments cellType=GM12878 fragSize=10k
+    subGroups view=Alignments cellType=GM12878 fragSize=10k 
     #type pairedTagAlign
     type bed 6
     dateSubmitted 2009-04-04
@@ -11296,4 +11296,38 @@ wgEncode	1
     configurable on
     fragSize 10k
     cell K562
+
+    track wgEncodeGisDnaPetAlignmentsGm128781k
+    release alpha
+    subTrack wgEncodeGisDnaPet
+    shortLabel GM12878
+    longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+    subGroups view=Alignments cellType=GM12878 fragSize=1k
+    #type pairedTagAlign
+    type bed 6
+    dateSubmitted 2009-04-07
+    dateUnrestricted 2010-01-07
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 10006
+    noInherit on
+    configurable on
+    fragSize 1k
+    cell GM12878
+
+    track wgEncodeGisDnaPetAlignmentsGm128785k
+    release alpha
+    subTrack wgEncodeGisDnaPet
+    shortLabel GM12878
+    longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+    subGroups view=Alignments cellType=GM12878 fragSize=5k
+    #type pairedTagAlign
+    type bed 6
+    dateSubmitted 2009-04-07
+    dateUnrestricted 2010-01-07
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 10006
+    noInherit on
+    configurable on
+    fragSize 5k
+    cell GM12878
 
