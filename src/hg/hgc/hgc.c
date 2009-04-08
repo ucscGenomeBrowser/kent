@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1524 2009/03/30 22:15:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1525 2009/04/08 01:34:58 mikep Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21465,7 +21465,8 @@ else if (sameWord(track, "RfamSeedFolds")
 	 || sameWord(track, "rnaTestFoldsV3")
 	 || sameWord(track, "mcFolds")
 	 || sameWord(track, "rnaEditFolds")
-	 || sameWord(track, "altSpliceFolds"))
+	 || sameWord(track, "altSpliceFolds")
+         || stringIn(track, "rnaSecStr"))
     {
     doRnaSecStr(tdb, item);
     }
