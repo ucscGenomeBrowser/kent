@@ -881,11 +881,15 @@ sub splitSpaceList($) {
 
 # locate .hg.conf file to use.  This first checks the HGDB_CONF environment
 # variable, then etc/.hg.conf, then ~/.hg.conf.  Error if not found or
-# readable.
+# readable.  Special checks for hgwbeta to access hg.hgsqlbeta.conf
 sub getHgConf() {
     my $hgConf = $ENV{"HGDB_CONF"};
     if (!defined($hgConf) || (! -r $hgConf)) {
-        $hgConf = "etc/.hg.conf";
+        if ($gbCommon::hostName eq "hgwbeta") {
+            $hgConf = "etc/.hg.hgsqlbeta.conf";
+        } else {
+            $hgConf = "etc/.hg.conf";
+        }
     }
     if (! -r $hgConf) {
         $hgConf = $ENV{"HOME"} . "/.hg.conf";
