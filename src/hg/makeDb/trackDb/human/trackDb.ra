@@ -3137,7 +3137,7 @@ dataVersion January 2009
 
     track fox2ClipClusters
     subTrack fox2ClipSeqComp
-    shortLabel FOX2 ES-clust
+    shortLabel FOX2 clusters
     longLabel FOX2 binding site clusters
     subGroups   view=clusters
     priority 4
