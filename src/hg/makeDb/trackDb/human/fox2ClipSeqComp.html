@@ -26,6 +26,27 @@ sequencing.  Approximately 4 million reads were uniquely mapped to the
 repeat-masked human genome by MosaikAligner.
 </P>
 <P>
+To identify CLIP clusters, we performed the following steps: (i) CLIP reads
+were associated with protein-coding genes as defined by the region from the
+annotated transcriptional start to the end of each gene locus. (ii) CLIP reads
+were separated into the categories of sense or antisense to the transcriptional
+direction of the gene. (ii) Sense CLIP reads were extended by 100 nt in the
+5'-to-3' direction. The height of each nucleotide position is the number of
+reads that overlap that position. (iv) The count distribution of heights is as
+follows from 1, 2, ...h, ...H-1, H: {n1, n2, ...nh, ...nH-1,nH; N = Sigma ni
+(i = 1:H)}. For a particular height, h, the associated probability of observing
+a height of at least h is Ph = Sigma ni (i = h:H) / N. (v) We computed the
+background frequency after randomly placing the same number of extended reads
+within the gene for 100 iterations. This controls for the length of the gene
+and the number of reads. For each iteration, the count distribution and
+probabilities for the randomly placed reads (Ph,random) was generated as in
+step (iv). (vi) Our modified FDR for a peak height was computed as FDR(h) =
+(muh + sigmah)/Ph, where muh and sigmah is the average and s.d., respectively,
+of Ph,random across the 100 iterations. For each gene loci, we chose a
+threshold peak height h* as the smallest height equivalent to FDR(h*) < 0.001.
+We identified FOX2 binding clusters by grouping nucleotide positions satisfying
+h > h* and occurred within 50 nt of each other.
+<P>
 For further details of the method used to generate this annotation
 please refer to Yeo <EM>et al</EM>. (2009).
 </P>
