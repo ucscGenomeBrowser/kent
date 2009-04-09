@@ -3081,16 +3081,18 @@ semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
 
+
+
 track fox2ClipSeqComp
 compositeTrack on
 shortLabel FOX2 CLIP-seq
 longLabel FOX2 adaptor-trimmed CLIP-seq reads
-subGroup1	view Tracks reads=Reads density=Density
+subGroup1	view Tracks reads=Reads density=Density clusters=Clusters
 settingsByView	density:viewLimitsMax=0:2401
 group regulation
 priority 250
 visibility hide
-visibilityViewDefaults	reads=pack density=full
+visibilityViewDefaults	reads=pack density=full clusters=pack
 type bed 3 .
 dataVersion January 2009
 
@@ -3132,6 +3134,16 @@ dataVersion January 2009
     graphTypeDefault Bar
     windowingFunction mean
     noInherit	on
+
+    track fox2ClipClusters
+    subTrack fox2ClipSeqComp
+    shortLabel FOX2 ES-clust
+    longLabel FOX2 binding site clusters
+    subGroups   view=clusters
+    priority 4
+    type bed 4 .
+    noInherit on
+    noScoreFilter .    
 
 searchName fox2ClipSeq
 searchTable fox2ClipSeq
