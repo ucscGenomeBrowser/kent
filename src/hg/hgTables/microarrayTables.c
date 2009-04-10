@@ -19,7 +19,11 @@ return (tdb && (startsWith("expRatio", tdb->type) || startsWith("array", tdb->ty
 void doOutMicroarrayNames(struct trackDb *tdb)
 /* Show the microarray names from .ra file */
 {
-struct microarrayGroups *allGroups = maGetTrackGroupings(database, tdb);
+struct microarrayGroups *allGroups;
+if (anyIntersection())
+    errAbort("Can't do all fields output when intersection is on. "
+    "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
+allGroups = maGetTrackGroupings(database, tdb);
 if (allGroups)
     {
     struct maGrouping *allArrays = allGroups->allArrays;
