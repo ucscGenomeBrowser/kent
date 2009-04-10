@@ -1,4 +1,4 @@
-/* hgGenome.h - Include file used by all modules in hgGenome. 
+/* hgGenome.h - Include file used by all modules in hgGenome.
  * hgGenome is a CGI script that produces a web page containing
  * a graphic with all chromosomes in genome, and a graph or two
  * on top of them. */
@@ -8,6 +8,7 @@
 
 #include "grp.h"
 #include "hPrint.h"
+#include "customTrack.h"
 
 /*** Prefixes for variables in cart we don't share with other apps. ***/
 #define hggPrefix "hgGenome_"
@@ -87,8 +88,7 @@ struct trackDb *findSelectedTrack(struct trackDb *trackList,
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 
-struct customTrack *lookupCt(char *name);
-/* Find named custom track. */
+#define lookupCt(name) ctFind(getCustomTracks(),name)
 
 struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
                           int fields);
@@ -220,7 +220,7 @@ char *graphSourceAt(int row, int col);
 char *graphColorAt(int row, int col);
 /* Return graph color at given row/column, NULL if nonw. */
 
-struct genoLay *ggLayout(struct sqlConnection *conn, 
+struct genoLay *ggLayout(struct sqlConnection *conn,
 	int graphRows, int graphCols);
 /* Figure out how to lay out image. */
 
@@ -288,7 +288,7 @@ boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
 boolean isBedGraph(char *table);
-/* Return TRUE if table is specified as a bedGraph in the current database's 
+/* Return TRUE if table is specified as a bedGraph in the current database's
  * trackDb. */
 
 void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
@@ -315,7 +315,7 @@ struct bed *getBeds(char *chrom, struct lm *lm, int *retFieldCount);
 struct bed *customTrackGetBedsForChrom(char *name, char *chrom,
 	struct lm *lm,	int *retFieldCount);
 /* Get list of beds from custom track of given name that are
- * in given chrom. You can bedFree this when done. */ 
+ * in given chrom. You can bedFree this when done. */
 
 
 boolean isMafTable(char *database, struct trackDb *track, char *table);

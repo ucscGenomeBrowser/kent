@@ -14,7 +14,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.3 2008/09/03 19:18:54 markd Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.4 2009/04/10 20:02:13 tdreszer Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -33,20 +33,6 @@ void flushCustomTracks()
 /* Flush custom track list. */
 {
 theCtList = NULL;
-}
-
-
-struct customTrack *lookupCt(char *name)
-/* Find named custom track. */
-{
-struct customTrack *ctList = getCustomTracks();
-struct customTrack *ct;
-for (ct=ctList;  ct != NULL;  ct=ct->next)
-    {
-    if (sameString(ct->tdb->tableName, name))
-	return ct;
-    }
-return NULL;
 }
 
 struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
@@ -184,7 +170,7 @@ if (fieldCount >= 15)
     field = newSlName("expIds");
     slAddHead(&fieldList, field);
     field = newSlName("expScores");
-    slAddHead(&fieldList, field);    
+    slAddHead(&fieldList, field);
     }
 slReverse(&fieldList);
 return fieldList;
@@ -258,7 +244,7 @@ else
 struct bed *customTrackGetBedsForChrom(char *name, char *chrom,
 	struct lm *lm,	int *retFieldCount)
 /* Get list of beds from custom track of given name that are
- * in given chrom. You can bedFree this when done. */ 
+ * in given chrom. You can bedFree this when done. */
 {
 struct customTrack *ct = lookupCt(name);
 struct bed *bedList = NULL;
