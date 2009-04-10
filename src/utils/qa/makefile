@@ -43,6 +43,7 @@ install:
 	cp -p --remove-destination cronLinks.csh           ${SCRIPTS}
 	cp -p --remove-destination databaseAday.csh        ${SCRIPTS}
 	cp -p --remove-destination dbUpdateTimes.csh       ${SCRIPTS}
+	cp -p --remove-destination doGenbankTests          ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
 	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
