@@ -123,10 +123,7 @@ echo
 timestamp=$(date +%m.%d.%Y-%R%p)
 echo -e "--> Running gbSanity, and putting output in:"
 echo -e "${HOST}:${sanityPath}/misc/${db}.sanity.$timestamp"
-oldPath=$(pwd)
-cd ${sanityPath}
-bin/x86_64/gbSanity $db >& misc/${db}.sanity.$timestamp || allOk=no
-cd $oldPath
+(cd ${sanityPath} && bin/x86_64/gbSanity $db >& misc/${db}.sanity.$timestamp) || allOk=no
 echo -e "Here is the last line of ${db}.sanity.$timestamp:\n"
 tail -1
 echo -e "If there are any errors here, consult Mark Diekhans.\n"
@@ -151,9 +148,10 @@ echo
 if [ $allOk = yes ]
 then
   echo No errors were encountered during $(basename $0).  Yay!
+  date
 else
   echo At least one ERROR occurred during $(basename $0).
+  date
   exit 2
 fi
 exit 0
-# end.
