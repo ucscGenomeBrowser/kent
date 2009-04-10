@@ -16,9 +16,9 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.20 2009/03/17 04:28:39 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.21 2009/04/10 20:04:29 tdreszer Exp $";
 
-static char *genePredMenu[] = 
+static char *genePredMenu[] =
     {
     "genomic",
     "protein",
@@ -38,7 +38,7 @@ static boolean isRefGeneTrack(char *table)
 return sameString("refGene", table) || sameString("xenoRefGene", table);
 }
 
-static void genePredOptions(struct trackDb *track, char *type, 
+static void genePredOptions(struct trackDb *track, char *type,
 	struct sqlConnection *conn)
 /* Put up sequence type options for gene prediction tracks. */
 {
@@ -171,7 +171,7 @@ if (isRefGeneTrack(curTable))
     }
 else
     {
-    char *dupType = cloneString(curTrack->type);
+    char *dupType = cloneString(findTypeForTable(database, curTrack, curTable));
     typeWordCount = chopLine(dupType, typeWords);
     if (typeIx >= typeWordCount)
 	internalErr();
@@ -281,9 +281,9 @@ else
 void doOutSequence(struct sqlConnection *conn)
 /* Output sequence page. */
 {
-if (curTrack != NULL && sameString(curTrack->tableName, curTable) 
-	&& startsWith("genePred", curTrack->type))
-    genePredOptions(curTrack, curTrack->type, conn);
+struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
+if (tdb != NULL && startsWith("genePred", tdb->type))
+    genePredOptions(tdb, curTrack->type, conn);
 else
     genomicFormatPage(conn);
 }

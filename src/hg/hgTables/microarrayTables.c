@@ -8,18 +8,12 @@
 #include "microarray.h"
 #include "hgTables.h"
 
-boolean isMicroarray(struct trackDb *curTrack, char *table)
-/* Return TRUE if table is specified as a microarray in the current database's 
+boolean isMicroarray(struct trackDb *parent, char *table)
+/* Return TRUE if table is specified as a microarray in the current database's
  * trackDb. */
 {
-if (curTrack && sameString(curTrack->tableName, table))
-    return (startsWith("expRatio", curTrack->type) || startsWith("array", curTrack->type));
-else
-    {
-    struct trackDb *tdb = hTrackDbForTrack(database, table);
-    return (tdb && (startsWith("expRatio", tdb->type) || startsWith("array", tdb->type)));
-    }
-return FALSE;
+struct trackDb *tdb = findTdbForTable(database, parent, table);
+return (tdb && (startsWith("expRatio", tdb->type) || startsWith("array", tdb->type)));
 }
 
 void doOutMicroarrayNames(struct trackDb *tdb)

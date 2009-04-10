@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.58 2009/04/03 19:08:34 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.59 2009/04/10 20:04:29 tdreszer Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -69,9 +69,9 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void describeFields(char *db, char *table, 
+void describeFields(char *db, char *table,
 	struct asObject *asObj, struct sqlConnection *conn)
-/* Print out an HTML table showing table fields and types, and optionally 
+/* Print out an HTML table showing table fields and types, and optionally
  * offering histograms for the text/enum fields. */
 {
 struct sqlResult *sr;
@@ -82,8 +82,8 @@ char query[256];
 struct slName *exampleList, *example;
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
-					/*	instead of "reserved" */
+showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table));
+// should we expect itemRgb instead of "reserved"
 
 safef(query, sizeof(query), "select * from %s limit 1", table);
 exampleList = storeRow(conn, query);
@@ -173,8 +173,8 @@ sqlFreeResult(&sr);
 }
 
 static void explainCoordSystem()
-/* Our coord system is counter-intuitive to users.  Warn them in advance to 
- * reduce the frequency with which they find this "bug" on their own and 
+/* Our coord system is counter-intuitive to users.  Warn them in advance to
+ * reduce the frequency with which they find this "bug" on their own and
  * we have to explain it on the genome list. */
 {
 if (!hIsGsidServer())
@@ -202,8 +202,8 @@ int i, columnCount = 0;
 int itemRgbCol = -1;
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
-					/*	instead of "reserved" */
+showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table));
+// should we expect itemRgb	instead of "reserved"
 
 /* Make table with header row containing name of fields. */
 safef(query, sizeof(query), "describe %s", table);
@@ -386,16 +386,16 @@ if (jpList != NULL)
 	    hPrintf("(%s.%s and %s.%s are arrays sharing an index)",
 	        jp->a->table, jp->a->field,
 	        jp->b->table, jp->b->field);
-	    	
+
 	    }
 	else if (aViaIndex)
 	    {
-	    hPrintf("(which is an array index into %s.%s)", 
+	    hPrintf("(which is an array index into %s.%s)",
 	    	jp->a->table, jp->a->field);
 	    }
 	else if (bViaIndex)
 	    {
-	    hPrintf("(%s.%s is an array index into %s.%s)", 
+	    hPrintf("(%s.%s is an array index into %s.%s)",
 		jp->a->table, jp->a->field,
 	    	jp->b->table, jp->b->field);
 	    }
@@ -567,7 +567,7 @@ htmlClose();
 }
 
 static boolean curTrackDescribesCurTable()
-/* Return TRUE if curTable is curTrack or its subtrack. */ 
+/* Return TRUE if curTable is curTrack or its subtrack. */
 {
 if (curTrack == NULL)
     return FALSE;
@@ -584,10 +584,10 @@ else if (curTrack->subtracks != NULL)
     {
     struct trackDb *sTdb = NULL;
     for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
-	{
-	if (sameString(sTdb->tableName, curTable))
-	    return TRUE;
-	}
+        {
+        if (sameString(sTdb->tableName, curTable))
+            return TRUE;
+        }
     }
 return FALSE;
 }

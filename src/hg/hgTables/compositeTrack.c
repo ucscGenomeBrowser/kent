@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.13 2009/03/13 21:40:33 kent Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.14 2009/04/10 20:04:28 tdreszer Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -106,7 +106,7 @@ cgiMakeRadioButton(hgtaNextSubtrackMergeOp, val, sameString(val, selVal));
 }
 
 static void showBedMergeOptions()
-/* Show subtrack merge operation options for tables that are distilled 
+/* Show subtrack merge operation options for tables that are distilled
  * to BED (not wiggle/bedGraph). */
 {
 char *op = cartUsualString(cart, hgtaNextSubtrackMergeOp, "any");
@@ -149,25 +149,37 @@ printf("Base-pair-wise union (OR) of %s and other selected subtracks<P>\n",
        curTable);
 }
 
-static struct trackDb *getPrimaryTdb()
-/* Return a pointer to the subtrack tdb for the primary subtrack. */
+struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table)
+/* Find or creates the tdb for this table. */
 {
-struct trackDb *primary = NULL, *sTdb = NULL;
-for (sTdb = curTrack->subtracks; sTdb != NULL; sTdb = sTdb->next)
+if(isEmpty(table))
+    return parent;
+struct trackDb *tdb = NULL;
+if (isCustomTrack(table))
     {
-    if (sameString(curTable, sTdb->tableName))
-	{
-	primary = sTdb;
-	break;
-	}
+    struct customTrack *ct = lookupCt(table);
+    if (ct != NULL)
+        tdb = ct->tdb;
     }
-return primary;
+else
+    tdb = tdbFindOrCreate(db,parent,table);
+return tdb;
 }
+
+char *findTypeForTable(char *db,struct trackDb *parent,char *table)
+/* Finds the TrackType for this Table */
+{
+struct trackDb *tdb = findTdbForTable(db,parent,table);
+if(tdb)
+    return tdb->type;
+return (parent?parent->type:NULL);
+}
+
 
 void doSubtrackMergeMore(struct sqlConnection *conn)
 /* Respond to subtrack merge create/edit button */
 {
-struct trackDb *primary = getPrimaryTdb();
+struct trackDb *primary = subTdbFind(curTrack,curTable);
 char *dbTable = getDbTable(database, curTable);
 
 htmlOpen("Merge subtracks of %s (%s)",
@@ -176,7 +188,7 @@ htmlOpen("Merge subtracks of %s (%s)",
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=%s>\n",
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-/* Currently selected subtrack table will be the primary subtrack in the 
+/* Currently selected subtrack table will be the primary subtrack in the
  * merge. */
 cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
 
@@ -202,11 +214,11 @@ htmlClose();
 }
 
 char *describeSubtrackMerge(char *linePrefix)
-/* Return a multi-line string that describes the specified subtrack merge, 
+/* Return a multi-line string that describes the specified subtrack merge,
  * with each line beginning with linePrefix. */
 {
 struct dyString *dy = dyStringNew(512);
-struct trackDb *primary = getPrimaryTdb(), *tdb = NULL;
+struct trackDb *primary = subTdbFind(curTrack,curTable), *tdb = NULL;
 dyStringAppend(dy, linePrefix);
 dyStringPrintf(dy, "Subtrack merge, primary table = %s (%s)\n",
 	       curTable, primary->longLabel);

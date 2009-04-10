@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.64 2009/03/19 00:42:38 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.65 2009/04/10 20:04:28 tdreszer Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -49,7 +49,7 @@ if (fieldCount >= 4)
     if (hti->nameField[0] != 0)
 	dyStringPrintf(fields, ",%s", hti->nameField);
     else /* Put in . as placeholder. */
-	dyStringPrintf(fields, ",'.'");  
+	dyStringPrintf(fields, ",'.'");
     }
 if (fieldCount >= 5)
     {
@@ -63,18 +63,18 @@ if (fieldCount >= 6)
     if (hti->strandField[0] != 0)
 	dyStringPrintf(fields, ",%s", hti->strandField);
     else
-	dyStringPrintf(fields, ",'.'");  
+	dyStringPrintf(fields, ",'.'");
     }
 if (fieldCount >= 8)
     {
     if (hti->cdsStartField[0] != 0)
 	dyStringPrintf(fields, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
     else
-	dyStringPrintf(fields, ",%s,%s", hti->startField, hti->endField);  
+	dyStringPrintf(fields, ",%s,%s", hti->startField, hti->endField);
     }
 if (fieldCount >= 12)
     {
-    dyStringPrintf(fields, ",%s,%s,%s", hti->countField, 
+    dyStringPrintf(fields, ",%s,%s,%s", hti->countField,
         hti->endsSizesField, hti->startsField);
     }
 if (htiIsPsl(hti))
@@ -159,15 +159,15 @@ else if (isPsl)
 	if (tStrand == '-')
 	    {
 	    int tSize = sqlUnsigned(row[10]);
-	    *pslIsProtein = 
-		   (bed->chromStart == 
-		    tSize - (3*bed->blockSizes[bed->blockCount - 1]  + 
+	    *pslIsProtein =
+		   (bed->chromStart ==
+		    tSize - (3*bed->blockSizes[bed->blockCount - 1]  +
 		    bed->chromStarts[bed->blockCount - 1]));
 	    }
 	else
 	    {
-	    *pslIsProtein = (bed->chromEnd == 
-		    3*bed->blockSizes[bed->blockCount - 1]  + 
+	    *pslIsProtein = (bed->chromEnd ==
+		    3*bed->blockSizes[bed->blockCount - 1]  +
 		    bed->chromStarts[bed->blockCount - 1]);
 	    }
 	*pslKnowIfProtein = TRUE;
@@ -185,7 +185,7 @@ else if (isPsl)
 	int tSize = sqlUnsigned(row[10]);
 	for (i=0; i<blockCount; ++i)
 	    {
-	    bed->chromStarts[i] = tSize - 
+	    bed->chromStarts[i] = tSize -
 		    (bed->chromStarts[i] + bed->blockSizes[i]);
 	    }
 	reverseInts(bed->chromStarts, bed->blockCount);
@@ -267,7 +267,7 @@ struct bed *getFilteredBeds(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get list of beds on single region that pass filtering. */
 {
-/* region may be part of a list, and the routines we call work on lists of 
+/* region may be part of a list, and the routines we call work on lists of
  * regions.  Temporarily force region->next to NULL and restore at end. */
 struct region *oldNext = region->next;
 struct bed *bedList = NULL;
@@ -307,7 +307,7 @@ char *ctVisWigMenu[] =
 };
 int ctVisWigMenuSize = 3;
 
-void doBedOrCtOptions(char *table, struct sqlConnection *conn, 
+void doBedOrCtOptions(char *table, struct sqlConnection *conn,
 	boolean doCt)
 /* Put up form to get options on BED or custom track output. */
 /* (Taken from hgText.c/doBedCtOptions) */
@@ -317,7 +317,7 @@ struct hTableInfo *hti = getHti(database, table, conn);
 char buf[256];
 char *setting;
 htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
-if (doGalaxy()) 
+if (doGalaxy())
     startGalaxyForm();
 else
     hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
@@ -381,8 +381,8 @@ else
     if ((anyIntersection() && intersectionIsBpWise()) ||
 	(anySubtrackMerge(database, table) && subtrackMergeIsBpWise()))
 	{
-	/* The original table may have blocks/CDS, described in hti, but 
-	 * that info will be lost after base pair-wise operations.  So make 
+	/* The original table may have blocks/CDS, described in hti, but
+	 * that info will be lost after base pair-wise operations.  So make
 	 * a temporary copy of hti with its flags tweaked: */
 	struct hTableInfo simplifiedHti;
 	memcpy(&simplifiedHti, hti, sizeof(simplifiedHti));
@@ -395,13 +395,13 @@ else
     }
 if (doCt)
     {
-    if (doGalaxy()) 
+    if (doGalaxy())
         {
         /* send the action parameter with the form as well */
         cgiMakeHiddenVar(hgtaDoGetCustomTrackFile, "get custom track in file");
         printGalaxySubmitButtons();
         }
-    else 
+    else
         {
         cgiMakeButton(hgtaDoGetCustomTrackTb, "get custom track in table browser");
         hPrintf(" ");
@@ -412,15 +412,15 @@ if (doCt)
     }
 else
     {
-    if (doGalaxy()) 
+    if (doGalaxy())
         {
         cgiMakeHiddenVar(hgtaDoGetBed, "get BED");
         printGalaxySubmitButtons();
         }
-    else 
+    else
         cgiMakeButton(hgtaDoGetBed, "get BED");
     }
-if (!doGalaxy()) 
+if (!doGalaxy())
     {
     hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "cancel");
@@ -493,7 +493,7 @@ else
 return ctNew;
 }
 
-boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt, 
+boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt,
 		     boolean doCtFile, boolean redirectToGb)
 /* Actually output bed or custom track. Return TRUE unless no results. */
 {
@@ -502,7 +502,7 @@ char *table = curTable;
 struct hTableInfo *hti = getHti(db, table, conn);
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
-boolean doCtHdr = (cartUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE) 
+boolean doCtHdr = (cartUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE)
 	|| doCt || doCtFile);
 char *ctWigOutType = cartCgiUsualString(cart, hgtaCtWigOutType, outWigData);
 char *fbQual = fbOptionsToQualifier();
@@ -533,59 +533,59 @@ for (region = regionList; region != NULL; region = region->next)
     struct dataVector *dv = NULL;
 
     if (isWig && doDataPoints)
-	{
-	if (needSubtrackMerge)
-	    {
-	    dv = wiggleDataVector(curTrack, curTable, conn, region);
-	    if (dv != NULL)
-		slAddHead(&dataVectorList, dv);
-	    }
-	else
-	    {
-	    int count = 0;
-	    struct wigAsciiData *wigData = NULL;
-	    struct wigAsciiData *asciiData;
-	    struct wigAsciiData *next;
-	    
-	    wigData = getWiggleAsData(conn, curTable, region);
-	    for (asciiData = wigData; asciiData; asciiData = next)
-		{
-		next = asciiData->next;
-		if (asciiData->count)
-		    {
-		    slAddHead(&wigDataList, asciiData);
-		    ++count;
-		    }
-		}
-	    slReverse(&wigDataList);
-	    }
-	}
+        {
+        if (needSubtrackMerge)
+            {
+            dv = wiggleDataVector(curTrack, curTable, conn, region);
+            if (dv != NULL)
+            slAddHead(&dataVectorList, dv);
+            }
+        else
+            {
+            int count = 0;
+            struct wigAsciiData *wigData = NULL;
+            struct wigAsciiData *asciiData;
+            struct wigAsciiData *next;
+
+            wigData = getWiggleAsData(conn, curTable, region);
+            for (asciiData = wigData; asciiData; asciiData = next)
+                {
+                next = asciiData->next;
+                if (asciiData->count)
+                    {
+                    slAddHead(&wigDataList, asciiData);
+                    ++count;
+                    }
+                }
+            slReverse(&wigDataList);
+            }
+        }
     else if (isBedGr && doDataPoints)
-	{
-	dv = bedGraphDataVector(curTable, conn, region);
-	if (dv != NULL)
-	    slAddHead(&dataVectorList, dv);
-	}
+        {
+        dv = bedGraphDataVector(curTable, conn, region);
+        if (dv != NULL)
+            slAddHead(&dataVectorList, dv);
+        }
     else if (isBgWg && doDataPoints)
         {
-	dv = bigWigDataVector(curTable, conn, region);
-	if (dv != NULL)
-	    slAddHead(&dataVectorList, dv);
-	}
+        dv = bigWigDataVector(curTable, conn, region);
+        if (dv != NULL)
+            slAddHead(&dataVectorList, dv);
+        }
     else if (isWig || isBgWg)
-	{
-	dv = wiggleDataVector(curTrack, curTable, conn, region);
-	bedList = dataVectorToBedList(dv);
-	dataVectorFree(&dv);
-	}
+        {
+        dv = wiggleDataVector(curTrack, curTable, conn, region);
+        bedList = dataVectorToBedList(dv);
+        dataVectorFree(&dv);
+        }
     else if (isBedGr)
-	{
-	bedList = getBedGraphAsBed(conn, curTable, region);
-	}
+        {
+        bedList = getBedGraphAsBed(conn, curTable, region);
+        }
     else
-	{
-	bedList = cookedBedList(conn, curTable, region, lm, &fields);
-	}
+        {
+        bedList = cookedBedList(conn, curTable, region, lm, &fields);
+        }
 
     /*	this is a one-time only initial creation of the custom track
      *	structure to receive the results.  gotResults turns it off after
@@ -594,88 +594,88 @@ for (region = regionList; region != NULL; region = region->next)
     if (doCtHdr && !gotResults &&
 	((bedList != NULL) || (wigDataList != NULL) ||
 	 (dataVectorList != NULL)))
-	{
-	ctNew = beginCustomTrack(table, fields,
-				 doCt, (isWig || isBedGr || isBgWg), doDataPoints);
-	}
+        {
+        ctNew = beginCustomTrack(table, fields,
+                    doCt, (isWig || isBedGr || isBgWg), doDataPoints);
+        }
 
     if (doDataPoints && (wigDataList || dataVectorList))
-	gotResults = TRUE;
+        gotResults = TRUE;
     else
-	{
-	if ((fbQual == NULL) || (fbQual[0] == 0))
-	    {
-	    for (bed = bedList;  bed != NULL;  bed = bed->next)
-		{
-		if (bed->name != NULL)
-		    {
-		    subChar(bed->name, ' ', '_');
-		    }
-		if (doCt)
-		    {
-		    struct bed *dupe = cloneBed(bed); /* Out of local memory. */
-		    slAddHead(&ctNew->bedList, dupe);
-		    }
-		else
-		    {
-		    if (bedItemRgb(curTrack))
-			bedTabOutNitemRgb(bed, fields, stdout);
-		    else
-			bedTabOutN(bed, fields, stdout);
-		    }
+        {
+        if ((fbQual == NULL) || (fbQual[0] == 0))
+            {
+            for (bed = bedList;  bed != NULL;  bed = bed->next)
+                {
+                if (bed->name != NULL)
+                    {
+                    subChar(bed->name, ' ', '_');
+                    }
+                if (doCt)
+                    {
+                    struct bed *dupe = cloneBed(bed); /* Out of local memory. */
+                    slAddHead(&ctNew->bedList, dupe);
+                    }
+                else
+                    {
+                    if (bedItemRgb(hTrackDbForTrack(db, curTable)))
+                        bedTabOutNitemRgb(bed, fields, stdout);
+                    else
+                        bedTabOutN(bed, fields, stdout);
+                    }
 
-		gotResults = TRUE;
-		}
-	    }
-	else
-	    {
-	    safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
-	    fbList = fbFromBed(db, fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
-	    if (fields >= 6)
-		fields = 6;
-	    else if (fields >= 4)
-		fields = 4;
-	    else
-		fields = 3;
-	    if (doCt && ctNew)
-		{
-		ctNew->fieldCount = fields;
-		safef(ctNew->tdb->type, strlen(ctNew->tdb->type)+1,
-		      "bed %d", fields);
-		}
-	    for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
-		{
-		if (fbPtr->name != NULL)
-		    {
-		    char *ptr = strchr(fbPtr->name, ' ');
-		    if (ptr != NULL)
-			*ptr = 0;
-		    }
-		if (doCt)
-		    {
-		    struct bed *fbBed = fbToBedOne(fbPtr);
-		    slAddHead(&ctNew->bedList, fbBed );
-		    }
-		else
-		    {
-		    if (fields >= 6)
-			hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
-			   fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
-			   0, fbPtr->strand);
-		    else if (fields >= 4)
-			hPrintf("%s\t%d\t%d\t%s\n",
-			  fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name);
-		    else
-			hPrintf("%s\t%d\t%d\n",
-				fbPtr->chrom, fbPtr->start, fbPtr->end);
-		    }
-		gotResults = TRUE;
-		}
-	    featureBitsFreeList(&fbList);
-	    }
-	}
-    bedList = NULL;
-    lmCleanup(&lm);
+                gotResults = TRUE;
+                }
+            }
+        else
+            {
+            safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
+            fbList = fbFromBed(db, fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
+            if (fields >= 6)
+            fields = 6;
+            else if (fields >= 4)
+            fields = 4;
+            else
+            fields = 3;
+            if (doCt && ctNew)
+                {
+                ctNew->fieldCount = fields;
+                safef(ctNew->tdb->type, strlen(ctNew->tdb->type)+1,
+                    "bed %d", fields);
+                }
+            for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
+                {
+                if (fbPtr->name != NULL)
+                    {
+                    char *ptr = strchr(fbPtr->name, ' ');
+                    if (ptr != NULL)
+                    *ptr = 0;
+                    }
+                if (doCt)
+                    {
+                    struct bed *fbBed = fbToBedOne(fbPtr);
+                    slAddHead(&ctNew->bedList, fbBed );
+                    }
+                else
+                    {
+                    if (fields >= 6)
+                    hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
+                    fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
+                    0, fbPtr->strand);
+                    else if (fields >= 4)
+                    hPrintf("%s\t%d\t%d\t%s\n",
+                    fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name);
+                    else
+                    hPrintf("%s\t%d\t%d\n",
+                        fbPtr->chrom, fbPtr->start, fbPtr->end);
+                    }
+                gotResults = TRUE;
+                }
+            featureBitsFreeList(&fbList);
+            }
+        }
+        bedList = NULL;
+        lmCleanup(&lm);
     }
 if (!gotResults)
     {
@@ -692,26 +692,26 @@ else if (doCt)
 	if (doDataPoints)
 	    {
 	    if (needSubtrackMerge || isBedGr || isBgWg)
-		{
-		slReverse(&dataVectorList);
-		wigDataSize = dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
-				      0, NULL);
-		// TODO: see if can make prettier wig output here that
-		// doesn't necessarily have one value per base
-		}
+            {
+            slReverse(&dataVectorList);
+            wigDataSize = dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
+                        0, NULL);
+            // TODO: see if can make prettier wig output here that
+            // doesn't necessarily have one value per base
+            }
 	    else
-		{
-		struct wiggleDataStream *wds = NULL;
-		/* create an otherwise empty wds so we can print out the list */
-		wds = wiggleDataStreamNew();
-		wds->ascii = wigDataList;
-		wigDataSize = wds->asciiOut(wds, db, ctNew->wigAscii, TRUE, FALSE);
+            {
+            struct wiggleDataStream *wds = NULL;
+            /* create an otherwise empty wds so we can print out the list */
+            wds = wiggleDataStreamNew();
+            wds->ascii = wigDataList;
+            wigDataSize = wds->asciiOut(wds, db, ctNew->wigAscii, TRUE, FALSE);
 #if defined(DEBUG)    /*      dbg     */
-		/* allow file readability for debug */
-		chmod(ctNew->wigAscii, 0666);
+            /* allow file readability for debug */
+            chmod(ctNew->wigAscii, 0666);
 #endif
-		wiggleDataStreamFree(&wds);
-		}
+            wiggleDataStreamFree(&wds);
+            }
 	    }
 	else
 	    slReverse(&ctNew->bedList);
@@ -722,49 +722,49 @@ else if (doCt)
 	}
     /*  Put up redirect-to-browser page. */
     if (redirectToGb)
-	{
-	char browserUrl[256];
-	char headerText[512];
-	int redirDelay = 3;
-	safef(browserUrl, sizeof(browserUrl),
-	      "%s?%s&db=%s", hgTracksName(), cartSidUrlString(cart), database);
-	safef(headerText, sizeof(headerText),
-	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
-	      redirDelay, browserUrl);
-	webStartHeader(cart, database, headerText,
-		       "Table Browser: %s %s: %s", hOrganism(database), 
-		       freezeName, "get custom track");
-	if (doDataPoints)
-	    {
-	    hPrintf("There are %d data points in custom track. ", wigDataSize);
-	    }
-	else
-	    {
-	    hPrintf("There are %d items in custom track. ",
-		    slCount(ctNew->bedList));
-	    }
-	hPrintf("You will be automatically redirected to the genome browser in\n"
-	       "%d seconds, or you can \n"
-	       "<A HREF=\"%s\">click here to continue</A>.\n",
-	       redirDelay, browserUrl);
-	}
+        {
+        char browserUrl[256];
+        char headerText[512];
+        int redirDelay = 3;
+        safef(browserUrl, sizeof(browserUrl),
+            "%s?%s&db=%s", hgTracksName(), cartSidUrlString(cart), database);
+        safef(headerText, sizeof(headerText),
+            "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+            redirDelay, browserUrl);
+        webStartHeader(cart, database, headerText,
+                "Table Browser: %s %s: %s", hOrganism(database),
+                freezeName, "get custom track");
+        if (doDataPoints)
+            {
+            hPrintf("There are %d data points in custom track. ", wigDataSize);
+            }
+        else
+            {
+            hPrintf("There are %d items in custom track. ",
+                slCount(ctNew->bedList));
+            }
+        hPrintf("You will be automatically redirected to the genome browser in\n"
+            "%d seconds, or you can \n"
+            "<A HREF=\"%s\">click here to continue</A>.\n",
+            redirDelay, browserUrl);
+        }
     }
 else if (doDataPoints)
     {
     if (needSubtrackMerge || isBedGr || isBgWg)
-	{
-	slReverse(&dataVectorList);
-	dataVectorWriteWigAscii(dataVectorList, "stdout", 0, NULL);
-	}
+        {
+        slReverse(&dataVectorList);
+        dataVectorWriteWigAscii(dataVectorList, "stdout", 0, NULL);
+        }
     else
-	{
-	/*	create an otherwise empty wds so we can print out the list */
-	struct wiggleDataStream *wds = NULL;
-	wds = wiggleDataStreamNew();
-	wds->ascii = wigDataList;
-	wds->asciiOut(wds, db, "stdout", TRUE, FALSE);
-	wiggleDataStreamFree(&wds);
-	}
+        {
+        /*	create an otherwise empty wds so we can print out the list */
+        struct wiggleDataStream *wds = NULL;
+        wds = wiggleDataStreamNew();
+        wds->ascii = wigDataList;
+        wds->asciiOut(wds, db, "stdout", TRUE, FALSE);
+        wiggleDataStreamFree(&wds);
+        }
     }
 return gotResults;
 }

@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.26 2009/04/01 19:31:59 angie Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.27 2009/04/10 20:04:30 tdreszer Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -60,8 +60,8 @@ if (sqlTableExists(conn, splitTable))
 	int rowOffset;
 	char **row;
 	struct agpGap gap;
-	struct sqlResult *sr = hRangeQuery(conn, "gap", 
-		region->chrom, region->start, region->end, 
+	struct sqlResult *sr = hRangeQuery(conn, "gap",
+		region->chrom, region->start, region->end,
 		NULL, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -377,7 +377,7 @@ if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
 else if (isBigWig(curTable))
     doSummaryStatsBigWig(conn);
-else if (isChromGraph(curTrack))
+else if (isChromGraph(findTdbForTable(database, curTrack, curTable)))
     doSummaryStatsChromGraph(conn);
 else if (sameWord(curTable,WIKI_TRACK_TABLE))
     doSummaryStatsWikiTrack(conn);

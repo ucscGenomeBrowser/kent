@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.48 2009/03/17 04:28:39 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.49 2009/04/10 20:04:29 tdreszer Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -33,7 +33,7 @@ static char *nextVars[] = {hgtaNextIntersectGroup, hgtaNextIntersectTrack,
 	hgtaNextInvertTable, hgtaNextInvertTable2,
 	};
 
-/* This is already duplicated in correlate.c and is handy -- should be 
+/* This is already duplicated in correlate.c and is handy -- should be
  * libified, probably in cart.h. */
 void removeCartVars(struct cart *cart, char **vars, int varCount);
 
@@ -138,7 +138,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
 
 hPrintf("Select a group, track and table to intersect with:\n");
-iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange, 
+iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange,
 	hgtaNextIntersectTrack, onChange, conn);
 iName = iTrack->shortLabel;
 
@@ -373,7 +373,7 @@ else
 return(count);
 }
 
-static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
+static struct bed *bitsToBed4List(Bits *bits, int bitSize,
 	char *chrom, int minSize, int rangeStart, int rangeEnd,
 	struct lm *lm)
 /* Translate ranges of set bits to bed 4 items. */
@@ -454,7 +454,7 @@ for (bed = bedListIn;  bed != NULL;  bed = nextBed)
     }
 slReverse(&intersectedBedList);
 return intersectedBedList;
-} 
+}
 
 void expandZeroSize(struct bed *bedList, boolean hasBlocks, int chromSize)
 /* Expand any bed items with size=0 to size=2 so insertion points are not
@@ -482,7 +482,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 
 Bits *bitsForIntersectingTable(struct sqlConnection *conn, struct region *region, int chromSize,
 	boolean isBpWise)
-/* Get a bitmap that corresponds to the table we are intersecting with. 
+/* Get a bitmap that corresponds to the table we are intersecting with.
  * Consult CGI vars to figure out what table it is. */
 {
 boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
@@ -567,7 +567,7 @@ if (isBpWise)
     if (region->end < chromSize)
 	bitClearRange(bits1, region->end, (chromSize - region->end));
     /* translate back to bed */
-    intersectedBedList = bitsToBed4List(bits1, chromSize, 
+    intersectedBedList = bitsToBed4List(bits1, chromSize,
     	region->chrom, 1, region->start, region->end, lm);
     if (retFieldCount != NULL)
 	*retFieldCount = 4;
@@ -579,25 +579,6 @@ else
 					    chromSize);
 bitFree(&bits2);
 return intersectedBedList;
-}
-
-static char *getPrimaryType(char *primarySubtrack, struct trackDb *tdb)
-/* Do not free when done. */
-/* Copied in from hui.c...  really isSubtrackMerged should take two tdbs 
- * and incorporate the name and type checking! */
-{
-struct trackDb *subtrack = NULL;
-char *type = NULL;
-if (primarySubtrack)
-    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
-	{
-	if (sameString(subtrack->tableName, primarySubtrack))
-	    {
-	    type = subtrack->type;
-	    break;
-	    }
-	}
-return type;
 }
 
 struct bed *getRegionAsMergedBed(
@@ -620,7 +601,7 @@ else
     Bits *bits2 = NULL;
     struct bed *bedMerged = NULL;
     struct trackDb *subtrack = NULL;
-    char *primaryType = getPrimaryType(table, curTrack);
+    char *primaryType = findTypeForTable(database,curTrack,table);
     char *op = cartString(cart, hgtaSubtrackMergeOp);
     boolean isBpWise = (sameString(op, "and") || sameString(op, "or"));
     double moreThresh = cartDouble(cart, hgtaSubtrackMergeMoreThreshold);
@@ -637,7 +618,7 @@ else
 		isSubtrackMerged(subtrack->tableName) &&
 		sameString(subtrack->type, primaryType))
 		{
-		struct bed *bedList2 = 
+		struct bed *bedList2 =
 		    getRegionAsBed(db, subtrack->tableName, region, NULL,
 				   idHash, lm, retFieldCount);
 		bedList = slCat(bedList, bedList2);
@@ -647,9 +628,9 @@ else
 	}
     bits1 = bitAlloc(chromSize+8);
     bits2 = bitAlloc(chromSize+8);
-    /* If doing a base-pair-wise operation, then start with the primary 
-     * subtrack's ranges in bits1, and AND/OR all the selected subtracks' 
-     * ranges into bits1.  If doing a non-bp-wise intersection, then 
+    /* If doing a base-pair-wise operation, then start with the primary
+     * subtrack's ranges in bits1, and AND/OR all the selected subtracks'
+     * ranges into bits1.  If doing a non-bp-wise intersection, then
      * start with all bits clear in bits1, and then OR selected subtracks'
      * ranges into bits1.  */
     if (isBpWise)
@@ -715,7 +696,7 @@ struct bed *bedList = getFilteredBeds(conn, table, region, lm, retFieldCount);
 /*	wiggle tracks have already done the intersection if there was one */
 if (!isWiggle(database, table) && anyIntersection())
     {
-    struct bed *iBedList = intersectOnRegion(conn, region, table, bedList, 
+    struct bed *iBedList = intersectOnRegion(conn, region, table, bedList,
     	lm, retFieldCount);
     return iBedList;
     }
@@ -734,7 +715,7 @@ return getIntersectedBeds(conn, table, region, lm, retFieldCount);
 }
 
 
-struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
+struct bed *cookedBedsOnRegions(struct sqlConnection *conn,
 	char *table, struct region *regionList, struct lm *lm, int *retFieldCount)
 /* Get cooked beds on all regions. */
 {

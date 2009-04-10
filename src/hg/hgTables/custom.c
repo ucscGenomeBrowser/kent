@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.39 2009/03/18 01:34:52 kent Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.40 2009/04/10 20:04:28 tdreszer Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -32,20 +32,6 @@ void flushCustomTracks()
 /* Flush custom track list. */
 {
 theCtList = NULL;
-}
-
-
-struct customTrack *lookupCt(char *name)
-/* Find named custom track. */
-{
-struct customTrack *ctList = getCustomTracks();
-struct customTrack *ct;
-for (ct=ctList;  ct != NULL;  ct=ct->next)
-    {
-    if (sameString(ct->tdb->tableName, name))
-	return ct;
-    }
-return NULL;
 }
 
 struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
@@ -186,7 +172,7 @@ if (fieldCount >= 15)
     field = newSlName("expIds");
     slAddHead(&fieldList, field);
     field = newSlName("expScores");
-    slAddHead(&fieldList, field);    
+    slAddHead(&fieldList, field);
     }
 slReverse(&fieldList);
 return fieldList;
@@ -336,7 +322,7 @@ struct bedFilter *bedFilterForCustomTrack(char *ctName)
 struct hashEl *var, *varList = cartFindPrefix(cart, hgtaFilterVarPrefix);
 int prefixSize = strlen(hgtaFilterVarPrefix);
 struct bedFilter *bf = NULL;
-int *trash;	
+int *trash;
 
 for (var = varList; var != NULL; var = var->next)
     {
@@ -552,7 +538,7 @@ fprintf(f, "\n");
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, track->tableName, 
+    struct bed *bed, *bedList = cookedBedList(conn, track->tableName,
     	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{

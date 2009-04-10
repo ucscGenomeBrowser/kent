@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.180 2009/03/18 01:34:52 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.181 2009/04/10 20:04:29 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -110,7 +110,7 @@ for ( ; c != 0 ; )
 }
 
 void writeHtmlCell(char *text)
-/* Write out a cell in an HTML table, making text not too big, 
+/* Write out a cell in an HTML table, making text not too big,
  * and stripping html tags and breaking spaces.... */
 {
 int maxLen = 128;
@@ -241,46 +241,8 @@ boolean trackIsType(char *table, char *type)
 /* Return TRUE track is a specific type.  Type should be something like "bed" or
  * "bigBed" or "bigWig" */
 {
-struct trackDb *tdb = NULL;
-if (isCustomTrack(table))
-    {
-    struct customTrack *ct = lookupCt(table);
-    if (ct != NULL)
-        tdb = ct->tdb;
-    }
-else
-    {
-    if (curTrack && sameString(curTrack->tableName, table))
-	tdb = curTrack;
-    else
-	tdb = hTrackDbForTrack(database, table);
-    }
-return tdb != NULL && startsWithWord(type, tdb->type);
-}
-
-struct trackDb *findCompositeTdb(struct trackDb *track, char *table)
-/*	find the tdb for the table, if it is custom or composite or ordinary  */
-{
-struct trackDb *tdb = track;
-
-if (isCustomTrack(table))
-    {
-    struct customTrack *ct = lookupCt(table);
-    tdb = ct->tdb;
-    }
-else if (track && tdbIsComposite(track))
-    {
-    struct trackDb *subTdb;
-    for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
-	{
-	if (sameWord(subTdb->tableName, table))
-	    {
-	    tdb = subTdb;
-	    break;
-	    }
-	}
-    }
-return(tdb);
+char *tdbType = findTypeForTable(database, curTrack, table);
+return (tdbType && startsWithWord(type, tdbType));
 }
 
 static struct trackDb *getFullTrackList()
@@ -476,7 +438,7 @@ return region;
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere)
-/* Construct and execute query for table on region. Returns NULL if 
+/* Construct and execute query for table on region. Returns NULL if
  * table doesn't exist (e.g. missing split table for region->chrom). */
 {
 struct sqlResult *sr;
@@ -497,13 +459,13 @@ if (isPositional)
 	}
     if (region->fullChrom) /* Full chromosome. */
 	{
-	sr = hExtendedChromQuery(conn, table, region->chrom, 
+	sr = hExtendedChromQuery(conn, table, region->chrom,
 		extraWhere, FALSE, fields, NULL);
 	}
     else
 	{
-	sr = hExtendedRangeQuery(conn, table, region->chrom, 
-		region->start, region->end, 
+	sr = hExtendedRangeQuery(conn, table, region->chrom,
+		region->start, region->end,
 		extraWhere, TRUE, fields, NULL);
 	}
     }
@@ -523,7 +485,7 @@ return sr;
 }
 
 char *getDbTable(char *db, char *table)
-/* If table already contains its real database as a dot-prefix, then 
+/* If table already contains its real database as a dot-prefix, then
  * return a clone of table; otherwise alloc and return db.table . */
 {
 if (sameString(table, WIKI_TRACK_TABLE))
@@ -551,19 +513,19 @@ return table;
 }
 
 char *connectingTableForTrack(char *rawTable)
-/* Return table name to use with all.joiner for track. 
+/* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
 {
 if (sameString(rawTable, "mrna"))
     return cloneString("all_mrna");
 else if (sameString(rawTable, "est"))
     return cloneString("all_est");
-else 
+else
     return cloneString(rawTable);
 }
 
 char *chromTable(struct sqlConnection *conn, char *table)
-/* Get chr1_table if it exists, otherwise table. 
+/* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 {
 char *chrom = hDefaultChrom(database);
@@ -578,7 +540,7 @@ else
 }
 
 char *chrnTable(struct sqlConnection *conn, char *table)
-/* Return chrN_table if table is split, otherwise table. 
+/* Return chrN_table if table is split, otherwise table.
  * You can freeMem this when done. */
 {
 char buf[256];
@@ -673,7 +635,7 @@ if (sqlTableExists(conn, "chromInfo"))
     {
     char chromName[64];
     struct hTableInfo *hti;
-    sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
+    sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
 	chromName, sizeof(chromName));
     hti = hFindTableInfo(db, chromName, table);
     if (hti != NULL)
@@ -688,7 +650,7 @@ return result;
 boolean isSqlStringType(char *type)
 /* Return TRUE if type is a stringish SQL type. */
 {
-return strstr(type, "char") || strstr(type, "text") 
+return strstr(type, "char") || strstr(type, "text")
        || strstr(type, "blob");
 }
 
@@ -805,7 +767,7 @@ if (track == NULL)
 return track;
 }
 
-struct trackDb *findSelectedTrack(struct trackDb *trackList, 
+struct trackDb *findSelectedTrack(struct trackDb *trackList,
 	struct grp *group, char *varName)
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
@@ -838,7 +800,7 @@ if (track == NULL)
 return track;
 }
 
-struct grp *makeGroupList(struct sqlConnection *conn, 
+struct grp *makeGroupList(struct sqlConnection *conn,
 	struct trackDb *trackList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
@@ -921,7 +883,7 @@ return group;
 }
 
 
-static void addTablesAccordingToTrackType(struct slName **pList, 
+static void addTablesAccordingToTrackType(struct slName **pList,
 	struct hash *uniqHash, struct trackDb *track)
 /* Parse out track->type and if necessary add some tables from it. */
 {
@@ -1058,7 +1020,7 @@ return isCustomTrack(hti->rootName) ||
 	(hti->chromField[0] || sameString(hti->rootName, "gl")));
 }
 
-char *getIdField(char *db, struct trackDb *track, char *table, 
+char *getIdField(char *db, struct trackDb *track, char *table,
 	struct hTableInfo *hti)
 /* Get ID field for table, or NULL if none.  FreeMem result when done */
 {
@@ -1069,25 +1031,25 @@ else if (track != NULL)
     {
     struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->tableName);
     if (trackHti != NULL && isCustomTrack(table))
-	idField = cloneString(trackHti->nameField);
+        idField = cloneString(trackHti->nameField);
     else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
-	struct joinerPair *jp, *jpList;
-	jpList = joinerRelate(allJoiner, db, track->tableName);
-	for (jp = jpList; jp != NULL; jp = jp->next)
-	    {
-	    if (sameString(jp->a->field, trackHti->nameField))
-	        {
-		if ( sameString(jp->b->database, db) 
-		  && sameString(jp->b->table, table) )
-		    {
-		    idField = cloneString(jp->b->field);
-		    break;
-		    }
-		}
-	    }
-	joinerPairFreeList(&jpList);
-	}
+        struct joinerPair *jp, *jpList;
+        jpList = joinerRelate(allJoiner, db, track->tableName);
+        for (jp = jpList; jp != NULL; jp = jp->next)
+            {
+            if (sameString(jp->a->field, trackHti->nameField))
+                {
+                if ( sameString(jp->b->database, db)
+                && sameString(jp->b->table, table) )
+                    {
+                    idField = cloneString(jp->b->field);
+                    break;
+                    }
+                }
+            }
+            joinerPairFreeList(&jpList);
+        }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
  * use the first field. */
@@ -1096,7 +1058,7 @@ if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     struct sqlConnection *conn = hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
     if (fieldList == NULL)
-	errAbort("getIdField: Can't find fields of table %s", table);
+        errAbort("getIdField: Can't find fields of table %s", table);
     idField = cloneString(fieldList->name);
     slFreeList(&fieldList);
     hFreeConn(&conn);
@@ -1209,10 +1171,12 @@ char *idField;
 boolean showItemRgb = FALSE;
 int itemRgbCol = -1;	/*	-1 means not found	*/
 boolean printedColumns = FALSE;
+struct trackDb *tdb = findTdbForTable(db, curTrack, table);
 
 hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
-showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+
+showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb */
 					/*	instead of "reserved" */
 
 /* If they didn't pass in a field list assume they want all fields. */
@@ -1254,7 +1218,7 @@ for (region = regionList; region != NULL; region = region->next)
     int colIx, lastCol = fieldCount-1;
     char *filter = filterClause(db, table, region->chrom, identifierFilter);
 
-    sr = regionQuery(conn, table, fieldSpec->string, 
+    sr = regionQuery(conn, table, fieldSpec->string,
     	region, isPositional, filter);
     if (sr == NULL)
 	continue;
@@ -1502,7 +1466,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("%s%s",sep,row[c]);
 	sep = "\t";
 	}
-    fprintf(stdout, "\n");	    
+    fprintf(stdout, "\n");
     }
 sqlFreeResult(&sr);
 removeMetaData();
@@ -1577,14 +1541,14 @@ else if (sameString(output, outGff))
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
     else
-        doOutGff(table, conn); 
+        doOutGff(table, conn);
     }
 else if (sameString(output, outHyperlinks))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
     else
-        doOutHyperlinks(table, conn); 
+        doOutHyperlinks(table, conn);
     }
 else if (sameString(output, outWigData))
     {
@@ -1605,14 +1569,14 @@ else if (sameString(output, outMaf))
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
     else
-        doOutMaf(track, table, conn); 
+        doOutMaf(track, table, conn);
     }
 else if (sameString(output, outChromGraphData))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
     else
-        doOutChromGraphDataCt(track, table); 
+        doOutChromGraphDataCt(track, table);
     }
 else
     errAbort("Don't know how to handle %s output yet", output);
@@ -1628,7 +1592,7 @@ struct hashEl *varList;
 if (hIsCgbServer() || hIsGsidServer())
     {
     if (cartVarExists(cart, hgtaDoSchema))
-	{    
+	{
 	doSchema(conn);
 	}
     else
@@ -1689,7 +1653,7 @@ else if (cartVarExists(cart, hgtaDoClearFilter))
      doClearFilter(conn);
 else if (cartVarExists(cart, hgtaDoSchemaTable))
     {
-    doTableSchema( cartString(cart, hgtaDoSchemaDb), 
+    doTableSchema( cartString(cart, hgtaDoSchemaDb),
     	cartString(cart, hgtaDoSchemaTable), conn);
     }
 else if (cartVarExists(cart, hgtaDoValueHistogram))
@@ -1699,7 +1663,7 @@ else if (cartVarExists(cart, hgtaDoValueRange))
 else if (cartVarExists(cart, hgtaDoSelectFieldsMore))
     doSelectFieldsMore();
 else if (cartVarExists(cart, hgtaDoPrintSelectedFields))
-    doPrintSelectedFields();  
+    doPrintSelectedFields();
 else if (cartVarExists(cart, hgtaDoGalaxySelectedFields))
     sendParamsToGalaxy(hgtaDoPrintSelectedFields, "get output");
 else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
@@ -1707,28 +1671,28 @@ else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
 else if ((varList = cartFindPrefix(cart, hgtaDoSetAllFieldPrefix)) != NULL)
     doSetAllField(varList->name + strlen(hgtaDoSetAllFieldPrefix));
 else if (cartVarExists(cart, hgtaDoGenePredSequence))
-    doGenePredSequence(conn);  
+    doGenePredSequence(conn);
 else if (cartVarExists(cart, hgtaDoGenomicDna))
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
         sendParamsToGalaxy(hgtaDoGenomicDna, "submit");
     else
-        doGenomicDna(conn);  
+        doGenomicDna(conn);
 else if (cartVarExists(cart, hgtaDoGetBed))
-    doGetBed(conn);  
+    doGetBed(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackTb))
-    doGetCustomTrackTb(conn);  
+    doGetCustomTrackTb(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackGb))
     doGetCustomTrackGb(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
-    doGetCustomTrackFile(conn);  
+    doGetCustomTrackFile(conn);
 else if (cartVarExists(cart, hgtaDoRemoveCustomTrack))
     doRemoveCustomTrack(conn);
 else if (cartVarExists(cart, hgtaDoClearSubtrackMerge))
     doClearSubtrackMerge(conn);
-/* Hack but I don't know what else to do now: hCompositeUi makes a hidden 
- * var for hgtaDoSubtrackMergePage, so that javascript can submit and it will 
- * look like that button was pressed.  However when the real submit button is 
- * pressed, it will look like both were pressed... so check the real submit 
+/* Hack but I don't know what else to do now: hCompositeUi makes a hidden
+ * var for hgtaDoSubtrackMergePage, so that javascript can submit and it will
+ * look like that button was pressed.  However when the real submit button is
+ * pressed, it will look like both were pressed... so check the real submit
  * button first (and check doMainPage before this too, for "cancel"!): */
 else if (cartVarExists(cart, hgtaDoSubtrackMergeSubmit))
     doSubtrackMergeSubmit(conn);
@@ -1762,21 +1726,21 @@ fullGroupList = makeGroupList(conn, fullTrackList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;
-curTable = findSelectedTable(conn, curTrack, hgtaTable);
+curTable    = findSelectedTable(conn, curTrack, hgtaTable);
 if (curTrack == NULL)
     {
-    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *tdb  = hTrackDbForTrack(database, curTable);
     struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
     if (cTdb)
-	curTrack = cTdb;
+        curTrack = cTdb;
     else
-	curTrack = tdb;
+        curTrack = tdb;
     }
 }
 
 
 void hgTables()
-/* hgTables - Get table data associated with tracks and intersect tracks. 
+/* hgTables - Get table data associated with tracks and intersect tracks.
  * Here we set up cart and some global variables, dispatch the command,
  * and put away the cart when it is done. */
 {
@@ -1785,7 +1749,7 @@ char *clade = NULL;
 
 oldVars = hashNew(10);
 
-/* Sometimes we output HTML and sometimes plain text; let each outputter 
+/* Sometimes we output HTML and sometimes plain text; let each outputter
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
