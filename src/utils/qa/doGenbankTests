@@ -1,0 +1,159 @@
+#!/bin/bash -e
+###############################################################################
+#  doGenbankTests
+#
+#  June 2008 -- Brooke Rhead
+#
+#  Wrapper script for automated checking of GenBank tables.
+#  Note: this script assumes the kent source tree is checked out in ~/kent/src
+# 
+###############################################################################
+
+tableExists()
+{
+  local db=$1
+  local table=$2
+  local res=`hgsql -Ne "show tables like '$table'" $db`
+  if [ -z "$res" ]
+  then
+    return 1 
+  else
+    return 0
+  fi
+}
+
+allOk=yes
+
+# check host, set path to genbank table list
+if [ "$HOST" != hgwdev -a "$HOST" != hgwbeta ]
+then
+  echo "This script must be run from hgwdev or hgwbeta." >&2
+  exit 1
+elif [ "$HOST" = hgwdev ]
+then
+  genbankPath="/cluster/data/genbank/etc/genbank.tbls"
+  sanityPath="/cluster/data/genbank"
+else #host is hgwbeta
+  genbankPath="/genbank/etc/genbank.tbls"
+  sanityPath="/genbank"
+fi
+
+# get arguments / give usage statement
+if [ $# -lt 1 -o $# -gt 2 ]
+then
+  echo "usage:  $(basename $0) db [outFile]
+where outFile is the name of a file in which to record results" >&2
+  exit 1
+else
+  db="$1"
+  if [ $# -eq 2 ]
+  then
+    exec > "$2" 2>&1  # neat bash trick to redirect stdout (also redirecting error)
+  fi
+fi
+
+# print some useful info
+echo "$(basename $0) output on $db"
+date
+echo
+
+# get a list of all genbank tracks present in this assembly
+echo "The following GenBank tracks are present in this assembly:"
+
+# now look for the actual tracks
+tableExists $db refGene && trackList="${trackList} refGene" && echo -e "\tRefSeq Genes"
+tableExists $db xenoRefGene && trackList="${trackList} xenoRefGene" && echo -e "\tOther RefSeq"
+tableExists $db all_mrna && trackList="${trackList} all_mrna" && echo -e "\t\$Org mRNAs"
+tableExists $db xenoMrna && trackList="${trackList} xenoMrna" && echo -e "\tOther mRNAs"
+tableExists $db all_est && trackList="${trackList} all_est" && echo -e "\t\$Org ESTs"
+tableExists $db %intronEst && trackList="${trackList} %intronEst" && echo -e "\tSpliced ESTs"
+tableExists $db xenoEst && trackList="${trackList} xenoEst" && echo -e "\tOther ESTs"
+tableExists $db mgcGenes  && trackList="${trackList} mgcGenes"&& echo -e "\tMGC Genes"
+tableExists $db orfeomeGenes  && trackList="${trackList} orfeomeGenes"&& echo -e "\tORFeome Clones"
+echo
+
+echo -e "--> Running genePredCheck and pslCheck:\n"
+
+# run genePredChecks
+for table in refGene xenoRefGene mgcGenes orfeomeGenes
+do
+  tableExists $db $table && {
+    echo genePredCheck $table
+    nice genePredCheck -db=$db $table || allOk=no
+  }
+done
+echo
+
+# run pslChecks
+for table in all_mrna xenoMrna all_est refSeqAli xenoRefSeqAli
+do
+  tableExists $db $table && {
+    echo pslCheck $table
+    nice pslCheck -db=$db $table || allOk=no
+  }
+done
+echo
+
+# run joinerCheck
+joinerLoc=~/kent/src/hg/makeDb/schema/all.joiner
+
+echo -e "--> Checking appropriate keys in $(basename $joinerLoc):\n"
+
+doJoinerCheck() {
+  local table=$1 ident=$2
+  tableExists $db $table && {
+    echo joinerCheck -keys -database=$db -identifier=$ident $(basename $joinerLoc)
+    nice joinerCheck -keys -database=$db -identifier=$ident $joinerLoc || allOk=no
+    echo
+  }
+}
+
+doJoinerCheck gbCdnaInfo gbCdnas
+doJoinerCheck refGene refSeqId
+doJoinerCheck xenoRefGene xenoRefSeqId
+doJoinerCheck all_mrna nativeMrnaAccession
+doJoinerCheck xenoMrna xenoMrnaAccession
+doJoinerCheck all_est nativeEstAccession # takes care of intronEst, too
+doJoinerCheck xenoEst xenoEstAccession
+doJoinerCheck mgcGenes mgcAccession
+doJoinerCheck orfeomeGenes orfeomeAccession
+echo
+
+# run gbSanity
+timestamp=$(date +%m.%d.%Y-%R%p)
+echo -e "--> Running gbSanity, and putting output in:"
+echo -e "${HOST}:${sanityPath}/misc/${db}.sanity.$timestamp"
+oldPath=$(pwd)
+cd ${sanityPath}
+bin/x86_64/gbSanity $db >& misc/${db}.sanity.$timestamp || allOk=no
+cd $oldPath
+echo -e "Here is the last line of ${db}.sanity.$timestamp:\n"
+tail -1
+echo -e "If there are any errors here, consult Mark Diekhans.\n"
+
+# run featureBits
+echo -e "--> Running featureBits.  Remember to paste this into the pushqueue:\n"
+for table in refGene xenoRefGene mgcGenes all_mrna intronEst all_est xenoMrna mgcFullMrna orfeomeGenes
+do
+  tableExists $db $table && {
+    echo featureBits -countGaps $db $table
+    nice featureBits -countGaps $db $table || allOk=no
+    echo featureBits -countGaps $db $table gap
+    nice featureBits -countGaps $db $table gap || allOk=no
+    echo
+  }
+done
+echo
+
+# run countPerChrom??
+
+# give overall report of errors
+if [ $allOk = yes ]
+then
+  echo No errors were encountered during $(basename $0).  Yay!
+else
+  echo At least one ERROR occurred during $(basename $0).
+  exit 2
+fi
+exit 0
+# end.
