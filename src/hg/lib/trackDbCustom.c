@@ -12,8 +12,10 @@
 #include "hash.h"
 #include "sqlNum.h"
 #include "obscure.h"
+#include "hgMaf.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.60 2009/03/13 23:02:08 hiram Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.61 2009/04/10 19:56:35 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -776,4 +778,35 @@ return  (setting && (   sameWord(setting,"on")
                      || sameWord(setting,"true")
                      || sameWord(setting,"enabled")
                      || atoi(setting) != 0));
+}
+
+struct trackDb *subTdbFind(struct trackDb *parent,char *table)
+/* Return subTrack tdb if it exists in parent. */
+{
+if(parent == NULL)
+    return NULL;
+
+struct trackDb *tdb;
+for (tdb = parent->subtracks;
+     tdb != NULL && differentString(tdb->tableName,table);
+     tdb = tdb->next) {}
+return tdb;
+}
+
+struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table)
+/* Find or creates the tdb for this table. May return NULL. */
+{
+struct trackDb *tdb = NULL;
+if (parent != NULL)
+    {
+    if(sameString(parent->tableName, table))
+        tdb = parent;
+    else if(consWiggleFind(db,parent,table) != NULL)
+        tdb = parent;
+    else
+        tdb = subTdbFind(parent,table);
+    }
+if(tdb == NULL && db != NULL)
+    tdb = hTrackDbForTrack(db, table);
+return tdb;
 }

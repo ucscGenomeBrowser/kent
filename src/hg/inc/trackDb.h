@@ -277,5 +277,11 @@ char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char
 boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
 
+struct trackDb *subTdbFind(struct trackDb *parent,char *table);
+/* Return subTrack tdb if it exists in parent. */
+
+struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
+/* Find or creates the tdb for this table. May return NULL. */
+
 #endif /* TRACKDB_H */
 
