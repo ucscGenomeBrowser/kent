@@ -211,6 +211,9 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
 
+void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *extra);
+/* Make a text control filled with initial value. */
+
 void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
 			      char *script);
 /* Make a text control filled with initial value, with a (java)script

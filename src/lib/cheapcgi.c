@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.116 2009/04/03 23:25:30 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.117 2009/04/10 23:59:38 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1145,6 +1145,23 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 {
 cgiMakeOnKeypressTextVar(varName, initialVal, charSize, NULL);
 }
+
+void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *extra)
+/* Make a text control filled with initial value. */
+{
+if (initialVal == NULL)
+    initialVal = "";
+if(width==0)
+    width=strlen(initialVal)*10;
+if(width==0)
+    width = 100;
+
+printf("<INPUT TYPE=TEXT class='inputBox' NAME=\"%s\" style='width: %dpx' VALUE=\"%s\"", varName,width, initialVal);
+if (isNotEmpty(extra))
+    printf(" %s",extra);
+printf(">\n");
+}
+
 
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
 /* Make a text control filled with initial value.  */
