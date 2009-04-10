@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.141 2009/04/10 21:30:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.142 2009/04/10 21:33:30 tdreszer Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -355,7 +355,6 @@ char *showTableField(struct trackDb *track, char *varName, boolean useJoiner)
 {
 struct slName *name, *nameList = NULL;
 char *selTable;
-//char *db = findSelDb();
 
 if (track == NULL)
     nameList = tablesForDb(findSelDb());
