@@ -18,7 +18,7 @@ endif
 
 # cd ~
 
-set host = "hgwbeta"
+set host = "$sqlbeta"
 set hhost = "-h $host"
 # just for testing, use dev:
 #set host = "hgwdev"
