@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.181 2009/04/10 20:04:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.182 2009/04/11 00:02:13 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -670,6 +670,12 @@ boolean isSqlNumType(char *type)
 /* Return TRUE if it is a numerical SQL type. */
 {
 return strstr(type, "int") || strstr(type, "float") || strstr(type, "double");
+}
+
+boolean isSqlIntType(char *type)
+/* Return TRUE if it is an integer SQL type. */
+{
+return (strstr(type, "int") != NULL);
 }
 
 struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)

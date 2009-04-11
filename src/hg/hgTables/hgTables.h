@@ -270,6 +270,9 @@ boolean isSqlSetType(char *type);
 boolean isSqlNumType(char *type);
 /* Return TRUE if it is a numerical SQL type. */
 
+boolean isSqlIntType(char *type);
+/* Return TRUE if it is an integer SQL type. */
+
 struct sqlFieldType
 /* List field names and types */
     {
