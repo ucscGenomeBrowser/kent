@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.70 2009/04/11 00:05:02 tdreszer Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.71 2009/04/11 00:05:19 tdreszer Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -899,6 +899,13 @@ if (!(isWig||isBedGr))
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
     hPrintf("</TD></TR></TABLE>\n");
+#define WIG_BED_LIMITS_OUTPUT
+#ifdef WIG_BED_LIMITS_OUTPUT
+    }
+else
+    {
+    char *name;
+#endif//def WIG_BED_LIMITS_OUTPUT
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
     name = filterFieldVarName(db, rootTable, "_", filterMaxOutputVar);
     cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
