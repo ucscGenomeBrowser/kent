@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.69 2009/04/10 20:04:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.70 2009/04/11 00:05:02 tdreszer Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -600,16 +600,17 @@ void stringFilterOption(char *db, char *table, char *field, char *logOp)
 {
 char *name;
 
-hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
+hPrintf("<TR VALIGN=BOTTOM align='left'><TD colspan=2> %s </TD><TD>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
-cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
-		cartUsualString(cart, name, ddOpMenu[0]));
-hPrintf(" match </TD><TD>\n");
+cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
+    cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
+hPrintf("</TD><TD>match </TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
+cgiMakeTextVarWithExtraHtml(name, cartUsualString(cart, name, "*"),140,NULL);
+//cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
 if (logOp == NULL)
     logOp = "";
-hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
+hPrintf("&nbsp;%s </TD></TR>\n", logOp);
 }
 
 static void makeEnumValMenu(char *type, char ***pMenu, int *pMenuSize)
@@ -657,41 +658,98 @@ char *name = NULL;
 char **valMenu = NULL;
 int valMenuSize = 0;
 
-hPrintf("<TR VALIGN=BOTTOM><TD valign=top> %s </TD><TD valign=top>\n", field);
+hPrintf("<TR VALIGN=BOTTOM align='left'><TD valign=top align='left'colspan=2> %s </TD><TD valign=top>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
-cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
-		cartUsualString(cart, name, ddOpMenu[0]));
-hPrintf(" %s </TD><TD>\n", isSqlSetType(type) ? "include" : "match");
+cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
+    cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
+hPrintf("<TD valign=top>%s</TD><TD colspan=4 nowrap>\n", isSqlSetType(type) ? "include" : "match");
 name = filterPatternVarName(db, table, field);
 makeEnumValMenu(type, &valMenu, &valMenuSize);
-if (valMenuSize-1 > 2)
-    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
-else
-    cgiMakeDropList(name, valMenu, valMenuSize,
-		    cartUsualString(cart, name, valMenu[0]));
 if (logOp == NULL)
     logOp = "";
-hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
+if (valMenuSize-1 > 2)
+    {
+    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
+    hPrintf("</TD><TD>%s </TD></TR>\n", logOp);
+    }
+else
+    {
+    cgiMakeDropList(name, valMenu, valMenuSize,cartUsualString(cart, name, valMenu[0]));
+    hPrintf("&nbsp;%s </TD></TR>\n", logOp);
+    }
 }
 
 
-void numericFilterOption(char *db, char *table, char *field, char *label,
-	char *logOp)
+static void numericFilter(char *db, char *table, char *field, char *label,char *logOp)
 /* Print out a table row with filter constraint options for a number. */
 {
 char *name;
 
-hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", label);
-puts(" is ");
+hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
 name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
-		cartUsualString(cart, name, cmpOpMenu[0]));
+cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
+    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVar(name, cartUsualString(cart, name, ""), 20);
+double val = cartUsualDouble(cart, name, 0);
+cgiMakeDoubleVarNoLimits(name,val,label,140);
 if (logOp == NULL)
     logOp = "";
-hPrintf("</TD><TD>%s</TD></TR>\n", logOp);
+hPrintf("&nbsp;%s</TD></TR>\n", logOp);
+}
+
+static void numericFilterWithLimits(char *db, char *table, char *field, char *label,double min,double max,char *logOp)
+/* Print out a filter constraint for an integer within a range. */
+{
+char *name;
+
+hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
+name = filterFieldVarName(db, table, field, filterCmpVar);
+cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
+    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+puts("</TD><TD>\n");
+name = filterPatternVarName(db, table, field);
+double val = cartUsualDouble(cart, name, 0);
+cgiMakeDoubleVarWithLimits(name,val,label,140,min,max);
+if (logOp == NULL)
+    logOp = "";
+hPrintf("&nbsp;%s</TD></TR>\n", logOp);
+}
+
+void integerFilter(char *db, char *table, char *field, char *label,char *logOp)
+/* Print out a filter constraint for an integer within a range. */
+{
+char *name;
+
+hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
+name = filterFieldVarName(db, table, field, filterCmpVar);
+cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
+    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+puts("</TD><TD>\n");
+name = filterPatternVarName(db, table, field);
+int val = cartUsualInt(cart, name, 0);
+cgiMakeIntVarNoLimits(name,val,label,140);
+if (logOp == NULL)
+    logOp = "";
+hPrintf("&nbsp;%s</TD></TR>\n", logOp);
+}
+
+void integerFilterWithLimits(char *db, char *table, char *field, char *label,int min,int max,char *logOp)
+/* Print out a filter constraint for an integer within a range. */
+{
+char *name;
+
+hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s is</TD><TD colspan=2>\n", label);
+name = filterFieldVarName(db, table, field, filterCmpVar);
+cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
+    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+puts("</TD><TD>\n");
+name = filterPatternVarName(db, table, field);
+int val = cartUsualInt(cart, name, 0);
+cgiMakeIntVarWithLimits(name,val,label,140,min,max);
+if (logOp == NULL)
+    logOp = "";
+hPrintf("&nbsp;%s</TD></TR>\n", logOp);
 }
 
 void eqFilterOption(char *db, char *table, char *field,
@@ -737,25 +795,27 @@ if (isBedGr)
 
     wordCount = chopLine(typeLine,words);
     if (wordCount > 1)
-	bedGraphColumn = sqlUnsigned(words[1]);
+        bedGraphColumn = sqlUnsigned(words[1]);
     freez(&typeLine);
     }
 
 if (isWig)
     {
     hPrintf("<TABLE BORDER=0>\n");
-    numericFilterOption(db, rootTable, filterDataValueVar,
-	filterDataValueVar, "");
     if ((tdb != NULL) && (tdb->type != NULL))
-	{
-	double min, max;
-	wiggleMinMax(tdb,&min,&max);
+        {
+        double min, max;
+        wiggleMinMax(tdb,&min,&max);
+        numericFilterWithLimits(db, rootTable, filterDataValueVar,filterDataValueVar,min,max,"");
 
-	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g:%g]) "
-		"</TD></TR></TABLE>\n", min, max);
-	}
+        hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g:%g]) "
+            "</TD></TR></TABLE>\n", min, max);
+        }
     else
-	hPrintf("</TABLE>\n");
+        {
+        numericFilter(db, rootTable, filterDataValueVar,filterDataValueVar, "");
+        hPrintf("</TABLE>\n");
+        }
     }
 else
     {
@@ -764,58 +824,66 @@ else
     struct sqlFieldType *ft, *ftList;
     if (isBigBed(table))
         {
-	ftList = bigBedListFieldsAndTypes(table, conn);
-	}
+        ftList = bigBedListFieldsAndTypes(table, conn);
+        }
     else
         {
-	ftList = sqlListFieldsAndTypes(conn, table);
-	}
+        ftList = sqlListFieldsAndTypes(conn, table);
+        }
     hPrintf("<TABLE BORDER=0>\n");
     for (ft = ftList; ft != NULL; ft = ft->next)
-	{
-	char *field = ft->name;
-	char *type = ft->type;
-	char *logic = "";
+        {
+        char *field = ft->name;
+        char *type = ft->type;
+        char *logic = "";
 
-	if ((0 == fieldNum) && (!sameWord(field,"bin")))
-		noBinBedGraphColumn -= 1;
-	if (!sameWord(type, "longblob"))
-	    {
-	    if (!gotFirst)
-		gotFirst = TRUE;
-	    else if (!isBedGr)
-		logic = " AND ";
-	    }
-	if (!isBedGr || (noBinBedGraphColumn == fieldNum))
-	    {
-	    if (isSqlStringType(type))
-		{
-		stringFilterOption(db, rootTable, field, logic);
-		}
-	    else if (isSqlEnumType(type) || isSqlSetType(type))
-		{
-		enumFilterOption(db, rootTable, field, type, logic);
-		}
-	    else
-		{
-		numericFilterOption(db, rootTable, field, field, logic);
-		}
-	    if (isBedGr)
-		{
-		double min, max;
-		double tDbMin, tDbMax;
+        if ((0 == fieldNum) && (!sameWord(field,"bin")))
+            noBinBedGraphColumn -= 1;
+        if (!sameWord(type, "longblob"))
+            {
+            if (!gotFirst)
+                gotFirst = TRUE;
+            else if (!isBedGr)
+                logic = " AND ";
+            }
+        if (!isBedGr || (noBinBedGraphColumn == fieldNum))
+            {
+            if (isSqlEnumType(type) || isSqlSetType(type))
+                {
+                enumFilterOption(db, rootTable, field, type, logic);
+                }
+            else if(isSqlIntType(type))
+                {
+                integerFilter(db, rootTable, field, field, logic);
+                }
+            else if(isSqlNumType(type))
+                {
+                if(isBedGr)
+                    {
+                    double min, max;
+                    double tDbMin, tDbMax;
 
-		wigFetchMinMaxLimits(tdb, &min, &max, &tDbMin, &tDbMax);
-		if (tDbMin < min)
-		    min = tDbMin;
-		if (tDbMax > max)
-		    max = tDbMax;
-		hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
-		    "</TD></TR>\n", field, min, max);
-		}
-	    }
-	++fieldNum;
-	}
+                    wigFetchMinMaxLimits(tdb, &min, &max, &tDbMin, &tDbMax);
+                    if (tDbMin < min)
+                        min = tDbMin;
+                    if (tDbMax > max)
+                        max = tDbMax;
+                    numericFilterWithLimits(db, rootTable, field, field, min, max, logic);
+                    hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
+                        "</TD></TR>\n", field, min, max);
+                    }
+                else
+                    {
+                    numericFilter(db, rootTable, field, field, logic);
+                    }
+                }
+            else //if (isSqlStringType(type))
+                {
+                stringFilterOption(db, rootTable, field, logic);
+                }
+            }
+        ++fieldNum;
+        }
     hPrintf("</TABLE>\n");
     }
 
@@ -855,64 +923,66 @@ puts("<TABLE BORDER=0>");
 if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf"))
     {
     stringFilterOption(db, table, "chrom", " AND ");
-    numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
-    numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
+    integerFilter(db, table, "chromStart", "chromStart", " AND ");
+    integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
     }
 else if (ct->wiggle)
     {
-    numericFilterOption("ct", table, filterDataValueVar, filterDataValueVar,"");
     if ((ct->tdb != NULL) && (ct->tdb != NULL))
-	{
-	double min, max;
-	wiggleMinMax(ct->tdb,&min,&max);
+        {
+        double min, max;
+        wiggleMinMax(ct->tdb,&min,&max);
 
-	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g,%g]) "
-		"</TD></TR>\n", min, max);
-	}
+        numericFilterWithLimits("ct", table, filterDataValueVar, filterDataValueVar,min,max,"");
+        hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g,%g]) "
+            "</TD></TR>\n", min, max);
+        }
+    else
+        {
+        numericFilter("ct", table, filterDataValueVar, filterDataValueVar,"");
+        }
     }
 else
     {
     if (ct->fieldCount >= 3)
-	{
-	stringFilterOption(db, table, "chrom", " AND ");
-	numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
-	numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
-	}
+        {
+        stringFilterOption(db, table, "chrom", " AND ");
+        integerFilter(db, table, "chromStart", "chromStart", " AND ");
+        integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
+        }
     if (ct->fieldCount >= 4)
-	{
-	stringFilterOption(db, table, "name", " AND ");
-	}
+        {
+        stringFilterOption(db, table, "name", " AND ");
+        }
     if (ct->fieldCount >= 5)
-	{
-	numericFilterOption(db, table, "score", "score", " AND ");
-	}
+        {
+        numericFilter(db, table, "score", "score", " AND ");
+        }
     if (ct->fieldCount >= 6)
-	{
-	stringFilterOption(db, table, "strand", " AND ");
-	}
+        {
+        stringFilterOption(db, table, "strand", " AND ");
+        }
     if (ct->fieldCount >= 8)
-	{
-	numericFilterOption(db, table, "thickStart", "thickStart", " AND ");
-	numericFilterOption(db, table, "thickEnd", "thickEnd", " AND ");
-	}
+        {
+        integerFilter(db, table, "thickStart", "thickStart", " AND ");
+        integerFilter(db, table, "thickEnd", "thickEnd", " AND ");
+        }
     if (ct->fieldCount >= 12)
-	{
-	numericFilterOption(db, table, "blockCount", "blockCount", " AND ");
-	}
+        {
+        integerFilter(db, table, "blockCount", "blockCount", " AND ");
+        }
     /* These are not bed fields, just extra constraints that we offer: */
     if (ct->fieldCount >= 3)
-	{
-	numericFilterOption(db, table, "chromLength", "(chromEnd - chromStart)",
-			    (ct->fieldCount >= 8) ? " AND " : "");
-	}
+        {
+        integerFilter(db, table, "chromLength", "(chromEnd - chromStart)",
+                    (ct->fieldCount >= 8) ? " AND " : "");
+        }
     if (ct->fieldCount >= 8)
-	{
-	numericFilterOption(db, table, "thickLength", "(thickEnd - thickStart)",
-			    " AND ");
-	eqFilterOption(db, table, "compareStarts", "chromStart", "thickStart",
-		       " AND ");
-	eqFilterOption(db, table, "compareEnds", "chromEnd", "thickEnd", "");
-	}
+        {
+        integerFilter( db, table, "thickLength",  "(thickEnd - thickStart)", " AND ");
+        eqFilterOption(db, table, "compareStarts","chromStart","thickStart", " AND ");
+        eqFilterOption(db, table, "compareEnds",  "chromEnd",  "thickEnd",   "");
+        }
     }
 
 puts("</TABLE>");
@@ -967,6 +1037,11 @@ if (strchr(table, '.'))
     htmlOpen("Filter on Fields from %s", table);
 else
     htmlOpen("Filter on Fields from %s.%s", db, table);
+
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
+commonCssStyles();
+
 hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", cgiScriptName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
