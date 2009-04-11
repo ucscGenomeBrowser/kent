@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ###############################################
 # 
@@ -33,7 +34,7 @@ set mach2="hgwbeta"
 set centdb1="hgcentraltest"
 set centdb2="hgcentralbeta"
 set host1=""
-set host2="-h hgwbeta"
+set host2="-h $sqlbeta"
 
 # check if asssembly database exits on dev.
 set orgCheck=`hgsql -N -e 'SELECT COUNT(*) FROM dbDb WHERE name = "'$db'"' \
@@ -72,12 +73,12 @@ endif
 # set machines to beta where needed
 if ( $mach1 == "hgwbeta" ) then
   set centdb1="hgcentralbeta"
-  set host1="-h hgwbeta"
+  set host1="-h $sqlbeta"
 endif
 
 if ( $mach2 == "hgwbeta" ) then
   set centdb2="hgcentralbeta"
-  set host2="-h hgwbeta"
+  set host2="-h $sqlbeta"
 endif
 
 

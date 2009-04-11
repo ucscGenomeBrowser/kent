@@ -125,7 +125,7 @@ echo -e "--> Running gbSanity, and putting output in:"
 echo -e "${HOST}:${sanityPath}/misc/${db}.sanity.$timestamp"
 (cd ${sanityPath} && bin/x86_64/gbSanity $db >& misc/${db}.sanity.$timestamp) || allOk=no
 echo -e "Here is the last line of ${db}.sanity.$timestamp:\n"
-tail -1
+tail -1 ${db}.sanity.$timestamp
 echo -e "If there are any errors here, consult Mark Diekhans.\n"
 
 # run featureBits

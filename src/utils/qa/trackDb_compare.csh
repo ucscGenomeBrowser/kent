@@ -1,4 +1,5 @@
 #! /bin/tcsh
+source `which qaConfig.csh`
 
 
 ############################
@@ -33,7 +34,7 @@ echo
 echo
 echo "Compare tableName, shortLabel and type fields"
 hgsql -N -e "SELECT tableName, shortLabel, type FROM $table" $db_dev | sort > $db_dev.$table.hgwdev.comp1.sort.txt
-hgsql -h hgwbeta -N -e "SELECT tableName, shortLabel, type FROM $table" $db_beta | sort > $db_beta.$table.hgwbeta.comp1.sort.txt
+hgsql -h $sqlbeta -N -e "SELECT tableName, shortLabel, type FROM $table" $db_beta | sort > $db_beta.$table.hgwbeta.comp1.sort.txt
 
 # Determine lines uniq to dev and beta
 set uniqDev=`comm -23 $db_dev.$table.hgwdev.comp1.sort.txt $db_beta.$table.hgwbeta.comp1.sort.txt | wc -l`

@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 # Script to run joinerCheck for full database with -key options
 # 08-17-04 M. Chalup
 # ---------

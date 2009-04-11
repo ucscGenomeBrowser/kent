@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 if ($#argv != 1) then
   # no command line args

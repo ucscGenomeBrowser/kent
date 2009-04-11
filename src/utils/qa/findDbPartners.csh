@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 #######################
 #
@@ -43,7 +44,7 @@ getAssemblies.csh blast%${Db}% | egrep -v "found|split" | tee -a $db.fullList
 
 # find if {Human,Fly,Worm} Proteins track exists
 echo "find if {Human,Fly,Worm} Proteins track exists.  ref to:"
-hgsql -h hgwbeta -e "SHOW TABLES LIKE 'blast%'" $db | egrep "FB|KG|SG" \
+hgsql -h $sqlbeta -e "SHOW TABLES LIKE 'blast%'" $db | egrep "FB|KG|SG" \
   | egrep -v "Ref|Pep" \
   | sed "s/blast//" | perl -pwe '$_ = lcfirst($_)' | perl -wpe "s/FB|KG|SG//" \
   | tee -a $db.fullList

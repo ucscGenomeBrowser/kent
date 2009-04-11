@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ####################
 #  10-03-07 Bob Kuhn and Brooke Rhead

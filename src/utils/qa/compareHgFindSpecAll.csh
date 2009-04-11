@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ###############################################
 #  Checks all fields in hgFindSpec

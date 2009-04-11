@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 # Script to test the chromInfo table
 # 21 April 2004 M. Chalup
 

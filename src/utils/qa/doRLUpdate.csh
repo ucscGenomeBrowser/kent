@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 if ( "$HOST" != "hgwdev" ) then
  echo "Error: this script must be run from hgwdev."
  exit 1

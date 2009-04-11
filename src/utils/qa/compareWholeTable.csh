@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ###############################################
 # 
@@ -57,11 +58,11 @@ if ( $status ) then
 endif
 
 if ( $mach1 == "hgwbeta" ) then
-  set host1="-h hgwbeta"
+  set host1="-h $sqlbeta"
 endif
 
 if ( $mach2 == "hgwbeta" ) then
-  set host2="-h hgwbeta"
+  set host2="-h $sqlbeta"
 endif
  
 # set flags for RR queries

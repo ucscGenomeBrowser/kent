@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ###############################################
 # 
@@ -41,7 +42,7 @@ endif
 #  get files of tables and compare:
 
 hgsql -N -e "SELECT $column FROM $table" $db | sort  > $db.$table.$column.dev
-hgsql -N -h hgwbeta -e "SELECT $column FROM $table" $db2 | sort  > $db2.$table.$column.beta
+hgsql -N -h $sqlbeta -e "SELECT $column FROM $table" $db2 | sort  > $db2.$table.$column.beta
 comm -23 $db.$table.$column.dev $db2.$table.$column.beta >$db.$table.$column.devOnly
 comm -13 $db.$table.$column.dev $db2.$table.$column.beta >$db2.$table.$column.betaOnly
 comm -12 $db.$table.$column.dev $db2.$table.$column.beta >$db.$table.$column.common

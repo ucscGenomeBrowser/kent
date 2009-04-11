@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ###############################################
 # 
@@ -292,7 +293,7 @@ foreach mouse ( $mice )
   echo "$mouse.extFile on hgwdev:"
   hgsql -e 'SELECT * FROM extFile WHERE name LIKE "genetrap%"' $mouse
   echo "             hgwbeta:"
-  hgsql -h hgwbeta -Ne 'SELECT * FROM extFile WHERE name LIKE "genetrap%"' \
+  hgsql -h $sqlbeta -Ne 'SELECT * FROM extFile WHERE name LIKE "genetrap%"' \
      $mouse
   echo
 end
@@ -387,7 +388,7 @@ end
 echo
 foreach table ( extFile seq )
   foreach mouse ( $mice )
-    echo 'hgsql -h hgwbeta -e ' "'"CREATE TABLE $table$oldYear${oldMonth}01 \
+    echo 'hgsql -h $sqlbeta -e ' "'"CREATE TABLE $table$oldYear${oldMonth}01 \
       SELECT \* FROM $table"'" $mouse  
   end
 end
@@ -404,7 +405,7 @@ end
 echo
 foreach table ( extFile seq )
   foreach mouse ( $mice )
-    echo 'hgsql -h hgwbeta -e ' "'"SHOW TABLES LIKE \"$table%\" "'" \
+    echo 'hgsql -h $sqlbeta -e ' "'"SHOW TABLES LIKE \"$table%\" "'" \
       $mouse
   end
 end
@@ -432,7 +433,7 @@ end
 echo
 foreach table ( extFile seq )
   foreach mouse ( $mice )
-    echo 'hgsql -h hgwbeta -e ' \
+    echo 'hgsql -h $sqlbeta -e ' \
       "'"DROP TABLE $table$oldOldYear${oldOldMonth}01"'" \
       $mouse
   end
@@ -445,7 +446,7 @@ echo
 
 echo "remove old rows:"
 foreach i ( $counter )
-  set extFileIdOld[$i]=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
+  set extFileIdOld[$i]=`hgsql -h $sqlbeta -Ne 'SELECT id FROM extFile \
     WHERE name LIKE "genetrap.'$lastMonth%'"' $mice[$i]`
 end
 
@@ -460,11 +461,11 @@ end
 
 echo
 foreach mouse ( $mice )
-  echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM $mouse.extFile WHERE name LIKE \
+  echo 'hgsql -h $sqlbeta -e ' "'"DELETE FROM $mouse.extFile WHERE name LIKE \
     '"'genetrap.$lastMonth.fasta'"' \' $mouse 
 end
 foreach i ( $counter )
-  echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM $mice[$i].seq WHERE extFile = \
+  echo 'hgsql -h $sqlbeta -e ' "'"DELETE FROM $mice[$i].seq WHERE extFile = \
       $extFileIdOld[$i]\' $mice[$i]
 end
 echo
@@ -497,7 +498,7 @@ wc -l *devOnly | grep -v total
 echo
 echo "beta"
 foreach i ( $counter )
-  hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq \
+  hgsql -h $sqlbeta -Ne 'SELECT COUNT(*) FROM seq \
     WHERE extFile = "'$extFileIdOld[$i]'"' $mice[$i]
 end
 wc -l *betaOnly | grep -v total
@@ -509,9 +510,9 @@ echo "Here are the commands needed to load the new rows into extFile \
   and seq tables on BETA:\n"
 
 foreach mouse ( $mice )
-  echo 'hgsql -h hgwbeta -e ' "'"LOAD DATA LOCAL INFILE \
+  echo 'hgsql -h $sqlbeta -e ' "'"LOAD DATA LOCAL INFILE \
     '"'$mouse.seq.$update'"'     INTO TABLE seq"'"         $mouse
-  echo 'hgsql -h hgwbeta -e ' "'"LOAD DATA LOCAL INFILE \
+  echo 'hgsql -h $sqlbeta -e ' "'"LOAD DATA LOCAL INFILE \
     '"'$mouse.extFile.$update'"' INTO TABLE extFile"'" $mouse
   echo
 end
@@ -554,7 +555,7 @@ foreach i ( $counter )
 end
 
 foreach i ( $counter )
-  echo 'hgsql -h hgwbeta -Ne' "'" \
+  echo 'hgsql -h $sqlbeta -Ne' "'" \
     'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld[$i]'"' \' \
     $mice[$i]
 end
@@ -565,7 +566,7 @@ foreach i ( $counter)
   echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
 end
 foreach i ( $counter)
-  echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
+  echo 'hgsql -h $sqlbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
 end
 echo
 echo

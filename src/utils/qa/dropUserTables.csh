@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 ##########################################################
 # remove unneeded trackDb_ and hgFindSpec_ tables        #
 #  on hgwbeta for given assembly ($1)                    #

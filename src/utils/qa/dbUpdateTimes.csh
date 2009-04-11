@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ################################
 #  05-17-04
@@ -34,11 +35,11 @@ endif
 echo $databases > dbs
 
 if ($databases == assemblies) then
-  hgsql -N -h hgwbeta -e "SELECT name FROM dbDb" hgcentralbeta > dbs
+  hgsql -N -h $sqlbeta -e "SELECT name FROM dbDb" hgcentralbeta > dbs
 endif
 
 if ($databases == all) then
-  hgsql -N -h hgwbeta -e "SHOW DATABASES" hgcentralbeta > dbs
+  hgsql -N -h $sqlbeta -e "SHOW DATABASES" hgcentralbeta > dbs
 endif
 
 echo
@@ -86,7 +87,7 @@ foreach db (`cat dbs`)
   cat $db.strip genbank.local | sort > $db.genbankPlus
 
   # get list of tables from beta, remove trackDb* 
-  hgsql -N -h hgwbeta -e "SHOW TABLES" $db | sort | grep -v "trackDb" \
+  hgsql -N -h $sqlbeta -e "SHOW TABLES" $db | sort | grep -v "trackDb" \
     > $db.tables.beta
 
   rm -f $db.remove
@@ -118,7 +119,7 @@ foreach db (`cat dbs`)
   foreach table (`cat $db.tables`)
     set dev=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
       | awk '{print $13, $14}'`
-    set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
+    set beta=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
       | awk '{print $13, $14}'`
 
     if ("$beta" != "$dev") then

@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 #################################
 # 
@@ -139,7 +140,7 @@ if ( 'setup' == $run ) then
  # dropped from hgwbeta for users review.
  # if the file is empty, then that means this must be NEW data.
  foreach oneFile ( $files )
-  hgsql -h hgwbeta -Ne "SELECT * FROM extFile WHERE path = '$oneFile'" $db \
+  hgsql -h $sqlbeta -Ne "SELECT * FROM extFile WHERE path = '$oneFile'" $db \
    >> XXextFileDropFromBetaXX 
  end
 
@@ -162,7 +163,7 @@ if ( 'setup' == $run ) then
  set extFileId=`cat XXextFileDropFromBetaXX | awk '{print $1}'`
 
  # it is possible (even common) for there to be no seq table
- set seqTable=`hgsql -h hgwbeta -Ne "SHOW TABLES LIKE 'seq'" $db`
+ set seqTable=`hgsql -h $sqlbeta -Ne "SHOW TABLES LIKE 'seq'" $db`
  if ( "" == $seqTable ) then
   set seqTable=0
   echo "0" > XXseqTableXX
@@ -174,7 +175,7 @@ if ( 'setup' == $run ) then
  # create file of row(s) from seq on hgwbeta (if there is a seq table)
  if ( 1 == $seqTable ) then
   foreach id ( "$extFileId" )
-   hgsql -h hgwbeta -Ne "SELECT * FROM seq WHERE extFile = '$id'" $db \
+   hgsql -h $sqlbeta -Ne "SELECT * FROM seq WHERE extFile = '$id'" $db \
     >> XXseqDropFromBetaXX
   end
  else
@@ -329,7 +330,7 @@ if ( 'real' == $run ) then
   set tableList="extFile seq"
  endif
  foreach table ( $tableList )
-  set numTables=`hgsql -h hgwbeta -Ne "SHOW TABLES LIKE '$table'" $db`
+  set numTables=`hgsql -h $sqlbeta -Ne "SHOW TABLES LIKE '$table'" $db`
   if ( $numTables == '' ) then
    echo "\n ERROR: the $table table does not exist on hgwbeta."
    echo " You should create an empty $table table in the $db database"
@@ -346,11 +347,11 @@ if ( 'real' == $run ) then
  # Make a backup of seq and extFile tables on hgwbeta.
  foreach table ( $tableList )
   if ( 0 == $DEBUG ) then
-   hgsql -h hgwbeta -e "CREATE TABLE IF NOT EXISTS $table$today \
+   hgsql -h $sqlbeta -e "CREATE TABLE IF NOT EXISTS $table$today \
     SELECT * FROM $table" $db
   else
    # DEBUG mode
-   echo "hgsql -h hgwbeta -e "'CREATE TABLE IF NOT EXISTS '$table''$today' \
+   echo "hgsql -h $sqlbeta -e "'CREATE TABLE IF NOT EXISTS '$table''$today' \
     SELECT * FROM '$table''" $db\n"
   endif
  end
@@ -363,7 +364,7 @@ if ( 'real' == $run ) then
  # If this is a Case II Update, we expect the table to have changed, so skip it.
  if ( 2 != $case ) then
   foreach oneFile ( $files )
-   hgsql -h hgwbeta -Ne 'SELECT * FROM extFile WHERE path = "'$oneFile'"' \
+   hgsql -h $sqlbeta -Ne 'SELECT * FROM extFile WHERE path = "'$oneFile'"' \
     $db >> XXextFileDropFromBetaRealXX
   end
 
@@ -397,11 +398,11 @@ if ( 'real' == $run ) then
    set extFileId=`cat XXextFileDropFromBetaXX | awk '{print $1}'`
    if ( 0 == $DEBUG ) then
     foreach id ( $extFileId )
-     hgsql -h hgwbeta -e "DELETE FROM extFile WHERE id = '$id'" $db
+     hgsql -h $sqlbeta -e "DELETE FROM extFile WHERE id = '$id'" $db
     end
    else
     # DEBUG mode
-    echo "hgsql -h hgwbeta -e "'DELETE FROM extFile WHERE id = '$extFileId''" \
+    echo "hgsql -h $sqlbeta -e "'DELETE FROM extFile WHERE id = '$extFileId''" \
      $db\n"
    endif
 
@@ -414,10 +415,10 @@ if ( 'real' == $run ) then
     set seqExtFile=`cat XXseqDropFromBetaXX | awk '{print $5}' | sort -u`
     foreach val ( $seqExtFile )
      if ( 0 == $DEBUG ) then
-      hgsql -h hgwbeta -e "DELETE FROM seq WHERE extFile = '$val'" $db
+      hgsql -h $sqlbeta -e "DELETE FROM seq WHERE extFile = '$val'" $db
      else
       # DEBUG mode
-      echo "hgsql -h hgwbeta -e "'DELETE FROM seq WHERE extFile = '$val''" $db\n"
+      echo "hgsql -h $sqlbeta -e "'DELETE FROM seq WHERE extFile = '$val''" $db\n"
      endif
     end #foreach
    endif
@@ -427,21 +428,21 @@ if ( 'real' == $run ) then
  # do this for all instances: new data, update Case I, update Case II
  # load data into hgwbeta: $db.extFile based on: XXextFileCopyFromDevXX
  if ( 0 == $DEBUG ) then
-  hgsql -h hgwbeta -e 'LOAD DATA LOCAL INFILE "'XXextFileCopyFromDevXX'" \
+  hgsql -h $sqlbeta -e 'LOAD DATA LOCAL INFILE "'XXextFileCopyFromDevXX'" \
    INTO TABLE extFile' $db
  else
   # DEBUG mode
-  echo "hgsql -h hgwbeta -e "'LOAD DATA LOCAL INFILE 'XXextFileCopyFromDevXX' \
+  echo "hgsql -h $sqlbeta -e "'LOAD DATA LOCAL INFILE 'XXextFileCopyFromDevXX' \
    INTO TABLE extFile'" $db\n"
  endif
 
  # load data into hgwbeta: $db.seq based on: XXseqCopyFromDevXX
  if ( 0 == $DEBUG ) then
-  hgsql -h hgwbeta -e 'LOAD DATA LOCAL INFILE "'XXseqCopyFromDevXX'" \
+  hgsql -h $sqlbeta -e 'LOAD DATA LOCAL INFILE "'XXseqCopyFromDevXX'" \
    INTO TABLE seq' $db
  else
   # DEBUG mode
-  echo "hgsql -h hgwbeta -e "'LOAD DATA LOCAL INFILE 'XXseqCopyFromDevXX' \
+  echo "hgsql -h $sqlbeta -e "'LOAD DATA LOCAL INFILE 'XXseqCopyFromDevXX' \
    INTO TABLE seq'" $db\n"
  endif
 
@@ -484,13 +485,13 @@ if ( 'real' == $run ) then
  echo '#drop rows from $db.extFile:'
  echo '# set extFileId to this: cat XXextFileCopyFromDevXX | awk {print $1}'
  echo '# foreach id in $extFileId'
- echo '#  hgsql -h hgwbeta -e DELETE FROM extFile WHERE id = $id $db'
+ echo '#  hgsql -h $sqlbeta -e DELETE FROM extFile WHERE id = $id $db'
  echo '# end'
  echo
  echo '#drop rows from $db.seq:'
  echo '# set seqExtFile to this cat XXseqCopyFromDevXX | awk {print $5} | sort -u'
  echo '# foreach val in $seqExtFile'
- echo '#  hgsql -h hgwbeta -e DELETE FROM seq WHERE extFile = $val $db'
+ echo '#  hgsql -h $sqlbeta -e DELETE FROM seq WHERE extFile = $val $db'
  echo '# end\n'
 
  if ( "update" == $type && 1 == "$case" ) then

@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ####################
 #  06-20-05 Robert Kuhn
@@ -42,7 +43,7 @@ rm -f $output
 rm -f $output2
 
 # get assembly list from beta
-hgsql -h hgwbeta -N -e "SELECT name FROM dbDb" hgcentralbeta \
+hgsql -h $sqlbeta -N -e "SELECT name FROM dbDb" hgcentralbeta \
    | sort | grep -v ci1 | grep -v zoo > xxAssembliesxx
 echo "all" >> xxAssembliesxx
 echo "genbank" >> xxAssembliesxx

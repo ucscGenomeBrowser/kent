@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 /bin/rm -f /tmp/hostlist
 hgsql -h genome-centdb -e "select remote_host from access_log" apachelog  > /tmp/hostlist

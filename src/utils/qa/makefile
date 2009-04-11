@@ -90,6 +90,8 @@ install:
 	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
+	cp -p --remove-destination qaConfig.csh            ${SCRIPTS}
+	cp -p --remove-destination qaConfig.bash           ${SCRIPTS}
 	cp -p --remove-destination qaEnsGenes.csh          ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}

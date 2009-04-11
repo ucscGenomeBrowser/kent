@@ -1,4 +1,5 @@
 #! /bin/tcsh
+source `which qaConfig.csh`
 echo "Content-Type:text/html"
 echo
 echo "<HTML>"

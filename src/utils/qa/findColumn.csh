@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ################################
 #  04-21-04
@@ -9,7 +10,7 @@
 set db=""
 set field=""
 set machine="beta"
-set host="-h hgwbeta"
+set host="-h $sqlbeta"
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo

@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ######################################
 #
@@ -24,7 +25,7 @@ else
   set run=$argv[1]
 endif
 
-set unlock=`hgsql -h hgwbeta -Ne "SELECT qid FROM pushQ \
+set unlock=`hgsql -h $sqlbeta -Ne "SELECT qid FROM pushQ \
   WHERE lockDateTime != '' or lockUser != ''" qapushq`
 if ( '' == "$unlock" ) then
   echo "\n no locks to unlock\n"  
@@ -32,13 +33,13 @@ if ( '' == "$unlock" ) then
 endif
 
 if ( 'go' == $run ) then
-  hgsql -h hgwbeta -e "SELECT qid, lockUser, lockDateTime FROM pushQ \
+  hgsql -h $sqlbeta -e "SELECT qid, lockUser, lockDateTime FROM pushQ \
   WHERE lockDateTime != '' or lockUser != ''" qapushq
   exit 0
 else 
   if ( 'real' == $run && '' != "$unlock" ) then
     foreach lock ( $unlock )
-      hgsql -h hgwbeta -e "UPDATE pushQ SET lockUser = '', lockDateTime = '' \
+      hgsql -h $sqlbeta -e "UPDATE pushQ SET lockUser = '', lockDateTime = '' \
       WHERE qid = '$lock'" qapushq
       echo "\nunlocking qid: $lock"
     end

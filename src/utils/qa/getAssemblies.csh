@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 #######################
 #
@@ -9,7 +10,7 @@
 
 set tablename=""
 set machine="hgwbeta"
-set host="-h hgwbeta"
+set host="-h $sqlbeta"
 set found=0
 set dbs=""
 set rr="false"

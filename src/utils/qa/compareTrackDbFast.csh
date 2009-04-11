@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 if ($#argv < 3 || $#argv > 4) then
  echo ""
@@ -36,7 +37,7 @@ foreach machine ( $machine1 $machine2 )
   else
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
-      set host="-h hgwbeta"
+      set host="-h $sqlbeta"
     else
       set cent=""
       set host="-h genome-centdb"
@@ -80,12 +81,12 @@ set tableRow=""
 if ( $field == "html" || $field == "settings" ) then
   rm -f $machine1.$db.$table
   rm -f $machine2.$db.$table
-  set tracks=`hgsql -N -h hgwbeta -e "SELECT tableName FROM trackDb" $db`
+  set tracks=`hgsql -N -h $sqlbeta -e "SELECT tableName FROM trackDb" $db`
   foreach row ( $tracks )
     set tableRow=$row
     foreach machX ( $machine1 $machine2 )
       if ( $machX == "hgwbeta" ) then
-        hgsql -h hgwbeta -e 'SELECT '$field' FROM trackDb \
+        hgsql -h $sqlbeta -e 'SELECT '$field' FROM trackDb \
           WHERE tableName = "'$tableRow'"' $db > $machX.$db.$table.$field
       else
         set pubMySqlFlag=1
@@ -104,7 +105,7 @@ else
   foreach mach ( $machine1 $machine2 )
     rm -f $mach.$db.$table 
     if ( $mach == "hgwbeta" ) then
-      hgsql -h hgwbeta -e 'SELECT '$field' FROM trackDb' $db \
+      hgsql -h $sqlbeta -e 'SELECT '$field' FROM trackDb' $db \
          > $mach.$db.$table
     else
       set pubMySqlFlag=1

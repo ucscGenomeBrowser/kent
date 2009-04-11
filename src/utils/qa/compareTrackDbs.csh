@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 set table = "trackDb"
 set field = "tableName"
@@ -49,7 +50,7 @@ foreach machine ( $machine1 $machine2 )
   else
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
-      set host="-h hgwbeta"
+      set host="-h $sqlbeta"
     else
       set cent=""
       set host="-h genome-centdb"

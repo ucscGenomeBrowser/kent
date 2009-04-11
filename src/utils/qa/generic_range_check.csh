@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 # Script to process the Gene Sorter tables to check MIN/MAX size of
 # certain fields.  Will also check for NULL and empty fields
 # Based on Bob Kuhn's spgGene.csh

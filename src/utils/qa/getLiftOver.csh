@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 #######################
 #
@@ -40,7 +41,7 @@ endif
 
 if ($machine == 'hgwbeta') then
  set central='hgcentralbeta'
- set host='-h hgwbeta'
+ set host='-h $sqlbeta'
 endif
 if ($machine == 'hgwdev') then
  set central='hgcentraltest'

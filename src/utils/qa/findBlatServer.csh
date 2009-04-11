@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 ################################
 #
@@ -51,7 +52,7 @@ endif
 
 echo $machine | grep hgwbeta > /dev/null
 if ( ! $status ) then
-  set machine='-h hgwbeta hgcentralbeta'
+  set machine='-h $sqlbeta hgcentralbeta'
 endif
   
 echo $machine | grep hgwdev > /dev/null

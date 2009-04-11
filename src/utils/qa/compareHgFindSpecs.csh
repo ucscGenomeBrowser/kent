@@ -1,4 +1,5 @@
 #!/bin/tcsh
+source `which qaConfig.csh`
 
 if ($#argv < 3 || $#argv > 4) then
  echo ""
@@ -35,7 +36,7 @@ foreach machine ( $machine1 $machine2 )
   else
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
-      set host="-h hgwbeta"
+      set host="-h $sqlbeta"
     else
       set cent=""
       set host="-h genome-centdb"
