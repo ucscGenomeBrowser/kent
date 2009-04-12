@@ -8,7 +8,7 @@
 #include "blastParse.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: blastParse.c,v 1.22 2009/04/12 03:47:20 markd Exp $";
+static char const rcsid[] = "$Id: blastParse.c,v 1.23 2009/04/12 05:48:42 markd Exp $";
 
 #define TRACE_LEVEL 3  /* verbose level to enable tracing of files */
 #define DUMP_LEVEL 4    /* verbose level to enable dumping of parsed */
@@ -305,11 +305,35 @@ if (verboseLevel() >= DUMP_LEVEL)
 return bq;
 }
 
+static char *findNextGapped(struct blastFile *bf, struct blastQuery *bq)
+/* scan for next gapped alignment, return line or NULL if not hit */
+{
+while (TRUE)
+    {
+    if (!bfSkipBlankLines(bf))
+        return NULL;
+    char *line = bfNextLine(bf);
+    /*
+     * the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
+     * TBLASTN 2.2.15 [Oct-15-2006]
+     * I am hoping that by looking for only "BLAST" this will work with things like blastp, blastn, psi-blast, etc
+     */
+    if (startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
+        {
+	lineFileReuse(bf->lf);
+        return NULL;
+        }
+    if (line[0] == '>')
+        return line;
+    if (isRoundLine(line))
+        parseRoundLine(line, bq);
+    }
+}
+
 struct blastGappedAli *blastFileNextGapped(struct blastFile *bf, struct blastQuery *bq)
 /* Read in next gapped alignment.   Does *not* put it on bf->gapped list. 
  * Return NULL at EOF or end of query. */
 {
-char *line;
 char *words[16];
 int wordCount;
 struct blastGappedAli *bga;
@@ -318,19 +342,9 @@ int lenSearch;
 
 verbose(TRACE_LEVEL, "blastFileNextGapped\n");
 
-/* First line should be query. */
-if (!bfSkipBlankLines(bf))
+char *line = findNextGapped(bf, bq);
+if (line == NULL)
     return NULL;
-line = bfNextLine(bf);
-/*
-the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
-TBLASTN 2.2.15 [Oct-15-2006]
-I am hoping that by looking for only "BLAST" this will work with things like blastp, blastn, psi-blast, etc
-*/
-if (startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
-    return NULL;
-if (line[0] != '>')
-    bfError(bf, "Expecting >target");
 
 AllocVar(bga);
 bga->query = bq;

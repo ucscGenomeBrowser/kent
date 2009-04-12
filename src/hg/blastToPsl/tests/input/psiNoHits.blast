@@ -1,0 +1,61 @@
+BLASTP 2.2.16 [Mar-25-2007]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+
+Reference for composition-based statistics:
+Schaffer, Alejandro A., L. Aravind, Thomas L. Madden,
+Sergei Shavirin, John L. Spouge, Yuri I. Wolf,  
+Eugene V. Koonin, and Stephen F. Altschul (2001), 
+"Improving the accuracy of PSI-BLAST protein database searches with 
+composition-based statistics and other refinements",  Nucleic Acids Res. 29:2994-3005.
+
+Query= Q1HDS8
+         (62 letters)
+
+Database: para.tmp/uniprot.xeno.fa 
+           6,121,393 sequences; 1,813,306,667 total letters
+
+Searching..................................................done
+
+
+
+ ***** No hits found ******
+
+Searching..................................................done
+
+
+
+ ***** No hits found ******
+
+  Database: para.tmp/uniprot.xeno.fa
+    Posted date:  Apr 11, 2009  1:32 PM
+  Number of letters in database: 999,999,610
+  Number of sequences in database:  3,169,277
+  
+  Database: para.tmp/uniprot.xeno.fa.01
+    Posted date:  Apr 11, 2009  1:35 PM
+  Number of letters in database: 813,307,057
+  Number of sequences in database:  2,952,116
+  
+Lambda     K      H
+   0.331    0.145    0.552 
+
+Lambda     K      H
+   0.267   0.0457    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+effective search space used: 44945020540
+T: 11
+A: 40
+X1: 16 ( 7.6 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 40 (21.9 bits)
+S2: 72 (32.2 bits)
