@@ -8,7 +8,7 @@ all:
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
 	longDbNameTest multiLineDescTest tblastxTest tblastnTest \
-	blastpPsiTest psiNoHitsTest
+	blastpPsiTest psiNoHitsTest psiBadFormatTest
 
 #tblastnDbFirstTest megaBlastTest
 
@@ -115,6 +115,15 @@ psiNoHitsTest: mkdirs
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
+# PSI-BLASTP produces bogus blocks where query starts at 0 and there is not
+# ending number on the line. Sbjct may be empty or have sequence.  These 
+# are ignored
+psiBadFormatTest: mkdirs
+	${blastToPsl} -scores=output/$@.bscores input/psiBadFormat.blast output/$@.psl >output/$@.err 2>&1
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+	diff -u expected/$@.err output/$@.err
 clean::
 	rm -rf output
 

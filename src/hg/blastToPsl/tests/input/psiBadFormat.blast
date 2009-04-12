@@ -1,0 +1,220 @@
+BLASTP 2.2.16 [Mar-25-2007]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+
+Reference for composition-based statistics:
+Schaffer, Alejandro A., L. Aravind, Thomas L. Madden,
+Sergei Shavirin, John L. Spouge, Yuri I. Wolf,  
+Eugene V. Koonin, and Stephen F. Altschul (2001), 
+"Improving the accuracy of PSI-BLAST protein database searches with 
+composition-based statistics and other refinements",  Nucleic Acids Res. 29:2994-3005.
+
+Query= Q96A84-2
+         (439 letters)
+
+Database: para.tmp/uniprot.xeno.fa 
+           6,121,393 sequences; 1,813,306,667 total letters
+
+Searching..................................................done
+
+
+Results from round 1
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+O16001 6087 Hydra attenuata                                            82   7e-14
+
+>O16001 6087 Hydra attenuata
+          Length = 465
+
+ Score = 82.0 bits (201), Expect = 7e-14,   Method: Composition-based stats.
+ Identities = 77/189 (40%), Positives = 96/189 (50%), Gaps = 4/189 (2%)
+
+Query: 183 GSPGDGGLQDQVGAWGLPGPTGPKGDAGSRGPMGMRGPPGPQGPPGSPGRAGAVGTPGER 242
+           G  G+ GL    G  G  GP G  G  G+ GP G+ GP GP GP G  G  G  G+ G++
+Sbjct: 162 GEAGENGLPGIKGDTGARGPNGTIGFQGAAGPEGLMGPSGPTGPDGVKGPQGPRGSDGQQ 221
+
+Query: 243 GPPGPPGPPGPPGPPAPVGPPHARISQHGDPLLSNTFTETNNHWPQGPTGPPGPPGPMGP 302
+           G  G  G  G PGP  PVG P     Q G+P       ++ +    GP G  G  GP G 
+Sbjct: 222 GTAGLAGESGDPGPSGPVGQP----GQRGEPGYPGIRGDSGDRGDTGPQGLDGLDGPPGD 277
+
+Query: 303 PGPPGPTGVPGSPGHIGPPGPTGPKGISGHPGEKGERGLRGEPGPQGSAGQRGEPGPKGD 362
+            G PGP G+PG+PG +G  G  G +G  G PG++GE+G  G PG  G AG +G  G +G 
+Sbjct: 278 RGLPGPVGLPGAPGPVGERGEPGKQGPRGFPGQQGEQGSPGIPGVVGEAGDKGPRGLQGQ 337
+
+Query: 363 PGEKSHWGE 371
+            G     GE
+Sbjct: 338 VGVAGPPGE 346
+
+
+
+ Score = 75.1 bits (183), Expect = 7e-12,   Method: Composition-based stats.
+ Identities = 81/192 (42%), Positives = 88/192 (45%), Gaps = 8/192 (4%)
+
+Query: 183 GSPGDGGLQDQVGAWGLPGPTGPKGDAGSRGPMGMRGPPGPQGPPGSPGRAGAVGTPGER 242
+           G PGD GL   VG  G PGP G +G+ G +GP G  G  G QG PG PG  G  G  G R
+Sbjct: 273 GPPGDRGLPGPVGLPGAPGPVGERGEPGKQGPRGFPGQQGEQGSPGIPGVVGEAGDKGPR 332
+
+Query: 243 GPPGPPGPPGPPGPPAPVGPPHARISQHGDPLLSNTFTETNNHWPQ--------GPTGPP 294
+           G  G  G  GPPG     G P             N     +   P         G  G  
+Sbjct: 333 GLQGQVGVAGPPGESGSDGRPGPPGPNGAPGQRGNQGLPGSPGLPGLPGIKGHIGEKGFT 392
+
+Query: 295 GPPGPMGPPGPPGPTGVPGSPGHIGPPGPTGPKGISGHPGEKGERGLRGEPGPQGSAGQR 354
+           GP G  G  G PG TG  G PG  GP G  GP G+ G  GE+G  G  G PGP G AG R
+Sbjct: 393 GPIGEKGNRGEPGRTGQMGIPGARGPVGDPGPVGLDGKEGERGIPGKDGLPGPPGQAGLR 452
+
+Query: 355 GEPGPKGDPGEK 366
+           G PG +G  GEK
+Sbjct: 453 GIPGLQGATGEK 464
+
+
+
+ Score = 73.6 bits (179), Expect = 2e-11,   Method: Composition-based stats.
+ Identities = 76/186 (40%), Positives = 89/186 (47%), Gaps = 13/186 (6%)
+
+Query: 189 GLQDQVGAWGLPGPTGPKGDAGSRGPMGMRGPPGPQGPPGSPGRAGAVGTPGERGPPGPP 248
+           G++   G  G PGP G KGD G  G  G  G PG +G  G+ G  G +G  G  GP G  
+Sbjct: 138 GIKGVKGELGEPGPKGAKGDVGQNGEAGENGLPGIKGDTGARGPNGTIGFQGAAGPEGLM 197
+
+Query: 249 GPPGPPGPPAPVGPPHARISQHGDPLLSNTFTETNNHWPQGPTGPPGPPGPMGPPGPPGP 308
+           GP GP GP    GP   R S            +       G +G PGP GP+G PG  G 
+Sbjct: 198 GPSGPTGPDGVKGPQGPRGSD----------GQQGTAGLAGESGDPGPSGPVGQPGQRGE 247
+
+Query: 309 TGVPGSPGHIGPPGPTGPKGISGHPGEKGERGLRGE---PGPQGSAGQRGEPGPKGDPGE 365
+            G PG  G  G  G TGP+G+ G  G  G+RGL G    PG  G  G+RGEPG +G  G 
+Sbjct: 248 PGYPGIRGDSGDRGDTGPQGLDGLDGPPGDRGLPGPVGLPGAPGPVGERGEPGKQGPRGF 307
+
+Query: 366 KSHWGE 371
+               GE
+Sbjct: 308 PGQQGE 313
+
+
+
+ Score = 72.8 bits (177), Expect = 4e-11,   Method: Composition-based stats.
+ Identities = 86/225 (38%), Positives = 100/225 (44%), Gaps = 26/225 (11%)
+
+Query: 166 PATPEDPAPLWGPPPAQGSPGDGGLQDQVGAWGLPGPTGPKGDAGSRGP---MGMRGPPG 222
+           P+ P  P  + GP   +GS G  G     G  G PGP+GP G  G RG     G+RG  G
+Sbjct: 199 PSGPTGPDGVKGPQGPRGSDGQQGTAGLAGESGDPGPSGPVGQPGQRGEPGYPGIRGDSG 258
+
+Query: 223 PQGPPGSPGRAGAVGTPGERGPPGPPGPPGPPGPPAPVGPPH--------ARISQHGDPL 274
+            +G  G  G  G  G PG+RG PGP G PG PGP    G P          +  + G P 
+Sbjct: 259 DRGDTGPQGLDGLDGPPGDRGLPGPVGLPGAPGPVGERGEPGKQGPRGFPGQQGEQGSPG 318
+
+Query: 275 LSNTFTETNNHWPQGPTGPPGPPGPMGPPGPP---------------GPTGVPGSPGHIG 319
+           +     E  +  P+G  G  G  GP G  G                 G  G+PGSPG  G
+Sbjct: 319 IPGVVGEAGDKGPRGLQGQVGVAGPPGESGSDGRPGPPGPNGAPGQRGNQGLPGSPGLPG 378
+
+Query: 320 PPGPTGPKGISGHPGEKGERGLRGEPGPQGSAGQRGEPGPKGDPG 364
+            PG  G  G  G  G  GE+G RGEPG  G  G  G  GP GDPG
+Sbjct: 379 LPGIKGHIGEKGFTGPIGEKGNRGEPGRTGQMGIPGARGPVGDPG 423
+
+
+
+ Score = 61.6 bits (148), Expect = 8e-08,   Method: Composition-based stats.
+ Identities = 69/190 (36%), Positives = 87/190 (45%), Gaps = 16/190 (8%)
+
+Query: 193 QVGAWGLPGPTGPKGDAGSRGPMGMRGPPGPQGPPGSPGRAGAVGTP------------G 240
+           + G  G+ GP G  GD G+ GP G+RG  G +G  G PG  G +G              G
+Sbjct: 79  ETGETGISGPRGLTGDPGNVGPKGLRGKDGREGQKGEPGSKGLMGVTGNPGPSGPPGQRG 138
+
+Query: 241 ERGPPGPPGPPGPPGPPAPVGPPHARISQHGDPLLSNTFTETNNHWPQGPTGPPGPPGPM 300
+            +G  G  G PGP G    VG    +  + G+  L     +T    P G  G  G  GP 
+Sbjct: 139 IKGVKGELGEPGPKGAKGDVG----QNGEAGENGLPGIKGDTGARGPNGTIGFQGAAGPE 194
+
+Query: 301 GPPGPPGPTGVPGSPGHIGPPGPTGPKGISGHPGEKGERGLRGEPGPQGSAGQRGEPGPK 360
+           G  GP GPTG  G  G  GP G  G +G +G  GE G+ G  G  G  G  G+ G PG +
+Sbjct: 195 GLMGPSGPTGPDGVKGPQGPRGSDGQQGTAGLAGESGDPGPSGPVGQPGQRGEPGYPGIR 254
+
+Query: 361 GDPGEKSHWG 370
+           GD G++   G
+Sbjct: 255 GDSGDRGDTG 264
+
+
+
+ Score = 48.9 bits (115), Expect = 5e-04,   Method: Composition-based stats.
+ Identities = 40/87 (45%), Positives = 46/87 (52%)
+
+Query: 177 GPPPAQGSPGDGGLQDQVGAWGLPGPTGPKGDAGSRGPMGMRGPPGPQGPPGSPGRAGAV 236
+           G P + G PG  G++  +G  G  GP G KG+ G  G  G  G PG +GP G PG  G  
+Sbjct: 369 GLPGSPGLPGLPGIKGHIGEKGFTGPIGEKGNRGEPGRTGQMGIPGARGPVGDPGPVGLD 428
+
+Query: 237 GTPGERGPPGPPGPPGPPGPPAPVGPP 263
+           G  GERG PG  G PGPPG     G P
+Sbjct: 429 GKEGERGIPGKDGLPGPPGQAGLRGIP 455
+
+
+
+ Score = 48.5 bits (114), Expect = 7e-04,   Method: Composition-based stats.
+ Identities = 73/213 (34%), Positives = 94/213 (44%), Gaps = 27/213 (12%)
+
+Query: 0   --------------------------                                  
+                                                                       
+Sbjct: 38  PPGPPGVAGGNQTTVVVIYGPPGPPG                                   63
+
+Query: 0                                                               
+                                                                       
+Sbjct: 63                                                               63
+
+Query: 0                                                               
+                                                                       
+Sbjct: 63                                                               63
+
+Query: 178 PPPAQGSPGDGGLQDQVGAWGLPGPTGPKGDAGSRGP                        214
+                G PG  G   + G  G+ GP G  GD G+ GP                       
+Sbjct: 64  NQGPIGPPGPKGFNGETGETGISGPRGLTGDPGNVGP                        100
+
+Query: 215 MGMRGPPGPQGPPGSPGRAGAVGTPGERGPPGPPGPPGPPGPPAPVGPPHARISQHGDPL 274
+            G+RG  G +G  G PG  G +G  G  GP GPPG  G  G    +G P  + ++ GD  
+Sbjct: 101 KGLRGKDGREGQKGEPGSKGLMGVTGNPGPSGPPGQRGIKGVKGELGEPGPKGAK-GDVG 159
+
+Query: 275 LSNTFTETNNHWPQGPTGPPGPPGPMGPPGPPGPTGVPGSPGHIGPPGPTGPKGISGHPG 334
+            +    E      +G TG  GP G +G  G  GP G+ G  G  GP G  GP+G  G  G
+Sbjct: 160 QNGEAGENGLPGIKGDTGARGPNGTIGFQGAAGPEGLMGPSGPTGPDGVKGPQGPRGSDG 219
+
+Query: 335 EKGERGLRGEPGPQGSAGQRGEPGPKGDPG 364
+           ++G  GL GE G  G +G  G+PG +G+PG
+Sbjct: 220 QQGTAGLAGESGDPGPSGPVGQPGQRGEPG 249
+
+
+
+ Score = 38.9 bits (89), Expect = 0.58,   Method: Composition-based stats.
+ Identities = 46/122 (37%), Positives = 48/122 (39%), Gaps = 25/122 (20%)
+
+Query: 195 GAWGLPGPTGPKGDAGSRGPMGMRGPPGPQGPPGSPGRAGAVGTPGERGPPGPPGPPGPP 254
+           G  G PG  G  G  G  G  G  GP G +G  G PGR G +G PG RGP G PGP G  
+Sbjct: 369 GLPGSPGLPGLPGIKGHIGEKGFTGPIGEKGNRGEPGRTGQMGIPGARGPVGDPGPVGLD 428
+
+Query: 255 GPPAPVGPPHARISQHGDPLLSNTFTETNNHWPQGPTGPPGPPGPMGPPGPPGPTGVPGS 314
+           G     G P                         G  G PGPPG  G  G PG  G  G 
+Sbjct: 429 GKEGERGIP-------------------------GKDGLPGPPGQAGLRGIPGLQGATGE 463
+
+Query: 315 PG 316
+            G
+Sbjct: 464 KG 465
+
+
+
+ Score = 38.5 bits (88), Expect = 0.79,   Method: Composition-based stats.
+ Identities = 53/140 (37%), Positives = 55/140 (39%), Gaps = 4/140 (2%)
+
+Query: 231 GRAGAVGTPGERGPPGPPGPPGPPGPPAPVGPPHARISQHGDPLLSNTFTETNNHWPQGP 290
+           G  G  G  G RG  G PG  GP G     G    R  Q G+P        T N  P GP
+Sbjct: 78  GETGETGISGPRGLTGDPGNVGPKGLRGKDG----REGQKGEPGSKGLMGVTGNPGPSGP 133
+
+Query: 291 TGPPGPPGPMGPPGPPGPTGVPGSPGHIGPPGPTGPKGISGHPGEKGERGLRGEPGPQGS 350
+            G  G  G  G  G PGP G  G  G  G  G  G  GI G  G +G  G  G  G  G 
+Sbjct: 134 PGQRGIKGVKGELGEPGPKGAKGDVGQNGEAGENGLPGIKGDTGARGPNGTIGFQGAAGP 193
+
+Query: 351 AGQRGEPGPKGDPGEKSHWG 370
+            G  G  GP G  G K   G
+Sbjct: 194 EGLMGPSGPTGPDGVKGPQG 213
+
+
