@@ -111,7 +111,6 @@ blastpPsiTest: mkdirs
 # PSI-BLASTP with no hits
 psiNoHitsTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/psiNoHits.blast output/$@.psl
-	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
