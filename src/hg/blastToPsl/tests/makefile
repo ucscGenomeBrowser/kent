@@ -7,7 +7,8 @@ all:
 
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
-	longDbNameTest multiLineDescTest tblastxTest tblastnTest
+	longDbNameTest multiLineDescTest tblastxTest tblastnTest \
+	blastpPsiTest
 
 #tblastnDbFirstTest megaBlastTest
 
@@ -99,6 +100,13 @@ megaBlastTest: mkdirs
 	${blastToPsl} input/970.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+
+# PSI-BLASTP 
+blastpPsiTest: mkdirs
+	${blastToPsl} -scores=output/$@.bscores input/blastpPsi.blast output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
 
 clean::
 	rm -rf output

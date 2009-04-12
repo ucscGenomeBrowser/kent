@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.22 2007/08/22 02:49:47 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.23 2009/04/12 03:47:20 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -64,7 +64,9 @@ errAbort(
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
   "          an integer, double or 1e-10. Default is no filter.\n"
-  "  -pslx - create PSLX output (includes sequences for blocks)\n" 
+  "  -pslx - create PSLX output (includes sequences for blocks)\n"
+  "\n"
+  "Output only results of last round from PSI BLAST\n"
   );
 }
 
@@ -337,14 +339,18 @@ pslFree(&psl);
 }
 
 void processQuery(struct blastQuery *bq, unsigned flags, FILE* pslFh, FILE* scoreFh)
-/* process one query  */
+/* process one query. Each gaped block becomes an psl. Chaining is left
+ * to other programs.  Only output last round from PSI BLAST */
 {
 struct blastGappedAli* ba;
 struct blastBlock *bb;
 for (ba = bq->gapped; ba != NULL; ba = ba->next)
     {
-    for (bb = ba->blocks; bb != NULL; bb = bb->next)
-        processBlock(bb, flags, pslFh, scoreFh);
+    if (ba->psiRound == bq->psiRounds)
+        {
+        for (bb = ba->blocks; bb != NULL; bb = bb->next)
+            processBlock(bb, flags, pslFh, scoreFh);
+        }
     }
 }
 

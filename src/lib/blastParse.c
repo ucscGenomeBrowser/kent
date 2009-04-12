@@ -8,7 +8,7 @@
 #include "blastParse.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: blastParse.c,v 1.21 2008/09/17 17:56:37 kent Exp $";
+static char const rcsid[] = "$Id: blastParse.c,v 1.22 2009/04/12 03:47:20 markd Exp $";
 
 #define TRACE_LEVEL 3  /* verbose level to enable tracing of files */
 #define DUMP_LEVEL 4    /* verbose level to enable dumping of parsed */
@@ -54,12 +54,12 @@ static char *bfNextLine(struct blastFile *bf)
 char *line = NULL;
 if (lineFileNext(bf->lf, &line, NULL))
     {
-    verbose(TRACE_LEVEL, "=> %s\n", line);
+    verbose(TRACE_LEVEL, "    => %s\n", line);
     return line;
     }
 else
     {
-    verbose(TRACE_LEVEL, "=> EOF\n");
+    verbose(TRACE_LEVEL, "    => EOF\n");
     return NULL;
     }
 }
@@ -237,6 +237,23 @@ bq->dbSeqCount = atoi(words[0]);
 bq->dbBaseCount = atoi(words[2]);
 }
 
+static char *roundLinePrefix = "Results from round "; // start of a round line
+
+static boolean isRoundLine(char *line)
+/* check if a line is a PSI round number line */
+{
+return startsWith(roundLinePrefix, line);
+}
+
+static void parseRoundLine(char *line, struct blastQuery *bq)
+/* round line and save current round in query
+ *   Results from round 1
+ */
+{
+char *p = skipLeadingSpaces(line + strlen(roundLinePrefix));
+bq->psiRounds = atoi(p);
+}
+
 struct blastQuery *blastFileNextQuery(struct blastFile *bf)
 /* Read all alignments associated with next query.  Return NULL at EOF. */
 {
@@ -268,7 +285,9 @@ for (;;)
 	lineFileReuse(bf->lf);
 	break;
 	}
-    if (stringIn("No hits found", line) != NULL)
+    else if (isRoundLine(line))
+        parseRoundLine(line, bq);
+    else if (stringIn("No hits found", line) != NULL)
         break;
     }
 
@@ -298,8 +317,6 @@ struct blastBlock *bb;
 int lenSearch;
 
 verbose(TRACE_LEVEL, "blastFileNextGapped\n");
-AllocVar(bga);
-bga->query = bq;
 
 /* First line should be query. */
 if (!bfSkipBlankLines(bf))
@@ -314,7 +331,11 @@ if (startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
     return NULL;
 if (line[0] != '>')
     bfError(bf, "Expecting >target");
+
+AllocVar(bga);
+bga->query = bq;
 bga->targetName = cloneString(line+1); 
+bga->psiRound = bq->psiRounds;
 
 /* Process something like:
  *      Length = 100000
@@ -324,6 +345,8 @@ bga->targetName = cloneString(line+1);
 for (lenSearch=0; lenSearch<25; lenSearch++)
 	{
 	line = bfNeedNextLine(bf);
+        if (isRoundLine(line))
+            parseRoundLine(line, bq);
 	wordCount = chopLine(line, words);
 	if (wordCount == 3 && sameString(words[0], "Length") &&  sameString(words[1], "=")
             && isdigit(words[2][0]))
@@ -357,7 +380,7 @@ else
     }
 }
 
-static boolean nextBlockLine(struct blastFile *bf, char **retLine)
+static boolean nextBlockLine(struct blastFile *bf, struct blastQuery *bq, char **retLine)
 /* Get next block line.  Return FALSE and reuse line if it's
  * an end of block type line. */
 {
@@ -367,6 +390,9 @@ char *line;
 *retLine = line = bfNextLine(bf);
 if (line == NULL)
     return FALSE;
+if (isRoundLine(line))
+    parseRoundLine(line, bq);
+
 /*
 the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
 TBLASTN 2.2.15 [Oct-15-2006]
@@ -464,7 +490,7 @@ verbose(TRACE_LEVEL,  "blastFileNextBlock\n");
  * alignment. */
 for (;;)
     {
-    if (!nextBlockLine(bf, &line))
+    if (!nextBlockLine(bf, bq, &line))
 	return NULL;
     if (startsWith(" Score", line))
 	break;
@@ -594,7 +620,7 @@ for (;;)
     /* Fetch next first line. */
     for (;;)
 	{
-	if (!nextBlockLine(bf, &line))
+	if (!nextBlockLine(bf, bq, &line))
 	    goto DONE;
 	if (startsWith(" Score", line))
 	    {
@@ -758,7 +784,10 @@ void blastGappedAliPrint(struct blastGappedAli* ba, FILE* out)
 /* print a BLAST gapped alignment for debugging purposes  */
 {
 struct blastBlock *bb;
-fprintf(out, "%s <=> %s\n", ba->query->query, ba->targetName);
+fprintf(out, "%s <=> %s", ba->query->query, ba->targetName);
+if (ba->psiRound > 0)
+    fprintf(out, " round: %d", ba->psiRound);
+fputc('\n', out);
 for (bb = ba->blocks; bb != NULL; bb = bb->next)
     {
     blastBlockPrint(bb, out);
