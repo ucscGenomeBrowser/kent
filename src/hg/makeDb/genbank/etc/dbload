@@ -78,9 +78,11 @@ lastTimeTmp=$lastTime.tmp
 dbloadTime=$dbloadVar/dbload.time
 
 # use our own .hg.conf for genbank db user
-HGDB_CONF=$gbRoot/etc/.hg.conf
-export HGDB_CONF
-
+if [ $(hostname) = "hgwbeta" ] ; then
+    export HGDB_CONF=$gbRoot/etc/.hg.hgsqlbeta.cof
+else
+    export HGDB_CONF=$gbRoot/etc/.hg.conf
+fi
 
 mkdir -p $dbloadVar
 
