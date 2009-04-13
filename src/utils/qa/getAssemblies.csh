@@ -47,7 +47,6 @@ endif
 
 if (($#argv > 1 && $quiet == 1) || $#argv == 3 ) then
   set machine="$argv[2]"
-  set host="-h $argv[2]"
   if ($argv[2] == "hgwdev") then
     set host=""
   endif
