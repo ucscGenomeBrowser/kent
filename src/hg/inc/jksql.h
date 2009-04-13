@@ -156,7 +156,7 @@ boolean sqlRowExists(struct sqlConnection *conn,
 
 /* Options to sqlLoadTabFile */
 
-#define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessable
+#define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessible
                                      * by the sql server */
 #define SQL_TAB_FILE_WARN_ON_WARN  0x02 /* warn on warnings being returned
                                          * rather than abort */
@@ -173,8 +173,9 @@ boolean sqlRowExists(struct sqlConnection *conn,
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options);
-/* Load a tab-seperated file into a database table, checking for errors. 
- * Options are the SQL_TAB_* bit set. */
+/* Load a tab-seperated file into a database table, checking for errors.
+ * Options are the SQL_TAB_* bit set. SQL_TAB_FILE_ON_SERVER is ignored if
+ * sqlIsRemote() returns true. */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* Query database.
@@ -481,5 +482,9 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
 
 void sqlSetParanoid(boolean beParanoid);
 /* If set to TRUE, will make more diagnostic stderr messages. */
+
+boolean sqlIsRemote(struct sqlConnection *conn);
+/* test if the conn appears to be to a remote system.
+ * Current only tests for a TCP/IP connection */
 
 #endif /* JKSQL_H */

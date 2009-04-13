@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.128 2009/02/28 00:34:00 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.129 2009/04/13 22:34:11 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1128,8 +1128,9 @@ return (sqlUnsigned(majorVerBuf) >= 4);
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
-/* Load a tab-seperated file into a database table, checking for errors. 
- * Options are the SQL_TAB_* bit set. */
+/* Load a tab-seperated file into a database table, checking for errors.
+ * Options are the SQL_TAB_* bit set. SQL_TAB_FILE_ON_SERVER is ignored if
+ * sqlIsRemote() returns true. */
 {
 assert(!conn->isFree);
 char tabPath[PATH_LEN];
@@ -1154,7 +1155,7 @@ boolean doDisableKeys = FALSE;
 
 /* determine if tab file can be accessed directly by the database, or send
  * over the network */
-if (options & SQL_TAB_FILE_ON_SERVER)
+if ((options & SQL_TAB_FILE_ON_SERVER) && !sqlIsRemote(conn))
     {
     /* tab file on server requiries full path */
     strcpy(tabPath, "");
@@ -2421,4 +2422,11 @@ void sqlSetParanoid(boolean beParanoid)
 /* If set to TRUE, will make more diagnostic stderr messages. */
 {
 sqlParanoid = beParanoid;
+}
+
+boolean sqlIsRemote(struct sqlConnection *conn)
+/* test if the conn appears to be to a remote system.
+ * Current only tests for a TCP/IP connection */
+{
+return (conn->conn->unix_socket == NULL);
 }
