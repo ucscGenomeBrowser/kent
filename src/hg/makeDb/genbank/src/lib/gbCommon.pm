@@ -907,66 +907,25 @@ sub setupHgConf() {
     return $hgConf;
 }
 
-# catch of .hg.conf users/password
-my $hgUser;
-my $hgPassword;
-
-# get the db.user and db.password from ~/.hg.conf, caching the results.
-sub getMysqlUser() {
-   if (!defined($hgUser)) {
-       my $hgConf = getHgConf();
-       open(HGCONF, "<$hgConf") || die("can't open $hgConf");
-       my $line;
-       while (($line = <HGCONF>)) {
-           my($key,$val) = parseConfLine($hgConf, $line);
-           if (defined($key)) {
-               if ($key eq "db.user") {
-                   $hgUser = $val;
-               } elsif ($key eq "db.password") {
-                   $hgPassword = $val;
-               }
-           }
-           
-       }
-       close(HGCONF);
-       if (!defined($hgUser)) {
-           die("$hgConf doesn't set db.user");
-       }
-       if (!defined($hgPassword)) {
-           die("$hgConf doesn't set db.password");
-       }
-   }
-   return ($hgUser, $hgPassword);
-}
-
-# execute a mysql with genome user/password, return the output.
+# execute a mysql command, return the output.
 sub callMysql($) {
     my($args) = @_;
-
-    my($user, $pass) = getMysqlUser();
-    # still not super secure, since ps can see env.
-    $main::ENV{MYSQL_PWD} = $pass;
-    return callProg("mysql -u$user $args");
+    setupHgConf();
+    return callProg("hgsql $args");
 }
 
-# execute a mysqldump with genome user/password
+# execute a mysqldump
 sub runMysqlDump($) {
     my($args) = @_;
-
-    my($user, $pass) = getMysqlUser();
-    # still not super secure, since ps can see env.
-    $main::ENV{MYSQL_PWD} = $pass;
-    runProg("mysqldump -u$user $args");
+    setupHgConf();
+    runProg("hgsqldump $args");
 }
 
 # execute a mysql with genome user/password
 sub runMysql($) {
     my($args) = @_;
-
-    my($user, $pass) = getMysqlUser();
-    # still not super secure, since ps can see env.
-    $main::ENV{MYSQL_PWD} = $pass;
-    runProg("mysql -u$user $args");
+    setupHgConf();
+    runProg("hgsql $args");
 }
 
 # determine if a database exists
