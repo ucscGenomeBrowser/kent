@@ -11331,3 +11331,39 @@ wgEncode	1
     fragSize 5k
     cell GM12878
 
+
+track wgEncodeHelicosRnaSeq
+compositeTrack on
+shortLabel Helicos RnaSeq
+longLabel ENCODE Helicos Gingeras RnaSeq
+group regulation
+subGroup1 view Views Alignments=Alignments
+subGroup2 cellType Cell_Line K562=K562
+subGroup3 localization Localization cytosol=cytosol
+subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
+dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+controlledVocabulary encode/cv.ra cellType localization rnaExtract
+dragAndDrop subTracks
+visibilityViewDefaults  Alignments=hide
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeHelicosRnaSeq off
+    shortLabel longPolyA K562 cytosol
+    longLabel ENCODE Helicos RNA-Seq Tags (longPolyA in K562 cell cytosol using )
+    subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
+    #type tagAlign
+    type bigBed
+    dateSubmitted 2009-04-13
+    dateUnrestricted 2010-01-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
