@@ -7,7 +7,8 @@ SCRIPT_FILES = \
 CONFIG_FILES = \
 	fields.ra \
 	labs.ra \
-	cv.ra
+	cv.ra \
+	hg18_chromInfo.txt
 
 CV = cv.ra
 
