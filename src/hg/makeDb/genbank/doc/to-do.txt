@@ -1159,5 +1159,8 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   - genome has 1-base insertion (error); frame rendered is wrong
     due to micro-indel merging.
 
+- shows ESTes with Author: HCGP http://www.ludwig.org.br/ORESTES be in gbWarn
+
 - mRNA BX161433 flagged invitroNorm in gbWarn; BX356367 seems to be from
   same clone and should be flagged
+
