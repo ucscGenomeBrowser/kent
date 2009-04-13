@@ -203,13 +203,14 @@ set metatable="genomeClade"
 # get lookup for clade check
 # filter out "/" when it appears in genome name - to avoid e.g, Dog/Human
 hgsql $host1 -Ne 'SELECT * FROM genomeClade WHERE genome LIKE "%'$genome'"' \
-  $centdb1 | grep -v "/" > $metatable.$db.$out1 
+  $centdb1 | grep -v "/" | sort > $metatable.$db.$out1 
 hgsql $host2 -Ne 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
-  $centdb2 | grep -v "/" > $metatable.$db.$out2
+  $centdb2 | grep -v "/" | sort > $metatable.$db.$out2
  
 set metatable=""
 
 # compare and  print results
+# should replace with commTiro.csh, but for now simply sorting genomeClade above
 foreach table ( `echo $metatables` )
   comm -23 $table.$db.$out1 $table.$db.$out2 > $table.$db.${out1}Only
   comm -13 $table.$db.$out1 $table.$db.$out2 > $table.$db.${out2}Only
