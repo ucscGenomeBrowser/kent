@@ -658,6 +658,13 @@ int differentStringNullOk(char *a, char *b);
 #define isEmpty(string) (string == NULL || string[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
+int cmpStringsWithEmbeddedNumbers(char *a, char *b);
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+
+int cmpWordsWithEmbeddedNumbers(char *a, char *b);
+/* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
+
 boolean startsWith(char *start,char *string);
 /* Returns TRUE if string begins with start. */
 
@@ -743,6 +750,12 @@ int countCharsN(char *s, char c, int size);
 
 int countLeadingChars(char *s, char c);
 /* Count number of characters c at start of string. */
+
+int countLeadingDigits(char *s);
+/* Return number of leading digits in s */
+
+int countLeadingNondigits(char *s);
+/* Count number of leading non-digit characters in s. */
 
 int countSame(char *a, char *b);
 /* Count number of characters that from start in a,b that are same. */
