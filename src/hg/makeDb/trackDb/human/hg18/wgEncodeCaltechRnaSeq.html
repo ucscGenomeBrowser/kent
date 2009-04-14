@@ -15,8 +15,8 @@ one end of a randomly primed cDNA molecule;
 and paired-end reads, which are obtained as pairs from both ends cDNAs 
 resulting from random priming. 
 The resulting sequence reads are then informatically mapped onto the genome 
-sequence (<I>Alignments</I>), which has been informatically
-"expanded" to also contain known RNA splice junctions (<I>Splice Sites</I>).  
+sequence (<I>Alignments</I>). Those that dont map to the genome
+are mapped to known RNA splice junctions (<I>Splice Sites</I>).  
 These mapped reads are then counted to determine their 
 frequency of occurrence at known gene models.  Sequence reads that cluster at 
 genome locations that lack an existing
@@ -55,8 +55,8 @@ ERANGE, as described previously
 (Mortazavi <EM>et al.</EM>, 2008).  These multi-reads (<I>Alignments</I>) are 
 displayed in grey. In addition to tracks of 
 individual reads, bedgraph files (<I>Raw Signal</I>) summarize the data in 
-units of RPM (reads passing over a base 
-normalized per million mapped reads in the measurement).  The RPM measure 
+units of RPKM (reads passing over a base 
+normalized per million mapped reads in the measurement).  The RPKM measure 
 assists in visualizing 
 the relative amount of a given transcript across multiple samples. </P>
 
@@ -155,7 +155,7 @@ alignment of sequence reads. </LI>
 of given abundance.   </LI>
 <LI>Linear range detection of spiked in RNA transcripts from Arabidopsis and 
 phage lambda over 5 orders of magnitude.   </LI>
-<LI>Endpoint RTPCR confirms presence of selected RNAFAR 3’UTR extensions.
+<LI>Endpoint RTPCR confirms presence of selected RNAFAR 3&prime;UTR extensions.
 </LI>
 <LI>Correlation to published microarray data r = 0.62 </LI>
 </UL>
