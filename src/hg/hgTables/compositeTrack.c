@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.14 2009/04/10 20:04:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.15 2009/04/14 14:19:52 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -150,7 +150,7 @@ printf("Base-pair-wise union (OR) of %s and other selected subtracks<P>\n",
 }
 
 struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table)
-/* Find or creates the tdb for this table. */
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) */
 {
 if(isEmpty(table))
     return parent;

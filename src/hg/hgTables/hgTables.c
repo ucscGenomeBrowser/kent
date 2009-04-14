@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.182 2009/04/11 00:02:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.183 2009/04/14 14:19:53 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1182,8 +1182,7 @@ struct trackDb *tdb = findTdbForTable(db, curTrack, table);
 hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
 
-showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb */
-					/*	instead of "reserved" */
+showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)

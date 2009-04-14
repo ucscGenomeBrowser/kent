@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.75 2009/04/10 20:04:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.76 2009/04/14 14:19:52 angie Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -322,6 +322,8 @@ static void fillInTrackTable(struct trackTable *table,
 boolean isCustomDbTable = FALSE;
 struct customTrack *ct = NULL;
 struct trackDb *tdb = findTdbForTable(database,table->tdb,table->tableName);
+if (tdb == NULL)
+    errAbort("fillInTrackTable: tdb is NULL!");
 table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
 table->actualTdb = tdb;

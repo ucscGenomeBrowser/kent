@@ -1041,7 +1041,7 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 #define uglyw warn	/* Warn for debugging purposes. */
 
 struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table);
-/* Find or creates the tdb for this table. */
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) */
 
 char *findTypeForTable(char *db,struct trackDb *parent,char *table);
 /* Finds the TrackType for this Table */

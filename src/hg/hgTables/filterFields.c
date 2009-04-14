@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.71 2009/04/11 00:05:19 tdreszer Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.72 2009/04/14 14:19:53 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -266,8 +266,7 @@ struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable);
 struct asObject *asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb */
-					/*	instead of "reserved" */
+showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 struct slName *fieldName, *fieldList;
 if (isBigBed(table))
