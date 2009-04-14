@@ -139,7 +139,7 @@ end:
 
 
 char* sign_and_encryptFromFiles(const char *data, char *keyFile, char *certFile, char *ppCertFile, int verbose)
-/* sign and encrypt button data for safe delivery to paypal, use keys/certs in specified filenames */
+/* sign and encrypt button data for safe delivery to paypal, use keys/certs in specified filenames.  Free return value with free(). */
 {
     ERR_load_crypto_strings();
     OpenSSL_add_all_algorithms();

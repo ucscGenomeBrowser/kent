@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.35 2008/09/08 16:05:04 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.36 2009/04/14 18:14:44 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -813,7 +813,6 @@ if (buttonEncrypted)
     }
 else
     {
-    buttonEncrypted = cloneString("");
     fprintf(stderr, "error: sign_and_encrypt failed on buttonData=[%s]\n", buttonData);
     }
 
@@ -830,7 +829,11 @@ safef(buttonHtml,sizeof(buttonHtml),
 , buttonEncrypted
 );
 
-freez(&buttonEncrypted);
+if (buttonEncrypted)  /* paypalSignEncrypt.c uses malloc to avoid common.h */
+    {
+    free(buttonEncrypted);
+    buttonEncrypted = NULL;
+    }
 
 //debug
 //fprintf(stderr, "encrypted button form: [%s]\n", buttonHtml);
