@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.1 2009/01/08 05:36:24 mikep Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.2 2009/04/14 08:24:12 mikep Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -443,7 +443,7 @@ while (namePt != NULL && namePt[0] != 0)
     AllocVar(el);
     el->val = dataPt;
     slAddHead(&list, el);
-    hashAddSaveName(hash, namePt, el, &el->name);
+    hashAddSaveName(hash, namePt, el->val, &el->name);
     namePt = nextNamePt;
     }
 slReverse(&list);
