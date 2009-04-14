@@ -4,37 +4,6 @@ AE or subtype B HIV-1 gp120 nucleotide sequences.  Each positive selection site 
 </P>
 
 <H2>Methods</H2>
-<P>Levels of selection in each subtype and placebo and vaccine samples were 
-compared using methods implemented in PAML v3.14.  The nonsynonymous/synonymous
-substitution rate ratio (&omega; = <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub>) and 
-the proportion of sites (<i>p</i>) with &omega; &gt; 1 were estimated under the 
-site-specific models of Goldman (2005) and Yang (2000). Tests of positive 
-selection were performed by comparing likelihood scores (likelihood ratio 
-test) between the M1 (neutral) and M2 (selection) and between the M7 (beta) 
-and M8 (beta&amp;&omega;) per-site nested models. Selection levels per-gene (M0) 
-were also estimated for comparison. We also applied the Bayesian test 
-developed by Yang (2005) and implemented in PAML to identify the potential 
-sites under diversifying selection as indicated by a posterior probability 
-&gt; 0.95. Maximum likelihood trees were estimated for each subtype using 
-PhyML under the best-fit substitution models. Each analysis was run 
-twice under &omega; = 1.5 and 0.5. 
-</P>
-
-<P>
-A new coalescent model has been recently described that estimates the 
-<i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio and the recombination 
-rate (&rho;) simultaneously using Bayesian inference (Wilson and McVean 2006). 
-Such a model is implemented in Omegamap (Wilson and McVean 2006) and has 
-been applied to all of our datasets. We ran Omegamap under a constant model 
-for variation (i.e., all sites are assumed to share common &omega; and &rho;) and 
-the following parameter settings: 
-<LI>N&#176; orders = 10</LI>
-<LI>N&#176; iterations = 10<super>6</super></LI>
-<LI>thinning = 100</LI>
-<LI>priors = improper inverse</LI>
-</P>
-
-<H3>Details</H3>
 <P>The standard method for detecting adaptive molecular evolution in 
 protein-coding DNA sequences is through comparison of nonsynonymous 
 (amino acid changing; <i>d</i><sub>N</sub>) and synonymous 
@@ -56,13 +25,13 @@ selection and therefore most important in vaccine targets. Here
 placebo and vaccine samples were compared using methods implemented in 
 PAML v3.14.  &omega; and the proportion of sites (&rho;) with &omega;
 &gt; 1 were estimated under the site-specific models of
-Goldman <em> et al.</em> (1994) and Yang.
+Goldman <em>et al</em>. (1994) and Yang (2000).
 Tests of positive selection were performed by comparing likelihood scores 
 (likelihood ratio test) between the M1 (neutral) and M2 (selection) and 
 between the M7 (beta) and M8 (beta&&omega;) per-site nested models. 
 More stringent models in PAML (M0) of per-gene selection were also 
 estimated for comparison. If adaptive selection was identified, we then 
-applied the Bayesian test developed by Yang <em>et al.</em> and implemented 
+applied the Bayesian test developed by Yang <em>et al</em>. and implemented 
 in PAML to identify the potential sites under diversifying selection as 
 indicated by a posterior probability &gt; 0.95. Maximum likelihood trees 
 were estimated for each subtype using PhyML under the best-fit substitution 
@@ -70,8 +39,8 @@ models. Each analysis was run twice under &omega; = 1.5 and 0.5.
 </P>
 
 <P>
-Simulations published by Anisimova <em>et al.</em> (2003) and Shriner 
-<em>et al.</em> (2003) assessed the accuracy and power of the LRT and Bayes 
+Simulations published by Anisimova <em>et al</em>. (2003) and Shriner 
+<em>et al</em>. (2003) assessed the accuracy and power of the LRT and Bayes 
 test implemented in PAML in the presence of recombination. General conclusions 
 from these analyses indicate that excessive recombination (&rho; = 0.01), 
 like usually observed in HIV sequences, can cause false positives in the Bayes 
@@ -82,8 +51,9 @@ positive selection seems to be less affected by recombination.
 Nevertheless, a new coalescent model has been recently described that estimates 
 the <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> ratio in the presence of 
 recombination and hence generates simultaneous estimates of &omega; and &rho; 
-using Bayesian inference. Such a model is implemented in Omegamap  and has been 
-applied to our subtype and vaccine and placebo samples. We ran Omegamap under 
+using Bayesian inference (Wilson <em>et al</em>. 2006). 
+Such a model is implemented in omegaMap and has been 
+applied to our subtype and vaccine and placebo samples. We ran omegaMap under 
 a constant model for variation (i.e., all sites are assumed to share common 
 &omega; and &rho;) and the following parameter settings: 
 <LI>N&#176; orders = 10</LI>
@@ -112,8 +82,8 @@ recombination could inflate <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub>
 rates, but this does not seem to be the case, since 
 <i>d</i><sub>N</sub>/<i>d</i><sub>S</sub> rates (as estimated in PAML) 
 are higher for subtype B, hence suggesting that the high frequency of 
-subtype AE in Thailand is rather a founder event that could take 
-place ~25 years ago.
+subtype AE in Thailand is rather a founder event that could have taken 
+place approximately 25 years ago.
 </P>
 
 <TABLE BORDER=1>
@@ -246,9 +216,9 @@ place ~25 years ago.
 
 <P><B>Table 1.</B> Test of adaptive selection for the Thailand HIV-1 
 subtypes B and AE from placebo and vaccinated individuals in PAML 
-and Omegamap. All model comparisons in PAML were significant 
+and omegaMap. All model comparisons in PAML were significant 
 (<i>P</i> &lt; 0.001). The recombination rate (&rho;) under 
-selection (Omegamap) is also provided. 95% HPD intervals are 
+selection (omegaMap) is also provided. 95% HPD intervals are 
 indicated between parentheses.
 </P>
 
