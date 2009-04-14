@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.61 2009/04/10 19:56:35 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.62 2009/04/14 14:22:26 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -807,6 +807,10 @@ if (parent != NULL)
         tdb = subTdbFind(parent,table);
     }
 if(tdb == NULL && db != NULL)
-    tdb = hTrackDbForTrack(db, table);
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    tdb = hMaybeTrackInfo(conn, table);
+    hFreeConn(&conn);
+    }
 return tdb;
 }
