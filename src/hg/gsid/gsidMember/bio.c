@@ -1,11 +1,11 @@
 /* use bio to call openssl on https://host/url */
 
-#include "common.h"
-#include "dystring.h"
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 
-boolean check_cert(SSL *ssl, char *host)
+#include "bio.h"
+
+int check_cert(SSL *ssl, char *host)
 {
 X509 *peer;
 char peer_CN[256];

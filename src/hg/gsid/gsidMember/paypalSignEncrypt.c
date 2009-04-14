@@ -1,12 +1,26 @@
 /* paypalSignEncrypt.h - routines to sign and encrypt button data using openssl */
 
+#include <string.h>
+
 #include "paypalSignEncrypt.h"
 
 /* The following code comes directly from PayPal's ButtonEncyption.cpp file, and has been
    modified only to work with C
 */
 
-char* sign_and_encrypt(const char *data, RSA *rsa, X509 *x509, X509 *PPx509, bool verbose)
+#include "openssl/buffer.h"
+#include "openssl/bio.h"
+#include "openssl/sha.h"
+#include "openssl/rand.h"
+#include "openssl/err.h"
+#include "openssl/rsa.h"
+#include "openssl/evp.h"
+#include "openssl/x509.h"
+#include "openssl/x509v3.h"
+#include "openssl/pkcs7.h"
+#include "openssl/pem.h"
+
+char* sign_and_encrypt(const char *data, RSA *rsa, X509 *x509, X509 *PPx509, int verbose)
 /* sign and encrypt button data for safe delivery to paypal */
 {
 	char *ret = NULL;
@@ -106,7 +120,7 @@ char* sign_and_encrypt(const char *data, RSA *rsa, X509 *x509, X509 *PPx509, boo
 
 	BIO_flush(bio);
 	len = BIO_get_mem_data(bio, &str);
-	ret = needMem(sizeof(char)*(len+1));
+	ret = malloc(sizeof(char)*(len+1));
 	memcpy(ret, str, len);
 	ret[len] = 0;
 
@@ -124,7 +138,7 @@ end:
 }
 
 
-char* sign_and_encryptFromFiles(const char *data, char *keyFile, char *certFile, char *ppCertFile, bool verbose)
+char* sign_and_encryptFromFiles(const char *data, char *keyFile, char *certFile, char *ppCertFile, int verbose)
 /* sign and encrypt button data for safe delivery to paypal, use keys/certs in specified filenames */
 {
     ERR_load_crypto_strings();

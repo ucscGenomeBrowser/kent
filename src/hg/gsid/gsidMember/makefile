@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 # !!! NOTE we use gcc34 here to avoid a compiler compatibility issue with openss
-CC = gcc34
+#CC = gcc34
 
 XINC = -I/usr/include
 L += $(MYSQLLIBS) -lm -lcrypt -lssl
@@ -8,7 +8,7 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = gsidMember
 
-O = members.o $A.o bio.o paypalSignEncrypt.o
+O = paypalSignEncrypt.o bio.o members.o $A.o
 
 HG_WARN=${HG_WARN_ERR}
 

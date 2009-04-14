@@ -3,6 +3,8 @@
 #ifndef BIO_H
 #define BIO_H
 
+#include "dystring.h"
+
 struct dyString *bio(char *site, char *url, char *certFile, char *certPath);
 /*
 This SSL/TLS client example, attempts to retrieve a page from an SSL/TLS web server. 
