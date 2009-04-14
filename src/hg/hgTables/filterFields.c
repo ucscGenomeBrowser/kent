@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.72 2009/04/14 14:19:53 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.73 2009/04/14 18:05:55 tdreszer Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -780,11 +780,10 @@ struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable);
 boolean gotFirst = FALSE;
-boolean isWig = FALSE;
+boolean isSmallWig = isWiggle(db, table);
+boolean isWig = isSmallWig || isBigWig(table);
 boolean isBedGr = isBedGraph(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
-
-isWig = isWiggle(db, table) || isBigWig(table);
 
 if (isBedGr)
     {
@@ -898,13 +897,11 @@ if (!(isWig||isBedGr))
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
     hPrintf("</TD></TR></TABLE>\n");
-#define WIG_BED_LIMITS_OUTPUT
-#ifdef WIG_BED_LIMITS_OUTPUT
     }
-else
+
+if (isSmallWig||isBedGr)
     {
     char *name;
-#endif//def WIG_BED_LIMITS_OUTPUT
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
     name = filterFieldVarName(db, rootTable, "_", filterMaxOutputVar);
     cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
