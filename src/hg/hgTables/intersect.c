@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.49 2009/04/10 20:04:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.50 2009/04/14 14:16:35 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -37,16 +37,27 @@ static char *nextVars[] = {hgtaNextIntersectGroup, hgtaNextIntersectTrack,
  * libified, probably in cart.h. */
 void removeCartVars(struct cart *cart, char **vars, int varCount);
 
+static boolean canIntersect(char *db, char *table)
+/* Return true if table exists and is positional. */
+{
+if (isCustomTrack(table) && lookupCt(table) != NULL)
+    return TRUE;
+if (sameWord(table, WIKI_TRACK_TABLE))
+    return TRUE;
+if (hTableOrSplitExists(db, table))
+    return isPositional(db, table);
+return FALSE;
+}
+
 boolean anyIntersection()
 /* Return TRUE if there's an intersection to do. */
 {
 boolean specd = (cartVarExists(cart, hgtaIntersectTrack) &&
 		 cartVarExists(cart, hgtaIntersectTable));
-if (specd)
+if (specd && canIntersect(database, curTable))
     {
     char *table = cartString(cart, hgtaIntersectTable);
-    if ((isCustomTrack(table) && lookupCt(table) != NULL) ||
-	hTableOrSplitExists(database, table) || sameWord(table, WIKI_TRACK_TABLE))
+    if (canIntersect(database, table))
 	return TRUE;
     else
 	{
