@@ -872,8 +872,9 @@ needsEncoded yes
 
 name MMR
 label MMR
-url http://chromium.liacs.nl/LOVD2/variants.php?select_db=%s
-acc yes
+url http://www.med.mun.ca/MMRvariants/search.aspx
+#url http://chromium.liacs.nl/LOVD2/variants.php?select_db=%s
+#acc yes
 
 name RPGR
 label RPGR
