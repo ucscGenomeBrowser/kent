@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.67 2009/03/11 22:30:11 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.68 2009/04/14 04:03:29 mikep Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -487,22 +487,25 @@ if ( ! noLoad )
                         {
                         float min = sqlFloat(row[0]);
                         float max = sqlFloat(row[1]);
-			if (max == min || sameString(row[0],row[1])) // this will lead to 'inf' score value in SQL update causing an error
-			    errAbort("Could not set score in table %s max(%s)=min(%s)=%s\n", track, fillInScoreColumn, fillInScoreColumn, row[0]);
-                        sqlFreeResult(&sr);
+			if ( !(max == -1 && min == -1)) // if score is -1 then ignore, as if it werent present
+			    {
+			    if (max == min || sameString(row[0],row[1])) // this will lead to 'inf' score value in SQL update causing an error
+				errAbort("Could not set score in table %s max(%s)=min(%s)=%s\n", track, fillInScoreColumn, fillInScoreColumn, row[0]);
 
-                        // Calculate a, b s/t f(x) = ax + b maps min-max => minScore-1000
-                        float a = (1000-minScore) / (max - min);
-                        float b = 1000 - ((1000-minScore) * max) / (max - min);
+			    // Calculate a, b s/t f(x) = ax + b maps min-max => minScore-1000
+			    float a = (1000-minScore) / (max - min);
+			    float b = 1000 - ((1000-minScore) * max) / (max - min);
 
-                        safef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
-                        int changed = sqlUpdateRows(conn, query, NULL);
-                        verbose(2, "update query: %s; changed: %d\n", query, changed);
-                        }
-                    else
-                        {
-                        sqlFreeResult(&sr);
-                        }
+			    safef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
+			    int changed = sqlUpdateRows(conn, query, NULL);
+			    verbose(2, "update query: %s; changed: %d\n", query, changed);
+			    }
+			else
+			    {
+			    verbose(2, "score not updated; all values for column %s are -1\n", fillInScoreColumn);
+			    }
+			}
+                    sqlFreeResult(&sr);
                     }
                 }
             }
