@@ -2,7 +2,36 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.25 2009/03/11 09:38:16 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.26 2009/04/14 18:32:24 mikep Exp $";
+
+void doPost()
+{
+int c;
+long i = 0;
+struct hash *h = newHash(0);
+struct cgiVar *cgi = NULL;
+char *filename = NULL;
+char *query = cloneString(getenv("QUERY_STRING"));
+MJP(2);verbose(2,"query_string [%s]\n", query);
+if (!query)
+    errAbort("No query string\n");
+if (!cgiParseInput(query, &h, &cgi))
+    errAbort("Could not parse query string [%s]\n", query);
+MJP(2);verbose(2,"query [%s]\n", query);
+filename = (char *)hashOptionalVal(h, "filename", "tmp_test");
+if (filename == NULL)
+    errAbort("filename not found\n");
+MJP(2);verbose(2,"writing file [%s]\n", filename);
+FILE *f = mustOpen(filename, "wb");
+while ((c = getchar()) != EOF)
+    {
+    ++i;
+    if ((fputc(c, f)) == EOF)
+	errnoAbort("Error %d writing char [%c] to file [%s]\n", errno, c, filename);
+    }
+carefulClose(&f);
+MJP(2);verbose(2,"wrote %ld bytes to file [%s]\n", i, filename);
+}
 
 void doGet()
 {
@@ -262,13 +291,19 @@ int main(int argc, char *argv[])
  * Stateless server; No "CART" required for REST interface */
 {
 cgiSpoof(&argc, argv); // spoof cgi vars if running from command line
-initCgiInputMethod(cgiRequestMethod()); // otherwise initialize from request_method
-verboseSetLevel(cgiOptionalInt("verbose", 1));
 
-if (sameOk(cgiRequestMethod(), "GET"))
+char *method = getenv("REQUEST_METHOD");
+//initCgiInputMethod(cgiRequestMethod()); // otherwise initialize from request_method
+//verboseSetLevel(cgiOptionalInt("verbose", 1));
+verboseSetLevel(2);
+
+//if (sameOk(cgiRequestMethod(), "GET"))
+if (sameOk(method, "GET"))
     doGet();
-else 
-    errAbort("request_method %s not implemented\n", cgiRequestMethod());
+else if (sameOk(method, "POST"))
+    doPost();//errAbort("request_method %s not implemented\n", cgiRequestMethod());
+else
+    errAbort("request_method %s not implemented\n", method);
 return 0;
 }
 
