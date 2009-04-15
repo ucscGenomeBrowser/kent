@@ -2,7 +2,12 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.26 2009/04/14 18:32:24 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.27 2009/04/15 06:26:29 mikep Exp $";
+// #/g/project/(data|summary)/{project}/{pi}?/{lab}?/{datatype}?/{track}?/{genome}?
+// RewriteRule ^/g/project/(data|summary)/([^/]+)(/([^/]+)(.*))?$ /$5?cmd=$1\&project=$2\&pi=$4 [C]
+// RewriteRule ^/(/([^/]+)(/([^/]+)(/([^/]+)(/([^/]+))?)?)?)?$ /cgi-bin/hgData?lab=$2\&datatype=$4\&track=$6\&genome=$8 [PT,QSA,L,E=ETag:%{HTTP:If-None-Match},E=Modified:%{HTTP:If-Modified-Since},E=Authorization:%{HTTP:Authorization}]
+
+// curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=testing.bed
 
 void doPost()
 {
@@ -10,17 +15,41 @@ int c;
 long i = 0;
 struct hash *h = newHash(0);
 struct cgiVar *cgi = NULL;
-char *filename = NULL;
+char filename[1000];
+char *url = getenv("SCRIPT_URL");
 char *query = cloneString(getenv("QUERY_STRING"));
-MJP(2);verbose(2,"query_string [%s]\n", query);
-if (!query)
-    errAbort("No query string\n");
-if (!cgiParseInput(query, &h, &cgi))
+char *contLenStr = getenv("CONTENT_LENGTH");
+long contLen = sqlUnsigned(contLenStr);
+char *cmd, *project, *pi, *lab, *datatype, *view, *track, *genome;
+MJP(2);verbose(2,"query_string=[%s] url=[%s] content_type=[%s] content_length=[%s = %ld]\n", 
+    query, url, getenv("CONTENT_TYPE"), contLenStr, contLen);
+if (!query || !cgiParseInput(query, &h, &cgi))
     errAbort("Could not parse query string [%s]\n", query);
-MJP(2);verbose(2,"query [%s]\n", query);
-filename = (char *)hashOptionalVal(h, "filename", "tmp_test");
-if (filename == NULL)
-    errAbort("filename not found\n");
+cmd      = hashMustFindVal(h, "cmd");
+project  = hashFindVal(h, "project");
+pi       = hashFindVal(h, "pi");
+lab      = hashFindVal(h, "lab");
+datatype = hashFindVal(h, "datatype");
+view     = hashFindVal(h, "view");
+track    = hashFindVal(h, "track");
+genome   = hashFindVal(h, "genome");
+verboseSetLevel(sqlUnsigned(hashOptionalVal(h, "verbose", "1")));
+MJP(2);verbose(2,"cmd=%s, project=%s, pi=%s, lab=%s, datatype=%s, view=%s, track=%s, genome=%s.\n", 
+    cmd, project, pi, lab, datatype, view, track, genome);
+// split track into list of names
+// capitalize each of the names
+// join together into tableName using project....etc.
+// create bigbed using this data
+// Then:-
+// count how many bytes: 
+// - do without gzip
+// - with gzip
+// to see if on-the-fly compression works
+
+// if (filename == NULL)
+//     errAbort("filename not found\n");
+
+safef(filename, 1000, "trash/%s", (char *)hashOptionalVal(h, "filename", "mjp_tmp_file"));
 MJP(2);verbose(2,"writing file [%s]\n", filename);
 FILE *f = mustOpen(filename, "wb");
 while ((c = getchar()) != EOF)
@@ -30,6 +59,8 @@ while ((c = getchar()) != EOF)
 	errnoAbort("Error %d writing char [%c] to file [%s]\n", errno, c, filename);
     }
 carefulClose(&f);
+okSendHeader(0, 0);
+printf("bytes read=%ld\ncontent_length=%ld\ncompression=%f%%\nurl=%s\n", i, contLen, 100.0*contLen/i, url);
 MJP(2);verbose(2,"wrote %ld bytes to file [%s]\n", i, filename);
 }
 
@@ -295,15 +326,15 @@ cgiSpoof(&argc, argv); // spoof cgi vars if running from command line
 char *method = getenv("REQUEST_METHOD");
 //initCgiInputMethod(cgiRequestMethod()); // otherwise initialize from request_method
 //verboseSetLevel(cgiOptionalInt("verbose", 1));
-verboseSetLevel(2);
+verboseSetLevel(1);
 
 //if (sameOk(cgiRequestMethod(), "GET"))
 if (sameOk(method, "GET"))
     doGet();
 else if (sameOk(method, "POST"))
-    doPost();//errAbort("request_method %s not implemented\n", cgiRequestMethod());
+    doPost();
 else
-    errAbort("request_method %s not implemented\n", method);
+    errAbort("request method %s not implemented\n", method);
 return 0;
 }
 
