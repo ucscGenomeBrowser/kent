@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.399 2009/03/17 19:54:56 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.400 2009/04/15 19:40:43 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -285,7 +285,7 @@ char query[256];
 boolean res = FALSE;
 safef(query, sizeof(query), "select name from dbDb where name = '%s'",
       database);
-res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
+res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL) && sqlDatabaseExists(database);
 hDisconnectCentral(&conn);
 hashAddInt(dbsChecked, database, res);
 return res;
@@ -796,7 +796,7 @@ return NULL;
 boolean hTableOrSplitExists(char *db, char *track)
 /* Return TRUE if track table (or split table) exists in db. */
 {
-if (!sqlDatabaseExists(db))
+if (!hDbExists(db))
     return FALSE;
 struct hash *hash = tableListGetDbHash(db);
 return (hashLookup(hash, track) != NULL);
