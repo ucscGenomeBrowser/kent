@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.126 2009/04/13 17:59:44 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.127 2009/04/15 19:37:37 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -136,21 +136,7 @@ return TRUE;
 int cmpChrom(char *a, char *b)
 /* Compare two chromosomes. */
 {
-int cSame = countSameNonDigit(a, b);
-
-a += cSame;
-b += cSame;
-if (isdigit(*a) && isdigit(*b))
-    {
-    int diff = atoi(a) - atoi(b);
-    if (diff != 0)
-	return diff;
-    a = skipNumeric(a);	
-    b = skipNumeric(b);	
-    return strcmp(a,b);
-    }
-else
-    return strcmp(a,b);
+return cmpStringsWithEmbeddedNumbers(a, b);
 }
 
 
