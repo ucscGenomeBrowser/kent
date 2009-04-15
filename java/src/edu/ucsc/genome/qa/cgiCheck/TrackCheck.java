@@ -59,7 +59,7 @@ public class TrackCheck {
     // get metadata
     HGDBInfo metadbinfo; 
     try {
-      metadbinfo = new HGDBInfo("hgwbeta", "hgcentralbeta");
+      metadbinfo = new HGDBInfo(target.machine, "hgcentralbeta");
     } catch (Exception e) {
       System.out.println(e.toString());
       return;
