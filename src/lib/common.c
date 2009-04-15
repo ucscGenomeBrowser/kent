@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.128 2009/03/17 11:20:15 mikep Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.129 2009/04/15 17:40:39 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1266,6 +1266,84 @@ int count = 0;
 while (*s++ == c)
    ++count;
 return count;
+}
+
+int countLeadingDigits(char *s)
+/* Return number of leading digits in s */
+{
+int count = 0;
+while (isdigit(*s))
+   {
+   ++count;
+   ++s;
+   }
+return count;
+}
+
+int countLeadingNondigits(char *s)
+/* Count number of leading non-digit characters in s. */
+{
+int count = 0;
+char c;
+while ((c = *s++) != 0)
+   {
+   if (isdigit(c))
+       break;
+   ++count;
+   }
+return count;
+}
+
+int cmpStringsWithEmbeddedNumbers(char *a, char *b)
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+{
+for (;;)
+   {
+   /* Figure out number of digits at start, and do numerical comparison if there
+    * are any.  If numbers agree step over numerical part, otherwise return difference. */
+   int aNum = countLeadingDigits(a);
+   int bNum = countLeadingDigits(b);
+   if (aNum >= 0 && bNum >= 0)
+       {
+       int diff = atoi(a) - atoi(b);
+       if (diff != 0)
+           return diff;
+       a += aNum;
+       b += bNum;
+       }
+
+   /* Count number of non-digits at start. */
+   int aNonNum = countLeadingNondigits(a);
+   int bNonNum = countLeadingNondigits(b);
+
+   // If different sizes of non-numerical part, then don't match, let strcmp sort out how
+   if (aNonNum != bNonNum)
+       return strcmp(a,b);  
+   // If no characters left then they are the same!
+   else if (aNonNum == 0)
+       return 0;
+   // Non-numerical part is the same length and non-zero.  See if it is identical.  Return if not.
+   else
+       {
+       int diff = memcmp(a,b,aNonNum);   
+       if (diff != 0)
+            return diff;
+       a += aNonNum;
+       b += bNonNum;
+       }
+   }
+}
+
+int cmpWordsWithEmbeddedNumbers(char *a, char *b)
+/* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
+{
+char *A = cloneString(a);
+char *B = cloneString(b);
+int diff = cmpStringsWithEmbeddedNumbers(strUpper(A), strUpper(B));
+freeMem(A);
+freeMem(B);
+return diff;
 }
 
 int countSame(char *a, char *b)
