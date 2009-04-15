@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.39 2009/04/13 23:36:12 kate Exp $
+# $Id: Encode.pm,v 1.40 2009/04/15 00:10:53 tdreszer Exp $
 
 package Encode;
 
@@ -23,6 +23,7 @@ use HgAutomate;
 our $loadFile = "load.ra";
 our $unloadFile = "unload.ra";
 our $trackFile = "trackDb.ra";
+our $fileDbFile = "fileDb.ra";
 our $pushQFile = "pushQ.sql";
 our $dafVersion = "1.0";
 our $dafPrevVersion = "0.2.2";
