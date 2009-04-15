@@ -33,7 +33,10 @@ public class HgConf extends Properties {
 
   /** This constructor will look in ~/.hg.conf */
   public HgConf() throws Exception {
-    String fileName = System.getProperty("user.home") + "/.hg.conf";
+    String fileName = System.getenv("HGDB_CONF");
+    if (fileName == null) {
+      fileName = System.getProperty("user.home") + "/.hg.conf";
+    }
     init(fileName);
   }
 
