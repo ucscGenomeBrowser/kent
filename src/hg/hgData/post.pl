@@ -7,13 +7,15 @@ use Compress::Zlib;
 use HTTP::Request::Common;
 use LWP;
 
-$HTTP::Request::Common::DYNAMIC_FILE_UPLOAD = 1;
+die "$0 - post a compressed-on-the-fly file\nusage: \n\n$0 filename" unless scalar(@ARGV)==1;
 
-my $request = POST 'http://hgwdev-mikep/cgi-bin/hgData',
+$HTTP::Request::Common::DYNAMIC_FILE_UPLOAD = 1;
+# curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=trash/testing.bed
+
+my $request = POST 'http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18',
     [
- 'filename' => 'testpostfile.bed',
- 'verbose' => 2,
- 'a_file' => ['test.bed']
+#  'verbose' => 2,
+ 'a_file' => [ $ARGV[0] ]
     ],
     'Content_Type' => 'form-data',
     'Content_Encoding' => 'gzip';
