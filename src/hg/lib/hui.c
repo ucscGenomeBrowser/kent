@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.184 2009/04/06 20:54:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.185 2009/04/15 18:17:31 kate Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4595,9 +4595,10 @@ boolean makeDownloadsLink(struct trackDb *tdb)
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n",
+    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n",
             cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
             trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
+            ENCODE_DCC_DOWNLOADS,
             tdb->tableName);
     return TRUE;
     }
