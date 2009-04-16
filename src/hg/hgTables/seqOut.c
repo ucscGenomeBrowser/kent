@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.21 2009/04/10 20:04:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.22 2009/04/16 18:20:40 angie Exp $";
 
 static char *genePredMenu[] =
     {
@@ -110,6 +110,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+boolean gotResults = FALSE;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     char *protAcc = hashFindVal(protHash, bed->name);
@@ -120,8 +121,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	if (fa != NULL)
 	    hPrintf("%s", fa);
 	freez(&fa);
+	gotResults = TRUE;
 	}
     }
+if (!gotResults)
+    hPrintf(NO_RESULTS);
 hashFree(&protHash);
 hashFree(&uniqHash);
 }
@@ -131,6 +135,7 @@ void doRefGeneMrnaSequence(struct sqlConnection *conn, struct bed *bedList)
 {
 struct hash *uniqHash = newHash(18);
 struct bed *bed;
+boolean gotResults = FALSE;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!hashLookup(uniqHash, bed->name))
@@ -140,8 +145,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	if (fa != NULL)
 	    hPrintf("%s", fa);
 	freez(&fa);
+	gotResults = TRUE;
 	}
     }
+if (!gotResults)
+    hPrintf(NO_RESULTS);
 hashFree(&uniqHash);
 }
 
@@ -182,6 +190,7 @@ else
 	char **row;
 	char query[256];
 	struct hash *hash = newHash(18);
+	boolean gotResults = FALSE;
 
 	/* Make hash of all id's passing filters. */
 	for (bed = bedList; bed != NULL; bed = bed->next)
@@ -196,10 +205,13 @@ else
 		{
 		hPrintf(">%s\n", row[0]);
 		writeSeqWithBreaks(stdout, row[1], strlen(row[1]), 60);
+		gotResults = TRUE;
 		}
 	    }
 	sqlFreeResult(&sr);
 	hashFree(&hash);
+	if (!gotResults)
+	    hPrintf(NO_RESULTS);
 	}
     else
 	{
@@ -246,13 +258,20 @@ struct region *region, *regionList = getRegions();
 struct hTableInfo *hti = getHti(database, curTable, conn);
 int fieldCount;
 textOpen();
+boolean gotResult = FALSE;
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bedList = cookedBedList(conn, curTable, region, lm, &fieldCount);
-    hgSeqBed(database, hti, bedList);
+    if (bedList != NULL)
+    	{
+    	gotResult = TRUE;
+    	hgSeqBed(database, hti, bedList);
+	}
     lmCleanup(&lm);
     }
+if (!gotResult)
+    hPrintf(NO_RESULTS);
 }
 
 void doGenePredSequence(struct sqlConnection *conn)
