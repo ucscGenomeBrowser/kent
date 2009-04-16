@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.176 2009/04/07 18:21:30 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.177 2009/04/16 19:03:30 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -42,6 +42,7 @@ use vars qw/
     $opt_allowReloads
     $opt_configDir
     $opt_fileType
+    $opt_justFileDb
     $opt_metaDataOnly
     $opt_outDir
     $opt_quick
@@ -87,6 +88,7 @@ options:
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
     -fileType=type	used only with validateFile option; e.g. narrowPeak
+    -justFileDb         Just generate the fileDb.ra file which contains all metadata
     -metaDataOnly       Process DAF/DDF and just update the projects.metadata field;
                         equal to -allowReloads -skipAll
     -quick		Validate only first $quickCount lines of files
@@ -830,7 +832,7 @@ sub validateFasta
 }
 
 sub validateRpkm
-# Wold lab format, has gene name and 2 floats 
+# Wold lab format, has gene name and 2 floats
 #   Allowing Gene name to be composed of any characters but <tab>
 #
 # Example format 1 (3 cols):-
@@ -871,7 +873,7 @@ sub validateRpkm
 }
 
 sub validateBowtie
-# Unkown format (for download) from Wold lab. 
+# Unkown format (for download) from Wold lab.
 # Assume last column is optional
 # Sample lines:-
 # HWI-EAS229_75_30DY0AAXX:7:1:0:1545/1    +       chr1    5983615 NCGTCCATCTCACATCGTCAGGAAAGGGGGAAGCACTGGATGGCTGTGGCCTCACAGGCAGGGAGAGTGGGGTCC     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N
@@ -887,7 +889,7 @@ sub validateBowtie
         chomp;
         $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n" 
+        die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n"
 	    unless $_ =~ m/^([A-Za-z0-9:>_,\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_,\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_,\.\|\/-]+)?$/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
@@ -898,7 +900,7 @@ sub validateBowtie
 }
 
 sub validatePsl
-# PSL format (for download) from Wold lab. 
+# PSL format (for download) from Wold lab.
 # EXAMPLE FROM http://genome.ucsc.edu/FAQ/FAQformat#format2
 # This adds 2 columns (sequence,<tab>sequence,) to the standard 21 columns
 # Only the first 21 are validated
@@ -919,12 +921,12 @@ sub validatePsl
     while(<$fh>) {
         chomp;
         $lineNumber++;
-        next if $lineNumber == 1 and m/^psLayout version \d+/; # check first line 
+        next if $lineNumber == 1 and m/^psLayout version \d+/; # check first line
         next if $lineNumber == 2 and m/^$/;
         next if $lineNumber == 3 and m/^match/;
         next if $lineNumber == 4 and m/^\s+match/;
         next if $lineNumber == 5 and m/^------/;
-        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n" 
+        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
 	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
@@ -987,13 +989,14 @@ sub ddfKey
 sub isDownloadOnly {
     my ($view, $grant, $lab, $daf) = @_;
     # Added 'downloadOnly' bool to DAF views so these rules can be explicit not hardcoded
-    # Dont load any RawData* or Comparative views, 
+    # Dont load any RawData* or Comparative views,
     # Dont load Alignments unless they are from Gingeras or Wold labs (RNA folks like to  see their RNAs)
     # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
     # Wold group have RawData, RawData[2-7]
     # Wold group alignments are called 'Aligns', 'Splices', 'Paired'
-    return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative' 
+    return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
 	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
+
 }
 
 sub printCompositeTdbSettings {
@@ -1080,7 +1083,6 @@ sub printCompositeTdbSettings {
 # Main
 
 my $now = time();
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($now);
 my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
 my @ddfLines = ();	# each line in DDF (except for fields header); value is a hash; e.g. {files => 'foo.bed', cell => 'HeLa-S3', ...}
@@ -1097,6 +1099,7 @@ my $ok = GetOptions("allowReloads",
                     "timing",
                     "skipAll",
                     "skipAutoCreation",
+                    "justFileDb",
                     "skipOutput",
                     "skipValidateFiles",
                     "skipValidateFastQ",
@@ -1108,6 +1111,9 @@ my $ok = GetOptions("allowReloads",
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_sendEmail = 0 if (!defined $opt_sendEmail);
+if($opt_justFileDb) {
+   $opt_skipAll = $opt_quick = $opt_allowReloads =1;
+}
 $quickOpt = " -quick " if defined ($opt_quick);
 
 if($opt_skipAll) {
@@ -1237,6 +1243,9 @@ if($hasReplicates) {
 my @glob = glob "*.DDF";
 push(@glob, glob "*.ddf");
 my $ddfFile = Encode::newestFile(@glob);
+my $fileTime = (stat($ddfFile))->ctime;
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($fileTime);
+
 HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 my $lines = Encode::readFile($ddfFile);
 
@@ -1299,6 +1308,10 @@ while (@{$lines}) {
     my $i = 0;
     my %line;
     for my $val (split('\t', $line)) {
+        if($ddfHeader[$i] ne "files" && $val =~ / /) {
+            $val =~ s/\"/\\"/g if $val =~ /\"/;
+            $val = '"' . $val . '"';
+        }
         $line{$ddfHeader[$i]} = $val;
         $i++;
     }
@@ -1370,34 +1383,44 @@ if(!@errors) {
     doTime("beginning ddfReplicateSets loop") if $opt_timing;
     for my $key (keys %ddfReplicateSets) {
         # create missing optional views (e.g. ChIP-Seq RawSignal or transcriptome project PlusRawSignal and MinusRawSignal)
-	# note this loop assumes these are on a per replicate basis.
-	# Also note that any project (like transcriptome) that doesnt have replicates should also use
-	# this for their auto-create signals.
-	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
+        # note this loop assumes these are on a per replicate basis.
+        # Also note that any project (like transcriptome) that doesnt have replicates should also use
+        # this for their auto-create signals.
+        HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
         if( ( !defined($daf->{noAutoCreate}) || $daf->{noAutoCreate} ne "yes") && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
-		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
-		&& !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
-		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
-		&& ($daf->{dataType} ne 'MethylSeq')) {
-            if($daf->{dataType} eq 'ChipSeq' && !defined($daf->{medianFragmentLength})) {
-                pushError(\@errors, "Missing medianFragmentLength field; this field is required for dataType '$daf->{dataType}' when RawSignal view is not provided");
-            } else {
-                # hack for case where they have removed RawSignal view in the DAF
-		# - if no (Plus|Minus|)RawSignal is defined, assume RawSignal is required
-                if(!defined($daf->{TRACKS}{RawSignal}{order})
-			&& !defined($daf->{TRACKS}{PlusRawSignal}{order})
-			&& !defined($daf->{TRACKS}{MinusRawSignal}{order}) ) {
-                    $daf->{TRACKS}{RawSignal}{order} = ++$maxOrder;
-                }
-		# Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
-		my @newViews = ();
-		push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};
-		push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
-		push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
+        && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
+        && !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
+        && !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
+        && ($daf->{dataType} ne 'MethylSeq')) {
+            # hack for case where they have removed RawSignal view in the DAF
+            # - if no (Plus|Minus|)RawSignal is defined, assume RawSignal is required
+            if(!defined($daf->{TRACKS}{RawSignal}{order})
+            && !defined($daf->{TRACKS}{PlusRawSignal}{order})
+            && !defined($daf->{TRACKS}{MinusRawSignal}{order}) ) {
+                $daf->{TRACKS}{RawSignal}{order} = ++$maxOrder;
+            }
+            # Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
+            my @newViews = ();
+            push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};
+            push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
+            push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
 
-		foreach my $newView (@newViews) #loop around making them
-		{
+            foreach my $newView (@newViews) #loop around making them
+            {
                 my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
+                # Time to check for fragLength by replicate (in alignments line) (die, don't just push error and build anyway)
+                if($newView eq "RawSignal") {
+                    if(!defined($alignmentLine->{fragLength})) {
+                        if(!defined($daf->{medianFragmentLength})) {
+                            die (\@errors, "Missing fragLength field for building $daf->{dataType} '$newView' for replicate $alignmentLine->{replicate}\nThe fragLength is required and is the median fragment length used in generating this replicate.\n");
+                        } else { # Letting medianFramentLength stand in for per relicate fragLength
+                            $alignmentLine->{fragLength} = $daf->{medianFragmentLength};
+                        }
+                    }
+                    if ($alignmentLine->{fragLength} < 0 || $alignmentLine->{fragLength} > 10000) {
+                        die (\@errors, "Missing or invalid fragLength field for building $daf->{dataType} '$newView' for replicate $alignmentLine->{replicate}\nThe fragLength is required and is the median fragment length used in generating this replicate.\n");
+                    }
+                }
                 my %line = %{$alignmentLine};
                 $line{view} = $newView;
                 $line{type} = 'wig';
@@ -1433,47 +1456,47 @@ if(!@errors) {
                 $tmpCount++;
                 if($opt_skipAutoCreation) {
                     HgAutomate::verbose(2, "Skipping auto-creating view '$newView' for key '$key'\n");
-                  } else {
-                      HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key' in file '$tmpFile'\n");
-                        doTime("beginning Auto-create of view $newView in file $tmpFile") if $opt_timing;
-                        # XXXX gzip before saving to disk?
-                        my @cmds;
-                        my $sortFiles;
-                        if(defined($daf->{medianFragmentLength})) {
-                            push(@cmds, "/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianFragmentLength} $files");
-                            $sortFiles = " -";
-			    # sorting stdin, so have to sort in mem (and control how much mem we use)
-			    push @cmds, "sort $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
-                        } else {
-                            $sortFiles = $files;
-			    # sort each file in place, controling mem usage, then do merge sort
-			    my @sortList = split(/\s+/, $sortFiles);
-			    foreach my $f (@sortList) {
-				my $err = system("sort $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n -o $f $f ");
-				if ($err) {
-				    die ("File \'$f\' failed sort\n");
-				}
-				HgAutomate::verbose(2, "File \'$f\' sorted\n");
-			    }
-			    # Now do the mergesort in the pipeline
-			    push @cmds, "sort -m $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
+                } else {
+                    HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key' in file '$tmpFile'\n");
+                    doTime("beginning Auto-create of view $newView in file $tmpFile") if $opt_timing;
+
+                    # XXXX gzip before saving to disk?
+                    my @cmds;
+                    my $sortFiles;
+                    if(defined($alignmentLine->{fragLength})) {
+                        push(@cmds, "/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $alignmentLine->{fragLength} $files");
+                        $sortFiles = " -";
+                        # sorting stdin, so have to sort in mem (and control how much mem we use)
+                        push @cmds, "sort $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
+                    } else {
+                        $sortFiles = $files;
+                        # sort each file in place, controling mem usage, then do merge sort
+                        my @sortList = split(/\s+/, $sortFiles);
+                        foreach my $f (@sortList) {
+                            my $err = system("sort $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n -o $f $f ");
+                            if ($err) {
+                                die ("File \'$f\' failed sort\n");
+                            }
+                            HgAutomate::verbose(2, "File \'$f\' sorted\n");
                         }
-			push @cmds, "grep -v -E \"^track\" ";
-			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
-			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
-                        push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
-                        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
-                        if(my $err = $safe->exec()) {
-                            print STDERR  "ERROR: failed auto bedItemOverlap creation of bedGraph for $key" . $safe->stderr() . "\n";
-                            # don't show end-user pipe error(s)
-                            pushError(\@errors, "failed creation of wiggle for '$key'");
-                        }
-                        doTime("done Auto-create of view $newView") if $opt_timing;
+                        # Now do the mergesort in the pipeline
+                        push @cmds, "sort -m $SORT_BUF -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
                     }
+                    push @cmds, "grep -v -E \"^track\" ";
+                    push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
+                    push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
+                    push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
+                    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
+                    if(my $err = $safe->exec()) {
+                        print STDERR  "ERROR: failed auto bedItemOverlap creation of bedGraph for $key" . $safe->stderr() . "\n";
+                        # don't show end-user pipe error(s)
+                        pushError(\@errors, "failed creation of wiggle for '$key'");
+                    }
+                    doTime("done Auto-create of view $newView") if $opt_timing;
+                }
                 $line{files} = [$tmpFile];
                 push(@ddfLines, \%line);
-	    }  # End foreach newView loop
-            }
+            }  # End foreach newView loop
         }
     } # End replicate sets loop
     doTime("done ddfReplicateSets loop") if $opt_timing;
@@ -1506,6 +1529,11 @@ if($opt_skipOutput) {
     open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
     open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
 }
+if($opt_justFileDb || !$opt_skipOutput) {
+    open(FILE_RA, ">$outPath/$Encode::fileDbFile") || die "SYS ERROR: Can't write '$outPath/$Encode::fileDbFile' file; error: $!\n";
+} else {
+    open(FILE_RA, ">>/dev/null");
+}
 
 # Create a composite track entry if the trackDb.ra entry was not found
 if(!$opt_skipOutput && !$compositeExists) {
@@ -1523,6 +1551,33 @@ foreach my $ddfLine (@ddfLines) {
     my $diePrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     my $view = $ddfLine->{view};
     my $type = $daf->{TRACKS}{$view}{type} || die "Missing DAF entry for view '$view'\n";
+    my $metadata = "project=wgEncode grant=$daf->{grant} lab=$daf->{lab} dataType=$daf->{dataType}";
+    $metadata .= " cell=$ddfLine->{cell}" if $ddfLine->{cell}; # force some order
+    $metadata .= " antibody=$ddfLine->{antibody}" if $ddfLine->{antibody};
+    for my $key (keys %{$ddfLine}) {
+        my $value = $ddfLine->{$key};
+        if($value
+        && $key ne 'files'
+        && $key ne 'cell'
+        && $key ne 'antibody'
+        && $key ne 'view'
+        && $key ne 'replicate'
+        && $key ne 'labVersion'
+        && $key ne 'softwareVersion') {
+            $metadata .= " $key=$value"; # and the rest
+        }
+    }
+    $metadata .= " view=$view";
+    $metadata .= " replicate=$ddfLine->{replicate}" if $ddfLine->{replicate} && $daf->{TRACKS}{$view}{hasReplicates};
+    $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
+    $metadata .= " softwareVersion=$ddfLine->{softwareVersion}" if $ddfLine->{softwareVersion};
+    $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
+    if($submitDir =~ /(\d+)$/) {
+        $metadata .= " subId=$1";
+    }
+    my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
+    $metadata .= sprintf(" dateSubmitted=%04d-%02d-%02d", 1900 + $year, $mon + 1, $mday);
+    $metadata .= sprintf(" dateUnrestricted=%04d-%02d-%02d", 1900 + $rYear, $rMon + 1, $rMDay);
 
     HgAutomate::verbose(2, "  View: $view\n");
     my $replicate;
@@ -1534,9 +1589,12 @@ foreach my $ddfLine (@ddfLines) {
         }
     }
     # Construct table name from track name and variables
-    my $tableName = "$compositeTrack$view";
-    if(defined($replicate)) {
-        $tableName .= "Rep$replicate";
+    my $tableName = "$compositeTrack";
+    if($Encode::dafVersion le "1.0") {
+        $tableName .= $view;
+        if(defined($replicate)) {
+            $tableName .= "Rep$replicate";
+        }
     }
     if(!defined($daf->{TRACKS}{$view}{shortLabelPrefix})) {
         $daf->{TRACKS}{$view}{shortLabelPrefix} = "";
@@ -1547,7 +1605,7 @@ foreach my $ddfLine (@ddfLines) {
         $longLabel .= " Replicate $replicate";
     }
     my $subGroups = "view=$view";
-    my $additional = "\n";
+    my $additional = "";
     my $pushQDescription = "";
     my $species;
     my $tier1 = 0;
@@ -1567,7 +1625,7 @@ foreach my $ddfLine (@ddfLines) {
         my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
         if($hash{'antibody'} && $hash{'cell'}) {
             $pushQDescription = "$hash{'antibody'} in $hash{'cell'}";
-            $shortSuffix = "$hash{'antibody'} $hash{'cell'}";
+            $shortSuffix = "$hash{'cell'} $hash{'antibody'}";
             $longSuffix = "$hash{'antibody'} in $hash{'cell'} cells";
         } elsif($hash{'ripAntibody'} && $hash{'ripTgtProtein'} && $hash{'cell'}) {
             $longSuffix = "$hash{'ripTgtProtein'} in $hash{'cell'} cells using $hash{'ripAntibody'}";
@@ -1595,7 +1653,7 @@ foreach my $ddfLine (@ddfLines) {
             $tier1 = 1 if ($hash{'cell'} eq 'GM12878' || $hash{'cell'} eq 'K562');
         } else {
 	    warn "Warning: variables undefined for pushQDescription,shortSuffix,longSuffix\n";
-	}
+    	}
         if(defined($shortViewMap{$view})) {
             $shortSuffix .= " " . $shortViewMap{$view};
         }
@@ -1609,14 +1667,20 @@ foreach my $ddfLine (@ddfLines) {
         if($longSuffix) {
             $longLabel .= " ($longSuffix)";
         }
-	# make the "subGroups" and "additional" fields from all variables
-	for my $var (sort keys %hash) {
+    	# make the "subGroups" and "additional" fields from all variables
+	   for my $var (sort keys %hash) {
             # The var name is over-ridden for antibody and cell, for historical reasons
             my $groupVar = $var;
 	    $groupVar = "factor" if $var eq "antibody";
 	    $groupVar = "cellType" if $var eq "cell";
             $subGroups .= " $groupVar=$hash{$var}";
             $additional = "    $var $hash{$var}\n" . $additional;
+        }
+    }
+    if($Encode::dafVersion gt "1.0") {
+        $tableName .= "$view";
+        if(defined($replicate)) {
+            $tableName .= "Rep$replicate";
         }
     }
 
@@ -1637,9 +1701,27 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # XXXX Move the decision about which views have tracks into the DAF?
-    # Already this is used in 2 places so made it a function, 
+    # Already this is used in 2 places so made it a function,
     # would be better in the DAF except we'd have to go change all the DAFs :(
     my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab}, $daf);
+
+    print FILE_RA "    filename $tableName.$type.gz\n";
+    $metadata .= " composite=$compositeTrack";
+
+    if($downloadOnly) {
+        my $parentTable = $tableName;
+        $parentTable =~ s/RawData/RawSignal/    if $parentTable =~ /RawData/;
+        $parentTable =~ s/Alignments/RawSignal/ if $parentTable =~ /Alignments/;
+        print FILE_RA "    parentTable $parentTable\n";
+        $metadata .= " parentTable=$parentTable";
+    } else {
+        print FILE_RA "    tableName $tableName\n";
+        $metadata .= " tableName=$tableName";
+    }
+    print FILE_RA "    composite $compositeTrack\n";
+    my $fileType = $type;
+    $fileType =~ s/ //g;
+    $metadata .= " fileName=$tableName.$fileType.gz";
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
@@ -1654,7 +1736,7 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
-    my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
+    print FILE_RA sprintf("    metadata %s\n\n", $metadata);
 
     if($downloadOnly || ($type eq "wig" && !grep(/$Encode::autoCreatedPrefix/, @{$ddfLine->{files}}))) {
         # adds entries to README.txt for download only files AND wig data (excepting wig data generated by us)
@@ -1673,7 +1755,7 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "    track $tableName\n";
         print TRACK_RA "    release alpha\n";
         if ($tier1 eq 1) {
-            # default to only Tier1 subtracks visible.  Wrangler should review if this is 
+            # default to only Tier1 subtracks visible.  Wrangler should review if this is
             #   correct for the track
             print TRACK_RA "    subTrack $compositeTrack\n";
         } else {
@@ -1698,30 +1780,15 @@ foreach my $ddfLine (@ddfLines) {
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
         }
-        print TRACK_RA "    priority " . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
-        # noInherit is necessary b/c composite track will often have a different dummy type setting.
-        print TRACK_RA "    noInherit on\n";
-        # removing default individual subtrack configurability, for performance reasons
-        # add back as needed, by wrangler discretion
-        #if($view eq 'RawSignal' and 0) { # Sorry tim, you will have to list your projects here
-            #print TRACK_RA "    configurable off\n";
-        #} else {
-            #print TRACK_RA "    configurable on\n";
-        #}
-        if($type eq 'wig') {
-            print TRACK_RA <<END;
-    spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-END
-	} elsif($type eq 'bed 5 +') {
-		print TRACK_RA "    useScore 1\n";
-	}
         print TRACK_RA $additional;
+        # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
+        print TRACK_RA sprintf("    metadata %s\n", $metadata);
+        print TRACK_RA "\n";
     }
 }
 close(LOADER_RA);
 close(TRACK_RA);
+close(FILE_RA);
 close(README);
 doTime("done out files") if $opt_timing;
 
