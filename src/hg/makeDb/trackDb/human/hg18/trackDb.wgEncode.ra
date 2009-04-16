@@ -4558,7 +4558,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel pros polyA- cell
+    shortLabel pros pA- cell
     longLabel ENCODE RIKEN CAGE Tags (from longNonPolyA in prostate cell)
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bed 6
@@ -4571,7 +4571,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA- cyto
+    shortLabel K562 pA- cyto
     longLabel ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
@@ -4585,7 +4585,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA- nucl
+    shortLabel K562 pA- nucl
     longLabel ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell nucleus)
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
@@ -4599,7 +4599,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel pros polyA- cell
+    shortLabel pros pA- cell +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in prostate cell)
     subGroups view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4612,7 +4612,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel pros polyA- cell
+    shortLabel pros pA- cell -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in prostate cell)
     subGroups view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4625,7 +4625,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA- cyto
+    shortLabel K562 pA- cyto +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in K562 cell cytosol)
     subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4639,7 +4639,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA- cyto
+    shortLabel K562 pA- cyto -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in K562 cell cytosol)
     subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4653,7 +4653,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA- nucl
+    shortLabel K562 pA- nucl +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in K562 cell nucleus)
     subGroups view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4667,7 +4667,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA- nucl
+    shortLabel K562 pA- nucl -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in K562 cell nucleus)
     subGroups view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
@@ -4681,7 +4681,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA- cyto +
+    shortLabel K562 pA- cyto r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in K562 cell cytosol)
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig 1.00 63823.00
@@ -4696,7 +4696,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA- cyto -
+    shortLabel K562 pA- cyto r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in K562 cell cytosol)
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig 1.00 63540.00
@@ -4711,7 +4711,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel pros pA- cell +
+    shortLabel pros pA- cell r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in prostate cell)
     subGroups view=PlusRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig 1.00 61689.00
@@ -4725,7 +4725,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel pros pA- cell -
+    shortLabel pros pA- cell r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in prostate cell)
     subGroups view=MinusRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig 1.00 65524.00
@@ -4739,7 +4739,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA- nucl +
+    shortLabel K562 pA- nucl r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in K562 cell nucleus)
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig 1.00 45083.00
@@ -4754,7 +4754,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA- nucl -
+    shortLabel K562 pA- nucl r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in K562 cell nucleus)
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig 1.00 14562.00
@@ -4769,7 +4769,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ cyto
+    shortLabel K562 pA+ cyto +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ K562 cell cytosol using )
     subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -4786,7 +4786,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ cyto
+    shortLabel K562 pA+ cyto -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ K562 cell cytosol using )
     subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -4803,7 +4803,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ nucl
+    shortLabel K562 pA+ nucl +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ K562 cell nucleus using )
     subGroups view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -4820,7 +4820,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ nucl
+    shortLabel K562 pA+ nucl -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ K562 cell nucleus using )
     subGroups view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -4837,7 +4837,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ cyto
+    shortLabel K562 pA+ cyto
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ K562 cell cytosol using )
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
@@ -4854,7 +4854,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ nucl
+    shortLabel K562 pA+ nucl
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ K562 cell nucleus using )
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
@@ -4871,7 +4871,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA+ cyto +
+    shortLabel K562 pA+ cyto r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (PolyA+ K562 cell cytosol using )
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 64144.00
@@ -4911,7 +4911,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA+ nucl +
+    shortLabel K562 pA+ nucl r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (PolyA+ K562 cell nucleus using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 65282.00
@@ -4931,7 +4931,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA+ nucl -
+    shortLabel K562 pA+ nucl r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (PolyA+ K562 cell nucleus using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 49208.00
@@ -4951,7 +4951,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ psom
+    shortLabel K562 pA+ psom +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ K562 cell polysome using )
     subGroups view=PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
@@ -4968,7 +4968,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ psom
+    shortLabel K562 pA+ psom -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ K562 cell polysome using )
     subGroups view=MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
@@ -4985,7 +4985,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total nlus
+    shortLabel K562 tot nlus +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleolus using )
     subGroups view=PlusClusters cellType=K562 localization=nucleolus rnaExtract=total
     type bedGraph 4
@@ -5002,7 +5002,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total nlus
+    shortLabel K562 tot nlus -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleolus using )
     subGroups view=MinusClusters cellType=K562 localization=nucleolus rnaExtract=total
     type bedGraph 4
@@ -5019,7 +5019,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot nplsm
+    shortLabel K562 tot nplm +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
     subGroups view=PlusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
@@ -5036,7 +5036,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total nplsm
+    shortLabel K562 tot nplm -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
     subGroups view=MinusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
@@ -5053,7 +5053,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total chrm
+    shortLabel K562 tot chrm +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell chromatin using )
     subGroups view=PlusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
@@ -5070,7 +5070,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total chrm
+    shortLabel K562 tot chrm -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell chromatin using )
     subGroups view=MinusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
@@ -5087,7 +5087,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 polyA+ psom
+    shortLabel K562 pA+ psom
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ K562 cell polysome using )
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
@@ -5104,7 +5104,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total nlus
+    shortLabel K562 tot nlus
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleolus using )
     subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total
     type bed 6
@@ -5121,7 +5121,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total nplsm
+    shortLabel K562 tot nplm
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleoplasm using )
     subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=total
     type bed 6
@@ -5138,7 +5138,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 total chrm
+    shortLabel K562 tot chrm
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell chromatin using )
     subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=total
     type bed 6
@@ -5155,7 +5155,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot chrm +
+    shortLabel K562 tot chrm r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell chromatin using )
     subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig 1.00 1042.00
@@ -5175,7 +5175,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot chrm -
+    shortLabel K562 tot chrm r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell chromatin using )
     subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig 1.00 752.00
@@ -5195,7 +5195,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA+ psom +
+    shortLabel K562 pA+ psom r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (PolyA+ K562 cell polysome using )
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 1588.00
@@ -5215,7 +5215,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 pA+ psom -
+    shortLabel K562 pA+ psom r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (PolyA+ K562 cell polysome using )
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 954.00
@@ -5235,7 +5235,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot nplsm +
+    shortLabel K562 tot nplm r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig 1.00 698.00
@@ -5255,7 +5255,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot nplsm -
+    shortLabel K562 tot nplm r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig 1.00 397.00
@@ -5275,7 +5275,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot nlus +
+    shortLabel K562 tot nlus r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleolus using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig 1.00 1389.00
@@ -5295,7 +5295,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 tot nlus -
+    shortLabel K562 tot nlus r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleolus using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig 1.00 778.00
@@ -5315,7 +5315,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol
+    shortLabel GM128 pA- cyto -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
@@ -5333,7 +5333,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol
+    shortLabel GM128 pA- cyto +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
@@ -5351,7 +5351,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus
+    shortLabel GM128 pA- nucl -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
@@ -5369,7 +5369,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus
+    shortLabel GM128 pA- nucl +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
@@ -5387,7 +5387,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol
+    shortLabel GM128 pA- cyto
     longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
@@ -5405,7 +5405,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus
+    shortLabel GM128 pA- nucl
     longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
@@ -5423,7 +5423,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus  PlusRaw
+    shortLabel GM128 pA- nuc r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig 1.00 65151.00
@@ -5444,7 +5444,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 nucleus  MinusRaw
+    shortLabel GM128 pA- nuc r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longNonPolyA in GM12878 cell nucleus using )
     subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig 1.00 65526.00
@@ -5465,7 +5465,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol  PlusRaw
+    shortLabel GM128 pA- cyt r+
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type wig 1.00 63912.00
@@ -5486,7 +5486,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longNonPolyA GM12878 cytosol  MinusRaw
+    shortLabel GM128 pA- cyt r-
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longNonPolyA in GM12878 cell cytosol using )
     subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type wig 1.00 64907.00
