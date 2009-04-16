@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.17 2009/04/07 16:46:25 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.18 2009/04/16 22:56:55 tdreszer Exp $
 
 var debug = false;
 
@@ -272,7 +272,7 @@ function validateInt(obj,min,max)
             obj.value = obj.defaultValue;
         if(!isInteger(obj.value)) {
             if(popup) {
-                obj.value = prompt(title +" is invalid!\nMust be an integer.\n(min:"+isInteger(min)+" max:"+isInteger(max)+")",obj.value);
+                obj.value = prompt(title +" is invalid!\nMust be an integer.",obj.value);
                 continue;
             } else {
                 alert(title +" of '"+obj.value +"' is invalid!\nMust be an integer."); // try a prompt box!
