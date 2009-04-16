@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.183 2009/04/14 14:19:53 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.184 2009/04/16 18:21:44 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -162,31 +162,17 @@ void explainWhyNoResults(FILE *f)
 /* Put up a little explanation to user of why they got nothing. */
 {
 if (f == NULL)
-    {
-    hPrintf("# No results");
-    if (identifierFileName() != NULL)
-        hPrintf(" matching identifier list");
-    if (anyFilter())
-        hPrintf(" passing filter");
-    if (!fullGenomeRegion())
-        hPrintf(" in given region");
-    if (anyIntersection())
-        hPrintf(" after intersection");
-    hPrintf(".");
-    }
-else
-    {
-    fprintf(f, "# No results");
-    if (identifierFileName() != NULL)
-        fprintf(f, " matching identifier list");
-    if (anyFilter())
-        fprintf(f, " passing filter");
-    if (!fullGenomeRegion())
-        fprintf(f, " in given region");
-    if (anyIntersection())
-        fprintf(f, " after intersection");
-    fprintf(f, ".");
-    }
+    f = stdout;
+fprintf(f, "# No results");
+if (identifierFileName() != NULL)
+    fprintf(f, " matching identifier list");
+if (anyFilter())
+    fprintf(f, " passing filter");
+if (!fullGenomeRegion())
+    fprintf(f, " in given region");
+if (anyIntersection())
+    fprintf(f, " after intersection");
+fprintf(f, ".\n");
 }
 
 char *curTableLabel()
@@ -1410,7 +1396,7 @@ for (region = regionList; region != NULL; region = region->next)
     lmCleanup(&lm);
     }
 if (count == 0)
-    hPrintf("\n# No results returned from query.\n\n");
+    hPrintf(NO_RESULTS);
 htmlClose();
 }
 
