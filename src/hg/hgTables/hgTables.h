@@ -380,6 +380,7 @@ void doClearSubtrackMerge(struct sqlConnection *conn);
 void doSubtrackMergeSubmit(struct sqlConnection *conn);
 /* Respond to submit on intersect page. */
 
+#define NO_RESULTS "\n# No results returned from query.\n\n"
 
 /* --------- CGI/Cart Variables --------------------- */
 
