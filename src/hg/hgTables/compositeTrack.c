@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.15 2009/04/14 14:19:52 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.16 2009/04/16 18:34:06 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -61,7 +61,7 @@ return (sameString(op, "and") || sameString(op, "or"));
 boolean isSubtrackMerged(char *tableName)
 /* Return true if tableName has been selected for subtrack merge. */
 {
-char option[64];
+char option[128];
 safef(option, sizeof(option), "%s_sel", tableName);
 return cartUsualBoolean(cart, option, FALSE);
 }
