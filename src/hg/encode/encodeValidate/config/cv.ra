@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.86 2009/03/20 18:18:40 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.87 2009/04/16 15:21:51 kate Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -12,6 +12,7 @@ karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+color 153,38,0
 tier 1
 
 term K562
@@ -24,6 +25,7 @@ karyotype cancer
 lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+color 46,0.184
 tier 1
 
 term HepG2
@@ -36,6 +38,7 @@ lineage endoderm
 karyotype cancer
 termId BTO:0000559
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+color 189,0,157
 tier 2
 
 term HeLa-S3
@@ -48,6 +51,7 @@ lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+color 0,119,158
 tier 2
 
 term HeLa-S3_IFNg
@@ -60,6 +64,7 @@ lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+color 0,119,158
 tier 3
 
 term HUVEC
@@ -72,6 +77,7 @@ lineage mesoderm
 karyotype normal
 termId BTO:0001949
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001949
+color 224,75,0
 tier 2
 
 term Keratinocyte
@@ -84,6 +90,7 @@ lineage ectoderm
 karyotype normal
 termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
+color 179,0,134
 tier 2
 
 term H1_ES
