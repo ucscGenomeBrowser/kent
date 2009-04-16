@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.65 2009/04/10 20:04:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.66 2009/04/16 18:22:01 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -679,7 +679,7 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (!gotResults)
     {
-    hPrintf("\n# No results returned from query.\n\n");
+    hPrintf(NO_RESULTS);
     }
 else if (doCt)
     {

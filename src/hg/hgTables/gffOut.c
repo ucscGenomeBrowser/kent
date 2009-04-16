@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.17 2009/03/17 04:28:38 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.18 2009/04/16 18:22:01 angie Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -269,6 +269,6 @@ for (region = regionList; region != NULL; region = region->next)
     slFreeList(&gffList);
     }
 if (itemCount == 0)
-    hPrintf("\n# No results returned from query.\n\n");
+    hPrintf(NO_RESULTS);
 }
 
