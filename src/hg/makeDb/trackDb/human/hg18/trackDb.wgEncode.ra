@@ -3435,7 +3435,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep1Helas3
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel HeLa FAIRE  1
+    shortLabel HeLa FAIRE 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 0.00 94.88
@@ -6288,7 +6288,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 polyA- cyto
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in  K562 cytosol)
+    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 cytosol)
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig -55473.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -11631,22 +11631,22 @@ wgEncode 1
 # GIS RNA-seq (wrangler: mikep)
 
 track wgEncodeGisRnaSeq
-compositeTrack	on
-shortLabel	Gis RnaSeq
-longLabel	ENCODE Gis Gingeras RnaSeq
-group		regulation
-subGroup1	view Views Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3	localization Localization cytosol=cytosol
-subGroup4	rnaExtract RnaExtract longPolyA=longPolyA
-dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
-sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary	encode/cv.ra cellType localization rnaExtract
-dragAndDrop	subTracks
-visibilityViewDefaults	 Alignments=hide
-priority	0
-type		bed 3
-wgEncode	1
+compositeTrack on
+shortLabel Gis RnaSeq
+longLabel ENCODE Gis Gingeras RnaSeq
+group regulation
+subGroup1 view Views Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup3 localization Localization cytosol=cytosol
+subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
+dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+controlledVocabulary encode/cv.ra cellType localization rnaExtract
+dragAndDrop subTracks
+visibilityViewDefaults Alignments=hide
+priority 0
+type bed 3
+wgEncode 1
 
     track wgEncodeGisRnaSeqAlignmentsGm12878CytosolLongpolya
     release alpha
@@ -11669,7 +11669,7 @@ wgEncode	1
     track wgEncodeGisRnaSeqPlusRawSignalGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq
-    shortLabel longPolyA GM12878 cytosol  PlusRaw
+    shortLabel longPolyA GM12878 cytosol PlusRaw
     longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal (PolyA+ in GM12878 cytosol)
     subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 24775.00
@@ -11690,7 +11690,7 @@ wgEncode	1
     track wgEncodeGisRnaSeqMinusRawSignalGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq
-    shortLabel longPolyA GM12878 cytosol  MinusRaw
+    shortLabel longPolyA GM12878 cytosol MinusRaw
     longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal (PolyA+ in GM12878 cytosol)
     subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 14099.00
@@ -11728,7 +11728,7 @@ wgEncode	1
     track wgEncodeGisRnaSeqPlusRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq
-    shortLabel longPolyA K562 cytosol  PlusRaw
+    shortLabel longPolyA K562 cytosol PlusRaw
     longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal (PolyA+ in K562 cytosol)
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 18950.00
@@ -11748,7 +11748,7 @@ wgEncode	1
     track wgEncodeGisRnaSeqMinusRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq
-    shortLabel longPolyA K562 cytosol  MinusRaw
+    shortLabel longPolyA K562 cytosol MinusRaw
     longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal (PolyA+ in K562 cytosol)
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 11491.00
@@ -11769,21 +11769,21 @@ wgEncode	1
 # GIS DNA Pet (wrangler: mikep)
 
 track wgEncodeGisDnaPet
-compositeTrack	on
-shortLabel	GIS gDNA PET
-longLabel	ENCODE GIS gDNA PET
-group		regulation
-subGroup1	view Views Alignments=Alignments
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3	fragSize FragSize 1k=1k 5k=5k 10k=10k
-dimensions	dimensionX=cellType	dimensionY=fragSize
-sortOrder	cellType=+ fragSize=+ view=+
-controlledVocabulary	encode/cv.ra cellType fragSize
-dragAndDrop	subTracks
-visibilityViewDefaults	 Alignments=hide
-priority	0
-type		bed 3
-wgEncode	1
+compositeTrack on
+shortLabel GIS gDNA PET
+longLabel ENCODE GIS gDNA PET
+group regulation
+subGroup1 view Views Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup3 fragSize FragSize 1k=1k 5k=5k 10k=10k
+dimensions dimensionX=cellType dimensionY=fragSize
+sortOrder cellType=+ fragSize=+ view=+
+controlledVocabulary encode/cv.ra cellType fragSize
+dragAndDrop subTracks
+visibilityViewDefaults Alignments=hide
+priority 0
+type bed 3
+wgEncode 1
 # MJP: Change 'type bed 6' back to 'type pairedTagAlign' once the
 # display code is done
 
@@ -11888,7 +11888,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults  Alignments=hide
+visibilityViewDefaults Alignments=hide
 priority 0
 type bed 3
 wgEncode 1
