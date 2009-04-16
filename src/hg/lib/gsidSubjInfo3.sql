@@ -10,9 +10,9 @@ CREATE TABLE gsidSubjInfo3 (
   riskFactor varchar(255) NOT NULL default '',
   daysInfectF int(11) NOT NULL default '0',
   daysInfectL int(11) NOT NULL default '0',
-  comment varchar(255) NOT NULL default '',
   newField1 varchar(255) NOT NULL default '',
   newField2 varchar(255) NOT NULL default '',
+  comment varchar(255) NOT NULL default '',
   KEY subjId (subjId)
 ) TYPE=MyISAM;
 
