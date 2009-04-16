@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.10 2009/04/06 18:40:21 larrym Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.11 2009/04/16 20:38:04 larrym Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -76,7 +76,7 @@ if(host)
     }
 else
     {
-    conn = hAllocConn(database);
+    conn = sqlConnect(database);
     }
 
 ret = newHash(0);
