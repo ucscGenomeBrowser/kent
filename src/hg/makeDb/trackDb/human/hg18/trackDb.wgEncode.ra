@@ -5046,6 +5046,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
     release alpha
@@ -5063,6 +5064,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
     release alpha
@@ -5080,6 +5082,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
     release alpha
@@ -5097,6 +5100,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
     release alpha
@@ -5114,6 +5118,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
     release alpha
@@ -5131,6 +5136,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCagePlusRawSignalGm12878NucleusLongnonpolya
     release alpha
@@ -5151,6 +5157,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCageMinusRawSignalGm12878NucleusLongnonpolya
     release alpha
@@ -5171,6 +5178,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCagePlusRawSignalGm12878CytosolLongnonpolya
     release alpha
@@ -5191,6 +5199,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeRikenCageMinusRawSignalGm12878CytosolLongnonpolya
     release alpha
@@ -5211,6 +5220,7 @@ wgEncode 1
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
 
 # U. Washington DNAse-seq (wrangler: mikep)
@@ -5627,7 +5637,7 @@ scoreMin 500
 track wgEncodeAffyRnaChip
 compositeTrack on
 shortLabel Affy RNA Loc
-longLabel ENCODE Affymetrix Subcellular RNA Localization
+longLabel ENCODE Affymetrix Subcellular RNA Localization by Tiling Array
 group expression
 subGroup1 view Views Transfrags=Transfrags FilteredTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FilteredRawSignal=Filtered_Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
@@ -5676,7 +5686,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel pros polyA- cell
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA from prostate whole cell))
+    longLabel ENCODE Affy Filtered Signal (PolyA- RNA from prostate whole cell)
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig -62124.00 54385.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6519,6 +6529,7 @@ wgEncode 1
     rnaExtract total
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal
     release alpha
@@ -6536,6 +6547,7 @@ wgEncode 1
     rnaExtract total
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusTotal
     release alpha
@@ -6556,6 +6568,7 @@ wgEncode 1
     rnaExtract total
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal
     release alpha
@@ -6576,6 +6589,7 @@ wgEncode 1
     rnaExtract total
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CellTotal
     release alpha
@@ -6593,6 +6607,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
     release alpha
@@ -6610,6 +6625,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878CellTotal
     release alpha
@@ -6630,6 +6646,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
     release alpha
@@ -6650,6 +6667,7 @@ wgEncode 1
     rnaExtract total
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleoplasmTotal
     release alpha
@@ -6667,6 +6685,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0,184
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal
     release alpha
@@ -6687,6 +6706,7 @@ wgEncode 1
     rnaExtract total
     localization nucleoplasm
     cell K562
+    color 46,0,184
 
 
 # SUNY Albany genechp (wrangler: mikep)
@@ -9647,6 +9667,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
     release alpha
@@ -9666,6 +9687,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisPetTagsProstateCellLongpolya
     release alpha
@@ -10025,6 +10047,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort1940
     release alpha
@@ -10042,6 +10065,7 @@ wgEncode 1
     rnaExtract short19-40
     localization cytosol
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort4060
     release alpha
@@ -10059,6 +10083,7 @@ wgEncode 1
     rnaExtract short40-60
     localization cytosol
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort60200
     release alpha
@@ -10076,6 +10101,7 @@ wgEncode 1
     rnaExtract short60-200
     localization cytosol
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleolusShort
     release alpha
@@ -10093,6 +10119,7 @@ wgEncode 1
     rnaExtract short
     localization nucleolus
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     release alpha
@@ -10110,6 +10137,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleoplasmShort
     release alpha
@@ -10127,6 +10155,7 @@ wgEncode 1
     rnaExtract short
     localization nucleoplasm
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     release alpha
@@ -10144,6 +10173,7 @@ wgEncode 1
     rnaExtract short
     localization polysome
     cell K562
+    color 46,0,184
 
     track wgEncodeCshlRnaSeqTransfragsProstateCellShortdeplrrna
     release alpha
@@ -10195,6 +10225,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShortdeplrrna
     release alpha
@@ -10212,6 +10243,7 @@ wgEncode 1
     rnaExtract shortDeplRrna
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShortdeplrrna
     release alpha
@@ -10229,6 +10261,7 @@ wgEncode 1
     rnaExtract shortDeplRrna
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     release alpha
@@ -10246,6 +10279,7 @@ wgEncode 1
     rnaExtract short
     localization nucleus
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCshlRnaSeqTransfragsK562ChromatinShort
     release alpha
@@ -10263,6 +10297,7 @@ wgEncode 1
     rnaExtract short
     localization chromatin
     cell K562
+    color 46,0,184
 
 
 # HudsonAlpha Methyl-seq (wrangler: larrym)
@@ -10555,6 +10590,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75
     release alpha
@@ -10574,6 +10610,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75
     release alpha
@@ -10593,6 +10630,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75
     release alpha
@@ -10612,6 +10650,7 @@ wgEncode 1
     mapAlgorithm blat34
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75
     release alpha
@@ -10631,6 +10670,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75
     release alpha
@@ -10650,6 +10690,7 @@ wgEncode 1
     mapAlgorithm blat34
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75
     release alpha
@@ -10672,6 +10713,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75
     release alpha
@@ -10694,6 +10736,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32
     release alpha
@@ -10713,6 +10756,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32
     release alpha
@@ -10732,6 +10776,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32
     release alpha
@@ -10751,6 +10796,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32
     release alpha
@@ -10770,6 +10816,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32
     release alpha
@@ -10792,6 +10839,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32
     release alpha
@@ -10814,6 +10862,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75
     release alpha
@@ -10833,6 +10882,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75
     release alpha
@@ -10852,6 +10902,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75
     release alpha
@@ -10871,6 +10922,7 @@ wgEncode 1
     mapAlgorithm blat34
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75
     release alpha
@@ -10893,6 +10945,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell K562
+    color 46,0,184
 
     track wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
     release alpha
@@ -10912,6 +10965,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32
     release alpha
@@ -10931,6 +10985,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
     release alpha
@@ -10950,6 +11005,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32
     release alpha
@@ -10969,6 +11025,7 @@ wgEncode 1
     mapAlgorithm bow098
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32
     release alpha
@@ -10991,6 +11048,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32
     release alpha
@@ -11013,6 +11071,7 @@ wgEncode 1
     mapAlgorithm erng3b
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75
     release alpha
@@ -11032,6 +11091,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75
     release alpha
@@ -11051,6 +11111,7 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75
     release alpha
@@ -11070,6 +11131,7 @@ wgEncode 1
     mapAlgorithm blat34
     localization cell
     cell GM12878
+    color 153,38,0
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
     release alpha
@@ -11092,7 +11154,10 @@ wgEncode 1
     mapAlgorithm BB1
     localization cell
     cell GM12878
+    color 153,38,0
 
+
+# GIS RNA-seq (wrangler: mikep)
 
 track		wgEncodeGisRnaSeq
 compositeTrack	on
@@ -11128,6 +11193,7 @@ wgEncode	1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisRnaSeqPlusRawSignalGm12878CytosolLongpolya
     release alpha
@@ -11148,6 +11214,7 @@ wgEncode	1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisRnaSeqMinusRawSignalGm12878CytosolLongpolya
     release alpha
@@ -11168,6 +11235,7 @@ wgEncode	1
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
+    color 153,38,0
 
     track wgEncodeGisRnaSeqAlignmentsK562CytosolLongpolya
     release alpha
@@ -11227,6 +11295,8 @@ wgEncode	1
     cell K562
 
 
+# GIS DNA Pet (wrangler: mikep)
+
 track		wgEncodeGisDnaPet
 compositeTrack	on
 shortLabel	GIS gDNA PET
@@ -11251,7 +11321,7 @@ wgEncode	1
     subTrack wgEncodeGisDnaPet
     shortLabel GM12878
     longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
-    subGroups view=Alignments cellType=GM12878 fragSize=10k 
+    subGroups view=Alignments cellType=GM12878 fragSize=10k
     #type pairedTagAlign
     type bed 6
     dateSubmitted 2009-04-04
@@ -11331,6 +11401,8 @@ wgEncode	1
     fragSize 5k
     cell GM12878
 
+
+# Helicos RNA-seq (wrangler: mikep)
 
 track wgEncodeHelicosRnaSeq
 compositeTrack on
