@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.73 2009/04/14 18:05:55 tdreszer Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.74 2009/04/16 18:55:42 tdreszer Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -899,7 +899,7 @@ if (!(isWig||isBedGr))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isSmallWig||isBedGr)
+if (isWig||isBedGr)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
