@@ -1,4 +1,4 @@
-machine hgwbeta.cse.ucsc.edu
+machine hgsqlbeta.cse.ucsc.edu
 server hgw1.cse.ucsc.edu
 quick false
 dbSpec all
