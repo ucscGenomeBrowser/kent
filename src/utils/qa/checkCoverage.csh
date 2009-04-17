@@ -17,7 +17,7 @@ set send=""
 
 if ($#argv < 2 || $#argv > 3 ) then
   echo
-  echo "  find all the places where data missing from a track."
+  echo "  find all the non-gap places where data missing from a track."
   echo
   echo "      usage:  database table [chrom]"
   echo
