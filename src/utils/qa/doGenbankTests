@@ -22,6 +22,18 @@ tableExists()
   fi
 }
 
+databaseExists()
+{
+  local db=$1
+  local res=`hgsql -Ne "show databases like '$db'"`
+  if [ -z "$res" ]
+  then
+    return 1
+  else
+    return 0
+  fi
+}
+
 allOk=yes
 
 # check host, set path to genbank table list
@@ -46,6 +58,11 @@ where outFile is the name of a file in which to record results" >&2
   exit 1
 else
   db="$1"
+  if ! databaseExists $db
+  then
+    echo "ERROR: $db does not seem to be a valid database name" >&2
+    exit 1
+  fi
   if [ $# -eq 2 ]
   then
     exec > "$2" 2>&1  # neat bash trick to redirect stdout (also redirecting error)
