@@ -13,7 +13,7 @@ track posSelVax004HispanicModel2
 shortLabel VAX004 Hispanic Pos Sel M2
 longLabel VAX004 Hispanic Postive Selection (Model 2)
 group posSel
-priority 101
+priority 103
 visibility pack
 color 0,0,255
 type bed 5
@@ -23,7 +23,7 @@ track posSelVax004HispanicModel8
 shortLabel VAX004 Hispanic Pos Sel M8
 longLabel VAX004 Hispanic Postive Selection (Model 8)
 group posSel
-priority 101
+priority 103
 visibility pack
 color 0,0,255
 type bed 5
@@ -82,7 +82,7 @@ track posSelVax004OtherModel2
 shortLabel VAX004 Other Pos Sel M2
 longLabel VAX004 Other Postive Selection (Model 2)
 group posSel
-priority 101
+priority 105
 visibility pack
 color 0,0,255
 type bed 5
@@ -92,7 +92,7 @@ track posSelVax004OtherModel8
 shortLabel VAX004 Other Pos Sel M8
 longLabel VAX004 Other Postive Selection (Model 8)
 group posSel
-priority 101
+priority 105
 visibility pack
 color 0,0,255
 type bed 5
@@ -162,7 +162,7 @@ track posSelVax004WhiteModel2
 shortLabel VAX004 White Pos Sel M2
 longLabel VAX004 White Postive Selection (Model 2)
 group posSel
-priority 101
+priority 104
 visibility pack
 color 0,0,255
 type bed 5
@@ -172,7 +172,7 @@ track posSelVax004WhiteModel8
 shortLabel VAX004 White Pos Sel M8
 longLabel VAX004 White Postive Selection (Model 8)
 group posSel
-priority 101
+priority 104
 visibility pack
 color 0,0,255
 type bed 5
@@ -202,7 +202,7 @@ track posSelVax004BlackModel2
 shortLabel VAX004 Black Pos Sel M2
 longLabel VAX004 Black Postive Selection (Model 2)
 group posSel
-priority 101
+priority 102
 visibility pack
 color 0,0,255
 type bed 5
@@ -212,7 +212,7 @@ track posSelVax004BlackModel8
 shortLabel VAX004 Black Pos Sel M8
 longLabel VAX004 Black Postive Selection (Model 8)
 group posSel
-priority 101
+priority 102
 visibility pack
 color 0,0,255
 type bed 5
