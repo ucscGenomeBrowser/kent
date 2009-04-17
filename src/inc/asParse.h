@@ -24,6 +24,12 @@ enum asTypes
    t_set,      /* set of symbolic values */
    };
 
+boolean asTypesIsInt(enum asTypes type);
+/* Return TRUE if it's any integer type - short, long, unsigned, etc. */
+
+boolean asTypesIsFloating(enum asTypes type);
+/* Return TRUE if it's any floating point type - float or double. */
+
 struct asTypeInfo
     {
     enum asTypes type;		   /* Numeric ID of low level type. */

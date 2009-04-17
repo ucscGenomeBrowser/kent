@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.7 2009/03/17 18:25:47 kent Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.8 2009/04/17 23:22:37 kent Exp $";
 
 /* n.b. switched double/float from %f to %g to partially address losing
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
@@ -248,6 +248,37 @@ for (obj = objList; obj != NULL; obj = obj->next)
     asLinkEmbeddedObjects(obj, objList);
 
 return objList;
+}
+
+boolean asTypesIsInt(enum asTypes type)
+/* Return TRUE if it's any integer type - short, long, unsigned, etc. */
+{
+switch (type)
+   {
+   case t_int:
+   case t_uint:
+   case t_short:
+   case t_ushort:
+   case t_byte:
+   case t_ubyte:
+   case t_off:
+       return TRUE;
+   default:
+       return FALSE;
+   }
+}
+
+boolean asTypesIsFloating(enum asTypes type)
+/* Return TRUE if it's any floating point type - float or double. */
+{
+switch (type)
+   {
+   case t_float:
+   case t_double:
+       return TRUE;
+   default:
+       return FALSE;
+   }
 }
 
 static struct asObject *asParseLineFile(struct lineFile *lf)
