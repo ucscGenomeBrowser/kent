@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1525 2009/04/08 01:34:58 mikep Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1526 2009/04/17 19:25:26 mikep Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1283,8 +1283,16 @@ hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
-    sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+    {
+    // not sure how to free hti, I cant seen any code where an hti is ever freed.
+    struct hTableInfo *hti = hFindTableInfoWithConn(conn, seqName, tdb->tableName);
+    if (hti && *hti->nameField && differentString("name", hti->nameField))
+	sprintf(query, "select * from %s where %s = '%s' and chrom = '%s' and chromStart = %d",
+	    table, hti->nameField, escapedName, seqName, start);
+    else
+	sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, escapedName, seqName, start);
+    }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

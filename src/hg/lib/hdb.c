@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.400 2009/04/15 19:40:43 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.401 2009/04/17 19:25:26 mikep Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2590,7 +2590,8 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     if (!fitField(hash, "name", retName))
 	if (!fitField(hash, "acc", retName))
 	    if (!fitField(hash, "frag", retName))
-		fitField(hash, "contig", retName);
+		if (!fitField(hash, "contig", retName))
+		    fitField(hash, "sequence", retName); // so that tagAlign can masquerade as BED
     fitField(hash, "score", retScore);
     fitField(hash, "strand", retStrand);
     fitField(hash, "thickStart", retCdsStart);
