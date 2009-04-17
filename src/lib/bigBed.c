@@ -10,6 +10,7 @@
 #include "rangeTree.h"
 #include "cirTree.h"
 #include "bPlusTree.h"
+#include "basicBed.h"
 #include "asParse.h"
 #include "sig.h"
 #include "udc.h"
@@ -69,7 +70,7 @@ return a->fileOffset;
 
 
 static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct lm *lm, 
-	bits64 *retDiskSize, bits16 *retFieldCount)
+	struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount)
 /* Read bed file and return it as list of ppBeds. The whole thing will
  * be allocated in the passed in lm - don't ppBedFreeList or slFree
  * list! */
@@ -78,34 +79,82 @@ struct ppBed *pbList = NULL, *pb;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
 bits64 diskSize = 0;
-int fieldCount = 0;
+int fieldCount = 0, fieldAlloc=0;
+char **row = NULL;
 while (lineFileNextReal(lf, &line))
     {
+    /* First time through figure out the field count, and if not set, the defined field count. */
     if (fieldCount == 0)
-        fieldCount = chopByWhite(line, NULL, 0);
-    int i;
-    char *words[3];
-    for (i=0; i<3; ++i)
-	words[i] = nextWord(&line);
+	{
+	if (as == NULL)
+	    {
+	    fieldCount = chopByWhite(line, NULL, 0);
+	    if (definedFieldCount == 0)
+		definedFieldCount = fieldCount;
+	    if (as == NULL)
+		{
+		char *asText = bedAsDef(definedFieldCount, fieldCount);
+		as = asParseText(asText);
+		freeMem(asText);
+		}
+	    }
+	else
+	    {
+	    fieldCount = slCount(as->columnList);
+	    }
+	fieldAlloc = fieldCount+1;
+	AllocArray(row, fieldAlloc);
+	}
+
+    /* Chop up line and make sure the word count is right. */
+    int wordCount = chopByWhite(line, row, fieldAlloc);
+    lineFileExpectWords(lf, fieldCount, wordCount);
+
+    /* Allocate variable and fill in first three fields. */
     lmAllocVar(lm, pb);
-    char *chrom = words[0];
+    char *chrom = row[0];
     struct hashEl *hel = hashLookup(chromHash, chrom);
     if (hel == NULL)
         errAbort("%s is not in chrom.sizes line %d of %s", chrom, lf->lineIx, lf->fileName);
     pb->chrom = hel->name;
-    pb->start = lineFileNeedNum(lf, words, 1);
-    pb->end = lineFileNeedNum(lf, words, 2);
-    int len = 0;
-    line = skipLeadingSpaces(line);
-    if (line != NULL)
-	{
-        len = strlen(line);
-	pb->rest = lmCloneString(lm, skipLeadingSpaces(line));
+    pb->start = lineFileNeedNum(lf, row, 1);
+    pb->end = lineFileNeedNum(lf, row, 2);
+    int i;
+
+    /* Check remaining fields are formatted right, and concatenate them into "rest" string. */
+    if (fieldCount > 3)
+        {
+	/* Count up string sizes and allocate something big enough. */
+	int textSize = 0;
+	for (i=3; i<fieldCount; ++i)
+	    textSize += strlen(row[i]) + 1;
+	char *s = pb->rest = lmAlloc(lm, textSize);
+
+	/* Go through and check that numerical strings really are numerical. */
+	struct asColumn *asCol = slElementFromIx(as->columnList, 3);
+	for (i=3; i<fieldCount; ++i)
+	    {
+	    enum asTypes type = asCol->lowType->type;
+	    if (asTypesIsInt(type))
+	        lineFileNeedFullNum(lf, row, i);
+	    else if (asTypesIsFloating(type))
+	        lineFileNeedDouble(lf, row, i);
+	    int len = strlen(row[i]);
+	    memcpy(s, row[i], len);
+	    s[len] = '\t';
+	    s += len+1;
+	    asCol = asCol->next;
+	    }
+	/* Convert final tab to a zero. */
+	pb->rest[textSize-1] = 0;
+	diskSize += textSize + 3*sizeof(bits32);
 	}
-    diskSize += len + 1 + 3*sizeof(bits32);
+    else
+        diskSize += 3*sizeof(bits32) + 1;  /* Still will write terminal 0 */
     slAddHead(&pbList, pb);
     }
 slReverse(&pbList);
+freeMem(row);
 *retDiskSize = diskSize;
 *retFieldCount = fieldCount;
 return pbList;
@@ -237,13 +286,24 @@ bits64 reductionDataOffsets[10];
 bits64 reductionIndexOffsets[10];
 bits16 fieldCount;
 
+/* Load up as object if defined in file. */
+struct asObject *as = NULL;
+if (asFileName != NULL)
+    {
+    /* Parse it and do sanity check. */
+    as = asParseFile(asFileName);
+    if (as->next != NULL)
+        errAbort("Can only handle .as files containing a single object.");
+    }
+
 /* Load in chromosome sizes. */
 struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
 verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chromSizes);
 
 /* Load and sort input file. */
 bits64 fullSize;
-struct ppBed *pb, *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, &fullSize, &fieldCount);
+struct ppBed *pb, *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, as, 
+	definedFieldCount, &fullSize, &fieldCount);
 if (definedFieldCount == 0)
     definedFieldCount = fieldCount;
 bits64 pbCount = slCount(pbList);
@@ -336,13 +396,9 @@ for (i=0; i<summaryCount; ++i)
     writeOne(f, reserved64);	// Fill in with index offset later
     }
 
-/* Optionally write out as file. */
+/* Optionally write out .as file. */
 if (asFileName != NULL)
     {
-    /* Parse it and do sanity check. */
-    struct asObject *as = asParseFile(asFileName);
-    if (as->next != NULL)
-        errAbort("Can only handle .as files containing a single object.");
     int colCount = slCount(as->columnList);
     if (colCount != fieldCount)
         errAbort("%d columns in %s, %d columns in %s. These must match!",
@@ -351,6 +407,7 @@ if (asFileName != NULL)
     FILE *asFile = mustOpen(asFileName, "r");
     copyOpenFile(asFile, f);
     fputc(0, f);
+    carefulClose(&asFile);
     }
 
 /* Write chromosome bPlusTree */
