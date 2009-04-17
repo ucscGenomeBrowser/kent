@@ -18,7 +18,7 @@ if ($#argv != 2) then
   echo "  checks for entries beyond the end of the chromsome."
   echo '    finds the proper column names if "chrom", "tName" or "genoName".'
   echo
-  echo "    usage:  database, table"
+  echo "    usage:  database table"
   echo
   exit
 else
