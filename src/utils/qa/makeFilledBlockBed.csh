@@ -17,7 +17,7 @@ set send=""
 
 if ($#argv != 3 ) then
   echo
-  echo "  make bed file of large blocks, ignoring intron/exons"
+  echo "  make bed file of large blocks, fusing introns/exons"
   echo "  will take split tables without the chrN_ prefix."
   echo
   echo "      usage:  database table outfile.bed"
