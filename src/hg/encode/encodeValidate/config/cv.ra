@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.88 2009/04/16 17:24:06 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.89 2009/04/17 19:24:43 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -953,10 +953,6 @@ description Control signal from Naked DNA.
 term Reference_Genome
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
-
-term HTC-116
-type Cell Line
-description colorectal carcinoma
 
 term H9ES
 type Cell Line
