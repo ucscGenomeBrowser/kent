@@ -55,6 +55,7 @@ char tmpbuf[1024];
 SSL_CTX *ctx;
 SSL *ssl;
 
+SSL_library_init();
 ERR_load_crypto_strings();
 ERR_load_SSL_strings();
 OpenSSL_add_all_algorithms();
