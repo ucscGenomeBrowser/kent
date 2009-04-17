@@ -7,7 +7,7 @@
 #include "bigBed.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.4 2009/03/15 00:18:23 kent Exp $";
+static char const rcsid[] = "$Id: bigBedSummary.c,v 1.5 2009/04/17 20:54:35 kent Exp $";
 
 char *summaryType = "coverage";
 
@@ -17,7 +17,7 @@ void usage()
 errAbort(
   "bigBedSummary - Extract summary information from a bigBed file.\n"
   "usage:\n"
-  "   bigWigSummary file.bb chrom start end dataPoints\n"
+  "   bigBedSummary file.bb chrom start end dataPoints\n"
   "Get summary data from bigBed for indicated region, broken into\n"
   "dataPoints equal parts.  (Use dataPoints=1 for simple summary.)\n"
   "options:\n"
