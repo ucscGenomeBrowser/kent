@@ -12,7 +12,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.63 2009/03/18 01:34:07 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.64 2009/04/17 21:38:49 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -451,49 +451,6 @@ else
 
 return list;
 }
-
-
-struct bed *bedLoadNBin(char *row[], int wordCount)
-/* Convert a row of strings to a bed. */
-{
-struct bed * bed;
-int count;
-
-AllocVar(bed);
-bed->chrom = cloneString(row[1]);
-bed->chromStart = sqlUnsigned(row[2]);
-bed->chromEnd = sqlUnsigned(row[3]);
-if (wordCount > 3)
-     bed->name = cloneString(row[4]);
-if (wordCount > 4)
-     bed->score = sqlSigned(row[5]);
-if (wordCount > 5)
-     bed->strand[0] = row[6][0];
-if (wordCount > 6)
-     bed->thickStart = sqlUnsigned(row[7]);
-else
-     bed->thickStart = bed->chromStart;
-if (wordCount > 7)
-     bed->thickEnd = sqlUnsigned(row[8]);
-else
-     bed->thickEnd = bed->chromEnd;
-if (wordCount > 8)
-    bed->itemRgb = itemRgbColumn(row[9]);
-if (wordCount > 9)
-    bed->blockCount = sqlUnsigned(row[10]);
-if (wordCount > 10)
-    sqlSignedDynamicArray(row[11], &bed->blockSizes, &count);
-if (wordCount > 11)
-    sqlSignedDynamicArray(row[12], &bed->chromStarts, &count);
-if (wordCount > 12)
-    bed->expCount = sqlUnsigned(row[13]);
-if (wordCount > 13)
-    sqlSignedDynamicArray(row[14], &bed->expIds, &count);
-if (wordCount > 14)
-    sqlFloatDynamicArray(row[15], &bed->expScores, &count);
-return bed;
-}
-
 
 static void bedOutputN_Opt(struct bed *el, int wordCount, FILE *f,
 	char sep, char lastSep, boolean useItemRgb)

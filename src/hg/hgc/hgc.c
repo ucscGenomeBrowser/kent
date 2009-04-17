@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1526 2009/04/17 19:25:26 mikep Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1527 2009/04/17 21:38:47 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18130,6 +18130,7 @@ struct dyString *itemUrl = newDyString(128), *d;
 char *old = "_";
 char *new = "";
 char *pat = "fold";
+int hasBin = 1;
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 /* get bed size */
@@ -18140,7 +18141,7 @@ num = atoi(words[1]);
 sprintf(query, "select * from %s where name = '%s' and chromStart = %d", tdb->tableName, item, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-    bed = bedLoadNBin(row, num);
+    bed = bedLoadN(row+hasBin, num);
 
 genericHeader(tdb, item);
 /* convert chromosome co-ordinates to scaffold position and */

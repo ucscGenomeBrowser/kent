@@ -173,9 +173,6 @@ struct bed *bedLoadAll(char *fileName);
 /* Determines how many fields are in a bedFile and load all beds from
  * a tab-separated file.  Dispose of this with bedFreeList(). */
 
-struct bed *bedLoadNBin(char *row[], int wordCount);
-/* Convert a row of strings to a bed. */
-
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
