@@ -620,6 +620,17 @@ if (colon != NULL)
     afterProtocol = url + colonPos + 1;
     while (afterProtocol[0] == '/')
        afterProtocol += 1;
+    char *userPwd = strchr(afterProtocol, '@');
+    if (userPwd)
+	{
+	char *afterHost = strchr(afterProtocol, '/');
+        if (!afterHost)
+	    {
+	    afterHost = afterProtocol+strlen(afterProtocol);
+	    }
+	if (userPwd < afterHost)
+    	    afterProtocol = userPwd + 1;
+	}
     afterProtocol = qEncode(afterProtocol);
     }
 else
