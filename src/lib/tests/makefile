@@ -76,13 +76,13 @@ pipelineExitCode: ${BIN_DIR}/pipelineTester
 
 # test redirecting stderr, see that two process can write stderr, but only
 # the second's stdout should make it to the end of the pipe.  Since order
-# of writes to stderr is determined by process scheduling, sort the output
-# before comparing.
+# of writes to stderr is determined by process scheduling and when a process
+# terminates due to SIGPIPE, just check that stderr was not empty, don't
+# check contents.
 pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.raw.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
+	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
 	diff -b expected/$@.out output/$@.out
-	sort output/$@.raw.err > output/$@.err
-	diff -b expected/$@.err output/$@.err
+	test -s output/$@.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
