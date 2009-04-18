@@ -678,3 +678,33 @@ featureBits taeGut1 rmsk
 # was earlier...
 # 97507442 bases of 1222864691 (7.974%) in intersection
 
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2009-04-17 markd)
+
+/mblab.wustl.edu/predictions/taeGut1
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/taeGut1/bed/nscan/
+
+    wget -nv http://mblab.wustl.edu/predictions/taeGut1/taeGut1.gtf
+    wget -nv http://mblab.wustl.edu/predictions/taeGut1/taeGut1.prot.fa
+    bzip2 taeGut1.*
+    chmod a-w *
+
+    # load track
+    ldHgGene -bin -gtf -genePredExt taeGut1 nscanGene taeGut1.gtf.bz2
+    hgPepPred taeGut1 generic nscanPep  taeGut1.prot.fa.bz2
+    rm *.tab
+
+    # create zebraFinch/nscanGene.html
+
+    # zebraFinch/taeGut1/trackDb.ra, add:
+    track nscanGene override
+    informant Zerba Finch N-SCAN uses chicken (galGal3) as the informant
+
+    searchTable nscanGene
+    searchType genePred
+    termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
+    searchPriority 50
+
