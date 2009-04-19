@@ -23,7 +23,7 @@ BEGIN {
                            makeFileDir removeDir renameFile getFileSize getFileModTime
                            runProg runProgNoAbort callProg runPipe md5Files md5Check
                            gbChmod getReleases getLastRelease getUpdates
-                           parseOptEq inList inListRef getTmpDir readFile makeAbs
+                           parseOptEq inList inListRef getTmpDir readFile isAbs makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConfUndef getDbConf
                            getDbConfNo getDbConfNoUndef splitSpaceList
@@ -707,10 +707,16 @@ sub backgroundWait() {
     return $gbCommon::pidCount;
 }
 
+# is a filename absolute
+sub isAbs($) {
+    my($path) = @_;
+    return ($path =~ /^\//);
+}
+
 # make a filename absolute
 sub makeAbs($) {
     my($path) = @_;
-    if (! ($path =~ /^\//)) {
+    if (! isAbs($path)) {
         my $cwd = `pwd`; 
         chomp($cwd);
         $path = $cwd . "/" . $path;

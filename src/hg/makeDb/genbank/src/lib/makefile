@@ -12,6 +12,7 @@ PY_SRCS = \
 	py/genbank/Config.py \
 	py/genbank/GbIndex.py \
 	py/genbank/GenomeSeqs.py \
+	py/genbank/GenomePartition.py \
 	py/genbank/Pipeline.py \
 	py/genbank/__init__.py \
 	py/genbank/fileOps.py \

@@ -5,8 +5,6 @@ O = gbAlignCommon.o gbAlignGet.o gbAlignInstall.o
 
 PROGS = ${GB_BINDIR}/gbAlignSetup \
 	${GB_BINDIR}/gbAlignRSync \
-	${GB_BINDIR}/gbAlignIServerCopy \
-	${GB_BINDIR}/gbAlignIServerClean \
 	${GB_BINDIR}/gbAlignRun \
 	${GB_BINDIR}/gbAlignFinish \
 	${GB_BINDIR}/gbAlignStep \

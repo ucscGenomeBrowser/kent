@@ -1,4 +1,4 @@
-"module to access information about genome sequences"
+"Module to store information about genome sequences"
 
 import os, glob
 from genbank.fileOps import prLine, prRow
@@ -6,7 +6,9 @@ from genbank import procOps
 
 class GenomeSeq(object):
     "information about a genome sequence"
-    def __init__(self, path, id, size):
+    __slots__ = ("genomeSeqs", "path", "id", "size", "unplaced", "regions")
+    def __init__(self, genomeSeqs, path, id, size):
+        self.genomeSeqs = genomeSeqs
         self.path = path
         self.id = id
         self.size = size
@@ -17,51 +19,47 @@ class GenomeSeq(object):
 class GenomeSeqs(dict):
     "table of genome sequences and sizes for a database"
 
-    def __init__(self, genomeGlob, skipChroms):
-        """expand genomeGlob and add all sequences. If skipChroms is not None,
-        it is is a list of chrs to ignore"""
+    def __init__(self, db, genomeFileSpec):
+        """Build from all sequences in a genome.
+        - db - genome database or other name used to identify the genome.
+        - genomeFileSpec - either a glob pattern or file specification for 2bit
+          or nib genome seq files.
+        """
 
-        self.genomeDb = None
-        if skipChroms != None:
-            self.skipChroms = frozenset(skipChroms)
-        else:
-            self.skipChroms = frozenset()
-        paths = glob.glob(genomeGlob)
+        self.db = db
+        paths = glob.glob(genomeFileSpec)
         if len(paths) == 0:
-            raise Exception("no files matching: " + genomeGlob)
+            raise Exception("no files matching: " + genomeFileSpec)
         if (len(paths) == 1) and paths[0].endswith(".2bit"):
-            self._addTwoBit(paths[0])
+            self.__addTwoBit(paths[0])
         else:
-            self._addNibs(paths)
+            self.__addNibs(paths)
 
-    def _addNibs(self, paths):
+    def __addNibs(self, paths):
         "add nib sequences to object"
         # /cluster/data/hg17/nib/chrX.nib	chrX	154824264
-        self.genomeDb = os.path.dirname(paths[0])
         lines = procOps.callProcLines(["nibSize"] + paths)
         for line in lines:
             row = line.split("\t")
-            if row[1] not in self.skipChroms:
-                self[row[1]] = GenomeSeq(row[0], row[1], int(row[2]))
+            self[row[1]] = GenomeSeq(self, row[0], row[1], int(row[2]))
 
-    def _addTwoBit(self, path):
+    def __addTwoBit(self, path):
         "add twoBit sequences to object"
         self.genomeDb = path[0]
         # chrX	154824264
         lines = procOps.callProcLines(["twoBitInfo", path, "stdout"])
         for line in lines:
             row = line.split("\t")
-            if row[0] not in self.skipChroms:
-                self[row[0]] = GenomeSeq(path, row[0], int(row[1]))
+            self[row[0]] = GenomeSeq(self, path, row[0], int(row[1]))
 
-    def _loadLift(self, liftFile):
+    def __loadLift(self, liftFile):
         "load lift into dict of lists of (start end), ensuring they are sorted"
         fh = open(liftFile)
         lifts = {}
         # offset oldName oldSize newName newSize strand
         for line in fh:
             row = line[0:-1].split("\t")
-            if (row[1] != "gap") and (row[3] not in self.skipChroms):
+            if row[1] != "gap":
                 start = int(row[0])
                 end = start + int(row[2])
                 if not row[3] in lifts:
@@ -72,7 +70,7 @@ class GenomeSeqs(dict):
             l.sort()
         return lifts
 
-    def _addSeqRegions(self, seq, lifts):
+    def __addSeqRegions(self, seq, lifts):
         "add ungapped regions for a sequence"
         seq.regions = []
         start = lifts[0][0]
@@ -87,9 +85,9 @@ class GenomeSeqs(dict):
     def addUnGappedRegions(self, liftFile):
         """define regions without gaps from a lift file.  If a sequence
         is flagged as unplaced, adjacent lift entries are not joined"""
-        lifts = self._loadLift(liftFile)
+        lifts = self.__loadLift(liftFile)
         for id in lifts.iterkeys():
-            self._addSeqRegions(self[id], lifts[id])
+            self.__addSeqRegions(self[id], lifts[id])
     
     def dump(self, fh):
         "print contents for debugging purposes"

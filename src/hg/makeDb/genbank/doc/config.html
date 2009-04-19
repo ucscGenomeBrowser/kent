@@ -37,14 +37,8 @@
 
     <H3>Global configuration parameters</H3>
     <UL>
-    <LI> <CODE>cluster.iservers</CODE> - space-separated list of iservers to use
-         to serve sequence fasta files.  Empty <CODE>no</CODE> or empty
-         for a global filesystem.
-    <LI> <CODE>cluster.rootDir</CODE> - root directory on cluster filesystems,
-         either iserver or local file systems.
+    <LI> <CODE>cluster.rootDir</CODE> - root directory on cluster filesystems.
     <LI> <CODE>cluster.paraHub</CODE> - Host where parasol hub is running.
-    <li> <code>cluster.iservers</code> - List of iservers to use for
-          alignment.
     <LI> <CODE>grepIndex.genbank.default</CODE> - Create <EM>grepIndex</EM> files
          for databases in the specified directory.  This value should
          correspond to the value <CODE>grepIndex.genbank</CODE> in the
@@ -63,7 +57,7 @@
 
     <UL>
      <li> <code><em>$db</em>.align.window</code> - Size of genome alignment windows, in bases.
-          the genome is partitioned in seqments of no more than this sizes for alignment.
+          The genome is partitioned in segments of no more than this sizes for alignment.
      <li> <code><em>$db</em>.align.overlap</code> - Number of bases of overlap in the alignment
           windows.
      <li> <code><em>$db</em>.align.maxGap</code> - Gaps no larger than this
@@ -86,9 +80,6 @@
           and <CODE>?</CODE>.  For example <CODE>*_random</CODE>.
      <li> <code><em>$db</em>.align.minUnplacedSize</code> - Skip
           unplaced sequences smaller than this size.
-     <li> <code><em>$db</em>.align.skipChroms</code> - 
-          White-space separated list of chromosome to skip.  You probably
-          don't want to use this.
      <li> <code><em>$db</em>.serverGenome</code> - glob pattern or file for genome
           sequences on server. This can be NIBs or a TwoBit file.
      <li> <code><em>$db</em>.clusterGenome</code> - glob pattern or file for genome
