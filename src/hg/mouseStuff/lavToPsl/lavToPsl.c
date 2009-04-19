@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: lavToPsl.c,v 1.10 2006/06/20 16:44:17 angie Exp $";
+static char const rcsid[] = "$Id: lavToPsl.c,v 1.11 2009/04/19 05:44:11 markd Exp $";
 
 /* strand to us for target */
 char* targetStrand = "+";
@@ -167,7 +167,8 @@ freez(matrix);
 freez(command);
 if (!lineFileNext(lf, &line, &size))
    unexpectedEof(lf);
-if (stringIn("blastz",line))
+// check for "blastz" or "lastz"
+if (stringIn("lastz",line))
     {
     stripChar(line,'"');
     wordCount = chopLine(line, words);
@@ -230,7 +231,9 @@ for (i=0; ; ++i)
        break;
        }
     word = needNextWord(lf, &line);
-    word += 2;  /* Skip over "> */
+    word++;  /* Skip over `"' and optional `>' */
+    if (*word == '>')
+        word++;
     e = strchr(word, '"');
     if (e != NULL) 
         {
