@@ -78,15 +78,15 @@ echo
 echo "The following GenBank tracks are present in this assembly:"
 
 # now look for the actual tracks
-tableExists $db refGene && trackList="${trackList} refGene" && echo -e "\tRefSeq Genes"
-tableExists $db xenoRefGene && trackList="${trackList} xenoRefGene" && echo -e "\tOther RefSeq"
-tableExists $db all_mrna && trackList="${trackList} all_mrna" && echo -e "\t\$Org mRNAs"
-tableExists $db xenoMrna && trackList="${trackList} xenoMrna" && echo -e "\tOther mRNAs"
-tableExists $db all_est && trackList="${trackList} all_est" && echo -e "\t\$Org ESTs"
-tableExists $db %intronEst && trackList="${trackList} %intronEst" && echo -e "\tSpliced ESTs"
-tableExists $db xenoEst && trackList="${trackList} xenoEst" && echo -e "\tOther ESTs"
-tableExists $db mgcGenes  && trackList="${trackList} mgcGenes"&& echo -e "\tMGC Genes"
-tableExists $db orfeomeGenes  && trackList="${trackList} orfeomeGenes"&& echo -e "\tORFeome Clones"
+tableExists $db refGene && echo -e "\tRefSeq Genes"
+tableExists $db xenoRefGene && echo -e "\tOther RefSeq"
+tableExists $db mgcGenes  && echo -e "\tMGC Genes"
+tableExists $db orfeomeGenes  && echo -e "\tORFeome Clones"
+tableExists $db all_mrna && echo -e "\t\$Org mRNAs"
+tableExists $db %intronEst && echo -e "\tSpliced ESTs"
+tableExists $db all_est && echo -e "\t\$Org ESTs"
+tableExists $db xenoMrna && echo -e "\tOther mRNAs"
+tableExists $db xenoEst && echo -e "\tOther ESTs"
 echo
 
 echo -e "--> Running genePredCheck and pslCheck:\n"
@@ -102,7 +102,7 @@ done
 echo
 
 # run pslChecks
-for table in all_mrna xenoMrna all_est refSeqAli xenoRefSeqAli
+for table in all_mrna xenoMrna all_est refSeqAli xenoRefSeqAli xenoEst
 do
   tableExists $db $table && {
     echo pslCheck $table
@@ -128,12 +128,12 @@ doJoinerCheck() {
 doJoinerCheck gbCdnaInfo gbCdnas
 doJoinerCheck refGene refSeqId
 doJoinerCheck xenoRefGene xenoRefSeqId
-doJoinerCheck all_mrna nativeMrnaAccession
-doJoinerCheck xenoMrna xenoMrnaAccession
-doJoinerCheck all_est nativeEstAccession # takes care of intronEst, too
-doJoinerCheck xenoEst xenoEstAccession
 doJoinerCheck mgcGenes mgcAccession
 doJoinerCheck orfeomeGenes orfeomeAccession
+doJoinerCheck all_mrna nativeMrnaAccession
+doJoinerCheck all_est nativeEstAccession # takes care of intronEst, too
+doJoinerCheck xenoMrna xenoMrnaAccession
+doJoinerCheck xenoEst xenoEstAccession
 echo
 
 # run gbSanity
@@ -147,7 +147,8 @@ echo -e "\nIf there are any errors here, consult Mark Diekhans.\n"
 
 # run featureBits
 echo -e "--> Running featureBits.  Remember to paste this into the pushqueue:\n"
-for table in refGene xenoRefGene mgcGenes all_mrna intronEst all_est xenoMrna mgcFullMrna orfeomeGenes
+for table in refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes \
+             all_mrna intronEst all_est xenoMrna xenoEst
 do
   tableExists $db $table && {
     echo featureBits -countGaps $db $table
