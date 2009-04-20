@@ -3075,16 +3075,14 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12878 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
     cell GM12878
-    color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878 fileName=wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseqNew cell=GM12878 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878 fileName=wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalGm12878
     release alpha
@@ -4059,16 +4057,14 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in K562 cells)
     subGroups view=Peaks EXP=FAIRE cellType=K562
     type narrowPeak
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
     cell K562
-    color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks softwareVersion="ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=234 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseqNew cell=K562 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalK562
     release alpha
