@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.177 2009/04/16 19:03:30 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.178 2009/04/20 17:33:16 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1082,7 +1082,6 @@ sub printCompositeTdbSettings {
 ############################################################################
 # Main
 
-my $now = time();
 my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
 my @ddfLines = ();	# each line in DDF (except for fields header); value is a hash; e.g. {files => 'foo.bed', cell => 'HeLa-S3', ...}
@@ -1243,8 +1242,8 @@ if($hasReplicates) {
 my @glob = glob "*.DDF";
 push(@glob, glob "*.ddf");
 my $ddfFile = Encode::newestFile(@glob);
-my $fileTime = (stat($ddfFile))->ctime;
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($fileTime);
+my $ddfFileTime = (stat($ddfFile))->ctime;
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($ddfFileTime);
 
 HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 my $lines = Encode::readFile($ddfFile);
@@ -1575,7 +1574,7 @@ foreach my $ddfLine (@ddfLines) {
     if($submitDir =~ /(\d+)$/) {
         $metadata .= " subId=$1";
     }
-    my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
+    my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($ddfFileTime); # Use DDF time
     $metadata .= sprintf(" dateSubmitted=%04d-%02d-%02d", 1900 + $year, $mon + 1, $mday);
     $metadata .= sprintf(" dateUnrestricted=%04d-%02d-%02d", 1900 + $rYear, $rMon + 1, $rMDay);
 
