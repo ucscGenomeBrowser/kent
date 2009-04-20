@@ -12052,8 +12052,8 @@ wgEncode 1
 
 track wgEncodeHelicosRnaSeq
 compositeTrack on
-shortLabel Helicos RnaSeq
-longLabel ENCODE Helicos Gingeras RnaSeq
+shortLabel Helicos RNA-seq
+longLabel ENCODE Helicos RNA-seq
 group regulation
 subGroup1 view Views Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562
