@@ -17,6 +17,8 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 
+#define TIMING 0
+
 struct bbiFile *bigBedFileOpen(char *fileName)
 /* Open up big bed file. */
 {
@@ -263,6 +265,21 @@ void bigBedFileCreate(
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
+bigBedFileCreateDetailed(inName, FALSE, chromSizes, blockSize, itemsPerSlot, definedFieldCount, asFileName, outName);
+}
+
+void bigBedFileCreateDetailed(
+	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
+	boolean sorted,	  /* Input is already sorted */
+	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
+	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
+	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
+	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
+				    * are the defined bed ones. */
+	char *asFileName, /* If non-null points to a .as file that describes fields. */
+	char *outName)    /* BigBed output file name. */
+/* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
+{
 /* This code needs to agree with code in two other places currently - bigWigFileCreate,
  * and bbiFileOpen.  I'm thinking of refactoring to share at least between
  * bigBedFileCreate and bigWigFileCreate.  It'd be great so it could be structured
@@ -286,6 +303,8 @@ bits64 reductionDataOffsets[10];
 bits64 reductionIndexOffsets[10];
 bits16 fieldCount;
 
+uglyTime(NULL); // initialize timing
+
 /* Load up as object if defined in file. */
 struct asObject *as = NULL;
 if (asFileName != NULL)
@@ -294,11 +313,15 @@ if (asFileName != NULL)
     as = asParseFile(asFileName);
     if (as->next != NULL)
         errAbort("Can only handle .as files containing a single object.");
+    if (TIMING)
+	uglyTime("Parsed file %s", asFileName);
     }
 
 /* Load in chromosome sizes. */
 struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
 verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chromSizes);
+if (TIMING)
+    uglyTime("bbiChromSizesFromFile()");
 
 /* Load and sort input file. */
 bits64 fullSize;
@@ -306,9 +329,18 @@ struct ppBed *pb, *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, as,
 	definedFieldCount, &fullSize, &fieldCount);
 if (definedFieldCount == 0)
     definedFieldCount = fieldCount;
+if (TIMING)
+    uglyTime("ppBedLoadAll()");
 bits64 pbCount = slCount(pbList);
+if (TIMING)
+    uglyTime("slCount()");
 verbose(1, "Read %llu items from %s\n", pbCount, inName);
-slSort(&pbList, ppBedCmp);
+if (!sorted)
+    {
+    slSort(&pbList, ppBedCmp);
+    if (TIMING)
+	uglyTime("slSort()");
+    }
 
 /* Make chromosomes. */
 int chromCount, maxChromNameSize;
@@ -316,11 +348,15 @@ struct bbiChromInfo *chromInfoArray;
 makeChromInfo(pbList, chromHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 verbose(1, "%d of %d chromosomes used (%4.2f%%)\n", chromCount, chromHash->elCount, 
 	100.0*chromCount/chromHash->elCount);
+if (TIMING)
+    uglyTime("makeChromInfo()");
 
 /* Calculate first meaningful reduction size and make first reduction. */
 bits16 summaryCount = 0;
 bits16 version = 1;
 int initialReduction = ppBedAverageSize(pbList)*10;
+if (TIMING)
+    uglyTime("ppBedAverageSize()");
 verbose(2, "averageBedSize=%d\n", initialReduction/10);
 if (initialReduction > 10000)
     initialReduction = 10000;
@@ -329,7 +365,11 @@ struct bbiSummary *summaryList, *firstSummaryList;
 for (;;)
     {
     summaryList = summaryOnDepth(pbList, chromInfoArray, initialReduction);
+    if (TIMING)
+	uglyTime("summaryOnDepth(initialReduction=%d)", initialReduction);
     summarySize = bbiTotalSummarySize(summaryList);
+    if (TIMING)
+	uglyTime("bbiTotalSummarySize(summarySize=%d,fullSize=%ld,lastSummarySize=%ld)", summarySize, fullSize, lastSummarySize);
     if (summarySize >= fullSize && summarySize != lastSummarySize)
         {
 	initialReduction *= 2;
@@ -344,6 +384,8 @@ reduceSummaries[0] = firstSummaryList = summaryList;
 reductionAmounts[0] = initialReduction;
 verbose(1, "Initial zoom reduction x%d data size %4.2f%%\n", 
 	initialReduction, 100.0 * summarySize/fullSize);
+if (TIMING)
+    uglyTime("first summary list");
 
 /* Now calculate up to 10 levels of further summary. */
 bits64 reduction = initialReduction;
@@ -354,7 +396,11 @@ for (i=0; i<ArraySize(reduceSummaries)-1; i++)
         break;
     summaryList = bbiReduceSummaryList(reduceSummaries[summaryCount-1], chromInfoArray, 
     	reduction);
+    if (TIMING)
+	uglyTime("bbiReduceSummaryList(reduction=%ld)", reduction);
     summarySize = bbiTotalSummarySize(summaryList);
+    if (TIMING)
+	uglyTime("bbiTotalSummarySize(summarySize=%ld,summaryCount=%ld,lastSummarySize=%ld)", summarySize, summaryCount, lastSummarySize);
     if (summarySize != lastSummarySize)
         {
  	reduceSummaries[summaryCount] = summaryList;
@@ -366,6 +412,8 @@ for (i=0; i<ArraySize(reduceSummaries)-1; i++)
         break;
     }
 
+if (TIMING)
+    uglyTime("reduce summaries");
 
 /* Open output file and write out fixed size header, including some dummy values for
  * offsets we'll fill in later. */
@@ -395,6 +443,8 @@ for (i=0; i<summaryCount; ++i)
     writeOne(f, reserved64);	// Fill in with data offset later
     writeOne(f, reserved64);	// Fill in with index offset later
     }
+if (TIMING)
+    uglyTime("write summary headers");
 
 /* Optionally write out .as file. */
 if (asFileName != NULL)
@@ -417,6 +467,8 @@ bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount
     bbiChromInfoKey, maxChromNameSize, bbiChromInfoVal, 
     sizeof(chromInfoArray[0].id) + sizeof(chromInfoArray[0].size), 
     f);
+if (TIMING)
+    uglyTime("write chromosome tree");
 
 /* Write the main data. */
 dataOffset = ftell(f);
@@ -436,6 +488,8 @@ for (pb = pbList; pb != NULL; pb = pb->next)
     putc(0, f);
     }
 
+if (TIMING)
+    uglyTime("write the main data");
 /* Write the main index. */
 indexOffset = ftell(f);
 struct ppBed **pbArray;
@@ -446,6 +500,8 @@ cirTreeFileBulkIndexToOpenFile(pbArray, sizeof(pbArray[0]), pbCount,
     blockSize, itemsPerSlot, NULL, ppBedFetchKey, ppBedFetchOffset, 
     indexOffset, f);
 freez(&pbArray);
+if (TIMING)
+    uglyTime("write the main index");
 
 /* Write out summary sections. */
 verbose(2, "bigBedFileCreate writing %d summaries\n", summaryCount);
@@ -454,6 +510,8 @@ for (i=0; i<summaryCount; ++i)
     reductionDataOffsets[i] = ftell(f);
     reductionIndexOffsets[i] = bbiWriteSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
     }
+if (TIMING)
+    uglyTime("write summary sections");
 
 /* Go back and fill in offsets properly in header. */
 fseek(f, dataOffsetPos, SEEK_SET);
@@ -476,6 +534,8 @@ for (i=0; i<summaryCount; ++i)
     writeOne(f, reductionIndexOffsets[i]);
     }
 
+if (TIMING)
+    uglyTime("filled in header and done.");
 carefulClose(&f);
 freez(&chromInfoArray);
 }
