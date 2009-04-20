@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.74 2009/04/01 01:33:18 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.75 2009/04/20 19:32:02 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2212,13 +2212,7 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
         struct hvGfx *hvg, Color *retColor, Color *retBarbColor)
 /* Figure out color to draw linked feature in. */
 {
-/* If this is the item that the user searched by
-   make it be in red so visible. */
-if(sameString(position, lf->name))
-    {
-    *retColor = *retBarbColor =  MG_RED;
-    }
-else if (lf->filterColor > 0)
+if (lf->filterColor > 0)
     {
     if (lf->extra == (void *)USE_ITEM_RGB)
 	{
