@@ -27,7 +27,7 @@ extern char *MGC_FULL_MRNA_TBL;
 extern char *ORFEOME_MRNA_TBL;
 
 struct slName* gbAlignTblList(struct sqlConnection *conn);
-/* Get list of genePred tables in database. */
+/* Get list of psl tables in database. */
 
 void gbAlignTblWrite(struct gbAlignTbl *gat, struct psl* psl,
                      struct sqlConnection *conn);

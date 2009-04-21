@@ -257,7 +257,7 @@ slFreeList(&tbls);
 }
 
 struct slName* gbAlignTblList(struct sqlConnection *conn)
-/* Get list of genePred tables in database. */
+/* Get list of psl tables in database. */
 {
 /* always try for perChrom tables, in case config has been changed */
 struct slName* tables = NULL;

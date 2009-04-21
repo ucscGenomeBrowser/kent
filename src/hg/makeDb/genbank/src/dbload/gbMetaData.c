@@ -6,6 +6,7 @@
 
 #include "gbMetaData.h"
 #include "gbGeneTbl.h"
+#include "gbAlignTbl.h"
 #include "gbMDParse.h"
 #include "common.h"
 #include "hash.h"
@@ -35,7 +36,7 @@
 #include "gbMiscDiff.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.47 2008/04/26 07:09:22 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.48 2009/04/21 00:14:50 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -813,13 +814,11 @@ static void updateGeneEntries(struct sqlConnection *conn,
                               struct gbStatus* status)
 /* update gene table entries when annotation have changed */
 {
-struct gbGeneTbl *geneTbl = NULL;
 if (status->srcDb == GB_REFSEQ)
     {
-    if (status->orgCat == GB_NATIVE)
-        geneTbl = gbGeneTblSetRefGeneGet(ggts, conn);
-    else
-        geneTbl = gbGeneTblSetXenoRefGeneGet(ggts, conn);
+    struct gbGeneTbl *geneTbl = (status->orgCat == GB_NATIVE)
+        ? gbGeneTblSetRefGeneGet(ggts, conn)
+        : gbGeneTblSetXenoRefGeneGet(ggts, conn);
     gbGeneTblRebuild(geneTbl, status, conn);
     }
 else 
@@ -853,7 +852,7 @@ if (partitionMayHaveGeneTbls(select))
     }
 }
 
- void gbMetaDataDbLoad(struct sqlConnection *conn)
+void gbMetaDataDbLoad(struct sqlConnection *conn)
 /* load the metadata changes into the database */
 {
 struct sqlUpdater *nextUpd;
@@ -929,9 +928,15 @@ if (select->release->srcDb == GB_REFSEQ)
 else
     {
     if (haveMgc)
+        {
         sqlDeleterDel(deleter, conn, MGC_GENES_TBL, "name");
+        sqlDeleterDel(deleter, conn, MGC_FULL_MRNA_TBL, "qName");
+        }
     if (haveOrfeome)
+        {
         sqlDeleterDel(deleter, conn, ORFEOME_GENES_TBL, "name");
+        sqlDeleterDel(deleter, conn, ORFEOME_MRNA_TBL, "qName");
+        }
     }
 }
 
