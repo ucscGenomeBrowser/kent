@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.4 2009/04/02 20:58:37 hiram Exp $";
+#	"$Id: hg19.txt,v 1.5 2009/04/21 19:00:46 rhead Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -477,6 +477,13 @@ doBlastzChainNet.pl `pwd`/DEF \
     hgsql -e \
 'update dbDb set defaultPos="chr6:28343766-33555363" where name="hg19";' \
 	hgcentraltest
+
+# reset again to a smaller range (2009-04-21 - Brooke)
+# this region that shows HAR1A and HAR1B
+
+    hgsql -e \
+'update dbDb set defaultPos="chr20:61,726,101-61,736,100" where name="hg19";' \
+        hgcentraltest
 
 ############################################################################
 # Self Lastz run (WORKING - 2009-03-19 - Hiram)
