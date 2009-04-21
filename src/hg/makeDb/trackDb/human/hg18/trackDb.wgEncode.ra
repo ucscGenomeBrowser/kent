@@ -3299,7 +3299,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqPeaksHelas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=DNase cellType=HeLa
@@ -3313,7 +3313,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalHelas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase Sig
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=DNase cellType=HeLa
@@ -3328,7 +3328,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=DNase cellType=HeLa
@@ -3343,7 +3343,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Helas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
@@ -3358,7 +3358,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Helas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase 2
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
@@ -3373,7 +3373,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Helas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase 3
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
@@ -3388,7 +3388,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqPeaksHelas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=FAIRE cellType=HeLa
@@ -3402,7 +3402,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqSignalHelas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE Sig
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=FAIRE cellType=HeLa
@@ -3417,7 +3417,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqBaseOverlapSignalHelas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HeLa
@@ -3432,7 +3432,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqRawSignalRep1Helas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
@@ -3447,7 +3447,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqRawSignalRep2Helas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE 2
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
@@ -3462,7 +3462,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqRawSignalRep3Helas3
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE 3
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
@@ -3477,7 +3477,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HeLa
@@ -3492,7 +3492,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHelas3Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HeLa
@@ -3508,7 +3508,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HeLa
@@ -3524,7 +3524,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
@@ -3540,7 +3540,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF 2
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
@@ -3556,7 +3556,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc Pk
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HeLa
@@ -3571,7 +3571,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHelas3Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc Sig
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HeLa
@@ -3587,7 +3587,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HeLa
@@ -3603,7 +3603,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
@@ -3619,7 +3619,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc 2
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
@@ -3635,7 +3635,7 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa Input Sig
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HeLa-S3 cells)
     subGroups view=Signal EXP=zCTRL cellType=HeLa
@@ -3651,7 +3651,7 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqRawSignalHelas3Input
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HeLa Input Raw
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in HeLa-S3 cells)
     subGroups view=rRAW EXP=zCTRL cellType=HeLa
@@ -3667,7 +3667,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=DNase cellType=HepG2
@@ -3681,7 +3681,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalHepg2
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase Sig
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=DNase cellType=HepG2
@@ -3696,7 +3696,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=DNase cellType=HepG2
@@ -3711,7 +3711,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Hepg2
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
@@ -3726,7 +3726,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase 2
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
@@ -3741,7 +3741,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase 3
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
@@ -3754,9 +3754,92 @@ wgEncode 1
     cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=RawSignal replicate=3 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wig.gz
 
+    track wgEncodeUncFAIREseqPeaksHepg2
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel HepG2 FAIRE Pk
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HepG2 cells)
+    subGroups view=Peaks EXP=FAIRE cellType=HepG2
+    type narrowPeak
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
+    cell HepG2
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2 fileName=wgEncodeUncFAIREseqPeaksHepg2.narrowPeak.gz
+
+    track wgEncodeUncFAIREseqSignalHepg2
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel HepG2 FAIRE Sig
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HepG2 cells)
+    subGroups view=Signal EXP=FAIRE cellType=HepG2
+    type wig 0.00 1.60
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
+    spanList first
+    cell HepG2
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2 fileName=wgEncodeUncFAIREseqSignalHepg2.wig.gz
+
+    track wgEncodeUncFAIREseqBaseOverlapSignalHepg2
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel HepG2 FAIRE BO
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HepG2 cells)
+    subGroups view=SignalBO EXP=FAIRE cellType=HepG2
+    type wig 0.00 5987.00
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
+    spanList first
+    cell HepG2
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2.wig.gz
+
+    track wgEncodeUncFAIREseqRawSignalRep1Hepg2
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel HepG2 FAIRE 1
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HepG2 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=HepG2
+    type wig 0.00 33.79
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
+    spanList first
+    cell HepG2
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep1Hepg2.wig.gz
+
+    track wgEncodeUncFAIREseqRawSignalRep2Hepg2
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel HepG2 FAIRE 2
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HepG2 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=HepG2
+    type wig 0.00 59.03
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
+    spanList first
+    cell HepG2
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep2Hepg2.wig.gz
+
+    track wgEncodeUncFAIREseqRawSignalRep3Hepg2
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel HepG2 FAIRE 3
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HepG2 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=HepG2
+    type wig 0.00 41.00
+    dateSubmitted 2009-04-20
+    dateUnrestricted 2010-01-20
+    dataVersion ENCODE May 2009 Freeze
+    spanList first
+    cell HepG2
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep3Hepg2.wig.gz
+
     track wgEncodeUtaChIPseqPeaksHepg2Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HepG2 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HepG2
@@ -3771,7 +3854,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHepg2Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in HepG2 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HepG2
@@ -3787,7 +3870,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in HepG2 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HepG2
@@ -3803,7 +3886,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Raw 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
@@ -3819,7 +3902,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF 2
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
@@ -3835,7 +3918,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqPeaksHepg2Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc Pk
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HepG2 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HepG2
@@ -3850,7 +3933,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHepg2Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc Sig
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in HepG2 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HepG2
@@ -3866,7 +3949,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in HepG2 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HepG2
@@ -3882,7 +3965,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
@@ -3898,7 +3981,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc 2
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
@@ -3914,7 +3997,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc 3
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 3 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
@@ -3930,7 +4013,7 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalHepg2Input
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 Input Sig
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HepG2 cells)
     subGroups view=Signal EXP=zCTRL cellType=HepG2
@@ -3947,7 +4030,7 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqRawSignalHepg2Input
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel HepG2 Input Raw
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in HepG2 cells)
     subGroups view=rRAW EXP=zCTRL cellType=HepG2
@@ -4065,6 +4148,7 @@ wgEncode 1
     dataVersion ENCODE May 2009 Freeze
     cell K562
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseqNew cell=K562 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
+
 
     track wgEncodeUncFAIREseqSignalK562
     release alpha
@@ -4366,7 +4450,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqRegionsExcludedGm12878
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel Excluded Regions
     longLabel ENCODE Open Chromatin, Regions Excluded
     #subGroups view=sXREG EXP=zzREF cellType=zzRG
@@ -4380,7 +4464,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqUniqueness20bpGm12878
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel Uniqueness 20bp
     longLabel ENCODE Reference Genome Uniqueness of 20bp Windows
     #subGroups view=u20 EXP=zzREF cellType=zzRG
@@ -4395,7 +4479,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqUniqueness24bpGm12878
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel Uniqueness 24bp
     longLabel ENCODE Reference Genome Uniqueness of 24bp Windows
     #subGroups view=u24 EXP=zzREF cellType=zzRG
@@ -4410,7 +4494,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqUniqueness35bpGm12878
     release alpha
-    subTrack wgEncodeChromatinMap
+    subTrack wgEncodeChromatinMap off
     shortLabel Uniqueness 35bp
     longLabel ENCODE Reference Genome Uniqueness of 35bp Windows
     #subGroups view=u35 EXP=zzREF cellType=zzRG
