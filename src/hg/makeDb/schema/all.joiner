@@ -1026,6 +1026,12 @@ identifier chainSelf
     $gbd.chainSelfLink.chainId $split full
     $gbd.netSelf.chainId exclude=0
 
+identifier chainSelfNonSplit
+"Link together self chain info"
+    hg19.chainSelf.id
+    hg19.chainSelfLink.chainId full
+    hg19.netSelf.chainId exclude=0
+
 identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id $split
@@ -1128,6 +1134,13 @@ identifier nativeEstAccession typeOf=estAccession
     sacCer2.intronEst.qName splitPrefix=%\_
     caeJap1.intronEst.qName 
     $gbd.estOrientInfo.name full 
+
+identifier nativeEstAccessionNonSplit typeOf=estAccession
+"Genbank Native (same organism as database) EST accession"
+    hg19.all_est.qName dupeOk
+    hg19.est.qName full 
+    hg19.intronEst.qName
+    hg19.estOrientInfo.name full 
 
 identifier xenoEstAccession typeOf=estAccession
 "Genbank xeno (different organism from database) EST accession"
@@ -2918,6 +2931,9 @@ tablesIgnored $kgDb
     pbResAvgStd
     pbStamp
     pep%Dist
+
+tablesIgnored hg19
+    gold
 
 tablesIgnored $calJac
     gold
