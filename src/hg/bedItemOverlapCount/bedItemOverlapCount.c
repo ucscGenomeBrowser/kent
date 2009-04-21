@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.11 2009/04/16 20:38:04 larrym Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.12 2009/04/21 23:02:25 larrym Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -22,9 +22,11 @@ static struct hash *chromHash = NULL;
 static char *host = NULL;
 static char *user = NULL;
 static char *password = NULL;
+char *chromSizes = NULL;		/* read chrom sizes from file instead of database . */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"chromSize", OPTION_STRING},
     {"host", OPTION_STRING},
     {"user", OPTION_STRING},
     {"password", OPTION_STRING},
@@ -45,15 +47,16 @@ errAbort(
   "     | bedItemOverlapCount [options] <database> stdin \\\n"
   "         | wigEncode stdin data.wig data.wib\n"
   "options:\n"
-  "   -host\tmysql host\n"
-  "   -user\tmysql user\n"
-  "   -password\tmysql password\n\n"
+  "   -chromSize=sizefile\tRead chrom sizes from file instead of database\n"
+  "   -host=hostname\tmysql host used to get chrom sizes\n"
+  "   -user=username\tmysql user\n"
+  "   -password=password\tmysql password\n\n"
+  "\tchromSize file is three white space separated fields per line: chrom name, size, and dummy value\n"
   "\tYou will want to separate your + and - strand\n"
   "\titems before sending into this program as it only looks at\n"
   "\tthe chrom, start and end columns of the bed file.\n"
-  "\tIt wants a <database> connection to lookup chrom sizes for a sanity\n"
-  "\tcheck of the incoming data.  This should be redone to take a chrom.sizes\n"
-  "\targument instead to be independent of the database.\n"
+  "\tIt requires a <database> connection to lookup chrom sizes for a sanity\n"
+  "\tcheck of the incoming data (unless you use -chromSize argument).\n\n"
   "The bed file must be sorted at least by chrom since the processing is\n"
   "\tgoing to be chrom by chrom with no going back.\n"
   " *** AND *** this is only for simple bed files without multiple blocks. ***"
@@ -152,7 +155,23 @@ char *prevChrom = (char *)NULL;
 boolean outputToDo = FALSE;
 unsigned chromSize = 0;
 
-chromHash = loadAllChromInfo(database, &maxChromSize);
+if (chromSizes != NULL)
+    {
+    chromHash = newHash(0);
+    // unfortunately, chromInfoLoadAll requires that the file have three fields (I don't know why),
+    // so that's why we require a dummy third column in the chromInfo file.
+    struct chromInfo *el = chromInfoLoadAll(chromSizes);
+    for(;el != NULL;el=el->next)
+        {
+        if (el->size > maxChromSize) maxChromSize = el->size;
+        verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
+        hashAdd(chromHash, el->chrom, (void *)(& el->size));
+        }
+    }
+else
+    {
+    chromHash = loadAllChromInfo(database, &maxChromSize);
+    }
 
 verbose(2,"#\tmaxChromSize: %u\n", maxChromSize);
 if (maxChromSize < 1)
@@ -238,6 +257,7 @@ if (argc < 2)
 host = optionVal("host", NULL);
 user = optionVal("user", NULL);
 password = optionVal("password", NULL);
+chromSizes = optionVal("chromSize", NULL);
 verbose(2, "#\tworking on database: %s\n", argv[1]);
 bedItemOverlapCount(argv[1], argc-2, argv+2);
 return 0;
