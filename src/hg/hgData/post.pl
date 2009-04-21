@@ -7,15 +7,17 @@ use Compress::Zlib;
 use HTTP::Request::Common;
 use LWP;
 
-die "$0 - post a compressed-on-the-fly file\nusage: \n\n$0 filename" unless scalar(@ARGV)==1;
+die "$0 - post a compressed-on-the-fly file\nusage: \n\n$0 hostname filename " unless scalar(@ARGV)==2;
+my $HOST = $ARGV[0];
+my $FILE = $ARGV[1];
 
 $HTTP::Request::Common::DYNAMIC_FILE_UPLOAD = 1;
 # curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=trash/testing.bed
 
-my $request = POST 'http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18',
+my $request = POST "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18",
     [
 #  'verbose' => 2,
- 'a_file' => [ $ARGV[0] ]
+ 'a_file' => [ $FILE ]
     ],
     'Content_Type' => 'form-data',
     'Content_Encoding' => 'gzip';
