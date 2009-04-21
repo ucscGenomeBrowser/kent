@@ -95,8 +95,8 @@ if ( "$mode" == "review") then
         mkdir $CVS_REPORT_HIST/branch
         mkdir $CVS_REPORT_HIST/review
         mkdir $CVS_REPORT_HIST/kent
-        echo "Copying previous cvs for update by cvs-reports-d [from $CVS_REPORT_OLD_HIST/kent/* -> $CVS_REPORT_HIST/kent/] on $HOST [${0}: `date`]"
-	cp -r $CVS_REPORT_OLD_HIST/kent/* $CVS_REPORT_HIST/kent/
+        echo "Moving previous cvs for update by cvs-reports-d [from $CVS_REPORT_OLD_HIST/kent/* -> $CVS_REPORT_HIST/kent/] on $HOST [${0}: `date`]"
+	mv $CVS_REPORT_OLD_HIST/kent/* $CVS_REPORT_HIST/kent/
 	echo "Created  dirs $CVS_REPORT_HIST/{branch,review,kent} on $HOST [${0}: `date`]"
     endif
 else
