@@ -27,6 +27,7 @@ scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload:/mirrordata/apa
 echo "updating jksrc.zip symlink [${0}: `date`]"
 ssh -n qateam@hgdownload "cd /mirrordata/apache/htdocs/admin/;ln -s jksrc.v${BRANCHNN}.zip jksrc.zip"
 
-echo "scp-ing js/*.js files to hgdownload [${0}: `date`]"
-scp -p $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/js/*.js qateam@hgdownload:/mirrordata/apache/htdocs/js
+# hgdocs/js/*.gs files are not apparently needed on hgdownload as there is no directory there
+#echo "scp-ing js/*.js files to hgdownload [${0}: `date`]"
+#scp -p $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/js/*.js qateam@hgdownload:/mirrordata/apache/htdocs/js
 echo "Done. [${0}: `date`]"
