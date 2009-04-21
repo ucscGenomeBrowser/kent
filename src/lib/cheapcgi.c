@@ -1,5 +1,5 @@
 /* Routines for getting variables passed in from web page
- * forms via CGI. 
+ * forms via CGI.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.2 2009/04/14 08:24:12 mikep Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.3 2009/04/21 18:52:20 mikep Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -38,7 +38,7 @@ for (v=cookieList; v != NULL; v = v->next)
     printf("%s=%s (%d)\n", v->name, v->val, v->saved);
 }
 
-void useTempFile() 
+void useTempFile()
 /* tell cheapcgi to use temp files */
 {
 doUseTempFile = TRUE;
@@ -90,21 +90,36 @@ char *_cgiRawInput()
 return inputString;
 }
 
-static void getQueryInput()
+static void getQueryInputExt(boolean abortOnErr)
 /* Get query string from environment if they've used GET method. */
 {
 inputString = getenv("QUERY_STRING");
 if (inputString == NULL)
-    errAbort("No QUERY_STRING in environment.");
+    {
+    if (abortOnErr)
+	errAbort("No QUERY_STRING in environment.");
+    inputString = cloneString("");
+    return;
+    }
 inputString = cloneString(inputString);
 }
 
+static void getQueryInput()
+/* Get query string from environment if they've used GET method. */
+{
+getQueryInputExt(TRUE);
+}
+
 static void getPostInput()
-/* Get input from file if they've used POST method. */
+/* Get input from file if they've used POST method.
+ * Grab any GET QUERY_STRING input first. */
 {
 char *s;
 long i;
 int r;
+
+getQueryInputExt(FALSE);
+int getSize = strlen(inputString);
 
 s = getenv("CONTENT_LENGTH");
 if (s == NULL)
@@ -115,18 +130,26 @@ s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
     {
     /* use MIME parse on input stream instead, can handle large uploads */
-    inputString = "";  // must not be NULL so it knows it was set
-    return;  
+    /* inputString must not be NULL so it knows it was set */
+    return;
     }
-inputString = needMem((size_t)inputSize+1);
+int len = getSize + inputSize;
+if (getSize > 0)
+    ++len;
+char *temp = needMem((size_t)len+1);
 for (i=0; i<inputSize; ++i)
     {
     r = getc(stdin);
     if (r == EOF)
 	errAbort("Short POST input.");
-    inputString[i] = r;
+    temp[i] = r;
     }
-inputString[inputSize] = 0;
+if (getSize > 0)
+  temp[i++] = '&';
+strncpy(temp+i, inputString, getSize);
+temp[len] = 0;
+freeMem(inputString);
+inputString = temp;
 }
 
 #define memmem(hay, haySize, needle, needleSize) \
@@ -213,17 +236,17 @@ for(mp=mp->multi;mp;mp=mp->next)
 
     //debug
     //fprintf(stderr,"GALT: mp->size[%llu], mp->binary=[%d], mp->fileName=[%s], mp=>data:[%s]\n",
-	//(unsigned long long) mp->size, mp->binary, mp->fileName, 
+	//(unsigned long long) mp->size, mp->binary, mp->fileName,
 	//mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
     //fflush(stderr);
-    
+
     /* filename if there is one */
     /* Internet Explorer on Windows is sending full path names, strip
      * directory name from those.  Using \ and / and : as potential
      * path separator characters, e.g.:
      *	 C:\Documents and Settings\tmp\file.txt.gz
      */
-    if(cdFileName) 
+    if(cdFileName)
 	{
 	char *lastPathSep = strrchr(cdFileName, (int) '\\');
 	if (!lastPathSep)
@@ -240,15 +263,15 @@ for(mp=mp->multi;mp;mp=mp->next)
 	slAddHead(&list, el);
 	hashAddSaveName(hash, varNameFilename, el, &el->name);
     	}
-	
-    if (mp->data) 
+
+    if (mp->data)
 	{
 	if (mp->binary)
 	    {
 	    char varNameBinary[256];
 	    char addrSizeBuf[40];
 	    safef(varNameBinary,sizeof(varNameBinary),"%s__binary",cdName);
-	    safef(addrSizeBuf,sizeof(addrSizeBuf),"%lu %llu", 
+	    safef(addrSizeBuf,sizeof(addrSizeBuf),"%lu %llu",
 		(unsigned long)mp->data,
 		(unsigned long long)mp->size);
 	    AllocVar(el);
@@ -263,13 +286,13 @@ for(mp=mp->multi;mp;mp=mp->next)
 	    slAddHead(&list, el);
 	    hashAddSaveName(hash, cdName, el, &el->name);
 	    }
-	}	    
+	}
     else if (mp->fileName)
 	{
 	char varNameData[256];
 	safef(varNameData, sizeof(varNameData), "%s__data", cdName);
 	AllocVar(el);
-	el->val = mp->fileName; 
+	el->val = mp->fileName;
 	slAddHead(&list, el);
 	hashAddSaveName(hash, varNameData, el, &el->name);
 	//debug
@@ -284,7 +307,7 @@ for(mp=mp->multi;mp;mp=mp->next)
 	{
 	errAbort("mp-> type not data,fileName, or multi - unexpected MIME structure");
 	}
-    
+
     freez(&cdMain);
     freez(&cdName);
     freez(&cdFileName);
@@ -388,12 +411,9 @@ if (s != NULL)
 qs = getenv("QUERY_STRING");
 if (qs == NULL)
     return "POST";
-if (qs[0] == 0)
-    {
-    char *cl = getenv("CONTENT_LENGTH");
-    if (cl != NULL && atoi(cl) > 0)
-	return "POST";
-    }
+char *cl = getenv("CONTENT_LENGTH");
+if (cl != NULL && atoi(cl) > 0)
+    return "POST";
 return "QUERY";
 }
 
@@ -413,16 +433,20 @@ if (inputString == NULL)
     }
 }
 
-static void cgiParseInputAbort(char *input, struct hash **retHash, 
+static void cgiParseInputAbort(char *input, struct hash **retHash,
 	struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
- * the input data.  The hash table will contain references back 
- * into input, so please don't free input until you're done with 
+ * the input data.  The hash table will contain references back
+ * into input, so please don't free input until you're done with
  * the hash. Prints message aborts if there's an error.*/
 {
 char *namePt, *dataPt, *nextNamePt;
-struct hash *hash = newHash(6);
-struct cgiVar *list = NULL, *el;
+struct hash *hash = *retHash;
+struct cgiVar *list = *retList, *el;
+
+if (!hash)
+  hash = newHash(6);
+slReverse(&list);
 
 namePt = input;
 while (namePt != NULL && namePt[0] != 0)
@@ -459,11 +483,11 @@ static void cgiParseAbort()
 longjmp(cgiParseRecover, -1);
 }
 
-boolean cgiParseInput(char *input, struct hash **retHash, 
+boolean cgiParseInput(char *input, struct hash **retHash,
 	struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
- * the input data.  The hash table will contain references back 
- * into input, so please don't free input until you're done with 
+ * the input data.  The hash table will contain references back
+ * into input, so please don't free input until you're done with
  * the hash. Prints message and returns FALSE if there's an error.*/
 {
 boolean ok = TRUE;
@@ -504,7 +528,7 @@ switch (sigNum)
     }
     logCgiToStderr();
     fprintf(stderr, "Received signal %s\n", sig);
-    raise(SIGKILL); 
+    raise(SIGKILL);
 }
 
 void initSigHandlers()
@@ -520,7 +544,7 @@ if (cgiIsOnWeb())
 }
 
 
-static void initCgiInput() 
+static void initCgiInput()
 /* Initialize CGI input stuff.  After this CGI vars are
  * stored in an internal hash/list regardless of how they
  * were passed to the program. */
@@ -548,12 +572,10 @@ s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
     {
     cgiParseMultipart(&inputHash, &inputList);
-    }	    
-else
-#endif /* GBROWSE */
-    {
-    cgiParseInputAbort(inputString, &inputHash, &inputList);
     }
+#endif /* GBROWSE */
+
+cgiParseInputAbort(inputString, &inputHash, &inputList);
 
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
@@ -565,10 +587,10 @@ if (s != NULL)
 s = cgiOptionalString("JKSQL_PROF");
 if (s != NULL)
     envUpdate("JKSQL_PROF", s);
-    
+
 }
 
-struct cgiVar *cgiVarList() 
+struct cgiVar *cgiVarList()
 /* return the list of cgiVar's */
 {
 initCgiInput();
@@ -591,7 +613,7 @@ void cgiBadVar(char *varName)
 {
 if (varName == NULL) varName = "";
 errAbort("Sorry, didn't find input variable %s\n"
-        "Probably the web page didn't mean to call this program.", 
+        "Probably the web page didn't mean to call this program.",
         varName);
 }
 
@@ -605,7 +627,7 @@ return res;
 }
 
 void cgiDecode(char *in, char *out, int inLength)
-/* Decode from cgi pluses-for-spaces format to normal. 
+/* Decode from cgi pluses-for-spaces format to normal.
  * Out will be a little shorter than in typically, and
  * can be the same buffer. */
 {
@@ -614,12 +636,12 @@ int i;
 for (i=0; i<inLength;++i)
     {
     c = *in++;
-    if (c == '+') 
+    if (c == '+')
 	*out++ = ' ';
     else if (c == '%')
 	{
 	int code;
-	if (sscanf(in, "%2x", &code) != 1) 
+	if (sscanf(in, "%2x", &code) != 1)
 	    code = '?';
 	in += 2;
 	i += 2;
@@ -632,7 +654,7 @@ for (i=0; i<inLength;++i)
 }
 
 char *cgiEncode(char *inString)
-/* Return a cgi-encoded version of inString. 
+/* Return a cgi-encoded version of inString.
  * Alphanumerics kept as is, space translated to plus,
  * and all other characters translated to %hexVal. */
 {
@@ -678,8 +700,8 @@ return outString;
 }
 
 char *cgiEncodeFull(char *inString)
-/* Return a cgi-encoded version of inString (no + for space!). 
- * Alphanumerics/./_ kept as is and all other characters translated to 
+/* Return a cgi-encoded version of inString (no + for space!).
+ * Alphanumerics/./_ kept as is and all other characters translated to
  * %hexVal. */
 {
 char c;
@@ -735,7 +757,7 @@ return mustFindVarData(varName);
 }
 
 char *cgiUsualString(char *varName, char *usual)
-/* Return value of string if it exists in cgi environment.  
+/* Return value of string if it exists in cgi environment.
  * Otherwise return 'usual' */
 {
 char *pt;
@@ -805,7 +827,7 @@ char *data;
 double x;
 
 data = mustFindVarData(varName);
-if (sscanf(data, "%lf", &x)<1) 
+if (sscanf(data, "%lf", &x)<1)
      errAbort("Expecting real number in %s, got \"%s\"\n", varName, data);
 return x;
 }
@@ -866,7 +888,7 @@ void cgiMakeClearButton(char *form, char *field)
 {
 char javascript[1024];
 
-safef(javascript, sizeof(javascript), 
+safef(javascript, sizeof(javascript),
     "document.%s.%s.value = ''; document.%s.submit();", form, field, form);
 cgiMakeOnClickButton(javascript, " Clear  ");
 }
@@ -874,15 +896,15 @@ cgiMakeOnClickButton(javascript, " Clear  ");
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 {
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>", 
-        name, value, 
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>",
+        name, value,
         (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
 }
 
 void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 /* Make 'submit' type button, with onclick javascript */
 {
-printf("<input type=\"submit\" name=\"%s\" value=\"%s\" onclick=\"%s\" %s%s%s>", 
+printf("<input type=\"submit\" name=\"%s\" value=\"%s\" onclick=\"%s\" %s%s%s>",
         name, value, onClick,
         (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
 }
@@ -913,7 +935,7 @@ void cgiMakeOptionalButton(char *name, char *value, boolean disabled)
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", name, value);
 if (disabled)
     printf(" DISABLED");
-printf(">"); 
+printf(">");
 }
 
 void cgiMakeFileEntry(char *name)
@@ -974,7 +996,7 @@ printf("<TD> %s </TD>\n", text);
 void cgiTableFieldWithMsg(char *text, char *msg)
 /* Make table field entry with mouseover */
 {
-printf("<TD %s%s%s> %s </TD>\n", 
+printf("<TD %s%s%s> %s </TD>\n",
         (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ),
         text);
 }
@@ -1020,14 +1042,13 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-static void cgiCommonMakeCheckBox(char *name, boolean checked, char *id, char *moreHtml)
+static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled, char *id, char *moreHtml)
 /* Make check box - designed to be called by the variously overloaded
  * cgiMakeCheckBox functions, and should NOT be called directly.
  * moreHtml: optional additional html like javascript call or mouseover msg (may be NULL)
  * id: button id (may be NULL)
- * Also make a shadow hidden variable so we
- * can distinguish between variable not present and
- * variable set to false. */
+ * Also make a shadow hidden variable and support 2 boolean states:
+ *    checked/unchecked and enabled/disabled. */
 {
 char buf[256], idBuf[256];
 
@@ -1036,10 +1057,12 @@ if(id)
 else
     idBuf[0] = 0;
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s %s>", name, idBuf,
-    (moreHtml ? moreHtml : ""), (checked ? "CHECKED" : ""));
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
+    (moreHtml ? moreHtml : ""),
+    (checked ? " CHECKED" : ""),
+    (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "1");
+cgiMakeHiddenVar(buf, ( enabled ? "0" : (checked ? "-1" : "-2")));
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
@@ -1055,36 +1078,43 @@ if(msg)
 else
     buf[0] = 0;
 
-cgiCommonMakeCheckBox(name, checked, id, buf);
+cgiMakeCheckBox2Bool(name, checked, TRUE, id, buf);
 }
 
 void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
 {
-cgiCommonMakeCheckBox(name, checked, NULL, msg);
+cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, msg);
 }
 
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id)
 /* Make check box, which includes an ID. */
 {
-cgiCommonMakeCheckBox(name, checked, id, NULL);
+cgiMakeCheckBox2Bool(name, checked, TRUE, id, NULL);
 }
 
 void cgiMakeCheckBox(char *name, boolean checked)
 /* Make check box. */
 {
-cgiCommonMakeCheckBox(name, checked, NULL, NULL);
+cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, NULL);
 }
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
 /* Make check box with javascript. */
 {
-cgiCommonMakeCheckBox(name,checked,NULL,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,NULL,javascript);
 }
 
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript)
 /* Make check box with ID and javascript. */
 {
-cgiCommonMakeCheckBox(name,checked,id,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,id,javascript);
+}
+
+void cgiMakeCheckBox2BoolWithIdAndJS(char *name, boolean checked, boolean enabled,char *id, char *javascript)
+/* Make check box supporting 2 boolean state: checke/unchecked and enabled/disabled
+   Also support ID and javascript.*/
+{
+cgiMakeCheckBox2Bool(name,checked,enabled,id,javascript);
 }
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
@@ -1105,7 +1135,7 @@ cgiMakeTextAreaDisableable(varName, initialVal, rowCount, columnCount, FALSE);
 }
 
 void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled)
-/* Make a text area that can be disabled. The rea has rowCount X 
+/* Make a text area that can be disabled. The rea has rowCount X
  * columnCount and with text: intialVal */
 {
 printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d %s>%s</TEXTAREA>", varName,
@@ -1124,7 +1154,7 @@ if (initialVal == NULL)
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\"", varName, 
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\"", varName,
 	charSize, initialVal);
 if (isNotEmpty(script))
     printf(" onkeypress=\"%s\"", script);
@@ -1138,13 +1168,79 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 cgiMakeOnKeypressTextVar(varName, initialVal, charSize, NULL);
 }
 
+void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *extra)
+/* Make a text control filled with initial value. */
+{
+if (initialVal == NULL)
+    initialVal = "";
+if(width==0)
+    width=strlen(initialVal)*10;
+if(width==0)
+    width = 100;
+
+printf("<INPUT TYPE=TEXT class='inputBox' NAME=\"%s\" style='width: %dpx' VALUE=\"%s\"", varName,width, initialVal);
+if (isNotEmpty(extra))
+    printf(" %s",extra);
+printf(">\n");
+}
+
+
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
 /* Make a text control filled with initial value.  */
 {
 if (maxDigits == 0) maxDigits = 4;
 
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName, 
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 	maxDigits, initialVal);
+}
+
+void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max)
+/* Make a integer control filled with initial value.
+   If min and/or max are non-NULL will enforce range
+   Requires utils.js jQuery.js and inputBox class */
+{
+if(width==0)
+    {
+    if(max)
+        width=strlen(max)*10;
+    else
+        {
+        int sz=initialVal+1000;
+        if(min)
+            sz=atoi(min) + 1000;
+        width = 10;
+        while(sz/=10)
+            width+=10;
+        }
+    }
+if (width < 65)
+    width = 65;
+
+printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%d",varName,width,initialVal);
+printf(" onChange='return validateInt(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
+if(title)
+    printf(" title='%s'",title);
+printf(">\n");
+}
+void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, int min, int max)
+{
+char minLimit[20];
+char maxLimit[20];
+safef(minLimit,sizeof(minLimit),"%d",min);
+safef(maxLimit,sizeof(maxLimit),"%d",max);
+cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+}
+void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min)
+{
+char minLimit[20];
+safef(minLimit,sizeof(minLimit),"%d",min);
+cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,NULL);
+}
+void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max)
+{
+char maxLimit[20];
+safef(maxLimit,sizeof(maxLimit),"%d",max);
+cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxLimit);
 }
 
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
@@ -1152,11 +1248,51 @@ void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
 {
 if (maxDigits == 0) maxDigits = 4;
 
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName, 
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
 	maxDigits, initialVal);
 }
 
-void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[], 
+void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, char *min, char *max)
+/* Make a floating point control filled with initial value.
+   If min and/or max are non-NULL will enforce range
+   Requires utils.js jQuery.js and inputBox class */
+{
+if(width==0)
+    {
+    if(max)
+        width=strlen(max)*10;
+    }
+if (width < 65)
+    width = 65;
+
+printf("<INPUT TYPE=TEXT  class='inputBox' name=\"%s\" style='width: %dpx' value=%15g",varName,width,initialVal);
+printf(" onChange='return validateFloat(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
+if(title)
+    printf(" title='%s'",title);
+printf(">\n");
+}
+void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max)
+{
+char minLimit[20];
+char maxLimit[20];
+safef(minLimit,sizeof(minLimit),"%g",min);
+safef(maxLimit,sizeof(maxLimit),"%g",max);
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+}
+void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min)
+{
+char minLimit[20];
+safef(minLimit,sizeof(minLimit),"%g",min);
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,NULL);
+}
+void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max)
+{
+char maxLimit[20];
+safef(maxLimit,sizeof(maxLimit),"%g",max);
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxLimit);
+}
+
+void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
     int menuSize, char *checked, char *class, char *style,char *javascript)
 /* Make a drop-down list with names, text class, style and javascript. */
 {
@@ -1164,9 +1300,9 @@ int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
 if (style)
-    printf("<SELECT NAME=\"%s\" class=%s style=\"%s\" %s>\n", name, class, style, javascript);
+    printf("<SELECT NAME=\"%s\" class='%s' style=\"%s\" %s>\n", name, class, style, javascript);
 else
-    printf("<SELECT NAME=\"%s\" class=%s>\n", name, class);
+    printf("<SELECT NAME=\"%s\" class='%s'>\n", name, class);
 for (i=0; i<menuSize; ++i)
     {
     if (sameWord(menu[i], checked))
@@ -1178,23 +1314,23 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
-void cgiMakeDropListClassWithStyle(char *name, char *menu[], 
+void cgiMakeDropListClassWithStyle(char *name, char *menu[],
     int menuSize, char *checked, char *class, char *style)
 /* Make a drop-down list with names, text class and style. */
 {
     cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,style,"");
 }
 
-void cgiMakeDropListClass(char *name, char *menu[], 
+void cgiMakeDropListClass(char *name, char *menu[],
 	int menuSize, char *checked, char *class)
 /* Make a drop-down list with names. */
 {
-    cgiMakeDropListClassWithStyle(name, menu, menuSize, checked, 
+    cgiMakeDropListClassWithStyle(name, menu, menuSize, checked,
                                         class, NULL);
 }
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
-/* Make a drop-down list with names. 
+/* Make a drop-down list with names.
  * uses style "normalText" */
 {
     cgiMakeDropListClass(name, menu, menuSize, checked, "normalText");
@@ -1208,7 +1344,7 @@ return "multishad.";
 
 void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *checked, int length)
 /* Make a list of names with window height equalt to length,
- * which can have multiple selections. Same as drop-down list 
+ * which can have multiple selections. Same as drop-down list
  * except "multiple" is added to select tag. */
 {
 int i;
@@ -1252,7 +1388,7 @@ if ((i % tableColumns) != 0)
 puts("</TR></TABLE>");
 char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "1");
+cgiMakeHiddenVar(buf, "0");
 }
 
 void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName *checked,
@@ -1263,7 +1399,7 @@ void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName 
 cgiMakeCheckboxGroupWithVals(name, menu, NULL, menuSize, checked, tableColumns);
 }
 
-void cgiMakeDropListFull(char *name, char *menu[], char *values[], 
+void cgiMakeDropListFull(char *name, char *menu[], char *values[],
                          int menuSize, char *checked, char *extraAttribs)
 /* Make a drop-down list with names and values. */
 {
@@ -1291,7 +1427,7 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
-void cgiMakeDropListWithVals(char *name, char *menu[], char *values[], 
+void cgiMakeDropListWithVals(char *name, char *menu[], char *values[],
                          int menuSize, char *checked)
 /* Make a drop-down list with names and values. In this case checked
  * corresponds to a value, not a menu. */
@@ -1404,8 +1540,8 @@ for (cv = inputList; cv != NULL; cv = cv->next)
 
 
 boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb)
-/* Use the command line to set up things as if we were a CGI program. 
- * User types in command line (assuming your program called cgiScript) 
+/* Use the command line to set up things as if we were a CGI program.
+ * User types in command line (assuming your program called cgiScript)
  * like:
  *        cgiScript nonCgiArg1 var1=value1 var2=value2 var3=value3 nonCgiArg2
  * or like
@@ -1413,7 +1549,7 @@ boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb)
  * or even like
  *        cgiScript nonCgiArg1 -x -y=bogus z=really
  * (The non-cgi arguments can occur anywhere.  The cgi arguments (all containing
- * the character '=' or starting with '-') are erased from argc/argv.  Normally 
+ * the character '=' or starting with '-') are erased from argc/argv.  Normally
  * you call this cgiSpoof(&argc, argv);
  */
 {
@@ -1483,12 +1619,12 @@ boolean cgiFromFile(char *fileName)
  *       argument2=someOtherVal
  *       ...
  * and puts them into the cgi environment so that the usual
- * cgiGetVar() commands can be used. Useful when a program 
+ * cgiGetVar() commands can be used. Useful when a program
  * has a lot of possible parameters.
  */
 {
 char **argv = NULL;
-int argc = 0; 
+int argc = 0;
 int maxArgc = 10;
 int i;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -1497,7 +1633,7 @@ boolean spoof= FALSE;
 AllocArray(argv, maxArgc);
 /* Remember that first arg is program name.
    Put filename there instead. */
-argc = 1; 
+argc = 1;
 argv[0] = cloneString(fileName);
 for(;;)
     {
@@ -1569,5 +1705,20 @@ if (cookieHash != NULL)
     hashFree(&cookieHash);
 cookieHash = NULL;
 cookieList = NULL;
+}
+
+void commonCssStyles()
+/* Defines a few common styles to use through CSS */
+{
+    printf("\n<style type='text/css'>\n");
+    printf(".trDrag {background-color:%s;} .pale {background-color:%s;}\n",COLOR_BG_GHOST,COLOR_BG_PALE);
+    printf(".inputBox {border: 2px inset %s;}\n",COLOR_LTGREY);
+    printf(".greenRoof {border-top: 3px groove %s;}\n",COLOR_DARKGREEN);
+    //printf(".greenFloor {border-bottom: 3px ridge %s;}\n",COLOR_DARKGREEN);      // Unused
+    //printf(".hiddenRoof {border-top: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT);     // Doesn't work
+    //printf(".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
+    printf(".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN);
+    printf(".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);
+    puts("</style>");
 }
 

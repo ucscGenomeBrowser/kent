@@ -113,11 +113,14 @@ struct netParsedUrl
    char host[128];	/* Name of host computer - www.yahoo.com, etc. */
    char port[16];       /* Port, usually 80 or 8080. */
    char file[1024];	/* Remote file name/query string, starts with '/' */
+   ssize_t byteRangeStart; /* Start of byte range, use -1 for none */
+   ssize_t byteRangeEnd;   /* End of byte range use -1 for none */
    };
 
 void netParseUrl(char *url, struct netParsedUrl *parsed);
 /* Parse a URL into components.   A full URL is made up as so:
- *   http://hostName:port/file
+ *   http://user:password@hostName:port/file;byterange=0-499
+ * User and password may be cgi-encoded.
  * This is set up so that the http:// and the port are optional. 
  */
 
@@ -206,6 +209,9 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
  * This routine handles up to 5 steps of redirection.
  * The logic to this routine is also complicated a little to make it work in a pipe, which means we
  * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
+
+boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
+/* Return date and size of ftp url file */
 
 #endif /* NET_H */
 

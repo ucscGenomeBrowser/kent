@@ -6,10 +6,11 @@
 #include "localmem.h"
 #include "linefile.h"
 #include "obscure.h"
+#include "bPlusTree.h"
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.24 2008/11/03 19:07:33 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.24.10.1 2009/04/21 18:52:23 mikep Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -270,20 +271,18 @@ if (tbf != NULL)
     carefulClose(&tbf->f);
     hashFree(&tbf->hash);
     /* The indexList is allocated out of the hash's memory pool. */
+    bptFileClose(&tbf->bpt);
     freez(pTbf);
     }
 }
 
-struct twoBitFile *twoBitOpen(char *fileName)
-/* Open file, read in header and index.  
+static struct twoBitFile *twoBitOpenReadHeader(char *fileName)
+/* Open file, read in header but not index.  
  * Squawk and die if there is a problem. */
 {
 bits32 sig;
 struct twoBitFile *tbf;
-struct twoBitIndex *index;
 boolean isSwapped = FALSE;
-int i;
-struct hash *hash;
 FILE *f = mustOpen(fileName, "rb");
 
 /* Allocate header verify signature, and read in
@@ -304,6 +303,19 @@ if (tbf->version != 0)
     }
 tbf->seqCount = readBits32(f, isSwapped);
 tbf->reserved = readBits32(f, isSwapped);
+return tbf;
+}
+
+struct twoBitFile *twoBitOpen(char *fileName)
+/* Open file, read in header and index.  
+ * Squawk and die if there is a problem. */
+{
+struct twoBitFile *tbf = twoBitOpenReadHeader(fileName);
+struct twoBitIndex *index;
+boolean isSwapped = tbf->isSwapped;
+int i;
+struct hash *hash;
+FILE *f = tbf->f;
 
 /* Read in index. */
 hash = tbf->hash = hashNew(digitsBaseTwo(tbf->seqCount));
@@ -318,6 +330,18 @@ for (i=0; i<tbf->seqCount; ++i)
     slAddHead(&tbf->indexList, index);
     }
 slReverse(&tbf->indexList);
+return tbf;
+}
+
+struct twoBitFile *twoBitOpenExternalBptIndex(char *twoBitName, char *bptName)
+/* Open file, read in header, but not regular index.  Instead use
+ * bpt index.   Beware if you use this the indexList field will be NULL
+ * as will the hash. */
+{
+struct twoBitFile *tbf = twoBitOpenReadHeader(twoBitName);
+tbf->bpt = bptFileOpen(bptName);
+if (tbf->seqCount != tbf->bpt->itemCount)
+    errAbort("%s and %s don't have same number of sequences!", twoBitName, bptName);
 return tbf;
 }
 
@@ -352,10 +376,20 @@ for (;;)
 static void twoBitSeekTo(struct twoBitFile *tbf, char *name)
 /* Seek to start of named record.  Abort if can't find it. */
 {
-struct twoBitIndex *index = hashFindVal(tbf->hash, name);
-if (index == NULL)
-     errAbort("%s is not in %s", name, tbf->fileName);
-fseek(tbf->f, index->offset, SEEK_SET);
+if (tbf->bpt)
+    {
+    bits32 offset;
+    if (!bptFileFind(tbf->bpt, name, strlen(name), &offset, sizeof(offset)))
+	 errAbort("%s is not in %s", name, tbf->bpt->fileName);
+    fseek(tbf->f, offset, SEEK_SET);
+    }
+else
+    {
+    struct twoBitIndex *index = hashFindVal(tbf->hash, name);
+    if (index == NULL)
+	 errAbort("%s is not in %s", name, tbf->fileName);
+    fseek(tbf->f, index->offset, SEEK_SET);
+    }
 }
 
 static void readBlockCoords(FILE *f, boolean isSwapped, bits32 *retBlockCount,

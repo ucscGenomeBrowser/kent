@@ -7,7 +7,7 @@
 #include "common.h"
 #include "hmmstats.h"
 
-static char const rcsid[] = "$Id: hmmstats.c,v 1.4 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: hmmstats.c,v 1.4.366.1 2009/04/21 18:52:21 mikep Exp $";
 
 int scaledLog(double val)
 /* Return scaled log of val. */
@@ -29,6 +29,21 @@ double gaussean(double x, double mean, double sd)
 x -= mean;
 x /= sd;
 return oneOverSqrtTwoPi * exp(-0.5*x*x) / sd;
+}
+
+double calcVarianceFromSums(double sum, double sumSquares, bits64 n)
+/* Calculate variance. */
+{
+double var = sumSquares - sum*sum/n;
+if (n > 1)
+    var /= n-1;
+return var;
+}
+
+double calcStdFromSums(double sum, double sumSquares, bits64 n)
+/* Calculate standard deviation. */
+{
+return sqrt(calcVarianceFromSums(sum, sumSquares, n));
 }
 
 

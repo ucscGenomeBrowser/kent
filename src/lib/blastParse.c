@@ -8,10 +8,11 @@
 #include "blastParse.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: blastParse.c,v 1.21 2008/09/17 17:56:37 kent Exp $";
+static char const rcsid[] = "$Id: blastParse.c,v 1.21.16.1 2009/04/21 18:52:20 mikep Exp $";
 
+#define WARN_LEVEL 1   /* verbose level to enable warnings */
 #define TRACE_LEVEL 3  /* verbose level to enable tracing of files */
-#define DUMP_LEVEL 4    /* verbose level to enable dumping of parsed */
+#define DUMP_LEVEL 4   /* verbose level to enable dumping of parsed */
 
 struct blastFile *blastFileReadAll(char *fileName)
 /* Read all blast alignment in file. */
@@ -32,8 +33,13 @@ return bf;
 static void bfError(struct blastFile *bf, char *message)
 /* Print blast file error message. */
 {
-errAbort("%s\nLine %d of %s", message, 
-	bf->lf->lineIx, bf->fileName);
+errAbort("%s:%d: %s", bf->fileName, bf->lf->lineIx, message);
+}
+
+static void bfWarn(struct blastFile *bf, char *message)
+/* Print blast file warning message. */
+{
+verbose(WARN_LEVEL, "Warning: %s:%d: %s\n", bf->fileName, bf->lf->lineIx, message);
 }
 
 static void bfUnexpectedEof(struct blastFile *bf)
@@ -48,18 +54,40 @@ static void bfSyntax(struct blastFile *bf)
 bfError(bf, "Can't cope with BLAST output syntax");
 }
 
+static boolean isAllDigits(char *s)
+/* test if a string is all digits */
+{
+for (; *s != '\0'; s++)
+    {
+    if (!isdigit(*s))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static boolean isAllDashes(char *s)
+/* test if a string is all dashes */
+{
+for (; *s != '\0'; s++)
+    {
+    if (*s != '-')
+        return FALSE;
+    }
+return TRUE;
+}
+
 static char *bfNextLine(struct blastFile *bf)
 /* Fetch next line of input trying, or NULL if not found */
 {
 char *line = NULL;
 if (lineFileNext(bf->lf, &line, NULL))
     {
-    verbose(TRACE_LEVEL, "=> %s\n", line);
+    verbose(TRACE_LEVEL, "    => %s\n", line);
     return line;
     }
 else
     {
-    verbose(TRACE_LEVEL, "=> EOF\n");
+    verbose(TRACE_LEVEL, "    => EOF\n");
     return NULL;
     }
 }
@@ -237,6 +265,23 @@ bq->dbSeqCount = atoi(words[0]);
 bq->dbBaseCount = atoi(words[2]);
 }
 
+static char *roundLinePrefix = "Results from round "; // start of a round line
+
+static boolean isRoundLine(char *line)
+/* check if a line is a PSI round number line */
+{
+return startsWith(roundLinePrefix, line);
+}
+
+static void parseRoundLine(char *line, struct blastQuery *bq)
+/* round line and save current round in query
+ *   Results from round 1
+ */
+{
+char *p = skipLeadingSpaces(line + strlen(roundLinePrefix));
+bq->psiRounds = atoi(p);
+}
+
 struct blastQuery *blastFileNextQuery(struct blastFile *bf)
 /* Read all alignments associated with next query.  Return NULL at EOF. */
 {
@@ -268,7 +313,9 @@ for (;;)
 	lineFileReuse(bf->lf);
 	break;
 	}
-    if (stringIn("No hits found", line) != NULL)
+    else if (isRoundLine(line))
+        parseRoundLine(line, bq);
+    else if (stringIn("No hits found", line) != NULL)
         break;
     }
 
@@ -286,11 +333,35 @@ if (verboseLevel() >= DUMP_LEVEL)
 return bq;
 }
 
+static char *findNextGapped(struct blastFile *bf, struct blastQuery *bq)
+/* scan for next gapped alignment, return line or NULL if not hit */
+{
+while (TRUE)
+    {
+    if (!bfSkipBlankLines(bf))
+        return NULL;
+    char *line = bfNextLine(bf);
+    /*
+     * the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
+     * TBLASTN 2.2.15 [Oct-15-2006]
+     * I am hoping that by looking for only "BLAST" this will work with things like blastp, blastn, psi-blast, etc
+     */
+    if (startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
+        {
+	lineFileReuse(bf->lf);
+        return NULL;
+        }
+    if (line[0] == '>')
+        return line;
+    if (isRoundLine(line))
+        parseRoundLine(line, bq);
+    }
+}
+
 struct blastGappedAli *blastFileNextGapped(struct blastFile *bf, struct blastQuery *bq)
 /* Read in next gapped alignment.   Does *not* put it on bf->gapped list. 
  * Return NULL at EOF or end of query. */
 {
-char *line;
 char *words[16];
 int wordCount;
 struct blastGappedAli *bga;
@@ -298,23 +369,15 @@ struct blastBlock *bb;
 int lenSearch;
 
 verbose(TRACE_LEVEL, "blastFileNextGapped\n");
+
+char *line = findNextGapped(bf, bq);
+if (line == NULL)
+    return NULL;
+
 AllocVar(bga);
 bga->query = bq;
-
-/* First line should be query. */
-if (!bfSkipBlankLines(bf))
-    return NULL;
-line = bfNextLine(bf);
-/*
-the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
-TBLASTN 2.2.15 [Oct-15-2006]
-I am hoping that by looking for only "BLAST" this will work with things like blastp, blastn, psi-blast, etc
-*/
-if (startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
-    return NULL;
-if (line[0] != '>')
-    bfError(bf, "Expecting >target");
 bga->targetName = cloneString(line+1); 
+bga->psiRound = bq->psiRounds;
 
 /* Process something like:
  *      Length = 100000
@@ -324,6 +387,8 @@ bga->targetName = cloneString(line+1);
 for (lenSearch=0; lenSearch<25; lenSearch++)
 	{
 	line = bfNeedNextLine(bf);
+        if (isRoundLine(line))
+            parseRoundLine(line, bq);
 	wordCount = chopLine(line, words);
 	if (wordCount == 3 && sameString(words[0], "Length") &&  sameString(words[1], "=")
             && isdigit(words[2][0]))
@@ -357,7 +422,7 @@ else
     }
 }
 
-static boolean nextBlockLine(struct blastFile *bf, char **retLine)
+static boolean nextBlockLine(struct blastFile *bf, struct blastQuery *bq, char **retLine)
 /* Get next block line.  Return FALSE and reuse line if it's
  * an end of block type line. */
 {
@@ -367,6 +432,9 @@ char *line;
 *retLine = line = bfNextLine(bf);
 if (line == NULL)
     return FALSE;
+if (isRoundLine(line))
+    parseRoundLine(line, bq);
+
 /*
 the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
 TBLASTN 2.2.15 [Oct-15-2006]
@@ -396,22 +464,37 @@ else
     }
 }
 
-static void parseBlockLine(struct blastFile *bf, int *startRet, int *endRet,
+static boolean parseBlockLine(struct blastFile *bf, int *startRet, int *endRet,
                            struct dyString *seq)
 /* read and parse the next target or query line, like:
  *   Query: 26429 taccttgacattcctcagtgtgtcatcatcgttctctcctccaaacggcgagagtccgga 26488
  *
  * also handle broken NCBI tblastn output like:
  *   Sbjct: 1181YYGEQRSTNGQTIQLKTQVFRRFPDDDDESEDHDDPDNAHESPEQEGAEGHFDLHYYENQ 1360
+ *
+ * Ignores and returns FALSE on bogus records generated by PSI BLAST, such as
+ *   Query: 0   --------------------------                                  
+ *   Sbjct: 38  PPGPPGVAGGNQTTVVVIYGPPGPPG                                   63
+ *   Query: 0                                                               
+ *   Sbjct: 63                                                               63
+ * If FALSE is returned, the output parameters will be unchanged.
  */
 {
 char* line = bfNeedNextLine(bf);
 int a, b, s, e;
 char *words[16];
 int wordCount = chopLine(line, words);
-if ((wordCount < 3) || (wordCount > 4)
-    || !(sameString("Query:", words[0]) || sameString("Sbjct:", words[0])))
+if ((wordCount < 2) || (wordCount > 4) || !(sameString("Query:", words[0]) || sameString("Sbjct:", words[0])))
     bfSyntax(bf);
+
+/* look for one of the bad formats to ignore, as described above */
+if (((wordCount == 2) && isAllDigits(words[1]))
+    || ((wordCount == 3) && isAllDigits(words[1]) && isAllDigits(words[2]))
+    || ((wordCount == 3) && isAllDigits(words[1]) && isAllDashes(words[2])))
+    {
+    bfWarn(bf, "Ignored invalid alignment format for aligned sequence pair");
+    return FALSE;
+    }
 
 /* special handling for broken output with no space between start and
  * sequence */
@@ -439,7 +522,62 @@ s = min(a,b);
 e = max(a,b);
 *startRet = min(s, *startRet);
 *endRet = max(e, *endRet);
+return TRUE;
 }
+
+static boolean findBlockSeqPair(struct blastFile *bf, struct blastQuery *bq)
+/* scan forward for the next pair of Query:/Sbjct: sequences */
+{
+char *line;
+for (;;)
+    {
+    if (!nextBlockLine(bf, bq, &line))
+        return FALSE;
+    if (startsWith(" Score", line))
+        {
+        lineFileReuse(bf->lf);
+        return FALSE;
+        }
+    if (startsWith("Query:", line))
+        {
+        lineFileReuse(bf->lf);
+        return TRUE;
+        }
+    }
+}
+
+static void clearBlastBlock(struct blastBlock *bb, struct dyString *qString, struct dyString *tString)
+/* reset the contents of a blast block being accummulated */
+{
+bb->qStart = bb->tStart = 0x3fffffff;
+bb->qEnd = bb->tEnd = -bb->qStart;
+dyStringClear(qString);
+dyStringClear(tString);
+}
+
+static void parseBlockSeqPair(struct blastFile *bf, struct blastBlock *bb,
+                              struct dyString *qString, struct dyString *tString)
+/* parse the current pair Query:/Sbjct: sequences */
+{
+boolean isOk = TRUE;
+
+/* Query line */
+if (!parseBlockLine(bf, &bb->qStart, &bb->qEnd, qString))
+    isOk = FALSE;
+
+/* Skip next line. */
+bfNeedNextLine(bf);
+
+/* Fetch target sequence line. */
+if (!parseBlockLine(bf, &bb->tStart, &bb->tEnd, tString))
+    isOk = FALSE;
+if (!isOk)
+    {
+    // reset accumulated data so we discard everything before bogus pair
+    clearBlastBlock(bb, qString, tString);
+    }
+}
+
 
 static struct blastBlock *nextBlock(struct blastFile *bf, struct blastQuery *bq,
                                     struct blastGappedAli *bga, boolean *skipRet)
@@ -464,7 +602,7 @@ verbose(TRACE_LEVEL,  "blastFileNextBlock\n");
  * alignment. */
 for (;;)
     {
-    if (!nextBlockLine(bf, &line))
+    if (!nextBlockLine(bf, bq, &line))
 	return NULL;
     if (startsWith(" Score", line))
 	break;
@@ -577,43 +715,18 @@ else
  *              |||||| |||||||||| ||| ||||||||||||||||||||||| || || ||||||||
  * Sbjct: 62966 taccttaacattcctcaatgtttcatcatcgttctctcctccaaatggtgaaagtccgga 63025
  */
-bb->qStart = bb->tStart = 0x3fffffff;
-bb->qEnd = bb->tEnd = -bb->qStart;
 if (qString == NULL)
     {
     qString = newDyString(50000);
     tString = newDyString(50000);
     }
-else
-    {
-    dyStringClear(qString);
-    dyStringClear(tString);
-    }
+clearBlastBlock(bb, qString, tString);
 for (;;)
     {
-    /* Fetch next first line. */
-    for (;;)
-	{
-	if (!nextBlockLine(bf, &line))
-	    goto DONE;
-	if (startsWith(" Score", line))
-	    {
-	    lineFileReuse(bf->lf);
-	    goto DONE;
-	    }
-	if (startsWith("Query:", line))
-	    break;
-	}
-    lineFileReuse(bf->lf);
-    parseBlockLine(bf, &bb->qStart, &bb->qEnd, qString);
-
-    /* Skip next line. */
-    line = bfNeedNextLine(bf);
-
-    /* Fetch target sequence line. */
-    parseBlockLine(bf, &bb->tStart, &bb->tEnd, tString);
+    if (!findBlockSeqPair(bf, bq))
+        break;
+    parseBlockSeqPair(bf, bb, qString, tString);
     }
-DONE:
 
 /* convert to [0..n) and move to strand coords if necessary */
 bb->qStart--;
@@ -758,7 +871,10 @@ void blastGappedAliPrint(struct blastGappedAli* ba, FILE* out)
 /* print a BLAST gapped alignment for debugging purposes  */
 {
 struct blastBlock *bb;
-fprintf(out, "%s <=> %s\n", ba->query->query, ba->targetName);
+fprintf(out, "%s <=> %s", ba->query->query, ba->targetName);
+if (ba->psiRound > 0)
+    fprintf(out, " round: %d", ba->psiRound);
+fputc('\n', out);
 for (bb = ba->blocks; bb != NULL; bb = bb->next)
     {
     blastBlockPrint(bb, out);

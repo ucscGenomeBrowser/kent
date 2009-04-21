@@ -305,5 +305,17 @@ float pslIdent(struct psl *psl);
 float pslQueryAligned(struct psl *psl);
 /* compute fraction of query that was aligned */
 
+INLINE unsigned pslQEnd(struct psl *psl, int blkIdx)
+/* return query end for the given block */
+{
+return psl->qStarts[blkIdx] + psl->blockSizes[blkIdx];
+}
+
+INLINE unsigned pslTEnd(struct psl *psl, int blkIdx)
+/* return target end for the given block */
+{
+return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
+}
+
 #endif /* PSL_H */
 

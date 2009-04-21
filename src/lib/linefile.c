@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.58 2008/02/12 22:14:03 braney Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.58.52.1 2009/04/21 18:52:21 mikep Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -672,7 +672,7 @@ for (c = words[wordIx]; *c; c++)
     if (*c == '-' || isdigit(*c))
         /* NOTE: embedded '-' will be caught by lineFileNeedNum */
         continue;
-    errAbort("Expecting number field %d line %d of %s, got %s", 
+    errAbort("Expecting integer field %d line %d of %s, got %s", 
             wordIx+1, lf->lineIx, lf->fileName, words[wordIx]);
     }
 return lineFileNeedNum(lf, words, wordIx);

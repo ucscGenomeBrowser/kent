@@ -13,8 +13,10 @@
 #include "net.h"
 #include "linefile.h"
 #include "base64.h"
+#include "cheapcgi.h"
+#include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.61 2008/10/30 03:13:08 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.61.10.1 2009/04/21 18:52:21 mikep Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -71,6 +73,7 @@ if (!isdigit(portName[0]))
     errAbort("netConnectTo: ports must be numerical, not %s", portName);
 return netMustConnect(hostName, atoi(portName));
 }
+
 
 int netAcceptingSocketFrom(int port, int queueSize, char *host)
 /* Create a socket that can accept connections from a 
@@ -240,11 +243,12 @@ if (in != NULL)
 
 void netParseUrl(char *url, struct netParsedUrl *parsed)
 /* Parse a URL into components.   A full URL is made up as so:
- *   http://user:password@hostName:port/file
+ *   http://user:password@hostName:port/file;byterange=0-499
+ * User and password may be cgi-encoded.
  * This is set up so that the http:// and the port are optional. 
  */
 {
-char *s, *t, *u, *v, *w;
+char *s, *t, *u, *v, *w, *x;
 char buf[1024];
 
 /* Make local copy of URL. */
@@ -270,70 +274,97 @@ else
     }
 
 /* Split off file part. */
+parsed->byteRangeStart = -1;  /* default to no byte range specified */
+parsed->byteRangeEnd = -1;
 u = strchr(s, '/');
 if (u == NULL)
-   strcpy(parsed->file, "/");
+    strcpy(parsed->file, "/");
 else
-   {
-   /* need to encode spaces, but not ! other characters */
-   char *t=replaceChars(u," ","%20");
-   strncpy(parsed->file, t, sizeof(parsed->file));
-   freeMem(t);
-   *u = 0;
-   }
+    {
+    x = strrchr(u, ';');
+    if (x)
+	{
+	if (startsWith(";byterange=", x))
+	    {
+	    char *y=strchr(x, '=');
+	    ++y;
+	    char *z=strchr(y, '-');
+	    if (z)
+		{
+    		++z;
+		*x = 0;
+		// TODO: use something better than atol() ?
+		parsed->byteRangeStart = atoll(y); 
+		parsed->byteRangeEnd = atoll(z);
+	    	}    
+	    }
+	}
+
+    /* need to encode spaces, but not ! other characters */
+    char *t=replaceChars(u," ","%20");
+    strncpy(parsed->file, t, sizeof(parsed->file));
+    freeMem(t);
+    *u = 0;
+    }
 
 
 /* Split off user part */
 v = strchr(s, '@');
 if (v == NULL)
-   {
-   if (sameWord(parsed->protocol,"http"))
-      {
-      strcpy(parsed->user, "");
-      strcpy(parsed->password, "");
-      }
-   if (sameWord(parsed->protocol,"ftp"))
-      {
-      strcpy(parsed->user, "anonymous");
-      strcpy(parsed->password, "x@genome.ucsc.edu");
-      }
-   }
+    {
+    if (sameWord(parsed->protocol,"http") ||
+        sameWord(parsed->protocol,"https"))
+	{
+	strcpy(parsed->user, "");
+	strcpy(parsed->password, "");
+	}
+    if (sameWord(parsed->protocol,"ftp"))
+	{
+	strcpy(parsed->user, "anonymous");
+	strcpy(parsed->password, "x@genome.ucsc.edu");
+	}
+    }
 else
-   {
-   *v = 0;
-   /* split off password part */
-   w = strchr(s, ':');
-   if (w == NULL)
-      {
-      strncpy(parsed->user, s, sizeof(parsed->user));
-      strcpy(parsed->password, "");
-      }
-   else
-      {
-      *w = 0;
-      strncpy(parsed->user, s, sizeof(parsed->user));
-      strncpy(parsed->password, w+1, sizeof(parsed->password));
-      }
-   s = v+1;
-   }
+    {
+    *v = 0;
+    /* split off password part */
+    w = strchr(s, ':');
+    if (w == NULL)
+	{
+	strncpy(parsed->user, s, sizeof(parsed->user));
+	strcpy(parsed->password, "");
+	}
+    else
+	{
+	*w = 0;
+	strncpy(parsed->user, s, sizeof(parsed->user));
+	strncpy(parsed->password, w+1, sizeof(parsed->password));
+	}
+    
+    cgiDecode(parsed->user,parsed->user,strlen(parsed->user));
+    cgiDecode(parsed->password,parsed->password,strlen(parsed->password));
+    s = v+1;
+    }
 
 
 /* Save port if it's there.  If not default to 80. */
 t = strchr(s, ':');
 if (t == NULL)
-   {
-   if (sameWord(parsed->protocol,"http"))
-      strcpy(parsed->port, "80");
-   if (sameWord(parsed->protocol,"ftp"))
-      strcpy(parsed->port, "21");
-   }
+    {
+    if (sameWord(parsed->protocol,"http"))
+	strcpy(parsed->port, "80");
+    if (sameWord(parsed->protocol,"https"))
+	strcpy(parsed->port, "443");
+    if (sameWord(parsed->protocol,"ftp"))
+	strcpy(parsed->port, "21");
+    }
 else
-   {
-   *t++ = 0;
-   if (!isdigit(t[0]))
-      errAbort("Non-numeric port name %s", t);
-   strncpy(parsed->port, t, sizeof(parsed->port));
-   }
+    {
+    *t++ = 0;
+    if (!isdigit(t[0]))
+	errAbort("Non-numeric port name %s", t);
+    strncpy(parsed->port, t, sizeof(parsed->port));
+    }
 
 /* What's left is the host. */
 strncpy(parsed->host, s, sizeof(parsed->host));
@@ -377,18 +408,23 @@ for (;;)
     }
 }
 
-struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult, boolean noTimeoutError)
+void sendFtpCommandOnly(int sd, char *cmd)
+/* send command to ftp server */
+{   
+write(sd, cmd, strlen(cmd));
+}
+
+
+struct dyString *receiveFtpReply(int sd, char *cmd, boolean seeResult)
 /* send command to ftp server and check resulting reply code, 
    give error if not desired reply */
-{   
+{
 struct dyString *rs = NULL;
 int reply = 0;
 char buf[4*1024];
 int readSize;
 char *startLastLine = NULL;
 long timeOut = 1000000; /* wait in microsec */
-
-write(sd, cmd, strlen(cmd));
 
 rs = newDyString(4*1024);
 while (1)
@@ -397,9 +433,7 @@ while (1)
 	{
 	if (!readReadyWait(sd, timeOut))
 	    {
-	    if (!noTimeoutError)
-		errAbort("ftp server response timed out > %ld microsec",timeOut);
-	    return rs;
+	    errAbort("ftp server response timed out > %ld microsec",timeOut);
 	    }
 	if ((readSize = read(sd, buf, sizeof(buf))) == 0)
 	    break;
@@ -440,11 +474,17 @@ if (!seeResult) dyStringFree(&rs);
 return rs;
 }
 
+struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult)
+/* send command to ftp server and check resulting reply code, 
+   give error if not desired reply */
+{   
+sendFtpCommandOnly(sd, cmd);
+return receiveFtpReply(sd, cmd, seeResult);
+}
 
 int parsePasvPort(char *rs)
 /* parse PASV reply to get the port and return it */
 {
-char *rsCopy = strdup(rs);
 char *words[7];
 int wordCount;
 char *rsStart = strchr(rs,'(');
@@ -456,9 +496,179 @@ wordCount = chopString(rsStart, ",", words, ArraySize(words));
 if (wordCount != 6)
     errAbort("PASV reply does not parse correctly");
 result = atoi(words[4])*256+atoi(words[5]);    
-freez(&rsCopy);
 return result;
 }    
+
+
+long long parseFtpSIZE(char *rs)
+/* parse reply to SIZE and return it */
+{
+char *words[3];
+int wordCount;
+char *rsStart = rs;
+long long result = 0;
+wordCount = chopString(rsStart, " ", words, ArraySize(words));
+if (wordCount != 2)
+    errAbort("SIZE reply does not parse correctly");
+result = atoll(words[1]);    
+return result;
+}    
+
+
+time_t parseFtpMDTM(char *rs)
+/* parse reply to MDTM and return it
+ * 200 YYYYMMDDhhmmss */
+{
+char spread[] = "YYYY MM DD hh mm ss";
+char *to = spread;
+char *from = NULL;
+char *words[3];
+int wordCount;
+char *rsStart = rs;
+int len = strlen(rs);
+if (len == 0) 
+    return FALSE;
+char *rsLast = rs + len - 1;
+if (*rsLast == '\n')
+    {
+    *rsLast = 0;
+    --rsLast;
+    --len;
+    if (len == 0) 
+	return FALSE;
+    }
+if (*rsLast == '\r')
+    {
+    *rsLast = 0;
+    --rsLast;
+    --len;
+    if (len == 0) 
+	return FALSE;
+    }
+wordCount = chopString(rsStart, " ", words, ArraySize(words));
+if (wordCount != 2)
+    errAbort("MDTM reply does not parse correctly");
+
+//printf("MDTM parse string [%s], length=%lld\n", words[1], (long long) strlen(words[1]));
+
+from = words[1];
+
+*to++ = *from++;
+*to++ = *from++;
+*to++ = *from++;
+*to++ = *from++;
+*to++ = '-';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = '-';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ' ';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ':';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ':';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = 0;
+
+// printf("MDTM to [%s], length=%lld\n", spread, (long long) strlen(spread));
+
+struct tm tm;
+time_t t;
+
+if (strptime(spread, "%Y-%m-%d %H:%M:%S", &tm) == NULL)
+    { /* Handle error */;
+    errAbort("unable to parse MDTM string [%s]", spread);
+    }
+
+//printf("year: %d; month: %d; day: %d;\n",
+//        tm.tm_year, tm.tm_mon, tm.tm_mday);
+//printf("hour: %d; minute: %d; second: %d\n",
+//        tm.tm_hour, tm.tm_min, tm.tm_sec);
+//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
+
+
+tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
+                          to determine whether daylight saving time
+                          is in effect */
+t = mktime(&tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktime failed while parsing last-modified string [%s]", words[1]);
+    }
+
+//printf("seconds since the Epoch: %lld\n", (long long) t);"
+
+return t;
+}    
+
+
+
+boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime)
+/* Return date and size of ftp url file */
+{
+struct netParsedUrl npu;
+struct dyString *rs = NULL;
+int sd;
+long timeOut = 1000000; /* wait in microsec */
+char cmd[256];
+
+// TODO maybe remove this workaround where udc cache wants info on URL "/" ?
+
+/* Parse the URL and connect. */
+netParseUrl(url, &npu);
+
+if (!sameString(npu.protocol, "ftp"))
+    errAbort("Sorry, can only netOpen ftp's currently");
+
+if (sameString(npu.file,"/"))
+    {
+    *retSize = 0;
+    *retTime = time(NULL);
+    return TRUE;
+    }
+
+sd = netMustConnect(npu.host, atoi(npu.port));
+
+/* Ask remote ftp server for file info. */
+
+/* don't send a command, just read the welcome msg */
+if (readReadyWait(sd, timeOut))
+    sendFtpCommand(sd, "", FALSE);
+
+safef(cmd,sizeof(cmd),"USER %s\r\n", npu.user);
+sendFtpCommand(sd, cmd, FALSE);
+
+safef(cmd,sizeof(cmd),"PASS %s\r\n", npu.password);
+sendFtpCommand(sd, cmd, FALSE);
+
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);  // Not sure this is required for just size/date
+/* 200 Type set to I */
+/* (send the data as binary, so can support compressed files) */
+
+safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
+rs = sendFtpCommand(sd, cmd, TRUE);
+*retSize = parseFtpSIZE(rs->string);
+/* 200 12345 */
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
+safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
+rs = sendFtpCommand(sd, cmd, TRUE);
+*retTime = parseFtpMDTM(rs->string);
+/* 200 YYYYMMDDhhmmss */
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
+close(sd);   
+
+return TRUE;
+}
 
 
 int netGetOpenFtp(char *url)
@@ -466,7 +676,7 @@ int netGetOpenFtp(char *url)
 {
 struct netParsedUrl npu;
 struct dyString *rs = NULL;
-int sd;
+int sd, sdata;
 long timeOut = 1000000; /* wait in microsec */
 char cmd[256];
 
@@ -480,38 +690,122 @@ sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* don't send a command, just read the welcome msg */
 if (readReadyWait(sd, timeOut))
-    sendFtpCommand(sd, "", FALSE, FALSE);
+    sendFtpCommand(sd, "", FALSE);
 
 safef(cmd,sizeof(cmd),"USER %s\r\n",npu.user);
-sendFtpCommand(sd, cmd, FALSE, FALSE);
+sendFtpCommand(sd, cmd, FALSE);
 
 safef(cmd,sizeof(cmd),"PASS %s\r\n",npu.password);
-sendFtpCommand(sd, cmd, FALSE, FALSE);
+sendFtpCommand(sd, cmd, FALSE);
 
-sendFtpCommand(sd, "TYPE I\r\n", FALSE, FALSE);
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);
 /* 200 Type set to I */
 /* (send the data as binary, so can support compressed files) */
 
-rs = sendFtpCommand(sd, "PASV\r\n", TRUE, FALSE);
+rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
+if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+    {
+    safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
+    sendFtpCommand(sd, cmd, FALSE);
+    }
+
 safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
-/* we can't wait for reply because 
-   we need to start the next fetch connect 
-   but then if there is an error e.g. missing file,
-   then we don't see the err msg because we
-   already closed the port and are waiting.
-   And our timeout is long - indefinitely so?
-*/
-sendFtpCommand(sd, cmd, FALSE, TRUE);  
+sendFtpCommandOnly(sd, cmd);  
 
-close(sd);
+sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
 
-sd = netMustConnect(npu.host, parsePasvPort(rs->string));
+/* Because some FTP servers will kill the data connection
+ * as soon as the control connection closes,
+ * we have to develop a workaround using a partner process. */
+
+/* see which comes first, an error message on the control conn
+ * or data on the data conn */
+
+int secondsWaited = 0;
+while (TRUE)
+    {
+    if (secondsWaited >= 10)
+	{
+	errAbort("ftp server error on cmd=[%s] timed-out waiting for data or error\n",cmd);
+	}
+    timeOut = 1000000; /* wait in microsec */
+    if (readReadyWait(sdata, timeOut))
+	{
+	break;   // we have some data
+	}
+    if (readReadyWait(sd, 0)) /* wait in microsec */
+	{
+	receiveFtpReply(sd, cmd, FALSE);  // this can see an error like bad filename
+	}
+    ++secondsWaited;
+    }
+    
 
 /* Clean up and return handle. */
 dyStringFree(&rs);
-return sd;
+
+
+fflush(stdin);
+fflush(stdout);
+fflush(stderr);
+
+int pipefd[2];
+
+pipe(pipefd);  /* make a pipe (fds go in pipefd[0] and pipefd[1])  */
+
+int pid = fork();
+
+if (pid < 0)
+    errnoAbort("can't fork in netGetOpenFtp");
+if (pid == 0)
+    {
+    /* child */
+
+    fclose(stdin);
+    fclose(stdout);
+
+    close(pipefd[0]);  /* close unused half of pipe */
+
+    char buf[32768];
+    int rd = 0;
+    long long dataPos = 0; 
+    if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	dataPos = npu.byteRangeStart;
+    while((rd = read(sdata, buf, 32768)) > 0) 
+	{
+	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	    if ((dataPos + rd) > npu.byteRangeEnd)
+		rd = npu.byteRangeEnd - dataPos + 1;
+	int wt = write(pipefd[1], buf, rd);
+	if (wt == -1)
+	    errnoAbort("error writing ftp data to pipe");
+	dataPos += rd;
+	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	    if (dataPos >= npu.byteRangeEnd)
+		break;	    
+	}
+    if (rd == -1)
+	errnoAbort("error reading ftp socket");
+    close(pipefd[1]);  /* being safe */
+    close(sd);
+    close(sdata);
+
+    exit(0);
+
+    /* child will never get to here */
+    }
+
+/* parent */
+
+close(pipefd[1]);  /* close unused unput half of pipe */
+
+/* although the parent closes these, the child has them open still */
+close(sd);   
+close(sdata);
+
+return pipefd[0];
 }
 
 int netHttpConnect(char *url, char *method, char *protocol, char *agent)
@@ -530,9 +824,17 @@ int sd;
 
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
-if (!sameString(npu.protocol, "http"))
+if (sameString(npu.protocol, "http"))
+    sd = netMustConnect(npu.host, atoi(npu.port));
+else if (sameString(npu.protocol, "https"))
+    {
+    sd = netMustConnectHttps(npu.host, atoi(npu.port));
+    }
+else
+    {
     errAbort("Sorry, can only netOpen http's currently");
-sd = netMustConnect(npu.host, atoi(npu.port));
+    return -1;  /* never gets here, fixes compiler complaint */
+    }
 
 /* Ask remote server for a file. */
 dyStringPrintf(dy, "%s %s %s\r\n", method, npu.file, protocol);
@@ -552,12 +854,20 @@ if (!sameString(npu.user,""))
     freez(&b64up);
     }
 dyStringAppend(dy, "Accept: */*\r\n");
+if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+    {
+    dyStringPrintf(dy, "Range: bytes=%lld-%lld\r\n"
+	, (long long) npu.byteRangeStart
+	, (long long) npu.byteRangeEnd);
+    }
 write(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
 return sd;
 }
+
+
 
 int netOpenHttpExt(char *url, char *method, boolean end)
 /* Return a file handle that will read the url.  If end is not
@@ -621,7 +931,7 @@ int netUrlOpen(char *url)
 /* Return unix low-level file handle for url. 
  * Just close(result) when done. */
 {
-if (startsWith("http://",url) || (stringIn("://", url) == NULL))
+if (startsWith("http://",url) || startsWith("https://",url) || (stringIn("://", url) == NULL))
     return netGetOpenHttp(url);
 else if (startsWith("ftp://",url))
     return netGetOpenFtp(url);
@@ -711,7 +1021,7 @@ while(TRUE)
 	    {
 	    redirect = TRUE;
 	    }
-	else if (!sameString(code, "200"))
+	else if (!(sameString(code, "200") || sameString(code, "206")))
 	    {
 	    warn("%s: %s %s\n", url, code, line);
 	    return FALSE;
@@ -855,6 +1165,7 @@ else
     return lf;
     }
 }
+
 
 struct lineFile *netLineFileOpen(char *url)
 /* Return a lineFile attached to url.  This one

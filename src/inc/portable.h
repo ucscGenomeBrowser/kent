@@ -20,11 +20,20 @@ struct fileInfo
     struct fileInfo  *next;	/* Next in list. */
     off_t size;		/* Size in bytes. */
     bool isDir;		/* True if file is a directory. */
+    int statErrno;	/* Result of stat (e.g. bad symlink). */
+    time_t lastAccess;  /* Last access time. */
     char name[1];	/* Allocated at run time. */
     };
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir);
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
+	time_t lastAccess);
 /* Return a new fileInfo. */
+
+struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures);
+/* Return list of files matching wildcard pattern with
+ * extra info. If full path is true then the path will be
+ * included in the name of each file.  You can free the
+ * resulting list with slFreeList. */
 
 struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath);
 /* Return list of files matching wildcard pattern with
@@ -38,10 +47,20 @@ char *getCurrentDir();
 void setCurrentDir(char *newDir);
 /* Set current directory.  Abort if it fails. */
 
+boolean maybeSetCurrentDir(char *newDir);
+/* Change directory, return FALSE (and set errno) if fail. */
+
 boolean makeDir(char *dirName);
 /* Make dir.  Returns TRUE on success.  Returns FALSE
  * if failed because directory exists.  Prints error
  * message and aborts on other error. */
+
+void makeDirsOnPath(char *pathName);
+/* Create directory specified by pathName.  If pathName contains
+ * slashes, create directory at each level of path if it doesn't
+ * already exist.  Abort with error message if there's a problem.
+ * (It's not considered a problem for the directory to already
+ * exist. ) */
 
 long clock1000();
 /* 1000 hz clock */
