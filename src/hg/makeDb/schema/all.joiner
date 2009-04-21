@@ -1030,7 +1030,6 @@ identifier chainSelfNonSplit
 "Link together self chain info"
     hg19.chainSelf.id
     hg19.chainSelfLink.chainId full
-    #hg19.netSelf.chainId exclude=0
 
 identifier chain[${chainDest}]Id
 "Link together chain info"
