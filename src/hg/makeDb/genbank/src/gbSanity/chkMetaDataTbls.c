@@ -17,7 +17,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.11 2007/05/17 18:59:51 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.12 2009/04/21 04:24:31 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -155,9 +155,9 @@ int iRow = 0;
 char *acc = row[iRow++];
 char *product;
 
-if (!startsWith("NM_", acc))
+if (!(startsWith("NM_", acc) || startsWith("NR_", acc)))
     {
-    gbError("%s: non-NM_ mrnaAcc in refLink", acc);
+    gbError("%s: non-NM_/NR_ mrnaAcc in refLink", acc);
     return;
     }
 
