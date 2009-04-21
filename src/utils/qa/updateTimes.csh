@@ -30,10 +30,10 @@ if ( $#argv < 2 || $#argv > 5 ) then
   echo "  gets update times from any two or all three machines for tables in list." 
   echo "  warning:  not in real time for RR.  uses overnight dump." 
   echo
-  echo "    usage:  database tablelist (will accept single table),"
-  echo "            [3 | all | machine1] [machine2] [machine3] "
+  echo "    usage:  database tablelist [3 | all | machine1] [machine2] [machine3] "
   echo "            (defaults to dev and beta)"
   echo
+  echo "            tablelist will accept single table"
   echo '            "3" indicates dev, beta and hgw1'
   echo '            "all" indicates dev, beta, all 8 RR machines'
   echo
