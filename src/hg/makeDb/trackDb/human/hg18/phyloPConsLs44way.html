@@ -1,0 +1,67 @@
+<H2>Description</H2>
+<P>
+This track shows basewise measurements of evolutionary 
+conservation/acceleration in particular clades of interest,  <em>relative </em>
+to the levels of conservation/acceleration displayed elsewhere in the 
+phylogeny. These scores were produced by the <em>phyloP</em> program from the 
+<A TARGET=_BLANK HREF="http://compgen.bscb.cornell.edu/phast">
+PHAST package</A> , using the same 
+species set, multiz alignment, and neutral model of evolution that were 
+used for the main conservation track (see description page for 
+"Vertebrate Multiz Alignment & Conservation (44 Species)" track for 
+details). The individual scores represent -log p-values for a slow-down 
+or speed-up in the estimated evolutionary rate for the clade of 
+interest, relative to the estimated rate outside that clade, under a 
+null hypothesis of neutral evolution (see Methods). 
+</P>
+<P>
+As with the phyloP 
+scores for the main conservation track, positive values indicate a 
+decrease in rate (conservation) and negative values indicate an increase 
+in rate (acceleration). In this case, however, the score measures a 
+<em>change</em> in evolutionary rate in a clade of interest, possibly 
+indicating clade-specific selection rather than the absolute rate 
+across the phylogeny. Note that this track does not attempt to 
+distinguish between negative and positive directional selection. For 
+example, a clade-specific increase in rate could be due to 
+clade-specific positive selection or relaxation of constraint. 
+Similarly, a clade-specific decrease in rate could be due to gain of 
+negative selection or loss of positive selection.
+</P>
+<H2>Methods</H2>
+<P>
+The scores were produced by running <em>phyloP</em> with the options --method 
+LRT --mode CONACC --wig-scores, and by indicating the clade of interest 
+with the --subtree option (see PHAST docs 
+<http://compgen.bscb.cornell.edu/phast>). The program was given a 
+neutral model estimated from fourfold degenerate sites, as decribed for 
+the main conservation track. With these options, <em>phyloP</em> performs a 
+likelihood ratio test at each alignment column. This test compares a 
+null model in which the neutral branch lengths are all scaled by a 
+single scaling factor (a free parameter, estimated by maximum 
+likelihood), and an alternative model with separate scaling factors for 
+the clade of interest and the remainder of the phylogeny (both estimated 
+by maximum likelihood). To obtain an approximate p-value, the log 
+likelihood ratio of these two hypotheses is compared to an asymptotic 
+chi-squared null distribution, in the usual way. Scores are then 
+computed as -log 10 p-values. If the estimated rate for the clade of 
+interest is greater than the estimated rate outside that clade, the 
+score is negated, to indicate acceleration rather than conservation.
+</P>
+<H2>References</H2>
+<P>
+Pollard KS, Salama SR, Lambert N, Lambot M-A, Coppens S, Pedersen JS, 
+Katzman S, King B, Onodera C, Siepel A, Kern AD, Dehay C, Igel H, Ares 
+M, Vanderhaeghen P, and Haussler D. An RNA gene expressed during 
+cortical development evolved rapidly in humans. 
+<http://www.nature.com/nature/journal/v443/n7108/abs/nature05113.html> 
+/Nature/ 443:167-172, 2006.
+</P>
+<P>
+Siepel A, Pollard KS, Haussler D. New methods for detecting 
+lineage-specific selection. 
+<http://compgen.bscb.cornell.edu/~acs/dless.pdf> /Proc. 10th Int'l Conf. 
+on Research in Computational Molecular Biology (RECOMB '06)/. 2006.
+</P>
+
+
