@@ -50,6 +50,10 @@ struct joiner *allJoiner;	/* Info on how to join tables. */
 void hPrintSpaces(int count);
 /* Print a number of non-breaking spaces. */
 
+void writeHtmlCell(char *text);
+/* Write out a cell in an HTML table, making text not too big,
+ * and stripping html tags and breaking spaces.... */
+
 void htmlOpen(char *format, ...);
 /* Start up a page that will be in html format. */
 
@@ -109,9 +113,6 @@ void nbSpaces(int count);
 boolean anyCompression();
 /*  Check if any compressed file output has been requested */
 
-struct trackDb *findCompositeTdb(struct trackDb *track, char *table);
-/*	find the tdb for the table, if it is custom or composite or ordinary  */
-
 void initGroupsTracksTables(struct sqlConnection *conn);
 /* Get list of groups that actually have something in them. */
 
@@ -136,7 +137,7 @@ void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
 /* If *pTable includes database, overrider *pDb with it, using
  * buf to hold string. */
 
-struct grp *makeGroupList(struct sqlConnection *conn, 
+struct grp *makeGroupList(struct sqlConnection *conn,
 	struct trackDb *trackList, boolean allTablesOk);
 /* Get list of groups that actually have something in them. */
 
@@ -147,7 +148,7 @@ struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
 struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner);
 /* Return list of all tables associated with track. */
 
-struct trackDb *findSelectedTrack(struct trackDb *trackList, 
+struct trackDb *findSelectedTrack(struct trackDb *trackList,
 	struct grp *group, char *varName);
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
@@ -158,7 +159,7 @@ struct trackDb *findTrack(char *name, struct trackDb *trackList);
 struct trackDb *mustFindTrack(char *name, struct trackDb *trackList);
 /* Find track or squawk and die. */
 
-struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList, 
+struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
 	struct grp *group);
 /* Find named track that is in group (NULL for any group).
  * Return NULL if can't find it. */
@@ -170,19 +171,19 @@ struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 /* Return named column. */
 
 char *connectingTableForTrack(char *rawTable);
-/* Return table name to use with all.joiner for track. 
+/* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
 
 char *chromTable(struct sqlConnection *conn, char *table);
-/* Get chr1_table if it exists, otherwise table. 
+/* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 
 char *chrnTable(struct sqlConnection *conn, char *table);
-/* Return chrN_table if table is split, otherwise table. 
+/* Return chrN_table if table is split, otherwise table.
  * You can freeMem this when done. */
 
 char *getDbTable(char *db, char *table);
-/* If table already contains its real database as a dot-prefix, then 
+/* If table already contains its real database as a dot-prefix, then
  * return a clone of table; otherwise alloc and return db.table . */
 
 void doTabOutTable(char *database, char *table, FILE *f,
@@ -223,7 +224,7 @@ struct bed *bedFromRow(
  * with the results of a SQL query constructed with the aid
  * of the bedSqlFieldsExceptForChrom function. */
 
-struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
+struct bed *getAllIntersectedBeds(struct sqlConnection *conn,
 	char *table, struct lm *lm);
 /* Get list of beds in selected regions that pass intersection
  * (and filtering). Do lmCleanup (not bedFreeList) when done. */
@@ -234,15 +235,21 @@ struct bed *cookedBedList(struct sqlConnection *conn,
 /* Get data for track in region after all processing steps (filtering
  * intersecting etc.) in BED format.  */
 
-struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm, 
+struct bed *cookedBedsOnRegions(struct sqlConnection *conn,
+	char *table, struct region *regionList, struct lm *lm,
 	int *retFieldCount);
 /* Get cooked beds on all regions. */
 
-struct hTableInfo *getHti(char *db, char *table);
+struct hTableInfo *getHtiOnDb(char *db, char *table);
 /* Return primary table info. */
 
-struct hTableInfo *maybeGetHti(char *db, char *table);
+struct hTableInfo *getHti(char *db, char *table, struct sqlConnection *conn);
+/* Return primary table info. Conn should be open to db. */
+
+struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn);
+/* Return primary table info, but don't abort if table not there. Conn should be open to db. */
+
+struct hTableInfo *maybeGetHtiOnDb(char *db, char *table);
 /* Return primary table info, but don't abort if table not there. */
 
 boolean htiIsPositional(struct hTableInfo *hti);
@@ -262,6 +269,30 @@ boolean isSqlSetType(char *type);
 
 boolean isSqlNumType(char *type);
 /* Return TRUE if it is a numerical SQL type. */
+
+boolean isSqlIntType(char *type);
+/* Return TRUE if it is an integer SQL type. */
+
+struct sqlFieldType
+/* List field names and types */
+    {
+    struct sqlFieldType *next;
+    char *name;		/* Name of field. */
+    char *type;		/* Type of field (MySQL notion) */
+    };
+
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
+/* Create a new sqlFieldType */
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt);
+/* Free resources used by sqlFieldType */
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList);
+/* Free a list of dynamically allocated sqlFieldType's */
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table);
+/* Get list of fields including their names and types.  The type currently is just
+ * a MySQL type string. */
 
 /* ------------- Functions related to joining and filtering ------------*/
 void tabOutSelectedFields(
@@ -300,8 +331,19 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
 
+char *intersectOp();
+/* Get intersect op from CGI var and make sure it's ok. */
+
 boolean intersectionIsBpWise();
 /* Return TRUE if the intersection/union operation is base pair-wise. */
+
+Bits *bitsForIntersectingTable(struct sqlConnection *conn, struct region *region,
+	int chromSize, boolean isBpWise);
+/* Get a bitmap that corresponds to the table we are intersecting with.
+ * Consult CGI vars to figure out what table it is. */
+
+boolean intersectOverlapFilter(char *op, double moreThresh, double lessThresh, double overlap);
+/* Return TRUE if have enough (or not too much) overlap according to thresholds and op. */
 
 /* --------- Functions related to correlation. --------------- */
 boolean anyCorrelation();
@@ -326,7 +368,7 @@ boolean isSubtrackMerged(char *tableName);
 /* Return true if tableName has been selected for subtrack merge. */
 
 char *describeSubtrackMerge(char *linePrefix);
-/* Return a multi-line string that describes the specified subtrack merge, 
+/* Return a multi-line string that describes the specified subtrack merge,
  * with each line beginning with linePrefix. */
 
 void doSubtrackMergePage(struct sqlConnection *conn);
@@ -338,6 +380,7 @@ void doClearSubtrackMerge(struct sqlConnection *conn);
 void doSubtrackMergeSubmit(struct sqlConnection *conn);
 /* Respond to submit on intersect page. */
 
+#define NO_RESULTS "\n# No results returned from query.\n\n"
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -516,6 +559,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outWigData "wigData"
 #define outWigBed "wigBed"
 #define outChromGraphData "chromGraphData"
+#define outMicroarrayNames "microarrayNames"
+#define outMicroarrayGroupings "microarrayGroupings"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 #define outPalOptions "fasta"
@@ -532,7 +577,7 @@ char *identifierFileName();
 struct hash *identifierHash(char *db, char *table);
 /* Return hash full of identifiers from the given table (or NULL). */
 
-char *getIdField(char *db, struct trackDb *track, char *table, 
+char *getIdField(char *db, struct trackDb *track, char *table,
 	struct hTableInfo *hti);
 /* Get ID field for table, or NULL if none.  FreeMem result when done */
 
@@ -561,7 +606,38 @@ void floatStatRow(char *label, double x);
 void stringStatRow(char *label, char *val);
 /* Print label, string value. */
 
-/* ----------- ChromGraph stuff in chromGraph.c. */
+void wigFilterStatRow(struct sqlConnection *conn);
+/* Put row in statistics table that says what wig filter is on. */
+
+/* ----------- Filter stuff in filterFields.c. -------- */
+
+void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
+		     char **retVals, boolean *retInv);
+/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in
+ * retCft, retVals and retInv to make a filter. */
+
+void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
+		       char ***retVals, boolean *retInv);
+/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in
+ * retCft, retVals and retInv to make a filter. */
+
+void cgiToDoubleFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    double **retVals);
+/* Given a comparison operator and a (pair of) integers from CGI, fill in
+ * retNft and retVals to make a filter. */
+
+void cgiToLongFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    long long **retVals);
+/* Given a comparison operator and a (pair of) integers from CGI, fill in
+ * retNft and retVals to make a filter. */
+
+void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    int **retVals);
+/* Given a comparison operator and a (pair of) integers from CGI, fill in
+ * retNft and retVals to make a filter. */
+
+
+/* ----------- ChromGraph stuff in chromGraph.c. --------- */
 boolean isChromGraph(struct trackDb *track);
 /* Return TRUE if it's a chromGraph track */
 
@@ -573,7 +649,7 @@ void doSummaryStatsChromGraph(struct sqlConnection *conn);
 
 /* ----------- hgPal stuff in pal.c ------------------------------*/
 
-boolean isPalCompatible(struct sqlConnection *conn, 
+boolean isPalCompatible(struct sqlConnection *conn,
     struct trackDb *track, char *table);
 /* Return TRUE if table is genePred and there is a maf. */
 
@@ -593,11 +669,20 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
 
 #define	MAX_REGION_DISPLAY	1000
 
+enum wigOutputType
+/*	type of output requested from static int wigOutRegion()	*/
+    {
+    wigOutData, wigOutBed, wigDataNoPrint,
+    };
+boolean trackIsType(char *table, char *type);
+/* Return TRUE track is a specific type.  Type should be something like "bed" or
+ * "bigBed" or "bigWig" */
+
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
 boolean isBedGraph(char *table);
-/* Return TRUE if table is specified as a bedGraph in the current database's 
+/* Return TRUE if table is specified as a bedGraph in the current database's
  * trackDb. */
 
 struct bed *getWiggleAsBed(
@@ -612,7 +697,7 @@ struct bed *getWiggleAsBed(
 
 struct bed *getBedGraphAsBed(struct sqlConnection *conn, char *table,
 			     struct region *region);
-/* Extract a bedList in region from the given bedGraph table -- 
+/* Extract a bedList in region from the given bedGraph table --
  * subtrack merge, filtering and intersection are handled here. */
 
 void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
@@ -640,8 +725,59 @@ void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn
 
 void doSummaryStatsWiggle(struct sqlConnection *conn);
 /* Put up page showing summary stats for wiggle track. */
+
 void wigShowFilter(struct sqlConnection *conn);
 /* print out wiggle data value filter */
+
+/* ----------- BigWig business in bigWig.c -------------------- */
+
+boolean isBigWig(char *table);
+/* Return TRUE if table is bedGraph in current database's trackDb. */
+
+char *bigWigFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with bigWig.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+
+
+int bigWigOutRegion(char *table, struct sqlConnection *conn,
+			     struct region *region, int maxOut,
+			     enum wigOutputType wigOutType);
+/* Write out bigWig for region, doing intersecting and filtering as need be. */
+
+void doSummaryStatsBigWig(struct sqlConnection *conn);
+/* Put up page showing summary stats for bigWig track. */
+
+/* ----------- BigBed business in bigBed.c -------------------- */
+
+boolean isBigBed(char *table);
+/* Return TRUE if table corresponds to a bigBed file. */
+
+char *bigBedFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with bigBed.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+
+struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
+/* Get fields of bigBed into hti structure. */
+
+struct asObject *bigBedAsForTable(char *table, struct sqlConnection *conn);
+/* Get asObject associated with bigBed table. */
+
+struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
+/* Get fields of bigBed as simple name list. */
+
+struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
+/* Get fields of bigBed as list of sqlFieldType. */
+
+struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *db, char *table, struct region *regionList, struct lm *lm,
+	int *retFieldCount);
+/* Get list of beds from bigBed, in all regions, that pass filtering. */
+
+void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
+
+void showSchemaBigBed(char *table);
+/* Show schema on bigBed. */
 
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
@@ -665,7 +801,7 @@ struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
  * in current regions and that pass filters.  You can bedFree
  * this when done. */
 
-struct customTrack *lookupCt(char *name);
+#define lookupCt(name) ctFind(getCustomTracks(),name)
 /* Find named custom track. */
 
 struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
@@ -702,8 +838,8 @@ struct bed *getRegionAsMergedBed(
 /* Return a bed list of all items in the given range in subtrack-merged table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 
-struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm, 
+struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *table, struct region *regionList, struct lm *lm,
 	int *retFieldCount);
 /* Get list of beds from database in region that pass filtering. */
 
@@ -894,7 +1030,21 @@ struct bed *wikiTrackGetFilteredBeds(char *name, struct region *regionList,
 /* Get list of beds from the wikiTrack * in current regions and that pass
  *	filters.  You can bedFree this when done.  */
 
+/* --------------- microarray track functions ------------- */
+
+boolean isMicroarray(struct trackDb *parent, char *table);
+/* Return TRUE if table is specified as a microarray in the current database's
+ * trackDb. */
+
+void doOutMicroarrayNames(struct trackDb *tdb);
+/* Show the microarray names from .ra file */
+
 #define uglyw warn	/* Warn for debugging purposes. */
+
+struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table);
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) */
+
+char *findTypeForTable(char *db,struct trackDb *parent,char *table);
+/* Finds the TrackType for this Table */
+
 #endif /* HGTABLES_H */
-
-

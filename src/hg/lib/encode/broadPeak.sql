@@ -16,4 +16,7 @@ CREATE TABLE broadPeak (
     qValue float not null default -1,	# Cross-dataset statistical significance of signal value (-log10)
               #Indices
     INDEX chromStart (chrom(8), chromStart)
-);
+)
+AVG_ROW_LENGTH = 40
+MAX_ROWS = 200000000000
+;

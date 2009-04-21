@@ -5,7 +5,7 @@
 #include "ensFace.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.8 2008/08/15 21:28:00 hiram Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.8.22.1 2009/04/21 19:00:36 mikep Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -41,6 +41,12 @@ char *ensOrgNameFromScientificName(char *scientificName)
         /* special case for Dog, different form of the same
          * scientific name */
         return "Canis_familiaris";
+        }
+    if (sameWord(scientificName, "Gorilla gorilla gorilla"))
+        {
+        /* special case for Dog, different form of the same
+         * scientific name */
+        return "Gorilla_gorilla";
         }
     /* replace spaces with underscores, assume max two spaces
      * (species and sub-species).  */

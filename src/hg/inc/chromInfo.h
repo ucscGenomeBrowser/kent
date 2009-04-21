@@ -64,3 +64,8 @@ boolean chromSeqFileExists(char *db, char *chrom);
 /* sequence file for this chromosome and check if the file exists. */
 #endif /* CHROMINFO_H */
 
+struct chromInfo *createChromInfoList(char *name, char *database);
+/* Load up chromosome information for chrom 'name'.
+ * If name is NULL or "all" then load all chroms.
+ * Similar to featureBits.c - could be moved to library */
+

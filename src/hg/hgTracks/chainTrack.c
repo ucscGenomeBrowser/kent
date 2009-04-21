@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.30 2008/09/03 19:19:01 markd Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.30.18.1 2009/04/21 19:03:56 mikep Exp $";
 
 
 struct cartOptions
@@ -256,15 +256,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
 int qs;
-char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr;
 char extraWhere[128] ;
 struct cartOptions *chainCart;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
-optionChrStr = cartUsualString(cart, optionChr, "All");
+optionChrStr = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+	"chromFilter", "All");
 if (startsWith("chr",optionChrStr)) 
     {
     snprintf(extraWhere, sizeof(extraWhere), 
@@ -377,18 +376,15 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 
 boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
-char scoreOption[256];
 
 AllocVar(chainCart);
 
 normScoreAvailable = chainDbNormScoreAvailable(database, chromName, tg->mapName, NULL);
 
 /*	what does the cart say about coloring option	*/
-chainCart->chainColor = chainFetchColorOption(tdb, (char **) NULL);
-
-snprintf( scoreOption, sizeof(scoreOption), "%s.scoreFilter", tdb->tableName);
-chainCart->scoreFilter = cartUsualInt(cart, scoreOption, 0);
-
+chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);
+chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
+	FALSE, SCORE_FILTER, 0);
 
 linkedFeaturesMethods(tg);
 tg->itemColor = lfChromColor;	/*	default coloring option */
@@ -412,11 +408,9 @@ if (normScoreAvailable)
     }
 else
     {
-    char option[128]; /* Option -  rainbow chromosome color */
     char *optionStr;	/* this old option was broken before */
 
-    snprintf(option, sizeof(option), "%s.color", tg->mapName);
-    optionStr = cartUsualString(cart, option, "on");
+    optionStr = cartUsualStringClosestToHome(cart, tdb, FALSE, "color", "on");
     if (differentWord("on",optionStr))
 	{
 	setNoColor(tg);

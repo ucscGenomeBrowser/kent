@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.16 2006/06/12 23:06:11 angie Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.16.132.1 2009/04/21 19:03:52 mikep Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -241,7 +241,7 @@ return(gffList);
 void doOutGff(char *table, struct sqlConnection *conn)
 /* Save as GFF. */
 {
-struct hTableInfo *hti = getHti(database, table);
+struct hTableInfo *hti = getHti(database, table, conn);
 struct bed *bedList;
 struct gffLine *gffList, *gffPtr;
 char source[64];
@@ -269,6 +269,6 @@ for (region = regionList; region != NULL; region = region->next)
     slFreeList(&gffList);
     }
 if (itemCount == 0)
-    hPrintf("\n# No results returned from query.\n\n");
+    hPrintf(NO_RESULTS);
 }
 

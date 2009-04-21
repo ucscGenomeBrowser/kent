@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.26 2008/09/03 19:19:22 markd Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.26.18.1 2009/04/21 19:00:37 mikep Exp $";
 
 static int maxEvidence = 500;
 
@@ -1198,7 +1198,7 @@ struct mergedEdge
 int i,j;
 
 /* Traverse graph and build up range tree */
-struct rbTree *rangeTree = rangeTreeNew(0);
+struct rbTree *rangeTree = rangeTreeNew();
 bool **edgeMatrix = gg->edgeMatrix;
 int vertexCount = gg->vertexCount;
 for (i=0; i<vertexCount; ++i)

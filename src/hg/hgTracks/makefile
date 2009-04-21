@@ -1,12 +1,12 @@
 include ../../inc/common.mk
 
-L = ${MYSQLLIBS} -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTracks
 
-O = $A.o altGraphXTrack.o bedGraph.o chainTrack.o \
+O = $A.o altGraphXTrack.o bedGraph.o bedTrack.o bigWigTrack.o chainTrack.o \
 	cgapSageTrack.o chromGraphTrack.o config.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
         expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \

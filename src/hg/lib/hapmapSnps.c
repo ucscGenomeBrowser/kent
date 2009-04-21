@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapSnps.h"
 
-static char const rcsid[] = "$Id: hapmapSnps.c,v 1.3 2007/03/12 17:11:43 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSnps.c,v 1.3.100.1 2009/04/21 19:00:37 mikep Exp $";
 
 void hapmapSnpsStaticLoad(char **row, struct hapmapSnps *ret)
 /* Load a row from hapmapSnps table into ret.  The contents of ret will
@@ -182,3 +182,8 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+char *hapmapPhaseIIPops[] = { "CEU", "CHB", "JPT", "YRI" };
+char *hapmapPhaseIIIPops[] =
+    { "ASW", "CEU", "CHB", "CHD", "GIH", "JPT", "LWK", "MEX", "MKK", "TSI", "YRI" };
+
+char *hapmapOrthoSpecies[] = {"Chimp", "Macaque", NULL};

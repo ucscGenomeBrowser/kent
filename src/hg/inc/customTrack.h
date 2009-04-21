@@ -30,7 +30,7 @@
 
 struct customTrack
 /* A custom track.  */
-/* NOTE: if you add any *File members to struct customTrack, please update 
+/* NOTE: if you add any *File members to struct customTrack, please update
  * cart.c cartCopyCustomTracks() accordingly! */
     {
     struct customTrack *next;	/* Next in list. */
@@ -84,14 +84,14 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
                                           int *retNumAdded,
                                           char **retErr);
 /* Figure out from cart variables where to get custom track text/file.
- * Parse text/file into a custom set of tracks.  Lift if necessary.  
- * If retBrowserLines is non-null then it will return a list of lines 
- * starting with the word "browser".  If retCtFileName is non-null then  
+ * Parse text/file into a custom set of tracks.  Lift if necessary.
+ * If retBrowserLines is non-null then it will return a list of lines
+ * starting with the word "browser".  If retCtFileName is non-null then
  * it will return the custom track filename.  If any existing custom tracks
  * are replaced with new versions, they are included in replacedCts.
  *
  * If there is a syntax error in the custom track this will report the
- * error, clear the custom track from the cart,  and return NULL.  It 
+ * error, clear the custom track from the cart,  and return NULL.  It
  * will also leak memory. */
 
 void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList);
@@ -173,5 +173,8 @@ boolean ctConfigUpdate(char *filename);
  * the custom tracks in this file were created.  The only way to check is
  * by file mod time, unless we add the enable time to
  * browser metadata somewhere */
+
+struct customTrack *ctFind(struct customTrack *ctList,char *name);
+/* Find named custom track. */
 
 #endif

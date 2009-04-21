@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.89 2008/12/22 21:03:54 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.89.2.1 2009/04/21 19:03:55 mikep Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -151,97 +151,94 @@ else
 return(thisQStart + (s - tStart));
 }
 
+/* Calls to hDnaFromSeq are rather expensive for 2bit, so cache genomic sequence */
+static char *initedTrack = NULL;
+static struct dnaSeq *cachedGenoDna = NULL;
+static int cachedGenoStart = 0;
+static int cachedGenoEnd = 0;
 
-static void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts,
-			unsigned *exonEnds, int exonCount, unsigned cdsStart, 
-			unsigned cdsEnd, int startI, boolean reverse, 
-			struct dnaSeq *mrnaSeq)
-//get n bases from coding exons only.
+static void getLinkedFeaturesSpan(struct linkedFeatures *lfList, int *retStart, int *retEnd)
+/* Find the overall lowest and highest coords in lfList.  If any items hang off the
+ * edge of the window, we will end up with coords <winStart and/or >winEnd which is
+ * what we want. */
+{
+int start = winStart, end = winEnd;
+struct linkedFeatures *lf;
+for (lf = lfList;  lf != NULL;  lf = lf->next)
+    {
+    if (lf->start < start)
+	start = lf->start;
+    if (lf->end > end)
+	end = lf->end;
+    }
+if (retStart)
+    *retStart = start;
+if (retEnd)
+    *retEnd = end;
+}
+
+static char *getCachedDna(int chromStart, int chromEnd)
+/* Return a pointer into our cached genomic dna.  chromEnd is just for
+ * bounds-checking (honor system).  Do not change or free the return value! */
+{
+if (!initedTrack || ! cachedGenoDna)
+    errAbort("getCachedDnaAt called before baseColorInitTrack?!");
+if (chromStart < cachedGenoStart || chromEnd > cachedGenoEnd)
+    errAbort("getCachedDnaAt: coords %d,%d are out of cached range %d,%d",
+	     chromStart, chromEnd, cachedGenoStart, cachedGenoEnd);
+return &(cachedGenoDna->dna[chromStart - cachedGenoStart]);
+}
+
+static void getNextCodonDna(char *retStr, int n, struct genePred *gp, int startI,
+			    boolean posStrand)
+/* Get at most n bases from coding exons following exon startI. */
 {
 int i, j, thisN;
-int theStart, theEnd;
-
-//clear retStr
-sprintf(retStr,"   ");
-
-if (!reverse)  /*positive strand*/
+int cdsExonStart, cdsExonEnd;
+char *codonDna;
+for (i = 0;  i < n;  i++)
+    retStr[i] = 'N';
+retStr[n] = '\0';
+if (posStrand)
     {
-   
-    thisN = 0;
-    //move to next block start
-    i = startI+1;
-    while (thisN < n)
+    for (thisN = 0, i = startI+1;  thisN < n && i < gp->exonCount;  i++)
 	{
-        struct dnaSeq *codonDna = NULL;
-
-	/*already on last block*/
-	if (i >= exonCount) 
-	    break;
-
-        //get dna for this exon
-        codonDna = hDnaFromSeq(database, chrom, exonStarts[i], exonEnds[i], dnaUpper );
-
-	theStart = exonStarts[i];
-	theEnd = exonEnds[i];
-	if (cdsStart > 0 && theStart < cdsStart)
-	    theStart = cdsStart;
-
-	if (cdsEnd > 0 && theEnd > cdsEnd)
-	    theEnd = cdsEnd;
-           
-	for (j=0; j<(theEnd - theStart); j++)
+        // get dna for exon to the right
+        codonDna = getCachedDna(gp->exonStarts[i], gp->exonEnds[i]);
+	cdsExonStart = gp->exonStarts[i];
+	cdsExonEnd = gp->exonEnds[i];
+	if (gp->cdsStart < gp->txEnd && cdsExonStart < gp->cdsStart)
+	    cdsExonStart = gp->cdsStart;
+	if (gp->cdsEnd > gp->txStart  && cdsExonEnd > gp->cdsEnd)
+	    cdsExonEnd = gp->cdsEnd;
+	for (j=0; j < (cdsExonEnd - cdsExonStart); j++)
 	    {
-	    if (mrnaSeq != NULL)
-		retStr[thisN] = mrnaSeq->dna[theStart+j];
-	    else
-                retStr[thisN] = codonDna->dna[j+theStart-exonStarts[i]];
-
+	    retStr[thisN] = codonDna[j+cdsExonStart-gp->exonStarts[i]];
 	    thisN++;
 	    if (thisN >= n) 
 		break;
 	    }
-
-	i++;
 	}
-    retStr[thisN] = '\0';
-       
     }
-else   /*negative strand*/
+else
     {
-    retStr[n] = '\0';
-    thisN = n-1;
-    //move to previous block end
-    i = startI-1;
-    while(thisN >= 0)
+    for (thisN = n-1, i = startI-1;  thisN >= 0 && i >= 0;  i--)
 	{
-        struct dnaSeq *codonDna = NULL;
-
-	if (i < 0)
-	    break;
-
-        //get dna for this exon
-        codonDna = hDnaFromSeq(database, chrom, exonStarts[i], exonEnds[i], dnaUpper );
-
-	theStart = exonStarts[i];
-	theEnd = exonEnds[i];
-	if (theStart < cdsStart)
-	    theStart = cdsStart;
-
-	if (theEnd > cdsEnd)
-	    theEnd = cdsEnd;
-           
-	for (j=0; j<(theEnd - theStart); j++)
+        // get dna for exon to the left
+        codonDna = getCachedDna(gp->exonStarts[i], gp->exonEnds[i]);
+	cdsExonStart = gp->exonStarts[i];
+	cdsExonEnd = gp->exonEnds[i];
+	if (gp->cdsStart < gp->txEnd && cdsExonStart < gp->cdsStart)
+	    cdsExonStart = gp->cdsStart;
+	if (gp->cdsEnd > gp->txStart && cdsExonEnd > gp->cdsEnd)
+	    cdsExonEnd = gp->cdsEnd;
+	for (j=0; j < (cdsExonEnd - cdsExonStart); j++)
 	    {
-	    if (mrnaSeq != NULL)
-		retStr[thisN] = mrnaSeq->dna[theEnd-j-1];
-	    else
-                retStr[thisN] = codonDna->dna[theEnd-j-1-exonStarts[i]];
-
+	    retStr[thisN] = codonDna[cdsExonEnd-j-1-gp->exonStarts[i]];
 	    thisN--;
 	    if (thisN < 0) 
 		break;
 	    }
-	i--;
 	}
     }
 }
@@ -277,10 +274,11 @@ static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
  * zoomedToBaseLevel, we're not in dense mode etc. */
 {
 struct simpleFeature *sf = NULL;
+char *winDna = getCachedDna(winStart, winEnd);
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
-    int s = sf->start;
-    int e = sf->end;
+    int s = max(winStart, sf->start);
+    int e = min(winEnd, sf->end);
     if (s > winEnd || e < winStart)
       continue;
     if (e > s)
@@ -288,17 +286,15 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	int mrnaS = convertCoordUsingPsl(s, psl);
 	if(mrnaS >= 0)
 	    {
-	    struct dnaSeq *genoSeq = hDnaFromSeq(database, chromName, s, e, dnaUpper);
 	    int i;
 	    for (i=0; i < (e - s); i++)
 		{
-		if (mrnaSeq->dna[mrnaS+i] != genoSeq->dna[i])
+		if (mrnaSeq->dna[mrnaS+i] != winDna[s-winStart+i])
 		    {
 		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale,
 				 cdsColor[CDS_STOP]);
 		    }
 		}
-	    dnaSeqFree(&genoSeq);
 	    }
 	}
     }
@@ -591,18 +587,16 @@ else
      * the right thing to do for any alignment.  By using exonFrames for
      * genomic codons, this is letting the query sequence define the frame.
      */
-    boolean useExonFrames = TRUE;
     struct genbankCds cds;
     getPslCds(psl, tg, &cds);
-    int insertMergeSize = useExonFrames ? -1 : 0;
-    unsigned opts = genePredCdsStatFld|(useExonFrames ? genePredExonFramesFld : 0);
+    int insertMergeSize = -1;
+    unsigned opts = genePredCdsStatFld|genePredExonFramesFld;
     struct genePred *gp = genePredFromPsl2(psl, opts, &cds, insertMergeSize);
     lf->start = gp->txStart;
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, NULL, useExonFrames,
-				  colorStopStart);
+    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart);
     genePredFree(&gp);
     }
 return(sfList);
@@ -610,23 +604,20 @@ return(sfList);
 
 
 
-void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf, 
-			    struct psl *psl, int sizeMul, boolean
-                            isXeno, int maxShade,
-			    enum baseColorDrawOpt drawOpt, struct track *tg)
-/*divide a pslX record into a linkedFeature, where each simple feature
- * is a 3-base codon (or a partial codon if on a boundary). Uses
- * GenBank to get the CDS start/stop of the psl record and also grabs
- * the sequence. This takes care of hidden gaps in the alignment, that
- * alter the frame. Therefore this function relies on the mRNA
- * sequence (rather than the genomic) to determine the frame.*/
+struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf, 
+        struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
+        enum baseColorDrawOpt drawOpt, struct track *tg)
+/* Given an lf and the psl from which the lf was constructed, 
+ * return a list of simpleFeature elements, one per codon (or partial 
+ * codon if the codon falls on a gap boundary.  sizeMul, isXeno and maxShade
+ * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 {
 boolean colorStopStart = (drawOpt != baseColorDrawDiffCodons);
-struct simpleFeature *sfList = splitPslByCodon(chromName, lf, psl, sizeMul,
+struct simpleFeature *sfList = splitPslByCodon(psl->tName, lf, psl, sizeMul,
                                                isXeno, maxShade, drawOpt,
 					       colorStopStart, tg);
 slReverse(&sfList);
-lf->codons = sfList;
+return sfList;
 }
 
 
@@ -876,20 +867,22 @@ cdsColor[CDS_SYN_BLEND] = hvGfxFindColorIx(hvg,CDS_SYN_BLEND_R,
 
 
 
-static void updatePartialCodon(char *retStr, char *chrom, int start,
-        int end, boolean reverse, struct dnaSeq *codonDna, int base)
+static void updatePartialCodon(char *retStr, int exonStart, int exonEnd, boolean posStrand)
+/* Add bases to the appropriate end of retStr, from exonStart until we have 3 bases or
+ * run into exonEnd*/
 {
-    char tmpStr[5];
-    char tmpDna[5];
-
-    snprintf(tmpDna, min(3-strlen(retStr)+1,abs(end-start+1)), "%s",
-            &codonDna->dna[start-base]);
-    if (!reverse)
-        safef(tmpStr, 4, "%s%s", retStr, tmpDna);
-    else
-        safef(tmpStr, 4, "%s%s", tmpDna, retStr);
-
-    strncpy( retStr, tmpStr, 4 );
+char tmpStr[4];
+char tmpDna[4];
+char *codonDna = getCachedDna(exonStart, exonEnd);
+int baseCount = min(3-strlen(retStr), abs(exonEnd-exonStart));
+memcpy(tmpDna, codonDna, baseCount);
+tmpDna[baseCount] = '\0';
+if (posStrand)
+    safef(tmpStr, sizeof(tmpStr), "%s%s", retStr, tmpDna);
+else
+    safef(tmpStr, sizeof(tmpStr), "%s%s", tmpDna, retStr);
+memcpy(retStr, tmpStr, 3);
+retStr[3] = '\0';
 }
 
 struct simpleFeature *baseColorCodonsFromDna(int frame, int chromStart,
@@ -937,20 +930,23 @@ slReverse(&sfList);
 return sfList;
 }
 
-static struct simpleFeature *splitByCodon( char *chrom, 
-        struct linkedFeatures *lf, 
-        unsigned *starts, unsigned *ends, 
-        int blockCount, unsigned
-        cdsStart, unsigned cdsEnd,
-        unsigned *gaps, int *exonFrames, boolean colorStopStart)
+struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf, 
+	struct genePred *gp, boolean colorStopStart)
+/* Given an lf and the genePred from which the lf was constructed, 
+ * return a list of simpleFeature elements, one per codon (or partial 
+ * codon if the codon falls on a gap boundary. */
 {
-    int codon = 0;
+unsigned *starts = gp->exonStarts;
+unsigned *ends = gp->exonEnds;
+int blockCount = gp->exonCount;
+unsigned cdsStart = gp->cdsStart;
+unsigned cdsEnd = gp->cdsEnd;
+int *exonFrames = gp->exonFrames;
+boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
     int frame = 0;
     int currentStart = 0, currentEnd = 0;
-    struct dnaSeq *codonDna = NULL;
     char partialCodonSeq[4];
-    char theRestOfCodon[4];
-    int currentSize, base;
+    int currentSize;
     int i;
 
     boolean foundStart = FALSE;
@@ -971,215 +967,209 @@ static struct simpleFeature *splitByCodon( char *chrom,
         posStrand = FALSE;
     }
 
+    bool altColor = FALSE;
+    unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
-    {
-        int thisStart, thisEnd;
-	unsigned cdsLine;
-        if(exonFrames != NULL)
-        {
+	{
+        int exonStart = starts[i];
+        int exonEnd = ends[i];
+        if (useExonFrames)
+	    {
             if(exonFrames[i] > 0)
                 frame = 3 - exonFrames[i];
             else
                 frame = 0;
-        }
+	    }
 
         if(frame == 0)
             strcpy(partialCodonSeq,"");
 
-        thisStart = starts[i];
-        thisEnd = ends[i];
-        cdsLine = posStrand?cdsStart:cdsEnd;
 
-        // 3' block or 5' block
-        if ((thisStart < cdsStart && thisEnd <= cdsStart) ||
-                (thisStart >= cdsEnd && thisEnd > cdsEnd))
-        {
-            AllocVar(sf);
-            sf->start = thisStart;
-            sf->end = thisEnd; 
-            slAddHead(&sfList, sf);
+        // 3' or 5' UTR exon
+        if ((exonStart < cdsStart && exonEnd <= cdsStart) ||
+                (exonStart >= cdsEnd && exonEnd > cdsEnd))
+	    {
+	    if (exonEnd > winStart && exonStart < winEnd)
+		{
+		AllocVar(sf);
+		sf->start = exonStart;
+		sf->end = exonEnd; 
+		slAddHead(&sfList, sf);
+		}
             continue;
-        }
-        //UTR to coding block
-        else if (thisEnd > cdsLine && thisStart < cdsLine)
-        {
-            AllocVar(sf);
-            if(posStrand)
-            {
-                sf->start = thisStart;
-                sf->end = cdsStart;
+	    }
+        // UTR + coding exon
+        else if (exonEnd > cds5Prime && exonStart < cds5Prime)
+	    {
+	    int utrStart, utrEnd;
+            if (posStrand)
+		{
+                utrStart = exonStart;
+                utrEnd = cdsStart;
                 currentStart = cdsStart;
-            }
+		}
             else
-            {
-                sf->start = cdsEnd;
-                sf->end = thisEnd;
+		{
+                utrStart = cdsEnd;
+                utrEnd = exonEnd;
                 currentEnd = cdsEnd;
-            }
-            slAddHead(&sfList, sf);
-        }
+		}
+	    if (utrEnd > winStart && utrStart < winEnd)
+		{
+		AllocVar(sf);
+		sf->start = utrStart;
+		sf->end = utrEnd; 
+		slAddHead(&sfList, sf);
+		}
+	    }
         else
             if(posStrand)
-                currentStart = thisStart;
+                currentStart = exonStart;
             else 
-                currentEnd = thisEnd;
+                currentEnd = exonEnd;
 
+	// If UTR + coding, trim to coding portion:
+	if (exonStart < cdsStart) exonStart = cdsStart;
+	if (exonEnd > cdsEnd) exonEnd = cdsEnd;
 
-        /*get dna for entire coding block. this is faster than
-          getting it for each codon, but suprisingly not faster
-          than getting it for each linked feature*/
-	if (thisStart < cdsStart) thisStart = cdsStart;
-	if (thisEnd > cdsEnd) thisEnd = cdsEnd;
-        codonDna = hDnaFromSeq(database, chrom, thisStart, thisEnd, dnaUpper );
-        base = thisStart;
-
-        //break each block by codon and set color code to denote codon
+        // break each exon into codons and assign alternating shades.
         while (TRUE)
-        {
+	    {
             int codonInc = frame;
             if (frame == 0)  
-            {
-                codon++; codon %= 2; codonInc = 3;
-            }
-            
+		{
+                altColor = altColor ? FALSE : TRUE;
+		codonInc = 3;
+		}
+
             if(posStrand)
                 currentEnd = currentStart + codonInc;
             else
                 currentStart = currentEnd - codonInc; 
 
-            AllocVar(sf);
-            sf->start = currentStart;
-            sf->end = currentEnd;
-
-            //we've gone off the end of the current block
-            if ((posStrand && currentEnd > thisEnd) ||
-                    (!posStrand && currentStart < thisStart ))
-            {
-
+            //we've gone off the end of the current exon
+            if ((posStrand && currentEnd > exonEnd) ||
+		(!posStrand && currentStart < exonStart ))
+		{
                 if (posStrand)
-                {
-                    frame = currentEnd - thisEnd;
-                    sf->end = currentEnd = thisEnd;
-                }
+		    {
+                    frame = currentEnd - exonEnd;
+                    currentEnd = exonEnd;
+		    }
                 else
-                {
-                    frame = thisStart - currentStart;
-                    sf->start = currentStart = thisStart;
-                }
-
+		    {
+                    frame = exonStart - currentStart;
+                    currentStart = exonStart;
+		    }
                 if(frame == 3) 
-                {
+		    {
                     frame = 0;
                     break;
-                }
+		    }
+		/* accumulate partial codon in case of one base exon, or start a new one. */
+		updatePartialCodon(partialCodonSeq, currentStart, currentEnd, posStrand);
+		if (currentStart < winEnd && currentEnd > winStart)
+		    {
+		    // get next 'frame' nt's to see what codon will be (skipping intron sequence)
+		    char theRestOfCodon[4];
+		    getNextCodonDna(theRestOfCodon, frame, gp, i, posStrand);
+		    /* This code doesn't really work right in all cases of a
+		     * one-base blocks. It broke with some TransMap alignments
+		     * with indels around the one base.  This code is fragile, so
+		     * just work around it by truncating the sequence.
+		     */
+		    char tempCodonSeq[8];
+		    if(posStrand)
+			safef(tempCodonSeq, sizeof(tempCodonSeq), "%s%s", partialCodonSeq, 
+			      theRestOfCodon);
+		    else
+			safef(tempCodonSeq, sizeof(tempCodonSeq), "%s%s", theRestOfCodon, 
+			      partialCodonSeq );
+		    tempCodonSeq[4] = '\0';  // no more than 3 bases
 
-                /*accumulate partial codon in case of 
-                  one base exon, or start a new one.*/
-                updatePartialCodon(partialCodonSeq, chrom, sf->start,
-                                sf->end, !posStrand, codonDna, base);
-
-                /*get next 'frame' nt's to see what codon will be 
-                  (skipping intron sequence)*/
-                getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
-                        blockCount, cdsStart, cdsEnd, i, !posStrand, NULL);
-
-                /* This code doesn't really work right in all cases of a
-                 * one-base blocks. It broke with some TransMap alignments
-                 * with indels around the one base.  This code is fragile, so
-                 * just work around it by truncating the sequence.
-                 */
-                char tempCodonSeq[8];
-                if(posStrand)
-                    safef(tempCodonSeq, sizeof(tempCodonSeq), "%s%s", partialCodonSeq, 
-                            theRestOfCodon);
-                else
-                    safef(tempCodonSeq, sizeof(tempCodonSeq), "%s%s", theRestOfCodon, 
-                            partialCodonSeq );
-                tempCodonSeq[4] = '\0';  // no more than 3 bases
-
-                sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
-                             (!posStrand && currentStart >= cdsStart))?
-                             setColorByCds( tempCodonSeq,codon,&foundStart, 
-                             !posStrand, colorStopStart):-2;
-                slAddHead(&sfList, sf);
+		    AllocVar(sf);
+		    sf->start = currentStart;
+		    sf->end = currentEnd;
+		    sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
+				  (!posStrand && currentStart >= cdsStart)) ?
+			setColorByCds(tempCodonSeq, altColor, &foundStart, 
+				      !posStrand, colorStopStart) :
+			-2;
+		    slAddHead(&sfList, sf);
+		    }
                 break;
-            }
+		} // end if we've gone off the end of the current exon
 
-            currentSize = sf->end - sf->start;
+            currentSize = currentEnd - currentStart;
             /*inside a coding block (with 3 bases)*/
             if (currentSize == 3)
-            {
-                char currentCodon[5];
-                char *thisDna = &codonDna->dna[sf->start - base];
-                snprintf(currentCodon, currentSize+1, "%s", thisDna);
-                sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
-                             (!posStrand && currentStart >= cdsStart))?
-                             setColorByCds(currentCodon,codon,&foundStart, 
-                                     !posStrand, colorStopStart):-2;
-            }
+		{
+		AllocVar(sf);
+		sf->start = currentStart;
+		sf->end = currentEnd;
+		if ((posStrand && currentEnd <= cdsEnd) ||
+		    (!posStrand && currentStart >= cdsStart))
+		    {
+		    char currentCodon[4];
+		    char *thisDna = getCachedDna(currentStart, currentEnd);
+		    memcpy(currentCodon, thisDna, 3);
+		    currentCodon[3] = '\0';
+		    sf->grayIx = setColorByCds(currentCodon, altColor, &foundStart, 
+					       !posStrand, colorStopStart);
+		    }
+		else
+		    sf->grayIx = -2;
+		}
             /*start of a coding block with less than 3 bases*/
             else if (currentSize < 3)
-            {
-                updatePartialCodon(partialCodonSeq,chrom,sf->start,
-                        sf->end,!posStrand,codonDna, base);
+		{
+                updatePartialCodon(partialCodonSeq, currentStart, currentEnd, posStrand);
+		AllocVar(sf);
+		sf->start = currentStart;
+		sf->end = currentEnd;
                 if (strlen(partialCodonSeq) == 3) 
-                    sf->grayIx = setColorByCds(partialCodonSeq,codon,
+                    sf->grayIx = setColorByCds(partialCodonSeq, altColor,
                             &foundStart, !posStrand, colorStopStart);
                 else
                     sf->grayIx = -2;
                 strcpy(partialCodonSeq,"" );
 
                 /*update frame based on bases appended*/
-                frame -= (sf->end - sf->start);     
-            }
+                frame -= currentSize;
+		}
             else
-                errAbort("%s: Too much dna (%d,%s)<br>\n", lf->name, 
-                        codonDna->size, codonDna->dna );
+                errAbort("%s: Too much dna (%d - %d = %d)<br>\n", lf->name, 
+			 currentEnd, currentStart, currentSize);
 
             slAddHead(&sfList, sf);
             if(posStrand)
                 currentStart = currentEnd;
             else
                 currentEnd = currentStart;
-        }
-	/* coding block to UTR block */
-	if (posStrand && (thisEnd < ends[i]))
+	    } // end loop on codons within exon
+
+	/* coding + UTR exon */
+	if (posStrand && (exonEnd < ends[i]) &&
+	    exonEnd < winEnd && ends[i] > winStart)
 	    {
             AllocVar(sf);
-            sf->start = thisEnd;
+            sf->start = exonEnd;
             sf->end = ends[i];
             slAddHead(&sfList, sf);
 	    }
-	else if (!posStrand && (thisStart > starts[i]))
+	else if (!posStrand && (exonStart > starts[i]) &&
+		 starts[i] < winEnd && exonStart > winStart)
 	    {
             AllocVar(sf);
             sf->start = starts[i];
-            sf->end = thisStart;
+            sf->end = exonStart;
             slAddHead(&sfList, sf);
 	    }
-    }
+	} // end loop on exons
 
     if(posStrand)
         slReverse(&sfList);
     return(sfList);
-}
-
-struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
-	struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps,
-	boolean useExonFrames, boolean colorStopStart)
-/* Given an lf and the genePred from which the lf was constructed, 
- * return a list of simpleFeature elements, one per codon (or partial 
- * codon if the codon falls on a gap boundary.  If useExonFrames is true, 
- * use the frames portion of gp (which should be from a genePredExt);
- * otherwise determine frame from genomic sequence. */
-{
-    if(useExonFrames)
-        return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
-			    gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames,
-			    colorStopStart));
-    else
-        return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
-                    gp->cdsStart,gp->cdsEnd,gaps,NULL, colorStopStart));
 }
 
 
@@ -1229,22 +1219,22 @@ if(size < 3)
 	if (!appendAtStart)
             {
 	    newIdx = mrnaS + size;
-	    strncpy(retMrnaBases, &mrnaSeq->dna[mrnaS], size);
-	    strncpy(retMrnaBases+size, &mrnaSeq->dna[newIdx], 3-size);
+	    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS], size);
+	    memcpy(retMrnaBases+size, &mrnaSeq->dna[newIdx], 3-size);
             }
 	else
             {
 	    newIdx = mrnaS - (3 - size);
-	    strncpy(retMrnaBases, &mrnaSeq->dna[newIdx], 3);
+	    memcpy(retMrnaBases, &mrnaSeq->dna[newIdx], 3);
             }
         }
     else
 	{
-	strncpy(retMrnaBases, "NNN", 3);
+	memcpy(retMrnaBases, "NNN", 3);
 	}
     }
 else
-    strncpy(retMrnaBases, &mrnaSeq->dna[mrnaS], 3);
+    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS], 3);
 retMrnaBases[3] = '\0';
 if (isRc)
     reverseComplement(retMrnaBases, strlen(retMrnaBases));
@@ -1472,7 +1462,7 @@ if ((showDiffBasesMaxZoom >= 0.0)
     && ((basesPerPixel > showDiffBasesMaxZoom) || (showDiffBasesMaxZoom == 0.0)))
     enabled = FALSE;
 
-if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && enabled)
+if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && lf->codons && enabled)
     {
     drawCdsDiffCodonsOnly(tg, lf, hvg, xOff, y, scale,
 			  heightPer, mrnaSeq, psl, winStart);
@@ -1603,13 +1593,47 @@ if (indelShowQInsert)
 	 * all polyA. */
 	s = (psl->strand[1] == '-') ?
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
-	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk] - 1);
+	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
 	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
     }
 }
 
+void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
+/* Set up base coloring state (e.g. cache genomic sequence) for tg.
+ * This must be called by tg->drawItems if baseColorDrawSetup is used 
+ * in tg->drawItemAt.  Assumes tg->items is linkedFeatures. */
+{
+if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
+    {
+    int overallStart, overallEnd;
+    getLinkedFeaturesSpan((struct linkedFeatures *)tg->items, &overallStart, &overallEnd);
+    if (overallStart < cachedGenoStart || overallEnd > cachedGenoEnd)
+	{
+	// leak mem to save time (don't bother freeing old cached dna)
+	cachedGenoStart = overallStart;
+	cachedGenoEnd = overallEnd;
+	cachedGenoDna = hDnaFromSeq(database, chromName, cachedGenoStart, cachedGenoEnd, dnaUpper);
+	}
+    initedTrack = cloneString(tg->mapName);
+    }
+
+/* allocate colors for coding coloring */
+if (!cdsColorsMade)
+    { 
+    makeCdsShades(hvg, cdsColor);
+    cdsColorsMade = TRUE;
+    }
+}
+
+static void checkTrackInited(struct track *tg, char *what)
+/* Die if baseColorInitTrack has not been called (most recently) for this track. */
+{
+if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
+    errAbort("Error: Track %s should have been baseColorInitTrack'd before %s.",
+	     tg->mapName, what);
+}
 
 enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
@@ -1617,7 +1641,9 @@ enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 /* Returns the CDS coloring option, allocates colors if necessary, and 
  * returns the sequence and psl record for the given item if applicable. 
  * Note: even if base coloring is not enabled, this will return psl and 
- * mrna seq if query insert/polyA coloring is enabled. */
+ * mrna seq if query insert/polyA coloring is enabled.
+ * baseColorInitTrack must be called before this (in tg->drawItems) --
+ * this is meant to be called by tg->drawItemAt (i.e. linkedFeaturesDrawAt). */
 {
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
@@ -1628,13 +1654,8 @@ indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
 if (drawOpt <= baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
     return drawOpt;
 
-/* allocate colors for coding coloring */
-if (!cdsColorsMade)
-    { 
-    makeCdsShades(hvg, cdsColor);
-    cdsColorsMade = TRUE;
-    }
-   
+checkTrackInited(tg, "calling baseColorDrawSetup");
+
 /* If we are using item sequence, fetch alignment and sequence: */
 if ((drawOpt > baseColorDrawOff && startsWith("psl", tg->tdb->type)) ||
     indelShowQueryInsert || indelShowPolyA)
@@ -1698,16 +1719,9 @@ void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
 			  struct psl **pPsl)
 /* Free structures allocated just for base/cds coloring. */
 {
-if (lf->original != NULL)
-    {
-    /* Currently, lf->original is used only for coloring PSL's.  If it is 
-     * used to color some other type in the future, this will remind the 
-     * programmer to free it here. */
-    assert(pPsl != NULL);
-    assert(lf->original == *pPsl);
-    }
-if (pPsl != NULL)
-    pslFree(pPsl);
+// We could free lf->original here (either genePredFree or pslFree, depending
+// on the type -- but save time by skipping that.  Maybe we should save time
+// by skipping this free too:
 if (pMrnaSeq != NULL)
     dnaSeqFree(pMrnaSeq);
 }

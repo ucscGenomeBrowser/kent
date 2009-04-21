@@ -16,9 +16,9 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.19 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.19.18.1 2009/04/21 19:03:54 mikep Exp $";
 
-static char *genePredMenu[] = 
+static char *genePredMenu[] =
     {
     "genomic",
     "protein",
@@ -38,7 +38,7 @@ static boolean isRefGeneTrack(char *table)
 return sameString("refGene", table) || sameString("xenoRefGene", table);
 }
 
-static void genePredOptions(struct trackDb *track, char *type, 
+static void genePredOptions(struct trackDb *track, char *type,
 	struct sqlConnection *conn)
 /* Put up sequence type options for gene prediction tracks. */
 {
@@ -110,6 +110,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+boolean gotResults = FALSE;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     char *protAcc = hashFindVal(protHash, bed->name);
@@ -120,8 +121,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	if (fa != NULL)
 	    hPrintf("%s", fa);
 	freez(&fa);
+	gotResults = TRUE;
 	}
     }
+if (!gotResults)
+    hPrintf(NO_RESULTS);
 hashFree(&protHash);
 hashFree(&uniqHash);
 }
@@ -131,6 +135,7 @@ void doRefGeneMrnaSequence(struct sqlConnection *conn, struct bed *bedList)
 {
 struct hash *uniqHash = newHash(18);
 struct bed *bed;
+boolean gotResults = FALSE;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!hashLookup(uniqHash, bed->name))
@@ -140,8 +145,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	if (fa != NULL)
 	    hPrintf("%s", fa);
 	freez(&fa);
+	gotResults = TRUE;
 	}
     }
+if (!gotResults)
+    hPrintf(NO_RESULTS);
 hashFree(&uniqHash);
 }
 
@@ -171,7 +179,7 @@ if (isRefGeneTrack(curTable))
     }
 else
     {
-    char *dupType = cloneString(curTrack->type);
+    char *dupType = cloneString(findTypeForTable(database, curTrack, curTable));
     typeWordCount = chopLine(dupType, typeWords);
     if (typeIx >= typeWordCount)
 	internalErr();
@@ -182,6 +190,7 @@ else
 	char **row;
 	char query[256];
 	struct hash *hash = newHash(18);
+	boolean gotResults = FALSE;
 
 	/* Make hash of all id's passing filters. */
 	for (bed = bedList; bed != NULL; bed = bed->next)
@@ -196,10 +205,13 @@ else
 		{
 		hPrintf(">%s\n", row[0]);
 		writeSeqWithBreaks(stdout, row[1], strlen(row[1]), 60);
+		gotResults = TRUE;
 		}
 	    }
 	sqlFreeResult(&sr);
 	hashFree(&hash);
+	if (!gotResults)
+	    hPrintf(NO_RESULTS);
 	}
     else
 	{
@@ -214,7 +226,7 @@ lmCleanup(&lm);
 void genomicFormatPage(struct sqlConnection *conn)
 /* Put up page asking for what sort of genomic sequence. */
 {
-struct hTableInfo *hti = getHti(database, curTable);
+struct hTableInfo *hti = getHti(database, curTable, conn);
 htmlOpen("%s Genomic Sequence", curTableLabel());
 if (doGalaxy())
     startGalaxyForm();
@@ -243,16 +255,23 @@ void doGenomicDna(struct sqlConnection *conn)
 /* Get genomic sequence (UI has already told us how). */
 {
 struct region *region, *regionList = getRegions();
-struct hTableInfo *hti = getHti(database, curTable);
+struct hTableInfo *hti = getHti(database, curTable, conn);
 int fieldCount;
 textOpen();
+boolean gotResult = FALSE;
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bedList = cookedBedList(conn, curTable, region, lm, &fieldCount);
-    hgSeqBed(database, hti, bedList);
+    if (bedList != NULL)
+    	{
+    	gotResult = TRUE;
+    	hgSeqBed(database, hti, bedList);
+	}
     lmCleanup(&lm);
     }
+if (!gotResult)
+    hPrintf(NO_RESULTS);
 }
 
 void doGenePredSequence(struct sqlConnection *conn)
@@ -281,9 +300,9 @@ else
 void doOutSequence(struct sqlConnection *conn)
 /* Output sequence page. */
 {
-if (curTrack != NULL && sameString(curTrack->tableName, curTable) 
-	&& startsWith("genePred", curTrack->type))
-    genePredOptions(curTrack, curTrack->type, conn);
+struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
+if (tdb != NULL && startsWith("genePred", tdb->type))
+    genePredOptions(tdb, curTrack->type, conn);
 else
     genomicFormatPage(conn);
 }

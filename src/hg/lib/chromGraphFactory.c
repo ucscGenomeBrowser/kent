@@ -15,7 +15,7 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.13 2008/09/17 18:10:13 kent Exp $";
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.13.16.1 2009/04/21 19:00:33 mikep Exp $";
 
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
@@ -24,6 +24,7 @@ static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.13 2008/09/17 18:10:13
 #define illumina300Table "snpArrayIllumina300"
 #define illumina550Table "snpArrayIllumina550"
 #define illumina650Table "snpArrayIllumina650"
+#define illumina1MTable "snpArrayIllumina1M"
 
 #define agilentCgh244ATable "agilentCgh244a"
 
@@ -212,7 +213,7 @@ return count;
 static char *findSnpTable(struct sqlConnection *conn)
 /* Return name of SNP table if any */
 {
-char *tables[] = {"snp126", "snp125", "snp"};
+char *tables[] = {"snp131", "snp130", "snp129", "snp128", "snp127", "snp126", "snp125", "snp"};
 int i;
 for (i=0; i<ArraySize(tables); ++i)
     if (sqlTableExists(conn, tables[i]))
@@ -309,6 +310,17 @@ if (sqlTableExists(conn, table))
     {
     AllocVar(mtr);
     mtr->type = cgfMarkerHumanHap650;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Illumina 1M recognizer */
+table = illumina1MTable;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerHumanHap1M;
     mtr->table = table;
     mtr->query = "select count(*) from %s where name='%s'";
     slAddHead(&list, mtr);
@@ -661,6 +673,7 @@ char **row;
 int match = 0, total = 0;
 struct chromGraph *cg;
 struct chromPos *pos;
+
 if (report)
     printf("Loaded %d elements from %s table for mapping.<BR>\n", 
     	hash->elCount, table);
@@ -671,6 +684,9 @@ if (aliasTable != NULL)
 	printf("Loaded %d aliases from %s table as well.<BR>\n", 
 		aliasHash->elCount, aliasTable);
     }
+
+fflush(stdout); // trying to keep browser from timing out
+
 AllocArray(row, colCount);
 Chopper chopper = getChopper(formatType);
 char *line;
@@ -682,6 +698,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     chopper(line, row, colCount);
     char *name = row[0];
+    char *marker = cloneString(name);
     touppers(name);
     ++total;
     pos = hashFindVal(hash, name);
@@ -705,10 +722,12 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 		cg->chrom = pos->chrom;
 		cg->chromStart = pos->pos;
 		cg->val = cppNeedDouble(cpp, row, i);
+		cg->marker = cloneString(marker);
 		slAddHead(&fileEl->cgList, cg);
 		}
 	    }
 	}
+    freeMem(marker);
     }
 if (report)
     printf("Mapped %d of %d (%3.1f%%) of markers<BR>\n", match, total, 
@@ -794,6 +813,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
       || sameString(markerType, cgfMarkerHumanHap300)
       || sameString(markerType, cgfMarkerHumanHap550)
       || sameString(markerType, cgfMarkerHumanHap650)
+      || sameString(markerType, cgfMarkerHumanHap1M)
       || sameString(markerType, cgfMarkerAgilentCgh244A)
         )
     {
@@ -804,6 +824,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
     if (sameString(markerType, cgfMarkerHumanHap300)) table = illumina300Table;
     if (sameString(markerType, cgfMarkerHumanHap550)) table = illumina550Table;
     if (sameString(markerType, cgfMarkerHumanHap650)) table = illumina650Table;
+    if (sameString(markerType, cgfMarkerHumanHap1M)) table = illumina1MTable;
     if (sameString(markerType, cgfMarkerAgilentCgh244A)) table = agilentCgh244ATable;
     if (!sqlTableExists(conn, table))
         errAbort("Sorry, no data for %s on this assembly.",
@@ -814,7 +835,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
     }
 else
     {
-    errAbort("Unknown identifier format.");
+    errAbort("Unknown identifier format. markerType=%s", markerType);
     }
 if (ok)
     return fileList;

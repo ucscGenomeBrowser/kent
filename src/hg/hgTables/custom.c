@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.37 2008/09/03 19:18:58 markd Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.37.18.1 2009/04/21 19:03:52 mikep Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -32,20 +32,6 @@ void flushCustomTracks()
 /* Flush custom track list. */
 {
 theCtList = NULL;
-}
-
-
-struct customTrack *lookupCt(char *name)
-/* Find named custom track. */
-{
-struct customTrack *ctList = getCustomTracks();
-struct customTrack *ct;
-for (ct=ctList;  ct != NULL;  ct=ct->next)
-    {
-    if (sameString(ct->tdb->tableName, name))
-	return ct;
-    }
-return NULL;
 }
 
 struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
@@ -186,12 +172,13 @@ if (fieldCount >= 15)
     field = newSlName("expIds");
     slAddHead(&fieldList, field);
     field = newSlName("expScores");
-    slAddHead(&fieldList, field);    
+    slAddHead(&fieldList, field);
     }
 slReverse(&fieldList);
 return fieldList;
 }
 
+#ifdef UNUSED
 static void tabBedRow(struct bed *bed, struct slName *fieldList)
 /* Print out named fields from bed. */
 {
@@ -259,6 +246,7 @@ for (field = fieldList; field != NULL; field = field->next)
     }
 hPrintf("\n");
 }
+#endif /* UNUSED */
 
 static void tabBedRowFile(struct bed *bed, struct slName *fieldList, FILE *f)
 /* Print out to a file named fields from bed. */
@@ -328,142 +316,13 @@ for (field = fieldList; field != NULL; field = field->next)
 fprintf(f, "\n");
 }
 
-static void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
-		     char **retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
- * retCft, retVals and retInv to make a filter. */
-{
-char *vals, *ptrs[32];
-int numWords;
-int i;
-
-assert(retCft != NULL);
-assert(retVals != NULL);
-assert(retInv != NULL);
-assert(sameString(dd, "does") || sameString(dd, "doesn't"));
-
-/* catch null-constraint cases.  ? will be treated as a literal match, 
- * which would make sense for bed strand and maybe other single-char things: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*"))
-    {
-    *retCft = cftIgnore;
-    return;
-    }
-
-*retCft = cftMultiLiteral;
-numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
-vals = needMem((numWords+1) * sizeof(char));
-for (i=0;  i < numWords;  i++)
-    vals[i] = ptrs[i][0];
-vals[i] = 0;
-*retVals = vals;
-*retInv = sameString("doesn't", dd);
-}
-
-static void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
-		       char ***retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in 
- * retCft, retVals and retInv to make a filter. */
-{
-char **vals, *ptrs[32];
-int numWords;
-int i;
-
-assert(retSft != NULL);
-assert(retVals != NULL);
-assert(retInv != NULL);
-assert(sameString(dd, "does") || sameString(dd, "doesn't"));
-
-/* catch null-constraint cases: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*"))
-    {
-    *retSft = sftIgnore;
-    return;
-    }
-
-*retSft = sftMultiRegexp;
-numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
-vals = needMem((numWords+1) * sizeof(char *));
-for (i=0;  i < numWords;  i++)
-    vals[i] = cloneString(ptrs[i]);
-vals[i] = NULL;
-*retVals = vals;
-*retInv = sameString("doesn't", dd);
-}
-
-static void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
-		    int **retVals)
-/* Given a comparison operator and a (pair of) integers from CGI, fill in 
- * retNft and retVals to make a filter. */
-{
-char *ptrs[3];
-int *vals;
-int numWords;
-
-assert(retNft != NULL);
-assert(retVals != NULL);
-
-/* catch null-constraint cases: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*") || sameString(cmp, "ignored"))
-    {
-    *retNft = nftIgnore;
-    return;
-    }
-else if (sameString(cmp, "in range"))
-    {
-    *retNft = nftInRange;
-    numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
-    if (numWords != 2)
-	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
-    vals = needMem(2 * sizeof(int)); 
-    vals[0] = atoi(ptrs[0]);
-    vals[1] = atoi(ptrs[1]);
-    if (vals[0] > vals[1])
-	{
-	int tmp = vals[0];
-	vals[0] = vals[1];
-	vals[1] = tmp;
-	}
-    *retVals = vals;
-   }
-else
-    {
-    if (sameString(cmp, "<"))
-	*retNft = nftLessThan;
-    else if (sameString(cmp, "<="))
-	*retNft = nftLTE;
-    else if (sameString(cmp, "="))
-	*retNft = nftEqual;
-    else if (sameString(cmp, "!="))
-	*retNft = nftNotEqual;
-    else if (sameString(cmp, ">="))
-	*retNft = nftGTE;
-    else if (sameString(cmp, ">"))
-	*retNft = nftGreaterThan;
-    else
-	errAbort("Unrecognized comparison operator %s", cmp);
-    vals = needMem(sizeof(int));
-    vals[0] = atoi(pat);
-    *retVals = vals;
-    }
-}
-
 struct bedFilter *bedFilterForCustomTrack(char *ctName)
 /* If the user specified constraints, then translate them to a bedFilter. */
 {
 struct hashEl *var, *varList = cartFindPrefix(cart, hgtaFilterVarPrefix);
 int prefixSize = strlen(hgtaFilterVarPrefix);
 struct bedFilter *bf = NULL;
-int *trash;	
+int *trash;
 
 for (var = varList; var != NULL; var = var->next)
     {
@@ -666,40 +525,24 @@ else
     chosenFields = commaSepToSlNames(fields);
 
 if (f == NULL)
+    f = stdout;
+fprintf(f, "#");
+for (field = chosenFields; field != NULL; field = field->next)
     {
-    hPrintf("#");
-    for (field = chosenFields; field != NULL; field = field->next)
-        {
-        if (field != chosenFields)
-            hPrintf("\t");
-        hPrintf("%s", field->name);
-        }
-    hPrintf("\n");
+    if (field != chosenFields)
+	fprintf(f, "\t");
+    fprintf(f, "%s", field->name);
     }
-else
-    {
-    fprintf(f, "#");
-    for (field = chosenFields; field != NULL; field = field->next)
-        {
-        if (field != chosenFields)
-            fprintf(f, "\t");
-        fprintf(f, "%s", field->name);
-        }
-    fprintf(f, "\n");
-    }
+fprintf(f, "\n");
 
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, track->tableName, 
+    struct bed *bed, *bedList = cookedBedList(conn, track->tableName,
     	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
-        if (f == NULL)
-	    tabBedRow(bed, chosenFields);
-        else
-            tabBedRowFile(bed, chosenFields, f);
-	++count;
+	tabBedRowFile(bed, chosenFields, f);
 	}
     lmCleanup(&lm);
     }

@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedCart.c,v 1.2 2004/11/24 19:42:35 hiram Exp $";
+static char const rcsid[] = "$Id: bedCart.c,v 1.2.230.1 2009/04/21 19:00:32 mikep Exp $";
 
 #if defined(NOT_YET)
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
@@ -23,7 +23,7 @@ char *Default="Off";	/* anything different than this will turn it on */
 char *tdbDefault = (char *)NULL;
 
 if (tdb)
-    tdbDefault = trackDbSetting(tdb, OPT_ITEM_RGB);
+    tdbDefault = trackDbSettingClosestToHome(tdb, OPT_ITEM_RGB);
 
 if (tdbDefault)
     {

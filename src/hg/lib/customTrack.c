@@ -1,4 +1,4 @@
-/* Data structure for dealing with custom tracks in the browser. 
+/* Data structure for dealing with custom tracks in the browser.
  * See also customFactory, which is where the parsing is done. */
 
 #include "common.h"
@@ -26,12 +26,12 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.174 2008/09/03 19:19:21 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.174.18.1 2009/04/21 19:00:34 mikep Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
- *  name - any text up to 15 letters.  
- *  description - any text up to 60 letters. 
+ *  name - any text up to 15 letters.
+ *  description - any text up to 60 letters.
  *  url - URL.  If it contains '$$' this will be substituted with itemName.
  *  visibility - 0=hide, 1=dense, 2=full, 3=pack, 4=squish
  *  useScore - 0=use colors. 1=use grayscale based on score.
@@ -201,7 +201,7 @@ eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
 stripChar(tmp,'.');	/*	periods confuse hgTables	*/
 stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
 stripChar(tmp,'-');	/*	since that's the Invalid table */
-safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText */ 
+safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText */
 freeMem(tmp);
 return cloneString(buf);
 }
@@ -216,7 +216,7 @@ for (track = trackList; track != NULL; track = track->next)
 return FALSE;
 }
 
-void customTrackLift(struct customTrack *trackList, 
+void customTrackLift(struct customTrack *trackList,
                                 struct hash *ctgPosHash)
 /* Lift tracks based on hash of ctgPos. */
 {
@@ -290,11 +290,22 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     if (isDefaultTrack(ct))
         {
-        char *p = skipToNumeric(ct->tdb->shortLabel);
-        if (*p)
-            seqNum = sqlSigned(skipToNumeric(ct->tdb->shortLabel));
-        else
-            seqNum = 1;
+	char *p = ct->tdb->shortLabel;
+	seqNum = 0;
+	while (seqNum == 0)
+	    {
+	    p = skipToNumeric(p);
+	    if (*p)
+		{
+		char *q = skipNumeric(p);
+		if (*q)
+		    p = q;
+		else
+		    seqNum = sqlSigned(p);
+		}
+	    else
+		seqNum = 1;
+	    }
         maxFound = max(seqNum, maxFound);
         }
     }
@@ -423,7 +434,7 @@ static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
  * write parts that aren't default, then remove from settings
  * to avoid duplication of output.
  * NOTE: that there may no longer be any need to write anything
- * out except for settings, but this is more conservative to 
+ * out except for settings, but this is more conservative to
  * maintain functionality while custom track work continues */
 {
 struct trackDb *def = customTrackTdbDefault();
@@ -443,7 +454,7 @@ stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
 stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
 fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
 hashMayRemove(tdb->settingsHash, "description");
-    
+
 if (tdb->url != NULL && tdb->url[0])
     fprintf(f, "\t%s='%s'", "url", tdb->url);
 hashMayRemove(tdb->settingsHash, "url");
@@ -459,7 +470,7 @@ hashMayRemove(tdb->settingsHash, "priority");
 if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 hashMayRemove(tdb->settingsHash, "color");
-if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
+if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
 	|| tdb->altColorB != tdb->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 hashMayRemove(tdb->settingsHash, "altColor");
@@ -474,7 +485,7 @@ trackDbFree(&def);
 }
 
 void customTracksSaveFile(char *genomeDb, struct customTrack *trackList, char *fileName)
-/* Save out custom tracks. This is just used internally 
+/* Save out custom tracks. This is just used internally
  * and by testing programs */
 {
 FILE *f = mustOpen(fileName, "w");
@@ -566,7 +577,7 @@ boolean customTrackIsCompressed(char *fileName)
             endsWith(fileName,".bz2"));
 }
 
-static char *prepCompressedFile(struct cart *cart, char *fileName, 
+static char *prepCompressedFile(struct cart *cart, char *fileName,
                                         char *binVar, char *fileVar)
 /* determine compression type and format properly for parser */
 {
@@ -577,8 +588,8 @@ char *cFBin = cartOptionalString(cart, binVar);
 if (cFBin)
     {
     safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
-    /* cgi functions preserve binary data, cart vars have been 
-     *  cloneString-ed  which is bad for a binary stream that might 
+    /* cgi functions preserve binary data, cart vars have been
+     *  cloneString-ed  which is bad for a binary stream that might
      * contain 0s  */
     }
 else
@@ -608,9 +619,9 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
                                           int *retNumAdded,
                                           char **retErr)
 /* Figure out from cart variables where to get custom track text/file.
- * Parse text/file into a custom set of tracks.  Lift if necessary.  
- * If retBrowserLines is non-null then it will return a list of lines 
- * starting with the word "browser".  If retCtFileName is non-null then  
+ * Parse text/file into a custom set of tracks.  Lift if necessary.
+ * If retBrowserLines is non-null then it will return a list of lines
+ * starting with the word "browser".  If retCtFileName is non-null then
  * it will return the custom track filename.  If any existing custom tracks
  * are replaced with new versions, they are included in replacedCts.
  *
@@ -647,7 +658,7 @@ if (isNotEmpty(fileName))
         /* file contents not available -- check for compressed */
         if (customTrackIsCompressed(fileName))
             {
-            customText = prepCompressedFile(cart, fileName, 
+            customText = prepCompressedFile(cart, fileName,
                                 CT_CUSTOM_FILE_BIN_VAR, CT_CUSTOM_FILE_VAR);
             }
         else
@@ -670,7 +681,7 @@ if (isNotEmpty(docFileContents))
 else if (isNotEmpty(docFileName))
     {
     if (customTrackIsCompressed(docFileName))
-        html = prepCompressedFile(cart, docFileName, 
+        html = prepCompressedFile(cart, docFileName,
                         CT_CUSTOM_DOC_FILE_BIN_VAR, CT_CUSTOM_DOC_FILE_VAR);
     else
         {
@@ -681,7 +692,7 @@ else if (isNotEmpty(docFileName))
         customText = NULL;
         }
     }
-else 
+else
     html = cartUsualString(cart, CT_CUSTOM_DOC_TEXT_VAR, "");
 html = customDocParse(html);
 if(html != NULL)
@@ -722,7 +733,7 @@ if (isNotEmpty(customText))
         else
             err = msg;
         }
-    errCatchFree(&errCatch); 
+    errCatchFree(&errCatch);
     }
 
 /* the 'ctfile_$db' variable contains a filename from the trash directory.
@@ -743,17 +754,17 @@ if (customTracksExist(cart, &ctFileName))
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        ctList = 
+        ctList =
             customFactoryParse(genomeDb, ctFileName, TRUE, retBrowserLines);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
         remove(ctFileName);
-        warn("Internal error (%s): removing custom tracks", 
+        warn("Internal error (%s): removing custom tracks",
                         errCatch->message->string);
         }
-    errCatchFree(&errCatch); 
+    errCatchFree(&errCatch);
 
     /* handle selected tracks -- update doc, remove, etc. */
     char *selectedTable = NULL;
@@ -777,7 +788,7 @@ if (customTracksExist(cart, &ctFileName))
                     cartRemove(cart, selectedTable);
                     /* remove configuration variables */
                     char buf[128];
-                    safef(buf, sizeof buf, "%s.", selectedTable); 
+                    safef(buf, sizeof buf, "%s.", selectedTable);
                     cartRemovePrefix(cart, buf);
                     /* remove control variables */
                     cartRemove(cart, CT_DO_REMOVE_VAR);
@@ -835,8 +846,8 @@ struct customTrack *customTracksParseCart(char *genomeDb, struct cart *cart,
 /* Parse custom tracks from cart variables */
 {
 char *err = NULL;
-struct customTrack *ctList = 
-    customTracksParseCartDetailed(genomeDb, cart, retBrowserLines, retCtFileName, 
+struct customTrack *ctList =
+    customTracksParseCartDetailed(genomeDb, cart, retBrowserLines, retCtFileName,
                                         NULL, NULL, &err);
 if (err)
     warn("%s", err);
@@ -850,7 +861,7 @@ char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
 char *ctFileName = cartOptionalString(cart, ctFileVar);
 if (ctFileName)
     {
-    if (fileExists(ctFileName)) 
+    if (fileExists(ctFileName))
         {
         if (retCtFileName)
             *retCtFileName = ctFileName;
@@ -892,5 +903,15 @@ printf("offset: %d<BR>\n", track->offset);
 printf("gffHelper: %p<BR>\n", track->gffHelper);
 printf("groupName: %s<BR>\n", naForNull(track->groupName));
 printf("tdb->type: %s<BR>\n", naForNull(track->tdb ? track->tdb->type : NULL));
+}
+
+struct customTrack *ctFind(struct customTrack *ctList,char *name)
+/* Find named custom track. */
+{
+struct customTrack *ct;
+for (ct=ctList;
+     ct != NULL && differentString(ct->tdb->tableName,name);
+     ct=ct->next) {}
+return ct;
 }
 

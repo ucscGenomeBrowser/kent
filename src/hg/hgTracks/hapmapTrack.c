@@ -8,32 +8,40 @@
 #include "hapmapSnps.h"
 #include "hapmapAllelesOrtho.h"
 #include "hapmapAllelesSummary.h"
+#include "hapmapPhaseIIISummary.h"
 
-char *mixedFilter = HAP_POP_MIXED_DEFAULT;
-char *popCountFilter = HAP_POP_COUNT_DEFAULT;
-char *observedFilter = HAP_TYPE_DEFAULT;
+static char const rcsid[] = "$Id: hapmapTrack.c,v 1.44.18.1 2009/04/21 19:03:56 mikep Exp $";
+
+// These values are all overwritten in loadFilters() below.
+char *mixedFilter = HAP_FILTER_DEFAULT;
+char *popCountFilter = HAP_FILTER_DEFAULT;
+char *observedFilter = HAP_FILTER_DEFAULT;
 float minFreqFilter = 0.0;
 float maxFreqFilter = 0.5;
 float minHetFilter = 0.0;
-float maxHetFilter = 0.5;
-char *monoFilterCEU = HAP_MONO_DEFAULT;
-char *monoFilterCHB = HAP_MONO_DEFAULT;
-char *monoFilterJPT = HAP_MONO_DEFAULT;
-char *monoFilterYRI = HAP_MONO_DEFAULT;
-char *chimpFilter = HAP_CHIMP_DEFAULT;
-int chimpQualFilter = 0;
-char *macaqueFilter = HAP_MACAQUE_DEFAULT;
-int macaqueQualFilter = 0;
+float maxHetFilter = 0.5; // 1.0 for observed het in PhaseIII version of the track.
 
+char *monoFilter[HAP_PHASEIII_POPCOUNT];
+// Indices of HapMap PhaseII pops in there:
+#define CEU 1
+#define CHB 2
+#define JPT 5
+#define YRI 10
 
-boolean isTransitionObserved(char *observed)
+/* Someday these should come from a trackDb setting: */
+char *orthoFilter[HAP_ORTHO_COUNT];
+int orthoQualFilter[HAP_ORTHO_COUNT];
+#define CHIMP 0
+#define MACAQUE 1
+
+static boolean isTransitionObserved(char *observed)
 {
 if (sameString(observed, "A/G")) return TRUE;
 if (sameString(observed, "C/T")) return TRUE;
 return FALSE;
 }
 
-boolean isComplexObserved(char *observed)
+static boolean isComplexObserved(char *observed)
 /* return TRUE if not simple bi-allelic A/C, A/G, A/T, etc. */
 {
 if (sameString(observed, "A/C")) return FALSE;
@@ -45,11 +53,54 @@ if (sameString(observed, "G/T")) return FALSE;
 return TRUE;
 }
 
-void loadFilters()
+/* This maps new cart variable names to old, for backwards compatibility: */
+static char *cartVarNameUpdates[16][2] =
+    { { HAP_POP_MIXED, "hapmapSnps.isMixed" },
+      { HAP_POP_COUNT, "hapmapSnps.popCount" },
+      { HAP_TYPE, "hapmapSnps.polyType" },
+      { HAP_MIN_FREQ, "hapmapSnps.minorAlleleFreqMinimum" },
+      { HAP_MAX_FREQ, "hapmapSnps.minorAlleleFreqMaximum" },
+      { HAP_MIN_HET, "hapmapSnps.hetMinimum" },
+      { HAP_MAX_EXPECTED_HET, "hapmapSnps_hetMaximum" },
+      { HAP_MAX_EXPECTED_HET, "hapmapSnps.hetMaximum" },
+      { HAP_MONO_PREFIX "_CEU", "hapmapSnps.monomorphic.ceu" },
+      { HAP_MONO_PREFIX "_CHB", "hapmapSnps.monomorphic.chb" },
+      { HAP_MONO_PREFIX "_JPT", "hapmapSnps.monomorphic.jpt" },
+      { HAP_MONO_PREFIX "_YRI", "hapmapSnps.monomorphic.yri" },
+      { HAP_ORTHO_PREFIX "_Chimp", "hapmapSnps.chimp" },
+      { HAP_ORTHO_QUAL_PREFIX "_Chimp", "hapmapSnps.chimpQualScore" },
+      { HAP_ORTHO_PREFIX "_Macaque", "hapmapSnps.macaque" },
+      { HAP_ORTHO_QUAL_PREFIX "_Macaque", "hapmapSnps.macaqueQualScore" },
+    };
+
+static void updateOldCartVars()
+/* Detect old names for cart variables, in case they are still hanging around
+ * in people's carts.  When found, set the new var to the old val unless it 
+ * would clobber something specifically set for the new var.  Delete old 
+ * cart var name. */
 {
-mixedFilter = cartUsualString(cart, HAP_POP_MIXED, HAP_POP_MIXED_DEFAULT);
-popCountFilter = cartUsualString(cart, HAP_POP_COUNT, HAP_POP_COUNT_DEFAULT);
-observedFilter = cartUsualString(cart, HAP_TYPE, HAP_TYPE_DEFAULT);
+int i;
+for (i = 0;  i < ArraySize(cartVarNameUpdates);  i++)
+    {
+    char *newName = cartVarNameUpdates[i][0];
+    char *oldName = cartVarNameUpdates[i][1];
+    char *oldVal = cartOptionalString(cart, oldName);
+    if (oldVal != NULL)
+	{
+	if (cartOptionalString(cart, newName) == NULL)
+	    cartSetString(cart, newName, oldVal);
+	cartRemove(cart, oldName);
+	}
+    }
+}
+
+static void loadFilters(boolean isPhaseIII)
+/* Translate filter cart settings into global variables. */
+{
+updateOldCartVars();
+mixedFilter = cartUsualString(cart, HAP_POP_MIXED, HAP_FILTER_DEFAULT);
+popCountFilter = cartUsualString(cart, HAP_POP_COUNT, HAP_FILTER_DEFAULT);
+observedFilter = cartUsualString(cart, HAP_TYPE, HAP_FILTER_DEFAULT);
 minFreqFilter = sqlFloat(cartUsualString(cart, HAP_MIN_FREQ, HAP_MIN_FREQ_DEFAULT));
 if (minFreqFilter < 0.0) 
     {
@@ -68,67 +119,75 @@ if (minHetFilter < 0.0)
     minHetFilter = 0.0;
     cartSetDouble(cart, HAP_MIN_HET, 0.0);
     }
-maxHetFilter = sqlFloat(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
-if (maxHetFilter > 0.5) 
+if (isPhaseIII)
     {
-    maxHetFilter = 0.5;
-    cartSetDouble(cart, HAP_MAX_HET, 0.5);
+    maxHetFilter = sqlFloat(cartUsualString(cart, HAP_MAX_OBSERVED_HET,
+					    HAP_MAX_OBSERVED_HET_DEFAULT));
+    float defaultMaxHetF = atof(HAP_MAX_OBSERVED_HET_DEFAULT);
+    if (maxHetFilter > defaultMaxHetF)
+	{
+	maxHetFilter = defaultMaxHetF;
+	cartSetDouble(cart, HAP_MAX_OBSERVED_HET, defaultMaxHetF);
+	}
     }
-monoFilterCEU = cartUsualString(cart, HAP_MONO_CEU, HAP_MONO_DEFAULT);
-monoFilterCHB = cartUsualString(cart, HAP_MONO_CHB, HAP_MONO_DEFAULT);
-monoFilterJPT = cartUsualString(cart, HAP_MONO_JPT, HAP_MONO_DEFAULT);
-monoFilterYRI = cartUsualString(cart, HAP_MONO_YRI, HAP_MONO_DEFAULT);
-chimpFilter = cartUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT);
-chimpQualFilter = 
-    sqlUnsigned(cartUsualString(cart, HAP_CHIMP_QUAL, HAP_CHIMP_QUAL_DEFAULT));
-if (chimpQualFilter < 0) 
+else
     {
-    chimpQualFilter = 0;
-    cartSetInt(cart, HAP_CHIMP_QUAL, 0);
+    maxHetFilter = sqlFloat(cartUsualString(cart, HAP_MAX_EXPECTED_HET,
+					    HAP_MAX_EXPECTED_HET_DEFAULT));
+    float defaultMaxHetF = atof(HAP_MAX_EXPECTED_HET_DEFAULT);
+    if (maxHetFilter > defaultMaxHetF)
+	{
+	maxHetFilter = defaultMaxHetF;
+	cartSetDouble(cart, HAP_MAX_EXPECTED_HET, defaultMaxHetF);
+	}
     }
-if (chimpQualFilter > 100) 
+char cartVar[128];
+int i;
+for (i = 0;  i < HAP_PHASEIII_POPCOUNT;  i++)
     {
-    chimpQualFilter = 100;
-    cartSetInt(cart, HAP_CHIMP_QUAL, 100);
+    safef(cartVar, sizeof(cartVar), "%s_%s", HAP_MONO_PREFIX, hapmapPhaseIIIPops[i]);
+    monoFilter[i] = cartUsualString(cart, cartVar, HAP_FILTER_DEFAULT);
     }
-
-macaqueFilter = cartUsualString(cart, HAP_MACAQUE, HAP_MACAQUE_DEFAULT);
-macaqueQualFilter = 
-    sqlUnsigned(cartUsualString(cart, HAP_MACAQUE_QUAL, HAP_MACAQUE_QUAL_DEFAULT));
-if (macaqueQualFilter < 0) 
+for (i = 0; i < HAP_ORTHO_COUNT;  i++)
     {
-    macaqueQualFilter = 0;
-    cartSetInt(cart, HAP_MACAQUE_QUAL, 0);
+    safef(cartVar, sizeof(cartVar), "%s_%s", HAP_ORTHO_PREFIX, hapmapOrthoSpecies[i]);
+    orthoFilter[i] = cartUsualString(cart, cartVar, HAP_FILTER_DEFAULT);
+    safef(cartVar, sizeof(cartVar), "%s_%s", HAP_ORTHO_QUAL_PREFIX, hapmapOrthoSpecies[i]);
+    orthoQualFilter[i] = cartUsualInt(cart, cartVar, atoi(HAP_ORTHO_QUAL_DEFAULT));
+    if (orthoQualFilter[i] < 0)
+	{
+	orthoQualFilter[i] = 0;
+	cartSetInt(cart, cartVar, 0);
+	}
+    if (orthoQualFilter[i] > 100)
+	{
+	orthoQualFilter[i] = 100;
+	cartSetInt(cart, cartVar, 100);
+	}
     }
-if (macaqueQualFilter > 100) 
-    {
-    macaqueQualFilter = 100;
-    cartSetInt(cart, HAP_MACAQUE_QUAL, 100);
-    }
-
 }
 
-boolean allDefaults()
+static boolean allDefaults(boolean isPhaseIII)
 /* return TRUE if all filters are set to default values */
 {
-if (differentString(mixedFilter, HAP_POP_MIXED_DEFAULT)) return FALSE;
-if (differentString(popCountFilter, HAP_POP_COUNT_DEFAULT)) return FALSE;
-if (differentString(observedFilter, HAP_TYPE_DEFAULT)) return FALSE;
+if (differentString(mixedFilter, HAP_FILTER_DEFAULT)) return FALSE;
+if (differentString(popCountFilter, HAP_FILTER_DEFAULT)) return FALSE;
+if (differentString(observedFilter, HAP_FILTER_DEFAULT)) return FALSE;
 if (minFreqFilter > sqlFloat(HAP_MIN_FREQ_DEFAULT)) return FALSE;
 if (maxFreqFilter < sqlFloat(HAP_MAX_FREQ_DEFAULT)) return FALSE;
 if (minHetFilter > sqlFloat(HAP_MIN_HET_DEFAULT)) return FALSE;
-if (maxFreqFilter < sqlFloat(HAP_MAX_HET_DEFAULT)) return FALSE;
-if (differentString(monoFilterCEU, HAP_MONO_DEFAULT)) return FALSE;
-if (differentString(monoFilterCHB, HAP_MONO_DEFAULT)) return FALSE;
-if (differentString(monoFilterJPT, HAP_MONO_DEFAULT)) return FALSE;
-if (differentString(monoFilterYRI, HAP_MONO_DEFAULT)) return FALSE;
-if (differentString(chimpFilter, HAP_CHIMP_DEFAULT)) return FALSE;
-if (chimpQualFilter > sqlUnsigned(HAP_CHIMP_QUAL_DEFAULT)) return FALSE;
-if (differentString(macaqueFilter, HAP_MACAQUE_DEFAULT)) return FALSE;
-if (macaqueQualFilter > sqlUnsigned(HAP_MACAQUE_QUAL_DEFAULT)) return FALSE;
+char *defaultMaxHet = isPhaseIII ? HAP_MAX_OBSERVED_HET_DEFAULT : HAP_MAX_EXPECTED_HET_DEFAULT;
+if (maxHetFilter < sqlFloat(defaultMaxHet)) return FALSE;
+int i;
+for (i = 0;  i < HAP_PHASEIII_POPCOUNT;  i++)
+    if (differentString(monoFilter[i], HAP_FILTER_DEFAULT)) return FALSE;
+for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
+    {
+    if (differentString(orthoFilter[i], HAP_FILTER_DEFAULT)) return FALSE;
+    if (orthoQualFilter[i] > sqlUnsigned(HAP_ORTHO_QUAL_DEFAULT)) return FALSE;
+    }
 return TRUE;
 }
-
 
 
 static void hapmapLoadSimple(struct track *tg)
@@ -138,22 +197,31 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 1;
+int i;
 
-if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
-{
-    struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
-        slAddHead(&orthoItemList, orthoLoadItem);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    slSort(&orthoItemList, bedCmp);
-    tg->items = orthoItemList;
-    return;
-}
+char orthoTable[HDB_MAX_TABLE_STRING];
+for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
+    {
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (sameString(tg->mapName, orthoTable))
+	{
+	struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
+	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
+	    slAddHead(&orthoItemList, orthoLoadItem);
+	    }
+	sqlFreeResult(&sr);
+	hFreeConn(&conn);
+	slSort(&orthoItemList, bedCmp);
+	tg->items = orthoItemList;
+	return;
+	}
+    }
 
 struct hapmapSnps *simpleLoadItem, *simpleItemList = NULL;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -168,8 +236,8 @@ slSort(&simpleItemList, bedCmp);
 tg->items = simpleItemList;
 }
 
-boolean orthoMatchSummary(struct hapmapAllelesOrtho *orthoItem, 
-                          struct hapmapAllelesSummary *summaryItem)
+boolean orthoMatchSummaryPhaseII(struct hapmapAllelesOrtho *orthoItem, 
+				 struct hapmapAllelesSummary *summaryItem)
 /* compare an ortho item to a summary item */
 /* return FALSE if not matching */
 /* probably could use bedCmp to do this */
@@ -181,8 +249,8 @@ if (differentString(orthoItem->name, summaryItem->name)) return FALSE;
 return TRUE;
 }
 
-boolean simpleMatchSummary(struct hapmapSnps *simpleItem, 
-                           struct hapmapAllelesSummary *summaryItem)
+boolean simpleMatchSummaryPhaseII(struct hapmapSnps *simpleItem, 
+				  struct hapmapAllelesSummary *summaryItem)
 /* compare a simple item to a summary item */
 /* return FALSE if not matching */
 /* probably could use bedCmp to do this */
@@ -194,7 +262,7 @@ if (differentString(simpleItem->name, summaryItem->name)) return FALSE;
 return TRUE;
 }
 
-float getMinFreq(struct hapmapAllelesSummary *summaryItem)
+float getMinFreqPhaseII(struct hapmapAllelesSummary *summaryItem)
 {
 float freqCEU = 0.5;
 float freqCHB = 0.5;
@@ -229,7 +297,7 @@ if (freqYRI < ret) ret = freqYRI;
 return ret;
 }
 
-float getMaxFreq(struct hapmapAllelesSummary *summaryItem)
+float getMaxFreqPhaseII(struct hapmapAllelesSummary *summaryItem)
 {
 float freqCEU = 0.0;
 float freqCHB = 0.0;
@@ -265,7 +333,7 @@ return ret;
 }
 
 
-char *getMajorAllele(struct hapmapAllelesSummary *summaryItem)
+char *getMajorAllelePhaseII(struct hapmapAllelesSummary *summaryItem)
 {
 char *allele = NULL;
 
@@ -286,7 +354,7 @@ if (!allele)
 return allele;
 }
 
-char *getMinorAllele(struct hapmapAllelesSummary *summaryItem, char *majorAllele)
+char *getMinorAllelePhaseII(struct hapmapAllelesSummary *summaryItem, char *majorAllele)
 /* return the allele that isn't the majorAllele */
 {
 char *allele = NULL;
@@ -302,7 +370,7 @@ if (!allele)
 return allele;
 }
 
-boolean orthoAlleleCheck(struct hapmapAllelesSummary *summaryItem, char *species)
+boolean orthoAlleleCheckPhaseII(struct hapmapAllelesSummary *summaryItem, char *species)
 /* return TRUE if disqualified from being ortho mismatch */
 /* orthoAllele is adjusted for strand; population allele is not */
 {
@@ -329,11 +397,41 @@ char *subString = strstr(summaryItem->observed, orthoAllele);
 if (subString) return TRUE;
 
 return FALSE;
+}
 
+static boolean filterObserved(boolean complexObserved, boolean transitionObserved)
+/* Return TRUE if observedFilter disqualifies the observed types. */
+{
+if (sameString(observedFilter, "complex") && !complexObserved) return TRUE;
+if (sameString(observedFilter, "bi-alleleic") && complexObserved) return TRUE;
+if (sameString(observedFilter, "transition") && complexObserved) return TRUE;
+if (sameString(observedFilter, "transition") && !transitionObserved) return TRUE;
+if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
+if (sameString(observedFilter, "transversion") && transitionObserved) return TRUE;
+return FALSE;
+}
+
+static boolean filterFreq(boolean isMixed, float minFreq, float maxFreq)
+/* Return TRUE if {min,max}FreqFilter disqualifies item. */
+{
+if (minFreqFilter > atof(HAP_MIN_FREQ_DEFAULT))
+    {
+    /* disqualify mixed items when freq filter is set */
+    if (isMixed) return TRUE;
+    if (minFreq < minFreqFilter) return TRUE;
+    }
+
+if (maxFreqFilter < atof(HAP_MAX_FREQ_DEFAULT))
+    {
+    /* disqualify mixed items when freq filter is set */
+    if (isMixed) return TRUE;
+    if (maxFreq > maxFreqFilter) return TRUE;
+    }
+return FALSE;
 }
 
 
-boolean filterOne(struct hapmapAllelesSummary *summaryItem)
+static boolean filterOnePhaseII(struct hapmapAllelesSummary *summaryItem)
 /* return TRUE if summaryItem is disqualified for any reason */
 {
 boolean complexObserved = isComplexObserved(summaryItem->observed);
@@ -349,106 +447,86 @@ if (sameString(popCountFilter, "all 4 populations") && summaryItem->popCount != 
 if (sameString(popCountFilter, "1-3 populations") && summaryItem->popCount == 4)
     return TRUE;
 
-if (sameString(observedFilter, "complex") && !complexObserved) return TRUE;
-if (sameString(observedFilter, "bi-alleleic") && complexObserved) return TRUE;
-if (sameString(observedFilter, "transition") && complexObserved) return TRUE;
-if (sameString(observedFilter, "transition") && !transitionObserved) return TRUE;
-if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
-if (sameString(observedFilter, "transversion") && transitionObserved) return TRUE;
+if (filterObserved(complexObserved, transitionObserved))
+    return TRUE;
 
-if (minFreqFilter > sqlFloat(HAP_MIN_FREQ_DEFAULT))
-    {
-    /* disqualify mixed items when freq filter is set */
-    if (sameString(summaryItem->isMixed, "YES")) return TRUE;
-    float minFreq = getMinFreq(summaryItem);
-    if (minFreq < minFreqFilter) return TRUE;
-    }
-
-if (maxFreqFilter < sqlFloat(HAP_MAX_FREQ_DEFAULT))
-    {
-    /* disqualify mixed items when freq filter is set */
-    if (sameString(summaryItem->isMixed, "YES")) return TRUE;
-    float maxFreq = getMaxFreq(summaryItem);
-    if (maxFreq > maxFreqFilter) return TRUE;
-    }
+if (filterFreq(sameString(summaryItem->isMixed, "YES"),
+	       getMinFreqPhaseII(summaryItem), getMaxFreqPhaseII(summaryItem)))
+    return TRUE;
 
 if (summaryItem->score/1000.0 < minHetFilter) return TRUE;
 if (summaryItem->score/1000.0 > maxHetFilter) return TRUE;
 
 if (summaryItem->totalAlleleCountCEU > 0)
     {
-    if (sameString(monoFilterCEU, "yes") && summaryItem->majorAlleleCountCEU != summaryItem->totalAlleleCountCEU) return TRUE;
-    if (sameString(monoFilterCEU, "no") && summaryItem->majorAlleleCountCEU == summaryItem->totalAlleleCountCEU) return TRUE;
+    if (sameString(monoFilter[CEU], "yes") && summaryItem->majorAlleleCountCEU != summaryItem->totalAlleleCountCEU) return TRUE;
+    if (sameString(monoFilter[CEU], "no") && summaryItem->majorAlleleCountCEU == summaryItem->totalAlleleCountCEU) return TRUE;
     }
 if (summaryItem->totalAlleleCountCHB > 0)
     {
-    if (sameString(monoFilterCHB, "yes") && summaryItem->majorAlleleCountCHB != summaryItem->totalAlleleCountCHB) return TRUE;
-    if (sameString(monoFilterCHB, "no") && summaryItem->majorAlleleCountCHB == summaryItem->totalAlleleCountCHB) return TRUE;
+    if (sameString(monoFilter[CHB], "yes") && summaryItem->majorAlleleCountCHB != summaryItem->totalAlleleCountCHB) return TRUE;
+    if (sameString(monoFilter[CHB], "no") && summaryItem->majorAlleleCountCHB == summaryItem->totalAlleleCountCHB) return TRUE;
     }
 if (summaryItem->totalAlleleCountJPT > 0)
     {
-    if (sameString(monoFilterJPT, "yes") && summaryItem->majorAlleleCountJPT != summaryItem->totalAlleleCountJPT) return TRUE;
-    if (sameString(monoFilterJPT, "no") && summaryItem->majorAlleleCountJPT == summaryItem->totalAlleleCountJPT) return TRUE;
+    if (sameString(monoFilter[JPT], "yes") && summaryItem->majorAlleleCountJPT != summaryItem->totalAlleleCountJPT) return TRUE;
+    if (sameString(monoFilter[JPT], "no") && summaryItem->majorAlleleCountJPT == summaryItem->totalAlleleCountJPT) return TRUE;
     }
 if (summaryItem->totalAlleleCountYRI > 0)
     {
-    if (sameString(monoFilterYRI, "yes") && summaryItem->majorAlleleCountYRI != summaryItem->totalAlleleCountYRI) return TRUE;
-    if (sameString(monoFilterYRI, "no") && summaryItem->majorAlleleCountYRI == summaryItem->totalAlleleCountYRI) return TRUE;
+    if (sameString(monoFilter[YRI], "yes") && summaryItem->majorAlleleCountYRI != summaryItem->totalAlleleCountYRI) return TRUE;
+    if (sameString(monoFilter[YRI], "no") && summaryItem->majorAlleleCountYRI == summaryItem->totalAlleleCountYRI) return TRUE;
     }
 
 /* ortho quality */
-if (summaryItem->chimpAlleleQuality < chimpQualFilter) return TRUE;
-if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) return TRUE;
+if (summaryItem->chimpAlleleQuality < orthoQualFilter[CHIMP]) return TRUE;
+if (summaryItem->macaqueAlleleQuality < orthoQualFilter[MACAQUE]) return TRUE;
 
 /* orthoAlleles */
 /* if any filter set, data must be available */
-if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "none"))
+if (differentString(orthoFilter[CHIMP], "no filter") && sameString(summaryItem->chimpAllele, "none"))
     return TRUE;
-if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "none"))
+if (differentString(orthoFilter[MACAQUE], "no filter") && sameString(summaryItem->macaqueAllele, "none"))
     return TRUE;
-if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "N"))
+if (differentString(orthoFilter[CHIMP], "no filter") && sameString(summaryItem->chimpAllele, "N"))
     return TRUE;
-if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "N")) 
+if (differentString(orthoFilter[MACAQUE], "no filter") && sameString(summaryItem->macaqueAllele, "N")) 
     return TRUE;
 
 /* If mixed, then we can't tell if we have a match, so must filter out. */
-if (sameString(chimpFilter, "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(orthoFilter[CHIMP], "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
-if (sameString(macaqueFilter, "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(orthoFilter[MACAQUE], "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
-if (sameString(chimpFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(orthoFilter[CHIMP], "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
-if (sameString(macaqueFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
-    return TRUE;
-if (sameString(chimpFilter, "matches neither human allele") && sameString(summaryItem->isMixed, "YES")) 
-    return TRUE;
-if (sameString(macaqueFilter, "matches neither human allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(orthoFilter[MACAQUE], "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
 
-char *majorAllele = getMajorAllele(summaryItem);
-if (sameString(chimpFilter, "matches major human allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
+char *majorAllele = getMajorAllelePhaseII(summaryItem);
+if (sameString(orthoFilter[CHIMP], "matches major human allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
     return TRUE;
-if (sameString(macaqueFilter, "matches major human allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
+if (sameString(orthoFilter[MACAQUE], "matches major human allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
     return TRUE;
 
-char *minorAllele = getMinorAllele(summaryItem, majorAllele);
-if (sameString(chimpFilter, "matches minor human allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
+char *minorAllele = getMinorAllelePhaseII(summaryItem, majorAllele);
+if (sameString(orthoFilter[CHIMP], "matches minor human allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
     return TRUE;
-if (sameString(macaqueFilter, "matches minor human allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
+if (sameString(orthoFilter[MACAQUE], "matches minor human allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
     return TRUE;
 
 /* mismatches */
-if (sameString(chimpFilter, "matches neither human allele") && orthoAlleleCheck(summaryItem, "chimp"))
+if (sameString(orthoFilter[CHIMP], "matches neither human allele") && orthoAlleleCheckPhaseII(summaryItem, "chimp"))
     return TRUE;
-if (sameString(macaqueFilter, "matches neither human allele") && orthoAlleleCheck(summaryItem, "macaque"))
+if (sameString(orthoFilter[MACAQUE], "matches neither human allele") && orthoAlleleCheckPhaseII(summaryItem, "macaque"))
     return TRUE;
 
 return FALSE;
 }
 
 
-struct hapmapAllelesOrtho *filterOrthoList(struct hapmapAllelesOrtho *orthoList, 
-                                           struct hapmapAllelesSummary *summaryList)
+struct hapmapAllelesOrtho *filterOrthoListPhaseII(struct hapmapAllelesOrtho *orthoList, 
+						  struct hapmapAllelesSummary *summaryList)
 /* delete from orthoList based on filters */
 /* could use slList and combine filterOrthoList() with filterSimpleList() */
 {
@@ -459,12 +537,12 @@ struct hapmapAllelesOrtho *ret = NULL;
 
 while (orthoItem)
     {
-    if (!orthoMatchSummary(orthoItem, summaryItem))
+    if (!orthoMatchSummaryPhaseII(orthoItem, summaryItem))
        {
        summaryItem = summaryItem->next;
        continue;
        }
-    if (!filterOne(summaryItem))
+    if (!filterOnePhaseII(summaryItem))
         {
 	orthoItemClone = CloneVar(orthoItem);
 	orthoItemClone->next = NULL;
@@ -477,8 +555,8 @@ slSort(&ret, bedCmp);
 return ret;
 }
 
-struct hapmapSnps *filterSimpleList(struct hapmapSnps *simpleList, 
-                                    struct hapmapAllelesSummary *summaryList)
+struct hapmapSnps *filterSimpleListPhaseII(struct hapmapSnps *simpleList, 
+					   struct hapmapAllelesSummary *summaryList)
 /* delete from simpleList based on filters */
 /* could use slList and combine filterOrthoList() with filterSimpleList() */
 {
@@ -489,12 +567,12 @@ struct hapmapSnps *ret = NULL;
 
 while (simpleItem)
     {
-    if (!simpleMatchSummary(simpleItem, summaryItem))
+    if (!simpleMatchSummaryPhaseII(simpleItem, summaryItem))
        {
        summaryItem = summaryItem->next;
        continue;
        }
-    if (!filterOne(summaryItem))
+    if (!filterOnePhaseII(summaryItem))
         {
 	simpleItemClone = CloneVar(simpleItem);
 	simpleItemClone->next = NULL;
@@ -508,23 +586,13 @@ return ret;
 }
 
 
-
-static void hapmapLoad(struct track *tg)
-/* load filtered data */
+static void hapmapLoadPhaseII(struct track *tg)
+/* load filtered data from HapMap PhaseII (4 populations) */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset;
-
-loadFilters();
-
-if (allDefaults() || !hTableExists(database, "hapmapAllelesSummary")) 
-    {
-    hapmapLoadSimple(tg);
-    return;
-    }
-
 /* first load summary data */
 struct hapmapAllelesSummary *summaryLoadItem, *summaryItemList = NULL;
 sr = hRangeQuery(conn, "hapmapAllelesSummary", chromName, winStart, winEnd, NULL, &rowOffset);
@@ -536,22 +604,32 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slSort(&summaryItemList, bedCmp);
 
-if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
-{
-    struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL, *orthoItemsFiltered = NULL;
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
-        slAddHead(&orthoItemList, orthoLoadItem);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    slSort(&orthoItemList, bedCmp);
-    orthoItemsFiltered = filterOrthoList(orthoItemList, summaryItemList);
-    tg->items = orthoItemsFiltered;
-    return;
-}
+int i;
+char orthoTable[HDB_MAX_TABLE_STRING];
+for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
+    {
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (sameString(tg->mapName, orthoTable))
+	{
+	struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
+	struct hapmapAllelesOrtho *orthoItemsFiltered = NULL;
+	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
+	    slAddHead(&orthoItemList, orthoLoadItem);
+	    }
+	sqlFreeResult(&sr);
+	hFreeConn(&conn);
+	slSort(&orthoItemList, bedCmp);
+	orthoItemsFiltered = filterOrthoListPhaseII(orthoItemList, summaryItemList);
+	tg->items = orthoItemsFiltered;
+	return;
+	}
+    }
 
 struct hapmapSnps *simpleLoadItem, *simpleItemList = NULL, *simpleItemsFiltered = NULL;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -563,8 +641,171 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slSort(&simpleItemList, bedCmp);
-simpleItemsFiltered = filterSimpleList(simpleItemList, summaryItemList);
+simpleItemsFiltered = filterSimpleListPhaseII(simpleItemList, summaryItemList);
 tg->items = simpleItemsFiltered;
+}
+
+struct hash *loadSummaryHashPhaseIII(struct sqlConnection *conn)
+/* Load PhaseIII summary info into a hash (key = SNP rsId). */
+{
+struct hash *summaryHash = hashNew(14);
+char **row;
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, "hapmapPhaseIIISummary",
+				   chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hapmapPhaseIIISummary *s = hapmapPhaseIIISummaryLoad(row+rowOffset);
+    hashAdd(summaryHash, s->name, s);
+    }
+sqlFreeResult(&sr);
+return summaryHash;
+}
+
+boolean filterOnePhaseIII(struct hapmapPhaseIIISummary *summary)
+/* return TRUE if summary is disqualified for any reason */
+{
+boolean complexObserved = isComplexObserved(summary->observed);
+boolean transitionObserved = isTransitionObserved(summary->observed);
+
+if (sameString(mixedFilter, "mixed") && !summary->isMixed) 
+    return TRUE;
+if (sameString(mixedFilter, "not mixed") && summary->isMixed) 
+    return TRUE;
+
+if (sameString(popCountFilter, "all 11 Phase III populations") && summary->popCount != 11) 
+    return TRUE;
+if (sameString(popCountFilter, "all 4 Phase II populations") && summary->phaseIIPopCount != 4)
+    return TRUE;
+
+if (filterObserved(complexObserved, transitionObserved))
+    return TRUE;
+
+if (filterFreq(summary->isMixed, summary->minFreq, summary->maxFreq))
+    return TRUE;
+
+if (summary->score/1000.0 < minHetFilter || summary->score/1000.0 > maxHetFilter) return TRUE;
+
+int i;
+for (i = 0;  i < HAP_PHASEIII_POPCOUNT;  i++)
+    {
+    if (summary->foundInPop[i])
+	{
+	if (sameString(monoFilter[i], "yes") && !summary->monomorphicInPop[i]) return TRUE;
+	if (sameString(monoFilter[i], "no")  &&  summary->monomorphicInPop[i]) return TRUE;
+	}
+    }
+
+/* ortho quality and alleles */
+for (i = 0;  i < HAP_ORTHO_COUNT; i++)
+    {
+    if (summary->orthoQuals[i] < orthoQualFilter[i]) return TRUE;
+    /* if any filter set, data must be available */
+    if (differentString(orthoFilter[i], "no filter") && summary->orthoAlleles[i] == 'N')
+	return TRUE;
+    /* If mixed, then we can't tell if we have a match, so must filter out. */
+    if (summary->isMixed &&
+	(sameString(orthoFilter[i], "matches major human allele") ||
+	 sameString(orthoFilter[i], "matches minor human allele")))
+	return TRUE;
+    if (sameString(orthoFilter[i], "matches major human allele") &&
+	summary->orthoAlleles[i] != summary->overallMajorAllele)
+	return TRUE;
+    if (sameString(orthoFilter[i], "matches minor human allele") &&
+	summary->maxFreq > 0 &&  // make sure minor allele has been observed
+	summary->orthoAlleles[i] != summary->overallMinorAllele)
+	return TRUE;
+    /* mismatches */
+    if (sameString(orthoFilter[i], "matches neither human allele"))
+	{
+	char observed[128];
+	safecpy(observed, sizeof(observed), summary->observed);
+	#define MAX_OBS_ALS 10
+	char *obsAls[MAX_OBS_ALS];
+	int alCount = chopByChar(observed, '/', obsAls, ArraySize(obsAls));
+	if (alCount > MAX_OBS_ALS)
+	    errAbort("Too many observed alleles for HapMap SNP %s", summary->name);
+	int j;
+	for (j = 0;  j < alCount;  j++)
+	    if (strlen(obsAls[j]) == 1 && summary->orthoAlleles[i] == obsAls[j][0]) return TRUE;
+	}
+    }
+return FALSE;
+}
+
+boolean loadOrthosPhaseIII(struct track *tg, struct sqlConnection *conn, struct hash *summaryHash)
+/* If tg->mapName is a hapmapAlleles table, load & filter into tg->items and return TRUE. */
+{
+int i;
+char orthoTable[HDB_MAX_TABLE_STRING];
+for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
+    {
+    safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (sameString(tg->mapName, orthoTable))
+	{
+	struct hapmapAllelesOrtho *item, *itemList = NULL;
+	struct hapmapPhaseIIISummary *summary;
+	int rowOffset;
+	struct sqlResult *sr = hRangeQuery(conn, tg->mapName,
+					   chromName, winStart, winEnd, NULL, &rowOffset);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    item = hapmapAllelesOrthoLoad(row+rowOffset);
+	    summary = (struct hapmapPhaseIIISummary *)hashMustFindVal(summaryHash, item->name);
+	    if (!filterOnePhaseIII(summary))
+		slAddHead(&itemList, item);
+	    }
+	sqlFreeResult(&sr);
+	slSort(&itemList, bedCmp);
+	tg->items = itemList;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+static void hapmapLoadPhaseIII(struct track *tg)
+/* load filtered data from HapMap PhaseIII (11 populations) */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char **row = NULL;
+int rowOffset;
+struct hash *summaryHash = loadSummaryHashPhaseIII(conn);
+
+if (loadOrthosPhaseIII(tg, conn, summaryHash))
+    return;
+
+struct hapmapSnps *item, *itemList = NULL;
+struct hapmapPhaseIIISummary *summary;
+struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    item = hapmapSnpsLoad(row+rowOffset);
+    summary = (struct hapmapPhaseIIISummary *)hashMustFindVal(summaryHash, item->name);
+    if (!filterOnePhaseIII(summary))
+	slAddHead(&itemList, item);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slSort(&itemList, bedCmp);
+tg->items = itemList;
+}
+
+
+static void hapmapLoad(struct track *tg)
+/* load filtered data */
+{
+boolean isPhaseIII = sameString(trackDbSettingOrDefault(tg->tdb, "hapmapPhase", "II"), "III");
+loadFilters(isPhaseIII);
+if (allDefaults(isPhaseIII) ||
+    (isPhaseIII && !hTableExists(database, "hapmapPhaseIIISummary")) ||
+    (!isPhaseIII & !hTableExists(database, "hapmapAllelesSummary")))
+    hapmapLoadSimple(tg);
+else if (isPhaseIII)
+    hapmapLoadPhaseIII(tg);
+else
+    hapmapLoadPhaseII(tg);
 }
 
 void hapmapDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -585,16 +826,27 @@ char *allele = NULL;
 char *strand = NULL;
 int chromStart = 0;
 int chromEnd = 0;
-
-if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+boolean isOrtho = FALSE;
+int i;
+char orthoTable[HDB_MAX_TABLE_STRING];
+for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    struct hapmapAllelesOrtho *thisItem = item;
-    chromStart = thisItem->chromStart;
-    chromEnd = thisItem->chromEnd;
-    allele = cloneString(thisItem->orthoAllele);
-    strand = cloneString(thisItem->strand);
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (sameString(tg->mapName, orthoTable))
+	{
+	struct hapmapAllelesOrtho *thisItem = item;
+	chromStart = thisItem->chromStart;
+	chromEnd = thisItem->chromEnd;
+	allele = cloneString(thisItem->orthoAllele);
+	strand = cloneString(thisItem->strand);
+	isOrtho = TRUE;
+	break;
+	}
     }
-else
+if (!isOrtho)
     {
     struct hapmapSnps *thisItem = item;
     chromStart = thisItem->chromStart;
@@ -641,12 +893,21 @@ int totalCount = 0;
 int minorCount = 0;
 int gradient = 0;
 
-if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+int i;
+char orthoTable[HDB_MAX_TABLE_STRING];
+for (i = 0;  i < HAP_ORTHO_COUNT;  i++)
     {
-    struct hapmapAllelesOrtho *thisItem = item;
-    gradient = grayInRange(thisItem->score, 0, 100);
-    col = shadesOfBrown[gradient];
-    return col;
+    if (endsWith(tg->mapName, "PhaseII"))
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%sPhaseII", hapmapOrthoSpecies[i]);
+    else
+	safef(orthoTable, sizeof(orthoTable), "hapmapAlleles%s", hapmapOrthoSpecies[i]);
+    if (sameString(tg->mapName, orthoTable))
+	{
+	struct hapmapAllelesOrtho *thisItem = item;
+	gradient = grayInRange(thisItem->score, 0, 100);
+	col = shadesOfBrown[gradient];
+	return col;
+	}
     }
 
 struct hapmapSnps *thisItem = item;

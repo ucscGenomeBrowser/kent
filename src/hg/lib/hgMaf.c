@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.12 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.12.18.1 2009/04/21 19:00:39 mikep Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -24,8 +24,8 @@ return a->components->start - b->components->start;
 }
 
 
-struct mafAli *mafLoadInRegion2(struct sqlConnection *conn, 
-    struct sqlConnection *conn2, char *table, char *chrom, 
+struct mafAli *mafLoadInRegion2(struct sqlConnection *conn,
+    struct sqlConnection *conn2, char *table, char *chrom,
     int start, int end, char *file)
 /* Return list of alignments in region. */
 {
@@ -38,7 +38,7 @@ int rowOffset;
 if (file != NULL)
     mf = mafOpen(file);
 
-struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
+struct sqlResult *sr = hRangeQuery(conn, table, chrom,
     start, end, NULL, &rowOffset);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -74,14 +74,14 @@ struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end)
 {
 struct sqlConnection *conn2 = hAllocConn(sqlGetDatabase(conn));
-struct mafAli *ret = mafLoadInRegion2(conn, conn2, table, chrom, 
+struct mafAli *ret = mafLoadInRegion2(conn, conn2, table, chrom,
     start, end,NULL);
 hFreeConn(&conn2);
 return ret;
 }
 
 struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
-	char *chrom, int start, int end, 
+	char *chrom, int start, int end,
 	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash)
 /* Return list of alignments in region from axt external file as a maf. */
 {
@@ -91,7 +91,7 @@ struct lineFile *lf = NULL;
 struct mafAli *maf, *mafList = NULL;
 struct axt *axt;
 int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
+struct sqlResult *sr = hRangeQuery(conn, table, chrom,
     start, end, NULL, &rowOffset);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -196,7 +196,7 @@ struct mafAli *hgMafFrag(
 	char *outName, 	    /* Optional name to use in first component */
 	struct slName *orderList /* Optional order of organisms. */
 	)
-/* mafFrag- Extract maf sequences for a region from database.  
+/* mafFrag- Extract maf sequences for a region from database.
  * This creates a somewhat unusual MAF that extends from start
  * to end whether or not there are actually alignments.  Where
  * there are no alignments (or alignments missing a species)
@@ -251,13 +251,13 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     struct mafComp *mc, *mcMaster = maf->components;
     struct mafAli *subMaf = NULL;
     order = 0;
-    if (curPos < mcMaster->start) 
+    if (curPos < mcMaster->start)
 	{
-	fillInMissing(nativeOrg, orgList, native, start, 
+	fillInMissing(nativeOrg, orgList, native, start,
 		curPos, mcMaster->start);
 	symCount += mcMaster->start - curPos;
 	}
-    if (curPos < mcMaster->start + mcMaster->size) /* Prevent worst 
+    if (curPos < mcMaster->start + mcMaster->size) /* Prevent worst
     						    * backtracking */
 	{
 	if (mafNeedSubset(maf, masterSrc, curPos, end))
@@ -424,4 +424,17 @@ char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig)
 char option[128];
 safef(option, sizeof option, "%s.cons.%s", tdb->tableName, wig->leftLabel);
 return (cloneString(option));
+}
+
+struct consWiggle *consWiggleFind(char *db,struct trackDb *parent,char *table)
+/* Return conservation wig if it is found in the parent. */
+{
+if(parent == NULL || !startsWith("wigMaf", parent->type))
+    return NULL;
+
+struct consWiggle *wig, *wiggles = wigMafWiggles(db, parent);
+for (wig = wiggles;
+     wig != NULL && differentString(wig->table,table);
+     wig = wig->next) {}
+return wig;
 }

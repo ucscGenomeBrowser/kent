@@ -1,5 +1,8 @@
-/* hgMaf.h - Stuff to load up mafs from the browser database. 
+/* hgMaf.h - Stuff to load up mafs from the browser database.
  *           Also, items for maf track display */
+#ifndef HGMAF_H
+#define HGMAF_H
+
 
 #include "trackDb.h"
 #include "cart.h"
@@ -26,8 +29,8 @@
 #define gsidSubjList "gsidTable.gsidSubjList"
 #define gsidSeqList "gsidTable.gsidSeqList"
 
-struct mafAli *mafLoadInRegion2(struct sqlConnection *conn, 
-    struct sqlConnection *conn2, char *table, char *chrom, 
+struct mafAli *mafLoadInRegion2(struct sqlConnection *conn,
+    struct sqlConnection *conn2, char *table, char *chrom,
     int start, int end, char *file);
 /* Return list of alignments in region. */
 
@@ -36,7 +39,7 @@ struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 /* Return list of alignments in region. */
 
 struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
-	char *chrom, int start, int end, 
+	char *chrom, int start, int end,
 	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash);
 /* Return list of alignments in region from axt external file as a maf. */
 
@@ -49,7 +52,7 @@ struct mafAli *hgMafFrag(
 	char *outName, 	    /* Optional name to use in first component */
 	struct slName *orderList /* Optional order of organisms. */
 	);
-/* mafFrag- Extract maf sequences for a region from database.  
+/* mafFrag- Extract maf sequences for a region from database.
  * This creates a somewhat unusual MAF that extends from start
  * to end whether or not there are actually alignments.  Where
  * there are no alignments (or alignments missing a species)
@@ -74,7 +77,7 @@ struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb);
 char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig);
 /* Return name of cart variable for this cons wiggle */
 
-struct wigMafSpecies 
+struct wigMafSpecies
     {
     struct wigMafSpecies *next;
     char *name;
@@ -82,6 +85,11 @@ struct wigMafSpecies
     boolean on;
     };
 
-struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart, 
+struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart,
     struct trackDb *tdb, char *name, char *db) ;
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt);
+
+struct consWiggle *consWiggleFind(char *db,struct trackDb *parent,char *table);
+/* Return conservation wig if it is found in the parent. */
+
+#endif//ndef HGMAF_H

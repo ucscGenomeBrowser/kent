@@ -27,6 +27,9 @@ struct wigCartOptions
     boolean bedGraph;	/*	is this a bedGraph track ?	*/
     };
 
+struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);
+/* Create a wigCartOptions from cart contents and tdb. */
+
 struct preDrawElement
     {
 	double	max;	/*	maximum value seen for this point	*/
@@ -36,6 +39,17 @@ struct preDrawElement
 	double  sumSquares;	/* sum of (values squared) at this point */
 	double  plotValue;	/*	raw data to plot	*/
 	double  smooth;	/*	smooth data values	*/
+    };
+
+struct bedGraphItem
+/* A bedGraph track item. */
+    {
+    struct bedGraphItem *next;
+    int start, end;	/* Start/end in chrom coordinates. */
+    char *name;		/* Common name */
+    float dataValue;	/* data value from bed table graphColumn	*/
+    double graphUpperLimit;	/* filled in by DrawItems	*/
+    double graphLowerLimit;	/* filled in by DrawItems	*/
     };
 
 /*	source to these routines is in wigTrack.c	*/
@@ -98,9 +112,18 @@ void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis);
 /*	drawing left labels	*/
 
+char *wigNameCallback(struct track *tg, void *item);
+/* Return name of wig level track. */
+
 void wigFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);
 /*	find upper and lower limits of graphed items (wigItem)	*/
+
+void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
+	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
+/* Draw once we've figured out predraw. */
 
 /******************  in source file bedGraph.c ************************/
 void wigBedGraphFindItemLimits(void *items,

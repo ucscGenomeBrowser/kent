@@ -378,6 +378,41 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	net track level display options	*/
+enum netLevelEnum {
+   netLevel0 = 0,
+   netLevel1 = 1,
+   netLevel2 = 2,
+   netLevel3 = 3,
+   netLevel4 = 4,
+   netLevel5 = 5,
+   netLevel6 = 6,
+};
+
+enum netLevelEnum netLevelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *netLevelEnumToString(enum netLevelEnum x);
+/* Convert from enum to string representation. */
+
+void netLevelDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/*	net track color options	*/
+enum netColorEnum {
+   netColorChromColors = 0,
+   netColorGrayScale = 1,
+};
+
+enum netColorEnum netColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *netColorEnumToString(enum netColorEnum x);
+/* Convert from enum to string representation. */
+
+void netColorDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	chain track color options	*/
 enum chainColorEnum {
    chainColorChromColors = 0,
@@ -832,20 +867,139 @@ void compositeViewControlNameFree(char **name);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
+#define NO_SCORE_FILTER  "noScoreFilter"
+#define  SCORE_FILTER      "scoreFilter"
+#define SIGNAL_FILTER      "signalFilter"
+#define PVALUE_FILTER      "pValueFilter"
+#define QVALUE_FILTER      "qValueFilter"
+#define _LIMITS            "Limits"
+#define _MIN               "Min"
+#define _MAX               "Max"
+#define _BY_RANGE          "ByRange"
+#define  SCORE_MIN         "scoreMin"
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
+void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
+/* Put up UI for net tracks */
+
+void chainCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
+/* Put up UI for chain tracks */
+
 void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax);
-/* If scoreMin has been set, let user select the shade of gray for that score, in case 
+/* If scoreMin has been set, let user select the shade of gray for that score, in case
  * the default is too light to see or darker than necessary. */
+
+struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
+/* creates the where clause condition to support numeric int filter range.
+   Filters are expected to follow
+        {fiterName}: trackDb min:max values
+        {filterName}Min: cart variable
+        {filterName}Max: cart variable Optional (and considered non-existent if -99)
+        {filterName}Limits: trackDb allowed range "0:1000" Optional
+   The and param allows stringing multiple where clauses together */
+
+struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
+/* creates the where clause condition to support  numeric double filters.
+   Filters are expected to follow
+        {fiterName}: trackDb min value;
+        {filterName}Min: cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+   The and param allows stringing multiple where clauses together */
+
+void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
+
+void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up genePred-specific controls */
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
 
-void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
-/* Updates the tdb_>priority from cart then sorts the list anew */
+boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
 
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
+
+boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name);
+/* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
+   returns TRUE for composite level name */
+
+boolean hSameTrackDbType(char *type1, char *type2);
+/* Compare type strings: require same string unless both are wig tracks. */
+
+typedef struct _sortOrder {
+// Sort order is used for sorting trackDb entries (hgTrackDb) and setting up javascript sorting (hui.c)
+    int count;
+    char*sortOrder;      // from cart (eg: CEL=+ FAC=- view=-)
+    char*htmlId;         // {tableName}.sortOrder
+    char**column;        // Always order in trackDb.ra (eg: FAC,CEL,view) TAG
+    char**title;         // Always order in trackDb.ra (eg: Factor,Cell Line,View)
+    boolean* forward;    // Always order in trackDb.ra but value of cart! (eg: -,+,-)
+    int*  order;  // 1 based
+    char *setting;
+} sortOrder_t;
+
+sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb);
+/* Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
+   Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
+   But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
+
+void sortOrderFree(sortOrder_t **sortOrder);
+/* frees any previously obtained sortOrder settings */
+
+typedef struct _sortColumn {
+// link list of columns to sort contained in sortableItem
+    struct _sortColumn *next;
+    char *value;                // value to sort on
+    boolean fwd;                // direction
+} sortColumn;
+
+typedef struct _sortableTdbItem {
+// link list of tdb items to sort
+    struct _sortableTdbItem *next;
+    struct trackDb *tdb;        // a contained item is actually a tdb entry
+    sortColumn *columns;        // a link list of values to sort on
+} sortableTdbItem;
+
+sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder);
+// creates a sortable tdb item struct, given a child tdb and its parents sort table
+
+void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items);
+// sort tdb items in list and then update priorities of item tdbs
+
+void sortableTdbItemsFree(sortableTdbItem **items);
+// Frees all memory associated with a list of sortable tdb items
+
+#define FILTER_BY "filterBy"
+typedef struct _filterBy {
+// A single filterBy set (from trackDb.ra filterBy column:Title=value,value [column:Title=value,value,value])
+    struct _filterBy *next;   // SL list
+    char*column;              // field that will be filtered on
+    char*title;               // Title that User sees
+    char*htmlName;            // Name used in HTML/CGI
+    boolean useIndex;         // The returned values should be indexes
+    struct slName *slValues;  // Values that can be filtered on (All is always implied)
+    struct slName *slChoices; // Values that have been chosen
+} filterBy_t;
+
+filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name);
+/* Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found */
+
+void filterBySetFree(filterBy_t **filterBySet);
+/* Free a set of filterBy structs */
+
+char *filterBySetClause(filterBy_t *filterBySet);
+/* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
+boolean makeDownloadsLink(struct trackDb *tdb);
+// Make a downloads link (if appropriate and then returns TRUE)
+
+boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
+// Make a table schema link (if appropriate and then returns TRUE)
 
 #endif /* HUI_H */

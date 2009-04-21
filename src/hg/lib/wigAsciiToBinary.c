@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.27 2009/01/06 19:13:23 mikep Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.27.2.1 2009/04/21 19:00:42 mikep Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -87,8 +87,14 @@ static double *data_values = (double *) NULL;
 			/* all the data values read in for this one row */
 static unsigned char * validData = (unsigned char *) NULL;
 				/* array to keep track of what data is valid */
-static double overallUpperLimit = -1.0e+300; /* for the complete set of data */
-static double overallLowerLimit = 1.0e+300; /* for the complete set of data */
+/* during wigAsciiToBinary, these starting limits are for the complete set
+ *	of data, they must change from these initial defaults during
+ *	processing
+ */
+/* limits for the complete set of data, they must change from these initial
+	defaults during processing */
+static double overallUpperLimit = wigEncodeStartingUpperLimit;
+static double overallLowerLimit = wigEncodeStartingLowerLimit;
 static char *wibFileName = (char *)NULL;	/* for use in output_row() */
 static long long wibSizeLimit = 0;	/*	governor on ct trash files */
 static long long wibSize = 0;	/*	counting up to limit */
@@ -118,8 +124,10 @@ static int isIntD(double x)
  */
 static void output_row()
 {
-double lowerLimit = 1.0e+300;
-double upperLimit = -1.0e+300;
+/* limits for the complete set of data, they must change from these initial
+	defaults during processing */
+double lowerLimit = wigEncodeStartingLowerLimit;
+double upperLimit = wigEncodeStartingUpperLimit;
 double dataRange = 0.0;
 double sumData = 0.0;
 double sumSquares = 0.0;
@@ -349,8 +357,10 @@ if (options != NULL)
 	wibSizeLimit = options->wibSizeLimit;
     }
 
-overallLowerLimit = 1.0e+300;	/* for the complete set of data */
-overallUpperLimit = -1.0e+300;	/* for the complete set of data */
+/* limits for the complete set of data, they must change from these initial
+	defaults during processing */
+overallLowerLimit = wigEncodeStartingLowerLimit;
+overallUpperLimit = wigEncodeStartingUpperLimit;
 binout = mustOpen(wibFile,"w");	/*	binary data file	*/
 wigout = mustOpen(wigFile,"w");	/*	table row definition file */
 #if defined(DEBUG)	/*	dbg	*/
@@ -547,6 +557,8 @@ while (lineFileNext(lf, &line, NULL))
 	Offset = bedChromStart;
 	dataValue = bedDataValue;
 	}
+    if (dataValue > overallUpperLimit) overallUpperLimit = dataValue;
+    if (dataValue < overallLowerLimit) overallLowerLimit = dataValue;
 
     /* see if this is the first time through, establish chromStart 	*/
     if (validLines == 1)
