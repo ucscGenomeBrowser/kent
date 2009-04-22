@@ -5632,7 +5632,7 @@ wgEncode 1
 track wgEncodeUwDnaseSeq
 compositeTrack on
 shortLabel UW DNaseI HS
-longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by DNase-seq
+longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM06990=GM06990 K562=K562 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH_RA=SK-N-SH(+RA) Th1=Th1
@@ -5654,7 +5654,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 Raw 2
-    longLabel ENCODE UW DNase-seq Raw Signal Rep 2 (in HepG2 cells)
+    longLabel ENCODE UW DNaseI Raw Signal Rep 2 (in HepG2 cells)
     subGroups view=RawSignal cellType=HepG2
     type wig 1.00 54453.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5674,7 +5674,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 2
-    longLabel ENCODE UW DNase-seq Hotspots Rep 2 (in HepG2 cells)
+    longLabel ENCODE UW DNaseI Hotspots Rep 2 (in HepG2 cells)
     subGroups view=Hotspots cellType=HepG2
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5690,7 +5690,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 Raw 2
-    longLabel ENCODE UW DNase-seq Raw Signal Rep 2 (in GM06990 cells)
+    longLabel ENCODE UW DNaseI Raw Signal Rep 2 (in GM06990 cells)
     subGroups view=RawSignal cellType=GM06990
     type wig 1.00 111633.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5709,7 +5709,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 2
-    longLabel ENCODE UW DNase-seq Hotspots Rep 2 (in GM06990 cells)
+    longLabel ENCODE UW DNaseI Hotspots Rep 2 (in GM06990 cells)
     subGroups view=Hotspots cellType=GM06990
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5724,7 +5724,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 Raw 1
-    longLabel ENCODE UW DNase-seq Raw Signal Rep 1 (in K562 cells)
+    longLabel ENCODE UW DNaseI Raw Signal Rep 1 (in K562 cells)
     subGroups view=RawSignal cellType=K562
     type wig 1.00 47529.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5744,7 +5744,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 Raw 2
-    longLabel ENCODE UW DNase-seq Raw Signal Rep 2 (in K562 cells)
+    longLabel ENCODE UW DNaseI Raw Signal Rep 2 (in K562 cells)
     subGroups view=RawSignal cellType=K562
     type wig 1.00 62912.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5764,7 +5764,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 Pk
-    longLabel ENCODE UW DNase-seq Peaks (in K562 cells)
+    longLabel ENCODE UW DNaseI Peaks (in K562 cells)
     subGroups view=Peaks cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5780,7 +5780,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 1
-    longLabel ENCODE UW DNase-seq Hotspots Rep 1 (in K562 cells)
+    longLabel ENCODE UW DNaseI Hotspots Rep 1 (in K562 cells)
     subGroups view=Hotspots cellType=K562
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5796,7 +5796,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 2
-    longLabel ENCODE UW DNase-seq Hotspots Rep 2 (in K562 cells)
+    longLabel ENCODE UW DNaseI Hotspots Rep 2 (in K562 cells)
     subGroups view=Hotspots cellType=K562
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5812,7 +5812,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel SKNSH(+RA) Raw 1
-    longLabel ENCODE UW DNase-seq Raw Signal Rep 1 (in SK-N-SH(+RA) cells)
+    longLabel ENCODE UW DNaseI Raw Signal Rep 1 (in SK-N-SH(+RA) cells)
     subGroups view=RawSignal cellType=SK-N-SH_RA
     type wig 1.00 24217.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -5831,7 +5831,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel SKNSH(+RA) Pk
-    longLabel ENCODE UW DNase-seq Peaks (in SK-N-SH(+RA) cells)
+    longLabel ENCODE UW DNaseI Peaks (in SK-N-SH(+RA) cells)
     subGroups view=Peaks cellType=SK-N-SH_RA
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
@@ -5846,7 +5846,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel SKNSH(+RA) 1
-    longLabel ENCODE UW DNase-seq Hotspots Rep 1 (in SK-N-SH(+RA) cells)
+    longLabel ENCODE UW DNaseI Hotspots Rep 1 (in SK-N-SH(+RA) cells)
     subGroups view=Hotspots cellType=SK-N-SH_RA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
