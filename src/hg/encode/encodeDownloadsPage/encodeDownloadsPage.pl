@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.6 2009/03/20 21:46:03 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.7 2009/04/22 23:57:17 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -93,17 +93,89 @@ sub htmlTableRow {
     my ($file,$size,$date,$releaseDate,$metaData) = @_;
 
     if($releaseDate && length($releaseDate) > 0) {
-        print OUT_FILE "<TR><TD align='left'>&nbsp;&nbsp;$releaseDate\n";
+        print OUT_FILE "<TR valign='top'><TD align='left'>&nbsp;&nbsp;$releaseDate\n";
     } else {
-        print OUT_FILE "<TR><TD align='left'>&nbsp;\n";
+        print OUT_FILE "<TR valign='top'><TD align='left'>&nbsp;\n";
     }
     print OUT_FILE "<TD><A type='application/zip' target='_blank' HREF=\"$file\">$file</A>\n";
     print OUT_FILE "<TD align='right'>&nbsp;&nbsp;$size<TD>&nbsp;&nbsp;$date&nbsp;&nbsp;\n";
     if($metaData && length($metaData) > 0) {
-        print OUT_FILE "<TD>$metaData\n";
+        print OUT_FILE "<TD nowrap>$metaData\n";
     }
     print OUT_FILE "</TR>\n";
 }
+
+sub metadataLineToArrays {
+# Creates pair of arrays that contain the settings in a metadata setting line (retains order)
+    my ($line) = @_;
+
+    my @tags;
+    my @vals;
+    my $tix = 0;
+    while($line && length($line)>0) {
+        my $tag;
+        my $val;
+        ( $tag,$line ) = split(/=/, $line,2);
+        $tag =~ s/\s+//g;
+        my @chars = split(//,$line);
+        if($chars[0] ne "\"") {
+            ( $val,$line ) = split(/\s+/, $line,2);
+        } else {
+            my $ix=1;
+            while($ix < length($line) && ($chars[$ix] ne '"' || $chars[$ix - 1] eq '\\')) {  # Find next " skipping escaped \"
+                $ix++;
+            }
+            if($ix < length($line)) {
+                $val  = substr($line,1,$ix - 1);
+                $line = substr($line,  $ix + 1);
+                $val  =~ s/\\"/\"/g;
+            } else {
+                $val = $line;
+                $line = "";
+            }
+        }
+        $tags[$tix  ] = $tag;
+        $vals[$tix++] = $val;
+    }
+    return ( \@tags, \@vals );
+}
+
+sub metadataArraysRemoveHash {
+# Removes members of has from metadata Arrays
+    my ($tagsRef,$valsRef,$removeRef) = @_;
+    my @tags = @{$tagsRef};
+    my @vals = @{$valsRef};
+    my %remove = %{$removeRef};
+
+    my @tagsOk;
+    my @valsOk;
+    my $nix = 0;
+    my $oix = 0;
+    while($tags[$oix]) {
+        if($remove{$tags[$oix]}) {
+            $oix++;
+        } else {
+            $tagsOk[$nix  ] = $tags[$oix  ];
+            $valsOk[$nix++] = $vals[$oix++];
+        }
+    }
+    return ( \@tagsOk, \@valsOk );
+}
+
+sub metadataArraysJoin {
+# Removes members of has from metadata Arrays
+    my ($tagsRef,$valsRef) = @_;
+    my @tags = @{$tagsRef};
+    my @vals = @{$valsRef};
+    my @meta;
+    my $tix = 0;
+    while($tags[$tix]) {
+        $meta[$tix] = join("=",($tags[$tix],$vals[$tix]));
+        $tix++;
+    }
+    return @meta;
+}
+
 ############################################################################
 # Main
 
@@ -175,41 +247,73 @@ for my $line (@fileList) {
     if($results) {
         my ($type) = split(/\s+/, $results);    # White space
         $metaData{type} = $type;
-        $results = $db->quickQuery("select settings from trackDb where tableName = '$tableName'");
-#print OUT_FILE "Settings:$results\n";
-        if( $results ) {
-            my @settings = split(/\n/, $results); # New Line
-            while (@settings) {
-                my @pair = split(/\s+/, (shift @settings),3);
-#print OUT_FILE "Settings:". join('=',@pair) . "\n";
-                if($pair[0] eq "subTrack") {
-                    my $parentSettings = $db->quickQuery("select settings from trackDb where tableName = '$pair[1]'");
-                    if( $parentSettings ) {
-                        my @parent = split(/\n/, $parentSettings); # New Line
-                        while (@parent) {
-                            my @par = split(/\s+/, (shift @parent));
-                            if( $par[0] eq "wgEncode" ) {
-                                $typePrefix = "ENCODE ";
-                            }
-                        }
+    } else {
+        if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
+            $metaData{type} = $dataType;
+        }
+    }
+    $results = $db->quickQuery("select settings from trackDb where tableName = '$tableName'");
+    if(!$results) {
+        ### TODO: This needs to be replaced with a lookup of fileDb.ra
+        my $associatedTable = $tableName;
+        $associatedTable =~ s/RawData/RawSignal/    if $tableName =~ /RawData/;
+        $associatedTable =~ s/Alignments/RawSignal/ if $tableName =~ /Alignments/;
+        if($tableName ne $associatedTable) {
+            $results = $db->quickQuery("select settings from trackDb where tableName = '$associatedTable'");
+            if($results) {
+                $metaData{parent} = "RawData&rarr;RawSignal" if $tableName =~ /RawData/;
+                $metaData{parent} = "Alignments&rarr;RawSignal" if $tableName =~ /Alignments/;
+            }
+        }
+    }
+    if( $results ) {
+        my @settings = split(/\n/, $results); # New Line
+        while (@settings) {
+            my @pair = split(/\s+/, (shift @settings),2);
+            if($pair[0] eq "releaseDate" && length($releaseDate) == 0) {
+                $releaseDate = $pair[1];
+            } elsif($pair[0] eq "dateSubmitted" && length($releaseDate) == 0) {
+                my ($YYYY,$MM,$DD) = split('-',$pair[1]);
+                $MM = $MM - 1;
+                my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
+                $rMon = $rMon + 1;
+                $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
+            } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
+                $metaData{$pair[0]} = $pair[1];
+            } elsif($pair[0] eq "metadata") {
+                # Use metadata setting with priority  ### TODO Need to do this for files
+                my ( $tagRef, $valRef ) = metadataLineToArrays($pair[1]);
+                my @tags = @{$tagRef};
+                my @vals = @{$valRef};
+                my $tix = 0;
+                while($tags[$tix]) {
+                    if($tags[$tix] eq "dateUnrestricted") {
+                        $releaseDate = $vals[$tix];
+                    } elsif($tags[$tix] eq "dateSubmitted" && length($releaseDate) == 0) {
+                        my ($YYYY,$MM,$DD) = split('-',$vals[$tix]);
+                        $MM = $MM - 1;
+                        my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
+                        $rMon = $rMon + 1;
+                        $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
                     }
-                } elsif($pair[0] eq "releaseDate") {
-                    $releaseDate = $pair[1];
-                } elsif($pair[0] eq "dateSubmitted" && length($releaseDate) == 0) {
-                    my ($YYYY,$MM,$DD) = split('-',$pair[1]);
-                    $MM = $MM - 1;
-                    my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
-                    $rMon = $rMon + 1;
-                    $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
-                } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
-                    $metaData{$pair[0]} = $pair[1];
+                    $tix++;
                 }
+                my %remove;
+                $remove{project}    = 1;
+                $remove{composite}  = 1;
+                $remove{fileName}    = 1;
+                $remove{dateSubmitted} = 1;
+                $remove{dateUnrestricted}  = 1;
+                ( $tagRef, $valRef ) =  metadataArraysRemoveHash( \@tags,\@vals,\%remove );
+                @tags = @{$tagRef};
+                @vals = @{$valRef};
+                my @metas = metadataArraysJoin( \@tags,\@vals );
+                $metaData{metadata} = join("; ", @metas);
             }
         }
     } else {
         if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
             $metaData{type} = $dataType;
-            $typePrefix = "ENCODE ";
             my ($YYYY,$MM,$DD) = split('-',$file[3]);
             $MM = $MM - 1;
             my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
@@ -235,14 +339,22 @@ for my $line (@fileList) {
     }
     my @tmp;
     if(my $type = $metaData{type}) {
-        push(@tmp, "${typePrefix}type: $type");
+        push(@tmp, "type: $type");
         delete $metaData{type};
     }
-    if(my $cell = $metaData{cell}) {
-        push(@tmp, "cell: $cell");
-        delete $metaData{cell};
+    if($metaData{metadata}) {
+        if($metaData{parent}) {
+            push(@tmp, $metaData{parent});
+            delete $metaData{parent};
+        }
+        push(@tmp, $metaData{metadata});
+    } else {
+        if(my $cell = $metaData{cell}) {
+            push(@tmp, "cell: $cell");
+            delete $metaData{cell};
+        }
+        push(@tmp, "$_: " . $metaData{$_}) for (sort keys %metaData);
     }
-    push(@tmp, "$_: " . $metaData{$_}) for (sort keys %metaData);
     my $metaData = join("; ", @tmp);
     # Now file contains: [file without path] [tableName] [size] [date] [releaseDate] [fullpath/file]
     htmlTableRow(*OUT_FILE,$fileName,$file[2],$file[3],$releaseDate,$metaData);
