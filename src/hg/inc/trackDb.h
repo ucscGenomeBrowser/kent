@@ -283,5 +283,18 @@ struct trackDb *subTdbFind(struct trackDb *parent,char *table);
 struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
+typedef struct _metadata {
+    int count;
+    char**tags;
+    char**values;
+    char* setting;
+} metadata_t;
+
+metadata_t *metadataSettingGet(struct trackDb *tdb);
+/* Looks for a metadata tag and parses the setting into arrays of tags and values */
+
+void metadataFree(metadata_t **metadata);
+/* frees any previously obtained metadata setting */
+
 #endif /* TRACKDB_H */
 
