@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.24 2009/04/01 23:08:30 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.25 2009/04/22 23:21:12 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -253,31 +253,46 @@ function compositeCfgRegisterOnchangeAction(prefix)
 function subtrackCfgHideAll(table)
 {
 // hide all the subtrack configuration stuff
-    $("div[id $= '.cfg']").each( function (i) {
+    $("div[id $= '_cfg']").each( function (i) {
         $( this ).css('display','none');
         $( this ).children("input[name$='.childShowCfg']").val("off");
     });
 }
 
-function subtrackCfgShow(anchor)
+function subtrackCfgShow(tableName)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
-    var td=anchor.parentNode;
-    var tr=td.parentNode;
-    var tbody=tr.parentNode;
-    var div = tr.getElementsByTagName("div");
-    if (div!=undefined && div[0].id.lastIndexOf(".cfg") == div[0].id.length - 4) {
-        if (div[0].style.display == 'none') {
-            subtrackCfgHideAll(tbody);
-            div[0].style.display = '';
-            $( div[0] ).children("input[name$='.childShowCfg']").val("on");
-        } else {
-            div[0].style.display = 'none';
-            $( div[0] ).children("input[name$='.childShowCfg']").val("off");
-        }
+    var divit = $("#div_"+tableName+"_cfg");
+    if($(divit).css('display') == 'none')
+        $("#div_"+tableName+"_meta").hide();
+    // Could have all inputs commented out, then uncommented when clicked:
+    // But would need to:
+    // 1) be able to find composite view level input
+    // 2) know if subtrack input is non-default (if so then subtrack value overrides composite view level value)
+    // 3) know whether so composite view level value has changed since hgTrackUi displayed (if so composite view level value overrides)
+    $(divit).toggle();
+    return false;
+}
+
+function subtrackMetaShow(tableName)
+{
+// Will show subtrack specific configuration controls
+// Config controls not matching name will be hidden
+    var divit = $("#div_"+tableName+"_meta");
+    if($(divit).css('display') == 'none')
+        $("#div_"+tableName+"_cfg").hide();
+    var htm = $(divit).html();
+    // Seems to be faster if this undisplayed junk is commented out.
+    if(htm.substring(0,4) == "<!--") {
+        htm = htm.substring(4,htm.length-7);
+        $(divit).html(htm);
+    } else {
+        $(divit).html("<!--"+htm+"-->");
     }
-    return true;
+
+    $(divit).toggle();
+    return false;
 }
 
 function enableViewCfgLink(enable,view)

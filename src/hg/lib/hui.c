@@ -21,7 +21,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.185 2009/04/15 18:17:31 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.186 2009/04/22 23:21:50 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -34,6 +34,55 @@ static char const rcsid[] = "$Id: hui.c,v 1.185 2009/04/15 18:17:31 kate Exp $";
 #define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(anc),(anc),(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
 #define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
 #define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
+
+#define ENCODE_DCC_DOWNLOADS "encodeDCC"
+
+static boolean makeNamedDownloadsLink(struct trackDb *tdb,char *name)
+// Make a downloads link (if appropriate and then returns TRUE)
+{
+// Downloads directory if this is ENCODE
+if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/%s/\" TARGET=_BLANK>%s</A></P>\n",
+            cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
+            trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
+            ENCODE_DCC_DOWNLOADS,
+            tdb->tableName,name);
+    return TRUE;
+    }
+return FALSE;
+}
+
+boolean makeDownloadsLink(struct trackDb *tdb)
+// Make a downloads link (if appropriate and then returns TRUE)
+{
+return makeNamedDownloadsLink(tdb,"Downloads");
+}
+
+boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
+// Make a table schema link (if appropriate and then returns TRUE)
+{
+#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>\n"
+if (hTableOrSplitExists(db, tdb->tableName))
+    {
+	char *tableName  = tdb->tableName;
+	if (sameString(tableName, "mrna"))
+	    tableName = "all_mrna";
+    char *hint = " title='Open table schema in new window'";
+    if( label == NULL)
+        label = " View table schema";
+    else
+        hint = " title='View table schema'";
+
+    if(tdbIsCompositeChild(tdb))
+        printf(SCHEMA_LINKED, db, tdb->parent->grp, tdb->parent->tableName,tableName,hint,label);
+    else
+        printf(SCHEMA_LINKED, db, tdb->grp, tdb->tableName,tableName,hint,label);
+
+    return TRUE;
+    }
+return FALSE;
+}
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1935,6 +1984,21 @@ if(members && *members)
     }
 }
 
+#ifdef ADD_MULT_SELECT_DIMENSIONS
+// This is the beginning of work on allowing subtrack selection by multi-select drop downs
+typedef struct _selectables {
+    int count;
+    members_t **subgroups;
+    boolean**multiple;
+} selectables_t;
+
+boolean selectablesExist(struct trackDb *parentTdb)
+/* Does this parent track contain selectables option? */
+{
+    return (trackDbSetting(parentTdb, "selectableBy") != NULL);
+}
+#endif//def ADD_MULT_SELECT_DIMENSIONS
+
 typedef struct _membership {
     int count;
     char **subgroups;    // Ary of Tags in parentTdb->subGroupN and in childTdb->subGroups (ie view)
@@ -2620,13 +2684,44 @@ char *encodeRestrictionDateDisplay(struct trackDb *trackDb)
 {
 if (!trackDb)
     return NULL;
-char *date = trackDbSetting(trackDb, "dateUnrestricted");
-if (date)
-    return strSwapChar(cloneString(date), ' ', 0);   // Truncate time
-date = trackDbSetting(trackDb, "dateSubmitted");
-if (date)
-    return dateAddToAndFormat(strSwapChar(cloneString(date), ' ', 0), "%F", 0, 9, 0);
-return NULL;
+char *date = NULL;
+boolean addMonths = FALSE;
+metadata_t *metadata = metadataSettingGet(trackDb);
+if(metadata != NULL)
+    {
+    int ix=0;
+    for(;ix<metadata->count;ix++)
+        {
+        if (sameString(metadata->tags[ix],"dateUnrestricted"))
+            {
+            date = metadata->values[ix];
+            addMonths = FALSE;
+            break;
+            }
+        else  if (date == NULL && sameString(metadata->tags[ix],"dateSubmitted"))
+            {
+            date = metadata->values[ix];
+            addMonths = TRUE;
+            }
+        }
+    }
+if(date == NULL)
+    date = trackDbSetting(trackDb, "dateUnrestricted");
+if(date != NULL)
+    addMonths = FALSE;
+else
+    {
+    addMonths = TRUE;
+    date = trackDbSetting(trackDb, "dateSubmitted");
+    }
+if (date != NULL)
+    {
+    date = strSwapChar(cloneString(date), ' ', 0);   // Truncate time
+    if(addMonths)
+        date = dateAddToAndFormat(date, "%F", 0, 9, 0);
+    }
+metadataFree(&metadata);
+return date;
 }
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
@@ -2820,7 +2915,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             if(useDragAndDrop)
                 printf(" class='trDraggable' title='Drag to Reorder' onmouseover=\"hintForDraggableRow(this)\"");
 
-            printf(" id=\"tr_%s\" nowrap>\n<TD>",id);
+            printf(" id=\"tr_%s\" nowrap%s>\n<TD>",id,(selectedOnly?" style='display:none'":""));
             dyStringClear(dyHtml);
             dyStringPrintf(dyHtml, "onclick='matSubtrackCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subtrackCB");
             for(di=0;di<dimMax;di++)
@@ -2845,7 +2940,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);                        // TODO: Sort needs to expand from subGroups to labels as well
                     if(ix >= 0)
                         {
-#define CFG_SUBTRACK_LINK  "<A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (subtrackCfgShow(this) == false);\" title=\"Configure Subtrack Settings\">%s</A>\n"
+#define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Configure Subtrack Settings'>%s</A>\n"
 #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
                         printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
@@ -2866,14 +2961,40 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     printf("%s\n",subtrack->shortLabel);
                 puts ("</TD>");
                 }
-            printf ("<TD nowrap='true'>&nbsp;%s", subtrack->longLabel);
+            printf ("<TD nowrap='true'><div onmouseover=\"this.style.cursor='text';\">&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
+
+            metadata_t *metadata = metadataSettingGet(subtrack);
+            if(metadata != NULL)
+                {
+                printf("&nbsp;<A HREF='#a_meta_%s' onclick='return subtrackMetaShow(\"%s\");' title='Show metadata'>...</A></div>\n",
+                       subtrack->tableName,subtrack->tableName);
+                printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",subtrack->tableName);
+                //printf("<DIV id='div.%s.meta'><table>",subtrack->tableName);
+                int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
+                for(;ix<metadata->count;ix++)
+                    {
+                    if(sameString(metadata->tags[ix],"fileName"))
+                        {
+                        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
+                        makeNamedDownloadsLink(parentTdb,metadata->values[ix]);
+                        printf("</td></tr>");
+                        }
+                    else if(!sameString(metadata->tags[ix],"subId")
+                         && !sameString(metadata->tags[ix],"composite"))
+                        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
+                    }
+                printf("</table>--></DIV>\n");
+                metadataFree(&metadata);
+                }
+            else
+                printf("</div>");
 
             if(cType != cfgNone)
                 {
                 ix = stringArrayIx("view", membership->subgroups, membership->count);
-#define CFG_SUBTRACK_DIV "<DIV id='div.%s.cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
+#define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
 #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
                 safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->tableName);
                 boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
@@ -4585,49 +4706,6 @@ if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
         puts("<P>");
         }
     }
-}
-
-#define ENCODE_DCC_DOWNLOADS "encodeDCC"
-
-boolean makeDownloadsLink(struct trackDb *tdb)
-// Make a downloads link (if appropriate and then returns TRUE)
-{
-// Downloads directory if this is ENCODE
-if(trackDbSetting(tdb, "wgEncode") != NULL)
-    {
-    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n",
-            cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
-            trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
-            ENCODE_DCC_DOWNLOADS,
-            tdb->tableName);
-    return TRUE;
-    }
-return FALSE;
-}
-
-boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
-// Make a table schema link (if appropriate and then returns TRUE)
-{
-#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>\n"
-if (hTableOrSplitExists(db, tdb->tableName))
-    {
-	char *tableName  = tdb->tableName;
-	if (sameString(tableName, "mrna"))
-	    tableName = "all_mrna";
-    char *hint = " title='Open table schema in new window'";
-    if( label == NULL)
-        label = " View table schema";
-    else
-        hint = " title='View table schema'";
-
-    if(tdbIsCompositeChild(tdb))
-        printf(SCHEMA_LINKED, db, tdb->parent->grp, tdb->parent->tableName,tableName,hint,label);
-    else
-        printf(SCHEMA_LINKED, db, tdb->grp, tdb->tableName,tableName,hint,label);
-
-    return TRUE;
-    }
-return FALSE;
 }
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
