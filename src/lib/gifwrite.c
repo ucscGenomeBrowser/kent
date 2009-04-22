@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gifcodes.h"
 
-static char const rcsid[] = "$Id: gifwrite.c,v 1.6 2003/05/21 21:02:22 kent Exp $";
+static char const rcsid[] = "$Id: gifwrite.c,v 1.7 2009/04/22 01:57:00 galt Exp $";
 
 static char gifsig[] = "GIF87a";
 
@@ -19,7 +19,7 @@ long gif_wcount;
 
 gif_wcount = (long)screen->width * screen->height;
 zeroBytes(&gif, sizeof(gif));
-strcpy(gif.giftype, gifsig);
+strncpy(gif.giftype, gifsig, sizeof(gif.giftype));
 gif.wlo = gim.wlo = ((screen->width)&0xff);
 gif.whi = gim.whi = ((screen->width>>8)&0xff);
 gif.hlo = gim.hlo = ((screen->height)&0xff);
