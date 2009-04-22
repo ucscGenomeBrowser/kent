@@ -3338,7 +3338,7 @@ chromosomes chr1
 
 track barskiChIPseq
 compositeTrack on
-shortLabel Barski ChIPseq
+shortLabel Barski ChIP-seq
 longLabel Barski et al. 2007 Chromatin Methylation ChIP-Seq
 group regulation
 subGroup1 view View SIG=Signal
