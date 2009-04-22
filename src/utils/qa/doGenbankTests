@@ -11,9 +11,8 @@
 
 tableExists()
 {
-  local db=$1
-  local table=$2
-  local res=`hgsql -Ne "show tables like '$table'" $db`
+  local db=$1 table=$2
+  local res=$(hgsql -Ne "show tables like '$table'" $db)
   if [ -z "$res" ]
   then
     return 1 
@@ -25,13 +24,19 @@ tableExists()
 databaseExists()
 {
   local db=$1
-  local res=`hgsql -Ne "show databases like '$db'"`
+  local res=$(hgsql -Ne "show databases like '$db'")
   if [ -z "$res" ]
   then
     return 1
   else
     return 0
   fi
+}
+
+getShortLabel()
+{
+  local db=$1 table=$2
+  hgsql -NBe "select shortLabel from trackDb where tableName='$table'" $db
 }
 
 allOk=yes
@@ -69,62 +74,54 @@ else
   fi
 fi
 
-# print some useful info
+# print information about the script at the top of the output
 echo "$(basename $0) output on $db"
 date
 echo
 
 # get a list of all genbank tracks present in this assembly
-echo "The following GenBank tracks are present in this assembly:"
-
-# now look for the actual tracks
-tableExists $db refGene && echo -e "\tRefSeq Genes"
-tableExists $db xenoRefGene && echo -e "\tOther RefSeq"
-tableExists $db mgcGenes  && echo -e "\tMGC Genes"
-tableExists $db orfeomeGenes  && echo -e "\tORFeome Clones"
-tableExists $db all_mrna && echo -e "\t\$Org mRNAs"
-tableExists $db %intronEst && echo -e "\tSpliced ESTs"
-tableExists $db all_est && echo -e "\t\$Org ESTs"
-tableExists $db xenoMrna && echo -e "\tOther mRNAs"
-tableExists $db xenoEst && echo -e "\tOther ESTs"
-echo
-
-echo -e "--> Running genePredCheck and pslCheck:\n"
-
-# run genePredChecks
-for table in refGene xenoRefGene mgcGenes orfeomeGenes
+echo -e "The following GenBank tracks are present in this assembly:\n"
+for table in refGene xenoRefGene mgcFullMrna orfeomeMrna \
+             all_mrna intronEst all_est xenoMrna xenoEst
 do
-  tableExists $db $table && {
-    echo genePredCheck $table
-    nice genePredCheck -db=$db $table || allOk=no
-  }
+  tableExists $db && getShortLabel $db $table
 done
 echo
 
-# run pslChecks
-for table in all_mrna xenoMrna all_est refSeqAli xenoRefSeqAli xenoEst
+# run genePredChecks and pslChecks
+echo -e "--> Running genePredCheck and pslCheck:\n"
+for table in refGene xenoRefGene mgcGenes orfeomeGenes
 do
   tableExists $db $table && {
-    echo pslCheck $table
-    nice pslCheck -db=$db $table || allOk=no
+    cmd="nice genePredCheck -db=$db $table"
+    echo $cmd
+    $cmd || allOk=no
+  }
+done
+echo
+for table in mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli \
+             xenoRefSeqAli xenoEst
+do
+  tableExists $db $table && {
+    cmd="nice pslCheck -db=$db $table"
+    echo $cmd
+    $cmd || allOk=no
   }
 done
 echo
 
 # run joinerCheck
 joinerLoc=~/kent/src/hg/makeDb/schema/all.joiner
-
-echo -e "--> Checking appropriate keys in $(basename $joinerLoc):\n"
-
+echo -e "--> Checking appropriate keys in all.joiner:\n"
 doJoinerCheck() {
   local table=$1 ident=$2
   tableExists $db $table && {
-    echo joinerCheck -keys -database=$db -identifier=$ident $(basename $joinerLoc)
-    nice joinerCheck -keys -database=$db -identifier=$ident $joinerLoc || allOk=no
+    cmd="nice joinerCheck -keys -database=$db -identifier=$ident $joinerLoc"
+    echo $cmd
+    $cmd || allOk=no
     echo
   }
 }
-
 doJoinerCheck gbCdnaInfo gbCdnas
 doJoinerCheck refGene refSeqId
 doJoinerCheck xenoRefGene xenoRefSeqId
@@ -137,24 +134,27 @@ doJoinerCheck xenoEst xenoEstAccession
 echo
 
 # run gbSanity
-timestamp=$(date +%m.%d.%Y-%R%p)
-echo -e "--> Running gbSanity, and putting output in:"
-echo -e "${HOST}:${sanityPath}/misc/${db}.sanity.$timestamp"
-(cd ${sanityPath} && bin/x86_64/gbSanity $db >& misc/${db}.sanity.$timestamp) || allOk=no
-echo -e "Here is the last line of ${db}.sanity.$timestamp:\n"
-tail -1 $sanityPath/misc/${db}.sanity.$timestamp
+filename=${db}.sanity.$(date +%m.%d.%Y-%R%p)
+echo -e "--> Running gbSanity, and putting output in:\n"
+echo -e "${HOST}:$sanityPath/misc/$filename"
+# need to run in a subshell, since gbSanity wants to be run from this dir
+(cd $sanityPath && bin/x86_64/gbSanity $db >& misc/$filename) || allOk=no
+echo -e "\nHere is the last line of that file:\n"
+tail -1 $sanityPath/misc/$filename
 echo -e "\nIf there are any errors here, consult Mark Diekhans.\n"
 
 # run featureBits
 echo -e "--> Running featureBits.  Remember to paste this into the pushqueue:\n"
-for table in refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes \
+for table in refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes orfeomeMrna \
              all_mrna intronEst all_est xenoMrna xenoEst
 do
   tableExists $db $table && {
-    echo featureBits -countGaps $db $table
-    nice featureBits -countGaps $db $table || allOk=no
-    echo featureBits -countGaps $db $table gap
-    nice featureBits -countGaps $db $table gap || allOk=no
+    cmd="nice featureBits -countGaps $db $table"
+    echo $cmd
+    $cmd || allOk=no
+    cmd="nice featureBits -countGaps $db $table gap"
+    echo $cmd
+    $cmd || allOk=no
     echo
   }
 done
