@@ -1,5 +1,6 @@
 #!/bin/tcsh
-source `dirname $0`/qaConfig.csh
+source `which qaConfig.csh`
+
 ###############################################
 #
 #  09-16-2008
