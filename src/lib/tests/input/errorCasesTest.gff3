@@ -1,0 +1,28 @@
+##gff-version 3
+# duplicate ids
+2RHet	MB6	mRNA	2317085	2318224	.	-	.	ID=DMG5-chr2RHet.4.001.a;Parent=DMG5-chr2RHet.4.001;Name=DMG5-chr2RHet.4.001.a
+2RHet	MB6	exon	2317085	2317489	.	-	.	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	exon	2317537	2317812	.	-	.	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	exon	2317913	2318224	.	-	.	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	stop_codon	2317085	2317087	.	-	0	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	CDS	2317085	2317489	.	-	0	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	CDS	2317537	2317812	.	-	0	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	CDS	2317913	2318182	.	-	0	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	start_codon	2318180	2318182	.	-	0	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	five_prime_UTR	2318183	2318224	.	-	.	Parent=DMG5-chr2RHet.4.001.a
+2RHet	MB6	gene	2316753	2318224	0	-	.	ID=DMG5-chr2RHet.4.001.a;Name=DMG5-chr2RHet.4.001.a
+2RHet	MB6	mRNA	2316753	2318224	.	-	.	ID=DMG5-chr2RHet.4.001.a.a;Parent=DMG5-chr2RHet.4.001.a;Name=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	exon	2316753	2316903	.	-	.	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	exon	2317224	2317454	.	-	.	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	exon	2317553	2317812	.	-	.	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	exon	2317913	2318224	.	-	.	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	stop_codon	2316753	2316755	.	-	0	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	CDS	2316753	2316903	.	-	1	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	CDS	2317224	2317454	.	-	1	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	CDS	2317553	2317812	.	-	0	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	CDS	2317913	2318182	.	-	0	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	start_codon	2318180	2318182	.	-	0	Parent=DMG5-chr2RHet.4.001.a.a
+2RHet	MB6	five_prime_UTR	2318183	2318224	.	-	.	Parent=DMG5-chr2RHet.4.001.a.a
+# bogus target with escaped space
+2L	sim4_preR5_gadfly4U_transcripts.fasta	match	22229547	22229792	.	-	.	ID=:194490_sim4_preR5_gadfly4U_transcripts.fasta;Name=CG41424-RA AABU01002023_1064-818-2Lh_cyto_het-preR5_gadfly4U_tra;program=sim4;programversion=1.0;sourcename=preR5_gadfly4U_transcripts.fasta;Target=CG41424-RA_AABU01002023_1064-818 22000976 22001221 +
+2L	sim4_preR5_gadfly4U_transcripts.fasta	match_part	22229547	22229792	98	-	.	Name=:200589;Parent=:194490_sim4_preR5_gadfly4U_transcripts.fasta;target_type=match;Target=CG41424-RA%20AABU01002023_1064-818 22000976 22001221 +

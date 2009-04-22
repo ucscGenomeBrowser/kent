@@ -12,7 +12,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
-    gfNet.o gff.o gfxPoly.o gifLabel.o gifcomp.o \
+    gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o gifcomp.o \
     gifdecomp.o gifread.o gifwrite.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
     https.o intExp.o intValTree.o internet.o itsa.o \
