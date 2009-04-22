@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1528 2009/04/22 22:44:02 mikep Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1529 2009/04/22 22:47:14 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4691,22 +4691,6 @@ if ((s = skipLeadingSpaces(s)) != NULL && s[0] != 0)
     }
 }
 
-void printGeneLynxName(char *search)
-/* Print link to GeneLynx search using gene name (WNT2, CFTR etc) */
-{
-printf("<B>GeneLynx</B> ");
-printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1\" TARGET=_blank>", search);
-printf("%s</A><BR>\n", search);
-}
-
-void printGeneLynxAcc(char *search)
-/* Print link to GeneLynx search using accession (X07876, BC001451 etc) */
-{
-printf("<B>GeneLynx</B> ");
-printf("<A HREF=\"http://human.genelynx.org/cgi-bin/fullsearch?fullquery=%s&submit=submit\" TARGET=_blank>", search);
-printf("%s</A><BR>\n", search);
-}
-
 /* --- !!! Riken code is under development Fan. 4/16/02 */
 void printRikenInfo(char *acc, struct sqlConnection *conn )
 /* Print Riken annotation info */
@@ -5014,10 +4998,6 @@ if (row != NULL)
         {
         printf("<B>Version:</B> %s<BR>\n", version);
         }
-    if ((!isEst) && startsWith("Human", organism))
-	{
-	printGeneLynxAcc(acc);
-	}
     /* print RGD EST Report link if it is Rat genome and it has a link to RGD */
     if (sameWord(organism, "Rat"))
 	{
@@ -9260,11 +9240,6 @@ if (!startsWith("Worm", organism))
 	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     printf("\n");
-    if (startsWith("Human", organism))
-        {
-        printGeneLynxName(rl->name);
-	printf("\n");
-        }
     printGeneCards(rl->name);
     }
 if (hTableExists(database, "jaxOrtholog"))
