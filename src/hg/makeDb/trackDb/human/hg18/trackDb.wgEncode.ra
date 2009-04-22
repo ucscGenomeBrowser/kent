@@ -5720,45 +5720,45 @@ scoreMin 500
     cell GM06990
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=GM06990 view=Hotspots replicate=2 labVersion=Hotspot-v5.0 dataVersion="ENCODE Nov 2008 Freeze" subId=110 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Gm06990 fileName=wgEncodeUwDnaseSeqHotspotsRep2Gm06990.broadPeak.gz
 
-    #track wgEncodeUwDnaseSeqRawSignalRep1K562
-    #release alpha
-    #subTrack wgEncodeUwDnaseSeq
-    #shortLabel K562 Raw 1
-    #longLabel ENCODE UW DNase-seq Raw Signal Rep 1 (in K562 cells)
-    #subGroups view=RawSignal cellType=K562
-    #type wig 1.00 47529.00
-    #dataVersion ENCODE Nov 2008 Freeze
-    #dateSubmitted 2008-12-09
-    #dateUnrestricted 2009-09-09
-    #priority 16
-    #noInherit on
-    #spanList first
-    #windowingFunction maximum
-    #maxHeightPixels 100:50:16
-    #viewLimits 1:150
-    #cell K562
-    #color 46,0,184
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Nov 2008 Freeze" subId=106 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1K562 fileName=wgEncodeUwDnaseSeqRawSignalRep1K562.wig.gz
+    track wgEncodeUwDnaseSeqRawSignalRep1K562
+    release alpha
+    subTrack wgEncodeUwDnaseSeq
+    shortLabel K562 Raw 1
+    longLabel ENCODE UW DNase-seq Raw Signal Rep 1 (in K562 cells)
+    subGroups view=RawSignal cellType=K562
+    type wig 1.00 47529.00
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-09
+    dateUnrestricted 2009-09-09
+    priority 16
+    noInherit on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
+    cell K562
+    color 46,0,184
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Nov 2008 Freeze" subId=106 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1K562 fileName=wgEncodeUwDnaseSeqRawSignalRep1K562.wig.gz
 
-    #track wgEncodeUwDnaseSeqRawSignalRep2K562
-    #release alpha
-    #subTrack wgEncodeUwDnaseSeq
-    #shortLabel K562 Raw 2
-    #longLabel ENCODE UW DNase-seq Raw Signal Rep 2 (in K562 cells)
-    #subGroups view=RawSignal cellType=K562
-    #type wig 1.00 62912.00
-    #dataVersion ENCODE Nov 2008 Freeze
-    #dateSubmitted 2008-12-09
-    #dateUnrestricted 2009-09-09
-    ##priority 16
-    #noInherit on
-    #spanList first
-    #windowingFunction maximum
-    #maxHeightPixels 100:50:16
-    #viewLimits 1:150
-    #cell K562
-    #color 46,0,184
-    #metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Nov 2008 Freeze" subId=106 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2K562 fileName=wgEncodeUwDnaseSeqRawSignalRep2K562.wig.gz
+    track wgEncodeUwDnaseSeqRawSignalRep2K562
+    release alpha
+    subTrack wgEncodeUwDnaseSeq
+    shortLabel K562 Raw 2
+    longLabel ENCODE UW DNase-seq Raw Signal Rep 2 (in K562 cells)
+    subGroups view=RawSignal cellType=K562
+    type wig 1.00 62912.00
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-09
+    dateUnrestricted 2009-09-09
+    priority 16
+    noInherit on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
+    cell K562
+    color 46,0,184
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=K562 view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Nov 2008 Freeze" subId=106 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2K562 fileName=wgEncodeUwDnaseSeqRawSignalRep2K562.wig.gz
 
     track wgEncodeUwDnaseSeqPeaksK562
     release alpha
