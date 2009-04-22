@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.18 2009/04/16 22:56:55 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.19 2009/04/22 21:02:26 tdreszer Exp $
 
 var debug = false;
 
@@ -332,10 +332,10 @@ function validateFloat(obj,min,max)
             obj.value = obj.defaultValue;
         if(!isFloat(obj.value)) {
             if(popup) {
-                obj.value = prompt(title +" is invalid!\nMust be a number.",obj.value);
+                obj.value = prompt(title +" is invalid.\nMust be a number.",obj.value);
                 continue;
             } else {
-                alert(title +" of '"+obj.value +"' is invalid!\nMust be a number."); // try a prompt box!
+                alert(title +" of '"+obj.value +"' is invalid.\nMust be a number."); // try a prompt box!
                 obj.value = obj.defaultValue;
                 return false;
             }
@@ -344,10 +344,10 @@ function validateFloat(obj,min,max)
         if(isFloat(min) && isFloat(max)) {
             if(val < rangeMin || val > rangeMax) {
                 if(popup) {
-                    obj.value = prompt(title +" is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
+                    obj.value = prompt(title +" is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -355,10 +355,10 @@ function validateFloat(obj,min,max)
         } else if(isFloat(min)) {
             if(val < rangeMin) {
                 if(popup) {
-                    obj.value = prompt(title +" is invalid!\nMust be no less than "+rangeMin+".",obj.value);
+                    obj.value = prompt(title +" is invalid.\nMust be no less than "+rangeMin+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no less than "+rangeMin+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no less than "+rangeMin+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -366,10 +366,10 @@ function validateFloat(obj,min,max)
         } else if(isFloat(max)) {
             if(val > rangeMax) {
                 if(popup) {
-                    obj.value = prompt(title +" is invalid!\nMust be no greater than "+rangeMax+".",obj.value);
+                    obj.value = prompt(title +" is invalid.\nMust be no greater than "+rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no greater than "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no greater than "+rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
