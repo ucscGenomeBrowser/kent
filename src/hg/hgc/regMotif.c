@@ -305,7 +305,7 @@ if (trc != NULL)
     printf("<B>Name:</B> ");
     sacCerHgGeneLinkName(conn, trc->name);
     printf("<BR>\n");
-    printf("<B>CHIP/CHIP Evidence:</B> %s<BR>\n", trc->chipEvidence);
+    printf("<B>ChIP-chip Evidence:</B> %s<BR>\n", trc->chipEvidence);
     printf("<B>Species conserved in:</B> %d of 2<BR>\n", trc->consSpecies);
     if (seq != NULL)
 	printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n", 
@@ -533,8 +533,8 @@ sqlFreeResult(&sr);
 void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
 	char *codeTable, char *motifTable, 
 	char *tfToConditionTable, char *conditionTable)
-/* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
-/* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
+/* Display detailed info on a ChIP-chip probe from transRegCode experiments. */
+/* Display detailed info on a ChIP-chip probe from transRegCode experiments. */
 {
 char query[256];
 struct sqlResult *sr;
@@ -543,7 +543,7 @@ int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
 struct sqlConnection *conn = hAllocConn(database);
 struct transRegCodeProbe *probe = NULL;
 
-cartWebStart(cart, database, "CHIP/CHIP Probe Info");
+cartWebStart(cart, database, "ChIP-chip Probe Info");
 safef(query, sizeof(query), "select * from %s where name = '%s'",
 	tdb->tableName, item);
 sr = sqlGetResult(conn, query);
