@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.12 2009/04/21 23:02:25 larrym Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.13 2009/04/23 00:31:12 larrym Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -51,11 +51,11 @@ errAbort(
   "   -host=hostname\tmysql host used to get chrom sizes\n"
   "   -user=username\tmysql user\n"
   "   -password=password\tmysql password\n\n"
-  "\tchromSize file is three white space separated fields per line: chrom name, size, and dummy value\n"
+  "\tchromSize file contains two white space separated fields per line: chrom name and size\n"
   "\tYou will want to separate your + and - strand\n"
   "\titems before sending into this program as it only looks at\n"
   "\tthe chrom, start and end columns of the bed file.\n"
-  "\tIt requires a <database> connection to lookup chrom sizes for a sanity\n"
+  "\tProgram requires a <database> connection to lookup chrom sizes for a sanity\n"
   "\tcheck of the incoming data (unless you use -chromSize argument).\n\n"
   "The bed file must be sorted at least by chrom since the processing is\n"
   "\tgoing to be chrom by chrom with no going back.\n"
@@ -158,15 +158,17 @@ unsigned chromSize = 0;
 if (chromSizes != NULL)
     {
     chromHash = newHash(0);
-    // unfortunately, chromInfoLoadAll requires that the file have three fields (I don't know why),
-    // so that's why we require a dummy third column in the chromInfo file.
-    struct chromInfo *el = chromInfoLoadAll(chromSizes);
-    for(;el != NULL;el=el->next)
+    struct lineFile *lf = lineFileOpen(chromSizes, TRUE);
+    char *row[2];
+    while (lineFileRow(lf, row))
         {
-        if (el->size > maxChromSize) maxChromSize = el->size;
-        verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
-        hashAdd(chromHash, el->chrom, (void *)(& el->size));
+        unsigned *ptr;
+        AllocVar(ptr);
+        *ptr = sqlUnsigned(row[1]);
+        maxChromSize = max(*ptr, maxChromSize);
+        hashAdd(chromHash, row[0], ptr);
         }
+    lineFileClose(&lf);
     }
 else
     {
