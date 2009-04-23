@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.10 2009/04/23 22:04:28 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.11 2009/04/23 22:09:22 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -262,10 +262,9 @@ for my $line (@fileList) {
     if($results) {
         my ($type) = split(/\s+/, $results);    # White space
         $metaData{type} = $type;
-    } else {
-        if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
-            $metaData{type} = $dataType;
-        }
+    }
+    if(!$metaData{type}) {
+        $metaData{type} = $dataType;
     }
     $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
     if(!$results) {
