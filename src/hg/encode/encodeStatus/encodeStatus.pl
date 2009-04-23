@@ -5,7 +5,7 @@
 # existing status.  Statuses that can be changed manually do not
 # overlap statuses set by the pipeline automation.
 #
-# $Id: encodeStatus.pl,v 1.7 2009/04/23 19:48:50 larrym Exp $
+# $Id: encodeStatus.pl,v 1.8 2009/04/23 19:51:20 larrym Exp $
 
 use warnings;
 use strict;
@@ -78,7 +78,7 @@ for my $i (0 .. @statuses - 1) {
                 print <<END;
 You must execute this command to add the pushQ entry:
 
-hgsql --host=hgsqlbeta qapushq < cat $pushQFile
+hgsql --host=hgsqlbeta qapushq < $pushQFile
 END
             } else {
                 die "Can't find pushQFile '$pushQFile'";
