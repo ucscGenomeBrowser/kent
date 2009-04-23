@@ -3083,7 +3083,7 @@ wgEncode 1
     dataVersion ENCODE May 2009 Freeze
     cell GM12878
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseqNew cell=GM12878 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878 fileName=wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878 fileName=wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalGm12878
     release alpha
@@ -4155,7 +4155,7 @@ wgEncode 1
     dataVersion ENCODE May 2009 Freeze
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseqNew cell=K562 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
 
 
     track wgEncodeUncFAIREseqSignalK562
@@ -4531,13 +4531,13 @@ priority 0
 scoreFilterByRange on
 compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName= wgEncodeNhgriBiPPromotersReferencegenomeHg18.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=bosTau4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeBostau4 fileName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeBostau4.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=canFam2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeCanfam2 fileName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeCanfam2.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeMm9 fileName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeMm9.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=panTro2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomePantro2 fileName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomePantro2.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rheMac2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeRhemac2 fileName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeRhemac2.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rn4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeRn4 fileName=wgEncodeNhgriBiPBidirectionsPromotersReferencegenomeRn4.bed8.gz
+metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=bosTau4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.bosTau4.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=canFam2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.canFam2.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=panTro2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.panTro2.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rheMac2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rheMac2.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rn4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rn4.bed8.gz
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 
@@ -4629,7 +4629,7 @@ shortLabel RIKEN CAGE Loc
 longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views 1_PlusClusters=Plus_Clusters 3_MinusClusters=Minus_Clusters 5_Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate 
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ longNonPolyA=Long_PolyA- total=Total_RNA
 dimensions dimensionX=cellType dimensionY=rnaExtract dimensionZ=localization
@@ -4638,7 +4638,7 @@ dragAndDrop subTracks
 visibilityViewDefaults 1_PlusClusters=full 3_MinusClusters=full 2_PlusRawSignal=hide 4_MinusRawSignal=hide 5_Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView 1_PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183 2_PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off  3_MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,windowingFunction=mean,autoScale=off 4_MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 
+settingsByView 1_PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183 2_PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off  3_MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,windowingFunction=mean,autoScale=off 4_MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
 priority 0
 type bed 3
 wgEncode 1
@@ -5033,7 +5033,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 psom pA+ 
+    shortLabel K562 psom pA+
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 polysome)
     subGroups view=5_Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
@@ -5768,7 +5768,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel pros cell pA+ Rw 
+    shortLabel pros cell pA+ Rw
     longLabel ENCODE Affy Raw Signal (PolyA+ RnA in prostate whole cell)
     subGroups view=RawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig -62728.00 58726.00
@@ -6551,7 +6551,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl tot 
+    shortLabel GM128 nucl tot
     longLabel ENCODE Affy Filtered Transfrags (Total RNA in GM12878 nucleus)
     subGroups view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=total
     type broadPeak
@@ -6633,7 +6633,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 cell tot 
+    shortLabel GM128 cell tot
     longLabel ENCODE Affy Filtered Transfrags (Total RNA in GM12878 whole cell)
     subGroups view=FilteredTransfrags cellType=GM12878 localization=cell rnaExtract=total
     type broadPeak
