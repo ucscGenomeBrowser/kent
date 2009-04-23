@@ -9,7 +9,7 @@
 #include "metaData.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkSeqTbl.c,v 1.2 2006/01/25 20:03:57 genbank Exp $";
+static char const rcsid[] = "$Id: chkSeqTbl.c,v 1.3 2009/04/23 00:35:41 markd Exp $";
 
 /* hash tables used to avoid repeating error messages */
 static struct hash* missingExtFileIds = NULL;  /* missing ext file ids that
@@ -258,7 +258,11 @@ struct metaData* md;
 parseGbSeqRow(row, &seq);
 md = metaDataTblsGetByPep(metaDataTbls, seq.acc);
 if (md == NULL)
+    {
+#if 0 //FIXME: disabled due to known and harmless bug
     gbError("%s: peptide in gbSeq not found in refLink", seq.acc);
+#endif
+    }
 else
     {
     if (md->protInSeq)

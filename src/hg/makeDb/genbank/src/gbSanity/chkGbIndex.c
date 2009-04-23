@@ -13,7 +13,7 @@
 #include "gbFileOps.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: chkGbIndex.c,v 1.4 2007/05/17 18:59:51 markd Exp $";
+static char const rcsid[] = "$Id: chkGbIndex.c,v 1.5 2009/04/23 00:35:41 markd Exp $";
 
 static void chkProcessed(struct gbEntry* entry, struct gbProcessed* processed)
 /* check a single processed object */
@@ -109,7 +109,9 @@ chkEntryAligned(entry);
 static boolean shouldCheck(struct gbEntry* entry)
 /* should an entry be checked */
 {
-return ((entry->processed == NULL) || (entry->processed->molType == mol_mRNA));
+// check entries with no processed, or genbanks of type mRNA or any refseq
+return ((entry->processed == NULL) || (entry->processed->molType == mol_mRNA)
+        || (entry->processed->update->release->srcDb == GB_REFSEQ));
 }
 
 void chkGbIndex(struct gbSelect* select, struct metaDataTbls* metaDataTbls)

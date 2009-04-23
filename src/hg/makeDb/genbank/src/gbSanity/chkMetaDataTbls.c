@@ -17,7 +17,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.12 2009/04/21 04:24:31 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.13 2009/04/23 00:35:41 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -175,12 +175,15 @@ strToUnsigned(row[iRow++], md->acc, "refLink.prodName", NULL);
 strToUnsigned(row[iRow++], md->acc, "refLink.locusLinkId", NULL);
 strToUnsigned(row[iRow++], md->acc, "refLink.omimId", NULL);
 
-if (strlen(md->rlProtAcc) == 0)
-    gbError("%s: empty protein acc in refLink", acc);
-else
+if (gbIsProteinCodingRefSeq(md->acc))
     {
-    metaDataTblsAddProtAcc(metaDataTbls, md);
-    md->hasProt = TRUE;
+    if (strlen(md->rlProtAcc) == 0)
+        gbError("%s: empty protein acc in refLink", acc);
+    else
+        {
+        metaDataTblsAddProtAcc(metaDataTbls, md);
+        md->hasProt = TRUE;
+        }
     }
 }
 
@@ -370,14 +373,17 @@ if (!md->inRefSeqStatus)
     gbError("%s: not in refSeqStatus table, and is RefSeq acc", md->acc);
 if (!md->inRefLink)
     gbError("%s: not in refLink table, and is RefSeq acc ", md->acc);
-if (!md->hasProt)
-    gbError("%s: no peptide for RefSeq", md->acc);
-else
+if (gbIsProteinCodingRefSeq(md->acc))
     {
-    if (!md->protInSeq)
-        gbError("%s: RefSeq peptide %s not in gbSeq table", md->acc, md->rlProtAcc);
-    else if (!md->protInExtFile)
-        gbError("%s: RefSeq peptide %s not in gbExtFile table", md->acc, md->rlProtAcc);
+    if (!md->hasProt)
+        gbError("%s: no peptide for RefSeq", md->acc);
+    else 
+        {
+        if (!md->protInSeq)
+            gbError("%s: RefSeq peptide %s not in gbSeq table", md->acc, md->rlProtAcc);
+        else if (!md->protInExtFile)
+            gbError("%s: RefSeq peptide %s not in gbExtFile table", md->acc, md->rlProtAcc);
+        }
     }
 }
 
