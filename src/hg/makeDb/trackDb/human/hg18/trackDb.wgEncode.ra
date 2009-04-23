@@ -5531,7 +5531,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 nuc pA- nuc
+    shortLabel GM128 nuc pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 nucleus)
     subGroups view=5_Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
