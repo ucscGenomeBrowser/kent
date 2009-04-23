@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1529 2009/04/22 22:47:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1530 2009/04/23 22:42:27 galt Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21006,6 +21006,8 @@ struct trackDb *tdb = NULL;
 getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
+
+setUdcCacheDir();
 
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);

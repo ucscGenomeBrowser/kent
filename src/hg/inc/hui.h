@@ -7,6 +7,9 @@
 #include "trackDb.h"
 struct lineFile;
 
+void setUdcCacheDir();
+/* set the path to the udc cache dir */
+
 char *hUserCookie();
 /* Return our cookie name. */
 

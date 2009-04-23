@@ -18,10 +18,11 @@
 #include "wiggle.h"
 #include "phyloTree.h"
 #include "hgMaf.h"
+#include "udc.h"
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.186 2009/04/22 23:21:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.187 2009/04/23 22:42:28 galt Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -92,6 +93,13 @@ if (hIsMgcServer())
 else
     return cfgOptionDefault("central.cookie", "hguid");
 }
+
+void setUdcCacheDir()
+/* set the path to the udc cache dir */
+{
+udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+}
+
 
 char *wrapWhiteFont(char *s)
 /* Write white font around s */

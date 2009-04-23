@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.64 2009/04/06 05:32:09 galt Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.65 2009/04/23 22:42:25 galt Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -543,6 +543,7 @@ void dispatchLocation()
 {
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome, oldVars);
+setUdcCacheDir();
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn(database);
