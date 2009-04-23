@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.484 2009/03/30 21:13:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.485 2009/04/23 16:22:19 kuhn Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2337,8 +2337,6 @@ else if (sameString(track, CUTTERS_TRACK_NAME))
     cutterUi(tdb);
 else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
-else if (sameString(track, "transRegCode"))
-    transRegCodeUi(tdb);
 else if (sameString(track, "gvPos"))
     gvUi(tdb);
 else if (sameString(track, "oreganno"))
