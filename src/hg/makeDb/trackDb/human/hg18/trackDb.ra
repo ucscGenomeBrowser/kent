@@ -3909,7 +3909,7 @@ priority 100
 
 # PhyloP lineage-specific conservation
 track phyloPConsLs44way
-shortLabel Clade Rel Cons
+shortLabel Clade Cons
 compositeTrack on
 longLabel Clade-specific Relative Conservation by PhyloP (44 Species)
 #altColor 70,130,70
