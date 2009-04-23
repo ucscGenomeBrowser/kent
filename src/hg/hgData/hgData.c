@@ -2,25 +2,64 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.27 2009/04/15 06:26:29 mikep Exp $";
+
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.28 2009/04/23 05:01:31 mikep Exp $";
 // #/g/project/(data|summary)/{project}/{pi}?/{lab}?/{datatype}?/{track}?/{genome}?
 // RewriteRule ^/g/project/(data|summary)/([^/]+)(/([^/]+)(.*))?$ /$5?cmd=$1\&project=$2\&pi=$4 [C]
 // RewriteRule ^/(/([^/]+)(/([^/]+)(/([^/]+)(/([^/]+))?)?)?)?$ /cgi-bin/hgData?lab=$2\&datatype=$4\&track=$6\&genome=$8 [PT,QSA,L,E=ETag:%{HTTP:If-None-Match},E=Modified:%{HTTP:If-Modified-Since},E=Authorization:%{HTTP:Authorization}]
 
 // curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=testing.bed
 
-void doPost()
+struct slPair *nameValueListToPair(char *s)
 {
-int c;
+// format: a=b,c=d,e=f        result-> b,d,f
+struct slPair *vars;
+char *t = cloneString(s);
+memSwapChar(t, strlen(t), ',', ' ');
+vars = slPairFromString(t);
+freez(&t);
+return vars;
+}
+
+boolean hashAddPair(struct hash *h, char *s)
+/* If string s contains a pair in the format "name: value"
+ * Add the name:value pair to the hash and return TRUE
+ * Otherwise return FALSE */
+{
+char *words[2];
+char *ss = cloneString(s);
+boolean ret = FALSE;
+if ( (chopByChar(ss, ':', words, sizeof(words))) == 2)
+    {
+    MJP(2);verbose(2,"header=[%s:%s]\n", trimSpaces(words[0]), trimSpaces(words[1]));
+    hashAdd(h, trimSpaces(words[0]), trimSpaces(words[1]));
+    ret = TRUE;
+    }
+freez(&ss);
+return ret;
+}
+
+void doUpdate(char *method)
+{
 long i = 0;
+int len;
+boolean ok;
 struct hash *h = newHash(0);
+struct hash *hHeader = newHash(0);
+FILE *f;
+struct lineFile *lf;
+char *line;
+int lineSize;
+char *boundary;
 struct cgiVar *cgi = NULL;
-char filename[1000];
 char *url = getenv("SCRIPT_URL");
 char *query = cloneString(getenv("QUERY_STRING"));
 char *contLenStr = getenv("CONTENT_LENGTH");
 long contLen = sqlUnsigned(contLenStr);
 char *cmd, *project, *pi, *lab, *datatype, *view, *track, *genome;
+struct dyString *tableName = newDyString(0);
+struct dyString *fileName = newDyString(0);
+struct slName *vars, *var;
 MJP(2);verbose(2,"query_string=[%s] url=[%s] content_type=[%s] content_length=[%s = %ld]\n", 
     query, url, getenv("CONTENT_TYPE"), contLenStr, contLen);
 if (!query || !cgiParseInput(query, &h, &cgi))
@@ -33,7 +72,7 @@ datatype = hashFindVal(h, "datatype");
 view     = hashFindVal(h, "view");
 track    = hashFindVal(h, "track");
 genome   = hashFindVal(h, "genome");
-verboseSetLevel(sqlUnsigned(hashOptionalVal(h, "verbose", "1")));
+//verboseSetLevel(sqlUnsigned(hashOptionalVal(h, "verbose", "1")));
 MJP(2);verbose(2,"cmd=%s, project=%s, pi=%s, lab=%s, datatype=%s, view=%s, track=%s, genome=%s.\n", 
     cmd, project, pi, lab, datatype, view, track, genome);
 // split track into list of names
@@ -48,20 +87,60 @@ MJP(2);verbose(2,"cmd=%s, project=%s, pi=%s, lab=%s, datatype=%s, view=%s, track
 
 // if (filename == NULL)
 //     errAbort("filename not found\n");
-
-safef(filename, 1000, "trash/%s", (char *)hashOptionalVal(h, "filename", "mjp_tmp_file"));
-MJP(2);verbose(2,"writing file [%s]\n", filename);
-FILE *f = mustOpen(filename, "wb");
-while ((c = getchar()) != EOF)
+//wgEncode-Helicos-RnaSeq-Alignments-K562,Cytosol,Longpolya
+vars = slNameListFromString(track, ',');
+dyStringAppend(tableName, project);
+dyStringAppend(tableName, lab);
+dyStringAppend(tableName, datatype);
+dyStringAppend(tableName, view);
+for (var = vars ; var ; var = var->next)
+    dyStringAppend(tableName, var->name);
+dyStringAppend(fileName, "../trash/");
+dyStringAppend(fileName, tableName->string);
+MJP(2);verbose(2,"writing file [%s]\n", fileName->string);
+if (sameOk(method, "POST"))
+    f = mustOpen(fileName->string, "wb"); // POST = Append
+else if (sameOk(method, "PUT"))
+    f = mustOpen(fileName->string, "wb"); // PUT = Write
+lf = lineFileStdin(TRUE);
+// get the multipart/form-data boundary string
+if (!lineFileNext(lf, &line, &lineSize))
+    errAbort("no boundary line\n");
+boundary = cloneStringZ(line, lineSize);
+MJP(2);verbose(2,"boundary=[%s]\n", boundary);
+// get the headers for the first 
+while ( (ok = lineFileNext(lf, &line, &lineSize)) && hashAddPair(hHeader, line))
+    ;
+if (!ok)
+    errAbort("no more input after headers\n");
+MJP(2);verbose(2,"ok=%d size=%d strlen=%d [%1x,%1x,%1x] line=[%s]\n", ok, lineSize, (int)strlen(line), line[0], line[1], line[2], line);
+// data is terminated by <CR><LF> and then the boundary
+// the <CR><LF> is interpreted as a line of length 0
+i = 0;
+while ((ok = lineFileNext(lf, &line, &lineSize)) && (len = strlen(line)) > 0)
     {
     ++i;
-    if ((fputc(c, f)) == EOF)
-	errnoAbort("Error %d writing char [%c] to file [%s]\n", errno, c, filename);
+    MJP(2);verbose(2,"%3d strlen=%d [%s] lf->nlType=[%d]\n", lineSize, len, line, lf->nlType);
+    mustWrite(f, line, len);
+    mustWrite(f, "\n", 1);
     }
+if (!ok)
+    errAbort("no blank line after input\n");
+// Check boundary matches. Note that this boundary has 2 more dashes on the end compared to the initial boundary.
+if (lineFileNext(lf, &line, &lineSize))
+    {
+    if (!sameStringN(line, boundary, strlen(boundary)) && !sameString("--", line+strlen(boundary)))
+	errAbort("line doesnt match boundary [%s] <> [%s]\n", line, boundary);
+    }
+else
+    errAbort("no boundary line after blank line after data\n");
 carefulClose(&f);
 okSendHeader(0, 0);
 printf("bytes read=%ld\ncontent_length=%ld\ncompression=%f%%\nurl=%s\n", i, contLen, 100.0*contLen/i, url);
-MJP(2);verbose(2,"wrote %ld bytes to file [%s]\n", i, filename);
+MJP(2);verbose(2,"wrote %ld bytes to file [%s]\n", i, fileName->string);
+slFreeList(&vars);
+freeDyString(&fileName);
+freeDyString(&tableName);
 }
 
 void doGet()
@@ -326,13 +405,13 @@ cgiSpoof(&argc, argv); // spoof cgi vars if running from command line
 char *method = getenv("REQUEST_METHOD");
 //initCgiInputMethod(cgiRequestMethod()); // otherwise initialize from request_method
 //verboseSetLevel(cgiOptionalInt("verbose", 1));
-verboseSetLevel(1);
+verboseSetLevel(2);
 
 //if (sameOk(cgiRequestMethod(), "GET"))
 if (sameOk(method, "GET"))
     doGet();
-else if (sameOk(method, "POST"))
-    doPost();
+else if (sameOk(method, "POST")||sameOk(method, "PUT"))
+    doUpdate(method);
 else
     errAbort("request method %s not implemented\n", method);
 return 0;
