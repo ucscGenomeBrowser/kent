@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.8 2009/04/23 17:08:51 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.9 2009/04/23 21:04:10 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -237,14 +237,28 @@ for my $line (@fileList) {
 #print OUT_FILE join ' ', @file,"\n";
     my @path = split('/', $file[5]);    # split on /
     my $fileName = $path[$#path]; # Last element
-    my ($tableName,$dataType) = split('\.', $fileName);   # tableName I hope
+    my $tableName = "";
+    my $dataType  = "";
+    ### Special case for Elnitski BiPs !!!
+    my $database = "hg18"; # default
+    if ( ($fileName =~ tr/\.//) == 3 ) {  # tableName.db.dataType.gz
+        ($tableName,$database,$dataType) = split('\.', $fileName);   # tableName I hope
+        if($database ne "panTro2" && $database ne "mm9" && $database ne "canFam2"
+        && $database ne "rheMac2" && $database ne "rn4" && $database ne "bosTau4") {
+            $database = "hg18"; # default
+        }
+    } else
+    ### Special case for Elnitski BiPs !!!
+    {
+        ($tableName,$dataType) = split('\.', $fileName);   # tableName I hope
+    }
 #print OUT_FILE "Path:$file[5]  File:$fileName  Table:$tableName\n";
 
     my $releaseDate = "";
     my $submitDate = "";
     my %metaData;
     my $typePrefix = "";
-    my $results = $db->quickQuery("select type from trackDb where tableName = '$tableName'");
+    my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
     if($results) {
         my ($type) = split(/\s+/, $results);    # White space
         $metaData{type} = $type;
@@ -253,7 +267,7 @@ for my $line (@fileList) {
             $metaData{type} = $dataType;
         }
     }
-    $results = $db->quickQuery("select settings from trackDb where tableName = '$tableName'");
+    $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
     if(!$results) {
         ### TODO: This needs to be replaced with a lookup of fileDb.ra
         my $associatedTable = $tableName;
