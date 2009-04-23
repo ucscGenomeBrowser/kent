@@ -60,8 +60,8 @@ type bed 5 +
 exonArrows off
 
 track transRegCodeProbe
-shortLabel Reg. CHIP/CHIP
-longLabel CHIP/CHIP Results from Harbison Gordon et al.
+shortLabel Reg. ChIP-chip
+longLabel ChIP-chip Results from Harbison Gordon et al.
 group regulation
 priority 92.6
 visibility hide
