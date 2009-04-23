@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.7 2009/04/22 23:57:17 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.8 2009/04/23 17:08:51 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -241,6 +241,7 @@ for my $line (@fileList) {
 #print OUT_FILE "Path:$file[5]  File:$fileName  Table:$tableName\n";
 
     my $releaseDate = "";
+    my $submitDate = "";
     my %metaData;
     my $typePrefix = "";
     my $results = $db->quickQuery("select type from trackDb where tableName = '$tableName'");
@@ -270,14 +271,10 @@ for my $line (@fileList) {
         my @settings = split(/\n/, $results); # New Line
         while (@settings) {
             my @pair = split(/\s+/, (shift @settings),2);
-            if($pair[0] eq "releaseDate" && length($releaseDate) == 0) {
+            if($pair[0] eq "releaseDate" && length($releaseDate) == 0) {       # metadata has priority
                 $releaseDate = $pair[1];
-            } elsif($pair[0] eq "dateSubmitted" && length($releaseDate) == 0) {
-                my ($YYYY,$MM,$DD) = split('-',$pair[1]);
-                $MM = $MM - 1;
-                my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
-                $rMon = $rMon + 1;
-                $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
+            } elsif($pair[0] eq "dateSubmitted" && length($submitDate) == 0) { # metadata has priority
+                $submitDate = $pair[1];
             } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
                 $metaData{$pair[0]} = $pair[1];
             } elsif($pair[0] eq "metadata") {
@@ -289,12 +286,8 @@ for my $line (@fileList) {
                 while($tags[$tix]) {
                     if($tags[$tix] eq "dateUnrestricted") {
                         $releaseDate = $vals[$tix];
-                    } elsif($tags[$tix] eq "dateSubmitted" && length($releaseDate) == 0) {
-                        my ($YYYY,$MM,$DD) = split('-',$vals[$tix]);
-                        $MM = $MM - 1;
-                        my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
-                        $rMon = $rMon + 1;
-                        $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
+                    } elsif($tags[$tix] eq "dateSubmitted") {
+                        $submitDate = $vals[$tix];
                     }
                     $tix++;
                 }
@@ -314,11 +307,6 @@ for my $line (@fileList) {
     } else {
         if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
             $metaData{type} = $dataType;
-            my ($YYYY,$MM,$DD) = split('-',$file[3]);
-            $MM = $MM - 1;
-            my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
-            $rMon = $rMon + 1;
-            $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
         }
 
         # pull metadata out of README.txt (if any is available).
@@ -337,6 +325,16 @@ for my $line (@fileList) {
             }
         }
     }
+    if(length($submitDate) == 0) {
+        $submitDate = $file[3];
+    }
+    if(length($releaseDate) == 0) {
+        my ($YYYY,$MM,$DD) = split('-',$submitDate);
+        $MM = $MM - 1;
+        my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
+        $rMon = $rMon + 1;
+        $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
+    }
     my @tmp;
     if(my $type = $metaData{type}) {
         push(@tmp, "type: $type");
@@ -353,11 +351,15 @@ for my $line (@fileList) {
             push(@tmp, "cell: $cell");
             delete $metaData{cell};
         }
+        if($metaData{parent}) {
+            push(@tmp, $metaData{parent});
+            delete $metaData{parent};
+        }
         push(@tmp, "$_: " . $metaData{$_}) for (sort keys %metaData);
     }
     my $metaData = join("; ", @tmp);
     # Now file contains: [file without path] [tableName] [size] [date] [releaseDate] [fullpath/file]
-    htmlTableRow(*OUT_FILE,$fileName,$file[2],$file[3],$releaseDate,$metaData);
+    htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$metaData);
 }
 print OUT_FILE "</TABLE>\n";
 
