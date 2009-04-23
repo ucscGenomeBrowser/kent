@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.9 2009/04/23 21:04:10 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.10 2009/04/23 22:04:28 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -269,17 +269,26 @@ for my $line (@fileList) {
     }
     $results = $db->quickQuery("select settings from $database.trackDb where tableName = '$tableName'");
     if(!$results) {
-        ### TODO: This needs to be replaced with a lookup of fileDb.ra
-        my $associatedTable = $tableName;
-        $associatedTable =~ s/RawData/RawSignal/    if $tableName =~ /RawData/;
-        $associatedTable =~ s/Alignments/RawSignal/ if $tableName =~ /Alignments/;
-        if($tableName ne $associatedTable) {
-            $results = $db->quickQuery("select settings from trackDb where tableName = '$associatedTable'");
-            if($results) {
-                $metaData{parent} = "RawData&rarr;RawSignal" if $tableName =~ /RawData/;
-                $metaData{parent} = "Alignments&rarr;RawSignal" if $tableName =~ /Alignments/;
+        ### TODO: This needs to be replaced with a select from a fileDb table
+        if(stat("fileDb.ra")) {
+            $results = `grep metadata fileDb.ra | grep '$fileName'`;
+            chomp $results;
+            $results =~ s/^ +//;
+            $results =~ s/ +$//;
+        }
+        if(!$results) {
+            my $associatedTable = $tableName;
+            $associatedTable =~ s/RawData/RawSignal/    if $tableName =~ /RawData/;
+            $associatedTable =~ s/Alignments/RawSignal/ if $tableName =~ /Alignments/;
+            if($tableName ne $associatedTable) {
+                $results = $db->quickQuery("select settings from trackDb where tableName = '$associatedTable'");
+                if($results) {
+                    $metaData{parent} = "RawData&rarr;RawSignal" if $tableName =~ /RawData/;
+                    $metaData{parent} = "Alignments&rarr;RawSignal" if $tableName =~ /Alignments/;
+                }
             }
         }
+        ### TODO: This needs to be replaced with a select from a fileDb table
     }
     if( $results ) {
         my @settings = split(/\n/, $results); # New Line
