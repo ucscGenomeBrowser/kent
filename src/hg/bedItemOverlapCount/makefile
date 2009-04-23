@@ -8,8 +8,9 @@ A = bedItemOverlapCount
 O = bedItemOverlapCount.o
 
 ${A}: ${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${A}${EXE}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 test:	${A}
 	cd tests && ./RunTest.sh
