@@ -9799,7 +9799,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodeManualRel2
     release alpha
     subTrack wgEncodeSangerGencode
-    shortLabel Manual (Feb09)
+    shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-02-28
@@ -9813,7 +9813,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodeAutoRel2
     release alpha
     subTrack wgEncodeSangerGencode
-    shortLabel Auto (Feb09)
+    shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-02-28
@@ -9827,7 +9827,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencodePolyaRel2
     release alpha
     subTrack wgEncodeSangerGencode off
-    shortLabel PolyA (Feb09)
+    shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-02-28
