@@ -55,9 +55,6 @@ set yeastFa = /cluster/data/$yeastDb/bed/blastp/sgdPep.faa
   # hg18.txt
 set bioCycPathways = /cluster/data/hg18/bed/ucsc.10/bioCyc/pathways.col
 set bioCycGenes = /cluster/data/hg18/bed/ucsc.10/bioCyc/genes.col
-   # For KEGG - update this following build instructions in hg18.txt
-set keggList = /cluster/data/hg18/bed/ucsc.10/kegg/keggList.tab
-
 
 # Tracks
 set multiz = multiz28way
@@ -1014,8 +1011,21 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
 # Do KEGG Pathways build
     mkdir $dir/kegg
     cd $dir/kegg
-    kgAttachKegg $db $keggList keggPathway.tab
+
+    wget --timestamping -O hsa2.html \
+    "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
+
+    cat hsa2.html |grep "mapno=" |sed -e 's/mapno=/\npath:hsa/'|grep -v org_name |\
+    sed -e 's/">/\t/' |\
+    sed -e 's/</\t/'|cut -f 1,2 >hsa.lis
+    
+    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+
+    kgAttachKegg $db keggList.tab  keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+
+    cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
+    hgLoadSqlTab $tempDb keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
 
 # Make spMrna table (useful still?)
    cd $dir
