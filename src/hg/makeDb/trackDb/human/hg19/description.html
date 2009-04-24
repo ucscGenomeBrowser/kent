@@ -36,39 +36,50 @@ User's Guide</A> for more information.
     <TR><TD VALIGN=Top NOWRAP><B>Request:</B><BR></TD>
        	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD>
     </TR>
+
     <TR><TD VALIGN=Top><BR></TD></TR>
     <TR><TD VALIGN=Top NOWRAP>chr7</TD>
         <TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays all of chromosome 7</TD>
     </TR>
+
     <TR><TD VALIGN=Top NOWRAP>20p13</TD>
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD>
     </TR>
+
     <TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p-arm telomere</TD>
     </TR>
+
     <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000 </TD>
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays a region of chr3 that spans 2000 bases, starting with position 1000000 </TD>
     </TR>
     <TR><TD VALIGN=Top><br></TD></TR>
-    <TR><TD VALIGN=Top NOWRAP>RH18061;RH80175 <BR>15q11;15q13</TD>
+
+<!-- no STS markers or chromBands yet
+    <TR><TD VALIGN=Top NOWRAP> 
+            RH18061;RH80175 <BR> 
+            15q11;15q13</TD>
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays region between genome landmarks, such as
-                      the STS markers RH18061 and RH80175
-                      or chromsome bands 15q11 to 15q13.
+                      the STS markers RH18061 and RH80175 or 
+                      chromsome bands 15q11 to 15q13.
                       This syntax may also be used for other range queries, such
-		      as between uniquely-determined ESTs, mRNAs,
+		      as between uniquely determined ESTs, mRNAs,
 		      refSeqs, etc.</TD>
     </TR>
+
     <TR><TD VALIGN=Top><br></TD></TR>
     <TR><TD VALIGN=Top NOWRAP>D16S3046</TD>
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps.
                       Includes 100,000 bases on each side as well.</TD>
     </TR>
+-->
+
     <TR><TD VALIGN=Top NOWRAP>AA205474</TD>
        	<TD WIDTH=14></TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer 
@@ -157,7 +168,8 @@ TARGET=_blank>Build 37.1 Statistics</A> web page.</P>
 <HR>
 <P>
 This browser contains nine haplotypes for this assembly:
-<TABLE BORDER=1><TR><TH>name</TH><TH>accession</TH><TH>UCSC chr name</TH></TR>
+<BR>
+<TABLE BORDER=1 CELLPADDING = 3><TR><TH>name</TH><TH>accession</TH><TH>UCSC chr name</TH></TR>
 <TR><TD ALIGN=LEFT>HSCHR6_MHC_APD_CTG1</TD><TD>GL000250.1</TD><TD ALIGN=LEFT>chr6_apd_hap1</TD></TR>
 <TR><TD ALIGN=LEFT>HSCHR6_MHC_COX_CTG1</TD><TD>GL000251.1</TD><TD ALIGN=LEFT>chr6_cox_hap2</TD></TR>
 <TR><TD ALIGN=LEFT>HSCHR6_MHC_DBB_CTG1</TD><TD>GL000252.1</TD><TD ALIGN=LEFT>chr6_dbb_hap3</TD></TR>
@@ -198,11 +210,11 @@ collaborators worldwide. See the
 page for a detailed list of the organizations and individuals who contributed 
 to this release. </P>
 <P>
+<!--Commented out til we get these
 <HR>
 <H3>Statistical information</H3>
 <UL>
-<!--Commented out til we get these
 <LI><A HREF="../goldenPath/certificates/">Non-Standard Join Certificates</A>
--->
 <LI><A HREF="../goldenPath/stats.html#hg19">Summary Statistics</A>
 </UL>
+-->
