@@ -8,7 +8,7 @@
 #include "rnautil.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: rnaPhylo.c,v 1.2 2009/04/24 08:31:49 mikep Exp $";
+static char const rcsid[] = "$Id: rnaPhylo.c,v 1.3 2009/04/24 08:44:11 mikep Exp $";
 
 // issues: 
 // - GU -> GC pair is only 1 change, whereas GC->CG or others are two changes
@@ -25,6 +25,7 @@ static char const rcsid[] = "$Id: rnaPhylo.c,v 1.2 2009/04/24 08:31:49 mikep Exp
 int dna[256];
 int pairId[4][4];
 boolean printMaxVariants = FALSE;
+boolean hideMissing = FALSE;
 
 struct stats {
     Bits *variants;
@@ -39,14 +40,16 @@ errAbort(
   "usage:\n"
   "   rnaPhylo refSpp tree.nh align.mfa [align2.mfa [align3.mfa ...]]\n"
   "options:\n"
-  "   -genomes=file.txt   : file with db and genome name separated by tab for human-readable display\n"
-  "   -maxVariants        : just output the filename and maximum number of variants found\n"
+  "   -genomes=file.txt   : File with db and genome name separated by tab for human-readable display\n"
+  "   -maxVariants        : Just output the filename and maximum number of variants found\n"
+  "   -hideMissing        : Hide (dont show) species where sequence is missing\n"
   );
 }
 
 static struct optionSpec options[] = {
     {"genomes", OPTION_STRING},
     {"maxVariants", OPTION_BOOLEAN},
+    {"hideMissing", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -193,20 +196,22 @@ int i;//, ii;
 if (tree->numEdges == 0)
     {
     name = hashOptionalVal(genomes, tree->ident->name, tree->ident->name);
-    treeSpaces(f, branch, depth, maxDepth);
     if ( sameOk(refSpp, tree->ident->name) )
 	{
+	treeSpaces(f, branch, depth, maxDepth);
 	printf("%-15s [%s]\n", name, (char *)hashMustFindVal(aln, refSpp));
 	}
     else if ( (seq = (char *)hashFindVal(aln, tree->ident->name)) && (ref = (char *)hashMustFindVal(aln, refSpp)) )
 	{
+	treeSpaces(f, branch, depth, maxDepth);
 	printf("%-15s [", name);
 	for (i = 0 ; seq[i] ; ++i)
 	    printf("%c", (dna[(int)ref[i]] >= 0 && dna[(int)seq[i]] == dna[(int)ref[i]]) ? '.' : seq[i]);
 	printf("]\n");
 	}
-    else
+    else if (!hideMissing)
 	{
+	treeSpaces(f, branch, depth, maxDepth);
 	printf("%-15s |\n", name);
 	}
     }
@@ -442,6 +447,7 @@ init();
 --argc;
 ++argv;
 printMaxVariants = optionExists("maxVariants");
+hideMissing = optionExists("hideMissing");
 if (argc < 3)
     usage();
 rnaPhylo(argv[0], argv[1], optionVal("genomes", NULL), &argv[2], argc-2);
