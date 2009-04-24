@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.187 2009/04/23 22:42:28 galt Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.188 2009/04/24 19:13:41 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2921,7 +2921,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                         (dimensions[dimZ]?dimensions[dimZ]->tag:NULL),membership); // view is known tag
             printf("<TR valign='top' BGCOLOR=\"%s\"",colors[colorIx]);
             if(useDragAndDrop)
-                printf(" class='trDraggable' title='Drag to Reorder' onmouseover=\"hintForDraggableRow(this)\"");
+                printf(" class='trDraggable' title='Drag to Reorder'");
 
             printf(" id=\"tr_%s\" nowrap%s>\n<TD>",id,(selectedOnly?" style='display:none'":""));
             dyStringClear(dyHtml);
@@ -2969,7 +2969,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     printf("%s\n",subtrack->shortLabel);
                 puts ("</TD>");
                 }
-            printf ("<TD nowrap='true'><div onmouseover=\"this.style.cursor='text';\">&nbsp;%s", subtrack->longLabel);
+            printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
 
@@ -2993,11 +2993,10 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                          && !sameString(metadata->tags[ix],"composite"))
                         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
                     }
-                printf("</table>--></DIV>\n");
+                printf("</table>-->\n");
                 metadataFree(&metadata);
                 }
-            else
-                printf("</div>");
+            printf("</div>");
 
             if(cType != cfgNone)
                 {
@@ -3325,8 +3324,8 @@ if (scoreFilterOk)
         printf("<b>Show only items with score at or above:</b> ");
         snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         val = cartUsualIntClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER,  scoreVal);
-        cgiMakeIntVarWithLimits(option, val, "Minimum score",0, 0,maxScore);
-        printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+        cgiMakeIntVarWithLimits(option, val, "Minimum score",0, scoreVal,maxScore);
+        printf("&nbsp;&nbsp;(range: %d&nbsp;to&nbsp;%d)", scoreVal, maxScore);
         }
     }
 
