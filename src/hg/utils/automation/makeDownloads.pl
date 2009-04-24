@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.20 2009/03/19 16:14:35 hiram Exp $
+# $Id: makeDownloads.pl,v 1.21 2009/04/24 00:21:50 rhead Exp $
 
 use Getopt::Long;
 use warnings;
@@ -652,7 +652,7 @@ chromOut.tar.gz - RepeatMasker .out files (one file per chromosome).
     *** PLEASE ADD REPEATMASKER VERSION AND LIB VERSION FROM THE DATE THAT REPEATMASKER WAS RUN (MAY BE IN MAKE.DOC)
 
 chromTrf.tar.gz - Tandem Repeats Finder locations, filtered to keep repeats
-    with period less than or equal to 12, and translated into UCSC's BED
+    with period less than or equal to 12, and translated into UCSC's BED 5+
     format (one file per chromosome).
 
 _EOF_
