@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.68 2009/04/14 04:03:29 mikep Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.69 2009/04/24 22:14:48 larrym Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -491,6 +491,7 @@ if ( ! noLoad )
 			    {
 			    if (max == min || sameString(row[0],row[1])) // this will lead to 'inf' score value in SQL update causing an error
 				errAbort("Could not set score in table %s max(%s)=min(%s)=%s\n", track, fillInScoreColumn, fillInScoreColumn, row[0]);
+                            sqlFreeResult(&sr);
 
 			    // Calculate a, b s/t f(x) = ax + b maps min-max => minScore-1000
 			    float a = (1000-minScore) / (max - min);
@@ -502,10 +503,10 @@ if ( ! noLoad )
 			    }
 			else
 			    {
+                            sqlFreeResult(&sr);
 			    verbose(2, "score not updated; all values for column %s are -1\n", fillInScoreColumn);
 			    }
 			}
-                    sqlFreeResult(&sr);
                     }
                 }
             }
