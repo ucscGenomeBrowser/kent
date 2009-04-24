@@ -1,0 +1,121 @@
+dm1	D. melanogaster
+equCab2	Horse
+oryLat2	Medaka
+sacCer1	S. cerevisiae
+dp2	D. pseudoobscura
+cb1	C. briggsae
+hg16	Human
+rn3	Rat
+galGal3	Chicken
+droWil1	D. willistoni
+danRer4	Zebrafish
+xenTro2	X. tropicalis
+panTro2	Chimp
+mm8	Mouse
+monDom4	Opossum
+rn4	Rat
+strPur1	S. purpuratus
+fr1	Fugu
+panTro1	Chimp
+galGal2	Chicken
+ce2	C. elegans
+rheMac1	Rhesus
+mm6	Mouse
+xenTro1	X. tropicalis
+canFam1	Dog
+ci1	C. intestinalis
+mm5	Mouse
+hg17	Human
+droYak1	D. yakuba
+danRer1	Zebrafish
+anoGam1	A. gambiae
+tetNig1	Tetraodon
+droMoj1	D. mojavensis
+apiMel2	A. mellifera
+droVir1	D. virilis
+droAna1	D. ananassae
+apiMel1	A. mellifera
+danRer2	Zebrafish
+monDom1	Opossum
+dm2	D. melanogaster
+dp3	D. pseudoobscura
+droSim1	D. simulans
+mm3	Mouse
+ci2	C. intestinalis
+droVir2	D. virilis
+droMoj2	D. mojavensis
+droEre1	D. erecta
+bosTau2	Cow
+droAna2	D. ananassae
+droGri1	D. grimshawi
+mm7	Mouse
+canFam2	Dog
+dasNov1	Armadillo
+loxAfr1	Elephant
+monDom2	Opossum
+danRer3	Zebrafish
+oryCun1	Rabbit
+echTel1	Tenrec
+droPer1	D. persimilis
+droYak2	D. yakuba
+droSec1	D. sechellia
+rheMac2	Rhesus
+hg18	Human
+dp4	D. pseudoobscura
+droEre2	D. erecta
+triCas1	T. castaneum
+droVir3	D. virilis
+droAna3	D. ananassae
+droMoj3	D. mojavensis
+droGri2	D. grimshawi
+triCas2	T. castaneum
+felCat3	Cat
+gasAcu1	Stickleback
+oryLat1	Medaka
+fr2	Fugu
+equCab1	Horse
+anoCar1	Lizard
+ornAna1	Platypus
+caePb1	C. brenneri
+priPac1	P. pacificus
+ce4	C. elegans
+cb3	C. briggsae
+caeRem2	C. remanei
+dm3	D. melanogaster
+otoGar1	Bushbaby
+tupBel1	TreeShrew
+cavPor2	Guinea Pig
+sorAra1	Shrew
+eriEur1	Hedgehog
+bosTau3	Cow
+mm9	Mouse
+apiMel3	A. mellifera
+strPur2	S. purpuratus
+danRer5	Zebrafish
+ponAbe2	Orangutan
+calJac1	Marmoset
+bosTau4	Cow
+cavPor3	Guinea Pig
+braFlo1	Lancelet
+petMar1	Lamprey
+caeRem3	C. remanei
+caePb2	C. brenneri
+caeJap1	C. japonica
+ce6	C. elegans
+taeGut1	Zebra finch
+gorGor1	Gorilla
+tarSyr1	Tarsier
+micMur1	Mouse lemur
+dipOrd1	Kangaroo rat
+speTri1	Squirrel
+ochPri2	Pika
+vicPac1	Alpaca
+turTru1	Dolphin
+myoLuc1	Microbat
+pteVam1	Megabat
+loxAfr2	Elephant
+proCap1	Rock hyrax
+dasNov2	Armadillo
+choHof1	Sloth
+hg15	Human
+bosTau1	Cow
