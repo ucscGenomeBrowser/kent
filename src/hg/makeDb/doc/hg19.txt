@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.6 2009/04/24 23:11:24 rhead Exp $";
+#	"$Id: hg19.txt,v 1.7 2009/04/24 23:42:48 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -486,14 +486,14 @@ doBlastzChainNet.pl `pwd`/DEF \
         hgcentraltest
 
 ############################################################################
-# Self Lastz run (WORKING - 2009-03-19 - Hiram)
+# Self Lastz run (DONE - 2009-03-19 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
     cd /hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
     cat << '_EOF_'
 # human vs human
 BLASTZ=lastz
 # maximum M allowed with lastz is only 255
-BLASTZ_M=255
+BLASTZ_M=254
 # lastz does not like the O= and E= lines in the matrix file 
 #       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
 BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
@@ -601,6 +601,16 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> load.log 2>&1 &
     #	real    47m17.871s
+
+    #	running the swap
+    ssh swarm
+    mkdir /hive/data/genomes/panTro2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/hg19/bed/lastzPanTro2.2009-03-19/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+	> swap.log 2>&1 &
 
 ############################################################################
 # Creating the pushQ entry (DONE - 2009-03-20 - Hiram)
@@ -795,5 +805,11 @@ done
     rsync -a --progress ./ /hive/data/staging/data/hg19/nib
 
     # Ask cluster-admin to sync /scratch/ filesystem to kluster nodes
+
+#############################################################################
+# create gc5Base download file (DONE - 2009-04-24 - Hiram)
+    cd /hive/data/genomes/hg19/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 hg19 \
+        /cluster/data/hg19/hg19.2bit | gzip -c > hg19.gc5Base.txt.gz
 
 #############################################################################
