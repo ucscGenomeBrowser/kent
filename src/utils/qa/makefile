@@ -29,9 +29,11 @@ install:
 	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
+	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}
 	cp -p --remove-destination commTrio.csh            ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTableLists.csh   ${SCRIPTS}
+	cp -p --remove-destination compareTableToFile.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbAll.csh   ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbFast.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbs.csh     ${SCRIPTS}
