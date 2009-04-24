@@ -50,7 +50,7 @@ set xenTro xenTro1,xenTro2
 # Define all organism/assembly-specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut
 
-# Define organism databases based on whole-genome shotgun projects 
+# Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
 set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryLat,$calJac,$cavPor,$taeGut
 
@@ -96,8 +96,8 @@ set kgDb2 hg16,hg17,mm7,mm8,rn3,rn4
 set kgDb3 hg18,mm9
 
 # Protein browser databases.
-set pbDb hg18,hg17,hg16,mm7,mm8,mm9,rn3 
-set pbDb1 hg17,hg16,mm7,mm8,mm9,rn3 
+set pbDb hg18,hg17,hg16,mm7,mm8,mm9,rn3
+set pbDb1 hg17,hg16,mm7,mm8,mm9,rn3
 set pbDb2 rn3
 set pbDb3 hg16,hg17,hg18
 
@@ -117,7 +117,7 @@ set split splitPrefix=chr%\_
 
 identifier goAccession external=GO
 "Gene ontology term accessions.  Example - GO:0003574"
-     go.term.acc 
+     go.term.acc
      go.goaPart.goId minCheck=0.999
 
 identifier goAccessionChopped
@@ -128,13 +128,13 @@ identifier goAccessionChopped
 
 identifier goId external=GO
 "Gene ontology term ID's.  Shouldn't be used outside of go database"
-     go.term.id 
+     go.term.id
      go.term2term.term1_id
      go.term2term.term2_id
      go.term_audit.term_id
      go.term_dbxref.term_id
-     go.term_definition.term_id unique 
-     go.term_synonym.term_id 
+     go.term_definition.term_id unique
+     go.term_synonym.term_id
      go.graph_path.term1_id
      go.graph_path.term2_id
 
@@ -147,7 +147,7 @@ identifier goDbXrefId external=GO
 
 identifier UniProtId external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) display ID."
-     uniProt.displayId.val 
+     uniProt.displayId.val
      proteome.uniProtAlias.alias minCheck=0.2
      proteome.spOldNew.newDisplayId minCheck=0.3
      proteome.spOldNew.oldDisplayId minCheck=0.3
@@ -167,16 +167,16 @@ identifier UniProtId external=UniProt
 identifier UniProtAccession external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) Accession"
      uniProt.displayId.acc
-     uniProt.accToKeyword.acc 
-     uniProt.accToTaxon.acc 
+     uniProt.accToKeyword.acc
+     uniProt.accToTaxon.acc
      uniProt.citation.acc
      uniProt.comment.acc
-     uniProt.description.acc unique 
+     uniProt.description.acc unique
      uniProt.extDbRef.acc
      uniProt.feature.acc
      uniProt.gene.acc
      uniProt.geneLogic.acc
-     uniProt.info.acc unique 
+     uniProt.info.acc unique
      uniProt.otherAcc.acc
      uniProt.protein.acc unique full
      proteome.spOldNew.acc minCheck=0.8
@@ -206,7 +206,7 @@ identifier UniProtAccession external=UniProt
 
 identifier UniProtAuthor
 "Author ID in UniProt (just use inside UCSC Relationalized UniProt)"
-    uniProt.author.id 
+    uniProt.author.id
     uniProt.referenceAuthors.author full
 
 identifier UniProtReference
@@ -217,8 +217,8 @@ identifier UniProtReference
 
 identifier UniProtCitation
 "Citation ID in UniProt (just use inside UCSC Relationalized UniProt)"
-    uniProt.citation.id 
-    uniProt.citationRc.citation 
+    uniProt.citation.id
+    uniProt.citationRc.citation
 
 identifier UniProtCitationRp
 "Reference Position Line ID in UniProt (just inside UCSC Relationalized)"
@@ -232,7 +232,7 @@ identifier UniProtRcType
 
 identifier UniProtRcVal
 "Reference Comment Text in UniProt (just inside UCSC Relationalized)"
-    uniProt.rcVal.id 
+    uniProt.rcVal.id
     uniProt.citationRc.rcVal full
 
 identifier UniProtCommentType
@@ -247,7 +247,7 @@ identifier UniProtCommentVal
 
 identifier UniProtExtDb
 "UniProt(Swiss-Prot/TrEMBL) external database ID (just inside UCSC Relationalized)"
-     uniProt.extDb.id 
+     uniProt.extDb.id
      uniProt.extDbRef.extDb full
 
 identifier UniProtFeatureClass
@@ -257,7 +257,7 @@ identifier UniProtFeatureClass
 
 identifier UniProtFeatureType
 "Type of UniProt feature type (just inside UCSC Relationalized)"
-     uniProt.featureType.id 
+     uniProt.featureType.id
      uniProt.feature.featureType full exclude=0
 
 identifier UniProtOrganelle
@@ -274,7 +274,7 @@ identifier ncbiTaxon
 "NCBI Taxon ID - number for a species.  Used by UniProt too"
      uniProt.taxon.id dupeOk
      uniProt.accToTaxon.taxon full
-     uniProt.commonName.taxon 
+     uniProt.commonName.taxon
      visiGene.antibody.taxon
      visiGene.gene.taxon
      visiGene.genotype.taxon
@@ -429,7 +429,7 @@ identifier vgProbe
     visiGene.probe.id
     visiGene.imageProbe.probe
     visiGene.vgPrbMap.probe
-    
+
 identifier vgProbeColor
 "Color - what color probe is in"
     visiGene.probeColor.id
@@ -545,6 +545,31 @@ identifier encodePseudogeneYale dependency
     $hg.encodePseudogeneYale.name
     $hg.encodePseudogeneClass.name minCheck=0.16 unique
 
+identifier wgEncodeGencodeAutoRel1 dependency
+"Link together Gencode gene model (Known) and class for Mar 07 Data Version"
+    $hg.wgEncodeGencodeAutoRel1.name
+    $hg.wgEncodeGencodeClassesRel1.name minCheck=0.83 unique
+
+identifier wgEncodeGencodeManualRel1 dependency
+"Link together Gencode gene model (Known) and class for Mar 07 Data Version"
+    $hg.wgEncodeGencodeManualRel1.name
+    $hg.wgEncodeGencodeClassesRel1.name minCheck=0.83 unique
+
+identifier wgEncodeGencodeAutoRel2 dependency
+"Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
+    $hg.wgEncodeGencodeAutoRel2.name
+    $hg.wgEncodeGencodeClassesRel2.name minCheck=0.83 unique
+
+identifier wgEncodeGencodeManualRel2 dependency
+"Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
+    $hg.wgEncodeGencodeManualRel2.name
+    $hg.wgEncodeGencodeClassesRel2.name minCheck=0.83 unique
+
+identifier wgEncodeGencodePolyaRel2 dependency
+"Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
+    $hg.wgEncodeGencodePolyaRel2.name
+    $hg.wgEncodeGencodeClassesRel2.name minCheck=0.83 unique
+
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg,$mm.acembly.name
@@ -555,7 +580,7 @@ identifier acemblyName dependency
 identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
     $gbd.ECgene.name
-    $gbd.ECgenePep.name unique 
+    $gbd.ECgenePep.name unique
 
 identifier geneidName dependency
 "Link together geneid predicted gene structure and peptide"
@@ -686,7 +711,7 @@ identifier affyHumanExon
 identifier affyHumanExonSampleId
 "Sample IDs for Affymetrix all human exon array."
     hgFixed.affyHumanExonExps.id
-    $hg.affyHumanExon.expIds comma full 
+    $hg.affyHumanExon.expIds comma full
     $hg.affyHumanExon.expScores comma indexOf full
 
 identifier sestanBrainAtlas
@@ -697,19 +722,19 @@ identifier sestanBrainAtlas
 identifier sestanBrainAtlasId
 "Sample IDs for the Sestan brain atlas array."
     hgFixed.sestanBrainAtlasExps.id
-    $hg.sestanBrainAtlas.expIds comma full 
+    $hg.sestanBrainAtlas.expIds comma full
     $hg.sestanBrainAtlas.expScores comma indexOf full
 
 identifier affyMouseExonSampleId
 "Sample IDs for Affymetrix all mouse exon array."
     hgFixed.affyMouseExonTissuesAllExps.id
-    $mm.affyExonTissues.expIds comma full 
+    $mm.affyExonTissues.expIds comma full
     $mm.affyExonTissues.expScores comma indexOf full
 
 identifier affyRatExonSampleId
 "Sample IDs for Affymetrix all rat exon array."
     hgFixed.affyRatExonTissuesAllExps.id
-    $rn.affyExonTissues.expIds comma full 
+    $rn.affyExonTissues.expIds comma full
     $rn.affyExonTissues.expScores comma indexOf full
 
 identifier gnfHumanAtlas2
@@ -837,7 +862,7 @@ identifier kimWormGeneId
 identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
-    $hg.nci60.expIds comma full 
+    $hg.nci60.expIds comma full
     $hg.nci60.expScores comma indexOf full
 
 identifier rosettaChr22SampleId
@@ -887,8 +912,8 @@ identifier gnfRatAtlas2MedianSampleId
 identifier gnfU95SampleIdV0
 "Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
      hgFixed.affyExps.id
-     $hg.affyRatio.expIds comma 
-     $hg.affyRatio.expScores comma indexOf 
+     $hg.affyRatio.expIds comma
+     $hg.affyRatio.expScores comma indexOf
 
 identifier gnfU95SampleIdV1
 "Identifiers of RNA samples used in GNF Human Expression Atlas 1"
@@ -949,7 +974,7 @@ identifier arbFlyLifeAllSampleId
      hgFixed.arbFlyLifeAllExps.id
      hgFixed.arbFlyLifeAll.expScores comma indexOf full
      hgFixed.arbFlyLifeAllRatio.expScores comma indexOf full
-     
+
 identifier arbFlyLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeMedianExps.id
@@ -981,7 +1006,7 @@ identifier hgFixedSageExpId
 
 identifier sageExpId
 "Sage experiment (tissue type etc) ID"
-    $gbd.sageExp.num 
+    $gbd.sageExp.num
     $gbd.sage.exps comma full
 
 identifier rinnSexSampleId
@@ -999,7 +1024,7 @@ identifier rinnSexMedianSampleId
 identifier stanfordPromotersCellId
 "Identifiers of cell lines for Stanford ENCODE project luciferase assays"
     hgFixed.encode_Stanford_PromotersExps.id
-    $hg.encode_Stanford_Promoters.expIds comma full 
+    $hg.encode_Stanford_Promoters.expIds comma full
     $hg.encode_Stanford_Promoters.expScores comma indexOf full
 
 identifier mouseLandscape
@@ -1055,7 +1080,7 @@ identifier stsAccession external=genbank typeOf=genbankAccession
 "Genbank accession of a Sequence Tag Site (STS) sequence."
     $gbd.stsInfo2.genbank dupeOk
 
-identifier bacEndNames 
+identifier bacEndNames
 "Names for BAC end reads."
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
@@ -1065,7 +1090,7 @@ identifier bacEndNames
     $hg.fishClones.beNames comma minCheck=0.70
 
 identifier danRerBacExtName
-"External name for BAC clones." 
+"External name for BAC clones."
     $danRer.bacCloneXRef.name dupeOk
     $danRer.bacEndPairs.name
     $danRer.bacEndSingles.name
@@ -1078,7 +1103,7 @@ identifier humanBacAccession typeOf=bacAccession
     $hg.clonePos.name chopAfter=. dupeOk
     $hg,!hg18.gold.frag chopAfter=. $split
     hg18.gold.frag chopAfter=. $split minCheck=0.98
-    hg16.certificate.accession1 
+    hg16.certificate.accession1
     hg16.certificate.accession2
     $hg,!hg18.gl.frag chopAfter=. $split
     hg18.gl.frag chopAfter=. $split minCheck=0.95
@@ -1097,7 +1122,7 @@ identifier wgsContigAccession typeOf=genbankAccession
     $wgs.contigAcc.acc
 
 identifier wgsContigName
-"Sequencing project name for whole-genome shotgun contigs." 
+"Sequencing project name for whole-genome shotgun contigs."
     $wgs.contigAcc.contig
     $wgs,!panTro1.gold.frag $split full
 
@@ -1106,11 +1131,11 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
     $kgDb.kgProtAlias.alias
     $kgDb.kgSpAlias.alias minCheck=0.1
     $kgDb.kgXref.protAcc
-    $gbd.refLink.protAcc 
+    $gbd.refLink.protAcc
 
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
-    $gbd.gbSeq.acc 
+    $gbd.gbSeq.acc
     $gbd.gbStatus.acc unique
     $gbd.gbCdnaInfo.acc unique
     $gbd.imageClone.acc
@@ -1127,19 +1152,19 @@ identifier estAccession typeOf=estOrMrnaAccession
 identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName dupeOk
-    $gbd,!sacCer2.est.qName $split full 
+    $gbd,!sacCer2.est.qName $split full
     $gbd,!sacCer2,!caeJap1.intronEst.qName $split
-    sacCer2.est.qName splitPrefix=%\_ full 
+    sacCer2.est.qName splitPrefix=%\_ full
     sacCer2.intronEst.qName splitPrefix=%\_
-    caeJap1.intronEst.qName 
-    $gbd.estOrientInfo.name full 
+    caeJap1.intronEst.qName
+    $gbd.estOrientInfo.name full
 
 identifier nativeEstAccessionNonSplit typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     hg19.all_est.qName dupeOk
-    hg19.est.qName full 
+    hg19.est.qName full
     hg19.intronEst.qName
-    hg19.estOrientInfo.name full 
+    hg19.estOrientInfo.name full
 
 identifier xenoEstAccession typeOf=estAccession
 "Genbank xeno (different organism from database) EST accession"
@@ -1152,7 +1177,7 @@ identifier xenoMrnaAccession typeOf=mrnaAccession
 "Genbank xeno (different organism from database) mRNA accession"
     $gbd.xenoMrna.qName dupeOk
 
-identifier nativeMrnaAccession typeOf=mrnaAccession 
+identifier nativeMrnaAccession typeOf=mrnaAccession
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName dupeOk
     $gbd,!ce2.mrnaOrientInfo.name full minCheck=0.01
@@ -1189,7 +1214,7 @@ identifier orfeomeAccession typeOf=nativeMrnaAccession
 
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
-    $gbd.refLink.mrnaAcc 
+    $gbd.refLink.mrnaAcc
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
@@ -1228,7 +1253,7 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
     $xrg.xenoRefSeqAli.qName full
     $xrg.xenoRefFlat.name full
 
-identifier knownToRefSeqId typeOf=mrnaAccession 
+identifier knownToRefSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession in knownToRefSeq table"
     $kgDb.knownToRefSeq.value dupeOk
     mm7.geneNetworkId.id minCheck=0.80
@@ -1280,7 +1305,7 @@ identifier knownGeneId dependency
     $kgDb.kgTxInfo.name full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
-    $kgDb.knownCanonical.transcript 
+    $kgDb.knownCanonical.transcript
     $kgDb.knownGeneMrna.name full
     $kgDb,!hg18,!mm9.knownGeneLink.name
     $kgDb.knownIsoforms.transcript full
@@ -1309,7 +1334,7 @@ identifier knownGeneId dependency
     $kgDb2.knownGenePep.name full
     $kgDb3.knownGenePep.name
     $kgDb3.knownCanonical.protein exclude=
-    $kgDb3.kgProtMap2.qName 
+    $kgDb3.kgProtMap2.qName
     $hg.humanHprdP2P.query
     $hg.humanHprdP2P.target
     $hg.humanVidalP2P.query
@@ -1321,12 +1346,12 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5
     $kgDb.kg3ToKg4.newId exclude=
 
-identifier knownGeneOld3Id dependency 
+identifier knownGeneOld3Id dependency
 "Previous UCSC Gene build"
     $kgDb.knownGeneOld3.name
     $kgDb.kg3ToKg4.oldId full
 
-identifier knownGeneOld2Id dependency 
+identifier knownGeneOld2Id dependency
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
     $kgDb.knownGeneOld2.name dupeOk
     $kgDb.kgXrefOld2.kgID full
@@ -1346,13 +1371,13 @@ identifier knownXref
 "Swissprot IDs"
     $kgDb.kgXref.spID  dupeOk
     proteome.spXref2.accession
-    proteome.hgnc.uniProt 
+    proteome.hgnc.uniProt
 
-identifier ccdsGeneId 
+identifier ccdsGeneId
 "CCDS Gene ID"
     $ccdsDb.ccdsGene.name dupeOk
     $ccdsDb.ccdsInfo.ccds full
-    $ccdsDb.ccdsKgMap.ccdsId 
+    $ccdsDb.ccdsKgMap.ccdsId
 
 identifier hugeId
 "HuGE Gene ID"
@@ -1378,76 +1403,76 @@ identifier gbCdnas
 identifier genBankAuthor
 "Connects genBank mRNA/EST and its author"
     $gbd.author.id
-    $gbd.gbCdnaInfo.author 
+    $gbd.gbCdnaInfo.author
 
 identifier genBankCds
 "Connects genBank mRNA/EST and its coding region (CDS)"
     $gbd.cds.id
-    $gbd.gbCdnaInfo.cds 
+    $gbd.gbCdnaInfo.cds
 
 identifier genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
     $gbd.cell.id
-    $gbd.gbCdnaInfo.cell 
+    $gbd.gbCdnaInfo.cell
 
 identifier genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
     $gbd.development.id
-    $gbd.gbCdnaInfo.development 
+    $gbd.gbCdnaInfo.development
 
 identifier genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
     $gbd.description.id
-    $gbd.gbCdnaInfo.description 
-    
+    $gbd.gbCdnaInfo.description
+
 identifier genBankGeneName
 "Connects genBank mRNA/EST and gene name"
     $gbd.geneName.id
-    $gbd.gbCdnaInfo.geneName 
+    $gbd.gbCdnaInfo.geneName
     $gbd.refLink.geneName
 
 identifier genBankKeyword
 "Connects genBank mRNA/EST and keyword"
     $gbd.keyword.id
-    $gbd.gbCdnaInfo.keyword 
+    $gbd.gbCdnaInfo.keyword
 
 identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
     $gbd.library.id
-    $gbd.gbCdnaInfo.library 
+    $gbd.gbCdnaInfo.library
     $gbd,!hg17.altGraphX.mrnaLibs comma
     hg17.altGraphX.mrnaLibs comma minCheck=0.99
 
 identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
     $gbd.mrnaClone.id
-    $gbd.gbCdnaInfo.mrnaClone 
+    $gbd.gbCdnaInfo.mrnaClone
 
 identifier genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
     $gbd.organism.id
-    $gbd.gbCdnaInfo.organism 
+    $gbd.gbCdnaInfo.organism
 
 identifier genBankProductName
 "Connects genBank mRNA/EST and protein product name"
     $gbd.productName.id
-    $gbd.gbCdnaInfo.productName 
+    $gbd.gbCdnaInfo.productName
     $gbd.refLink.prodName
 
 identifier genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
     $gbd.sex.id
-    $gbd.gbCdnaInfo.sex 
+    $gbd.gbCdnaInfo.sex
 
 identifier genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
     $gbd.source.id
-    $gbd.gbCdnaInfo.source 
+    $gbd.gbCdnaInfo.source
 
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd.gbCdnaInfo.tissue 
+    $gbd.gbCdnaInfo.tissue
     $gbd.altGraphX.mrnaTissues comma
 
 # Some misc clone-oriented identifiers
@@ -1497,7 +1522,7 @@ identifier stsName fuzzy
     $hg.fishClones.stsNames comma
     $gbd.stsInfo2.otherNames comma
     $mm.stsInfoMouseNew.alias separator=;
- 
+
 identifier stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $gbd,!hg16.stsInfo2.name
@@ -1531,7 +1556,7 @@ identifier rhMapName
 "Zebrafish RH (Radiation Hybrid) Map Name"
     $danRer.rhMap.qName dupeOk
     $danRer.rhMapZfishInfo.name minCheck=0.90 unique
- 
+
 identifier igtcName
 "IGTC (genetrap.org) sequence name"
     $mm.seq.acc
@@ -1549,8 +1574,8 @@ identifier hugoName external=HUGO fuzzy
 "International Human Gene Identifier"
     $hg.refLink.name
     $hg.atlasOncoGene.locusSymbol
-    $hg.kgAlias.alias 
-    $hg.kgSpAlias.alias minCheck=0.1 
+    $hg.kgAlias.alias
+    $hg.kgSpAlias.alias minCheck=0.1
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
@@ -1787,7 +1812,7 @@ identifier rgdSslpId external=RGD
 identifier ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
     $gbd.ensTranscript.gene_name dupeOk
-    $gbd.ensGtp.gene chopAfter=. 
+    $gbd.ensGtp.gene chopAfter=.
     $gbd.ensGeneXref.gene_name
 
 identifier ensemblGeneId3 external=Ensembl
@@ -1861,7 +1886,7 @@ identifier pfamId external=Pfam fuzzy
 
 identifier superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
-    hgFixed.scopDes.sunid    
+    hgFixed.scopDes.sunid
     $gbd.sfDes.id	# This table is redundant with hgFixed.scopDes
     $gbd.sfAssign.sfID
 
@@ -1910,24 +1935,24 @@ identifier dbSnpId external=dbSNP fuzzy
 "NCBI dbSNP ID"
     $kgDb.knownToCdsSnp.value
 
-identifier dbSnpHgId typeOf=dbSnpId 
+identifier dbSnpHgId typeOf=dbSnpId
 "Human dbSNP ID"
     hgFixed.dbSnpRsHg.rsId
     $hg.snpMap.name minCheck=0.90
     hgFixed.affy10KDetails.rsId minCheck=0.94
     hgFixed.affy120KDetails.rsId minCheck=0.97
 
-identifier dbSnpMmId typeOf=dbSnpId 
+identifier dbSnpMmId typeOf=dbSnpId
 "Mouse dbSNP ID"
     hgFixed.dbSnpRsMm.rsId
     $mm.snpMap.name
 
-identifier dbSnpRnId typeOf=dbSnpId 
+identifier dbSnpRnId typeOf=dbSnpId
 "Rat dbSNP ID"
     hgFixed.dbSnpRsRn.rsId
     $rn.snpMap.name
 
-identifier hapmapSnpId 
+identifier hapmapSnpId
 "HapMap SNPs"
     $hg.hapmapAllelesSummary.name
     $hg.hapmapSnpsCEU.name
@@ -1948,25 +1973,25 @@ identifier hapmapSnpId
 identifier snpAnnotations125
 "SNP annotations"
     $snpDb125.snp125.name dupeOk
-    $snpDb125.snp125Exceptions.name 
+    $snpDb125.snp125Exceptions.name
     $snpDb125.snpSeq.acc minCheck=.8
 
 identifier snpAnnotations126
 "SNP annotations"
     $snpDb126.snp126.name dupeOk
-    $snpDb126.snp126Exceptions.name 
+    $snpDb126.snp126Exceptions.name
     $snpDb126.snpSeq.acc minCheck=.8
 
 identifier snpAnnotations127
 "SNP annotations"
     $snpDb127.snp127.name dupeOk
-    $snpDb127.snp127Exceptions.name 
+    $snpDb127.snp127Exceptions.name
     $snpDb127.snpSeq.acc minCheck=.8
 
 identifier snpName128
 "dbSNP version 128 rs* identifiers"
     $gbd.snp128.name dupeOk
-    $gbd.snp128Exceptions.name 
+    $gbd.snp128Exceptions.name
     $gbd.snp128Seq.acc minCheck=.9
 
 identifier snpExceptions128
@@ -2015,18 +2040,18 @@ identifier snp129ArrayHg18
 identifier snpOrtho126
 "Ortho SNPs for hg18 only (dbSNP 126)"
     hg18.snp126.name dupeOk
-    hg18.snp126ortho.name 
-    hg18.snp126orthoPanTro2RheMac2.name 
+    hg18.snp126ortho.name
+    hg18.snp126orthoPanTro2RheMac2.name
 
 identifier snpOrtho128
 "Ortho SNPs for hg18 only (dbSNP 128)"
     hg18.snp128.name dupeOk
-    hg18.snp128OrthoPanTro2RheMac2.name 
+    hg18.snp128OrthoPanTro2RheMac2.name
 
 identifier snpOrtho129
 "Ortho SNPs for hg18 only (dbSNP 129)"
     hg18.snp129.name dupeOk
-    hg18.snp129OrthoPt2Pa2Rm2.name 
+    hg18.snp129OrthoPt2Pa2Rm2.name
 
 # Other NCBI Identifiers
 
@@ -2045,13 +2070,13 @@ identifier omimGeneId
 "omimGene ID"
     $hg.omimGene.name dupeOk
     $hg.omimGeneMap.omimId minCheck=0.85
-    $hg.refLink.omimId exclude=0 minCheck=0.98 
+    $hg.refLink.omimId exclude=0 minCheck=0.98
     $hg.omimMorbidMap.omimId minCheck=0.80
     $hg.omimToKnownCanonical.omimId
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
-#   hgFixed.sage.uni 
+#   hgFixed.sage.uni
     $hg.uniGene_2.name chopBefore=.
     $hg.sage.uni
 
@@ -2120,7 +2145,7 @@ identifier gbExtFileId
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
     hgFixed.encodeRegionInfo.name
-    $hg.encodeRegions.name 
+    $hg.encodeRegions.name
 
 identifier blastDm1FBPepId
 "dm1 proteins"
@@ -2165,13 +2190,13 @@ identifier blastHg16KGRefId
 #      $hg.blastKGPep00.name
 #      $xenTro.blastHg17KG.qName
 
-identifier blastKG01 
+identifier blastKG01
 "hg17 proteins 01"
      $gbd.blastHg17KG.qName dupeOk
      hg17.blastKGPep01.name
      hg17.blastKGRef01.acc
 
-identifier blastHg17KGPep01Id 
+identifier blastHg17KGPep01Id
 "hg17 peptides 01"
      hg17.blastKGPep01.name
      hg17.knownGene.name  minCheck=0.30
@@ -2181,7 +2206,7 @@ identifier blastHg17KGPep01Id
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
 
-identifier blastHg17KGRef01Id 
+identifier blastHg17KGRef01Id
 "hg17 ref 01"
      hg17.blastKGRef01.acc
      monDom1.blastHg17KG.qName
@@ -2189,7 +2214,7 @@ identifier blastHg17KGRef01Id
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
 
-identifier blastHg17KGPep02Id 
+identifier blastHg17KGPep02Id
 "hg17 peptides 02"
      hg17.blastKGPep02.name
      hg17.knownGene.name  minCheck=0.95
@@ -2200,7 +2225,7 @@ identifier blastHg17KGPep02Id
      apiMel2.blastHg17KG.qName
      dm2.blastHg17KG.qName
 
-identifier blastHg17KGRef02Id 
+identifier blastHg17KGRef02Id
 "hg17 ref 02"
      hg17.blastKGRef02.acc
      danRer3.blastHg17KG.qName
@@ -2209,7 +2234,7 @@ identifier blastHg17KGRef02Id
      apiMel2.blastHg17KG.qName
      dm2.blastHg17KG.qName
 
-identifier blastHg18KGPep04Id 
+identifier blastHg18KGPep04Id
 "hg18 peptides 04"
      hg18.blastKGPep04.name
      hg18.blastKGRef04.acc full
@@ -2241,7 +2266,7 @@ identifier blastHg18KGPep04Id
      sacCer2.blastHg18KG.qName
      mm9.blastHg18KG.qName
 
-identifier blastHg18KGRef04Id 
+identifier blastHg18KGRef04Id
 "hg18 ref 04"
      hg18.blastKGRef04.acc
      hg18.knownGeneOld2.name  minCheck=0.95
@@ -2271,18 +2296,18 @@ identifier blastHg18KGRef04Id
      oryLat2.blastHg18KG.qName
      mm9.blastHg18KG.qName
 
-identifier blastHg17KGRef01SwissId 
+identifier blastHg17KGRef01SwissId
 "hg17 proteins swiss 01"
      $hg.blastKGRef01.extra1 dupeOk
      uniProt.displayId.acc
 
-identifier blastCe4SG01 
+identifier blastCe4SG01
 "ce4 proteins 01"
      $gbd.blastCe6SG.qName dupeOk
      ce4.blastSGPep01.name
      ce4.blastSGRef01.acc
 
-identifier blastCe6SG01 
+identifier blastCe6SG01
 "ce6 proteins 01"
      $gbd.blastCe6SG.qName dupeOk
      ce6.blastSGPep01.name
@@ -2301,8 +2326,8 @@ identifier esRegModule
 identifier esRegMotif
 "Eran Segal's motifs deduced from coregulated genes"
     $sacCer.esRegMotif.name
-    $sacCer.esRegModuleToMotif.motif 
-    $sacCer.esRegGeneToMotif.name 
+    $sacCer.esRegModuleToMotif.motif
+    $sacCer.esRegGeneToMotif.name
 
 identifier yeastGrowthCondition
 "A growth condition for yeast cells"
@@ -2360,9 +2385,9 @@ identifier protVarId
 identifier protVarIdUni
 "UniProt Variants track mutation identifier contains UniProt ID"
     uniProt.protein.acc
-    hg18.protVar.name chopAfter=: 
+    hg18.protVar.name chopAfter=:
 
-#links between gv (the new Locus Variants) and related tables 
+#links between gv (the new Locus Variants) and related tables
 identifier gvId
 "Locus Variants track mutation identifier for attributes and links"
     hgFixed.gv.id
@@ -2372,9 +2397,9 @@ identifier gvId
     hg17,hg18.gvPos.name
 
 identifier gvSrcId
-"Locus Variants track source ID"     
+"Locus Variants track source ID"
     hgFixed.gvSrc.srcId
-    hgFixed.gv.srcId 
+    hgFixed.gv.srcId
 
 #links between oreganno (regulatory annotation) and related tables
 identifier oregId
@@ -2549,7 +2574,7 @@ identifier lsSnpPdbPdbId
 
 identifier lsSnpPdbSnpId
 "lsSnpPdb table snpId field"
-    hg18.snp129.name dupeOk 
+    hg18.snp129.name dupeOk
     hg18.lsSnpPdb.snpId
 
 
@@ -2563,8 +2588,8 @@ dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRat
 dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
 dependency $hg.gnfAtlas2Distance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
-dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
-dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio 
+dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio
+dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 
 # FAN says: the following hg17 tables are an exception
@@ -2947,7 +2972,7 @@ tablesIgnored $braFlo
 
 tablesIgnored $cavPor
     gold
-    
+
 tablesIgnored $cb
     chr%_gold
 
