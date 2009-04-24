@@ -1,7 +1,137 @@
+# convert Mac => Unix:
+tr '\r' '\n' < StanfordChip-FOXP2.DDF.original > StanfordChip-FOXP2.DDF
+
+Q) discrepancies b/n DDF and data directory?
+
+awk '{print $1}' StanfordChip-FOXP2.DDF > 1.txt
+remove first line
+ls data | awk '{print $1}' | sort > 2.txt
+diff 1.txt 2.txt
+0a1
+> FoxP2_PFSK1_SL102_hg18.TagAlign
+6d6
+< FoxP2_SK-N-MC_SL102_hg18.TagAlign
+
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/Encode.pm line 275.
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/Encode.pm line 275.
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/Encode.pm line 304.
+
+add "data/" prefix for all files
+
+change "PSFK-1"  to "PFSK-1" in DDF
+
+Format of narrowPeak file FoxP2_PFSK1_SL13_peakcalls.narrowPeak is invalid (missing many columns).
+
+grep '^newcontam' data/FoxP2_PFSK1_SL16_hg18.TagAlign
+data/FoxP2_PFSK1_SL16_hg18.TagAlign
+data/FoxP2_SK-N-MC_SL102_hg18.TagAlign
+
+Q) Figure out what are the weird chrom names?
+
+perl -e 'while(<>) {if(/^(\S+)/) {$hash{$1}++;}} print join("\n", sort keys %hash) . "\n";' FoxP2_SK-N-MC_SL102_hg18.TagAlign > uniq.txt &
+
+found 2 odd chrom names:
+
+humRibosomal.fasta
+newcontam
+
+egrep -v '^(newcontam|humRibosomal\.fasta)' FoxP2_SK-N-MC_SL102_hg18.TagAlign.original > FoxP2_SK-N-MC_SL102_hg18.TagAlign
+egrep -v '^(newcontam|humRibosomal\.fasta)' FoxP2_PFSK1_SL16_hg18.TagAlign.original > FoxP2_PFSK1_SL16_hg18.TagAlign
+
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/doEncodeValidate.pl line 742.
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/doEncodeValidate.pl line 767.
+Use of uninitialized value in addition (+) at /cluster/bin/scripts/doEncodeValidate.pl line 769.
+Use of uninitialized value in string eq at /cluster/bin/scripts/doEncodeValidate.pl line 776.
+Use of uninitialized value in string eq at /cluster/bin/scripts/doEncodeValidate.pl line 776.
+  View: RawSignal
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/doEncodeValidate.pl line 742.
+Use of uninitialized value in concatenation (.) or string at /cluster/bin/scripts/doEncodeValidate.pl line 767.
+Use of uninitialized value in addition (+) at /cluster/bin/scripts/doEncodeValidate.pl line 769.
+Use of uninitialized value in string eq at /cluster/bin/scripts/doEncodeValidate.pl line 776.
+Use of uninitialized value in string eq at /cluster/bin/scripts/doEncodeValidate.pl line 776.
+
+caused by MS-DOS text files (ugh).
+
+Q) How big are the files?
+
+One of the control tagAlign files:
+
+wc -l data/FoxP2_PFSK1_SL16_hg18.TagAlign.original
+23,550,618
+
+One of the experimental files:
+
+wc -l FoxP2_SK-N-MC_SL144_hg18.TagAlign
+13,411,341
+
+Rename the project Rami created:
+
+hgsql encpipeline_prod
+update projects set name = 'HudsonAlpha PFSK-1/SK-N-MC Control' where id = 6;
+
+hgLoadBed hg18 HAMethylSeq ~/tmp/methyl.bed -tmpDir=/data/tmp -bedGraph=4
+hgLoadBed hg18 HAMethylSeq ~/tmp/HCT116_hpaII.txt.BED -tmpDir=/data/tmp -bedGraph=4
+
+2009-02-10:
+
+Fixed various errors in HudsonAlpha_MethylSeq_Feb0909.DDF (add/subtract tabs etc.)
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/204 >& validate_error &
+
+Orange = methylated; blue = non-methylated
+
+Hypomethylation in HAL, and fetus and BG02ES (but no gene nearby):
+
+chr6:31,247,115-31,267,634
+
+Hypomethylation in human adult liver, and fetus:
+
+chr12:112,685,995-112,696,308
+
+Hypomethylation in human adult liver, and fetus:
+
+chr17:7,584,398-7,586,905
+
+Hypermethylation only in a cancer cell:
+
+chr17:7,548,069-7,550,576
+
+chr12:112,375,893-112,403,444 (LHX5)
+
+Hypermethylation only in late fetus and adult:
+
+chr12:120,130,554-120,135,393
+
+chr1:219,118,454-219,126,339 (HLX, but not near promoter)
+
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/204 > upload_error 2>&1 &
+
+2009-02 round:
+
+251, 259-262
+
+TODO:
+
+/hive/groups/encode/dcc/pipeline/encpipeline_prod/251 - figure out how to deal with control; e.g.:
+
+exp_data/Methylseq_GM12878_R1_hpa_1pcr.TagAlign	Alignments	GM12878	1		
+exp_data/Methylseq_GM12878_R1_msp_1pcr.TagAlign	Alignments	GM12878	1			
+
 #########################################################################################################
 # Deal with loading ftp data after that fact
 # 2009
 #########################################################################################################
+
+Larry,
+I'm currenly sending our fastq files for most of our ChIP-Seq submissions so far:
+HudsonAlphaChip_Bg_GM12878_K562         
+HudsonAlphaChip_RNAPol2_GM12878_K562         
+HudsonAlphaChip_GABP_GM12878_K562         
+HudsonAlphaChip_NRSF_GM12878_K562         
+HudsonAlphaChip_SRF_GM12878_K562         
+HudsonAlphaChip_TAF250_GM12878_Dec08         
+HudsonAlphaChip_TAF250_K562_Dec08
+
+Each of the above will be represented by a tar.gz names FASTQ_<Submission Name>. Inside each tar.gz are .fasq files for each of the experiments (uniquely marked by the Library Id - ex: ..._SL242_...fastq).
 
 D FASTQ_HudsonAlphaChip_Bg_GM12878_K562.tar.gz
 D FASTQ_HudsonAlphaChip_GABP_GM12878_K562.tar.gz
@@ -161,6 +291,33 @@ Couldn't find the following sequences from wgEncodeUtaChIPseqAlignmentsRep3Gm128
 AAGCATGGTGGCATGCGCATGTGGTCCCAGANC
 
 But maybe that's b/c it's not reversed
+
+2009-04-03
+
+Rami uploaded PFSK-1 and SK-N-MC replicates 1 and 2 and control - 
+
+cd /hive/groups/encode/dcc/pipeline/ftp/prod/rrauch
+tar xzvf HudsonAlpha_PFSK-1_SK-N-MC_FOXP2_FASTQ.tar.gz
+cd PFSK-1_SK-N-MC_FOXP2_FASTQ
+
+~/tmp/ramiDdf.pl < ~/tmp/fpsk.ddf
+
+generated wgEncodeHudsonalphaChipSeqRawDataRep2SknmcFoxp2.fastq.gz and wgEncodeHudsonalphaChipSeqRawDataRep2Pfsk1Foxp2.fastq.gz
+
+~/kent/src/hg/encode/encodeValidate/tagAlignSanityCheck.pl *Rep2SknmcFoxp2.tagAlign.gz *Rep2Pfsk1Foxp2.tagAlign.gz
+wgEncodeHudsonalphaChipSeqAlignmentsRep2SknmcFoxp2.tagAlign.gz is ok
+
+Couldn't find the following sequences from wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Foxp2.tagAlign.gz in wgEncodeHudsonalphaChipSeqRawDataRep2Pfsk1Foxp2.fastq.gz
+CATTTTACAGATGGAGAAACAGATT
+ACTTACAGTCATGGCACAAGGGGAA
+CTCATGTCAACGTTAAAAATGCTGT
+GAACCAGGTGTGAACTGGTGTCTAG
+AGTCCTGAGAATTCTACATCTCACG
+TTTGTAACGACAGGGTCTTGCTATG
+
+(6 out of 10).
+
+Still missing replicate 1 for FOXP2 in PFSK-1 and SK-N-MC!
 
 #########################################################################################################
 # Put whatever we can into the pushQ
