@@ -3318,6 +3318,9 @@ tablesIgnored $sacCer
     sgdClone
     sgdToPfam
     yeastP2P
+    uwFootprintsMappability
+    uwFootprintsPrints
+    uwFootprintsTagCounts
 
 tablesIgnored $tetNig
     gaze
