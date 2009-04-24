@@ -169,11 +169,11 @@ for (el = list; el != NULL; el = el->next)
 void outputOneSub(char *path1, char *path2, int i, int j, struct slName *loopText, FILE *f)
 /* Output all text in loop with one set of substitutions. */
 {
-char numBuf1[16], numBuf2[16];
-char dir1[256], root1[128], ext1[64], file1[265];
-char dir2[256], root2[128], ext2[64], file2[265];
-char lastDir1[128];
-char lastDir2[128];
+char numBuf1[64], numBuf2[64];
+char dir1[PATH_LEN], root1[PATH_LEN], ext1[FILEEXT_LEN], file1[FILENAME_LEN];
+char dir2[PATH_LEN], root2[PATH_LEN], ext2[FILEEXT_LEN], file2[FILENAME_LEN];
+char lastDir1[PATH_LEN];
+char lastDir2[PATH_LEN];
 struct subText *subList = NULL, *sub;
 struct slName *loopEl;
 struct slName *lastDirs1 = NULL, *lastDirs2 = NULL, *lastDirsEl;
@@ -181,7 +181,7 @@ int k;
 
 /* Collect info for substitutions on first list. */
 splitPath(path1, dir1, root1, ext1);
-sprintf(file1, "%s%s", root1, ext1);
+safef(file1, sizeof(file1), "%s%s", root1, ext1);
 getLastDir(lastDir1, dir1);
 lastDirs1 = getLastDirs(dir1);
 lastDirsEl = lastDirs1;
@@ -191,7 +191,7 @@ for (k = 1; k <= ARBITRARY_MAX_NUM_DIRS; k++)
     struct subText *tmpSub = NULL;
     if (!lastDirsEl)
 	break;
-    safef(targetText, 24, "$(lastDirs1=%d)", k);
+    safef(targetText, sizeof(targetText), "$(lastDirs1=%d)", k);
     tmpSub = subTextNew(targetText, lastDirsEl->name);
     slAddHead(&subList, tmpSub);
     lastDirsEl = lastDirsEl->next;
@@ -208,13 +208,13 @@ sub = subTextNew("$(ext1)", ext1);
 slAddHead(&subList, sub);
 sub = subTextNew("$(file1)", file1);
 slAddHead(&subList, sub);
-sprintf(numBuf1, "%d", i);
+safef(numBuf1, sizeof(numBuf1), "%d", i);
 sub = subTextNew("$(num1)", numBuf1);
 slAddHead(&subList, sub);
 
 /* Collect info for substitutions on second list. */
 splitPath(path2, dir2, root2, ext2);
-sprintf(file2, "%s%s", root2, ext2);
+safef(file2, sizeof(file2), "%s%s", root2, ext2);
 getLastDir(lastDir2, dir2);
 lastDirs2 = getLastDirs(dir2);
 lastDirsEl = lastDirs2;
@@ -224,7 +224,7 @@ for (k = 1; k <= ARBITRARY_MAX_NUM_DIRS; k++)
     struct subText *tmpSub = NULL;
     if (!lastDirsEl)
 	break;
-    safef(targetText, 24, "$(lastDirs1=%d)", k);    
+    safef(targetText, sizeof(targetText), "$(lastDirs2=%d)", k);    
     tmpSub = subTextNew(targetText, lastDirsEl->name);
     slAddHead(&subList, tmpSub);
     lastDirsEl = lastDirsEl->next;
@@ -241,7 +241,7 @@ sub = subTextNew("$(ext2)", ext2);
 slAddHead(&subList, sub);
 sub = subTextNew("$(file2)", file2);
 slAddHead(&subList, sub);
-sprintf(numBuf2, "%d", j);
+safef(numBuf2, sizeof(numBuf2), "%d", j);
 sub = subTextNew("$(num2)", numBuf2);
 slAddHead(&subList, sub);
 
