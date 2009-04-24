@@ -70,9 +70,9 @@ detail about the transcript and feature types.
 <tr><td>Havana_unprocessed_pseudogene   <td><B><font color="#B404AE">Medium Pink  </font></B><td>Level 2 Manual annotation: unprocessed pseudogene<td>polymorphic_pseudogene, transcribed_unprocessed_pseudogene, unitary_pseudogene, unprocessed_pseudogene</tr>
 <tr><td>Havana_pseudogene               <td><B><font color="#FF33FF">Light Pink   </font></B><td>Level 2 Manual annotation: pseudogene            <td>pseudogene, IG_pseudogene</tr>
 <tr><td>Havana_TEC                      <td><B><font color="#666666">Grey         </font></B><td>Level 2 Manual annotation: TEC                   <td>TEC, artifact</tr>
-<tr><td>Havana_polyA                    <td><B><font color="#000000">Black        </font></B><td>Level 2 Manual annotation: polyA                 <td>polyA features</tr>
+<tr><td>Havana_polyA                    <td><B><font color="#000000">Black        </font></B><td>Level 2 Manual annotation: polyA                 <td>polyA_signal, polyA_site, pseudo_polyA</tr>
 <tr><td>Ensembl_coding                  <td><B><font color="#DF0101">Dark Red     </font></B><td>Level 3 Automated annotation: Coding             <td>protein_coding, IG_protein, C_segment, J_segment, V_segment</tr>
-<tr><td>Ensembl_RNA                     <td><B><font color="#FE2E2E">Light Red    </font></B><td>Level 3 Automated annotation: RNA transcripts    <td>Mt_tRNA_pseudogene, miRNA, miRNA_pseudogene, misc_RNA, misc_RNA_pseudogene, rRNA, rRNA_pseudogene, scRNA, scRNA_pseudogene, snRNA, snRNA_pseudogene, snoRNA, snoRNA_pseudogene, tRNA_pseudogene</tr>
+<tr><td>Ensembl_RNA                     <td><B><font color="#FE2E2E">Light Red    </font></B><td>Level 3 Automated annotation: RNA transcripts    <td>miRNA, miRNA_pseudogene, misc_RNA, misc_RNA_pseudogene, Mt_rRNA, Mt_tRNA, Mt_tRNA_pseudogene, rRNA, rRNA_pseudogene, scRNA, scRNA_pseudogene, snoRNA, snoRNA_pseudogene, snRNA, snRNA_pseudogene, tRNAscan, tRNA_pseudogene</tr>
 <tr><td>Ensembl_pseudogene              <td><B><font color="#990066">Dark Pink    </font></B><td>Level 3 Automated annotation: pseudogene         <td>pseudogene, retrotransposon</tr>
 <!--<tr><td>Havana_pseudogene               <td><font color="#F781F3">Light Pink   </font><td>Level 2 Manual annotation: pseudogene            <td>pseudogene, IG_pseudogene</tr>-->
 <!--<tr><td>Havana_non_coding               <td><font color="#F7BE81">Light Orange </font><td>Level 2 Manual annotation: non-coding            <td>ambiguous_orf, antisense, non_coding, retained_intron, processed_transcript</tr>-->
@@ -126,7 +126,8 @@ techniques.
 <h2>Credits</h2>
 
 <P> This GENCODE release is the result of a collaborative effort among
-the following laboratories:
+the following laboratories: (contact: <A HREF="mailto:&#102;&#115;k&#64;&#115;an&#103;&#101;&#114;.&#97;&#99;.u&#107;">
+Felix Kokocinski</A>)
 </P>
 
 <P>
@@ -139,44 +140,48 @@ the following laboratories:
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;">HAVANA annotation group,
-Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/HGP/havana/havana.shtml" target="_blank">HAVANA annotation group</a>,
+          Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
       <td style="vertical-align: top;">Adam Frankish, James Gilbert, Jennifer Harrow,
 Felix Kokocinski, Stephen Trevanion, Tim Hubbard (GENCODE Principal Investigator)<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;">Genome Bioinformatics Lab (CRG), Barcelona, Spain</td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://genome.imim.es/" target="_blank">Genome Bioinformatics Lab (CRG)</a>,
+          Barcelona, Spain</td>
       <td style="vertical-align: top;">Thomas Derrien, Tyler Alioto, Roderic Guig&oacute;</td>
     </tr>
     <tr>
-      <td>Genome Bioinformatics, University of California Santa Cruz (UCSC), USA</td>
+      <td><a href="http://genome.ucsc.edu/" target="_blank">Genome Bioinformatics, University of California Santa Cruz</a> (UCSC), USA</td>
       <td>Rachel Harte, Mark Diekhans, Robert Baertsch, David Haussler</td>
     </tr>
     <tr>
-      <td>Comp. Genomics Lab, Washington University St. Louis (WUSTL), USA</td>
+      <td><a href"http://mblab.wustl.edu/" target="_blank">Comp. Genomics Lab, Washington University</a> St. Louis (WUSTL), USA</td>
       <td>Jeltje van Baren, Charlie Comstock, David Lu, Michael Brent</td>
     </tr>
     <tr>
-      <td>Computer Science and Artificial Intelligence Lab, Broad Institute of MIT and Harvard (MIT), USA</td>
+      <td><a href="http://www.csail.mit.edu/" target="_blank">Computer Science and Artificial Intelligence Lab</a>,
+          <a href="http://www.broad.mit.edu/" target="_blank">Broad Institute of MIT and Harvard</a>, USA</td>
       <td>Mike Lin, Manolis Kellis</td>
     </tr>
     <tr>
-      <td>Bioinformatics, Yale University (Yale), USA</td>
+      <td><a href="http://bioinfo.mbb.yale.edu/" target="_blank">Bioinformatics, Yale University</a> (Yale), USA</td>
       <td>Philip Cayting, Mark Gerstein</td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;">Center for Integrative Genomics, University of Lausanne, Switzerland</td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.unil.ch/cig" target="_blank">Center for Integrative Genomics</a>,
+          University of Lausanne, Switzerland</td>
       <td style="vertical-align: top;"> Cedric Howald, Alexandre Reymond</td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;">ENSEMBL genebuild group, Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.ensembl.org/info/docs/genebuild/genome_annotation.html" target="_blank">ENSEMBL genebuild group</a>,
+          Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
       <td style="vertical-align: top;">Bronwen Aken, Julio Fernandez Banet, Stephen Searle<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;">
-Structural Computational Biology Group, Centro Natcional de Investigaciones Oncologicas (CNIO), Madrid, Spain</td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.cnio.es/ing/grupos/plantillas/presentacion.asp?pag=726" target="_blank">
+Structural Computational Biology Group</a>, Centro Natcional de Investigaciones Oncologicas (CNIO), Madrid, Spain</td>
       <td>Manuel Rodr&iacute;guez Jos&eacute;, Jan-Jaap Wesselink, Michael Tress,&nbsp;Alfonso Valencia</td>
     </tr>
   </tbody>
@@ -191,3 +196,12 @@ Structural Computational Biology Group, Centro Natcional de Investigaciones Onco
 for ENCODE</a>. <em>Genome Biol</em>. 2006;7 Suppl
 1:S4.1-9.</P>
 
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
