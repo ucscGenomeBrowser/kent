@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.5 2009/04/21 19:00:46 rhead Exp $";
+#	"$Id: hg19.txt,v 1.6 2009/04/24 23:11:24 rhead Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -478,11 +478,11 @@ doBlastzChainNet.pl `pwd`/DEF \
 'update dbDb set defaultPos="chr6:28343766-33555363" where name="hg19";' \
 	hgcentraltest
 
-# reset again to a smaller range (2009-04-21 - Brooke)
-# this region that shows HAR1A and HAR1B
+# reset to a smaller range (2009-04-24 - Brooke)
+# this is the SOD1 gene, implicated in Lou Gehrig's disease.
 
     hgsql -e \
-'update dbDb set defaultPos="chr20:61,726,101-61,736,100" where name="hg19";' \
+'update dbDb set defaultPos="chr21:33,031,597-33,041,570" where name="hg19";' \
         hgcentraltest
 
 ############################################################################
