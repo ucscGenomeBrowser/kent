@@ -8,7 +8,7 @@
 #include "rnautil.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: rnaPhylo.c,v 1.1 2009/04/24 05:26:33 mikep Exp $";
+static char const rcsid[] = "$Id: rnaPhylo.c,v 1.2 2009/04/24 08:31:49 mikep Exp $";
 
 // issues: 
 // - GU -> GC pair is only 1 change, whereas GC->CG or others are two changes
@@ -24,6 +24,7 @@ static char const rcsid[] = "$Id: rnaPhylo.c,v 1.1 2009/04/24 05:26:33 mikep Exp
 
 int dna[256];
 int pairId[4][4];
+boolean printMaxVariants = FALSE;
 
 struct stats {
     Bits *variants;
@@ -36,14 +37,16 @@ void usage()
 errAbort(
   "rnaPhylo - rna phylogenetic analysis\n"
   "usage:\n"
-  "   rnaPhylo refSpp tree.nh align.mfa\n"
+  "   rnaPhylo refSpp tree.nh align.mfa [align2.mfa [align3.mfa ...]]\n"
   "options:\n"
   "   -genomes=file.txt   : file with db and genome name separated by tab for human-readable display\n"
+  "   -maxVariants        : just output the filename and maximum number of variants found\n"
   );
 }
 
 static struct optionSpec options[] = {
     {"genomes", OPTION_STRING},
+    {"maxVariants", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -129,7 +132,7 @@ struct hash *readMfa(char *alignfile, char *refSpp)
 {
 char *name, *seq, *dot;
 int size;
-struct hash *h = newHash(0);
+struct hash *h = NULL;
 struct lineFile *lf = lineFileOpen(alignfile, TRUE);
 boolean first = TRUE;
 while (faReadNext(lf, &seq, &size, &name))
@@ -139,6 +142,7 @@ while (faReadNext(lf, &seq, &size, &name))
     MJP(2);verbose(2,"hashAdd(h,%s,%s)\n", name, seq);
     if (first)
 	{
+	h = newHash(0);
 	hashAdd(h, refSpp, cloneString(seq));
 	hashAdd(h, REF_ID, cloneString(name));
 	first = FALSE;
@@ -198,7 +202,7 @@ if (tree->numEdges == 0)
 	{
 	printf("%-15s [", name);
 	for (i = 0 ; seq[i] ; ++i)
-	    printf("%c", seq[i] == ref[i] ? '.' : seq[i]);
+	    printf("%c", (dna[(int)ref[i]] >= 0 && dna[(int)seq[i]] == dna[(int)ref[i]]) ? '.' : seq[i]);
 	printf("]\n");
 	}
     else
@@ -340,65 +344,94 @@ while (lineFileNext(lf, &line, &lineSize))
 return h;
 }
 
-void rnaPhylo(char *refSpp, char *treefile, char *alignfile, char *genomesfile)
+void rnaPhylo(char *refSpp, char *treefile, char *genomesfile, char *alignfiles[], int numFiles)
 /* rnaPhylo - rna phylogenetic analysis. */
 {
 char *ss, *tens, *ones;
 int *pair, pairCount, ssLen, a, b, s0;
-int *events, *variants;
+int i, *events, *variants;
 char *pairSymbols;
-int maxDepth;
+int maxDepth, maxVariants, sumVariants, sumSqVariants;
 
 struct phyloTree *t = phyloOpenTree(treefile);
 maxDepth = findMaxDepth(t);
-struct hash *aln = readMfa(alignfile, refSpp);
 struct hash *genomes = readGenomes(genomesfile);
-struct stats *s;
-
-AllocArray(pairSymbols,1000);
-phyloDebugTree(t, stdout);
-ss = (char *)hashFindVal(aln, SS_KEY);
-ssLen = strlen(ss);
-fold2pairingList(ss, ssLen, &pair);
-pairCount = countPairs(pair, ssLen);
-mkPairPartnerSymbols(pair, pairSymbols, ssLen);
-printf("Structure analysis for sequence [%s] in genome [%s]\n", (char *)hashMustFindVal(aln, REF_ID), refSpp);
-printTree(aln, t, refSpp, genomes);
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "Structure", ss);
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "Pairs", pairSymbols);
-AllocArray(events, pairCount);
-AllocArray(variants, pairCount);
-s0 = 0;
-for (a = 0; a < ssLen ; ++a)
+for (i = 0 ; i < numFiles ; ++i)
     {
-    b = pair[a];
-    if (b < 0 || b < a)
+    struct hash *aln = readMfa(alignfiles[i], refSpp);
+    if (!aln)
+	{
+	warn("%s: no alignment found", alignfiles[i]);
 	continue;
-    s = evoColumnStats(a, b, aln, t);
-    events[s0] = s->events;
-    variants[s0] = bitCountRange(s->variants, 0, NUM_PAIRS);
-    ++s0;
+	}
+    ss = (char *)hashFindVal(aln, SS_KEY);
+    ssLen = strlen(ss);
+    fold2pairingList(ss, ssLen, &pair);
+    pairCount = countPairs(pair, ssLen);
+    AllocArray(events, pairCount);
+    AllocArray(variants, pairCount);
+    s0 = maxVariants = sumVariants = sumSqVariants = 0;
+    for (a = 0; a < ssLen ; ++a)
+	{
+	b = pair[a];
+	if (b < 0 || b < a)
+	    continue;
+	struct stats *s = evoColumnStats(a, b, aln, t);
+	events[s0] = s->events;
+	variants[s0] = bitCountRange(s->variants, 0, NUM_PAIRS);
+	maxVariants = max(maxVariants, variants[s0]);
+	sumVariants += variants[s0];
+	sumSqVariants += variants[s0]*variants[s0];
+	++s0;
+	freeStats(&s);
+	}
+    if (pairCount != s0)
+	errAbort("Pair count != s0 (%d != %d)\n", pairCount, s0);
+    if (printMaxVariants)
+	{
+	printf("%s,pairs,%d,maxVariants,%d,sumVariants,%d,sumSqVariants,%d,avgVariants,%.2f\n", alignfiles[i], s0, maxVariants, sumVariants, sumSqVariants, (float)sumVariants/s0);
+	}
+    else
+	{
+	AllocArray(pairSymbols,ssLen+1);
+	mkPairPartnerSymbols(pair, pairSymbols, ssLen);
+	printf("%s: Structure analysis for sequence [%s] in genome [%s]\n", alignfiles[i], (char *)hashMustFindVal(aln, REF_ID), refSpp);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "Structure", ss);
+	printTree(aln, t, refSpp, genomes);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "Structure", ss);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "Pairs", pairSymbols);
+	AllocArray(tens, ssLen+1);
+	AllocArray(ones, ssLen+1);
+	mkPairStats(pair, ssLen, variants, pairCount, tens, ones);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "Variants", tens);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "(cont.)", ones);
+	freez(&tens);
+	freez(&ones);
+	AllocArray(tens, ssLen+1);
+	AllocArray(ones, ssLen+1);
+	mkPairStats(pair, ssLen, events, pairCount, tens, ones);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "Events", tens);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s [%s]\n", "(cont.)", ones);
+	freez(&tens);
+	freez(&ones);
+	freez(&pairSymbols);
+	}
+    struct hashEl *helList = hashElListHash(aln);
+    hashElFreeList(&helList);
+    freeHash(&aln);
+    freez(&pair);
+    freez(&events);
+    freez(&variants);
     }
-if (pairCount != s0)
-    errAbort("Pair count != s0 (%d != %d)\n", pairCount, s0);
-AllocArray(tens, ssLen+1);
-AllocArray(ones, ssLen+1);
-mkPairStats(pair, ssLen, variants, pairCount, tens, ones);
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "Variants", tens);
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "(cont.)", ones);
-AllocArray(tens, ssLen+1);
-AllocArray(ones, ssLen+1);
-mkPairStats(pair, ssLen, events, pairCount, tens, ones);
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "Events", tens);
-spaceOut(stdout, maxDepth+1); 
-printf("%15s [%s]\n", "(cont.)", ones);
 }
 
 int main(int argc, char *argv[])
@@ -408,8 +441,9 @@ optionInit(&argc, argv, options);
 init();
 --argc;
 ++argv;
-if (argc != 3)
+printMaxVariants = optionExists("maxVariants");
+if (argc < 3)
     usage();
-rnaPhylo(argv[0], argv[1], argv[2], optionVal("genomes", NULL));
+rnaPhylo(argv[0], argv[1], optionVal("genomes", NULL), &argv[2], argc-2);
 return 0;
 }
