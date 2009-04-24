@@ -9805,6 +9805,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     dateSubmitted 2009-02-28
     dateUnrestricted 2009-11-27
     #accession 2008-10-01
+    type genePred
     priority 1
     freezeDate 2009-02-16
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
@@ -9818,6 +9819,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     dateSubmitted 2009-02-28
     dateUnrestricted 2009-11-27
     #accession 2008-10-01
+    type genePred
     priority 2
     freezeDate 2009-02-16
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
@@ -9831,6 +9833,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     dateSubmitted 2009-02-28
     dateUnrestricted 2009-11-27
     #accession 2008-10-01
+    type genePred
     priority 3
     freezeDate 2009-02-16
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
