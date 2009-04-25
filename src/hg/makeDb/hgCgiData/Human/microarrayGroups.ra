@@ -711,6 +711,36 @@ names TCGA-06-0184,TCGA-06-0210,TCGA-06-0168,TCGA-06-0152,TCGA-06-0166,TCGA-08-0
 
 ## Baylor ABI sequence data
 
+
+name hgscOVABI_SomaticNSGroups
+type groupings
+all hgscOVABIAll
+
+name hgscOVABI_SomaticSGroups
+type groupings
+all hgscOVABIAll
+
+name hgscOVABI_GermlineSGroups
+type groupings
+all hgscOVABIAll
+
+name hgscOVABI_GermlineNSGroups
+type groupings
+all hgscOVABIAll
+
+
+name hgscOVABIGroups
+type groupings
+all hgscOVABIAll
+
+name hgscOVABIAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+names TCGA-13-0724,TCGA-09-0366,TCGA-13-0755,TCGA-09-0364,TCGA-13-0717,TCGA-13-0758,TCGA-13-0727,TCGA-13-0726,TCGA-09-0365,TCGA-13-0757,TCGA-09-0367,TCGA-13-0723,TCGA-13-0730,TCGA-13-0751,TCGA-09-0369,TCGA-13-0714,TCGA-13-0720,TCGA-13-0761,TCGA-13-0764,TCGA-13-0762,TCGA-13-0760,TCGA-13-0725
+
+
 name hgscABI_SomaticNSGroups
 type groupings
 all hgscABIAll
