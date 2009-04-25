@@ -7,7 +7,7 @@
 #include "verbose.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: positionalTblCheck.c,v 1.1 2008/07/18 04:37:03 markd Exp $";
+static char const rcsid[] = "$Id: positionalTblCheck.c,v 1.2 2009/04/25 00:45:14 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -76,14 +76,13 @@ sqlFreeResult(&sr);
 static void positionalTblCheck(char *db, char *table)
 /* positionalTblCheck - check that positional tables are sorted. */
 {
-hSetDb(db);
-struct hTableInfo *tblInfo = hFindTableInfoDb(db, NULL, table);
+struct hTableInfo *tblInfo = hFindTableInfo(db, NULL, table);
 if (tblInfo == NULL)
     errAbort("cant find table %s.%s or %s.*_%s", db, table, db, table);
 if (!tblInfo->isPos)
     errAbort("%s.%s does not appear to be a positional table", db, table);
-struct slName *tbl, *tbls = hSplitTableNames(table);
-struct sqlConnection *conn = hAllocConn();
+struct slName *tbl, *tbls = hSplitTableNames(db, table);
+struct sqlConnection *conn = hAllocConn(db);
 for (tbl = tbls; tbl != NULL; tbl = tbl->next)
     checkTblOrder(conn, tbl->name, tblInfo->chromField, tblInfo->startField);
 hFreeConn(&conn);

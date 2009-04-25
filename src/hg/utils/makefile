@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.12 2009/02/10 22:27:09 kent Exp $
+# 	$Id: makefile,v 1.13 2009/04/25 00:45:14 markd Exp $
 
 include ../../inc/common.mk
 
@@ -51,6 +51,7 @@ DIRS = \
 	crTreeSearchBed \
 	gapToLift \
 	oligoMatch \
+	positionalTblCheck \
 	safePush \
 	toDev64 \
 	twoBitMask
@@ -62,6 +63,5 @@ BAD_DIRS= \
 	jkShell \
 	dnsInfo \
 	wigAsciiToBinary \
-	positionalTblCheck \
 	cCp
 
