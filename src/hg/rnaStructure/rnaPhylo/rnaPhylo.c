@@ -7,9 +7,11 @@
 #include "phyloTree.h"
 #include "rnautil.h"
 #include "bits.h"
+#include "dystring.h"
 
-static char const rcsid[] = "$Id: rnaPhylo.c,v 1.3 2009/04/24 08:44:11 mikep Exp $";
+static char const rcsid[] = "$Id: rnaPhylo.c,v 1.4 2009/04/26 07:58:43 mikep Exp $";
 
+#define ADDSEQ 0
 // issues: 
 // - GU -> GC pair is only 1 change, whereas GC->CG or others are two changes
 // - how to count the evolutionary distance
@@ -26,6 +28,7 @@ int dna[256];
 int pairId[4][4];
 boolean printMaxVariants = FALSE;
 boolean hideMissing = FALSE;
+boolean printNodes = FALSE;
 
 struct stats {
     Bits *variants;
@@ -43,6 +46,7 @@ errAbort(
   "   -genomes=file.txt   : File with db and genome name separated by tab for human-readable display\n"
   "   -maxVariants        : Just output the filename and maximum number of variants found\n"
   "   -hideMissing        : Hide (dont show) species where sequence is missing\n"
+  "   -printNodes         : Print nodes\n"
   );
 }
 
@@ -50,6 +54,7 @@ static struct optionSpec options[] = {
     {"genomes", OPTION_STRING},
     {"maxVariants", OPTION_BOOLEAN},
     {"hideMissing", OPTION_BOOLEAN},
+    {"printNodes", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -66,12 +71,12 @@ dna['U'] = dna['u'] = 3;
 for (i=0 ; i<4 ; ++i)
     for (j=0 ; j<4 ; ++j)
 	pairId[i][j] = -1;
-pairId[0][3] = 0;
-pairId[3][0] = 1;
-pairId[1][2] = 2;
-pairId[2][1] = 3;
-pairId[2][3] = 4;
-pairId[3][2] = 5;
+pairId[2][3] = 0; // GU
+pairId[3][2] = 1; // UG
+pairId[0][3] = 2; // AU
+pairId[3][0] = 3; // UA
+pairId[1][2] = 4; // CG
+pairId[2][1] = 5; // GC
 }
 
 boolean faReadNext(struct lineFile *lf, char **retSeq, int *retSize, char **retName)
@@ -179,57 +184,117 @@ int findMaxDepth(struct phyloTree *tree)
     return findMaxDepth2(tree, 0, 0);
 }
 
-void treeSpaces(FILE *f, char branch, int depth, int maxDepth)
+void treeSpaces(FILE *f, char branch, char prefix, int depth, int maxDepth)
 {
   spaceOut(f, depth);
   putc(branch, f);
   spaceOut(f, maxDepth-depth);
+  putc(prefix, f);
 }
 
-void printTreeDepth(struct hash *aln, struct phyloTree *tree, char *refSpp, struct hash *genomes, char branch, int depth, int maxDepth, FILE *f)
+char *nodeName(struct phyloTree *node, struct hash *genomes)
+{
+char *name = "";
+if (node && node->ident && node->ident->name)
+    name = (char *)hashOptionalVal(genomes, node->ident->name, node->ident->name);
+return name;
+}
+
+char *ssEncode(char *seq, char *ss, int *pair, char *ref)
+{
+char *s = cloneString(seq);
+int i = 0, p;
+while (s[i])
+    {
+    if (pair[i] < 0) // unpaired
+	{
+	if (ref && dna[(int)seq[i]] >= 0 && dna[(int)ref[i]] == dna[(int)seq[i]])
+	    s[i] = '.';
+	}
+    else // paird
+	{
+	if (dna[(int)seq[i]] >= 0 && dna[(int)seq[pair[i]]] >= 0) // both are bases, not '-'
+	    {
+	    p = pairId[dna[(int)seq[i]]][dna[(int)seq[pair[i]]]];
+	    s[i] = (p >= 0 ? '0' + p : (i < pair[i] ? '{' : '}'));
+	    }
+	else 
+	    {
+	    if (dna[(int)seq[i]] < 0) // this one is '-'
+		s[i] = (i < pair[i] ? '<' : '>');
+	    else // its a base
+		s[i] = (i < pair[i] ? '[' : ']');
+	    }
+	//MJP(2);verbose(2,"(i=%d,pair=%d) p=%d %c %c\n", i, pair[i], p, seq[i], seq[pair[i]]);
+	}
+    ++i;
+    }
+return s;
+}
+
+void printTreeDepth(struct hash *aln, struct phyloTree *tree, char *refSpp, struct hash *genomes, char *ss, int *pair, char branch, int depth, int maxDepth, FILE *f)
 // returns the max depth of the tree
 {
 char *seq;
 char *ref;
 char *name;
-int i;//, ii;
+char *ssEnc = NULL;
+//int ii;
+MJP(2);verbose(2,"edges=%d tree=%p genomes=%p\n", tree->numEdges, tree, genomes);
+name = nodeName(tree, genomes);
+MJP(2);verbose(2,"nodeName=[%s]\n", name);
 if (tree->numEdges == 0)
     {
-    name = hashOptionalVal(genomes, tree->ident->name, tree->ident->name);
+    ref = (char *)hashMustFindVal(aln, refSpp);
     if ( sameOk(refSpp, tree->ident->name) )
 	{
-	treeSpaces(f, branch, depth, maxDepth);
-	printf("%-15s [%s]\n", name, (char *)hashMustFindVal(aln, refSpp));
+	treeSpaces(f, branch, ' ', depth, maxDepth);
+	//printf("%-15s [%s]\n", name, ref);
+	ssEnc = ssEncode(ref, ss, pair, ref);
+	printf("%-15s  %s\n", name, ssEnc);
 	}
-    else if ( (seq = (char *)hashFindVal(aln, tree->ident->name)) && (ref = (char *)hashMustFindVal(aln, refSpp)) )
+    else if ( (seq = (char *)hashFindVal(aln, tree->ident->name)) && ref )
 	{
-	treeSpaces(f, branch, depth, maxDepth);
-	printf("%-15s [", name);
-	for (i = 0 ; seq[i] ; ++i)
-	    printf("%c", (dna[(int)ref[i]] >= 0 && dna[(int)seq[i]] == dna[(int)ref[i]]) ? '.' : seq[i]);
-	printf("]\n");
+	treeSpaces(f, branch, ' ', depth, maxDepth);
+	ssEnc = ssEncode(seq, ss, pair, ref);
+	printf("%-15s  %s\n", name, ssEnc);
+	if (ADDSEQ)
+	    {
+	    treeSpaces(f, branch, ' ', depth, maxDepth);
+	    printf("%-15s  ", name);
+	    int i;
+	    for (i = 0 ; seq[i] ; ++i)
+		printf("%c", (dna[(int)ref[i]] >= 0 && dna[(int)seq[i]] == dna[(int)ref[i]]) ? '.' : seq[i]);
+	    printf("\n");
+	    }
 	}
     else if (!hideMissing)
 	{
-	treeSpaces(f, branch, depth, maxDepth);
+	treeSpaces(f, branch, ' ', depth, maxDepth);
 	printf("%-15s |\n", name);
 	}
     }
 else if (tree->numEdges == 2)
     {
-    printTreeDepth(aln, tree->edges[0], refSpp, genomes, '/',  depth+1, maxDepth, f);
-    printTreeDepth(aln, tree->edges[1], refSpp, genomes, '\\', depth+1, maxDepth, f);
+    printTreeDepth(aln, tree->edges[0], refSpp, genomes, ss, pair, '/',  depth+1, maxDepth, f);
+    if (printNodes)
+	{
+	treeSpaces(f, '+', '*', depth, maxDepth);
+	printf("%-15s  %s\n", name, "");
+	}
+    printTreeDepth(aln, tree->edges[1], refSpp, genomes, ss, pair, '\\', depth+1, maxDepth, f);
     }
 else
     {
     errAbort("Found %d edges, expecting 0 (leaf) or 2 (node)\n", tree->numEdges);
     }
+freez(&ssEnc);
 }
 
-void printTree(struct hash *aln, struct phyloTree *tree, char *refSpp, struct hash *genomes)
+void printTree(struct hash *aln, struct phyloTree *tree, char *refSpp, struct hash *genomes, char *ss, int *pair)
 {
 if (aln && tree)
-    printTreeDepth(aln, tree, refSpp, genomes, '+', 0, findMaxDepth(tree), stdout);
+    printTreeDepth(aln, tree, refSpp, genomes, ss, pair, '+', 0, findMaxDepth(tree), stdout);
 }
 
 struct stats *newStats()
@@ -358,9 +423,13 @@ int i, *events, *variants;
 char *pairSymbols;
 int maxDepth, maxVariants, sumVariants, sumSqVariants;
 
+MJP(2);verbose(2,"phyloOpenTree(%s)\n", treefile);
 struct phyloTree *t = phyloOpenTree(treefile);
+MJP(2);verbose(2,"findMaxDepth()\n");
 maxDepth = findMaxDepth(t);
+MJP(2);verbose(2,"d=%d; readGenomes(%s)\n", maxDepth, genomesfile);
 struct hash *genomes = readGenomes(genomesfile);
+MJP(2);verbose(2,"mfa loop(%d files)\n", numFiles);
 for (i = 0 ; i < numFiles ; ++i)
     {
     struct hash *aln = readMfa(alignfiles[i], refSpp);
@@ -401,31 +470,34 @@ for (i = 0 ; i < numFiles ; ++i)
 	AllocArray(pairSymbols,ssLen+1);
 	mkPairPartnerSymbols(pair, pairSymbols, ssLen);
 	printf("%s: Structure analysis for sequence [%s] in genome [%s]\n", alignfiles[i], (char *)hashMustFindVal(aln, REF_ID), refSpp);
+	printf("legend: {}=base paired with non-canonical base; <>=gap paired with base; []=base paired with gap\n");
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "Structure", ss);
-	printTree(aln, t, refSpp, genomes);
+	printf("%15s  [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
+	printf("%15s  [%s]\n", "Structure", ss);
+	printTree(aln, t, refSpp, genomes, ss, pair);
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "Structure", ss);
+	printf("%15s  [%s]\n", "Structure", ss);
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "Pairs", pairSymbols);
+	printf("%15s  [%s]\n", "Pairs", pairSymbols);
+	spaceOut(stdout, maxDepth+1); 
+	printf("%15s  [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
 	AllocArray(tens, ssLen+1);
 	AllocArray(ones, ssLen+1);
 	mkPairStats(pair, ssLen, variants, pairCount, tens, ones);
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "Variants", tens);
+	printf("%15s  [%s]\n", "Variants", tens);
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "(cont.)", ones);
+	printf("%15s  [%s]\n", "(cont.)", ones);
 	freez(&tens);
 	freez(&ones);
 	AllocArray(tens, ssLen+1);
 	AllocArray(ones, ssLen+1);
 	mkPairStats(pair, ssLen, events, pairCount, tens, ones);
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "Events", tens);
+	printf("%15s  [%s]\n", "Events", tens);
 	spaceOut(stdout, maxDepth+1); 
-	printf("%15s [%s]\n", "(cont.)", ones);
+	printf("%15s  [%s]\n", "(cont.)", ones);
 	freez(&tens);
 	freez(&ones);
 	freez(&pairSymbols);
@@ -437,6 +509,7 @@ for (i = 0 ; i < numFiles ; ++i)
     freez(&events);
     freez(&variants);
     }
+MJP(2);verbose(2,"done\n");
 }
 
 int main(int argc, char *argv[])
@@ -448,6 +521,7 @@ init();
 ++argv;
 printMaxVariants = optionExists("maxVariants");
 hideMissing = optionExists("hideMissing");
+printNodes = optionExists("printNodes");
 if (argc < 3)
     usage();
 rnaPhylo(argv[0], argv[1], optionVal("genomes", NULL), &argv[2], argc-2);
