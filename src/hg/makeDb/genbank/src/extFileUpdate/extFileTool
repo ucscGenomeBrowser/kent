@@ -27,7 +27,11 @@ proc dumpExtFile {db} {
     set dumpTmp $dumpFile.tooltmp
     file mkdir [file dirname $dumpTmp]
 
-    set env(HGDB_CONF) etc/.hg.conf
+    if {$host == "hgwbeta"} {
+        set env(HGDB_CONF) etc/.hg.hgsqlbeta.conf
+    } else {
+        set env(HGDB_CONF) etc/.hg.conf
+    }
     exec hgsql -N -e {select * from gbExtFile} $db >$dumpTmp
     file rename -force $dumpTmp $dumpFile
 }
