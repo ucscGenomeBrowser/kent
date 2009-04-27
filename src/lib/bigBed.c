@@ -68,15 +68,19 @@ const struct ppBed *a = *((struct ppBed **)va);
 return a->fileOffset;
 }
 
-static struct ppBed *ppBedLoadOne(struct lineFile *lf, char *line, char **row, int fieldCount, int fieldAlloc, bits64 diskSize, struct hash *chromHash, struct lm *lm, struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount)
-/* Read bed file and return it as list of ppBeds. The whole thing will
- * be allocated in the passed in lm - don't ppBedFreeList or slFree
- * list! */
+static struct ppBed *ppBedLoadOne(struct lineFile *lf, char **row, int fieldCount, struct hash *chromHash, struct lm *lm, struct asObject *as, bits64 *diskSize)
+/* Return a ppBed record from a line of bed file in lf.
+   Return the disk size it would occupy in *diskSize.
+   lf is the lineFile the row is coming from.
+   row is a preallocated array of pointers to the individual fields.
+   fieldCount is the number of fields.
+   chromHash is a hash of the chromosome sizes.
+   lm is localMem to allocate ppBed memory from - don't ppBedFreeList or slFree
+   list!
+   as is the autoSql object describing this bed file or NULL if standard bed.
+   */
 {
 struct ppBed *pb;
-/* Chop up line and make sure the word count is right. */
-int wordCount = chopByWhite(line, row, fieldAlloc);
-lineFileExpectWords(lf, fieldCount, wordCount);
 
 /* Allocate variable and fill in first three fields. */
 lmAllocVar(lm, pb);
@@ -115,11 +119,11 @@ if (fieldCount > 3)
 	}
     /* Convert final tab to a zero. */
     pb->rest[textSize-1] = 0;
-    diskSize += textSize + 3*sizeof(bits32);
+    *diskSize = textSize + 3*sizeof(bits32);
     }
 else
     {
-    diskSize += 3*sizeof(bits32) + 1;  /* Still will write terminal 0 */
+    *diskSize = 3*sizeof(bits32) + 1;  /* Still will write terminal 0 */
     }
 return pb;
 }
@@ -133,9 +137,9 @@ static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct
 struct ppBed *pbList = NULL, *pb;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-bits64 diskSize = 0;
 int fieldCount = 0, fieldAlloc=0;
 char **row = NULL;
+*retDiskSize = 0;
 while (lineFileNextReal(lf, &line))
     {
     /* First time through figure out the field count, and if not set, the defined field count. */
@@ -160,12 +164,16 @@ while (lineFileNextReal(lf, &line))
 	fieldAlloc = fieldCount+1;
 	AllocArray(row, fieldAlloc);
 	}
-    pb = ppBedLoadOne(lf, line, row, fieldCount, fieldAlloc, diskSize, chromHash, lm, as, definedFieldCount, retDiskSize, retFieldCount);
+    /* Chop up line and make sure the word count is right. */
+    int wordCount = chopByWhite(line, row, fieldAlloc);
+    lineFileExpectWords(lf, fieldCount, wordCount);
+    bits64 diskSize = 0;
+    pb = ppBedLoadOne(lf, row, fieldCount, chromHash, lm, as, &diskSize);
+    *retDiskSize += diskSize;
     slAddHead(&pbList, pb);
     }
 slReverse(&pbList);
 freeMem(row);
-*retDiskSize = diskSize;
 *retFieldCount = fieldCount;
 return pbList;
 }
