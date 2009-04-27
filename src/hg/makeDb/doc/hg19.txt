@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.7 2009/04/24 23:42:48 hiram Exp $";
+#	"$Id: hg19.txt,v 1.8 2009/04/27 20:11:50 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -611,6 +611,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
 	> swap.log 2>&1 &
+    #	real    723m41.377s
+    cat fb.panTro2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 
 ############################################################################
 # Creating the pushQ entry (DONE - 2009-03-20 - Hiram)
