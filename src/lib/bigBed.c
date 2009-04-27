@@ -68,6 +68,61 @@ const struct ppBed *a = *((struct ppBed **)va);
 return a->fileOffset;
 }
 
+static struct ppBed *ppBedLoadOne(struct lineFile *lf, char *line, char **row, int fieldCount, int fieldAlloc, bits64 diskSize, struct hash *chromHash, struct lm *lm, struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount)
+/* Read bed file and return it as list of ppBeds. The whole thing will
+ * be allocated in the passed in lm - don't ppBedFreeList or slFree
+ * list! */
+{
+struct ppBed *pb;
+/* Chop up line and make sure the word count is right. */
+int wordCount = chopByWhite(line, row, fieldAlloc);
+lineFileExpectWords(lf, fieldCount, wordCount);
+
+/* Allocate variable and fill in first three fields. */
+lmAllocVar(lm, pb);
+char *chrom = row[0];
+struct hashEl *hel = hashLookup(chromHash, chrom);
+if (hel == NULL)
+    errAbort("%s is not in chrom.sizes line %d of %s", chrom, lf->lineIx, lf->fileName);
+pb->chrom = hel->name;
+pb->start = lineFileNeedNum(lf, row, 1);
+pb->end = lineFileNeedNum(lf, row, 2);
+int i;
+
+/* Check remaining fields are formatted right, and concatenate them into "rest" string. */
+if (fieldCount > 3)
+    {
+    /* Count up string sizes and allocate something big enough. */
+    int textSize = 0;
+    for (i=3; i<fieldCount; ++i)
+	textSize += strlen(row[i]) + 1;
+    char *s = pb->rest = lmAlloc(lm, textSize);
+
+    /* Go through and check that numerical strings really are numerical. */
+    struct asColumn *asCol = slElementFromIx(as->columnList, 3);
+    for (i=3; i<fieldCount; ++i)
+	{
+	enum asTypes type = asCol->lowType->type;
+	if (asTypesIsInt(type))
+	    lineFileNeedFullNum(lf, row, i);
+	else if (asTypesIsFloating(type))
+	    lineFileNeedDouble(lf, row, i);
+	int len = strlen(row[i]);
+	memcpy(s, row[i], len);
+	s[len] = '\t';
+	s += len+1;
+	asCol = asCol->next;
+	}
+    /* Convert final tab to a zero. */
+    pb->rest[textSize-1] = 0;
+    diskSize += textSize + 3*sizeof(bits32);
+    }
+else
+    {
+    diskSize += 3*sizeof(bits32) + 1;  /* Still will write terminal 0 */
+    }
+return pb;
+}
 
 static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct lm *lm, 
 	struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount)
@@ -105,52 +160,7 @@ while (lineFileNextReal(lf, &line))
 	fieldAlloc = fieldCount+1;
 	AllocArray(row, fieldAlloc);
 	}
-
-    /* Chop up line and make sure the word count is right. */
-    int wordCount = chopByWhite(line, row, fieldAlloc);
-    lineFileExpectWords(lf, fieldCount, wordCount);
-
-    /* Allocate variable and fill in first three fields. */
-    lmAllocVar(lm, pb);
-    char *chrom = row[0];
-    struct hashEl *hel = hashLookup(chromHash, chrom);
-    if (hel == NULL)
-        errAbort("%s is not in chrom.sizes line %d of %s", chrom, lf->lineIx, lf->fileName);
-    pb->chrom = hel->name;
-    pb->start = lineFileNeedNum(lf, row, 1);
-    pb->end = lineFileNeedNum(lf, row, 2);
-    int i;
-
-    /* Check remaining fields are formatted right, and concatenate them into "rest" string. */
-    if (fieldCount > 3)
-        {
-	/* Count up string sizes and allocate something big enough. */
-	int textSize = 0;
-	for (i=3; i<fieldCount; ++i)
-	    textSize += strlen(row[i]) + 1;
-	char *s = pb->rest = lmAlloc(lm, textSize);
-
-	/* Go through and check that numerical strings really are numerical. */
-	struct asColumn *asCol = slElementFromIx(as->columnList, 3);
-	for (i=3; i<fieldCount; ++i)
-	    {
-	    enum asTypes type = asCol->lowType->type;
-	    if (asTypesIsInt(type))
-	        lineFileNeedFullNum(lf, row, i);
-	    else if (asTypesIsFloating(type))
-	        lineFileNeedDouble(lf, row, i);
-	    int len = strlen(row[i]);
-	    memcpy(s, row[i], len);
-	    s[len] = '\t';
-	    s += len+1;
-	    asCol = asCol->next;
-	    }
-	/* Convert final tab to a zero. */
-	pb->rest[textSize-1] = 0;
-	diskSize += textSize + 3*sizeof(bits32);
-	}
-    else
-        diskSize += 3*sizeof(bits32) + 1;  /* Still will write terminal 0 */
+    pb = ppBedLoadOne(lf, line, row, fieldCount, fieldAlloc, diskSize, chromHash, lm, as, definedFieldCount, retDiskSize, retFieldCount);
     slAddHead(&pbList, pb);
     }
 slReverse(&pbList);
@@ -300,8 +310,6 @@ bits64 reductionDataOffsetPos[10];
 bits64 reductionDataOffsets[10];
 bits64 reductionIndexOffsets[10];
 bits16 fieldCount;
-
-uglyTime(NULL); // initialize timing
 
 /* Load up as object if defined in file. */
 struct asObject *as = NULL;
