@@ -10826,6 +10826,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell HFL11W
+    color 189,0,157
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
     release alpha
@@ -10840,6 +10841,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell HFL24W
+    color 189,0,157
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
     release alpha
@@ -10854,7 +10856,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell HAL
-
+    color 189,0,157
 
 # Wold Lab (Caltech) RNA-Seq (wrangler: mikep)
 
