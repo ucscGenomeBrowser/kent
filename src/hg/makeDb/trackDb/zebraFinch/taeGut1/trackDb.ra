@@ -19,7 +19,7 @@ visibility dense
 type bed 3 +
 
 track nscanGene override
-informant Zerba Finch N-SCAN uses chicken (galGal3) as the informant
+informant Zebra Finch N-SCAN uses chicken (galGal3) as the informant
 
 searchTable nscanGene
 searchType genePred
