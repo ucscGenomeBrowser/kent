@@ -11930,3 +11930,17 @@ hg16.upstreamMaf = mzPt1Mm3Rn3Gg2_pHMM /hive/data/genomes/hg16/bed/multiz.hg16mm
 
 
 #############################################################################
+# LIFTOVER TO Hg19 (DONE - 2009-04-24 - Hiram )
+    mkdir /hive/data/genomes/hg16/bed/blat.hg19.2009-04-24
+    cd /hive/data/genomes/hg16/bed/blat.hg19.2009-04-24
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -buildDir=`pwd` -debug hg16 hg19
+    # Real run:
+    time nice -n +19 \
+	$HOME/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` -verbose=2 \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 hg16 hg19 > do.log 2>&1 &
+    #	real    93m11.093s
+
+#############################################################################
