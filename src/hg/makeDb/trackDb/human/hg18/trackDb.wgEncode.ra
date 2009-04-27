@@ -4524,14 +4524,15 @@ longLabel ENCODE Elnitski Bi-directional Promoters
 visibility hide
 group regulation
 type bed 8 +
-dateSubmitted 2009-01-27
-dateUnrestricted 2009-10-27
-dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+dataVersion ENCODE May 2009 Freeze
 priority 0
 scoreFilterByRange on
 compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
+metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE May 2009 Freeze" subId=294 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
+#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBipOld fileName=wgEncodeNhgriBip.hg18.bed8.gz.old
 #metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=bosTau4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.bosTau4.bed8.gz
 #metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=canFam2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.canFam2.bed8.gz
 #metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
@@ -5219,20 +5220,59 @@ shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM06990=GM06990 K562=K562 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH_RA=SK-N-SH(+RA) Th1=Th1
+subGroup2 cellType Cell_Line Caco2=Caco-2 GM06990=GM06990 K562=K562 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH_RA=SK-N-SH(+RA) Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0 Hotspots:pValueFilter=0.0,qValueFilter=0.0 RawSignal:viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0 Hotspots:pValueFilter=0.0,qValueFilter=0.0 RawSignal:viewLimits=1:10,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3 +
 wgEncode 1
 # project dirs: 111 110 106 50 48 49 47 46
 noScoreFilter .
 scoreMin 500
+
+    track wgEncodeUwDnaseSeqHotspotsRep1Caco2
+    release alpha
+    subTrack wgEncodeUwDnaseSeq off
+    shortLabel Caco-2 1
+    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in Caco-2 cells)
+    subGroups view=Hotspots cellType=Caco2
+    type broadPeak
+    dateSubmitted 2009-04-24
+    dateUnrestricted 2010-01-24
+    dataVersion ENCODE May 2009 Freeze
+    cell Caco-2
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=Caco-2 view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE May 2009 Freeze" subId=288 dateSubmitted=2009-04-24 dateUnrestricted=2010-01-24 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Caco2 fileName=wgEncodeUwDnaseSeqHotspotsRep1Caco2.broadPeak.gz
+
+    track wgEncodeUwDnaseSeqPeaksCaco2
+    release alpha
+    subTrack wgEncodeUwDnaseSeq off
+    shortLabel Caco-2 Pk
+    longLabel ENCODE UW DNase-Seq Peaks (in Caco-2 cells)
+    subGroups view=Peaks cellType=Caco2
+    type narrowPeak
+    dateSubmitted 2009-04-24
+    dateUnrestricted 2010-01-24
+    dataVersion ENCODE May 2009 Freeze
+    cell Caco-2
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=Caco-2 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE May 2009 Freeze" subId=288 dateSubmitted=2009-04-24 dateUnrestricted=2010-01-24 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksCaco2 fileName=wgEncodeUwDnaseSeqPeaksCaco2.narrowPeak.gz
+
+    track wgEncodeUwDnaseSeqRawSignalRep1Caco2
+    release alpha
+    subTrack wgEncodeUwDnaseSeq off
+    shortLabel Caco-2 Raw 1
+    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in Caco-2 cells)
+    subGroups view=RawSignal cellType=Caco2
+    type wig 1.00 59677.00
+    dateSubmitted 2009-04-24
+    dateUnrestricted 2010-01-24
+    dataVersion ENCODE May 2009 Freeze
+    cell Caco-2
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=Caco-2 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE May 2009 Freeze" subId=288 dateSubmitted=2009-04-24 dateUnrestricted=2010-01-24 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Caco2 fileName=wgEncodeUwDnaseSeqRawSignalRep1Caco2.wig.gz
 
     track wgEncodeUwDnaseSeqRawSignalRep2Hepg2
     release alpha
