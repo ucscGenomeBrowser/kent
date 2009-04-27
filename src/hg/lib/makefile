@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-L += -lm $(MYSQLLIBS)
+L = -lm $(MYSQLLIBS)
 
 O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
@@ -43,12 +43,12 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o \
     growthCondition.o grp.o \
-    hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
+    hapmapAllelesOrtho.o hapmapAllelesSummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \
     hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o \
-    hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
+    hgGene.o hgMaf.o hgRelate.o hgSeq.o hPrint.o  hvGfx.o \
     HInv.o hui.o humanParalog.o \
     imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
@@ -59,7 +59,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     mcnBreakpoints.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
-    netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
+    netAlign.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
     pal.o pbStamp.o pcrResult.o pepPred.o plasEndPairs.o \
     polyGenotype.o protFeat.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \

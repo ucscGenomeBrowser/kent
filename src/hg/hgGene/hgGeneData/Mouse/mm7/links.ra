@@ -1,9 +1,0 @@
-name exonPrimer
-shortLabel ExonPrimer
-tables kgXref
-idSql select kgID from kgXref where kgID = '%s'
-url http://ihg.helmholtz-muenchen.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm7&acc=%s
-priority 10
-
-name ensembl
-url http://apr2006.archive.ensembl.org/Mus_musculus/geneview?transcript=%s

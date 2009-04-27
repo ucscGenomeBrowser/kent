@@ -1,4 +1,4 @@
-/* Put up pages for selecting and filtering on fields. */
+/* Put up pages for selecting and filtering on fields. */ 
 
 #include "common.h"
 #include "hash.h"
@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.74 2009/04/16 18:55:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.62 2009/01/09 00:58:26 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -35,7 +35,7 @@ static char *dbTableVar(char *prefix, char *db, char *table)
 /* Get variable name of form prefixDb.table */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s%s.%s",
+safef(buf, sizeof(buf), "%s%s.%s", 
 	prefix, db, table);
 return buf;
 }
@@ -44,7 +44,7 @@ static char *dbTableFieldVar(char *prefix, char *db, char *table, char *field)
 /* Get variable name of form prefixDb.table.field */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s%s.%s.%s",
+safef(buf, sizeof(buf), "%s%s.%s.%s", 
 	prefix, db, table, field);
 return buf;
 }
@@ -140,13 +140,13 @@ for (in = inList; in != NULL; in = in->next)
     {
     struct sqlConnection *conn = sqlConnect(in->db);
     struct joinerPair *jpList, *jp;
-
+    
     /* Keep track of tables in inList. */
     safef(dtName, sizeof(dtName), "%s.%s", inList->db, inList->table);
     hashAdd(inHash, dtName, NULL);
 
     /* First table in input is not allowed in output. */
-    if (in == inList)
+    if (in == inList)	
         hashAdd(uniqHash, dtName, NULL);
 
     /* Scan through joining information and add tables,
@@ -154,7 +154,7 @@ for (in = inList; in != NULL; in = in->next)
     jpList = joinerRelate(joiner, in->db, in->table);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
-	safef(dtName, sizeof(dtName), "%s.%s",
+	safef(dtName, sizeof(dtName), "%s.%s", 
 		jp->b->database, jp->b->table);
 	if (!hashLookup(uniqHash, dtName))
 	    {
@@ -240,7 +240,7 @@ if (withGetButton)
     {
     if (doGalaxy()) /* need form fields here and Galaxy so add step to Galaxy */
         cgiMakeButton(hgtaDoGalaxySelectedFields, "done with selections");
-    else
+    else 
         cgiMakeButton(hgtaDoPrintSelectedFields, "get output");
     hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "cancel");
@@ -248,11 +248,11 @@ if (withGetButton)
     }
 jsInit();
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
-			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table),
+			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
 			   "check all");
 hPrintf(" ");
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
-			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
+			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
 			   "clear all");
 }
 
@@ -262,22 +262,22 @@ static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
-struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable);
+char query[256];
+struct sqlResult *sr;
+char **row;
 struct asObject *asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
-struct slName *fieldName, *fieldList;
-if (isBigBed(table))
-    fieldList = bigBedGetFields(table, conn);
-else
-    fieldList = sqlListFields(conn, table);
+safef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
 
 hTableStart();
-for (fieldName = fieldList; fieldName != NULL; fieldName = fieldName->next)
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *field = fieldName->name;
+    char *field = row[0];
     char *var = checkVarName(db, rootTable, field);
     struct asColumn *asCol;
     hPrintf("<TR>");
@@ -418,7 +418,7 @@ else
 }
 
 boolean primaryOrLinked(char *dbTableField)
-/* Return TRUE if this is the primary table for field selection, or if it
+/* Return TRUE if this is the primary table for field selection, or if it 
  * is linked with that table. */
 {
 char dbTable[256];
@@ -528,7 +528,7 @@ return filterFieldVarName(db, table, field, filterPatternVar);
 }
 
 boolean anyFilter()
-/* Return TRUE if any filter set.  If there is filter state from a filter
+/* Return TRUE if any filter set.  If there is filter state from a filter 
  * defined on a different table, clear it. */
 {
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
@@ -599,25 +599,24 @@ void stringFilterOption(char *db, char *table, char *field, char *logOp)
 {
 char *name;
 
-hPrintf("<TR VALIGN=BOTTOM align='left'><TD colspan=2> %s </TD><TD>\n", field);
+hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
-cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
-    cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
-hPrintf("</TD><TD>match </TD><TD>\n");
+cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
+		cartUsualString(cart, name, ddOpMenu[0]));
+hPrintf(" match </TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVarWithExtraHtml(name, cartUsualString(cart, name, "*"),140,NULL);
-//cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
+cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
 if (logOp == NULL)
     logOp = "";
-hPrintf("&nbsp;%s </TD></TR>\n", logOp);
+hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
 }
 
 static void makeEnumValMenu(char *type, char ***pMenu, int *pMenuSize)
-/* Given a SQL type description of an enum or set, parse out the list of
- * values and turn them into a char array for menu display, with "*" as
- * the first item (no constraint).
+/* Given a SQL type description of an enum or set, parse out the list of 
+ * values and turn them into a char array for menu display, with "*" as 
+ * the first item (no constraint). 
  * This assumes that the values do not contain the ' character.
- * This will leak a little mem unless you free *pMenu[1] and *pMenu
+ * This will leak a little mem unless you free *pMenu[1] and *pMenu 
  * when done. */
 {
 static char *noop = "*";
@@ -657,103 +656,46 @@ char *name = NULL;
 char **valMenu = NULL;
 int valMenuSize = 0;
 
-hPrintf("<TR VALIGN=BOTTOM align='left'><TD valign=top align='left'colspan=2> %s </TD><TD valign=top>\n", field);
+hPrintf("<TR VALIGN=BOTTOM><TD valign=top> %s </TD><TD valign=top>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
-cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
-    cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
-hPrintf("<TD valign=top>%s</TD><TD colspan=4 nowrap>\n", isSqlSetType(type) ? "include" : "match");
+cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
+		cartUsualString(cart, name, ddOpMenu[0]));
+hPrintf(" %s </TD><TD>\n", isSqlSetType(type) ? "include" : "match");
 name = filterPatternVarName(db, table, field);
 makeEnumValMenu(type, &valMenu, &valMenuSize);
+if (valMenuSize-1 > 2)
+    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
+else
+    cgiMakeDropList(name, valMenu, valMenuSize,
+		    cartUsualString(cart, name, valMenu[0]));
 if (logOp == NULL)
     logOp = "";
-if (valMenuSize-1 > 2)
-    {
-    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
-    hPrintf("</TD><TD>%s </TD></TR>\n", logOp);
-    }
-else
-    {
-    cgiMakeDropList(name, valMenu, valMenuSize,cartUsualString(cart, name, valMenu[0]));
-    hPrintf("&nbsp;%s </TD></TR>\n", logOp);
-    }
+hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
 }
 
 
-static void numericFilter(char *db, char *table, char *field, char *label,char *logOp)
+void numericFilterOption(char *db, char *table, char *field, char *label,
+	char *logOp)
 /* Print out a table row with filter constraint options for a number. */
 {
 char *name;
 
-hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
+hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", label);
+puts(" is ");
 name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
+		cartUsualString(cart, name, cmpOpMenu[0]));
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-double val = cartUsualDouble(cart, name, 0);
-cgiMakeDoubleVarNoLimits(name,val,label,140);
+cgiMakeTextVar(name, cartUsualString(cart, name, ""), 20);
 if (logOp == NULL)
     logOp = "";
-hPrintf("&nbsp;%s</TD></TR>\n", logOp);
-}
-
-static void numericFilterWithLimits(char *db, char *table, char *field, char *label,double min,double max,char *logOp)
-/* Print out a filter constraint for an integer within a range. */
-{
-char *name;
-
-hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
-name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
-puts("</TD><TD>\n");
-name = filterPatternVarName(db, table, field);
-double val = cartUsualDouble(cart, name, 0);
-cgiMakeDoubleVarWithLimits(name,val,label,140,min,max);
-if (logOp == NULL)
-    logOp = "";
-hPrintf("&nbsp;%s</TD></TR>\n", logOp);
-}
-
-void integerFilter(char *db, char *table, char *field, char *label,char *logOp)
-/* Print out a filter constraint for an integer within a range. */
-{
-char *name;
-
-hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
-name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
-puts("</TD><TD>\n");
-name = filterPatternVarName(db, table, field);
-int val = cartUsualInt(cart, name, 0);
-cgiMakeIntVarNoLimits(name,val,label,140);
-if (logOp == NULL)
-    logOp = "";
-hPrintf("&nbsp;%s</TD></TR>\n", logOp);
-}
-
-void integerFilterWithLimits(char *db, char *table, char *field, char *label,int min,int max,char *logOp)
-/* Print out a filter constraint for an integer within a range. */
-{
-char *name;
-
-hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s is</TD><TD colspan=2>\n", label);
-name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-    cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
-puts("</TD><TD>\n");
-name = filterPatternVarName(db, table, field);
-int val = cartUsualInt(cart, name, 0);
-cgiMakeIntVarWithLimits(name,val,label,140,min,max);
-if (logOp == NULL)
-    logOp = "";
-hPrintf("&nbsp;%s</TD></TR>\n", logOp);
+hPrintf("</TD><TD>%s</TD></TR>\n", logOp);
 }
 
 void eqFilterOption(char *db, char *table, char *field,
 	char *fieldLabel1, char *fieldLabel2, char *logOp)
-/* Print out a table row with filter constraint options for an equality
+/* Print out a table row with filter constraint options for an equality 
  * comparison. */
 {
 char *name;
@@ -778,116 +720,101 @@ static void filterControlsForTableDb(char *db, char *rootTable)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
-struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable);
+char query[256];
+struct sqlResult *sr;
+char **row;
 boolean gotFirst = FALSE;
-boolean isSmallWig = isWiggle(db, table);
-boolean isWig = isSmallWig || isBigWig(table);
+boolean isWig = FALSE;
 boolean isBedGr = isBedGraph(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
+
+isWig = isWiggle(db, table);
 
 if (isBedGr)
     {
     int wordCount;
     char *words[8];
-    char *typeLine = cloneString(tdb->type);
+    char *typeLine = cloneString(curTrack->type);
 
     wordCount = chopLine(typeLine,words);
     if (wordCount > 1)
-        bedGraphColumn = sqlUnsigned(words[1]);
+	bedGraphColumn = sqlUnsigned(words[1]);
     freez(&typeLine);
     }
 
 if (isWig)
     {
     hPrintf("<TABLE BORDER=0>\n");
-    if ((tdb != NULL) && (tdb->type != NULL))
-        {
-        double min, max;
-        wiggleMinMax(tdb,&min,&max);
-        numericFilterWithLimits(db, rootTable, filterDataValueVar,filterDataValueVar,min,max,"");
+    numericFilterOption(db, rootTable, filterDataValueVar,
+	filterDataValueVar, "");
+    if ((curTrack != NULL) && (curTrack->type != NULL))
+	{
+	double min, max;
+	wiggleMinMax(curTrack,&min,&max);
 
-        hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g:%g]) "
-            "</TD></TR></TABLE>\n", min, max);
-        }
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g:%g]) "
+		"</TD></TR></TABLE>\n", min, max);
+	}
     else
-        {
-        numericFilter(db, rootTable, filterDataValueVar,filterDataValueVar, "");
-        hPrintf("</TABLE>\n");
-        }
+	hPrintf("</TABLE>\n");
     }
 else
     {
     int fieldNum = 0;
     int noBinBedGraphColumn = bedGraphColumn;
-    struct sqlFieldType *ft, *ftList;
-    if (isBigBed(table))
-        {
-        ftList = bigBedListFieldsAndTypes(table, conn);
-        }
-    else
-        {
-        ftList = sqlListFieldsAndTypes(conn, table);
-        }
+    safef(query, sizeof(query), "describe %s", table);
+    sr = sqlGetResult(conn, query);
     hPrintf("<TABLE BORDER=0>\n");
-    for (ft = ftList; ft != NULL; ft = ft->next)
-        {
-        char *field = ft->name;
-        char *type = ft->type;
-        char *logic = "";
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *field = row[0];
+	char *type = row[1];
+	char *logic = "";
 
-        if ((0 == fieldNum) && (!sameWord(field,"bin")))
-            noBinBedGraphColumn -= 1;
-        if (!sameWord(type, "longblob"))
-            {
-            if (!gotFirst)
-                gotFirst = TRUE;
-            else if (!isBedGr)
-                logic = " AND ";
-            }
-        if (!isBedGr || (noBinBedGraphColumn == fieldNum))
-            {
-            if (isSqlEnumType(type) || isSqlSetType(type))
-                {
-                enumFilterOption(db, rootTable, field, type, logic);
-                }
-            else if(isSqlIntType(type))
-                {
-                integerFilter(db, rootTable, field, field, logic);
-                }
-            else if(isSqlNumType(type))
-                {
-                if(isBedGr)
-                    {
-                    double min, max;
-                    double tDbMin, tDbMax;
+	if ((0 == fieldNum) && (!sameWord(field,"bin")))
+		noBinBedGraphColumn -= 1;
+	if (!sameWord(type, "longblob"))
+	    {
+	    if (!gotFirst)
+		gotFirst = TRUE;
+	    else if (!isBedGr)
+		logic = " AND ";
+	    }
+	if (!isBedGr || (noBinBedGraphColumn == fieldNum))
+	    {
+	    if (isSqlStringType(type))
+		{
+		stringFilterOption(db, rootTable, field, logic);
+		}
+	    else if (isSqlEnumType(type) || isSqlSetType(type))
+		{
+		enumFilterOption(db, rootTable, field, type, logic);
+		}
+	    else
+		{
+		numericFilterOption(db, rootTable, field, field, logic);
+		}
+	    if (isBedGr)
+		{
+		double min, max;
+		double tDbMin, tDbMax;
 
-                    wigFetchMinMaxLimits(tdb, &min, &max, &tDbMin, &tDbMax);
-                    if (tDbMin < min)
-                        min = tDbMin;
-                    if (tDbMax > max)
-                        max = tDbMax;
-                    numericFilterWithLimits(db, rootTable, field, field, min, max, logic);
-                    hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
-                        "</TD></TR>\n", field, min, max);
-                    }
-                else
-                    {
-                    numericFilter(db, rootTable, field, field, logic);
-                    }
-                }
-            else //if (isSqlStringType(type))
-                {
-                stringFilterOption(db, rootTable, field, logic);
-                }
-            }
-        ++fieldNum;
-        }
+		wigFetchMinMaxLimits(curTrack, &min, &max, &tDbMin, &tDbMax);
+		if (tDbMin < min)
+		    min = tDbMin;
+		if (tDbMax > max)
+		    max = tDbMax;
+		hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
+		    "</TD></TR>\n", field, min, max);
+		}
+	    }
+	++fieldNum;
+	}
     hPrintf("</TABLE>\n");
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr))
-    {
+    if (!(isWig||isBedGr)) {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
@@ -899,7 +826,7 @@ if (!(isWig||isBedGr))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr)
+if (isWig || isBedGr)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -921,71 +848,70 @@ static void filterControlsForTableCt(char *db, char *table)
 /* Put up filter controls for a custom track. */
 {
 struct customTrack *ct = lookupCt(table);
+
 puts("<TABLE BORDER=0>");
 
 if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf"))
     {
     stringFilterOption(db, table, "chrom", " AND ");
-    integerFilter(db, table, "chromStart", "chromStart", " AND ");
-    integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
+    numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
+    numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
     }
 else if (ct->wiggle)
     {
-    if ((ct->tdb != NULL) && (ct->tdb != NULL))
-        {
-        double min, max;
-        wiggleMinMax(ct->tdb,&min,&max);
+    numericFilterOption("ct", table, filterDataValueVar, filterDataValueVar,"");
+    if ((curTrack != NULL) && (curTrack->type != NULL))
+	{
+	double min, max;
+	wiggleMinMax(curTrack,&min,&max);
 
-        numericFilterWithLimits("ct", table, filterDataValueVar, filterDataValueVar,min,max,"");
-        hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g,%g]) "
-            "</TD></TR>\n", min, max);
-        }
-    else
-        {
-        numericFilter("ct", table, filterDataValueVar, filterDataValueVar,"");
-        }
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g,%g]) "
+		"</TD></TR>\n", min, max);
+	}
     }
 else
     {
     if (ct->fieldCount >= 3)
-        {
-        stringFilterOption(db, table, "chrom", " AND ");
-        integerFilter(db, table, "chromStart", "chromStart", " AND ");
-        integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
-        }
+	{
+	stringFilterOption(db, table, "chrom", " AND ");
+	numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
+	numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
+	}
     if (ct->fieldCount >= 4)
-        {
-        stringFilterOption(db, table, "name", " AND ");
-        }
+	{
+	stringFilterOption(db, table, "name", " AND ");
+	}
     if (ct->fieldCount >= 5)
-        {
-        numericFilter(db, table, "score", "score", " AND ");
-        }
+	{
+	numericFilterOption(db, table, "score", "score", " AND ");
+	}
     if (ct->fieldCount >= 6)
-        {
-        stringFilterOption(db, table, "strand", " AND ");
-        }
+	{
+	stringFilterOption(db, table, "strand", " AND ");
+	}
     if (ct->fieldCount >= 8)
-        {
-        integerFilter(db, table, "thickStart", "thickStart", " AND ");
-        integerFilter(db, table, "thickEnd", "thickEnd", " AND ");
-        }
+	{
+	numericFilterOption(db, table, "thickStart", "thickStart", " AND ");
+	numericFilterOption(db, table, "thickEnd", "thickEnd", " AND ");
+	}
     if (ct->fieldCount >= 12)
-        {
-        integerFilter(db, table, "blockCount", "blockCount", " AND ");
-        }
+	{
+	numericFilterOption(db, table, "blockCount", "blockCount", " AND ");
+	}
     /* These are not bed fields, just extra constraints that we offer: */
     if (ct->fieldCount >= 3)
-        {
-        integerFilter(db, table, "chromLength", "(chromEnd - chromStart)",
-                    (ct->fieldCount >= 8) ? " AND " : "");
-        }
+	{
+	numericFilterOption(db, table, "chromLength", "(chromEnd - chromStart)", 
+			    (ct->fieldCount >= 8) ? " AND " : "");
+	}
     if (ct->fieldCount >= 8)
-        {
-        integerFilter( db, table, "thickLength",  "(thickEnd - thickStart)", " AND ");
-        eqFilterOption(db, table, "compareStarts","chromStart","thickStart", " AND ");
-        eqFilterOption(db, table, "compareEnds",  "chromEnd",  "thickEnd",   "");
-        }
+	{
+	numericFilterOption(db, table, "thickLength", "(thickEnd - thickStart)",
+			    " AND ");
+	eqFilterOption(db, table, "compareStarts", "chromStart", "thickStart", 
+		       " AND ");
+	eqFilterOption(db, table, "compareEnds", "chromEnd", "thickEnd", "");
+	}
     }
 
 puts("</TABLE>");
@@ -1040,11 +966,6 @@ if (strchr(table, '.'))
     htmlOpen("Filter on Fields from %s", table);
 else
     htmlOpen("Filter on Fields from %s.%s", db, table);
-
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js", NULL);
-commonCssStyles();
-
 hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", cgiScriptName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
@@ -1106,7 +1027,7 @@ void constrainFreeForm(char *rawQuery, struct dyString *clause)
  * - numbers
  * - patterns with wildcards
  * Make sure they don't use any SQL reserved words, ;'s, etc.
- * Let SQL handle the actual parsing of nested expressions etc. -
+ * Let SQL handle the actual parsing of nested expressions etc. - 
  * this is just a token cop. */
 {
 struct kxTok *tokList, *tokPtr;
@@ -1156,38 +1077,38 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
 	{
 	char *word = cloneString(tokPtr->string);
 	toUpperN(word, strlen(word));
-	if (startsWith("SQL_", word) ||
-	    startsWith("MYSQL_", word) ||
-	    sameString("ALTER", word) ||
-	    sameString("BENCHMARK", word) ||
-	    sameString("CHANGE", word) ||
-	    sameString("CREATE", word) ||
-	    sameString("DELAY", word) ||
-	    sameString("DELETE", word) ||
-	    sameString("DROP", word) ||
-	    sameString("FLUSH", word) ||
-	    sameString("GET_LOCK", word) ||
-	    sameString("GRANT", word) ||
-	    sameString("INSERT", word) ||
-	    sameString("KILL", word) ||
-	    sameString("LOAD", word) ||
-	    sameString("LOAD_FILE", word) ||
-	    sameString("LOCK", word) ||
-	    sameString("MODIFY", word) ||
-	    sameString("PROCESS", word) ||
-	    sameString("QUIT", word) ||
-	    sameString("RELEASE_LOCK", word) ||
-	    sameString("RELOAD", word) ||
-	    sameString("REPLACE", word) ||
-	    sameString("REVOKE", word) ||
-	    sameString("SELECT", word) ||
-	    sameString("SESSION_USER", word) ||
-	    sameString("SHOW", word) ||
-	    sameString("SYSTEM_USER", word) ||
-	    sameString("UNLOCK", word) ||
-	    sameString("UPDATE", word) ||
-	    sameString("USE", word) ||
-	    sameString("USER", word) ||
+	if (startsWith("SQL_", word) || 
+	    startsWith("MYSQL_", word) || 
+	    sameString("ALTER", word) || 
+	    sameString("BENCHMARK", word) || 
+	    sameString("CHANGE", word) || 
+	    sameString("CREATE", word) || 
+	    sameString("DELAY", word) || 
+	    sameString("DELETE", word) || 
+	    sameString("DROP", word) || 
+	    sameString("FLUSH", word) || 
+	    sameString("GET_LOCK", word) || 
+	    sameString("GRANT", word) || 
+	    sameString("INSERT", word) || 
+	    sameString("KILL", word) || 
+	    sameString("LOAD", word) || 
+	    sameString("LOAD_FILE", word) || 
+	    sameString("LOCK", word) || 
+	    sameString("MODIFY", word) || 
+	    sameString("PROCESS", word) || 
+	    sameString("QUIT", word) || 
+	    sameString("RELEASE_LOCK", word) || 
+	    sameString("RELOAD", word) || 
+	    sameString("REPLACE", word) || 
+	    sameString("REVOKE", word) || 
+	    sameString("SELECT", word) || 
+	    sameString("SESSION_USER", word) || 
+	    sameString("SHOW", word) || 
+	    sameString("SYSTEM_USER", word) || 
+	    sameString("UNLOCK", word) || 
+	    sameString("UPDATE", word) || 
+	    sameString("USE", word) || 
+	    sameString("USER", word) || 
 	    sameString("VERSION", word))
 	    {
 	    errAbort("Illegal SQL word \"%s\" in free-form query string",
@@ -1246,7 +1167,7 @@ return pat != NULL && pat[0] != 0 && !sameString(cmpOp, cmpOpMenu[0]);
 }
 
 static boolean filteredOrLinked(char *db, char *table)
-/* Return TRUE if this table is the table to be filtered or if it is to be
+/* Return TRUE if this table is the table to be filtered or if it is to be 
  * linked with that table. */
 {
 char *dbTable = getDbTable(db, table);
@@ -1351,7 +1272,7 @@ return type;
 }
 
 static void normalizePatList(struct slName **pPatList)
-/* patList might be a plain old list of terms, in which case we keep the
+/* patList might be a plain old list of terms, in which case we keep the 
  * terms only if they are not no-ops.  patList might also be one element
  * that is a space-separated list of terms, in which case we make a new
  * list item for each non-no-op term.  (Trim spaces while we're at it.) */
@@ -1406,7 +1327,7 @@ if (!sameString(oldDb, db))
      safef(explicitDb, sizeof(explicitDb), "%s.", db);
 else
      explicitDb[0] = 0;
-
+     
 /* Cope with split table. */
 safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
 if (!sqlTableExists(conn, splitTable))
@@ -1440,8 +1361,8 @@ for (var = varList; var != NULL; var = var->next)
     memcpy(field, s, fieldNameSize);
     field[fieldNameSize] = 0;
     type += 1;
-    /* rawLogic and rawQuery are handled below;
-     * filterMaxOutputVar is not really a filter variable and is handled
+    /* rawLogic and rawQuery are handled below; 
+     * filterMaxOutputVar is not really a filter variable and is handled 
      * in wiggle.c. */
     if (startsWith("raw", type) || sameString(filterMaxOutputVar, type))
 	continue;
@@ -1580,168 +1501,10 @@ void doTest(struct sqlConnection *conn)
 char *s = NULL;
 textOpen();
 hPrintf("Doing test!\n");
-s = filterClause("hg18", "knownGene", "chrX", NULL);
+s = filterClause("hg16", "knownGene", "chrX", NULL);
 if (s != NULL)
     hPrintf("%s\n", s);
 else
     hPrintf("%p\n", s);
-}
-
-void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
-		     char **retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in
- * retCft, retVals and retInv to make a filter. */
-{
-char *vals, *ptrs[32];
-int numWords;
-int i;
-
-assert(retCft != NULL);
-assert(retVals != NULL);
-assert(retInv != NULL);
-assert(sameString(dd, "does") || sameString(dd, "doesn't"));
-
-/* catch null-constraint cases.  ? will be treated as a literal match,
- * which would make sense for bed strand and maybe other single-char things: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*"))
-    {
-    *retCft = cftIgnore;
-    return;
-    }
-
-*retCft = cftMultiLiteral;
-numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
-vals = needMem((numWords+1) * sizeof(char));
-for (i=0;  i < numWords;  i++)
-    vals[i] = ptrs[i][0];
-vals[i] = 0;
-*retVals = vals;
-*retInv = sameString("doesn't", dd);
-}
-
-void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
-		       char ***retVals, boolean *retInv)
-/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in
- * retCft, retVals and retInv to make a filter. */
-{
-char **vals, *ptrs[32];
-int numWords;
-int i;
-
-assert(retSft != NULL);
-assert(retVals != NULL);
-assert(retInv != NULL);
-assert(sameString(dd, "does") || sameString(dd, "doesn't"));
-
-/* catch null-constraint cases: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*"))
-    {
-    *retSft = sftIgnore;
-    return;
-    }
-
-*retSft = sftMultiRegexp;
-numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
-vals = needMem((numWords+1) * sizeof(char *));
-for (i=0;  i < numWords;  i++)
-    vals[i] = cloneString(ptrs[i]);
-vals[i] = NULL;
-*retVals = vals;
-*retInv = sameString("doesn't", dd);
-}
-
-void cgiToDoubleFilter(char *cmp, char *pat, enum numericFilterType *retNft,
-		    double **retVals)
-/* Given a comparison operator and a (pair of) integers from CGI, fill in
- * retNft and retVals to make a filter. */
-{
-char *ptrs[3];
-double *vals;
-int numWords;
-
-assert(retNft != NULL);
-assert(retVals != NULL);
-
-/* catch null-constraint cases: */
-if (pat == NULL)
-    pat = "";
-pat = trimSpaces(pat);
-if ((pat[0] == 0) || sameString(pat, "*") || sameString(cmp, "ignored"))
-    {
-    *retNft = nftIgnore;
-    *retVals = NULL;
-    return;
-    }
-else if (sameString(cmp, "in range"))
-    {
-    *retNft = nftInRange;
-    numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
-    if (numWords != 2)
-	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
-    vals = needMem(2 * sizeof(int));
-    vals[0] = atof(ptrs[0]);
-    vals[1] = atof(ptrs[1]);
-    if (vals[0] > vals[1])
-	{
-	int tmp = vals[0];
-	vals[0] = vals[1];
-	vals[1] = tmp;
-	}
-    *retVals = vals;
-   }
-else
-    {
-    if (sameString(cmp, "<"))
-	*retNft = nftLessThan;
-    else if (sameString(cmp, "<="))
-	*retNft = nftLTE;
-    else if (sameString(cmp, "="))
-	*retNft = nftEqual;
-    else if (sameString(cmp, "!="))
-	*retNft = nftNotEqual;
-    else if (sameString(cmp, ">="))
-	*retNft = nftGTE;
-    else if (sameString(cmp, ">"))
-	*retNft = nftGreaterThan;
-    else
-	errAbort("Unrecognized comparison operator %s", cmp);
-    vals = needMem(2*sizeof(int));	// 2* simplifies int conversion elsewhere.
-    vals[0] = atof(pat);
-    *retVals = vals;
-    }
-}
-
-void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
-		    int **retVals)
-/* Given a comparison operator and a (pair of) integers from CGI, fill in
- * retNft and retVals to make a filter. */
-{
-double *doubleVals;
-cgiToDoubleFilter(cmp, pat, retNft, &doubleVals);
-int *intVals = needMem(2*sizeof(int));
-intVals[0] = doubleVals[0];
-intVals[1] = doubleVals[1];
-freeMem(doubleVals);
-*retVals = intVals;
-}
-
-void cgiToLongFilter(char *cmp, char *pat, enum numericFilterType *retNft,
-		    long long **retVals)
-/* Given a comparison operator and a (pair of) integers from CGI, fill in
- * retNft and retVals to make a filter. */
-{
-double *doubleVals;
-cgiToDoubleFilter(cmp, pat, retNft, &doubleVals);
-long long *longVals = needMem(2*sizeof(long long));
-longVals[0] = doubleVals[0];
-longVals[1] = doubleVals[1];
-freeMem(doubleVals);
-*retVals = longVals;
 }
 

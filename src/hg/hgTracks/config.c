@@ -41,16 +41,16 @@ for (group = groupList; group != NULL; group = group->next)
 	internalErr();
     }
 
-cgiMakeDropListFull(groupCgiName, labels, groups, numGroups,
+cgiMakeDropListFull(groupCgiName, labels, groups, numGroups, 
 		    defaultLabel, NULL);
 }
 
 static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
-/* Put up track configurations. If groupTarget is
+/* Put up track configurations. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
- * unchanged.  If -1 then set visibility to default, otherwise it should
+ * unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 {
 char pname[512];
@@ -65,7 +65,7 @@ changeTrackVis(groupList, groupTarget, changeVis);
 #ifdef BOB_DOESNT_LIKE
 if (changeVis != -2)
     {
-    if (groupTarget == NULL ||
+    if (groupTarget == NULL || 
     	(groupList != NULL && sameString(groupTarget, groupList->name)))
 	{
 	if (changeVis == -1)
@@ -91,31 +91,30 @@ for (group = groupList; group != NULL; group = group->next)
     char *indicator;
     char *indicatorImg;
     boolean isOpen = !isCollapsedGroup(group);
-    collapseGroupGoodies(isOpen, FALSE, &indicatorImg,
+    collapseGroupGoodies(isOpen, FALSE, &indicatorImg, 
                             &indicator, &otherState);
     hTableStart();
     hPrintf("<TR NOWRAP>");
     hPrintf("<TH NOWRAP align=\"left\" colspan=3 BGCOLOR=#536ED3>");
-    hPrintf("\n<A NAME='%sGroup'></A>",group->name);
-    hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
-        collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue'></A>&nbsp;&nbsp;",
-        hgTracksName(), cartSidUrlString(cart),collapseGroupVar(group->name),
-         otherState, group->name, group->name, group->name, indicatorImg, indicator);
+    hPrintf("\n<A NAME=\"%s\"></A>",group->name);
+    hPrintf("<A HREF=\"%s?%s&hgTracksConfigPage=configure&%s=%s#%s\" class=\"bigBlue\"><IMG height=22 width=22 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+        hgTracksName(), cartSidUrlString(cart), 
+        collapseGroupVar(group->name),
+        otherState, group->name, indicatorImg, indicator);
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\">", 
 	    configHideAll, "hide all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\">", 
 	    configShowAll, "show all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\">", 
 	    configDefaultAll, "default", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
@@ -145,12 +144,22 @@ for (group = groupList; group != NULL; group = group->next)
         }
     hPrintf("</TR>\n");
 
+    if (!isOpen)
+        {
+        /* finish group section here if it's collapsed */
+        hTableEnd();
+        hPrintf("<BR>");
+        if (differentString(group->name, "user"))
+            isFirstNotCtGroup = FALSE;
+        continue;
+        }
+
     /* First non-CT group gets ruler. */
-    if (!showedRuler && isFirstNotCtGroup &&
+    if (!showedRuler && isFirstNotCtGroup && 
                 differentString(group->name, "user"))
 	{
         showedRuler = TRUE;
-	hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
+	hPrintf("<TR>");
 	hPrintf("<TD>");
         hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
@@ -211,13 +220,12 @@ for (group = groupList; group != NULL; group = group->next)
         }
 
     /* Loop through this group and display */
-    int rowCount=1;
     for (tr = group->trackList; tr != NULL; tr = tr->next)
 	{
 	struct track *track = tr->track;
         struct trackDb *tdb = track->tdb;
 
-	hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none'"),group->name, rowCount++);
+	hPrintf("<TR>");
 	hPrintf("<TD NOWRAP>");
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
@@ -225,8 +233,8 @@ for (group = groupList; group != NULL; group = group->next)
         if(trackDbSetting(track->tdb, "wgEncode") != NULL)
             hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
 	if (track->hasUi)
-	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">",
-                tdb->parent ? "TITLE=\"Part of super track: " : "",
+	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">", 
+                tdb->parent ? "TITLE=\"Part of super track: " : "", 
                 tdb->parent ? tdb->parent->shortLabel : "",
                 tdb->parent ? "...\"" : "", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart), track->mapName);
@@ -254,12 +262,12 @@ for (group = groupList; group != NULL; group = group->next)
                 {
                 /* check for option of limiting visibility to one mode */
                 hTvDropDownClassVisOnly(track->mapName, track->visibility,
-                            track->canPack, (track->visibility == tvHide) ?
-                            "hiddenText" : "normalText",
+                            track->canPack, (track->visibility == tvHide) ? 
+                            "hiddenText" : "normalText", 
                             trackDbSetting(track->tdb, "onlyVisibility"));
                 }
 	    }
-	else
+	else 
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD>");
 	hPrintf("<TD NOWRAP>");
@@ -290,8 +298,8 @@ for (group = groupList; group != NULL; group = group->next)
 }
 
 void configPageSetTrackVis(int vis)
-/* Do config page after setting track visibility. If vis is -2, then visibility
- * is unchanged.  If -1 then set visibility to default, otherwise it should
+/* Do config page after setting track visibility. If vis is -2, then visibility 
+ * is unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 {
 struct dyString *title = dyStringNew(0);
@@ -313,7 +321,7 @@ ideoTrack = chromIdeoTrack(trackList);
 if (ideoTrack != NULL)
     removeTrackFromGroup(ideoTrack);
 
-/* Fetch group to change on if any from CGI,
+/* Fetch group to change on if any from CGI, 
  * and remove var so it doesn't get used again. */
 groupTarget = cloneString(cartUsualString(cart, configGroupTarget, ""));
 cartRemove(cart, configGroupTarget);
@@ -402,16 +410,16 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", TRUE));
+hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", FALSE));
 hPrintf("</TD><TD>");
-hPrintf("Enable drag-and-zoom");
+hPrintf("Drag Selection/Zooming");
 hPrintf("</TD></TR>\n");
 
 
 hTableEnd();
 
 char buf[128];
-safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s",
+safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s", 
         organization, browserName, organism, hFreezeFromDb(database));
 webNewSection(buf);
 hPrintf("Tracks: ");
@@ -421,9 +429,9 @@ cgiMakeButton(configShowAll, "show all");
 hPrintf(" ");
 cgiMakeButton(configDefaultAll, "default");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
+cgiMakeButton(configHideAllGroups, "collapse all");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
+cgiMakeButton(configShowAllGroups, "expand all");
 hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 

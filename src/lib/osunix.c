@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.39 2009/02/07 18:12:20 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.35 2008/12/11 22:48:19 hiram Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -84,12 +84,6 @@ if (chdir(newDir) != 0)
     errnoAbort("can't to set current directory: %s", newDir);
 }
 
-boolean maybeSetCurrentDir(char *newDir)
-/* Change directory, return FALSE (and set errno) if fail. */
-{
-return chdir(newDir) == 0;
-}
-
 struct slName *listDir(char *dir, char *pattern)
 /* Return an alphabetized list of all files that match 
  * the wildcard pattern in directory. */
@@ -117,16 +111,13 @@ slNameSort(&list);
 return list;
 }
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
-	time_t lastAccess)
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);
 struct fileInfo *fi = needMem(sizeof(*fi) + len);
 fi->size = size;
 fi->isDir = isDir;
-fi->statErrno = statErrno;
-fi->lastAccess = lastAccess;
 strcpy(fi->name, name);
 return fi;
 }
@@ -158,7 +149,7 @@ return TRUE;
 }
 
 
-struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures)
+struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath)
 /* Return list of files matching wildcard pattern with
  * extra info. If full path is true then the path will be
  * included in the name of each file. */
@@ -184,20 +175,14 @@ while ((de = readdir(d)) != NULL)
 	    {
 	    struct stat st;
 	    bool isDir = FALSE;
-	    int statErrno = 0;
 	    strcpy(pathName+fileNameOffset, fileName);
 	    if (stat(pathName, &st) < 0)
-		{
-		if (ignoreStatFailures)
-		    statErrno = errno;
-		else
-    		    errAbort("stat failed in listDirX");
-		}
+		errAbort("stat failed in listDirX");
 	    if (S_ISDIR(st.st_mode))
 		isDir = TRUE;
 	    if (fullPath)
 		fileName = pathName;
-	    el = newFileInfo(fileName, st.st_size, isDir, statErrno, st.st_atime);
+	    el = newFileInfo(fileName, st.st_size, isDir);
 	    slAddHead(&list, el);
 	    }
 	}
@@ -205,14 +190,6 @@ while ((de = readdir(d)) != NULL)
 closedir(d);
 slSort(&list, cmpFileInfo);
 return list;
-}
-
-struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath)
-/* Return list of files matching wildcard pattern with
- * extra info. If full path is true then the path will be
- * included in the name of each file. */
-{
-return listDirXExt(dir, pattern, fullPath, FALSE);
 }
 
 unsigned long fileModTime(char *pathName)

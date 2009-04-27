@@ -1,10 +1,7 @@
-# if you are seeing this file as text in a web browser, you need to configure
-# chimerax as a helper application.
-
-# Python code for chimerax files to display proteins with SNPs annotated.
-# Due scoping bug in exec coding from chimerax files (1.3 alpha release and
-# earlier), can only have one function and must import into function's local
-# namespace.
+# Python code to include in .chimerax files to display proteins with 
+# SNPs annotated.  Due scoping bug in exec coding from chimerax files
+# (1.3 alpha release and earlier), can only have one function and
+# must import into function's local namespace.
 
 def displayPdb(pdbId, snps):
     # snps is list of (snpId, chain, snpPos, [isPrimary])

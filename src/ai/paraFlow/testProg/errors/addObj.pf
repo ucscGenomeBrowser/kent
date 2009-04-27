@@ -1,8 +1,0 @@
-class pt
-    {
-    double x,y;
-    }
-
-pt a = (1,2), b=(1.5,2.5);
-
-pt c = a + b;

@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.129 2009/04/15 17:40:39 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.123 2009/01/08 00:30:03 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -922,7 +922,7 @@ while((name = nextWord(&word)))
     char *val = strchr(name,'=');
     if (!val)
 	{
-	warn("missing equals sign in name=value pair: name=[%s] in string=[%s]\n", name, s);
+	warn("missing equals sign in name=value pair: [%s]\n", name);
 	return NULL;
 	}
     *val++ = 0;
@@ -1116,17 +1116,15 @@ for (i=0; i<size; ++i)
 }
 
 
-char *strUpper(char *s)
+void touppers(char *s)
 /* Convert entire string to upper case. */
 {
 char c;
-char *ss=s;
 for (;;)
     {
-    if ((c = *ss) == 0) break;
-    *ss++ = toupper(c);
+    if ((c = *s) == 0) break;
+    *s++ = toupper(c);
     }
-return s;
 }
 
 char *replaceChars(char *string, char *old, char *new)
@@ -1171,17 +1169,15 @@ strcpy(resultPtr, string);
 return result;
 }
 
-char *strLower(char *s)
+void tolowers(char *s)
 /* Convert entire string to lower case */
 {
 char c;
-char *ss=s;
 for (;;)
     {
-    if ((c = *ss) == 0) break;
-    *ss++ = tolower(c);
+    if ((c = *s) == 0) break;
+    *s++ = tolower(c);
     }
-return s;
 }
 
 char * memSwapChar(char *s, int len, char oldChar, char newChar)
@@ -1266,84 +1262,6 @@ int count = 0;
 while (*s++ == c)
    ++count;
 return count;
-}
-
-int countLeadingDigits(char *s)
-/* Return number of leading digits in s */
-{
-int count = 0;
-while (isdigit(*s))
-   {
-   ++count;
-   ++s;
-   }
-return count;
-}
-
-int countLeadingNondigits(char *s)
-/* Count number of leading non-digit characters in s. */
-{
-int count = 0;
-char c;
-while ((c = *s++) != 0)
-   {
-   if (isdigit(c))
-       break;
-   ++count;
-   }
-return count;
-}
-
-int cmpStringsWithEmbeddedNumbers(char *a, char *b)
-/* Compare strings such as gene names that may have embedded numbers,
- * so that bmp4a comes before bmp14a */
-{
-for (;;)
-   {
-   /* Figure out number of digits at start, and do numerical comparison if there
-    * are any.  If numbers agree step over numerical part, otherwise return difference. */
-   int aNum = countLeadingDigits(a);
-   int bNum = countLeadingDigits(b);
-   if (aNum >= 0 && bNum >= 0)
-       {
-       int diff = atoi(a) - atoi(b);
-       if (diff != 0)
-           return diff;
-       a += aNum;
-       b += bNum;
-       }
-
-   /* Count number of non-digits at start. */
-   int aNonNum = countLeadingNondigits(a);
-   int bNonNum = countLeadingNondigits(b);
-
-   // If different sizes of non-numerical part, then don't match, let strcmp sort out how
-   if (aNonNum != bNonNum)
-       return strcmp(a,b);  
-   // If no characters left then they are the same!
-   else if (aNonNum == 0)
-       return 0;
-   // Non-numerical part is the same length and non-zero.  See if it is identical.  Return if not.
-   else
-       {
-       int diff = memcmp(a,b,aNonNum);   
-       if (diff != 0)
-            return diff;
-       a += aNonNum;
-       b += bNonNum;
-       }
-   }
-}
-
-int cmpWordsWithEmbeddedNumbers(char *a, char *b)
-/* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
-{
-char *A = cloneString(a);
-char *B = cloneString(b);
-int diff = cmpStringsWithEmbeddedNumbers(strUpper(A), strUpper(B));
-freeMem(A);
-freeMem(B);
-return diff;
 }
 
 int countSame(char *a, char *b)
@@ -1545,23 +1463,18 @@ if (s != NULL)
 return s;
 }
 
-void repeatCharOut(FILE *f, char c, int count)
-/* Write character to file repeatedly. */
-{
-while (--count >= 0)
-    fputc(c, f);
-}
-
 void spaceOut(FILE *f, int count)
 /* Put out some spaces to file. */
 {
-repeatCharOut(f, ' ', count);
+while (--count >= 0)
+    fputc(' ', f);
 }
 
 void starOut(FILE *f, int count)
 /* Put out some asterisks to file. */
 {
-repeatCharOut(f, '*', count);
+while (--count >= 0)
+    fputc('*', f);
 }
 
 boolean hasWhiteSpace(char *s)
@@ -1844,7 +1757,7 @@ buf[len] = 0;
 return TRUE;
 }
 
-void msbFirstWriteBits64(FILE *f, bits64 x)
+void writeBits64(FILE *f, bits64 x)
 /* Write out 64 bit number in manner that is portable across architectures */
 {
 int i;
@@ -1857,7 +1770,7 @@ for (i=7; i>=0; --i)
 mustWrite(f, buf, 8);
 }
 
-bits64 msbFirstReadBits64(FILE *f)
+bits64 readBits64(FILE *f)
 /* Write out 64 bit number in manner that is portable across architectures */
 {
 int i;
@@ -1960,44 +1873,6 @@ fclose(f);
 return trimSpaces(wordBuf);
 }
 
-int fileOffsetSizeCmp(const void *va, const void *vb)
-/* Help sort fileOffsetSize by offset. */
-{
-const struct fileOffsetSize *a = *((struct fileOffsetSize **)va);
-const struct fileOffsetSize *b = *((struct fileOffsetSize **)vb);
-if (a->offset > b->offset)
-    return 1;
-else if (a->offset == b->offset)
-    return 0;
-else
-    return -1;
-}
-
-struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList)
-/* Returns a new list which is inList transformed to have adjacent blocks
- * merged.  Best to use this with a sorted list. */
-{
-struct fileOffsetSize *newList = NULL, *newEl = NULL, *oldEl, *nextOld;
-
-for (oldEl = inList; oldEl != NULL; oldEl = nextOld)
-    {
-    nextOld = oldEl->next;
-    if (nextOld != NULL && nextOld->offset < oldEl->offset)
-        errAbort("Unsorted inList in fileOffsetSizeMerge %llu %llu", oldEl->offset, nextOld->offset);
-    if (newEl == NULL || newEl->offset + newEl->size < oldEl->offset)
-        {
-	newEl = CloneVar(oldEl);
-	slAddHead(&newList, newEl);
-	}
-    else
-        {
-	newEl->size = oldEl->offset + oldEl->size - newEl->offset;
-	}
-    }
-slReverse(&newList);
-return newList;
-}
-
 int roundingScale(int a, int p, int q)
 /* returns rounded a*p/q */
 {
@@ -2037,51 +1912,6 @@ if (ret < 0)
 return ret;
 }
 
-void memRead(char **pPt, void *buf, int size)
-/* Copy memory from *pPt to buf, and advance *pPt by size */
-{
-memcpy(buf, *pPt, size);
-*pPt += size;
-}
-
-bits64 byteSwap64(bits64 a)
-/* Return byte-swapped version of a */
-{
-union {bits64 whole; UBYTE bytes[4];} u,v;
-u.whole = a;
-v.bytes[0] = u.bytes[7];
-v.bytes[1] = u.bytes[6];
-v.bytes[2] = u.bytes[5];
-v.bytes[3] = u.bytes[4];
-v.bytes[4] = u.bytes[3];
-v.bytes[5] = u.bytes[2];
-v.bytes[6] = u.bytes[1];
-v.bytes[7] = u.bytes[0];
-return v.whole;
-}
-
-bits64 readBits64(FILE *f, boolean isSwapped)
-/* Read and optionally byte-swap 64 bit entity. */
-{
-bits64 val;
-mustReadOne(f, val);
-if (isSwapped)
-    val = byteSwap64(val);
-return val;
-}
-
-bits64 memReadBits64(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by 
- * *pPt, and advance *pPt past read area. */
-{
-bits64 val;
-memcpy(&val, *pPt, sizeof(val));
-if (isSwapped)
-    val = byteSwap64(val);
-*pPt += sizeof(val);
-return val;
-}
-
 bits32 byteSwap32(bits32 a)
 /* Return byte-swapped version of a */
 {
@@ -2104,18 +1934,6 @@ if (isSwapped)
 return val;
 }
 
-bits32 memReadBits32(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
- * *pPt, and advance *pPt past read area. */
-{
-bits32 val;
-memcpy(&val, *pPt, sizeof(val));
-if (isSwapped)
-    val = byteSwap32(val);
-*pPt += sizeof(val);
-return val;
-}
-
 bits16 byteSwap16(bits16 a)
 /* Return byte-swapped version of a */
 {
@@ -2135,93 +1953,6 @@ if (isSwapped)
     val = byteSwap16(val);
 return val;
 }
-
-bits16 memReadBits16(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap 16 bit entity from memory buffer pointed to by 
- * *pPt, and advance *pPt past read area. */
-{
-bits16 val;
-memcpy(&val, *pPt, sizeof(val));
-if (isSwapped)
-    val = byteSwap16(val);
-*pPt += sizeof(val);
-return val;
-}
-
-double byteSwapDouble(double a)
-/* Return byte-swapped version of a */
-{
-union {double whole; UBYTE bytes[4];} u,v;
-u.whole = a;
-v.bytes[0] = u.bytes[7];
-v.bytes[1] = u.bytes[6];
-v.bytes[2] = u.bytes[5];
-v.bytes[3] = u.bytes[4];
-v.bytes[4] = u.bytes[3];
-v.bytes[5] = u.bytes[2];
-v.bytes[6] = u.bytes[1];
-v.bytes[7] = u.bytes[0];
-return v.whole;
-}
-
-
-double readDouble(FILE *f, boolean isSwapped)
-/* Read and optionally byte-swap double-precision floating point entity. */
-{
-double val;
-mustReadOne(f, val);
-if (isSwapped)
-    val = byteSwapDouble(val);
-return val;
-}
-
-double memReadDouble(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap double-precision floating point entity
- * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
-{
-double val;
-memcpy(&val, *pPt, sizeof(val));
-if (isSwapped)
-    val = byteSwapDouble(val);
-*pPt += sizeof(val);
-return val;
-}
-
-float byteSwapFloat(float a)
-/* Return byte-swapped version of a */
-{
-union {float whole; UBYTE bytes[4];} u,v;
-u.whole = a;
-v.bytes[0] = u.bytes[3];
-v.bytes[1] = u.bytes[2];
-v.bytes[2] = u.bytes[1];
-v.bytes[3] = u.bytes[0];
-return v.whole;
-}
-
-
-float readFloat(FILE *f, boolean isSwapped)
-/* Read and optionally byte-swap single-precision floating point entity. */
-{
-float val;
-mustReadOne(f, val);
-if (isSwapped)
-    val = byteSwapFloat(val);
-return val;
-}
-
-float memReadFloat(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap single-precision floating point entity
- * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
-{
-float val;
-memcpy(&val, *pPt, sizeof(val));
-if (isSwapped)
-    val = byteSwapFloat(val);
-*pPt += sizeof(val);
-return val;
-}
-
 
 void removeReturns(char *dest, char *src)
 /* Removes the '\r' character from a string.

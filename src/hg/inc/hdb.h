@@ -15,6 +15,10 @@
 #include "dystring.h"
 #endif
 
+#ifndef SUBTEXT_H
+#include "subText.h"
+#endif
+
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif 
@@ -281,8 +285,9 @@ aaSeq *hPepSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl);
 /* Get a peptide sequence from the specified seq and extFile tables. Abort if
  * not found. */
 
-int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, struct sqlConnection *conn);
-/* Return sequence for RNA and  it's database ID. Return -1 if not found. */
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn);
+/* Return sequence for RNA, it's database ID, and optionally genbank 
+ * modification date. Return -1 if not found. */
 
 char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId);
 /* Return sequence as a fasta record in a string and it's database ID, or 
@@ -442,6 +447,21 @@ boolean hFindChromStartEndFields(char *db, char *table,
 	char retStart[HDB_MAX_FIELD_STRING],
 	char retEnd[HDB_MAX_FIELD_STRING]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
+
+boolean hFindBed12Fields(char *table, 
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING], char retName[HDB_MAX_FIELD_STRING],
+	char retScore[HDB_MAX_FIELD_STRING],
+	char retStrand[HDB_MAX_FIELD_STRING],
+        char retCdsStart[HDB_MAX_FIELD_STRING],
+	char retCdsEnd[HDB_MAX_FIELD_STRING],
+	char retCount[HDB_MAX_FIELD_STRING],
+	char retStarts[HDB_MAX_FIELD_STRING],
+	char retEndsSizes[HDB_MAX_FIELD_STRING]);
+/* Given a table return the fields corresponding to all the bed 12 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
 
 boolean hIsBinned(char *db, char *table);
 /* Return TRUE if a table is binned. */
@@ -666,10 +686,6 @@ char *hHtmlPath(char *database);
 char *hFreezeDate(char *database);
 /* Return freeze date of database. Use freeMem when done. */
 
-char *hFreezeDateOpt(char *database);
-/* Return freeze date of database or NULL if unknown database
- *  Use freeMem when done. */
-
 char *hGenomeOrArchive(char *database);
 /* Return genome name associated from the regular or the archive database. */
 
@@ -686,6 +702,12 @@ boolean hGotClade(void);
 char *hClade(char *genome);
 /* If central database has clade tables, return the clade for the 
  * given genome; otherwise return NULL. */
+
+void hAddDbSubVars(char *prefix, char *database, struct subText **pList);
+/* Add substitution variables associated with database to list. */
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database);
+/* Lookup strings in track database. */
 
 char *hDefaultDbForGenome(char *genome);
 /*
@@ -758,10 +780,6 @@ int chrSlNameCmp(const void *el1, const void *el2);
  * slName **s (as passed in by slSort) whose names match the regex 
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 
-int bedCmpExtendedChr(const void *va, const void *vb);
-/* Compare to sort based on chrom,chromStart.  Use extended
- * chrom name comparison, that strip prefixes and does numeric compare */
-
 int compareDbs(char *dbA, char *dbB);
 /* Compare two org# e.g. mm6 vs. mm16 or mm6 vs. hg17
  * Return > 0 if dbA > dbB, < 0 if less than, and 0 if equal */
@@ -779,9 +797,5 @@ struct slName *getPfamDomainList(struct sqlConnection *conn, char *ucscGeneId);
 
 boolean isUnknownChrom(char *dataBase, char *chromName);
 /* Return true if chrom is one of our "unknown" chromomsomes (e.g. chrUn). */
-
-char *hGenbankModDate(char *acc, struct sqlConnection *conn);
-/* Get string for genbank last modification date, or NULL if not found..
- * Free resulting string. */
 
 #endif /* HDB_H */

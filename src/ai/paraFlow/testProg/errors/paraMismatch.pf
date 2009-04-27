@@ -1,4 +1,0 @@
-array of string letters = ("a", "b", "c");
-
-para (int x in letters) do
-    print(x);

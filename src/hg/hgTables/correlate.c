@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.76 2009/04/14 14:19:52 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.70 2009/01/09 00:58:26 angie Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -36,7 +36,7 @@ static char *maxResultsMenu[] =
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 
-struct dataVector *dataVectorNew(char *chrom, int size)
+static struct dataVector *allocDataVector(char *chrom, int size)
 /* allocate a dataVector for 'size' number of data points on specified chrom */
 {
 struct dataVector *v;
@@ -171,16 +171,15 @@ boolean correlateTrackTableOK(struct trackDb *tdb, char *table)
 {
 if (!tdb)
     return FALSE;
-if (startsWithWord("bedGraph", tdb->type) ||
-    startsWithWord("bed5FloatScore",tdb->type) ||
+if (startsWith("bedGraph", tdb->type) ||
+    startsWith("bed5FloatScore",tdb->type) ||
     startsWith("wig ",tdb->type) ||
-    startsWithWord("genePred",tdb->type) ||
-    startsWithWord("psl",tdb->type) ||
-    startsWithWord("narrowPeak",tdb->type) ||
-    startsWithWord("broadPeak",tdb->type) ||
-    startsWithWord("gappedPeak",tdb->type) ||
-    startsWithWord("bigWig", tdb->type) ||
-    startsWithWord("bed",tdb->type))
+    startsWith("genePred",tdb->type) ||
+    startsWith("psl",tdb->type) ||
+    startsWith("narrowPeak",tdb->type) ||
+    startsWith("broadPeak",tdb->type) ||
+    startsWith("gappedPeak",tdb->type) ||
+    startsWith("bed ",tdb->type))
         return TRUE;
 if (startsWith("wigMaf ",tdb->type))
     {
@@ -321,16 +320,13 @@ static void fillInTrackTable(struct trackTable *table,
 {
 boolean isCustomDbTable = FALSE;
 struct customTrack *ct = NULL;
-struct trackDb *tdb = findTdbForTable(database,table->tdb,table->tableName);
-if (tdb == NULL)
-    errAbort("fillInTrackTable: tdb is NULL!");
+struct trackDb *tdb = findCompositeTdb(table->tdb,table->tableName);
 table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
 table->actualTdb = tdb;
 table->actualTable = cloneString(tdb->tableName);
 table->isBedGraph = FALSE;
 table->isWig = FALSE;
-table->isBigWig = FALSE;
 table->dbTableName = NULL;
 
 if (isCustomTrack(table->actualTable))
@@ -340,7 +336,7 @@ if (isCustomTrack(table->actualTable))
     isCustomDbTable = TRUE;
     }
 
-if (startsWithWord("bedGraph", tdb->type))
+if (startsWith("bedGraph", tdb->type))
     {
     table->isBedGraph = TRUE;
     /*	find the column name that belongs to the specified numeric
@@ -354,7 +350,7 @@ if (startsWithWord("bedGraph", tdb->type))
         }
 
     /* there are no bedGraph custom tracks yet, but when they do show
-     * up, they will only correlate if they are in the database
+     * up, they will only correlate if they are in the database 
      * XXXX Hiram, what does this mean? Why would the custom tables not be in the db?
      * Also, what's up with the following || test?
      */
@@ -386,10 +382,6 @@ if (startsWithWord("bedGraph", tdb->type))
 	if (isCustomDbTable)
 	    hFreeConn(&conn);
 	}
-    }
-else if (startsWithWord("bigWig", tdb->type))
-    {
-    table->isBigWig = TRUE;
     }
 else if (sameString("cpgIsland", tdb->tableName))
     {
@@ -525,7 +517,7 @@ hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
-    tdb = findTdbForTable(database,track, name->name);
+    tdb = findCompositeTdb(track, name->name);
     if (correlateTrackTableOK(tdb, name->name))
 	{
 	hPrintf("<OPTION VALUE=%s", name->name);
@@ -789,7 +781,6 @@ else
     vector->end = vector->start;
 }	/*	static void correlateReadBed()	*/
 
-
 struct dataVector *dataVectorFetchOneRegion(struct trackTable *table,
 	struct region *region, struct sqlConnection *conn)
 /*	fetch all the data for this track and table in the given region */
@@ -803,17 +794,13 @@ if (! correlateTrackOK(table->actualTdb))
 
 startTime = clock1000();
 /*	assume entire region is going to produce numbers	*/
-vector = dataVectorNew(region->chrom, regionSize);
+vector = allocDataVector(region->chrom, regionSize);
 
 /*	wiggle tables work properly from database or custom tracks,
  *	    intersections and data value limits will
  *	    function in getWiggleData().
  */
-if (isBigWig(table->tableName))
-    {
-    bigWigFillDataVector(table->tableName, region, conn, vector);
-    }
-else if (table->isWig)
+if (table->isWig)
     {
     int span = 1;
     struct wigAsciiData *wigData = NULL;
@@ -894,7 +881,7 @@ return NULL;
 }	/*	struct dataVector *dataVectorFetchOneRegion()	*/
 
 static void scavengeVectorSpace(struct dataVector *dv)
-/* Realloc dv->value and dv->position if newCount is sufficiently smaller
+/* Realloc dv->value and dv->position if newCount is sufficiently smaller 
  * than dv->maxCount. */
 {
 /*	if our count of numbers is more than 1000K less than planned for,
@@ -1047,11 +1034,11 @@ v1->calcTime += endTime - startTime;
 
 static void intersectVectorWithBoolean(struct dataVector *v1,
 				       struct dataVector *v2)
-/* v1 has dataVector with real values; v2 has dataVector with booleans,
- * i.e. all points in range are present and value is 1 where there is an
- * item and 0 where there is no item.
- * Remove positions/values from v1 for which v2 contains 0.
- * Note: this does not change v2, unlike intersectVectors, nor does it
+/* v1 has dataVector with real values; v2 has dataVector with booleans, 
+ * i.e. all points in range are present and value is 1 where there is an 
+ * item and 0 where there is no item. 
+ * Remove positions/values from v1 for which v2 contains 0. 
+ * Note: this does not change v2, unlike intersectVectors, nor does it 
  * compute any statistics.  It is solely for distilling v1. */
 {
 int v1Index = 0;
@@ -1097,9 +1084,9 @@ v1->calcTime += endTime - startTime;
 
 void dataVectorBinaryOp(struct dataVector *v1, struct dataVector *v2,
 			enum dataVectorBinaryOpType op, boolean requireBoth)
-/* Store op(v1, v2) in v1.
- * If requireBoth is TRUE, remove a value from v1 if v2 has no value at the
- * same position; if FALSE, leave v1 value unchanged if v2 has no value at
+/* Store op(v1, v2) in v1.  
+ * If requireBoth is TRUE, remove a value from v1 if v2 has no value at the 
+ * same position; if FALSE, leave v1 value unchanged if v2 has no value at 
  * same position. */
 {
 int i=0, j=0;
@@ -1194,10 +1181,10 @@ dv->calcTime += endTime - startTime;
 }
 
 struct dataVector *dataVectorInvert(struct dataVector *dv, int start, int end)
-/* Return a new dataVector that has a value of 1 where dv has no value,
+/* Return a new dataVector that has a value of 1 where dv has no value, 
  * and no value where dv has any value, with positions in [start,end). */
 {
-struct dataVector *dvNew = dataVectorNew("inv", end-start);
+struct dataVector *dvNew = allocDataVector("inv", end-start);
 if (dv == NULL || dv->count < 1)
     {
     int i=0;
@@ -1243,11 +1230,11 @@ return dvNew;
 }
 
 struct dataVector *dataVectorBoolComp(struct dataVector *dv, int start, int end)
-/* Return a new dataVector that has a value of 1 where dv has a value of 0,
- * and a value of 0 where dv has any nonzero value, with positions in
+/* Return a new dataVector that has a value of 1 where dv has a value of 0, 
+ * and a value of 0 where dv has any nonzero value, with positions in 
  * [start,end). */
 {
-struct dataVector *dvNew = dataVectorNew("comp", end-start);
+struct dataVector *dvNew = allocDataVector("comp", end-start);
 if (dv == NULL || dv->count < 1)
     {
     int i=0;
@@ -1301,7 +1288,7 @@ return dvNew;
 void dataVectorIntersect(struct dataVector *dv1, struct dataVector *dv2,
 			 boolean dv2IsWiggle, boolean complementDv2)
 /* Remove a value from dv1 if dv2 has no value (or if complementDv2, any value)
- * at the same position.  Note: this will change dv2 too, unless complementDv2
+ * at the same position.  Note: this will change dv2 too, unless complementDv2 
  * is set! */
 {
 if (dv1 == NULL || dv1->count < 1)
@@ -1344,7 +1331,7 @@ else
 
 int dataVectorWriteWigAscii(struct dataVector *dataVectorList,
 			    char *filename, int maxOut, char *description)
-/* Write wigAscii for all dataVectors in dataVectorList to filename.
+/* Write wigAscii for all dataVectors in dataVectorList to filename. 
  * Return the number of datapoints written. */
 {
 FILE *out = mustOpen(filename, "w");
@@ -1384,7 +1371,7 @@ return total;
 }
 
 struct bed *dataVectorToBedList(struct dataVector *dvList)
-/* Allocate and return a bedList of ranges where dataVectors in dvList
+/* Allocate and return a bedList of ranges where dataVectors in dvList 
  * contain values. */
 {
 struct dataVector *dv = NULL;
@@ -1432,8 +1419,8 @@ return bedList;
 
 int dataVectorWriteBed(struct dataVector *dvList, char *filename, int maxOut,
 		       char *description)
-/* Print out bed of ranges where dataVectors in dvList contain values.
- * Return the number of datapoints distilled into bed (the number of bed
+/* Print out bed of ranges where dataVectors in dvList contain values. 
+ * Return the number of datapoints distilled into bed (the number of bed 
  * items will usually be smaller than the number of datapoints). */
 {
 FILE *out = mustOpen(filename, "w");
@@ -1482,8 +1469,8 @@ static struct dataVector *tbDataVectorOneRegion(struct trackTable *tt,
  * level data vector fetch followed by some processing).  */
 {
 struct dataVector *dv = NULL;
-/* For wiggle and bedGraph, subtrack merge is implemented on top of
- * dataVectorFetchOneRegion.  For bed-able tables, it's handled below
+/* For wiggle and bedGraph, subtrack merge is implemented on top of 
+ * dataVectorFetchOneRegion.  For bed-able tables, it's handled below 
  * dataVectorFetchOneRegion (under cookedBedList). */
 if (isWiggle(database, tt->tableName))
     dv = wiggleDataVector(tt->tdb, tt->tableName, conn, region);
@@ -2126,7 +2113,7 @@ for (x = xTable->vSet; x != NULL; x = x->next)
  *	relationship between the result vector and the y data set
  *	positions.
  */
-result = dataVectorNew("result", totalBases);
+result = allocDataVector("result", totalBases);
 rIndex = 0;		/* index for result vector data values	*/
 
 /*	This loop walks through all the regions in the data vectors.
@@ -2402,7 +2389,7 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 
 /* Print group, track, and table selection menus */
-tdb2 = showGroupTrackRowLimited(hgtaNextCorrelateGroup, onChange,
+tdb2 = showGroupTrackRowLimited(hgtaNextCorrelateGroup, onChange, 
     hgtaNextCorrelateTrack, onChange, hgtaNextCorrelateTable, &table2);
 
 tableName2 = tdb2->shortLabel;
@@ -2418,7 +2405,6 @@ tmpString = cloneString(windowingSizeStr);
 stripChar(tmpString, ',');
 windowingSize = sqlUnsigned(tmpString);
 freeMem(tmpString);
-
 
 /*	limit total data points and window size	options */
 hPrintf("<TABLE BORDER=0><TR><TD>Limit total data points in result:&nbsp\n");

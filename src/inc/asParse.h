@@ -24,12 +24,6 @@ enum asTypes
    t_set,      /* set of symbolic values */
    };
 
-boolean asTypesIsInt(enum asTypes type);
-/* Return TRUE if it's any integer type - short, long, unsigned, etc. */
-
-boolean asTypesIsFloating(enum asTypes type);
-/* Return TRUE if it's any floating point type - float or double. */
-
 struct asTypeInfo
     {
     enum asTypes type;		   /* Numeric ID of low level type. */
@@ -71,9 +65,6 @@ struct asObject
     bool isTable;	        /* True if a table. */
     bool isSimple;	        /* True if a simple object. */
     };
-
-struct dyString *asColumnToSqlType(struct asColumn *col);
-/* Convert column to a sql type spec in returned dyString */
 
 struct asObject *asParseFile(char *fileName);
 /* Parse autoSql .as file. */

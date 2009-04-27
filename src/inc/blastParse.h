@@ -24,7 +24,6 @@ struct blastQuery
     char *database;                     /* Name of database. */
     int dbSeqCount;                     /* Number of sequences in database. */
     int dbBaseCount;                    /* Number of bases in database. */
-    int psiRounds;                      /* PSI BLAST rounds, or 0 if not PSI blast */
     struct blastGappedAli *gapped;      /* List of gapped alignments. */
     };
 
@@ -33,7 +32,6 @@ struct blastGappedAli
     {
     struct blastGappedAli *next;
     struct blastQuery *query;           /* Query associated with this alignment (not owned here). */
-    int psiRound;                       /* PSI BLAST round, or 0 if not PSI blast */
     char *targetName;                   /* Name of target sequence. */
     int targetSize;                     /* Size of target sequence. */
     struct blastBlock *blocks;          /* List of aligning blocks (no big gaps). */

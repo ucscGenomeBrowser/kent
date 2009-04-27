@@ -1,5 +1,5 @@
 table transRegCodeProbe
-"ChIP-chip Probe and Transcription Factor Binding Info"
+"CHIP/CHIP Probe and Transcription Factor Binding Info"
     (
     string chrom;	"Reference sequence chromosome or scaffold"
     uint chromStart;    "Start position in chromosome"

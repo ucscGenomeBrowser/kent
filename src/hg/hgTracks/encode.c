@@ -3,14 +3,13 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "hui.h"
 #include "hgTracks.h"
 #include "customTrack.h"
 #include "encode.h"
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.21 2009/04/01 23:45:00 angie Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.14 2008/12/09 07:13:42 angie Exp $";
 
 #define SMALLBUF 128
 
@@ -108,7 +107,7 @@ tg->itemColor = encodeRnaColor;
 tg->itemNameColor = encodeRnaColor;
 }
 
-static struct linkedFeatures *lfFromEncodePeak(struct slList *item, struct trackDb *tdb,
+struct linkedFeatures *lfFromEncodePeak(struct slList *item, char *trackName,
 					int scoreMin, int scoreMax)
 /* Translate an {encode,narrow,broad,gapped}Peak item into a linkedFeatures. */
 {
@@ -127,8 +126,8 @@ if (peak->peak > -1)
     }
 lf->filterColor = -1;
 lf->orientation = orientFromChar(peak->strand[0]);
-adjustBedScoreGrayLevel(tdb, (struct bed *)peak, scoreMin, scoreMax);
-lf->grayIx = grayInRange((int)peak->score, scoreMin, scoreMax);
+adjustBedScoreGrayLevel(trackName, (struct bed *)peak, scoreMin, scoreMax);
+lf->grayIx = grayInRange((int)peak->score, 0, 1000);
 safecpy(lf->name, sizeof(lf->name), peak->name);
 if (peak->blockCount > 0)
     {
@@ -155,15 +154,50 @@ lf->components = sfList;
 return lf;
 }
 
-
 static char *encodePeakFilter(char *trackName, struct trackDb *tdb, boolean isCustom)
 {
 struct dyString *extraWhere = newDyString(128);
-boolean and = FALSE;
-extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000","score",&and);
-extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,SIGNAL_FILTER,NULL,"signalValue",&and);
-extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,PVALUE_FILTER,NULL,"pValue",&and);
-extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,QVALUE_FILTER,NULL,"qValue",&and);
+char pValVarName[256];
+char qValVarName[256];
+char scoreVarName[256];
+boolean useScore = FALSE;
+safef(pValVarName, sizeof(pValVarName), "%s.%s", trackName, ENCODE_PEAK_PVAL_FILTER_SUFFIX);
+safef(qValVarName, sizeof(qValVarName), "%s.%s", trackName, ENCODE_PEAK_QVAL_FILTER_SUFFIX);
+safef(scoreVarName, sizeof(scoreVarName), "%s.%s", trackName, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
+if (!trackDbSettingOn(tdb, "filterPvalQval"))
+    useScore = TRUE;
+if (useScore && cartVarExists(cart, scoreVarName))
+    {
+    int score = cartUsualInt(cart, scoreVarName, -1);
+    if ((score < 0) || (score > 1000))
+	{
+	warn("invalid score %s set in filter for track %s",
+	     cartString(cart, scoreVarName), trackName);
+	cartRemove(cart, scoreVarName);	     
+	}
+    else 
+	dyStringPrintf(extraWhere, "(score >= %d)", score);
+    }
+else if (!useScore)
+    {
+    double pVal = cartUsualDouble(cart, pValVarName, 0);
+    double qVal = cartUsualDouble(cart, qValVarName, 0);
+    if (pVal < 0)
+	{
+	warn("invalid p-value %s set in filter for track %s", 
+	     cartString(cart, pValVarName), trackName);
+	cartRemove(cart, pValVarName);
+	pVal = 0;
+	}
+    if ((qVal < 0) || (qVal > 1))
+	{
+	warn("invalid q-value %s set in filter for track %s", 
+	     cartString(cart, qValVarName), trackName);
+	cartRemove(cart, qValVarName);
+	qVal = 0;
+	}
+    dyStringPrintf(extraWhere, "(pValue >= %f) and (qValue >= %f)", pVal, qVal);    
+    }
 
 if (sameString(extraWhere->string, ""))
     return NULL;
@@ -181,12 +215,13 @@ char *filterConstraints = NULL;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
 enum encodePeakType pt = 0;
-int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+struct trackDb *parentTdb = tg->tdb ? tg->tdb->parent : tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(parentTdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(parentTdb, "scoreMax", "1000"));
 if (ct)
     {
     db = CUSTOM_TRASH;
-    table = ct->dbTableName;
+    table = ct->dbTableName;    
     }
 else
     {
@@ -201,10 +236,10 @@ sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &r
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
-
+    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, parentTdb->tableName,
+						 scoreMin, scoreMax);
     if (lf)
-	   slAddHead(&lfList, lf);
+	slAddHead(&lfList, lf);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

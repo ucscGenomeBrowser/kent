@@ -8,16 +8,10 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
-#include "netCart.h"
+#include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.25 2009/03/18 18:27:00 hiram Exp $";
-
-struct cartOptions
-    {
-    enum netColorEnum netColor; /*  ChromColors, GrayScale */
-    enum netLevelEnum netLevel; /* filter chains by level 1 thru 6 (0==All) */
-    };
+static char const rcsid[] = "$Id: netTrack.c,v 1.23 2008/02/20 00:42:27 markd Exp $";
 
 struct netItem
 /* A net track item. */
@@ -83,25 +77,9 @@ static void netColorClearCashe()
 netColorLastChrom = "UNKNOWN";
 }
 
-static Color netColor(struct track *tg, char *chrom, int level)
+static Color netColor(char *chrom)
 /* return appropriate color for a chromosome/scaffold */
 {
-struct cartOptions *netCart;
-
-netCart = (struct cartOptions *) tg->extraUiData;
-
-if (netCart->netColor == netColorGrayScale)
-    switch(level)
-	{
-	case 1: return(shadesOfGray[9]); break;
-	case 2: return(shadesOfGray[7]); break;
-	case 3: return(shadesOfGray[6]); break;
-	case 4: return(shadesOfGray[5]); break;
-	case 5: return(shadesOfGray[4]); break;
-	case 6: return(shadesOfGray[3]); break;
-	default: return(shadesOfGray[2]); break;
-	}
-
 static Color color;
 if (!sameString(chrom, netColorLastChrom))
     color = getSeqColor(chrom, rHvg);
@@ -188,7 +166,7 @@ if (w >= 1)
 }
 
 
-static void rNetDraw(struct track *tg, struct hvGfx *hvg, struct cnFill *fillList, int level, int y)
+static void rNetDraw(struct hvGfx *hvg, struct cnFill *fillList, int level, int y)
 /* Recursively draw net. */
 {
 struct cnFill *fill;
@@ -198,7 +176,7 @@ int orientation;
 
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    color = netColor(tg, fill->qName, level);
+    color = netColor(fill->qName);
     invColor = hvGfxContrastingColor(rHvg, color);
     orientation = orientFromChar(fill->qStrand);
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
@@ -227,7 +205,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         {
 	if (gap->children)
 	    {
-	    rNetDraw(tg, hvg, gap->children, level+2, y + rNextLine);
+	    rNetDraw(hvg, gap->children, level+2, y + rNextLine);
 	    }
 	}
     }
@@ -264,7 +242,7 @@ if (net != NULL)
     rScale = scaleForPixels(width);
 
     /* Recursively do main bit of work. */
-    rNetDraw(tg, hvg, net->fillList, 1, yOff);
+    rNetDraw(hvg, net->fillList, 1, yOff);
     chainNetFree(&net);
     }
 if (vis == tvDense)
@@ -274,13 +252,6 @@ if (vis == tvDense)
 void netMethods(struct track *tg)
 /* Make track group for chain/net alignment. */
 {
-struct cartOptions *netCart;
-
-AllocVar(netCart);
-
-netCart->netColor = netFetchColorOption(cart, tg->tdb, FALSE);
-netCart->netLevel = netFetchLevelOption(cart, tg->tdb, FALSE);
-
 tg->loadItems = netLoad;
 tg->freeItems = netFree;
 tg->drawItems = netDraw;
@@ -291,5 +262,5 @@ tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
 tg->mapsSelf = TRUE;
-tg->extraUiData = (void *) netCart;
 }
+

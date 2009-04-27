@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.129 2009/04/13 22:34:11 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.124 2008/12/11 23:32:26 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -31,7 +31,6 @@ static long sqlTotalQueries = 0;            /* total number of queries */
 static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
 static unsigned traceIndent = 0;            /* how much to indent */
 static char *indentStr = "                                                       ";
-static boolean sqlParanoid = FALSE;         /* extra squawking */
 
 struct sqlProfile
 /* a configuration profile for connecting to a server */
@@ -334,18 +333,11 @@ if (monitorFlags)
 return deltaTime;
 }
 
-static char *scConnDb(struct sqlConnection *sc)
-/* Return sc->conn->db, unless it is NULL -- if NULL, return a string for
- * fprint'd messages. */
-{
-return (sc->conn->db ? sc->conn->db : "db=?");
-}
-
 static void monitorPrintInfo(struct sqlConnection *sc, char *name)
 /* print a monitor message, with connection id and databases. */
 {
 fprintf(stderr, "%.*s%s %ld %s\n", traceIndent, indentStr, name,
-        sc->conn->thread_id, scConnDb(sc));
+        sc->conn->thread_id, sc->conn->db);
 }
 
 static void monitorPrint(struct sqlConnection *sc, char *name,
@@ -355,7 +347,7 @@ static void monitorPrint(struct sqlConnection *sc, char *name,
 {
 va_list args;
 fprintf(stderr, "%.*s%s %ld %s ", traceIndent, indentStr, name,
-        sc->conn->thread_id, scConnDb(sc));
+        sc->conn->thread_id, sc->conn->db);
 va_start(args, format);
 vfprintf(stderr, format, args);
 va_end(args);
@@ -497,7 +489,7 @@ if (sc != NULL)
 }
 
 char* sqlGetDatabase(struct sqlConnection *sc)
-/* Get the database associated with an connection. Warning: return may be NULL! */
+/* Get the database associated with an connection. */
 {
 assert(!sc->isFree);
 return sc->conn->db;
@@ -560,7 +552,7 @@ slReverse(&list);
 return list;
 }
 
-void sqlAddDatabaseFields(char *database, struct hash *hash)
+static void addDatabaseFields(char *database, struct hash *hash)
 /* Add fields from the one database to hash. */
 {
 struct sqlConnection *conn = sqlConnect(database);
@@ -593,7 +585,7 @@ struct hash *dbHash = sqlHashOfDatabases();
 struct hashEl *dbList, *db;
 dbList = hashElListHash(dbHash);
 for (db = dbList; db != NULL; db = db->next)
-    sqlAddDatabaseFields(db->name, fullHash);
+    addDatabaseFields(db->name, fullHash);
 slFreeList(&dbList);
 hashFree(&dbHash);
 return fullHash;
@@ -665,10 +657,10 @@ if (mysql_real_connect(
     if (abort)
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
 	    database, host, user, mysql_error(conn));
-    else if (sqlParanoid)
+    else
 	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
-		"mysql: %s  pid=%ld\n", 
-		database, host, user, mysql_error(conn), (long)getpid());
+		"pid=%ld\nASH: mysql: %s  pid=%ld\n", 
+	    database, host, user, (long)getpid(), mysql_error(conn), (long)getpid());
     return NULL;
     }
 
@@ -1050,7 +1042,7 @@ safef(query, sizeof(query), "select * from %s limit 1,1", table);
 if ((sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE)) == NULL)
     {
     fprintf(stderr, "ASH: Got nothing from select on %s.%s.  pid=%ld\n",
-	    scConnDb(sc), table, (long)getpid());
+	    sc->conn->db, table, (long)getpid());
     /* An error here is OK if and only if the table exists and is empty: */
     return (sqlTableSizeIfExists(sc, table) == 0);
     }
@@ -1060,7 +1052,7 @@ else
 sqlFreeResult(&sr);
 if (ret == FALSE)
     fprintf(stderr, "ASH: Error reading result of select on %s.%s!  pid=%ld\n",
-	    scConnDb(sc), table, (long)getpid());
+	    sc->conn->db, table, (long)getpid());
 return ret;
 }
 
@@ -1128,9 +1120,8 @@ return (sqlUnsigned(majorVerBuf) >= 4);
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
-/* Load a tab-seperated file into a database table, checking for errors.
- * Options are the SQL_TAB_* bit set. SQL_TAB_FILE_ON_SERVER is ignored if
- * sqlIsRemote() returns true. */
+/* Load a tab-seperated file into a database table, checking for errors. 
+ * Options are the SQL_TAB_* bit set. */
 {
 assert(!conn->isFree);
 char tabPath[PATH_LEN];
@@ -1155,7 +1146,7 @@ boolean doDisableKeys = FALSE;
 
 /* determine if tab file can be accessed directly by the database, or send
  * over the network */
-if ((options & SQL_TAB_FILE_ON_SERVER) && !sqlIsRemote(conn))
+if (options & SQL_TAB_FILE_ON_SERVER)
     {
     /* tab file on server requiries full path */
     strcpy(tabPath, "");
@@ -2418,15 +2409,3 @@ for (i=0; ;i++)
 return cloneString(tableName);
 }
 
-void sqlSetParanoid(boolean beParanoid)
-/* If set to TRUE, will make more diagnostic stderr messages. */
-{
-sqlParanoid = beParanoid;
-}
-
-boolean sqlIsRemote(struct sqlConnection *conn)
-/* test if the conn appears to be to a remote system.
- * Current only tests for a TCP/IP connection */
-{
-return (conn->conn->unix_socket == NULL);
-}

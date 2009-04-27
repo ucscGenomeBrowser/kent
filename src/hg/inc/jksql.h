@@ -86,7 +86,7 @@ void sqlDisconnect(struct sqlConnection **pSc);
 /* Close down connection. */
 
 char* sqlGetDatabase(struct sqlConnection *sc);
-/* Get the database associated with an connection. Warning: return may be NULL! */
+/* Get the database associated with an connection. */
 
 char* sqlGetHost(struct sqlConnection *sc);
 /* Get the host associated with an connection. */
@@ -99,9 +99,6 @@ struct slName *sqlListTables(struct sqlConnection *conn);
 
 struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
-
-void sqlAddDatabaseFields(char *database, struct hash *hash);
-/* Add fields from the one database to hash. */
 
 struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */
@@ -156,7 +153,7 @@ boolean sqlRowExists(struct sqlConnection *conn,
 
 /* Options to sqlLoadTabFile */
 
-#define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessible
+#define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessable
                                      * by the sql server */
 #define SQL_TAB_FILE_WARN_ON_WARN  0x02 /* warn on warnings being returned
                                          * rather than abort */
@@ -173,9 +170,8 @@ boolean sqlRowExists(struct sqlConnection *conn,
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options);
-/* Load a tab-seperated file into a database table, checking for errors.
- * Options are the SQL_TAB_* bit set. SQL_TAB_FILE_ON_SERVER is ignored if
- * sqlIsRemote() returns true. */
+/* Load a tab-seperated file into a database table, checking for errors. 
+ * Options are the SQL_TAB_* bit set. */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* Query database.
@@ -479,12 +475,5 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
  * table name encorperates the host, pid, and time, which helps insure
  * uniqueness between different processes at least.  FreeMem the result
  * when you are done. */
-
-void sqlSetParanoid(boolean beParanoid);
-/* If set to TRUE, will make more diagnostic stderr messages. */
-
-boolean sqlIsRemote(struct sqlConnection *conn);
-/* test if the conn appears to be to a remote system.
- * Current only tests for a TCP/IP connection */
 
 #endif /* JKSQL_H */

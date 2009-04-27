@@ -1,4 +1,0 @@
-
-array of int a = (4,3,1,2);
-double product = para (x in a) * x*1.0;
-print(product);

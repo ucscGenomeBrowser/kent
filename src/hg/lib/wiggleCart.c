@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.20 2009/01/21 00:22:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.18 2008/12/06 00:29:48 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -77,30 +77,63 @@ wigDebugPrint("wigFetch");
 static void wigMaxLimitsCompositeOverride(struct trackDb *tdb,char *name,double *min, double *max,double *tDbMin, double *tDbMax)
 /* If aquiring min/max for composite level wig cfg, look for trackDb.ra "settingsByView" */
 {
-if(isNameAtCompositeLevel(tdb,name))
+if(tdbIsCompositeChild(tdb)
+&& startsWith(tdb->parent->tableName,name)
+&& name[strlen(tdb->parent->tableName)] == '.'            // Cfg at composite view level
+&& trackDbSetting(tdb->parent,"settingsByView") != NULL)  // settings specific to composite view level
     {
-    char *setting = trackDbSettingByView(tdb,VIEWLIMITSMAX);
-    if(setting != NULL)
+    char *words[8];
+    char *view=NULL;
+    char *limitsByView=NULL;
+    int cnt,ix;
+    if(subgroupFind(tdb,"view",&view)) // Find out view of tdb
         {
-        char *word = strSwapChar(setting,':',' ');
-        if(tDbMin != NULL && word[0] != 0)
-            *tDbMin = sqlDouble(nextWord(&word));
-        if(tDbMax != NULL && word[0] != 0)
-            *tDbMax = sqlDouble(word);
-        if(tDbMin != NULL && tDbMax != NULL)
-            correctOrder(*tDbMin,*tDbMax);
-        freez(&setting);
+        char *settings = cloneString(trackDbSetting(tdb->parent,"settingsByView"));
+        // retrieve settingsByView from parent "settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910 ..."
+        cnt = chopLine(settings, words);
+        for(ix=0;ix<cnt;ix++)
+            {
+            if(startsWithWordByDelimiter(view,':',words[ix]))
+                {
+                limitsByView = cloneString(words[ix]+(strlen(view)+1));
+                break;
+                }
+            }
+        freeMem(settings);
+        subgroupFree(&view);
         }
-    setting = trackDbSettingByView(tdb,VIEWLIMITS);
-    if(setting != NULL)
+    if(limitsByView != NULL) // found a match
         {
-        char *word = strSwapChar(setting,':',' ');
-        assert(min != NULL && max != NULL);
-        *min = sqlDouble(nextWord(&word));
-        if(word[0] != 0)
-            *max = sqlDouble(word);
-        correctOrder(*min,*max);
-        freez(&setting);
+        // parse limitsByView "defaultViewLimits=5:500,viewLimits=0:20910"
+        cnt = chopByChar(limitsByView,',',words,ArraySize(words));
+        for(ix=0;ix<cnt;ix++)
+            {
+            if(startsWithWordByDelimiter(VIEWLIMITS,'=',words[ix]))
+                {
+                // parse viewLimits "0:20910"
+                words[ix] = strSwapChar(words[ix]+strlen(VIEWLIMITS)+1,':',' ');
+                if(tDbMin != NULL && words[ix][0] != 0)
+                    *tDbMin = sqlDouble(nextWord(&words[ix]));
+                if(tDbMax != NULL && words[ix][0] != 0)
+                    *tDbMax = sqlDouble(words[ix]);
+                if(tDbMin != NULL && tDbMax != NULL)
+                    correctOrder(*tDbMin,*tDbMax);
+                }
+            else if(startsWithWordByDelimiter(DEFAULTVIEWLIMITS,'=',words[ix]))
+                {
+                words[ix] = strSwapChar(words[ix]+strlen(DEFAULTVIEWLIMITS)+1,':',' ');
+                // parse defaultViewLimits "5:500"
+                if(words[ix][0] != 0)
+                    {
+                    assert(min != NULL && max != NULL);
+                    *min = sqlDouble(nextWord(&words[ix]));
+                    if(words[ix][0] != 0)
+                        *max = sqlDouble(words[ix]);
+                    correctOrder(*min,*max);
+                    }
+                }
+            }
+        freeMem(limitsByView);
         }
     }
 }
@@ -117,12 +150,13 @@ if(isNameAtCompositeLevel(tdb,name))
 void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
     double *min, double *max, double *tDbMin, double *tDbMax, int wordCount, char **words)
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
+char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
 char *minY_str = NULL;  /*	string from cart	*/
 char *maxY_str = NULL;  /*	string from cart	*/
 double minY;    /*	from trackDb.ra words, the absolute minimum */
 double maxY;    /*	from trackDb.ra words, the absolute maximum */
-char * tdbDefault = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE"));
+char * tdbDefault = cloneString(trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE"));
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
 char * viewLimits = (char *)NULL;
@@ -134,7 +168,7 @@ boolean isBedGraph = (wordCount == 0 || sameString(words[0],"bedGraph"));
 if (sameWord("NONE",tdbDefault))
     {
     freeMem(tdbDefault);
-    tdbDefault = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, "NONE"));
+    tdbDefault = cloneString(trackDbSettingOrDefault(tdb, VIEWLIMITS, "NONE"));
     }
 
 /*	And check for either viewLimits in custom track settings */
@@ -182,8 +216,8 @@ else
 
 if(isBedGraph)
     {
-    char * tdbMin = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, MIN_LIMIT, "NONE"));
-    char * tdbMax = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, MAX_LIMIT, "NONE"));
+    char * tdbMin = cloneString(trackDbSettingOrDefault(tdb, MIN_LIMIT, "NONE"));
+    char * tdbMax = cloneString(trackDbSettingOrDefault(tdb, MAX_LIMIT, "NONE"));
     if (sameWord("NONE",tdbMin))
         {
         if (settingsMin != (char *)NULL)
@@ -303,8 +337,10 @@ if (differentWord("NONE",tdbDefault))
 wigMaxLimitsCompositeOverride(tdb,name,min,max,tDbMin,tDbMax);
 
 /*	And finally, let's see if values are available in the cart */
-minY_str = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MIN_Y);
-maxY_str = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MAX_Y);
+snprintf( o4, sizeof(o4), "%s.%s", name, MIN_Y);
+snprintf( o5, sizeof(o5), "%s.%s", name, MAX_Y);
+minY_str = cartOptionalString(theCart, o4);
+maxY_str = cartOptionalString(theCart, o5);
 
 if (minY_str && maxY_str)	/*	if specified in the cart */
     {
@@ -325,14 +361,14 @@ freeMem(viewLimits);
  *****************************************************************************/
 void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* Option 1 - track pixel height:  .heightPer  */
 char *heightPer = NULL; /*	string from cart	*/
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int defaultHeightPixels = maxHeightPixels;
 int defaultHeight;      /*      truncated by limits     */
 int minHeightPixels = MIN_HEIGHT_PER;
 char * tdbDefault = cloneString(
-    trackDbSettingClosestToHomeOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER) );
+    trackDbSettingOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER) );
 
 if (sameWord(DEFAULT_HEIGHT_PER,tdbDefault))
     {
@@ -398,7 +434,8 @@ if (differentWord(DEFAULT_HEIGHT_PER,tdbDefault))
 	    break;
 	}
     }
-heightPer = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, HEIGHTPER);
+snprintf( option, sizeof(option), "%s.%s", name, HEIGHTPER);
+heightPer = cartOptionalString(theCart, option);
 /*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
 if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
 else defaultHeight = defaultHeightPixels;
@@ -421,13 +458,13 @@ freeMem(tdbDefault);
 static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
     char *notDefault, char *tdbString, char *secondTdbString)
 {
-char *tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, tdbString, "NONE");
+char *tdbDefault = trackDbSettingOrDefault(tdb, tdbString, "NONE");
 char *ret;
 
 ret = Default;	/* the answer, unless found to be otherwise	*/
 
 if (sameWord("NONE",tdbDefault) && (secondTdbString != (char *)NULL))
-    tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, secondTdbString, "NONE");
+    tdbDefault = trackDbSettingOrDefault(tdb, secondTdbString, "NONE");
 
 if (differentWord("NONE",tdbDefault))
     {
@@ -468,11 +505,12 @@ enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart,
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* .horizGrid  */
 char *horizontalGrid = NULL;
 enum wiggleGridOptEnum ret;
 
-horizontalGrid = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, HORIZGRID));
+snprintf( option, sizeof(option), "%s.%s", name, HORIZGRID );
+horizontalGrid = cloneString(cartOptionalString(theCart, option));
 
 if (!horizontalGrid)	/*	if it is NULL	*/
     horizontalGrid = wigCheckBinaryOption(tdb,Default,notDefault,GRIDDEFAULT,
@@ -492,17 +530,18 @@ enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart,
 {
 char *Default = wiggleScaleEnumToString(wiggleScaleAuto);
 char *notDefault = wiggleScaleEnumToString(wiggleScaleManual);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* .autoScale  */
 char *autoScale = NULL;
 enum wiggleScaleOptEnum ret;
 
 
-autoScale = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, AUTOSCALE));
+snprintf( option, sizeof(option), "%s.%s", name, AUTOSCALE );
+autoScale = cloneString(cartOptionalString(theCart, option));
 
 if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
     {
     /*	It may be the autoScale=on/off situation from custom tracks */
-    char * tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, AUTOSCALE, "NONE");
+    char * tdbDefault = trackDbSettingOrDefault(tdb, AUTOSCALE, "NONE");
     if (sameWord(tdbDefault,"on"))
 	autoScale = cloneString(Default);
     else if (sameWord(tdbDefault,"off"))
@@ -526,11 +565,12 @@ enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart,
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* .lineBar  */
 char *graphType = NULL;
 enum wiggleGraphOptEnum ret;
 
-graphType = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, LINEBAR));
+snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
+graphType = cloneString(cartOptionalString(theCart, option));
 
 if (!graphType)	/*	if nothing from the Cart, check trackDb/settings */
     graphType = wigCheckBinaryOption(tdb,Default,notDefault,GRAPHTYPEDEFAULT,
@@ -549,11 +589,12 @@ enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleWindowingEnumToString(wiggleWindowingMax);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* .windowingFunction  */
 char *windowingFunction = NULL;
 enum wiggleWindowingEnum ret;
 
-windowingFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, WINDOWINGFUNCTION));
+snprintf( option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
+windowingFunction = cloneString(cartOptionalString(theCart, option));
 
 /*	If windowingFunction is a string, it came from the cart, otherwise
  *	see if it is specified in the trackDb option, finally
@@ -562,7 +603,7 @@ windowingFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, co
 if (!windowingFunction)
     {
     char * tdbDefault =
-	trackDbSettingClosestToHomeOrDefault(tdb, WINDOWINGFUNCTION, Default);
+	trackDbSettingOrDefault(tdb, WINDOWINGFUNCTION, Default);
 
     freeMem(windowingFunction);
     if (differentWord(Default,tdbDefault))
@@ -600,16 +641,17 @@ enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* .smoothingWindow  */
 char * smoothingWindow = NULL;
 enum wiggleSmoothingEnum ret;
 
-smoothingWindow = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, SMOOTHINGWINDOW));
+snprintf( option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
+smoothingWindow = cloneString(cartOptionalString(theCart, option));
 
 if (!smoothingWindow) /* if nothing from the Cart, check trackDb/settings */
     {
     char * tdbDefault =
-	trackDbSettingClosestToHomeOrDefault(tdb, SMOOTHINGWINDOW, Default);
+	trackDbSettingOrDefault(tdb, SMOOTHINGWINDOW, Default);
 
 
     if (differentWord(Default,tdbDefault))
@@ -648,11 +690,12 @@ enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart,
 {
 char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
 char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* .yLineMark  */
 char *yLineMark = NULL;
 enum wiggleYLineMarkEnum ret;
 
-yLineMark = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, YLINEONOFF));
+snprintf( option, sizeof(option), "%s.%s", name, YLINEONOFF );
+yLineMark = cloneString(cartOptionalString(theCart, option));
 
 if (!yLineMark)	/*	if nothing from the Cart, check trackDb/settings */
     yLineMark = wigCheckBinaryOption(tdb,Default,notDefault,YLINEONOFF,
@@ -673,11 +716,11 @@ return(ret);
  *****************************************************************************/
 void wigFetchYLineMarkValueWithCart(struct cart *theCart,struct trackDb *tdb, char *name, double *tDbYMark )
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char option[MAX_OPT_STRLEN]; /* Option 11 - value from: .yLineMark */
 char *yLineMarkValue = NULL;  /*	string from cart	*/
 double yLineValue;   /*	value from cart or trackDb */
 char * tdbDefault = cloneString(
-    trackDbSettingClosestToHomeOrDefault(tdb, YLINEMARK, "NONE") );
+    trackDbSettingOrDefault(tdb, YLINEMARK, "NONE") );
 
 if (sameWord("NONE",tdbDefault))
     {
@@ -700,7 +743,8 @@ if (sameWord("NONE",tdbDefault))
 yLineValue = 0.0;
 
 /*	Let's see if a value is available in the cart */
-yLineMarkValue = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, YLINEMARK);
+snprintf( option, sizeof(option), "%s.%s", name, YLINEMARK);
+yLineMarkValue = cartOptionalString(theCart, option);
 
 /*	if yLineMarkValue is non-Null, it is the requested value 	*/
 if (yLineMarkValue)

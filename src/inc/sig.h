@@ -75,27 +75,6 @@
 #define genomeRangeTreeSwapSig 0x0481fbf7
 /* Signature of genomeRangeTree binary data file */
 
-#define bptSig 0x78CA8C91
-/* Signature of generic b+ tree index file. */
-
-#define bptSwapped 0x918CCA78
-/* Signature of generic b+ tree index file. */
-
-#define cirTreeSig 0x2468ACE0
-/* Signature of a chromosome id r-tree index file. */
-
-#define crTreeSig 0x2369ADE1
-/* Signature of a chromosome r-tree index file. */
-
-#define bigWigSig 0x888FFC26
-/* Signature for a big wig file. */
-
-#define bigBedSig 0x8789F2EB
-/* Signature for a big bed file. */
-
-#define udcBitmapSig 0x4187E2F6
-/* Signature for a url data cache bitmap file. */
-
 #endif /* SIG_H */
 
 

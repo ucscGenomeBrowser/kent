@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.8 2009/03/03 21:11:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.6 2008/09/03 19:19:04 markd Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -46,7 +46,7 @@ if (optionScoreVal != NULL)
 optionScore = cartUsualInt(cart, option, optionScore);
 
 safef(extraWhere, size, "score >= %d",optionScore);
-}
+}			   		   
 
 
 void loadRnaSecStr(struct track *tg)
@@ -72,7 +72,7 @@ rnaSecStrFreeList((struct rnaSecStr**)&tg->items);
 }
 
 void spreadAndColorString(struct hvGfx *hvg, int x, int y, int width, int height,
-			  Color *colorIxs, int maxShade, MgFont *font, char *text, int count,
+			  Color *colorIxs, int maxShade, MgFont *font, char *text, int count, 
 			  double *scores, double minScore, double maxScore)
 /* Draw evenly spaced letters in string. The scores array contains a
  * score for each letter in the text string. The score will determine
@@ -157,8 +157,8 @@ freeMem(fold);
 }
 
 
-void rnaSecStrDrawAt(struct track *tg, void *item,
-		     struct hvGfx *hvg, int xOff, int y,
+void rnaSecStrDrawAt(struct track *tg, void *item, 
+		     struct hvGfx *hvg, int xOff, int y, 
 		     double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple rnaSecStr item at position. */
 {
@@ -168,8 +168,8 @@ int x1 = round((double)((int)rnaSecStr->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)rnaSecStr->chromEnd-winStart)*scale) + xOff;
 int w;
 struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, rnaSecStr, hvg);
@@ -193,7 +193,7 @@ if (color)
 	int dir = 0;
 	if (rnaSecStr->strand[0] == '+')
 	    dir = 1;
-	else if(rnaSecStr->strand[0] == '-')
+	else if(rnaSecStr->strand[0] == '-') 
 	    dir = -1;
 	if (dir != 0 && w > 2)
 	    {

@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.102 2009/02/13 01:02:16 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.101 2008/09/13 00:46:54 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -588,7 +588,7 @@ if (gp->cdsStart < gp->cdsEnd)
         {
         errAbort("Error: exonFrames field is being added, but I found a "
                  "gene (%s) with CDS but no valid frames.  "
-                 "This can happen if program is invoked with -genePredExt "
+                 "This can happen if ldHgGene is invoked with -genePredExt "
                  "but no valid frames are given in the file.  If the 8th "
                  "field of GFF/GTF file is always a placeholder, then don't use "
                  "-genePredExt.",
@@ -597,61 +597,18 @@ if (gp->cdsStart < gp->cdsEnd)
     }
 }
 
-static boolean isGtfFeature(char *feat)
-/* check if a feature is one of the recognized features.  All otherse
- * should be ignored. http://mblab.wustl.edu/GTF22.html */
-{
-static char *gtfFeats[] = {"CDS", "start_codon", "stop_codon", "5UTR", "3UTR",
-                           "inter", "inter_CNS", "intron_CNS", "exon", NULL};
-int i;
-for (i = 0; gtfFeats[i] != NULL; i++)
-    {
-    if (sameString(feat, gtfFeats[i]))
-        return TRUE;
-    }
-return FALSE;
-}
-
-static boolean ignoreGxfLine(struct gffLine *gl, boolean isGtf)
-/* should the specified line be skipped? */
-{
-if (isGtf)
-    return !isGtfFeature(gl->feature);
-else
-    return FALSE;
-}
-
-static boolean allowedFrameFeature(struct gffLine *gl, boolean isGtf)
-/* should this feature be used to assign frame? */
-{
-if (isStartStopCodon(gl->feature) || ignoreGxfLine(gl, isGtf))
-    return FALSE;
-
-// for GFF, any features with frame can be used to set frame,
-// with GTF, there are some bogus files that set frame on UTR features,
-// so only use CDS
-if (isGtf)
-    return sameString(gl->feature, "CDS");
-else
-    return (gl->frame != '.');
-}
-
 static struct gffLine *assignFrameForCdsExon(int start, int end, int *framePtr,
-                                             struct gffLine *gl, boolean isGtf)
+                                             struct gffLine *gl)
 /* set the frame for an exon, advancing gl past end of this exon */
 {
 /* skip lines preceeding this exon */
-while (gl != NULL)
-    {
-    if (allowedFrameFeature(gl, isGtf) && (gl->end >= start))
-        break;
+while ((gl != NULL) && (gl->end <= start))
     gl = gl->next;
-}
 /* set frame from any overlapping records with frame. Don't include
  * start/stop_codon, as it isn't a full exon. */
 while ((gl != NULL) && (rangeIntersection(gl->start, gl->end, start, end) > 0))
     {
-    if (allowedFrameFeature(gl, isGtf))
+    if (!isStartStopCodon(gl->feature))
         {
         int frame = phaseToFrame(gl->frame);
         if (frame >= 0)
@@ -662,7 +619,7 @@ while ((gl != NULL) && (rangeIntersection(gl->start, gl->end, start, end) > 0))
 return gl;
 }
 
-static void assignFrame(boolean isGtf, struct gffGroup *group, struct genePred *gp)
+static void assignFrame(struct gffGroup *group, struct genePred *gp)
 /* Assign frame from GFF after genePred has been built.*/
 {
 struct gffLine *gl = group->lineList;
@@ -672,7 +629,7 @@ for (i = 0; i < gp->exonCount; i++)
     {
     if (genePredCdsExon(gp, i, &start, &end))
         {
-        gl = assignFrameForCdsExon(start, end, &(gp->exonFrames[i]), gl, isGtf);
+        gl = assignFrameForCdsExon(start, end, &(gp->exonFrames[i]), gl);
         if (gp->exonFrames[i] >= 0)
             haveFrame = TRUE;
         }
@@ -683,6 +640,7 @@ if (haveFrame)
     fixStopFrame(gp);
 checkForNoFrames(gp);
 }
+
 
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
                                          boolean isGtf, char *exonSelectWord, unsigned optFields,
@@ -706,9 +664,8 @@ boolean useStartStops = isGtf || haveStartStopCodons(gff);
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if (ignoreGxfLine(gl, isGtf))
-        continue;
-    if (isExon(gl->feature, isGtf, exonSelectWord))
+    char *feat = gl->feature;
+    if (isExon(feat, isGtf, exonSelectWord))
 	++exonCount;
     if (isCds(gl->feature))
         {
@@ -717,9 +674,9 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
 	if (gl->end > cdsEnd)
             cdsEnd = gl->end;
 	}
-    if (sameWord(gl->feature, "start_codon"))
+    if (sameWord(feat, "start_codon"))
         haveStartCodon = TRUE;
-    if (sameWord(gl->feature, "stop_codon"))
+    if (sameWord(feat, "stop_codon"))
         {
         /* stop_codon can be split, need bounds for adjusting CDS below */
         if ((stopCodonStart < 0) || (gl->start < stopCodonStart))
@@ -826,8 +783,6 @@ i = -1; /* before first exon */
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if (ignoreGxfLine(gl, isGtf))
-        continue;
     if (isExon(gl->feature, isGtf, exonSelectWord) || (isGtf && isCds(gl->feature)))
         {
         chkGroupLine(group, gl, gp);
@@ -857,7 +812,7 @@ if ((options & genePredGxfImpliedStopAfterCds) && !haveStopCodon)
     adjImpliedStopAfterCds(gp);
 
 if (optFields & genePredExonFramesFld)
-    assignFrame(isGtf, group, gp);
+    assignFrame(group, gp);
 
 return gp;
 }

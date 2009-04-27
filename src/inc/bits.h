@@ -8,9 +8,6 @@
 
 typedef unsigned char Bits;
 
-#define bitToByteSize(bitSize) ((bitSize+7)/8)
-/* Convert number of bits to number of bytes needed to store bits. */
-
 Bits *bitAlloc(int bitCount);
 /* Allocate bits. */
 

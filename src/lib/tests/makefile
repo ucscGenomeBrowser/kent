@@ -1,11 +1,11 @@
 include ../../inc/common.mk
 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS = ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test
+    mimeTests base64Tests quotedPTests safeTest hashTest
 	rm -r output
 	@echo tested all
 
@@ -13,7 +13,7 @@ mkdirs:
 	${MKDIR} output ${BIN_DIR}
 
 errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS}
 	${STRIP} ${BIN_DIR}/errCatchTest${EXE}
 	${BIN_DIR}/errCatchTest secret > output/errCatch.good
 	diff expected/errCatch.good output/errCatch.good
@@ -21,13 +21,13 @@ errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 	diff expected/errCatch.bad output/errCatch.bad
 
 htmlExpandUrlTest: htmlExpandUrlTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS}
 	${STRIP} ${BIN_DIR}/htmlExpandUrlTest${EXE}
 	${BIN_DIR}/htmlExpandUrlTest > output/htmlExpandUrlTest 2>&1
 	diff expected/htmlExpandUrlTest output/htmlExpandUrlTest
 
 htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/htmlPageTest htmlPageTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/htmlPageTest htmlPageTest.o ${MYLIBS}
 	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
@@ -76,29 +76,29 @@ pipelineExitCode: ${BIN_DIR}/pipelineTester
 
 # test redirecting stderr, see that two process can write stderr, but only
 # the second's stdout should make it to the end of the pipe.  Since order
-# of writes to stderr is determined by process scheduling and when a process
-# terminates due to SIGPIPE, just check that stderr was not empty, don't
-# check contents.
+# of writes to stderr is determined by process scheduling, sort the output
+# before comparing.
 pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
+	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.raw.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
 	diff -b expected/$@.out output/$@.out
-	test -s output/$@.err
+	sort output/$@.raw.err > output/$@.err
+	diff -b expected/$@.err output/$@.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS}
 
 
 dyStringTest: ${BIN_DIR}/dyStringTester mkdirs
 	${BIN_DIR}/dyStringTester
 
 ${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS}
 
 
 mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeAutoBoundary mimeBlat
 
 ${BIN_DIR}/mimeTester:  mkdirs mimeTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS}
 
 
 mime1: ${BIN_DIR}/mimeTester mkdirs
@@ -141,7 +141,7 @@ mimeSeries: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -sizeSeries=3000
 
 ${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/htmlMimeTest htmlMimeTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/htmlMimeTest htmlMimeTest.o ${MYLIBS}
 
 htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 	${BIN_DIR}/htmlMimeTest http://hgwdev.cse.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 3490 3502 > output/$@.out
@@ -151,7 +151,7 @@ htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 base64Tests: base64Encode base64Decode
 
 ${BIN_DIR}/testBase64:  mkdirs testBase64.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS}
 
 base64Encode: ${BIN_DIR}/testBase64 mkdirs
 	${BIN_DIR}/testBase64 'My Test String' > output/$@.out
@@ -192,43 +192,20 @@ safeTest: ${BIN_DIR}/safeTester mkdirs
 hashTest: hashTest1
 
 ${BIN_DIR}/testHash:  mkdirs testHash.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testHash testHash.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/testHash testHash.o ${MYLIBS}
 
 hashTest1: ${BIN_DIR}/testHash mkdirs
 	${BIN_DIR}/testHash input/$@.txt > output/$@.out
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/testQuotedString: mkdirs testQuotedString.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testQuotedString testQuotedString.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${BIN_DIR}/testQuotedString testQuotedString.o ${MYLIBS}
 
 testQuotedString:	${BIN_DIR}/testQuotedString mkdirs
 	${BIN_DIR}/testQuotedString -verbose=2 quote this\\ following
 
 miniBlat:  mkdirs miniBlat.o ${MYLIBS}
-	${CC} ${COPT} -o miniBlat miniBlat.o ${MYLIBS} ${L}
-
-fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
-	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
-
-##
-# gff3 tests
-##
-gff3Tester=${BIN_DIR}/gff3Tester
-gff3Test: gff3SacCerTest gff3ErrorCasesTest
-
-# FIXME: doesn't work yet
-# gff3SpecialCasesTest
-
-gff3SacCerTest: ${gff3Tester} mkdirs
-	${gff3Tester} input/sacCerTest.gff3 output/$@.out
-gff3SpecialCasesTest: ${gff3Tester} mkdirs
-	${gff3Tester} input/specialCasesTest.gff3 output/$@.out
-gff3ErrorCasesTest: ${gff3Tester} mkdirs
-	if ${gff3Tester} input/errorCasesTest.gff3 /dev/null >output/$@.err 2>&1 ; then exit 0 else exit 1; fi
-
-${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
-	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS}
+	${CC} ${COPT} -o miniBlat miniBlat.o ${MYLIBS}
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out

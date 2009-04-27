@@ -69,37 +69,37 @@ void hapmapSnpsOutput(struct hapmapSnps *el, FILE *f, char sep, char lastSep);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 /* items for trackUi options and filters */
 
-#define HAP_POP_MIXED "hapmapSnps_isMixed"
-#define HAP_POP_COUNT "hapmapSnps_popCount"
-#define HAP_TYPE "hapmapSnps_polyType"
-#define HAP_MIN_FREQ "hapmapSnps_minorAlleleFreqMinimum"
-#define HAP_MAX_FREQ "hapmapSnps_minorAlleleFreqMaximum"
-#define HAP_MIN_HET "hapmapSnps_hetMinimum"
-#define HAP_MAX_OBSERVED_HET "hapmapSnps_obsHetMaximum"
-#define HAP_MAX_EXPECTED_HET "hapmapSnps_expHetMaximum"
-#define HAP_MONO_PREFIX "hapmapSnps_monomorphic"
-#define HAP_ORTHO_PREFIX "hapmapSnps_ortho"
-#define HAP_ORTHO_QUAL_PREFIX "hapmapSnps_orthoQual"
+#define HAP_POP_MIXED "hapmapSnps.isMixed"
+#define HAP_POP_COUNT "hapmapSnps.popCount"
+#define HAP_TYPE "hapmapSnps.polyType"
+#define HAP_MIN_FREQ "hapmapSnps.minorAlleleFreqMinimum"
+#define HAP_MAX_FREQ "hapmapSnps.minorAlleleFreqMaximum"
+#define HAP_MIN_HET "hapmapSnps.hetMinimum"
+#define HAP_MAX_HET "hapmapSnps.hetMaximum"
+#define HAP_MONO_CEU "hapmapSnps.monomorphic.ceu"
+#define HAP_MONO_CHB "hapmapSnps.monomorphic.chb"
+#define HAP_MONO_JPT "hapmapSnps.monomorphic.jpt"
+#define HAP_MONO_YRI "hapmapSnps.monomorphic.yri"
+#define HAP_CHIMP "hapmapSnps.chimp"
+#define HAP_CHIMP_QUAL "hapmapSnps.chimpQualScore"
+#define HAP_MACAQUE "hapmapSnps.macaque"
+#define HAP_MACAQUE_QUAL "hapmapSnps.macaqueQualScore"
 
-#define HAP_FILTER_DEFAULT "no filter"
+#define HAP_POP_MIXED_DEFAULT "no filter"
+#define HAP_POP_COUNT_DEFAULT "no filter"
+#define HAP_TYPE_DEFAULT      "no filter"
 
 #define HAP_MIN_FREQ_DEFAULT  "0.0"
 #define HAP_MAX_FREQ_DEFAULT  "0.5"
 #define HAP_MIN_HET_DEFAULT   "0.0"
-#define HAP_MAX_EXPECTED_HET_DEFAULT   "0.5"
-#define HAP_MAX_OBSERVED_HET_DEFAULT   "1.0"
+#define HAP_MAX_HET_DEFAULT   "0.5"
 
-#define HAP_ORTHO_QUAL_DEFAULT "0"
+#define HAP_MONO_DEFAULT      "no filter"
 
-#define HAP_PHASEII_POPCOUNT 4
-#define HAP_PHASEIII_POPCOUNT 11
-#define HAP_ORTHO_COUNT 2
-
-char *hapmapPhaseIIPops[HAP_PHASEII_POPCOUNT];
-char *hapmapPhaseIIIPops[HAP_PHASEIII_POPCOUNT];
-
-/* Someday this should come from a trackDb setting: */
-extern char *hapmapOrthoSpecies[HAP_ORTHO_COUNT+1];
+#define HAP_CHIMP_DEFAULT     "no filter"
+#define HAP_CHIMP_QUAL_DEFAULT "0"
+#define HAP_MACAQUE_DEFAULT   "no filter"
+#define HAP_MACAQUE_QUAL_DEFAULT "0"
 
 #endif /* HAPMAPSNPS_H */
 

@@ -7,8 +7,6 @@
 #define MAX_OPT_STRLEN	128
 
 #define OPT_CHROM_COLORS "chainColor"
-#define OPT_CHROM_FILTER "chromFilter"
-#define CHAIN_SCORE_MAXIMUM	2000000000
 /*	TrackUi menu items, completing the sentence:
  *	Color chains by:
  */
@@ -16,8 +14,7 @@
 #define SCORE_COLORS "Normalized Score"
 #define NO_COLORS "Black"
 
-extern enum chainColorEnum chainFetchColorOption(struct cart *cart,
-    struct trackDb *tdb, boolean compositeLevel);
-/******	ColorOption - Chrom colors by default **************************/
+extern enum chainColorEnum chainFetchColorOption(struct trackDb *tdb,
+        char **optString);
 
 #endif /* CHAINCART_H */

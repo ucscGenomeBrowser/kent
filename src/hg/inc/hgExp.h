@@ -19,7 +19,6 @@ char **hgExpGetNames(
 /* Create array filled with experiment names. */
 
 void hgExpLabelPrint(
-        char *database,         /* database we're loading */
 	char *colName, 		/* hgNear column name */
 	char *subName, 		/* all/median/selected */
 	int skipName,		/* number of characters in name to skip */

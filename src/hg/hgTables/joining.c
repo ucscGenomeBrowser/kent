@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.53 2009/03/17 17:24:51 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.51 2009/01/09 00:58:27 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -319,18 +319,6 @@ static void makeCtOrderedCommaFieldList(struct joinerDtf *dtfList,
 struct slName *fieldList = getBedFields(15);
 makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
-}
-
-static void makeBigBedOrderedCommaFieldList(struct joinerDtf *dtfList,
-	struct dyString *dy)
-/* Make comma-separated field list in same order as fields are in
- * big bed. */
-{
-struct sqlConnection *conn = hAllocConn(dtfList->database);
-struct slName *fieldList = bigBedGetFields(dtfList->table, conn);
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
-slFreeList(&fieldList);
-hFreeConn(&conn);
 }
 
 struct tableJoiner
@@ -693,7 +681,7 @@ struct joinedTables *tjLoadFirst(struct region *regionList,
 struct joinedTables *joined = joinedTablesNew(totalFieldCount, 
 	totalKeyCount, maxRowCount);
 struct hash *idHash = NULL;
-struct hTableInfo *hti = getHtiOnDb(tj->database, tj->table);
+struct hTableInfo *hti = getHti(tj->database, tj->table);
 char *idField = getIdField(tj->database, curTrack, tj->table, hti);
 if (idField != NULL)
     idHash = identifierHash(tj->database, tj->table);
@@ -971,9 +959,7 @@ if (! doJoin)
     struct sqlConnection *conn = sqlConnect(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
-    if (isBigBed(dtfList->table))
-	makeBigBedOrderedCommaFieldList(dtfList, dy);
-    else if (isCustomTrack(dtfList->table))
+    if (isCustomTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);
@@ -1123,7 +1109,7 @@ struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
 /* Get list of beds from database, in all regions, that pass filtering. */
 {
 /* A joining query may be required if the filter incorporates linked tables. */
-struct hTableInfo *hti = getHti(database, table, conn);
+struct hTableInfo *hti = getHti(database, table);
 struct slName *fieldList = getBedFieldSlNameList(hti, database, table);
 struct joinerDtf *dtfList = NULL;
 struct joinerDtf *filterTables = NULL;

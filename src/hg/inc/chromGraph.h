@@ -22,7 +22,6 @@ struct chromGraph
     char *chrom;	/* Chromosome */
     int chromStart;	/* Start coordinate */
     double val;	/* Value at coordinate */
-    char *marker;	/* Marker */
     };
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret);

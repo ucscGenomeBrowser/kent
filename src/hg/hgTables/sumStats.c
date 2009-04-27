@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.27 2009/04/10 20:04:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.22 2008/05/27 23:48:28 hiram Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -60,8 +60,8 @@ if (sqlTableExists(conn, splitTable))
 	int rowOffset;
 	char **row;
 	struct agpGap gap;
-	struct sqlResult *sr = hRangeQuery(conn, "gap",
-		region->chrom, region->start, region->end,
+	struct sqlResult *sr = hRangeQuery(conn, "gap", 
+		region->chrom, region->start, region->end, 
 		NULL, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -239,16 +239,6 @@ void stringStatRow(char *label, char *val)
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%s</TD></TR>\n", label, val);
 }
 
-void wigFilterStatRow(struct sqlConnection *conn)
-/* Put row in statistics table that says what wig filter is on. */
-{
-hPrintf("<TR><TD>filter</TD><TD ALIGN=RIGHT>");
-if (anyFilter())
-    wigShowFilter(conn);
-else
-    hPrintf("off");
-hPrintf("</TD></TR>\n");
-}
 
 void doSummaryStatsBed(struct sqlConnection *conn)
 /* Put up page showing summary stats for track that is in database
@@ -262,7 +252,7 @@ long startTime, midTime, endTime;
 long loadTime = 0, calcTime = 0, freeTime = 0;
 struct covStats *itemCovList = NULL, *blockCovList = NULL, *cov;
 int itemCount = 0;
-struct hTableInfo *hti = getHti(database, curTable, conn);
+struct hTableInfo *hti = getHti(database, curTable);
 int minScore = BIGNUM, maxScore = -BIGNUM;
 long long sumScores = 0;
 boolean hasBlocks = hti->hasBlocks;
@@ -375,9 +365,7 @@ void doSummaryStats(struct sqlConnection *conn)
 hgBotDelay();
 if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
-else if (isBigWig(curTable))
-    doSummaryStatsBigWig(conn);
-else if (isChromGraph(findTdbForTable(database, curTrack, curTable)))
+else if (isChromGraph(curTrack))
     doSummaryStatsChromGraph(conn);
 else if (sameWord(curTable,WIKI_TRACK_TABLE))
     doSummaryStatsWikiTrack(conn);

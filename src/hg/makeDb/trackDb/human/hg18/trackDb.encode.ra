@@ -1,6 +1,0 @@
-include trackDb.encodeGenes.ra
-include trackDb.encodeTxLevels.ra
-include trackDb.encodeChip.ra
-include trackDb.encodeChrom.ra
-include trackDb.encodeCompAndVar.ra
-

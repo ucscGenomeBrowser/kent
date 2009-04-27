@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-L += -lm ${MYSQLLIBS}
+L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
@@ -8,9 +8,9 @@ A = hgTables
 
 T = tstbug.o
 
-O = $A.o asObj.o bedList.o bigBed.o bigWig.o chromGraph.o compositeTrack.o custom.o filterFields.o \
+O = $A.o asObj.o bedList.o chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
-    joining.o maf.o mainPage.o microarrayTables.o rangeHistogram.o schema.o pal.o \
+    joining.o maf.o mainPage.o rangeHistogram.o schema.o pal.o \
     seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o userRegions.o
 
 include ../../inc/cgi_build_rules.mk
@@ -42,7 +42,6 @@ compile: $O
 
 asObj.o:	hgTables.h
 bedList.o:	hgTables.h correlate.h
-bigWig.o:	hgTables.h
 custom.o:	hgTables.h
 compositeTrack.o:	hgTables.h
 filterFields.o:	hgTables.h

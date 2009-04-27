@@ -115,7 +115,6 @@
 #define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 
 #define BIGNUM 0x3fffffff	/* A really big number */
-#define BIGDOUBLE 1.7E+308	/* Close to biggest double-precision number */
 
 #define LIMIT_2or8GB (2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)))
 /*      == 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
@@ -283,14 +282,6 @@ void verbose(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
  * default is stdout) if global verbose variable
  * is set to verbosity or higher.  Default level is 1. */
-#if defined(__GNUC__)
-__attribute__((format(printf, 2, 3)))
-#endif
-    ;
-
-void verboseTime(int verbosity, char *label, ...)
-/* Print label and how long it's been since last call.  Call with
- * a NULL label to initialize.  Verbosity level 1 */
 #if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
@@ -658,13 +649,6 @@ int differentStringNullOk(char *a, char *b);
 #define isEmpty(string) (string == NULL || string[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
-int cmpStringsWithEmbeddedNumbers(char *a, char *b);
-/* Compare strings such as gene names that may have embedded numbers,
- * so that bmp4a comes before bmp14a */
-
-int cmpWordsWithEmbeddedNumbers(char *a, char *b);
-/* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
-
 boolean startsWith(char *start,char *string);
 /* Returns TRUE if string begins with start. */
 
@@ -713,12 +697,10 @@ void toLowerN(char *s, int n);
 void toggleCase(char *s, int size);
 /* toggle upper and lower case chars in string. */
 
-char *strUpper(char *s);
-#define touppers(s) (void)strUpper(s)
+void touppers(char *s);
 /* Convert entire string to upper case. */
 
-char *strLower(char *s);
-#define tolowers(s) (void)strLower(s)
+void tolowers(char *s);
 /* Convert entire string to lower case */
 
 char *replaceChars(char *string, char *oldStr, char *newStr);
@@ -750,12 +732,6 @@ int countCharsN(char *s, char c, int size);
 
 int countLeadingChars(char *s, char c);
 /* Count number of characters c at start of string. */
-
-int countLeadingDigits(char *s);
-/* Return number of leading digits in s */
-
-int countLeadingNondigits(char *s);
-/* Count number of leading non-digit characters in s. */
 
 int countSame(char *a, char *b);
 /* Count number of characters that from start in a,b that are same. */
@@ -803,9 +779,6 @@ void eraseWhiteSpace(char *s);
 
 char *trimSpaces(char *s);
 /* Remove leading and trailing white space. */
-
-void repeatCharOut(FILE *f, char c, int count);
-/* Write character to file repeatedly. */
 
 void spaceOut(FILE *f, int count);
 /* Put out some spaces to file. */
@@ -921,9 +894,6 @@ void mustRead(FILE *file, void *buf, size_t size);
 #define readOne(file, var) (fread(&(var), sizeof(var), 1, (file)) == 1)
 /* Read one variable from file. Returns FALSE if can't do it. */
 
-#define memReadOne(pPt, var) memRead((pPt), &(var), sizeof(var))
-/* Read one variable from memory. */
-
 void writeString(FILE *f, char *s);
 /* Write a 255 or less character string to a file.
  * This will write the length of the string in the first
@@ -942,10 +912,10 @@ boolean fastReadString(FILE *f, char buf[256]);
  * to hold it.  String is in 'writeString' format.
  * Returns FALSE at EOF. */
 
-void msbFirstWriteBits64(FILE *f, bits64 x);
+void writeBits64(FILE *f, bits64 x);
 /* Write out 64 bit number in manner that is portable across architectures */
 
-bits64 msbFirstReadBits64(FILE *f);
+bits64 readBits64(FILE *f);
 /* Write out 64 bit number in manner that is portable across architectures */
 
 void carefulClose(FILE **pFile);
@@ -959,20 +929,6 @@ boolean carefulCloseWarn(FILE **pFile);
 char *firstWordInFile(char *fileName, char *wordBuf, int wordBufSize);
 /* Read the first word in file into wordBuf. */
 
-struct fileOffsetSize
-/* A piece of a file. */
-   {
-   struct fileOffsetSize *next;	/* Next in list. */
-   bits64	offset;		/* Start offset of block. */
-   bits64	size;		/* Size of block. */
-   };
-
-int fileOffsetSizeCmp(const void *va, const void *vb);
-/* Help sort fileOffsetSize by offset. */
-
-struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList);
-/* Returns a new list which is inList transformed to have adjacent blocks
- * merged.  Best to use this with a sorted list. */
 
 int roundingScale(int a, int p, int q);
 /* returns rounded a*p/q */
@@ -1007,58 +963,17 @@ int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
 
-void memRead(char **pPt, void *buf, int size);
-/* Copy memory from *pPt to buf, and advance *pPt by size */
-
-bits64 byteSwap64(bits64 a);
-/* Swap from intel to sparc order of a 64 bit quantity. */
-
-bits64 readBits64(FILE *f, boolean isSwapped);
-/* Read and optionally byte-swap 64 bit entity. */
-
-bits64 memReadBits64(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by 
- * *pPt, and advance *pPt past read area. */
-
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
 
 bits32 readBits32(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity. */
 
-bits32 memReadBits32(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
- * *pPt, and advance *pPt past read area. */
-
 bits16 byteSwap16(bits16 a);
 /* Swap from intel to sparc order of a 16 bit quantity. */
 
 bits16 readBits16(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 16 bit entity. */
-
-bits16 memReadBits16(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
- * *pPt, and advance *pPt past read area. */
-
-double byteSwapDouble(double a);
-/* Return byte-swapped version of a */
-
-double readDouble(FILE *f, boolean isSwapped);
-/* Read and optionally byte-swap double-precision floating point entity. */
-
-double memReadDouble(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap double-precision floating point entity
- * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
-
-float byteSwapFloat(float a);
-/* Return byte-swapped version of a */
-
-float readFloat(FILE *f, boolean isSwapped);
-/* Read and optionally byte-swap single-precision floating point entity. */
-
-float memReadFloat(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap single-precision floating point entity
- * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
 
 void removeReturns(char* dest, char* src);
 /* Removes the '\r' character from a string.

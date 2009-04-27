@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.96 2009/02/10 22:12:08 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.92 2008/12/11 00:07:00 aamp Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -98,6 +98,8 @@ char *customTrackTempDb()
 /* set environment for pipeline commands, but don't override if
  * already set for debugging. */
 saveCurrentEnv();
+if (!isEmpty(getenv("HGDB_CONF")))
+    envUpdate("HGDB_CONF", "./hg.conf");
 return (CUSTOM_TRASH);
 }
 
@@ -251,7 +253,7 @@ struct dyString *errDy = newDyString(0);
 struct lineFile *lf;
 char *line;
 int i;
-dyStringPrintf(errDy, "track load error (track name='%s'):<BR>\n", track->tdb->tableName);
+dyStringPrintf(errDy, "track load error:<BR>\n");
 lf = lineFileOpen(track->dbStderrFile, TRUE);
 i = 0;
 while( (i < 3) && lineFileNext(lf, &line, NULL))
@@ -1476,72 +1478,6 @@ static struct customFactory wigFactory =
     wigLoader,
     };
 
-
-/*** Big Wig Factory - for big client-side wiggle tracks ***/
-
-static boolean bigWigRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
-    	struct customTrack *track)
-/* Return TRUE if looks like we're handling a wig track */
-{
-return (sameType(type, "bigWig"));
-}
-
-static struct customTrack *bigWigLoader(struct customFactory *fac,  
-	struct hash *chromHash,
-    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
-/* Load up wiggle data until get next track line. */
-{
-/* Not much to this.  A bigWig has nothing here but a track line. */
-struct hash *settings = track->tdb->settingsHash;
-char *dataUrl = hashFindVal(settings, "dataUrl");
-if (dataUrl == NULL)
-    errAbort("Missing dataUrl setting from track of type=bigWig");
-return track;
-}
-
-static struct customFactory bigWigFactory = 
-/* Factory for wiggle tracks */
-    {
-    NULL,
-    "bigWig",
-    bigWigRecognizer,
-    bigWigLoader,
-    };
-
-/*** Big Bed Factory - for big client-side BED tracks ***/
-
-static boolean bigBedRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
-    	struct customTrack *track)
-/* Return TRUE if looks like we're handling a wig track */
-{
-return (sameType(type, "bigBed"));
-}
-
-static struct customTrack *bigBedLoader(struct customFactory *fac,  
-	struct hash *chromHash,
-    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
-/* Load up big bed data until get next track line. */
-{
-/* Not much to this.  A bigBed has nothing here but a track line. */
-struct hash *settings = track->tdb->settingsHash;
-char *dataUrl = hashFindVal(settings, "dataUrl");
-if (dataUrl == NULL)
-    errAbort("Missing dataUrl setting from track of type=bigBed");
-return track;
-}
-
-static struct customFactory bigBedFactory = 
-/* Factory for bigBed tracks */
-    {
-    NULL,
-    "bigBed",
-    bigBedRecognizer,
-    bigBedLoader,
-    };
-
-
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
@@ -1556,13 +1492,11 @@ if (factoryList == NULL)
      */
     slAddHead(&factoryList, &mafFactory);
     slAddTail(&factoryList, &wigFactory);
-    slAddTail(&factoryList, &bigWigFactory);
     slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gtfFactory);
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory);
-    slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);
     slAddTail(&factoryList, &coloredExonFactory);

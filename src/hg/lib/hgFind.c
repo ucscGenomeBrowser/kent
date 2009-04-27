@@ -31,16 +31,14 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.218 2009/02/24 22:34:08 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.214 2008/10/22 18:19:15 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
 
 /* alignment tables to check when looking for mrna alignments */
-static char *estTables[] = { "intronEst", "all_est", "xenoEst", NULL };
-static char *estLabels[] = { "Spliced ESTs", "ESTs", "Other ESTs", NULL };
-static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL };
-static char *mrnaLabels[] = { "mRNAs", "Other mRNAs", NULL };
+static char *estTables[] = { "all_est", "xenoEst", NULL};
+static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL};
 static struct dyString *hgpMatchNames = NULL;
 
 static void hgPosFree(struct hgPos **pEl)
@@ -1214,6 +1212,58 @@ hFreeConn(&conn);
 return ret;
 }
 
+static struct psl *findAllAli(char *db, char *acc, char *lowerType, boolean *retIsXeno)
+/* Return a list of alignmentts to the given accession.  lowerType tells 
+ * whether to look in mrna or est tables; if acc is found in a xeno table, 
+ * set *retIsXeno to TRUE. */
+{
+struct sqlConnection *conn = hAllocConn(db);
+char query[256];
+struct psl *pslList = NULL, *psl;
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+char **tables, *table;
+
+if (sameWord(lowerType, "mrna"))
+    tables = mrnaTables;
+else if (sameWord(lowerType, "est"))
+    tables = estTables;
+else
+    /* invalid type */
+    return pslList;
+
+while ((table = *tables++) != NULL)
+    {
+    if (sqlTableExists(conn, table))
+	{
+        rowOffset = hOffsetPastBin(db, NULL, table);
+        snprintf(query, sizeof(query), "select * from %s where qName = '%s'",
+                                                             table, acc);
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            psl = pslLoad(row+rowOffset);
+            slAddTail(&pslList, psl);
+            }
+        if (pslList != NULL) 
+	    {
+	    if (retIsXeno != NULL)
+		{
+		if (startsWith("xeno", table))
+		    *retIsXeno = TRUE;
+		else
+		    *retIsXeno = FALSE;
+		}
+            /* for speed -- found proper table, so don't need to look farther */
+            break;
+	    }
+	}
+    }
+hFreeConn(&conn);
+return pslList;
+}
+
 static void mrnaHtmlStart(struct hgPosTable *table, FILE *f)
 /* Print preamble to mrna alignment positions. */
 {
@@ -1262,80 +1312,6 @@ else
     return hTrackOpenVis(db, trackName);
 }
 
-static struct psl *getPslFromTable(struct sqlConnection *conn, char *db, char *table, char *acc)
-/* If table exists, return PSL for each row with qName = acc. */
-{
-struct psl *pslList = NULL;
-if (sqlTableExists(conn, table))
-    {
-    int rowOffset = hOffsetPastBin(db, NULL, table);
-    char query[256];
-    safef(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct psl *psl = pslLoad(row+rowOffset);
-	slAddHead(&pslList, psl);
-	}
-    slReverse(&pslList);
-    sqlFreeResult(&sr);
-    }
-return pslList;
-}
-
-static void addPslResultToHgp(struct hgPositions *hgp, char *db, char *tableName,
-			      char *shortLabel, char *acc, struct psl *pslList)
-
-/* Create an hgPosTable for the given psl search results, and add it to hgp->tableList. */
-{
-if (pslList == NULL)
-    return;
-struct hgPosTable *table;
-struct dyString *dy = newDyString(1024);
-struct psl *psl;
-char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
-char *ui = getUiUrl(cart);
-AllocVar(table);
-table->htmlStart = mrnaHtmlStart;
-table->htmlEnd = mrnaHtmlEnd;
-table->htmlOnePos = mrnaHtmlOnePos;
-slAddHead(&hgp->tableList, table);
-dyStringPrintf(dy, "%s Alignments in %s", acc, shortLabel);
-table->description = cloneString(dy->string);
-if (startsWith("all_", tableName))
-    tableName += 4;
-table->name = cloneString(tableName);
-slSort(&pslList, pslCmpScore);
-for (psl = pslList; psl != NULL; psl = psl->next)
-    {
-    struct hgPos *pos;
-    dyStringClear(dy);
-    AllocVar(pos);
-    pos->chrom = hgOfficialChromName(db, psl->tName);
-    pos->chromStart = psl->tStart;
-    pos->chromEnd = psl->tEnd;
-    pos->name = cloneString(psl->qName);
-    pos->browserName = cloneString(psl->qName);
-    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
-		   hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
-		   tableName, carefulTrackOpenVis(db, tableName));
-    if (ui != NULL)
-	dyStringPrintf(dy, "&%s", ui);
-    dyStringPrintf(dy, "%s\">", hgp->extraCgi);
-    dyStringPrintf(dy, "%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
-		   psl->match + psl->misMatch + psl->repMatch + psl->nCount,
-		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-		   skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
-		   psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
-    dyStringPrintf(dy, "\n");
-    pos->description = cloneString(dy->string);
-    slAddHead(&table->posList, pos);
-    }
-slReverse(&table->posList);
-freeDyString(&dy);
-}
-
 static boolean findMrnaPos(char *db, char *acc,  struct hgPositions *hgp)
 /* Find MRNA or EST position(s) from accession number.
  * Look to see if it's an mRNA or EST.  Fill in hgp and return
@@ -1343,63 +1319,85 @@ static boolean findMrnaPos(char *db, char *acc,  struct hgPositions *hgp)
 /* NOTE: this excludes RefSeq mrna's, as they are currently
  * handled in findRefGenes(), which is called later in the main function */
 {
+char *type;
+char *extraCgi = hgp->extraCgi;
+char *ui = getUiUrl(cart);
+char tableName [64];
 if (!hTableExists(db, "gbCdnaInfo"))
     return FALSE;
-char *type = mrnaType(db, acc); 
-if (isEmpty(type))
+if ((type = mrnaType(db, acc)) == NULL || type[0] == 0)
     /* this excludes refseq mrna's, and accessions with
      * invalid column type in mrna table (refseq's and ests) */
     return FALSE;
-char lowerType[16];
-struct sqlConnection *conn = hAllocConn(db);
-char **tables, **labels, *tableName;
-boolean gotResults = FALSE;
-
-safecpy(lowerType, sizeof(lowerType), type);
-tolowers(lowerType);
-if (sameWord(lowerType, "mrna"))
-    {
-    tables = mrnaTables;
-    labels = mrnaLabels;
-    }
-else if (sameWord(lowerType, "est"))
-    {
-    tables = estTables;
-    labels = estLabels;
-    }
 else
-    return FALSE;
-
-while ((tableName = *tables++) != NULL)
     {
-    char *label = *labels++;
-    struct psl *pslList = NULL;
-    if (sameString(tableName, "intronEst") && !sqlTableExists(conn, tableName))
-	{
-	struct slName *c, *chromList = hChromList(db);
-	char splitTable[HDB_MAX_TABLE_STRING];
-	for (c = chromList;  c != NULL;  c = c->next)
-	    {
-	    safef(splitTable, sizeof(splitTable), "%s_%s", c->name, tableName);
-	    struct psl *chrPslList = getPslFromTable(conn, db, splitTable, acc);
-	    if (pslList == NULL)
-		pslList = chrPslList;
-	    else
-		slCat(pslList, chrPslList);
-	    }
-	}
+    struct psl *pslList, *psl;
+    int pslCount;
+    char suffix[16];
+    struct hgPosTable *table;
+    struct hgPos *pos;
+    char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+    boolean isXeno = FALSE;
+
+    strncpy(suffix, type, sizeof(suffix));
+    tolowers(suffix);
+    pslList = psl = findAllAli(db, acc, suffix, &isXeno);
+    pslCount = slCount(pslList);
+    if (pslCount <= 0)
+	return FALSE;
     else
-	pslList = getPslFromTable(conn, db, tableName, acc);
-    if (pslList == NULL)
-	continue;
-    gotResults = TRUE;
-    addPslResultToHgp(hgp, db, tableName, label, acc, pslList);
-    if (!sameString(tableName, "intronEst"))
-	/* for speed -- found proper table, so don't need to look farther */
-	break;
+        {
+	struct dyString *dy = newDyString(1024);
+	
+        if (isXeno)
+            {
+	    safef(tableName, sizeof(tableName), "xeno%s", suffix);
+	    toUpperN(tableName+strlen("xeno"), 1);
+            }
+        else
+            {
+	    makeGbTrackTableName(db, tableName, sizeof(tableName), suffix);
+	    }
+
+	AllocVar(table);
+	table->htmlStart = mrnaHtmlStart;
+	table->htmlEnd = mrnaHtmlEnd;
+	table->htmlOnePos = mrnaHtmlOnePos;
+	slAddHead(&hgp->tableList, table);
+	dyStringPrintf(dy, "%s Alignments", acc);
+	table->description = cloneString(dy->string);
+        table->name = cloneString(tableName);
+	slSort(&pslList, pslCmpScore);
+	for (psl = pslList; psl != NULL; psl = psl->next)
+	    {
+	    dyStringClear(dy);
+	    AllocVar(pos);
+	    pos->chrom = hgOfficialChromName(db, psl->tName);
+	    pos->chromStart = psl->tStart;
+	    pos->chromEnd = psl->tEnd;
+	    pos->name = cloneString(psl->qName);
+	    pos->browserName = cloneString(psl->qName);
+	    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
+                           hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
+                           tableName, carefulTrackOpenVis(db, tableName));
+	    if (ui != NULL)
+	        dyStringPrintf(dy, "&%s", ui);
+	    dyStringPrintf(dy, "%s\">",
+		extraCgi);
+	    dyStringPrintf(dy, "%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
+		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
+		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
+		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
+		psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
+	    dyStringPrintf(dy, "\n");
+	    pos->description = cloneString(dy->string);
+	    slAddHead(&table->posList, pos);
+	    }
+	slReverse(&table->posList);
+	freeDyString(&dy);
+	return TRUE;
+	}
     }
-hFreeConn(&conn);
-return gotResults;
 }
 
 static char *getGenbankGrepIndex(char *db, struct hgFindSpec *hfs, char *table,
@@ -2831,10 +2829,7 @@ if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, hgp, relativeFla
 
 if (isNotEmpty(hfs->xrefTable))
     {
-    struct sqlConnection *conn = hAllocConn(db);
-    boolean exists = sqlTableExists(conn, hfs->xrefTable);
-    hFreeConn(&conn);
-    if (! exists)
+    if (! hTableOrSplitExists(db, hfs->xrefTable))
 	return(FALSE);
     xrefList = getXrefTerms(db, hfs, term);
     }
@@ -2856,7 +2851,7 @@ return(found);
 char *canonicalRangeExp = 
 		     "^([[:alnum:]._\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
-		     "([-0-9,]+)"
+		     "([0-9,]+)"
 		     "[[:space:]]*-[[:space:]]*"
 		     "([0-9,]+)$";
 char *gbrowserRangeExp = 

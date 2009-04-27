@@ -14,7 +14,18 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.20 2009/02/04 23:57:03 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.14 2008/09/03 19:19:01 markd Exp $";
+
+struct bedGraphItem
+/* A bedGraph track item. */
+    {
+    struct bedGraphItem *next;
+    int start, end;	/* Start/end in chrom coordinates. */
+    char *name;		/* Common name */
+    float dataValue;	/* data value from bed table graphColumn	*/
+    double graphUpperLimit;	/* filled in by DrawItems	*/
+    double graphLowerLimit;	/* filled in by DrawItems	*/
+    };
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -53,12 +64,11 @@ int rowOffset = 0;
 struct bedGraphItem *bgList = NULL;
 int itemsLoaded = 0;
 int colCount = 0;
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) NULL;
 int graphColumn = 5;
 char *tableName;
 
-if(sameString(tg->mapName, "affyTranscription"))
-    wigCart->colorTrack = "affyTransfrags";
+wigCart = (struct wigCartOptions *) tg->extraUiData;
 graphColumn = wigCart->graphColumn;
 
 
@@ -113,9 +123,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bg->name = cloneString(name);
 	}
     bg->dataValue = sqlFloat(row[graphColumn]);
-    /* filled in by DrawItems	*/
-    bg->graphUpperLimit = wigEncodeStartingUpperLimit;
-    bg->graphLowerLimit = wigEncodeStartingLowerLimit;
+    bg->graphUpperLimit = -1.0e+300; /* filled in by DrawItems	*/
+    bg->graphLowerLimit = 1.0e+300; /* filled in by DrawItems	*/
     slAddHead(&bgList, bg);
     bedFree(&bed);
     }
@@ -141,16 +150,48 @@ static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
 struct bedGraphItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
+int itemCount = 0;
+struct wigCartOptions *wigCart;
+enum wiggleYLineMarkEnum yLineOnOff;
+double yLineMark;
+struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
+int preDrawZero;		/* location in preDraw where screen starts */
+int preDrawSize;		/* size of preDraw array */
 int i;				/* an integer loop counter	*/
+double overallUpperLimit = -1.0e+300;	/*	determined from data	*/
+double overallLowerLimit = 1.0e+300;	/*	determined from data	*/
+double overallRange;		/*	determined from data	*/
+double graphUpperLimit;		/*	scaling choice will set these	*/
+double graphLowerLimit;		/*	scaling choice will set these	*/
+double graphRange;		/*	scaling choice will set these	*/
+double epsilon;			/*	range of data in one pixel	*/
+int x1 = 0;			/*	screen coordinates	*/
+int x2 = 0;			/*	screen coordinates	*/
+Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
+wigCart = (struct wigCartOptions *) tg->extraUiData;
+if(sameString(tg->mapName, "affyTranscription"))
+    wigCart->colorTrack = "affyTransfrags";
+
+yLineOnOff = wigCart->yLineOnOff;
+yLineMark = wigCart->yLineMark;
+
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
 
+/*	width - width of drawing window in pixels
+ *	pixelsPerBase - pixels per base
+ *	basesPerPixel - calculated as 1.0/pixelsPerBase
+ */
+itemCount = 0;
+
+preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+
 /*	walk through all the data and prepare the preDraw array	*/
-int preDrawZero, preDrawSize;
-struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
     double dataValue = wi->dataValue;	/* the data value to graph */
+
+    ++itemCount;
 
     /*	Ready to draw, what do we know:
     *	the feature being processed:
@@ -168,8 +209,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
      *	keep track of pixels before and after the screen for
      *	later smoothing operations
      */
-    int x1 = (wi->start - seqStart) * pixelsPerBase;
-    int x2 = (wi->end - seqStart) * pixelsPerBase;
+    x1 = (wi->start - seqStart) * pixelsPerBase;
+    x2 = (wi->end - seqStart) * pixelsPerBase;
 
     if (x2 > x1)
 	{
@@ -213,12 +254,69 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+overallRange = preDrawLimits(preDraw, preDrawZero, width,
+    &overallUpperLimit, &overallLowerLimit);
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
+    wigCart->autoScale,
+    &overallUpperLimit, &overallLowerLimit,
+    &graphUpperLimit, &graphLowerLimit,
+    &overallRange, &epsilon, tg->lineHeight,
+    wigCart->maxY, wigCart->minY);
 
+/*
+ *	We need to put the graphing limits back into the items
+ *	so the LeftLabels routine can find these numbers.
+ *	This may seem like overkill to put it into each item but
+ *	this will become necessary when these graphs stack up upon
+ *	each other in a multiple item display, each one will have its
+ *	own graph.
+ */
+for (wi = tg->items; wi != NULL; wi = wi->next)
+    {
+	wi->graphUpperLimit = graphUpperLimit;
+	wi->graphLowerLimit = graphLowerLimit;
+    }
+
+colorArray = allocColorArray(preDraw, width, preDrawZero,
+    wigCart->colorTrack, tg, hvg);
+
+graphPreDraw(preDraw, preDrawZero, width,
+    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+    epsilon, colorArray, vis, wigCart->lineBar);
+
+drawZeroLine(vis, wigCart->horizontalGrid,
+    graphUpperLimit, graphLowerLimit,
+    hvg, xOff, yOff, width, tg->lineHeight);
+
+drawArbitraryYLine(vis, wigCart->yLineOnOff,
+    graphUpperLimit, graphLowerLimit,
+    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
+    wigCart->yLineOnOff);
+
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
+
+freez(&colorArray);
 freeMem(preDraw);
 }	/*	bedGraphDrawItems()	*/
 
+void wigBedGraphFindItemLimits(void *items,
+    double *graphUpperLimit, double *graphLowerLimit)
+/*	find upper and lower limits of graphed items (bedGraphItem)	*/
+{
+struct bedGraphItem *wi;
+*graphUpperLimit = -1.0e+300;
+*graphLowerLimit = 1.0e+300;
+
+for (wi = items; wi != NULL; wi = wi->next)
+    {
+    if (wi->graphUpperLimit > *graphUpperLimit)
+	*graphUpperLimit = wi->graphUpperLimit;
+    if (wi->graphLowerLimit < *graphLowerLimit)
+	*graphLowerLimit = wi->graphLowerLimit;
+    }
+}	/*	wigBedGraphFindItemLimits	*/
 
 /*
  *	WARNING ! - track->visibility is merely the default value
@@ -229,8 +327,38 @@ freeMem(preDraw);
 void bedGraphMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[])
 {
-struct wigCartOptions *wigCart = wigCartOptionsNew(cart, tdb, wordCount, words);
-wigCart->bedGraph = TRUE;	/*	signal to left labels	*/
+int defaultHeight = atoi(DEFAULT_HEIGHT_PER);  /* truncated by limits	*/
+double minY = 0.0;	/*	from trackDb or cart, requested minimum */
+double maxY = 1000.0;	/*	from trackDb or cart, requested maximum */
+double yLineMark;	/*	from trackDb or cart */
+struct wigCartOptions *wigCart;
+int maxHeight = atoi(DEFAULT_HEIGHT_PER);
+int minHeight = MIN_HEIGHT_PER;
+
+AllocVar(wigCart);
+char *name = compositeViewControlNameFromTdb(tdb);
+
+/*	These Fetch functions look for variables in the cart bounded by
+ *	limits specified in trackDb or returning defaults
+ */
+wigCart->lineBar = wigFetchGraphTypeWithCart(cart, tdb, name, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart, tdb, name, (char **) NULL);
+
+wigCart->autoScale = wigFetchAutoScaleWithCart(cart, tdb, name,(char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart, tdb, name,(char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart, tdb, name,(char **) NULL);
+
+wigFetchMinMaxPixelsWithCart(cart, tdb, name,&minHeight, &maxHeight, &defaultHeight);
+wigFetchYLineMarkValueWithCart(cart, tdb, name,&yLineMark);
+wigCart->yLineMark = yLineMark;
+wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart, tdb, name,(char **) NULL);
+
+wigCart->maxHeight = maxHeight;
+wigCart->defaultHeight = defaultHeight;
+wigCart->minHeight = minHeight;
+
+wigFetchMinMaxLimitsWithCart(cart, tdb, name,&minY, &maxY, (double *)NULL, (double *)NULL);
+
 switch (wordCount)
     {
 	case 2:
@@ -246,10 +374,12 @@ switch (wordCount)
 	    break;
     } 
 
-track->minRange = wigCart->minY;
-track->maxRange = wigCart->maxY;
-track->graphUpperLimit = wigEncodeStartingUpperLimit;
-track->graphLowerLimit = wigEncodeStartingLowerLimit;
+track->minRange = minY;
+track->maxRange = maxY;
+
+wigCart->minY = track->minRange;
+wigCart->maxY = track->maxRange;
+wigCart->bedGraph = TRUE;	/*	signal to left labels	*/
 
 track->loadItems = bedGraphLoadItems;
 track->freeItems = bedGraphFreeItems;

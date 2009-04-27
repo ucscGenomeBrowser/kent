@@ -10,7 +10,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: rangeHistogram.c,v 1.5 2009/04/10 20:04:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: rangeHistogram.c,v 1.4 2008/05/29 17:32:18 hiram Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */
@@ -92,8 +92,8 @@ char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaHistoTable);
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table));
-// should we expect itemRgb instead of "reserved"
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 if (showItemRgb && sameWord(field, "reserved"))
     htmlOpen("Value range for %s.%s.itemRgb", db, table);

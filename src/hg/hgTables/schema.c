@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.59 2009/04/10 20:04:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.52 2008/10/09 00:04:32 aamp Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -69,9 +69,9 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void describeFields(char *db, char *table,
+void describeFields(char *db, char *table, 
 	struct asObject *asObj, struct sqlConnection *conn)
-/* Print out an HTML table showing table fields and types, and optionally
+/* Print out an HTML table showing table fields and types, and optionally 
  * offering histograms for the text/enum fields. */
 {
 struct sqlResult *sr;
@@ -82,8 +82,8 @@ char query[256];
 struct slName *exampleList, *example;
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table));
-// should we expect itemRgb instead of "reserved"
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 safef(query, sizeof(query), "select * from %s limit 1", table);
 exampleList = storeRow(conn, query);
@@ -173,8 +173,8 @@ sqlFreeResult(&sr);
 }
 
 static void explainCoordSystem()
-/* Our coord system is counter-intuitive to users.  Warn them in advance to
- * reduce the frequency with which they find this "bug" on their own and
+/* Our coord system is counter-intuitive to users.  Warn them in advance to 
+ * reduce the frequency with which they find this "bug" on their own and 
  * we have to explain it on the genome list. */
 {
 if (!hIsGsidServer())
@@ -191,6 +191,41 @@ else
     }
 }
 
+static void stripHtmlTags(char *text)
+/* remove HTML tags from text string, replacing in place by moving
+ * the text up to take their place
+ */
+{
+char *s = text;
+char *e = text;
+char c = *text;
+for ( ; c != 0 ; )
+    {
+    c = *s++;
+    if (c == 0)
+	/*	input string is NULL, or it ended with '>' without any
+	 *	opening '>'
+	 */
+	{
+	*e = 0;
+	break;
+	}
+    /* stays in the while loop for adjacent tags <TR><TD> ... etc */
+    while (c == '<' && c != 0)
+	{
+	s = strchr(s,'>');
+	if (s != NULL)
+	    {
+	    if (*s == '>') ++s; /* skip closing bracket > */
+	    c = *s++;		/* next char after the closing bracket > */
+	    }
+	else
+	    c = 0;	/* no closing bracket > found, end of string */
+	}
+    *e++ = c;	/*	copies all text outside tags, including ending NULL */
+    }
+}
+
 
 static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table)
 /* Put up sample values. */
@@ -202,8 +237,8 @@ int i, columnCount = 0;
 int itemRgbCol = -1;
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table));
-// should we expect itemRgb	instead of "reserved"
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 /* Make table with header row containing name of fields. */
 safef(query, sizeof(query), "describe %s", table);
@@ -244,9 +279,25 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		hPrintf("<TD></TD>");
 		}
+	    else if (strlen(row[i]) > 128)
+		{
+		char *s = cloneStringZ(row[i],128);
+		char *r;
+		stripHtmlTags(s);
+		eraseTrailingSpaces(s);
+		r = replaceChars(s, " ", "&nbsp;");
+		hPrintf("<TD>%s&nbsp;...</TD>", r);
+		freeMem(s);
+		freeMem(r);
+		}
 	    else
-	        {
-		writeHtmlCell(row[i]);
+		{
+		char *r;
+		stripHtmlTags(row[i]);
+		eraseTrailingSpaces(row[i]);
+		r = replaceChars(row[i], " ", "&nbsp;");
+		hPrintf("<TD>%s</TD>", r);
+		freeMem(r);
 		}
 	    }
 	}
@@ -335,12 +386,7 @@ if (tdb != NULL && isNotEmpty(tdb->html))
 static void showSchemaDb(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-struct trackDb *tdbForConn = tdb ? tdb : curTrack;
-struct sqlConnection *conn;
-if (tdbForConn == NULL)
-    conn = hAllocConn(db);
-else
-    conn = hAllocConnTrack(db, tdbForConn);
+struct sqlConnection *conn = sqlConnect(db);
 struct joiner *joiner = allJoiner;
 struct joinerPair *jpList, *jp;
 struct asObject *asObj = asForTable(conn, table);
@@ -386,16 +432,16 @@ if (jpList != NULL)
 	    hPrintf("(%s.%s and %s.%s are arrays sharing an index)",
 	        jp->a->table, jp->a->field,
 	        jp->b->table, jp->b->field);
-
+	    	
 	    }
 	else if (aViaIndex)
 	    {
-	    hPrintf("(which is an array index into %s.%s)",
+	    hPrintf("(which is an array index into %s.%s)", 
 	    	jp->a->table, jp->a->field);
 	    }
 	else if (bViaIndex)
 	    {
-	    hPrintf("(%s.%s is an array index into %s.%s)",
+	    hPrintf("(%s.%s is an array index into %s.%s)", 
 		jp->a->table, jp->a->field,
 	    	jp->b->table, jp->b->field);
 	    }
@@ -409,7 +455,7 @@ if (jpList != NULL)
 webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
 printTrackHtml(tdb);
-hFreeConn(&conn);
+sqlDisconnect(&conn);
 }
 
 static void showSchemaCtWiggle(char *table, struct customTrack *ct)
@@ -520,7 +566,7 @@ static void showSchemaCt(char *table)
 {
 struct customTrack *ct = lookupCt(table);
 char *type = ct->tdb->type;
-if (startsWithWord("wig", type) || startsWithWord("bigWig", type))
+if (startsWithWord("wig", type))
     showSchemaCtWiggle(table, ct);
 else if (startsWithWord("chromGraph", type))
     showSchemaCtChromGraph(table, ct);
@@ -544,9 +590,7 @@ showSchemaDb(wikiDbName(), tdb, table);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (isBigBed(table))
-    showSchemaBigBed(table);
-else if (isCustomTrack(table))
+if (isCustomTrack(table))
     showSchemaCt(table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
@@ -567,7 +611,7 @@ htmlClose();
 }
 
 static boolean curTrackDescribesCurTable()
-/* Return TRUE if curTable is curTrack or its subtrack. */
+/* Return TRUE if curTable is curTrack or its subtrack. */ 
 {
 if (curTrack == NULL)
     return FALSE;
@@ -584,10 +628,10 @@ else if (curTrack->subtracks != NULL)
     {
     struct trackDb *sTdb = NULL;
     for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
-        {
-        if (sameString(sTdb->tableName, curTable))
-            return TRUE;
-        }
+	{
+	if (sameString(sTdb->tableName, curTable))
+	    return TRUE;
+	}
     }
 return FALSE;
 }

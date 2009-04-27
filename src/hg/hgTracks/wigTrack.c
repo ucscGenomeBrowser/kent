@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.90 2009/02/04 23:57:03 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.84 2008/11/25 07:17:45 mikep Exp $";
 
 #define SMALLBUF 128
 
@@ -98,7 +98,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     }
 }
 
-void wigFillInColorArray(struct track *wigTrack, struct hvGfx *hvg,
+void wigFillInColorArray(struct track *wigTrack, struct hvGfx *hvg, 
 			 Color *colorArray, int colSize, struct track *colorTrack)
 /* Fill in a color array with the colorTrack's color where
    it would normally have an exon. */
@@ -179,7 +179,7 @@ static struct hash *trackSpans = NULL;	/* hash of hashes */
  *	All these names were condensed into the root of the name with
  *	the extensions removed.
  */
-char *wigNameCallback(struct track *tg, void *item)
+static char *wigName(struct track *tg, void *item)
 /* Return name of wig level track. */
 {
 return tg->mapName;
@@ -314,13 +314,13 @@ if ( el == NULL)
 }
 
 #ifndef GBROWSE
-void ctWigLoadItems(struct track *tg)
+void ctWigLoadItems(struct track *tg) 
 /*	load custom wiggle track data	*/
 {
 struct customTrack *ct;
 char *row[13];
 struct lineFile *lf = NULL;
-struct wiggle wiggle;
+struct wiggle wiggle; 
 struct wigItem *wiList = NULL;
 int itemsLoaded = 0;
 struct hash *spans = NULL;	/* Spans encountered during load */
@@ -350,7 +350,7 @@ lf = lineFileOpen(ct->wigFile, TRUE);
 while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
 
-    wiggleStaticLoad(row, &wiggle);
+    wiggleStaticLoad(row, &wiggle); 
     /*	we have to do hRangeQuery's job here since we are reading a
      *	file.  We need to be on the correct chromosome, and the data
      *	needs to be in the current view.
@@ -376,7 +376,7 @@ lineFileClose(&lf);
 }
 #endif /* GBROWSE */
 
-void wigLoadItems(struct track *tg)
+void wigLoadItems(struct track *tg) 
 /*	wigLoadItems - read the table rows that hRangeQuery returns
  *	With appropriate adjustment to help hRangeQuery limit its
  *	result to specific "Span" based on the basesPerPixel.
@@ -419,7 +419,7 @@ char *spanOver1K = "Span >= 1000";
 char whereSpan[SMALLBUF];
 int spanMinimum = 1;
 char *dbTableName = NULL;
-struct trackDb *tdb = NULL;
+struct trackDb *tdb = NULL; 
 int loadStart = winStart, loadEnd = winEnd;
 
 #ifndef GBROWSE
@@ -558,8 +558,8 @@ preDraw = (struct preDrawElement *) needMem ((size_t)
 for (i = 0; i < *preDrawSize; ++i)
     {
     preDraw[i].count = 0;
-    preDraw[i].max = wigEncodeStartingUpperLimit;
-    preDraw[i].min = wigEncodeStartingLowerLimit;
+    preDraw[i].max = -1.0e+300;
+    preDraw[i].min = 1.0e+300;
     }
 return preDraw;
 }
@@ -582,7 +582,7 @@ for (i = 0; i < preDrawSize; ++i)
 		if (fabs(preDraw[i].min)
 				< fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
-		else
+		else 
 		    dataValue = preDraw[i].max;
 		break;
 	case (wiggleWindowingMean):
@@ -594,7 +594,7 @@ for (i = 0; i < preDrawSize; ++i)
 		if (fabs(preDraw[i].min)
 			> fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
-		else
+		else 
 		    dataValue = preDraw[i].max;
 		break;
 	}
@@ -649,8 +649,8 @@ double preDrawLimits(struct preDrawElement *preDraw, int preDrawZero,
 int i;
 
 /*	Just in case they haven't been initialized before	*/
-*overallUpperLimit = wigEncodeStartingUpperLimit;
-*overallLowerLimit = wigEncodeStartingLowerLimit;
+*overallUpperLimit = -1.0e+300;
+*overallLowerLimit = 1.0e+300;
 for (i = preDrawZero; i < preDrawZero+width; ++i)
     {
     /*	count is non-zero meaning valid data exists here	*/
@@ -679,9 +679,8 @@ if (autoScale == wiggleScaleAuto)
     {
     int i;
 
-    /* reset limits for auto scale */
-    *overallUpperLimit = wigEncodeStartingUpperLimit;
-    *overallLowerLimit = wigEncodeStartingLowerLimit;
+    *overallUpperLimit = -1.0e+300;	/* reset limits for auto scale */
+    *overallLowerLimit = 1.0e+300;
     for (i = preDrawZero; i < preDrawZero+width; ++i)
 	{
 	/*	count is non-zero meaning valid data exists here	*/
@@ -730,7 +729,7 @@ Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 
 /*	Set up the color by array. Determine color of each pixel
  *	based initially on the sign of the data point. If a colorTrack
- *	is specified also fill in the color array with that.
+ *	is specified also fill in the color array with that. 
  */
 AllocArray(colorArray, width);
 for(x1 = 0; x1 < width; ++x1)
@@ -750,7 +749,7 @@ for(x1 = 0; x1 < width; ++x1)
     }
 
 /* Fill in colors from alternate track if necessary. */
-if(colorTrack != NULL)
+if(colorTrack != NULL) 
     {
     struct track *cTrack = hashMustFindVal(trackHash, colorTrack);
 
@@ -978,7 +977,7 @@ if (tg->mapsSelf)
 #endif /* GBROWSE */
 	itemName = cloneString(tg->mapName);
 
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName,
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
             itemName, NULL);
     freeMem(itemName);
     }
@@ -1015,70 +1014,6 @@ if (minimalSpan > usingDataSpan)
 return usingDataSpan;
 }
 
-void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
-	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
-/* Draw once we've figured out predraw... */
-{
-enum wiggleYLineMarkEnum yLineOnOff;
-double yLineMark;
-
-/*	determined from data	*/
-double overallUpperLimit = wigEncodeStartingUpperLimit;
-double overallLowerLimit = wigEncodeStartingLowerLimit;
-double overallRange;		/*	determined from data	*/
-double graphUpperLimit;		/*	scaling choice will set these	*/
-double graphLowerLimit;		/*	scaling choice will set these	*/
-double graphRange;		/*	scaling choice will set these	*/
-double epsilon;			/*	range of data in one pixel	*/
-Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
-
-yLineOnOff = wigCart->yLineOnOff;
-yLineMark = wigCart->yLineMark;
-
-/*	width - width of drawing window in pixels
- *	pixelsPerBase - pixels per base
- *	basesPerPixel - calculated as 1.0/pixelsPerBase
- */
-preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
-preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
-overallRange = preDrawLimits(preDraw, preDrawZero, width,
-    &overallUpperLimit, &overallLowerLimit);
-graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
-    wigCart->autoScale,
-    &overallUpperLimit, &overallLowerLimit,
-    &graphUpperLimit, &graphLowerLimit,
-    &overallRange, &epsilon, tg->lineHeight,
-    wigCart->maxY, wigCart->minY);
-
-
-colorArray = allocColorArray(preDraw, width, preDrawZero,
-    wigCart->colorTrack, tg, hvg);
-
-graphPreDraw(preDraw, preDrawZero, width,
-    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-    epsilon, colorArray, vis, wigCart->lineBar);
-
-drawZeroLine(vis, wigCart->horizontalGrid,
-    graphUpperLimit, graphLowerLimit,
-    hvg, xOff, yOff, width, tg->lineHeight);
-
-drawArbitraryYLine(vis, wigCart->yLineOnOff,
-    graphUpperLimit, graphLowerLimit,
-    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
-    wigCart->yLineOnOff);
-
-wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-
-freez(&colorArray);
-if (retGraphUpperLimit != NULL)
-    *retGraphUpperLimit = graphUpperLimit;
-if (retGraphLowerLimit != NULL)
-    *retGraphLowerLimit = graphLowerLimit;
-}
-
 
 static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -1091,12 +1026,22 @@ double basesPerPixel = 1.0;
 int itemCount = 0;
 char currentFile[PATH_LEN];
 int wibFH = 0;		/*	file handle to binary file */
+struct wigCartOptions *wigCart = tg->extraUiData;
+enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
 int i;				/* an integer loop counter	*/
+double overallUpperLimit = -1.0e+300;	/*	determined from data	*/
+double overallLowerLimit = 1.0e+300;	/*	determined from data	*/
+double overallRange;		/*	determined from data	*/
+double graphUpperLimit;		/*	scaling choice will set these	*/
+double graphLowerLimit;		/*	scaling choice will set these	*/
+double graphRange;		/*	scaling choice will set these	*/
+double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
+Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 int usingDataSpan = 1;		/* will become larger if possible */
 
 if (tg->items == NULL)
@@ -1178,7 +1123,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	x1 = (wi->start - seqStart) * pixelsPerBase;
 	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
 
-	if (x2 > x1)
+	if (x2 > x1) 
 	    {
 	    unsigned char *readData;	/* the bytes read in from the file */
 	    lseek(wibFH, wi->offset, SEEK_SET);
@@ -1213,8 +1158,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    }
 		}
 	    freeMem(readData);
-	    }
-	else
+	    } 
+	else 
 	    {	/*	only one pixel for this block of data */
 	    int xCoord = preDrawZero + x1;
 	    /*	if the point falls within our array, record it.
@@ -1247,12 +1192,65 @@ if (wibFH > 0)
  *	cooresponds to a single pixel on the screen
  */
 
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+overallRange = preDrawLimits(preDraw, preDrawZero, width,
+    &overallUpperLimit, &overallLowerLimit);
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width, wigCart->autoScale,
+    &overallUpperLimit, &overallLowerLimit,
+    &graphUpperLimit, &graphLowerLimit,
+    &overallRange, &epsilon, tg->lineHeight, wigCart->maxY, wigCart->minY);
 
+/*
+ *	We need to put the graphing limits back into the items
+ *	so the LeftLabels routine can find these numbers.
+ *	This may seem like overkill to put it into each item but
+ *	this will become necessary when these graphs stack up upon
+ *	each other in a multiple item display, each one will have its
+ *	own graph.
+ */
+for (wi = tg->items; wi != NULL; wi = wi->next)
+    {
+	wi->graphUpperLimit = graphUpperLimit;
+	wi->graphLowerLimit = graphLowerLimit;
+    }
 
+colorArray = allocColorArray(preDraw, width, preDrawZero,
+    wigCart->colorTrack, tg, hvg);
+
+graphPreDraw(preDraw, preDrawZero, width,
+    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+    epsilon, colorArray, vis, lineBar);
+
+drawZeroLine(vis, wigCart->horizontalGrid, graphUpperLimit, graphLowerLimit,
+    hvg, xOff, yOff, width, tg->lineHeight);
+
+drawArbitraryYLine(vis, wigCart->yLineOnOff, graphUpperLimit, graphLowerLimit,
+    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
+    wigCart->yLineOnOff);
+
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
+
+freez(&colorArray);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
+
+void wigFindItemLimits(void *items,
+    double *graphUpperLimit, double *graphLowerLimit)
+/*	find upper and lower limits of graphed items (wigItem)	*/
+{
+struct wigItem *wi;
+*graphUpperLimit = -1.0e+300;
+*graphLowerLimit = 1.0e+300;
+
+for (wi = items; wi != NULL; wi = wi->next)
+    {
+    if (wi->graphUpperLimit > *graphUpperLimit)
+	*graphUpperLimit = wi->graphUpperLimit;
+    if (wi->graphLowerLimit < *graphLowerLimit)
+	*graphLowerLimit = wi->graphLowerLimit;
+    }
+}
 
 void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
@@ -1294,8 +1292,8 @@ else if (tg->limitedVis == tvFull)
     if (height >= (3 * fontHeight))
 	{
 	boolean zeroOK = TRUE;
-	double graphUpperLimit = tg->graphUpperLimit;
-	double graphLowerLimit = tg->graphLowerLimit;
+	double graphUpperLimit = -1.0e+300;
+	double graphLowerLimit = 1.0e+300;
 	char upper[128];
 	char lower[128];
 	char upperTic = '-';	/* as close as we can get with ASCII */
@@ -1308,6 +1306,12 @@ else if (tg->limitedVis == tvFull)
 	    centerOffset = fontHeight;
 	    upperTic = '_';	/*	this is correct	*/
 	    }
+	if (wigCart->bedGraph)
+	    wigBedGraphFindItemLimits(tg->items,
+		&graphUpperLimit, &graphLowerLimit);
+	else
+	    wigFindItemLimits(tg->items,
+		&graphUpperLimit, &graphLowerLimit);
 
 	/*  In areas where there is no data, these limits do not change */
 	if (graphUpperLimit < graphLowerLimit)
@@ -1390,14 +1394,22 @@ else if (tg->limitedVis == tvFull)
     }	/*	if (tg->visibility == tvFull)	*/
 }	/* wigLeftLabels */
 
-
-struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[])
-/* Create a wigCartOptions from cart contents and tdb. */
+/* Make track group for wig multiple alignment.
+ *	WARNING ! - track->visibility is merely the default value
+ *	from the trackDb entry at this time.  It will be set after this
+ *	 by hgTracks from its cart UI setting.  When called in
+ *	 TotalHeight it will then be the requested visibility.
+ */
+void wigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
 {
-struct wigCartOptions *wigCart;
-
 int defaultHeight;	/*	truncated by limits	*/
+double minY;	/*	from trackDb or cart, requested minimum */
+double maxY;	/*	from trackDb or cart, requested maximum */
+double tDbMinY;	/*	from trackDb type line, the absolute minimum */
+double tDbMaxY;	/*	from trackDb type line, the absolute maximum */
 double yLineMark;	/*	from trackDb or cart */
+struct wigCartOptions *wigCart;
 int maxHeight = atoi(DEFAULT_HEIGHT_PER);
 int minHeight = MIN_HEIGHT_PER;
 
@@ -1423,34 +1435,22 @@ wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
 
-wigFetchMinMaxYWithCart(cart,tdb,name, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
+if(trackDbSetting(tdb, "wigColorBy") != NULL)
+    wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 
-wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
+wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+track->minRange = minY;
+track->maxRange = maxY;
 
-return wigCart;
-}
-
-/* Make track group for wig multiple alignment.
- *	WARNING ! - track->visibility is merely the default value
- *	from the trackDb entry at this time.  It will be set after this
- *	 by hgTracks from its cart UI setting.  When called in
- *	 TotalHeight it will then be the requested visibility.
- */
-void wigMethods(struct track *track, struct trackDb *tdb,
-	int wordCount, char *words[])
-{
-struct wigCartOptions *wigCart = wigCartOptionsNew(cart, tdb, wordCount, words);
-track->minRange = wigCart->minY;
-track->maxRange = wigCart->maxY;
-track->graphUpperLimit = wigEncodeStartingUpperLimit;
-track->graphLowerLimit = wigEncodeStartingLowerLimit;
+wigCart->minY = track->minRange;
+wigCart->maxY = track->maxRange;
 wigCart->bedGraph = FALSE;	/*	signal to left labels	*/
 
 track->loadItems = wigLoadItems;
 track->freeItems = wigFreeItems;
 track->drawItems = wigDrawItems;
-track->itemName = wigNameCallback;
-track->mapItemName = wigNameCallback;
+track->itemName = wigName;
+track->mapItemName = wigName;
 track->totalHeight = wigTotalHeight;
 track->itemHeight = tgFixedItemHeight;
 
@@ -1464,4 +1464,5 @@ track->drawLeftLabels = wigLeftLabels;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 
+compositeViewControlNameFree(&name);
 }	/*	wigMethods()	*/

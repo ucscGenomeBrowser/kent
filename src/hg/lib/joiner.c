@@ -19,7 +19,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joiner.c,v 1.28 2009/02/11 18:49:44 angie Exp $";
+static char const rcsid[] = "$Id: joiner.c,v 1.27 2008/09/17 18:10:13 kent Exp $";
 
 static void joinerFieldFree(struct joinerField **pJf)
 /* Free up memory associated with joinerField. */
@@ -1076,7 +1076,6 @@ static boolean tableExists(char *database, char *table, char *splitPrefix)
 {
 struct sqlConnection *conn = sqlMayConnect(database);
 boolean exists;
-boolean hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
 char t2[1024];
 if (conn == NULL)
     return FALSE;
@@ -1084,11 +1083,11 @@ if (isNotEmpty(splitPrefix))
     safef(t2, sizeof(t2), "%s%s", splitPrefix, table);
 else
     safef(t2, sizeof(t2), "%s", table);
-exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
+exists = sqlTableWildExists(conn, t2);
 if (!exists && isNotEmpty(splitPrefix))
     {
     safef(t2, sizeof(t2), "%s", table);
-    exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
+    exists = sqlTableExists(conn, t2);
     }
 sqlDisconnect(&conn);
 return exists;

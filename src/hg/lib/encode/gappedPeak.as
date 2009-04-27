@@ -14,6 +14,6 @@ table gappedPeak
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
     float  signalValue;  "Measurement of average enrichment for the region"
-    float  pValue;       "Statistical significance of signal value (-log10). Set to -1 if not used."
-    float  qValue;       "Statistical significance with multiple-test correction applied (FDR). Set to -1 if not used."
+    float  pValue;       "Within dataset statistical significance of signal value (-log10)"
+    float  qValue;       "Cross-dataset statistical significance of signal value (-log10)"
     )

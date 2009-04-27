@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.17 2009/01/09 00:14:34 galt Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.15 2007/03/13 22:37:25 galt Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -385,14 +385,6 @@ void chromGraphToBinGetMinMax(struct chromGraph *list, char *fileName,
 {
 struct chromGraph *el;
 FILE *f = mustOpen(fileName, "wb");
-
-/* make a .cgm text file in parallel with binary for use by GS 
- * or other programs requiring marker label preservation */
-char cgmName[256];
-safef(cgmName, sizeof(cgmName), "%s.cgm", fileName);
-FILE *m = mustOpen(cgmName, "w");
-int cgmCount = 0;
-
 bits32 sig = chromGraphSig;
 bits32 endMarker = (bits32)(-1);
 struct cInfo *ci, *ciList = cInfoMake(list, fileName);
@@ -421,7 +413,7 @@ fgetpos(f, &indexPos);
 for (ci = ciList; ci != NULL; ci = ci->next)
     {
     writeString(f, ci->name);
-    msbFirstWriteBits64(f, ci->offset);
+    writeBits64(f, ci->offset);
     }
 
 /* Write data. */
@@ -434,12 +426,6 @@ for (ci = ciList; ci  != NULL; ci = ci->next)
 	bits32 pos = el->chromStart;
 	writeOne(f, pos);
 	writeOne(f, el->val);
-        if (el->marker)
-	    {
-	    fprintf(m, "%s\t%s\t%d\t%f\n", el->marker, ci->name, el->chromStart, el->val);
-            freeMem(el->marker);
-	    ++cgmCount;
-	    }
 	}
     writeOne(f, endMarker);
     }
@@ -449,12 +435,9 @@ fsetpos(f, &indexPos);
 for (ci = ciList; ci != NULL; ci = ci->next)
     {
     writeString(f, ci->name);
-    msbFirstWriteBits64(f, ci->offset);
+    writeBits64(f, ci->offset);
     }
 carefulClose(&f);
-carefulClose(&m);
-if (cgmCount < 1)
-    remove(cgmName);
 slFreeList(&ciList);
 
 /* Save return variables */
@@ -520,7 +503,7 @@ for (i=0; i<chromCount; ++i)
     {
     AllocVar(chrom);
     chrom->name =  readString(f);
-    chrom->offset = msbFirstReadBits64(f);
+    chrom->offset = readBits64(f);
     slAddHead(&cgb->chromList, chrom);
     hashAdd(cgb->chromHash, chrom->name, chrom);
     }

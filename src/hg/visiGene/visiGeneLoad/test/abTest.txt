@@ -1,5 +1,0 @@
-cap1	This shows HOXA1 and HOXA2 in the brain
-cap2	This is a cytochrome gene in the liver, specifically CYP450A
-cap3	Zahler freen3
-cap4	Zahler freen4
-cap5	Zahler freen5

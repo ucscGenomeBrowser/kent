@@ -3,7 +3,7 @@
  * for personal, academic, and non-profit purposes.  Commercial use          *
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
-/* Cheapcgi.h - turns variables passed from the web form into
+/* Cheapcgi.h - turns variables passed from the web form into 
  * something that C understands. */
 
 #ifndef CHEAPCGI_H
@@ -11,19 +11,12 @@
 
 #ifndef DYSTRING_H
 #include "dystring.h"
-#endif
+#endif 
 
 #ifndef HASH_H
 #include "hash.h"
-#endif
+#endif 
 
-#define COLOR_BG_DEFAULT        "#FFFEE8"
-#define COLOR_BG_ALTDEFAULT     "#FFF9D2"
-#define COLOR_BG_GHOST          "#EEEEEE"
-#define COLOR_BG_PALE           "#F8F8F8"
-#define COLOR_DARKGREEN         "#008800"
-#define COLOR_DARKBLUE          "#000088"
-#define COLOR_LTGREY            "#CCCCCC"
 
 void initSigHandlers();
 /* set handler for various terminal signals for logging purposes */
@@ -96,7 +89,7 @@ char *cgiOptionalString(char *varName);
 /* Return value of string if it exists in cgi environment, else NULL */
 
 char *cgiUsualString(char *varName, char *usual);
-/* Return value of string if it exists in cgi environment.
+/* Return value of string if it exists in cgi environment.  
  * Otherwiser return 'usual' */
 
 struct slName *cgiStringList(char *varName);
@@ -104,7 +97,7 @@ struct slName *cgiStringList(char *varName);
  * may be empty.  Free result with slFreeList(). */
 
 int cgiOptionalInt(char *varName, int defaultVal);
-/* This returns value of varName if it exists in cgi environment,
+/* This returns value of varName if it exists in cgi environment, 
  * otherwise it returns defaultVal. */
 
 double cgiOptionalDouble(char *varName, double defaultVal);
@@ -130,18 +123,18 @@ void cgiBadVar(char *varName);
 /* Complain about a variable that's not there. */
 
 void cgiDecode(char *in, char *out, int inLength);
-/* Decode from cgi pluses-for-spaces format to normal.
+/* Decode from cgi pluses-for-spaces format to normal. 
  * Out will be a little shorter than in typically. */
 
 char *cgiEncode(char *inString);
-/* Return a cgi-encoded version of inString.
+/* Return a cgi-encoded version of inString. 
  * Alphanumerics kept as is, space translated to plus,
- * and all other characters translated to %hexVal.
+ * and all other characters translated to %hexVal. 
  * You can free return value with freeMem(). */
 
 char *cgiEncodeFull(char *inString);
-/* Return a cgi-encoded version of inString (no + for space!).
- * Alphanumerics/./_ kept as is and all other characters translated to
+/* Return a cgi-encoded version of inString (no + for space!). 
+ * Alphanumerics/./_ kept as is and all other characters translated to 
  * %hexVal. */
 
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg);
@@ -196,23 +189,16 @@ void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
 /* Make check box with ID and javascript. */
 
-void cgiMakeCheckBox2BoolWithIdAndJS(char *name, boolean checked, boolean enabled,char *id, char *javascript);
-/* Make check box supporting 2 boolean state: checke/unchecked and enabled/disabled
-   Also support ID and javascript.*/
-
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount);
 /* Make a text area with area rowCount X columnCount and with text: intialVal. */
 
 void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled);
-/* Make a text area that can be disabled. The rea has rowCount X
+/* Make a text area that can be disabled. The rea has rowCount X 
  * columnCount and with text: intialVal */
 
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
-
-void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *extra);
-/* Make a text control filled with initial value. */
 
 void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
 			      char *script);
@@ -223,45 +209,25 @@ void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */
 
-void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max);
-/* Make a integer control filled with initial value.
-   If min and/or max are non-NULL will enforce range
-   Requires utils.js jQuery.js and inputBox class */
-void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, int min, int max);
-void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min);
-void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max);
-#define cgiMakeIntVarNoLimits(varName,initialVal,title,width) cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,NULL)
-/* All four of these call cgiMakeIntVarInRange() and therefore require utils.js */
-
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
-
-void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, char *min, char *max);
-/* Make a floating point control filled with initial value.
-   If min and/or max are non-NULL will enforce range
-   Requires utils.js jQuery.js and inputBox class */
-void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max);
-void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min);
-void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max);
-#define cgiMakeDoubleVarNoLimits(varName,initialVal,title,width) cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,NULL)
-/* All four of these call cgiMakeDoubleVarInRange() and therefore require utils.js */
 
 void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class);
 /* Make a drop-down list with names and style sheet class. */
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
-/* Make a drop-down list with names.
+/* Make a drop-down list with names. 
  * uses style "normalText" */
 
-void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
+void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[], 
     int menuSize, char *checked, char *class, char *style,char *javascript);
 /* Make a drop-down list with names, text class, style and javascript. */
 
-void cgiMakeDropListClassWithStyle(char *name, char *menu[],
+void cgiMakeDropListClassWithStyle(char *name, char *menu[], 
 	int menuSize, char *checked, char *class, char *style);
 /* Make a drop-down list with names, text class and style. */
 
-void cgiMakeDropListWithVals(char *name, char *menu[], char *values[],
+void cgiMakeDropListWithVals(char *name, char *menu[], char *values[], 
                          int menuSize, char *checked);
 /* Make a drop-down list with names and values. In this case checked
  * corresponds to a value, not a menu. */
@@ -287,7 +253,7 @@ void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */
 
 void cgiContinueHiddenVar(char *varName);
-/* Write CGI var back to hidden input for next time around.
+/* Write CGI var back to hidden input for next time around. 
  * (if it exists). */
 
 void cgiContinueAllVars();
@@ -308,8 +274,8 @@ struct dyString *cgiUrlString();
 /* Get URL-formatted that expresses current CGI variable state. */
 
 boolean cgiSpoof(int *pArgc, char *argv[]);
-/* Use the command line to set up things as if we were a CGI program.
- * User types in command line (assuming your program called cgiScript)
+/* Use the command line to set up things as if we were a CGI program. 
+ * User types in command line (assuming your program called cgiScript) 
  * like:
  *        cgiScript nonCgiArg1 var1=value1 var2=value2 var3=value3 nonCgiArg2
  * or like
@@ -320,7 +286,7 @@ boolean cgiSpoof(int *pArgc, char *argv[]);
  */
 
 boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb);
-/* Use the command line to set up things as if we were a CGI program.
+/* Use the command line to set up things as if we were a CGI program. 
  * If preferWeb is TRUE will choose real CGI variables over command
  * line ones. */
 
@@ -335,15 +301,15 @@ boolean cgiFromFile(char *fileName);
  *       argument2=someOtherVal
  *       ...
  * and puts them into the cgi environment so that the usual
- * cgiGetVar() commands can be used. Useful when a program
+ * cgiGetVar() commands can be used. Useful when a program 
  * has a lot of possible parameters.
  */
 
-boolean cgiParseInput(char *input, struct hash **retHash,
+boolean cgiParseInput(char *input, struct hash **retHash, 
 	struct cgiVar **retList);
 /* Parse cgi-style input into a hash table and list.  This will alter
- * the input data.  The hash table will contain references back
- * into input, so please don't free input until you're done with
+ * the input data.  The hash table will contain references back 
+ * into input, so please don't free input until you're done with 
  * the hash. Prints message and returns FALSE if there's an error.*/
 
 void cgiSimpleTableStart();
@@ -395,8 +361,5 @@ void logCgiToStderr();
 void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
-
-void commonCssStyles();
-/* Defines a few common styles to use through CSS */
 
 #endif /* CHEAPCGI_H */

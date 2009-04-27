@@ -1,9 +1,0 @@
-!/bin/csh -f
-exit
-
-#############################################################################
-# This is the make doc for hg18 ENCODE DCC tracks processed by the pipeline,
-# but with manual processing post-pipeline
-
-#############################################################################
-#  Open Chromain track

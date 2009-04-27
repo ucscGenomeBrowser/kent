@@ -1,2 +1,0 @@
-This directory is for tests for genome.ucsc.edu.
-[hgwdev:/scratch/javaBuild/src/edu/ucsc/genome/qa/cgiCheck> nohup TrackCheck hgw1.props > & $WEEKLYBLD/logs/TrackCheck-hgw1.07-13-2006

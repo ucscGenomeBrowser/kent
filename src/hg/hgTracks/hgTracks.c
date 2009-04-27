@@ -28,9 +28,7 @@
 #include "cds.h"
 #include "cutterTrack.h"
 #include "wikiTrack.h"
-#include "ctgPos.h"
 #include "bed.h"
-#include "bigBed.h"
 #include "bedCart.h"
 #include "customTrack.h"
 #include "cytoBand.h"
@@ -42,9 +40,10 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 #include "encode.h"
-#include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1563 2009/04/23 22:42:25 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1539 2009/01/02 19:56:51 larrym Exp $";
+
+#define SMALLBUF 64
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -89,7 +88,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
-boolean dragZooming = TRUE;
+boolean dragZooming = FALSE;
 struct hash *oldVars = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
@@ -195,30 +194,20 @@ for (group = groupList; group != NULL; group = group->next)
             struct trackDb *tdb = track->tdb;
 	    if (changeVis == -1)
                 {
-                if(tdbIsComposite(tdb))
-                    {
-                    safef(pname, sizeof(pname),"%s.*",track->mapName); //to remove all settings associated with this composite!
-                    cartRemoveLike(cart,pname);
-                    struct track *subTrack;
-                    for(subTrack = track->subtracks;subTrack != NULL; subTrack = subTrack->next)
-                        {
-                        subTrack->visibility = tdb->visibility;
-                        cartRemove(cart, subTrack->mapName);
-                        }
-                    }
-
                 /* restore defaults */
-                if (tdbIsSuperTrackChild(tdb) || tdbIsCompositeChild(tdb))
+                if (tdbIsSuperTrackChild(tdb))
                     {
-                    assert(tdb->parent != NULL && tdb->parent->tableName);
-                    cartRemove(cart, tdb->parent->tableName);
+                    /* removing the supertrack parent's cart variables
+                     * restores defaults */
+                    assert(tdb->parentName != NULL);
+                    cartRemove(cart, tdb->parentName);
                     if (withPriorityOverride)
                         {
-                        safef(pname, sizeof(pname), "%s.priority",tdb->parent->tableName);
+                        safef(pname, sizeof(pname), "%s.priority",
+                                    tdb->parentName);
                         cartRemove(cart, pname);
                         }
                     }
-
                 track->visibility = tdb->visibility;
                 cartRemove(cart, track->mapName);
 
@@ -594,7 +583,6 @@ struct targetDb *target;
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return;
 
-/* Don't free psl -- used in drawing phase by baseColor code. */
 struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
 if (target != NULL)
@@ -640,7 +628,9 @@ if (target != NULL)
 		      (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
 		lf->extra = cloneString(extraInfo);
 		slAddHead(&itemList, lf);
+		pslFree(&trimmed);
 		}
+	    pslFree(&gpsl);
 	    }
 	}
     hFreeConn(&conn);
@@ -650,12 +640,16 @@ else
 	if (sameString(psl->tName, chromName) && psl->tStart < winEnd &&
 	    psl->tEnd > winStart)
 	    {
+	    /* Collapse the 2-block PSL into one block for display: */
+	    psl->blockCount = 1;
+	    psl->blockSizes[0] = psl->tEnd - psl->tStart;
 	    struct linkedFeatures *lf =
 		lfFromPslx(psl, 1, FALSE, FALSE, tg);
 	    safecpy(lf->name, sizeof(lf->name), "");
 	    lf->extra = cloneString("");
 	    slAddHead(&itemList, lf);
 	    }
+pslFreeList(&pslList);
 slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }
@@ -738,7 +732,7 @@ return fileExists(pslFileName) && fileExists(faFileName);
 }
 
 void loadUserPsl(struct track *tg)
-/* Load up hgBlat results from table into track items. */
+/* Load up rnas from table into track items. */
 {
 char *ss = userSeqString;
 char buf2[3*512];
@@ -748,6 +742,11 @@ struct psl *psl;
 struct linkedFeatures *lfList = NULL, *lf;
 enum gfType qt, tt;
 int sizeMul = 1;
+enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
+
+indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
+	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 parseSs(ss, &pslFileName, &faFileName);
 pslxFileOpen(pslFileName, &qt, &tt, &f);
@@ -766,7 +765,11 @@ while ((psl = pslNext(f)) != NULL)
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
-	/* Don't free psl -- used in drawing phase by baseColor code. */
+	if (drawOpt > baseColorDrawOff ||
+	    indelShowQueryInsert || indelShowPolyA)
+	    lf->original = psl;
+	else
+	    pslFree(&psl);
 	}
     else
 	pslFree(&psl);
@@ -1239,7 +1242,7 @@ if (track->limitedVis != tvHide)
                         track->labelColor : track->ixColor);
     hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
                         labelColor, font, track->longLabel);
-    if (withNextItemArrows && track->labelNextItemButtonable && track->labelNextPrevItem && !tdbIsComposite(track->tdb))
+    if (withNextItemArrows && track->labelNextItemButtonable && track->labelNextPrevItem)
 	doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
 			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
     else
@@ -1489,7 +1492,7 @@ if(tdbIsCompositeChild(subtrack->tdb))
         {
         int len = strlen(subtrack->tdb->parent->tableName) + strlen(stView) + 10;
         char *ddName = needMem(len);
-        safef(ddName,len,"%s.%s.vis",subtrack->tdb->parent->tableName,stView);
+        safef(ddName,len,"%s_dd_%s",subtrack->tdb->parent->tableName,stView); // If not found takes "usual"
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
             vis = hTvFromString(fromParent);
@@ -1530,8 +1533,6 @@ int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
 boolean rulerCds = zoomedToCdsColorLevel;
-int rulerClickHeight = 0;
-int newWinWidth = 0;
 
 /* Start a global track hash. */
 trackHash = newHash(8);
@@ -1651,7 +1652,7 @@ hvg->rc = revCmplDisp;
 initColors(hvg);
 
 /* Start up client side map. */
-hPrintf("<MAP id='map' Name=%s>\n", mapName);
+hPrintf("<MAP Name=%s>\n", mapName);
 
 /* Find colors to draw in. */
 findTrackColors(hvg, trackList);
@@ -1804,7 +1805,7 @@ if (rulerMode != tvHide)
     {
     struct dnaSeq *seq = NULL;
     int rulerClickY = 0;
-    rulerClickHeight = rulerHeight;
+    int rulerClickHeight = rulerHeight;
 
     y = rulerClickY;
     hvGfxSetClip(hvg, insideX, y, insideWidth, yAfterRuler-y+1);
@@ -1866,7 +1867,7 @@ if (rulerMode != tvHide)
     /* Make hit boxes that will zoom program around ruler. */
     int boxes = 30;
     int winWidth = winEnd - winStart;
-    newWinWidth = winWidth;
+    int newWinWidth = winWidth;
     int i, ws, we = 0, ps, pe = 0;
     int mid, ns, ne;
     double wScale = (double)winWidth/boxes;
@@ -1885,6 +1886,9 @@ if (rulerMode != tvHide)
         newWinWidth = insideWidth/tl.mWidth;
     else
         errAbort("invalid zoom type %s", zoomType);
+    hPrintf("<input type='hidden' id='hgt.newWinWidth' value='%d'>\n", newWinWidth);
+    hPrintf("<input type='hidden' id='hgt.rulerClickHeight' value='%d'>\n", rulerClickHeight);
+    hPrintf("<input type='hidden' id='hgt.dragSelection' value='%d'>\n", dragZooming ? 1 : 0);
 
     if (newWinWidth < 1)
 	newWinWidth = 1;
@@ -2113,16 +2117,6 @@ for (track = trackList; track != NULL; track = track->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-hPrintf("<input type='hidden' id='hgt.dragSelection' name='dragSelection' value='%d'>\n", dragZooming ? 1 : 0);
-if(rulerClickHeight)
-    {
-    hPrintf("<input type='hidden' id='hgt.rulerClickHeight' name='rulerClickHeight' value='%d'>\n", rulerClickHeight);
-    }
-if(newWinWidth)
-    {
-    hPrintf("<input type='hidden' id='hgt.newWinWidth' name='newWinWidth' value='%d'>\n", newWinWidth);
-    }
-
 /* Save out picture and tell html file about it. */
 hvGfxClose(&hvg);
 char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
@@ -2132,63 +2126,35 @@ hPrintf("><BR>\n");
 }
 
 
-static void printEnsemblAnchor(char *database, char* archive,
-	char *chrName, int start, int end)
+static void printEnsemblAnchor(char *database, char* archive)
 /* Print anchor to Ensembl display on same window. */
 {
 char *scientificName = hScientificName(database);
 char *dir = ensOrgNameFromScientificName(scientificName);
 struct dyString *ensUrl;
 char *name;
-int localStart, localEnd;
-
-name = chrName;
+int start, end;
 
 if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
     /* Also, must give "chrom" as "scaffold_N", name below. */
-    if (differentWord(chromName,"chrM") &&
-	!hScaffoldPos(database, chromName, winStart, winEnd,
-                        &name, &localStart, &localEnd))
+    if (!hScaffoldPos(database, chromName, winStart, winEnd,
+                        &name, &start, &end))
         /* position doesn't appear on Ensembl browser.
          * Ensembl doesn't show scaffolds < 2K */
         return;
     }
-else if (sameWord(scientificName, "Gasterosteus aculeatus"))
+else
     {
-    if (differentWord("chrM", chrName))
-	{
-	char *fixupName = replaceChars(chrName, "chr", "group");
-	name = fixupName;
-	}
+    name = chromName;
+    start = winStart;
+    end = winEnd;
     }
-else if (sameWord(scientificName, "Ciona intestinalis"))
-    {
-    if (stringIn("chr0", chrName))
-	{
-	char *fixupName = replaceChars(chrName, "chr0", "chr");
-	name = fixupName;
-	}
-    }
-else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
-    {
-    if (stringIn("2micron", chrName))
-	{
-	char *fixupName = replaceChars(chrName, "2micron", "2-micron");
-	name = fixupName;
-	}
-    }
-
-if (sameWord(chrName, "chrM"))
-    name = "chrMt";
-localStart = start;
-localEnd = end + 1;	// Ensembl base-1 display coordinates
-ensUrl = ensContigViewUrl(dir, name, seqBaseCount, localStart, localEnd, archive);
+start += 1;
+ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
-/* NOTE: you can not freeMem(dir) because sometimes it is a literal
- * constant */
-freeMem(scientificName);
+/* NOTE: probably should free mem from dir and scientificName ?*/
 dyStringFree(&ensUrl);
 }
 
@@ -2221,15 +2187,17 @@ for (hel = hels; hel != NULL; hel = hel->next)
 	for (subtrack = track->tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    {
 	    if (sameString(subtrack->tableName, table))
-            {
-            char selName[SMALLBUF];
-            track->visibility = tvFull;
-            cartSetString(cart, track->tdb->tableName, "full");
-            track->tdb->visibility = tvFull;
-            subtrack->visibility = tvFull;
-            safef(selName, sizeof(selName), "%s_sel", table);
-            cartSetBoolean(cart, selName, TRUE);
-            }
+		{
+		char selName[SMALLBUF];
+		char selVal[2];
+		track->visibility = tvFull;
+		track->tdb->visibility = tvFull;
+		cartSetString(cart, track->tdb->tableName, "full");
+		subtrack->visibility = tvFull;
+		safef(selName, sizeof(selName), "%s_sel", table);
+		safef(selVal, sizeof(selVal), "%d", tvFull);
+		cartSetString(cart, selName, selVal);
+		}
 	    }
 	}
     }
@@ -2603,30 +2571,6 @@ else if (sameString(type, "wig"))
     tg->customPt = ct;
     tg->labelNextItemButtonable = FALSE;
     }
-else if (sameString(type, "bigWig"))
-    {
-    tg = trackFromTrackDb(tdb);
-    tg->bbiFileName = trackDbSetting(tdb, "dataUrl");
-    tg->labelNextItemButtonable = FALSE;
-    }
-else if (sameString(type, "bigBed"))
-    {
-    /* Figure out file name from settings. */
-    char *fileName = trackDbSetting(tdb, "dataUrl");
-
-    /* Briefly open file to find field counts, and from that revise the
-     * tdb->type to be more complete. */
-    struct bbiFile *bbi = bigBedFileOpen(fileName);
-    char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
-    char typeBuf[64];
-    safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
-    tdb->type = cloneString(typeBuf);
-    bbiFileClose(&bbi);
-
-    /* Finish wrapping track around tdb. */
-    tg = trackFromTrackDb(tdb);
-    tg->bbiFileName = fileName;
-    }
 else if (sameString(type, "bedGraph"))
     {
     tg = trackFromTrackDb(tdb);
@@ -2702,7 +2646,7 @@ else if (sameString(type, "encodePeak"))
     }
 else
     {
-    errAbort("Unrecognized custom track type %s", type);
+    errAbort("Unrecognized custom graph type %s", type);
     }
 if (!ct->dbTrack)
     tg->labelNextItemButtonable = FALSE;
@@ -2855,46 +2799,6 @@ return (hTableExists("hgFixed", "cutters") &&
 	hTableExists("hgFixed", "rebaseCompanies"));
 }
 
-void fr2ScaffoldEnsemblLink(char *archive)
-/* print out Ensembl link to appropriate scaffold there */
-{
-    struct sqlConnection *conn = hAllocConn(database);
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    char query[256];
-    safef(query, sizeof(query),
-"select * from chrUn_gold where chrom = '%s' and chromStart<%u and chromEnd>%u",
-	chromName, winEnd, winStart);
-    sr = sqlGetResult(conn, query);
-
-    int itemCount = 0;
-    struct agpFrag *agpItem = NULL;
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	agpFragFree(&agpItem);	// if there is a second one
-	agpItem = agpFragLoad(row+1);
-	++itemCount;
-	if (itemCount > 1)
-	    break;
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    if (1 == itemCount)
-	{	// verify *entirely* within single contig
-	if ((winEnd <= agpItem->chromEnd) &&
-	    (winStart >= agpItem->chromStart))
-	    {
-	    int agpStart = winStart - agpItem->chromStart;
-	    int agpEnd = agpStart + winEnd - winStart;
-	    hPuts("<TD ALIGN=CENTER>");
-	    printEnsemblAnchor(database, archive, agpItem->frag,
-		agpStart, agpEnd);
-	    hPrintf("%s</A></TD>", "Ensembl");
-	    }
-	}
-    agpFragFree(&agpItem);	// the one we maybe used
-}
-
 void hotLinks()
 /* Put up the hot links bar. */
 {
@@ -2929,15 +2833,10 @@ if (hIsGsidServer())
     }
 else
     {
-    /* disable TB for CGB servers */
-    if (!hIsCgbServer())
-	{
-    	hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
-       	database, chromName, winStart+1, winEnd, cartSessionVarName(),
-       	cartSessionId(cart), "Tables");
-    	}
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
+       database, chromName, winStart+1, winEnd, cartSessionVarName(),
+       cartSessionId(cart), "Tables");
     }
-
 if (hgNearOk(database))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
@@ -2951,8 +2850,6 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
 
-/* disable Convert function for CGB servers for the time being */
-if (!hIsCgbServer())
 if (liftOverChainForDb(database) != NULL)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"");
@@ -2987,63 +2884,15 @@ if (trackVersionExists)
     }
 
 /* Print Ensembl anchor for latest assembly of organisms we have
- * supported by Ensembl == if versionString from trackVersion exists */
-if (ensVersionString[0])
+ * supported by Ensembl (human, mouse, rat, fugu) */
+if (ensVersionString[0] && !isUnknownChrom(database, chromName))
     {
     char *archive = NULL;
     if (ensDateReference[0] && differentWord("current", ensDateReference))
-	    archive = cloneString(ensDateReference);
-    /*	Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-    if (isUnknownChrom(database, chromName))
-	{
-	if (sameWord(database,"fr2"))
-	    fr2ScaffoldEnsemblLink(archive);
-	else if (hTableExists(database, "ctgPos"))
-	    /* see if we are entirely within a single contig */
-	    {
-	    struct sqlConnection *conn = hAllocConn(database);
-	    struct sqlResult *sr = NULL;
-	    char **row = NULL;
-	    char query[256];
-	    safef(query, sizeof(query),
-"select * from ctgPos where chrom = '%s' and chromStart<%u and chromEnd>%u",
-		chromName, winEnd, winStart);
-	    sr = sqlGetResult(conn, query);
-
-	    int itemCount = 0;
-	    struct ctgPos *ctgItem = NULL;
-	    while ((row = sqlNextRow(sr)) != NULL)
-		{
-		ctgPosFree(&ctgItem);	// if there is a second one
-		ctgItem = ctgPosLoad(row);
-		++itemCount;
-		if (itemCount > 1)
-		    break;
-		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    if (1 == itemCount)
-		{	// verify *entirely* within single contig
-		if ((winEnd <= ctgItem->chromEnd) &&
-		    (winStart >= ctgItem->chromStart))
-		    {
-		    int ctgStart = winStart - ctgItem->chromStart;
-		    int ctgEnd = ctgStart + winEnd - winStart;
-		    hPuts("<TD ALIGN=CENTER>");
-		    printEnsemblAnchor(database, archive, ctgItem->contig,
-			ctgStart, ctgEnd);
-		    hPrintf("%s</A></TD>", "Ensembl");
-		    }
-		}
-	    ctgPosFree(&ctgItem);	// the one we maybe used
-	    }
-	}
-    else
-	{
-	hPuts("<TD ALIGN=CENTER>");
-	printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
-	hPrintf("%s</A></TD>", "Ensembl");
-	}
+            archive = cloneString(ensDateReference);
+    hPuts("<TD ALIGN=CENTER>");
+    printEnsemblAnchor(database, archive);
+    hPrintf("%s</A></TD>", "Ensembl");
     }
 
 /* Print NCBI MapView anchor */
@@ -3566,9 +3415,7 @@ if (psOutput != NULL)
    }
 
 /* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
-hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
 if (!psOutput) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 
@@ -3720,7 +3567,7 @@ if (!hideControls)
 		"VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
         hPrintf("\n%s", trackGroupsHidden1->string);
 	hPrintf("</CENTER></FORM>\n");
-	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
+	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
         hPrintf(trackGroupsHidden2->string);
         freeDyString(&trackGroupsHidden1);
         freeDyString(&trackGroupsHidden2);
@@ -3747,7 +3594,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hWrites(" ");
-	hButton("hgt.jump", "jump");
+	hButton("submit", "jump");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
         hButton("hgTracksConfigPage", "configure");
@@ -3807,6 +3654,12 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
+    hButtonWithOnClick("hgt.collapseGroups", "collapse groups", NULL, "return setAllTrackGroupVisibility(false)");
+
+    hPrintf(" ");
+    hButtonWithOnClick("hgt.expandGroups", "expand groups", NULL, "return setAllTrackGroupVisibility(true)");
+
+    hPrintf(" ");
     hOnClickButton("document.customTrackForm.submit();return false;",
                         hasCustomTracks ?
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
@@ -3821,7 +3674,7 @@ if (!hideControls)
         hPrintf(" ");
 	}
 
-    hButton("hgt.refresh", "refresh");
+    hButton("submit", "refresh");
 
     hPrintf("<BR>\n");
 
@@ -3837,21 +3690,11 @@ if (showTrackControls)
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly */
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    hPrintf("<tr><td align='left'>\n");
-
-    hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
-    hPrintf("</td>");
-
-    hPrintf("<td colspan='%d' align='CENTER' nowrap>"
+    hPrintf("<tr><td colspan='%d' align='CENTER' nowrap>"
 	   "Use drop-down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
-	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
-
-    hPrintf("<td align='right'>");
-    hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
-    hPrintf("</td></tr>");
-
+	   "more compact modes.</td></tr>\n", MAX_CONTROL_COLUMNS );
     if (!hIsGsidServer())
     	{
 	cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
@@ -3898,7 +3741,7 @@ if (showTrackControls)
 	hPrintf("</td><td align='center' width='100%%'>\n");
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("</td><td align='right'>\n");
-	hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
+	hPrintf("<input type='submit' name='submit' value='refresh'>\n");
 	hPrintf("</td></tr></table></th>\n");
 	controlGridEndRow(cg);
 
@@ -4012,7 +3855,7 @@ if (showTrackControls)
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
-    hButton("hgt.refresh", "refresh");
+    hButton("submit", "refresh");
 hPrintf("</CENTER>\n");
 
 #ifdef SLOW
@@ -4318,6 +4161,9 @@ if  (cgiVarExists("hgt.toggleRevCmplDisp"))
     toggleRevCmplDisp();
 setRulerMode();
 
+hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
+hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
+
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
     relativeScroll(-0.95);
@@ -4609,12 +4455,10 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
-setUdcCacheDir();
-
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
-dragZooming = cartUsualBoolean(cart, "dragZooming", TRUE);
+dragZooming = cartUsualBoolean(cart, "dragZooming", FALSE);
 
 /* Do main display. */
 
@@ -4718,7 +4562,6 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
                         "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
                         "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
                         "hgt.collapseGroups", "hgt.expandGroups",
-                        "hgt.jump", "hgt.refresh",
 			NULL };
 
 int main(int argc, char *argv[])

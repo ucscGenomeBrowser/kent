@@ -12,10 +12,8 @@
 #include "hash.h"
 #include "sqlNum.h"
 #include "obscure.h"
-#include "hgMaf.h"
-#include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.63 2009/04/22 22:56:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.45 2008/09/16 23:18:56 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -34,9 +32,9 @@ else
    return 1;
 }
 
-static void parseColor(struct lineFile *lf, char *text,
+static void parseColor(struct lineFile *lf, char *text, 
 	unsigned char *r, unsigned char *g, unsigned char *b)
-/* Turn comma-separated string of three numbers into three
+/* Turn comma-separated string of three numbers into three 
  * color components. */
 {
 char *words[4];
@@ -64,34 +62,19 @@ else if (sameString(value, "pack") || sameString(value, "3"))
 else if (sameString(value, "squish") || sameString(value, "4"))
     return tvSquish;
 else
-    errAbort("Unknown visibility %s line %d of %s",
+    errAbort("Unknown visibility %s line %d of %s", 
              value, lf->lineIx, lf->fileName);
 return tvHide;  /* never reached */
 }
 
-static void parseTrackLine(struct trackDb *bt, char *value,
-                           struct lineFile *lf)
-/* parse the track line */
-{
-char *val2 = cloneString(value);
-bt->tableName = nextWord(&val2);
-
-// check for override option
-if (val2 != NULL)
-    {
-    val2 = trimSpaces(val2);
-    if (!sameString(val2, "override"))
-        errAbort("invalid track line: %s:%d: track %s", lf->fileName, lf->lineIx, value);
-    bt->overrides = hashNew(0);
-    }
-}
-
-static void trackDbAddInfo(struct trackDb *bt,
+static void trackDbAddInfo(struct trackDb *bt, 
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
 if (sameString(var, "track"))
-    parseTrackLine(bt, value, lf);
+    {
+    bt->tableName = cloneString(value);
+    }
 else if (sameString(var, "shortLabel") || sameString(var, "name"))
     bt->shortLabel = cloneString(value);
 else if (sameString(var, "longLabel") || sameString(var, "description"))
@@ -138,85 +121,6 @@ else	/* Add to settings. */
 	bt->settingsHash = hashNew(7);
     hashAdd(bt->settingsHash, var, cloneString(value));
     }
-if (bt->overrides != NULL)
-    hashAdd(bt->overrides, var, NULL);
-}
-
-static void replaceStr(char **varPtr, char *val)
-/** replace string in varPtr with val */
-{
-freeMem(*varPtr);
-*varPtr = cloneString(val);
-}
-
-static void overrideField(struct trackDb *td, struct trackDb *overTd,
-                          char *var)
-/* Update override one field from override. */
-{
-if (sameString(var, "track"))
-    {
-    // skip
-    }
-else if (sameString(var, "shortLabel") || sameString(var, "name"))
-    replaceStr(&td->shortLabel, overTd->shortLabel);
-else if (sameString(var, "longLabel") || sameString(var, "description"))
-    replaceStr(&td->longLabel, overTd->longLabel);
-else if (sameString(var, "priority"))
-    td->priority = overTd->priority;
-else if (sameWord(var, "url"))
-    replaceStr(&td->url, overTd->url);
-else if (sameString(var, "visibility"))
-    td->visibility =  overTd->visibility;
-else if (sameWord(var, "color"))
-    {
-    td->colorR = overTd->colorR;
-    td->colorG = overTd->colorG;
-    td->colorB = overTd->colorB;
-    }
-else if (sameWord(var, "altColor"))
-    {
-    td->altColorR = overTd->altColorR;
-    td->altColorG = overTd->altColorG;
-    td->altColorB = overTd->altColorB;
-    }
-else if (sameWord(var, "type"))
-    replaceStr(&td->type, overTd->type);
-else if (sameWord(var, "spectrum") || sameWord(var, "useScore"))
-    td->useScore = overTd->useScore;
-else if (sameWord(var, "canPack"))
-    td->canPack = overTd->canPack;
-else if (sameWord(var, "chromosomes"))
-    {
-    // just format and re-parse
-    char *sa = sqlStringArrayToString(overTd->restrictList, overTd->restrictCount);
-    sqlStringFreeDynamicArray(&td->restrictList);
-    sqlStringDynamicArray(sa, &td->restrictList, &td->restrictCount);
-    freeMem(sa);
-    }
-else if (sameWord(var, "private"))
-    td->private = overTd->private;
-else if (sameWord(var, "group"))
-    {
-    replaceStr(&td->grp, overTd->grp);
-    }
-else	/* Add to settings. */
-    {
-    if (td->settingsHash == NULL)
-	td->settingsHash = hashNew(7);
-    char *val = hashMustFindVal(overTd->settingsHash, var);
-    struct hashEl *hel = hashStore(td->settingsHash, var);
-    replaceStr((char**)&hel->val, val);
-    }
-}
-
-void trackDbOverride(struct trackDb *td, struct trackDb *overTd)
-/* apply an trackOverride trackDb entry to a trackDb entry */
-{
-assert(overTd->overrides != NULL);
-struct hashEl *hel;
-struct hashCookie hc = hashFirst(overTd->overrides);
-while ((hel = hashNext(&hc)) != NULL)
-    overrideField(td, overTd, hel->name);
 }
 
 static boolean packableType(char *type)
@@ -224,11 +128,10 @@ static boolean packableType(char *type)
 {
 char *t = cloneString(type);
 char *s = firstWordInLine(t);
-boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
-                   sameString("bed", s) || sameString("genePred", s) ||
-		   sameString("bigBed", s) ||
+boolean canPack = (sameString("psl", s) || sameString("chain", s) || 
+                   sameString("bed", s) || sameString("genePred", s) || 
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
-		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
+		   sameString("factorSource", s) || sameString("bed5FloatScore", s) || 
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s));
 freeMem(t);
 return canPack;
@@ -283,18 +186,21 @@ if (bt->settings == NULL)
 }
 
 char *trackDbInclude(char *raFile, char *line)
-/* Get include filename from trackDb line.
-   Return NULL if line doesn't contain include */
+/* Get include filename from trackDb line.  
+   Return NULL if line doesn't contain #include */
 {
 static char incFile[256];
 char *file;
 
-if (startsWith("include", line))
+/* For transition, allow with or without leading #.
+   Later, we'll only allow w/o # */
+if (startsWith("#include", line) || startsWith("include", line))
     {
     splitPath(raFile, incFile, NULL, NULL);
     nextWord(&line);
     file = nextQuotedWord(&line);
     strcat(incFile, file);
+    printf("found include file: %s\n", incFile);
     return cloneString(incFile);
     }
 else
@@ -322,7 +228,7 @@ for (;;)
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
-        if (startsWithWord("track", line))
+        if (startsWith("track", line))
             {
             lineFileReuse(lf);
             break;
@@ -370,8 +276,8 @@ for (bt = btList; bt != NULL; bt = bt->next)
     struct trackDb *compositeTdb;
     char *compositeName;
     if ((compositeName = trackDbSetting(bt, "subTrack")) != NULL &&
-        trackDbSettingClosestToHome(bt, "noInherit") == NULL)
-            if ((compositeTdb =
+        trackDbSetting(bt, "noInherit") == NULL)
+            if ((compositeTdb = 
                     hashFindVal(compositeHash, compositeName)) != NULL)
                 trackDbInherit(bt, compositeTdb);
     trackDbPolish(bt);
@@ -382,7 +288,7 @@ return btList;
 
 void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
 			      boolean hideFirst)
-/* Override visbility settings using a ra file.  If hideFirst, set all
+/* Override visbility settings using a ra file.  If hideFirst, set all 
  * visibilities to hide before applying visibilityRa. */
 {
 struct lineFile *lf;
@@ -464,8 +370,8 @@ boolean trackDbSettingOn(struct trackDb *tdb, char *name)
 /* Return true if a tdb setting is "on" "true" or "enabled". */
 {
 char *setting = trackDbSetting(tdb,name);
-return  (setting && (   sameWord(setting,"on")
-                     || sameWord(setting,"true")
+return  (setting && (   sameWord(setting,"on") 
+                     || sameWord(setting,"true") 
                      || sameWord(setting,"enabled")));
 }
 
@@ -496,7 +402,7 @@ float trackDbFloatSettingOrDefault(struct trackDb *tdb, char *name, float defaul
 }
 
 struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr)
-/* Return a list of settings whose names match wildStr (may contain wildcard
+/* Return a list of settings whose names match wildStr (may contain wildcard 
  * characters).  Free the result with hashElFreeList. */
 {
 struct hashEl *allSettings = hashElListHash(tdb->settingsHash);
@@ -646,230 +552,4 @@ if (origAssembly)
     }
 }
 
-eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary)
-/* determine what kind of track specific configuration is needed,
-   warn if not multi-view compatible */
-{
-eCfgType cType = cfgNone;
-if(startsWith("wigMaf", tdb->type))
-    cType = cfgWigMaf;
-else if(startsWith("wig", tdb->type))
-    cType = cfgWig;
-else if(startsWith("bigWig", tdb->type))
-    cType = cfgWig;
-else if(startsWith("bedGraph", tdb->type))
-    cType = cfgWig;
-else if(startsWith("netAlign", tdb->type))
-    {
-    cType = cfgNetAlign;
-    warnIfNecessary = FALSE;
-    }
-else if(sameWord("bed5FloatScore",       tdb->type)
-     || sameWord("bed5FloatScoreWithFdr",tdb->type))
-    cType = cfgBedScore;
-else if(sameWord("narrowPeak",tdb->type)
-     || sameWord("broadPeak", tdb->type)
-     || sameWord("encodePeak",tdb->type)
-     || sameWord("gappedPeak",tdb->type))
-    cType = cfgPeak;
-else if(sameWord("genePred",tdb->type))
-        cType = cfgGenePred;
-else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so far
-    {
-    char *words[3];
-    chopLine(cloneString( tdb->type), words);
-    if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
-        cType = cfgBedScore;
-    }
-else if(startsWith("chain",tdb->type))
-    cType = cfgChain;
-
-if(cType == cfgNone && warnIfNecessary)
-    {
-    if(!startsWith("bed ", tdb->type) && !startsWith("bigBed", tdb->type)
-    && subgroupFind(tdb,"view",NULL))
-        warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",tdb->type,tdb->tableName);
-    }
-return cType;
-}
-
-char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name)
-/* Get a trackDb setting at the view level for a multiview composite.
-   returns a string that must be freed */
-{
-char *trackSetting = NULL;
-char *settingsByView = cloneString(trackDbSetting(parentTdb,"settingsByView"));
-if(settingsByView != NULL)
-    {
-    char *settingForAView = NULL;
-    char *words[8];
-    int cnt,ix;
-    // parse settingsByView "Signal:viewLimits=5:500,viewLimitsMax=0:20910 ..."
-    cnt = chopLine(cloneString(settingsByView), words);
-    for(ix=0;ix<cnt;ix++)
-        {
-        if(startsWithWordByDelimiter(view,':',words[ix]))
-            {
-            settingForAView = cloneString(words[ix]+(strlen(view)+1));
-            break;
-            }
-        }
-    freeMem(settingsByView);
-    if(settingForAView != NULL) // found a match
-        {
-        // parse settingByView: "viewLimits=5:500,viewLimitsMax=0:20910"
-        cnt = chopByChar(settingForAView,',',words,ArraySize(words));
-        for(ix=0;ix<cnt;ix++)
-            {
-            if(startsWithWordByDelimiter(name,'=',words[ix]))
-                {
-                trackSetting = cloneString(words[ix]+strlen(name)+1);
-                break;
-                }
-            }
-        freeMem(settingForAView);
-        }
-    }
-return trackSetting;
-}
-
-char *trackDbSettingByView(struct trackDb *tdb, char *name)
-/* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
-   returns a string that must be freed */
-{
-char * view;
-if(tdbIsCompositeChild(tdb) && subgroupFind(tdb,"view",&view))
-    {
-    return trackDbCompositeSettingByView(tdb->parent,view,name);
-    }
-return NULL;
-}
-
-
-char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name)
-/* Look for a trackDb setting from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
-{
-char *trackSetting = trackDbSetting(tdb,name);
-if(trackSetting == NULL && tdbIsCompositeChild(tdb))
-    {
-    trackSetting = trackDbSettingByView(tdb,name);
-    if(trackSetting == NULL)
-        trackSetting = trackDbSetting(tdb->parent,name);
-    }
-return trackSetting;
-}
-
-char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
-/* Look for a trackDb setting (or default) from lowest level on up:
-   from subtrack, then composite, then settingsByView, then composite */
-{
-char *trackSetting = trackDbSettingClosestToHome(tdb,name);
-if(trackSetting == NULL)
-    trackSetting = defaultVal;
-return trackSetting;
-}
-
-boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name)
-/* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
-{
-char *setting = trackDbSettingClosestToHome(tdb,name);
-return  (setting && (   sameWord(setting,"on")
-                     || sameWord(setting,"true")
-                     || sameWord(setting,"enabled")
-                     || atoi(setting) != 0));
-}
-
-struct trackDb *subTdbFind(struct trackDb *parent,char *table)
-/* Return subTrack tdb if it exists in parent. */
-{
-if(parent == NULL)
-    return NULL;
-
-struct trackDb *tdb;
-for (tdb = parent->subtracks;
-     tdb != NULL && differentString(tdb->tableName,table);
-     tdb = tdb->next) {}
-return tdb;
-}
-
-struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table)
-/* Find or creates the tdb for this table. May return NULL. */
-{
-struct trackDb *tdb = NULL;
-if (parent != NULL)
-    {
-    if(sameString(parent->tableName, table))
-        tdb = parent;
-    else if(consWiggleFind(db,parent,table) != NULL)
-        tdb = parent;
-    else
-        tdb = subTdbFind(parent,table);
-    }
-if(tdb == NULL && db != NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(db);
-    tdb = hMaybeTrackInfo(conn, table);
-    hFreeConn(&conn);
-    }
-return tdb;
-}
-
-metadata_t *metadataSettingGet(struct trackDb *tdb)
-/* Looks for a metadata tag and parses the setting into arrays of tags and values */
-{
-char *setting = trackDbSetting(tdb, "metadata");
-if(setting == NULL)
-    return NULL;
-int count = countChars(setting,'='); // <= actual count, since value may contain a =
-if(count <= 0)
-    return NULL;
-
-metadata_t *metadata = needMem(sizeof(metadata_t));
-metadata->setting    = cloneString(setting);
-metadata->tags = needMem(sizeof(char*)*count);
-metadata->values = needMem(sizeof(char*)*count);
-char *cp = metadata->setting;
-for(metadata->count=0;*cp != '\0' && metadata->count<count;metadata->count++)
-    {
-    metadata->tags[metadata->count] = cloneNextWordByDelimiter(&cp,'=');
-    if(*cp != '"')
-        metadata->values[metadata->count] = cloneNextWordByDelimiter(&cp,' ');
-    else
-        {
-        metadata->values[metadata->count] = ++cp;
-        for(;*cp != '\0';cp++)
-            {
-            if(*cp == '"' && *(cp - 1) != '\\') // Not escaped
-                {
-                *cp = '\0';
-                metadata->values[metadata->count] = replaceChars(metadata->values[metadata->count],"\\\"","\"");
-                *cp = '"'; // Put it baaack!
-                break;
-                }
-            }
-        if(*cp == '\0') // Didn't find close quote!
-            metadata->values[metadata->count] = cloneString(metadata->values[metadata->count]);
-        else
-            cp++;
-        }
-    }
-
-return metadata;
-}
-
-void metadataFree(metadata_t **metadata)
-/* frees any previously obtained metadata setting */
-{
-if(metadata && *metadata)
-    {
-    for(;(*metadata)->count > 0;(*metadata)->count--)
-        {
-        freeMem((*metadata)->tags[  (*metadata)->count - 1]);
-        freeMem((*metadata)->values[(*metadata)->count - 1]);
-        }
-    freeMem((*metadata)->setting);
-    freez(metadata);
-    }
-}
 

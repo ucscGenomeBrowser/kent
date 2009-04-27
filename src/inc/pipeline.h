@@ -30,7 +30,7 @@
  *    static char *cmd2[] = {"sort", "-k", "1,1n", NULL};
  *    static char **cmds[] = {cmd1, cmd2, NULL};
  *    
- *    struct pipeline *pl = pipelineOpen(cmds, pipelineRead, inFilePath, stderrFd);
+ *    struct pipeline *pl = pipelineOpen(cmds, pipelineRead, inFilePath);
  *    struct lineFile *lf = pipelineLineFile(pl);
  *    char *line;
  *    
@@ -49,7 +49,7 @@
  *    static char *cmd2[] = {"gzip", "-c3", NULL};
  *    static char **cmds[] = {cmd1, cmd2, NULL};
  *    
- *    struct pipeline *pl = pipelineOpen(cmds, pipelineWrite, outFilePath, stderrFd);
+ *    struct pipeline *pl = pipelineOpen(cmds, pipelineWrite, outFilePath);
  *    char *line;
  *    
  *    while ((line = makeNextRow()) != NULL)
@@ -58,9 +58,6 @@
  *    pipelineWait(pl);
  *    pipelineFree(&pl);
  *
- * To append to an output file, use pipelineWrite|pipelineAppend:
- *    
- *    struct pipeline *pl = pipelineOpen(cmds, pipelineWrite|pipelineAppend, outFilePath, stderrFd);
  */
 #ifndef PIPELINE_H
 #define PIPELINE_H
@@ -76,7 +73,6 @@ enum pipelineOpts
     pipelineNoAbort    = 0x04, /* don't abort if a process exits non-zero,
                                 * wait will return exit code instead.
                                 * Still aborts if process signals. */
-    pipelineAppend     = 0x10, /* Append to output file (used only with pipelineWrite) */
     /* these are internal options */
     pipelineMemInput   = 0x08  /* pipeline takes input from memory */
     };

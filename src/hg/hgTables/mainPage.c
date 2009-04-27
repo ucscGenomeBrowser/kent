@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.142 2009/04/10 21:33:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.135 2008/12/02 21:51:09 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -258,7 +258,7 @@ return acHash;
 }
 
 static boolean accessControlDenied(struct hash *acHash, char *table)
-/* Return TRUE if table access is restricted to some host(s) other than
+/* Return TRUE if table access is restricted to some host(s) other than 
  * the one we're running on. */
 {
 static char *currentHost = NULL;
@@ -375,7 +375,7 @@ for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
     if (track != NULL)
-	tdb = findTdbForTable(database,track,name->name);
+	tdb = findCompositeTdb(track, name->name);
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     if (sameString(selTable, name->name))
         {
@@ -393,7 +393,7 @@ for (name = nameList; name != NULL; name = name->next)
 hPrintf("</SELECT>\n");
 char *restrictDate = encodeRestrictionDateDisplay(selTdb);
 if (restrictDate)
-    hPrintf("<A HREF=\'%s\' TARGET=BLANK>restricted until:</A>&nbsp;%s",
+    hPrintf("<A HREF=\'%s\' TARGET=BLANK>restricted until:</A>&nbsp;%s", 
                 ENCODE_DATA_RELEASE_POLICY, restrictDate);
 return selTable;
 }
@@ -440,52 +440,47 @@ hPrintf(" Send output to <A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</
 hPrintf("</TD></TR>\n");
 }
 
-struct outputType otAllFields = { NULL,
-	outPrimaryTable,
+struct outputType otAllFields = { NULL, 
+	outPrimaryTable, 
 	"all fields from selected table", };
-struct outputType otSelected = { NULL,
+struct outputType otSelected = { NULL, 
     outSelectedFields,
     "selected fields from primary and related tables",  };
-struct outputType otSequence = { NULL,
+struct outputType otSequence = { NULL, 
     outSequence,
     "sequence", };
-struct outputType otPal = { NULL,
+struct outputType otPal = { NULL, 
     outPalOptions,
     "CDS FASTA alignment from multiple alignment", };
-struct outputType otGff = { NULL,
+struct outputType otGff = { NULL, 
     outGff,
     "GTF - gene transfer format", };
-struct outputType otBed = { NULL,
+struct outputType otBed = { NULL, 
     outBed,
     "BED - browser extensible data", };
-struct outputType otCustomTrack = { NULL,
+struct outputType otCustomTrack = { NULL, 
     outCustomTrack,
     "custom track", };
-struct outputType otHyperlinks = { NULL,
+struct outputType otHyperlinks = { NULL, 
     outHyperlinks,
     "hyperlinks to Genome Browser", };
-struct outputType otWigData = { NULL,
-     outWigData,
+struct outputType otWigData = { NULL, 
+     outWigData, 
     "data points", };
-struct outputType otWigBed = { NULL,
-     outWigBed,
+struct outputType otWigBed = { NULL, 
+     outWigBed, 
     "bed format", };
 struct outputType otMaf = { NULL,
      outMaf,
      "MAF - multiple alignment format", };
-struct outputType otChromGraphData = { NULL,
-     outChromGraphData,
+struct outputType otChromGraphData = { NULL, 
+     outChromGraphData, 
     "data points", };
-struct outputType otMicroarrayNames = { NULL,
-     outMicroarrayNames,
-    "microarray names", };
-struct outputType otMicroarrayGroupings = { NULL,
-     outMicroarrayGroupings,
-    "microarray groupings", };
+
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
-    boolean isPal, boolean isMicroarray)
+    boolean isPal)
 /* Print output line. */
 {
 struct outputType *otList = NULL, *otDefault = NULL;
@@ -519,12 +514,6 @@ else if (isMaf)
 else if (isChromGraphCt)
     {
     slAddTail(&otList, &otChromGraphData);
-    }
-else if (isMicroarray)
-    {
-    slAddTail(&otList, &otMicroarrayNames);
-    slAddTail(&otList, &otAllFields);
-    slAddTail(&otList, &otSelected);
     }
 else if (isPositional)
     {
@@ -564,7 +553,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-      isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE;
+	isChromGraphCt = FALSE, isPal = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -573,18 +562,18 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print clade, genome and assembly line. */
     {
     if (gotClade)
-        {
-        hPrintf("<TR><TD><B>clade:</B>\n");
-        printCladeListHtml(hGenome(database), onChangeClade());
-        nbSpaces(3);
-        hPrintf("<B>genome:</B>\n");
-        printGenomeListForCladeHtml(database, onChangeOrg());
-        }
+	{
+	hPrintf("<TR><TD><B>clade:</B>\n");
+	printCladeListHtml(hGenome(database), onChangeClade());
+	nbSpaces(3);
+	hPrintf("<B>genome:</B>\n");
+	printGenomeListForCladeHtml(database, onChangeOrg());
+	}
     else
-        {
-        hPrintf("<TR><TD><B>genome:</B>\n");
-        printGenomeListHtml(database, onChangeOrg());
-        }
+	{
+	hPrintf("<TR><TD><B>genome:</B>\n");
+	printGenomeListHtml(database, onChangeOrg());
+	}
     nbSpaces(3);
     hPrintf("<B>assembly:</B>\n");
     printAssemblyListHtml(database, onChangeDb());
@@ -601,16 +590,17 @@ hPrintf("<TABLE BORDER=0>\n");
     boolean hasCustomTracks = FALSE;
     struct trackDb *t;
     for (t = fullTrackList;  t != NULL;  t = t->next)
-        {
-        if (isCustomTrack(t->tableName))
-            {
-            hasCustomTracks = TRUE;
-            break;
-            }
-        }
+	{
+	if (isCustomTrack(t->tableName))
+	    {
+	    hasCustomTracks = TRUE;
+	    break;
+	    }
+	}
     hOnClickButton("document.customTrackForm.submit();return false;",
-        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-
+		   hasCustomTracks ? 
+                            CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+    
     hPrintf("</TD></TR>\n");
     }
 
@@ -620,39 +610,32 @@ hPrintf("<TABLE BORDER=0>\n");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
-        hti = getHti(database, curTable, conn);
-        isPositional = htiIsPositional(hti);
-        }
+	hti = getHti(database, curTable);
+	isPositional = htiIsPositional(hti);
+	}
     isWig = isWiggle(database, curTable);
-    if (isBigWig(curTable))
-        {
-        isPositional = TRUE;
-        isWig = TRUE;
-        }
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
-    isArray = isMicroarray(curTrack, curTable);
-    struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
-    isPal = isPalCompatible(conn, tdb, curTable);
+    isPal = isPalCompatible(conn, curTrack, curTable);
     nbSpaces(1);
     if (isCustomTrack(curTable))
-        {
-        isChromGraphCt = isChromGraph(tdb);
-        }
+	{
+	isChromGraphCt = isChromGraph(curTrack);
+	}
     cgiMakeButton(hgtaDoSchema, "describe table schema");
     hPrintf("</TD></TR>\n");
     }
 
     if (curTrack == NULL)
-        {
-        struct trackDb *tdb = hTrackDbForTrack(database, curTable);
-        struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
-        if (cTdb)
-            curTrack = cTdb;
-        else
-            curTrack = tdb;
-        isMaf = isMafTable(database, curTrack, curTable);
-        }
+	{
+	struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+	struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
+	if (cTdb)
+	    curTrack = cTdb;
+	else
+	    curTrack = tdb;
+	isMaf = isMafTable(database, curTrack, curTable);
+	}
 
 /* Region line */
 {
@@ -719,9 +702,6 @@ if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     }
 }
 
-/* microarray options */
-/*   button for option page here (median/log-ratio, etc)  */
-
 /* Filter line. */
 {
 hPrintf("<TR><TD><B>filter:</B>\n");
@@ -778,51 +758,51 @@ if (isPositional)
     }
 
 /* Correlation line. */
-struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
-if (correlateTrackTableOK(tdb, curTable))
+if (correlateTrackTableOK(curTrack, curTable))
     {
     char *table2 = cartUsualString(cart, hgtaCorrelateTable, "none");
     hPrintf("<TR><TD><B>correlation:</B>\n");
     if (differentWord(table2,"none") && strlen(table2))
-        {
-        struct grp *groupList = makeGroupList(conn, fullTrackList, TRUE);
-        struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
-        struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,hgtaCorrelateTrack);
-        if (tdbIsComposite(tdb2))
-            {
-            struct trackDb *subTdb;
-            for (subTdb=tdb2->subtracks; subTdb != NULL; subTdb=subTdb->next)
-                {
-                if (sameString(table2, subTdb->tableName))
-                    {
-                    tdb2 = subTdb;
-                    break;
-                    }
-                }
-            }
-        cgiMakeButton(hgtaDoCorrelatePage, "calculate");
-        cgiMakeButton(hgtaDoClearCorrelate, "clear");
+	{
+	struct grp *groupList = makeGroupList(conn, fullTrackList, TRUE);
+	struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
+	struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,
+		hgtaCorrelateTrack);
+	if (tdbIsComposite(tdb2))
+	    {
+	    struct trackDb *subTdb;
+	    for (subTdb=tdb2->subtracks; subTdb != NULL; subTdb=subTdb->next)
+		{
+		if (sameString(table2, subTdb->tableName))
+		    {
+		    tdb2 = subTdb;
+		    break;
+		    }
+		}
+	    }
+	cgiMakeButton(hgtaDoCorrelatePage, "calculate");
+	cgiMakeButton(hgtaDoClearCorrelate, "clear");
         if (tdb2 && tdb2->shortLabel)
-            hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", tdb2->shortLabel);
+	    hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", tdb2->shortLabel);
 
 #ifdef NOT_YET
-        /* debugging 	dbg	vvvvv	*/
-        if (curTrack && curTrack->type)		/*	dbg	*/
-            {
-            hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')", curTrack->type, tdb2->type, table2);
-            }
-        /* debugging 	debug	^^^^^	*/
+/* debugging 	dbg	vvvvv	*/
+if (curTrack && curTrack->type)		/*	dbg	*/
+    {
+    hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')", curTrack->type, tdb2->type, table2);
+    }
+/* debugging 	debug	^^^^^	*/
 #endif
 
-        }
-        else
-            cgiMakeButton(hgtaDoCorrelatePage, "create");
+	}
+    else
+	cgiMakeButton(hgtaDoCorrelatePage, "create");
 
-        hPrintf("</TD></TR>\n");
+    hPrintf("</TD></TR>\n");
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, isArray);
+showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal);
 
 /* Print output destination line. */
     {
@@ -900,7 +880,7 @@ void mainPageAfterOpen(struct sqlConnection *conn)
 /* Put up main page assuming htmlOpen()/htmlClose()
  * will happen in calling routine. */
 {
-hPrintf("%s",
+hPrintf("%s", 
   "Use this program to retrieve the data associated with a track in text "
   "format, to calculate intersections between tracks, and to retrieve "
   "DNA sequence covered by a track. For help in using this application "

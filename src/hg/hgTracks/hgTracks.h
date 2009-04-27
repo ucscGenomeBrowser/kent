@@ -86,7 +86,7 @@ struct track
     /* Return name to associate on map. */
 
     int (*totalHeight)(struct track *tg, enum trackVisibility vis);
-	/* Return total height. Called before and after drawItems.
+	/* Return total height. Called before and after drawItems. 
 	 * Must set the following variables. */
     int height;                /* Total height - must be set by above call. */
     int lineHeight;            /* Height per track including border. */
@@ -99,12 +99,12 @@ struct track
     /* Return number of pixels needed to right of item for additional labeling. (Optional) */
 
     void (*drawItems)(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
+	struct hvGfx *hvg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw item list, one per track. */
 
-    void (*drawItemAt)(struct track *tg, void *item, struct hvGfx *hvg,
-        int xOff, int yOff, double scale,
+    void (*drawItemAt)(struct track *tg, void *item, struct hvGfx *hvg, 
+        int xOff, int yOff, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw a single option.  This is optional, but if it's here
      * then you can plug in genericDrawItems into the drawItems,
@@ -128,15 +128,15 @@ struct track
     Color (*itemLabelColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color for the item's label (optional). */
 
-    void (*mapItem)(struct track *tg, struct hvGfx *hvg, void *item,
-    	char *itemName, char *mapItemName, int start, int end,
-	int x, int y, int width, int height);
+    void (*mapItem)(struct track *tg, struct hvGfx *hvg, void *item, 
+    	char *itemName, char *mapItemName, int start, int end, 
+	int x, int y, int width, int height); 
     /* Write out image mapping for a given item */
 
     boolean hasUi;	/* True if has an extended UI page. */
     void *extraUiData;	/* Pointer for track specific filter etc. data. */
 
-    void (*trackFilter)(struct track *tg);
+    void (*trackFilter)(struct track *tg);	
     /* Stuff to handle user interface parts. */
 
     void *customPt;  /* Misc pointer variable unique to track. */
@@ -146,12 +146,8 @@ struct track
 
     float minRange, maxRange;	  /*min and max range for sample tracks 0.0 to 1000.0*/
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
-    double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
-
-    char *bbiFileName;		/* File name for bigWig or bigBed. */
 
     int bedSize;		/* Number of fields if a bed file. */
-    boolean isBigBed;		/* If a bed, is it a bigBed? */
 
     char *otherDb;		/* Other database for an axt track. */
 
@@ -175,15 +171,15 @@ struct track
 
     boolean exonArrows;	/* Draw arrows on exons? */
     boolean exonArrowsAlways;	/* Draw arrows on exons even with introns showing? */
-    boolean nextItemButtonable; /* Use the next-exon buttons? */
-    boolean labelNextItemButtonable; /* Use the next-gene buttons? */
+    boolean nextItemButtonable; /* Use the next-exon buttons? */ 
+    boolean labelNextItemButtonable; /* Use the next-gene buttons? */ 
     struct itemAttrTbl *itemAttrTbl;  /* relational attributes for specific
                                          items (color) */
 
     /* fill in left label drawing area */
     Color labelColor;   /* Fixed color for the track label (optional) */
     void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis);
 
@@ -192,12 +188,12 @@ struct track
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
 
-    void (*nextPrevItem)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
+    void (*nextPrevItem)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);    
     /* Function will draw the button on a track item and assign a map */
     /* box to it as well, so that a click will move the browser window */
     /* to the next (or previous if next==FALSE) item. This is meant to */
     /* jump to parts of an item already partially in the window but is */
-    /* hanging off the edge... e.g. the next exon in a gene. */
+    /* hanging off the edge... e.g. the next exon in a gene. */ 
 
     void (*labelNextPrevItem)(struct track *tg, boolean next);
     /* If this function is given, it can dictate where the browser loads */
@@ -225,7 +221,7 @@ typedef void (*TrackHandler)(struct track *tg);
 boolean trackIsCompositeWithSubtracks(struct track *track);
 /* Temporary function until all composite tracks point to their own children */
 
-struct trackRef
+struct trackRef 
 /* A reference to a track. */
     {
     struct trackRef *next;	/* Next in list. */
@@ -256,7 +252,7 @@ struct simpleFeature
 /* Some details of how to draw linked features. */
 enum {lfSubXeno = 1};
 enum {lfSubSample = 2};
-enum {lfWithBarbs = 3}; /* Turn on barbs to show direction based on
+enum {lfWithBarbs = 3}; /* Turn on barbs to show direction based on 
                          * strand field */
 enum {lfSubChain = 4};
 enum {lfNoIntronLines = 5}; /* Draw no lines between exon blocks */
@@ -277,7 +273,7 @@ struct linkedFeatures
     struct simpleFeature *components;   /* List of component simple features. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
     void *extra;			/* Extra info that varies with type. */
-    void *original;			/* The structure that was converted
+    void *original;			/* The structure that was converted 
 					   into this (when needed later).  */
     struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
     char popUp[128];			/* text for popup */
@@ -286,7 +282,7 @@ struct linkedFeatures
 struct linkedFeaturesSeries
 /* series of linked features that are comprised of multiple linked features */
 {
-    struct linkedFeaturesSeries *next;
+    struct linkedFeaturesSeries *next; 
     char *name;                      /* name for series of linked features */
     int start, end;                     /* Start/end in browser coordinates. */
     int orientation;                    /* Orientation. */
@@ -401,8 +397,8 @@ void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */
 
 struct track *getTrackList(struct group **pGroupList, int vis);
-/* Return list of all tracks, organizing by groups.
- * If vis is -1, restore default groups to tracks.
+/* Return list of all tracks, organizing by groups. 
+ * If vis is -1, restore default groups to tracks. 
  * Shared by hgTracks and configure page. */
 
 void groupTrackListAddSuper(struct cart *cart, struct group *group);
@@ -425,12 +421,12 @@ enum trackVisibility limitVisibility(struct track *tg);
 char *hgcNameAndSettings();
 /* Return path to hgc with variables to store UI settings. */
 
-void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height,
+void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
 	char *group, char *item, char *statusLine);
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 
-void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
+void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height, 
 		    struct track *toggleGroup, char *chrom,
 		    int start, int end, char *message, char *extra);
 /* Print out image map rectangle that would invoke this program again.
@@ -438,17 +434,17 @@ void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 
-void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
+void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height, 
 	struct track *curGroup);
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 
-void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, 
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 
-void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height,
+void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
                        char *track, char *item, char *statusLine, char *directUrl, boolean withHguid,
                        char *extra);
 /* Print out image map rectangle that would invoke the hgc (human genome click)
@@ -471,17 +467,17 @@ double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
 
-void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
+void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd, 
 	double scale, int xOff, int y, int height, Color color);
-/* Draw a box scaled from chromosome to window coordinates.
+/* Draw a box scaled from chromosome to window coordinates. 
  * Get scale first with scaleForPixels. */
 
-void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd,
+void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd, 
 	double scale, int xOff, int y, int height, Color color);
-/* Draw a box scaled from chromosome to window coordinates.
- * Get scale first with scaleForPixels.
+/* Draw a box scaled from chromosome to window coordinates. 
+ * Get scale first with scaleForPixels. 
  * use colorBin to collect multiple colors for the same pixel, choose
- * majority color, break ties by blending the colors.
+ * majority color, break ties by blending the colors. 
  * Yellow and red are blended as brown, other colors not implemented.*/
 
 Color whiteIndex();
@@ -506,12 +502,12 @@ Color getSeqColor(char *name, struct hvGfx *hvg);
 /* Return color index corresponding to chromosome/scaffold name. */
 
 Color lighterColor(struct hvGfx *hvg, Color color);
-/* Get lighter shade of a color */
+/* Get lighter shade of a color */ 
 
 Color slightlyLighterColor(struct hvGfx *hvg, Color color);
-/* Get slightly lighter shade of a color */
+/* Get slightly lighter shade of a color */ 
 
-void clippedBarbs(struct hvGfx *hvg, int x, int y,
+void clippedBarbs(struct hvGfx *hvg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle);
 /* Draw barbed line.  Clip it to fit the window first though since
@@ -538,43 +534,38 @@ int tgItemNoEnd(struct track *tg, void *item);
 int tgFixedItemHeight(struct track *tg, void *item);
 /* Return item height for fixed height track. */
 
-int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis,
+int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
 			       int lineHeight, int heightPer, boolean allowOverflow);
-/* Most fixed height track groups will use this to figure out the height
+/* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
 int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
-/* Most fixed height track groups will use this to figure out the height
+/* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
 void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
-/* Change track visibilities. If groupTarget is
+/* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
- * unchanged.  If -1 then set visibility to default, otherwise it should
- * be tvHide, tvDense, etc.
+ * unchanged.  If -1 then set visibility to default, otherwise it should 
+ * be tvHide, tvDense, etc. 
  */
 
-void genericDrawItems(struct track *tg,
+void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 
-void bedDrawSimpleAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y,
+void bedDrawSimpleAt(struct track *tg, void *item, 
+	struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
-void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis);
-/* Draw simple Bed items. */
-
 typedef struct slList *(*ItemLoader)(char **row);
 
-void bedLoadItemByQuery(struct track *tg, char *table,
+void bedLoadItemByQuery(struct track *tg, char *table, 
 			char *query, ItemLoader loader);
 /* Generic tg->item loader. If query is NULL use generic
  hRangeQuery(). */
@@ -582,18 +573,18 @@ void bedLoadItemByQuery(struct track *tg, char *table,
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
-void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
+void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row), 
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
 				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item));
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
-void adjustBedScoreGrayLevel(struct trackDb *tdb, struct bed *bed, int scoreMin, int scoreMax);
-/* For each distinct trackName passed in, check cart for trackName.minGrayLevel; if
- * that is different from the gray level implied by scoreMin's place in [0..scoreMax],
- * then linearly transform bed->score from the range of [scoreMin,scoreMax] to
- * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax].
+void adjustBedScoreGrayLevel(char *trackName, struct bed *bed, int scoreMin, int scoreMax);
+/* For each distinct trackName passed in, check cart for trackName_minGrayLevel; if 
+ * that is different from the gray level implied by scoreMin's place in [0..scoreMax], 
+ * then linearly transform bed->score from the range of [scoreMin,scoreMax] to 
+ * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax]. 
  * Note: this assumes that scoreMin and scoreMax are constant for each track. */
 
 struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax);
@@ -601,19 +592,6 @@ struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMa
 
 struct linkedFeatures *lfFromBed(struct bed *bed);
 /* Return a linked feature from a (full) bed. */
-
-void loadSimpleBed(struct track *tg);
-/* Load the items in one track - just move beds in
- * window... */
-
-void loadBed8(struct track *tg);
-/* Convert bed 8 info in window to linked feature. */
-
-void loadBed9(struct track *tg);
-/* Convert bed 9 info in window to linked feature.  (to handle itemRgb)*/
-
-void loadGappedBed(struct track *tg);
-/* Convert bed info in window to linked feature. */
 
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
@@ -634,18 +612,18 @@ int lfCalcGrayIx(struct linkedFeatures *lf);
 /* Calculate gray level from components. */
 
 void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw linked features items. */
 
-void linkedFeaturesAverageDense(struct track *tg,
+void linkedFeaturesAverageDense(struct track *tg, 
 	int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw dense linked features items. */
 
 void linkedFeaturesMethods(struct track *tg);
-/* Fill in track group methods for linked features.
+/* Fill in track group methods for linked features. 
  * Many other methods routines will call this first
  * to get a reasonable set of defaults. */
 
@@ -667,11 +645,11 @@ void spreadBasesString(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Draw evenly spaced base letters in string. */
 
 void spreadAlignString(struct hvGfx *hvg, int x, int y, int width, int height,
-                        Color color, MgFont *font, char *s,
+                        Color color, MgFont *font, char *s, 
                         char *match, int count, bool dots, bool isCodon);
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
- * with the main color, mismatched letters will have alt color.
+ * with the main color, mismatched letters will have alt color. 
  * Draw a vertical bar in light yellow where sequence lacks gaps that
  * are in reference sequence (possible insertion) -- this is indicated
  * by an escaped ('/') insert count in the sequence.
@@ -703,7 +681,7 @@ void cytoBandIdeoMethods(struct track *tg);
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
 
-void chainMethods(struct track *track, struct trackDb *tdb,
+void chainMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
 /* Make track group for chain alignment. */
 
@@ -717,7 +695,7 @@ void altGraphXMethods(struct track *tg);
 /* setup special methods for altGraphX track */
 
 void wabaMethods(struct track *tg);
-/* Return track with fields shared by waba-based
+/* Return track with fields shared by waba-based 
  * alignment tracks filled in. */
 
 void axtMethods(struct track *tg, char *otherDb);
@@ -740,7 +718,7 @@ struct repeatItem
     int yOffset;
     };
 
-void pslMethods(struct track *track, struct trackDb *tdb,
+void pslMethods(struct track *track, struct trackDb *tdb, 
 	int argc, char *argv[]);
 /* Load up psl type methods. */
 
@@ -750,19 +728,17 @@ void loadXenoPsl(struct track *tg);
 void loadProteinPsl(struct track *tg);
 /* Load a protein psl */
 
-struct linkedFeatures *lfFromPslx(struct psl *psl,
+struct linkedFeatures *lfFromPslx(struct psl *psl, 
 	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg);
-/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA,
- * sizeMul=3 for protein. 
- * Don't free psl afterwards!  (may be used by baseColor code) */
+/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
+ * sizeMul=3 for protein. */
 
 
 struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int
                 sizeMul);
 
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
-/* Create a linked feature item from psl.
- * Don't free psl afterwards!  (may be used by baseColor code) */
+/* Create a linked feature item from psl. */
 
 struct linkedFeatures *lfFromPslsWScoresInRange(char *table, int start, int end, char *chromName, boolean isXeno, float maxScore);
 /* Return linked features from range of table with the scores scaled appropriately */
@@ -771,11 +747,9 @@ void ctWigLoadItems(struct track *tg);
 /*	load custom wiggle track data	*/
 void wigLoadItems(struct track *tg);
 /*	load wiggle track data from database	*/
-void wigMethods(struct track *track, struct trackDb *tdb,
+void wigMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
-void bedGraphMethods(struct track *track, struct trackDb *tdb,
-	int wordCount, char *words[]);
-void bigWigMethods(struct track *track, struct trackDb *tdb,
+void bedGraphMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[]);
 
 /* Make track group for wig - wiggle tracks. */
@@ -786,9 +760,9 @@ void chromGraphMethods(struct track *tg);
 void chromGraphMethodsCt(struct track *tg);
 /* Fill in chromGraph methods for custom track. */
 
-void wigMafPMethods(struct track *track, struct trackDb *tdb,
+void wigMafPMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
-void wigMafMethods(struct track *track, struct trackDb *tdb,
+void wigMafMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
 int wigTotalHeight(struct track *tg, enum trackVisibility vis);
 
@@ -815,11 +789,11 @@ void samplePrintYAxisLabel( struct hvGfx *hvg, int y, struct track *track, char 
         double min0, double max0 );
 /*print a label for a horizontal y-axis line*/
 
-int whichSampleBin( double num, double thisMin, double thisMax,
+int whichSampleBin( double num, double thisMin, double thisMax, 
 	double binCount );
 /* Get bin value from num. */
 
-double whichSampleNum( double bin, double thisMin, double thisMax,
+double whichSampleNum( double bin, double thisMin, double thisMax, 
 	double binCount );
 /* gets range nums. from bin values*/
 
@@ -915,7 +889,7 @@ void makeRedBlueShadesOnWhiteBackground(struct hvGfx *hvg);
 
 void linkedFeaturesSeriesMethods(struct track *tg);
 
-void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end,
+void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height);
 
 void drawScaledBoxSample(struct hvGfx *hvg,
@@ -937,12 +911,12 @@ Color getChromBreakBlueColor();
 Color getChromBreakGreenColor();
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
-				 struct hvGfx *hvg, int xOff, int y, double scale,
+				 struct hvGfx *hvg, int xOff, int y, double scale, 
 				 MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
 Color lighterColor(struct hvGfx *hvg, Color color);
-/* Get lighter shade of a color */
+/* Get lighter shade of a color */ 
 
 struct track *chromIdeoTrack(struct track *trackList);
 /* Find chromosome ideogram track */
@@ -965,8 +939,8 @@ void configPage();
 /* Put up configuration page. */
 
 void configPageSetTrackVis(int vis);
-/* Do config page after setting track visibility. If vis is -2, then visibility
- * is unchanged.  If -1 then set visibility to default, otherwise it should
+/* Do config page after setting track visibility. If vis is -2, then visibility 
+ * is unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 
 struct track *trackNew();
@@ -974,10 +948,6 @@ struct track *trackNew();
 
 void bedMethods(struct track *tg);
 /* Fill in methods for (simple) bed tracks. */
-
-void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
-                                int wordCount, char *words[]);
-/* Fill in methods for more complex bed tracks. */
 
 void makeCompositeTrack(struct track *track, struct trackDb *tdb);
 /* Construct track subtrack list from trackDb entry.
@@ -990,9 +960,9 @@ void compositeTrackVis(struct track *track);
 /* set visibilities of subtracks */
 
 boolean isWithCenterLabels(struct track *track);
-/* Special cases: inhibit center labels of subtracks in dense mode, and
+/* Special cases: inhibit center labels of subtracks in dense mode, and 
  * of composite track in non-dense mode.
- * BUT if track->tdb has a centerLabelDense setting, let subtracks go with
+ * BUT if track->tdb has a centerLabelDense setting, let subtracks go with 
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 
@@ -1005,7 +975,7 @@ void loadGenePred(struct track *tg);
 boolean highlightItem(struct track *tg, void *item);
 /* Should this item be highlighted? */
 
-void linkedFeaturesSeriesDrawAt(struct track *tg, void *item,
+void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
         struct hvGfx *hvg, int xOff, int y, double scale,
 	MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a linked features series item at position. */
@@ -1063,7 +1033,7 @@ void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next);
  * and updates position in cart. */
 
 void createHgFindMatchHash();
-/* Read from the cart the string assocated with matches and
+/* Read from the cart the string assocated with matches and 
    put the matching items into a hash for highlighting later. */
 
 TrackHandler lookupTrackHandler(char *name);
@@ -1088,11 +1058,6 @@ void registerTrackHandler(char *name, TrackHandler handler);
 
 enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
-
-char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
-// Returns "score >= ..." extra where clause if one is needed
-
-#define SMALLBUF 128
-
+        
 #endif /* HGTRACKS_H */
 

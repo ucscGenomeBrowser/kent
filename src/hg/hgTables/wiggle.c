@@ -1,11 +1,10 @@
-/* wiggle - stuff to process wiggle tracks.
+/* wiggle - stuff to process wiggle tracks. 
  * Much of this is lifted from hgText/hgWigText.c */
 
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "localmem.h"
 #include "portable.h"
 #include "obscure.h"
 #include "jksql.h"
@@ -19,13 +18,18 @@
 #include "trackDb.h"
 #include "customTrack.h"
 #include "wiggle.h"
-#include "hmmstats.h"
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.72 2009/04/10 20:04:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.65 2008/09/03 19:18:59 markd Exp $";
 
 extern char *maxOutMenu[];
+
+enum wigOutputType 
+/*	type of output requested from static int wigOutRegion()	*/
+    {
+    wigOutData, wigOutBed, wigDataNoPrint,
+    };
 
 
 /*	a common set of stuff is accumulating in the various
@@ -73,11 +77,6 @@ char varPrefix[128];
 struct hashEl *varList, *var;
 char *pat = NULL;
 char *cmp = NULL;
-if (constraint != NULL)
-    *constraint = NULL;	// Make sure return variable gets set to something at least.
-
-if (isCustomTrack(table))
-    db = "ct";
 
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 
@@ -147,7 +146,6 @@ if (cmp && pat)
 else
     return FALSE;
 }	/*	static boolean checkWigDataFilter()	*/
-
 
 static void wigDataHeader(char *name, char *description, char *visibility,
 	enum wigOutputType wigOutType)
@@ -241,14 +239,6 @@ static struct bed *bedTable2(struct sqlConnection *conn,
 	struct region *region, char *table2)
 /*	get a bed list, possibly complement, for table2	*/
 {
-/* This use of bedTable rather than a bitmap is not really working. The
- * rest of the table browser does intersection at the exon level, while
- * the wig code, which this is part of, does it at the gene level.  I
- * noticed it while working on the corresponding routines for bigWig,
- * which I'm building to work with bitmaps at the exon level.  I'm not
- * sure it's worth fixing this code since nobody has complained, and we're
- * probably going to be doing mostly bigWig rather than wig in the future.
- *    -JK */
 boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
 char *op = cartString(cart, hgtaIntersectOp);
 struct bed *bedList = NULL;
@@ -305,8 +295,8 @@ unsigned long long valuesMatched = 0;
  */
 
 
-/* If table2 is NULL, it means that the WIG_INIT macro recognized that we
- * are working on table2 now, so we should not use intersectBedList
+/* If table2 is NULL, it means that the WIG_INIT macro recognized that we 
+ * are working on table2 now, so we should not use intersectBedList 
  * (in fact we may be trying to compute it here). */
 if ((table2 != NULL) && anyIntersection())
     {
@@ -328,11 +318,11 @@ static void intersectDataVector(char *table, struct dataVector *dataVector1,
 			struct region *region, struct sqlConnection *conn)
 /* Perform intersection (if specified) on dataVector. */
 {
-/* If table is type wig (not bedGraph), then intersection has already been
- * performed on each input (other selected subtracks must be the same type
- * as table).
+/* If table is type wig (not bedGraph), then intersection has already been 
+ * performed on each input (other selected subtracks must be the same type 
+ * as table).  
  * Otherwise, handle intersection here. */
-if (anyIntersection() && !isWiggle(database, table) && !isBigWig(table))
+if (anyIntersection() && !isWiggle(database, table))
     {
     char *track2 = cartString(cart, hgtaIntersectTrack);
     char *table2 = cartString(cart, hgtaIntersectTable);
@@ -343,7 +333,7 @@ if (anyIntersection() && !isWiggle(database, table) && !isBigWig(table))
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
 	char *op = cartString(cart, hgtaIntersectOp);
-	boolean dv2IsWiggle = (isWiggle(database, table2) || isBigWig(table2) ||
+	boolean dv2IsWiggle = (isWiggle(database, table2) ||
 			       isBedGraph(table2));
 	dataVectorIntersect(dataVector1, dataVector2,
 			    dv2IsWiggle, sameString(op, "none"));
@@ -352,7 +342,7 @@ if (anyIntersection() && !isWiggle(database, table) && !isBigWig(table))
     }
 }
 
-int wigPrintDataVectorOut(struct dataVector *dataVectorList,
+static int printDataVectorOut(struct dataVector *dataVectorList,
 			      enum wigOutputType wigOutType, int maxOut,
 			      char *description)
 /* Print out bed or data points from list of dataVectors. */
@@ -375,9 +365,9 @@ switch (wigOutType)
 return count;
 }
 
-struct dataVector *mergedWigDataVector(char *table,
+static struct dataVector *mergedWigDataVector(char *table,
 	struct sqlConnection *conn, struct region *region)
-/* Perform the specified subtrack merge wiggle-operation on table and
+/* Perform the specified subtrack merge wiggle-operation on table and 
  * all other selected subtracks and intersect if necessary. */
 {
 struct trackDb *tdb1 = hTrackDbForTrack(database, table);
@@ -404,7 +394,7 @@ for (sTdb = cTdb->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
     {
     if (isSubtrackMerged(sTdb->tableName) &&
 	! sameString(tdb1->tableName, sTdb->tableName) &&
-	hSameTrackDbType(tdb1->type, sTdb->type))
+	sameString(tdb1->type, sTdb->type))
 	{
 	struct trackTable *tt2 = trackTableNew(sTdb, sTdb->tableName, conn);
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
@@ -445,12 +435,12 @@ return dataVector1;
 static int mergedWigOutRegion(char *table, struct sqlConnection *conn,
 			      struct region *region, int maxOut,
 			      enum wigOutputType wigOutType)
-/* Perform the specified subtrack merge wiggle-operation on table and
+/* Perform the specified subtrack merge wiggle-operation on table and 
  * all other selected subtracks, intersect if necessary, and print out. */
 {
 struct dataVector *dv = mergedWigDataVector(table, conn, region);
-int resultCount =
-    wigPrintDataVectorOut(dv, wigOutType, maxOut, describeSubtrackMerge("#\t"));
+int resultCount = 
+    printDataVectorOut(dv, wigOutType, maxOut, describeSubtrackMerge("#\t"));
 dataVectorFree(&dv);
 return resultCount;
 }
@@ -459,19 +449,48 @@ return resultCount;
 static int bedGraphOutRegion(char *table, struct sqlConnection *conn,
 			     struct region *region, int maxOut,
 			     enum wigOutputType wigOutType)
-/* Read in bedGraph as dataVector (filtering is handled there),
+/* Read in bedGraph as dataVector (filtering is handled there), 
  * intersect if necessary, and print it out. */
 {
 struct dataVector *dv =bedGraphDataVector(table, conn, region);
-int resultCount = wigPrintDataVectorOut(dv, wigOutType, maxOut, NULL);
+int resultCount = printDataVectorOut(dv, wigOutType, maxOut, NULL);
 dataVectorFree(&dv);
 return resultCount;
+}
+
+static struct trackDb *trackDbWithWiggleSettings(char *table)
+/* Get trackDb for a table in the database -- or if it has a parent/composite 
+ * track, then return that because it contains the wiggle settings. */
+{
+if (curTrack != NULL)
+    {
+    if (sameString(table, curTrack->tableName))
+	return curTrack;
+    else if (curTrack->subtracks)
+	{
+	struct trackDb *sTdb = NULL;
+	for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+	    {
+	    if (sameString(table, sTdb->tableName))
+		return curTrack;
+	    }
+	}
+    }
+/* OK, table is not curTrack nor any of its subtracks -- look it up (and its 
+ * parent if there is one): */
+{
+struct trackDb *tdb = hTrackDbForTrack(database, table);
+struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
+if (cTdb != NULL)
+    return cTdb;
+return tdb;
+}
 }
 
 static int wigOutRegion(char *table, struct sqlConnection *conn,
 	struct region *region, int maxOut, enum wigOutputType wigOutType,
 	struct wigAsciiData **data, int spanConstraint)
-/* Write out wig data in region.  Write up to maxOut elements.
+/* Write out wig data in region.  Write up to maxOut elements. 
  * Returns number of elements written. */
 {
 int linesOut = 0;
@@ -521,7 +540,7 @@ if (isCustom)
 	else
 	    {
 	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
-	    struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    unsigned span = minSpan(trashConn, splitTableOrFileName,
 		region->chrom, region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
@@ -544,8 +563,8 @@ else
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	if (intersectBedList)
 	    {
-	    struct trackDb *tdb = findTdbForTable(database, curTrack, table);
-	    unsigned span;
+	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
+	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
@@ -666,11 +685,9 @@ for (region = regionList; region != NULL; region = region->next)
     if (anySubtrackMerge(database, table))
 	outCount = mergedWigOutRegion(table, conn, region, curMaxOut,
 				      wigOutType);
-    else if (startsWithWord("bedGraph", track->type))
+    else if (startsWith("bedGraph ", track->type))
 	outCount = bedGraphOutRegion(table, conn, region, curMaxOut,
 				     wigOutType);
-    else if (startsWithWord("bigWig", track->type))
-        outCount = bigWigOutRegion(table, conn, region, curMaxOut, wigOutType);
     else
 	outCount = wigOutRegion(table, conn, region, curMaxOut,
 				wigOutType, NULL, 0);
@@ -687,7 +704,7 @@ if (curOut >= maxOut)
 
 struct dataVector *bedGraphDataVector(char *table,
 	struct sqlConnection *conn, struct region *region)
-/* Read in bedGraph as dataVector and return it.  Filtering, subtrack merge
+/* Read in bedGraph as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */
 {
 struct dataVector *dv = NULL;
@@ -716,10 +733,9 @@ else
 return dv;
 }
 
-
 struct dataVector *wiggleDataVector(struct trackDb *tdb, char *table,
 	struct sqlConnection *conn, struct region *region)
-/* Read in wiggle as dataVector and return it.  Filtering, subtrack merge
+/* Read in wiggle as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */
 {
 struct dataVector *dv = NULL;
@@ -736,7 +752,7 @@ return dv;
 
 struct bed *getBedGraphAsBed(struct sqlConnection *conn, char *table,
 			     struct region *region)
-/* Extract a bedList in region from the given bedGraph table -- filtering and
+/* Extract a bedList in region from the given bedGraph table -- filtering and 
  * intersection are handled inside of this function. */
 {
 struct dataVector *dv = NULL;
@@ -775,12 +791,12 @@ if (db != NULL && table != NULL)
     if (isCustomTrack(table))
 	{
 	struct customTrack *ct = lookupCt(table);
-	if (ct != NULL && ct->wiggle)
+	if (ct->wiggle)
 	    typeWiggle = TRUE;
 	}
     else
 	{
-	struct hTableInfo *hti = maybeGetHtiOnDb(db, table);
+	struct hTableInfo *hti = maybeGetHti(db, table);
 	typeWiggle = (hti != NULL && HTI_IS_WIGGLE);
 	}
     }
@@ -788,10 +804,17 @@ return(typeWiggle);
 }
 
 boolean isBedGraph(char *table)
-/* Return TRUE if table is specified as a bedGraph in the current database's
+/* Return TRUE if table is specified as a bedGraph in the current database's 
  * trackDb. */
 {
-return trackIsType(table, "bedGraph");
+if (curTrack && sameString(curTrack->tableName, table))
+    return startsWith("bedGraph", curTrack->type);
+else
+    {
+    struct trackDb *tdb = hTrackDbForTrack(database, table);
+    return (tdb && startsWith("bedGraph", tdb->type));
+    }
+return FALSE;
 }
 
 struct bed *getWiggleAsBed(
@@ -841,7 +864,7 @@ if (isCustom)
 	{
 	unsigned span = 0;
 	struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
-	struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
 		splitTableOrFileName, operations);
@@ -863,7 +886,7 @@ else
 
     if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
 	{
-	struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	unsigned span = 0;
 
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
@@ -1024,7 +1047,7 @@ for (region = regionList; region != NULL; region = region->next)
 	if (ct->dbTrack)
 	    {
 	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
-	    struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
@@ -1218,8 +1241,8 @@ stringStatRow("region", regionName);
 numberStatRow("bases in region", regionSize);
 numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
-wigFilterStatRow(conn);
-stringStatRow("intersection", cartUsualString(cart, hgtaIntersectTable, "off"));
+stringStatRow("filter", (anyFilter() ? "on" : "off"));
+stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
 htmlClose();
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
@@ -1230,7 +1253,9 @@ void wigShowFilter(struct sqlConnection *conn)
 double ll, ul;
 char *constraint;
 
-if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
+if ( (isCustomTrack(curTable) &&
+	checkWigDataFilter("ct", curTable, &constraint, &ll, &ul))
+	|| checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
     {
     if (constraint && sameWord(constraint, "in range"))
 	{

@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.16 2009/04/16 18:34:06 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.12 2008/09/03 19:18:58 markd Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -61,7 +61,7 @@ return (sameString(op, "and") || sameString(op, "or"));
 boolean isSubtrackMerged(char *tableName)
 /* Return true if tableName has been selected for subtrack merge. */
 {
-char option[128];
+char option[64];
 safef(option, sizeof(option), "%s_sel", tableName);
 return cartUsualBoolean(cart, option, FALSE);
 }
@@ -106,7 +106,7 @@ cgiMakeRadioButton(hgtaNextSubtrackMergeOp, val, sameString(val, selVal));
 }
 
 static void showBedMergeOptions()
-/* Show subtrack merge operation options for tables that are distilled
+/* Show subtrack merge operation options for tables that are distilled 
  * to BED (not wiggle/bedGraph). */
 {
 char *op = cartUsualString(cart, hgtaNextSubtrackMergeOp, "any");
@@ -149,37 +149,25 @@ printf("Base-pair-wise union (OR) of %s and other selected subtracks<P>\n",
        curTable);
 }
 
-struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table)
-/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) */
+static struct trackDb *getPrimaryTdb()
+/* Return a pointer to the subtrack tdb for the primary subtrack. */
 {
-if(isEmpty(table))
-    return parent;
-struct trackDb *tdb = NULL;
-if (isCustomTrack(table))
+struct trackDb *primary = NULL, *sTdb = NULL;
+for (sTdb = curTrack->subtracks; sTdb != NULL; sTdb = sTdb->next)
     {
-    struct customTrack *ct = lookupCt(table);
-    if (ct != NULL)
-        tdb = ct->tdb;
+    if (sameString(curTable, sTdb->tableName))
+	{
+	primary = sTdb;
+	break;
+	}
     }
-else
-    tdb = tdbFindOrCreate(db,parent,table);
-return tdb;
+return primary;
 }
-
-char *findTypeForTable(char *db,struct trackDb *parent,char *table)
-/* Finds the TrackType for this Table */
-{
-struct trackDb *tdb = findTdbForTable(db,parent,table);
-if(tdb)
-    return tdb->type;
-return (parent?parent->type:NULL);
-}
-
 
 void doSubtrackMergeMore(struct sqlConnection *conn)
 /* Respond to subtrack merge create/edit button */
 {
-struct trackDb *primary = subTdbFind(curTrack,curTable);
+struct trackDb *primary = getPrimaryTdb();
 char *dbTable = getDbTable(database, curTable);
 
 htmlOpen("Merge subtracks of %s (%s)",
@@ -188,7 +176,7 @@ htmlOpen("Merge subtracks of %s (%s)",
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=%s>\n",
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-/* Currently selected subtrack table will be the primary subtrack in the
+/* Currently selected subtrack table will be the primary subtrack in the 
  * merge. */
 cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
 
@@ -196,7 +184,7 @@ hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
 hCompositeUi(database, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm");
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
-if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable))
+if (isWiggle(database, curTable) || isBedGraph(curTable))
     showWiggleMergeOptions(primary->longLabel);
 else
     showBedMergeOptions();
@@ -214,17 +202,17 @@ htmlClose();
 }
 
 char *describeSubtrackMerge(char *linePrefix)
-/* Return a multi-line string that describes the specified subtrack merge,
+/* Return a multi-line string that describes the specified subtrack merge, 
  * with each line beginning with linePrefix. */
 {
 struct dyString *dy = dyStringNew(512);
-struct trackDb *primary = subTdbFind(curTrack,curTable), *tdb = NULL;
+struct trackDb *primary = getPrimaryTdb(), *tdb = NULL;
 dyStringAppend(dy, linePrefix);
 dyStringPrintf(dy, "Subtrack merge, primary table = %s (%s)\n",
 	       curTable, primary->longLabel);
 dyStringAppend(dy, linePrefix);
 dyStringPrintf(dy, "Subtrack merge operation: ");
-if (isWiggle(database, curTable) || isBedGraph(curTable) || isBigWig(curTable))
+if (isWiggle(database, curTable) || isBedGraph(curTable))
     {
     char *op = cartString(cart, hgtaSubtrackMergeWigOp);
     dyStringPrintf(dy, "%s of %s and selected subtracks:\n", op, curTable);

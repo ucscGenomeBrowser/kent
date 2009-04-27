@@ -1,21 +1,20 @@
 include ../inc/common.mk
 
-
-O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
-    basicBed.o bbiRead.o bbiWrite.o bigBed.o binRange.o bits.o blastOut.o \
-    blastParse.o boxClump.o boxLump.o bPlusTree.o bwgCreate.o bwgQuery.o \
+O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
+    base64.o binRange.o bits.o blastOut.o blastParse.o boxClump.o \
+    boxLump.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
-    cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o \
+    cheapcgi.o codebias.o colHash.o common.o correlate.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
     dnautil.o dtdParse.o dystring.o \
     emblParse.o errCatch.o errabort.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
-    gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o gifcomp.o \
+    gfNet.o gff.o gfxPoly.o gifLabel.o gifcomp.o \
     gifdecomp.o gifread.o gifwrite.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
-    https.o intExp.o intValTree.o internet.o itsa.o \
+    intExp.o intValTree.o internet.o itsa.o \
     jointalign.o jpegSize.o \
     keys.o kxTok.o \
     linefile.o localmem.o log.o \
@@ -33,7 +32,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
-    udc.o vGfx.o vGif.o verbose.o \
+    vGfx.o vGif.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o
 

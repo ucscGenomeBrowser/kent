@@ -6,19 +6,23 @@
 #include "cutterTrack.h"
 
 void cuttersDrawAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y, double scale,
+	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the restriction enzyme at position. */
 {
 struct bed *bed = item;
 int heightPer, x1, x2, w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin, scoreMax;
 if (!zoomedToBaseLevel)
     bedDrawSimpleAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-else
+else 
     {
     heightPer = tg->heightPer;
     x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
     x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+    scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+    scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));    
     color = hvGfxFindColorIx(hvg, 0,0,0);
     w = x2-x1;
     if (w < 1)
@@ -54,12 +58,12 @@ else
 	if (strand == '+')
 	    {
 	    hvGfxBox(hvg, cuts[0], y - tickHeight, tickWidth, tickHeight, color);
-	    hvGfxBox(hvg, cuts[1], y + 2, tickWidth, tickHeight, color);
+	    hvGfxBox(hvg, cuts[1], y + 2, tickWidth, tickHeight, color);	    
 	    }
 	else if (strand == '-')
 	    {
 	    hvGfxBox(hvg, cuts[2], y - tickHeight, tickWidth, tickHeight, color);
-	    hvGfxBox(hvg, cuts[3], y + 2, tickWidth, tickHeight, color);
+	    hvGfxBox(hvg, cuts[3], y + 2, tickWidth, tickHeight, color);	    	    
 	    }
 	hvGfxBox(hvg, x1, y, w, 2, color);
 	/* Draw highlight of non-N bases. */
@@ -121,7 +125,7 @@ if (winSize < 250000)
 	if (zoomedToBaseLevel)
 	    cullCutters(&cutters, FALSE, NULL, 0);
 	else if (winSize >= 20000 && winSize < 250000)
-	    {
+	    {	
 	    struct slName *popularCutters = slNameListFromComma(CUTTERS_POPULAR);
 	    cullCutters(&cutters, TRUE, popularCutters, 0);
 	    }
@@ -129,7 +133,7 @@ if (winSize < 250000)
 	    {
 	    cullCutters(&cutters, FALSE, NULL, 5);
 	    }
-	else
+	else 
 	    cullCutters(&cutters, FALSE, NULL, 6);
 	}
     bedList = matchEnzymes(cutters, windowDna, winStart);
@@ -154,7 +158,7 @@ tg->canPack = TRUE;
 tg->visibility = tvHide;
 tg->hasUi = TRUE;
 tg->shortLabel = cloneString(CUTTERS_TRACK_LABEL);
-tg->longLabel = cloneString(CUTTERS_TRACK_LONGLABEL);
+tg->longLabel = cloneString(CUTTERS_TRACK_LONGLABEL);			    
 tg->loadItems = cuttersLoad;
 tg->drawItemAt = cuttersDrawAt;
 tg->priority = 99.9;
