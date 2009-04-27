@@ -1228,6 +1228,7 @@ group regulation
 priority 93
 visibility dense
 spectrum on
+noScoreFilter .
 type bed 6 +
 exonArrows off
 
