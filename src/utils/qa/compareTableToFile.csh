@@ -16,18 +16,19 @@ source `which qaConfig.csh`
 set db=""
 set table=""
 set file=""
+set wig="F"
 set verb="F"
 
 # usage statement
-if ( $#argv < 3 || $#argv > 4 ) then
+if ( $#argv < 3 || $#argv > 5 ) then
  echo
  echo " Ensures that a table correlates with its associated file."
  echo " Only prints results if there is a diff between table and file."
  echo " Works for these file types: narrowPeak, broadPeak, gappedPeak,"
  echo "                             bedGraph, NRE, BiP, gcf"
- echo " (for wiggle files use: checkWigFiles.csh)"
+ echo " For wiggle files, you must specify [wig] parameter."
  echo
- echo "  usage:  database tableName fileName [verbose]"
+ echo "  usage:  database tableName fileName [wig] [verbose]"
  echo "   fileName includes path of download file "
  echo "   e.g. /goldenPath/<db>/fileName.gz"
  echo
@@ -40,8 +41,17 @@ set db=$argv[1]
 set table=$argv[2]
 set file=$argv[3]
 
-if ( $#argv == 4 ) then
+if ( 5 == $#argv ) then
+ set wig="T"
  set verb="T"
+endif
+
+if ( 4 == $#argv ) then
+ if ( "wig" == $argv[4] ) then
+  set wig="T"
+ else
+  set verb="T"
+ endif
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -52,6 +62,12 @@ endif
 if ( ! -e $file ) then
  echo " \nERROR: sorry I can't find the original file here: ~$file\n"
  exit 1
+endif
+
+# if this is a wiggle file, call checkWigFiles script
+if ( "T" == $wig ) then
+ checkWigFiles.csh $db $table $file rm
+ exit 0
 endif
 
 # get count and size (sum(chromEnd-chromStart))from $file
