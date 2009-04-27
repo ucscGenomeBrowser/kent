@@ -43,6 +43,11 @@ User's Guide</A> for more information.
        	<TD VALIGN=Top>Displays all of chromosome 7</TD>
     </TR>
 
+    <TR><TD VALIGN=Top NOWRAP>chrUn_gl000212</TD>
+        <TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays all of the unplaced contig gl000212</TD>
+    </TR>
+
 <!-- no cytoBand yet
     <TR><TD VALIGN=Top NOWRAP>20p13</TD>
        	<TD WIDTH=14></TD>
@@ -166,10 +171,19 @@ assembly can be found on the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=9606&build=37&ver=1"
 TARGET=_blank>Build 37.1 Statistics</A> web page.</P>
 <P>
+<B>Chromosome naming scheme</B><BR>
+In addition to the &quot;regular&quot; chromosomes, the hg19 browser contains
+nine haplotype chromosomes and 59 unplaced contigs.  If an unplaced contig is
+localized to a chromosome, the contig name is appended to the regular chromosome
+name, as in <TT>chr1_gl000191_random</TT>.  If the chromosome is unknown, the
+contig is represented with the name &quot;chrUn&quot; followed by the contig
+indentifier, as in <TT>chrUn_gl000211</TT>.  Note that the chrUn contigs are no
+longer placed in a single, artificial chromosome as they have been in previous UCSC
+assemblies. See the <A HREF="../cgi-bin/hgTracks?chromInfoPage=">sequences</A>
+page for a complete list of hg19 chromosome names.
 
-<HR>
 <P>
-This browser contains nine haplotypes for this assembly:
+The nine haplotype chromosomes are:
 <BR>
 <TABLE BORDER=1 CELLPADDING = 3><TR><TH>name</TH><TH>accession</TH><TH>UCSC chr name</TH></TR>
 <TR><TD ALIGN=LEFT>HSCHR6_MHC_APD_CTG1</TD><TD>GL000250.1</TD><TD ALIGN=LEFT>chr6_apd_hap1</TD></TR>
