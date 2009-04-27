@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.89 2009/04/17 19:24:43 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.90 2009/04/27 20:25:52 larrym Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1003,13 +1003,16 @@ term HFL11W
 type Cell Line
 description Human Fetal Liver 11 weeks
 tier 3
+color 189,0,157
 
 term HFL24W
 type Cell Line
 description Human Fetal Liver 24 weeks
 tier 3
+color 189,0,157
 
 term HAL
 type Cell Line
 description Human Adult Liver
 tier 3
+color 189,0,157
