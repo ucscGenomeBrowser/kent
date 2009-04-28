@@ -875,11 +875,14 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 #define SIGNAL_FILTER      "signalFilter"
 #define PVALUE_FILTER      "pValueFilter"
 #define QVALUE_FILTER      "qValueFilter"
+#define _NO                "No"
 #define _LIMITS            "Limits"
 #define _MIN               "Min"
 #define _MAX               "Max"
 #define _BY_RANGE          "ByRange"
 #define  SCORE_MIN         "scoreMin"
+#define  GRAY_LEVEL_SCORE_MIN SCORE_MIN
+#define  MIN_GRAY_LEVEL  "minGrayLevel"
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
