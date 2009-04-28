@@ -1222,7 +1222,7 @@ color 50,0,100
 type psl xeno
 
 track esRegGeneToMotif
-shortLabel Regulatory Module 
+shortLabel Reg. Module 
 longLabel Eran Segal Regulatory Module
 group regulation
 priority 93
