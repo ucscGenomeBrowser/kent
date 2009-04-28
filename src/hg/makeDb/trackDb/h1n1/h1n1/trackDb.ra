@@ -85,7 +85,7 @@ group map
 type psl
 priority 3.002
 color 0,0,180
-visibility pack
+visibility hide
 baseColorDefault diffCodons
 baseColorUseCds table h1n1Seq2Cds
 baseColorUseSequence extFile seq extFile
