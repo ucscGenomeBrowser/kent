@@ -7,5 +7,7 @@ MAILTO=genbank@cse.ucsc.edu
 PATH=/usr/local/bin:/usr/bin:/bin
 
 # copy new download files from genbank server
-# poll hourly
-30 * * * *  flock /genbank/var/downloadcp/run/downloadcp.lock -c "rsync -e /usr/bin/rsh --whole-file -rl --times --include='*.fa.gz' --include='*.maf.gz' --exclude='*.tmp*' genbank-10:/cluster/data/genbank/data/ftp/ /mirrordata/apache/htdocs/goldenPath"
+# can't use  --times as it attempts to change times on directories that
+# genbank doesn't own.
+# poll hourly 
+30 * * * *  flock /genbank/var/downloadcp/run/downloadcp.lock -c "rsync -e /usr/bin/rsh --whole-file -rl --include='*.fa.gz' --include='*.maf.gz' --exclude='*.tmp*' genbank-10:/cluster/data/genbank/data/ftp/ /mirrordata/apache/htdocs/goldenPath"
