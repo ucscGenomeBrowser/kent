@@ -10670,6 +10670,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell H9ES
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
     release alpha
@@ -10684,6 +10685,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell H9ES-E
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
     release alpha
@@ -10699,6 +10701,7 @@ wgEncode 1
     itemRgb on
     cell H9ES-AFP+
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP+ view=Regions replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=204 dateSubmitted=2009-02-23 dateUnrestricted=2009-11-23 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
     release alpha
@@ -10714,6 +10717,7 @@ wgEncode 1
     itemRgb on
     cell H9ES-AFP-
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP- view=Regions replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=204 dateSubmitted=2009-02-23 dateUnrestricted=2009-11-23 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg.bed9.gz
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
     release alpha
@@ -10728,6 +10732,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell H9ES-AFP-
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
     release alpha
@@ -10742,6 +10747,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell H9ES-EB
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
     release alpha
@@ -10756,6 +10762,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell H9ES-CM
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
     release alpha
@@ -10770,6 +10777,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell H9ES-EBD
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
     release alpha
@@ -10784,6 +10792,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell BG02ES
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
     release alpha
@@ -10798,6 +10807,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell BG02ES-EBD
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
     release alpha
@@ -10812,6 +10822,7 @@ wgEncode 1
     noInherit on
     itemRgb on
     cell BG02ES-EBD
+    color 0,128,0
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
     release alpha
