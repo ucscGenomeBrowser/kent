@@ -223,6 +223,7 @@ void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */
 
+#define NO_VALUE            -96669
 void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max);
 /* Make a integer control filled with initial value.
    If min and/or max are non-NULL will enforce range
