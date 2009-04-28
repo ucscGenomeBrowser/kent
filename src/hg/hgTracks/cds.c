@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.92 2009/04/07 17:31:01 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.93 2009/04/28 23:40:24 markd Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -104,8 +104,7 @@ if (zoomed)
 static int convertCoordUsingPsl( int s, struct psl *psl )
 /*return query position corresponding to target position in one 
  * of the coding blocks of a psl file, or return -1 if target position
- * is not in a coding exon of this psl entry or if the psl entry is
- * null*/
+ * is not in an exon of this psl entry*/
 {
 int i;
 int idx = -1;
@@ -133,7 +132,7 @@ for ( i=0; i<psl->blockCount; i++ )
     if (psl->strand[1] == '-') 
          reverseUnsignedRange(&tStart, &tEnd, psl->tSize);
 
-    if (s >= tStart-3 && s < tEnd)
+    if (s >= tStart && s < tEnd)
 	{
 	idx = i;
 	break;
@@ -1345,6 +1344,8 @@ else
     {
     /*show we have an error by coloring entire exon block yellow*/
     drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+    // FIXME: this shouldn't ever happen, should be an errAbort
+    warn("Bug: drawDiffTextBox: convertCoordUsingPsl failed<br>\n");
     }
 }
 
@@ -1439,6 +1440,8 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    {
 	    /*show we have an error by coloring entire exon block yellow*/
 	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+            // FIXME: this shouldn't ever happen, should be an errAbort
+            warn("Bug: drawCdsDiffCodonsOnly: convertCoordUsingPsl failed<br>\n");
 	    }
 	}
     }
