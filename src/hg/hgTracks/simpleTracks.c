@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.75 2009/04/20 19:32:02 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.76 2009/04/29 18:14:28 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -4119,6 +4119,23 @@ tg->itemName 	= hg17KgName;
 tg->mapItemName = hg17KgMapName;
 }
 
+char *h1n1SeqName(struct track *tg, void *item)
+{
+struct linkedFeatures *lf = item;
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+char *strain = NULL;
+char *chp;
+
+safef(query, sizeof(query), "select strain from h1n1SeqXref where seqId = '%s'", lf->name);
+strain = sqlQuickString(conn, query);
+chp = strstr(strain, "/2009");
+if (chp != NULL) *chp = '\0';
+hFreeConn(&conn);
+safef(query, sizeof(query), "%s %s", strain+2, lf->name);
+return(strdup(query));
+}
+
 char *knownGeneName(struct track *tg, void *item)
 {
 static char cat[128];
@@ -4442,6 +4459,13 @@ tg->loadItems   = loadKnownGene;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
+}
+
+void h1n1SeqMethods(struct track *tg)
+/* Make track of known genes. */
+{
+/* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
+tg->itemName 	= h1n1SeqName;
 }
 
 char *superfamilyName(struct track *tg, void *item)
@@ -10841,6 +10865,7 @@ registerTrackHandler("genomicDups", genomicDupsMethods);
 registerTrackHandler("clonePos", coverageMethods);
 registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
+registerTrackHandler("h1n1_0429Seq", h1n1SeqMethods);
 registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
