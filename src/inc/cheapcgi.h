@@ -49,6 +49,12 @@ void dumpCookieList();
 boolean cgiIsOnWeb();
 /* Return TRUE if looks like we're being run as a CGI. */
 
+char *cgiRequestMethod();
+/* Return CGI REQUEST_METHOD (such as 'GET/POST/PUT/DELETE/HEAD') */
+
+char *cgiRequestUri();
+/* Return CGI REQUEST_URI */
+
 char *cgiScriptName();
 /* Return name of script so libs can do context-sensitive stuff. */
 

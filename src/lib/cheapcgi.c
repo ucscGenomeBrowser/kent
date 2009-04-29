@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.118 2009/04/28 22:58:40 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.119 2009/04/29 18:18:44 mikep Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -48,6 +48,18 @@ boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. */
 {
 return getenv("REQUEST_METHOD") != NULL;
+}
+
+char *cgiRequestMethod()
+/* Return CGI REQUEST_METHOD (such as 'GET/POST/PUT/DELETE/HEAD') */
+{
+return getenv("REQUEST_METHOD");
+}
+
+char *cgiRequestUri()
+/* Return CGI REQUEST_URI */
+{
+return getenv("REQUEST_URI");
 }
 
 char *cgiScriptName()
