@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.119 2009/04/29 18:18:44 mikep Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.120 2009/04/29 19:38:27 mikep Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -60,6 +60,12 @@ char *cgiRequestUri()
 /* Return CGI REQUEST_URI */
 {
 return getenv("REQUEST_URI");
+}
+
+char *cgiRequestContentLength()
+/* Return HTTP REQUEST CONTENT_LENGTH if available*/
+{
+return getenv("CONTENT_LENGTH");
 }
 
 char *cgiScriptName()

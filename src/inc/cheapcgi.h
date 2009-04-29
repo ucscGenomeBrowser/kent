@@ -55,6 +55,9 @@ char *cgiRequestMethod();
 char *cgiRequestUri();
 /* Return CGI REQUEST_URI */
 
+char *cgiRequestContentLength();
+/* Return HTTP REQUEST CONTENT_LENGTH if available*/
+
 char *cgiScriptName();
 /* Return name of script so libs can do context-sensitive stuff. */
 
