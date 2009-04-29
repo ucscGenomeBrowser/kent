@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.188 2009/04/24 19:13:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.189 2009/04/29 16:27:33 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3459,7 +3459,6 @@ struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
         {filterName}Limits: trackDb allowed range "0:1000" Optional
    The 'and' param allows stringing multiple where clauses together */
 {
-#define NO_VALUE -999
 char *setting = trackDbSettingClosestToHome(tdb, filter);
 if(setting)
     {
