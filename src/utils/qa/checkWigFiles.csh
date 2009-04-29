@@ -36,18 +36,22 @@ else
  set db=$argv[1]
  set table=$argv[2]
  set file=$argv[3]
- if ( 4 == $#argv ) then
+ if ( "rm" == $argv[4] ) then
   set remove="T"
+ else
+  echo "\nERROR: fourth argument must be 'rm'\n"
+  exit 1
  endif
 endif
 
 if ( "$HOST" != "hgwdev" ) then
- echo "\nERROR: this script must be run from hgwdev."
+ echo "\nERROR: this script must be run from hgwdev.\n"
  exit 1
 endif
 
 if ( ! -e $file ) then
- echo " \nERROR: sorry I can't find the original wig file here: ~$file\n"
+ echo "\nERROR: sorry I can't find the original wig file here:"
+ echo " /usr/local/apahce/htdocs$file\n"
  exit 1
 endif
 
