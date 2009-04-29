@@ -122,7 +122,8 @@ static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct
 /* Read bed file and return it as list of ppBeds. The whole thing will
  * be allocated in the passed in lm - don't ppBedFreeList or slFree
  * list! 
- * Returns TRUE in isSorted if the input file is already sorted */
+ * Returns TRUE in isSorted if the input file is already sorted,
+ * Returns the count of records and the average size of records */
 {
 struct ppBed *pbList = NULL, *pb;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -130,7 +131,7 @@ char *line;
 int fieldCount = 0, fieldAlloc=0;
 char **row = NULL;
 char *prevChrom = NULL; // set after first time through loop
-bits32 prevStart = 0;   // set after first time through loop
+bits32 prevStart = 0;   // ditto
 double totalSize = 0.0;
 long n = 0;
 *retDiskSize = 0;
@@ -182,6 +183,7 @@ freeMem(row);
 return pbList;
 }
 
+// Not used now, compiler gives a 'unused code' warning if its left in
 // static double ppBedAverageSize(struct ppBed *pbList)
 // /* Return size of average bed in list. */
 // {
@@ -393,7 +395,7 @@ verbose(1, "%d of %d chromosomes used (%4.2f%%)\n", chromCount, chromHash->elCou
 /* Calculate first meaningful reduction size and make first reduction. */
 bits16 summaryCount = 0;
 bits16 version = 1;
-int initialReduction = pbAverageSize*10;//int initialReduction = ppBedAverageSize(pbList)*10;
+int initialReduction = pbAverageSize*10;
 
 verbose(2, "averageBedSize=%d\n", initialReduction/10);
 if (initialReduction > 10000)
