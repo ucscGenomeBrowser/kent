@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.129 2009/04/13 22:34:11 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.130 2009/04/29 22:27:06 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -97,14 +97,18 @@ return sp;
 }
 
 static void sqlProfileAssocDb(struct sqlProfile *sp, char *db)
-/* associate a db with a profile */
+/* associate a db with a profile.  If it is already associated with this
+ * profile, don't do anything.*/
 {
 struct sqlProfile *sp2 = hashFindVal(dbToProfile, db);
-if (sp2 != NULL)
+if ((sp2 != NULL) && (sp2 != sp))
     errAbort("databases %s already associated with profile %s, trying to associated it with %s",
              db, sp2->name, sp->name);
-hashAdd(dbToProfile, db, sp);
-slSafeAddHead(&sp->dbs, slNameNew(db));
+if (sp2 == NULL)
+    {
+    hashAdd(dbToProfile, db, sp);
+    slSafeAddHead(&sp->dbs, slNameNew(db));
+    }
 }
 
 static void sqlProfileCreate(char *profileName, char *host, char *user,
@@ -119,13 +123,13 @@ if (sameString(sp->name, defaultProfileName))
 
 static void sqlProfileAddProfIf(char *profileName)
 /* check if a config prefix is a profile, and if so, add a
- * sqlProfile object for it */
+ * sqlProfile object for it if doesn't already exist. */
 {
 char *host = cfgOption2(profileName, "host");
 char *user = cfgOption2(profileName, "user");
 char *password = cfgOption2(profileName, "password");
 
-if ((host != NULL) && (user != NULL) && (password != NULL))
+if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profiles, profileName) == NULL))
     {
     /* for the default profile, allow environment variable override */
     if (sameString(profileName, defaultProfileName))
@@ -154,8 +158,10 @@ for (cname = cnames; cname != NULL; cname = cname->next)
     }
 }
 
-static void sqlProfileAddDb(char *db, char *profileName)
-/* add a mapping of db to profile */
+void sqlProfileAddDb(char *profileName, char *db)
+/* add a mapping of db to profile.  If database is already associated with
+ * this profile, it is ignored.  If it is associated with a different profile,
+ * it is an error. */
 {
 struct sqlProfile *sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
@@ -164,7 +170,10 @@ sqlProfileAssocDb(sp, db);
 }
 
 static void sqlProfileAddDbs(struct slName *cnames)
-/* add mappings of db to profile from ${db}.${profile} entries */
+/* add mappings of db to profile from ${db}.${profile} entries.
+ * would have liked to have automatically added ${profile}.db
+ * entries, but backupcentral, etc, would map multiple profiles
+ * to a databases, so this is done manually in hdb.c. */
 {
 struct slName *cname;
 for (cname = cnames; cname != NULL; cname = cname->next)
@@ -174,7 +183,7 @@ for (cname = cnames; cname != NULL; cname = cname->next)
         {
         char *profileName = cfgVal(cname->name);
         *dot1 = '\0';
-        sqlProfileAddDb(cname->name,  profileName);
+        sqlProfileAddDb(profileName, cname->name);
         *dot1 = '.';
         }
     }

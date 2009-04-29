@@ -76,6 +76,11 @@ void sqlProfileConfigDefault(char *host, char *user, char *password);
  * profile in hg.conf or defines a new one.  Results are unpredictable if a
  * connect cache has been established for this profile. */
 
+void sqlProfileAddDb(char *profileName, char *db);
+/* add a mapping of db to profile.  If database is already associated with
+ * this profile, it is ignored.  If it is associated with a different profile,
+ * it is an error. */
+
 struct hash *sqlHashOfDatabases(void);
 /* Get hash table with names of all databases that are online. */
 

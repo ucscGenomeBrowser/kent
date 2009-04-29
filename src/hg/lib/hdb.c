@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.401 2009/04/17 19:25:26 mikep Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.402 2009/04/29 22:27:07 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -558,8 +558,9 @@ static void hCentralMkCache()
 /* create the central database cache, trying to connect to the
  * database and failing over if needed */
 {
-centralDb = cfgOption2("central", "db");
-centralCc = sqlConnCacheNewProfile("central");
+char *centralProfile = "central";
+centralDb = cfgOption2(centralProfile, "db");
+centralCc = sqlConnCacheNewProfile(centralProfile);
 sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
 if ((conn == NULL) || !cartTablesOk(conn))
@@ -568,8 +569,9 @@ if ((conn == NULL) || !cartTablesOk(conn))
             "pid=%ld\n", (long)getpid());
     sqlConnCacheDealloc(centralCc, &conn);
     sqlConnCacheFree(&centralCc);
-    centralDb = cfgOption2("backupcentral", "database");
-    centralCc = sqlConnCacheNewProfile("backupcentral");
+    centralProfile = "backupcentral";
+    centralDb = cfgOption2(centralProfile, "database");
+    centralCc = sqlConnCacheNewProfile(centralProfile);
     conn = sqlConnCacheAlloc(centralCc, centralDb);
     if (!cartTablesOk(conn))
         errAbort("Cannot access cart tables in central (nor backupcentral) "
@@ -577,6 +579,9 @@ if ((conn == NULL) || !cartTablesOk(conn))
                  "settings in the hg.conf file and the databases they "
                  "specify.");
     }
+/* now that a profile has been determined, make sure this database goes
+ * through that profile */
+sqlProfileAddDb(centralProfile, centralDb);
 sqlConnCacheDealloc(centralCc, &conn);
 sqlSetParanoid(FALSE);
 }
@@ -602,17 +607,22 @@ static void hArchiveCentralMkCache()
 /* create the archive central database cache, trying to connect to the
  * database and failing over if needed */
 {
-centralArchiveDb = cfgOption2("archivecentral", "db");
-centralArchiveCc = sqlConnCacheNewProfile("archivecentral");
+char *archiveProfile = "archivecentral";
+centralArchiveDb = cfgOption2(archiveProfile, "db");
+centralArchiveCc = sqlConnCacheNewProfile(archiveProfile);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralArchiveCc, centralArchiveDb);
 if (conn == NULL)
     {
     sqlConnCacheDealloc(centralArchiveCc, &conn);
     sqlConnCacheFree(&centralArchiveCc);
-    centralDb = cfgOption2("archivebackup", "database");
-    centralCc = sqlConnCacheNewProfile("archivebackup");
+    archiveProfile = "archivebackup";
+    centralDb = cfgOption2(archiveProfile, "database");
+    centralCc = sqlConnCacheNewProfile(archiveProfile);
     conn = sqlConnCacheAlloc(centralCc, centralDb);
     }
+/* now that a profile has been determined, make sure this database goes
+ * through that profile */
+sqlProfileAddDb(archiveProfile, centralArchiveDb);
 sqlConnCacheDealloc(centralCc, &conn);
 }
 
@@ -645,6 +655,8 @@ if ((cfgOption("cart.db") != NULL) || (cfgOption("cart.host") != NULL)
         || (cfgOption("cart.user") == NULL) || (cfgOption("cart.password") == NULL))
         errAbort("Must specify either all or none of the cart options in the hg.conf file.");
     cartCc = sqlConnCacheNewProfile("cart");
+    /* make sure this database goes through that profile */
+    sqlProfileAddDb("cart", cartDb);
     }
 else
     {
