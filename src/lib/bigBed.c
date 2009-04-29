@@ -23,17 +23,6 @@ struct bbiFile *bigBedFileOpen(char *fileName)
 return bbiFileOpen(fileName, bigBedSig, "big bed");
 }
 
-struct ppBed
-/* A partially parsed out bed record plus some extra fields. */
-    {
-    struct ppBed *next;	/* Next in list. */
-    char *chrom;		/* Chromosome name (not allocated here) */
-    bits32 start, end;		/* Range inside chromosome - half open zero based. */
-    char *rest;			/* The rest of the bed. */
-    bits64 fileOffset;		/* File offset. */
-    bits32 chromId;		/* Chromosome ID. */
-    };
-
 static int ppBedCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start,end. */
 {
@@ -68,12 +57,12 @@ const struct ppBed *a = *((struct ppBed **)va);
 return a->fileOffset;
 }
 
-static struct ppBed *ppBedLoadOne(struct lineFile *lf, char **row, int fieldCount, struct hash *chromHash, struct lm *lm, struct asObject *as, bits64 *diskSize)
+struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, struct hash *chromHash, struct lm *lm, struct asObject *as, bits64 *diskSize)
 /* Return a ppBed record from a line of bed file in lf.
    Return the disk size it would occupy in *diskSize.
-   lf is the lineFile the row is coming from.
-   row is a preallocated array of pointers to the individual fields.
+   row is a preallocated array of pointers to the individual fields in this row to load.
    fieldCount is the number of fields.
+   lf is the lineFile the row is coming from, used for error messages and parsing fields.
    chromHash is a hash of the chromosome sizes.
    lm is localMem to allocate ppBed memory from - don't ppBedFreeList or slFree
    list!
@@ -129,17 +118,23 @@ return pb;
 }
 
 static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct lm *lm, 
-	struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount)
+	struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount, boolean *isSorted, bits64 *count, double *avgSize)
 /* Read bed file and return it as list of ppBeds. The whole thing will
  * be allocated in the passed in lm - don't ppBedFreeList or slFree
- * list! */
+ * list! 
+ * Returns TRUE in isSorted if the input file is already sorted */
 {
 struct ppBed *pbList = NULL, *pb;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
 int fieldCount = 0, fieldAlloc=0;
 char **row = NULL;
+char *prevChrom = NULL; // set after first time through loop
+bits32 prevStart = 0;   // set after first time through loop
+double totalSize = 0.0;
+long n = 0;
 *retDiskSize = 0;
+*isSorted = TRUE;
 while (lineFileNextReal(lf, &line))
     {
     /* First time through figure out the field count, and if not set, the defined field count. */
@@ -168,29 +163,38 @@ while (lineFileNextReal(lf, &line))
     int wordCount = chopByWhite(line, row, fieldAlloc);
     lineFileExpectWords(lf, fieldCount, wordCount);
     bits64 diskSize = 0;
-    pb = ppBedLoadOne(lf, row, fieldCount, chromHash, lm, as, &diskSize);
+    pb = ppBedLoadOne(row, fieldCount, lf, chromHash, lm, as, &diskSize);
+    if (*isSorted && prevChrom && prevChrom == pb->chrom && pb->start < prevStart)
+	*isSorted = FALSE; // first time through the loop prevChrom is NULL so test fails
+    prevChrom = pb->chrom;
+    prevStart = pb->start;
+    ++n;
+    totalSize += pb->end - pb->start;
     *retDiskSize += diskSize;
     slAddHead(&pbList, pb);
     }
+if (n > 0)
+    *avgSize = totalSize/n;
+*count = n;
 slReverse(&pbList);
 freeMem(row);
 *retFieldCount = fieldCount;
 return pbList;
 }
 
-static double ppBedAverageSize(struct ppBed *pbList)
-/* Return size of average bed in list. */
-{
-struct ppBed *pb;
-double total = 0.0;
-long count = 0;
-for (pb = pbList; pb != NULL; pb = pb->next)
-    {
-    total += pb->end - pb->start;
-    count += 1;
-    }
-return total/count;
-}
+// static double ppBedAverageSize(struct ppBed *pbList)
+// /* Return size of average bed in list. */
+// {
+// struct ppBed *pb;
+// double total = 0.0;
+// long count = 0;
+// for (pb = pbList; pb != NULL; pb = pb->next)
+//     {
+//     total += pb->end - pb->start;
+//     count += 1;
+//     }
+// return total/count;
+// }
 
 static void makeChromInfo(struct ppBed *pbList, struct hash *chromSizeHash,
 	int *retChromCount, struct bbiChromInfo **retChromArray,
@@ -281,20 +285,77 @@ void bigBedFileCreate(
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
-bigBedFileCreateDetailed(inName, FALSE, chromSizes, blockSize, itemsPerSlot, definedFieldCount, asFileName, outName);
+bits16 fieldCount;
+bits64 fullSize;
+bits64 count;
+double averageSize;
+struct asObject *as = NULL;
+struct hash *chromHash = NULL;
+struct ppBed *pbList = NULL;
+bigBedFileCreateReadInfile(inName, chromSizes, blockSize, itemsPerSlot, definedFieldCount, asFileName, 
+    outName, &pbList, &count, &averageSize, &chromHash, &fieldCount, &as, &fullSize);
+bigBedFileCreateDetailed(pbList, count, averageSize, inName, chromHash, blockSize, itemsPerSlot, 
+    definedFieldCount, fieldCount, asFileName, as, fullSize, outName);
 }
 
-void bigBedFileCreateDetailed(
+void bigBedFileCreateReadInfile(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
-	boolean sorted,	  /* Input is already sorted */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
-	char *outName)    /* BigBed output file name. */
-/* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
+	char *outName,    /* BigBed output file name. */
+	struct ppBed **ppbList,   /* Input bed data, will be sorted. */
+	bits64 *count,            /* size of input pbList */
+	double *averageSize,      /* average size of elements in pbList */
+	struct hash **pChromHash,  /* Hash containing sizes of all chroms. */
+	bits16 *fieldCount,       /* actual field count from input data. */
+	struct asObject **pAs,    /* If non-null contains as object that describes fields. */
+	bits64 *fullSize)         /* full size of ppBed on disk */
+/* Load data to prepare bigBed. */
+{
+/* Load up as object if defined in file. */
+struct asObject *as = NULL;
+boolean sorted;
+if (asFileName != NULL)
+    {
+    /* Parse it and do sanity check. */
+    as = asParseFile(asFileName);
+    if (as->next != NULL)
+        errAbort("Can only handle .as files containing a single object.");
+    }
+/* Load in chromosome sizes. */
+struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
+verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chromSizes);
+/* Load and sort input file. */
+struct ppBed *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, as, 
+	definedFieldCount, fullSize, fieldCount, &sorted, count, averageSize);
+verbose(1, "Read %llu items from %s\n", *count, inName);
+if (!sorted)
+    slSort(&pbList, ppBedCmp);
+*ppbList = pbList;
+*pChromHash = chromHash;
+*pAs = as;
+}
+
+void bigBedFileCreateDetailed(
+	struct ppBed *pbList, 	  /* Input bed data. Must be sorted. */
+	bits64 pbCount,           /* size of input pbList */
+	double pbAverageSize,     /* average size of elements in pbList */
+	char *inName,             /* Input file name (for error message reporting) */
+	struct hash *chromHash,   /* Hash containing sizes of all chroms. */
+	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
+	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
+	bits16 definedFieldCount, /* Number of defined bed fields - 3-16 or so.  0 means all fields
+				    * are the defined bed ones. */
+	bits16 fieldCount,        /* actual field count from input data. */
+	char *asFileName,         /* If non-null points to a .as file that describes fields. */
+	struct asObject *as,      /* If non-null contains as object that describes fields. */
+	bits64 fullSize,          /* full size of ppBed on disk */
+	char *outName)            /* BigBed output file name. */
+/* create zoomed bigBed version from ppBed list. */
 {
 /* This code needs to agree with code in two other places currently - bigWigFileCreate,
  * and bbiFileOpen.  I'm thinking of refactoring to share at least between
@@ -317,34 +378,10 @@ bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
 bits64 reductionDataOffsets[10];
 bits64 reductionIndexOffsets[10];
-bits16 fieldCount;
+struct ppBed *pb;
 
-/* Load up as object if defined in file. */
-struct asObject *as = NULL;
-if (asFileName != NULL)
-    {
-    /* Parse it and do sanity check. */
-    as = asParseFile(asFileName);
-    if (as->next != NULL)
-        errAbort("Can only handle .as files containing a single object.");
-    }
-
-/* Load in chromosome sizes. */
-struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
-verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chromSizes);
-
-/* Load and sort input file. */
-bits64 fullSize;
-struct ppBed *pb, *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, as, 
-	definedFieldCount, &fullSize, &fieldCount);
 if (definedFieldCount == 0)
     definedFieldCount = fieldCount;
-bits64 pbCount = slCount(pbList);
-verbose(1, "Read %llu items from %s\n", pbCount, inName);
-if (!sorted)
-    {
-    slSort(&pbList, ppBedCmp);
-    }
 
 /* Make chromosomes. */
 int chromCount, maxChromNameSize;
@@ -356,7 +393,8 @@ verbose(1, "%d of %d chromosomes used (%4.2f%%)\n", chromCount, chromHash->elCou
 /* Calculate first meaningful reduction size and make first reduction. */
 bits16 summaryCount = 0;
 bits16 version = 1;
-int initialReduction = ppBedAverageSize(pbList)*10;
+int initialReduction = pbAverageSize*10;//int initialReduction = ppBedAverageSize(pbList)*10;
+
 verbose(2, "averageBedSize=%d\n", initialReduction/10);
 if (initialReduction > 10000)
     initialReduction = 10000;
