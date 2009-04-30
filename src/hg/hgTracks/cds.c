@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.89.2.1 2009/04/21 19:03:55 mikep Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.89.2.2 2009/04/30 20:33:04 mikep Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -104,8 +104,7 @@ if (zoomed)
 static int convertCoordUsingPsl( int s, struct psl *psl )
 /*return query position corresponding to target position in one 
  * of the coding blocks of a psl file, or return -1 if target position
- * is not in a coding exon of this psl entry or if the psl entry is
- * null*/
+ * is not in an exon of this psl entry*/
 {
 int i;
 int idx = -1;
@@ -133,7 +132,7 @@ for ( i=0; i<psl->blockCount; i++ )
     if (psl->strand[1] == '-') 
          reverseUnsignedRange(&tStart, &tEnd, psl->tSize);
 
-    if (s >= tStart-3 && s < tEnd)
+    if (s >= tStart && s < tEnd)
 	{
 	idx = i;
 	break;
@@ -247,12 +246,15 @@ else
 static void drawVertLine(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
 			 int height, double scale, Color color)
-/* Draw a 1-pixel wide vertical line at the given chromosomal coord. */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
 {
 int thisX = round((double)(chromStart-winStart)*scale) + xOff;
 int thisY = y;
 int thisHeight = height;
-if ((chromStart < lf->tallStart) || (chromStart >= lf->tallEnd))
+if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     {
     /* adjust for UTR. WARNING: this duplicates shortOff & shortHeight
      * calculations in linkedFeaturesDrawAt */
@@ -1345,6 +1347,8 @@ else
     {
     /*show we have an error by coloring entire exon block yellow*/
     drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+    // FIXME: this shouldn't ever happen, should be an errAbort
+    warn("Bug: drawDiffTextBox: convertCoordUsingPsl failed<br>\n");
     }
 }
 
@@ -1439,6 +1443,8 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    {
 	    /*show we have an error by coloring entire exon block yellow*/
 	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+            // FIXME: this shouldn't ever happen, should be an errAbort
+            warn("Bug: drawCdsDiffCodonsOnly: convertCoordUsingPsl failed<br>\n");
 	    }
 	}
     }
@@ -1541,7 +1547,7 @@ if (indelShowPolyA && mrnaSeq)
 		 (psl->qSize -
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
-		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk] - 1;
+		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
 		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;

@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1539.2.1 2009/04/21 19:03:57 mikep Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1539.2.2 2009/04/30 20:33:05 mikep Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4608,6 +4608,8 @@ if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
+
+setUdcCacheDir();
 
 initTl();
 
