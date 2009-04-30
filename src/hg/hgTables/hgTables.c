@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.171.2.1 2009/04/21 19:03:53 mikep Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.171.2.2 2009/04/30 20:33:53 mikep Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1749,6 +1749,8 @@ allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
 conn = hAllocConn(database);
+
+setUdcCacheDir();
 
 if (lookupPosition())
     {
