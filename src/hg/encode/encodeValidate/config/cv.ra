@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.91 2009/04/29 22:03:10 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.92 2009/04/30 04:53:15 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -184,7 +184,7 @@ description B-Lymphocyte (CEPH)
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
-lineage CEPH/Utah - European Caucasion -Male; Epstein-Barr Virus
+lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0001522 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
@@ -244,7 +244,7 @@ description Human promyelocytic leukemia cells
 vendorName ATCC
 vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
-lineage endoderm
+lineage
 karyotype cancer, female
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738&termName=HL-60%20cell
@@ -256,7 +256,7 @@ description Human Mammary Epithelial Cells
 vendorName Lonza
 vendorId CC-3150
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1FDC0AF834F18C7C001A4B525E10&cpgnum=1)/.do
-lineage endoderm
+lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
@@ -352,7 +352,7 @@ description pancreatic carcinoma
 vendorName ATCC
 vendorId CRL-1469
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
-lineage ectoderm
+lineage
 karyotype cancer, male
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
@@ -425,7 +425,7 @@ description Human skeletal muscle cells
 vendorName Lonza
 vendorId CC-2561
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA21A59CABF8F18C7C001A4B525E10&cpgnum=1)/.do
-lineage "SK-N-MC was isolated in September of l971 and was found to have moderate dopamine - beta - hydroxylase activity as well as formaldehyde induced fluorescence indicative of intracellular catecholamines." - ATCC
+lineage
 karyotype
 termId BTO:0001801 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
