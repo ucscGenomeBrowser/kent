@@ -11790,8 +11790,8 @@ wgEncode 1
     track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeHelicosRnaSeq off
-    shortLabel longPolyA K562 cytosol
-    longLabel ENCODE Helicos RNA-Seq Tags (PolyA+ in K562 cytosol)
+    shortLabel K562 cyto polyA+
+    longLabel ENCODE Helicos RNA-Seq Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type tagAlign
     type bigBed
@@ -11803,13 +11803,14 @@ wgEncode 1
     rnaExtract longPolyA
     localization cytosol
     cell K562
+    color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeHelicosRnaSeq
-    shortLabel longPolyA K562 cytosol
-    longLabel ENCODE Helicos RNA-Seq Raw Signal (PolyA+ in K562 cytosol)
+    shortLabel K562 cyto polyA+
+    longLabel ENCODE Helicos RNA-Seq Raw Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=yRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 65535.00
     dateSubmitted 2009-04-13
@@ -11822,5 +11823,6 @@ wgEncode 1
     maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
+    color 46,0,184
     cell K562
 
