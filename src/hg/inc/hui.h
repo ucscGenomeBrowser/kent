@@ -7,6 +7,9 @@
 #include "trackDb.h"
 struct lineFile;
 
+void setUdcCacheDir();
+/* set the path to the udc cache dir */
+
 char *hUserCookie();
 /* Return our cookie name. */
 
@@ -872,11 +875,14 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 #define SIGNAL_FILTER      "signalFilter"
 #define PVALUE_FILTER      "pValueFilter"
 #define QVALUE_FILTER      "qValueFilter"
+#define _NO                "No"
 #define _LIMITS            "Limits"
 #define _MIN               "Min"
 #define _MAX               "Max"
 #define _BY_RANGE          "ByRange"
 #define  SCORE_MIN         "scoreMin"
+#define  GRAY_LEVEL_SCORE_MIN SCORE_MIN
+#define  MIN_GRAY_LEVEL  "minGrayLevel"
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
@@ -895,20 +901,25 @@ struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
        struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
 /* creates the where clause condition to support numeric int filter range.
    Filters are expected to follow
-        {fiterName}: trackDb min:max values
-        {filterName}Min: cart variable
-        {filterName}Max: cart variable Optional (and considered non-existent if -99)
+        {fiterName}: trackDb min or min:max - default value(s);
+        {filterName}Min or {filterName}: min (user supplied) cart variable;
+        {filterName}Max: max (user supplied) cart variable;
         {filterName}Limits: trackDb allowed range "0:1000" Optional
-   The and param allows stringing multiple where clauses together */
+           uses:{filterName}Min: old trackDb value if {filterName}Limits not found
+                {filterName}Max: old trackDb value if {filterName}Limits not found
+                defaultLimits: function param if no tdb limits settings found)
+   The 'and' param and dyString in/out allows stringing multiple where clauses together */
 
 struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
-       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
-/* creates the where clause condition to support  numeric double filters.
+       struct dyString *extraWhere,char *filter,char *defaultLimits, char*field, boolean *and);
+/* creates the where clause condition to support numeric double filters.
    Filters are expected to follow
-        {fiterName}: trackDb min value;
-        {filterName}Min: cart variable;
+        {fiterName}: trackDb min or min:max - default value(s);
+        {filterName}Min or {filterName}: min (user supplied) cart variable;
+        {filterName}Max: max (user supplied) cart variable;
         {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
-   The and param allows stringing multiple where clauses together */
+            uses:  defaultLimits: function param if no tdb limits settings found)
+   The 'and' param allows stringing multiple where clauses together */
 
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
