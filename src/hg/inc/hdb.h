@@ -413,9 +413,9 @@ struct trackDb *hTrackDb(char *db, char *chrom);
  * incompatible with the returned list) */
 
 struct trackDb *hTrackDbForTrack(char *db, char *track);
-/* Load trackDb object for a track. If track is composite, its subtracks 
- * will also be loaded and inheritance will be handled; if track is a 
- * subtrack then inheritance will be handled.  (Unless a subtrack has 
+/* Load trackDb object for a track. If track is composite, its subtracks
+ * will also be loaded and inheritance will be handled; if track is a
+ * subtrack then inheritance will be handled.  (Unless a subtrack has
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found. */
 

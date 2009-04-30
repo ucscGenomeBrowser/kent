@@ -3,10 +3,6 @@
 #define BASEMASKCOMMON_H
 
 
-char *chromTable(char *db, char *table, char *chromDb);
-/* Get chr1_table if it exists, otherwise table.
- * You can freeMem this when done. */
-
 time_t chromTableUpdateTime(char *db, char *table, char *chromDb);
 /* Find the last update time for table in db.
  * If the table doesnt exist, find a chromosome or scaffold) name from chromDb and

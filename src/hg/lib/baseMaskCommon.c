@@ -6,10 +6,10 @@
 #include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
-static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.7.16.2 2009/04/21 19:00:31 mikep Exp $";
+static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.7.16.3 2009/04/30 22:43:05 mikep Exp $";
 
 
-char *chromTable(char *db, char *table, char *chromDb)
+static char *chromTable(char *db, char *table, char *chromDb)
 /* Get chr1_table if it exists, otherwise table. 
  * You can freeMem this when done. */
 {
