@@ -9,7 +9,7 @@
 #include "bits.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: rnaPhylo.c,v 1.5 2009/04/30 06:26:34 mikep Exp $";
+static char const rcsid[] = "$Id: rnaPhylo.c,v 1.6 2009/04/30 08:33:00 mikep Exp $";
 
 #define ADDSEQ 0
 // issues: 
@@ -471,7 +471,7 @@ for (i = 0 ; i < numFiles ; ++i)
 	mkPairPartnerSymbols(pair, pairSymbols, ssLen);
 	printf("%s: Structure analysis for sequence [%s] in genome [%s]\n", alignfiles[i], (char *)hashMustFindVal(aln, REF_ID), refSpp);
 	printf("legend: {}=base paired with non-canonical base; <>=gap paired with base; []=base paired with gap\n");
-	printf("      : 0=GU 1=UG 2=AU 3=UA 4=CG 5=GC; '.'=unpaired, same as ref; [ACGT]=unpaired, different to ref\n");
+	printf("      : 0=GU 1=UG 2=AU 3=UA 4=CG 5=GC; '-'=gap; '.'=unpaired, same as ref; [ACGT]=unpaired, different to ref\n");
 	spaceOut(stdout, maxDepth+1); 
 	printf("%15s  [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
 	spaceOut(stdout, maxDepth+1); 
