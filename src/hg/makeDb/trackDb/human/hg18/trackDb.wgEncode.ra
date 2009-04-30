@@ -11517,7 +11517,7 @@ track wgEncodeGisRnaSeq
 compositeTrack on
 shortLabel GIS RNA-seq
 longLabel ENCODE GIS RNA-seq
-group regulation
+group expression
 subGroup1 view Views Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 localization Localization cytosol=cytosol
@@ -11776,7 +11776,7 @@ track wgEncodeHelicosRnaSeq
 compositeTrack on
 shortLabel Helicos RNA-seq
 longLabel ENCODE Helicos RNA-seq
-group regulation
+group expression
 subGroup1 view Views Alignments=Alignments yRawSignal=Raw_Signal
 subGroup2 cellType Cell_Line K562=K562
 subGroup3 localization Localization cytosol=cytosol
