@@ -57,7 +57,7 @@ echo
 # "check that all tables were pushed:"
 
 echo
-~/bin/updateTimes.csh $db $tablelist
+updateTimes.csh $db $tablelist
 echo
 
 
