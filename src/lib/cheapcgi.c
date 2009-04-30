@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.3 2009/04/21 18:52:20 mikep Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.4 2009/04/30 19:39:34 mikep Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -62,6 +62,12 @@ char *cgiRequestUri()
 return getenv("REQUEST_URI");
 }
 
+char *cgiRequestContentLength()
+/* Return HTTP REQUEST CONTENT_LENGTH if available*/
+{
+return getenv("CONTENT_LENGTH");
+}
+
 char *cgiScriptName()
 /* Return name of script so libs can do context-sensitive stuff. */
 {
@@ -72,6 +78,12 @@ char *cgiServerName()
 /* Return name of server */
 {
 return getenv("SERVER_NAME");
+}
+
+char *cgiRequestHttpHost()
+/* Return HTTP HOST header (sent from client, as opposed to SERVER_NAME) */
+{
+return getenv("HTTP_HOST");
 }
 
 char *cgiRemoteAddr()
@@ -467,7 +479,7 @@ while (namePt != NULL && namePt[0] != 0)
     AllocVar(el);
     el->val = dataPt;
     slAddHead(&list, el);
-    hashAddSaveName(hash, namePt, el->val, &el->name);
+    hashAddSaveName(hash, namePt, el, &el->name);
     namePt = nextNamePt;
     }
 slReverse(&list);
@@ -549,22 +561,12 @@ static void initCgiInput()
  * stored in an internal hash/list regardless of how they
  * were passed to the program. */
 {
-initCgiInputMethod(NULL);
-}
-
-void initCgiInputMethod(char *method)
-/* Initialize CGI input stuff assuming HTTP "method"
- * such as "GET" or "POST".
- * After this CGI vars are
- * stored in an internal hash/list regardless of how they
- * were passed to the program. */
-{
 char* s;
 
 if (inputString != NULL)
     return;
 
-_cgiFindInput(method);
+_cgiFindInput(NULL);
 
 #ifndef GBROWSE
 /* check to see if the input is a multipart form */
@@ -1194,6 +1196,7 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 	maxDigits, initialVal);
 }
 
+#define NO_VALUE            -96669
 void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max)
 /* Make a integer control filled with initial value.
    If min and/or max are non-NULL will enforce range
@@ -1226,21 +1229,41 @@ void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int wid
 {
 char minLimit[20];
 char maxLimit[20];
-safef(minLimit,sizeof(minLimit),"%d",min);
-safef(maxLimit,sizeof(maxLimit),"%d",max);
-cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+char *minStr=NULL;
+char *maxStr=NULL;
+if(min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%d",min);
+    minStr = minLimit;
+    }
+if(max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%d",max);
+    maxStr = maxLimit;
+    }
+cgiMakeIntVarInRange(varName,initialVal,title,width,minStr,maxStr);
 }
 void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min)
 {
 char minLimit[20];
-safef(minLimit,sizeof(minLimit),"%d",min);
-cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,NULL);
+char *minStr=NULL;
+if(min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%d",min);
+    minStr = minLimit;
+    }
+cgiMakeIntVarInRange(varName,initialVal,title,width,minStr,NULL);
 }
 void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max)
 {
 char maxLimit[20];
-safef(maxLimit,sizeof(maxLimit),"%d",max);
-cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxLimit);
+char *maxStr=NULL;
+if(max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%d",max);
+    maxStr = maxLimit;
+    }
+cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
@@ -1275,21 +1298,41 @@ void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, i
 {
 char minLimit[20];
 char maxLimit[20];
-safef(minLimit,sizeof(minLimit),"%g",min);
-safef(maxLimit,sizeof(maxLimit),"%g",max);
-cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+char *minStr=NULL;
+char *maxStr=NULL;
+if((int)min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%g",min);
+    minStr = minLimit;
+    }
+if((int)max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%g",max);
+    maxStr = maxLimit;
+    }
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,maxStr);
 }
 void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min)
 {
 char minLimit[20];
-safef(minLimit,sizeof(minLimit),"%g",min);
-cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,NULL);
+char *minStr=NULL;
+if((int)min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%g",min);
+    minStr = minLimit;
+    }
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,NULL);
 }
 void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max)
 {
 char maxLimit[20];
-safef(maxLimit,sizeof(maxLimit),"%g",max);
-cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxLimit);
+char *maxStr=NULL;
+if((int)max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%g",max);
+    maxStr = maxLimit;
+    }
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
