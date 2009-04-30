@@ -5710,7 +5710,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel pros polyA- cell
+    shortLabel pros cell pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in prostate whole cell)
     subGroups view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
     type broadPeak
@@ -5742,7 +5742,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel pros polyA- cell
+    shortLabel pros cell pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in prostate whole cell)
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig -62124.00 54385.00
@@ -5792,7 +5792,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel pros polyA+ cell
+    shortLabel pros cell pA+
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in prostate whole cell)
     subGroups view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longPolyA
     type broadPeak
@@ -5825,7 +5825,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel pros polyA+ cell
+    shortLabel pros cell pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in prostate whole cell)
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig -62728.00 56449.00
@@ -5858,7 +5858,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA- nucl
+    shortLabel K562 nucl pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in K562 nucleus)
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
@@ -5891,7 +5891,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA- nucl
+    shortLabel K562 nucl pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 nucleus)
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig -56486.00 45415.00
@@ -5924,7 +5924,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 total cell
+    shortLabel K562 cell total
     longLabel ENCODE Affy Filtered Transfrags (Total RNA in K562 whole cell)
     subGroups view=FilteredTransfrags cellType=K562 localization=cell rnaExtract=total
     type broadPeak
@@ -5940,7 +5940,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 total cell
+    shortLabel K562 cell total
     longLabel ENCODE Affy Filtered Signal (Total RNA in K562 whole cell)
     subGroups view=FilteredRawSignal cellType=K562 localization=cell rnaExtract=total
     type wig -40989.00 59494.00
@@ -5990,7 +5990,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA+ nucl
+    shortLabel K562 nucl pA+
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in K562 nucleus)
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type broadPeak
@@ -6023,7 +6023,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA+ nucl
+    shortLabel K562 nucl pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in K562 nucleus)
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig -49290.00 43018.00
@@ -6040,7 +6040,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA- cyto
+    shortLabel K562 cyto pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in K562 cytosol)
     subGroups view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -6089,7 +6089,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA- cyto
+    shortLabel K562 cyto pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 cytosol)
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig -55473.00 56092.00
@@ -6106,7 +6106,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA+ cyto
+    shortLabel K562 cyto pA+
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in K562 cytosol)
     subGroups view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type broadPeak
@@ -6138,7 +6138,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA+ cyto
+    shortLabel K562 cyto pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig -42328.00 61956.00
@@ -6172,7 +6172,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562PolysomeLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA- psom
+    shortLabel K562 psom pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in K562 polysome)
     subGroups view=FilteredTransfrags cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type broadPeak
@@ -6221,7 +6221,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562PolysomeLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 polyA- psom
+    shortLabel K562 psom pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 polysome)
     subGroups view=FilteredRawSignal cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type wig -52880.00 48739.00
@@ -6238,7 +6238,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl pA-
+    shortLabel GM128 nuc pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in GM12878 nucleus)
     subGroups view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
@@ -6287,7 +6287,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl pA-
+    shortLabel GM128 nuc pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in GM12878 nucleus)
     subGroups view=FilteredRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig -52768.00 58546.00
@@ -6454,7 +6454,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562ChromatinTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 total chrm
+    shortLabel K562 chrm total
     longLabel ENCODE Affy Filtered Transfrags (Total RNA in K562 chromatin)
     subGroups view=FilteredTransfrags cellType=K562 localization=chromatin rnaExtract=total
     type broadPeak
@@ -6472,7 +6472,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 total chrm
+    shortLabel K562 chrm total
     longLabel ENCODE Affy Filtered Signal (Total RNA in K562 chromatin)
     subGroups view=FilteredRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig -61688.00 49221.00
@@ -6755,7 +6755,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 total nplsm
+    shortLabel K562 nplsm total
     longLabel ENCODE Affy Filtered Transfrags (Total RNA in K562 nucleoplasm)
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleoplasm rnaExtract=total
     type broadPeak
@@ -6774,7 +6774,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 nplsm tot
+    shortLabel K562 nplsm total
     longLabel ENCODE Affy Filtered Signal (Total RNA in K562 nucleoplasm)
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig -54090.00 55745.00
