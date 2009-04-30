@@ -9,7 +9,7 @@
 #include "bits.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: rnaPhylo.c,v 1.4 2009/04/26 07:58:43 mikep Exp $";
+static char const rcsid[] = "$Id: rnaPhylo.c,v 1.5 2009/04/30 06:26:34 mikep Exp $";
 
 #define ADDSEQ 0
 // issues: 
@@ -28,7 +28,7 @@ int dna[256];
 int pairId[4][4];
 boolean printMaxVariants = FALSE;
 boolean hideMissing = FALSE;
-boolean printNodes = FALSE;
+boolean hideNodes = FALSE;
 
 struct stats {
     Bits *variants;
@@ -46,7 +46,7 @@ errAbort(
   "   -genomes=file.txt   : File with db and genome name separated by tab for human-readable display\n"
   "   -maxVariants        : Just output the filename and maximum number of variants found\n"
   "   -hideMissing        : Hide (dont show) species where sequence is missing\n"
-  "   -printNodes         : Print nodes\n"
+  "   -hideNodes          : Hide ancestral nodes from output\n"
   );
 }
 
@@ -54,7 +54,7 @@ static struct optionSpec options[] = {
     {"genomes", OPTION_STRING},
     {"maxVariants", OPTION_BOOLEAN},
     {"hideMissing", OPTION_BOOLEAN},
-    {"printNodes", OPTION_BOOLEAN},
+    {"hideNodes", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -277,7 +277,7 @@ if (tree->numEdges == 0)
 else if (tree->numEdges == 2)
     {
     printTreeDepth(aln, tree->edges[0], refSpp, genomes, ss, pair, '/',  depth+1, maxDepth, f);
-    if (printNodes)
+    if (!hideNodes)
 	{
 	treeSpaces(f, '+', '*', depth, maxDepth);
 	printf("%-15s  %s\n", name, "");
@@ -471,6 +471,7 @@ for (i = 0 ; i < numFiles ; ++i)
 	mkPairPartnerSymbols(pair, pairSymbols, ssLen);
 	printf("%s: Structure analysis for sequence [%s] in genome [%s]\n", alignfiles[i], (char *)hashMustFindVal(aln, REF_ID), refSpp);
 	printf("legend: {}=base paired with non-canonical base; <>=gap paired with base; []=base paired with gap\n");
+	printf("      : 0=GU 1=UG 2=AU 3=UA 4=CG 5=GC; '.'=unpaired, same as ref; [ACGT]=unpaired, different to ref\n");
 	spaceOut(stdout, maxDepth+1); 
 	printf("%15s  [%s]\n", "Reference seq.", (char *)hashMustFindVal(aln, refSpp));
 	spaceOut(stdout, maxDepth+1); 
@@ -521,7 +522,7 @@ init();
 ++argv;
 printMaxVariants = optionExists("maxVariants");
 hideMissing = optionExists("hideMissing");
-printNodes = optionExists("printNodes");
+hideNodes = optionExists("hideNodes");
 if (argc < 3)
     usage();
 rnaPhylo(argv[0], argv[1], optionVal("genomes", NULL), &argv[2], argc-2);
