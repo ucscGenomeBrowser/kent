@@ -5,7 +5,7 @@ MYLIBS = ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest
+    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test
 	rm -r output
 	@echo tested all
 
@@ -209,6 +209,26 @@ miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
 	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
+
+##
+# gff3 tests
+##
+gff3Tester=${BIN_DIR}/gff3Tester
+gff3Test: gff3SacCerTest gff3ErrorCasesTest
+
+# FIXME: doesn't work yet
+# gff3SpecialCasesTest
+
+gff3SacCerTest: ${gff3Tester} mkdirs
+	${gff3Tester} input/sacCerTest.gff3 output/$@.out
+gff3SpecialCasesTest: ${gff3Tester} mkdirs
+	${gff3Tester} input/specialCasesTest.gff3 output/$@.out
+gff3ErrorCasesTest: ${gff3Tester} mkdirs
+	if ${gff3Tester} input/errorCasesTest.gff3 /dev/null >output/$@.err 2>&1 ; then exit 0 else exit 1; fi
+
+${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS}
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
