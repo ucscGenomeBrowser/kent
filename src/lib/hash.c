@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.48 2008/10/06 17:04:17 hiram Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.49 2009/04/30 18:12:00 mikep Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -211,7 +211,11 @@ struct hashEl *hashAddSaveName(struct hash *hash, char *name, void *val, char **
 /* Add new element to hash table.  Save the name of the element, which is now
  * allocated in the hash table, to *saveName.  A typical usage would be:
  *    AllocVar(el);
- *    hashAddSaveName(hash, name, el, &el->name);
+ *    el->val = someVal;
+ *    hashAddSaveName(hash, name, el->val, &el->name);
+ * Note this above code gives you a hashEl 'el' which is not in the hash, but
+ * whose ->name and ->val pointers are the same as the pionters of 
+ * the hashEl in the hash.
  */
 {
 struct hashEl *hel = hashAdd(hash, name, val);
