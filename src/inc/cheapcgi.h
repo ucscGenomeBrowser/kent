@@ -55,11 +55,17 @@ char *cgiRequestMethod();
 char *cgiRequestUri();
 /* Return CGI REQUEST_URI */
 
+char *cgiRequestContentLength();
+/* Return HTTP REQUEST CONTENT_LENGTH if available*/
+
 char *cgiScriptName();
 /* Return name of script so libs can do context-sensitive stuff. */
 
 char *cgiServerName();
 /* Return name of server */
+
+char *cgiRequestHttpHost();
+/* Return HTTP HOST header (sent from client, as opposed to SERVER_NAME) */
 
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
@@ -229,6 +235,7 @@ void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */
 
+#define NO_VALUE            -96669
 void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max);
 /* Make a integer control filled with initial value.
    If min and/or max are non-NULL will enforce range
@@ -401,13 +408,6 @@ void logCgiToStderr();
 void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
-
-void initCgiInputMethod(char *method);
-/* Initialize CGI input stuff assuming HTTP "method"
- * such as "GET" or "POST".
- * After this CGI vars are
- * stored in an internal hash/list regardless of how they
- * were passed to the program. */
 
 void commonCssStyles();
 /* Defines a few common styles to use through CSS */
