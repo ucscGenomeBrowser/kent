@@ -171,7 +171,7 @@ void okSendHeader(time_t modified, int expireSecs);
 // If modified > 0, set Last-Modified date (and ETag) based on this
 // If expireSecs > 0, set Expires header to now+expireSecs
 
-void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType);
+void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType, char *location);
 // Send a 2xx header
 // If modified > 0 set Last-Modified date (and ETag based on this)
 // if contentType is NULL, defaults to Content-Type: application/json

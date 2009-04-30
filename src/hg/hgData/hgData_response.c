@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.9 2009/03/10 07:30:24 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.10 2009/04/30 03:45:23 mikep Exp $";
 
 char *http_status1xx[] = {"Continue", "Switching Protocols"};
 
@@ -27,36 +27,40 @@ if ( (reqEtag && sameOk(reqEtag, etag(modified)))
 return FALSE;
 }
 
-static void sendEtagHeader(int status, char *message, time_t modified, int expireSecs, char *contentType)
+static void sendEtagHeader(int status, char *message, time_t modified, int expireSecs, char *contentType, char *location)
 {
-printf("Status: %d %s\n", status, message);
+printf("Status: %d %s\r\n", status, message);
 char *d = gmtimeToHttpStr(time(NULL));
-printf("X-UCSC-Date: %s\n", d);
+printf("X-UCSC-Date: %s\r\n", d);
 freez(&d);
 if (expireSecs > 0)
     {
     char *d = gmtimeToHttpStr(time(NULL)+expireSecs);
-    printf("Expires: %s\n", d);
-    printf("X-UCSC-Expires: %s\n", d);
+    printf("Expires: %s\r\n", d);
+    printf("X-UCSC-Expires: %s\r\n", d);
     freez(&d);
     }
 if (modified > 0)
     {
-    printf("ETag: %s\n", etag(modified));
+    printf("ETag: %s\r\n", etag(modified));
     if (status!=304)
 	{
 	char *d = gmtimeToHttpStr(modified);
-	printf("Last-Modified: %s\n", d);
-	printf("X-UCSC-Last-Modified: %s\n", d);
+	printf("Last-Modified: %s\r\n", d);
+	printf("X-UCSC-Last-Modified: %s\r\n", d);
 	freez(&d);
 	}
     }
-//printf("Accept-Encoding: compress, gzip\n"); // check x-gzip etc.
-printf("Content-Type: %s\n", ((contentType) ? (contentType) : "application/json"));
-printf("\n");
+if (location != NULL)
+    {
+    printf("Location: %s\r\n", location);
+    }
+//printf("Accept-Encoding: compress, gzip\r\n"); // check x-gzip etc.
+printf("Content-Type: %s\r\n", ((contentType) ? (contentType) : "application/json"));
+printf("\r\n");
 }
 
-void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType)
+void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType, char *location)
 // Send a 2xx header
 // If modified > 0 set Last-Modified date (and ETag based on this)
 // if contentType is NULL, defaults to Content-Type: application/json
@@ -64,7 +68,7 @@ void send2xxHeader(int status, time_t modified, int expireSecs, char *contentTyp
 int status200 = status - 200;
 if (status200 < 0 || status200 >= sizeof(http_status2xx))
     errAbort("Invalid 2xx status %d\n", status);
-sendEtagHeader(status, http_status2xx[status200], modified, expireSecs, contentType);
+sendEtagHeader(status, http_status2xx[status200], modified, expireSecs, contentType, location);
 }
 
 void send3xxHeader(int status, time_t modified, int expireSecs, char *contentType)
@@ -75,7 +79,7 @@ void send3xxHeader(int status, time_t modified, int expireSecs, char *contentTyp
 int status300 = status - 300;
 if (status300 < 0 || status300 >= sizeof(http_status3xx))
     errAbort("Invalid 3xx status %d\n", status);
-sendEtagHeader(status, http_status3xx[status300], modified, expireSecs, contentType);
+sendEtagHeader(status, http_status3xx[status300], modified, expireSecs, contentType, NULL);
 }
 
 void okSendHeader(time_t modified, int expireSecs)
@@ -83,7 +87,7 @@ void okSendHeader(time_t modified, int expireSecs)
 // If modified > 0, set Last-Modified date (and ETag) based on this
 // If expireSecs > 0, set Expires header to now+expireSecs
 {
-send2xxHeader(200, modified, expireSecs, NULL);
+send2xxHeader(200, modified, expireSecs, NULL, NULL);
 }
 
 static void errClientArgs(int code, char *status, char *format, va_list args)
@@ -94,10 +98,11 @@ static void errClientArgs(int code, char *status, char *format, va_list args)
 {
 char msg[2048];
 struct json_object *err = json_object_new_object();
-fprintf(stdout, "Status: %u %s\n", code, status);
-/*fprintf(stdout, "Content-type: text/xml\n\n");
+fprintf(stdout, "Status: %u %s\r\n", code, status);
+/*fprintf(stdout, "Content-type: text/xml\r\n");
 fprintf(stdout, "<html><head><title>Error %u %s</title></head><body>\n<h1>Error %u: %s</h1>\n", code, status, code, status);*/
-fprintf(stdout, "Content-type: application/json\n\n");
+fprintf(stdout, "Content-type: application/json\r\n");
+fprintf(stdout, "\r\n");
 if (format != NULL) {
     vsnprintf(msg, sizeof(msg), format, args);
     }
