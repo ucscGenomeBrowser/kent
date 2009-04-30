@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.76 2009/04/29 18:14:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.77 2009/04/30 15:58:32 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -1769,58 +1769,15 @@ enum {blackShadeIx=9,whiteShadeIx=0};
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn)
 // Returns "score >= ..." extra where clause if one is needed
 {
-char *extraWhereClause = NULL;
-if(trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) != NULL)
-    return NULL;
-
 if( scoreColumn == NULL)
     scoreColumn = "score";
 
-if(trackDbSettingClosestToHomeOn(tdb, SCORE_FILTER _BY_RANGE))
-    {
-    char *scoreDefault = strSwapChar(cloneString(trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0:1000")),':',0);
-    int defaultMin = atoi(scoreDefault);
-    int defaultMax = atoi(scoreDefault + strlen(scoreDefault) + 1);
-    freeMem(scoreDefault);
-    int scoreRangeMin = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER _MIN, defaultMin);
-    int scoreRangeMax = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER _MAX, defaultMax);
-    if (scoreRangeMin < defaultMin)
-        {
-        warn("%d is an invalid %s for the filter on the %s track. Please choose a score in the valid range",
-             scoreRangeMin, scoreColumn, tdb->tableName);
-	    cartRemoveVariableClosestToHome(cart, tdb, FALSE, SCORE_FILTER _MIN);
-	    scoreRangeMin = defaultMin;
-        }
-    if (scoreRangeMax > defaultMax)
-        {
-        warn("%d is an invalid %s for the filter on the %s track. Please choose a score in the valid range",
-             scoreRangeMax, scoreColumn, tdb->tableName);
-	    cartRemoveVariableClosestToHome(cart, tdb, FALSE, SCORE_FILTER _MAX);
-	    scoreRangeMax = defaultMax;
-        }
-    if (scoreRangeMin > 0 || scoreRangeMax < 1000) // TODO: Here is a possible bug: default range and data range may differ!
-        {
-        extraWhereClause = needMem(64);
-        safef(extraWhereClause, 64, "%s >= %d and %s <= %d", scoreColumn,scoreRangeMin,scoreColumn,scoreRangeMax);
-        }
-    }
-else
-    {
-    int defaultMin =atoi(trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0"));
-    int scoreRangeMin = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER, defaultMin);
-    if (scoreRangeMin < defaultMin)
-        {
-        warn("%d is an invalid %s for the filter on the %s track. Please choose a score in the valid range", scoreRangeMin, scoreColumn, tdb->tableName);
-	    cartRemoveVariableClosestToHome(cart, tdb, FALSE, SCORE_FILTER);
-	    scoreRangeMin = defaultMin;
-        }
-    else if (scoreRangeMin > 0) // TODO: Here is a possible bug: default min and data min may differ!
-        {
-        extraWhereClause = needMem(64);
-        safef(extraWhereClause, 64,"%s >= %d", scoreColumn, scoreRangeMin);
-        }
-    }
-return extraWhereClause;
+struct dyString *extraWhere = newDyString(128);
+boolean and = FALSE;
+extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
+if (sameString(extraWhere->string, ""))
+    return NULL;
+return dyStringCannibalize(&extraWhere);
 }
 
 
