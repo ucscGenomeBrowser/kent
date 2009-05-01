@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.13 2009/04/23 00:31:12 larrym Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.14 2009/05/01 00:25:57 tdreszer Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -151,9 +151,6 @@ static void bedItemOverlapCount(char *database, int fileCount, char *fileList[])
 unsigned maxChromSize = 0;
 int i;
 unsigned short *counts = (unsigned short *)NULL;
-char *prevChrom = (char *)NULL;
-boolean outputToDo = FALSE;
-unsigned chromSize = 0;
 
 if (chromSizes != NULL)
     {
@@ -185,10 +182,12 @@ counts = needHugeMem(sizeof(unsigned short) * maxChromSize);
 /*	Reset the array to be zero to be reused */
 memset((void *)counts, 0, sizeof(unsigned short)*(size_t)maxChromSize);
 
+unsigned chromSize = 0;
+char *prevChrom = (char *)NULL;
+boolean outputToDo = FALSE;
 for (i=0; i<fileCount; ++i)
 {
     struct lineFile *bf = lineFileOpen(fileList[i] , TRUE);
-    unsigned thisChromSize = 0;
     struct bed *bed = (struct bed *)NULL;
     char *row[3];
 
@@ -197,41 +196,33 @@ for (i=0; i<fileCount; ++i)
 	int i;
 	bed = bedLoadN(row, 3);
 	verbose(3,"#\t%s\t%d\t%d\n",bed->chrom,bed->chromStart, bed->chromEnd);
-	if (prevChrom && differentWord(bed->chrom,prevChrom))
-	    {
-	    chromSize = chromosomeSize(prevChrom);
-	    verbose(2,"#\tchrom %s done, size %d\n", prevChrom, chromSize);
-	    if (outputToDo)
-		outputCounts(counts, prevChrom, chromSize);
-	    outputToDo = FALSE;
-	    memset((void *)counts, 0,
-		sizeof(unsigned short)*(size_t)maxChromSize); /* zero counts */
-	    freeMem(prevChrom);
-	    prevChrom = cloneString(bed->chrom);
-	    thisChromSize = chromosomeSize(prevChrom);
-	    verbose(2,"#\tchrom %s starting, size %d\n", prevChrom,
-		thisChromSize);
-	    }
-	else if ((char *)NULL == prevChrom)
-	    {
-	    prevChrom = cloneString(bed->chrom);
-	    chromSize = chromosomeSize(prevChrom);
-	    thisChromSize = chromosomeSize(prevChrom);
-	    verbose(2,"#\tchrom %s starting, size %d\n", prevChrom,
-		thisChromSize);
-	    }
-    if (bed->chromEnd > thisChromSize)
+    if (prevChrom && differentWord(bed->chrom,prevChrom)) // End a chr
         {
-        if (bed->chromStart >= thisChromSize || differentWord(bed->chrom,"chrM")) // circular chrom
+        verbose(2,"#\tchrom %s done, size %d\n", prevChrom, chromSize);
+        if (outputToDo)
+            outputCounts(counts, prevChrom, chromSize);
+        outputToDo = FALSE;
+        memset((void *)counts, 0,
+        sizeof(unsigned short)*(size_t)maxChromSize); /* zero counts */
+        freez(&prevChrom); // pointer is now NULL so it will be caught by next if!
+        }
+    if ((char *)NULL == prevChrom)  // begin a chr
+        {
+        prevChrom = cloneString(bed->chrom);
+        chromSize = chromosomeSize(prevChrom);
+        verbose(2,"#\tchrom %s starting, size %d\n", prevChrom,chromSize);
+        }
+    if (bed->chromEnd > chromSize)
+        {
+        if (bed->chromStart >= chromSize || differentWord(bed->chrom,"chrM")) // circular chrom
             {
             warn("ERROR: %s\t%d\t%d", bed->chrom, bed->chromStart,
             bed->chromEnd);
-            errAbort("chromEnd > chromSize ?  %d > %d", bed->chromEnd,
-                thisChromSize);
+            errAbort("chromEnd > chromSize ?  %d > %d", bed->chromEnd,chromSize);
             }
-        for (i = bed->chromStart; i < thisChromSize; ++i)
+        for (i = bed->chromStart; i < chromSize; ++i)
             counts[i]++;
-        for (i = 0; i < (bed->chromEnd - thisChromSize); ++i)
+        for (i = 0; i < (bed->chromEnd - chromSize); ++i)
             counts[i]++;
         }
     else
@@ -239,11 +230,12 @@ for (i=0; i<fileCount; ++i)
         for (i = bed->chromStart; i < bed->chromEnd; ++i)
             counts[i]++;
         }
-	outputToDo = TRUE;
-	bedFree(&bed); // plug the memory leak
-	}
-    verbose(2,"#\tchrom %s done, size %d\n", prevChrom, thisChromSize);
+    outputToDo = TRUE;
+    bedFree(&bed); // plug the memory leak
+    }
+    verbose(2,"#\tchrom %s done, size %d\n", prevChrom, chromSize);
     lineFileClose(&bf);
+    // Note, next file could be on same chr!
 }
 if (outputToDo)
     outputCounts(counts, prevChrom, chromSize);
