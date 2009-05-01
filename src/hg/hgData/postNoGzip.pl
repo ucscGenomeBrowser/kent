@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use HTTP::Request::Common;
+use LWP;
+
+die "$0 - post a file\nusage: \n\n$0 POST|PUT hostname filename " unless scalar(@ARGV)==3 or scalar(@ARGV)==4;
+my $METHOD = $ARGV[0];
+my $HOST = $ARGV[1];
+my $FILE = $ARGV[2];
+my $CONTENTTYPE = defined($ARGV[3]) ? $ARGV[3] : "form-data";
+
+$HTTP::Request::Common::DYNAMIC_FILE_UPLOAD = 1;
+# curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=trash/testing.bed
+
+select STDOUT; $| = 1;
+
+my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18",
+    [
+#  'verbose' => 2,
+ 'a_file' => [ $FILE ]
+    ],
+    'Content_Type' => $CONTENTTYPE
+    )
+ : 
+  (PUT "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18",
+    [
+#  'verbose' => 2,
+ 'a_file' => [ $FILE ]
+    ],
+    'Content_Type' => $CONTENTTYPE
+    );
+
+
+
+print "starting test\n====================================\n".localtime()."\n====================================\n";
+
+my $browser = LWP::UserAgent->new();
+print "issue request\n====================================\n".localtime()."\n====================================\n";
+my $response = $browser->request($request);
+
+
+print "printing response content\n====================================\n".localtime()."\n====================================\n";
+print $response->content();
+print "\n====================================\n".localtime()."\n====================================\n";
+print "Location: [".$response->header("Location")."]\n"if $response->header("Location");
+print "success=[".$response->is_success."] status=[".$response->status_line."]\ndone.\n";
+
