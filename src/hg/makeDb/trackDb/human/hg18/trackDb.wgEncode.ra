@@ -4645,7 +4645,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in prostate whole cell)
@@ -4660,7 +4660,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 cytosol)
@@ -4675,7 +4675,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 nucleus)
@@ -4690,7 +4690,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
-    release alpha
+#   release alpha
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in prostate whole cell)
@@ -4705,7 +4705,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in prostate whole cell)
@@ -4720,7 +4720,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in K562 cytosol)
@@ -4735,7 +4735,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in K562 cytosol)
@@ -4750,7 +4750,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in K562 nucleus)
@@ -4765,7 +4765,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in K562 nucleus)
@@ -4780,7 +4780,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+ +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 cytosol)
@@ -4798,7 +4798,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562CytosolLongpolya fileName=wgEncodeRikenCagePlusClustersK562CytosolLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+ -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 cytosol)
@@ -4816,7 +4816,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+ +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 nucleus)
@@ -4834,7 +4834,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleusLongpolya fileName=wgEncodeRikenCagePlusClustersK562NucleusLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+ -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 nucleus)
@@ -4852,7 +4852,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 cytosol)
@@ -4870,7 +4870,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562CytosolLongpolya fileName=wgEncodeRikenCageAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 nucleus)
@@ -4888,7 +4888,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersK562PolysomeLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA+ +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 polysome)
@@ -4906,7 +4906,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=polysome view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562PolysomeLongpolya fileName=wgEncodeRikenCagePlusClustersK562PolysomeLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562PolysomeLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA+ -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 polysome)
@@ -4924,7 +4924,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=polysome view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562PolysomeLongpolya fileName=wgEncodeRikenCageMinusClustersK562PolysomeLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in K562 nucleolus)
@@ -4942,7 +4942,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleolusTotal fileName=wgEncodeRikenCagePlusClustersK562NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleolusTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in K562 nucleolus)
@@ -4960,7 +4960,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleolusTotal fileName=wgEncodeRikenCageMinusClustersK562NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in K562 nucleoplasm)
@@ -4978,7 +4978,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCagePlusClustersK562NucleoplasmTotal.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in K562 nucleoplasm)
@@ -4996,7 +4996,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562ChromatinTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in K562 chromatin)
@@ -5014,7 +5014,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562ChromatinTotal fileName=wgEncodeRikenCagePlusClustersK562ChromatinTotal.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersK562ChromatinTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in K562 chromatin)
@@ -5032,7 +5032,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562ChromatinTotal fileName=wgEncodeRikenCageMinusClustersK562ChromatinTotal.bedGraph4.gz
 
     track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA+
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 polysome)
@@ -5050,7 +5050,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=polysome view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562PolysomeLongpolya fileName=wgEncodeRikenCageAlignmentsK562PolysomeLongpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot
     longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 nucleolus)
@@ -5068,7 +5068,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleolusTotal fileName=wgEncodeRikenCageAlignmentsK562NucleolusTotal.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot
     longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 nucleoplasm)
@@ -5086,7 +5086,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleoplasmTotal fileName=wgEncodeRikenCageAlignmentsK562NucleoplasmTotal.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562ChromatinTotal
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot
     longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 chromatin)
@@ -5104,7 +5104,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562ChromatinTotal fileName=wgEncodeRikenCageAlignmentsK562ChromatinTotal.tagAlign.gz
 
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel GM128 cyt pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in GM12878 cytosol)
@@ -5122,7 +5122,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel GM128 cyt pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in GM12878 cytosol)
@@ -5140,7 +5140,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel GM128 nuc pA- -
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in GM12878 nucleus)
@@ -5158,7 +5158,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel GM128 nuc pA- +
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in GM12878 nucleus)
@@ -5176,7 +5176,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=PlusClusters dataVersion="ENCODE NFeb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel GM128 cyt pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 cytosol)
@@ -5194,7 +5194,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
-    release alpha
+#    release alpha
     subTrack wgEncodeRikenCage
     shortLabel GM128 nuc pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 nucleus)
