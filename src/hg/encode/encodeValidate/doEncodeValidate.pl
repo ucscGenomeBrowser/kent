@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.179 2009/04/29 22:58:55 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.180 2009/05/01 06:20:28 aamp Exp $
 
 use warnings;
 use strict;
@@ -1443,7 +1443,7 @@ if(!@errors) {
                         if ( ! -s "$dir/$fbase") {
                             die ("Unzipped file \'$fbase\' does not exist (or is empty) for DDF file \'$file\'\n");
                         }
-                        push @unzippedFiles, $fbase;
+                        push @unzippedFiles, "$dir/$fbase";
                     } else {
                         push @unzippedFiles, $file;
                     }
