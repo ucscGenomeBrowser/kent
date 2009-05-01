@@ -1,24 +1,111 @@
 /* hgData - simple RESTful interface to genome data. */
 #include "common.h"
 #include "hgData.h"
+#include "asParse.h"
+#include "bigBed.h"
+#include "localmem.h"
+#include "ra.h"
 
+// Rough speed estimates; 
+// Can process 125,000 lines per second to make a Bigbed on hgwdev 
+// using input to/from hive
+// Want to process data immediately if it would probably take less  than BIGBED_MAX_SECS
+//#define BIGBED_LINES_PER_SEC 125000
+#define BIGBED_LINES_PER_SEC 50
+#define BIGBED_MAX_SECS 10
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.28 2009/04/23 05:01:31 mikep Exp $";
+// use large blocks of memory as we expect to receive large bigBed files
+#define LM_BLOCKSIZE 1024*1024*8
+#define CHROM_SIZES "/cluster/home/mikep/kent/src/hg/encode/validateFiles/hg18_chromInfo.txt"
+// suggested defaults from bigBed.h
+#define BLOCKSIZE    1024
+#define ITEMS_PER_SLOT 64
+#define AS_FILE_PATH "/cluster/bin/sqlCreate/"
+#define CV_CONFIG_FILE "/cluster/data/encode/pipeline/config/cv.ra"
+
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.29 2009/05/01 20:55:55 mikep Exp $";
 // #/g/project/(data|summary)/{project}/{pi}?/{lab}?/{datatype}?/{track}?/{genome}?
 // RewriteRule ^/g/project/(data|summary)/([^/]+)(/([^/]+)(.*))?$ /$5?cmd=$1\&project=$2\&pi=$4 [C]
 // RewriteRule ^/(/([^/]+)(/([^/]+)(/([^/]+)(/([^/]+))?)?)?)?$ /cgi-bin/hgData?lab=$2\&datatype=$4\&track=$6\&genome=$8 [PT,QSA,L,E=ETag:%{HTTP:If-None-Match},E=Modified:%{HTTP:If-Modified-Since},E=Authorization:%{HTTP:Authorization}]
 
 // curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=testing.bed
 
-struct slPair *nameValueListToPair(char *s)
+struct hash *hAsFile = NULL;
+struct hash *hCvRa = NULL;
+
+struct asObject *readAsFile(char *asFileName)
 {
-// format: a=b,c=d,e=f        result-> b,d,f
+struct asObject *as = NULL;
+if (asFileName != NULL)
+    {
+    /* Parse it and do sanity check. */
+    as = asParseFile(asFileName);
+    if (as->next != NULL)
+        errAbort("Can only handle .as files containing a single object.");
+    }
+return as;
+}
+
+void upperLower(char *s)
+{
+if (strlen(s) == 0)
+    return;
+s[0] = toupper(s[0]);
+++s;
+while ( (*s++ = tolower(*s)) )
+    ;
+}
+
+char *encodeConcatTrackName(char *variables)
+{
+char *track;
+struct dyString *name = newDyString(strlen(variables));
+struct slName *var, *vars = slNameListFromString(variables, ',');
+MJP(2);verbose(2,"variables=%s\n", variables);
+for (var = vars ; var ; var = var->next)
+    {
+    upperLower(var->name);
+    dyStringAppend(name, var->name);
+    }
+track = dyStringCannibalize(&name);
+slFreeList(&vars);
+MJP(2);verbose(2,"track=%s\n", track);
+return track;
+}
+
+struct slPair *nameValueStringToPair(char *s, char delim)
+{
+// format: a=b<delim> c=d<delim>e=f        result-> b,d,f
 struct slPair *vars;
 char *t = cloneString(s);
-memSwapChar(t, strlen(t), ',', ' ');
+memSwapChar(t, strlen(t), delim, ' ');
 vars = slPairFromString(t);
 freez(&t);
 return vars;
+}
+
+struct slPair *nameValueListToPair(char *s)
+{
+// format: a=b,c=d,e=f        result-> b,d,f
+return nameValueStringToPair(s, ',');
+}
+
+char *contentFileName(char *content)
+// Parse a "Content-Disposition" header of the format:
+// Content-Disposition:form-data; name="a_file"; filename="test.100m.bed"
+// into its own list of pairs to find filename paramter
+{
+char *filename;
+// parse this header into its own pairs, possibly terminated by ';'
+struct slPair *cl = slPairFromString(content);
+if ( (filename = slPairFindVal(cl, "filename")) == NULL)
+    errAbort("Could not find filename in Content-Disposition header [%s]\n", content);
+filename = cloneString(filename);
+// trip off trailing ';' if any
+if (strlen(filename) > 0 && filename[strlen(filename)-1] == ';')
+    filename[strlen(filename)-1] = '\0';
+slPairFreeValsAndList(&cl);
+return filename;
 }
 
 boolean hashAddPair(struct hash *h, char *s)
@@ -39,6 +126,20 @@ freez(&ss);
 return ret;
 }
 
+char *myFindVarData(struct hash *inputHash, char *varName)
+/* Get the string associated with varName from the query string. 
+ * Similar to cheapcgi.c:findVarData() but takes cgi hash as input,
+ * and doesnt have the call to initCgiInput() */
+{
+struct cgiVar *var;
+
+//initCgiInput();
+if ((var = hashFindVal(inputHash, varName)) == NULL)
+    return NULL;
+return var->val;
+}
+
+
 void doUpdate(char *method)
 {
 long i = 0;
@@ -46,32 +147,45 @@ int len;
 boolean ok;
 struct hash *h = newHash(0);
 struct hash *hHeader = newHash(0);
-FILE *f;
 struct lineFile *lf;
 char *line;
 int lineSize;
 char *boundary;
+char *inputfile;
 struct cgiVar *cgi = NULL;
 char *url = getenv("SCRIPT_URL");
 char *query = cloneString(getenv("QUERY_STRING"));
 char *contLenStr = getenv("CONTENT_LENGTH");
 long contLen = sqlUnsigned(contLenStr);
-char *cmd, *project, *pi, *lab, *datatype, *view, *track, *genome;
+char *cmd, *project, *pi, *lab, *datatype, *view, *track, *genome, *variables;
+struct dyString *location = newDyString(0);
 struct dyString *tableName = newDyString(0);
 struct dyString *fileName = newDyString(0);
-struct slName *vars, *var;
+struct asObject *as = readAsFile((char *)hashMustFindVal(hAsFile, "tagAlign")); // FIXME: MJP - gotta get path for AS files for encode
+struct hash *chromHash = bbiChromSizesFromFile(CHROM_SIZES); // FIXME: MJP - gotta get path for hg18
+MJP(2);verbose(2, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, CHROM_SIZES);
+
+if ( !startsWith(getenv("CONTENT_TYPE"),"multipart/form-data") )
+    errAbort("Unknown request body content-type [%s]\n", getenv("CONTENT_TYPE"));
+
+// turn off buffering of stdin, as it messes with lineFile unbuffered IO
+if (setvbuf(stdin, NULL, _IONBF, 0))
+    errnoAbort("Could not unbuffer stdin\n");
+
 MJP(2);verbose(2,"query_string=[%s] url=[%s] content_type=[%s] content_length=[%s = %ld]\n", 
     query, url, getenv("CONTENT_TYPE"), contLenStr, contLen);
 if (!query || !cgiParseInput(query, &h, &cgi))
     errAbort("Could not parse query string [%s]\n", query);
-cmd      = hashMustFindVal(h, "cmd");
-project  = hashFindVal(h, "project");
-pi       = hashFindVal(h, "pi");
-lab      = hashFindVal(h, "lab");
-datatype = hashFindVal(h, "datatype");
-view     = hashFindVal(h, "view");
-track    = hashFindVal(h, "track");
-genome   = hashFindVal(h, "genome");
+cmd      = myFindVarData(h, "cmd");
+if (!cmd)
+    errAbort("Malformed url: no command supplied (%s)\n", query);
+project  = myFindVarData(h, "project");
+pi       = myFindVarData(h, "pi");
+lab      = myFindVarData(h, "lab");
+datatype = myFindVarData(h, "datatype");
+view     = myFindVarData(h, "view");
+track    = myFindVarData(h, "track");
+genome   = myFindVarData(h, "genome");
 //verboseSetLevel(sqlUnsigned(hashOptionalVal(h, "verbose", "1")));
 MJP(2);verbose(2,"cmd=%s, project=%s, pi=%s, lab=%s, datatype=%s, view=%s, track=%s, genome=%s.\n", 
     cmd, project, pi, lab, datatype, view, track, genome);
@@ -88,20 +202,18 @@ MJP(2);verbose(2,"cmd=%s, project=%s, pi=%s, lab=%s, datatype=%s, view=%s, track
 // if (filename == NULL)
 //     errAbort("filename not found\n");
 //wgEncode-Helicos-RnaSeq-Alignments-K562,Cytosol,Longpolya
-vars = slNameListFromString(track, ',');
+char *asFileName = (char *)hashMustFindVal(hAsFile, "tagAlign");
+variables = track;
+track = encodeConcatTrackName(variables);
 dyStringAppend(tableName, project);
 dyStringAppend(tableName, lab);
 dyStringAppend(tableName, datatype);
 dyStringAppend(tableName, view);
-for (var = vars ; var ; var = var->next)
-    dyStringAppend(tableName, var->name);
+dyStringAppend(tableName, track);
 dyStringAppend(fileName, "../trash/");
 dyStringAppend(fileName, tableName->string);
-MJP(2);verbose(2,"writing file [%s]\n", fileName->string);
-if (sameOk(method, "POST"))
-    f = mustOpen(fileName->string, "wb"); // POST = Append
-else if (sameOk(method, "PUT"))
-    f = mustOpen(fileName->string, "wb"); // PUT = Write
+dyStringAppend(fileName, ".bb");
+dyStringPrintf(location, "http://%s/g/tracks/%s/%s", cgiRequestHttpHost(), genome, tableName->string);
 lf = lineFileStdin(TRUE);
 // get the multipart/form-data boundary string
 if (!lineFileNext(lf, &line, &lineSize))
@@ -114,16 +226,68 @@ while ( (ok = lineFileNext(lf, &line, &lineSize)) && hashAddPair(hHeader, line))
 if (!ok)
     errAbort("no more input after headers\n");
 MJP(2);verbose(2,"ok=%d size=%d strlen=%d [%1x,%1x,%1x] line=[%s]\n", ok, lineSize, (int)strlen(line), line[0], line[1], line[2], line);
+if ( differentString(hashMustFindVal(hHeader, "Content-Type"),"text/plain") )
+    errAbort("Unknown content-type [%s] inside request body\n", (char *)hashMustFindVal(hHeader, "Content-Type"));
+if ( (inputfile = contentFileName(hashMustFindVal(hHeader,"Content-Disposition"))) == NULL)
+    errAbort("Could not find Content-Disposition header to get filename\n");
+
 // data is terminated by <CR><LF> and then the boundary
 // the <CR><LF> is interpreted as a line of length 0
-i = 0;
+struct ppBed *pbList = NULL;
+struct lm *lm = lmInit(LM_BLOCKSIZE);
+int fieldCount = 0, fieldAlloc=0;
+char **row = NULL;
+char *prevChrom = NULL; // set after first time through loop
+bits32 prevStart = 0;   // ditto
+double totalSize = 0.0;
+long count = 0;
+bits64 fullSize = 0;
+bits16 definedFieldCount = 0;
+boolean delayedCreate = FALSE;
 while ((ok = lineFileNext(lf, &line, &lineSize)) && (len = strlen(line)) > 0)
     {
-    ++i;
-    MJP(2);verbose(2,"%3d strlen=%d [%s] lf->nlType=[%d]\n", lineSize, len, line, lf->nlType);
-    mustWrite(f, line, len);
-    mustWrite(f, "\n", 1);
+    if ((count % 100000) == 0)
+	{
+	MJP(2);verbose(2,"lines=%ld\n", count);
+	}
+    MJP(3);verbose(4,"%3d strlen=%d [%s] lf->nlType=[%d]\n", lineSize, len, line, lf->nlType);
+    /* First time through figure out the field count, and if not set, the defined field count. */
+    if (fieldCount == 0)
+	{
+	if (as == NULL)
+	    {
+	    fieldCount = chopByWhite(line, NULL, 0);
+	    if (definedFieldCount == 0)
+		definedFieldCount = fieldCount;
+	    if (as == NULL)
+		{
+		char *asText = bedAsDef(definedFieldCount, fieldCount);
+		as = asParseText(asText);
+		freeMem(asText);
+		}
+	    }
+	else
+	    {
+	    fieldCount = slCount(as->columnList);
+	    }
+	fieldAlloc = fieldCount+1;
+	AllocArray(row, fieldAlloc);
+	}
+    int wordCount = chopByWhite(line, row, fieldAlloc);
+    lineFileExpectWords(lf, fieldCount, wordCount);
+    bits64 diskSize = 0;
+    ++count;
+    struct ppBed *pb = ppBedLoadOne(row, fieldCount, lf, chromHash, lm, as, &diskSize);
+    if (prevChrom && prevChrom == pb->chrom && pb->start < prevStart)
+	errAbort("Input is not sorted line #%ld [previous=(%s,%d) current=(%s,%d)]\n", count, prevChrom, prevStart, pb->chrom, pb->start); // first time through the loop prevChrom is NULL so test fails
+    prevChrom = pb->chrom;
+    prevStart = pb->start;
+    totalSize += pb->end - pb->start;
+    fullSize += diskSize;
+    slAddHead(&pbList, pb);
     }
+MJP(2);verbose(2,"read lines=%ld\n", count);
+slReverse(&pbList);
 if (!ok)
     errAbort("no blank line after input\n");
 // Check boundary matches. Note that this boundary has 2 more dashes on the end compared to the initial boundary.
@@ -134,11 +298,46 @@ if (lineFileNext(lf, &line, &lineSize))
     }
 else
     errAbort("no boundary line after blank line after data\n");
-carefulClose(&f);
-okSendHeader(0, 0);
-printf("bytes read=%ld\ncontent_length=%ld\ncompression=%f%%\nurl=%s\n", i, contLen, 100.0*contLen/i, url);
-MJP(2);verbose(2,"wrote %ld bytes to file [%s]\n", i, fileName->string);
-slFreeList(&vars);
+// Now we have the full dataset.
+// If it is not too big, process it immediately and send "201 Created" 
+//   Include a "Location: " header pointing to the track status info.
+// If it is too big, return a "202 Accepted" with guesstimate of the time it will take
+//   Include a "Location: " header pointing to the track status info.
+//   Then, close the in & out files so apache will return the reponse to the client,
+//   and continue on writing the bigBed.
+// See HTTP 1.1 for status codes: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+if ( (count / BIGBED_LINES_PER_SEC) <= BIGBED_MAX_SECS)
+    {
+    MJP(2);verbose(2,"Creating bigbed now (%ld lines, avgsize=%.2f, diskSize=%lld, inputfile=%s)\n", count, totalSize/count, fullSize, inputfile);
+    bigBedFileCreateDetailed(pbList, count, totalSize/count, tableName->string, chromHash, BLOCKSIZE, 
+	ITEMS_PER_SLOT, definedFieldCount, fieldCount, asFileName, as, fullSize, fileName->string);
+    send2xxHeader(201, 0, 0, NULL, location->string);
+    }
+else
+    {
+    MJP(2);verbose(2,"Creating bigbed LATER (%ld lines, avgsize=%.2f, diskSize=%lld)\n", count, totalSize/count, fullSize);
+    send2xxHeader(202, 0, 0, NULL, location->string);
+    printf("Estimated time to complete = %ld minutes\n", 1 + ((count / BIGBED_LINES_PER_SEC) / 60));
+    lineFileClose(&lf);
+    if (fclose(stdin))
+	errnoAbort("Could not close stdin\n");
+    if (fclose(stdout))
+	errnoAbort("Could not close stdout\n");
+    //if (fclose(stderr))
+	//errnoAbort("Could not close stderr\n");
+    sleep(30);
+    bigBedFileCreateDetailed(pbList, count, totalSize/count, tableName->string, chromHash, BLOCKSIZE, 
+	ITEMS_PER_SLOT, definedFieldCount, fieldCount, asFileName, as, fullSize, fileName->string);
+    delayedCreate = TRUE;
+    }
+
+if (!delayedCreate)
+    {
+    printf("bytes read=%ld\ncontent_length=%ld\ncompression=%f%%\nurl=%s\n", i, contLen, 100.0*contLen/i, url);
+    MJP(2);verbose(2,"wrote %ld lines to file [%s]\n", count, fileName->string);
+    }
+lmCleanup(&lm);
+freeDyString(&location);
 freeDyString(&fileName);
 freeDyString(&tableName);
 }
@@ -400,13 +599,26 @@ int main(int argc, char *argv[])
 /* Process command line.
  * Stateless server; No "CART" required for REST interface */
 {
+verboseSetLevel(2);
+// turn off buffering of stderr
+if (setvbuf(stderr, NULL, _IONBF, 0))
+    errnoAbort("Could not unbuffer stderr\n");
+MJP(2);verbose(2,"cgiSpoof\n");
 cgiSpoof(&argc, argv); // spoof cgi vars if running from command line
 
 char *method = getenv("REQUEST_METHOD");
+MJP(2);verbose(2,"method=%s\n", method);
 //initCgiInputMethod(cgiRequestMethod()); // otherwise initialize from request_method
 //verboseSetLevel(cgiOptionalInt("verbose", 1));
-verboseSetLevel(2);
 
+hAsFile = hashNew(0);
+hashAdd(hAsFile, "tagAlign", AS_FILE_PATH "tagAlign.as");
+hCvRa = raReadAll(CV_CONFIG_FILE, "term");
+/* Return hash that contains all ra records in file keyed
+ * by given field, which must exist.  The values of the
+ * hash are themselves hashes. */
+
+MJP(2);verbose(2,"starting\n");
 //if (sameOk(cgiRequestMethod(), "GET"))
 if (sameOk(method, "GET"))
     doGet();
