@@ -1,42 +1,52 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
+
 # File: convertPrimerToFA
 # Author: Terry Furey
 # Date: 10/4/2001
 # Project: Human
 # Description: Convert a primer file to a .fa file
+# initial source from 2004 found in /cluster/bin/scripts
+# placed into source tree 2009-05-01 with strict and warnings
+
+use strict;
+use warnings;
 
 # Usage message
 if ($#ARGV < 0) {
-  print stderr "USAGE: convertPrimerToFA [-mouse] <primer file>\n";
+  print STDERR "USAGE: convertPrimerToFA [-mouse] <primer file>\n";
   exit(1);
 }
 
 # Read in and check parameters
-$mouse = 0;
+my $mouse = 0;
 while ($#ARGV != 0) {
-  $arg = shift(@ARGV);
+  my $arg = shift(@ARGV);
   if ($arg eq "-mouse") {
     $mouse = 1;
   } else {
     die("$arg is not a valid option\n");
   }
 }
-$file = shift(@ARGV);
+my $file = shift(@ARGV);
 open(FILE, "<$file") || die("Could not open $file\n");
 
 # Process each line
-while($line = <FILE>) {
+while(my $line = <FILE>) {
   chomp($line);
+  my $length = 0;
+  my ($id, $left, $right, $len, $name, $symbol, $otherid);
   if ($mouse) {
-    ($id, $left, $right, $length, $name, $symbol) = split(' ',$line);
+    ($id, $left, $right, $len, $name, $symbol) = split('\t',$line);
   } else {
-    ($id, $left, $right, $length, $otherid) = split(' ',$line);
+    ($id, $left, $right, $len, $otherid) = split('\t',$line);
   }
-  if ($length == "-") {
+  if ($len eq "-") {
       $length = 500;
-  } elsif ($length =~ "-") {
-    ($start, $end) = split("-",$length);
+  } elsif ($len =~ "-") {
+    my ($start, $end) = split("-",$len);
     $length = int(($end - $start)/2) + $start;
+  } elsif (length($len) > 1) {
+    $length = $len;
   }
 
   # Make sure everything is uppercase
@@ -52,19 +62,19 @@ while($line = <FILE>) {
   print "$left\n";
 
   # Determine number of N's to print, and print out
-  @left = split(//,$left);
-  @right = split(//,$right);
-  $numN = $length - $#left - $#right - 2;
+  my @left = split(//,$left);
+  my @right = split(//,$right);
+  my $numN = $length - $#left - $#right - 2;
   if ($numN <=0) {
       $length = 50;
       $numN = $length - $#left - $#right - 2;
   }
-  $lines = int($numN/25);
-  for ($i = 0; $i < $lines; $i++) {
+  my $lines = int($numN/25);
+  for (my $i = 0; $i < $lines; $i++) {
     print "NNNNNNNNNNNNNNNNNNNNNNNNN\n";
   }
-  $remainder = $numN - ($lines * 25);
-  for ($i = 0; $i < $remainder; $i++) {
+  my $remainder = $numN - ($lines * 25);
+  for (my $i = 0; $i < $remainder; $i++) {
     print "N";
   } 
   if ($remainder > 0) {
@@ -72,7 +82,7 @@ while($line = <FILE>) {
   }
 
   # Reverse complement right primer and print out
-  for ($i = $#right; $i >= 0; $i--) {
+  for (my $i = $#right; $i >= 0; $i--) {
     if ($right[$i] eq "A") { print "T"; }    
     elsif ($right[$i] eq "T") { print "A"; }
     elsif ($right[$i] eq "G") { print "C"; }
