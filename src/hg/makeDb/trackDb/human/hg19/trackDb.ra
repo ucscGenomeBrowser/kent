@@ -49,6 +49,30 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track chainPanTro2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 240
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+spectrum on
+type chain panTro2
+otherDb panTro2
+
+track netPanTro2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 240.1
+visibility dense
+spectrum on
+type netAlign panTro2 chainPanTro2
+otherDb panTro2
+
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
