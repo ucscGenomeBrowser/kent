@@ -23,7 +23,7 @@
 #define AS_FILE_PATH "/cluster/bin/sqlCreate/"
 #define CV_CONFIG_FILE "/cluster/data/encode/pipeline/config/cv.ra"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.29 2009/05/01 20:55:55 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.30 2009/05/02 00:07:19 mikep Exp $";
 // #/g/project/(data|summary)/{project}/{pi}?/{lab}?/{datatype}?/{track}?/{genome}?
 // RewriteRule ^/g/project/(data|summary)/([^/]+)(/([^/]+)(.*))?$ /$5?cmd=$1\&project=$2\&pi=$4 [C]
 // RewriteRule ^/(/([^/]+)(/([^/]+)(/([^/]+)(/([^/]+))?)?)?)?$ /cgi-bin/hgData?lab=$2\&datatype=$4\&track=$6\&genome=$8 [PT,QSA,L,E=ETag:%{HTTP:If-None-Match},E=Modified:%{HTTP:If-Modified-Since},E=Authorization:%{HTTP:Authorization}]
@@ -92,12 +92,16 @@ return nameValueStringToPair(s, ',');
 
 char *contentFileName(char *content)
 // Parse a "Content-Disposition" header of the format:
-// Content-Disposition:form-data; name="a_file"; filename="test.100m.bed"
+// [form-data; name="a_file"; filename="test.100m.bed"]
 // into its own list of pairs to find filename paramter
 {
 char *filename;
+struct slPair *cl;
 // parse this header into its own pairs, possibly terminated by ';'
-struct slPair *cl = slPairFromString(content);
+if (!startsWith("form-data; ", content))
+    errAbort("Content-Disposition not form-data [%s]\n", content);
+content += strlen("form-data; "); // skip over this bit to name=value pairs section
+cl = slPairFromString(content);
 if ( (filename = slPairFindVal(cl, "filename")) == NULL)
     errAbort("Could not find filename in Content-Disposition header [%s]\n", content);
 filename = cloneString(filename);
@@ -165,8 +169,8 @@ struct asObject *as = readAsFile((char *)hashMustFindVal(hAsFile, "tagAlign")); 
 struct hash *chromHash = bbiChromSizesFromFile(CHROM_SIZES); // FIXME: MJP - gotta get path for hg18
 MJP(2);verbose(2, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, CHROM_SIZES);
 
-if ( !startsWith(getenv("CONTENT_TYPE"),"multipart/form-data") )
-    errAbort("Unknown request body content-type [%s]\n", getenv("CONTENT_TYPE"));
+if ( !startsWith("multipart/form-data", getenv("CONTENT_TYPE")) )
+    errAbort("Unknown request body content-type [%s] [startswith=%d]\n", getenv("CONTENT_TYPE"), startsWith("multipart/form-data", getenv("CONTENT_TYPE")));
 
 // turn off buffering of stdin, as it messes with lineFile unbuffered IO
 if (setvbuf(stdin, NULL, _IONBF, 0))
