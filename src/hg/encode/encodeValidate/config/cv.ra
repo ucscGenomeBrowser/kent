@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.93 2009/05/02 19:07:00 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.94 2009/05/02 19:30:55 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -709,6 +709,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-21754
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 
+term Rad21
+type Antibody
+targetDescription Synthetic peptide (Human) conjugated to KLH - which represents a portion of human Rad21 encoded within exon 14
+antibodyDescription Rabbit polyclonal
+orderUrl http://www.abcam.com/index.html?datasheet=992
+vendorName Abcam
+vendorId ab992
+
 term SREBP1A
 type Antibody
 targetDescription Sterol regulatory element binding transcription factor 1
@@ -756,6 +764,14 @@ antibodyDescription Rabbit monoclonal
 vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
+
+term XRCC4
+type Antibody
+targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
+antibodyDescription Rabbit polyclonal
+orderUrl http://www.abcam.com/index.html?datasheet=1451
+vendorName Abcam
+vendorId ab1451
 
 term ZNF263
 type Antibody
