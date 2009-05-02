@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.92 2009/04/30 04:53:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.93 2009/05/02 19:07:00 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -700,6 +700,14 @@ targetDescription RNA polymerase II. Is responsible for RNA transcription. It is
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
+
+term Pol3
+type Antibody
+targetDescription RNA Polymerase III
+antibodyDescription mouse monoclonal IgG1
+vendorName Santa Cruz Biotech
+vendorId sc-21754
+orderUrl http://www.scbt.com/product.php?datasheet=21754
 
 term SREBP1A
 type Antibody
