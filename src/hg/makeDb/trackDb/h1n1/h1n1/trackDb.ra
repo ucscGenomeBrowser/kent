@@ -58,18 +58,38 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
-track h1n1_0429Seq
-shortLabel 0429 H1N1
-longLabel Recent (04/29/09) Swine Flu H1N1 Sequences
+track h1n1_0430Seq
+shortLabel 0430 H1N1
+longLabel Recent (04/30/09) Swine Flu H1N1 Sequences
 group map
 priority 15
-visibility pack
+visibility hide
 color 12,100,80
 indelQueryInsert on
 maxItems 2000
 type psl
 baseColorDefault diffCodons
-baseColorUseCds table h1n1_0429SeqCds
+baseColorUseCds table h1n1_0430SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0504Seq
+shortLabel 0504 H1N1
+longLabel Recent (05/04/09) Swine Flu H1N1 Sequences
+group map
+priority 15
+visibility pack
+color 12,100,100
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0504SeqCds
 baseColorUseSequence extFile seq extFile
 indelDoubleInsert on
 indelQueryInsert on
