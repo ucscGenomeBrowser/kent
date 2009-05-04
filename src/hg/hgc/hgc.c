@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1530 2009/04/23 22:42:27 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1531 2009/05/04 18:16:34 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9415,6 +9415,146 @@ if (s != NULL)
 return trimSpaces(gi);
 }
 
+void showSAM_h1n1(char *item)
+{
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+struct sqlConnection *conn2 = hAllocConn(database);
+char cond_str[256];
+char *predFN;
+char *homologID;
+char *SCOPdomain;
+char *chain;
+char goodSCOPdomain[40];
+int  first = 1;
+float  eValue;
+char *chp;
+int homologCount;
+int gotPDBFile = 0;
+char extUrl[200] = {"http://users.soe.ucsc.edu/~karplus/h1n1"};
+
+printf("<H3>Protein Structure Analysis and Prediction by ");
+printf("<A HREF=\"http://www.soe.ucsc.edu/research/compbio/SAM_T02/sam-t02-faq.html\"");
+printf(" TARGET=_blank>SAM-T02</A></H3>\n");
+
+printf("<B>Multiple Alignment:</B> ");
+printf("<A HREF=\"%s/%s/summary.html#alignment", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+printf("<B>Secondary Structure Predictions:</B> ");
+printf("<A HREF=\"%s/%s/summary.html#secondary-structure", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+printf("<B>3D Structure Prediction (PDB file):</B> ");
+printf("<A HREF=\"%s/%s/decoys/%s.try1-opt3.pdb.gz", extUrl, item, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+gotPDBFile = 0;
+safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+
+printf("<TABLE>\n");
+printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
+printf("<TD ALIGN=\"center\">Top</TD>\n");
+printf("<TD ALIGN=\"center\">Side</TD>\n");
+printf("</TR>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", extUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", extUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", extUrl, item, item);
+printf("</TR>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>", 
+	extUrl, item, item);
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view2_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view3_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("</TR>\n");
+printf("</TABLE>\n");
+
+printf("<BR><B>Detailed results of SAM-T02:</B> ");
+printf("<A HREF=\"%s/%s/summary.html", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+/* by pass the following additional processing for now, until two necessary tables are built */
+hFreeConn(&conn2);
+return;
+
+if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
+    {
+    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
+    if (predFN != NULL)
+	{
+	printf("<A HREF=\"../SARS/%s/", item);
+	/* printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", item,item); */
+	printf("%s\">%s</A><BR>\n", predFN,item);
+	gotPDBFile = 1;
+	}
+    }
+if (!gotPDBFile)
+    {
+    printf("No high confidence level structure prediction available for this sequence.");
+    printf("<BR>\n");
+    }
+printf("<B>3D Structure of Close Homologs:</B> ");
+homologCount = 0;
+strcpy(goodSCOPdomain, "dummy");
+
+conn2= hAllocConn(database);
+safef(query2, sizeof(query2),
+	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
+	item);
+sr2 = sqlMustGetResult(conn2, query2);
+row2 = sqlNextRow(sr2);
+if (row2 != NULL)
+    {
+    while (row2 != NULL)
+	{
+	homologID = row2[0];
+	sscanf(row2[1], "%e", &eValue);
+	SCOPdomain = row2[2];
+	chp = SCOPdomain+strlen(SCOPdomain)-1;
+	while (*chp != '.') chp--;
+	*chp = '\0';
+	chain = row2[3];
+	if (eValue <= 1.0e-10)
+	    strcpy(goodSCOPdomain, SCOPdomain);
+	else
+	    {
+	    if (strcmp(goodSCOPdomain,SCOPdomain) != 0)
+		goto skip;
+	    else
+		if (eValue > 0.1) goto skip;
+	    }
+	if (first)
+	    first = 0;
+	else
+	    printf(", ");
+
+	printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s",
+	       homologID);
+	if (strlen(chain) >= 1)
+	    printf("\"TARGET=_blank>%s(chain %s)</A>", homologID, chain);
+	else
+	    printf("\"TARGET=_blank>%s</A>", homologID);
+	homologCount++;
+
+	skip:
+	row2 = sqlNextRow(sr2);
+	}
+    }
+hFreeConn(&conn2);
+sqlFreeResult(&sr2);
+if (homologCount == 0)
+    printf("None<BR>\n");
+
+printf("<BR><B>Details:</B> ");
+printf("<A HREF=\"../SARS/%s/summary.html", item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+htmlHorizontalLine();
+}
 void showSAM_T02(char *itemName)
 {
 char query2[256];
@@ -15692,6 +15832,42 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doH1n1Seq(struct trackDb *tdb, char *item)
+/* Show extra info for H1N1 Seq  Annotations track. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlResult *sr;
+char query[256];
+char **row;
+genericHeader(tdb, item);
+
+/*pslList = getAlignments(conn, track, item);
+printAlignmentsSimple(pslList, start, "h1n1Seq", track, item);
+*/
+sprintf(query, "select * from h1n1SeqXref where seqId = '%s'", item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *seqId, *geneSymbol, *strain;
+
+    seqId = row[0];
+    geneSymbol = row[1];
+    strain = row[2];
+
+    printf("<B>Sequence ID: %s</B> <BR>", seqId);
+    printf("<B>Gene: %s</B> <BR>", geneSymbol);
+    printf("<B>Strain: %s</B> <BR>", strain);
+    }
+htmlHorizontalLine();
+showSAM_h1n1(item);
+
+htmlHorizontalLine();
+printTrackHtml(tdb);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doGbProtAnn(struct trackDb *tdb, char *item)
 /* Show extra info for GenBank Protein Annotations track. */
 {
@@ -21819,6 +21995,30 @@ else if (sameWord(track, "ncRna"))
 else if (sameWord(track, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0504Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0430Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0429Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0428Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0428NonMexicoSeq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0428_mexicoSeq"))
+    {
+    doH1n1Seq(tdb, item);
     }
 else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
     {
