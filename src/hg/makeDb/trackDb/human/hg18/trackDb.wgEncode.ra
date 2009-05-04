@@ -6949,7 +6949,23 @@ settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,s
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
+    track wgEncodeYaleChIPseqRel2PeaksGm12878Jund
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 JunD Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
+    subGroups view=Peaks factor=JunD cellType=GM12878
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 153,38,0
+    cell GM12878
+    antibody JunD
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Jund fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Jund.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksGm12878Jund
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
@@ -7008,7 +7024,23 @@ wgEncode 1
     antibody JunD
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=239 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Jund fileName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Jund.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksGm12878Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 Max Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
+    subGroups view=Peaks factor=Max cellType=GM12878
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 153,38,0
+    cell GM12878
+    antibody Max
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Max fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Max.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksGm12878Max
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
@@ -7067,7 +7099,23 @@ wgEncode 1
     antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Max type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=190 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Max fileName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Max.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksGm12878Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 Pol2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
+    subGroups view=Peaks factor=Pol2 cellType=GM12878
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 153,38,0
+    cell GM12878
+    antibody Pol2
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Pol2.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksGm12878Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
@@ -7126,7 +7174,23 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=92 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksGm12878Cfos
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 c-Fos Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Fos in GM12878 cells)
+    subGroups view=Peaks factor=c-Fos cellType=GM12878
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 153,38,0
+    cell GM12878
+    antibody c-Fos
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Cfos fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Cfos.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksGm12878Cfos
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
@@ -7141,6 +7205,7 @@ wgEncode 1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=94 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Cfos fileName=wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalGm12878Cfos
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
@@ -7249,7 +7314,23 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Input type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=107 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalGm12878Input fileName=wgEncodeYaleChIPseqRawSignalGm12878Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksHct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HCT116 TCF4 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
+    subGroups view=Peaks factor=TCF4 cellType=HCT116
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 0,55,219
+    cell HCT-116
+    antibody TCF4
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HCT-116 antibody=TCF4 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2PeaksHct116Tcf4.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksHct116Tcf4
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
@@ -7357,7 +7438,23 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=Input type=wig fragLength=700 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=224 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalHct116Input fileName=wgEncodeYaleChIPseqRawSignalHct116Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksHek293Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HEK293 Pol2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
+    subGroups view=Peaks factor=Pol2 cellType=HEK293b
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 133,0,173
+    cell HEK293
+    antibody Pol2
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HEK293 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksHek293Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHek293Pol2.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksHek293Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
@@ -7480,7 +7577,23 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293 antibody=Input type=wig fragLength=700 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=191 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalHek293Input fileName=wgEncodeYaleChIPseqRawSignalHek293Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksHelas3Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa Pol2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa cells)
+    subGroups view=Peaks factor=Pol2 cellType=HeLa
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 0,119,158
+    cell HeLa-S3
+    antibody Pol2
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HeLa-S3 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksHelas3Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa cells)
@@ -8255,7 +8368,23 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=700 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=240 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep3Hepg2Input fileName=wgEncodeYaleChIPseqRawSignalRep3Hepg2Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Gata1
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 GATA1 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562 cells)
+    subGroups view=Peaks factor=GATA1 cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody GATA-1
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=GATA-1 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Gata1 fileName=wgEncodeYaleChIPseqRel2PeaksK562Gata1.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Gata1
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562 cells)
@@ -8316,7 +8445,23 @@ wgEncode 1
     antibody GATA-1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=GATA-1 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=227 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Gata1 fileName=wgEncodeYaleChIPseqRawSignalRep2K562Gata1.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Jund
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 JunD Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
+    subGroups view=Peaks factor=JunD cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody JunD
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Jund fileName=wgEncodeYaleChIPseqRel2PeaksK562Jund.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Jund
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
@@ -8375,7 +8520,23 @@ wgEncode 1
     antibody JunD
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Jund fileName=wgEncodeYaleChIPseqRawSignalRep2K562Jund.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
+    subGroups view=Peaks factor=Max cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody Max
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Max fileName=wgEncodeYaleChIPseqRel2PeaksK562Max.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Max
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
@@ -8434,7 +8595,23 @@ wgEncode 1
     antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Max type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=226 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Max fileName=wgEncodeYaleChIPseqRawSignalRep2K562Max.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Nfe2
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 NF-E2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
+    subGroups view=Peaks factor=NF-E2 cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody NF-E2
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=NF-E2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Nfe2 fileName=wgEncodeYaleChIPseqRel2PeaksK562Nfe2.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Nfe2
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
@@ -8493,7 +8670,23 @@ wgEncode 1
     antibody NF-E2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=NF-E2 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=189 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Nfe2 fileName=wgEncodeYaleChIPseqRawSignalRep2K562Nfe2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Pol2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
+    subGroups view=Peaks factor=Pol2 cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody Pol2
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksK562Pol2.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
@@ -8553,7 +8746,23 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=16 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep2K562Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 ZNF263 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562 cells)
+    subGroups view=Peaks factor=ZNF263 cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody ZNF263
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=ZNF263 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Znf263 fileName=wgEncodeYaleChIPseqRel2PeaksK562Znf263.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Znf263
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562 cells)
@@ -8612,7 +8821,23 @@ wgEncode 1
     antibody ZNF263
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=ZNF263 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=205 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Znf263 fileName=wgEncodeYaleChIPseqRawSignalRep2K562Znf263.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Cfos
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 c-Fos Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
+    subGroups view=Peaks factor=c-Fos cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody c-Fos
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Cfos fileName=wgEncodeYaleChIPseqRel2PeaksK562Cfos.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Cfos
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
@@ -8686,7 +8911,23 @@ wgEncode 1
     antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=68 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep3K562Cfos fileName=wgEncodeYaleChIPseqRawSignalRep3K562Cfos.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Cjun
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 c-Jun Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
+    subGroups view=Peaks factor=c-Jun cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody c-Jun
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Jun view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Cjun fileName=wgEncodeYaleChIPseqRel2PeaksK562Cjun.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Cjun
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
@@ -8745,7 +8986,23 @@ wgEncode 1
     antibody c-Jun
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=c-Jun type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=72 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Cjun fileName=wgEncodeYaleChIPseqRawSignalRep2K562Cjun.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksK562Cmyc
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 c-Myc Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
+    subGroups view=Peaks factor=c-Myc cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell K562
+    antibody c-Myc
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Myc view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksK562Cmyc fileName=wgEncodeYaleChIPseqRel2PeaksK562Cmyc.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksK562Cmyc
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
@@ -8814,6 +9071,7 @@ wgEncode 1
     dateSubmitted 2009-03-17
     dateUnrestricted 2009-12-17
     dataVersion ENCODE Feb 2009 Freeze
+    color 46,0,184
     cell K562
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
 
@@ -8828,6 +9086,7 @@ wgEncode 1
     dateUnrestricted 2009-12-17
     dataVersion ENCODE Feb 2009 Freeze
     spanList first
+    color 46,0,184
     cell K562
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
 
@@ -8881,7 +9140,23 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Input type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=107 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalK562Input fileName=wgEncodeYaleChIPseqRawSignalK562Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2PeaksNb4Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel NB4 Pol2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
+    subGroups view=Peaks factor=Pol2 cellType=NB4
+    type narrowPeak
+    dateSubmitted 2009-05-02
+    dateUnrestricted 2010-02-02
+    dataVersion ENCODE May 2009 Freeze
+    color 46,0,184
+    cell NB4
+    antibody Pol2
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=NB4 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseqRel2 tableName=wgEncodeYaleChIPseqRel2PeaksNb4Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksNb4Pol2.narrowPeak.gz
+
     track wgEncodeYaleChIPseqPeaksNb4Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
