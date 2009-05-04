@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.66 2009/04/16 18:22:01 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.67 2009/05/04 19:07:52 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -517,6 +517,7 @@ boolean doDataPoints = FALSE;
 boolean isWig = isWiggle(database, table);
 struct wigAsciiData *wigDataList = NULL;
 struct dataVector *dataVectorList = NULL;
+boolean doRgb = bedItemRgb(hTrackDbForTrack(db, curTable));
 
 if (!doCt)
     {
@@ -618,7 +619,7 @@ for (region = regionList; region != NULL; region = region->next)
                     }
                 else
                     {
-                    if (bedItemRgb(hTrackDbForTrack(db, curTable)))
+                    if (doRgb)
                         bedTabOutNitemRgb(bed, fields, stdout);
                     else
                         bedTabOutN(bed, fields, stdout);
