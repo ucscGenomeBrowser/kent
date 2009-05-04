@@ -10112,7 +10112,7 @@ gClass_Ensembl_pseudogene 153,0,102
 filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_nonsense,Havana_non_coding,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Havana_polyA,Ensembl_coding,Ensembl_RNA,Ensembl_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,C_segment,IG_gene,IG_pseudogene,J_segment,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,non_coding,nonsense_mediated_decay,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,V_segment,unitary_pseudogene,unprocessed_pseudogene
 
     track wgEncodeGencodeManualRel2
-    release alpha
+    #release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
@@ -10128,7 +10128,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
 
     track wgEncodeGencodeAutoRel2
-    release alpha
+    #release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
@@ -10144,7 +10144,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
 
     track wgEncodeGencodePolyaRel2
-    release alpha
+    #release alpha
     subTrack wgEncodeSangerGencode off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
