@@ -6,8 +6,8 @@
 #include "chromInfo.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.16 2009/04/03 17:11:08 mikep Exp $";
-static char *version = "$Revision: 1.16 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.17 2009/05/04 19:36:03 tdreszer Exp $";
+static char *version = "$Revision: 1.17 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -114,7 +114,7 @@ for (i= (int)'A' ; i <= (int)'Z' ; ++i)
     seqName[i] = seqName[i+(int)('a'-'A')] = alpha[i] = alpha[i+(int)('a'-'A')] = 1;
 for (i= (int)'0' ; i <= (int)'9' ; ++i)
     seqName[i] = digits[i] = csSeqName[i] = csQualChars[i] = 1;
-seqName['_'] = seqName['.'] = seqName[':'] = seqName['/'] = seqName['-'] = 1;
+seqName['_'] = seqName['.'] = seqName[':'] = seqName['/'] = seqName['-'] = seqName['#'] = 1;
 csSeqName[','] = csSeqName['.'] = csSeqName['-'] = csSeqName['#'] = 1;
 csQualChars[' '] = 1;
 for (i= (int)'!' ; i <= (int)'~' ; ++i)
@@ -139,7 +139,7 @@ return h;
 boolean checkUnsigned(char *file, int line, char *row, char *s, unsigned *val, char *name)
 /* Convert series of digits to unsigned integer about
  * twice as fast as atoi (by not having to skip white
- * space or stop except at the null byte.) 
+ * space or stop except at the null byte.)
  * Returns true if conversion possible, and value is returned in 'val'
  * Otherwise prints warning and returns false */
 {
@@ -163,7 +163,7 @@ return TRUE;
 
 boolean checkSigned(char *file, int line, char *row, char *s, int *val, char *name)
 /* Convert string to signed integer.  Unlike atol assumes
- * all of string is number. 
+ * all of string is number.
  * Returns true if conversion possible, and value is returned in 'val'
  * Otherwise prints warning and returns false */
 {
@@ -264,7 +264,7 @@ return TRUE;
 }
 
 boolean checkSeqName(char *file, int line, char *s, char firstChar, char *name)
-// Return TRUE if string has non-zero length and contains only seqName[] chars 
+// Return TRUE if string has non-zero length and contains only seqName[] chars
 // Othewise print warning that seqName is empty and return FALSE
 {
 int i;
@@ -275,7 +275,7 @@ if (s[0] == 0)
     }
 else if (s[0] != firstChar)
     {
-    warn("Error [file=%s, line=%d]: %s first char invalid (got '%c', wanted '%c') [%s]", 
+    warn("Error [file=%s, line=%d]: %s first char invalid (got '%c', wanted '%c') [%s]",
 	file, line, name, s[0], firstChar, s);
     return FALSE;
     }
@@ -304,7 +304,7 @@ else
 }
 
 boolean checkTrailingCsSeqName(char *s)
-// Return true if all chars in s (if any) are csSeqName chars 
+// Return true if all chars in s (if any) are csSeqName chars
 // Return false otherwise
 {
 while (csSeqName[(int) *s])
@@ -321,7 +321,7 @@ else
 //     T01301010111200210102321210100112312
 
 boolean checkCsSeqName(char *file, int line, char *s)
-// Return TRUE if string has non-zero length, matches CS name pattern contains only csSeqName[] chars 
+// Return TRUE if string has non-zero length, matches CS name pattern contains only csSeqName[] chars
 // Othewise print warning that seqName is empty and return FALSE
 {
 char *s0;
@@ -332,15 +332,15 @@ if (s[0] == 0)
     }
 else if (s[0] != '>')
     {
-    warn("Error [file=%s, line=%d]: sequence name first char invalid (got '%c', wanted '>') [%s]", 
+    warn("Error [file=%s, line=%d]: sequence name first char invalid (got '%c', wanted '>') [%s]",
 	file, line, s[0], s);
     return FALSE;
     }
-if ( (s0 = getDigits(s+1)) 
-      && (*(s0++) == '_') 
-      && (s0 = getDigits(s0)) && (*(s0++) == '_') 
-      && (s0 = getDigits(s0)) && (*(s0++) == '_') 
-      && alpha[(int) *(s0++)] && digits[(int) *(s0++)] 
+if ( (s0 = getDigits(s+1))
+      && (*(s0++) == '_')
+      && (s0 = getDigits(s0)) && (*(s0++) == '_')
+      && (s0 = getDigits(s0)) && (*(s0++) == '_')
+      && alpha[(int) *(s0++)] && digits[(int) *(s0++)]
       && checkTrailingCsSeqName(s0) )
     {
     verbose(2,"[%s %3d] OK [%s] file(%s) line=%d\n", __func__, __LINE__, s, file, line);
@@ -354,7 +354,7 @@ else
 }
 
 boolean checkQual(char *file, int line, char *s)
-// Return TRUE if string has non-zero length and contains only qualChars[] chars 
+// Return TRUE if string has non-zero length and contains only qualChars[] chars
 // Othewise print warning that quality is empty and return FALSE
 {
 int i;
@@ -397,13 +397,13 @@ return TRUE;
 
 boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, char *chrom, unsigned chromSize)
 // Return TRUE if start and end are both >= 0,
-// and if zeroSizeOk then start <= end 
+// and if zeroSizeOk then start <= end
 //        otherwise  then start < end
 // Also check end <= chromSize (as a special case, ignore chrM end if chrMSizeOk)
 // Othewise print warning and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, chrom, chromSize, row);
-unsigned s, e; 
+unsigned s, e;
 if (   !checkUnsigned(file, line, row, start, &s, "chromStart")
     || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
     return FALSE;
@@ -446,7 +446,7 @@ boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char
 {
 verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
 unsigned p, s, e;
-if (   !checkUnsigned(file, line, row, peak, &p, "peak") 
+if (   !checkUnsigned(file, line, row, peak, &p, "peak")
     || !checkUnsigned(file, line, row, start, &s, "chromStart")
     || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
     return FALSE;
@@ -535,7 +535,7 @@ unsigned chromSize;
 int size;
 // Dot in place of N for tagaligns from Larry's group. Maybe remove this later.
 int savedot = dnaChars[(int)'.'];
-dnaChars[(int)'.'] = 1; 
+dnaChars[(int)'.'] = 1;
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
@@ -548,9 +548,9 @@ while (lineFileNext(lf, &row, &size))
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
 	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
 	&& checkStrand(file, line, row, words[5])
-	&& (paired ? 
+	&& (paired ?
 		(checkString(file, line, row, words[3], "name")
-		&& checkSeq(file, line, row, words[6], "seq1") 
+		&& checkSeq(file, line, row, words[6], "seq1")
 		&& checkSeq(file, line, row, words[7], "seq2"))
 	    :
 		checkSeq(file, line, row, words[3], "sequence")
@@ -609,8 +609,8 @@ while (lineFileNext(lf, &row, &size))
     if ( checkColumns(file, line, row, buf, words, PEAK_WORDS, bedTypeCols[type])
 	&& checkChrom(file, line, row, words[0], &chromSize)
 	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
-	&& ( type == BED_GRAPH ? 
-	      (checkFloat(file, line, row, words[3], "value")) // canonical bedGraph has float in 4th column 
+	&& ( type == BED_GRAPH ?
+	      (checkFloat(file, line, row, words[3], "value")) // canonical bedGraph has float in 4th column
 	   : // otherwise BROAD_, NARROW_, or GAPPED_PEAK
 	      (checkString(file, line, row, words[3], "name")
 		  && checkIntBetween(file, line, row, words[4], "score", 0, 1000)
@@ -760,7 +760,7 @@ int validateCsfasta(struct lineFile *lf, char *file)
 // Validate Colorspace fasta files
 {
 char *seqName = NULL;
-char *seq = NULL; 
+char *seq = NULL;
 int line = 0;
 int errs = 0;
 boolean startOfFile = TRUE;
@@ -811,7 +811,7 @@ int validateCsqual(struct lineFile *lf, char *file)
 // Validate Colorspace quality files
 {
 char *seqName = NULL;
-char *qual = NULL; 
+char *qual = NULL;
 int line = 0;
 int errs = 0;
 boolean startOfFile = TRUE;
@@ -859,7 +859,7 @@ for (i = 0; i < numFiles ; ++i)
     lineFileClose(&lf);
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
-if (errs > 0) 
+if (errs > 0)
     errAbort("Aborting ... found %d errors in total\n", errs);
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
 }
@@ -884,7 +884,7 @@ struct chromInfo *ci = NULL;
 struct hash *funcs = newHash(0);
 char *chromDb, *chromInfo;
 optionInit(&argc, argv, options);
-++argv; 
+++argv;
 --argc;
 if (optionExists("version"))
     errAbort(version);
