@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1531 2009/05/04 18:16:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1532 2009/05/04 21:23:24 giardine Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19889,6 +19889,9 @@ for (i=0; i < oregannoAttrSize; i++)
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct oregannoLink link;
+        /* skip ORegAnno links until they are fixed */
+        if (!sameString(oregannoAttributes[i], "SrcLink") )
+            {
         used++;
         if (used == 1)
             {
@@ -19905,8 +19908,9 @@ for (i=0; i < oregannoAttrSize; i++)
                 }
             }
         oregannoLinkStaticLoad(row, &link);
-        printOregannoLink(&link);
+        printOregannoLink(&link); 
         printf("<BR>\n");
+            }
         }
     freeMem(tab);
     }
@@ -20295,7 +20299,32 @@ hFreeConn(&conn2);
 return attrCnt;
 }
 
-void doOmicia (struct trackDb *tdb, char *itemName)
+void doOmicia (struct trackDb *tdb, char *itemName) 
+/* this prints the detail page for the Omicia track */
+{
+struct omiciaLink *link = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+/* print generic bed start */
+doBed6FloatScore(tdb, itemName);
+
+/* print links */
+safef(query, sizeof(query), "select * from omiciaLink where id = '%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    link = omiciaLinkLoad(row);
+    printLinksRaLink(link->acc, link->raKey, link->displayVal);
+    }
+sqlFreeResult(&sr);
+
+printTrackHtml(tdb);
+}
+
+void doOmiciaOld (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Omicia OMIM track */
 {
 char *table = tdb->tableName;
@@ -22234,7 +22263,7 @@ else if (startsWith("dbRIP", track))
     {
     dbRIP(tdb, item, NULL);
     }
-else if (sameString("omiciaAuto", track) || sameString("omiciaHand", track))
+else if (sameString("omicia", track)) //Auto", track) || sameString("omiciaHand", track))
     {
     doOmicia(tdb, item);
     }
