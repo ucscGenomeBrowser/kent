@@ -39,7 +39,7 @@ foreach machine ( $machine1 $machine2 )
       set host="-h $sqlbeta"
     else
       set cent=""
-      set host="-h genome-centdb"
+      set host="-h $sqlrr"
     endif
   endif
   hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent | grep "$db" >& /dev/null

@@ -8,7 +8,7 @@ if ( "$HOST" != "hgwdev" ) then
     exit 1
 endif
 
-hgsql -h genome-centdb hgcentral -B -N -e "SELECT db, host, port FROM blatServers \
+hgsql -h $sqlrr hgcentral -B -N -e "SELECT db, host, port FROM blatServers \
   ORDER BY db, host, port" > blatList
 set list = (`cat blatList`)
 

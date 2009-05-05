@@ -93,11 +93,11 @@ foreach db ( $dbs )
   set dbHtmlOut="$db.$machine.htmlOut"
   set outfile="$todaysPath/$dbSummaryOut"
   set htmlfile="$todaysPath/$dbHtmlOut"
-  set active=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
+  set active=`hgsql -h $sqlrr -N -e 'SELECT active FROM dbDb \
      WHERE name = "'$db'"' hgcentral`
   if ( 0 == $active ) then
     set comment="staged"
-    set archived=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDbArch \
+    set archived=`hgsql -h $sqlrr -N -e 'SELECT active FROM dbDbArch \
        WHERE name = "'$db'"' hgcentral`
     if ( 1 == $archived ) then
       set comment="archived"

@@ -84,12 +84,12 @@ endif
 
 if ( $mach1 == "RR" || $mach1 == "rr" ) then
   set centdb1="hgcentral"
-  set host1="-h genome-centdb"
+  set host1="-h $sqlrr"
 endif
 
 if ( $mach2 == "RR" || $mach2 == "rr" ) then
   set centdb2="hgcentral"
-  set host2="-h genome-centdb"
+  set host2="-h $sqlrr"
 endif
 
 # set machines to RR where needed if hgw# format used
@@ -102,7 +102,7 @@ if ( $status ) then
     exit 1
   else
     set centdb1="hgcentral"
-    set host1="-h genome-centdb"
+    set host1="-h $sqlrr"
   endif
 endif
  
@@ -113,7 +113,7 @@ if ( $status ) then
     exit 1
   else
     set centdb2="hgcentral"
-    set host2="-h genome-centdb"
+    set host2="-h $sqlrr"
   endif
 endif
 

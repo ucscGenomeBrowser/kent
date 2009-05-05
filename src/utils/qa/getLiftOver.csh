@@ -14,7 +14,7 @@ source `which qaConfig.csh`
 set machine="hgw1"
 set db=""
 set central="hgcentral"
-set host="-h genome-centdb"
+set host="-h $sqlrr"
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"

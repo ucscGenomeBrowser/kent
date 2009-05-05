@@ -39,7 +39,7 @@ set beta=`hgsql -N -h $sqlbeta -e "SELECT name FROM dbDb \
   WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
   hgcentralbeta`
 
-set rr=`hgsql -N -h genome-centdb -e "SELECT name FROM dbDb \
+set rr=`hgsql -N -h $sqlrr -e "SELECT name FROM dbDb \
   WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
   hgcentral`
 
@@ -60,7 +60,7 @@ foreach db ( $all )
     WHERE name = "'$db'"' hgcentraltest`
   set beta=`hgsql -N -h $sqlbeta -e 'SELECT orderKey FROM dbDb \
     WHERE name = "'$db'"' hgcentralbeta`
-  set rr=`hgsql -N -h genome-centdb -e 'SELECT orderKey FROM dbDb \
+  set rr=`hgsql -N -h $sqlrr -e 'SELECT orderKey FROM dbDb \
     WHERE name = "'$db'"' hgcentral`
   echo "$db $dev $beta $rr" | gawk '{ printf("%-8s  %3s  %3s  %3s \n", \
     $1, $2, $3, $4) }' >> orderKeyOutfile
