@@ -296,5 +296,9 @@ metadata_t *metadataSettingGet(struct trackDb *tdb);
 void metadataFree(metadata_t **metadata);
 /* frees any previously obtained metadata setting */
 
+char *metadataSettingFind(struct trackDb *tdb,char *name);
+/* Looks for a specific metadata setting and returns the value or null
+   returned value should be freed */
+
 #endif /* TRACKDB_H */
 

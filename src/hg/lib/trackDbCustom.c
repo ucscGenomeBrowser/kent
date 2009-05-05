@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.63 2009/04/22 22:56:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.64 2009/05/05 22:33:09 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -871,5 +871,27 @@ if(metadata && *metadata)
     freeMem((*metadata)->setting);
     freez(metadata);
     }
+}
+
+char *metadataSettingFind(struct trackDb *tdb,char *name)
+/* Looks for a specific metadata setting and returns the value or null
+   returned value should be freed */
+{
+metadata_t *metadata = metadataSettingGet(tdb);
+if(metadata == NULL)
+    return NULL;
+
+int ix=0;
+char *setting = NULL;
+for(;ix<metadata->count;ix++)
+    {
+    if (sameString(metadata->tags[ix],name))
+        {
+        setting = cloneString(metadata->values[ix]);
+        break;
+        }
+    }
+metadataFree(&metadata);
+return setting;
 }
 
