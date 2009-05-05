@@ -154,7 +154,7 @@ struct sts *sts;
 
 stsHash = newHash(16);
 
-while (lineFileChopNext(sf, words, 5))
+while (lineFileChopCharNext(sf, '\t', words, 5))
     {
       if (words[1] && words[2] && words[3] && words[4])
 	{
@@ -409,7 +409,7 @@ verboseSetLevel(verb);
 
  efName = optionVal("epcr", NULL);
  pf = pslFileOpen(argv[1]);
- apf = lineFileOpen(argv[2], FALSE);
+ apf = lineFileOpen(argv[2], TRUE);
 
  of = mustOpen(argv[3], "w");
  sprintf(filename, "%s.notfound.primers", argv[3]);
@@ -420,7 +420,7 @@ verboseSetLevel(verb);
 
  if (efName)
    {
-     ef = lineFileOpen(efName, FALSE);
+     ef = lineFileOpen(efName, TRUE);
      verbose(1, "Reading epcr file\n");
      readEpcr(ef);
    }
