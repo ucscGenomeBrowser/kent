@@ -8912,7 +8912,7 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
     antibody Large_Fragment
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Largefragment fileName=wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Largefragment fileName=wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Largefragment
     subTrack wgEncodeYaleChIPseq off
@@ -8927,7 +8927,7 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
     antibody Large_Fragment
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Largefragment fileName=wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Largefragment fileName=wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
     subTrack wgEncodeYaleChIPseq off
@@ -8972,7 +8972,7 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
     antibody MNase
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mnase fileName=wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mnase fileName=wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
     subTrack wgEncodeYaleChIPseq off
@@ -9016,7 +9016,7 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
     antibody Mouse_IgG
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg fileName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg fileName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Mouseigg
     subTrack wgEncodeYaleChIPseq off
@@ -9031,7 +9031,7 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
     antibody Mouse_IgG
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mouseigg fileName=wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mouseigg fileName=wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
     subTrack wgEncodeYaleChIPseq off
@@ -9076,7 +9076,7 @@ wgEncode 1
     cell HeLa-S3
     color 0,119,158
     antibody Naked_DNA
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Nakeddna fileName=wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Nakeddna fileName=wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
     subTrack wgEncodeYaleChIPseq off
@@ -9136,7 +9136,7 @@ wgEncode 1
     color 0,119,158
     antibody STAT1
     accession GSE12782
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 accession=GSE12782 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1 fileName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 accession=GSE12782 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1 fileName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3ifngStat1
     subTrack wgEncodeYaleChIPseq off
@@ -9153,7 +9153,7 @@ wgEncode 1
     color 0,119,158
     antibody STAT1
     accession GSE12782
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngStat1 fileName=wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngStat1 fileName=wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
     subTrack wgEncodeYaleChIPseq off
@@ -9250,7 +9250,7 @@ wgEncode 1
     cell HepG2
     color 189,0,157
     antibody Pol2
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Pol2 fileName=wgEncodeYaleChIPseqPeaksHepg2Pol2.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Pol2 fileName=wgEncodeYaleChIPseqPeaksHepg2Pol2.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHepg2Pol2
     subTrack wgEncodeYaleChIPseq off
@@ -9265,7 +9265,7 @@ wgEncode 1
     cell HepG2
     color 189,0,157
     antibody Pol2
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Pol2 fileName=wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Pol2 fileName=wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2
     subTrack wgEncodeYaleChIPseq off
@@ -9324,7 +9324,7 @@ wgEncode 1
     cell HepG2
     color 189,0,157
     antibody SREBP1A
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHepg2Srebp1a
     subTrack wgEncodeYaleChIPseq off
@@ -9339,7 +9339,7 @@ wgEncode 1
     cell HepG2
     color 189,0,157
     antibody SREBP1A
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1a fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1a fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a
     subTrack wgEncodeYaleChIPseq off
@@ -9398,7 +9398,7 @@ wgEncode 1
     cell HepG2
     color 189,0,157
     antibody SREBP2
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp2 fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp2.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp2 fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp2.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHepg2Srebp2
     subTrack wgEncodeYaleChIPseq off
@@ -9413,7 +9413,7 @@ wgEncode 1
     cell HepG2
     color 189,0,157
     antibody SREBP2
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2
     subTrack wgEncodeYaleChIPseq off
