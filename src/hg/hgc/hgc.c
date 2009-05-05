@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1532 2009/05/04 21:23:24 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1533 2009/05/05 22:48:31 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2318,17 +2318,6 @@ puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
-if(sameString(tdb->type,"genePred") && startsWith("ENCODE Gencode",tdb->longLabel))
-    {
-#define VEGA_TRANSCRIPTID_LINK    "<a href=\"http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=%s\" target=\"_blank\">Vega Transcript Report</a> from transcript Id."
-#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id."
-    puts("<LI>\n");
-    if(startsWith("OTTHUM",geneName))
-        printf(VEGA_TRANSCRIPTID_LINK,geneName);
-    else if(startsWith("ENST",geneName))
-        printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
-    puts("</LI>\n");
-    }
 printf("</UL>\n");
 }
 
@@ -2510,18 +2499,30 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
 void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
-char *version;
-if ((version = trackDbSetting(tdb, "dataVersion")) != NULL)
+char *version = metadataSettingFind(tdb,"dataVersion");
+if(version != NULL)
+    {
     printf("<B>Data version:</B> %s <BR>\n", version);
+    freeMem(version);
+    }
+else
+    {
+    version = trackDbSetting(tdb,"dataVersion");
+    if (version != NULL)
+        printf("<B>Data version:</B> %s <BR>\n", version);
+    }
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
 /* If this annotation has a dateUnrestricted trackDb setting, print it */
 {
-char *restrictionDate;
-if ((restrictionDate = trackDbSetting(tdb, "dateUnrestricted")) != NULL)
-    printf("<A HREF=\"/ENCODE/terms.html\" TARGET=_BLANK><B>Restricted until</A>:</B> %s <BR>\n", 
+char *restrictionDate = encodeRestrictionDateDisplay(tdb);
+if (restrictionDate != NULL)
+    {
+    printf("<A HREF=\"/ENCODE/terms.html\" TARGET=_BLANK><B>Restricted until</A>:</B> %s <BR>\n",
                 restrictionDate);
+    freeMem(restrictionDate);
+    }
 }
 
 void printOrigAssembly(struct trackDb *tdb)
@@ -8682,7 +8683,7 @@ if (url != NULL && url[0] != 0)
     	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
 	       "../cgi-bin/hgGene?hgg_gene=", kgId);
     	printf("%s</A></B>: ", kgId);
-    	
+
 	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -8711,9 +8712,9 @@ if (url != NULL && url[0] != 0)
 	    printf("%s", kgDescription);
 	    }
         printf("<BR>\n");
-	
+
 	safef(query, sizeof(query),
-	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'", 
+	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'",
 	      kgId, kgId);
     	sr = sqlMustGetResult(conn, query);
 	if (sr != NULL)
@@ -8722,7 +8723,7 @@ if (url != NULL && url[0] != 0)
 	    printedCnt = 0;
 	    while ((row = sqlNextRow(sr)) != NULL)
 	    	{
-	        if (printedCnt < 1) 
+	        if (printedCnt < 1)
 		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
 		else
 		    printf(", ");
@@ -9463,7 +9464,7 @@ printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\
 printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", extUrl, item, item);
 printf("</TR>\n");
 printf("<TR>\n");
-printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>", 
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>",
 	extUrl, item, item);
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view2_500.jpg\">500x500</A></TD>",
 	extUrl, item, item);
@@ -18668,7 +18669,7 @@ sqlFreeResult(&sr);
 
 void doHapmapSnpsAllPops(struct sqlConnection *conn, struct trackDb *tdb, char *itemName,
 			 boolean showOrtho)
-/* Show item's SNP allele frequencies for each of the 11 HapMap Phase III 
+/* Show item's SNP allele frequencies for each of the 11 HapMap Phase III
  * populations, as well as chimp and macaque if showOrtho. */
 {
 int i;
@@ -19908,7 +19909,7 @@ for (i=0; i < oregannoAttrSize; i++)
                 }
             }
         oregannoLinkStaticLoad(row, &link);
-        printOregannoLink(&link); 
+        printOregannoLink(&link);
         printf("<BR>\n");
             }
         }
@@ -20299,7 +20300,7 @@ hFreeConn(&conn2);
 return attrCnt;
 }
 
-void doOmicia (struct trackDb *tdb, char *itemName) 
+void doOmicia (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Omicia track */
 {
 struct omiciaLink *link = NULL;
