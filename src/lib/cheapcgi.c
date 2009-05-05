@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.120 2009/04/29 19:38:27 mikep Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.121 2009/05/05 23:35:07 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1190,7 +1190,6 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 	maxDigits, initialVal);
 }
 
-#define NO_VALUE            -96669
 void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max)
 /* Make a integer control filled with initial value.
    If min and/or max are non-NULL will enforce range
