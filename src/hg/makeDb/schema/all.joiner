@@ -695,22 +695,6 @@ identifier agilentRatProbeId external=agilent fuzzy
     $rn.agilentCgh105a.name
     $rn.agilentCgh244a.name
 
-identifier affyHumanExon
-"Affymetrix all human exon array probe id"
-    hgFixed.affyHumanExon.name
-    $hg.affyHumanExon.name
-
-identifier affyHumanExonSampleId
-"Sample IDs for Affymetrix all human exon array."
-    hgFixed.affyHumanExonExps.id
-    $hg.affyHumanExon.expIds comma full
-    $hg.affyHumanExon.expScores comma indexOf full
-
-identifier sestanBrainAtlas
-"Another Affy All Exon array ... slightly different set of probes though"
-    $hg.sestanBrainAtlas.name
-    $hg.affyHumanExon.name minCheck=0.62
-
 identifier sestanBrainAtlasId
 "Sample IDs for the Sestan brain atlas array."
     hgFixed.sestanBrainAtlasExps.id
@@ -1276,11 +1260,6 @@ identifier knownGeneId dependency
     $hg.gnfU95Distance.target
     $kgDb.gnfAtlas2Distance.query
     $kgDb.gnfAtlas2Distance.target
-    $hg.affyHumanExonGs.name
-    $hg.affyHumanExonGsMedian.name
-    $hg.affyHumanExonRatioMedian.name
-    $hg.affyHumanExonGsRatioMedianDist.query
-    $hg.affyHumanExonGsRatioMedianDist.target
     $kgDb.affyGnfU74ADistance.query
     $kgDb.affyGnfU74ADistance.target
     $kgDb.affyGnfU74BDistance.query
