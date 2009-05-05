@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.190 2009/04/30 15:55:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.191 2009/05/05 22:37:28 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2754,47 +2754,40 @@ switch(cType)
 }
 
 char *encodeRestrictionDateDisplay(struct trackDb *trackDb)
-/* Create a string for ENCODE restriction date of this track */
+/* Create a string for ENCODE restriction date of this track
+   if return is not null, then free it after use */
 {
 if (!trackDb)
     return NULL;
-char *date = NULL;
 boolean addMonths = FALSE;
-metadata_t *metadata = metadataSettingGet(trackDb);
-if(metadata != NULL)
+char *date = metadataSettingFind(trackDb,"dateUnrestricted");
+if(date == NULL)
     {
-    int ix=0;
-    for(;ix<metadata->count;ix++)
-        {
-        if (sameString(metadata->tags[ix],"dateUnrestricted"))
-            {
-            date = metadata->values[ix];
-            addMonths = FALSE;
-            break;
-            }
-        else  if (date == NULL && sameString(metadata->tags[ix],"dateSubmitted"))
-            {
-            date = metadata->values[ix];
-            addMonths = TRUE;
-            }
-        }
+    date = metadataSettingFind(trackDb,"dateSubmitted");
+    addMonths = TRUE;
     }
 if(date == NULL)
-    date = trackDbSetting(trackDb, "dateUnrestricted");
-if(date != NULL)
-    addMonths = FALSE;
-else
     {
-    addMonths = TRUE;
+    addMonths = FALSE;
+    date = trackDbSetting(trackDb, "dateUnrestricted");
+    if(date)
+        date = cloneString(date); // all returns should be freeable memory
+    }
+if(date == NULL)
+    {
     date = trackDbSetting(trackDb, "dateSubmitted");
+    if(date)
+        {
+        addMonths = TRUE;
+        date = cloneString(date); // all returns should be freeable memory
+        }
     }
 if (date != NULL)
     {
-    date = strSwapChar(cloneString(date), ' ', 0);   // Truncate time
+    date = strSwapChar(date, ' ', 0);   // Truncate time
     if(addMonths)
         date = dateAddToAndFormat(date, "%F", 0, 9, 0);
     }
-metadataFree(&metadata);
 return date;
 }
 
@@ -4427,7 +4420,7 @@ if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=ucscVocab>%s</A>\n"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
         int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+strlen(label) + 2;
@@ -4442,13 +4435,14 @@ for(ix=1;ix<count && !found;ix++)
         if(sameString(vocabType,words[ix]))  // tags match, but search for term
             {
             char * cvSetting = words[ix] + strlen(words[ix]) + 1;
-            char * cvTerm = trackDbSetting(childTdb, cvSetting);
+            char * cvTerm = metadataSettingFind(childTdb, cvSetting);
             if(cvTerm != NULL)
                 {
                 int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(cvTerm)+strlen(label) + 2;
                 char *link=needMem(sz);
                 safef(link,sz,VOCAB_LINK,words[0],cvTerm,label);
                 freeMem(words[0]);
+                freeMem(cvTerm);
                 return link;
                 }
             }
