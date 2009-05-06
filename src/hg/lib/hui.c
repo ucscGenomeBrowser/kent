@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.191 2009/05/05 22:37:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.192 2009/05/06 00:24:07 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2791,6 +2791,39 @@ if (date != NULL)
 return date;
 }
 
+boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText)
+/* If metadata exists, create a link that will allow toggling it's display */
+{
+metadata_t *metadata = metadataSettingGet(tdb);
+if(metadata != NULL)
+    {
+    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>\n",
+           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
+    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
+    if(!embeddedInText)
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
+    for(;ix<metadata->count;ix++)
+        {
+        if(sameString(metadata->tags[ix],"fileName"))
+            {
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
+            makeNamedDownloadsLink(tdb->parent != NULL? tdb->parent :tdb ,metadata->values[ix]);
+            printf("</td></tr>");
+            }
+        else
+            if(!sameString(metadata->tags[ix],"subId")
+                && !sameString(metadata->tags[ix],"composite"))
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
+        }
+    printf("</table>--></div>\n");
+    metadataFree(&metadata);
+    return TRUE;
+    }
+return FALSE;
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
@@ -3031,30 +3064,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-
-            metadata_t *metadata = metadataSettingGet(subtrack);
-            if(metadata != NULL)
-                {
-                printf("&nbsp;<A HREF='#a_meta_%s' onclick='return subtrackMetaShow(\"%s\");' title='Show metadata'>...</A></div>\n",
-                       subtrack->tableName,subtrack->tableName);
-                printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",subtrack->tableName);
-                //printf("<DIV id='div.%s.meta'><table>",subtrack->tableName);
-                int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
-                for(;ix<metadata->count;ix++)
-                    {
-                    if(sameString(metadata->tags[ix],"fileName"))
-                        {
-                        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
-                        makeNamedDownloadsLink(parentTdb,metadata->values[ix]);
-                        printf("</td></tr>");
-                        }
-                    else if(!sameString(metadata->tags[ix],"subId")
-                         && !sameString(metadata->tags[ix],"composite"))
-                        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
-                    }
-                printf("</table>-->\n");
-                metadataFree(&metadata);
-                }
+            metadataToggle(subtrack,"...",TRUE);
             printf("</div>");
 
             if(cType != cfgNone)
@@ -3097,7 +3107,6 @@ sortOrderFree(&sortOrder);
 dividersFree(&dividers);
 hierarchyFree(&hierarchy);
 }
-
 
 static void compositeUiAllSubtracks(char *db, struct cart *cart, struct trackDb *tdb,
 				    char *primarySubtrack)
