@@ -16,7 +16,7 @@ if ($#argv < 1 || $#argv > 4) then
   echo "    usage: database [machine1] [machine2] [mode] "
   echo
   echo "      (defaults to hgw1 and hgwbeta)"
-  echo "      mode = (fast|verbose|fastVerbose) "
+  echo "      mode = (fast | verbose | fastVerbose) "
   echo "       - verbose is for html field - defaults to terse"
   echo "       - fast = (mysql-genome) - defaults to realTime (WGET)"
   echo 
@@ -44,9 +44,7 @@ if ( $#argv == 4 ) then
   set inputMode = $argv[4]
 endif
 
-# if ( $inputMode != "fast" && $inputMode != "fastVerbose" \
-#   && $inputMode != "verbose" && $inputMode != "" ) then
-
+# confirm that choice of mode is acceptable
 if (! ( $inputMode == "fast" || $inputMode == "fastVerbose" \
         || $inputMode == "verbose" || $inputMode == "" )) then
     echo
@@ -92,7 +90,7 @@ foreach field ( $fields )
     if ( $status ) then
       exit 1
     endif
-    echo "  not real time for $field"
+    echo "  not real time for $field for RR results."
   else
     # echo "\n mode2 = $mode2"
     # echo "field  = $field"
@@ -126,7 +124,7 @@ else
   # mode is verbose: spew results to stdout 
   echo
   compareTrackDbFast.csh $machine1 $machine2 $db $field 
-  echo "  not real time for $field"
+  echo "  not real time for $field for RR results."
   echo
 endif
 
