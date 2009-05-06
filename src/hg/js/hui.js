@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.25 2009/04/22 23:21:12 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.26 2009/05/06 00:26:06 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -271,26 +271,6 @@ function subtrackCfgShow(tableName)
     // 1) be able to find composite view level input
     // 2) know if subtrack input is non-default (if so then subtrack value overrides composite view level value)
     // 3) know whether so composite view level value has changed since hgTrackUi displayed (if so composite view level value overrides)
-    $(divit).toggle();
-    return false;
-}
-
-function subtrackMetaShow(tableName)
-{
-// Will show subtrack specific configuration controls
-// Config controls not matching name will be hidden
-    var divit = $("#div_"+tableName+"_meta");
-    if($(divit).css('display') == 'none')
-        $("#div_"+tableName+"_cfg").hide();
-    var htm = $(divit).html();
-    // Seems to be faster if this undisplayed junk is commented out.
-    if(htm.substring(0,4) == "<!--") {
-        htm = htm.substring(4,htm.length-7);
-        $(divit).html(htm);
-    } else {
-        $(divit).html("<!--"+htm+"-->");
-    }
-
     $(divit).toggle();
     return false;
 }

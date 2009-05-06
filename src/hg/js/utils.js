@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.20 2009/04/28 23:00:20 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.21 2009/05/06 00:25:44 tdreszer Exp $
 
 var debug = false;
 
@@ -378,3 +378,24 @@ function validateFloat(obj,min,max)
         return true;
     }
 }
+
+function metadataShowHide(tableName)
+{
+// Will show subtrack specific configuration controls
+// Config controls not matching name will be hidden
+    var divit = $("#div_"+tableName+"_meta");
+    if($(divit).css('display') == 'none')
+        $("#div_"+tableName+"_cfg").hide();
+    var htm = $(divit).html();
+    // Seems to be faster if this undisplayed junk is commented out.
+    if(htm.substring(0,4) == "<!--") {
+        htm = htm.substring(4,htm.length-7);
+        $(divit).html(htm);
+    } else {
+        $(divit).html("<!--"+htm+"-->");
+    }
+
+    $(divit).toggle();
+    return false;
+}
+
