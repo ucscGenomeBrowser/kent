@@ -2986,11 +2986,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=DNase cellType=GM12878
     type narrowPeak
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=277 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksGm12878 fileName=wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz
 
@@ -3001,12 +2996,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=DNase cellType=GM12878
     type wig 0.00 2.54
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList first
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Signal labVersion="F-Seq 1.81, average reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalGm12878 fileName=wgEncodeDukeDNaseSeqSignalGm12878.wig.gz
 
@@ -3017,12 +3007,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=DNase cellType=GM12878
     type wig 0.00 570.00
-    dateSubmitted 2008-11-22
-    dateUnrestricted 2009-08-22
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878.wig.gz
 
@@ -3033,11 +3018,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 10.46
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=31 dateSubmitted=2008-11-08 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wig.gz
 
@@ -3048,11 +3029,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 9.77
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=31 dateSubmitted=2008-11-08 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wig.gz
 
@@ -3063,11 +3040,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 39.64
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=31 dateSubmitted=2008-11-08 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wig.gz
 
@@ -3078,10 +3051,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878 fileName=wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
 
@@ -3092,12 +3061,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=FAIRE cellType=GM12878
     type wig 0.00 4.28
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalGm12878 fileName=wgEncodeUncFAIREseqSignalGm12878.wig.gz
 
@@ -3108,12 +3072,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=GM12878
     type wig 0.00 6800.00
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878.wig.gz
 
@@ -3124,12 +3083,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 37.13
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep1Gm12878.wig.gz
 
@@ -3140,12 +3094,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 46.48
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep2Gm12878.wig.gz
 
@@ -3156,12 +3105,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 39.94
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep3Gm12878.wig.gz
 
@@ -3172,13 +3116,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=GM12878
     type narrowPeak
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
-    cell GM12878
     color 153,38,0
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Peaks labVersion="F-Seq 1.81, ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=278 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksGm12878Ctcf fileName=wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalGm12878Ctcf
@@ -3188,14 +3126,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=GM12878
     type wig 0.00 11.12
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalGm12878Ctcf fileName=wgEncodeUtaChIPseqSignalGm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf
@@ -3205,14 +3137,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=GM12878
     type wig 0.00 1956.00
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
@@ -3222,14 +3148,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 16.91
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
@@ -3239,14 +3159,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 19.41
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
@@ -3256,14 +3170,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 17.14
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
@@ -3273,13 +3181,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (GM12878 cells)
     subGroups view=Signal EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input view=Signal labVersion=1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=34 dateSubmitted=2008-11-07 dateUnrestricted=2009-07-07 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalGm12878Input fileName=wgEncodeUtaustinChIPseqSignalGm12878Input.wig.gz
 
     track wgEncodeUtaustinChIPseqRawSignalGm12878Input
@@ -3289,13 +3192,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (GM12878 cells)
     subGroups view=rRAW EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
     spanList 1
-    cell GM12878
     color 153,38,0
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=34 dateSubmitted=2008-11-07 dateUnrestricted=2009-07-07 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqRawSignalGm12878Input fileName=wgEncodeUtaustinChIPseqRawSignalGm12878Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHelas3
@@ -3305,10 +3203,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=DNase cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHelas3 fileName=wgEncodeDukeDNaseSeqPeaksHelas3.narrowPeak.gz
 
@@ -3319,11 +3213,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=DNase cellType=HeLa
     type wig 0.00 1.50
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHelas3 fileName=wgEncodeDukeDNaseSeqSignalHelas3.wig.gz
 
@@ -3334,11 +3224,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=DNase cellType=HeLa
     type wig 0.00 277.00
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3.wig.gz
 
@@ -3349,11 +3235,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 0.00 8.96
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=RawSignal replicate=1 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wig.gz
 
@@ -3364,11 +3246,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 0.00 6.80
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=RawSignal replicate=2 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wig.gz
 
@@ -3379,11 +3257,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 0.00 6.34
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=RawSignal replicate=3 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wig.gz
 
@@ -3394,10 +3268,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=FAIRE cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-03-22
-    dateUnrestricted 2009-12-22
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqPeaksHelas3 fileName=wgEncodeUncFAIREseqPeaksHelas3.narrowPeak.gz
 
@@ -3408,11 +3278,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=FAIRE cellType=HeLa
     type wig 0.00 0.74
-    dateSubmitted 2009-03-22
-    dateUnrestricted 2009-12-22
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHelas3 fileName=wgEncodeUncFAIREseqSignalHelas3.wig.gz
 
@@ -3423,11 +3289,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HeLa
     type wig 0.00 3729.00
-    dateSubmitted 2009-03-22
-    dateUnrestricted 2009-12-22
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3.wig.gz
 
@@ -3438,11 +3300,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 0.00 94.88
-    dateSubmitted 2009-03-22
-    dateUnrestricted 2009-12-22
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep1Helas3.wig.gz
 
@@ -3453,11 +3311,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 0.00 73.57
-    dateSubmitted 2009-03-22
-    dateUnrestricted 2009-12-22
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep2Helas3.wig.gz
 
@@ -3468,11 +3322,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 0.00 96.69
-    dateSubmitted 2009-03-22
-    dateUnrestricted 2009-12-22
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep3Helas3.wig.gz
 
@@ -3483,12 +3333,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HeLa-S3
     color 0,119,158
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Peaks labVersion="ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3Ctcf fileName=wgEncodeUtaChIPseqPeaksHelas3Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3Ctcf
@@ -3498,13 +3343,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HeLa
     type wig 0.00 8.59
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqSignalHelas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf
@@ -3514,13 +3354,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HeLa
     type wig 0.00 1920.00
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
@@ -3530,13 +3365,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 0.00 32.31
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=RawSignal replicate=1 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
@@ -3546,13 +3376,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 0.00 23.96
-    dateSubmitted 2009-03-20
-    dateUnrestricted 2009-12-20
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=RawSignal replicate=2 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
@@ -3562,12 +3387,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HeLa-S3
     color 0,119,158
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="ROC analysis" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3Cmyc fileName=wgEncodeUtaChIPseqPeaksHelas3Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3Cmyc
@@ -3577,13 +3397,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HeLa
     type wig 0.00 0.77
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc
@@ -3593,13 +3408,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HeLa
     type wig 0.00 170.00
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
@@ -3609,13 +3419,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 0.00 42.31
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=RawSignal replicate=1 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
@@ -3625,13 +3430,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 0.00 40.05
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=RawSignal replicate=2 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
@@ -3641,13 +3441,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HeLa-S3 cells)
     subGroups view=Signal EXP=zCTRL cellType=HeLa
     type wig 0.00 3.70
-    dateSubmitted 2009-03-16
-    dateUnrestricted 2009-12-16
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=275 dateSubmitted=2009-03-16 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHelas3Input fileName=wgEncodeUtaustinChIPseqSignalHelas3Input.wig.gz
 
     track wgEncodeUtaustinChIPseqRawSignalHelas3Input
@@ -3657,13 +3452,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in HeLa-S3 cells)
     subGroups view=rRAW EXP=zCTRL cellType=HeLa
     type wig 0.00 29.73
-    dateSubmitted 2009-03-16
-    dateUnrestricted 2009-12-16
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HeLa-S3
     color 0,119,158
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input view=RawSignal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=275 dateSubmitted=2009-03-16 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqRawSignalHelas3Input fileName=wgEncodeUtaustinChIPseqRawSignalHelas3Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
@@ -3673,11 +3463,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=DNase cellType=HepG2
     type narrowPeak
-    dateSubmitted 2009-03-11
-    dateUnrestricted 2009-12-11
-    dataVersion ENCODE Feb 2009 Freeze
     color 189,0,157
-    cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=277 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHepg2 fileName=wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHepg2
@@ -3687,12 +3473,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=DNase cellType=HepG2
     type wig 0.00 2.70
-    dateSubmitted 2009-03-11
-    dateUnrestricted 2009-12-11
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHepg2 fileName=wgEncodeDukeDNaseSeqSignalHepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2
@@ -3702,12 +3484,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=DNase cellType=HepG2
     type wig 0.00 288.00
-    dateSubmitted 2009-03-11
-    dateUnrestricted 2009-12-11
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Hepg2
@@ -3717,12 +3495,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 0.00 4.70
-    dateSubmitted 2009-03-11
-    dateUnrestricted 2009-12-11
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=RawSignal replicate=1 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
@@ -3732,12 +3506,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 0.00 4.48
-    dateSubmitted 2009-03-11
-    dateUnrestricted 2009-12-11
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=RawSignal replicate=2 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
@@ -3747,12 +3517,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 0.00 8.15
-    dateSubmitted 2009-03-11
-    dateUnrestricted 2009-12-11
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=RawSignal replicate=3 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHepg2
@@ -3762,10 +3528,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=FAIRE cellType=HepG2
     type narrowPeak
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
-    cell HepG2
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2 fileName=wgEncodeUncFAIREseqPeaksHepg2.narrowPeak.gz
 
@@ -3776,11 +3538,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=FAIRE cellType=HepG2
     type wig 0.00 1.60
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2 fileName=wgEncodeUncFAIREseqSignalHepg2.wig.gz
 
@@ -3791,11 +3549,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HepG2
     type wig 0.00 5987.00
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2.wig.gz
 
@@ -3806,11 +3560,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HepG2 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HepG2
     type wig 0.00 33.79
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep1Hepg2.wig.gz
 
@@ -3821,11 +3571,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HepG2 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HepG2
     type wig 0.00 59.03
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep2Hepg2.wig.gz
 
@@ -3836,11 +3582,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HepG2 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HepG2
     type wig 0.00 41.00
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep3Hepg2.wig.gz
 
@@ -3851,12 +3593,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HepG2 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HepG2
     type narrowPeak
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HepG2
     color 189,0,157
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Peaks labVersion="ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2Ctcf fileName=wgEncodeUtaChIPseqPeaksHepg2Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2Ctcf
@@ -3866,13 +3603,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in HepG2 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HepG2
     type wig 0.00 6.75
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Ctcf fileName=wgEncodeUtaChIPseqSignalHepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf
@@ -3882,13 +3614,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in HepG2 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HepG2
     type wig 0.00 654.00
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf
@@ -3898,13 +3625,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
     type wig 0.00 30.86
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=RawSignal replicate=1 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
@@ -3914,13 +3636,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
     type wig 0.00 22.20
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=RawSignal replicate=2 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Cmyc
@@ -3930,12 +3647,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HepG2 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HepG2
     type narrowPeak
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HepG2
     color 189,0,157
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Peaks labVersion="ROC analysis" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2Cmyc fileName=wgEncodeUtaChIPseqPeaksHepg2Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2Cmyc
@@ -3945,13 +3657,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in HepG2 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HepG2
     type wig 0.00 0.99
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Cmyc fileName=wgEncodeUtaChIPseqSignalHepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc
@@ -3961,13 +3668,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in HepG2 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HepG2
     type wig 0.00 528.00
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc
@@ -3977,13 +3679,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 0.00 29.38
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=RawSignal replicate=1 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
@@ -3993,13 +3690,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 0.00 35.97
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=RawSignal replicate=2 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
@@ -4009,13 +3701,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 3 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 0.00 28.82
-    dateSubmitted 2009-03-21
-    dateUnrestricted 2009-12-21
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell HepG2
     color 189,0,157
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=RawSignal replicate=3 labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHepg2Input
@@ -4025,14 +3712,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HepG2 cells)
     subGroups view=Signal EXP=zCTRL cellType=HepG2
     type wig 0.00 2.78
-    dateSubmitted 2009-03-12
-    dateUnrestricted 2009-12-12
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
-    color 189,0,157
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Input view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=274 dateSubmitted=2009-03-13 dateUnrestricted=2009-12-13 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHepg2Input fileName=wgEncodeUtaustinChIPseqSignalHepg2Input.wig.gz
 
     track wgEncodeUtaustinChIPseqRawSignalHepg2Input
@@ -4042,14 +3723,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in HepG2 cells)
     subGroups view=rRAW EXP=zCTRL cellType=HepG2
     type wig 0.00 26.71
-    dateSubmitted 2009-03-12
-    dateUnrestricted 2009-12-12
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 189,0,157
-    cell HepG2
-    color 189,0,157
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Input view=RawSignal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=274 dateSubmitted=2009-03-13 dateUnrestricted=2009-12-13 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqRawSignalHepg2Input fileName=wgEncodeUtaustinChIPseqRawSignalHepg2Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksK562
@@ -4059,11 +3734,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
     subGroups view=Peaks EXP=DNase cellType=K562
     type narrowPeak
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=277 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksK562 fileName=wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz
 
@@ -4074,12 +3744,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
     subGroups view=Signal EXP=DNase cellType=K562
     type wig 0.00 1.56
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList first
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Signal labVersion="F-Seq 1.81, average reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=235 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalK562 fileName=wgEncodeDukeDNaseSeqSignalK562.wig.gz
 
@@ -4090,11 +3755,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
     subGroups view=SignalBO EXP=DNase cellType=K562
     type wig 0.00 445.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=116 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562.wig.gz
 
@@ -4105,11 +3766,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in K562 cells)
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 12.92
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=RawSignal replicate=1 labVersion="F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=112 dateSubmitted=2008-12-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep1K562.wig.gz
 
@@ -4120,11 +3777,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in K562 cells)
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 37.72
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=RawSignal replicate=2 labVersion="F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=112 dateSubmitted=2008-12-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep2K562.wig.gz
 
@@ -4135,11 +3788,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in K562 cells)
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 34.81
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=RawSignal replicate=3 labVersion="F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=112 dateSubmitted=2008-12-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep3K562.wig.gz
 
@@ -4150,10 +3799,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in K562 cells)
     subGroups view=Peaks EXP=FAIRE cellType=K562
     type narrowPeak
-    dateSubmitted 2009-04-20
-    dateUnrestricted 2010-01-20
-    dataVersion ENCODE May 2009 Freeze
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
 
@@ -4165,12 +3810,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
     subGroups view=Signal EXP=FAIRE cellType=K562
     type wig 0.00 1.10
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    dataVersion ENCODE Feb 2009 Freeze
-    #dataVersion ENCODE Nov 2008 Freeze
     spanList first
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal softwareVersion="F-Seq, 1.81, combined seqs, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=234 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalK562 fileName=wgEncodeUncFAIREseqSignalK562.wig.gz
 
@@ -4181,11 +3821,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=K562
     type wig 0.00 8719.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=117 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
 
@@ -4196,11 +3832,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in K562 cells)
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 74.86
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=RawSignal replicate=1 softwareVersion="F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=113 dateSubmitted=2008-12-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1K562 fileName=wgEncodeUncFAIREseqRawSignalRep1K562.wig.gz
     color 46,0,184
 
@@ -4211,11 +3843,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in K562 cells)
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 63.65
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=RawSignal replicate=2 softwareVersion="F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=113 dateSubmitted=2008-12-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2K562 fileName=wgEncodeUncFAIREseqRawSignalRep2K562.wig.gz
 
@@ -4226,11 +3854,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in K562 cells)
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 67.60
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
     spanList 1
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=RawSignal replicate=3 softwareVersion="F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=113 dateSubmitted=2008-12-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3K562 fileName=wgEncodeUncFAIREseqRawSignalRep3K562.wig.gz
 
@@ -4241,12 +3865,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in K562 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=K562
     type narrowPeak
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
-    cell K562
     color 46,0,184
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Peaks labVersion="F-Seq 1.81, ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=278 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562Ctcf fileName=wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalK562Ctcf
@@ -4256,13 +3875,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in K562 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=K562
     type wig 0.00 6.78
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562Ctcf fileName=wgEncodeUtaChIPseqSignalK562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf
@@ -4272,13 +3886,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=K562
     type wig 0.00 3339.00
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1K562Ctcf
@@ -4288,13 +3897,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.00
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=RawSignal replicate=1 labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
@@ -4304,13 +3908,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 8.01
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=RawSignal replicate=2 labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
@@ -4320,13 +3919,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in K562 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=K562
     type wig 0.00 23.06
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody CTCF
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=RawSignal replicate=3 labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksK562Cmyc
@@ -4336,12 +3930,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in K562 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=K562
     type narrowPeak
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
-    cell K562
     color 46,0,184
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Peaks labVersion="F-Seq 1.81, ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=278 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562Cmyc fileName=wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalK562Cmyc
@@ -4351,13 +3940,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in K562 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=K562
     type wig 0.00 1.97
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562Cmyc fileName=wgEncodeUtaChIPseqSignalK562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc
@@ -4367,13 +3951,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=K562
     type wig 0.00 1925.00
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
@@ -4383,13 +3962,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 38.44
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=RawSignal replicate=1 labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
@@ -4399,13 +3973,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 30.71
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=RawSignal replicate=2 labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
@@ -4415,13 +3984,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (c-Myc in K562 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=K562
     type wig 0.00 34.69
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
-    cell K562
     color 46,0,184
-    antibody c-Myc
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=RawSignal replicate=3 labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalK562Input
@@ -4431,13 +3995,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in K562 cells)
     subGroups view=Signal EXP=zCTRL cellType=K562
     type wig 0.00 2.98
-    dataVersion ENCODE Nov 2008
-    dateSubmitted 2008-12-04
-    dateUnrestricted 2009-09-04
     spanList 1
-    cell K562
     color 46,0,184
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input view=Signal labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=109 dateSubmitted=2008-12-05 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalK562Input fileName=wgEncodeUtaustinChIPseqSignalK562Input.wig.gz
 
     track wgEncodeUtaustinChIPseqRawSignalK562Input
@@ -4447,13 +4006,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (Input in K562 cells)
     subGroups view=rRAW EXP=zCTRL cellType=K562
     type wig 0.00 37.78
-    dataVersion ENCODE Nov 2008
-    dateSubmitted 2008-12-04
-    dateUnrestricted 2009-09-04
     spanList 1
-    cell K562
     color 46,0,184
-    antibody Input
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input view=RawSignal labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=109 dateSubmitted=2008-12-05 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqRawSignalK562Input fileName=wgEncodeUtaustinChIPseqRawSignalK562Input.wig.gz
 
     track wgEncodeDukeDNaseSeqRegionsExcludedGm12878
@@ -4461,13 +4015,8 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel Excluded Regions
     longLabel ENCODE Open Chromatin, Regions Excluded
-    #subGroups view=sXREG EXP=zzREF cellType=zzRG
     subGroups view=sXREG EXP=zzRE cellType=zzRG
     type bed 6
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03
-    dateUnrestricted 2009-09-03
-    cell Reference_Genome
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Regions_Excluded labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRegionsExcludedGm12878 fileName=wgEncodeDukeDNaseSeqRegionsExcludedGm12878.bed6.gz
 
     track wgEncodeDukeDNaseSeqUniqueness20bpGm12878
@@ -4475,14 +4024,9 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel Uniqueness 20bp
     longLabel ENCODE Reference Genome Uniqueness of 20bp Windows
-    #subGroups view=u20 EXP=zzREF cellType=zzRG
     subGroups view=uniq EXP=zzU20 cellType=zzRG
     type wig 0.00 1.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03
-    dateUnrestricted 2009-09-03
     spanList 1
-    cell Reference_Genome
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Uniqueness_20bp labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqUniqueness20bpGm12878 fileName=wgEncodeDukeDNaseSeqUniqueness20bpGm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqUniqueness24bpGm12878
@@ -4490,14 +4034,9 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel Uniqueness 24bp
     longLabel ENCODE Reference Genome Uniqueness of 24bp Windows
-    #subGroups view=u24 EXP=zzREF cellType=zzRG
     subGroups view=uniq EXP=zzU24 cellType=zzRG
     type wig 0.00 1.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03
-    dateUnrestricted 2009-09-03
     spanList 1
-    cell Reference_Genome
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Uniqueness_24bp labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqUniqueness24bpGm12878 fileName=wgEncodeDukeDNaseSeqUniqueness24bpGm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqUniqueness35bpGm12878
@@ -4505,14 +4044,9 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel Uniqueness 35bp
     longLabel ENCODE Reference Genome Uniqueness of 35bp Windows
-    #subGroups view=u35 EXP=zzREF cellType=zzRG
     subGroups view=uniq EXP=zzU35 cellType=zzRG
     type wig 0.00 1.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03
-    dateUnrestricted 2009-09-03
     spanList 1
-    cell Reference_Genome
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Uniqueness_35bp labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqUniqueness35bpGm12878 fileName=wgEncodeDukeDNaseSeqUniqueness35bpGm12878.wig.gz
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
@@ -4524,9 +4058,6 @@ longLabel ENCODE Elnitski Bi-directional Promoters
 visibility hide
 group regulation
 type bed 8 +
-dateSubmitted 2009-04-27
-dateUnrestricted 2010-01-27
-dataVersion ENCODE May 2009 Freeze
 priority 0
 scoreFilterByRange on
 compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
@@ -4568,11 +4099,6 @@ wgEncode 1
     longLabel ENCODE NHGRI NRE Silencers (Ggamin prom. in K562 cells)
     subGroups view=SI cellType=K562 promoter=Ggam
     type bed 6
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    promoter G-gamma
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Ggamma fileName=wgEncodeNhgriNRESilencersK562Ggamma.bed6.gz
 
@@ -4583,11 +4109,6 @@ wgEncode 1
     longLabel ENCODE NHGRI NRE Enhancer Blockers (Ggam prom. in K562 cells)
     subGroups view=EB cellType=K562 promoter=Ggam
     type bed 6
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    promoter G-gamma
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma fileName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma.bed6.gz
 
@@ -4598,11 +4119,6 @@ wgEncode 1
     longLabel ENCODE NHGRI NRE Silencers (SV40 prom. in K562 cells)
     subGroups view=SI cellType=K562 promoter=SV40
     type bed 6
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    promoter SV40
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Sv40 fileName=wgEncodeNhgriNRESilencersK562Sv40.bed6.gz
 
@@ -4613,11 +4129,6 @@ wgEncode 1
     longLabel ENCODE NHGRI NRE Enhancer Blockers (NRE-EBs) (SV40 prom. in K562 cells)
     subGroups view=EB cellType=K562 promoter=SV40
     type bed 6
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    promoter SV40
-    cell K562
     color 46,0,184
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Sv40 fileName=wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
 
@@ -7773,12 +7284,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
     subGroups view=Peaks factor=JunD cellType=GM12878
     type narrowPeak
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody JunD
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Jund fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Jund.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Jund fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Jund.narrowPeak.gz
 
@@ -7804,12 +7310,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in GM12878 cells)
     subGroups view=Signal factor=JunD cellType=GM12878
     type bedGraph 4
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody JunD
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Jund fileName=wgEncodeYaleChIPseqRel2SignalGm12878Jund.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Jund fileName=wgEncodeYaleChIPseqRel2SignalGm12878Jund.bedGraph4.gz
 
@@ -7866,12 +7367,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
     subGroups view=Peaks factor=Max cellType=GM12878
     type narrowPeak
-    dateSubmitted 2009-01-09
-    dateUnrestricted 2009-10-09
-    dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Max
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Max fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Max.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-01-09 dateResubmitted=2009-05-02 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Max fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Max.narrowPeak.gz
 
@@ -7897,12 +7393,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
     subGroups view=Signal factor=Max cellType=GM12878
     type bedGraph 4
-    dateSubmitted 2009-01-09
-    dateUnrestricted 2009-10-09
-    dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Max
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Max fileName=wgEncodeYaleChIPseqRel2SignalGm12878Max.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-01-09 dateResubmitted=2009-05-02 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Max fileName=wgEncodeYaleChIPseqRel2SignalGm12878Max.bedGraph4.gz
 
@@ -7959,12 +7450,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
     subGroups view=Peaks factor=Pol2 cellType=GM12878
     type narrowPeak
-    dateSubmitted 2008-11-26
-    dateUnrestricted 2009-08-26
-    dataVersion ENCODE Nov 2008 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Pol2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2009-02-24 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Pol2.narrowPeak.gz
 
@@ -7990,11 +7476,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
     subGroups view=Signal factor=Pol2 cellType=GM12878
     type bedGraph 4
-    dateSubmitted 2008-11-26
-    dataVersion ENCODE Nov 2008 Freeze
-    dateUnrestricted 2009-08-26
-    cell GM12878
-    antibody Pol2
+    color 153,38,0
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Pol2 fileName=wgEncodeYaleChIPseqRel2SignalGm12878Pol2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2009-02-24 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Pol2 fileName=wgEncodeYaleChIPseqRel2SignalGm12878Pol2.bedGraph4.gz
 
@@ -8051,12 +7533,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Pol3 in GM12878 cells)
     subGroups view=Peaks factor=Pol3 cellType=GM12878
     type narrowPeak
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Pol3
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol3 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=318 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Pol3 fileName=wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalGm12878Pol3
@@ -8066,12 +7543,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Pol3 in GM12878 cells)
     subGroups view=Signal factor=Pol3 cellType=GM12878
     type bedGraph 4
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Pol3
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol3 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=318 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Pol3 fileName=wgEncodeYaleChIPseqSignalGm12878Pol3.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol3
@@ -8081,12 +7553,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol3 in GM12878 cells)
     subGroups view=zRAW factor=Pol3 cellType=GM12878
     type wig 1.00 835.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Pol3
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol3 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=318 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol3 fileName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol3.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol3
@@ -8096,12 +7563,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol3 in GM12878 cells)
     subGroups view=zRAW factor=Pol3 cellType=GM12878
     type wig 1.00 939.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 153,38,0
-    cell GM12878
-    antibody Pol3
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol3 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=318 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol3 fileName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol3.wig.gz
 
     track wgEncodeYaleChIPseqRel2PeaksGm12878Cfos
@@ -8111,12 +7573,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Fos in GM12878 cells)
     subGroups view=Peaks factor=cFos cellType=GM12878
     type narrowPeak
-    dateSubmitted 2008-11-24
-    dateUnrestricted 2009-08-24
-    dataVersion ENCODE Nov 2008 Freeze
     color 153,38,0
-    cell GM12878
-    antibody c-Fos
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Cfos fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Cfos.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-11-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksGm12878Cfos fileName=wgEncodeYaleChIPseqRel2PeaksGm12878Cfos.narrowPeak.gz
 
@@ -8142,12 +7599,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
     subGroups view=Signal factor=cFos cellType=GM12878
     type bedGraph 4
-    dateSubmitted 2008-11-24
-    dateUnrestricted 2009-08-24
-    dataVersion ENCODE Nov 2008 Freeze
     color 153,38,0
-    cell GM12878
-    antibody c-Fos
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Cfos fileName=wgEncodeYaleChIPseqRel2SignalGm12878Cfos.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=GM12878 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-11-24 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalGm12878Cfos fileName=wgEncodeYaleChIPseqRel2SignalGm12878Cfos.bedGraph4.gz
 
@@ -8219,12 +7671,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type bedGraph 4
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    dataVersion ENCODE Nov 2008 Freeze
-    cell GM12878
     color 153,38,0
-    antibody Input
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878InputBg fileName=wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2009-02-24 dateResubmitted=2009-03-21 dateUnrestricted=2009-11-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878InputBg fileName=wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz
 
@@ -8266,12 +7713,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
     subGroups view=Peaks factor=TCF4 cellType=HCT116
     type narrowPeak
-    dateSubmitted 2009-02-24
-    dateUnrestricted 2009-11-24
-    dataVersion ENCODE Feb 2009 Freeze
     color 0,55,219
-    cell HCT-116
-    antibody TCF4
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HCT-116 antibody=TCF4 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2PeaksHct116Tcf4.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HCT-116 antibody=TCF4 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-25 dateSubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2PeaksHct116Tcf4.narrowPeak.gz
 
@@ -8297,12 +7739,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF4 in HCT-116 cells)
     subGroups view=Signal factor=TCF4 cellType=HCT116
     type bedGraph 4
-    dateSubmitted 2009-02-24
-    dateUnrestricted 2009-11-24
-    dataVersion ENCODE Feb 2009 Freeze
     color 0,55,219
-    cell HCT-116
-    antibody TCF4
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HCT-116 antibody=TCF4 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HCT-116 antibody=TCF4 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz
 
@@ -8359,12 +7796,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
     subGroups view=Signal factor=zCTRL cellType=HCT116
     type bedGraph 4
-    dateSubmitted 2009-02-24
-    dateUnrestricted 2009-11-24
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HCT-116
     color 0,55,219
-    antibody Input
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHct116InputBg fileName=wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-02-25 dateResubmitted=2009-03-20 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHct116InputBg fileName=wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz
 
@@ -8406,12 +7838,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
     subGroups view=Peaks factor=Pol2 cellType=HEK293b
     type narrowPeak
-    dateSubmitted 2009-01-14
-    dateUnrestricted 2009-10-14
-    dataVersion ENCODE Feb 2009 Freeze
     color 133,0,173
-    cell HEK293(b)
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HEK293(b) antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHek293Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHek293Pol2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HEK293(b) antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-25 dateReubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHek293Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHek293Pol2.narrowPeak.gz
 
@@ -8437,12 +7864,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HEK293 cells)
     subGroups view=Signal factor=Pol2 cellType=HEK293b
     type bedGraph 4
-    dateSubmitted 2009-01-14
-    dataVersion ENCODE Feb 2009 Freeze
-    dateUnrestricted 2009-10-14
     color 133,0,173
-    cell HEK293(b)
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HEK293 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHek293Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHek293Pol2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HEK293(b) antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHek293Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHek293Pol2.bedGraph4.gz
 
@@ -8514,12 +7936,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
     subGroups view=Signal factor=zCTRL cellType=HEK293b
     type bedGraph 4
-    dateSubmitted 2009-01-14
-    dateUnrestricted 2009-10-14
-    dataVersion ENCODE Feb 2009 Freeze
     cell HEK293(b)
-    color 133,0,173
-    antibody Input
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHek293InputBg fileName=wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-02-25 dateResubmitted=2009-03-20 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHek293InputBg fileName=wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz
 
@@ -8561,12 +7978,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Max in HeLa-S3 cells)
     subGroups view=Peaks factor=Max cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 133,0,173
-    cell HeLa-S3
-    antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=317 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Max fileName=wgEncodeYaleChIPseqPeaksHelas3Max.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Max
@@ -8576,12 +7988,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Max in HeLa-S3 cells)
     subGroups view=Signal factor=Max cellType=HeLa
     type bedGraph 4
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 133,0,173
-    cell HeLa-S3
-    antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=317 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Max fileName=wgEncodeYaleChIPseqSignalHelas3Max.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Max
@@ -8591,12 +7998,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (Max in HeLa-S3 cells)
     subGroups view=zRAW factor=Max cellType=HeLa
     type wig 1.00 2286.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 133,0,173
-    cell HeLa-S3
-    antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Max type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=317 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Max fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Max.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Max
@@ -8606,12 +8008,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (Max in HeLa-S3 cells)
     subGroups view=zRAW factor=Max cellType=HeLa
     type wig 1.00 2626.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 133,0,173
-    cell HeLa-S3
-    antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Max type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=317 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Max fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Max.wig.gz
 
     track wgEncodeYaleChIPseqRel2PeaksHelas3Pol2
@@ -8621,12 +8018,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa cells)
     subGroups view=Peaks factor=Pol2 cellType=HeLa
     type narrowPeak
-    dateSubmitted 2008-10-01
-    dateUnrestricted 2009-07-01
-    dataVersion ENCODE Nov 2008 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HeLa-S3 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HeLa-S3 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2.narrowPeak.gz
 
@@ -8653,12 +8045,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HeLa cells)
     subGroups view=Signal factor=Pol2 cellType=HeLa
     type bedGraph 4
-    dateSubmitted 2008-10-01
-    dataVersion ENCODE Nov 2008 Freeze
-    dateUnrestricted 2009-07-01
     color 0,119,158
-    cell HeLa-S3
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HeLa-S3 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=HeLa-S3 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz
 
@@ -8735,12 +8122,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Fos in HeLa-S3 cells)
     subGroups view=Peaks factor=cFos cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Cfos fileName=wgEncodeYaleChIPseqPeaksHelas3Cfos.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Cfos
@@ -8750,12 +8132,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (c-Fos in HeLa-S3 cells)
     subGroups view=Signal factor=cFos cellType=HeLa
     type bedGraph 4
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Cfos fileName=wgEncodeYaleChIPseqSignalHelas3Cfos.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Cfos
@@ -8765,12 +8142,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 1333.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cfos fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cfos.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Cfos
@@ -8780,12 +8152,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 2081.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cfos fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cfos.wig.gz
 
     track wgEncodeYaleChIPseqPeaksHelas3Cmyc
@@ -8795,12 +8162,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks factor=cMyc cellType=HeLa
     type narrowPeak
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Myc
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Cmyc fileName=wgEncodeYaleChIPseqPeaksHelas3Cmyc.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Cmyc
@@ -8810,12 +8172,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal factor=cMyc cellType=HeLa
     type bedGraph 4
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Myc
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Cmyc fileName=wgEncodeYaleChIPseqSignalHelas3Cmyc.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Cmyc
@@ -8825,12 +8182,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1236.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Myc
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cmyc fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cmyc.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Cmyc
@@ -8840,12 +8192,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1677.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 0,119,158
-    cell HeLa-S3
-    antibody c-Myc
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cmyc.wig.gz
 
     track wgEncodeYaleChIPseqSignalHelas3InputBg
@@ -8855,12 +8202,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa
     type bedGraph 4
-    dateSubmitted 2008-09-29
-    dateUnrestricted 2009-06-29
-    dataVersion ENCODE Nov 2008 Freeze
-    cell HeLa-S3
     color 0,119,158
-    antibody Input
     accession GSE12781
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3InputBg fileName=wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3InputBg fileName=wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz
@@ -9194,12 +8536,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa-IF
     type bedGraph 4
-    dateSubmitted 2008-09-29
-    dateUnrestricted 2009-06-29
-    dataVersion ENCODE Nov 2008 Freeze
-    cell HeLa-S3_IFNg
     color 0,119,158
-    antibody Input
     accession GSE12782
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngInputBg fileName=wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngInputBg fileName=wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz
@@ -9467,12 +8804,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
     subGroups view=Signal factor=zCTRL cellType=HepG2
     type bedGraph 4
-    dateSubmitted 2009-02-28
-    dateUnrestricted 2009-11-28
-    dataVersion ENCODE Feb 2009 Freeze
-    cell HepG2
     color 189,0,157
-    antibody Input
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2InputBg fileName=wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-02-27 dateResubmitted=2009-03-20 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2InputBg fileName=wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz
 
@@ -9544,12 +8876,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562 cells)
     subGroups view=Peaks factor=GATA1 cellType=K562
     type narrowPeak
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody GATA-1
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=GATA-1 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Gata1 fileName=wgEncodeYaleChIPseqRel2PeaksK562Gata1.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=GATA-1 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Gata1 fileName=wgEncodeYaleChIPseqRel2PeaksK562Gata1.narrowPeak.gz
 
@@ -9577,12 +8904,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562 cells)
     subGroups view=Signal factor=GATA1 cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody GATA-1
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=GATA-1 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Gata1 fileName=wgEncodeYaleChIPseqRel2SignalK562Gata1.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=GATA-1 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Gata1 fileName=wgEncodeYaleChIPseqRel2SignalK562Gata1.bedGraph4.gz
 
@@ -9639,12 +8961,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
     subGroups view=Peaks factor=JunD cellType=K562
     type narrowPeak
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody JunD
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Jund fileName=wgEncodeYaleChIPseqRel2PeaksK562Jund.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Jund fileName=wgEncodeYaleChIPseqRel2PeaksK562Jund.narrowPeak.gz
 
@@ -9670,12 +8987,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in K562 cells)
     subGroups view=Signal factor=JunD cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-02-27
-    dateUnrestricted 2009-11-27
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody JunD
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Jund fileName=wgEncodeYaleChIPseqRel2SignalK562Jund.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Jund fileName=wgEncodeYaleChIPseqRel2SignalK562Jund.bedGraph4.gz
 
@@ -9732,12 +9044,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
     subGroups view=Peaks factor=Max cellType=K562
     type narrowPeak
-    dateSubmitted 2009-02-25
-    dateUnrestricted 2009-11-25
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody Max
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Max fileName=wgEncodeYaleChIPseqRel2PeaksK562Max.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Max view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Max fileName=wgEncodeYaleChIPseqRel2PeaksK562Max.narrowPeak.gz
 
@@ -9763,12 +9070,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in K562 cells)
     subGroups view=Signal factor=Max cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-02-25
-    dateUnrestricted 2009-11-25
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody Max
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Max fileName=wgEncodeYaleChIPseqRel2SignalK562Max.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Max fileName=wgEncodeYaleChIPseqRel2SignalK562Max.bedGraph4.gz
 
@@ -9825,12 +9127,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
     subGroups view=Peaks factor=NFe2 cellType=K562
     type narrowPeak
-    dateSubmitted 2009-01-09
-    dateUnrestricted 2009-10-09
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody NF-E2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=NF-E2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Nfe2 fileName=wgEncodeYaleChIPseqRel2PeaksK562Nfe2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=NF-E2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-01-09 dateResubmitted=2009-05-02 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Nfe2 fileName=wgEncodeYaleChIPseqRel2PeaksK562Nfe2.narrowPeak.gz
 
@@ -9856,12 +9153,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
     subGroups view=Signal factor=NFe2 cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-01-09
-    dateUnrestricted 2009-10-09
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody NF-E2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=NF-E2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Nfe2 fileName=wgEncodeYaleChIPseqRel2SignalK562Nfe2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=NF-E2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-01-09 dateResubmitted=2009-05-02 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Nfe2 fileName=wgEncodeYaleChIPseqRel2SignalK562Nfe2.bedGraph4.gz
 
@@ -9918,12 +9210,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
     subGroups view=Peaks factor=Pol2 cellType=K562
     type narrowPeak
-    dateSubmitted 2008-10-14
-    dateUnrestricted 2009-07-14
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksK562Pol2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksK562Pol2.narrowPeak.gz
 
@@ -9949,12 +9236,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562 cells)
     subGroups view=Signal factor=Pol2 cellType=K562
     type bedGraph 4
-    dateSubmitted 2008-10-14
-    dateUnrestricted 2009-07-14
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Pol2 fileName=wgEncodeYaleChIPseqRel2SignalK562Pol2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 200 Freeze" subId=324 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Pol2 fileName=wgEncodeYaleChIPseqRel2SignalK562Pol2.bedGraph4.gz
 
@@ -10012,12 +9294,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Rad21 in K562 cells)
     subGroups view=Peaks factor=Rad21 cellType=K562
     type narrowPeak
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody Rad21
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Rad21 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=319 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Rad21 fileName=wgEncodeYaleChIPseqPeaksK562Rad21.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalK562Rad21
@@ -10027,12 +9304,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Rad21 in K562 cells)
     subGroups view=Signal factor=Rad21 cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody Rad21
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Rad21 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=319 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Rad21 fileName=wgEncodeYaleChIPseqSignalK562Rad21.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Rad21
@@ -10042,12 +9314,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (Rad21 in K562 cells)
     subGroups view=zRAW factor=Rad21 cellType=K562
     type wig 1.00 4565.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody Rad21
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Rad21 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=319 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Rad21 fileName=wgEncodeYaleChIPseqRawSignalRep1K562Rad21.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Rad21
@@ -10057,12 +9324,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (Rad21 in K562 cells)
     subGroups view=zRAW factor=Rad21 cellType=K562
     type wig 1.00 4666.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody Rad21
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Rad21 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=319 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Rad21 fileName=wgEncodeYaleChIPseqRawSignalRep2K562Rad21.wig.gz
 
     track wgEncodeYaleChIPseqPeaksK562Xrcc4
@@ -10072,12 +9334,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (XRCC4 in K562 cells)
     subGroups view=Peaks factor=XRCC4 cellType=K562
     type narrowPeak
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody XRCC4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=XRCC4 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=320 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Xrcc4 fileName=wgEncodeYaleChIPseqPeaksK562Xrcc4.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalK562Xrcc4
@@ -10087,12 +9344,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (XRCC4 in K562 cells)
     subGroups view=Signal factor=XRCC4 cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody XRCC4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=XRCC4 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=320 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Xrcc4 fileName=wgEncodeYaleChIPseqSignalK562Xrcc4.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Xrcc4
@@ -10102,12 +9354,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (XRCC4 in K562 cells)
     subGroups view=zRAW factor=XRCC4 cellType=K562
     type wig 1.00 5645.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody XRCC4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=XRCC4 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=320 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Xrcc4 fileName=wgEncodeYaleChIPseqRawSignalRep1K562Xrcc4.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Xrcc4
@@ -10117,12 +9364,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (XRCC4 in K562 cells)
     subGroups view=zRAW factor=XRCC4 cellType=K562
     type wig 1.00 4628.00
-    dateSubmitted 2009-05-05
-    dateUnrestricted 2010-02-04
-    dataVersion ENCODE May 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody XRCC4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=XRCC4 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=320 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Xrcc4 fileName=wgEncodeYaleChIPseqRawSignalRep2K562Xrcc4.wig.gz
 
     track wgEncodeYaleChIPseqRel2PeaksK562Znf263
@@ -10132,12 +9374,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562 cells)
     subGroups view=Peaks factor=ZNF263 cellType=K562
     type narrowPeak
-    dateSubmitted 2009-02-11
-    dateUnrestricted 2009-11-11
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody ZNF263
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=ZNF263 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Znf263 fileName=wgEncodeYaleChIPseqRel2PeaksK562Znf263.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=ZNF263 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=323 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Znf263 fileName=wgEncodeYaleChIPseqRel2PeaksK562Znf263.narrowPeak.gz
 
@@ -10163,12 +9400,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
     subGroups view=Signal factor=ZNF263 cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-02-11
-    dateUnrestricted 2009-11-11
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
-    antibody ZNF263
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=ZNF263 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Znf263 fileName=wgEncodeYaleChIPseqRel2SignalK562Znf263.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=ZNF263 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=324 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Znf263 fileName=wgEncodeYaleChIPseqRel2SignalK562Znf263.bedGraph4.gz
 
@@ -10225,12 +9457,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
     subGroups view=Peaks factor=cFos cellType=K562
     type narrowPeak
-    dateSubmitted 2008-11-21
-    dateUnrestricted 2009-08-21
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody c-Fos
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Cfos fileName=wgEncodeYaleChIPseqRel2PeaksK562Cfos.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-11-21 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Cfos fileName=wgEncodeYaleChIPseqRel2PeaksK562Cfos.narrowPeak.gz
 
@@ -10256,12 +9483,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in K562 cells)
     subGroups view=Signal factor=cFos cellType=K562
     type bedGraph 4
-    dateSubmitted 2008-11-21
-    dataVersion ENCODE Nov 2008 Freeze
-    dateUnrestricted 2009-08-21
     color 46,0,184
-    cell K562
-    antibody c-Fos
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Cfos fileName=wgEncodeYaleChIPseqRel2SignalK562Cfos.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-11-21 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Cfos fileName=wgEncodeYaleChIPseqRel2SignalK562Cfos.bedGraph4.gz
 
@@ -10333,12 +9555,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
     subGroups view=Peaks factor=cJun cellType=K562
     type narrowPeak
-    dateSubmitted 2008-11-21
-    dateUnrestricted 2009-08-21
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody c-Jun
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Jun view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Cjun fileName=wgEncodeYaleChIPseqRel2PeaksK562Cjun.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Jun view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-11-21 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Cjun fileName=wgEncodeYaleChIPseqRel2PeaksK562Cjun.narrowPeak.gz
 
@@ -10364,12 +9581,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562 cells)
     subGroups view=Signal factor=cJun cellType=K562
     type bedGraph 4
-    dateSubmitted 2008-11-21
-    dateUnrestricted 2009-08-21
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody c-Jun
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Jun view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Cjun fileName=wgEncodeYaleChIPseqRel2SignalK562Cjun.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Jun view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-11-21 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Cjun fileName=wgEncodeYaleChIPseqRel2SignalK562Cjun.bedGraph4.gz
 
@@ -10426,12 +9638,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
     subGroups view=Peaks factor=cMyc cellType=K562
     type narrowPeak
-    dateSubmitted 2008-11-21
-    dateUnrestricted 2009-08-21
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody c-Myc
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Myc view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Cmyc fileName=wgEncodeYaleChIPseqRel2PeaksK562Cmyc.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Myc view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-11-21 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksK562Cmyc fileName=wgEncodeYaleChIPseqRel2PeaksK562Cmyc.narrowPeak.gz
 
@@ -10457,12 +9664,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562 cells)
     subGroups view=Signal factor=cMyc cellType=K562
     type bedGraph 4
-    dateSubmitted 2008-11-21
-    dateUnrestricted 2009-08-21
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell K562
-    antibody c-Myc
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Myc view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Cmyc fileName=wgEncodeYaleChIPseqRel2SignalK562Cmyc.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=K562 antibody=c-Myc view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-11-21 dateResubmitted=2009-05-02 dateUnrestricted=2009-08-21 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562Cmyc fileName=wgEncodeYaleChIPseqRel2SignalK562Cmyc.bedGraph4.gz
 
@@ -10519,11 +9721,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
     subGroups view=Signal factor=yRNAseq cellType=K562
     type bedGraph 4
-    dateSubmitted 2009-03-17
-    dateUnrestricted 2009-12-17
-    dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
-    cell K562
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaRawSignalK562
@@ -10533,12 +9731,8 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Raw Signal (in K562 cells)
     subGroups view=zRAW factor=yRNAseq cellType=K562
     type wig 1.00 65499.00
-    dateSubmitted 2009-03-17
-    dateUnrestricted 2009-12-17
-    dataVersion ENCODE Feb 2009 Freeze
     spanList first
     color 46,0,184
-    cell K562
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
 
     track wgEncodeYaleChIPseqSignalK562InputBg
@@ -10548,12 +9742,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
     subGroups view=Signal factor=zCTRL cellType=K562
     type bedGraph 4
-    dateSubmitted 2008-10-14
-    dateUnrestricted 2009-07-14
-    dataVersion ENCODE Nov 2008 Freeze
-    cell K562
     color 46,0,184
-    antibody Input
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562InputBg fileName=wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562InputBg fileName=wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz
 
@@ -10596,12 +9785,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
     subGroups view=Peaks factor=Pol2 cellType=NB4
     type narrowPeak
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell NB4
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=NB4 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksNb4Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksNb4Pol2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=NB4 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksNb4Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksNb4Pol2.narrowPeak.gz
 
@@ -10627,12 +9811,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
     subGroups view=Signal factor=Pol2 cellType=NB4
     type bedGraph 4
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    dataVersion ENCODE Nov 2008 Freeze
     color 46,0,184
-    cell NB4
-    antibody Pol2
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=NB4 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE May 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalNb4Pol2 fileName=wgEncodeYaleChIPseqRel2SignalNb4Pol2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseqRel2 cell=NB4 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalNb4Pol2 fileName=wgEncodeYaleChIPseqRel2SignalNb4Pol2.bedGraph4.gz
 
@@ -10704,12 +9883,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
     subGroups view=Signal factor=zCTRL cellType=NB4
     type bedGraph 4
-    dateSubmitted 2008-11-25
-    dateUnrestricted 2009-08-25
-    dataVersion ENCODE Nov 2008 Freeze
-    cell NB4
     color 46,0,184
-    antibody Input
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=NB4 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalNb4InputBg fileName=wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=NB4 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalNb4InputBg fileName=wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz
 
@@ -11581,15 +10755,11 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
-    dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-02-28
-    dateUnrestricted 2009-11-27
     #accession 2008-10-01
     type genePred
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
-    freezeDate 2009-02-16
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
 
     track wgEncodeGencodeAutoRel2
@@ -11597,15 +10767,11 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
-    dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-02-28
-    dateUnrestricted 2009-11-27
     #accession 2008-10-01
     type genePred
     priority 2
     url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$
     urlLabel Ensembl Transcript:
-    freezeDate 2009-02-16
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
 
     track wgEncodeGencodePolyaRel2
@@ -11613,13 +10779,9 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     subTrack wgEncodeSangerGencode off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
-    dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-02-28
-    dateUnrestricted 2009-11-27
     #accession 2008-10-01
     type genePred
     priority 3
-    freezeDate 2009-02-16
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
 
 # GIS PET (wrangler: mikep)
