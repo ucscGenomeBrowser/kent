@@ -1,3 +1,28 @@
+
+#track maserGBM
+#shortLabel CGH profiles
+#longLabel CGH profiles
+#group x
+#priority 45
+#visibility hide
+#type expRatio
+#logicalDb localDb
+#expScale 1.0
+#expStep 0.2
+#groupings maserGBMGroups
+
+#track CGHprofiles
+#shortLabel CGH profiles
+#longLabel CGH profiles
+#group x
+#priority 45
+#visibility hide
+#type expRatio
+#logicalDb localDb
+#expScale 1.0
+#expStep 0.2
+#groupings CGHprofilesGroups
+
 track COSMICsummary
 shortLabel COSMIC Data
 longLabel COSMIC Data
@@ -21,6 +46,20 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings cutler2007Groups
+
+track haverty2008
+shortLabel breast cancer CGH
+longLabel breast cancer CGH
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings haverty2008Groups
+
+######## ISPY ##################
 
 track ispyMipCGH
 shortLabel ispy CGH by MIP
@@ -94,6 +133,7 @@ expScale 5.0
 expStep 0.2
 groupings ISPYproteomicsGroups
 
+######################
 track ucsfNeveExp
 shortLabel Breast Cell Line Expression (Neve. et.al)
 longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
@@ -388,3 +428,39 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings mullighan2008_500KGroups
+
+track mullighan2008_SNP6
+shortLabel CGH (Mullighan et al. 2008)
+longLabel CGH (Mullighan et al. 2008)
+group cancerGenomics
+priority 50
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings mullighan2008_SNP6Groups
+
+track bardeesy2006
+shortLabel CGH (Bardeesy et al. 2006)
+longLabel CGH (Bardeesy et al. 2006)
+group cancerGenomics
+priority 50
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings bardeesy2006Groups
+
+track balagurunathan2008
+shortLabel Gene Expression (Balagurunathan et al. 2008)
+longLabel Gene Expression (Balagurunathan et al. 2008)
+group cancerGenomics
+priority 50
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings balagurunathan2008Groups
