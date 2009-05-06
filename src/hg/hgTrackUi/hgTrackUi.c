@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.485 2009/04/23 16:22:19 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.486 2009/05/06 00:26:59 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2419,11 +2419,15 @@ else if (tdbIsComposite(tdb))
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
-if (!ct)
+else
     {
-    printf("<P>");
-    makeSchemaLink(database,tdb,NULL);
-    printf("</P>");
+    if (!ct)
+        {
+        printf("<P>");
+        makeSchemaLink(database,tdb,NULL);
+        printf("</P>");
+        }
+    metadataToggle(tdb,"Track details...", FALSE);
     }
 makeDownloadsLink(tdb);
 }
