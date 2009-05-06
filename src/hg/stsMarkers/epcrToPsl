@@ -4,6 +4,11 @@
 # Date: 7/17/2002
 # Description:  Convert an output file from ePCR to a psl file
 
+# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# edit ~/kent/src/hg/stsMarkers/epcrToPsl instead.
+
+# $Id: epcrToPsl,v 1.5 2009/05/06 21:20:33 hiram Exp $
+
 use warnings;
 use strict;
 
@@ -149,7 +154,7 @@ while (my $line = <FILE>) {
 	if (($rat) || ($mouse)) {
 	    print OUT "$ratName{$dbsts}\t$size{$dbsts}\t0\t$size{$dbsts}\t$chr\t0\t$start\t$end\t";
 	} else {
-	    print OUT "dbSTS_$dbsts\t$size{$dbsts}\t0\t$size{$dbsts}\t$chr\t0\t$start\t$end\t";
+	    print OUT "dbSTS_$dbsts\t$size{$dbsts}\t0\t$size{$dbsts}\t$chr\t$chrSizes{$chr}\t$start\t$end\t";
 	}
 	print OUT "2\t$primerLeftSize{$dbsts},$primerRightSize{$dbsts},\t0,$rightStart{$dbsts},\t";
 	print OUT "$leftstart,$rightStart,\n";
