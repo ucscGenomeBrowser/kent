@@ -219,8 +219,9 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
+#include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1533 2009/05/05 22:48:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1534 2009/05/06 00:27:49 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2477,7 +2478,7 @@ if (hTableOrSplitExists(database, tdb->tableName))
     char *trackTable = getParentTrackName(tdb);
     printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&position=%s:%d-%d&"
-	   "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
+	   "hgta_doSchema=describe+table+schema\" target=ucscSchema title='Open schema in new window'>"
 	   "View table schema</A></P>\n",
 	   database, tdb->grp, trackTable, tdb->tableName,
 	   seqName, winStart+1, winEnd);
@@ -2553,6 +2554,7 @@ char *tableName;
 if (!isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
+    metadataToggle(tdb,"Track details...",FALSE);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
@@ -3552,6 +3554,8 @@ hFreeConn(&conn);
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info */
 {
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js",NULL);
 genericClickHandlerPlus(tdb, item, itemForUrl, NULL);
 }
 
