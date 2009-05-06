@@ -4722,6 +4722,181 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya.tagAlign.gz
 
+# U. Washington Affy Exon (wrangler: Andy)
+
+track wgEncodeUwAffyExonArray
+compositeTrack on
+shortLabel UW Affy Exon
+longLabel ENCODE UW Affy All Exon Arrays
+group expression
+subGroup1 view Views SimpleSignal=SimpleSignal
+subGroup2 cellType Cell_Line GM06990=GM06990 SKMC=SKMC K562=K562 HepG2=HepG2 HeLaS3=HeLa-S3 Th1=Th1 SKNSHRA=SK-N-SH_RA Caco2=Caco-2
+dimensions dimensionX=cellType
+sortOrder cellType=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell
+dragAndDrop subTracks
+visibilityViewDefaults  SimpleSignal=pack
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Caco2
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel Caco-2 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in Caco-2 cells)
+    subGroups view=SimpleSignal cellType=Caco2
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell Caco-2
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=Caco-2 view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Caco2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Caco2.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Gm06990
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel GM06990 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in GM06990 cells)
+    subGroups view=SimpleSignal cellType=GM06990
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell GM06990
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=GM06990 view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Gm06990 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Gm06990.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep2Gm06990
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel GM06990 2
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in GM06990 cells)
+    subGroups view=SimpleSignal cellType=GM06990
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell GM06990
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=GM06990 view=SimpleSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Gm06990 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Gm06990.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Helas3
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel HeLa-S3 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
+    subGroups view=SimpleSignal cellType=HeLaS3
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell HeLa-S3
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HeLa-S3 view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Helas3 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Helas3.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep2Helas3
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel HeLa-S3 2
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
+    subGroups view=SimpleSignal cellType=HeLaS3
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell HeLa-S3
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HeLa-S3 view=SimpleSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Helas3 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel HepG2 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in HepG2 cells)
+    subGroups view=SimpleSignal cellType=HepG2
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell HepG2
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HepG2 view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep2Hepg2
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel HepG2 2
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in HepG2 cells)
+    subGroups view=SimpleSignal cellType=HepG2
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell HepG2
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HepG2 view=SimpleSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Hepg2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Hepg2.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1K562
+    release alpha
+    subTrack wgEncodeUwAffyExonArray
+    shortLabel K562 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in K562 cells)
+    subGroups view=SimpleSignal cellType=K562
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell K562
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=K562 view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1K562 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1K562.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Skmc
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel SKMC 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in SKMC cells)
+    subGroups view=SimpleSignal cellType=SKMC
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell SKMC
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SKMC view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Skmc fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Skmc.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Sknshra
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel SK-N-SH_RA 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in SK-N-SH_RA cells)
+    subGroups view=SimpleSignal cellType=SKNSHRA
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell SK-N-SH_RA
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SK-N-SH_RA view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Sknshra fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Sknshra.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel SK-N-SH_RA 2
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SK-N-SH_RA cells)
+    subGroups view=SimpleSignal cellType=SKNSHRA
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell SK-N-SH_RA
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SK-N-SH_RA view=SimpleSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra.broadPeak.gz
+
+    track wgEncodeUwAffyExonArraySimpleSignalRep1Th1
+    release alpha
+    subTrack wgEncodeUwAffyExonArray off
+    shortLabel Th1 1
+    longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in Th1 cells)
+    subGroups view=SimpleSignal cellType=Th1
+    type broadPeak
+    dateSubmitted 2009-05-01
+    dateUnrestricted 2010-02-01
+    dataVersion ENCODE May 2009 Freeze
+    cell Th1
+    metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=Th1 view=SimpleSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=314 dateSubmitted=2009-05-01 dateUnrestricted=2010-02-01 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Th1 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Th1.broadPeak.gz
+
+
 # U. Washington ChIP-seq (wrangler: Andy)
 
 track wgEncodeUwChIPSeq
@@ -4730,7 +4905,7 @@ shortLabel UW ChIP-seq
 longLabel ENCODE ChIP-seq by Univ. Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line HEK293=HEK293 HeLaS3=HeLa-S3 HepG2=HepG2 HL60=HL-60 GM06990=GM06990 GM12801=GM12801 GM12878=GM12878 K562=K562
+subGroup2 cellType Cell_Line HEK293=HEK293 HeLaS3=HeLa-S3 HepG2=HepG2 HL60=HL-60 GM06990=GM06990 GM12801=GM12801 GM12878=GM12878 K562=K562 WERIRb1=WERI-Rb-1
 subGroup3 factor Factor CTCF=CTCF H3K4me3=H3K4me3
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -4742,6 +4917,62 @@ type bed 3
 wgEncode 1
 noInherit on
 settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,viewLimitsMax=-1:11000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean RawSignal:viewLimits=1:20,viewLimitsMax=-1:16000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
+
+    track wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel WERI-Rb-1 CTCF 1
+    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in WERI-Rb-1 cells)
+    subGroups view=Hotspots factor=CTCF cellType=WERIRb1
+    type broadPeak
+    dateSubmitted 2009-05-05
+    dateUnrestricted 2010-02-05
+    dataVersion ENCODE May 2009 Freeze
+    cell WERI-Rb-1
+    antibody CTCF
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=WERI-Rb-1 antibody=CTCF fragLength=350 view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE May 2009 Freeze" subId=309 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-05 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf.broadPeak.gz
+
+    track wgEncodeUwChIPSeqPeaksWerirb1Ctcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel WERI-Rb-1 CTCF Pk
+    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in WERI-Rb-1 cells)
+    subGroups view=Peaks factor=CTCF cellType=WERIRb1
+    type narrowPeak
+    dateSubmitted 2009-05-05
+    dateUnrestricted 2010-02-05
+    dataVersion ENCODE May 2009 Freeze
+    cell WERI-Rb-1
+    antibody CTCF
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=WERI-Rb-1 antibody=CTCF fragLength=350 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE May 2009 Freeze" subId=309 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-05 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksWerirb1Ctcf fileName=wgEncodeUwChIPSeqPeaksWerirb1Ctcf.narrowPeak.gz
+
+    track wgEncodeUwChIPSeqSignalWerirb1Ctcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel WERI-Rb-1 CTCF Sig
+    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in WERI-Rb-1 cells)
+    subGroups view=Signal factor=CTCF cellType=WERIRb1
+    type wig 1.00 3005.00
+    dateSubmitted 2009-05-05
+    dateUnrestricted 2010-02-05
+    dataVersion ENCODE May 2009 Freeze
+    cell WERI-Rb-1
+    antibody CTCF
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=WERI-Rb-1 antibody=CTCF fragLength=350 view=Signal labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE May 2009 Freeze" subId=309 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-05 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqSignalWerirb1Ctcf fileName=wgEncodeUwChIPSeqSignalWerirb1Ctcf.wig.gz
+
+    track wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel WERI-Rb-1 CTCF Raw 1
+    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in WERI-Rb-1 cells)
+    subGroups view=RawSignal factor=CTCF cellType=WERIRb1
+    type wig 1.00 4968.00
+    dateSubmitted 2009-05-05
+    dateUnrestricted 2010-02-05
+    dataVersion ENCODE May 2009 Freeze
+    cell WERI-Rb-1
+    antibody CTCF
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=WERI-Rb-1 antibody=CTCF type=wig fragLength=350 view=RawSignal replicate=1 labVersion="Eland (GAPipeline-1.3.2)" dataVersion="ENCODE May 2009 Freeze" subId=309 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-05 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf.wig.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf
     release alpha
