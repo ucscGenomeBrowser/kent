@@ -55,9 +55,12 @@ shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 7 yeast Multiz Alignment
 group compGeno
 priority 103.4
-visibility pack
+visibility hide 
 exonArrows off
 showTopScorers 200
 color 100,50,170
 type bed 5 .
 html phastConsElements
+
+track transRegCode override
+visibility hide
