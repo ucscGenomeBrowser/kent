@@ -25,7 +25,7 @@
 #define AS_FILE_PATH "/cluster/bin/sqlCreate/"
 #define CV_CONFIG_FILE "/cluster/data/encode/pipeline/config/cv.ra"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.31 2009/05/07 07:25:26 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.32 2009/05/07 23:53:32 mikep Exp $";
 
 struct hash *hAsFile = NULL;
 struct hash *hCvRa = NULL;
@@ -45,23 +45,6 @@ if (asFileName != NULL)
 return as;
 }
 
-/*struct slPair *nameValueStringToPair(char *s, char delim)
-{
-// format: a=b<delim> c=d<delim>e=f        result-> b,d,f
-struct slPair *vars;
-char *t = cloneString(s);
-memSwapChar(t, strlen(t), delim, ' ');
-vars = slPairFromString(t);
-freez(&t);
-return vars;
-}
-*/
-
-// struct slPair *nameValueListToPair(char *s)
-// {
-// // format: a=b,c=d,e=f        result-> b,d,f
-// return nameValueStringToPair(s, ',');
-// }
 
 char *contentDispositionFileName(char *content)
 // Parse a "Content-Disposition" header of the format:
@@ -88,6 +71,7 @@ stripChar(filename, '"');
 slPairFreeValsAndList(&cl);
 return filename;
 }
+
 
 boolean hashAddPair(struct hash *h, char *s, char delim)
 /* If string s contains a pair in the format "name<delim> value"
@@ -146,7 +130,6 @@ boolean expect100Continue()
 // Return true if headers include
 //   "Expect: 100-continue"
 {
-MJP(2);verbose(2,"Expet=[%s]\n", getenv("Expect"));
 return sameOk(getenv("Expect"), "100-continue");
 }
 
