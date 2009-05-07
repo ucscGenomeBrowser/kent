@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.486 2009/05/06 00:26:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.487 2009/05/07 00:33:31 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2427,7 +2427,7 @@ else
         makeSchemaLink(database,tdb,NULL);
         printf("</P>");
         }
-    metadataToggle(tdb,"Track details...", FALSE);
+    metadataToggle(tdb,"Table metadata...", FALSE);
     }
 makeDownloadsLink(tdb);
 }
