@@ -150,6 +150,20 @@ return ok;
 }
 
 
+void progressMeter(int elapsed, long soFar, long total)
+{
+int divisor = (soFar >= 1024*1024 ? 1024*1024 : (soFar >= 1024 ? 1024 : 1));
+elapsed = max(elapsed,1);
+char *units = (divisor == 1 ? "bytes" : (divisor == 1024 ? "Kbytes" : (divisor == 1024*1024 ? "Mbytes" : "")));
+if (total)
+    printf("%9ld %s/s %12ld %s %3ld%% (%d secs, %ld remaining)          \r", soFar/divisor/elapsed, units, 
+	soFar/divisor, units, soFar*100/total, elapsed, (total-soFar)*elapsed/soFar);
+else
+    printf("%9ld %s/s %12ld %s (%d secs)          \r", soFar/divisor/elapsed, units, 
+	soFar/divisor, units, elapsed);
+}
+
+
 /* Compress from file source to file dest until EOF on source.
    def() returns Z_OK on success, Z_MEM_ERROR if memory could not be
    allocated for processing, Z_STREAM_ERROR if an invalid compression
@@ -238,52 +252,92 @@ return ok;
 // }
 
 
-void netWriteGzFileChunked(int sd, char *inFile)
+void netWriteGzFileChunked(int sd, char *inFile, long inFileSize, void (*progress)(int elapsed, long soFar, long total))
 /* Write a file which is already gzipped 
  * Need to skip over any extra gzip header fields
- * and write a simple 10-byte header that apache understands 
+ * and write the simple 10-byte header with FLAGS=0 that apache understands 
+ * http://www.faqs.org/rfcs/rfc1952.html
+ * RFC1952 - GZIP file format specification version 4.3
  */
 {
-gzFile f;
+FILE *f;
 int res;
-unsigned char buf[CHUNK];
-char tmpBuf[1024];
+unsigned char buf[CHUNK+3]; // space for CRLF \0
+char szBuf[1024];  // hex size + CRLF
+long totSent = 10; // header
+time_t start = time(NULL);
 
 // open the file (and discard the gzip header)
-f = gzopen(inFile, "rb");
-// write a new basic 10-byte header that apache understands
-safef(tmpBuf, 11, "%c%c%c%c%c%c%c%c%c%c", gz_magic[0], gz_magic[1],
+f = mustOpen(inFile, "rb");
+// write 15 bytes containing chunk size 'a' (10) & basic 10-byte header & 2 CRLFs
+safef(szBuf, sizeof(szBuf), "%x\r\n%c%c%c%c%c%c%c%c%c%c\r\n", 10, gz_magic[0], gz_magic[1],
 	    Z_DEFLATED, 0 /*flags*/, 0,0,0,0 /*time*/, 0 /*xflags*/, 
 	    0x03 /* default OS_CODE to 'UNIX' */);
-mustWriteFd(sd, tmpBuf, 10);
+mustWriteFd(sd, szBuf, 15);
 // write the rest of the compressed file chunk by chunk
 // leave space in buf for the <CR><LF> chunk-data terminator
-while ( (res = gzread (f, buf, CHUNK-2)) > 0)
+//while ( (res = gzread (f, buf, CHUNK)) > 0)
+unsigned char *msg = NULL;
+while ( (res = fread(buf, 1, CHUNK, f)) > 0)
     {
+    if (ferror(f))
+	errnoAbort("error reading %s\n", inFile);
+    if (!msg)
+	{
+	MJP(2);verbose(2,"HEADER=[ID=%x.%x (GZIP is 1f8b)][CM=%x (8=deflate)][FLAGS=%x (0=no extra hdrs)][Mtime=%x.%x.%x.%x][XFL=%x][OS=%x (3=Unix)]\n", buf[0], buf[1], buf[2],buf[3],buf[4],buf[5],buf[6],buf[7],buf[8],buf[9]);
+	// skip header plus any extra headers determined by FLAGS field
+	msg = buf+10;
+	if (buf[3] != 0)
+	    {
+	    if (buf[3] & 4) // FEXTRA bit 2
+		{
+		MJP(2);verbose(2,"bit2 skipping 2 + 0x%x + 256*0x%x = %d bytes\n", msg[0], msg[1], 2 + msg[0] + 256*msg[1] );
+		msg += 2 + msg[0] + 256*msg[1];
+		}
+	    if (buf[3] & 8) // FNAME bit 3
+		{
+		unsigned char *s = msg;
+		while (*(msg++))
+		    ;
+		MJP(2);verbose(2,"bit3 skipping %ld bytes\n", msg-s);
+		}
+	    if (buf[3] & 16) // FCOMMENT bit 4
+		{
+		unsigned char *s = msg;
+		while (*(msg++))
+		    ;
+		MJP(2);verbose(2,"bit4 skipping %ld bytes\n", msg-s);
+		}
+	    if (buf[3] & 2) // FHCRC bit 1
+		{
+		msg += 2;
+		MJP(2);verbose(2,"bit1 skipping 2 bytes\n");
+		}
+	    }
+	MJP(2);verbose(2,"skipped %ld bytes\n", msg-buf);
+	res = res - (msg-buf);
+	}
     // write chunk size
-    safef(tmpBuf, sizeof(tmpBuf), "%x\r\n", res);
-    mustWriteFd(sd, tmpBuf, strlen(tmpBuf));
+    safef(szBuf, sizeof(szBuf), "%x\r\n", res);
+    mustWriteFd(sd, szBuf, strlen(szBuf));
     // append <CR><LF> to chunk-data and write
-    buf[res]   = '\r';
-    buf[res+1] = '\n';
-    mustWriteFd(sd, buf, res+2);
+    msg[res]   = '\r';
+    msg[res+1] = '\n';
+    mustWriteFd(sd, msg, res+2);
+    msg = buf;
+    totSent += res;
+/*unsigned char *x = msg+(res-8);
+MJP(2);verbose(2,"print crc\n");
+printf("bufsize=%d res=%d CRC=[%x.%x.%x.%x] ISIZE=[%x.%x.%x.%x]\n", CHUNK, res, x[0], x[1], x[2],x[3],x[4],x[5],x[6],x[7]);*/
+    if (progress)
+	(*progress)(time(NULL) - start, totSent, inFileSize);
     }
-// write the final zero chunk and terminator bytes
 mustWriteFd(sd, "0\r\n\r\n", 5);
 if (res != 0)
-    errAbort("gzread error [%d] [%s]\n", res, gzerror(f, &res));
-if ( (res = gzclose(f)) )
-    errAbort("gzclose error [%d] [%s]\n", res, gzerror(f, &res));
-}
-
-
-void progressMeter(int elapsed, long soFar, long total)
-{
-elapsed = max(elapsed,1);
-if (total)
-    printf("%9ldkb/s %3ld%% %ds\r", soFar/1024/elapsed, soFar*100/total, elapsed);
-else
-    printf("%9ldkb/s %12ldkb %ds\r", soFar/1024/elapsed, soFar/1024, elapsed);
+    errnoAbort("Read error in file [%s]\n", inFile);
+carefulClose(&f);
+if (progress)
+    printf("\n");
 }
 
 
@@ -293,10 +347,10 @@ void netWriteFileChunked(int sd, char *inFile, long inFileSize, void (*progress)
 FILE *f;
 size_t res;
 long totSent = 0;
+time_t start = time(NULL);
 unsigned char buf[CHUNK];
 char tmpBuf[1024];
 f = mustOpen(inFile, "rb");
-time_t start = time(NULL);
 /* compress until end of file */
 // write the rest of the compressed file chunk by chunk
 // leave space in buf for the <CR><LF> chunk-data terminator
@@ -489,11 +543,30 @@ return dyStringCannibalize(&data);
 }
 
 
+boolean check100Continue(struct lineFile *lf)
+{
+char *msg = "";
+struct hashEl *el;
+struct hash *hHeader = newHash(0);
+boolean ok = readHttpResponseHeaders(lf, hHeader);
+if ( !strstrNoCase( (char *)hashMustFindVal(hHeader, "STATUS"), "100 Continue") )
+    {
+    if ( (el = hashLookupUpperCase(hHeader, "TRANSFER-ENCODING")) && sameString((char *)el->val, "chunked") )
+	msg = readChunked(lf);
+    else if ( (el = hashLookupUpperCase(hHeader, "Content-Length")) )
+	msg = readContentLength(lf, sqlUnsigned((char *)el->val));
+    errAbort("Error: %s\n%s\n", (char *)hashFindVal(hHeader, "STATUS"), msg);
+    }
+freeHashAndVals(&hHeader);
+return ok;
+}
+
+
 int main(int argc, char *argv[])
 {
 struct netParsedUrl *npu = NULL;
 int sd;
-boolean isGz = FALSE, sendUncompressed = FALSE, ok;
+boolean isGz = FALSE, sendUncompressed = FALSE;
 char *method, *track, *project, *pi, *lab, *datatype, *variables, 
     *view, *inputfile, *type, *genome;
 int rep;
@@ -534,17 +607,17 @@ track = encodeTrackName(project, lab, datatype, view, rep, variables);
 
 if ( (inputSize = fileSize(inputfile)) == -1)
     errAbort("File [%s] does not exist\n", inputfile);
-
 if (endsWith(inputfile, "gz"))
-    {
     isGz = TRUE;
-    MJP(2);verbose(2,"gzip file %s\n", inputfile);
-    }
+if (isGz && sendUncompressed)
+    errAbort("Option -sendUncompressed does not work with compressed 'gz' input files\n");
+
 ///////////////
 // VALIDATE FILE HERE
 ///////////////
 if (!npu)
     exit(0);
+
 ///////////////
 // Send the file
 buildUrl(npu->file, sizeof(npu->file), project, pi, lab, datatype, view, variables, rep, 
@@ -559,10 +632,16 @@ if (isGz)
     MJP(2);verbose(2,"done netConnect(%s,%s) -> [%d]\n",npu->host, npu->port, sd );
     lf = lineFileAttach(npu->file, FALSE, sd);
     MJP(2);verbose(2,"send headers (gzip)\n");
-    netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, 
-	"Content-Encoding: gzip\r\nContent-Type: text/plain\r\n");
+    netHttpSendHeaders(sd, method, TRUE, 0, npu, FALSE, "Content-Type: text/plain\r\n");
+    check100Continue(lf);
+    printf("Sending %ldkb file %s\n", inputSize/1024, inputfile);
+    lineFileClose(&lf);
+    // full request can proceed
+    sd = netMustConnect(npu->host, atoi(npu->port));
+    lf = lineFileAttach(npu->file, FALSE, sd);
+    netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, "Content-Encoding: gzip\r\nContent-Type: text/plain\r\n");
     MJP(2);verbose(2,"netWriteGzFileChunked(%s)\n", inputfile);
-    netWriteGzFileChunked(sd, inputfile);
+    netWriteGzFileChunked(sd, inputfile, inputSize, progressMeter);
     }
 else
     {
@@ -571,18 +650,7 @@ else
 	sd = netMustConnect(npu->host, atoi(npu->port));
 	lf = lineFileAttach(npu->file, FALSE, sd);
 	netHttpSendHeaders(sd, method, TRUE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
-	hHeader = newHash(0);
-	ok = readHttpResponseHeaders(lf, hHeader);
-	if ( !strstrNoCase( (char *)hashMustFindVal(hHeader, "STATUS"), "100 Continue") )
-	    {
-	    struct hashEl *el;
-	    char *msg = "";
-	    if ( (el = hashLookupUpperCase(hHeader, "TRANSFER-ENCODING")) && sameString((char *)el->val, "chunked") )
-		msg = readChunked(lf);
-	    else if ( (el = hashLookupUpperCase(hHeader, "Content-Length")) )
-		msg = readContentLength(lf, sqlUnsigned((char *)el->val));
-	    errAbort("Error: %s\n%s\n", (char *)hashFindVal(hHeader, "STATUS"), msg);
-	    }
+	check100Continue(lf);
 	printf("Sending %ldkb file %s\n", inputSize/1024, inputfile);
 	lineFileClose(&lf);
 	// full request can proceed
@@ -594,12 +662,18 @@ else
     else
 	{
 	sd = netMustConnect(npu->host, atoi(npu->port));
-	MJP(2);verbose(2,"done netConnect(%s,%s) -> [%d]\n",npu->host, npu->port, sd );
 	lf = lineFileAttach(npu->file, FALSE, sd);
 	MJP(2);verbose(2,"send headers (send compressed)\n");
-	netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
+	netHttpSendHeaders(sd, method, TRUE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
+	check100Continue(lf);
+	printf("Sending %ldkb file %s\n", inputSize/1024, inputfile);
+	lineFileClose(&lf);
+	// full request can proceed
+	sd = netMustConnect(npu->host, atoi(npu->port));
+	lf = lineFileAttach(npu->file, FALSE, sd);
 	MJP(2);verbose(2,"netWriteDeflatedFileChunked(%s)\n", inputfile);
-	//netWriteDeflatedFileChunked(sd, inputfile);
+	netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
+	//netWriteDeflatedFileChunked(sd, inputfile, inputSize, progressMeter);
 	}
     }
 // get the headers
@@ -611,7 +685,8 @@ if (!readHttpResponseHeaders(lf, hHeader))
     errnoAbort("no blank line after headers\n");
 MJP(2);verbose(2,"hashLookupUpperCase(hHeader, Content-Type)\n");
 struct hashEl *el = hashLookupUpperCase(hHeader, "Content-Type");
-if ( !el || !(sameOk(el->val,"text/plain") || sameOk(el->val,"application/json")) )
+if ( !el || !(sameOk(el->val,"text/plain") || sameOk(el->val,"application/json")
+      || startsWith("text/html", el->val) ) )
     errAbort("Unexpected Content-Type [%s] inside request body\n", (char *)el->val);
 MJP(2);verbose(2,"hashLookupUpperCase(hHeader, Transfer-Encoding)\n");
 char *msg = "";
