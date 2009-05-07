@@ -221,7 +221,7 @@
 #include "lsSnpPdbChimera.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1535 2009/05/07 00:07:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1536 2009/05/07 18:05:52 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5995,9 +5995,15 @@ struct ctgPos2 *ctg2 = NULL;
 int cloneCount;
 struct contigAcc contigAcc;
 
+char * ncbiTerm = cgiEncode(ctgName);
+safef(query, sizeof(query), "%s%s", NUCCORE_SEARCH, ncbiTerm);
+
 genericHeader(tdb, ctgName);
-printf("<B>Name:</B> %s<BR>\n", ctgName);
-sprintf(query, "select * from %s where contig = '%s'", track, ctgName);
+printf("<B>Name:</B>&nbsp;<A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n",
+	query, ctgName);
+freeMem(ncbiTerm);
+safef(query, sizeof(query), "select * from %s where contig = '%s'",
+	track, ctgName);
 selectOneRow(conn, track, query, &sr, &row);
 
 if (sameString("ctgPos2", track))
