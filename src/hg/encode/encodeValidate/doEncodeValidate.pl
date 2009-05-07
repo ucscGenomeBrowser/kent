@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.180 2009/05/01 06:20:28 aamp Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.181 2009/05/07 19:46:05 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1114,7 +1114,7 @@ $opt_sendEmail = 0 if (!defined $opt_sendEmail);
 if($opt_justFileDb) {
    $opt_skipAll = $opt_quick = $opt_allowReloads =1;
 }
-$quickOpt = " -quick " if defined ($opt_quick);
+$quickOpt = " -quick=100 " if defined ($opt_quick);  # use validateFiles to validate 100 lines
 
 if($opt_skipAll) {
     $opt_skipAutoCreation = $opt_skipOutput = $opt_skipValidateFiles = 1;
@@ -1463,7 +1463,7 @@ if(!@errors) {
                     # XXXX gzip before saving to disk?
                     my @cmds;
                     my $sortFiles;
-                    if(defined($alignmentLine->{fragLength})) {
+                    if(defined($alignmentLine->{fragLength}) && $alignmentLine->{fragLength} != 0) {
                         push(@cmds, "/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $alignmentLine->{fragLength} $files");
                         $sortFiles = " -";
                         # sorting stdin, so have to sort in mem (and control how much mem we use)
@@ -1774,13 +1774,14 @@ foreach my $ddfLine (@ddfLines) {
         } else {
             print TRACK_RA "    type $type\n";
         }
-        print TRACK_RA sprintf("    dateSubmitted %04d-%02d-%02d\n", 1900 + $year, $mon + 1, $mday);
-        print TRACK_RA sprintf("    dateUnrestricted %04d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
-        print TRACK_RA sprintf("    dataVersion %s\n", $Encode::dataVersion);
+        # Obsolete: now in metadata
+        # print TRACK_RA sprintf("    dateSubmitted %04d-%02d-%02d\n", 1900 + $year, $mon + 1, $mday);
+        # print TRACK_RA sprintf("    dateUnrestricted %04d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
+        # print TRACK_RA sprintf("    dataVersion %s\n", $Encode::dataVersion);
+        # print TRACK_RA $additional;
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
         }
-        print TRACK_RA $additional;
         # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
         print TRACK_RA sprintf("    metadata %s\n", $metadata);
         print TRACK_RA "\n";
