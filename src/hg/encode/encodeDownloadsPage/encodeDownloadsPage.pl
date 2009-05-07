@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.11 2009/04/23 22:09:22 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.12 2009/05/07 00:12:33 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -63,6 +63,12 @@ sub htmlStartPage {
     print OUT_FILE " </HEAD>\n";
     print OUT_FILE " <BODY>\n";
     print OUT_FILE "<IMG SRC=\"/icons/back.gif\" ALT=\"[DIR]\"> <A HREF=\"../\">Parent Directory</A><BR>\n\n";
+# The following doesn't do any good because we want to sort, not drag and drop!
+#    # my ($second, $minute, $hour, $dayOfMonth, $month, $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime();
+#    my (undef, $minute, $hour, $dayOfMonth, undef, undef, undef, $dayOfYear, undef) = localtime();
+#    print OUT_FILE "<script type='text/javascript' src='../js/jquery.js?v=" . $dayOfYear . $dayOfMonth . $hour . $minute . "'></script>\n";
+#    print OUT_FILE "<noscript><b>Your browser does not support JavaScript so some functionality may be missing!</b></noscript>\n";
+#    print OUT_FILE "<script type='text/javascript' src='../js/jquery.tablednd.js?v=" . $dayOfYear . $dayOfMonth . $hour . $minute . "'></script>\n";
 
     my $hasPreamble = 0;
     if($preamble && length($preamble) > 0) { # TODO check that prolog exists
@@ -85,6 +91,54 @@ sub htmlEndPage {
 
     print OUT_FILE "\n<HR>\n";
     print OUT_FILE "</BODY></HTML>\n";
+}
+
+sub cmpRows {
+# Compares the sortable fields of a pair of rows
+    my ($aSortables,undef) = split(/\|/,$a,2);
+    my ($bSortables,undef) = split(/\|/,$b,2);
+    my @As = split(/ /,$aSortables);
+    my @Bs = split(/ /,$bSortables);
+    my $ret = 0;
+    my $ix=0;
+    while($ret == 0 && $As[$ix] && $Bs[$ix]) {
+        $ret = ( $As[$ix] cmp $Bs[$ix] );
+        $ix++;
+    }
+    return $ret;
+}
+
+sub sortAndPrintHtmlTableRows {
+    local *OUT_FILE = shift;
+    my @rows = sort cmpRows @_;
+    while(my $line = shift @rows) {
+        my ( undef,$row ) = split(/\|/, $line,2);
+        print OUT_FILE $row;
+    }
+}
+
+# prints a row closing of an html table
+sub sortableHtmlRow {
+# returns a table row ready to print but prepended by sortable columns
+    my ($sortablesRef,$file,$size,$date,$releaseDate,$metaData) = @_;
+
+    my @sortables  = @{$sortablesRef};
+    my $row =join(" ", @sortables);
+    $row .= "|";
+
+    if($releaseDate && length($releaseDate) > 0) {
+        $row .= "<TR valign='top'><TD align='left'>&nbsp;&nbsp;$releaseDate";
+    } else {
+        $row .= "<TR valign='top'><TD align='left'>&nbsp;";
+    }
+    $row .= "<TD><A type='application/zip' target='_blank' HREF=\"$file\">$file</A>";
+    $row .= "<TD align='right'>&nbsp;&nbsp;$size<TD>&nbsp;&nbsp;$date&nbsp;&nbsp;";
+    if($metaData && length($metaData) > 0) {
+        $row .= "<TD nowrap>$metaData";
+        # Find cell,dataType,antibody,lab,type,subId
+        # Alternative would be to package up all of the javascript sort code and then make individual columns for sortable metadata
+    }
+    $row .= "</TR>\n";
 }
 
 sub htmlTableRow {
@@ -141,7 +195,7 @@ sub metadataLineToArrays {
 }
 
 sub metadataArraysRemoveHash {
-# Removes members of has from metadata Arrays
+# Removes members of hash from metadata Arrays
     my ($tagsRef,$valsRef,$removeRef) = @_;
     my @tags = @{$tagsRef};
     my @vals = @{$valsRef};
@@ -162,8 +216,72 @@ sub metadataArraysRemoveHash {
     return ( \@tagsOk, \@valsOk );
 }
 
+sub metadataArraysMoveValuesToFront {
+# Removes members of hash from metadata Arrays
+    my ($tagsRef,$valsRef,$fieldsRef) = @_;
+    my @tags = @{$tagsRef};
+    my @vals = @{$valsRef};
+    my @fields = @{$fieldsRef};
+    my %fldsHash;
+    my @labels;
+    my @values;
+
+    my $ix=0;
+    while($fields[$ix]) {
+        my $tix=0;
+        while($tags[$tix]) {
+            if($tags[$tix] eq $fields[$ix]) {
+                push( @labels, $tags[$tix]);
+                push( @values, $vals[$tix]);
+            }
+            $tix++;
+        }
+        $fldsHash{$fields[$ix++]} = $ix;
+    }
+    ( $tagsRef, $valsRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%fldsHash );
+    @tags = @{$tagsRef};
+    @vals = @{$valsRef};
+    push(@labels,@tags);
+    push(@values,@vals);
+    return ( \@labels, \@values );
+}
+
+sub sortablesSet {
+# Joins metadata tags and vals arrays into single array of tag=val
+    my ($sortablesRef,$fieldsRef,$tag,$val) = @_;
+    my @sortables  = @{$sortablesRef};
+    my @sortFields = @{$fieldsRef};
+    my $six = 0; # keep order
+    while($sortFields[$six]) {
+        if($tag eq $sortFields[$six]) {
+            if($val && $val ne "") {
+                $sortables[$six] = $val;
+            } else {
+                $sortables[$six] = "~";  # must maintain field order during split on " "
+            }
+        }
+        $six++;
+    }
+    return @sortables;
+}
+
+sub sortablesSetFromMetadataArrays {
+# Joins metadata tags and vals arrays into single array of tag=val
+    my ($sortablesRef,$fieldsRef,$tagsRef,$valsRef) = @_;
+    my @sortables  = @{$sortablesRef};
+    #my @sortFields = @{$fieldsRef};
+    my @tags = @{$tagsRef};
+    my @vals = @{$valsRef};
+    my $tix = 0;
+    while($tags[$tix]) {
+        @sortables = sortablesSet( \@sortables,$fieldsRef,$tags[$tix],$vals[$tix]);
+        $tix++;
+    }
+    return @sortables;
+}
+
 sub metadataArraysJoin {
-# Removes members of has from metadata Arrays
+# Joins metadata tags and vals arrays into single array of tag=val
     my ($tagsRef,$valsRef) = @_;
     my @tags = @{$tagsRef};
     my @vals = @{$valsRef};
@@ -228,6 +346,8 @@ if(open(README, "$downloadsDir/README.txt")) {
 # Start the page
 htmlStartPage(*OUT_FILE,$downloadsDir,$indexHtml,$preamble);
 
+my @rows; #  Gather rows to be printed here
+
 print OUT_FILE "<TABLE cellspacing=0>\n";
 print OUT_FILE "<TR valign='bottom'><TH>RESTRICTED<BR>until<TH align='left'>&nbsp;&nbsp;File<TH align='right'>Size<TH>Submitted<TH align='left'>&nbsp;&nbsp;Details</TR>\n";
 
@@ -257,6 +377,9 @@ for my $line (@fileList) {
     my $releaseDate = "";
     my $submitDate = "";
     my %metaData;
+    ### TODO: Developer: set sort order here; sortables must have same number of strings and '~' is lowest val printable
+    my @sortFields = ("cell","dataType","antibody","lab","type","view","level","annotation","replicate","subId");
+    my @sortables  = (   "~",       "~",       "~",  "~",   "~",   "~",    "~",         "~",        "~",    "~");
     my $typePrefix = "";
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
     if($results) {
@@ -299,8 +422,9 @@ for my $line (@fileList) {
                 $submitDate = $pair[1];
             } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
                 $metaData{$pair[0]} = $pair[1];
+                @sortables = sortablesSet( \@sortables,\@sortFields,$pair[0],$pair[1] );
             } elsif($pair[0] eq "metadata") {
-                # Use metadata setting with priority  ### TODO Need to do this for files
+                # Use metadata setting with priority
                 my ( $tagRef, $valRef ) = metadataLineToArrays($pair[1]);
                 my @tags = @{$tagRef};
                 my @vals = @{$valRef};
@@ -313,39 +437,44 @@ for my $line (@fileList) {
                     }
                     $tix++;
                 }
-                my %remove;
-                $remove{project}    = 1;
-                $remove{composite}  = 1;
-                $remove{fileName}    = 1;
-                $remove{dateSubmitted} = 1;
-                $remove{dateUnrestricted}  = 1;
-                ( $tagRef, $valRef ) =  metadataArraysRemoveHash( \@tags,\@vals,\%remove );
+                if($metaData{type}) {
+                    unshift @tags, "type"; # push values onto the front
+                    unshift @vals, $metaData{type};
+                }
+                my %remove; # Don't display these metadata values
+                $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = 1;
+                ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
+                ( $tagRef, $valRef ) = metadataArraysMoveValuesToFront($tagRef, $valRef,\@sortFields);
                 @tags = @{$tagRef};
                 @vals = @{$valRef};
+
+                @sortables = sortablesSetFromMetadataArrays( \@sortables,\@sortFields,\@tags,\@vals );
                 my @metas = metadataArraysJoin( \@tags,\@vals );
+
                 $metaData{metadata} = join("; ", @metas);
             }
         }
-    } else {
+    } else { ### Obsoleted by metadata setting
         if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
             $metaData{type} = $dataType;
         }
 
-        # pull metadata out of README.txt (if any is available).
-        my $active = 0;
-        for my $line (@readme) {
-            chomp $line;
-            if($line =~ /file: $fileName/) {
-                $active = 1;
-            } elsif($active) {
-                if($line =~ /(.*):(.*)/) {
-                    my ($name, $var) = ($1, $2);
-                    $metaData{$name} = $var if($name !~ /restricted/i);
-                } else {
-                    last;
-                }
-            }
-        }
+        ### Obsoleted by metadata setting
+        ### # pull metadata out of README.txt (if any is available).
+        ### my $active = 0;
+        ### for my $line (@readme) {
+        ###     chomp $line;
+        ###     if($line =~ /file: $fileName/) {
+        ###         $active = 1;
+        ###     } elsif($active) {
+        ###         if($line =~ /(.*):(.*)/) {
+        ###             my ($name, $var) = ($1, $2);
+        ###             $metaData{$name} = $var if($name !~ /restricted/i);
+        ###         } else {
+        ###             last;
+        ###         }
+        ###     }
+        ### }
     }
     if(length($submitDate) == 0) {
         $submitDate = $file[3];
@@ -358,10 +487,6 @@ for my $line (@fileList) {
         $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
     }
     my @tmp;
-    if(my $type = $metaData{type}) {
-        push(@tmp, "type: $type");
-        delete $metaData{type};
-    }
     if($metaData{metadata}) {
         if($metaData{parent}) {
             push(@tmp, $metaData{parent});
@@ -369,20 +494,25 @@ for my $line (@fileList) {
         }
         push(@tmp, $metaData{metadata});
     } else {
+        if(my $type = $metaData{type}) {
+            push(@tmp, "type=$type");
+            delete $metaData{type};
+        }
         if(my $cell = $metaData{cell}) {
-            push(@tmp, "cell: $cell");
+            push(@tmp, "cell=$cell");
             delete $metaData{cell};
         }
         if($metaData{parent}) {
             push(@tmp, $metaData{parent});
             delete $metaData{parent};
         }
-        push(@tmp, "$_: " . $metaData{$_}) for (sort keys %metaData);
+        push(@tmp, "$_=" . $metaData{$_}) for (sort keys %metaData);
     }
-    my $metaData = join("; ", @tmp);
-    # Now file contains: [file without path] [tableName] [size] [date] [releaseDate] [fullpath/file]
-    htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$metaData);
+    my $details = join("; ", @tmp);
+    #htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$details);
+    push @rows, sortableHtmlRow(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$details);
 }
+sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
 print OUT_FILE "</TABLE>\n";
 
 htmlEndPage(*OUT_FILE);
