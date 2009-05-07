@@ -10995,8 +10995,8 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     #accession 2008-10-01
     type genePred
     priority 2
-    url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$
-    urlLabel Ensembl Transcript:
+    #url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$ ### can't do this because tRNAs do not have Ensembl ids
+    #urlLabel Ensembl Transcript:
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
 
     track wgEncodeGencodePolyaRel2
