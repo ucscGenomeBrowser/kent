@@ -221,7 +221,7 @@
 #include "lsSnpPdbChimera.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1534 2009/05/06 00:27:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1535 2009/05/07 00:07:51 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2267,6 +2267,16 @@ showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
+if(sameString(tdb->type,"genePred")
+&& startsWith("ENCODE Gencode",tdb->longLabel)
+&& startsWith("ENST",geneName))
+    {
+#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id."
+    puts("<LI>\n");
+    printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
+    puts("</LI>\n");
+    }
+
 if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
     {
     puts("<LI>\n");
@@ -2554,7 +2564,7 @@ char *tableName;
 if (!isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
-    metadataToggle(tdb,"Track details...",FALSE);
+    metadataToggle(tdb,"Table metadata...",FALSE);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
