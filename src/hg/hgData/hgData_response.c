@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.10 2009/04/30 03:45:23 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.11 2009/05/07 07:25:27 mikep Exp $";
 
 char *http_status1xx[] = {"Continue", "Switching Protocols"};
 
@@ -28,6 +28,10 @@ return FALSE;
 }
 
 static void sendEtagHeader(int status, char *message, time_t modified, int expireSecs, char *contentType, char *location)
+// If modified or expireSecs are 0 then dont send headers
+// If contentType is null then dont send header
+// If contentType is "" then send application/json as default
+// If location is null then dont send header
 {
 printf("Status: %d %s\r\n", status, message);
 char *d = gmtimeToHttpStr(time(NULL));
@@ -56,8 +60,18 @@ if (location != NULL)
     printf("Location: %s\r\n", location);
     }
 //printf("Accept-Encoding: compress, gzip\r\n"); // check x-gzip etc.
-printf("Content-Type: %s\r\n", ((contentType) ? (contentType) : "application/json"));
+if (contentType)
+    printf("Content-Type: %s\r\n", (strlen(contentType) > 0 ? (contentType) : "application/json"));
 printf("\r\n");
+}
+
+void send1xxHeader(int status)
+// Send a 1xx header
+{
+int status100 = status - 100;
+if (status100 < 0 || status100 >= sizeof(http_status1xx))
+    errAbort("Invalid 1xx status %d\n", status);
+sendEtagHeader(status, http_status1xx[status100], 0, 0, NULL, NULL);
 }
 
 void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType, char *location)
@@ -82,12 +96,19 @@ if (status300 < 0 || status300 >= sizeof(http_status3xx))
 sendEtagHeader(status, http_status3xx[status300], modified, expireSecs, contentType, NULL);
 }
 
+void okSend100ContinueHeader()
+// Send a 100 Continue header
+{
+send1xxHeader(100);
+}
+
 void okSendHeader(time_t modified, int expireSecs)
 // Send a 200 OK header
 // If modified > 0, set Last-Modified date (and ETag) based on this
 // If expireSecs > 0, set Expires header to now+expireSecs
+// Sends default Content-type
 {
-send2xxHeader(200, modified, expireSecs, NULL, NULL);
+send2xxHeader(200, modified, expireSecs, "", NULL);
 }
 
 static void errClientArgs(int code, char *status, char *format, va_list args)

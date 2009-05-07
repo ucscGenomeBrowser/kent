@@ -18,7 +18,11 @@ $HTTP::Request::Common::DYNAMIC_FILE_UPLOAD = 1;
 
 select STDOUT; $| = 1;
 
-my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18",
+# ?project=wgEncode&pi=Gingeras&lab=Helicos&dataType=RnaSeq&view=Alignments&cell=K562&localization=cytosol
+# &rnaExtract=longNonPolyA
+
+#my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/track/data/hg18/wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongnonpolya",
+my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=trash/testing.bed",
     [
 #  'verbose' => 2,
  'a_file' => [ $FILE ]
@@ -66,6 +70,7 @@ sub transform_upload {
     $request->content_length(-s $filename);
 }
 
+$request->authorization_basic('mikep', 'gringo');
 
 print "starting test\n====================================\n".localtime()."\n====================================\n";
 if ($FILE =~ /.gz/) {

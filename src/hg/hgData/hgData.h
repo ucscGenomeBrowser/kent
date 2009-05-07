@@ -88,24 +88,27 @@
 //#define okSendHeader(format) fprintf(stdout,"Content-type: %s\n\n", ((format) ? (format) : "application/json"))
 
 // Error responses
-#define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request [%s]", (cmd))
-#define ERR_NO_GENOME	errClientStatus(420, "Request error", "Genome required")
-#define ERR_NO_TRACK	errClientStatus(420, "Request error", "Track required")
+#define ERR_INVALID_COMMAND(cmd) 	errClientCode(400, "Invalid request [%s]", (cmd))
+#define ERR_NO_GENOME			errClientStatus(420, "Request error", "Genome required")
+#define ERR_NO_TRACK			errClientStatus(420, "Request error", "Track required")
 #define ERR_NO_GENOME_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to genome database %s", (db))
-#define ERR_NO_GENOMES_FOUND errClientStatus(420, "Request error", "No genome databases found") // maybe this should be a server error
-#define ERR_GENOME_NOT_FOUND(db) errClientStatus(404, "Request error", "Genome %s not found", (db))
+#define ERR_NO_GENOMES_FOUND 		errClientStatus(420, "Request error", "No genome databases found") // maybe this should be a server error
+#define ERR_GENOME_NOT_FOUND(db) 	errClientStatus(404, "Request error", "Genome %s not found", (db))
 #define ERR_NO_CHROM errClientStatus(420, "Request error", "Chrom required")
-#define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in genome %s", (chrom), (db))
-#define ERR_NO_CHROMS_FOUND(db) errClientStatus(420, "Request error", "No chroms found in genome %s", (db))
+#define ERR_CHROM_NOT_FOUND(db,chrom) 	errClientStatus(420, "Request error", "Chrom %s not found in genome %s", (chrom), (db))
+#define ERR_NO_CHROMS_FOUND(db) 	errClientStatus(420, "Request error", "No chroms found in genome %s", (db))
 #define ERR_START_AFTER_END(start, end) errClientStatus(420, "Request error", "Start position %d after end %d", (start), (end))
-#define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in genome %s", (track), (db))
+#define ERR_TRACK_NOT_FOUND(track, db) 	errClientStatus(420, "Request error", "Track %s not found in genome %s", (track), (db))
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in genome %s", (track), (db))
-#define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
-#define ERR_TABLE_INFO_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table information for %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
-#define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s unknown", (format))
+#define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) \
+					errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
+#define ERR_TABLE_INFO_NOT_FOUND(table, chrom, tableRoot, db) \
+					errClientStatus(420, "Request error", "Table information for %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
+#define ERR_BAD_FORMAT(format) 		errClientStatus(420, "Request error", "Format %s unknown", (format))
 #define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in genome %s", (action), (track), (db))
 #define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
-#define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "%s not implemented", (feature))
+#define ERR_NOT_IMPLEMENTED(feature) 	errClientStatus(420, "Request error", "%s not implemented", (feature))
+#define ERR_TRACK_EXISTS(track) 	errClientCode(409, "Track %s already exists", (track))
 
 /* Global Variables */
 char quoteBuf[1024];
@@ -170,6 +173,9 @@ void okSendHeader(time_t modified, int expireSecs);
 // Send a 200 OK header
 // If modified > 0, set Last-Modified date (and ETag) based on this
 // If expireSecs > 0, set Expires header to now+expireSecs
+
+void okSend100ContinueHeader();
+// Send a 100 Continue header
 
 void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType, char *location);
 // Send a 2xx header

@@ -17,3 +17,9 @@ compile: $O
 
 .o:	hgData.h
 
+%.o: %.c
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+
+test: test.o
+	${CC} test.o ${MYLIBS} ${L}
+	mv ${AOUT} test
