@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.60 2008/09/03 19:18:56 markd Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.61 2009/05/08 23:36:25 rhead Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -76,8 +76,8 @@ cgiParagraph(
     "If a pair of assemblies cannot be selected from the pull-down menus,"
     " a direct lift between them is unavailable.&nbsp;&nbsp;"
     "However, a sequential lift may be possible.&nbsp;&nbsp;"
-    "Example: lift from Human, July 2003 to Human, May 2004, and then from Human, "
-    "May 2004 to Human, Mar. 2006 to achieve a lift from hg16 to hg18.&nbsp;&nbsp;"
+    "Example: lift from Mouse, May 2004, to Mouse, Feb. 2006, and then from Mouse, "
+    "Feb. 2006 to Mouse, July 2007 to achieve a lift from mm5 to mm9.&nbsp;&nbsp;"
     "");
 
 /* create HMTL form */
