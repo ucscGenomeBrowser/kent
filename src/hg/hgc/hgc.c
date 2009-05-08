@@ -221,7 +221,7 @@
 #include "lsSnpPdbChimera.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1536 2009/05/07 18:05:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1537 2009/05/08 17:59:36 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20796,8 +20796,18 @@ char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", "kompExtra");
 boolean gotExtra = sqlTableExists(conn, extraTable);
 if (gotExtra)
     {
+    char mgiId[256];
     safef(query, sizeof(query), "select alias from %s where name = '%s'",
 	  extraTable, item);
+    sqlQuickQuery(conn, query, mgiId, sizeof(mgiId));
+    char *ptr = strchr(mgiId, ',');
+    if (!startsWith("MGI:", mgiId) || ptr == NULL)
+	errAbort("Where is the MGI ID?: '%s'", mgiId);
+    else
+	*ptr = '\0';
+    // Use the MGI ID to show all centers that are working on this gene:
+    safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%%'",
+	  extraTable, mgiId);
     sr = sqlGetResult(conn, query);
     char lastMgiId[16];
     lastMgiId[0] = '\0';
@@ -20805,7 +20815,7 @@ if (gotExtra)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *words[3];
-	int wordCount = chopCommas(row[0], words);
+	int wordCount = chopCommas(row[1], words);
 	if (wordCount >= 3)
 	    {
 	    char *mgiId = words[0], *center = words[1], *status = words[2];
@@ -20819,6 +20829,9 @@ if (gotExtra)
 		safecpy(lastMgiId, sizeof(lastMgiId), mgiId);
 		}
 	    printf("<TR><TD><B>Center: </B>%s</TD>\n", center);
+	    ptr = strrchr(row[0], '_');
+	    if (ptr != NULL)
+		printf("<TD><B>Design ID: </B>%s</TD>\n", ptr+1);
 	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
 	    }
 	}
