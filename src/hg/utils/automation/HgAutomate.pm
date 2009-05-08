@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.24 2009/03/13 22:27:12 hiram Exp $
+# $Id: HgAutomate.pm,v 1.25 2009/05/08 22:57:01 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -58,6 +58,9 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
 	  'hostCount' => 32, },
+      'encodek' =>
+        { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 16,
+	  'hostCount' => 48, },
 #      'kk9' => # Guessing here since the machines are down:
 #        { 'enabled' => 0, 'gigaHz' => 1.5, 'ram' => 2,
 #	  'hostCount' => 100, },
@@ -73,11 +76,12 @@ my @allClusters = (keys %cluster);
       'hive' =>
         { root => '/hive/data/genomes', clusterLocality => 0.3,
 	  distrHost => ['pk', 'swarm'], distrCommand => '',
-	  inputFor => ['pk', 'memk', 'swarm'], outputFor => ['pk', 'memk', 'swarm'], },
-      'san' =>
-        { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
-	  distrHost => ['pk'], distrCommand => '',
-	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
+	  inputFor => ['pk', 'memk', 'encodek', 'swarm'],
+	  outputFor => ['pk', 'memk', 'encodek', 'swarm'], },
+#      'san' =>
+#        { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
+#	  distrHost => ['pk'], distrCommand => '',
+#	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
     );
 
 $defaultDbHost = 'hgwdev';
@@ -211,7 +215,8 @@ sub getWorkhorseLoads {
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
   foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
-	`ssh -x memk parasol list machines | grep idle`) {
+	`ssh -x memk parasol list machines | grep idle`,
+	`ssh -x swarm parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
