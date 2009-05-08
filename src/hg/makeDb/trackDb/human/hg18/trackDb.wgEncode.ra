@@ -7495,7 +7495,7 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg HepG2=HepG2 K562=K562 NB4=NB4
+subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLaIF=HeLa-S3_IFNg HepG2=HepG2 K562=K562 NB4=NB4
 subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NFe2=NF-E2 Pol2=Pol2 Pol3=Pol3 Rad21=Rad21 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 TCF4=TCF4 XRCC4=XRCC4 ZNF263=ZNF263 cFos=c-Fos cJun=c-Jun cMyc=c-Myc yRNAseq=RNA-seq_PolyA zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -7561,7 +7561,18 @@ wgEncode 1
     antibody JunD
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=239 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Jund fileName=wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Jund
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 JunD 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (JunD in GM12878 cells)
+    subGroups view=zRAW factor=JunD cellType=GM12878
+    type wig 1.00 1439.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=JunD type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Jund fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Jund.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Jund
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in GM12878 cells)
@@ -7576,7 +7587,18 @@ wgEncode 1
     antibody JunD
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=239 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Jund fileName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Jund.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Jund
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 JunD 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (JunD in GM12878 cells)
+    subGroups view=zRAW factor=JunD cellType=GM12878
+    type wig 1.00 1970.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=JunD type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Jund fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Jund.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Jund
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 JunD 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in GM12878 cells)
@@ -7644,7 +7666,18 @@ wgEncode 1
     antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=190 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Max fileName=wgEncodeYaleChIPseqSignalGm12878Max.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 Max 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Max in GM12878 cells)
+    subGroups view=zRAW factor=Max cellType=GM12878
+    type wig 1.00 2293.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Max type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-01-09 dateRegenerated=2009-05-08 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Max fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Max.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Max
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
@@ -7659,7 +7692,18 @@ wgEncode 1
     antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Max type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=190 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Max fileName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Max.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 Max 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Max in GM12878 cells)
+    subGroups view=zRAW factor=Max cellType=GM12878
+    type wig 1.00 2048.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Max type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-01-09 dateRegenerated=2009-05-08 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Max fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Max.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Max
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 Max 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
@@ -7781,7 +7825,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol3 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol3 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Pol3 in GM12878 cells)
     subGroups view=zRAW factor=Pol3 cellType=GM12878
     type wig 1.00 835.00
     color 153,38,0
@@ -7791,7 +7835,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol3 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol3 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Pol3 in GM12878 cells)
     subGroups view=zRAW factor=Pol3 cellType=GM12878
     type wig 1.00 939.00
     color 153,38,0
@@ -7850,7 +7894,18 @@ wgEncode 1
     antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=94 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalGm12878Cfos fileName=wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Cfos
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 c-Fos 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
+    subGroups view=zRAW factor=cFos cellType=GM12878
+    type wig 1.00 1507.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=329 dateSubmitted=2008-11-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Cfos fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Gm12878Cfos.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
@@ -7865,7 +7920,18 @@ wgEncode 1
     antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=94 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos fileName=wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Cfos
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 c-Fos 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
+    subGroups view=zRAW factor=cFos cellType=GM12878
+    type wig 1.00 1828.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=329 dateSubmitted=2008-11-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Cfos fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Gm12878Cfos.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
@@ -7880,7 +7946,18 @@ wgEncode 1
     antibody c-Fos
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=94 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos fileName=wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Gm12878Cfos
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel GM12878 c-Fos 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
+    subGroups view=zRAW factor=cFos cellType=GM12878
+    type wig 1.00 1740.00
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=329 dateSubmitted=2008-11-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-08-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Gm12878Cfos fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Gm12878Cfos.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel GM128 c-Fos 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
@@ -7990,7 +8067,18 @@ wgEncode 1
     antibody TCF4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHct116Tcf4 fileName=wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Hct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HCT-116 TCF4 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
+    subGroups view=zRAW factor=TCF4 cellType=HCT116
+    type wig 1.00 3367.00
+    color 0,55,219
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2010-02-07 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Hct116Tcf4 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Hct116Tcf4.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
@@ -8005,7 +8093,18 @@ wgEncode 1
     antibody TCF4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4 fileName=wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Hct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HCT-116 TCF4 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
+    subGroups view=zRAW factor=TCF4 cellType=HCT116
+    type wig 1.00 1533.00
+    color 0,55,219
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2010-02-07 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Hct116Tcf4 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Hct116Tcf4.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 TCF4 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
@@ -8047,7 +8146,18 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=224 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHct116Input fileName=wgEncodeYaleChIPseqSignalHct116Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalHct116Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HCT116 Input Raw
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal (Input in HCT-116 cells)
+    subGroups view=zRAW factor=zCTRL cellType=HCT116
+    type wig 1.00 3439.00
+    color 0,55,219
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=Input type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=330 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalHct116Input fileName=wgEncodeYaleChIPseqRel2RawSignalHct116Input.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalHct116Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HCT-116 cells)
@@ -8115,7 +8225,18 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=192 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHek293Pol2 fileName=wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Hek293Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HEK293 Pol2 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
+    subGroups view=zRAW factor=Pol2 cellType=HEK293b
+    type wig 1.00 1982.00
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Hek293Pol2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Hek293Pol2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
@@ -8130,7 +8251,18 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Pol2 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=192 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Hek293Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HEK293 Pol2 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
+    subGroups view=zRAW factor=Pol2 cellType=HEK293b
+    type wig 1.00 1221.00
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Hek293Pol2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Hek293Pol2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
@@ -8145,7 +8277,18 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Pol2 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=192 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Hek293Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HEK293 Pol2 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
+    subGroups view=zRAW factor=Pol2 cellType=HEK293b
+    type wig 1.00 1913.00
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Hek293Pol2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Hek293Pol2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
@@ -8187,7 +8330,18 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=191 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHek293Input fileName=wgEncodeYaleChIPseqSignalHek293Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalHek293Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HEK293 Input Raw
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal (Input in HEK293 cells)
+    subGroups view=zRAW factor=zCTRL cellType=HEK293b
+    type wig 1.00 4758.00
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Input type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=330 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalHek293Input fileName=wgEncodeYaleChIPseqRel2RawSignalHek293Input.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalHek293Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HEK293 cells)
@@ -8226,7 +8380,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Max 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (Max in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Max in HeLa-S3 cells)
     subGroups view=zRAW factor=Max cellType=HeLa
     type wig 1.00 2286.00
     color 133,0,173
@@ -8236,7 +8390,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Max 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (Max in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Max in HeLa-S3 cells)
     subGroups view=zRAW factor=Max cellType=HeLa
     type wig 1.00 2626.00
     color 133,0,173
@@ -8369,7 +8523,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Fos 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Fos in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 1333.00
     color 0,119,158
@@ -8379,7 +8533,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Fos 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Fos in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 2081.00
     color 0,119,158
@@ -8409,7 +8563,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Myc 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1236.00
     color 0,119,158
@@ -8419,7 +8573,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Myc 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1677.00
     color 0,119,158
@@ -8500,7 +8654,18 @@ wgEncode 1
     antibody Large_Fragment
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Largefragment fileName=wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Large_Fragment 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Large_Fragment in HeLa-S3 cells)
+    subGroups view=zRAW factor=zLarge cellType=HeLa
+    type wig 1.00 2899.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Frag Control in HeLa)
@@ -8515,7 +8680,18 @@ wgEncode 1
     antibody Large_Fragment
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Large_Fragment 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Large_Fragment in HeLa-S3 cells)
+    subGroups view=zRAW factor=zLarge cellType=HeLa
+    type wig 1.00 3007.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Frag Control in HeLa)
@@ -8545,7 +8721,18 @@ wgEncode 1
     antibody MNase
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mnase fileName=wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mnase
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 MNase 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (MNase in HeLa-S3 cells)
+    subGroups view=zRAW factor=zMNase cellType=HeLa
+    type wig 1.00 6215.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mnase fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mnase.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (MNase Control in HeLa)
@@ -8560,7 +8747,18 @@ wgEncode 1
     antibody MNase
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mnase
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 MNase 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (MNase in HeLa-S3 cells)
+    subGroups view=zRAW factor=zMNase cellType=HeLa
+    type wig 1.00 7693.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mnase fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mnase.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (MNase Control in HeLa)
@@ -8604,7 +8802,18 @@ wgEncode 1
     antibody Mouse_IgG
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mouseigg fileName=wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Mouse_IgG 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Mouse_IgG in HeLa-S3 cells)
+    subGroups view=zRAW factor=zMouseIG cellType=HeLa
+    type wig 1.00 2816.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (mIgG Controlin HeLa)
@@ -8619,7 +8828,18 @@ wgEncode 1
     antibody Mouse_IgG
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Mouse_IgG 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Mouse_IgG in HeLa-S3 cells)
+    subGroups view=zRAW factor=zMouseIG cellType=HeLa
+    type wig 1.00 3901.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2010-02-07 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (mIgG Control in HeLa)
@@ -8649,7 +8869,18 @@ wgEncode 1
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Nakeddna fileName=wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Nakeddna
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Naked_DNA 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Naked_DNA in HeLa-S3 cells)
+    subGroups view=zRAW factor=zNaked cellType=HeLa
+    type wig 1.00 4017.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Nakeddna fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Nakeddna.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked DNA, HeLa cells)
@@ -8664,7 +8895,18 @@ wgEncode 1
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Nakeddna
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Naked_DNA 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Naked_DNA in HeLa-S3 cells)
+    subGroups view=zRAW factor=zNaked cellType=HeLa
+    type wig 1.00 2497.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Nakeddna fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Nakeddna.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked DNA, HeLa cells)
@@ -8679,7 +8921,18 @@ wgEncode 1
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Helas3Nakeddna
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 Naked_DNA 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Naked_DNA in HeLa-S3 cells)
+    subGroups view=zRAW factor=zNaked cellType=HeLa
+    type wig 1.00 2191.00
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Helas3Nakeddna fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Helas3Nakeddna.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked DNA, HeLa cells)
@@ -8698,7 +8951,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in HeLa_IFN cells)
-    subGroups view=Peaks factor=STAT1 cellType=HeLa-IF
+    subGroups view=Peaks factor=STAT1 cellType=HeLaIF
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
@@ -8713,7 +8966,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in HeLa_IFN cells)
-    subGroups view=Signal factor=STAT1 cellType=HeLa-IF
+    subGroups view=Signal factor=STAT1 cellType=HeLaIF
     type wig 0.00 20910.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
@@ -8729,7 +8982,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (STAT1, HeLa_IFN cells)
-    subGroups view=zRAW factor=STAT1 cellType=HeLa-IF
+    subGroups view=zRAW factor=STAT1 cellType=HeLaIF
     type wig 1.00 14648.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
@@ -8745,7 +8998,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (STAT1, HeLa_IFN cells)
-    subGroups view=zRAW factor=STAT1 cellType=HeLa-IF
+    subGroups view=zRAW factor=STAT1 cellType=HeLaIF
     type wig 1.00 6262.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
@@ -8762,7 +9015,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
-    subGroups view=Signal factor=zCTRL cellType=HeLa-IF
+    subGroups view=Signal factor=zCTRL cellType=HeLaIF
     type bedGraph 4
     color 0,119,158
     accession GSE12782
@@ -8774,7 +9027,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
-    subGroups view=Signal factor=zCTRL cellType=HeLa-IF
+    subGroups view=Signal factor=zCTRL cellType=HeLaIF
     type wig 0.00 11690.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-29
@@ -8790,7 +9043,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Input Rw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HeLa_IFN cells)
-    subGroups view=zRAW factor=zCTRL cellType=HeLa-IF
+    subGroups view=zRAW factor=zCTRL cellType=HeLaIF
     type wig 1.00 11690.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-29
@@ -8831,7 +9084,18 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Pol2 fileName=wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Pol2 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Pol2 in HepG2 cells)
+    subGroups view=zRAW factor=Pol2 cellType=HepG2
+    type wig 1.00 418.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Pol2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Pol2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HepG2 cells)
@@ -8846,7 +9110,18 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Pol2 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Pol2 in HepG2 cells)
+    subGroups view=zRAW factor=Pol2 cellType=HepG2
+    type wig 1.00 1067.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Pol2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Pol2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HepG2 cells)
@@ -8861,7 +9136,18 @@ wgEncode 1
     antibody Pol2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Pol2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Pol2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Pol2 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Pol2 in HepG2 cells)
+    subGroups view=zRAW factor=Pol2 cellType=HepG2
+    type wig 1.00 1454.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Pol2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Pol2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Pol2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HepG2 cells)
@@ -8905,7 +9191,18 @@ wgEncode 1
     antibody SREBP1A
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1a fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp1a
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 SREBP1A 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (SREBP1A in HepG2 cells)
+    subGroups view=zRAW factor=SREBP1A cellType=HepG2
+    type wig 1.00 1394.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp1a fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp1a.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP1A in HepG2 cells)
@@ -8920,7 +9217,18 @@ wgEncode 1
     antibody SREBP1A
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a fileName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp1a.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Srebp1a
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 SREBP1A 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (SREBP1A in HepG2 cells)
+    subGroups view=zRAW factor=SREBP1A cellType=HepG2
+    type wig 1.00 2321.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Srebp1a fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Srebp1a.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp1a
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP1A in HepG2 cells)
@@ -8935,7 +9243,18 @@ wgEncode 1
     antibody SREBP1A
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp1a fileName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp1a.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Srebp1a
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 SREBP1A 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (SREBP1A in HepG2 cells)
+    subGroups view=zRAW factor=SREBP1A cellType=HepG2
+    type wig 1.00 3157.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Srebp1a fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Srebp1a.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp1a
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP1A in HepG2 cells)
@@ -8979,7 +9298,18 @@ wgEncode 1
     antibody SREBP2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 SREBP2 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (SREBP2 in HepG2 cells)
+    subGroups view=zRAW factor=SREBP2 cellType=HepG2
+    type wig 1.00 481.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP2 in HepG2 cells)
@@ -8994,7 +9324,18 @@ wgEncode 1
     antibody SREBP2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2 fileName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Srebp2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Srebp2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 SREBP2 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (SREBP2 in HepG2 cells)
+    subGroups view=zRAW factor=SREBP2 cellType=HepG2
+    type wig 1.00 1256.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Srebp2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Srebp2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP2 in HepG2 cells)
@@ -9009,7 +9350,18 @@ wgEncode 1
     antibody SREBP2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp2 fileName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Srebp2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Srebp2
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 SREBP2 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (SREBP2 in HepG2 cells)
+    subGroups view=zRAW factor=SREBP2 cellType=HepG2
+    type wig 1.00 1432.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Srebp2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Srebp2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Srebp2
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP2 in HepG2 cells)
@@ -9051,7 +9403,18 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=240 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Input fileName=wgEncodeYaleChIPseqSignalHepg2Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Input 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Input in HepG2 cells)
+    subGroups view=zRAW factor=zCTRL cellType=HepG2
+    type wig 1.00 487.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Input fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Input.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1Hepg2Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Input in HepG2 cells)
@@ -9066,7 +9429,18 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=240 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Input fileName=wgEncodeYaleChIPseqRawSignalRep1Hepg2Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Input 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Input in HepG2 cells)
+    subGroups view=zRAW factor=zCTRL cellType=HepG2
+    type wig 1.00 1885.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Input fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Hepg2Input.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2Hepg2Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Input in HepG2 cells)
@@ -9081,7 +9455,18 @@ wgEncode 1
     antibody Input
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=240 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Input fileName=wgEncodeYaleChIPseqRawSignalRep2Hepg2Input.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HepG2 Input 3
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Input in HepG2 cells)
+    subGroups view=zRAW factor=zCTRL cellType=HepG2
+    type wig 1.00 1953.00
+    color 189,0,157
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Input fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Hepg2Input.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep3Hepg2Input
+    release beta
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 3
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Input in HepG2 cells)
@@ -9151,7 +9536,18 @@ wgEncode 1
     antibody GATA-1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=GATA-1 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=227 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Gata1 fileName=wgEncodeYaleChIPseqSignalK562Gata1.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 GATA-1 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (GATA-1 in K562 cells)
+    subGroups view=zRAW factor=GATA1 cellType=K562
+    type wig 1.00 1124.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=GATA-1 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1K562Gata1
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (GATA-1 in K562 cells)
@@ -9166,7 +9562,18 @@ wgEncode 1
     antibody GATA-1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=GATA-1 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=227 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Gata1 fileName=wgEncodeYaleChIPseqRawSignalRep1K562Gata1.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 GATA-1 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (GATA-1 in K562 cells)
+    subGroups view=zRAW factor=GATA1 cellType=K562
+    type wig 1.00 4603.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=GATA-1 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2K562Gata1
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (GATA-1 in K562 cells)
@@ -9234,7 +9641,18 @@ wgEncode 1
     antibody JunD
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Jund fileName=wgEncodeYaleChIPseqSignalK562Jund.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1K562Jund
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 JunD 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (JunD in K562 cells)
+    subGroups view=zRAW factor=JunD cellType=K562
+    type wig 1.00 2922.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE May 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Jund fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Jund.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1K562Jund
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in K562 cells)
@@ -9249,7 +9667,18 @@ wgEncode 1
     antibody JunD
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Jund fileName=wgEncodeYaleChIPseqRawSignalRep1K562Jund.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2K562Jund
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 JunD 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (JunD in K562 cells)
+    subGroups view=zRAW factor=JunD cellType=K562
+    type wig 1.00 3242.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE May 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Jund fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Jund.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2K562Jund
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in K562 cells)
@@ -9317,7 +9746,18 @@ wgEncode 1
     antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Max view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=226 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Max fileName=wgEncodeYaleChIPseqSignalK562Max.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1K562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Max in K562 cells)
+    subGroups view=zRAW factor=Max cellType=K562
+    type wig 1.00 5249.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Max type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Max fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Max.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1K562Max
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in K562 cells)
@@ -9332,7 +9772,18 @@ wgEncode 1
     antibody Max
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Max type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=226 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Max fileName=wgEncodeYaleChIPseqRawSignalRep1K562Max.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2K562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Max in K562 cells)
+    subGroups view=zRAW factor=Max cellType=K562
+    type wig 1.00 3573.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=Max type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Max fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Max.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2K562Max
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in K562 cells)
@@ -9400,7 +9851,18 @@ wgEncode 1
     antibody NF-E2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=NF-E2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=189 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Nfe2 fileName=wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1K562Nfe2
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 NF-E2 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (NF-E2 in K562 cells)
+    subGroups view=zRAW factor=NFe2 cellType=K562
+    type wig 1.00 8338.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=NF-E2 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-01-09 dateRegenerated=2009-05-08 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Nfe2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Nfe2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1K562Nfe2
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
@@ -9415,7 +9877,18 @@ wgEncode 1
     antibody NF-E2
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=NF-E2 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=189 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Nfe2 fileName=wgEncodeYaleChIPseqRawSignalRep1K562Nfe2.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2K562Nfe2
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 NF-E2 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (NF-E2 in K562 cells)
+    subGroups view=zRAW factor=NFe2 cellType=K562
+    type wig 1.00 6906.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=NF-E2 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-01-09 dateRegenerated=2009-05-08 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Nfe2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Nfe2.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2K562Nfe2
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
@@ -9537,7 +10010,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (Rad21 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Rad21 in K562 cells)
     subGroups view=zRAW factor=Rad21 cellType=K562
     type wig 1.00 4565.00
     color 46,0,184
@@ -9547,7 +10020,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (Rad21 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Rad21 in K562 cells)
     subGroups view=zRAW factor=Rad21 cellType=K562
     type wig 1.00 4666.00
     color 46,0,184
@@ -9577,7 +10050,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 XRCC4 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 1 (XRCC4 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (XRCC4 in K562 cells)
     subGroups view=zRAW factor=XRCC4 cellType=K562
     type wig 1.00 5645.00
     color 46,0,184
@@ -9587,7 +10060,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 XRCC4 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Replicate 2 (XRCC4 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (XRCC4 in K562 cells)
     subGroups view=zRAW factor=XRCC4 cellType=K562
     type wig 1.00 4628.00
     color 46,0,184
@@ -9646,7 +10119,18 @@ wgEncode 1
     antibody ZNF263
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=ZNF263 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=205 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Znf263 fileName=wgEncodeYaleChIPseqSignalK562Znf263.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 ZNF263 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (ZNF263 in K562 cells)
+    subGroups view=zRAW factor=ZNF263 cellType=K562
+    type wig 1.00 1197.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=ZNF263 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
@@ -9661,7 +10145,18 @@ wgEncode 1
     antibody ZNF263
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=ZNF263 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=205 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Znf263 fileName=wgEncodeYaleChIPseqRawSignalRep1K562Znf263.wig.gz
 
+    track wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 ZNF263 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (ZNF263 in K562 cells)
+    subGroups view=zRAW factor=ZNF263 cellType=K562
+    type wig 1.00 1128.00
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=ZNF263 type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263.wig.gz
+
     track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
+    release beta
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
@@ -9948,7 +10443,7 @@ wgEncode 1
     subGroups view=Signal factor=yRNAseq cellType=K562
     type bedGraph 4
     color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaRawSignalK562
     release alpha
@@ -9956,10 +10451,10 @@ wgEncode 1
     shortLabel K562 RNAseq Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Raw Signal (in K562 cells)
     subGroups view=zRAW factor=yRNAseq cellType=K562
-    type wig 1.00 65499.00
+    type wig 1.00 65508.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig fragLength=200 view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=331 dateSubmitted=2009-03-17 dateRegenerated=2009-05-08 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
 
     track wgEncodeYaleChIPseqSignalK562InputBg
     release alpha
