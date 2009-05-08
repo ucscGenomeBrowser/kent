@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.23 2009/03/20 23:01:23 angie Exp $
+# $Id: makePushQSql.pl,v 1.24 2009/05/08 23:05:22 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -188,7 +188,7 @@ sub getGenbankEntry {
   my @genbankTrackTables = qw(
     refGene xenoRefGene mgcGenes all_mrna chr*_mrna chr*_intronEst
     intronEst chr*_est all_est xenoMrna
-    mgcFullMrna mgcFullStatus
+    mgcFullMrna mgcFullStatus orfeomeGenes
     refFlat refLink refSeqAli refSeqStatus refSeqSummary
     xenoRefFlat xenoRefSeqAli
     );

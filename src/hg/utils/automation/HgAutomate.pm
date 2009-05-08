@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.25 2009/05/08 22:57:01 hiram Exp $
+# $Id: HgAutomate.pm,v 1.26 2009/05/08 23:05:21 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -215,8 +215,8 @@ sub getWorkhorseLoads {
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
   foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
-	`ssh -x memk parasol list machines | grep idle`,
-	`ssh -x swarm parasol list machines | grep idle`) {
+	`ssh -x encodek parasol list machines | grep idle`,
+	`ssh -x memk parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
