@@ -6,7 +6,7 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.10 2009/05/08 16:49:15 hiram Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.11 2009/05/08 17:36:16 hiram Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -76,6 +76,23 @@ if (sqlTableExists(conn, UCSC_TO_ENSEMBL))
 return ensemblName;
 }
 
+static int liftToEnsembl(char *database, char *chrom)
+/* if table ENSEMBL_LIFT exists in the given database, return the
+   offset for this chrom, else return zero */
+{
+int offset = 0;
+struct sqlConnection *conn = hAllocConn(database);
+
+if (sqlTableExists(conn, ENSEMBL_LIFT))
+    {
+    char query[256];
+    safef(query, ArraySize(query), "select offset from %s where chrom='%s'",
+	ENSEMBL_LIFT, chrom);
+    offset = sqlQuickNum(conn,query); // returns 0 for failed query
+    }
+return offset;
+}
+
 struct dyString *ensContigViewUrl(
 char *database, char *ensOrg, char *chrom, int chromSize,
                             int winStart, int winEnd, char *archive)
@@ -85,9 +102,17 @@ char *database, char *ensOrg, char *chrom, int chromSize,
 struct dyString *dy = dyStringNew(0);
 char *chrName;
 char *ensemblName = ucscToEnsembl(database, chrom);
+int ensemblLift = 0;
+int start = winStart;
+int end = winEnd;
 
 if (isNotEmpty(ensemblName))
+    {
     chrName = ensemblName;
+    ensemblLift = liftToEnsembl(database, ensemblName);
+    start += ensemblLift;
+    end += ensemblLift;
+    }
 else if (startsWith("scaffold", chrom))
     chrName = chrom;
 else
@@ -95,14 +120,14 @@ else
 if (sameWord(database,"hg19"))
     dyStringPrintf(dy, 
 	   "http://pre.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
-		    ensOrg, chrName, winStart, winEnd);
+		    ensOrg, chrName, start, end);
 else if (archive)
     dyStringPrintf(dy, 
 	   "http://%s.archive.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
-		    archive, ensOrg, chrName, winStart, winEnd);
+		    archive, ensOrg, chrName, start, end);
 else
     dyStringPrintf(dy, 
-               "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, winStart, winEnd);
+               "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, start, end);
 return dy;
 }
 

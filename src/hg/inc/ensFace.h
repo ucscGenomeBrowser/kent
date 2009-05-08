@@ -14,5 +14,6 @@ char *ensOrgNameFromScientificName(char *scientificName);
 /* Convert from ucsc to Ensembl organism name. */
 
 #define UCSC_TO_ENSEMBL "ucscToEnsembl"
+#define ENSEMBL_LIFT "ensemblLift"
 
 #endif /* ENSFACE_H */
