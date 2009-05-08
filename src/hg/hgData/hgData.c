@@ -25,7 +25,7 @@
 #define AS_FILE_PATH "/cluster/bin/sqlCreate/"
 #define CV_CONFIG_FILE "/cluster/data/encode/pipeline/config/cv.ra"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.32 2009/05/07 23:53:32 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.33 2009/05/08 04:54:49 mikep Exp $";
 
 struct hash *hAsFile = NULL;
 struct hash *hCvRa = NULL;
@@ -227,15 +227,18 @@ if ( (count / BIGBED_LINES_PER_SEC) <= BIGBED_MAX_SECS)
     }
 else
     {
-    MJP(2);verbose(2,"Creating bigbed LATER (%ld lines, avgsize=%.2f, diskSize=%lld)\n", count, totalSize/count, fullSize);
+    MJP(2);verbose(2,"send 202 header: Create bigbed LATER (%ld lines, avgsize=%.2f, diskSize=%lld)\n", count, totalSize/count, fullSize);
     send2xxHeader(202, 0, 0, "", locationUrl);
     printf("Estimated time to complete = %ld minutes\n", 1 + ((count / BIGBED_LINES_PER_SEC) / 60));
     lineFileClose(&lf);
+    MJP(2);verbose(2,"close stdin/stdout\n");
     if (fclose(stdin))
 	errnoAbort("Could not close stdin\n");
     if (fclose(stdout))
 	errnoAbort("Could not close stdout\n");
-    sleep(30);
+    MJP(2);verbose(2,"Close stderr and create bigBed\n");
+    if (fclose(stderr))
+	errnoAbort("Could not close stderr\n");
     bigBedFileCreateDetailed(pbList, count, totalSize/count, track, chromHash, BLOCKSIZE, 
 	ITEMS_PER_SLOT, definedFieldCount, fieldCount, asFileName, as, fullSize, fileName);
     delayedCreate = TRUE;
