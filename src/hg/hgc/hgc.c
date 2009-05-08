@@ -221,7 +221,7 @@
 #include "lsSnpPdbChimera.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1537 2009/05/08 17:59:36 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1538 2009/05/08 20:55:58 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22058,6 +22058,14 @@ else if (sameWord(track, "ncRna"))
 else if (sameWord(track, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
+    }
+else if (sameWord(track, "h1n1b_0506Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0506Seq"))
+    {
+    doH1n1Seq(tdb, item);
     }
 else if (sameWord(track, "h1n1_0504Seq"))
     {
