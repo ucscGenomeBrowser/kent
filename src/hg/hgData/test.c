@@ -20,22 +20,22 @@ void usage()
 errAbort(
   "test - track loader\n"
   "usage:\n"
-  "   test project pi lab datatype variables view inputfile type genome [server]\n"
+  "   test genome inputfile type view project pi lab datatype variables [server]\n"
   "parameters:\n"
-  "    project    : Name of the project, for example:\n"
-  "                 'wgEncode' - Whole genome ENCODE project\n"
-  "    pi         : PI (Principal Investigator, Gingeras, etc)\n"
-  "    lab        : Lab (eg, SUNY, RIKEN, etc)\n"
-  "    datatype   : Project Datatype (eg, RnaSeq, DnaseSeq, etc)\n"
-  "    variables  : Variables (eg, K562,cytosol,longNonPolyA)\n"
-  "    view       : View (eg, Alignments, RawSignal, RawData)\n"
+  "    genome     : Genome this data refers to (eg, hg18)\n"
   "    inputfile  : Name of the source data file which is to be sent\n"
   "                 - must be a single file (not a tar file)\n"
   "                 - must be sorted on (chrom,start) if it is BED type data\n"
   "                 - can be a '.gz' (gzip'ed) file\n"
   "                 - the file will be transmitted in compressed format\n" 
   "    type       : Type of data in the source file (eg, tagAlign, wig, broadPeak)\n"
-  "    genome     : Genome this data refers to (eg, hg18)\n"
+  "    view       : View (eg, Alignments, RawSignal, RawData)\n"
+  "    project    : Name of the project, for example:\n"
+  "                 'wgEncode' - Whole genome ENCODE project\n"
+  "    pi         : PI (Principal Investigator, Gingeras, etc)\n"
+  "    lab        : Lab (eg, SUNY, RIKEN, etc)\n"
+  "    datatype   : Project Datatype (eg, RnaSeq, DnaseSeq, etc)\n"
+  "    variables  : Variables (eg, K562,cytosol,longNonPolyA)\n"
   "    server     : Webserver to send data to. Specify protocol, user, password and \n"
   "                 alternative port (default 80) if required. Format: \n"
   "                   http://[user:password@]hostname[:port]\n"
@@ -368,7 +368,6 @@ do
 	buf[res]   = '\r';
 	buf[res+1] = '\n';
 	buf[res+2] = '0';
-	MJP(2);verbose(2,"chunk mustWriteFd(sd=%d, buf=%s, %d)\n", sd, buf, (int)res+2);
 	mustWriteFd(sd, buf, res+2);
 	totSent += res;
 	if (progress)
@@ -580,15 +579,15 @@ optionInit(&argc, argv, options);
 if (argc < 9 || argc > 10)
     usage();
 MJP(2);verbose(2,"started\n");
-project   = argv[0];
-pi        = argv[1];
-lab       = argv[2];
-datatype  = argv[3];
-variables = argv[4];
-view      = argv[5];
-inputfile = argv[6];
-type      = argv[7];
-genome    = argv[8];
+genome    = argv[0];
+inputfile = argv[1];
+type      = argv[2];
+view      = argv[3];
+project   = argv[4];
+pi        = argv[5];
+lab       = argv[6];
+datatype  = argv[7];
+variables = argv[8];
     MJP(2);verbose(2,"argc=%d\n", argc);
 if (argc == 10)
     {
@@ -651,9 +650,10 @@ else
 	lf = lineFileAttach(npu->file, FALSE, sd);
 	netHttpSendHeaders(sd, method, TRUE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
 	check100Continue(lf);
-	printf("Sending %ldkb file %s\n", inputSize/1024, inputfile);
 	lineFileClose(&lf);
+	close(sd);
 	// full request can proceed
+	printf("Sending %ldkb file %s\n", inputSize/1024, inputfile);
 	sd = netMustConnect(npu->host, atoi(npu->port));
 	lf = lineFileAttach(npu->file, FALSE, sd);
 	netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
