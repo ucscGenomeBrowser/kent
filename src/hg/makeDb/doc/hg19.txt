@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.9 2009/05/06 23:45:51 hiram Exp $";
+#	"$Id: hg19.txt,v 1.10 2009/05/08 22:23:22 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -819,6 +819,78 @@ done
     cd /hive/data/genomes/hg19/bed/gc5Base
     hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 hg19 \
         /cluster/data/hg19/hg19.2bit | gzip -c > hg19.gc5Base.txt.gz
+
+#############################################################################
+# Physical Map Contigs - ctgPos (DONE - 2009-04-23 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/ctgPos
+    cd /hive/data/genomes/hg19/bed/ctgPos
+    cat << '_EOF_' > mkCtgPos.sh
+AGP="/hive/data/genomes/hg19/download/assembled_chromosomes/AGP"
+export AGP
+for F in `(cd ${AGP}; ls chr*.agp | grep -v ".comp.agp")`
+do
+    C=${F/.agp/}
+    grep "^CM" "${AGP}/${F}" | awk '$5 != "N"' | awk '
+{
+printf "%s\t%d\t%s\t%d\t%d\n", $6, $8-$7+1, "'${C}'", $2-1+$7-1, $2-1+$8
+}
+'
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkCtgPos.sh
+    ./mkCtgPos.sh > ctgPos.tab
+
+    cat << '_EOF_' > mkRanCtgPos.sh
+AGP="/hive/data/genomes/hg19/download/unlocalized_scaffolds/AGP"
+export AGP
+for F in `(cd ${AGP}; ls chr*.agp)`
+do
+    C=${F/.unlocalized.scaf.agp/}
+    c=${C/chr/}
+    export C c
+    grep "^GL" "${AGP}/${F}" | awk '$5 != "N"' | awk '
+BEGIN {
+    ctgName=""
+    ctgStart=0
+    ctgEnd=0
+    chrom="'${c}'"
+    ctgNameLower=""
+}
+{
+if (match(ctgName,$1)) {
+    ctgEnd = $3
+} else {
+    if (length(ctgName) > 0) {
+        size=ctgEnd - ctgStart
+printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower, 
+ctgStart, ctgEnd
+    }
+    ctgStart = $2 - 1
+    ctgEnd = $3
+    ctgName = $1
+    ctgNameLower = tolower($1)
+    sub(".1$","",ctgNameLower)
+}
+}
+END {
+size=ctgEnd - ctgStart
+printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower, 
+ctgStart, ctgEnd
+}
+'
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkRanCtgPos.sh
+    ./mkRanCtgPos.sh >> ctgPos.tab
+
+    #	fetch .sql definition from hg18
+    chmod 777 .
+    hgsqldump --all -c --tab=. hg18 ctgPos
+    chmod 775 .
+    hgsql hg19 < ctgPos.sql
+    hgsql -e 'load data local infile "ctgPos.tab" into table ctgPos;' hg19
 
 #############################################################################
 # CLONE ENDS - first step for BACEND/CytoBand tracks
@@ -1799,11 +1871,9 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
 
 ##############################################################################
 # FISH CLONES (WORKING - 2009-04-29 - Hiram)
-#  **** RE-LOAD fishClones after bacEnds update - see below 2007-09-04 ****
-# The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to
-# creating this track  (and why is this ?)
+# The STS Marker and BAC End Pairs tracks must be completed prior to
+# creating this track.  
 
-    ssh kkstore01
     mkdir /hive/data/outside/ncbi/fishClones/fishClones.2009-04/
     cd /hive/data/outside/ncbi/fishClones/fishClones.2009-04/
 
@@ -1816,6 +1886,7 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
         # press Submit - save as
 # /hive/data/outside/ncbi/fishClones/fishClones.2009-04/hbrc.txt
     chmod 664 /hive/data/outside/ncbi/fishClones/fishClones.2009-04/hbrc.txt
+
 #	Unfortunately the format of this hbrc file has changed since
 #	last time.  The columns have been rearranged, and one important
 #	column is missing, the contig information.  So, let's see if we
@@ -1836,15 +1907,29 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
     mkdir /hive/data/genomes/hg19/bed/fishClones
     cd /hive/data/genomes/hg19/bed/fishClones
 
-# Copy previous sts info from fhcrc (take from previous build in future)
-    cp -p /hive/data/genomes/ncbi/fishClones/fishClones.2004-07/fhcrc.sts .
-#	This fhcrc.sts listing doesn't change.  It is merely a listing
-#	of aliases that remain in effect.
+    # Copy previous sts info from fhcrc
+    cp -p /hive/data/genomes/hg18/bed/fishClones/fhcrc.sts .
+    #	This fhcrc.sts listing doesn't change.  It is merely a listing
+    #	of aliases that remain in effect.
 
     #	Create cl_acc_gi_len file form cloneend information:
     grep -v "^#" /hive/data/genomes/hg19/bed/cloneend/all.txt \
-    | awk '{gsub("\.[0-9]*$", "", $2);
+    | awk '{gsub(".[0-9]*$", "", $2);
 	printf "%s\t%s\t%s\t%s\t%s\t%s\n", $1,$2,$3,$4,$5,$8}' > cl_acc_gi_len
+
+    hgsql -N \
+	-e "select chrom,chromStart,chromEnd,contig from ctgPos;" hg19 \
+	| sort -k1,1 -k2,2n > ctgPos.bed
+    hgsql -N \
+-e "select chrom,chromStart,chromEnd,frag,0,strand from gold;" hg19 \
+	| sort -k1,1 -k2,2n > gold.bed
+    hgsql -N \
+-e "select tName,tStart,tEnd,qName,0,strand from all_bacends;" hg19 \
+	| sort -k1,1 -k2,2n > all_bacends.bed
+    hgsql -N \
+-e "select chrom,chromStart,chromEnd,name,score,strand from bacEndPairs;" hg19 \
+	| sort -k1,1 -k2,2n > bacEndPairs.bed
+
 
 
     ssh hgwdev
@@ -1853,8 +1938,8 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
     #	evidently a bad entry in hbrc.fixed where columns of information
     #	are missing for one clone in particular
     time fishClones -verbose=2 -fhcrc=fhcrc.sts -noBin hg19 \
-	/hive/data/genomes/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt \
-	/hive/data/genomes/ncbi/fishClones/fishClones.2006-01/clac.out \
+	/hive/data/outside/ncbi/fishClones/fishClones.2009-04/fixed.hbrc.txt \
+	/hive/data/outside/ncbi/fishClones/fishClones.2009-04/clac.out \
          ./cl_acc_gi_len \
          /hive/data/genomes/hg19/bed/bacends/bacEnds.lifted.psl \
             fishClones
@@ -1881,3 +1966,136 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
 	hg19 fishClones fishClones.bed
     #	Loaded 9461 elements of size 16
 
+##############################################################################
+# UCSC to Ensembl chr name mapping (DONE - 2009-05-08 - Hiram)
+    mkdir /hive/data/genomes/hg19/ensembl
+    cd /hive/data/genomes/hg19/ensembl
+    wget --timestamping \
+	'ftp://ftp.ensembl.org/pub/pre/homo_sapiens/GRCh37/dna/*'
+    #	do not need the repeat masker sequence (although it would be
+    #	interesting to measure to see how it compares)
+    rm -f *.dna_rm.*
+    #	fortunately we have the same sizes as Ensembl for everything
+    #	(except the haplotypes) and the sizes are unique for each sequence
+    #	so we can relate the names via their sizes
+    mkdir /hive/data/genomes/hg19/bed/ucscToEnsembl
+    cd /hive/data/genomes/hg19/bed/ucscToEnsembl
+    #	the toplevel file is a duplicate of everything else
+    ls /hive/data/genomes/hg19/ensembl/*.fa.gz | grep -v toplevel \
+	| while read F
+do
+    zcat "${F}"
+done | faCount stdin > faCount.txt
+
+    cat << '_EOF_' > relateUcscEnsembl.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %ucscChrs;   # key is size, value is UCSC chr name
+
+open (FH,"<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    die "'$line\n'duplicate size in ../chrom.sizes" if (exists($ucscChrs{$size})
+);
+    $ucscChrs{$size} = $chr;
+}
+close (FH);
+
+my %ensemblChrs;        # key is size, value is Ensembl chr name
+
+open (FH,"<faCount.txt") or die "can not read faCount.txt";
+while (my $line = <FH>) {
+    next if ($line =~ m/#/);
+    next if ($line =~ m/total/);
+    chomp $line;
+    my ($chr, $size, $rest) = split('\s+', $line, 3);
+    die "'$line\n'duplicate size in faCount.txt" if (exists($ensemblChrs{$size})
+);
+    $ensemblChrs{$size} = $chr;
+}
+close (FH);
+
+my %usedUcscChrs;
+my %usedEnsemblChrs;
+my %ensemblTranslate; # key is Ensembl name, value is UCSC size
+foreach my $size (keys %ucscChrs) {
+    if (exists($ensemblChrs{$size})) {
+        $usedUcscChrs{$size} = $ucscChrs{$size};
+        $usedEnsemblChrs{$size} = $ensemblChrs{$size};
+        printf "%s\t%s\t%d\n", $ucscChrs{$size}, $ensemblChrs{$size}, $size;
+    } else {
+        my $ucscName = $ucscChrs{$size};
+        my $ensemblName = "unknown";
+        if ($ucscName =~ m/^chr6/) {
+            $ucscName =~ s/_hap.//;
+            $ucscName =~ s/chr6_/chr6_mhc_/;
+            $ensemblName = "HS" . uc($ucscName);
+        } elsif ($ucscName =~ m/^chr17_/ || $ucscName =~ m/^chr4_/) {
+            $ucscName =~ s/_.*/_1/;
+            $ensemblName = "HS" . uc($ucscName);
+        } elsif ($ucscName =~ m/^chrM/) {
+            print "# no translation for chrM\n";
+        } else {
+            die "unknown UCSC chr name: $ucscName";
+        }
+        printf "# ucsc $ucscChrs{$size} -> $ensemblName\n";
+        $ensemblTranslate{$ensemblName} = $size;
+    }
+}
+
+foreach my $size (keys %ensemblChrs) {
+    if (!exists($usedEnsemblChrs{$size})) {
+        my $ensemblName = $ensemblChrs{$size};
+        if (! exists($ensemblTranslate{$ensemblName})) {
+            die "can not translate Ensembl name $ensemblName";
+        } else {
+            my $ucscSize = $ensemblTranslate{$ensemblName};
+            printf "%s\t%s\t%d\t%d\n", $ucscChrs{$ucscSize}, $ensemblChrs{$size}
+, $ucscSize, $size;
+        }
+    }
+}
+
+printf "chrM\tMT\n";
+'_EOF_'
+    # << happy emacs
+    chmod +x relateUcscEnsembl.pl
+
+    ./relateUcscEnsembl.pl  2>&1 | grep -v "^#" \
+	| awk '{printf "%s\t%s\n", $1, $2}' | sort > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(21))
+);
+'_EOF_'
+
+    hgsql hg19 < ucscToEnsembl.sql
+    hgsql hg19 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    awk '{printf "%s\t%d\n", $2, -$1}' ../../jkStuff/ensGene.haplotype.lift \
+	> ensemblLift.tab
+
+    cat << '_EOF_' > ensemblLift.sql
+# UCSC offset to Ensembl coordinates
+CREATE TABLE ensemblLift (
+    chrom varchar(255) not null,      # Ensembl chromosome name
+    offset int unsigned not null,     # offset to add to UCSC position 
+              #Indices
+    PRIMARY KEY(chrom(15))
+);
+'_EOF_'
+
+    hgsql hg19 < ensemblLift.sql
+    hgsql hg19 \
+-e 'LOAD DATA LOCAL INFILE "ensemblLift.tab" INTO TABLE ensemblLift'
+##############################################################################
