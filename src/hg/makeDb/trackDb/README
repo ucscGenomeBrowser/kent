@@ -45,7 +45,7 @@ by using the release field.
 
 THE TRACK FIELD
 
-Each entry in trackDb.ra should start with a track 
+Each entry in trackDb.ra should start with a track
 field:
    track trackName [override]
 
@@ -274,7 +274,12 @@ priority     -    a decimal number            - used to order this track
 chromosomes  -    comma separated list        - only these chroms have data
                                               - for this track, this track is
                                               - not shown on other chroms
-scoreFilterMax -  integer                     - for score column trackUi filter
+scoreFilter        - integer                  - default score filter value for a track
+scoreFilterLimits  - integer:integer          - min:max range that score can take.
+                                              - (default 0:1000.  Single value N implies N:1000)
+scoreFilterByRange - on                       - Filter using both upper and lower bounds.
+                                              - (when used, set default bounds by 'scoreFilter N:M')
+scoreFilterMax     - integer                  - deprecated.  Use scoreFilterLimits.
 noScoreFilter . - to turn off Ui options for bed 5+ tracks, I don't know
 		- what the . is for, but it always appears to be used.
 
@@ -432,6 +437,46 @@ names, but omitting any chr*_ prefix) should not contain any
 underscores.  We use underscores in track table names to find sequence
 name prefixes.
 
+Filter by
+============
+Score
+-----
+There are currently 4 different numerical filters for bed tables with the named fields:
+   score, signalValue, pValue and qValue
+The field 'score' is an integer but the other three are floating point.
+All should be declared with the field name followed by these 3 suffixes:
+   {fieldName}Filter        n[:m]
+   {fieldName}FilterLimit   N:M
+   {fieldName}FilterByRange on
+Examples:
+To filter a track by qValue you might set
+   qValueFilter        0.5
+   qValueFilterLimit   0:300
+which sets up the limits of the filter as between 0 and 300 but offers the user a default value of 0.5.
+Likewise
+   scoreFilter        500:700
+   scoreFilterLimit   200:1000
+   scoreFilterByRange on
+sets up a filter on score with limits of from 200 to 1000, but offers from 500 to 700 as default.
+NOTE: Filtering by range has so far only been tested in the 'score' filter.
+
+Category
+--------
+Using the 'filterBy' setting you can set up a filter by 1 or more categories.
+Categories are simply a list of values that appear in a drop down list box ("DD").  One or more
+of these categories may be selected, to set up the filter.  The setting format:
+   filterBy {field1}:{Title1}=[+]category1a,category1b,...  [{field2}:{Title2}=[+]category2a,category2b,...]...
+Here {field1} must be the name of a field in the table,
+     {title1} is what the user will see as the title of the drop-down list box
+     [+] can be added to say that the table has numerical values (1,2,3...), while words are seen in the DD.
+     category1a,... a comma separated list of values that appear in the DD.
+                    These values are found in the table unless the '+' is used.
+Example:
+     filterBy level:Level=+Validated,Manual,Automatic class:Class=coding,snRNA,...
+This sets up 2 filter by category drop downs.  The first is on the table field 'level'.  If the user selects
+both 'Validated' and 'Manual', then an item must have a 1 or 2 in the level field in order to be seen.
+And if the user also selects 'coding' in the second filter, an item would have to have level 1 or 2 and
+class='coding'.
 
 COMPOSITE TRACKS
 ================
