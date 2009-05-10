@@ -346,19 +346,27 @@ void *slElementFromIx(void *list, int ix);
 int slIxFromElement(void *list, void *el);
 /* Return index of el in list.  Returns -1 if not on list. */
 
-void slSafeAddHead(void *listPt, void *node);
+INLINE void slAddHead(void *listPt, void *node)
 /* Add new node to start of list.
  * Usage:
- *    slSafeAddHead(&list, node);
+ *    slAddHead(&list, node);
  * where list and nodes are both pointers to structure
  * that begin with a next pointer.
  */
+{
+struct slList **ppt = (struct slList **)listPt;
+struct slList *n = (struct slList *)node;
+n->next = *ppt;
+*ppt = n;
+}
 
-/* Add new node to start of list, this macro is faster
- * than slSafeAddHead, but has standard macro restriction
- * on what can be safely passed as arguments. */
-#define slAddHead(listPt, node) \
-    ((node)->next = *(listPt), *(listPt) = (node))
+INLINE void slSafeAddHead(void *listPt, void *node)
+/* Add new node to start of list.  Now that slAddHead is an inline instead of
+ * a macro, this function is obsolete.
+ */
+{
+slAddHead(listPt, node);
+}
 
 void slAddTail(void *listPt, void *node);
 /* Add new node to tail of list.
