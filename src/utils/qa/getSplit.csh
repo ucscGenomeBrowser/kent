@@ -20,7 +20,7 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo "  determines if table is in split format "
   echo "    and returns split name if so."
   echo
-  echo "    usage:  db tablename [hgwdev | hgwbeta]"
+  echo "    usage:  db tablename [hgwdev | hgsqlbeta]"
   echo
   echo "      third argument accepts machine, defaults to hgwdev"
   echo
@@ -37,7 +37,7 @@ endif
 
 # assign command line arguments
 if ( $#argv == 3 ) then
-  if ( $argv[3] == "hgwbeta" ) then
+  if ( $argv[3] == "hgsqlbeta" ) then
     set machine="$argv[3]"
     set host="-h $sqlbeta"
   else
