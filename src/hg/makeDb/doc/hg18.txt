@@ -27327,4 +27327,17 @@ CREATE TABLE ensemblLift (
     hgsql hg18 < ensemblLift.sql
     hgsql hg18 \
 -e 'LOAD DATA LOCAL INFILE "ensemblLift.tab" INTO TABLE ensemblLift'
+
+##############################################################################
+# FOX2 CLUSTERS (DONE 2009-04-08, Andy)
+    cp cluster.combine.bed /hive/data/genomes/hg18/bed/fox2ClipSeq
+## (got the data as an attachment from Gene Yeo)
+    cd /hive/data/genomes/hg18/bed/fox2ClipSeq
+    grep chr cluster.combine.bed | cut -f1-4 | \
+      bedSort stdin fox2ClipClusters.hg17.bed
+    liftOver fox2ClipClusters.hg17.bed \
+      /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+      fox2ClipClusters.bed unmapped.bed
+    hgLoadBed hg18 fox2ClipClusters{,.bed}
+
 ##############################################################################
