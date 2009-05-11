@@ -3114,6 +3114,7 @@ tablesIgnored $hg
     dgv
     eponine
     exaptedRepeats
+    fox2ClipClusters
     fox2ClipSeq
     fox2ClipSeqDensityForwardStrand
     fox2ClipSeqDensityReverseStrand
