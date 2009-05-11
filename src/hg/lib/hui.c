@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.192 2009/05/06 00:24:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.193 2009/05/11 21:56:31 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -44,7 +44,7 @@ static boolean makeNamedDownloadsLink(struct trackDb *tdb,char *name)
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/%s/\" TARGET=ucscDownloads>%s</A></P>\n",
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open dowloads directory in a new window' TARGET=ucscDownloads>%s</A>",
             cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
             trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
             ENCODE_DCC_DOWNLOADS,
@@ -63,7 +63,7 @@ return makeNamedDownloadsLink(tdb,"Downloads");
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
-#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>\n"
+#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
 if (hTableOrSplitExists(db, tdb->tableName))
     {
 	char *tableName  = tdb->tableName;
@@ -72,8 +72,6 @@ if (hTableOrSplitExists(db, tdb->tableName))
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
-    else
-        hint = " title='View table schema'";
 
     if(tdbIsCompositeChild(tdb))
         printf(SCHEMA_LINKED, db, tdb->parent->grp, tdb->parent->tableName,tableName,hint,label);
@@ -84,6 +82,76 @@ if (hTableOrSplitExists(db, tdb->tableName))
     }
 return FALSE;
 }
+
+boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
+/* If metadata exists, create a link that will allow toggling it's display */
+{
+metadata_t *metadata = metadataSettingGet(tdb);
+if(metadata != NULL)
+    {
+    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
+           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
+    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
+    if(showLongLabel)
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
+    for(;ix<metadata->count;ix++)
+        {
+        if(sameString(metadata->tags[ix],"fileName"))
+            {
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
+            makeNamedDownloadsLink(tdb->parent != NULL? tdb->parent :tdb ,metadata->values[ix]);
+            printf("</td></tr>");
+            }
+        else
+            if(!sameString(metadata->tags[ix],"subId")
+                && !sameString(metadata->tags[ix],"composite"))
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
+        }
+    printf("</table>--></div>");
+    metadataFree(&metadata);
+    return TRUE;
+    }
+return FALSE;
+}
+
+void extraUiLinks(char *db,struct trackDb *tdb)
+/* Show downlaods, schema and metadata links where appropriate */
+{
+boolean schemaLink = (isCustomTrack(tdb->tableName) == FALSE)
+                  && (hTableOrSplitExists(db, tdb->tableName));
+boolean metadataLink = (!tdbIsComposite(tdb))
+                  && trackDbSetting(tdb, "metadata");
+boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL);
+boolean moreThanOne = (schemaLink && metadataLink)
+                   || (schemaLink && downloadLink)
+                   || (downloadLink && metadataLink);
+
+printf("<P>");
+if(moreThanOne)
+    printf("<table><tr><td nowrap>View table: ");
+
+if(schemaLink)
+    {
+    makeSchemaLink(db,tdb,(moreThanOne ? "schema":"View table schema"));
+    if(downloadLink || metadataLink)
+        printf(", ");
+    }
+if(downloadLink)
+    {
+    makeNamedDownloadsLink(tdb,(moreThanOne ? "downloads":"Downloads"));
+    if(metadataLink)
+        printf(",");
+    }
+if (metadataLink)
+    metadataToggle(tdb,"metadata", TRUE, TRUE);
+
+if(moreThanOne)
+    printf("</td></tr></table>");
+puts("</P>");
+}
+
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -2791,39 +2859,6 @@ if (date != NULL)
 return date;
 }
 
-boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText)
-/* If metadata exists, create a link that will allow toggling it's display */
-{
-metadata_t *metadata = metadataSettingGet(tdb);
-if(metadata != NULL)
-    {
-    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>\n",
-           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
-    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
-    if(!embeddedInText)
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
-    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
-    int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
-    for(;ix<metadata->count;ix++)
-        {
-        if(sameString(metadata->tags[ix],"fileName"))
-            {
-            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
-            makeNamedDownloadsLink(tdb->parent != NULL? tdb->parent :tdb ,metadata->values[ix]);
-            printf("</td></tr>");
-            }
-        else
-            if(!sameString(metadata->tags[ix],"subId")
-                && !sameString(metadata->tags[ix],"composite"))
-            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
-        }
-    printf("</table>--></div>\n");
-    metadataFree(&metadata);
-    return TRUE;
-    }
-return FALSE;
-}
-
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
@@ -3064,7 +3099,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-            metadataToggle(subtrack,"...",TRUE);
+            metadataToggle(subtrack,"...",TRUE,FALSE);
             printf("</div>");
 
             if(cType != cfgNone)
@@ -4298,6 +4333,8 @@ for(ix=0;ix<cnt;ix++)
         break;
         }
     }
+// At this point we need to search the cart to see if any others are already expanded.
+// cart var of style "wgEncodeYaleChIPseq.Peaks.showCfg" {parentTable}.{view}.showCfg value='on'
 freeMem(target);
 return expanded;
 }
@@ -4381,6 +4418,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         }
     }
 puts("<TD><A HREF=\"../../goldenPath/help/multiView.html\" TARGET=_BLANK>Help on views</A></TD>");
+// Need to do the same for ENCODE Gencode 'filterBy's
 puts("</TR>");
 if(makeCfgRows)
     {
