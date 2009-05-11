@@ -16,7 +16,7 @@ if ( $#argv != 2 ) then
   echo
   echo '  Finds the proper column names if "chrom", "tName" or "genoName".'
   echo
-  echo "    usage:  database, table"
+  echo "    usage:  database table"
   echo
   exit
 else
@@ -29,8 +29,16 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
+set split=`getSplit.csh $db $table`
+if ( $status ) then
+  echo "problem in getSplit.csh"
+endif
+if ( $split != "unsplit" ) then
+  set table="${split}_$table"
+endif
+
 set chr=`hgsql -N -e "DESC $table" $db | gawk '{print $1}' | egrep -w "chrom|tName|genoName"`
-if ($status) then
+if ( $status ) then
   echo '\n  '$db.$table' has no "chrom", "tName" or "genoName" fields.\n'
   echo ${0}:
   $0
