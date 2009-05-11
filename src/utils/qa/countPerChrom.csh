@@ -20,25 +20,22 @@ set db=""
 set oldDb=""
 set table=""
 set tableName=""
-set machine1="hgwdev"
-set machine2=""
 set host2=""
 set chrom="chrom"
 set chroms=""
 set old=""
 set new=""
-set onlyOne=0
 set machineOut=""
-set ok=0
 set split=""
 
-if ($#argv < 2 ||  $#argv > 4) then
+if ( $#argv < 2 ||  $#argv > 4 ) then
   # no command line args
   echo
-  echo "  check to see if there are genes on all chroms."
+  echo "  check to see if there are annotations on all chroms."
   echo "    will check to see if chrom field is named tName or genoName."
   echo
   echo "    usage:  database table [oldDb] [other machine]"
+  echo
   echo "      where oldDb must be specified if other machine is used"
   echo "      oldDb will be checked on other machine"
   echo "      defaults to hgwdev"
@@ -50,65 +47,38 @@ else
   set tableName=$table
 endif
 
-if ($#argv > 2) then
+if ( $#argv > 2 ) then
   set oldDb=$argv[3]
-else
-  set onlyOne=1
 endif
 
-if ($#argv == 4) then
-  set oldDb=$argv[3]
-  set machine1=$argv[4]
-  set machine2=$argv[4]
+if ( $#argv == 4 ) then
   set machineOut="(${argv[4]})"
   set host2="-h $argv[4]"
 endif
 
 # echo "db = $db"
 # echo "oldDb = $oldDb"
-# echo "machine2 = $machine2"
+# echo "machineOut = $machineOut"
 # echo "table = $table"
 
 set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
-set split=`getSplit.csh $db $table $machine1`
-if ($status) then
-  echo "\n  maybe the database is not present on $machine1?\n"
+set split=`getSplit.csh $db $table`
+if ( $status ) then
+  echo "\n  maybe the database is not present?\n"
   exit
 endif
 
-if ($split != "unsplit") then
+if ( $split != "unsplit" ) then
   set tableName=${split}_$table
-  echo "\nsplit tables. e.g., $tableName"
+  echo "\n  split tables. e.g., $tableName"
 endif
 
-# check if maybe chrom is called tName
-hgsql -e "DESC $tableName" $db | egrep -w tName > /dev/null 
-if (! $status ) then
-  set chrom="tName"
-  echo 'chrom is "tName"'
-  set ok=1
-endif 
-
-# check if maybe chrom is called genoName (prob only rmsk)
-hgsql -e "DESC $tableName" $db | egrep -w genoName > /dev/null 
-if (! $status ) then
-  set chrom="genoName"
-  echo 'chrom is "genoName"'
-  set ok=1
-endif 
-
-# final check to see chrom-like field present
-hgsql -e "DESC $tableName" $db | egrep -w chrom > /dev/null 
-if (! $status ) then
-  set ok=1
-endif 
-
-if ($ok == 0) then
-  echo
-  echo " no appropriate field for this table."
+set chrom=`getChromFieldName.csh $db $tableName`
+if ( $status ) then
+  echo "  error getting chromFieldName."
   echo "   chrom, genoName or tName required."
   echo
-  exit
+  exit 1
 endif 
 
 echo
@@ -116,13 +86,13 @@ echo
 # output header
 echo "chrom \t$db \t$oldDb$machineOut"
 
-foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep -v random`)
-  if ($split != "unsplit") then
+foreach x ( `echo $chroms | sed -e "s/ /\n/g" | grep -v random` )
+  if ( $split != "unsplit" ) then
     set table="${x}_$table"
   endif
   set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
      WHERE '$chrom' = "'$x'"' $db`
-  if ($onlyOne == 0) then
+  if ( $machineOut != "" ) then
     set old=`nice hgsql -N $host2 -e 'SELECT COUNT(*) FROM '$table' \
       WHERE '$chrom' = "'$x'"' $oldDb`
   endif 
@@ -138,7 +108,7 @@ foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep random`)
   endif
   set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
      WHERE '$chrom' = "'$x'"' $db`
-  if ($onlyOne == 0) then
+  if ( $machineOut != "" ) then
     set old=`nice hgsql -N $host2 -e 'SELECT COUNT(*) FROM '$table' \
       WHERE '$chrom' = "'$x'"' $oldDb`
   endif
