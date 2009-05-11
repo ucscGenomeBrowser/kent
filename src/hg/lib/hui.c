@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.193 2009/05/11 21:56:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.194 2009/05/11 22:16:23 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2552,17 +2552,18 @@ static void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
 if(filterBySet == NULL)
     return;
 
+#define FILTERBY_HELP_LINK  "<A HREF=\"../../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if(count == 1)
     puts("<BR><TABLE cellpadding=3><TR valign='top'>");
 else
-    puts("<BR><B>Filter by</B> (select multiple categories and items)<TABLE cellpadding=3><TR valign='top'>");
+    printf("<BR><B>Filter by</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 filterBy_t *filterBy = NULL;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     puts("<TD>");
     if(count == 1)
-        printf("<B>Filter by %s</B> (select multiple items)<BR>\n",filterBy->title);
+        printf("<B>Filter by %s</B> (select multiple items - %s)<BR>\n",filterBy->title,FILTERBY_HELP_LINK);
     else
         printf("<B>%s</B><BR>\n",filterBy->title);
     int fullSize = slCount(filterBy->slValues)+1;
