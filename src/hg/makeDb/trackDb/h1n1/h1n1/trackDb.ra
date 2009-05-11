@@ -223,4 +223,23 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
+track h1n1_0511Seq
+shortLabel 0511 H1N1
+longLabel Recent (051109) Swine Flu H1N1 Sequences
+group map
+priority 15
+visibility pack
+color 12,100,200
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0511SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
 
