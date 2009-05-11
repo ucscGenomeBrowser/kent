@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.10 2009/05/08 22:23:22 hiram Exp $";
+#	"$Id: hg19.txt,v 1.11 2009/05/11 20:50:57 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -2098,4 +2098,78 @@ CREATE TABLE ensemblLift (
     hgsql hg19 < ensemblLift.sql
     hgsql hg19 \
 -e 'LOAD DATA LOCAL INFILE "ensemblLift.tab" INTO TABLE ensemblLift'
+
 ##############################################################################
+# BLASTZ MOUSE Mm9 (DONE - 2009-05-11 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+    cd /hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/linSpecRep/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm9/nib
+SEQ2_SMSK=/scratch/data/mm9/notInOthers
+SEQ2_LEN=/scratch/data/mm9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+    
+BASE=/hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Mon May 11 13:40:46 PDT 2009
+
+#########################################################################
+# BLASTZ Dog CanFam2 (DONE - 2009-05-11 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+    cd /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+
+    cat << '_EOF_' > DEF
+# human vs dog
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/linSpecRep/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Dog CanFam2
+SEQ2_DIR=/scratch/data/canFam2/nib
+SEQ2_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ2_SMSK=/scratch/scratch/data/canFam2/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=20000000
+SEQ2_LAP=10000
+
+BASE=/hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Mon May 11 13:40:46 PDT 2009
+
+#########################################################################
