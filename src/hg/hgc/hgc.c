@@ -221,7 +221,7 @@
 #include "lsSnpPdbChimera.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1538 2009/05/08 20:55:58 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1539 2009/05/11 21:58:45 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2563,8 +2563,7 @@ char *tableName;
 
 if (!isCustomTrack(tdb->tableName))
     {
-    printTBSchemaLink(tdb);
-    metadataToggle(tdb,"Table metadata...",FALSE);
+    extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
