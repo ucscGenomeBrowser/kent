@@ -67,31 +67,31 @@ endif
 
 set chrom=""
 set split=""
-set isChromInfo=0
 
 # check for chromInfo table
-set isChromInfo=`hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" \
-   | wc -l`
-  if ( $status ) then
-    echo "$0 defaults to hgwbeta.  also check spelling of database"
-    echo
-    exit 1
-  endif
-if ( $isChromInfo > 0 ) then
+hgsql -N $host -e 'SHOW TABLES' $db | grep -qw "chromInfo" 
+if ( ! $status ) then
   set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
-
   # check if split table
-  set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
-    $db | wc -l`
-  if ( $split == 1 ) then
-    echo "$chrom"
-  else 
+  hgsql -N $host -e 'SHOW TABLES' $db | grep -qw $tablename 
+  if ( ! $status ) then
     echo "unsplit"
+  else
+    hgsql -N $host -e 'SHOW TABLES' $db | grep -qw ${chrom}_$tablename 
+    if ( ! $status ) then
+      echo "$chrom"
+    else
+      echo
+      echo " no such table $tablename or ${chrom}_$tablename."
+      echo
+      exit 1
+    endif
   endif
   exit 0
 else
-  echo "no chromInfo table.  split irrelevant"
+  echo
+  echo "no chromInfo table for $db on ${machine}."
+  echo
   exit 1
 endif
-echo
 
