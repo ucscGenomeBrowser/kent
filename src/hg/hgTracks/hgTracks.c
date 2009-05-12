@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1564 2009/05/08 16:49:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1565 2009/05/12 00:00:37 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3251,8 +3251,10 @@ for (track = *pTrackList; track != NULL; track = track->next)
         float priority = (float)cartUsualDouble(cart, cartVar,
                                                     track->defaultPriority);
         /* remove cart variables that are the same as the trackDb settings */
+/*  UGLY - add me back when tdb->priority is no longer pre-clobbered by cart var value
         if (priority == track->defaultPriority)
             cartRemove(cart, cartVar);
+*/
         track->priority = priority;
         }
 
