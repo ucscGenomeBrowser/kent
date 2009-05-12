@@ -19,14 +19,15 @@ endif
 set db=""
 set oldDb=""
 set table=""
-set tableName=""
 set host2=""
-set chrom="chrom"
+set chrom=""
 set chroms=""
 set old=""
 set new=""
 set machineOut=""
 set split=""
+set regular=""
+set random=""
 
 if ( $#argv < 2 ||  $#argv > 4 ) then
   # no command line args
@@ -34,32 +35,51 @@ if ( $#argv < 2 ||  $#argv > 4 ) then
   echo "  check to see if there are annotations on all chroms."
   echo "    will check to see if chrom field is named tName or genoName."
   echo
-  echo "    usage:  database table [oldDb] [other machine]"
+  echo "    usage:  database table [oldDb] [hgwbeta | hgsqlbeta | RR]"
   echo
-  echo "      where oldDb must be specified if other machine is used"
-  echo "      oldDb will be checked on other machine"
-  echo "      defaults to hgwdev"
+  echo "      checks on dev"
+  echo "      oldDb will be checked on other machine if specified"
+  echo "        otherwise checked on hgsqlbeta"
+  echo "      RR will use genome-mysql"
   echo
   exit
 else
   set db=$argv[1]
   set table=$argv[2]
-  set tableName=$table
 endif
 
-if ( $#argv > 2 ) then
-  set oldDb=$argv[3]
+if ( $#argv == 3 ) then
+  if ( $argv[3] == "RR" ) then
+    set host2="mysql -h genome-mysql -u genome -A"
+  else
+    set host2="hgsql -h hgsqlbeta"
+  endif
+  if ( $argv[3] == "hgwbeta"|| $argv[3] == "hgsqlbeta" || $argv[3] == "RR") then
+    set oldDb=$db
+    set machineOut="(${argv[3]})"
+  else
+    # argv[3] must be a db
+    set oldDb=$argv[3] 
+    set machineOut="(hgwbeta)"
+  endif
 endif
 
 if ( $#argv == 4 ) then
+  set oldDb=$argv[3]
   set machineOut="(${argv[4]})"
-  set host2="-h $argv[4]"
+  if ( $argv[4] == "hgwbeta"|| $argv[4] == "hgsqlbeta" ) then
+    set host2="hgsql -h hgsqlbeta"
+  endif
+  if ( $argv[4] == "RR" ) then
+    set host2="mysql -h genome-mysql -u genome -A"
+  endif
 endif
 
 # echo "db = $db"
 # echo "oldDb = $oldDb"
 # echo "machineOut = $machineOut"
 # echo "table = $table"
+# echo "host2 = $host2"
 
 set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
 set split=`getSplit.csh $db $table`
@@ -68,12 +88,14 @@ if ( $status ) then
   exit
 endif
 
-if ( $split != "unsplit" ) then
-  set tableName=${split}_$table
-  echo "\n  split tables. e.g., $tableName"
+if ( $split == "unsplit" ) then
+  set split=""
+else
+  set split=${split}_
+  echo "\n  split tables. e.g., $split$table"
 endif
 
-set chrom=`getChromFieldName.csh $db $tableName`
+set chrom=`getChromFieldName.csh $db $split$table`
 if ( $status ) then
   echo "  error getting chromFieldName."
   echo "   chrom, genoName or tName required."
@@ -86,33 +108,25 @@ echo
 # output header
 echo "chrom \t$db \t$oldDb$machineOut"
 
-foreach x ( `echo $chroms | sed -e "s/ /\n/g" | grep -v random` )
-  if ( $split != "unsplit" ) then
-    set table="${x}_$table"
-  endif
-  set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
-     WHERE '$chrom' = "'$x'"' $db`
-  if ( $machineOut != "" ) then
-    set old=`nice hgsql -N $host2 -e 'SELECT COUNT(*) FROM '$table' \
-      WHERE '$chrom' = "'$x'"' $oldDb`
-  endif 
-  # output
-  echo "$x\t$new\t$old"
-  set table=$argv[2]
-end
+# do randoms last
+set regular=`echo $chroms | sed -e "s/ /\n/g" | grep -v random`
+set  random=`echo $chroms | sed -e "s/ /\n/g" | grep random`
 
-# do randoms separately
-foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep random`)
-  if ($split != "unsplit") then
-    set table="${x}_$table"
+foreach c ( $regular $random )
+  if ( $split != "" ) then
+    set table="${c}_$table"
   endif
   set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
-     WHERE '$chrom' = "'$x'"' $db`
+     WHERE '$chrom' = "'$c'"' $db`
   if ( $machineOut != "" ) then
-    set old=`nice hgsql -N $host2 -e 'SELECT COUNT(*) FROM '$table' \
-      WHERE '$chrom' = "'$x'"' $oldDb`
-  endif
-  echo "$x\t$new\t$old"
+    set old=`$host2 -Ne 'SELECT COUNT(*) FROM '$table' \
+      WHERE '$chrom' = "'$c'"' $oldDb`
+    set old=`nice $host2 -Ne 'SELECT COUNT(*) FROM '$table' \
+      WHERE '$chrom' = "'$c'"' $oldDb`
+  endif 
+
+  # output
+  echo "$c\t$new\t$old"
   set table=$argv[2]
 end
 
