@@ -123,7 +123,7 @@ shortLabel 0428 Mexico H1N1 Sequences
 longLabel Recent (04/28/09) Swine Flu H1N1 Sequences, Mexico cases
 group map
 priority 11
-visibility pack
+visibility hide
 color 12,52,80
 indelQueryInsert on
 maxItems 2000
@@ -208,7 +208,7 @@ shortLabel 0506 H1N1
 longLabel Recent (050609) Swine Flu H1N1 Sequences
 group map
 priority 15
-visibility pack
+visibility hide
 color 20,100,100
 indelQueryInsert on
 maxItems 2000
