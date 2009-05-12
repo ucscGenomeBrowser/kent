@@ -19,7 +19,7 @@ Briefly, HUES6 human embryonic stem cells were treated with UV irradiation to
 stabilize in vivo protein-RNA interactions, followed by antibody-mediated 
 precipitation of specific RNA-protein complexes.  SDS-PAGE was then utilized 
 to isolate protein-RNA adducts after RNA trimming with nuclease, 3'RNA linkers 
-were ligated, and nucleotides were 5' end labeled with P32-gamma ATP.  
+were ligated, and nucleotides were 5' end labeled with <SUP>32</SUP>P-&gamma;ATP.  
 Recovered RNA was ligated to a 5' linker before amplification by RT-PCR.  
 Both linkers were designed to be compatible with Illumina 1G genome analyzer 
 sequencing.  Approximately 4 million reads were uniquely mapped to the 
@@ -30,22 +30,26 @@ To identify CLIP clusters, we performed the following steps: (i) CLIP reads
 were associated with protein-coding genes as defined by the region from the
 annotated transcriptional start to the end of each gene locus. (ii) CLIP reads
 were separated into the categories of sense or antisense to the transcriptional
-direction of the gene. (ii) Sense CLIP reads were extended by 100 nt in the
+direction of the gene. (iii) Sense CLIP reads were extended by 100 nt in the
 5'-to-3' direction. The height of each nucleotide position is the number of
 reads that overlap that position. (iv) The count distribution of heights is as
-follows from 1, 2, ...h, ...H-1, H: {n1, n2, ...nh, ...nH-1,nH; N = Sigma ni
-(i = 1:H)}. For a particular height, h, the associated probability of observing
-a height of at least h is Ph = Sigma ni (i = h:H) / N. (v) We computed the
-background frequency after randomly placing the same number of extended reads
-within the gene for 100 iterations. This controls for the length of the gene
+follows from 1, 2, ...<EM>h</EM>, ...<EM>H-1</EM>, <EM>H</EM>: {<EM>n</EM><SUB>1</SUB>, 
+<EM>n</EM><SUB>2</SUB>, ...<EM>n<SUB>h</SUB></EM>, ...<EM>n<SUB>H-1</SUB></EM>,
+<EM>n<SUB>H</SUB></EM>; <EM>N</EM> = &Sigma;<EM>n<SUB>i</SUB></EM>
+(<EM>i</EM> = 1:<EM>H</EM>)}. For a particular height, <EM>h</EM>, the associated 
+probability of observing a height of at least <EM>h</EM> is 
+<EM>P<SUB>h</SUB></EM> = &Sigma;<EM>n<SUB>i</SUB></EM>(<EM>i</EM> = <EM>h</EM>:<EM>H</EM>)
+/<EM>N</EM>. (v) We computed the background frequency after randomly placing the same number of 
+extended reads within the gene for 100 iterations. This controls for the length of the gene
 and the number of reads. For each iteration, the count distribution and
-probabilities for the randomly placed reads (Ph,random) was generated as in
-step (iv). (vi) Our modified FDR for a peak height was computed as FDR(h) =
-(muh + sigmah)/Ph, where muh and sigmah is the average and s.d., respectively,
-of Ph,random across the 100 iterations. For each gene loci, we chose a
-threshold peak height h* as the smallest height equivalent to FDR(h*) < 0.001.
+probabilities for the randomly placed reads (<EM>P<SUB>h</EM>,random</SUB>) was generated as in
+step (iv). (vi) Our modified FDR for a peak height was computed as FDR(<EM>h</EM>) =
+(&mu;<SUB>h</SUB> + &sigma;<SUB>h</SUB>)/P<SUB>h</SUB>, where &mu;<SUB>h</SUB> and 
+&sigma;<SUB>h</SUB> is the average and s.d., respectively,of <EM>P<SUB>h</EM>,random</SUB> 
+across the 100 iterations. For each gene loci, we chose a threshold peak height <EM>h*</EM> 
+as the smallest height equivalent to FDR(<EM>h*</EM>) < 0.001.
 We identified FOX2 binding clusters by grouping nucleotide positions satisfying
-h > h* and occurred within 50 nt of each other.
+<EM>h</EM> > <EM>h*</EM> and occurred within 50 nt of each other.
 <P>
 For further details of the method used to generate this annotation
 please refer to Yeo <EM>et al</EM>. (2009).
