@@ -32,6 +32,7 @@ endif
 set split=`getSplit.csh $db $table`
 if ( $status ) then
   echo "problem in getSplit.csh"
+  exit 1
 endif
 if ( $split != "unsplit" ) then
   set table="${split}_$table"
