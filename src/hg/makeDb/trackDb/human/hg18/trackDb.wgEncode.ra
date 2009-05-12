@@ -4145,12 +4145,12 @@ subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ longNonPolyA=Long_PolyA- total=Total_RNA
 dimensions dimensionX=cellType dimensionY=rnaExtract dimensionZ=localization
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+sortOrder cellType=+ view=+ rnaExtract=+ localization=+
 dragAndDrop subTracks
 visibilityViewDefaults 1_PlusClusters=full 3_MinusClusters=full 2_PlusRawSignal=hide 4_MinusRawSignal=hide 5_Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView 1_PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:1000,autoScale=off,windowingFunction=mean 2_PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off  3_MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:1000,windowingFunction=mean,autoScale=off 4_MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
+settingsByView 1_PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:50,autoScale=off,windowingFunction=mean 2_PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off  3_MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:50,windowingFunction=mean,autoScale=off 4_MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
 priority 0
 type bed 3
 wgEncode 1
