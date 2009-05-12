@@ -769,7 +769,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell GM12878
     color 153,38,0
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Control view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878Control fileName=wgEncodeBroadChipSeqSignalGm12878Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878Control fileName=wgEncodeBroadChipSeqSignalGm12878Control.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
     subTrack wgEncodeBroadChipSeq
@@ -784,7 +784,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell GM12878
     color 153,38,0
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Control type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1Gm12878Control fileName=wgEncodeBroadChipSeqRawSignalRep1Gm12878Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Input type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1Gm12878Control fileName=wgEncodeBroadChipSeqRawSignalRep1Gm12878Control.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
     subTrack wgEncodeBroadChipSeq
@@ -799,7 +799,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell GM12878
     color 153,38,0
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Control type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Control fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Input type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Control fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Control.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
     subTrack wgEncodeBroadChipSeq off
@@ -1485,7 +1485,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell HUVEC
     color 224,75,0
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Control view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecControl fileName=wgEncodeBroadChipSeqSignalHuvecControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecControl fileName=wgEncodeBroadChipSeqSignalHuvecControl.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecControl
     release alpha
@@ -1501,7 +1501,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell HUVEC
     color 224,75,0
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Control type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1HuvecControl fileName=wgEncodeBroadChipSeqRawSignalRep1HuvecControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Input type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1HuvecControl fileName=wgEncodeBroadChipSeqRawSignalRep1HuvecControl.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecControl
     release alpha
@@ -1517,7 +1517,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell HUVEC
     color 224,75,0
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Control type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2HuvecControl fileName=wgEncodeBroadChipSeqRawSignalRep2HuvecControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Input type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2HuvecControl fileName=wgEncodeBroadChipSeqRawSignalRep2HuvecControl.wig.gz
 
     track wgEncodeBroadChipSeqPeaksK562Ctcf
     subTrack wgEncodeBroadChipSeq
@@ -2203,7 +2203,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell K562
     color 46,0,184
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Control view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562Control fileName=wgEncodeBroadChipSeqSignalK562Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562Control fileName=wgEncodeBroadChipSeqSignalK562Control.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Control
     release alpha
@@ -2219,7 +2219,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell K562
     color 46,0,184
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Control type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1K562Control fileName=wgEncodeBroadChipSeqRawSignalRep1K562Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Input type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1K562Control fileName=wgEncodeBroadChipSeqRawSignalRep1K562Control.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Control
     release alpha
@@ -2235,7 +2235,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell K562
     color 46,0,184
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Control type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2K562Control fileName=wgEncodeBroadChipSeqRawSignalRep2K562Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Input type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2K562Control fileName=wgEncodeBroadChipSeqRawSignalRep2K562Control.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekCtcf
     subTrack wgEncodeBroadChipSeq off
@@ -2921,7 +2921,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell Keratinocyte
     color 179,0,134
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Control view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekControl fileName=wgEncodeBroadChipSeqSignalNhekControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekControl fileName=wgEncodeBroadChipSeqSignalNhekControl.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekControl
     release alpha
@@ -2937,7 +2937,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell Keratinocyte
     color 179,0,134
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Control type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1NhekControl fileName=wgEncodeBroadChipSeqRawSignalRep1NhekControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Input type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep1NhekControl fileName=wgEncodeBroadChipSeqRawSignalRep1NhekControl.wig.gz
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekControl
     release alpha
@@ -2953,7 +2953,7 @@ settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits
     cell Keratinocyte
     color 179,0,134
     antibody control
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Control type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2NhekControl fileName=wgEncodeBroadChipSeqRawSignalRep2NhekControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Input type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2NhekControl fileName=wgEncodeBroadChipSeqRawSignalRep2NhekControl.wig.gz
 
 
 # Duke/UT/UNC Chromatin Map (wrangler: tdreszer)
