@@ -59,4 +59,4 @@ foreach table ( blatServers clade dbDb dbDbArch defaultDb gdbPdb genomeClade \
 end
 
 echo $urlPath
-chmod 640 $dirPath/$today/*.namedSessionDb
+chmod 650 $dirPath/$today/*.namedSessionDb
