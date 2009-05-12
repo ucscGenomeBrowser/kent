@@ -66,7 +66,6 @@ endif
 # get all assemblies containing $tablename
 
 set chrom=""
-set split=""
 
 # check for chromInfo table
 hgsql -N $host -e 'SHOW TABLES' $db | grep -qw "chromInfo" 
