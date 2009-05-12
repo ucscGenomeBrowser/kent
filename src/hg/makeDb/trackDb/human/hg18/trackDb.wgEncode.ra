@@ -10661,14 +10661,14 @@ group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
-subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II Control=Input
+subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II zControl=Input
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder view=+ factor=+ cellType=+
+sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=hide RawSignal=dense
+visibilityViewDefaults Peaks=pack RawSignal=full+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0,minScore=0 RawSignal:viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0,minScore=0 RawSignal:viewLimitsMax=1:19628,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 nextItemButton on
@@ -10708,7 +10708,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel GM128 GABP Raw 1
+    shortLabel GM128 GABP Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (GABP in GM12878 cells)
     subGroups view=RawSignal factor=GABP cellType=GM12878
     type wig 1.00 6821.00
@@ -10724,7 +10724,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel GM128 GABP Raw 2
+    shortLabel GM128 GABP Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (GABP in GM12878 cells)
     subGroups view=RawSignal factor=GABP cellType=GM12878
     type wig 1.00 6113.00
@@ -10770,7 +10770,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel GM128 NRSF Raw 1
+    shortLabel GM128 NRSF Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (NRSF in GM12878 cells)
     subGroups view=RawSignal factor=NRSF cellType=GM12878
     type wig 1.00 19628.00
@@ -10786,7 +10786,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel GM128 NRSF Raw 2
+    shortLabel GM128 NRSF Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (NRSF in GM12878 cells)
     subGroups view=RawSignal factor=NRSF cellType=GM12878
     type wig 1.00 16142.00
@@ -10832,7 +10832,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel GM128 Pol2 Raw 1
+    shortLabel GM128 Pol2 Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
     subGroups view=RawSignal factor=Pol2 cellType=GM12878
     type wig 1.00 8689.00
@@ -10848,7 +10848,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel GM128 Pol2 Raw 2
+    shortLabel GM128 Pol2 Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
     subGroups view=RawSignal factor=Pol2 cellType=GM12878
     type wig 1.00 9957.00
@@ -10894,7 +10894,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel GM128 SRF Raw 1
+    shortLabel GM128 SRF Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (SRF in GM12878 cells)
     subGroups view=RawSignal factor=SRF cellType=GM12878
     type wig 1.00 3711.00
@@ -10910,7 +10910,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel GM128 SRF Raw 2
+    shortLabel GM128 SRF Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (SRF in GM12878 cells)
     subGroups view=RawSignal factor=SRF cellType=GM12878
     type wig 1.00 3169.00
@@ -10959,7 +10959,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GM128 Input Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Input in GM12878 cells)
-    subGroups view=RawSignal factor=Control cellType=GM12878
+    subGroups view=RawSignal factor=zControl cellType=GM12878
     type wig 1.00 2399.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
@@ -10974,7 +10974,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 Input Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Input in GM12878 cells)
-    subGroups view=RawSignal factor=Control cellType=GM12878
+    subGroups view=RawSignal factor=zControl cellType=GM12878
     type wig 1.00 2714.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
@@ -11017,7 +11017,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 GABP Raw 1
+    shortLabel K562 GABP Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (GABP in K562 cells)
     subGroups view=RawSignal factor=GABP cellType=K562
     type wig 1.00 15650.00
@@ -11033,7 +11033,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 GABP Raw 2
+    shortLabel K562 GABP Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (GABP in K562 cells)
     subGroups view=RawSignal factor=GABP cellType=K562
     type wig 1.00 18479.00
@@ -11079,7 +11079,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 NRSF Raw 1
+    shortLabel K562 NRSF Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (NRSF in K562 cells)
     subGroups view=RawSignal factor=NRSF cellType=K562
     type wig 1.00 47957.00
@@ -11095,7 +11095,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 NRSF Raw 2
+    shortLabel K562 NRSF Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (NRSF in K562 cells)
     subGroups view=RawSignal factor=NRSF cellType=K562
     type wig 1.00 29181.00
@@ -11141,7 +11141,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 Pol2 Raw 1
+    shortLabel K562 Pol2 Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
     subGroups view=RawSignal factor=Pol2 cellType=K562
     type wig 1.00 14400.00
@@ -11157,7 +11157,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 Pol2 Raw 2
+    shortLabel K562 Pol2 Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
     subGroups view=RawSignal factor=Pol2 cellType=K562
     type wig 1.00 10312.00
@@ -11203,7 +11203,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 SRF Raw 1
+    shortLabel K562 SRF Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (SRF in K562 cells)
     subGroups view=RawSignal factor=SRF cellType=K562
     type wig 1.00 8435.00
@@ -11219,7 +11219,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 SRF Raw 2
+    shortLabel K562 SRF Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (SRF in K562 cells)
     subGroups view=RawSignal factor=SRF cellType=K562
     type wig 1.00 3612.00
@@ -11250,7 +11250,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 TAFII Raw 1
+    shortLabel K562 TAFII Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (TAF-II in K562 cells)
     subGroups view=RawSignal factor=TAF-II cellType=K562
     type wig 1.00 2856.00
@@ -11266,9 +11266,9 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 Input Raw 1
+    shortLabel K562 Input Rw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Input in K562 cells)
-    subGroups view=RawSignal factor=Control cellType=K562
+    subGroups view=RawSignal factor=zControl cellType=K562
     type wig 1.00 6252.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
@@ -11281,9 +11281,9 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 Input Raw 2
+    shortLabel K562 Input Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Input in K562 cells)
-    subGroups view=RawSignal factor=Control cellType=K562
+    subGroups view=RawSignal factor=zControl cellType=K562
     type wig 1.00 3777.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
@@ -11356,7 +11356,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel PFSK1 Input
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in PFSK-1 cells)
-    subGroups view=RawSignal factor=Control cellType=PFSK-1
+    subGroups view=RawSignal factor=zControl cellType=PFSK-1
     type wig 1.00 4125.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-11
@@ -11427,7 +11427,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel SKNMC Input
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in SK-N-MC cells)
-    subGroups view=RawSignal factor=Control cellType=SK-N-MC
+    subGroups view=RawSignal factor=zControl cellType=SK-N-MC
     type wig 1.00 835.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-11
