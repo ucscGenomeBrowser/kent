@@ -31,6 +31,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	gorGor1 \
 	ponAbe1 ponAbe2 \
 	rheMac2 \
+	papHam1 \
 	calJac1 \
 	otoGar1 tupBel1\
 	canFam1 canFam2 \
