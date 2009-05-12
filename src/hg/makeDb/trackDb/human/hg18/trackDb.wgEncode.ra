@@ -4150,7 +4150,7 @@ dragAndDrop subTracks
 visibilityViewDefaults 1_PlusClusters=full 3_MinusClusters=full 2_PlusRawSignal=hide 4_MinusRawSignal=hide 5_Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView 1_PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183 2_PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off  3_MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,windowingFunction=mean,autoScale=off 4_MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
+settingsByView 1_PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:1000,autoScale=off,windowingFunction=mean 2_PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off  3_MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:1000,windowingFunction=mean,autoScale=off 4_MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
 priority 0
 type bed 3
 wgEncode 1
@@ -4204,7 +4204,7 @@ wgEncode 1
 #   release alpha
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA- +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in prostate whole cell)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in prostate whole cell)
     subGroups view=1_PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
@@ -4219,7 +4219,7 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage off
     shortLabel pros cell pA- -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in prostate whole cell)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in prostate whole cell)
     subGroups view=3_MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
@@ -4234,7 +4234,7 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA- +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in K562 cytosol)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 cytosol)
     subGroups view=1_PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
@@ -4249,7 +4249,7 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA- -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in K562 cytosol)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 cytosol)
     subGroups view=3_MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
@@ -4264,7 +4264,7 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA- +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in K562 nucleus)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 nucleus)
     subGroups view=1_PlusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
@@ -4279,7 +4279,7 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA- -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in K562 nucleus)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 nucleus)
     subGroups view=3_MinusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
@@ -4294,13 +4294,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+ +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 cytosol)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 cytosol)
     subGroups view=1_PlusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
-    priority 16
     noInherit on
     rnaExtract longPolyA
     localization cytosol
@@ -4312,13 +4311,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+ -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 cytosol)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 cytosol)
     subGroups view=3_MinusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
-    priority 17
     noInherit on
     rnaExtract longPolyA
     localization cytosol
@@ -4330,13 +4328,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+ +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 nucleus)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 nucleus)
     subGroups view=1_PlusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
-    priority 16
     noInherit on
     rnaExtract longPolyA
     localization nucleus
@@ -4348,13 +4345,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+ -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 nucleus)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 nucleus)
     subGroups view=3_MinusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
-    priority 17
     noInherit on
     rnaExtract longPolyA
     localization nucleus
@@ -4366,13 +4362,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA+
-    longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 cytosol)
+    longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=5_Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
-    priority 20
     noInherit on
     rnaExtract longPolyA
     localization cytosol
@@ -4384,13 +4379,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nucl pA+
-    longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 nucleus)
+    longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 nucleus)
     subGroups view=5_Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
-    priority 20
     noInherit on
     rnaExtract longPolyA
     localization nucleus
@@ -4402,13 +4396,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA+ +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 polysome)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 polysome)
     subGroups view=1_PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 26
     noInherit on
     rnaExtract longPolyA
     localization polysome
@@ -4420,13 +4413,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA+ -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 polysome)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 polysome)
     subGroups view=3_MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 27
     noInherit on
     rnaExtract longPolyA
     localization polysome
@@ -4438,13 +4430,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in K562 nucleolus)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 nucleolus)
     subGroups view=1_PlusClusters cellType=K562 localization=nucleolus rnaExtract=total
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 26
     noInherit on
     rnaExtract total
     localization nucleolus
@@ -4456,13 +4447,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nlos tot -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in K562 nucleolus)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleolus)
     subGroups view=3_MinusClusters cellType=K562 localization=nucleolus rnaExtract=total
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 27
     noInherit on
     rnaExtract total
     localization nucleolus
@@ -4474,13 +4464,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in K562 nucleoplasm)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 nucleoplasm)
     subGroups view=1_PlusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 26
     noInherit on
     rnaExtract total
     localization nucleoplasm
@@ -4492,13 +4481,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 nplm tot -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in K562 nucleoplasm)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleoplasm)
     subGroups view=3_MinusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 27
     noInherit on
     rnaExtract total
     localization nucleoplasm
@@ -4510,13 +4498,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total RNA in K562 chromatin)
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 chromatin)
     subGroups view=1_PlusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 26
     noInherit on
     rnaExtract total
     localization chromatin
@@ -4528,13 +4515,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 chrm tot -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total RNA in K562 chromatin)
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 chromatin)
     subGroups view=3_MinusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 27
     noInherit on
     rnaExtract total
     localization chromatin
@@ -4546,13 +4532,12 @@ wgEncode 1
 #    release alpha
     subTrack wgEncodeRikenCage
     shortLabel K562 psom pA+
-    longLabel ENCODE RIKEN CAGE Tags (PolyA+ in K562 polysome)
+    longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 polysome)
     subGroups view=5_Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 30
     noInherit on
     rnaExtract longPolyA
     localization polysome
@@ -4570,7 +4555,6 @@ wgEncode 1
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 30
     noInherit on
     rnaExtract total
     localization nucleolus
@@ -4588,7 +4572,6 @@ wgEncode 1
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 30
     noInherit on
     rnaExtract total
     localization nucleoplasm
@@ -4606,7 +4589,6 @@ wgEncode 1
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
-    priority 30
     noInherit on
     rnaExtract total
     localization chromatin
@@ -4617,14 +4599,13 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 cyt pA- -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in GM12878 cytosol)
+    shortLabel GM128 cyto pA- -
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 cytosol)
     subGroups view=3_MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
-    priority 47
     noInherit on
     rnaExtract longNonPolyA
     localization cytosol
@@ -4635,14 +4616,13 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 cyt pA- +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in GM12878 cytosol)
+    shortLabel GM128 cyto pA- +
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in GM12878 cytosol)
     subGroups view=1_PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
-    priority 46
     noInherit on
     rnaExtract longNonPolyA
     localization cytosol
@@ -4653,14 +4633,13 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 nuc pA- -
-    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- RNA in GM12878 nucleus)
+    shortLabel GM128 nucl pA- -
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 nucleus)
     subGroups view=3_MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
-    priority 47
     noInherit on
     rnaExtract longNonPolyA
     localization nucleus
@@ -4671,14 +4650,13 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 nuc pA- +
-    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- RNA in GM12878 nucleus)
+    shortLabel GM128 nucl pA- +
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in GM12878 nucleus)
     subGroups view=1_PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
-    priority 46
     noInherit on
     rnaExtract longNonPolyA
     localization nucleus
@@ -4689,14 +4667,13 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 cyt pA-
+    shortLabel GM128 cyto pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 cytosol)
     subGroups view=5_Alignments cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
-    priority 50
     noInherit on
     rnaExtract longNonPolyA
     localization cytosol
@@ -4707,14 +4684,13 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel GM128 nuc pA-
+    shortLabel GM128 nucl pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 nucleus)
     subGroups view=5_Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
-    priority 50
     noInherit on
     rnaExtract longNonPolyA
     localization nucleus
@@ -11558,7 +11534,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 cyt pA+
-    longLabel ENCODE GIS PET Alignments (PolyA+ in GM12878 cytosol)
+    longLabel ENCODE GIS PET Alignments (PolyA+ RNA in GM12878 cytosol)
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
@@ -11579,7 +11555,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel GM128 nuc pA+
-    longLabel ENCODE GIS PET Alignments (PolyA+ in GM12878 nucleus)
+    longLabel ENCODE GIS PET Alignments (PolyA+ RNA in GM12878 nucleus)
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
@@ -11600,7 +11576,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA prostate whole cell
-    longLabel ENCODE GIS PET Tags (PolyA+ in prostate whole cell)
+    longLabel ENCODE GIS PET Tags (PolyA+ RNA in prostate whole cell)
     subGroups view=Tags cellType=prostate localization=cell rnaExtract=longPolyA
     #type gappedPeak
     type bed 12 .
@@ -11620,7 +11596,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 cytosol
-    longLabel ENCODE GIS PET Tags (PolyA+ in K562 cytosol)
+    longLabel ENCODE GIS PET Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=Tags cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type gappedPeak
     type bed 12 +
@@ -11639,7 +11615,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 nucleus
-    longLabel ENCODE GIS PET Tags (PolyA+ in K562 nucleus)
+    longLabel ENCODE GIS PET Tags (PolyA+ RNA in K562 nucleus)
     subGroups view=Tags cellType=K562 localization=nucleus rnaExtract=longPolyA
     #type gappedPeak
     type bed 12 +
@@ -11658,7 +11634,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 polysome
-    longLabel ENCODE GIS PET Tags (PolyA+ in K562 polysome)
+    longLabel ENCODE GIS PET Tags (PolyA+ RNA in K562 polysome)
     subGroups view=Tags cellType=K562 localization=polysome rnaExtract=longPolyA
     #type gappedPeak
     type bed 12 +
@@ -11677,7 +11653,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA prostate whole cell
-    longLabel ENCODE GIS PET Alignments (PolyA+ in prostate whole cell)
+    longLabel ENCODE GIS PET Alignments (PolyA+ RNA in prostate whole cell)
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
@@ -11697,7 +11673,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 cytosol
-    longLabel ENCODE GIS PET Alignments (PolyA+ in K562 cytosol)
+    longLabel ENCODE GIS PET Alignments (PolyA+ RNA in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
@@ -11716,7 +11692,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 nucleus
-    longLabel ENCODE GIS PET Alignments (PolyA+ in K562 nucleus)
+    longLabel ENCODE GIS PET Alignments (PolyA+ RNA in K562 nucleus)
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
@@ -11735,7 +11711,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 polysome
-    longLabel ENCODE GIS PET Alignments (PolyA+ in K562 polysome)
+    longLabel ENCODE GIS PET Alignments (PolyA+ RNA in K562 polysome)
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
