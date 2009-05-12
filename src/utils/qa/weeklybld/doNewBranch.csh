@@ -100,8 +100,10 @@ echo "Unpack the new branch on BUILDDIR for beta [${0}: `date`]"
 #echo debug: disabled coBranch.csh
 ./coBranch.csh
 if ( $status ) then
- echo "Unpack the new branch on BUILDDIR for beta FAILED [${0}: `date`]"
- exit 1
+    echo "Unpack the new branch on BUILDDIR for beta FAILED [${0}: `date`]"
+    echo "Waiting for any other processes to finish"
+    wait
+    exit 1
 endif
 
 echo "Build utils on beta [${0}: `date`]"
@@ -110,6 +112,8 @@ echo
 ./buildUtils.csh
 if ( $status ) then
     echo "Build utils on beta FAILED [${0}: `date`]"
+    echo "Waiting for any other processes to finish"
+    wait
     exit 1
 endif
 
@@ -119,10 +123,12 @@ echo "Build branch sandbox on beta [${0}: `date`]"
 #echo debug: disabled build branch sandbox on beta
 ./buildBeta.csh
 if ( $status ) then
- echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
-# echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER galt browser-qa
-echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
- exit 1
+     echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
+    # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER galt browser-qa
+    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
+    echo "Waiting for any other processes to finish"
+    wait
+    exit 1
 endif
 echo "build on beta done for v$BRANCHNN [${0}: `date`]"
 echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER galt kent browser-qa
