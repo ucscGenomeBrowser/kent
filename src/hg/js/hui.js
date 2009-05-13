@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.26 2009/05/06 00:26:06 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.27 2009/05/13 19:37:01 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -146,6 +146,13 @@ function matSetMatrixCheckBoxes(state)
     return true;
 }
 
+function checkBoxSet(CB,state)
+{
+    CB.checked = state;
+    setCheckBoxShadow(CB);
+    hideOrShowSubtrack(CB);
+}
+
 function matSetSubtrackCheckBoxes(state)
 {
 // Set all subtrack checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
@@ -153,19 +160,35 @@ function matSetSubtrackCheckBoxes(state)
     for(var vIx=1;vIx<arguments.length;vIx++) {
         CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
-    //if(matCBwithViewDD) {
-    //    if(state) { // further filter by view
-    //        views = getViewNamesSelected(false); // get views (strings) that are off
-    //        for(var vIx=0;vIx<views.length;vIx++) {
-    //            CBs = CBs.filter(":not(."+views[vIx]+")");  // Successively limit list by additional classes.
-    //        }
-    //    }
-    //}
-    CBs.each( function (i) {
-        this.checked = state;
-        setCheckBoxShadow(this);
-        hideOrShowSubtrack(this);
-    });
+    // This next block of code is needed to make dimZ work with dimsX&Y
+    if(state) {
+        var dimZ = $("input.matrixCB.dimZ");
+        if(dimZ.length > 0) {
+            if(arguments.length == 3) { // Requested dimX&Y
+                dimZ = dimZ.filter(":checked");
+                for(var dIx=0;dIx<dimZ.length;dIx++) {
+                    var classes = $(dimZ[dIx]).attr("class");
+                    classes = classes.replace("matrixCB ","");
+                    classes = classes.replace("dimZ","");
+                    classes = classes.replace(/ /g,".");
+                    CBs.filter(classes).each( function (i) { checkBoxSet(this,state); });
+                }
+            // Okay, that works for including dimZ when dimX&Y is clicked.  What about including dimX&Y when dimZ is clicked?
+            } if(arguments.length == 2) { // Requested dimZ
+                var dimsXY = $("input.matrixCB").not(".dimZ");
+                dimsXY = dimsXY.filter(":checked");
+                for(var dIx=0;dIx<dimsXY.length;dIx++) {
+                    var classes = $(dimsXY[dIx]).attr("class");
+                    classes = classes.replace("matrixCB","");
+                    classes = classes.replace(/ /g,".");
+                    CBs.filter(classes).each( function (i) { checkBoxSet(this,state); });
+                }
+            }
+            return true;  // Notice if dimZ exists (regardless of checked state) then need to return
+        }
+    }
+    // state uncheck or dimZ doesn't exist
+    CBs.each( function (i) { checkBoxSet(this,state); });
 
     return true;
 }
@@ -406,10 +429,17 @@ function trCompareColumnAbbr(tr1,tr2,sortColumns)
 {
 // Compares a set of columns based upon the contents of their abbr
     for(var ix=0;ix < sortColumns.cellIxs.length;ix++) {
-        if(tr1.cells[sortColumns.cellIxs[ix]].abbr < tr2.cells[sortColumns.cellIxs[ix]].abbr)
-            return (sortColumns.reverse[ix] ? -1: 1);
-        else if(tr1.cells[sortColumns.cellIxs[ix]].abbr > tr2.cells[sortColumns.cellIxs[ix]].abbr)
-            return (sortColumns.reverse[ix] ? 1: -1);
+        //if(tr1.cells[sortColumns.cellIxs[ix]].abbr == undefined) {
+        //    if(tr1.cells[sortColumns.cellIxs[ix]].value < tr2.cells[sortColumns.cellIxs[ix]].value)
+        //        return (sortColumns.reverse[ix] ? -1: 1);
+        //    else if(tr1.cells[sortColumns.cellIxs[ix]].value > tr2.cells[sortColumns.cellIxs[ix]].value)
+        //        return (sortColumns.reverse[ix] ? 1: -1);
+        //} else {
+            if(tr1.cells[sortColumns.cellIxs[ix]].abbr < tr2.cells[sortColumns.cellIxs[ix]].abbr)
+                return (sortColumns.reverse[ix] ? -1: 1);
+            else if(tr1.cells[sortColumns.cellIxs[ix]].abbr > tr2.cells[sortColumns.cellIxs[ix]].abbr)
+                return (sortColumns.reverse[ix] ? 1: -1);
+        //}
     }
     return 0;
 }
@@ -692,14 +722,11 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
 function matChkBoxNormalize(matCb)
 {
     var classes =  $( matCb ).attr("class").split(" ");
-    var CBs = $("input.subtrackCB");
-    if(CBs.length > 0) {
-        while(classes.length > 0) {
-            var thisClass = classes.pop();
-            if(thisClass != "matrixCB")
-                CBs = CBs.filter("."+thisClass);  // Filter subtrack CBs with only matrixCB's classes (Must redefine CBs each time)
-        }
-    }
+    classes = classes.replace("dimZ ","");
+    classes = classes.replace("matrixCB "," ");
+    classes = classes.replace(/ /g,".");
+    var CBs = $("input.subtrackCB").filter(classes); // All subtrack CBs that match matrix CB
+    // Problem: dimZ creates implied class membership. However, this is a close enough approximation
     if(CBs.length > 0) {
         var CBsChecked = CBs.filter(":checked");
         if(CBsChecked.length == CBs.length)
