@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.195 2009/05/13 19:02:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.196 2009/05/13 23:16:00 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -140,7 +140,8 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    makeNamedDownloadsLink(tdb,(moreThanOne ? "downloads":"Downloads"));
+    struct trackDb *trueTdb = tdbIsCompositeChild(tdb)? tdb->parent: tdb;
+    makeNamedDownloadsLink(trueTdb,(moreThanOne ? "downloads":"Downloads"));
     if(metadataLink)
         printf(",");
     }
