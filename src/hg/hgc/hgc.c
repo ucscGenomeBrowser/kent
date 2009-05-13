@@ -219,9 +219,10 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
+#include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1541 2009/05/11 23:15:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1542 2009/05/13 19:05:17 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9435,6 +9436,80 @@ if (s != NULL)
 return trimSpaces(gi);
 }
 
+static void h1n1DownloadPdb(char *item, char *pdbUrl, struct tempName *tmpPdb)
+/* uncompress PDB to trash */
+{
+int inFd = netOpenHttpExt(pdbUrl, "GET", TRUE);
+int inFdRedir = 0;
+char *pdbUrlRedir = NULL;
+if (!netSkipHttpHeaderLinesHandlingRedirect(inFd, pdbUrl, &inFdRedir, &pdbUrlRedir))
+    errAbort("Unable to access predicted 3D structure file: %s", pdbUrl);
+if (pdbUrlRedir != NULL)
+    {
+    close(inFd);
+    inFd = inFdRedir;
+    freez(&pdbUrlRedir);
+    }
+
+trashDirFile(tmpPdb, "hgct", item, ".pdb");
+FILE *outFh = mustOpen(tmpPdb->forCgi, "w");
+struct lineFile *inLf = lineFileDecompressFd(pdbUrl, TRUE, inFd);
+char *line;
+while (lineFileNext(inLf, &line, NULL))
+    {
+    fputs(line, outFh);
+    fputc('\n', outFh);
+    }
+lineFileClose(&inLf);
+carefulClose(&outFh);
+}
+
+static void h1n1MkChimeraxTrashFullUrl(struct tempName *tmpPdb, char *fullUrl, int fullUrlSize)
+/* generate full URL for a chimerax file decompressed to trash */
+{
+// FIXME: this is not generate (URL generation will not work on all web servers).
+// if this is kept, should address this.
+char *serverName = getenv("SERVER_NAME");
+char *serverPort = getenv("SERVER_PORT");
+char *scriptName = getenv("SCRIPT_NAME");
+if ((serverName != NULL) && (serverPort != NULL) && (scriptName != NULL))
+    {
+    // remote url
+    safef(fullUrl, fullUrlSize, "http://%s", serverName);
+    if (!sameString(serverPort, "80"))
+        {
+        safecat(fullUrl, fullUrlSize, ":");
+        safecat(fullUrl, fullUrlSize, serverPort);
+        }
+    safecat(fullUrl, fullUrlSize, scriptName);
+    char *p = strrchr(fullUrl, '/');
+    if (p != NULL)
+        *++p = '\0';  // drop cgi name, keeping directory
+    safecat(fullUrl, fullUrlSize, tmpPdb->forHtml);
+    }
+else
+    {
+    // local url
+    safef(fullUrl, fullUrlSize, "file:///%s/%s", getCurrentDir(), tmpPdb->forHtml);
+    }
+}
+
+static void h1n1MkChimerax(char *item, char *pdbUrl, struct tempName *chimerax)
+/* generate a chimerax file for downloading h1n1 PDB structure */
+{
+// chimera doesn't handle compressed files via URL, so uncompress into the trash
+struct tempName tmpPdb;
+char usePdbUrl[PATH_LEN];
+if (endsWith(pdbUrl, ".gz") || endsWith(pdbUrl, ".Z"))
+    {
+    h1n1DownloadPdb(item, pdbUrl, &tmpPdb);
+    h1n1MkChimeraxTrashFullUrl(&tmpPdb, usePdbUrl, sizeof(usePdbUrl));
+    }
+else
+    safecpy(usePdbUrl, sizeof(usePdbUrl), pdbUrl);
+lsSnpPdbChimeraGenericLink(usePdbUrl, NULL, "hgct", item, chimerax);
+}
+
 void showSAM_h1n1(char *item)
 {
 char query2[256];
@@ -9452,7 +9527,7 @@ float  eValue;
 char *chp;
 int homologCount;
 int gotPDBFile = 0;
-char extUrl[200] = {"http://users.soe.ucsc.edu/~karplus/h1n1"};
+char *extUrl = "http://users.soe.ucsc.edu/~karplus/h1n1";
 
 printf("<H3>Protein Structure Analysis and Prediction by ");
 printf("<A HREF=\"http://www.soe.ucsc.edu/research/compbio/SAM_T02/sam-t02-faq.html\"");
@@ -9467,8 +9542,13 @@ printf("<A HREF=\"%s/%s/summary.html#secondary-structure", extUrl, item);
 printf("\" TARGET=_blank>%s</A><BR>\n", item);
 
 printf("<B>3D Structure Prediction (PDB file):</B> ");
-printf("<A HREF=\"%s/%s/decoys/%s.try1-opt3.pdb.gz", extUrl, item, item);
-printf("\" TARGET=_blank>%s</A><BR>\n", item);
+char pdbUrl[PATH_LEN];
+safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", extUrl, item, item);
+struct tempName chimerax;
+h1n1MkChimerax(item, pdbUrl, &chimerax);
+
+printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", pdbUrl, item, chimerax.forHtml);
+
 gotPDBFile = 0;
 safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
 

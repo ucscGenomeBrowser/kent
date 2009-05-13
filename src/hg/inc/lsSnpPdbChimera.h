@@ -32,4 +32,15 @@ char *lsSnpPdbGetUrlPdbSnp(char *pdbId, char *snpId);
 /* get LS-SNP/PDB URL for a particular PDB and/or SNP.  One or the two
  * ids maybe null */
 
+void lsSnpPdbChimeraGenericLink(char *pdbSpec, char *script,
+                                char *trashDirName, char *trashBaseName,
+                                struct tempName *chimerax);
+/* Generate a chimerax file for the given pdbSpec, which can be a PDB id or a
+ * URL.  Copies in the lsSnpPdbChimera.py file and then adds optional script python code.
+ * Fills in chimerax structure.
+ * FIXME: This is an experiment for H1N1 flu browser, this function has
+ * nothing to do with LS/SNP.  If we decide to keep this, this should be
+ * split into a generic chimera module.
+ */
+
 #endif

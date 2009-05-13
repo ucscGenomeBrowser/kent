@@ -6,12 +6,16 @@
 # earlier), can only have one function and must import into function's local
 # namespace.
 
-def displayPdb(pdbId, snps):
-    # snps is list of (snpId, chain, snpPos, [isPrimary])
+def displayPdb(pdbSpec, snps):
+    """pdbSpec can be a pdbId or a URL of a PDB format file.
+    snps is list of (snpId, chain, snpPos, [isPrimary])"""
     from chimera import runCommand
     from chimera.selection import OSLSelection
     runCommand("close all")
-    runCommand("open pdb:%s" % pdbId)
+    if pdbSpec.find("://") >= 0:
+        runCommand("open %s" % pdbSpec)
+    else:
+        runCommand("open pdb:%s" % pdbSpec)
 
     # hide all models/sub-models, NMR will only show first model
     runCommand("select #*:*.*")
