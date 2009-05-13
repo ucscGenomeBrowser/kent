@@ -19,7 +19,7 @@ set end=""
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo
-  echo "  find all the places where data missing from a track."
+  echo "  find all non-gap places where data missing from a track."
   echo
   echo "      usage:  database table [chrom]"
   echo
@@ -32,8 +32,12 @@ else
 endif
 
 if ( $#argv == 3 ) then
+  # limit to a chrom
   set limit='-chrom='$argv[3]
   set whereLimit='WHERE chrom = "'$argv[3]'"'
+  set chromList=${argv[3]}_
+else
+  set chromList=`hgsql -Ne "SELECT chrom FROM chromInfo" $db | sed -r "s/(.*)/\1_/"`
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -68,9 +72,9 @@ endif
 
 if ( $chr == "chrom" ) then
   set start=`hgsql -Ne "DESC $split$table" $db | awk '{print $1}' \
-    | egrep "txStart|chromStart" | head -1 | awk '{print $1}'`
+    | egrep "txStart|chromStart"`
   set end=`hgsql -Ne "DESC $split$table" $db | awk '{print $1}' \
-    | egrep "txEnd|chromEnd" | head -1 | awk '{print $1}'`
+    | egrep "txEnd|chromEnd"`
 else 
   if ( $chr == "tName" ) then
     set start="tStart"
@@ -86,10 +90,6 @@ endif
 # make simple BED3 file from track with introns filled in
 rm -f blockBedFile.bed
 if ( $split != "" ) then
-  set chromList=`hgsql -Ne "SELECT chrom FROM chromInfo" $db | sed -r "s/(.*)/\1_/"`
-  if ( $limit != "" ) then
-    set chromList=$argv[3]
-  endif
   foreach chrom ( $chromList )
     hgsql -Ne "SELECT $chr, $start, $end FROM $chrom$table" $db >> blockBedFile.bed
   end
@@ -119,45 +119,42 @@ if ( -z $table.holes.bed ) then
   echo "there are no non-gap regions not covered by $table."
   echo "or there may be no gap table."
   echo
-  rm -f blockBedFile.bed
-  rm -f gap.not.bed
-  rm -f $table.not.bed
-  exit 0
+else 
+  # report
+  echo
+  echo "non-gap holes in track are in this file: "
+  echo "    $table.holes.bed"
+  echo
+  echo "largest missing non-gap regions are here:"
+  
+  echo
+  echo "chrom chromStart chromEnd size" \
+    | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
+  echo "----- ---------- -------- ----" \
+    | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
+  head -10 $table.holes.sort \
+    | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
+  echo
+  
+  echo
+  # make links for three biggest
+  set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position="
+  set url2="&$table=pack&gap=dense"
+  set bigThree=`head -3 $table.holes.sort \
+    | awk '{print $1 ":" $2-300 "-" $3+300}'` 
+  echo "links to the three biggest voids in ${table}:"
+  echo " (with 300 bp padding on each end)"
+  foreach item ( $bigThree )
+    echo "$url1$item$url2"
+  end
+  echo
 endif
-
-# report
-echo
-echo "non-gap holes in track are in this file: "
-echo "    $table.holes.bed"
-echo
-echo "largest missing non-gap regions are here:"
-
-echo
-echo "chrom chromStart chromEnd size" \
-  | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
-echo "----- ---------- -------- ----" \
-  | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
-head -10 $table.holes.sort \
-  | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
-echo
-
-echo
-# make links for three biggest
-set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position="
-set url2="&$table=pack&gap=dense"
-set bigThree=`head -3 $table.holes.sort \
-  | awk '{print $1 ":" $2-300 "-" $3+300}'` 
-echo "links to the three biggest voids in ${table}:"
-echo " (with 300 bp padding on each end)"
-foreach item ( $bigThree )
-  echo "$url1$item$url2"
-end
-echo
-
+  
 # clean up
 rm -f blockBedFile.bed
 rm -f gap.not.bed
 rm -f $table.not.bed
+rm -f $table.holes.bed 
+rm -f $table.holes.sort
 
-exit
-
+exit 0
