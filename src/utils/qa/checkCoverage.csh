@@ -122,9 +122,6 @@ if ( -z $table.holes.bed ) then
 else 
   # report
   echo
-  echo "non-gap holes in track are in this file: "
-  echo "    $table.holes.bed"
-  echo
   echo "largest missing non-gap regions are here:"
   
   echo
