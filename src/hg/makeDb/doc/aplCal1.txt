@@ -1,0 +1,52 @@
+#########################################
+#
+# aplCal1 = Aplysia californica 
+#
+#
+
+# set up main genome directory
+
+ssh hgwdev
+cd /hive/data/genomes
+mkdir aplCal1
+cd aplCal1
+
+mkdir download
+cd download
+
+# get sequence from BROAD
+# http://www.broad.mit.edu/ftp/pub/assemblies/invertebrates/aplysia/
+vi fetch.sh
+chmod +x fetch.sh
+./fetch.sh
+
+
+# fixup ids for super fasta and quals
+#  change ">scaffold_0.1-1784514 (Draft_v1)" 
+#    to   ">scaffold_0"
+#  sed 's/\(>scaffold_[0-9]*\)[.].*/\1/'
+vi fix.csh
+chmod +x fix.csh
+./fix.csh
+
+totalKinds assembly.unplaced 2 > unplaced.types
+cat unplaced.types
+#unplaced 4270994
+#low_quality 945330
+#other 1781
+#deliberate 273497
+#vector_or_host 63932
+#multiple_instance 27153
+
+vi aplCal1.config.ra
+
+time makeGenomeDb.pl aplCal1.config.ra > & makeGenomeDb.pl.out &
+# took less than 10 minutes
+
+# Organism Image
+wget -O /usr/local/apache/htdocs/images/Aplysia_californica.jpg \
+ 'http://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Aplysia_californica.jpg/250px-Aplysia_californica.jpg'
+
+# Edit and check-in templates for description.html, gold.html, gap.html, aplCal1/trackDb.ra
+
+
