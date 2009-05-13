@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.9 2008/12/19 21:25:40 rico Exp $
+# $Id: blastz-run-ucsc,v 1.10 2009/05/13 00:04:56 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -361,6 +361,7 @@ sub plainBlastz {
   # just run blastz -- target and query can have "[$start,$end]" specifiers
   # where $start is 1-based.  Put output in file name $raw.
   my ($target, $query, $options, $raw) = @_;
+  my $answer = 1;  # default answer is that blastz was run OK
   my $blastz = $defVars{'BLASTZ'} || "lastz";
   #  these variables will be 1 if there is zero usable sequence
   #  this could be a more extensive check than just for zero.
@@ -382,9 +383,11 @@ sub plainBlastz {
   chomp $queryNoSequence;
   if ($targetNoSequence || $queryNoSequence) {
     &emptyLav($raw);
+    $answer = 0;  # not really running blastz
   } else {
     &run("$blastz $target $query $options > $raw");
   }
+  return($answer);
 }
 
 sub selectRpts {
@@ -462,19 +465,26 @@ sub abridgeLinSpecReps {
   &run("strip_rpts $TS2 $TS2X > $TS2S");
 
   # Run blastz on query forward strand and restore repeats:
-  &plainBlastz($TS1S, $TS2S, "B=0" . $blastzOptions, $TZF);
-  &run("restore_rpts $TZF " .
+  my $blastzOK = &plainBlastz($TS1S, $TS2S, "B=0" . $blastzOptions, $TZF);
+  if ($blastzOK ) {
+      &run("restore_rpts $TZF " .
             "$TS1 \"\\\"$tFname\\\" $tStart $tEnd\" " .
             "$TS2 \"\\\"$qFname\\\" $qStart $qEnd\" " .
             "$TS1X $TS2X > $raw");
-
+  } else {
+    &run("/bin/cp -p $TZF $raw");
+  }
   # Run blastz on query reverse strand and restore repeats:
   &run("revcomp $TS2S > $TS2SR");
-  &plainBlastz($TS1S, $TS2SR, "B=0" . $blastzOptions, $TZR);
-  &run("restore_rpts $TZR " .
+  $blastzOK = &plainBlastz($TS1S, $TS2SR, "B=0" . $blastzOptions, $TZR);
+  if ($blastzOK ) {
+      &run("restore_rpts $TZR " .
             "$TS1 \"\\\"$tFname\\\" $tStart $tEnd\" " .
             "$TS2 \"\\\"$qFname-\\\" $qStart $qEnd\" " .
             "$TS1X $TS2X reverse >> $raw");
+  } else {
+    &run("/bin/cat $TZF >> $raw");
+  }
 }
 
 sub liftLav {
@@ -515,7 +525,10 @@ sub convertOutput {
 &usage(1) if (scalar(@ARGV) != 4);
 my ($target, $query, $DEF, $out) = @ARGV;
 
-&cleanDie("$out already exists\n") if (-f "$out");
+# It is OK to have a previous result existing
+if ( -f "$out") {
+   exit 0;
+}
 
 &loadDef($DEF);
 my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
