@@ -5,7 +5,7 @@
 #include "options.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.5 2009/04/29 17:50:36 mikep Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.6 2009/05/13 01:13:57 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 64;
@@ -32,6 +32,8 @@ errAbort(
   "                  assumes all fields in bed are defined.\n"
   "   -as=fields.as - If have non-standard fields, it's great to put a definition of\n"
   "                   each field in a row in AutoSql format here.\n"
+  "   -clip - If set just issue warning messages rather than dying if wig\n"
+  "                  file contains items off end of chromosome."
   , blockSize, itemsPerSlot
   );
 }
@@ -41,13 +43,15 @@ static struct optionSpec options[] = {
    {"itemsPerSlot", OPTION_INT},
    {"bedFields", OPTION_INT},
    {"as", OPTION_STRING},
+   {"clip", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
-bigBedFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, as, outName);
+bigBedFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, as, 
+	optionExists("clip"), outName);
 }
 
 int main(int argc, char *argv[])
