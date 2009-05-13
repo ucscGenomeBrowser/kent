@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.12 2009/05/07 00:12:33 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.13 2009/05/13 17:29:21 mikep Exp $
 
 use warnings;
 use strict;
@@ -377,9 +377,10 @@ for my $line (@fileList) {
     my $releaseDate = "";
     my $submitDate = "";
     my %metaData;
+
     ### TODO: Developer: set sort order here; sortables must have same number of strings and '~' is lowest val printable
-    my @sortFields = ("cell","dataType","antibody","lab","type","view","level","annotation","replicate","subId");
-    my @sortables  = (   "~",       "~",       "~",  "~",   "~",   "~",    "~",         "~",        "~",    "~");
+    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","antibody","lab","type","view","level","annotation","replicate","subId");
+    my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my $typePrefix = "";
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
     if($results) {
