@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.194 2009/05/11 22:16:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.195 2009/05/13 19:02:49 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4717,7 +4717,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 alreadySet = cartUsualBoolean(cart, objName, FALSE);
                 struct dyString *dyJS = newDyString(100);
                 dyStringPrintf(dyJS, javascript);
-                dyStringPrintf(dyJS, " class=\"matrixCB %s\"",dimensionZ->names[ixZ]);
+                dyStringPrintf(dyJS, " class=\"matrixCB dimZ %s\"",dimensionZ->names[ixZ]);
                 cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
                 printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
                 puts("</TH>");
