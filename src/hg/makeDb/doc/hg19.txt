@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.11 2009/05/11 20:50:57 hiram Exp $";
+#	"$Id: hg19.txt,v 1.12 2009/05/13 20:51:33 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -702,8 +702,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-# XXX running 
-Sat Mar 21 22:22:18 PDT 2009
+    cat fb.hg19.chainGorGor1Link.txt 
+    #	1723432141 bases of 2897316137 (59.484%) in intersection
+    doRecipBest.pl -buildDir=`pwd` hg19 gorGor1 > rbest.log 2>&1
 
 ############################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2009-04-02 - Hiram)
@@ -2131,9 +2132,24 @@ TMPDIR=/scratch/tmp
     screen
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
+	-noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running Mon May 11 13:40:46 PDT 2009
+    #	fixed up some bugs in the doBlastzChainNet.pl script, finished
+    #	the lastz run manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat \
+	-noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
+    cat fb.hg19.chainMm9Link.txt 
+    #	1022723573 bases of 2897316137 (35.299%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -continue=syntenicNet -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > synNet.log 2>&1 &
 
 #########################################################################
 # BLASTZ Dog CanFam2 (DONE - 2009-05-11 - Hiram)
@@ -2168,8 +2184,206 @@ TMPDIR=/scratch/tmp
     screen
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running Mon May 11 13:40:46 PDT 2009
+    #	fixed up some bugs in the doBlastzChainNet.pl script, finished
+    #	the lastz run manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat \
+	-noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
+    #	fixup some data missing problems on encodek, then continuing
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=chainMerge \
+	-noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1 &
+    #	real    91m9.723s
+    cat fb.hg19.chainCanFam2Link.txt 
+    #	1532071680 bases of 2897316137 (52.879%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -continue=syntenicNet -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > synNet.log 2>&1 &
+XXX - running Wed May 13 12:51:14 PDT 2009
 
 #########################################################################
+# BLASTZ Chicken GalGal3 (WORKING - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGalGal3.2009-05-13
+    cd /hive/data/genomes/hg19/bed/lastzGalGal3.2009-05-13
+
+    cat << '_EOF_' > DEF
+# human vs chicken
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal3 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/galGal3/nib
+SEQ2_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ2_SMSK=/scratch/data/galGal3/linSpecRep
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzGalGal3.2009-05-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1
+XXX - running Wed May 13 10:21:42 PDT 2009
+
+#########################################################################
+# BLASTZ Macaca Mulatta RheMac2 (WORKING - 2009-05-13 - Hiram)
+
+    mkdir /hive/data/genomes/hg19/bed/lastzRheMac2.2009-05-13
+    cd /hive/data/genomes/hg19/bed/lastzRheMac2.2009-05-13
+
+    cat << '_EOF_' > DEF
+# human vs macaca mulatta
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Macaca Mulatta RheMac2
+SEQ2_DIR=/scratch/data/rheMac2/rheMac2.2bit
+SEQ2_LEN=/scratch/data/rheMac2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=10000
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzRheMac2.2009-05-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Wed May 13 10:41:20 PDT 2009
+
+#########################################################################
+# BLASTZ Rat Rn4 (WORKING - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
+    cd /hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
+
+    cat << '_EOF_' > DEF
+# human vs rat
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Rat Rn4
+SEQ2_DIR=/scratch/data/rn4/nib
+SEQ2_SMSK=/scratch/data/rn4/linSpecRep.notInHuman
+SEQ2_LEN=/scratch/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+    
+BASE=/hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+
+##############################################################################
+# BLASTZ Rat Rn4 (WORKING - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
+    cd /hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
+
+    cat << '_EOF_' > DEF
+# human vs orangutan
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Orangutan PonAbe1
+SEQ2_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/scratch/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=10000
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPonAbe2.2009-05-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+XXX - running Wed May 13 12:44:33 PDT 2009
+
+##############################################################################
