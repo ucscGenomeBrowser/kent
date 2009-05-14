@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.15 2009/05/14 19:00:51 hiram Exp $";
+#	"$Id: hg19.txt,v 1.16 2009/05/14 23:44:55 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -1903,7 +1903,8 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
     #	such a file can be fetched without resorting to email.
 
 # Get current clone/accession information
-    wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/clone/reports/clac.out
+http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
 
 # Create initial Fish Clones bed file
     ssh kkstore02
@@ -2148,6 +2149,9 @@ TMPDIR=/scratch/tmp
 	-swap -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    131m58.763s
+    cat fb.mm9.chainHg19Link.txt 
+    #	1013880568 bases of 2620346127 (38.693%) in intersection
 
 #########################################################################
 # LASTZ Dog CanFam2 (DONE - 2009-05-13 - Hiram)
@@ -2460,7 +2464,7 @@ TMPDIR=/scratch/tmp
 XXX - running Thu May 14 10:18:26 PDT 2009
 
 ##############################################################################
-# LASTZ Tetraodon TetNig1 (WORKING - 2009-05-14 - Hiram)
+# LASTZ Tetraodon TetNig1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14
 
@@ -2498,10 +2502,12 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
-XXX - running Thu May 14 10:18:26 PDT 2009
+    #	real    166m19.745s
+    cat fb.hg19.chainTetNig1Link.txt 
+    #	58038079 bases of 2897316137 (2.003%) in intersection
 
 ##############################################################################
-# LASTZ Stickleback GasAcu1 (WORKING - 2009-05-14 - Hiram)
+# LASTZ Stickleback GasAcu1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14
 
@@ -2539,10 +2545,12 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
-XXX - running Thu May 14 10:18:26 PDT 2009
+    #	real    174m40.659s
+    cat fb.hg19.chainGasAcu1Link.txt 
+    #	55509003 bases of 2897316137 (1.916%) in intersection
 
 ##############################################################################
-# LASTZ Macaca Mulatta RheMac2 (DONE - 2009-05-13 - Hiram)
+# LASTZ Marmoset CalJac1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14
 
@@ -2585,9 +2593,114 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Thu May 14 12:00:31 PDT 2009
-    #	real    760m22.810s
-    cat fb.hg19.chainRheMac2Link.txt 
-    #	2397361211 bases of 2897316137 (82.744%) in intersection
+    #	real    214m16.294s
+    cat fb.hg19.chainCalJac1Link.txt 
+    #	2053025318 bases of 2897316137 (70.860%) in intersection
+
+#########################################################################
+# LASTZ Tarsier TarSyr1 (WORKING - 2009-05-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzTarSyr1.2009-05-14
+    cd /hive/data/genomes/hg19/bed/lastzTarSyr1.2009-05-14
+
+    cat << '_EOF_' > DEF
+# Human vs. Tarsier
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Tarsier
+SEQ2_DIR=/scratch/data/tarSyr1/tarSyr1.2bit
+SEQ2_LEN=/scratch/data/tarSyr1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzTarSyr1.2009-05-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running 
+Thu May 14 16:30:50 PDT 2009
+
+#########################################################################
+# LASTZ Bushbaby OtoGar1 (WORKING - 2009-05-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOtoGar1.2009-05-14
+    cd /hive/data/genomes/hg19/bed/lastzOtoGar1.2009-05-14
+
+    cat << '_EOF_' > DEF
+# Human vs. Bushbaby
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Bushbaby otoGar1 - single chunk big enough to run largest scaffold
+SEQ2_DIR=/scratch/data/otoGar1/otoGar1.rmsk.2bit
+SEQ2_LEN=/hive/data/genomes/otoGar1/chrom.sizes
+SEQ2_LIMIT=200
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOtoGar1.2009-05-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Thu May 14 16:36:50 PDT 2009
+
+#########################################################################
+# LASTZ Mouse lemur MicMur1 (WORKING - 2009-05-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzMicMur1.2009-05-14
+    cd /hive/data/genomes/hg19/bed/lastzMicMur1.2009-05-14
+
+    cat << '_EOF_' > DEF
+# Human vs. Mouse lemur
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Mouse lemur
+SEQ2_DIR=/hive/data/genomes/micMur1/bed/repeatMasker/micMur1.rmsk.2bit
+SEQ2_LEN=/hive/data/genomes/micMur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzMicMur1.2009-05-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+XXX - running Thu May 14 16:36:50 PDT 2009
 
 #########################################################################
