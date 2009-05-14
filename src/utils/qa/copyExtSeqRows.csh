@@ -45,9 +45,9 @@ if ( $#argv != 4 ) then
  echo " Does not accept wildcards (* or %)."
  echo " Use entire path to file like so: /gbdb/db/.../fileName."
  echo " If this is a data update to a track, even if the file names are unique,"
- echo " run with 'update', else run with 'new'.\n"
+ echo "   run with 'update', else run with 'new'.\n"
  echo " This script must be run TWICE: first run with 'setup',"
- echo " then review the output, if it's OK, then run again with 'real'.\n"
+ echo "   then review the output, if it's OK, then run again with 'real'.\n"
  exit 1
 else
  set db=$argv[1]
@@ -95,7 +95,8 @@ else
  set files=$filelist
 endif
 
-# if this is a "real" run, we don't want to remove these files
+# in a setup run, there should be no XX...XX files yet, they will be made.
+# in a real run, they will be used.
 if ( 'setup' == $run ) then
  rm -f $listOfFiles
 else
@@ -128,15 +129,15 @@ if ( 'setup' == $run ) then
   ls $oneFile | egrep 'maf$|fa$|fasta$' > /dev/null
   if ( $status ) then
    echo "\n ERROR: one or more of the file(s) in your list are not of the"
-   echo " expected type. Typical file types in the extFile table end in .maf"
-   echo " or .fa (or somtimes .fasta)\n"
+   echo " expected type. Typical file types in the extFile table end in "
+   echo " .maf or .fa (or somtimes .fasta)\n"
    echo "      Your bad file: $oneFile\n"
    exit 1
   endif
  end
 
  # check hgwbeta to see if the extFile row(s) exist there
- # if this is a data UPDATE, make file containing lists of what will be
+ # if this is a data UPDATE, make a file containing lists of what will be
  # dropped from hgwbeta for users review.
  # if the file is empty, then that means this must be NEW data.
  foreach oneFile ( $files )
@@ -364,8 +365,8 @@ if ( 'real' == $run ) then
  # If this is a Case II Update, we expect the table to have changed, so skip it.
  if ( 2 != $case ) then
   foreach oneFile ( $files )
-   hgsql -h $sqlbeta -Ne 'SELECT * FROM extFile WHERE path = "'$oneFile'"' \
-    $db >> XXextFileDropFromBetaRealXX
+   hgsql -h $sqlbeta -Ne 'SELECT * FROM extFile WHERE path = "'$oneFile'"' $db \
+    >> XXextFileDropFromBetaRealXX
   end
 
   set numDiffs=`diff XXextFileDropFromBetaXX XXextFileDropFromBetaRealXX \
@@ -469,7 +470,7 @@ if ( 'real' == $run ) then
   endif
  else
   # new data
-  echo "1. Becuase this is new data, this script did not drop anything from"
+  echo "1. Because this is new data, this script did not drop anything from"
   echo "  the extFile and seq tables on hgwbeta.\n"
  endif
 
@@ -508,8 +509,8 @@ if ( 'real' == $run ) then
  echo "5. Before any changes were made on hgwbeta, the extFile and seq tables"
  echo "  were backed up.  If you are sure that everything went fine, you"
  echo "  should delete them (from hgwbeta):\n"
- echo "     $db.seq$today;"
- echo "     $db.extFile$today;\n"
+ echo "     DROP TABLE $db.seq$today;"
+ echo "     DROP TABLE $db.extFile$today;\n"
 
  echo "6. Many files were created during the running of this script."
  echo "  When you're ready to do a cleanup, here's a list of what can be"
