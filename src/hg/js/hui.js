@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.27 2009/05/13 19:37:01 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.28 2009/05/14 19:31:02 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -721,7 +721,7 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
 
 function matChkBoxNormalize(matCb)
 {
-    var classes =  $( matCb ).attr("class").split(" ");
+    var classes =  $( matCb ).attr("class");
     classes = classes.replace("dimZ ","");
     classes = classes.replace("matrixCB "," ");
     classes = classes.replace(/ /g,".");
