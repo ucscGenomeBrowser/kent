@@ -9,6 +9,7 @@ source `which qaConfig.csh`
 ####################
 
 set ip=""
+set chopIDs=""
 set worst=""
 set mode=""
 
@@ -53,7 +54,10 @@ if ($ip == "all") then
   cat ipFile
   echo
 
-  foreach ip (`echo $allIPs`)
+  # get locations (strip off sessionID)
+  set chopIPs=`echo $allIPs | sed "s/ /\n/"g \
+    | awk -F"." '{print $NF-3"."$NF-2"."$NF-1"."$NF}'`
+  foreach ip (`echo $chopIPs`)
     set orgName=`ipw $ip | grep OrgName | sed -e "s/OrgName: //"` > /dev/null
     set current=`grep -w $ip ipFile | awk '{print $5}'`
     echo "$ip\t\t$current\t  $orgName"
