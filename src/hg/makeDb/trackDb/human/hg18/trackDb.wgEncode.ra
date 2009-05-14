@@ -6271,7 +6271,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=dense
+visibilityViewDefaults Transfrags=hide FilteredTransfrags=pack RawSignal=hide FilteredRawSignal=full
 noInherit on
 settingsByView RawSignal:maxHeightPixels=100:16:16,windowingFunction=mean FilteredRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
@@ -11531,7 +11531,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Alignments=hide Tags=hide
+visibilityViewDefaults Alignments=pack Tags=pack
 noInherit on
 priority 0
 type bed 3
@@ -11955,7 +11955,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Transfrags=hide
+visibilityViewDefaults Transfrags=pack
 priority 0
 type bed 3
 wgEncode 1
@@ -13423,7 +13423,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Alignments=hide RawSignal=hide
+visibilityViewDefaults RawSignal=full+ Alignments=pack
 priority 0
 type bed 3
 wgEncode 1
