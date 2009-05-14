@@ -57,25 +57,31 @@ set contacts=`echo $contacts | sed "s/,/ /g" | sed "s/ /\n/g" \
 
 set debug=false
 if ( $debug == "true" ) then
-  # set contacts="kate, fan ting ann Hiram rachel Andy andy bob kayla"
-  echo "contacts $contacts"
+  echo "\ncontacts $contacts"
     set contacts=`echo $contacts | sed "s/,/ /" | sed "s/ /\n/g" \
     | perl -wpe '$_ = lcfirst($_);' | sort -u`
+  set contacts="larrym kate, fan ting ann Hiram rachel Andy andy bob larry kayla"
   echo "contacts $contacts"
 endif
 
 # replace common names with email addresses
 foreach i ( $counter )
-  set contacts=`echo $contacts | sed "s/$alias[$i]/$email[$i]/g"`
+  set contacts=`echo $contacts | sed "s/$alias[$i] /$email[$i] /g"`
   if ( $debug == "true" ) then
     echo    here5 $i
     echo    $alias[$i]
+    echo    $email[$i]
+    echo "   contacts $contacts"
+    ## send output only to selected people
+    # set contacts="ann kuhn pauline rhead kayla"
+    # set contacts="pauline rhead ann kayla"
     echo "   contacts $contacts"
   endif 
 end
 
-# set contacts="ann kuhn pauline rhead kayla"
-# set contacts="pauline rhead ann kayla"
+if ( $debug == "true" ) then
+  exit
+endif
 
 # cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
 cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
