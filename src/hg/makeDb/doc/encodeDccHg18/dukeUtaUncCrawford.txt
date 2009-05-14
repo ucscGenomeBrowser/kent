@@ -571,6 +571,7 @@ rename table wgEncodeUtaustinChIPseqRawSignalGm12878Input to wgEncodeUtaustinChI
 rename table wgEncodeUtaustinChIPseqRawSignalHelas3Input  to wgEncodeUtaustinChIPseqRawSignalHelas3Input_terry ;
 rename table wgEncodeUtaustinChIPseqRawSignalHepg2Input   to wgEncodeUtaustinChIPseqRawSignalHepg2Input_terry  ;
 rename table wgEncodeUtaustinChIPseqRawSignalK562Input    to wgEncodeUtaustinChIPseqRawSignalK562Input_terry   ;
+#### Remember that wigs have file name element, so rename doesn't work.  All will need to be deleted!
 
 ~/bin/scripts/doEncodeValidate.pl -quick -skipAutoCreation x ../2 > validate_error 2>&1
 view 'RawSignal' has already been loaded as track 'wgEncodeDukeDNaseSeqRawSignalRep2Gm12878'
@@ -602,3 +603,372 @@ Edit trackDb.wgEncode.ra replacing the old RawSignal tracks with the new ones.
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 326 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 327 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 328 displayed
+
+Splitting Uniqueness tracks 2009-05-12
+======================================
+ wgEncodeDukeDNaseSeqUniqueness20bpGm12878 |
+| wgEncodeDukeDNaseSeqUniqueness24bpGm12878 |
+| wgEncodeDukeDNaseSeqUniqueness35bpGm12878
+cd /gbdb/hg18/wib
+mv /gbdb/hg18/wib/wgEncodeDukeDNaseSeqUniqueness20bpGm12878.wib /gbdb/hg18/wib/wgEncodeDukeUniqueness20bp.wib
+mv /gbdb/hg18/wib/wgEncodeDukeDNaseSeqUniqueness24bpGm12878.wib /gbdb/hg18/wib/wgEncodeDukeUniqueness24bp.wib
+mv /gbdb/hg18/wib/wgEncodeDukeDNaseSeqUniqueness35bpGm12878.wib /gbdb/hg18/wib/wgEncodeDukeUniqueness35bp.wib
+
+update wgEncodeDukeDNaseSeqUniqueness20bpGm12878 set file = '/gbdb/hg18/wib/wgEncodeDukeUniqueness20bp.wib'; 
+update wgEncodeDukeDNaseSeqUniqueness24bpGm12878 set file = '/gbdb/hg18/wib/wgEncodeDukeDUniqueness24bp.wib'; 
+update wgEncodeDukeDNaseSeqUniqueness35bpGm12878 set file = '/gbdb/hg18/wib/wgEncodeDukeUniqueness35bp.wib'; 
+
+rename table wgEncodeDukeDNaseSeqUniqueness20bpGm12878 to wgEncodeDukeUniqueness20bp;
+rename table wgEncodeDukeDNaseSeqUniqueness24bpGm12878 to wgEncodeDukeUniqueness24bp;
+rename table wgEncodeDukeDNaseSeqUniqueness35bpGm12878 to wgEncodeDukeUniqueness35bp;
+
+rename table wgEncodeDukeDNaseSeqRegionsExcludedGm12878 to wgEncodeDukeRegionsExcluded;
+# in donwloads dir
+mv wgEncodeDukeDNaseSeqRegionsExcludedGm12878.bed6.gz wgEncodeDukeDNaseSeqRegionsExcluded.bed6.gz
+mv wgEncodeDukeDNaseSeqUniqueness20bpGm12878.wig.gz wgEncodeDukeDNaseSeqUniqueness20bp.wig.gz
+mv wgEncodeDukeDNaseSeqUniqueness24bpGm12878.wig.gz wgEncodeDukeDNaseSeqUniqueness24bp.wig.gz
+mv wgEncodeDukeDNaseSeqUniqueness35bpGm12878.wig.gz wgEncodeDukeDNaseSeqUniqueness35bp.wig.gz
+
+mv wgEncodeDukeDNaseSeqRegionsExcluded.bed6.gz wgEncodeDukeRegionsExcluded.bed6.gz
+mv wgEncodeDukeDNaseSeqUniqueness20bp.wig.gz wgEncodeDukeUniqueness20bp.wig.gz
+mv wgEncodeDukeDNaseSeqUniqueness24bp.wig.gz wgEncodeDukeUniqueness24bp.wig.gz
+mv wgEncodeDukeDNaseSeqUniqueness35bp.wig.gz wgEncodeDukeUniqueness35bp.wig.gz
+
+
+Getting ready for pushQ 2009-5-12
+=================================
+trackDb
+wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
+wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3
+wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2
+wgEncodeDukeDNaseSeqBaseOverlapSignalK562
+wgEncodeDukeDNaseSeqPeaksGm12878
+wgEncodeDukeDNaseSeqPeaksHelas3
+wgEncodeDukeDNaseSeqPeaksHepg2
+wgEncodeDukeDNaseSeqPeaksK562
+wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
+wgEncodeDukeDNaseSeqRawSignalRep1Helas3
+wgEncodeDukeDNaseSeqRawSignalRep1Hepg2
+wgEncodeDukeDNaseSeqRawSignalRep1K562
+wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
+wgEncodeDukeDNaseSeqRawSignalRep2Helas3
+wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
+wgEncodeDukeDNaseSeqRawSignalRep2K562
+wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
+wgEncodeDukeDNaseSeqRawSignalRep3Helas3
+wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
+wgEncodeDukeDNaseSeqRawSignalRep3K562
+wgEncodeDukeDNaseSeqSignalGm12878
+wgEncodeDukeDNaseSeqSignalHelas3
+wgEncodeDukeDNaseSeqSignalHepg2
+wgEncodeDukeDNaseSeqSignalK562
+wgEncodeDukeRegionsExcluded                 
+wgEncodeUncFAIREseqBaseOverlapSignalGm12878
+wgEncodeUncFAIREseqBaseOverlapSignalHelas3
+wgEncodeUncFAIREseqBaseOverlapSignalHepg2
+wgEncodeUncFAIREseqBaseOverlapSignalK562
+wgEncodeUncFAIREseqPeaksGm12878
+wgEncodeUncFAIREseqPeaksHepg2
+wgEncodeUncFAIREseqPeaksK562
+wgEncodeUncFAIREseqRawSignalRep1Gm12878
+wgEncodeUncFAIREseqRawSignalRep1Helas3
+wgEncodeUncFAIREseqRawSignalRep1Hepg2
+wgEncodeUncFAIREseqRawSignalRep1K562
+wgEncodeUncFAIREseqRawSignalRep2Gm12878
+wgEncodeUncFAIREseqRawSignalRep2Helas3
+wgEncodeUncFAIREseqRawSignalRep2Hepg2
+wgEncodeUncFAIREseqRawSignalRep2K562
+wgEncodeUncFAIREseqRawSignalRep3Gm12878
+wgEncodeUncFAIREseqRawSignalRep3Helas3
+wgEncodeUncFAIREseqRawSignalRep3Hepg2
+wgEncodeUncFAIREseqRawSignalRep3K562
+wgEncodeUncFAIREseqSignalGm12878
+wgEncodeUncFAIREseqSignalHelas3
+wgEncodeUncFAIREseqSignalHepg2
+wgEncodeUncFAIREseqSignalK562              
+wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf
+wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc
+wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf
+wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc
+wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf
+wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc
+wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf
+wgEncodeUtaChIPseqPeaksGm12878Ctcf
+wgEncodeUtaChIPseqPeaksHelas3Cmyc
+wgEncodeUtaChIPseqPeaksHelas3Ctcf
+wgEncodeUtaChIPseqPeaksHepg2Cmyc
+wgEncodeUtaChIPseqPeaksHepg2Ctcf
+wgEncodeUtaChIPseqPeaksK562Cmyc
+wgEncodeUtaChIPseqPeaksK562Ctcf
+wgEncodeUtaChIPseqRawSignalGm12878Input
+wgEncodeUtaChIPseqRawSignalHelas3Input
+wgEncodeUtaChIPseqRawSignalHepg2Input
+wgEncodeUtaChIPseqRawSignalK562Input
+wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
+wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
+wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
+wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc
+wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf
+wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
+wgEncodeUtaChIPseqRawSignalRep1K562Ctcf
+wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
+wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
+wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
+wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
+wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
+wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
+wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
+wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
+wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
+wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
+wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
+wgEncodeUtaChIPseqSignalGm12878Ctcf
+wgEncodeUtaChIPseqSignalHelas3Cmyc
+wgEncodeUtaChIPseqSignalHelas3Ctcf
+wgEncodeUtaChIPseqSignalHepg2Cmyc
+wgEncodeUtaChIPseqSignalHepg2Ctcf
+wgEncodeUtaChIPseqSignalK562Cmyc
+wgEncodeUtaChIPseqSignalK562Ctcf
+wgEncodeUtaustinChIPseqSignalGm12878Input
+wgEncodeUtaustinChIPseqSignalHelas3Input
+wgEncodeUtaustinChIPseqSignalHepg2Input
+wgEncodeUtaustinChIPseqSignalK562Input        
+NOTE: Missing HelaS3 Peaks!
+NOTE: Missing GM12878/c-Myc
+Note: All (non-input) have 2 reps except GM12878/CTCF,HepG2/c-Myc,K562/c-Myc,K562/CTCF
+
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/index.html
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep1Helas3.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep1K562.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep2Helas3.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep2K562.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep3Helas3.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqAlignmentsRep3K562.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqBaseOverlapSignalK562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqPeaksHelas3.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep1Gm12878.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep1Helas3.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep1Hepg2.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep1K562.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep2Gm12878.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep2Helas3.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep2Hepg2.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep2K562.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep3Gm12878.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep3Helas3.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep3Hepg2.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawDataRep3K562.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqSignalGm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqSignalHelas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqSignalHepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqSignalK562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeRegionsExcluded.bed6.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep1Gm12878.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep1Helas3.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep1Hepg2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep1K562.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep2Gm12878.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep2Helas3.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep2Hepg2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep2K562.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep3Gm12878.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep3Helas3.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep3Hepg2.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqAlignmentsRep3K562.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqBaseOverlapSignalGm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqBaseOverlapSignalHelas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqBaseOverlapSignalHepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqPeaksHepg2.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep1Gm12878.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep1Helas3.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep1Hepg2.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep1K562.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep2Gm12878.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep2Helas3.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep2Hepg2.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep2K562.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep3Gm12878.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep3Helas3.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep3Hepg2.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawDataRep3K562.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqSignalGm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqSignalHelas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqSignalHepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqSignalK562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1Gm12878Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1Helas3Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1Hepg2Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep1K562Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2Helas3Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2Hepg2Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep2K562Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep3Gm12878Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep3Hepg2Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep3K562Cmyc.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqAlignmentsRep3K562Ctcf.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksHelas3Cmyc.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksHelas3Ctcf.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksHepg2Cmyc.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksHepg2Ctcf.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1Gm12878Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1Helas3Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1Hepg2Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1Hepg2Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1K562Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep1K562Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2Gm12878Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2Helas3Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2Hepg2Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2Hepg2Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2K562Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep2K562Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep3Gm12878Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep3Hepg2Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep3K562Cmyc.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawDataRep3K562Ctcf.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalGm12878Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalHelas3Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalHepg2Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalHepg2Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalK562Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqSignalK562Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqAlignmentsGm12878Input.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqAlignmentsHelas3Input.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqAlignmentsHepg2Input.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqAlignmentsK562Input.tagAlign.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawDataGm12878Input.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawDataHelas3Input.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawDataHepg2Input.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawDataK562Input.fastq.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqSignalGm12878Input.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqSignalHelas3Input.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqSignalHepg2Input.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqSignalK562Input.wig.gz
+
+# Not yet available
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep1K562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep2K562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqRawSignalRep3K562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep1Gm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep1Helas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep1Hepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep1K562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep2Gm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep2Helas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep2Hepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep2K562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep3Gm12878.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep3Helas3.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep3Hepg2.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUncFAIREseqRawSignalRep3K562.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawSignalGm12878Input.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawSignalHelas3Input.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawSignalHepg2Input.wig.gz
+/usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawSignalK562Input.wig.gz
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 12 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 31 approved 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 34 approved         
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 79 approved 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 80 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 109 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 112 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 113 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 114 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 115 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 116 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 117 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 127 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 131 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 228 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 231 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 233 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 234 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 235 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 244 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 245 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 258 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 272 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 274 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 275 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 278 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 280 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 281 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 282 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 283 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 284 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 285 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 286 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 287 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 325 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 326 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 327 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 328 approved
+
+# Not yeet for uniqueness tracks:
+| wgEncodeDukeUniqueness20bp                     |
+| wgEncodeDukeUniqueness24bp                     |
+| wgEncodeDukeUniqueness35bp                     |
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 104 approved
