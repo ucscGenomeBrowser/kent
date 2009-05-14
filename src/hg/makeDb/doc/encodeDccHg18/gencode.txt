@@ -791,3 +791,12 @@ insert into wgEncodeGencodeAutoRel2 select * from wgEncodeGencodeTrnaNew;
 
 update wgEncodeGencodeAutoRel2 set chrom = "chrM" where chrom = "chrMT";
 drop table wgEncodeGencodeTrnaNew;
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 21 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 265 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 21 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 265 reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 21 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 265 released
