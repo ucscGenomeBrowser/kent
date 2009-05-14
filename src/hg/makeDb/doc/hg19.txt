@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.14 2009/05/14 17:37:13 hiram Exp $";
+#	"$Id: hg19.txt,v 1.15 2009/05/14 19:00:51 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -2368,7 +2368,7 @@ TMPDIR=/scratch/tmp
     #	2646687531 bases of 2897316137 (91.350%) in intersection
 
 ##############################################################################
-# LASTZ Lamprey PetMar1 (WORKING - 2009-05-14 - Hiram)
+# LASTZ Lamprey PetMar1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPetMar1.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzPetMar1.2009-05-14
 
@@ -2407,7 +2407,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
 	> do.log 2>&1 &
-XXX - running Thu May 14 10:18:36 PDT 2009
+    #	real    113m20.116s
+    cat fb.hg19.chainPetMar1Link.txt 
+    #	31347143 bases of 2897316137 (1.082%) in intersection
 
 ##############################################################################
 # LASTZ Fugu Fr2 (WORKING - 2009-05-14 - Hiram)
@@ -2458,3 +2460,134 @@ TMPDIR=/scratch/tmp
 XXX - running Thu May 14 10:18:26 PDT 2009
 
 ##############################################################################
+# LASTZ Tetraodon TetNig1 (WORKING - 2009-05-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14
+    cd /hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14
+
+    cat << '_EOF_' > DEF
+# human vs tetraodon
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Tetraodon TetNig1 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/data/tetNig1/tetNig1.2bit
+SEQ2_LEN=/hive/data/genomes/tetNig1/chrom.sizes
+SEQ2_CHUNK=410000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+XXX - running Thu May 14 10:18:26 PDT 2009
+
+##############################################################################
+# LASTZ Stickleback GasAcu1 (WORKING - 2009-05-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14
+    cd /hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14
+
+    cat << '_EOF_' > DEF
+# Human vs. Stickleback
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# TARGET: Stickleback gasAcu1
+SEQ2_DIR=/scratch/data/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/hive/data/genomes/gasAcu1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+XXX - running Thu May 14 10:18:26 PDT 2009
+
+##############################################################################
+# LASTZ Macaca Mulatta RheMac2 (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14
+    cd /hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14
+
+    cat << '_EOF_' > DEF
+# human vs. marmoset
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Marmoset (calJac1)
+SEQ2_DIR=/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/scratch/data/calJac1/chrom.sizes
+SEQ2_LIMIT=200
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Thu May 14 12:00:31 PDT 2009
+    #	real    760m22.810s
+    cat fb.hg19.chainRheMac2Link.txt 
+    #	2397361211 bases of 2897316137 (82.744%) in intersection
+
+#########################################################################
