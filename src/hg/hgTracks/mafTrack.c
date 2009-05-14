@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.63 2008/10/28 13:44:38 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.64 2009/05/14 21:45:24 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -463,7 +463,9 @@ else
         /* Take the score over the relevant range of text symbols in the maf,
          * and divide it by the bases we cover in the master genome to 
          * get a normalized by base score. */ 
-	score = mafScoreRangeMultiz(maf, t1, deltaT)/(b2-b1);
+	score = 0;
+	if (deltaT != 0)
+	    score = mafScoreRangeMultiz(maf, t1, deltaT)/(b2-b1);
 
         /* Scale the score so that it is between 0 and 1 */ 
 	score = (score - minScore) * scoreScale;
