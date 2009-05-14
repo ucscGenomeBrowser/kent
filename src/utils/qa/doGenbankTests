@@ -9,8 +9,7 @@
 # 
 ###############################################################################
 
-tableExists()
-{
+tableExists() {
   local db=$1 table=$2
   local res=$(hgsql -Ne "show tables like '$table'" $db)
   if [ -z "$res" ]
@@ -21,8 +20,7 @@ tableExists()
   fi
 }
 
-databaseExists()
-{
+databaseExists() {
   local db=$1
   local res=$(hgsql -Ne "show databases like '$db'")
   if [ -z "$res" ]
@@ -33,10 +31,22 @@ databaseExists()
   fi
 }
 
-getShortLabel()
-{
+selectShortLabel() {
   local db=$1 table=$2
   hgsql -NBe "select shortLabel from trackDb where tableName='$table'" $db
+}
+
+getShortLabel() {
+  local db=$1 table=$2
+  local res=$(selectShortLabel $db $table)
+  if [ -z "$res" -a "$table" = "all_mrna" ] 
+  then
+    res=$(selectShortLabel $db mrna)
+  elif [ -z "$res" -a "$table" = "all_est" ] 
+  then
+    res=$(selectShortLabel $db est)
+  fi
+  echo $res
 }
 
 allOk=yes
@@ -84,7 +94,7 @@ echo -e "The following GenBank tracks are present in this assembly:\n"
 for table in refGene xenoRefGene mgcFullMrna orfeomeMrna \
              all_mrna intronEst all_est xenoMrna xenoEst
 do
-  tableExists $db && getShortLabel $db $table
+  tableExists $db $table && getShortLabel $db $table
 done
 echo
 
@@ -135,11 +145,11 @@ echo
 
 # run gbSanity
 filename=${db}.sanity.$(date +%m.%d.%Y-%R%p)
-echo -e "--> Running gbSanity, and putting output in:\n"
+echo -e "--> Running gbSanity, and putting output in:"
 echo -e "${HOST}:$sanityPath/misc/$filename"
 # need to run in a subshell, since gbSanity wants to be run from this dir
 (cd $sanityPath && bin/x86_64/gbSanity $db >& misc/$filename) || allOk=no
-echo -e "\nHere is the last line of that file:\n"
+echo -e "Here is the last line of that file:\n"
 tail -1 $sanityPath/misc/$filename
 echo -e "\nIf there are any errors here, consult Mark Diekhans.\n"
 
