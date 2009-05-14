@@ -4180,8 +4180,8 @@ subGroup1 view Views 1_PlusClusters=Plus_Clusters 3_MinusClusters=Minus_Clusters
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ longNonPolyA=Long_PolyA- total=Total_RNA
-dimensions dimensionX=cellType dimensionY=rnaExtract dimensionZ=localization
-sortOrder cellType=+ view=+ rnaExtract=+ localization=+
+dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults 1_PlusClusters=full 3_MinusClusters=full 2_PlusRawSignal=hide 4_MinusRawSignal=hide 5_Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
