@@ -91,6 +91,7 @@ foreach machine ( $mach1 $mach2 )
     if ( $status ) then
       cat $machine.tmp
       rm $machine.tmp
+
       exit 1
     endif
   else
@@ -141,7 +142,7 @@ if ( 0 != $firstOnly || 0 !=  $secondOnly ) then
 endif
 
 rm -f *Only
-rm -f *out
+rm -f "*out"
 rm -f trioFile
 rm -f outFile
 rm -f genbank.local
