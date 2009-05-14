@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.12 2009/05/13 20:51:33 hiram Exp $";
+#	"$Id: hg19.txt,v 1.13 2009/05/14 04:56:59 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -2101,9 +2101,9 @@ CREATE TABLE ensemblLift (
 -e 'LOAD DATA LOCAL INFILE "ensemblLift.tab" INTO TABLE ensemblLift'
 
 ##############################################################################
-# BLASTZ MOUSE Mm9 (DONE - 2009-05-11 - Hiram)
-    mkdir /hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
-    cd /hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+# BLASTZ MOUSE Mm9 (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzMm9.2009-05-13
+    cd /hive/data/genomes/hg19/bed/lastzMm9.2009-05-13
 
     cat << '_EOF_' > DEF
 # human vs mouse
@@ -2114,16 +2114,16 @@ SEQ1_DIR=/scratch/data/hg19/nib
 SEQ1_SMSK=/scratch/data/hg19/linSpecRep/lineageSpecificRepeats
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
-SEQ1_LAP=0
+SEQ1_LAP=10000
 
 # QUERY: Mouse Mm9
 SEQ2_DIR=/scratch/data/mm9/nib
 SEQ2_SMSK=/scratch/data/mm9/notInOthers
 SEQ2_LEN=/scratch/data/mm9/chrom.sizes
 SEQ2_CHUNK=10000000
-SEQ2_LAP=10000
+SEQ2_LAP=0
     
-BASE=/hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+BASE=/hive/data/genomes/hg19/bed/lastzMm9.2009-05-13
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -2132,9 +2132,11 @@ TMPDIR=/scratch/tmp
     screen
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-noLoadChainSplit \
+	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Wed May 13 16:51:48 PDT 2009
+
     #	fixed up some bugs in the doBlastzChainNet.pl script, finished
     #	the lastz run manually, then continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2152,9 +2154,9 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=3000 -chainLinearGap=medium > synNet.log 2>&1 &
 
 #########################################################################
-# BLASTZ Dog CanFam2 (DONE - 2009-05-11 - Hiram)
-    mkdir /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
-    cd /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+# BLASTZ Dog CanFam2 (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-13
+    cd /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-13
 
     cat << '_EOF_' > DEF
 # human vs dog
@@ -2165,7 +2167,7 @@ SEQ1_DIR=/scratch/data/hg19/nib
 SEQ1_SMSK=/scratch/data/hg19/linSpecRep/lineageSpecificRepeats
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
-SEQ1_LAP=0
+SEQ1_LAP=10000
 
 # QUERY: Dog CanFam2
 SEQ2_DIR=/scratch/data/canFam2/nib
@@ -2173,9 +2175,9 @@ SEQ2_LEN=/scratch/data/canFam2/chrom.sizes
 SEQ2_SMSK=/scratch/scratch/data/canFam2/linSpecRep.notInHuman
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=20000000
-SEQ2_LAP=10000
+SEQ2_LAP=0
 
-BASE=/hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+BASE=/hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-13
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -2184,9 +2186,11 @@ TMPDIR=/scratch/tmp
     screen
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-noLoadChainSplit \
+	-noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Wed May 13 16:48:16 PDT 2009
+
     #	fixed up some bugs in the doBlastzChainNet.pl script, finished
     #	the lastz run manually, then continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2279,14 +2283,14 @@ BLASTZ_T=2
 SEQ1_DIR=/scratch/data/hg19/hg19.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
-SEQ1_LAP=0
+SEQ1_LAP=10000
 SEQ1_IN_CONTIGS=0
 
 # QUERY: Macaca Mulatta RheMac2
 SEQ2_DIR=/scratch/data/rheMac2/rheMac2.2bit
 SEQ2_LEN=/scratch/data/rheMac2/chrom.sizes
 SEQ2_CHUNK=20000000
-SEQ2_LAP=10000
+SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
 
 BASE=/hive/data/genomes/hg19/bed/lastzRheMac2.2009-05-13
@@ -2316,14 +2320,14 @@ SEQ1_DIR=/scratch/data/hg19/nib
 SEQ1_SMSK=/scratch/data/hg19/lineageSpecificRepeats
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
-SEQ1_LAP=0
+SEQ1_LAP=10000
 
 # QUERY: Rat Rn4
 SEQ2_DIR=/scratch/data/rn4/nib
 SEQ2_SMSK=/scratch/data/rn4/linSpecRep.notInHuman
 SEQ2_LEN=/scratch/data/rn4/chrom.sizes
 SEQ2_CHUNK=10000000
-SEQ2_LAP=10000
+SEQ2_LAP=0
     
 BASE=/hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
 TMPDIR=/scratch/tmp
@@ -2337,6 +2341,8 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -noLoadChainSplit \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Wed May 13 16:48:04 PDT 2009
+    #	real    314m18.227s
 
 ##############################################################################
 # BLASTZ Rat Rn4 (WORKING - 2009-05-13 - Hiram)
@@ -2361,14 +2367,14 @@ BLASTZ_T=2
 SEQ1_DIR=/scratch/data/hg19/hg19.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
-SEQ1_LAP=0
+SEQ1_LAP=10000
 SEQ1_IN_CONTIGS=0
 
 # QUERY: Orangutan PonAbe1
 SEQ2_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
 SEQ2_LEN=/scratch/data/ponAbe2/chrom.sizes
 SEQ2_CHUNK=20000000
-SEQ2_LAP=10000
+SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
 
 BASE=/hive/data/genomes/hg19/bed/lastzPonAbe2.2009-05-13
