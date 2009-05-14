@@ -16,7 +16,16 @@ cd download
 
 # get sequence from BROAD
 # http://www.broad.mit.edu/ftp/pub/assemblies/invertebrates/aplysia/
-vi fetch.sh
+
+    cat << '_EOF_' > fetch.sh
+#!/bin/sh
+
+wget --timestamping -r -np -l 2 -nd -L
+'ftp://ftp.broad.mit.edu/pub/assemblies/invertebrates/aplysia'
+
+'_EOF_'
+    # << happy emacs
+
 chmod +x fetch.sh
 ./fetch.sh
 
@@ -25,10 +34,27 @@ chmod +x fetch.sh
 #  change ">scaffold_0.1-1784514 (Draft_v1)" 
 #    to   ">scaffold_0"
 #  sed 's/\(>scaffold_[0-9]*\)[.].*/\1/'
-vi fix.csh
+
+    cat << '_EOF_' > fix.csh
+#!/bin/tcsh
+
+gunzip -c assembly_supers.fasta.gz | sed 's/\(>scaffold_[0-9]*\)[.].*/\1/' \
+  | gzip -c > assembly_supers.fasta.fix.gz
+
+gunzip -c assembly_supers.qual.gz | sed 's/\(>scaffold_[0-9]*\)[.].*/\1/' \
+  | gzip -c > assembly_supers.qual.fix.gz
+
+'_EOF_'
+    # << happy emacs
+
 chmod +x fix.csh
 ./fix.csh
 
+# totalKinds is something I made to add up the numbers of each kind
+# it just reveals that there are too many unplaced fragments
+# to consider making them all scaffolds, and as a chrUn it would
+# be too large.  We are going to just leave these out of the 
+# assembly like Broad did.  JK says ok.
 totalKinds assembly.unplaced 2 > unplaced.types
 cat unplaced.types
 #unplaced 4270994
@@ -38,7 +64,28 @@ cat unplaced.types
 #vector_or_host 63932
 #multiple_instance 27153
 
-vi aplCal1.config.ra
+
+# Run automation to make the basic genome
+
+    cat << '_EOF_' > aplCal1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db aplCal1
+scientificName Aplysia californica
+commonName Sea Hare
+assemblyDate Sept. 2008
+assemblyLabel Broad Institute v. 1.0
+orderKey 825
+clade other
+genomeCladePriority 19
+mitoAcc NC_005827
+fastaFiles /hive/data/genomes/aplCal1/download/assembly_supers.fasta.fix.gz
+agpFiles /hive/data/genomes/aplCal1/download/assembly.agp
+qualFiles /hive/data/genomes/aplCal1/download/assembly_supers.qual.fix.gz
+dbDbSpeciesDir seaHare
+taxId 6500
+'_EOF_'
+    # << happy emacs
+
 
 time makeGenomeDb.pl aplCal1.config.ra > & makeGenomeDb.pl.out &
 # took less than 10 minutes
