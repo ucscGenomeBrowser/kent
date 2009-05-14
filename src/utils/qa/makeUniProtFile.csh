@@ -56,17 +56,22 @@ set org=`hgsql -Ne 'SELECT organism FROM dbDb where name = "'$db'" LIMIT 1' hgce
 # now add the organism name to every row
 cat $db.rawDataForUniProt.sorted | sed -e 's/$/ '"$org"'/g' > $db.uniProtToUcscGenes.txt
 
-# clean up old files
-rm $db.rawDataForUniProt*
+# make the new directory and copy the file there
+mkdir -p /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes
+cp $db.uniProtToUcscGenes.txt /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt
 
 # how big is the file
 set num=`cat $db.uniProtToUcscGenes.txt | wc -l`
 
 # explain the output to the user
 echo "\nSUCCESS!\n"
-echo "Here's a sample of the $num line file you just created (expect: UniProtId ucscGeneId orgName)"
+echo "Here's a sample of the $num line file you just created"
+echo " (expect: UniProtId ucscGeneId orgName)"
 head $db.uniProtToUcscGenes.txt
 echo " \nAsk for a push of your new file to hgdownload:\n"
-echo " /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/$db.uniProtToUcscGenes.txt\n"
+echo " /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt"
+
+# clean up old files (except the real one)
+rm $db.rawDataForUniProt*
 
 exit 0
