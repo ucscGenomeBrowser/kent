@@ -50,3 +50,19 @@ wget -O /usr/local/apache/htdocs/images/Aplysia_californica.jpg \
 # Edit and check-in templates for description.html, gold.html, gap.html, aplCal1/trackDb.ra
 
 
+# repeat mask
+time doRepeatMasker.pl aplCal1 > & doRepeatMasker.pl.out &
+
+
+# simple repeat masker trf
+time doSimpleRepeat.pl aplCal1 > & doSimpleRepeat.pl.out &
+
+# make final masked .2bit
+[hgwdev:aplCal1> twoBitMask aplCal1.rmsk.2bit -add bed/simpleRepeat.2009-05-13/trfMask.bed aplCal1.2bit
+#Warning: BED file bed/simpleRepeat.2009-05-13/trfMask.bed has >=13 fields
+#which means it might contain block coordinates, but this program uses only the
+#first three fields (the entire span -- no support for blocks).
+
+ln -s /cluster/data/aplCal1/aplCal1.2bit /gbdb/aplCal1/
+
+
