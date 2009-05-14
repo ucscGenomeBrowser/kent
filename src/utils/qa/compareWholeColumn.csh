@@ -24,7 +24,7 @@ if ($#argv < 3 || $#argv > 4) then
   echo "  can compare to older database."
   echo "  writes files of everything."
   echo
-  echo "    usage:  database, table, column, [db2] "
+  echo "    usage:  database table column [db2] "
   echo
   exit
 else
