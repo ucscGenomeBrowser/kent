@@ -13,4 +13,7 @@ CREATE TABLE tagAlign (
     strand char(1) not null,	# Orientation of this read (+ or -)
               #Indices
     INDEX chromStart (chrom(8), chromStart)
-);
+)
+AVG_ROW_LENGTH = 100
+MAX_ROWS = 10000000000
+;

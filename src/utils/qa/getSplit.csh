@@ -11,18 +11,18 @@ source `which qaConfig.csh`
 #######################
 
 set tablename=""
-set machine="hgwbeta"
-set host="-h $sqlbeta"
+set machine="hgwdev"
+set host=""
 set db=""
 
-if ($#argv < 2 || $#argv > 3) then
+if ( $#argv < 2 || $#argv > 3 ) then
   echo
   echo "  determines if table is in split format "
   echo "    and returns split name if so."
   echo
-  echo "    usage:  db tablename [hgwdev|hgwbeta]"
+  echo "    usage:  db tablename [hgwdev | hgsqlbeta]"
   echo
-  echo "      third argument accepts machine, defaults to beta"
+  echo "      third argument accepts machine, defaults to hgwdev"
   echo
   exit
 else
@@ -36,11 +36,15 @@ if ( "$HOST" != "hgwdev" ) then
 endif
 
 # assign command line arguments
-if ($#argv == 3) then
-  set machine="$argv[3]"
-  set host="-h $argv[3]"
-  if ($argv[3] == "hgwdev") then
-    set host=""
+if ( $#argv == 3 ) then
+  if ( $argv[3] == "hgsqlbeta" ) then
+    set machine="$argv[3]"
+    set host="-h $sqlbeta"
+  else
+    if ( $argv[3] != "hgwdev" ) then
+      echo "only hgwdev and hgwbeta are allowed in $0."
+      exit 1
+    endif
   endif
 endif
 
@@ -64,29 +68,30 @@ endif
 set chrom=""
 set split=""
 set isChromInfo=0
-if ( $machine == hgwdev || $machine == hgwbeta ) then
-  # check for chromInfo table
-  set isChromInfo=`hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" \
-     | wc -l`
-  if ( $isChromInfo > 0 ) then
-    set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
 
-    # check if split table
-    set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
-      $db | wc -l`
-    if ( $split == 1 ) then
-      echo "$chrom"
-    else 
-      echo "unsplit"
-    endif
-    exit 0
-  else
-    echo "no chromInfo table.  split irrelevant"
+# check for chromInfo table
+set isChromInfo=`hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" \
+   | wc -l`
+  if ( $status ) then
+    echo "$0 defaults to hgwbeta.  also check spelling of database"
+    echo
     exit 1
   endif
-else   # not dev or beta
-  echo "\n  only works on dev and beta\n"
-  echo "${0}:"
-  $0
+if ( $isChromInfo > 0 ) then
+  set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
+
+  # check if split table
+  set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
+    $db | wc -l`
+  if ( $split == 1 ) then
+    echo "$chrom"
+  else 
+    echo "unsplit"
+  endif
+  exit 0
+else
+  echo "no chromInfo table.  split irrelevant"
+  exit 1
+endif
 echo
 

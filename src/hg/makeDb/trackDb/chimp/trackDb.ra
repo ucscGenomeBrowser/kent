@@ -34,7 +34,7 @@ track chainHg19
 shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 299.95
+priority 300.3
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -48,8 +48,8 @@ track netHg19
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 299.96
-visibility dense
+priority 300.4
+visibility hide
 spectrum on
 type netAlign hg19 chainHg19
 otherDb hg19

@@ -101,7 +101,7 @@ if ( $choice == "init" ) then
   rm -f $outPath/databaseAdayList
 
   # get list of active $gbd databases
-  hgsql -h genome-centdb hgcentral -B -N \
+  hgsql -h $sqlrr hgcentral -B -N \
     -e "SELECT name FROM dbDb WHERE active = 1 ORDER BY RAND()" \
     > $outPath/databaseAdayList
 

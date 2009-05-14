@@ -145,13 +145,13 @@ echo "<html><head><title>cvs-reports</title></head><body>" > index.html
 echo "<h1>CVS changes: kent</h1>" >> index.html
 echo "<ul>" >> index.html
 if ( "$mode" == "review") then
-    echo "<li><a href="review/index.html">Design/Review - Day 2</a> ($TODAY to $REVIEWDAY)" >> index.html
-    echo "<li><a href="branch/index.html">Biweekly Branch - Day 9</a> ($LASTREVIEWDAY to $TODAY)" >> index.html
+    echo "<li><a href="review/index.html">Design/Review - Day 2 - v$NEXTNN</a> ($TODAY to $REVIEWDAY)" >> index.html
+    echo "<li><a href="/cvs-reports-history/">Previous versions</a> " >> index.html
 else
-    echo "<li><a href="branch/index.html">Biweekly Branch - Day 9</a> ($REVIEWDAY to $TODAY)" >> index.html
-    echo "<li><a href="review/index.html">Design/Review - Day 2</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
+    echo "<li><a href="branch/index.html">Biweekly Branch - Day 9 - v$BRANCHNN</a> ($REVIEWDAY to $TODAY)" >> index.html
+    echo "<li><a href="review/index.html">Design/Review - Day 2 - v$BRANCHNN</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
+    echo "<li><a href="/cvs-reports-history/">Previous versions</a>" >> index.html
 endif    
-echo "</ul><a href="/cvs-reports-history/">Reports history</a>." >> index.html
 echo "</body></html>" >> index.html
 cd $WEEKLYBLD
 

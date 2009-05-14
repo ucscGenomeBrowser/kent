@@ -19,7 +19,7 @@ downloadRootDir=/cluster/data/genbank/data/ftp
 verb=''
 
 # parse command line
-downloadSeqsDays=5
+downloadSeqsDays=7
 while [[ $1 == -* ]] ; do
     opt=$1
     shift
@@ -45,7 +45,9 @@ cd $gbRoot
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/mkdownload/run/mkdownload.lock
 
-# make downloads for everything on the rr
+# make downloads for everything on the hgwbeta or rr
 databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
 
-nice gbMakeDownload $verb -getDownloadSeqs=$downloadSeqsDays -downloadRootDir=$downloadRootDir $databases
+# -maxDbs limits number of database processed so lock file gets released and 
+# prevent bogus stale lock message
+nice gbMakeDownload $verb -maxDbs=1 -getDownloadSeqs=$downloadSeqsDays -downloadRootDir=$downloadRootDir $databases

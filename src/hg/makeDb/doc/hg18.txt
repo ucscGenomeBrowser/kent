@@ -27289,3 +27289,55 @@ exit;
 #checked: 62958 failed: 0
     hgLoadGenePred -genePredExt hg18 vegaGene not.pseudo.gp
     hgLoadGenePred -genePredExt hg18 vegaPseudoGene pseudo.gp
+
+##############################################################################
+# UCSC to Ensembl chr name mapping (DONE - 2009-05-08 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/ucscToEnsembl
+    cd /hive/data/genomes/hg18/bed/ucscToEnsembl
+    awk '{printf "%s\t%s\n", $4, $2}' ../../jkStuff/ensGene.haplotype.lift \
+	> ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(21))
+);
+'_EOF_'
+
+    hgsql hg18 < ucscToEnsembl.sql
+    hgsql hg18 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    awk '{printf "%s\t%d\n", $2, -$1}' ../../jkStuff/ensGene.haplotype.lift \
+	> ensemblLift.tab
+
+    cat << '_EOF_' > ensemblLift.sql
+# UCSC offset to Ensembl coordinates
+CREATE TABLE ensemblLift (
+    chrom varchar(255) not null,      # Ensembl chromosome name
+    offset int unsigned not null,     # offset to add to UCSC position 
+              #Indices
+    PRIMARY KEY(chrom(6))
+);
+'_EOF_'
+
+    hgsql hg18 < ensemblLift.sql
+    hgsql hg18 \
+-e 'LOAD DATA LOCAL INFILE "ensemblLift.tab" INTO TABLE ensemblLift'
+
+##############################################################################
+# FOX2 CLUSTERS (DONE 2009-04-08, Andy)
+    cp cluster.combine.bed /hive/data/genomes/hg18/bed/fox2ClipSeq
+## (got the data as an attachment from Gene Yeo)
+    cd /hive/data/genomes/hg18/bed/fox2ClipSeq
+    grep chr cluster.combine.bed | cut -f1-4 | \
+      bedSort stdin fox2ClipClusters.hg17.bed
+    liftOver fox2ClipClusters.hg17.bed \
+      /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+      fox2ClipClusters.bed unmapped.bed
+    hgLoadBed hg18 fox2ClipClusters{,.bed}
+
+##############################################################################

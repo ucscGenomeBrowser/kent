@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.6 2009/03/17 19:05:58 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.7 2009/05/04 17:44:39 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -204,6 +204,26 @@ if (rename(oldName, newName))
     errAbort("Cannot rename %s to %s", oldName, newName);
 }
 
+static void removeDir(char *dirName)
+/* Remove all files in a directory and the directory itself. */
+// NOTE: If this is ever to be libified, beef it up:
+// 1. Add recursion to subdirs (maybe enabled by a new boolean arg)
+// 2. Make sure dirName exists
+// 3. Make sure current dir is not dirName or a subdir of dirName
+{
+struct slName *file;
+struct dyString *dy = dyStringNew(0);
+for (file = listDir(dirName, "*");  file != NULL;  file = file->next)
+    {
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%s/%s", dirName, file->name);
+    if (unlink(dy->string) != 0)
+	errAbort("unlink failed for file %s: %d", dy->string, errno);
+    }
+if (rmdir(dirName) != 0)
+    errAbort("rmdir failed for dir %s: %d", dirName, errno);
+}
+
 static void generateImgFiles(struct hgdpGeo *geo, char finalEpsFile[PATH_LEN],
 			     char finalPdfFile[PATH_LEN], char finalPngFile[PATH_LEN])
 /* Using the frequencies given in geo and the population latitude and longitude
@@ -298,6 +318,10 @@ safef(tmpPath, sizeof(tmpPath), "%s/%s", dirTn.forCgi, pdfFile);
 mustRename(tmpPath, finalPdfFile);
 safef(tmpPath, sizeof(tmpPath), "%s/%s", dirTn.forCgi, pngFile);
 mustRename(tmpPath, finalPngFile);
+
+// Clean up the temporary working directory (trash cleaner script doesn't
+// remove empty dirs:
+removeDir(dirTn.forCgi);
 }
 
 

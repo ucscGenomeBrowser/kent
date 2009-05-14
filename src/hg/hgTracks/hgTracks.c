@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1563 2009/04/23 22:42:25 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1565 2009/05/12 00:00:37 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2184,7 +2184,7 @@ if (sameWord(chrName, "chrM"))
     name = "chrMt";
 localStart = start;
 localEnd = end + 1;	// Ensembl base-1 display coordinates
-ensUrl = ensContigViewUrl(dir, name, seqBaseCount, localStart, localEnd, archive);
+ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, localStart, localEnd, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
  * constant */
@@ -2988,7 +2988,13 @@ if (trackVersionExists)
 
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl == if versionString from trackVersion exists */
-if (ensVersionString[0])
+if (sameWord(database,"hg19"))
+	{
+	hPuts("<TD ALIGN=CENTER>");
+	printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+	hPrintf("%s</A></TD>", "Ensembl");
+	}
+else if (ensVersionString[0])
     {
     char *archive = NULL;
     if (ensDateReference[0] && differentWord("current", ensDateReference))
@@ -3245,8 +3251,10 @@ for (track = *pTrackList; track != NULL; track = track->next)
         float priority = (float)cartUsualDouble(cart, cartVar,
                                                     track->defaultPriority);
         /* remove cart variables that are the same as the trackDb settings */
+/*  UGLY - add me back when tdb->priority is no longer pre-clobbered by cart var value
         if (priority == track->defaultPriority)
             cartRemove(cart, cartVar);
+*/
         track->priority = priority;
         }
 

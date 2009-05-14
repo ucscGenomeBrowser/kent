@@ -4,8 +4,9 @@
 #include "dystring.h"
 #include "ensFace.h"
 #include "hCommon.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.9 2009/01/16 05:42:15 hiram Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.11 2009/05/08 17:36:16 hiram Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -58,26 +59,75 @@ char *ensOrgNameFromScientificName(char *scientificName)
     return res;
 }
 
+static char *ucscToEnsembl(char *database, char *chrom)
+/* if table UCSC_TO_ENSEMBL exists in the given database, return the
+   Ensembl name for this chrom */
+{
+static char ensemblName[256];
+struct sqlConnection *conn = hAllocConn(database);
+ensemblName[0] = 0;
+if (sqlTableExists(conn, UCSC_TO_ENSEMBL))
+    {
+    char query[256];
+    safef(query, ArraySize(query), "select ensembl from %s where ucsc='%s'",
+	UCSC_TO_ENSEMBL, chrom);
+    (void) sqlQuickQuery(conn,query,ensemblName,ArraySize(ensemblName));
+    }
+return ensemblName;
+}
+
+static int liftToEnsembl(char *database, char *chrom)
+/* if table ENSEMBL_LIFT exists in the given database, return the
+   offset for this chrom, else return zero */
+{
+int offset = 0;
+struct sqlConnection *conn = hAllocConn(database);
+
+if (sqlTableExists(conn, ENSEMBL_LIFT))
+    {
+    char query[256];
+    safef(query, ArraySize(query), "select offset from %s where chrom='%s'",
+	ENSEMBL_LIFT, chrom);
+    offset = sqlQuickNum(conn,query); // returns 0 for failed query
+    }
+return offset;
+}
+
 struct dyString *ensContigViewUrl(
-                            char *ensOrg, char *chrom, int chromSize,
+char *database, char *ensOrg, char *chrom, int chromSize,
                             int winStart, int winEnd, char *archive)
 /* Return a URL that will take you to ensembl's contig view. */
 /* Not using chromSize.  archive is possibly a date reference */
 {
 struct dyString *dy = dyStringNew(0);
 char *chrName;
+char *ensemblName = ucscToEnsembl(database, chrom);
+int ensemblLift = 0;
+int start = winStart;
+int end = winEnd;
 
-if (startsWith("scaffold", chrom))
+if (isNotEmpty(ensemblName))
+    {
+    chrName = ensemblName;
+    ensemblLift = liftToEnsembl(database, ensemblName);
+    start += ensemblLift;
+    end += ensemblLift;
+    }
+else if (startsWith("scaffold", chrom))
     chrName = chrom;
 else
     chrName = skipChr(chrom);
-if (archive)
+if (sameWord(database,"hg19"))
+    dyStringPrintf(dy, 
+	   "http://pre.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
+		    ensOrg, chrName, start, end);
+else if (archive)
     dyStringPrintf(dy, 
 	   "http://%s.archive.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
-		    archive, ensOrg, chrName, winStart, winEnd);
+		    archive, ensOrg, chrName, start, end);
 else
     dyStringPrintf(dy, 
-               "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, winStart, winEnd);
+               "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, start, end);
 return dy;
 }
 

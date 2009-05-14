@@ -10,7 +10,7 @@ if ($#argv < 3 || $#argv > 4) then
  echo
  echo "    usage: machine1 machine2 database [field] (defaults to searchName)"
  echo ""
- exit 1
+ exit 
 endif
 
 #set machine1 = "hgwdev"
@@ -40,7 +40,7 @@ foreach machine ( $machine1 $machine2 )
       set host="-h $sqlbeta"
     else
       set cent=""
-      set host="-h genome-centdb"
+      set host="-h $sqlrr"
     endif
   endif
   hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent | grep "$db" >& /dev/null

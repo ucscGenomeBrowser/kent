@@ -12,14 +12,157 @@ shortLabel Swine Flu H1N1 Sequences
 longLabel Recent Swine Flu H1N1 Sequences
 group map
 priority 40
-visibility pack
+visibility hide
 color 12,52,200
 indelQueryInsert on
 maxItems 2000
 type psl
 
+track h1n1_0428Seq
+shortLabel 0428 H1N1 Sequences
+longLabel Recent (04/28/09) Swine Flu H1N1 Sequences
+group map
+priority 10
+visibility hide
+color 12,52,200
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0428SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0428NonMexicoSeq
+shortLabel 0428 Non-Mexico H1N1 Sequences
+longLabel Recent (04/28/09) Swine Flu H1N1 Sequences, Non-Mexico cases
+group map
+priority 12
+visibility hide
+color 12,52,150
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0428SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0430Seq
+shortLabel 0430 H1N1
+longLabel Recent (04/30/09) Swine Flu H1N1 Sequences
+group map
+priority 15
+visibility hide
+color 12,100,80
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0430SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0504ProtSeq
+shortLabel 0504 Prot H1N1
+longLabel Recent (05/04/09) Swine Flu H1N1 Protein Sequences
+group map
+priority 15
+visibility hide
+color 200,100,100
+indelQueryInsert on
+maxItems 2000
+type psl protein
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0504ProtSeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0504Seq
+shortLabel 0504 H1N1
+longLabel Recent (05/04/09) Swine Flu H1N1 Sequences
+group map
+priority 15
+visibility hide
+color 12,100,100
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0504SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0428_mexicoSeq
+shortLabel 0428 Mexico H1N1 Sequences
+longLabel Recent (04/28/09) Swine Flu H1N1 Sequences, Mexico cases
+group map
+priority 11
+visibility pack
+color 12,52,80
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0428_mexicoSeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1Seq2
+shortLabel H1N1 SEQ2
+longLabel H1N1 SEQ2
+group map
+type psl
+priority 3.002
+color 0,0,180
+visibility hide
+baseColorDefault diffCodons
+baseColorUseCds table h1n1Seq2Cds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+#searchTable transMapGeneH1n1Seq2
+#searchType psl
+#searchMethod prefix
+#searchPriority 2.31
+
 track humanHA
-shortLabel H1N1 HA
+shortLabel Human H1N1 HA
 longLabel Human H1N1 HA Sequences
 group map
 priority 100
@@ -30,7 +173,7 @@ maxItems 2000
 type psl
 
 track swineHA
-shortLabel Pig H1N1 HA
+shortLabel Swine H1N1 HA
 longLabel Swine H1N1 HA Sequences
 group map
 priority 110
@@ -39,4 +182,64 @@ color 100,100,200
 indelQueryInsert on
 maxItems 2000
 type psl
+
+track h1n1_0505ProtSeq
+shortLabel 0505 Prot H1N1
+longLabel Recent (050509) Swine Flu H1N1 Protein Sequences
+group map
+priority 15
+visibility hide
+color 200,100,100
+indelQueryInsert on
+maxItems 2000
+type psl protein
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0505ProtSeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0506Seq
+shortLabel 0506 H1N1
+longLabel Recent (050609) Swine Flu H1N1 Sequences
+group map
+priority 15
+visibility pack
+color 20,100,100
+indelQueryInsert on
+maxItems 2000
+type psl protein
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0506SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+track h1n1_0511Seq
+shortLabel 0511 H1N1
+longLabel Recent (051109) Swine Flu H1N1 Sequences
+group map
+priority 15
+visibility pack
+color 12,100,200
+indelQueryInsert on
+maxItems 2000
+type psl
+baseColorDefault diffCodons
+baseColorUseCds table h1n1_0511SeqCds
+baseColorUseSequence extFile seq extFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
 

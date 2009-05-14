@@ -33,7 +33,7 @@ cat ~/kent/src/hg/makeDb/genbank/etc/rr.dbs | sort | sed -e '/^#/ d' \
 > XXgenbankDbsXX
 
 # this is the list of active DBs on the RR
-hgsql -N -h genome-centdb hgcentral -e "SELECT name FROM dbDb \
+hgsql -N -h $sqlrr hgcentral -e "SELECT name FROM dbDb \
 WHERE active = 1 ORDER BY name;" > XXactiveDbsXX
 
 # find out what's active and not getting a genbank update

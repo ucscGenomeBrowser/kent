@@ -1,23 +1,3 @@
-# Local declaration so that local gold.html is picked up.
-track gold
-shortLabel Assembly
-longLabel Assembly from Fragments
-group map
-priority 10
-visibility hide
-color 150,100,30
-altColor 230,170,40
-type bed 3 +
-
-# Local declaration so that local gap.html is picked up.
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
-
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
 shortLabel $Organism mRNAs
@@ -48,6 +28,16 @@ baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
+
+track refGene override
+visibility pack
+
+track chainPanTro2 override
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+
+track netPanTro2 override
+visibility dense
 
 track hapChainNet
 compositeTrack on
@@ -300,3 +290,22 @@ matrixHeader A, C, G, T
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 type chain hg19
 otherDb hg19
+
+
+
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex GL[0-9]+\.[0-9]
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchName ctgPosNoVersion
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex GL[0-9]+
+dontCheck GL[0-9]+\.[0-9]
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s._'
+searchPriority 5
+

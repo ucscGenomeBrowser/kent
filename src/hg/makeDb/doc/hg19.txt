@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.8 2009/04/27 20:11:50 hiram Exp $";
+#	"$Id: hg19.txt,v 1.11 2009/05/11 20:50:57 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -116,6 +116,7 @@ do
     sed -e "s/.*\(GL[0-9]*\).*/\1/; s/GL/>chrUn_gl/" $F
 done >> scaffolds.fa
 
+
 ############################################################################
 ## Create database (DONE - 2009-03-04 - Hiram)
     cd /hive/data/genomes/hg19
@@ -147,6 +148,10 @@ taxId	9606
     #	3095693983 chrM 16571
     #	same total as in featureBits
 
+    #	much later on, discovered that we needed a chrM definition in the
+    #	agp files, added by hand to hg19/M/chrM.agp and hg19/hg19.agp the line:
+# chrM    1       16571   1       F       NC001807        1       16571   +
+    #	the spaces there are tabs
 
 ############################################################################
 # running repeat masker (DONE - 2009-03-05 - Hiram)
@@ -349,7 +354,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 # Loaded 28226 elements of size 10
 # Sorted
 # Saving bed.tab
-# Loading hg18
+# Loading hg19
 
 ############################################################################
 # create lift file on unBridged gaps for genbank splits (2009-03-09 - Hiram)
@@ -816,3 +821,1355 @@ done
         /cluster/data/hg19/hg19.2bit | gzip -c > hg19.gc5Base.txt.gz
 
 #############################################################################
+# Physical Map Contigs - ctgPos (DONE - 2009-04-23 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/ctgPos
+    cd /hive/data/genomes/hg19/bed/ctgPos
+    cat << '_EOF_' > mkCtgPos.sh
+AGP="/hive/data/genomes/hg19/download/assembled_chromosomes/AGP"
+export AGP
+for F in `(cd ${AGP}; ls chr*.agp | grep -v ".comp.agp")`
+do
+    C=${F/.agp/}
+    grep "^CM" "${AGP}/${F}" | awk '$5 != "N"' | awk '
+{
+printf "%s\t%d\t%s\t%d\t%d\n", $6, $8-$7+1, "'${C}'", $2-1+$7-1, $2-1+$8
+}
+'
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkCtgPos.sh
+    ./mkCtgPos.sh > ctgPos.tab
+
+    cat << '_EOF_' > mkRanCtgPos.sh
+AGP="/hive/data/genomes/hg19/download/unlocalized_scaffolds/AGP"
+export AGP
+for F in `(cd ${AGP}; ls chr*.agp)`
+do
+    C=${F/.unlocalized.scaf.agp/}
+    c=${C/chr/}
+    export C c
+    grep "^GL" "${AGP}/${F}" | awk '$5 != "N"' | awk '
+BEGIN {
+    ctgName=""
+    ctgStart=0
+    ctgEnd=0
+    chrom="'${c}'"
+    ctgNameLower=""
+}
+{
+if (match(ctgName,$1)) {
+    ctgEnd = $3
+} else {
+    if (length(ctgName) > 0) {
+        size=ctgEnd - ctgStart
+printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower, 
+ctgStart, ctgEnd
+    }
+    ctgStart = $2 - 1
+    ctgEnd = $3
+    ctgName = $1
+    ctgNameLower = tolower($1)
+    sub(".1$","",ctgNameLower)
+}
+}
+END {
+size=ctgEnd - ctgStart
+printf "%s\t%d\tchr%s_%s_random\t%d\t%d\n", ctgName, size, chrom, ctgNameLower, 
+ctgStart, ctgEnd
+}
+'
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkRanCtgPos.sh
+    ./mkRanCtgPos.sh >> ctgPos.tab
+
+    #	fetch .sql definition from hg18
+    chmod 777 .
+    hgsqldump --all -c --tab=. hg18 ctgPos
+    chmod 775 .
+    hgsql hg19 < ctgPos.sql
+    hgsql -e 'load data local infile "ctgPos.tab" into table ctgPos;' hg19
+
+#############################################################################
+# CLONE ENDS - first step for BACEND/CytoBand tracks
+#	(DONE - 2009-04-28 - Hiram)
+    mkdir -p /hive/data/genomes/hg19/bed/cloneend/ncbi
+    cd /hive/data/genomes/hg19/bed/cloneend/ncbi
+
+    wget --timestamping \
+'ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/homo_sapiens/9606_clone_ends*.mfa.gz'
+    wget --timestamping \
+'ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/homo_sapiens/9606_clone_info*.txt.gz'
+
+    cd /hive/data/genomes/hg19/bed/cloneend
+    # seems like the *.mfa files were split just for convenience
+    # concatenate
+
+    for F in ncbi/*.mfa.gz
+do
+    zcat "${F}"
+    echo "${F}" 1>&2
+done | gzip > all.mfa.gz
+    #	that 1>&2 echos to stderr so you can see the file name and not
+    #	interfere with the pipe stdout output to gzip
+
+    # Convert the title line of the all.mfa file
+    zcat all.mfa.gz \
+	| sed -e "s#^>gi.[0-9]*.gb.#>#; s#^>gi.[0-9]*.emb.#>#; s#\.[0-9]|.*##" \
+	    | gzip > cloneEnds.fa.gz
+
+    zcat all.mfa | ./convert.pl | gzip > cloneEnds.fa.gz
+
+    #	make sure nothing got broken:
+    faSize all.mfa.gz
+# 400901385 bases (5941742 N's 394959643 real 255835696 upper 139123947 lower)
+# in 833173 sequences in 1 files
+
+    faSize cloneEnds.fa.gz
+# 400901385 bases (5941742 N's 394959643 real 255835696 upper 139123947 lower)
+# in 833173 sequences in 1 files
+
+    #	identical numbers
+    #	you can also carefully check the names:
+    zcat all.mfa.gz | grep "^>" | awk -F'|' '{print $4}' \
+	| sed -e "s/\.[0-9]$//" | sort > mfa.names
+    #	should be the same as:
+    zcat cloneEnds.fa.gz | grep "^>" | sed -e "s/>//" | sort > clone.names
+
+
+    # concatenate the text files, too
+    bash
+    for F in ncbi/*.txt.gz
+do
+    zcat "${F}"
+    echo "${F}" 1>&2
+done | gzip > all.txt.gz
+
+    # generate cloneEndPairs.txt and cloneEndSingles.txt
+    zcat all.txt.gz >all.txt
+    $HOME/kent/src/hg/utils/cloneEndParse.pl all.txt
+
+    #	Reading in end info
+    #	Writing out pair info
+    #	Writing out singleton info
+    #	302264 pairs and 203094 singles
+    #	examined all the clone names and all the bac end names in these two
+    #	files and compared with business from all.txt to make sure we properly
+    #	classified all of them correctly.  We had 833,173 clone sequences,
+    #	and 501,135 bac end names
+
+    #	faSplit does not function correctly if given a .gz source file
+    #	AND, we need the unzipped file for sequence loading below
+    gunzip cloneEnds.fa.gz
+    # split
+    mkdir splitdir
+    cd splitdir
+    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    #	Check to ensure no breakage:
+    cat *.fa | faSize stdin
+# 400901385 bases (5941742 N's 394959643 real 255835696 upper 139123947 lower)
+# in 833173 sequences in 1 files
+    #	same numbers as before
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/hg19/cloneend
+    cd /gbdb/hg19/cloneend
+      ln -s /hive/data/genomes/hg19/bed/cloneend/cloneEnds.fa .
+    cd /tmp
+    hgLoadSeq hg19 /gbdb/hg19/cloneend/cloneEnds.fa
+    #  Advisory lock created
+    # Creating .tab file
+    # Adding /gbdb/hg19/cloneend/cloneEnds.fa
+    # 833173 sequences
+    # Updating seq table
+    # Advisory lock has been released
+    # All done
+
+##############################################################################
+# BACEND SEQUENCE ALIGNMENTS (WORKING - 2009-04-28 - Hiram)
+    mkdir -p /hive/data/genomes/hg19/bed/bacends/run.blat
+    cd /hive/data/genomes/hg19/bed/bacends/run.blat
+    #	going to run separate runs for the golden path sequence vs. the
+    #	randoms, haplotypes, chrUn and chrM
+    partitionSequence.pl 5000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -xdir xdir.sh -lstDir tParts \
+	| egrep -v "tParts|random|_hap|chrUn" \
+	| sed -e "s/.*2bit://; s/:/./" > hg19.list
+    ls -1S /hive/data/genomes/hg19/bed/cloneend/splitdir/cloneEnds*.fa \
+	> bacEnds.list
+
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/bacends/run.blat
+
+    cat > template << '_EOF_'
+#LOOP
+runOne.csh $(file1) $(path2) {check out line+ psl/$(root1)/$(file1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set target = $1
+set query = $2
+set result = $3
+set partSpec = `echo $target | sed -e "s/\./:/"`
+set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
+set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
+set range = `echo $start $end | awk '{print $2-$1}'`
+set dir = $result:h
+set chr = `echo $target | sed -e "s/\..*//"`
+set chrSize = `grep -P "^$chr\t" /scratch/data/hg19/chrom.sizes | cut -f2`
+set tmpFile = `echo $result | sed -e "s#psl/$chr/#/scratch/tmp/#; s/.psl//"`
+
+# echo $tmpFile
+# echo "chr: $chr $start $end -> size: $chrSize, range: $range"
+/bin/echo -e "$start\t$partSpec\t$range\t$chr\t$chrSize" > $tmpFile.lift
+/bin/mkdir -p $dir
+/cluster/bin/x86_64/blat -ooc=/scratch/data/hg19/11.ooc \
+        /scratch/data/hg19/hg19.2bit:$partSpec $query $tmpFile.psl
+rm -f $result
+liftUp -type=.psl $result $tmpFile.lift error $tmpFile.psl
+rm -f $tmpFile.lift $tmpFile.psl
+'_EOF_'
+    # << happy emacs
+
+    gensub2 hg19.list bacEnds.list template jobList
+    para create jobList
+# 62034 jobs in batch
+    # these jobs run quickly, limit them to 250 at a time
+    para try, check, -maxJob=250 push, etc ...
+# Completed: 62034 of 62034 jobs
+# CPU time in finished jobs:     506023s    8433.72m   140.56h    5.86d  0.016 y
+# IO & Wait Time:                175853s    2930.88m    48.85h    2.04d  0.006 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest finished job:             752s      12.53m     0.21h    0.01d
+# Submission to last job:          3533s      58.88m     0.98h    0.04d
+
+    #	combine the alignments
+    time pslSort dirs raw.psl temp psl/chr*
+    #	62034 files in 24 dirs
+    #	Got 62034 files 249 files per mid file
+    #	real    81m2.820s
+
+    #	-rw-rw-r--  1 13410334441 Apr 29 12:00 raw.psl
+    # cleanup
+    rmdir temp
+
+    time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds.psl /dev/null > pslReps.out 2>&1 &
+    #	real    5m55.990s
+    #	Processed 106254032 alignments
+    #	-rw-rw-r--  1   372734361 Apr 29 12:56 bacEnds.psl
+
+
+    wc -l bacEnds.psl
+    #	2852977 bacEnds.psl
+
+    time pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
+	-slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+	-mismatch -verbose bacEnds.psl \
+	/cluster/data/hg19/bed/cloneend/cloneEndPairs.txt \
+	all_bacends bacEnds
+    #	Reading pair file
+    #	Reading psl file
+    #	Creating Pairs
+    #	Writing to files
+    #	real    0m18.851s
+    #	this creates the files:
+    #	-rw-rw-r--  1    21178741 Apr 29 13:00 bacEnds.pairs
+    #	-rw-rw-r--  1     5250873 Apr 29 13:00 bacEnds.orphan
+    #	-rw-rw-r--  1      738045 Apr 29 13:00 bacEnds.short
+    #	-rw-rw-r--  1      463560 Apr 29 13:00 bacEnds.slop
+    #	-rw-rw-r--  1      146369 Apr 29 13:00 bacEnds.mismatch
+    #	-rw-rw-r--  1        3528 Apr 29 13:00 bacEnds.long
+
+    # filter and sort
+    awk '$5 >= 300' bacEnds.pairs | sort -k1,1 -k2,2n > bacEndPairs.bed
+    awk '$5 >= 300' bacEnds.slop bacEnds.short bacEnds.long \
+	bacEnds.mismatch bacEnds.orphan | sort -k1,1 -k2,2n > bacEndPairsBad.bed
+
+    extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+	bacEndPairsBad.bed | headRest 2 stdin | sort -k14,14 -k16,16n \
+	    > bacEndPairs.load.psl
+
+############################################################################
+# BACEND Randoms SEQUENCE ALIGNMENTS (WORKING - 2009-04-28 - Hiram)
+    mkdir -p /hive/data/genomes/hg19/bed/bacends/run.randoms
+    cd /hive/data/genomes/hg19/bed/bacends/run.randoms
+    #	this separate run for the randoms, haplotypes, chrUn and chrM
+    partitionSequence.pl 5000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -xdir xdir.sh -lstDir tParts \
+	| egrep "random|_hap|chrUn" \
+	| sed -e "s/.*2bit://; s/:/./" > random.list
+    cat tParts/*.lst | sed -e "s/.*2bit://; s/:/./" >> random.list
+
+    ls -1S /hive/data/genomes/hg19/bed/cloneend/splitdir/cloneEnds*.fa \
+	> bacEnds.list
+
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/bacends/run.randoms
+    gensub2 random.list bacEnds.list ../run.blat/template jobList
+    # very similar runOne.csh script as above, but it doesn't need to do
+    #	the lift
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set target = $1
+set query = $2
+set result = $3
+set partSpec = `echo $target | sed -e "s/\./:/"`
+set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
+set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
+set range = `echo $start $end | awk '{print $2-$1}'`
+set dir = $result:h
+set chr = `echo $target | sed -e "s/\..*//"`
+set chrSize = `grep -P "^$chr\t" /scratch/data/hg19/chrom.sizes | cut -f2`
+set tmpFile = `echo $result | sed -e "s#psl/$chr/#/scratch/tmp/#; s/.psl//"`
+
+# echo $tmpFile
+# echo "chr: $chr $start $end -> size: $chrSize, range: $range"
+/bin/echo -e "$start\t$partSpec\t$range\t$chr\t$chrSize" > $tmpFile.lift
+/bin/mkdir -p $dir
+/cluster/bin/x86_64/blat -ooc=/scratch/data/hg19/11.ooc \
+        /scratch/data/hg19/hg19.2bit:$partSpec $query $tmpFile.psl
+rm -f $result
+mv $tmpFile.psl $result
+echo rm -f $tmpFile.lift
+'_EOF_'
+    # << happy emacs
+
+    # these jobs run fast, do not let too many of them run
+    para -maxJob=100 try...check...push
+    para time
+# Completed: 6762 of 6762 jobs
+# CPU time in finished jobs:      20357s     339.29m     5.65h    0.24d  0.001 y
+# IO & Wait Time:                 17839s     297.31m     4.96h    0.21d  0.001 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest finished job:             261s       4.35m     0.07h    0.00d
+# Submission to last job:           508s       8.47m     0.14h    0.01d
+
+    time pslSort dirs raw.psl temp psl/chr*
+    #	6762 files in 69 dirs
+    #	Got 6762 files 82 files per mid file
+    #	real    6m37.177s
+
+    #	37044 files in 98 dirs
+    #	Got 37044 files 192 files per mid file
+    #	real    32m24.804s
+    #	-rw-rw-r--    1 6487445210 Feb  2 21:08 raw.psl
+    time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl randomEnds.psl randomReps.psr > pslReps.out 2>&1 &
+    #	real    0m5.761s
+    #	Processed 1254273 alignments
+
+    # cleanup
+    rmdir temp
+
+    wc -l randomEnds.psl
+    #	367567 randomEnds.psl
+
+    time pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
+	-slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+	-mismatch -verbose randomEnds.psl \
+	/cluster/data/hg19/bed/cloneend/cloneEndPairs.txt \
+	all_bacends bacEnds
+    #	Reading pair file
+    #	Reading psl file
+    #	Creating Pairs
+    #	Writing to files
+    #	real    0m11.221s
+    #	this creates the files:
+    #	-rw-rw-r--  1         0 Apr 29 14:53 bacEnds.slop
+    #	-rw-rw-r--  1         0 Apr 29 14:53 bacEnds.short
+    #	-rw-rw-r--  1         0 Apr 29 14:53 bacEnds.mismatch
+    #	-rw-rw-r--  1         0 Apr 29 14:53 bacEnds.long
+    #	-rw-rw-r--  1    141836 Apr 29 14:53 bacEnds.pairs
+    #	-rw-rw-r--  1    649907 Apr 29 14:53 bacEnds.orphan
+
+##############################################################################
+# BacEnds track - both results loaded together (DONE - 2009-04-29 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/bacends
+    # filter and sort
+    awk '$5 >= 300' run.blat/bacEnds.pairs run.randoms/bacEnds.pairs \
+	| sort -k1,1 -k2,2n > bacEndPairs.bed
+    awk '$5 >= 300' run.blat/bacEnds.slop run.blat/bacEnds.short \
+	run.blat/bacEnds.long run.blat/bacEnds.mismatch \
+	run.blat/bacEnds.orphan run.randoms/bacEnds.slop \
+	run.randoms/bacEnds.short run.randoms/bacEnds.long \
+	run.randoms/bacEnds.mismatch run.randoms/bacEnds.orphan \
+	    | sort -k1,1 -k2,2n > bacEndPairsBad.bed
+
+    head -5 run.blat/bacEnds.psl > bacEnds.psl
+    headRest 5 run.blat/bacEnds.psl > t.psl
+    headRest 5 run.randoms/randomEnds.psl >> t.psl
+    sort -k14,14 -k16,16n t.psl >> bacEnds.psl
+    extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+	bacEndPairsBad.bed | headRest 2 stdin | sort -k14,14 -k16,16n \
+	    > bacEnds.load.psl
+
+
+    #	load them into the database
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/bacends
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $4}' bacEndPairs.bed | grep " "
+    awk '{print $5}' bacEndPairs.bed | sort | uniq -c
+    #	result should be the scores, no extraneous strings:
+    #	156984 1000
+    #	   195 300
+    #	   316 375
+    #	   297 500
+    #	  1476 750
+    #	edit the file and fix it if it has a bad name.
+    hgLoadBed -notItemRgb hg19 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    #	Loaded 208922 elements of size 11
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -notItemRgb hg19 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    #	Loaded 79004 elements of size 11
+    #hgLoadPsl hg18 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg19 -table=all_bacends bacEnds.load.psl
+    # one complaint, there appears to be a bogus insert count in one
+    #	of the blat results:
+# < 585   797     67      0       3       2       -63     9       79188   +      AQ743980 852     42      846     chr19_gl000208_random   92689   4045    84100  11       14,124,84,496,53,6,20,28,28,10,4,       42,56,180,200,696,750,756,776,804,832,842,      4045,5767,7086,83449,83946,83999,84006,84027,84056,84085,84096,
+Became:
+# > 585   797     67      0       3       2       0       9       79188   +	 AQ743980 852     42      846     chr19_gl000208_random   92689   4045	84100  11       14,124,84,496,53,6,20,28,28,10,4,	42,56,180,200,696,750,756,776,804,832,842,	4045,5767,7086,83449,83946,83999,84006,84027,84056,84085,84096,
+
+    hgsql -N -e "select count(*) from all_bacends;" hg19
+    #	 2289275
+    hgsql -N -e "select count(*) from all_bacends;" hg18
+    #	1727387
+    hgsql -N -e "select count(*) from all_bacends;" hg17
+    #	 1729146
+
+    nice featureBits hg19 all_bacends
+# 230917362 bases of 2897316137 (7.970%) in intersection
+    nice featureBits hg18 all_bacends
+# 227770876 bases of 2881515245 (7.905%) in intersectio
+    nice featureBits hg17 all_bacends
+# 225763317 bases of 2866216770 (7.877%) in intersection
+
+    nice featureBits hg19 bacEndPairs
+# 236889607 bases of 2897316137 (8.176%) in intersection
+    nice featureBits hg18 bacEndPairs
+# 162690030 bases of 2881515245 (5.646%) in intersection
+    nice featureBits hg17 bacEndPairs
+# 162099487 bases of 2866216770 (5.656%) in intersection
+
+    nice featureBits hg19 bacEndPairsBad
+# 38344094 bases of 2897316137 (1.323%) in intersection
+    nice featureBits hg18 bacEndPairsBad
+# 37326990 bases of 2881515245 (1.295%) in intersection
+    nice featureBits hg17 bacEndPairsBad
+# 37437558 bases of 2866216770 (1.306%) in intersection
+
+############################################################################
+# STS MARKERS (DONE - 2009-04-30 - 2009-05-06 - Hiram)
+    mkdir /hive/data/outside/ncbi/sts.2009-04
+    cd /hive/data/outside/ncbi
+    ln -s sts.2009-04 sts.11
+    cd /hive/data/outside/ncbi/sts.2009-04
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+    wget --timestamping ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
+    gunzip sts.gz
+    mv sts dbSTS.fa
+
+    #	these items are copied in from the previous builds
+    cp -p /cluster/data/ncbi/sts.10/all.STS.fa ./all.STS.fa.prev
+    cp -p /cluster/data/ncbi/sts.10/stsInfo2.bed ./stsInfo2.bed.prev
+    #	edit stsInfo2.bed.prev for a
+    #	manual fixup of error that is in the hg18 bed file, replace
+    #	the line for AFM067XA9 to fix bogus long list of aliases to be:
+# 22788^IAFM067XA9^I1^IZ66598^I1^IGDB:1221611,^I5^I067XA9,GDB:1221611,W202,Z66598,SWSS2303^I69047^I0^I^ITCTTGGGGTTTAATTGCTTT^ICTTTGCCACAATCTTACACA^I149^IHomo sapiens^I1^I2^I6453,6454,^I0^I^I^I^I0^I0^I^I^I0^I0^IAFM067XA9^Ichr7^I145^I0^I^I^I0^I0^I^I^I0^I0^I^I^I0^I0^I^I^I0^I0^I^I^I0^I0
+    #	as taken directly out of the hg18.stsInfo2 table which was fixed
+    #	by Bob and Archana
+
+    # Convert the title line of the dbSTS.fa file
+    #	Verify that column 3 only contains gb emb dbj
+    grep "^>" dbSTS.fa | awk -F'|' '{print $3}' | sort | uniq -c 
+#   39124 dbj
+#   57375 emb
+# 1212541 gb
+    #	if that is true, this sed will work:
+    cat dbSTS.fa \
+	| sed -e "s#^>gi.[0-9]*.gb.#>#; s#^>gi.[0-9]*.emb.#>#; s#^>gi.[0-9]*.dbj.#>#; s#\.[0-9]|.*##" \
+	    > UniSTS.convert.fa
+
+    # get accessions
+    grep ">" UniSTS.convert.fa | sed -e "s/^>//" | sort > UniSTS.acc
+    #	head and tail that to ensure names are reasonable, odd names would
+    #	show up at the beginning or end
+    wc -l UniSTS.acc
+    #	1309040 UniSTS.acc
+
+    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers,
+    #   all.STS.fa, stsAlias.bed files
+
+    updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
+	UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
+
+    #	verify the number of aliases is reasonable:
+    awk '{print $3}' new.alias | sort | uniq -c | sort -rn | less
+    #	50 D7S831
+    #	34 CHLC.GATA2B06.465
+    #	24 CHLC.GATA11E11
+    #	23 AFM276ZF5
+    #	23 AFM273YH9
+    #	22 SHGC-133043
+    #	... etc ...
+    #	verify there are no unusually long or short lines:
+    awk '{printf "%d\n", length($0)}' new.info | sort -n | head -3
+    #	143
+    #	144
+    #	144
+    awk '{printf "%d\n", length($0)}' new.info | sort -n | tail -3
+    #	552
+    #	553
+    #	644
+    # check for null in the new files:
+    grep -i null new.*
+    #	if the new files look good, they can become the set to use:
+    mv new.info stsInfo2.bed
+    mv new.primers all.primers
+    mv new.alias stsAlias.bed
+    mv new.fa all.STS.fa
+
+    # get list of all STS id's in the fasta file
+    sed -n 's/^>\([0-9][0-9]*\) .*/\1/p' all.STS.fa | sort -n >  all.STS.id
+    wc -l all.STS.id
+    # 100520 total sequences
+    # in hg18 this was: 93698 total sequences
+    $HOME/kent/src/hg/stsMarkers/convertPrimerToFA all.primers > all.primers.fa
+    # check that fasta file for unusual length sequences:
+    faSize all.primers.fa
+# 97815329 bases (83677626 N's 14137703 real 14137703 upper 0 lower) in 317592 sequences in 1 files
+# Total size: mean 308.0 sd 279.3 min 40 (dbSTS_144) max 30000 (dbSTS_156892) median 244
+
+    # Copy stsInfo2.bed and stsAlias.bed to data directory becuase
+    # these will be loaded into the database later
+    mkdir -p /hive/data/genomes/hg19/bed/sts
+    cp -p stsInfo2.bed /hive/data/genomes/hg19/bed/sts/
+    cp -p stsAlias.bed /hive/data/genomes/hg19/bed/sts/
+
+    # Create sts sequence alignments
+    mkdir /hive/data/genomes/hg19/bed/sts/split
+
+    faSplit sequence all.STS.fa 100 /hive/data/genomes/hg19/bed/sts/split/sts
+
+    ssh swarm
+    mkdir /hive/data/genomes/hg19/bed/sts/run
+    cd /hive/data/genomes/hg19/bed/sts/run
+
+    #	going to run separate runs for the golden path sequence vs. the
+    #	randoms, haplotypes, chrUn and chrM
+    #	40,000,000 chunck sizes, 20,000 overlap
+    partitionSequence.pl 40000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -lstDir tParts \
+	| egrep -v "tParts|random|_hap|chrUn" \
+	| sed -e "s/.*2bit://;" > hg19.list
+    ls -1S ../split > sts.list
+
+    cat > template << '_EOF_'
+#LOOP
+runOne.csh $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set partSpec = $1
+set query = $2.fa
+set result = $3
+set tmpFile = "/scratch/tmp/$1.$2"
+set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
+set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
+set range = `echo $start $end | awk '{print $2-$1}'`
+set chr = `echo $partSpec | sed -e "s/:.*//"`
+set chrSize = `grep -P "^$chr\t" /scratch/data/hg19/chrom.sizes | cut -f2`
+/bin/echo -e "$start\t$partSpec\t$range\t$chr\t$chrSize" > $tmpFile.lift
+/bin/mkdir -p psl/$partSpec
+/bin/rm -f $tmpFile
+/cluster/bin/x86_64/blat -ooc=/scratch/data/hg19/11.ooc \
+    /scratch/data/hg19/hg19.2bit:$partSpec \
+	../split/${query} -stepSize=5 $tmpFile.psl
+/bin/rm -f $result
+/cluster/bin/x86_64/liftUp -type=.psl $result $tmpFile.lift error $tmpFile.psl
+# rm -f $tmpFile.lift $tmpFile.psl
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne.csh
+
+    gensub2 hg19.list sts.list template jobList
+    #	these jobs run quickly, allow only 100 at a time
+    para -maxJob=100 create jobList
+# 8367 jobs in batch
+    para try ... check ... push ... etc
+# Completed: 8366 of 8366 jobs
+# CPU time in finished jobs:      89744s    1495.74m    24.93h    1.04d  0.003 y
+# IO & Wait Time:                 25467s     424.44m     7.07h    0.29d  0.001 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:              53s       0.88m     0.01h    0.00d
+# Submission to last job:          1592s      26.53m     0.44h    0.02d
+
+    #	and, run the randoms as a separate run:
+    mkdir /hive/data/genomes/hg19/bed/sts/run.randoms
+    cd /hive/data/genomes/hg19/bed/sts/run.randoms
+    partitionSequence.pl 40000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -lstDir tParts \
+	| egrep "tParts|random|_hap|chrUn"
+    cat tParts/* | sed -e "s/.*2bit://;" > hg19.list
+    ls -1S ../split > sts.list
+    cat > template << '_EOF_'
+#LOOP
+runOne.csh $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set partSpec = $1
+set query = $2.fa
+set result = $3
+set tmpFile = "/scratch/tmp/$1.$2"
+/bin/mkdir -p psl/$partSpec
+/bin/rm -f $tmpFile
+/cluster/bin/x86_64/blat -ooc=/scratch/data/hg19/11.ooc \
+    /scratch/data/hg19/hg19.2bit:$partSpec \
+	../split/${query} -stepSize=5 $tmpFile.psl
+/bin/rm -f $result
+mv $tmpFile.psl $result
+/bin/rm -f $tmpFile.psl
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne.csh
+
+    gensub2 hg19.list sts.list template jobList
+    #	these jobs run quickly, allow only 100 at a time
+    para -maxJob=100 create jobList
+# 6486 jobs in batch
+    para try ... check ... push ... etc
+# Completed: 6486 of 6486 jobs
+# CPU time in finished jobs:       2206s      36.77m     0.61h    0.03d  0.000 y
+# IO & Wait Time:                 16505s     275.08m     4.58h    0.19d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           601s      10.02m     0.17h    0.01d
+
+    # Compile sts sequence results
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/sts/run
+    time pslSort dirs raw.psl temp psl/chr*
+    #	8366 files in 89 dirs
+    #	Got 8366 files 91 files per mid file
+    #	real    8m50.714s
+    #	-rw-rw-r--  1 810438277 May  1 11:45 raw.psl
+    cd /hive/data/genomes/hg19/bed/sts/run.randoms
+    time pslSort dirs raw.psl temp psl/chr*
+    #	6486 files in 69 dirs
+    #	Got 6486 files 81 files per mid file
+    #	real    1m42.120s
+    #	-rw-rw-r--  1 18378188 May  1 11:52 raw.psl
+
+    rmdir temp
+    cd /hive/data/genomes/hg19/bed/sts
+    cat run*/raw.psl | egrep -v "^$|^psLayout|^match|^ |^-" \
+	| pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons stdin \
+	stsMarkers.psl /dev/null
+    #	Processed 7412166 alignments
+    #	-rw-rw-r-- 1 12031760 May  1 11:57 stsMarkers.psl
+
+    $HOME/kent/src/hg/stsMarkers/extractPslInfo -h stsMarkers.psl
+    # creates stsMarkers.psl.initial
+    #	-rw-rw-r-- 1  4485053 May  1 12:06 stsMarkers.psl.initial
+    wc -l stsMarkers.psl.initial
+    #	101338  stsMarkers.psl.initial
+    #	this command needs a chrom_names file to work correctly with this
+    #	new style of layout for hg19:
+    cd /hive/data/genomes/hg19
+    cut -f1 chrom.sizes | sed -e "s/chr//" > chrom_names
+    cd /hive/data/genomes/hg19/bed/sts
+
+    $HOME/kent/src/hg/stsMarkers/findAccession.pl -agp stsMarkers.psl.initial \
+	/cluster/data/hg19
+    wc -l stsMarkers.psl.initial.acc
+    #	101338  stsMarkers.psl.initial.acc
+
+    sort -k4,4n stsMarkers.psl.initial.acc > stsMarkers.final
+
+    # determine found markers (4th field in file)
+    cut -f 4 stsMarkers.final | sort -n -u > stsMarkers.found
+    wc -l stsMarkers.found
+    #	96472 stsMarkers.found
+    #	out of 100520 total sequences from:
+    wc -l /hive/data/outside/ncbi/sts.2009-04/all.STS.id
+    #	There are lots of duplicates:
+    wc -l stsMarkers.final
+    #	101338 stsMarkers.final
+    #	And a lot of them are just completely haywire:
+    awk '$3-$2 < 1001' stsMarkers.final | wc -l
+    #	98382
+    #	filter out markers that are too long
+    awk '$3-$2 < 1001' stsMarkers.final > stsMarkers.1K.size.filtered
+
+    #  alignment of primers
+    ssh swarm
+    cd /hive/data/outside/ncbi/sts.2009-04
+    awk '$0 !~ /[^ACGT0-9\-\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
+	    all.primers > all.primers.ispcr
+    mkdir primerAlign
+    cd primerAlign
+    mkdir split
+    cd split
+    split -l 5000 ../../all.primers.ispcr primer_
+    ls > ../primer.list
+
+    cd ..
+    #	we need a 10.ooc file for this business
+    time blat /scratch/data/hg19/hg19.2bit \
+	/dev/null /dev/null -tileSize=10 -makeOoc=10.ooc -repMatch=1024
+# Wrote 146902 overused 10-mers to 10.ooc
+# real    19m16.758s
+
+    # separate runs for whole genome vs. randoms
+    mkdir run
+    cd run
+    partitionSequence.pl 40000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -lstDir tParts \
+	| egrep -v "tParts|random|_hap|chrUn" \
+	| sed -e "s/.*2bit://;" > hg19.list
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set partSpec = $1
+set primer = ../split/$2
+set result = $3
+set tmpFile = "/scratch/tmp/$1.$2"
+set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
+set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
+set range = `echo $start $end | awk '{print $2-$1}'`
+set chr = `echo $partSpec | sed -e "s/:.*//"`
+set chrSize = `grep -P "^$chr\t" /scratch/data/hg19/chrom.sizes | cut -f2`
+/bin/echo -e "$start\t$partSpec\t$range\t$chr\t$chrSize" > $tmpFile.lift
+/bin/mkdir -p psl/$partSpec
+/bin/rm -f $tmpFile.psl
+/cluster/bin/x86_64/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 \
+    -ooc=/hive/data/outside/ncbi/sts.2009-04/primerAlign/10.ooc -stepSize=5 \
+	/scratch/data/hg19/hg19.2bit:$partSpec $primer $tmpFile.psl
+/bin/rm -f $result
+/cluster/bin/x86_64/liftUp -type=.psl $result $tmpFile.lift error $tmpFile.psl
+rm -f $tmpFile.lift $tmpFile.psl
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne.csh
+
+    cat > template << '_EOF_'
+#LOOP
+runOne.csh $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 hg19.list ../primer.list template jobList
+    para create jobList
+# 5696 jobs in batch
+    para try ... check ... push ... etc
+# Completed: 5696 of 5696 jobs
+# CPU time in finished jobs:     203899s    3398.32m    56.64h    2.36d  0.006 y
+# IO & Wait Time:                 22049s     367.48m     6.12h    0.26d  0.001 y
+# Average job time:                  40s       0.66m     0.01h    0.00d
+# Longest finished job:            5314s      88.57m     1.48h    0.06d
+# Submission to last job:          5418s      90.30m     1.50h    0.06d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    #	sort and filter the results
+    cd psl
+    pslSort dirs raw.psl temp chr*
+    #	5696 files in 89 dirs
+    #	Got 5696 files 75 files per mid file
+    #	-rw-rw-r-- 1 456802973 May  4 13:32 raw.psl
+    cd ..
+    mkdir filter
+    pslQuickFilter -minMatch=26 -maxMismatch=5 \
+        -maxTinsert=5000 -verbose psl/ filter/
+    #	-rw-rw-r-- 1 50302564 May  4 13:35 raw.psl
+
+    #	And, for the randoms
+    mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/runRandoms
+    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/runRandoms
+    
+    partitionSequence.pl 40000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -lstDir tParts \
+	| egrep "tParts|random|_hap|chrUn" \
+	| sed -e "s/.*2bit://;" > hg19.list
+    cat tParts/* | sed -e "s/.*2bit://;" > hg19.list
+    cat tParts/* > hg19.list
+
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set partSpec = $1
+set primer = ../split/$2
+set result = $3
+set tmpFile = "/scratch/tmp/$1.$2"
+/bin/mkdir -p psl/$partSpec
+/bin/rm -f $tmpFile.psl
+/cluster/bin/x86_64/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 \
+    -ooc=/hive/data/outside/ncbi/sts.2009-04/primerAlign/10.ooc -stepSize=5 \
+	/scratch/data/hg19/hg19.2bit:$partSpec $primer $tmpFile.psl
+/bin/rm -f $result
+mv $tmpFile.psl $result
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne.csh
+
+    #	can not use line+ check here, many of them are empty
+    cat > template << '_EOF_'
+#LOOP
+runOne.csh $(file1) $(root2) {check out line psl/$(file1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 hg19.list ../primer.list template jobList
+    #	they run quickly, limit to 100
+    para -maxJob=100 create jobList
+    para try ... check ... push ... etc
+# Completed: 4416 of 4416 jobs
+# CPU time in finished jobs:       1746s      29.09m     0.48h    0.02d  0.000 y
+# IO & Wait Time:                 11407s     190.12m     3.17h    0.13d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:               8s       0.13m     0.00h    0.00d
+# Submission to last job:           147s       2.45m     0.04h    0.00d
+
+    #	sort and filter the results
+    cd psl
+    pslSort dirs raw.psl temp chr*
+    #	4416 files in 69 dirs
+    #	Got 4416 files 66 files per mid file
+    rmdir temp
+    #	-rw-rw-r-- 1 9066053 May  4 13:31 raw.psl
+
+    #	putting the two runs together
+    mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/psl
+    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/psl
+    ln -s ../run/filter/raw.psl run.psl
+    ln -s ../runRandoms/filter/raw.psl runRandoms.psl
+    #	-rw-rw-r-- 1 50302564 May  4 13:35 run.psl
+    #	-rw-rw-r-- 1   825973 May  4 13:35 runRandoms.psl
+    cd ..
+    pslSort dirs primers.psl temp psl
+    #	2 files in 1 dirs
+    #	Got 2 files 1 files per mid file
+    #	-rw-rw-r-- 1 51128110 May  4 13:39 primers.psl
+    wc -l primers.psl
+    #	448107 primers.psl
+    rmdir temp
+    pslFilterPrimers primers.psl ../all.primers primers.filter.psl
+    # creates primers.filter.unlifted.psl.notfound.primers
+    wc -l primers*
+    #	237962 primers.filter.psl
+    #	97191 primers.filter.psl.notfound.primers
+
+    #	see if ePCR can find some of these notfound
+    ssh swarm
+    mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/epcr
+    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/epcr
+
+    mkdir split
+    cd split
+    split -l 5000 ../../primers.filter.psl.notfound.primers  primers_
+    cd ..
+    ls -1S split > primers.lst
+    partitionSequence.pl 40000000 20000 /scratch/data/hg19/hg19.2bit \
+	/scratch/data/hg19/chrom.sizes 100 -lstDir tParts \
+	| grep -v tParts | sed -e "s/.*2bit://;" > hg19.list
+    cat tParts/* | sed -e "s/.*2bit://;" >> hg19.list
+
+    cat > runOne.csh << '_EOF_'
+#!/bin/csh -fe
+
+set partSpec = $1
+set primer = split/$2
+set result = $3
+set tmpFile = "/scratch/tmp/$1.$2"
+set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
+set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
+set range = `echo $start $end | awk '{print $2-$1}'`
+set chr = `echo $partSpec | sed -e "s/:.*//"`
+set chrSize = `grep -P "^$chr\t" /scratch/data/hg19/chrom.sizes | cut -f2`
+/bin/echo -e "$start\t$partSpec\t$range\t$chr\t$chrSize" > $tmpFile.lift
+/bin/mkdir -p epcr/$partSpec
+/bin/rm -f $tmpFile.psl
+twoBitToFa /scratch/data/hg19/hg19.2bit:$partSpec $tmpFile.fa
+/cluster/bin/scripts/runEpcr64 $primer $tmpFile.fa $tmpFile.epcr
+/bin/rm -f $result
+/bin/mv $tmpFile.epcr $result
+rm -f $tmpFile.fa $tmpFile.lift $tmpFile.psl $tmpFile.*
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne.csh
+
+    cat > template << '_EOF_'
+#LOOP
+runOne.csh $(file1) $(root2) {check out line epcr/$(file1)/$(root2).epcr}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 hg19.list primers.lst template jobList
+    para create jobList
+	# 3160 jobs
+    para try ... check ... push ... etc ...
+# Completed: 3160 of 3160 jobs
+# CPU time in finished jobs:      86253s    1437.54m    23.96h    1.00d  0.003 y
+# IO & Wait Time:                 11196s     186.61m     3.11h    0.13d  0.000 y
+# Average job time:                  31s       0.51m     0.01h    0.00d
+# Longest finished job:              89s       1.48m     0.02h    0.00d
+# Submission to last job:           237s       3.95m     0.07h    0.00d
+
+    find ./epcr -type f | xargs cat > all.epcr
+    wc -l all.epcr
+    #	797286 all.epcr
+    # convert the coordinates from the partitionSequence.pl to a lift file
+    awk '{print $1}' all.epcr | sort -u > hg19.partSpec.txt
+    $HOME/kent/src/hg/stsMarkers/liftFromSpec.pl hg19 hg19.partSpec.txt \
+	> all.epcr.lift
+    cat all.epcr | sed -e "s/\.\./ /; s/  */\t/g" \
+	| liftUp -type=.bed stdout all.epcr.lift error stdin \
+	| awk '
+{
+printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
+}
+' > all.epcr.lifted
+
+    pslFilterPrimers -epcr=all.epcr.lifted -verbose=1 ../primers.psl \
+    /cluster/home/hiram/bin/x86_64/pslFilterPrimers -epcr=all.epcr.lifted \
+	-verbose=1 ../primers.psl ../../all.primers epcr.primers.psl
+    #	this took a long time, many hours
+# -rw-rw-r--   1  2785254 May  5 17:28 epcr.not.found
+# -rw-rw-r--   1 27343510 May  5 17:28 epcr.primers.psl
+# -rw-rw-r--   1  1616885 May  5 17:28 epcr.primers.psl.notfound.primers
+
+    time ./epcrToHgPsl.pl epcr.not.found ../../all.primers \
+    time $HOME/kent/src/hg/stsMarkers/epcrToPsl epcr.not.found \
+	../../all.primers /hive/data/genomes/hg19
+    #	real    69m38.444s
+    #	-rw-rw-r--   1        0 May  6 14:18 epcr.not.found.nomatch
+    #	-rw-rw-r--   1  8369138 May  6 15:26 epcr.not.found.psl
+
+    #	combining everything together now
+    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign
+
+    sort -u primers.filter.psl epcr/epcr.primers.psl epcr/epcr.not.found.psl \
+                | sort -k15,15 -k17,17n > primers.final.psl
+    wc -l primers.final.psl
+    #	310705 primers.final.psl
+
+    time $HOME/kent/src/hg/stsMarkers/fixPrimersQueryGaps.pl \
+        ../all.primers primers.final.psl > primers.final.fix.psl
+    #	real    0m19.580s
+    wc -l primers.final.fix.psl
+    #	310705 primers.final.fix.psl
+
+    # Extract relevant info, make alignments unique, and create final file to
+    #	be merged with full sequence alignments
+    $HOME/kent/src/hg/stsMarkers/extractPslInfo -h primers.final.fix.psl
+    #	real    0m15.303s
+    #	-rw-rw-r-- 1 15660447 May  6 15:44 primers.final.fix.psl.initial
+    wc -l primers.final.fix.psl.initial
+    #	308210 primers.final.fix.psl.initial
+    $HOME/kent/src/hg/stsMarkers/findAccession.pl -agp \
+	primers.final.fix.psl.initial /hive/data/genomes/hg19
+    wc -l primers.final.fix.psl.initial.acc
+    #	308210 primers.final.fix.psl.initial.acc
+
+    $HOME/kent/src/hg/stsMarkers/getStsId ../stsInfo2.bed \
+	primers.final.fix.psl.initial.acc | sort -k 4n > primers.final
+    wc -l primers.final
+    # 308210 primers.final
+    #	There doesn't appear to be any use for this primers.ids list
+    #	except for curiosity.  Check the head and tail of this list to
+    #	verify no garbage is in here.  There should just be numbers.
+    awk '{print $4}' primers.final | sort -n | uniq > primers.ids
+    wc -l primers.ids
+    #	290961 primers.ids
+
+    # Merge primer and sequence files to create final bed file
+    # Merge (combineSeqPrimerPos) takes about an hour to run
+    cd /hive/data/genomes/hg19/bed/sts
+    time $HOME/kent/src/hg/stsMarkers/combineSeqPrimerPos stsMarkers.final \
+	/hive/data/outside/ncbi/sts.2009-04/primerAlign/primers.final
+    #	real    0m12.310s
+    #	-rw-rw-r-- 1 15222346 May  6 15:55 stsMarkers_pos.rdb
+    wc -l stsMarkers_pos.rdb
+    #	315308 stsMarkers_pos.rdb
+
+    time /cluster/bin/scripts/createSTSbed \
+	/hive/data/outside/ncbi/sts.2009-04/stsInfo2.bed  \
+	stsMarkers_pos.rdb > stsMap.bed
+    #	real    0m31.886s
+    #	-rw-rw-r-- 1 38244880 May  6 16:25 stsMap.bed
+    wc -l stsMap.bed
+    #	305914 stsMap.bed
+
+    # Set up sequence files
+    ssh hgwdev
+    mkdir /gbdb/hg19/sts.11/
+    ln -s /hive/data/outside/ncbi/sts.11/all.STS.fa \
+	/gbdb/hg19/sts.11/all.STS.fa
+    ln -s /hive/data/outside/ncbi/sts.11/all.primers.fa \
+        /gbdb/hg19/sts.11/all.primers.fa
+
+    # Load all files
+    cd /hive/data/genomes/hg19/bed/sts
+    hgLoadSeq hg19 /gbdb/hg19/sts.11/all.STS.fa /gbdb/hg19/sts.11/all.primers.fa
+    #	Creating seq.tab file
+    #	Adding /gbdb/hg19/sts.11/all.STS.fa
+    #	100520 sequences
+    #	Adding /gbdb/hg19/sts.11/all.primers.fa
+    #	317592 sequences
+    #	Updating seq table
+    #	Advisory lock has been released
+    #	All done
+
+
+    hgsql hg19 < $HOME/kent/src/hg/lib/stsInfo2.sql
+    hgsql hg19 < $HOME/kent/src/hg/lib/stsAlias.sql
+    #	these files already exist here from previous operations
+    # cp -p /hive/data/outside/ncbi/sts.11/{stsInfo2.bed,stsAlias.bed} .
+    hgsql hg19 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
+    hgsql hg19 -e 'load data local infile "stsAlias.bed" into table stsAlias'
+    #	a couple minutes for each load above
+    #	filter the stsMap.bed to eliminate items longer than 5,000 bases,
+    #	takes out about 850:
+    awk '$3-$2 < 5001' stsMap.bed | sort -k1,1 -k2,2n \
+	> stsMap.filtered.5000.bed
+
+    hgLoadBed -notItemRgb -noBin -tab \
+	-sqlTable=$HOME/kent/src/hg/lib/stsMap.sql hg19 stsMap \
+	    stsMap.filtered.5000.bed
+    #	Loaded 305064 elements of size 28
+
+    ln -s \
+/hive/data/outside/ncbi/sts.2009-04/primerAlign/primers.final.fix.psl \
+	primers.psl
+
+    hgLoadPsl -nobin -table=all_sts_primer hg19 primers.psl
+    hgLoadPsl -nobin -table=all_sts_seq hg19 stsMarkers.psl
+
+##############################################################################
+# FISH CLONES (WORKING - 2009-04-29 - Hiram)
+# The STS Marker and BAC End Pairs tracks must be completed prior to
+# creating this track.  
+
+    mkdir /hive/data/outside/ncbi/fishClones/fishClones.2009-04/
+    cd /hive/data/outside/ncbi/fishClones/fishClones.2009-04/
+
+# Download information from NCBI
+        # point browser at:
+#   http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+# change "Sequence tag:" to "placed on contig"
+        # change "Show details on sequence-tag" to "yes"
+        # change "Download or Display" to "Download table for UNIX"
+        # press Submit - save as
+# /hive/data/outside/ncbi/fishClones/fishClones.2009-04/hbrc.txt
+    chmod 664 /hive/data/outside/ncbi/fishClones/fishClones.2009-04/hbrc.txt
+
+#	Unfortunately the format of this hbrc file has changed since
+#	last time.  The columns have been rearranged, and one important
+#	column is missing, the contig information.  So, let's see if we
+#	can recover the original format by putting this together with
+#	some other things we have here.
+    $HOME/kent/src/hg/fishClones/fixup.hbrc.pl hbrc.txt \
+	/hive/data/genomes/hg19/bed/fishClones/seq_clone.pmd > fixed.hbrc.txt \
+	    2> dbg
+    #	the seq_clone.pmd file was obtained via email from Wonhee Jang
+    #	jang at ncbi.nlm.nih.gov - I have asked for clarification where
+    #	such a file can be fetched without resorting to email.
+
+# Get current clone/accession information
+    wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
+# Create initial Fish Clones bed file
+    ssh kkstore02
+    mkdir /hive/data/genomes/hg19/bed/fishClones
+    cd /hive/data/genomes/hg19/bed/fishClones
+
+    # Copy previous sts info from fhcrc
+    cp -p /hive/data/genomes/hg18/bed/fishClones/fhcrc.sts .
+    #	This fhcrc.sts listing doesn't change.  It is merely a listing
+    #	of aliases that remain in effect.
+
+    #	Create cl_acc_gi_len file form cloneend information:
+    grep -v "^#" /hive/data/genomes/hg19/bed/cloneend/all.txt \
+    | awk '{gsub(".[0-9]*$", "", $2);
+	printf "%s\t%s\t%s\t%s\t%s\t%s\n", $1,$2,$3,$4,$5,$8}' > cl_acc_gi_len
+
+    hgsql -N \
+	-e "select chrom,chromStart,chromEnd,contig from ctgPos;" hg19 \
+	| sort -k1,1 -k2,2n > ctgPos.bed
+    hgsql -N \
+-e "select chrom,chromStart,chromEnd,frag,0,strand from gold;" hg19 \
+	| sort -k1,1 -k2,2n > gold.bed
+    hgsql -N \
+-e "select tName,tStart,tEnd,qName,0,strand from all_bacends;" hg19 \
+	| sort -k1,1 -k2,2n > all_bacends.bed
+    hgsql -N \
+-e "select chrom,chromStart,chromEnd,name,score,strand from bacEndPairs;" hg19 \
+	| sort -k1,1 -k2,2n > bacEndPairs.bed
+
+
+
+    ssh hgwdev
+    #	have to be on hgwdev for this since it is going to read from the
+    #	database.  Had to work on this program to get it past what is
+    #	evidently a bad entry in hbrc.fixed where columns of information
+    #	are missing for one clone in particular
+    time fishClones -verbose=2 -fhcrc=fhcrc.sts -noBin hg19 \
+	/hive/data/outside/ncbi/fishClones/fishClones.2009-04/fixed.hbrc.txt \
+	/hive/data/outside/ncbi/fishClones/fishClones.2009-04/clac.out \
+         ./cl_acc_gi_len \
+         /hive/data/genomes/hg19/bed/bacends/bacEnds.lifted.psl \
+            fishClones
+    #	real    2m4.708s
+# Reading Fish Clones file /hive/data/genomes/ncbi/fishClones/fishClones.2006-01/hbrc.fixed
+# reading fishInfo file /hive/data/genomes/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt
+# Reading Clone/Acc (clac.out) file /hive/data/genomes/ncbi/fishClones/fishClones.2006-01/clac.out
+# Reading BAC Ends file ./cl_acc_gi_len
+# Reading BAC Ends psl file /hive/data/genomes/hg19/bed/bacends/bacEnds.lifted.psl
+# Reading additional STS Marker links fhcrc.sts
+# Determining good positions
+#	findClonePos: determining positions of fish clones
+# Writing output file
+# ERROR: at line # 170, no cytoband info for chrX:104048913-104206974
+# RP11-79L11
+# ERROR: at line # 171, no cytoband info for chrX:104048913-104206974
+# RP11-79L11
+
+    # Load the track
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/fishClones
+    hgLoadBed -notItemRgb -noBin -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/fishClones.sql \
+	hg19 fishClones fishClones.bed
+    #	Loaded 9461 elements of size 16
+
+##############################################################################
+# UCSC to Ensembl chr name mapping (DONE - 2009-05-08 - Hiram)
+    mkdir /hive/data/genomes/hg19/ensembl
+    cd /hive/data/genomes/hg19/ensembl
+    wget --timestamping \
+	'ftp://ftp.ensembl.org/pub/pre/homo_sapiens/GRCh37/dna/*'
+    #	do not need the repeat masker sequence (although it would be
+    #	interesting to measure to see how it compares)
+    rm -f *.dna_rm.*
+    #	fortunately we have the same sizes as Ensembl for everything
+    #	(except the haplotypes) and the sizes are unique for each sequence
+    #	so we can relate the names via their sizes
+    mkdir /hive/data/genomes/hg19/bed/ucscToEnsembl
+    cd /hive/data/genomes/hg19/bed/ucscToEnsembl
+    #	the toplevel file is a duplicate of everything else
+    ls /hive/data/genomes/hg19/ensembl/*.fa.gz | grep -v toplevel \
+	| while read F
+do
+    zcat "${F}"
+done | faCount stdin > faCount.txt
+
+    cat << '_EOF_' > relateUcscEnsembl.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %ucscChrs;   # key is size, value is UCSC chr name
+
+open (FH,"<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    die "'$line\n'duplicate size in ../chrom.sizes" if (exists($ucscChrs{$size})
+);
+    $ucscChrs{$size} = $chr;
+}
+close (FH);
+
+my %ensemblChrs;        # key is size, value is Ensembl chr name
+
+open (FH,"<faCount.txt") or die "can not read faCount.txt";
+while (my $line = <FH>) {
+    next if ($line =~ m/#/);
+    next if ($line =~ m/total/);
+    chomp $line;
+    my ($chr, $size, $rest) = split('\s+', $line, 3);
+    die "'$line\n'duplicate size in faCount.txt" if (exists($ensemblChrs{$size})
+);
+    $ensemblChrs{$size} = $chr;
+}
+close (FH);
+
+my %usedUcscChrs;
+my %usedEnsemblChrs;
+my %ensemblTranslate; # key is Ensembl name, value is UCSC size
+foreach my $size (keys %ucscChrs) {
+    if (exists($ensemblChrs{$size})) {
+        $usedUcscChrs{$size} = $ucscChrs{$size};
+        $usedEnsemblChrs{$size} = $ensemblChrs{$size};
+        printf "%s\t%s\t%d\n", $ucscChrs{$size}, $ensemblChrs{$size}, $size;
+    } else {
+        my $ucscName = $ucscChrs{$size};
+        my $ensemblName = "unknown";
+        if ($ucscName =~ m/^chr6/) {
+            $ucscName =~ s/_hap.//;
+            $ucscName =~ s/chr6_/chr6_mhc_/;
+            $ensemblName = "HS" . uc($ucscName);
+        } elsif ($ucscName =~ m/^chr17_/ || $ucscName =~ m/^chr4_/) {
+            $ucscName =~ s/_.*/_1/;
+            $ensemblName = "HS" . uc($ucscName);
+        } elsif ($ucscName =~ m/^chrM/) {
+            print "# no translation for chrM\n";
+        } else {
+            die "unknown UCSC chr name: $ucscName";
+        }
+        printf "# ucsc $ucscChrs{$size} -> $ensemblName\n";
+        $ensemblTranslate{$ensemblName} = $size;
+    }
+}
+
+foreach my $size (keys %ensemblChrs) {
+    if (!exists($usedEnsemblChrs{$size})) {
+        my $ensemblName = $ensemblChrs{$size};
+        if (! exists($ensemblTranslate{$ensemblName})) {
+            die "can not translate Ensembl name $ensemblName";
+        } else {
+            my $ucscSize = $ensemblTranslate{$ensemblName};
+            printf "%s\t%s\t%d\t%d\n", $ucscChrs{$ucscSize}, $ensemblChrs{$size}
+, $ucscSize, $size;
+        }
+    }
+}
+
+printf "chrM\tMT\n";
+'_EOF_'
+    # << happy emacs
+    chmod +x relateUcscEnsembl.pl
+
+    ./relateUcscEnsembl.pl  2>&1 | grep -v "^#" \
+	| awk '{printf "%s\t%s\n", $1, $2}' | sort > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(21))
+);
+'_EOF_'
+
+    hgsql hg19 < ucscToEnsembl.sql
+    hgsql hg19 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    awk '{printf "%s\t%d\n", $2, -$1}' ../../jkStuff/ensGene.haplotype.lift \
+	> ensemblLift.tab
+
+    cat << '_EOF_' > ensemblLift.sql
+# UCSC offset to Ensembl coordinates
+CREATE TABLE ensemblLift (
+    chrom varchar(255) not null,      # Ensembl chromosome name
+    offset int unsigned not null,     # offset to add to UCSC position 
+              #Indices
+    PRIMARY KEY(chrom(15))
+);
+'_EOF_'
+
+    hgsql hg19 < ensemblLift.sql
+    hgsql hg19 \
+-e 'LOAD DATA LOCAL INFILE "ensemblLift.tab" INTO TABLE ensemblLift'
+
+##############################################################################
+# BLASTZ MOUSE Mm9 (DONE - 2009-05-11 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+    cd /hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/linSpecRep/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm9/nib
+SEQ2_SMSK=/scratch/data/mm9/notInOthers
+SEQ2_LEN=/scratch/data/mm9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+    
+BASE=/hive/data/genomes/hg19/bed/lastzMm9.2009-05-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Mon May 11 13:40:46 PDT 2009
+
+#########################################################################
+# BLASTZ Dog CanFam2 (DONE - 2009-05-11 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+    cd /hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+
+    cat << '_EOF_' > DEF
+# human vs dog
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/linSpecRep/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Dog CanFam2
+SEQ2_DIR=/scratch/data/canFam2/nib
+SEQ2_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ2_SMSK=/scratch/scratch/data/canFam2/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=20000000
+SEQ2_LAP=10000
+
+BASE=/hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running Mon May 11 13:40:46 PDT 2009
+
+#########################################################################

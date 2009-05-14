@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.7 2007/06/02 21:57:18 markd Exp $";
+static char const rcsid[] = "$Id: pslStats.c,v 1.8 2009/05/02 08:13:29 markd Exp $";
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
@@ -79,7 +79,7 @@ return querySizesTbl;
 }
 
 struct sumStats
-/* structure to hold summary statistics, either per query or overall */
+/* structure to hold per-query summary statistics */
 {
     char *qName;        /* query name; string is in hash table, NULL if overall */
     unsigned queryCnt;  /* total number of queries, if summary */
@@ -110,8 +110,9 @@ if (qs == NULL)
     {
     AllocVar(qs);
     qs->qName = hel->name;  /* use string in hash */
-    hel->val = qs;
+    qs->queryCnt = 1;
     qs->minQSize = qs->maxQSize = qSize;
+    hel->val = qs;
     }
 else if (qs->minQSize != qSize)
     errAbort("conflicting query sizes for %s: %d and %d", qName, qs->minQSize, qSize);
@@ -253,6 +254,38 @@ ss->totalRepMatch += psl->repMatch;
 ss->alnCnt++;
 }
 
+static void sumStatsSum(struct sumStats *ss, struct sumStats *ss2)
+/* sum a sumStats object into this object */
+{
+if (ss->alnCnt == 0)
+    {
+    ss->minQSize = ss2->maxQSize;
+    ss->minIdent = ss2->maxIndent;
+    ss->minQCover = ss2->maxQCover;
+    ss->minTCover = ss2->maxTCover;
+    ss->minRepMatch = ss2->maxRepMatch;
+    }
+else if (ss2->alnCnt > 0)
+    {
+    ss->minQSize = min(ss->minQSize, ss2->minQSize);
+    ss->maxQSize = max(ss->maxQSize, ss2->maxQSize);
+    ss->minIdent = min(ss->minIdent, ss2->minIdent);
+    ss->maxIndent = max(ss->maxIndent, ss2->maxIndent);
+    ss->minQCover = min(ss->minQCover, ss2->minQCover);
+    ss->maxQCover = max(ss->maxQCover, ss2->maxQCover);
+    ss->minTCover = min(ss->minTCover, ss2->minTCover);
+    ss->maxTCover = max(ss->maxTCover, ss2->maxTCover);
+    ss->minRepMatch = min(ss->minRepMatch, ss2->minRepMatch);
+    ss->maxRepMatch = max(ss->maxRepMatch, ss2->maxRepMatch);
+    }
+ss->queryCnt += ss2->queryCnt;
+ss->totalQSize += ss2->totalQSize;
+ss->totalAlign += ss2->totalAlign;
+ss->totalMatch += ss2->totalMatch;
+ss->totalRepMatch += ss2->totalRepMatch;
+ss->alnCnt += ss2->alnCnt;
+}
+
 /* header for alignment statistics */
 static char *alnStatsHdr = "#qName\t" "qSize\t" "tName\t" "tStart\t" "tEnd\t"
 "ident\t" "qCover\t" "repMatch\t" "tCover\n";
@@ -330,8 +363,8 @@ while ((hel = hashNext(&cookie)) != NULL)
 carefulClose(&fh);
 }
 
-static void pslQueryStats(char *pslFile, char *statsFile, char *querySizeFile)
-/* collect and output per-query stats */
+static struct hash *collectQueryStats(char *pslFile, char *querySizeFile)
+/* collect per-query statistics */
 {
 struct hash *queryStatsTbl = (querySizeFile != NULL)
     ? sumStatsLoad(querySizeFile)
@@ -347,6 +380,13 @@ while ((psl = pslNext(pslLf)) != NULL)
     pslFree(&psl);
     }
 lineFileClose(&pslLf);
+return queryStatsTbl;
+}
+
+static void pslQueryStats(char *pslFile, char *statsFile, char *querySizeFile)
+/* collect and output per-query stats */
+{
+struct hash *queryStatsTbl = collectQueryStats(pslFile, querySizeFile);
 outputQueryStats(queryStatsTbl, statsFile);
 }
 
@@ -354,45 +394,52 @@ outputQueryStats(queryStatsTbl, statsFile);
 static char *overallStatsHdr = "#queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
 "alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
-"minTCover\t" "maxTCover\n";
+"minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\n";
 
-static void outputOverallStats(char *statsFile, struct sumStats *os)
+static void outputOverallStats(char *statsFile, struct sumStats *os, int aligned1, int alignedN)
 /* output overall statistic */
 {
 FILE *fh = mustOpen(statsFile, "w");
 fputs(overallStatsHdr, fh);
 fprintf(fh, "%d\t%d\t%d\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
-        "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\n",
+        "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\t"
+        "%d\t%d\t%d\n",
         os->queryCnt, os->minQSize, os->maxQSize, calcMeanQSize(os),
         os->alnCnt,
         os->minIdent, os->maxIndent, calcMeanIdent(os),
         os->minQCover, os->maxQCover, calcMeanQCover(os),
         os->minRepMatch, os->maxRepMatch, calcMeanRepMatch(os),
-        os->minTCover, os->maxTCover);
+        os->minTCover, os->maxTCover, aligned1+alignedN, aligned1, alignedN);
 carefulClose(&fh);
+}
+
+static struct sumStats sumOverAllStats(struct hash *queryStatsTbl, int *aligned1, int *alignedN)
+/* sum statistics over all queries */
+{
+struct sumStats os;
+ZeroVar(&os);
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(queryStatsTbl);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct sumStats *ss = hel->val;
+    sumStatsSum(&os, ss);
+    if (ss->alnCnt == 1)
+        (*aligned1)++;
+    else if (ss->alnCnt > 1)
+        (*alignedN)++;
+    }
+return os;
 }
 
 static void pslOverallStats(char *pslFile, char *statsFile,
                             char *querySizeFile)
 /* collect and output overall stats */
 {
-struct sumStats os;
-ZeroVar(&os);
-struct lineFile *pslLf = pslFileOpen(pslFile);
-struct psl* psl;
-struct hash* querySizesTbl = (querySizeFile != NULL)
-    ? querySizeCntLoad(querySizeFile)
-    : hashNew(queryHashPowTwo);
-
-while ((psl = pslNext(pslLf)) != NULL)
-    {
-    querySizeCntGet(querySizesTbl, psl->qName, psl->qSize);
-    sumStatsAccumulate(&os, psl);
-    pslFree(&psl);
-    }
-lineFileClose(&pslLf);
-os.queryCnt = hashNumEntries(querySizesTbl);
-outputOverallStats(statsFile, &os);
+struct hash *queryStatsTbl = collectQueryStats(pslFile, querySizeFile);
+int aligned1 = 0, alignedN = 0;
+struct sumStats os = sumOverAllStats(queryStatsTbl, &aligned1, &alignedN);
+outputOverallStats(statsFile, &os, aligned1, alignedN);
 }
 
 int main(int argc, char *argv[])

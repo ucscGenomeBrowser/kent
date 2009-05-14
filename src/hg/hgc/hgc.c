@@ -219,8 +219,9 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
+#include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1530 2009/04/23 22:42:27 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1541 2009/05/11 23:15:16 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2266,6 +2267,16 @@ showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
+if(sameString(tdb->type,"genePred")
+&& startsWith("ENCODE Gencode",tdb->longLabel)
+&& startsWith("ENST",geneName))
+    {
+#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id."
+    puts("<LI>\n");
+    printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
+    puts("</LI>\n");
+    }
+
 if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
     {
     puts("<LI>\n");
@@ -2318,17 +2329,6 @@ puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
-if(sameString(tdb->type,"genePred") && startsWith("ENCODE Gencode",tdb->longLabel))
-    {
-#define VEGA_TRANSCRIPTID_LINK    "<a href=\"http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=%s\" target=\"_blank\">Vega Transcript Report</a> from transcript Id."
-#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id."
-    puts("<LI>\n");
-    if(startsWith("OTTHUM",geneName))
-        printf(VEGA_TRANSCRIPTID_LINK,geneName);
-    else if(startsWith("ENST",geneName))
-        printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
-    puts("</LI>\n");
-    }
 printf("</UL>\n");
 }
 
@@ -2488,7 +2488,7 @@ if (hTableOrSplitExists(database, tdb->tableName))
     char *trackTable = getParentTrackName(tdb);
     printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&position=%s:%d-%d&"
-	   "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
+	   "hgta_doSchema=describe+table+schema\" target=ucscSchema title='Open schema in new window'>"
 	   "View table schema</A></P>\n",
 	   database, tdb->grp, trackTable, tdb->tableName,
 	   seqName, winStart+1, winEnd);
@@ -2510,18 +2510,30 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
 void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
-char *version;
-if ((version = trackDbSetting(tdb, "dataVersion")) != NULL)
+char *version = metadataSettingFind(tdb,"dataVersion");
+if(version != NULL)
+    {
     printf("<B>Data version:</B> %s <BR>\n", version);
+    freeMem(version);
+    }
+else
+    {
+    version = trackDbSetting(tdb,"dataVersion");
+    if (version != NULL)
+        printf("<B>Data version:</B> %s <BR>\n", version);
+    }
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
 /* If this annotation has a dateUnrestricted trackDb setting, print it */
 {
-char *restrictionDate;
-if ((restrictionDate = trackDbSetting(tdb, "dateUnrestricted")) != NULL)
-    printf("<A HREF=\"/ENCODE/terms.html\" TARGET=_BLANK><B>Restricted until</A>:</B> %s <BR>\n", 
+char *restrictionDate = encodeRestrictionDateDisplay(tdb);
+if (restrictionDate != NULL)
+    {
+    printf("<A HREF=\"/ENCODE/terms.html\" TARGET=_BLANK><B>Restricted until</A>:</B> %s <BR>\n",
                 restrictionDate);
+    freeMem(restrictionDate);
+    }
 }
 
 void printOrigAssembly(struct trackDb *tdb)
@@ -2551,7 +2563,7 @@ char *tableName;
 
 if (!isCustomTrack(tdb->tableName))
     {
-    printTBSchemaLink(tdb);
+    extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
@@ -3551,6 +3563,8 @@ hFreeConn(&conn);
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info */
 {
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js",NULL);
 genericClickHandlerPlus(tdb, item, itemForUrl, NULL);
 }
 
@@ -5980,9 +5994,15 @@ struct ctgPos2 *ctg2 = NULL;
 int cloneCount;
 struct contigAcc contigAcc;
 
+char * ncbiTerm = cgiEncode(ctgName);
+safef(query, sizeof(query), "%s%s", NUCCORE_SEARCH, ncbiTerm);
+
 genericHeader(tdb, ctgName);
-printf("<B>Name:</B> %s<BR>\n", ctgName);
-sprintf(query, "select * from %s where contig = '%s'", track, ctgName);
+printf("<B>Name:</B>&nbsp;<A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n",
+	query, ctgName);
+freeMem(ncbiTerm);
+safef(query, sizeof(query), "select * from %s where contig = '%s'",
+	track, ctgName);
 selectOneRow(conn, track, query, &sr, &row);
 
 if (sameString("ctgPos2", track))
@@ -8682,7 +8702,7 @@ if (url != NULL && url[0] != 0)
     	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
 	       "../cgi-bin/hgGene?hgg_gene=", kgId);
     	printf("%s</A></B>: ", kgId);
-    	
+
 	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -8711,9 +8731,9 @@ if (url != NULL && url[0] != 0)
 	    printf("%s", kgDescription);
 	    }
         printf("<BR>\n");
-	
+
 	safef(query, sizeof(query),
-	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'", 
+	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'",
 	      kgId, kgId);
     	sr = sqlMustGetResult(conn, query);
 	if (sr != NULL)
@@ -8722,7 +8742,7 @@ if (url != NULL && url[0] != 0)
 	    printedCnt = 0;
 	    while ((row = sqlNextRow(sr)) != NULL)
 	    	{
-	        if (printedCnt < 1) 
+	        if (printedCnt < 1)
 		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
 		else
 		    printf(", ");
@@ -9415,6 +9435,146 @@ if (s != NULL)
 return trimSpaces(gi);
 }
 
+void showSAM_h1n1(char *item)
+{
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+struct sqlConnection *conn2 = hAllocConn(database);
+char cond_str[256];
+char *predFN;
+char *homologID;
+char *SCOPdomain;
+char *chain;
+char goodSCOPdomain[40];
+int  first = 1;
+float  eValue;
+char *chp;
+int homologCount;
+int gotPDBFile = 0;
+char extUrl[200] = {"http://users.soe.ucsc.edu/~karplus/h1n1"};
+
+printf("<H3>Protein Structure Analysis and Prediction by ");
+printf("<A HREF=\"http://www.soe.ucsc.edu/research/compbio/SAM_T02/sam-t02-faq.html\"");
+printf(" TARGET=_blank>SAM-T02</A></H3>\n");
+
+printf("<B>Multiple Alignment:</B> ");
+printf("<A HREF=\"%s/%s/summary.html#alignment", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+printf("<B>Secondary Structure Predictions:</B> ");
+printf("<A HREF=\"%s/%s/summary.html#secondary-structure", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+printf("<B>3D Structure Prediction (PDB file):</B> ");
+printf("<A HREF=\"%s/%s/decoys/%s.try1-opt3.pdb.gz", extUrl, item, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+gotPDBFile = 0;
+safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+
+printf("<TABLE>\n");
+printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
+printf("<TD ALIGN=\"center\">Top</TD>\n");
+printf("<TD ALIGN=\"center\">Side</TD>\n");
+printf("</TR>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", extUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", extUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", extUrl, item, item);
+printf("</TR>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view2_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view3_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("</TR>\n");
+printf("</TABLE>\n");
+
+printf("<BR><B>Detailed results of SAM-T02:</B> ");
+printf("<A HREF=\"%s/%s/summary.html", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+/* by pass the following additional processing for now, until two necessary tables are built */
+hFreeConn(&conn2);
+return;
+
+if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
+    {
+    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
+    if (predFN != NULL)
+	{
+	printf("<A HREF=\"../SARS/%s/", item);
+	/* printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", item,item); */
+	printf("%s\">%s</A><BR>\n", predFN,item);
+	gotPDBFile = 1;
+	}
+    }
+if (!gotPDBFile)
+    {
+    printf("No high confidence level structure prediction available for this sequence.");
+    printf("<BR>\n");
+    }
+printf("<B>3D Structure of Close Homologs:</B> ");
+homologCount = 0;
+strcpy(goodSCOPdomain, "dummy");
+
+conn2= hAllocConn(database);
+safef(query2, sizeof(query2),
+	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
+	item);
+sr2 = sqlMustGetResult(conn2, query2);
+row2 = sqlNextRow(sr2);
+if (row2 != NULL)
+    {
+    while (row2 != NULL)
+	{
+	homologID = row2[0];
+	sscanf(row2[1], "%e", &eValue);
+	SCOPdomain = row2[2];
+	chp = SCOPdomain+strlen(SCOPdomain)-1;
+	while (*chp != '.') chp--;
+	*chp = '\0';
+	chain = row2[3];
+	if (eValue <= 1.0e-10)
+	    strcpy(goodSCOPdomain, SCOPdomain);
+	else
+	    {
+	    if (strcmp(goodSCOPdomain,SCOPdomain) != 0)
+		goto skip;
+	    else
+		if (eValue > 0.1) goto skip;
+	    }
+	if (first)
+	    first = 0;
+	else
+	    printf(", ");
+
+	printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s",
+	       homologID);
+	if (strlen(chain) >= 1)
+	    printf("\"TARGET=_blank>%s(chain %s)</A>", homologID, chain);
+	else
+	    printf("\"TARGET=_blank>%s</A>", homologID);
+	homologCount++;
+
+	skip:
+	row2 = sqlNextRow(sr2);
+	}
+    }
+hFreeConn(&conn2);
+sqlFreeResult(&sr2);
+if (homologCount == 0)
+    printf("None<BR>\n");
+
+printf("<BR><B>Details:</B> ");
+printf("<A HREF=\"../SARS/%s/summary.html", item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+htmlHorizontalLine();
+}
 void showSAM_T02(char *itemName)
 {
 char query2[256];
@@ -15692,6 +15852,42 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doH1n1Seq(struct trackDb *tdb, char *item)
+/* Show extra info for H1N1 Seq  Annotations track. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlResult *sr;
+char query[256];
+char **row;
+genericHeader(tdb, item);
+
+/*pslList = getAlignments(conn, track, item);
+printAlignmentsSimple(pslList, start, "h1n1Seq", track, item);
+*/
+sprintf(query, "select * from h1n1SeqXref where seqId = '%s'", item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *seqId, *geneSymbol, *strain;
+
+    seqId = row[0];
+    geneSymbol = row[1];
+    strain = row[2];
+
+    printf("<B>Sequence ID: %s</B> <BR>", seqId);
+    printf("<B>Gene: %s</B> <BR>", geneSymbol);
+    printf("<B>Strain: %s</B> <BR>", strain);
+    }
+htmlHorizontalLine();
+showSAM_h1n1(item);
+
+htmlHorizontalLine();
+printTrackHtml(tdb);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doGbProtAnn(struct trackDb *tdb, char *item)
 /* Show extra info for GenBank Protein Annotations track. */
 {
@@ -18492,7 +18688,7 @@ sqlFreeResult(&sr);
 
 void doHapmapSnpsAllPops(struct sqlConnection *conn, struct trackDb *tdb, char *itemName,
 			 boolean showOrtho)
-/* Show item's SNP allele frequencies for each of the 11 HapMap Phase III 
+/* Show item's SNP allele frequencies for each of the 11 HapMap Phase III
  * populations, as well as chimp and macaque if showOrtho. */
 {
 int i;
@@ -19713,6 +19909,9 @@ for (i=0; i < oregannoAttrSize; i++)
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct oregannoLink link;
+        /* skip ORegAnno links until they are fixed */
+        if (!sameString(oregannoAttributes[i], "SrcLink") )
+            {
         used++;
         if (used == 1)
             {
@@ -19731,6 +19930,7 @@ for (i=0; i < oregannoAttrSize; i++)
         oregannoLinkStaticLoad(row, &link);
         printOregannoLink(&link);
         printf("<BR>\n");
+            }
         }
     freeMem(tab);
     }
@@ -20120,6 +20320,31 @@ return attrCnt;
 }
 
 void doOmicia (struct trackDb *tdb, char *itemName)
+/* this prints the detail page for the Omicia track */
+{
+struct omiciaLink *link = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+/* print generic bed start */
+doBed6FloatScore(tdb, itemName);
+
+/* print links */
+safef(query, sizeof(query), "select * from omiciaLink where id = '%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    link = omiciaLinkLoad(row);
+    printLinksRaLink(link->acc, link->raKey, link->displayVal);
+    }
+sqlFreeResult(&sr);
+
+printTrackHtml(tdb);
+}
+
+void doOmiciaOld (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Omicia OMIM track */
 {
 char *table = tdb->tableName;
@@ -20570,8 +20795,18 @@ char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", "kompExtra");
 boolean gotExtra = sqlTableExists(conn, extraTable);
 if (gotExtra)
     {
+    char mgiId[256];
     safef(query, sizeof(query), "select alias from %s where name = '%s'",
 	  extraTable, item);
+    sqlQuickQuery(conn, query, mgiId, sizeof(mgiId));
+    char *ptr = strchr(mgiId, ',');
+    if (!startsWith("MGI:", mgiId) || ptr == NULL)
+	errAbort("Where is the MGI ID?: '%s'", mgiId);
+    else
+	*ptr = '\0';
+    // Use the MGI ID to show all centers that are working on this gene:
+    safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%%'",
+	  extraTable, mgiId);
     sr = sqlGetResult(conn, query);
     char lastMgiId[16];
     lastMgiId[0] = '\0';
@@ -20579,7 +20814,7 @@ if (gotExtra)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *words[3];
-	int wordCount = chopCommas(row[0], words);
+	int wordCount = chopCommas(row[1], words);
 	if (wordCount >= 3)
 	    {
 	    char *mgiId = words[0], *center = words[1], *status = words[2];
@@ -20593,6 +20828,9 @@ if (gotExtra)
 		safecpy(lastMgiId, sizeof(lastMgiId), mgiId);
 		}
 	    printf("<TR><TD><B>Center: </B>%s</TD>\n", center);
+	    ptr = strrchr(row[0], '_');
+	    if (ptr != NULL)
+		printf("<TD><B>Design ID: </B>%s</TD>\n", ptr+1);
 	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
 	    }
 	}
@@ -21820,6 +22058,46 @@ else if (sameWord(track, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
     }
+else if (sameWord(track, "h1n1b_0511Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0511Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1b_0506Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0506Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0504Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0430Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0429Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0428Seq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0428NonMexicoSeq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
+else if (sameWord(track, "h1n1_0428_mexicoSeq"))
+    {
+    doH1n1Seq(tdb, item);
+    }
 else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
     {
     doBDGPGene(tdb, item);
@@ -22034,7 +22312,7 @@ else if (startsWith("dbRIP", track))
     {
     dbRIP(tdb, item, NULL);
     }
-else if (sameString("omiciaAuto", track) || sameString("omiciaHand", track))
+else if (sameString("omicia", track)) //Auto", track) || sameString("omiciaHand", track))
     {
     doOmicia(tdb, item);
     }

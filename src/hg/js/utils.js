@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.19 2009/04/22 21:02:26 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.21 2009/05/06 00:25:44 tdreszer Exp $
 
 var debug = false;
 
@@ -272,10 +272,10 @@ function validateInt(obj,min,max)
             obj.value = obj.defaultValue;
         if(!isInteger(obj.value)) {
             if(popup) {
-                obj.value = prompt(title +" is invalid!\nMust be an integer.",obj.value);
+                obj.value = prompt(title +" is invalid.\nMust be an integer.",obj.value);
                 continue;
             } else {
-                alert(title +" of '"+obj.value +"' is invalid!\nMust be an integer."); // try a prompt box!
+                alert(title +" of '"+obj.value +"' is invalid.\nMust be an integer."); // try a prompt box!
                 obj.value = obj.defaultValue;
                 return false;
             }
@@ -284,10 +284,10 @@ function validateInt(obj,min,max)
         if(isInteger(min) && isInteger(max)) {
             if(val < rangeMin || val > rangeMax) {
                 if(popup) {
-                    obj.value = prompt(title +" is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
+                    obj.value = prompt(title +" is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid!\nMust be between "+rangeMin+" and "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be between "+rangeMin+" and "+rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -295,10 +295,10 @@ function validateInt(obj,min,max)
         } else if(isInteger(min)) {
             if(val < rangeMin) {
                 if(popup) {
-                    obj.value = prompt(title +" is invalid!\nMust be no less than "+rangeMin+".",obj.value);
+                    obj.value = prompt(title +" is invalid.\nMust be no less than "+rangeMin+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no less than "+rangeMin+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no less than "+rangeMin+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -306,10 +306,10 @@ function validateInt(obj,min,max)
         } else if(isInteger(max)) {
             if(val > rangeMax) {
                 if(popup) {
-                    obj.value = prompt(title +" is invalid!\nMust be no greater than "+rangeMax+".",obj.value);
+                    obj.value = prompt(title +" is invalid.\nMust be no greater than "+rangeMax+".",obj.value);
                     continue;
                 } else {
-                    alert(title +" of '"+obj.value +"' is invalid!\nMust be no greater than "+rangeMax+".");
+                    alert(title +" of '"+obj.value +"' is invalid.\nMust be no greater than "+rangeMax+".");
                     obj.value = obj.defaultValue;
                     return false;
                 }
@@ -378,3 +378,24 @@ function validateFloat(obj,min,max)
         return true;
     }
 }
+
+function metadataShowHide(tableName)
+{
+// Will show subtrack specific configuration controls
+// Config controls not matching name will be hidden
+    var divit = $("#div_"+tableName+"_meta");
+    if($(divit).css('display') == 'none')
+        $("#div_"+tableName+"_cfg").hide();
+    var htm = $(divit).html();
+    // Seems to be faster if this undisplayed junk is commented out.
+    if(htm.substring(0,4) == "<!--") {
+        htm = htm.substring(4,htm.length-7);
+        $(divit).html(htm);
+    } else {
+        $(divit).html("<!--"+htm+"-->");
+    }
+
+    $(divit).toggle();
+    return false;
+}
+

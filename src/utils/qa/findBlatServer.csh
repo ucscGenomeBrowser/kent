@@ -12,7 +12,7 @@ source `which qaConfig.csh`
 
 set db=''
 set host=''
-set machine='-h genome-centdb hgcentral'
+set machine="-h $sqlrr hgcentral"
 set order='db'
 
 if ( $#argv < 1 || $#argv > 3 ) then
@@ -62,7 +62,7 @@ endif
 
 echo $machine | egrep -i "hgw[1-8]|rr" > /dev/null
 if ( ! $status ) then
-  set machine='-h genome-centdb hgcentral'
+  set machine="-h $sqlrr hgcentral"
 endif
 
 if ( all% == "$db" ) then

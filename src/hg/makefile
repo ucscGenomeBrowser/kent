@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.149 2009/03/12 18:34:34 tdreszer Exp $
+# 	$Id: makefile,v 1.150 2009/04/29 23:21:57 mikep Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -12,6 +12,8 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	makeDb/hgCgiData js
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
+
+ENCODE_FILES = encode/encodeValidate
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToGtf \
@@ -224,7 +226,7 @@ cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi}
 
 #   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
 
-alpha:	 ${BROWSER_BINS:%=%.alpha} ${BROWSER_LOADERS:%=%.alpha}
+alpha:	 ${BROWSER_BINS:%=%.alpha} ${BROWSER_LOADERS:%=%.alpha} ${ENCODE_FILES:%=%.alpha}
 %.alpha: hgLib
 	( cd $* && echo $* && $(MAKE) alpha)
 

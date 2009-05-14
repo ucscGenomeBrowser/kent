@@ -516,6 +516,7 @@ group genes
 priority 10.2
 visibility hide
 color 90,0,150
+noScoreFilter .
 type bed 6 .
 
 track knownGeneOld3

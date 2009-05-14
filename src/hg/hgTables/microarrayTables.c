@@ -21,7 +21,7 @@ void doOutMicroarrayNames(struct trackDb *tdb)
 {
 struct microarrayGroups *allGroups;
 if (anyIntersection())
-    errAbort("Can't do all fields output when intersection is on. "
+    errAbort("Can't do microarray names output when intersection is on. "
     "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
 allGroups = maGetTrackGroupings(database, tdb);
 if (allGroups)

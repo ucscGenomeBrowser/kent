@@ -55,29 +55,24 @@ foreach table ($tables)
     # find out version of mysql running 
     # (v 5 has different signature for TABLE STATUS output)
     # (so does ver 4.1.*)
-# echo $status
- #   set ver=`getVersion.csh $machine 1` >& /dev/null
-# echo $status
- #   set subver=`getVersion.csh $machine 2`
-# echo $status
-## temporirly disable version checking.  we are stuck on ver 4.0 and this
-## is broken. (at getVersion.csh)
-#    if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
-#      # newer mysql versions use different fields
-#      set update=`getTableStatus.csh $db $machine | sed '1,2d' \
-#        | grep -w ^$table | awk '{print $14, $15}'`
-#      if ( $status ) then
-#        echo "."
-#        continue
-#      endif
-#    else
+    set ver=`getVersion.csh $machine 1` >& /dev/null
+    set subver=`getVersion.csh $machine 2`
+    if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
+      # newer mysql versions use different fields
+      set update=`getTableStatus.csh $db $machine | sed '1,2d' \
+        | grep -w ^$table | awk '{print $14, $15}'`
+      if ( $status ) then
+        echo "."
+        continue
+      endif
+    else
       set update=`getTableStatus.csh $db $machine | sed '1,2d' \
         | grep -w ^$table | awk '{print $13, $14}'`
       if ( $status ) then
         echo "."
         continue
       endif
-#    endif
+    endif
     echo "."$update
   end
 end

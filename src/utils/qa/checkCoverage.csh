@@ -1,5 +1,4 @@
 #!/bin/tcsh
-source `which qaConfig.csh`
 
 ####################
 #  09-20-07 Bob Kuhn
@@ -11,13 +10,16 @@ source `which qaConfig.csh`
 set db=""
 set table=""
 set limit=""
+set whereLimit=""
+set split=""
 set chr=""
+set chromList=""
 set start=""
-set send=""
+set end=""
 
-if ($#argv < 2 || $#argv > 3 ) then
+if ( $#argv < 2 || $#argv > 3 ) then
   echo
-  echo "  find all the non-gap places where data missing from a track."
+  echo "  find all the places where data missing from a track."
   echo
   echo "      usage:  database table [chrom]"
   echo
@@ -29,8 +31,9 @@ else
   set table=$argv[2]
 endif
 
-if ($#argv == 3 ) then
+if ( $#argv == 3 ) then
   set limit='-chrom='$argv[3]
+  set whereLimit='WHERE chrom = "'$argv[3]'"'
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -38,16 +41,35 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# find the correct names for starts and ends
-set chr=`getChromFieldName.csh $db $table`
+set split=`getSplit.csh $db $table`
 if ( $status ) then
-  echo "\n error.  Quitting.\n"
   exit 1
 endif
+if ( $split != "unsplit" ) then
+  set split=${split}_
+else 
+  set split=""
+endif
+
+# echo "split /${split}/"
+# echo "splittable $split$table"
+
+# find the correct names for starts and ends
+set chr=`getChromFieldName.csh $db $split$table`
+if ( $status ) then
+  echo "\n error.  not a positional table?  quitting.\n"
+  exit 1
+endif
+
+# echo "chr $chr"
+# echo "split /${split}/"
+# echo "split_table ${split}$table"
+
+
 if ( $chr == "chrom" ) then
-  set start=`hgsql -Ne "DESC $table" $db | awk '{print $1}' \
+  set start=`hgsql -Ne "DESC $split$table" $db | awk '{print $1}' \
     | egrep "txStart|chromStart" | head -1 | awk '{print $1}'`
-  set end=`hgsql -Ne "DESC $table" $db | awk '{print $1}' \
+  set end=`hgsql -Ne "DESC $split$table" $db | awk '{print $1}' \
     | egrep "txEnd|chromEnd" | head -1 | awk '{print $1}'`
 else 
   if ( $chr == "tName" ) then
@@ -61,25 +83,47 @@ else
   endif
 endif
 
+# make simple BED3 file from track with introns filled in
+rm -f blockBedFile.bed
+if ( $split != "" ) then
+  set chromList=`hgsql -Ne "SELECT chrom FROM chromInfo" $db | sed -r "s/(.*)/\1_/"`
+  if ( $limit != "" ) then
+    set chromList=$argv[3]
+  endif
+  foreach chrom ( $chromList )
+    hgsql -Ne "SELECT $chr, $start, $end FROM $chrom$table" $db >> blockBedFile.bed
+  end
+else
+  hgsql -Ne "SELECT $chr, $start, $end FROM $table $whereLimit" $db > blockBedFile.bed
+endif
+
 # echo $db
 # echo $table
 # echo $chr $start $end
 
-# make bed file of large blocks, ignoring intron/exons
-hgsql -Ne "SELECT $chr, $start, $end FROM $table" $db > blockBedFile.bed
-
-# make negative of table (block file) as bed file
-# and make negative of gap track
-# then intersect them
+# make negative of track and of gap track
 featureBits $db blockBedFile.bed -not $limit -bed=$table.not.bed \
   >& /dev/null
 featureBits $db gap    -not $limit -bed=gap.not.bed \
   >& /dev/null
+
+# then intersect them
 featureBits $db $table.not.bed gap.not.bed $limit \
   -bed=$table.holes.bed >& /dev/null
 # save coords and size and sort for biggest
 cat $table.holes.bed | awk '{print $1, $2, $3, $3-$2}' | sort -k4,4nr \
   > $table.holes.sort
+
+if ( -z $table.holes.bed ) then
+  echo
+  echo "there are no non-gap regions not covered by $table."
+  echo "or there may be no gap table."
+  echo
+  rm -f blockBedFile.bed
+  rm -f gap.not.bed
+  rm -f $table.not.bed
+  exit 0
+endif
 
 # report
 echo
@@ -93,7 +137,7 @@ echo "chrom chromStart chromEnd size" \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
 echo "----- ---------- -------- ----" \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
-head -20 $table.holes.sort \
+head -10 $table.holes.sort \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
 echo
 

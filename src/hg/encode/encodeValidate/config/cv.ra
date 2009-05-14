@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.90 2009/04/27 20:25:52 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.94 2009/05/02 19:30:55 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -178,6 +178,18 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
 
+term GM12801
+type Cell Line
+description B-Lymphocyte (CEPH)
+vendorName Coriell
+vendorId GM12801
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
+lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
+karyotype relatively normal
+termId BTO:0001522 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
+tier 3
+
 term GM18507
 type Cell Line
 description lymphoblastoid
@@ -224,6 +236,30 @@ lineage endoderm
 karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
+tier 3
+
+term HL-60
+type Cell Line
+description Human promyelocytic leukemia cells
+vendorName ATCC
+vendorId CCL-240
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
+lineage
+karyotype cancer, female
+termId BTO:0000738
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738&termName=HL-60%20cell
+tier 3
+
+term HMEC
+type Cell Line
+description Human Mammary Epithelial Cells
+vendorName Lonza
+vendorId CC-3150
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1FDC0AF834F18C7C001A4B525E10&cpgnum=1)/.do
+lineage
+karyotype
+termId BTO:0002178
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 tier 3
 
 term Jurkat
@@ -310,6 +346,18 @@ termId BTO:0000812
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000812&termName=OVCAR-3%20cell
 tier 3
 
+term PANC-1
+type Cell Line
+description pancreatic carcinoma
+vendorName ATCC
+vendorId CRL-1469
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1469&Template=cellBiology
+lineage
+karyotype cancer, male
+termId BTO:0000304
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
+tier 3
+
 term PFSK-1
 type Cell Line
 description neuroectodermal cell line derived from a human cerebral brain tumor
@@ -371,6 +419,18 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
 
+term SKMC
+type Cell Line
+description Human skeletal muscle cells
+vendorName Lonza
+vendorId CC-2561
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA21A59CABF8F18C7C001A4B525E10&cpgnum=1)/.do
+lineage
+karyotype
+termId BTO:0001801 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
+tier 3
+
 term Th1
 type Cell Line
 description primary human Th1 T cells
@@ -381,6 +441,30 @@ lineage
 karyotype
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678&termName=Th1%20cell
+tier 3
+
+term Th2
+type Cell Line
+description Primary human Th2 T cells
+vendorName
+vendorId None (primary pheresis of single normal subject)
+orderUrl
+lineage
+karyotype
+termId BTO:0001679
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679&termName=Th2%20cell
+tier 3
+
+term WERI-Rb-1
+type Cell Line
+description retinoblastoma
+vendorName ATCC
+vendorId HTB-169
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-169&Template=cellBiology
+lineage
+karyotype
+termId BTO:0001178 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178&termName=retinoblastoma%20cell
 tier 3
 
 # Gene types
@@ -617,6 +701,22 @@ orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
 
+term Pol3
+type Antibody
+targetDescription RNA Polymerase III
+antibodyDescription mouse monoclonal IgG1
+vendorName Santa Cruz Biotech
+vendorId sc-21754
+orderUrl http://www.scbt.com/product.php?datasheet=21754
+
+term Rad21
+type Antibody
+targetDescription Synthetic peptide (Human) conjugated to KLH - which represents a portion of human Rad21 encoded within exon 14
+antibodyDescription Rabbit polyclonal
+orderUrl http://www.abcam.com/index.html?datasheet=992
+vendorName Abcam
+vendorId ab992
+
 term SREBP1A
 type Antibody
 targetDescription Sterol regulatory element binding transcription factor 1
@@ -664,6 +764,14 @@ antibodyDescription Rabbit monoclonal
 vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
+
+term XRCC4
+type Antibody
+targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
+antibodyDescription Rabbit polyclonal
+orderUrl http://www.abcam.com/index.html?datasheet=1451
+vendorName Abcam
+vendorId ab1451
 
 term ZNF263
 type Antibody

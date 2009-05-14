@@ -86,7 +86,7 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash
 
 # Define various non-self chains
-set chainDest Hg16,Hg17,Hg18,Hg19,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1
+set chainDest Hg16,Hg17,Hg18,Hg19,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -545,30 +545,22 @@ identifier encodePseudogeneYale dependency
     $hg.encodePseudogeneYale.name
     $hg.encodePseudogeneClass.name minCheck=0.16 unique
 
-identifier wgEncodeGencodeAutoRel1 dependency
-"Link together Gencode gene model (Known) and class for Mar 07 Data Version"
-    $hg.wgEncodeGencodeAutoRel1.name
-    $hg.wgEncodeGencodeClassesRel1.name minCheck=0.83 unique
-
-identifier wgEncodeGencodeManualRel1 dependency
-"Link together Gencode gene model (Known) and class for Mar 07 Data Version"
-    $hg.wgEncodeGencodeManualRel1.name
-    $hg.wgEncodeGencodeClassesRel1.name minCheck=0.83 unique
-
-identifier wgEncodeGencodeAutoRel2 dependency
+identifier wgEncodeNhgriBip
 "Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
-    $hg.wgEncodeGencodeAutoRel2.name
-    $hg.wgEncodeGencodeClassesRel2.name minCheck=0.83 unique
+    hg18.wgEncodeNhgriBip.name dupeOk
+    panTro2.wgEncodeNhgriBip.name
+    rheMac2.wgEncodeNhgriBip.name
+    mm9.wgEncodeNhgriBip.name
+    rn4.wgEncodeNhgriBip.name
+    canFam2.wgEncodeNhgriBip.name
+    bosTau4.wgEncodeNhgriBip.name
 
-identifier wgEncodeGencodeManualRel2 dependency
+identifier wgEncodeGencodeClassesRel2
 "Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
-    $hg.wgEncodeGencodeManualRel2.name
-    $hg.wgEncodeGencodeClassesRel2.name minCheck=0.83 unique
-
-identifier wgEncodeGencodePolyaRel2 dependency
-"Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
-    $hg.wgEncodeGencodePolyaRel2.name
-    $hg.wgEncodeGencodeClassesRel2.name minCheck=0.83 unique
+    hg18.wgEncodeGencodeClassesRel2.name
+    hg18.wgEncodeGencodeAutoRel2.name unique
+    hg18.wgEncodeGencodeManualRel2.name unique
+    hg18.wgEncodeGencodePolyaRel2.name unique
 
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
@@ -702,22 +694,6 @@ identifier agilentRatProbeId external=agilent fuzzy
 "Agilent Rat CGH/CNV array probe ID"
     $rn.agilentCgh105a.name
     $rn.agilentCgh244a.name
-
-identifier affyHumanExon
-"Affymetrix all human exon array probe id"
-    hgFixed.affyHumanExon.name
-    $hg.affyHumanExon.name
-
-identifier affyHumanExonSampleId
-"Sample IDs for Affymetrix all human exon array."
-    hgFixed.affyHumanExonExps.id
-    $hg.affyHumanExon.expIds comma full
-    $hg.affyHumanExon.expScores comma indexOf full
-
-identifier sestanBrainAtlas
-"Another Affy All Exon array ... slightly different set of probes though"
-    $hg.sestanBrainAtlas.name
-    $hg.affyHumanExon.name minCheck=0.62
 
 identifier sestanBrainAtlasId
 "Sample IDs for the Sestan brain atlas array."
@@ -1245,6 +1221,8 @@ identifier refSeqId typeOf=mrnaAccession
     hg17.dupSpMrna.mrnaID minCheck=0.40
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.37
+#    hg18.wgEncodeGencodeManualRel2.name
+#    hg18.wgEncodeGencodeAutoRel2.name
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
@@ -1282,11 +1260,6 @@ identifier knownGeneId dependency
     $hg.gnfU95Distance.target
     $kgDb.gnfAtlas2Distance.query
     $kgDb.gnfAtlas2Distance.target
-    $hg.affyHumanExonGs.name
-    $hg.affyHumanExonGsMedian.name
-    $hg.affyHumanExonRatioMedian.name
-    $hg.affyHumanExonGsRatioMedianDist.query
-    $hg.affyHumanExonGsRatioMedianDist.target
     $kgDb.affyGnfU74ADistance.query
     $kgDb.affyGnfU74ADistance.target
     $kgDb.affyGnfU74BDistance.query
@@ -3141,6 +3114,7 @@ tablesIgnored $hg
     dgv
     eponine
     exaptedRepeats
+    fox2ClipClusters
     fox2ClipSeq
     fox2ClipSeqDensityForwardStrand
     fox2ClipSeqDensityReverseStrand

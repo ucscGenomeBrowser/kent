@@ -1,0 +1,604 @@
+### dukeUtaUncCrawford.txt wrangler notes for all submissions
+
+select id,name,status from projects where name like "Duke%" or name like "UNC%" or name like "UTA%";
++-----+------------------------------------+------------+
+| id  | name                               | status     |
++-----+------------------------------------+------------+
+|  31 | Duke DNase-Seq GM12878 20081031    | displayed  |
+|  32 | UNC FAIRE-Seq GM12878 20081031     | superceded |
+|  33 | UTA ChIP-Seq CTCF GM12878 20081031 | superceded |
+|  34 | UTA Input GM12878 20081031         | displayed  |
+|  79 | Duke DNase-Seq GM12878 20081121    | displayed  |
+|  80 | UNC FAIRE-Seq GM12878 20081121     | displayed  |
+| 104 | Duke ExtraTracks 20081201          | displayed  |
+| 109 | UTA Input K562 20081204            | displayed  |
+| 112 | Duke DNase-Seq K562 20081206       | displayed  |
+| 113 | UNC FAIRE-Seq K562 20081206        | displayed  |
+| 114 | Duke DNase-Seq GM12878 20081208    | displayed  |
+| 115 | UNC FAIRE-Seq GM12878 20081208     | displayed  |
+| 116 | Duke DNase-Seq K562 20081208       | displayed  |
+| 117 | UNC FAIRE-Seq K562 20081208        | displayed  |
+| 127 | Duke DNase-Seq K562 20081210       | displayed  |
+| 131 | Duke DNase-Seq GM12878 20081211    | displayed  |
+| 228 | UTA ChIP-Seq CTCF GM12878 20090224 | displayed  |
+| 231 | UNC FAIRE-Seq GM12878 20090224     | displayed  |
+| 233 | Duke DNase-Seq GM12878 20090225    | displayed  |
+| 234 | UNC FAIRE-Seq K562 20090225        | displayed  |
+| 235 | Duke DNase-Seq K562 20090225       | displayed  |
+| 244 | UTA ChIP-Seq CTCF K562 20090226    | displayed  |
+| 245 | UTA ChIP-Seq c-Myc K562 20090226   | displayed  |
+| 258 | Duke DNase-Seq GM12878 20090227    | displayed  |
+| 272 | Duke DNase-Seq HepG2 20090310      | displayed  |
+| 274 | UTA Input HepG2 20090312           | displayed  |
+| 275 | UTA Input HelaS3 20090313          | displayed  |
+| 278 | UTA ChIP Peaks Only                | displayed  |
+| 280 | Duke DNase HelaS3 20090320         | displayed  |
+| 281 | UTA ChIP-Seq CTCF HelaS3 20090320  | displayed  |
+| 282 | UTA ChIP-Seq c-Myc HelaS3 20090320 | displayed  |
+| 283 | UTA ChIP-Seq CTCF HepG2 20090320   | displayed  |
+| 284 | UTA ChIP-Seq c-Myc HepG2 20090320  | displayed  |
+| 285 | UNC FAIRE-Seq HelaS3 20090321      | displayed  |
+| 286 | UNC FAIRE-Seq HepG2 20090323       | displayed  |
+| 287 | UNC FAIRE-Seq Peaks Only 20090420  | displayed  |
++-----+------------------------------------+------------+
+36 rows in set (0.00 sec)
+
+Attempts at regeneration when Hive was out
+==========================================
+245 K562/c-Myc errors
+Creating wiggle table definition in hg18.wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
+Saving /data/tmp/loadWig_hgwdev_409b_87ede0.tab
+WARNING: Exceeded chr21 size 46944337 > 46944323. dropping 15 data point(s)
+WARNING: Exceeded chr7 size 158821448 > 158821424. dropping 25 data point(s)
+244 K562/Ctcf
+Creating wiggle table definition in hg18.wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
+Saving /data/tmp/loadWig_hgwdev_4d01_89a820.tab
+WARNING: Exceeded chr15 size 100338935 > 100338915. dropping 21 data point(s)
+WARNING: Exceeded chr20 size 62435981 > 62435964. dropping 18 data point(s)
+34 GM12878/Input
+Creating wiggle table definition in hg18.wgEncodeUtaustinChIPseqRawSignalGm12878Input
+Saving /data/tmp/loadWig_hgwdev_5073_45d160.tab
+WARNING: Exceeded chr10 size 135374747 > 135374737. dropping 11 data point(s)
+WARNING: Exceeded chr20 size 62435980 > 62435964. dropping 17 data point(s)
+Creating wiggle table definition in hg18.wgEncodeUtaustinChIPseqSignalGm12878Input
+Saving /data/tmp/loadWig_hgwdev_654a_466590.tab
+WARNING: Exceeded chr10 size 135374747 > 135374737. dropping 11 data point(s)
+WARNING: Exceeded chr20 size 62435980 > 62435964. dropping 17 data point(s)
+109 K562/Input
+Creating wiggle table definition in hg18.wgEncodeUtaustinChIPseqRawSignalK562Input
+Saving /data/tmp/loadWig_hgwdev_7cac_8ca280.tab
+WARNING: Exceeded chr10 size 135374738 > 135374737. dropping 2 data point(s)
+Creating wiggle table definition in hg18.wgEncodeUtaustinChIPseqSignalK562Input
+Saving /data/tmp/loadWig_hgwdev_6c0a_8bfa70.tab
+WARNING: Exceeded chr10 size 135374738 > 135374737. dropping 2 data point(s)
+113 K562/Input
+Creating wiggle table definition in hg18.wgEncodeUncFAIREseqRawSignalRep2K562
+Saving /data/tmp/loadWig_hgwdev_1fda_b8e650.tab
+WARNING: Exceeded chr20 size 62435984 > 62435964. dropping 21 data point(s)
+Creating wiggle table definition in hg18.wgEncodeUncFAIREseqRawSignalRep3K562
+Saving /data/tmp/loadWig_hgwdev_cc0_b71960.tab
+WARNING: Exceeded chr21 size 46944335 > 46944323. dropping 13 data point(s)
+WARNING: Exceeded chr7 size 158821447 > 158821424. dropping 24 data point(s)
+
+  Duke ExtraTracks 20081201          104
+  Duke DNase-Seq HepG2 20090310      272
+  Duke DNase-Seq GM12878 20090227    258(pk,sig,BO) 233*(Pk,Sig) 131(fastq) 114*(BO)  79*(BO) 31(taf,RawSig)
+  Duke DNase-Seq K562 20090225       235(pk,sig) 127(fastq) 116(BO) 112(taf,RawSig)
+  UTA Input GM12878 20081031          34
+  UTA Input K562 20081204            109
+  UTA Input HepG2 20090312           274
+  UTA Input HelaS3 20090313          275
+  UTA ChIP-Seq CTCF K562 20090226    244
+  UTA ChIP-Seq c-Myc K562 20090226   245
+  UTA ChIP-Seq CTCF GM12878 20090224 228(pk,sig,BO,RawSig,taf,fastq) 33*
+  UNC FAIRE-Seq GM12878 20090224     231(pk,sig,BO,RawSig,taf,fastq) 115*(BO) 80*(BO) 32*(pk,sig,RawSig,taf,fastq)
+  UNC FAIRE-Seq K562 20090225        234(pk,sig) 117(BO) 113(pk,sig,BO,RawSig,taf,fastq)
+
+Duke Round 1
+============
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/31 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/32 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/33 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/34 > validate_error 2>&1
+
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /cluster/data/encode/pipeline/encpipeline_prod/31 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /cluster/data/encode/pipeline/encpipeline_prod/32 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /cluster/data/encode/pipeline/encpipeline_prod/33 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /cluster/data/encode/pipeline/encpipeline_prod/34 > validate_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/31 > upload_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/32 > upload_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/33 > upload_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/34 > upload_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl -verbose 2 x /cluster/data/encode/pipeline/encpipeline_prod/31 > upload_error 2>&1 &
+
+mysql> select avg(pValue),stddev(pValue),avg(pValue) + stddev(pValue),max(pValue),min(pValue),
+       round(450*(min(pValue) - avg(pValue))/stddev(pValue))+550 minScore,
+       round(450* stddev(pValue)            /stddev(pValue))+550 maxScore,
+       round(450*(avg(pValue) - avg(pValue))/stddev(pValue))+550 midScore
+from wgEncodeDukeDNaseSeqPeaksGm12878;
+| avg(pValue)     | stddev(pValue)  | avg(pValue) + stddev(pValue) | max(pValue) | min(pValue)     | minScore | maxScore | midScore |
+| 3.5181506516691 | 3.5025172998741 |              7.0206679515431 |          16 | 1.1799999475479 |      250 |     1000 |      550 |
+
+  update wgEncodeDukeDNaseSeqPeaksGm12878 set score = 550 + round(450 *(pValue-avg(pValue))/stddev(pValue));
+  update wgEncodeDukeDNaseSeqPeaksGm12878 set score = 550 + round(450 *(pValue-3.51815)/3.50252);
+  update wgEncodeDukeDNaseSeqPeaksGm12878 set score = 1000 where score > 1000;
+
+This gives a spread of scores between 100-1000 which centers on 550 and any pValue 1 or more sd above the mean is scored at 1000.
+
+mysql> select min(score),avg(score),max(score)
+from wgEncodeDukeDNaseSeqPeaksGm12878;
+| min(score) | avg(score) | max(score) |
+|        250 |   476.9985 |       1000 |
+
+
+
+select min(
+update p set score = 1000 where pValue >= 5;
+update p set score = 300 + (700 * pValue/5) where pValue < 5;
+CREATE TABLE encode_releases (
+projectId	int(11),
+trackName	varchar(255) not null,
+downloadsDir	varchar(255),
+type		varchar(20),
+memtaData	varchar(255),
+INDEX trackName, (projectId,trackName)) 
+
+Duke 11-21
+==========
+cd 80;mv ../../ftp/prod/tsfurey//uncFAIREseqGM12878.20081121.tar.gz .
+tar -xzf /uncFAIREseqGM12878.20081121.tar.gz &
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/80 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /cluster/data/encode/pipeline/encpipeline_prod/80 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/80 > upload_error 2>&1 &
+
+cd 79;mv ../../ftp/prod/tsfurey//uncFAIREseqGM12878.20081121.tar.gz .
+tar -xzf /uncFAIREseqGM12878.20081121.tar.gz &
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/79 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/79 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/79 > upload_error 2>&1 &
+
+|  31 | Duke DNase-Seq GM12878 20081031         | displayed       |
+|  79 | Duke DNase-Seq GM12878 20081121         | displayed       |
+|  32 | UNC FAIRE-Seq GM12878 20081031          | displayed       |
+|  80 | UNC FAIRE-Seq GM12878 20081121          | displayed       |
+|  33 | UTA ChIP-Seq CTCF GM12878 20081031      | displayed       |
+|  34 | UTA Input GM12878 20081031              | displayed       |
+cd 31
+/bin/gzip -c UCSC_submission/GM12878_DukeDNaseSeq.pk > /usr/local/apache/htdocs/goldenPath/hg18/wgEncodeChromatinMap/wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz &                 
+cd 32
+/bin/gzip -c UCSC_submission/GM12878_UncFAIREseq.pk > /usr/local/apache/htdocs/goldenPath/hg18/wgEncodeChromatinMap/wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz &                  
+cd 33
+/bin/gzip -c UCSC_submission/GM12878_UtaChIPseq_CTCF.pk > /usr/local/apache/htdocs/goldenPath/hg18/wgEncodeChromatinMap/wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz &               
+
+Duke Extra Tracks
+=================
+awk '{printf "%s\t%s\t%s\t%s\t1000\t.\n",$1,$2,$3,$4;}' old/DukeDNaseSeq_RegionsExcluded.bed > DukeDNaseSeq_RegionsExcluded.bed
+edit DukeExtraTracks.DAF
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/104 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/104 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/104 > upload_error 2>&1 &
+/cluster/home/tdreszer/bin/scripts/doEncodeLoad.pl x -skipLoad /cluster/data/encode/pipeline/encpipeline_prod/104 > upload_error 2>&1 &
+
+Duke BO reentry
+===============
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/114 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/114 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/114 > upload_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/115 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/115 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/115 > upload_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/116 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/116 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/116 > upload_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/117 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/117 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/117 > upload_error 2>&1 &
+
+Prepare for Duke
+================
+
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 to save_wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878;
+rename table wgEncodeDukeDNaseSeqPeaksGm12878             to save_wgEncodeDukeDNaseSeqPeaksGm12878;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Gm12878     to save_wgEncodeDukeDNaseSeqRawSignalRep1Gm12878;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Gm12878     to save_wgEncodeDukeDNaseSeqRawSignalRep2Gm12878;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Gm12878     to save_wgEncodeDukeDNaseSeqRawSignalRep3Gm12878;
+rename table wgEncodeDukeDNaseSeqRegionsExcludedGm12878   to save_wgEncodeDukeDNaseSeqRegionsExcludedGm12878;
+rename table wgEncodeDukeDNaseSeqSignalGm12878            to save_wgEncodeDukeDNaseSeqSignalGm12878;
+rename table wgEncodeDukeDnasePeaksGM12878                to save_wgEncodeDukeDnasePeaksGM12878;
+rename table wgEncodeDukeDnaseSignalGM12878               to save_wgEncodeDukeDnaseSignalGM12878;
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalK562    to save_wgEncodeDukeDNaseSeqBaseOverlapSignalK562;
+rename table wgEncodeUncFAIREseqBaseOverlapSignalGm12878  to save_wgEncodeUncFAIREseqBaseOverlapSignalGm12878;
+rename table wgEncodeUncFAIREseqPeaksGm12878              to save_wgEncodeUncFAIREseqPeaksGm12878;
+rename table wgEncodeUncFAIREseqRawSignalRep1Gm12878      to save_wgEncodeUncFAIREseqRawSignalRep1Gm12878;
+rename table wgEncodeUncFAIREseqRawSignalRep2Gm12878      to save_wgEncodeUncFAIREseqRawSignalRep2Gm12878;
+rename table wgEncodeUncFAIREseqRawSignalRep3Gm12878      to save_wgEncodeUncFAIREseqRawSignalRep3Gm12878;
+rename table wgEncodeUncFAIREseqSignalGm12878             to save_wgEncodeUncFAIREseqSignalGm12878;
+rename table wgEncodeDukeDNaseSeqPeaksK562                to save_wgEncodeDukeDNaseSeqPeaksK562;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1K562        to save_wgEncodeDukeDNaseSeqRawSignalRep1K562;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2K562        to save_wgEncodeDukeDNaseSeqRawSignalRep2K562;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3K562        to save_wgEncodeDukeDNaseSeqRawSignalRep3K562;
+rename table wgEncodeDukeDNaseSeqSignalK562               to save_wgEncodeDukeDNaseSeqSignalK562;
+rename table wgEncodeUncFAIREseqBaseOverlapSignalK562     to save_wgEncodeUncFAIREseqBaseOverlapSignalK562;
+rename table wgEncodeUncFAIREseqPeaksK562                 to save_wgEncodeUncFAIREseqPeaksK562;
+rename table wgEncodeUncFAIREseqRawSignalRep1K562         to save_wgEncodeUncFAIREseqRawSignalRep1K562;
+rename table wgEncodeUncFAIREseqRawSignalRep2K562         to save_wgEncodeUncFAIREseqRawSignalRep2K562;
+rename table wgEncodeUncFAIREseqRawSignalRep3K562         to save_wgEncodeUncFAIREseqRawSignalRep3K562;
+rename table wgEncodeUncFAIREseqSignalK562                to save_wgEncodeUncFAIREseqSignalK562;
+rename table wgEncodeUtaChIPseqPeaksGm12878Ctcf           to save_wgEncodeUtaChIPseqPeaksGm12878Ctcf;
+rename table wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf   to save_wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf;
+rename table wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf   to save_wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf;
+rename table wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf   to save_wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf;
+rename table wgEncodeUtaChIPseqSignalGm12878Ctcf          to save_wgEncodeUtaChIPseqSignalGm12878Ctcf;
+show tables like "save_%";
++---------------------------------------------------+
+| Tables_in_hg18 (save_%)                           |
++---------------------------------------------------+
+| save_wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 |
+| save_wgEncodeDukeDNaseSeqBaseOverlapSignalK562    |
+| save_wgEncodeDukeDNaseSeqPeaksGm12878             |
+| save_wgEncodeDukeDNaseSeqPeaksK562                |
+| save_wgEncodeDukeDNaseSeqRawSignalRep1Gm12878     |
+| save_wgEncodeDukeDNaseSeqRawSignalRep1K562        |
+| save_wgEncodeDukeDNaseSeqRawSignalRep2Gm12878     |
+| save_wgEncodeDukeDNaseSeqRawSignalRep2K562        |
+| save_wgEncodeDukeDNaseSeqRawSignalRep3Gm12878     |
+| save_wgEncodeDukeDNaseSeqRawSignalRep3K562        |
+| save_wgEncodeDukeDNaseSeqRegionsExcludedGm12878   |
+| save_wgEncodeDukeDNaseSeqSignalGm12878            |
+| save_wgEncodeDukeDNaseSeqSignalK562               |
+| save_wgEncodeDukeDnasePeaksGM12878                |
+| save_wgEncodeDukeDnaseSignalGM12878               |
+| save_wgEncodeUncFAIREseqBaseOverlapSignalGm12878  |
+| save_wgEncodeUncFAIREseqBaseOverlapSignalK562     |
+| save_wgEncodeUncFAIREseqPeaksGm12878              |
+| save_wgEncodeUncFAIREseqPeaksK562                 |
+| save_wgEncodeUncFAIREseqRawSignalRep1Gm12878      |
+| save_wgEncodeUncFAIREseqRawSignalRep1K562         |
+| save_wgEncodeUncFAIREseqRawSignalRep2Gm12878      |
+| save_wgEncodeUncFAIREseqRawSignalRep2K562         |
+| save_wgEncodeUncFAIREseqRawSignalRep3Gm12878      |
+| save_wgEncodeUncFAIREseqRawSignalRep3K562         |
+| save_wgEncodeUncFAIREseqSignalGm12878             |
+| save_wgEncodeUncFAIREseqSignalK562                |
+| save_wgEncodeUtaChIPseqPeaksGm12878Ctcf           |
+| save_wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf   |
+| save_wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf   |
+| save_wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf   |
+| save_wgEncodeUtaChIPseqSignalGm12878Ctcf          |
++---------------------------------------------------+
+Duke
+====
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /hive/groups/encode/dcc/pipeline/encpipeline_prod/231 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/231 > load_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /hive/groups/encode/dcc/pipeline/encpipeline_prod/233 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/233 > load_error 2>&1 &
+
+Now revert:
+show tables like "%wgEncodeDukeDNaseSeqPeaksGm12878";
+drop table save_wgEncodeDukeDNaseSeqPeaksGm12878; 
+drop table deleted_wgEncodeDukeDNaseSeqPeaksGm12878; 
+show tables like "%wgEncodeDukeDNaseSeqSignalGm12878";
+drop table save_wgEncodeDukeDNaseSeqSignalGm12878; 
+rename table save_wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 to wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878;
+rename table save_wgEncodeDukeDNaseSeqRawSignalRep1Gm12878     to wgEncodeDukeDNaseSeqRawSignalRep1Gm12878;
+rename table save_wgEncodeDukeDNaseSeqRawSignalRep2Gm12878     to wgEncodeDukeDNaseSeqRawSignalRep2Gm12878;
+rename table save_wgEncodeDukeDNaseSeqRawSignalRep3Gm12878     to wgEncodeDukeDNaseSeqRawSignalRep3Gm12878;
+
+show tables like "%wgEncodeUncFAIREseqBaseOverlapSignalGm12878";
+drop table save_wgEncodeUncFAIREseqBaseOverlapSignalGm12878;
+show tables like "%wgEncodeUncFAIREseqPeaksGm12878";
+drop table save_wgEncodeUncFAIREseqPeaksGm12878;
+show tables like "%wgEncodeUncFAIREseqRawSignalRep1Gm12878";
+drop table save_wgEncodeUncFAIREseqRawSignalRep1Gm12878;
+show tables like "%wgEncodeUncFAIREseqRawSignalRep2Gm12878";
+drop table save_wgEncodeUncFAIREseqRawSignalRep2Gm12878;
+show tables like "%wgEncodeUncFAIREseqRawSignalRep3Gm12878";
+drop table save_wgEncodeUncFAIREseqRawSignalRep3Gm12878;
+show tables like "%wgEncodeUncFAIREseqSignalGm12878";
+drop table save_wgEncodeUncFAIREseqSignalGm12878;
+
+show tables like "%wgEncodeUncFAIREseqPeaksK562";
+drop table save_wgEncodeUncFAIREseqPeaksK562;
+show tables like "%wgEncodeUncFAIREseqSignalK562";
+drop table save_wgEncodeUncFAIREseqSignalK562;
+show tables like "%wgEncodeUncFAIREseqBaseOverlapSignalK562";
+rename table save_wgEncodeUncFAIREseqBaseOverlapSignalK562 to wgEncodeUncFAIREseqBaseOverlapSignalK562;
+show tables like "%wgEncodeUncFAIREseqRawSignalRep1K562";
+rename table save_wgEncodeUncFAIREseqRawSignalRep1K562 to wgEncodeUncFAIREseqRawSignalRep1K562;
+show tables like "%wgEncodeUncFAIREseqRawSignalRep2K562";
+rename table save_wgEncodeUncFAIREseqRawSignalRep2K562 to wgEncodeUncFAIREseqRawSignalRep2K562;
+show tables like "%wgEncodeUncFAIREseqRawSignalRep3K562";
+rename table save_wgEncodeUncFAIREseqRawSignalRep3K562 to wgEncodeUncFAIREseqRawSignalRep3K562;
+
+show tables like "%wgEncodeDukeDNaseSeqPeaksK562";
+drop table save_wgEncodeDukeDNaseSeqPeaksK562;
+show tables like "%wgEncodeDukeDNaseSeqSignalK562";
+drop table save_wgEncodeDukeDNaseSeqSignalK562;
+show tables like "%wgEncodeDukeDNaseSeqBaseOverlapSignalK562";
+rename table save_wgEncodeDukeDNaseSeqBaseOverlapSignalK562 to wgEncodeDukeDNaseSeqBaseOverlapSignalK562;
+show tables like "%wgEncodeDukeDNaseSeqRawSignalRep1K562";
+rename table save_wgEncodeDukeDNaseSeqRawSignalRep1K562 to wgEncodeDukeDNaseSeqRawSignalRep1K562;
+show tables like "%wgEncodeDukeDNaseSeqRawSignalRep2K562";
+rename table save_wgEncodeDukeDNaseSeqRawSignalRep2K562 to wgEncodeDukeDNaseSeqRawSignalRep2K562;
+show tables like "%wgEncodeDukeDNaseSeqRawSignalRep3K562";
+rename table save_wgEncodeDukeDNaseSeqRawSignalRep3K562 to wgEncodeDukeDNaseSeqRawSignalRep3K562;
+
+show tables like "%wgEncodeDukeDNaseSeqRegionsExcludedGm12878";
+rename table save_wgEncodeDukeDNaseSeqRegionsExcludedGm12878 to wgEncodeDukeDNaseSeqRegionsExcludedGm12878;
+
+show tables like "%wgEncodeUtaChIPseqPeaksGm12878Ctcf";
+drop table save_wgEncodeUtaChIPseqPeaksGm12878Ctcf;
+show tables like "%wgEncodeUtaChIPseqSignalGm12878Ctcf";
+drop table save_wgEncodeUtaChIPseqSignalGm12878Ctcf;
+show tables like "%wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf";
+drop table save_wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf;
+show tables like "%wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf";
+drop table save_wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf;
+show tables like "%wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf";
+drop table save_wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf;
+
+show tables like "%wgEncodeDukeDnasePeaksGM12878";
+drop table save_wgEncodeDukeDnasePeaksGM12878;
+show tables like "%wgEncodeDukeDnaseSignalGM12878";
+drop table save_wgEncodeDukeDnaseSignalGM12878;
+show tables like "save_%";
+Empty set (0.09 sec)
+
+
+Duke/UTA new submissions 2009-02-27
+===================================
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation x /hive/groups/encode/dcc/pipeline/encpipeline_prod/245 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/245 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/245 > load_error 2>&1 &
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 245 loaded
+
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads -quick -skipAutoCreation x /hive/groups/encode/dcc/pipeline/encpipeline_prod/258  validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -allowReloads x /hive/groups/encode/dcc/pipeline/encpipeline_prod/258  validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /hive/groups/encode/dcc/pipeline/encpipeline_prod/258 > load_error 2>&1 &
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 258 loaded
+
+Duke
+====
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 272 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 274 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 275 displayed
+
+
+Duke Resubmits corrected Peaks 2009-03-20
+=========================================
+| wgEncodeDukeDNaseSeqNewPeaksGm12878     |
+| wgEncodeDukeDNaseSeqNewPeaksHepg2       |
+| wgEncodeDukeDNaseSeqNewPeaksK562        |
+select count(*) from wgEncodeDukeDNaseSeqNewPeaksGm12878;|    97097 |
+select count(*) from wgEncodeDukeDNaseSeqNewPeaksHepg2;  |   118945 |
+select count(*) from wgEncodeDukeDNaseSeqNewPeaksK562;   |   106767 |
+select count(*) from wgEncodeDukeDNaseSeqPeaksGm12878;   |    97097 |
+select count(*) from wgEncodeDukeDNaseSeqPeaksHepg2;     |   118945 |
+select count(*) from wgEncodeDukeDNaseSeqPeaksK562;      |   106767 |
+
+SELECT DISTINCT t1.name FROM wgEncodeDukeDNaseSeqNewPeaksGm12878 t1, wgEncodeDukeDNaseSeqPeaksGm12878 t2 WHERE t1.name=t2.name and t1.chromEnd = (t2.chromEnd + 1) limit 2;
+
+rename table wgEncodeDukeDNaseSeqPeaksGm12878 to wgEncodeOldDukeDNaseSeqPeaksGm12878;
+rename table wgEncodeDukeDNaseSeqPeaksHepg2 to wgEncodeOldDukeDNaseSeqPeaksHepg2;
+rename table wgEncodeDukeDNaseSeqPeaksK562 to wgEncodeOldDukeDNaseSeqPeaksK562;
+
+rename table wgEncodeDukeDNaseSeqNewPeaksGm12878 to wgEncodeDukeDNaseSeqPeaksGm12878;
+rename table wgEncodeDukeDNaseSeqNewPeaksHepg2 to wgEncodeDukeDNaseSeqPeaksHepg2;
+rename table wgEncodeDukeDNaseSeqNewPeaksK562 to wgEncodeDukeDNaseSeqPeaksK562;
+
+select count(*) from wgEncodeUtaChIPseqNewPeaksGm12878Ctcf; |    69505 |
+select count(*) from wgEncodeUtaChIPseqNewPeaksK562Cmyc;    |    52589 |
+select count(*) from wgEncodeUtaChIPseqNewPeaksK562Ctcf;    |    65337 |   
+select count(*) from wgEncodeUtaChIPseqPeaksGm12878Ctcf;    |    69505 |
+select count(*) from wgEncodeUtaChIPseqPeaksK562Cmyc;       |    52589 |
+select count(*) from wgEncodeUtaChIPseqPeaksK562Ctcf;       |    65337 |
+
+SELECT DISTINCT t1.name FROM wgEncodeUtaChIPseqNewPeaksGm12878Ctcf t1, wgEncodeUtaChIPseqPeaksGm12878Ctcf t2 WHERE t1.name=t2.name and t1.chromEnd = (t2.chromEnd + 1) limit 2;
+
+rename table wgEncodeUtaChIPseqPeaksGm12878Ctcf to wgEncodeOldUtaChIPseqPeaksGm12878Ctcf; 
+rename table wgEncodeUtaChIPseqPeaksK562Cmyc to wgEncodeOldUtaChIPseqPeaksK562Cmyc;    
+rename table wgEncodeUtaChIPseqPeaksK562Ctcf to wgEncodeOldUtaChIPseqPeaksK562Ctcf; 
+
+rename table wgEncodeUtaChIPseqNewPeaksGm12878Ctcf to wgEncodeUtaChIPseqPeaksGm12878Ctcf; 
+rename table wgEncodeUtaChIPseqNewPeaksK562Cmyc to wgEncodeUtaChIPseqPeaksK562Cmyc;    
+rename table wgEncodeUtaChIPseqNewPeaksK562Ctcf to wgEncodeUtaChIPseqPeaksK562Ctcf;
+
+mv wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz.old
+mv wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz      wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz.old
+mv wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz     wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz.old
+mv wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz.old  
+mv wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz    wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz.old
+mv wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz    wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz.old 
+
+mv wgEncodeDukeDNaseSeqNewPeaksGm12878.narrowPeak.gz   wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz   
+mv wgEncodeDukeDNaseSeqNewPeaksK562.narrowPeak.gz      wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz
+mv wgEncodeDukeDNaseSeqNewPeaksHepg2.narrowPeak.gz     wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz
+mv wgEncodeUtaChIPseqNewPeaksGm12878Ctcf.narrowPeak.gz wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz  
+mv wgEncodeUtaChIPseqNewPeaksK562Ctcf.narrowPeak.gz    wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz
+mv wgEncodeUtaChIPseqNewPeaksK562Cmyc.narrowPeak.gz    wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz 
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 277 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 278 displayed
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 280 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 281 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 282 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 283 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 284 displayed
+
+Duke fix 285 hive crashed while loading 2009-03-21
+==================================================
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x /cluster/data/encode/pipeline/encpipeline_prod/285 > validate_error 2>&1
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl x -allowReloads /cluster/data/encode/pipeline/encpipeline_prod/285 > validate_error 2>&1 &
+
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/285 > load_error 2>&1 &
+
+Job died before Rep3,Peaks and fastq were loaded.  New DDF and restart.
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/285 >> load_error 2>&1 &
+
+hg18 went down... start over on full set
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/285 > load_error 2>&1 &
+
+Legitimate errors peaks and still no RawSiganlRep3, so start over excluding peaks
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x /cluster/data/encode/pipeline/encpipeline_prod/285 > load_error 2>&1 &
+
+Edit load.ra and again...
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 285 loaded
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 285 displayed
+
+More Duke/UNC/UTA 2009-04-20:
+=============================
+rename table wgEncodeUncFAIREseqPeaksGm12878 to wgEncodeOldUncFAIREseqPeaksGm12878;
+rename table wgEncodeUncFAIREseqNewPeaksGm12878 to wgEncodeUncFAIREseqPeaksGm12878;
+rename table wgEncodeUncFAIREseqPeaksK562 to wgEncodeOldUncFAIREseqPeaksK562;  
+rename table wgEncodeUncFAIREseqNewPeaksK562 to wgEncodeUncFAIREseqPeaksK562;
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 287 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 286 displayed
+
+Generate Raw Signals by our methods 2009-05-07
+==============================================
+# Created 4 DAF/DDF pairs:
+rawSigDuke.D*F
+rawSigUnc.D*F
+rawSigUta.D*F
+rawSigInput.D*F
+# Contents of DDF has relative path to current tagAlign file (*.taf); and contents of DAF is only RawSignal and Alignments
+cd encpipeline_prod
+mkdir 2 (for test)
+cd 2; cp rawSigDuke.D*F .
+
+~/bin/scripts/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x ../2 > validate_error 2>&1
+# no errors
+~/bin/scripts/doEncodeValidate.pl -quick -skipAutoCreation x ../2 > validate_error 2>&1
+view 'RawSignal' has already been loaded as track 'wgEncodeDukeDNaseSeqRawSignalRep2Gm12878'
+show tables like "wgEncodeDuke%RawSignal%";
+| wgEncodeDukeDNaseSeqRawSignalRep1Gm12878 |
+| wgEncodeDukeDNaseSeqRawSignalRep1Helas3  |
+| wgEncodeDukeDNaseSeqRawSignalRep1Hepg2   |
+| wgEncodeDukeDNaseSeqRawSignalRep1K562    |
+| wgEncodeDukeDNaseSeqRawSignalRep2Gm12878 |
+| wgEncodeDukeDNaseSeqRawSignalRep2Helas3  |
+| wgEncodeDukeDNaseSeqRawSignalRep2Hepg2   |
+| wgEncodeDukeDNaseSeqRawSignalRep2K562    |
+| wgEncodeDukeDNaseSeqRawSignalRep3Gm12878 |
+| wgEncodeDukeDNaseSeqRawSignalRep3Helas3  |
+| wgEncodeDukeDNaseSeqRawSignalRep3Hepg2   |
+| wgEncodeDukeDNaseSeqRawSignalRep3K562    |
+| wgEncodeUncFAIREseqRawSignalRep1Gm12878 |
+| wgEncodeUncFAIREseqRawSignalRep1Helas3  |
+| wgEncodeUncFAIREseqRawSignalRep1Hepg2   |
+| wgEncodeUncFAIREseqRawSignalRep1K562    |
+| wgEncodeUncFAIREseqRawSignalRep2Gm12878 |
+| wgEncodeUncFAIREseqRawSignalRep2Helas3  |
+| wgEncodeUncFAIREseqRawSignalRep2Hepg2   |
+| wgEncodeUncFAIREseqRawSignalRep2K562    |
+| wgEncodeUncFAIREseqRawSignalRep3Gm12878 |
+| wgEncodeUncFAIREseqRawSignalRep3Helas3  |
+| wgEncodeUncFAIREseqRawSignalRep3Hepg2   |
+| wgEncodeUncFAIREseqRawSignalRep3K562    |
+| wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf   |
+| wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc    |
+| wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf    |
+| wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc     |
+| wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf     |
+| wgEncodeUtaChIPseqRawSignalRep1K562Cmyc      |
+| wgEncodeUtaChIPseqRawSignalRep1K562Ctcf      |
+| wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf   |
+| wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc    |
+| wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf    |
+| wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc     |
+| wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf     |
+| wgEncodeUtaChIPseqRawSignalRep2K562Cmyc      |
+| wgEncodeUtaChIPseqRawSignalRep2K562Ctcf      |
+| wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf   |
+| wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc     |
+| wgEncodeUtaChIPseqRawSignalRep3K562Cmyc      |
+| wgEncodeUtaChIPseqRawSignalRep3K562Ctcf      |
+| wgEncodeUtaustinChIPseqRawSignalGm12878Input |
+| wgEncodeUtaustinChIPseqRawSignalHelas3Input  |
+| wgEncodeUtaustinChIPseqRawSignalHepg2Input   |
+| wgEncodeUtaustinChIPseqRawSignalK562Input    |
+
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Gm12878     to wgEncodeDukeDNaseSeqRawSignalRep1Gm12878_terry    ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Helas3      to wgEncodeDukeDNaseSeqRawSignalRep1Helas3_terry     ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Hepg2       to wgEncodeDukeDNaseSeqRawSignalRep1Hepg2_terry      ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1K562        to wgEncodeDukeDNaseSeqRawSignalRep1K562_terry       ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Gm12878     to wgEncodeDukeDNaseSeqRawSignalRep2Gm12878_terry    ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Helas3      to wgEncodeDukeDNaseSeqRawSignalRep2Helas3_terry     ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Hepg2       to wgEncodeDukeDNaseSeqRawSignalRep2Hepg2_terry      ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2K562        to wgEncodeDukeDNaseSeqRawSignalRep2K562_terry       ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Gm12878     to wgEncodeDukeDNaseSeqRawSignalRep3Gm12878_terry    ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Helas3      to wgEncodeDukeDNaseSeqRawSignalRep3Helas3_terry     ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Hepg2       to wgEncodeDukeDNaseSeqRawSignalRep3Hepg2_terry      ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3K562        to wgEncodeDukeDNaseSeqRawSignalRep3K562_terry       ;
+rename table wgEncodeUncFAIREseqRawSignalRep1Gm12878      to wgEncodeUncFAIREseqRawSignalRep1Gm12878_terry     ;
+rename table wgEncodeUncFAIREseqRawSignalRep1Helas3       to wgEncodeUncFAIREseqRawSignalRep1Helas3_terry      ;
+rename table wgEncodeUncFAIREseqRawSignalRep1Hepg2        to wgEncodeUncFAIREseqRawSignalRep1Hepg2_terry       ;
+rename table wgEncodeUncFAIREseqRawSignalRep1K562         to wgEncodeUncFAIREseqRawSignalRep1K562_terry        ;
+rename table wgEncodeUncFAIREseqRawSignalRep2Gm12878      to wgEncodeUncFAIREseqRawSignalRep2Gm12878_terry     ;
+rename table wgEncodeUncFAIREseqRawSignalRep2Helas3       to wgEncodeUncFAIREseqRawSignalRep2Helas3_terry      ;
+rename table wgEncodeUncFAIREseqRawSignalRep2Hepg2        to wgEncodeUncFAIREseqRawSignalRep2Hepg2_terry       ;
+rename table wgEncodeUncFAIREseqRawSignalRep2K562         to wgEncodeUncFAIREseqRawSignalRep2K562_terry        ;
+rename table wgEncodeUncFAIREseqRawSignalRep3Gm12878      to wgEncodeUncFAIREseqRawSignalRep3Gm12878_terry     ;
+rename table wgEncodeUncFAIREseqRawSignalRep3Helas3       to wgEncodeUncFAIREseqRawSignalRep3Helas3_terry      ;
+rename table wgEncodeUncFAIREseqRawSignalRep3Hepg2        to wgEncodeUncFAIREseqRawSignalRep3Hepg2_terry       ;
+rename table wgEncodeUncFAIREseqRawSignalRep3K562         to wgEncodeUncFAIREseqRawSignalRep3K562_terry        ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf   to wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf_terry  ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc    to wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc_terry   ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf    to wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf_terry   ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc     to wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc_terry    ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf     to wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf_terry    ;
+rename table wgEncodeUtaChIPseqRawSignalRep1K562Cmyc      to wgEncodeUtaChIPseqRawSignalRep1K562Cmyc_terry     ;
+rename table wgEncodeUtaChIPseqRawSignalRep1K562Ctcf      to wgEncodeUtaChIPseqRawSignalRep1K562Ctcf_terry     ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf   to wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf_terry  ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc    to wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc_terry   ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf    to wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf_terry   ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc     to wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc_terry    ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf     to wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf_terry    ;
+rename table wgEncodeUtaChIPseqRawSignalRep2K562Cmyc      to wgEncodeUtaChIPseqRawSignalRep2K562Cmyc_terry     ;
+rename table wgEncodeUtaChIPseqRawSignalRep2K562Ctcf      to wgEncodeUtaChIPseqRawSignalRep2K562Ctcf_terry     ;
+rename table wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf   to wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf_terry  ;
+rename table wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc     to wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc_terry    ;
+rename table wgEncodeUtaChIPseqRawSignalRep3K562Cmyc      to wgEncodeUtaChIPseqRawSignalRep3K562Cmyc_terry     ;
+rename table wgEncodeUtaChIPseqRawSignalRep3K562Ctcf      to wgEncodeUtaChIPseqRawSignalRep3K562Ctcf_terry     ;
+rename table wgEncodeUtaustinChIPseqRawSignalGm12878Input to wgEncodeUtaustinChIPseqRawSignalGm12878Input_terry;
+rename table wgEncodeUtaustinChIPseqRawSignalHelas3Input  to wgEncodeUtaustinChIPseqRawSignalHelas3Input_terry ;
+rename table wgEncodeUtaustinChIPseqRawSignalHepg2Input   to wgEncodeUtaustinChIPseqRawSignalHepg2Input_terry  ;
+rename table wgEncodeUtaustinChIPseqRawSignalK562Input    to wgEncodeUtaustinChIPseqRawSignalK562Input_terry   ;
+
+~/bin/scripts/doEncodeValidate.pl -quick -skipAutoCreation x ../2 > validate_error 2>&1
+view 'RawSignal' has already been loaded as track 'wgEncodeDukeDNaseSeqRawSignalRep2Gm12878'
+# Problem is that the tables are in the tdb
+# so edit trackDb.wgEncode.ra commenting out RawSignals
+~/bin/scripts/doEncodeValidate.pl -quick -skipAutoCreation x ../2 > validate_error 2>&1
+# no errors
+
+# Had used local version testing changes to code.  Checked in made install and now:
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick x ../2 > validate_error 2>&1 &
+
+# remove test dir
+cd ..;rm -rf 2
+
+# prepare archives and submit them
+tar -cpzf rawSigDuke.tgz rawSigDuke.D*F
+tar -cpzf rawSigUnc.tgz rawSigUnc.D*F
+tar -cpzf rawSigUta.tgz rawSigUta.D*F
+tar -cpzf rawSigInput.tgz rawSigInput.D*F
+
+# log on to submission pipeline website as tsfurey, create 4 new submission dirs, submitted the for tars
+| 325 | Duke DNase RawSignal Gen 20090507    | validating       |
+| 326 | UNC FAIRE-Seq RawSignal Gen 20090507 | upload requested |
+| 327 | UTA ChIP-Seq RawSignal Gen 20090507  | upload requested |
+| 328 | UTA Input RawSignal Gen 20090507     | upload requested |
+
+Edit trackDb.wgEncode.ra replacing the old RawSignal tracks with the new ones.
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 325 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 326 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 327 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 328 displayed

@@ -14,6 +14,7 @@ set directory=""
 set today=""
 set dirPath=""
 set urlPath=""
+set lastYr=""
 set devString=""
 set betaString=""
 set rrString=""
@@ -35,16 +36,20 @@ endif
 
 set directory="hgcentral" 
 # set file paths and URLs
-set today=`date +%Y-%m-%d`
 # set today="2008-05-05"
+set today=`date +%Y-%m-%d`
 set dirPath="/usr/local/apache/htdocs/qa/test-results/$directory"
 rm -rf $dirPath/$today/
 mkdir -p $dirPath/$today
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/$directory/$today"
 
-set devString='hgcentraltest'
-set betaString='-h $sqlbeta hgcentralbeta'
-set rrString='-h genome-centdb hgcentral' 
+# remove last year's dir
+set lastYr=`date +%Y-%m --date='1 year  ago'`
+rm -r  $dirPath/${lastYr}*
+
+set devString="hgcentraltest"
+set betaString="-h $sqlbeta hgcentralbeta"
+set rrString="-h $sqlrr hgcentral" 
 
 foreach table ( blatServers clade dbDb dbDbArch defaultDb gdbPdb genomeClade \
   liftOverChain namedSessionDb targetDb )

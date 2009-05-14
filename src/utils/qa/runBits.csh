@@ -16,7 +16,8 @@ set db=""
 set chrom=""
 set split=""
 set track=""
-set gapUrlFile=""
+set gapUrlFile=( "" "" )
+set comment=( "" "" )
 set url1=""
 set url3=""
 
@@ -64,15 +65,16 @@ set url3="&$track=pack&gap=pack"
 echo
 echo "featureBits -countGaps $db $track"
 featureBits -countGaps $db $track
+
 if ($status) then
-  echo "quitting"
+  echo "failed. quitting"
   echo
   exit
 endif
 
 echo "featureBits -countGaps $db $track gap"
-rm -f file
 featureBits -countGaps $db $track gap -bed=$db.gapFile
+echo
 
 if ( -z $db.gapFile ) then
   # no overlap to gap.  clean up and quit
@@ -80,12 +82,16 @@ if ( -z $db.gapFile ) then
   rm -f $db.gapFile
   rm -f $db.chromlist
   exit
+else
+  set gapUrlFile[1]=$db.gapFile
+  set comment[1]="There are gaps overlapping $track (gaps may be bridged or not):"
 endif
 
-if ( $checkUnbridged == "false" ) then
-  set gapUrlFile=$db.gapFile
-else
-  echo "check for overlap (including introns) to unbridged gaps:"
+
+if ( $checkUnbridged == "true" ) then
+  echo "checking for annotations spanning unbridged gaps."
+  # note: this means that the annotation need not intersect, 
+  #   introns spanning the gap are flagged
   rm -f $db.unbridgedGap.bed
   # create file of unbridged gaps
   if ( $split == "unsplit" ) then
@@ -108,36 +114,36 @@ else
   rm -f $db.$track.unbridged.gaps
   featureBits $db $track.bed $db.unbridgedGap.bed -bed=$db.$track.unbridged.gaps
   echo
-  set gapUrlFile=$db.$track.unbridged.gaps
+  set gapUrlFile[2]=$db.$track.unbridged.gaps
+  set comment[2]="total number of unbridged gaps:"
 endif
 
 # print three records, either from gap overlap or unbridged gap overlap.
-if ( -z $gapUrlFile ) then
-  exit
-else
-  # print 3 records, both as text and as links
-  # links have 300 bp padding 
-  echo "total number of unbridged gaps:"
-  wc -l  $gapUrlFile
-  head -3  $gapUrlFile
-  echo
-  set number=`wc -l  $gapUrlFile | awk '{print $1}'`
-  if ( $number < 3 ) then
-    set n=$number
+foreach n ( 1 2 )
+  if ( ! -e "$gapUrlFile[$n]" ) then
+    continue
   else
-    set n=3
+    # print 3 records as links with 300 bp padding 
+    echo $comment[$n]
+    wc -l  $gapUrlFile[$n]
+    echo
+    # set number to print: 3 or less
+    set num=`wc -l  $gapUrlFile[$n] | awk '{print $1}'`
+    set j=`echo "3 $num" | sed "s/ /\n/g" | sort -n | head -1`
+    while ( $j )
+      set pos=`sed -n -e "${j}p"  $gapUrlFile[$n] \
+        | awk '{print $1":"$2-300"-"$3+300}'`
+      echo "$url1&position=$pos$url3"
+      set j=`echo $j | awk '{print $1-1}'`
+    end
+    echo
   endif
-  while ( $n )
-    set pos=`sed -n -e "${n}p"  $gapUrlFile \
-      | awk '{print $1":"$2-300"-"$3+300}'`
-    echo "$url1&position=$pos$url3"
-    set n=`echo $n | awk '{print $1-1}'`
-  end
-endif
-echo
+end
 
 rm -f $db.unbridgedGap.bed
 rm -f $track.bed
 rm -f $db.chromlist
 rm -f $db.gapFile
+rm -f $gapUrlFile[1]
+rm -f $gapUrlFile[2]
 

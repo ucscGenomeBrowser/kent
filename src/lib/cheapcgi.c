@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.117 2009/04/10 23:59:38 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.121 2009/05/05 23:35:07 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -48,6 +48,24 @@ boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. */
 {
 return getenv("REQUEST_METHOD") != NULL;
+}
+
+char *cgiRequestMethod()
+/* Return CGI REQUEST_METHOD (such as 'GET/POST/PUT/DELETE/HEAD') */
+{
+return getenv("REQUEST_METHOD");
+}
+
+char *cgiRequestUri()
+/* Return CGI REQUEST_URI */
+{
+return getenv("REQUEST_URI");
+}
+
+char *cgiRequestContentLength()
+/* Return HTTP REQUEST CONTENT_LENGTH if available*/
+{
+return getenv("CONTENT_LENGTH");
 }
 
 char *cgiScriptName()
@@ -1204,21 +1222,41 @@ void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int wid
 {
 char minLimit[20];
 char maxLimit[20];
-safef(minLimit,sizeof(minLimit),"%d",min);
-safef(maxLimit,sizeof(maxLimit),"%d",max);
-cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+char *minStr=NULL;
+char *maxStr=NULL;
+if(min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%d",min);
+    minStr = minLimit;
+    }
+if(max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%d",max);
+    maxStr = maxLimit;
+    }
+cgiMakeIntVarInRange(varName,initialVal,title,width,minStr,maxStr);
 }
 void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min)
 {
 char minLimit[20];
-safef(minLimit,sizeof(minLimit),"%d",min);
-cgiMakeIntVarInRange(varName,initialVal,title,width,minLimit,NULL);
+char *minStr=NULL;
+if(min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%d",min);
+    minStr = minLimit;
+    }
+cgiMakeIntVarInRange(varName,initialVal,title,width,minStr,NULL);
 }
 void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max)
 {
 char maxLimit[20];
-safef(maxLimit,sizeof(maxLimit),"%d",max);
-cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxLimit);
+char *maxStr=NULL;
+if(max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%d",max);
+    maxStr = maxLimit;
+    }
+cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
@@ -1253,21 +1291,41 @@ void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, i
 {
 char minLimit[20];
 char maxLimit[20];
-safef(minLimit,sizeof(minLimit),"%g",min);
-safef(maxLimit,sizeof(maxLimit),"%g",max);
-cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,maxLimit);
+char *minStr=NULL;
+char *maxStr=NULL;
+if((int)min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%g",min);
+    minStr = minLimit;
+    }
+if((int)max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%g",max);
+    maxStr = maxLimit;
+    }
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,maxStr);
 }
 void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min)
 {
 char minLimit[20];
-safef(minLimit,sizeof(minLimit),"%g",min);
-cgiMakeDoubleVarInRange(varName,initialVal,title,width,minLimit,NULL);
+char *minStr=NULL;
+if((int)min != NO_VALUE)
+    {
+    safef(minLimit,sizeof(minLimit),"%g",min);
+    minStr = minLimit;
+    }
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,NULL);
 }
 void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max)
 {
 char maxLimit[20];
-safef(maxLimit,sizeof(maxLimit),"%g",max);
-cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxLimit);
+char *maxStr=NULL;
+if((int)max != NO_VALUE)
+    {
+    safef(maxLimit,sizeof(maxLimit),"%g",max);
+    maxStr = maxLimit;
+    }
+cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
