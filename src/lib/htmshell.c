@@ -2,10 +2,10 @@
  * html files.  Write the html initial stuff (<head>, <body>, etc.)
  * and the final stuff too.  Also catch errors here so that
  * the html final stuff is written even if the program has
- * to abort. 
+ * to abort.
  *
  * This also includes a few routines to write commonly used
- * html constructs such as images, horizontal lines. etc. 
+ * html constructs such as images, horizontal lines. etc.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.46 2008/12/02 01:34:56 markd Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.47 2009/05/15 18:57:17 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -204,12 +204,31 @@ void htmlVaWarn(char *format, va_list args)
 {
 va_list argscp;
 va_copy(argscp, args);
+#define WARN_USE_ALERT
+#ifdef WARN_USE_ALERT
+static boolean noWarningsYet = TRUE;
+char warning[512];
+vsprintf(warning,format, args);
+if(noWarningsYet)
+    {
+    // This will only be put into the document once (DO NOT depend on jQuery!)
+    puts("<div id='allWarnings' style='display:none;'>Warnings:</div>");
+    puts("<script type='text/javascript'>function addWarning(warning) {docllument.getElementById('allWarnings').innerHTML += '\\n\\n'+warning;};</script>");
+    puts("<script type='text/javascript'>function warn() {setTimeout(\"alert(document.getElementById('allWarnings').innerHTML);\",50); return true;};onload=warn();</script>");
+    noWarningsYet=FALSE;
+    }
 
+strSwapChar(warning,'\n',' ');
+printf("%s", htmlWarnStartPattern());
+printf("<script type='text/javascript'>addWarning(\"%s\");</script>\n",warning);
+printf("%s", htmlWarnEndPattern());
+#else//ifndef WARN_USE_ALERT
 htmlHorizontalLine();
 printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
+#endif//ndef WARN_USE_ALERT
 
 /* Log useful CGI info to stderr */
 logCgiToStderr();
@@ -262,7 +281,7 @@ pushAbortHandler(earlyAbortHandler);
 }
 
 
-static char *htmlStyle = 
+static char *htmlStyle =
     "<STYLE TYPE=\"text/css\">"
     ".hiddenText {background-color: silver}"
     ".normalText {background-color: white}"
@@ -279,7 +298,7 @@ char *htmlStyleUndecoratedLink =
 void htmlSetStyle(char *style)
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
- * which will remove underlines from links. 
+ * which will remove underlines from links.
  * Needs to be called before htmlStart or htmShell. */
 {
 htmlStyle = style;
@@ -452,7 +471,7 @@ popAbortHandler();
 
 /* Wrap an html file around the passed in function.
  * The passed in function is already in the body. It
- * should just make paragraphs and return. 
+ * should just make paragraphs and return.
  */
 void htmShell(char *title, void (*doMiddle)(), char *method)
 {
@@ -469,7 +488,7 @@ htmlEnd();
 
 /* Wrap an html file around the passed in function.
  * The passed in function is already in the body. It
- * should just make paragraphs and return. 
+ * should just make paragraphs and return.
  * Method should be "query" or "get" or "post".
 param title - The HTML page title
 param head - The head text: can be a refresh directive or javascript
@@ -507,7 +526,7 @@ size_t len = 0;
 if (path == NULL)
     errAbort("Program error: including null file");
 if (!fileExists(path))
-   errAbort("Missing file %s", path); 
+   errAbort("Missing file %s", path);
 readInGulp(path, &str, &len);
 
 if (len <= 0)
