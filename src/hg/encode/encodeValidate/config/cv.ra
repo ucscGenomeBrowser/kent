@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.94 2009/05/02 19:30:55 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.95 2009/05/15 18:21:55 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -532,6 +532,14 @@ targetDescription C-terminal binding protein 2
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326
 vendorName BD Biosciences
 vendorId 612044
+
+term E2F4
+type Antibody
+targetDescription mapping at the C-turminus of E2F4 of human origin h
+antibodyDescription rabbit polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-866
+orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 
 term FOXP2
 type Antibody
