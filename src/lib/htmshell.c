@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.47 2009/05/15 18:57:17 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.48 2009/05/15 20:32:30 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -211,10 +211,10 @@ char warning[512];
 vsprintf(warning,format, args);
 if(noWarningsYet)
     {
-    // This will only be put into the document once (DO NOT depend on jQuery!)
-    puts("<div id='allWarnings' style='display:none;'>Warnings:</div>");
-    puts("<script type='text/javascript'>function addWarning(warning) {docllument.getElementById('allWarnings').innerHTML += '\\n\\n'+warning;};</script>");
-    puts("<script type='text/javascript'>function warn() {setTimeout(\"alert(document.getElementById('allWarnings').innerHTML);\",50); return true;};onload=warn();</script>");
+    // This will only be put into the document once (DO NOT depend on jQuery!) (IE is a royale pain with innerHTML: used textarea)
+    puts("<textarea id='allWarnings' style='display:none;'>Warning(s):</textarea>");
+    puts("<script type='text/javascript'>function warn() {setTimeout(\"alert(document.getElementById('allWarnings').value);\",50); return true;};document.onload=warn();</script>");
+    puts("<script type='text/javascript'>function addWarning(warning) {document.getElementById('allWarnings').value+=\"\\n\\n\"+warning;};</script>");
     noWarningsYet=FALSE;
     }
 
