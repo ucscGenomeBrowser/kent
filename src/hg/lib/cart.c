@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.105 2009/03/19 21:02:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.106 2009/05/15 16:58:10 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1399,6 +1399,12 @@ getDbAndGenome(cart, &db, &org, oldVars);
 clade = hClade(org);
 pos = cartOptionalString(cart, positionCgiName);
 pos = addCommasToPos(db, stripCommas(pos));
+if(pos != NULL)
+    {
+    struct hashEl *oldpos = hashLookup(oldVars, positionCgiName);
+    if(oldpos != NULL && differentString(pos,oldpos->val))
+        cartSetString(cart,"lastPosition",oldpos->val);
+    }
 *extra = 0;
 if (pos == NULL && org != NULL)
     safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
