@@ -117,7 +117,7 @@ echo >> $output
 
 # get IPs of largest hitter and fastest hitter
 set largest=`sort -nr $output | sed -e "2,$ d" | gawk '{print $2}'`
-set fastest=`sort -nr +4 $output | sed -e "2,$ d" | gawk '{print $2}'`
+set fastest=`sort -nr -k4 $output | sed -e "2,$ d" | gawk '{print $2}'`
 
 echo "largest hitter = $largest" >> $output
 echo >> $output
