@@ -222,7 +222,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1543 2009/05/14 23:31:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1544 2009/05/15 09:25:54 mikep Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4181,11 +4181,12 @@ else
 	 end = cartInt(cart, "t");
 	 }
 
-    /* Table might be a custom track; if it's not in the database,
-     * just get DNA as if no table were given. */
+    /* Table might be a custom track if it's not in the database,
+     * or bigBed if it is in the database but has only one column called 'fileName';
+     * in which case, just get DNA as if no table were given. */
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
-    if (hti == NULL)
+    if (hti == NULL || hti->startField[0] == 0)
 	{
 	itemCount = 1;
 	hgSeqRange(database, seqName, start, end, '?', tbl);
