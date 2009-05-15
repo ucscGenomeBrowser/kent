@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1565 2009/05/12 00:00:37 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1566 2009/05/15 17:02:32 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4266,8 +4266,13 @@ if (isGenome(position) || NULL ==
     (hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
     {
     if (winStart == 0)	/* number of positions found */
-	hgp = findGenomePos(database, defaultPosition, &chromName, &winStart, &winEnd,
-			    cart);
+        {
+        freeMem(position);
+        position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
+        hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
+        if(hgp != NULL && position != defaultPosition)
+            cartSetString(cart, "position", position);
+        }
     }
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
