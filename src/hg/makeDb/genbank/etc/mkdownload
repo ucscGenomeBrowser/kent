@@ -48,6 +48,6 @@ gbCheckLock $gbRoot/var/mkdownload/run/mkdownload.lock
 # make downloads for everything on the hgwbeta or rr
 databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
 
-# -maxDbs limits number of database processed so lock file gets released and 
-# prevent bogus stale lock message
-nice gbMakeDownload $verb -maxDbs=1 -getDownloadSeqs=$downloadSeqsDays -downloadRootDir=$downloadRootDir $databases
+# -maxHours limits the length of of processing so lock file gets released and 
+# prevent bogus stale lock message and too many completed messages
+nice gbMakeDownload $verb -maxHours=8 -getDownloadSeqs=$downloadSeqsDays -downloadRootDir=$downloadRootDir $databases
