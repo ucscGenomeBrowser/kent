@@ -5,7 +5,7 @@
 #include "dnaseq.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: snpMaskCutDeletions.c,v 1.1 2008/02/04 20:16:54 angie Exp $";
+static char const rcsid[] = "$Id: snpMaskCutDeletions.c,v 1.2 2009/05/16 00:03:05 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -106,7 +106,6 @@ if (seq)
     totalSize += seq->size;
     dnaSeqFree(&seq);
     }
-verbose(0, "at line %d.\n", lfSnp->lineIx);
 lineFileClose(&lfSnp);
 twoBitClose(&tbfGenomic);
 carefulClose(&outMasked);
