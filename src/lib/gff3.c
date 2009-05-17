@@ -5,7 +5,7 @@
  */
 #include "common.h"
 #include "gff3.h"
-#include <values.h>
+#include <limits.h>
 #include "errabort.h"
 #include "localmem.h"
 #include "hash.h"
@@ -861,7 +861,7 @@ struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh)
 struct gff3File *g3f = gff3FileNew();
 g3f->fileName = gff3FileCloneStr(g3f, fileName);
 g3f->errFh = (errFh != NULL) ? errFh : stderr;
-g3f->maxErr = (maxErr < 0) ? MAXINT : maxErr;
+g3f->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 parseFile(g3f);
 resolveFile(g3f);
 if (g3f->errCnt > 0)
