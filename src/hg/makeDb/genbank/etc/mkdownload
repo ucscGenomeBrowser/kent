@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# mkdownload [-getDownloadSeqs=5]
+# mkdownload [-getDownloadSeqs=7]
 #
 # create download files
 #  -getDownloadSeqs=days - recreate downloads if older than this number of

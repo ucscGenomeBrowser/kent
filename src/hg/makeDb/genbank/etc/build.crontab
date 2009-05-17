@@ -21,6 +21,5 @@ MAILTO=genbank@cse.ucsc.edu
 # poll hourly 16:30 - 21:30
 30 16-21 * * 1-5	/cluster/data/genbank/etc/mkdownload
 
-# on weekends rebuild downloads if more than 5 days old
-# poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
-30 0-23 * * 0,6	/cluster/data/genbank/etc/mkdownload -getDownloadSeqs=5
+# rebuild downloads if more than 7 days old
+30 0-23 * * *	/cluster/data/genbank/etc/mkdownload -getDownloadSeqs=7
