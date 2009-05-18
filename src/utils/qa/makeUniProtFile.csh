@@ -12,6 +12,7 @@ source `which qaConfig.csh`
 ########################################
 
 set db=''
+set d=''
 set org=''
 set hasKGs=''
 set num=''
@@ -35,26 +36,66 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# make sure this assembly has UCSC Genes
-set hasKGs=`hgsql -Ne "SELECT genomeDb FROM gdbPdb" hgcentraltest | grep "$db"`
-if ( '' == $hasKGs ) then
- echo " \nERROR: this assembly does not appear to have a UCSC Genes track\n"
- exit 1
+
+# check to see if this assembly has UCSC Genes
+set hasKGs=`hgsql -Ne "SELECT genomeDb FROM gdbPdb" \
+ hgcentraltest | grep "$db"`
+
+# based on whether or not this assembly has UCSC Genes, make the mapping file
+if ( '' != $hasKGs ) then
+ # get the data from the two KG-related tables
+ hgsql -Ne "SELECT displayId, kgId FROM kgProtAlias" \
+  $db > $db.rawDataForUniProt
+ hgsql -Ne "SELECT spId, kgId FROM kgSpAlias WHERE spId != ''" \
+  $db >> $db.rawDataForUniProt
+
+ # find out the name of the organism for this database
+ set org=`hgsql -Ne 'SELECT organism FROM dbDb where name = "'$db'" LIMIT 1' \
+  hgcentraltest | perl -wpe '$_ = lcfirst($_)'`
+
+ # now add the organism name to every row
+ cat $db.rawDataForUniProt | sed -e 's/$/ '"$org"'/g' \
+  > $db.rawDataForUniProt.plus
+
+else #non-UCSC Gene assembly
+ # strip off the trailing digit(s)
+ set d=`echo $db | sed -e 's/[1-9]*$//'`
+ # each of the non-KG assemblies are treated a little differently
+ if ( "dm" == $d ) then
+  hgsql -Ne "SELECT alias, a.name FROM flyBase2004Xref AS a, \
+   flyBaseToUniProt AS b WHERE a.name=b.name AND alias != 'n/a'" \
+   $db > $db.rawDataForUniProt 
+ endif
+
+ if ( "ce" == $d ) then
+  hgsql -Ne "SELECT acc, name FROM sangerGene AS a, uniProt.gene AS b \
+   WHERE a.proteinID=b.val and acc != 'n/a'" $db > $db.rawDataForUniProt
+ endif
+ 
+ if ( "danRer" == $d ) then
+  echo " \nERROR: Although a file could be generated for danRer, uniProt has"
+  echo " decided that they do not want to do that mapping...yet\n" 
+  exit 1
+ endif
+ 
+ if ( "sacCer" == $d ) then
+  echo " \nERROR: Although a file could be generated for sacCer, uniProt has"
+  echo " decided that they do not want to do that mapping...yet\n" 
+  exit 1
+ endif
+
+ if ( -e $db.rawDataForUniProt ) then 
+  # now add the db name to every row (same for each of the orgs in the 'else')
+  cat $db.rawDataForUniProt \
+   | sed -e 's/$/ '"$db"'/g' > $db.rawDataForUniProt.plus
+ else
+  echo " \nERROR: It is not possible to make a mapping file for UniProt from"
+  echo " the database you entered: $db\n"
+  exit 1
 endif
 
-# get the data from the two tables
-hgsql -Ne "SELECT displayId, kgId FROM kgProtAlias" $db > $db.rawDataForUniProt
-hgsql -Ne "SELECT spId, kgId FROM kgSpAlias WHERE spId != ''" $db >> $db.rawDataForUniProt
-
-# make sure there is only one UCSC Gene ID - UniProt ID pair
-sort -k1,1 -u $db.rawDataForUniProt > $db.rawDataForUniProt.sorted
-
-# find out the name of the organism for this database
-set org=`hgsql -Ne 'SELECT organism FROM dbDb where name = "'$db'" LIMIT 1' hgcentraltest\
- | perl -wpe '$_ = lcfirst($_)'`
-
-# now add the organism name to every row
-cat $db.rawDataForUniProt.sorted | sed -e 's/$/ '"$org"'/g' > $db.uniProtToUcscGenes.txt
+# make sure there is only one Gene ID - UniProt ID pair
+sort -k1,1 -u $db.rawDataForUniProt.plus > $db.uniProtToUcscGenes.txt
 
 # make the new directory and copy the file there
 mkdir -p /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes
