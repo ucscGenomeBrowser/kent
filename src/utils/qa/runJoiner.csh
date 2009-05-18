@@ -10,6 +10,8 @@ source `which qaConfig.csh`
 #
 ################################
 
+onintr cleanup
+
 set db=""
 set table=""
 set range=""
@@ -142,6 +144,6 @@ if ( $noTimes == "" ) then
   nice joinerCheck $range -times $joinerFile
 endif
 
-
+cleanup:
 rm -f xxIDxx
 rm -fr xxJoinDirxx 
