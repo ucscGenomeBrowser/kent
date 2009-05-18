@@ -8,8 +8,9 @@
 #include "hdb.h"
 #include "customTrack.h"
 #include "customFactory.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.8 2009/03/30 22:14:25 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.9 2009/05/18 21:38:07 galt Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -139,6 +140,8 @@ struct sqlConnection *conn = hConnectCentral();
 struct slPair *updateList = NULL, *update;
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
+
+setUdcCacheDir();  /* programs that use udc must call this to initialize cache dir location */
 
 if (!sameString(centralDbName, actualDbName))
     errAbort("Central database specified in hg.conf file is %s but %s "
