@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.8 2008/08/15 17:46:49 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.9 2009/05/18 17:25:09 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -229,6 +229,9 @@ for (i = 0;  i < VALID_BITS;  i++)
     validBitStringsUsed[i] = FALSE;
 for (i = 0;  i < MAX_FUNC+1;  i++)
     functionStringsUsed[i] = FALSE;
+/* We might never have a class=unknown, but set the bit anyway because it is the 
+ * default value: */
+classStringsUsed[0] = 1;
 }
 
 void tallyMoltype(struct lineFile *lf, char *molType)
@@ -1160,12 +1163,12 @@ const char *observedNamedFormat =
     "\\/-(\\/[ACGT]+)*$";
 const char *observedNamedOddballFormat =
     "^\\([A-Z0-9 ]+\\)" /* there's all sorts of stuff in there now */
-    "(\\/-)?(\\/[ACGT]+)*$";
+    "(\\/-)?(\\/\\(?[A-Z0-9 ]+)*\\)?$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
     "^-\\/[ACGT]+(\\/["IUPAC"]+)+$";
 const char *observedMnpFormat =
-    "^[ACGT]+(\\/["IUPAC"]+)+$";
+    "^[ACGTN]+(\\/["IUPAC"]+)+$";
 /* there is only one instance of iupac ambiguous */
 
 boolean checkObservedFormat(struct lineFile *lf, char *class, char *observed)
@@ -1275,8 +1278,9 @@ else if (sameString(class, "mixed"))
 	return FALSE;
 	}
     else if (regexec(&obsMixed, observed, 0, NULL, 0) != 0)
-	lineFileAbort(lf, "Encountered something that doesn't fit "
-		      "observedMixedFormat: %s", observed);
+	// Single oddball in human 130 -- not worth adding to regex and masking.
+	warn("Line %d of %s: Encountered something that doesn't fit observedMixedFormat: %s",
+	     lf->lineIx, lf->fileName, observed);
     flagIupac(observed);
     }
 else if (sameString(class, "mnp"))
@@ -1445,7 +1449,8 @@ struct coords
 /* If SNP ids exceed this, and there are <= 16M total SNP items, then 
  * hashing would be more memory efficient.  Until then, just use an array 
  * as big as the hash would need to alloc. */
-#define MAX_SNPID 64 * 1024 * 1024
+/* SNP130: now 18M items, max ID 74315166. */
+#define MAX_SNPID 80 * 1024 * 1024
 int lastRsId = 0;
 struct coords **mappings = NULL;
 
