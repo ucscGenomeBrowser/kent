@@ -2053,57 +2053,44 @@ searchType bed
 searchPriority 10
 termRegex har[0-9]+
 
-track snp129
-shortLabel SNPs (129)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 129)
-group varRep
-priority 100.095
-visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
+track snp130 override
+chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+
+track snp129 override
 chimpOrangMacOrthoTable snp129OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-type bed 6 +
 
-track snp128
-shortLabel SNPs (128)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 128)
-group varRep
-priority 100.096
+#alpha -- hide by default because we have 130 now.
+track snp128 override
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
 chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
-type bed 6 +
+release alpha
 
-track snp127
-shortLabel SNPs (127)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
-group varRep
-priority 100.097
+#beta
+track snp128 override
+chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
+chimpDb panTro2
+macaqueDb rheMac2
+release beta
+
+track snp127 override
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
 snpSeq snp127Seq
-type bed 6 +
 
-track snp126
-shortLabel SNPs (126)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 126)
-group varRep
-priority 100.098
+track snp126 override
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
 chimpMacaqueOrthoTable snp126orthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
-type bed 6 +
 
 track snpArray
 compositeTrack on
