@@ -225,6 +225,23 @@
     hgsql h1n1 -e 'delete from h1n1SeqXref'
     hgsql h1n1 -e 'load data local infile "h1n1SeqXref.tab" into table h1n1SeqXref'
 
+# create dna sequences table
+
+    cp -p ~/h1n1/download/0514/epiflu_0514_dna_sequence.fa j1
+
+    ~/src/utils/faToTab/faToTab.pl /dev/null j1 >j2.tab
+    cut -f 1 j2.tab >jj1
+    cut -f 2 j2.tab >jseq
+
+    cat jj1 |sed -e 's/ | /\t/g'|sed -e 's/>//' >jj
+    cut -f 1 jj > jDnaId
+
+    paste jDnaId jseq >epiflu_0514_dna_sequence.tab
+
+    hgLoadSqlTab h1n1 dnaSeq ~/src/hg/lib/dnaSeq.sql epiflu_0514_dna_sequence.tab
+
+    rm j1 jj jj1 jseq jDnaId j2.tab
+
 # create protein sequences file with appropriate IDs
 
     cp -p ~/h1n1/download/0514/epiflu_0514_protein_sequence.fa j1
