@@ -3887,6 +3887,14 @@ termRegex rs[0-9]+
 searchPriority 12.993
 padding 250
 
+searchTable snp130
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.992
+padding 250
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
