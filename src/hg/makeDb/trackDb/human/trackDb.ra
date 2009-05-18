@@ -3152,3 +3152,22 @@ searchType bed
 semiShortCircuit 1
 termRegex ES_[0-9]+_[0-9]+
 searchPriority 30
+
+track uniqueness
+shortLabel Uniqueness
+longLabel 35mer alignment scores from BWA/MAQ, where 37 indicates a unique alignment
+group expression
+priority 79.1
+visibility hide
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM,chrX,chrY,
+defaultViewLimits 0:37
+minLimit 0
+maxLimit 37
+autoScaleDefault Off
+color 100,50,150 
+maxHeightPixels 40:40:12
+gridDefault on 
+yLineOnOff on 
+type bedGraph 4
+
+
