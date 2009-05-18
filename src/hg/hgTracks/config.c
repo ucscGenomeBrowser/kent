@@ -323,7 +323,8 @@ if (sameString(groupTarget, "none"))
 dyStringPrintf(title, "Configure Image");
 
 
-hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n", hgTracksName(),
+	cartUsualString(cart, "formMethod", "POST"));
 webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);
 
