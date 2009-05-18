@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/makeExclusionList.pl instead.
 
-# $Id: makeExclusionList.pl,v 1.5 2009/05/18 21:38:07 galt Exp $
+# $Id: makeExclusionList.pl,v 1.6 2009/05/18 23:16:06 galt Exp $
 
 # Scan the -verbose=4 output of refreshNamedSessionCustomTracks for
 # names of existing files that need to be ignored by the script that
@@ -21,7 +21,7 @@ open(OUT, ">$doNotRmFile") || die "Couldn't open >$doNotRmFile: $!";
 while (<>) {
   my $fileName;
   if (/^Found live custom track: (\S+)/ ||
-      /^setting dataUrl: (\S+)/) ||
+      /^setting dataUrl: (\S+)/ ||
       /^setting \w+File: (\S+)/) {
     $fileName = $1;
     $fileName =~ s@^\.\./@$outRoot/@;
