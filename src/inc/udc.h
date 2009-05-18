@@ -104,4 +104,7 @@ int udcDataViaFtp(char *url, bits64 offset, int size, void *buffer);
 boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo);
 /* Gets size and last modified time of FTP URL */
 
+struct slName *udcFileCacheFiles(char *url, char *cacheDir);
+/* Return low-level list of files used in cache. */
+
 #endif /* UDC_H */

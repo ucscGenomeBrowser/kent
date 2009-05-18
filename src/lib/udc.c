@@ -604,41 +604,65 @@ while ((c = *s++) != 0)
 return output;
 }
 
+void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **retColon)
+/* handle url parsing */
+{
+char *protocol, *afterProtocol;
+char *colon = strchr(url, ':');
+if (!colon)
+    {
+    *retColon = NULL;
+    return;
+    }
+int colonPos = colon - url;
+protocol = cloneStringZ(url, colonPos);
+afterProtocol = url + colonPos + 1;
+while (afterProtocol[0] == '/')
+   afterProtocol += 1;
+char *userPwd = strchr(afterProtocol, '@');
+if (userPwd)
+    {
+    char *afterHost = strchr(afterProtocol, '/');
+    if (!afterHost)
+	{
+	afterHost = afterProtocol+strlen(afterProtocol);
+	}
+    if (userPwd < afterHost)
+	afterProtocol = userPwd + 1;
+    }
+afterProtocol = qEncode(afterProtocol);
+*retProtocol = protocol;
+*retAfterProtocol = afterProtocol;
+*retColon = colon;
+}
+
+void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, char *afterProtocol)
+/* Initialize udcFile path and names */
+{
+int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(afterProtocol) + 1;
+file->cacheDir = needMem(len);
+safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, afterProtocol);
+
+/* Create file names for bitmap and data portions. */
+file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
+file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
+}
+
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 /* Open up a cached file.  Return NULL if file doesn't exist. */
 {
 verbose(2, "udcfileOpen(%s, %s)\n", url, cacheDir);
 /* Parse out protocol.  Make it "transparent" if none specified. */
-char *protocol, *afterProtocol;
-char *colon = strchr(url, ':');
-struct udcProtocol *prot;
+char *protocol, *afterProtocol, *colon;
 boolean isTransparent = FALSE;
-if (colon != NULL)
-    {
-    int colonPos = colon - url;
-    protocol = cloneStringZ(url, colonPos);
-    afterProtocol = url + colonPos + 1;
-    while (afterProtocol[0] == '/')
-       afterProtocol += 1;
-    char *userPwd = strchr(afterProtocol, '@');
-    if (userPwd)
-	{
-	char *afterHost = strchr(afterProtocol, '/');
-        if (!afterHost)
-	    {
-	    afterHost = afterProtocol+strlen(afterProtocol);
-	    }
-	if (userPwd < afterHost)
-    	    afterProtocol = userPwd + 1;
-	}
-    afterProtocol = qEncode(afterProtocol);
-    }
-else
+udcParseUrl(url, &protocol, &afterProtocol, &colon);
+if (!colon)
     {
     protocol = cloneString("transparent");
     afterProtocol = cloneString(url);
     isTransparent = TRUE;
     }
+struct udcProtocol *prot;
 prot = udcProtocolNew(protocol);
 
 /* Figure out if anything exists. */
@@ -673,16 +697,10 @@ if (isTransparent)
     }
 else
     {
-    int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(afterProtocol) + 1;
-    file->cacheDir = needMem(len);
-    safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, afterProtocol);
+    udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
 
     /* Make directory. */
     makeDirsOnPath(file->cacheDir);
-
-    /* Create file names for bitmap and data portions. */
-    file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
-    file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 
     /* Figure out a little bit about the extent of the good cached data if any. */
     setInitialCachedDataBounds(file);
@@ -699,6 +717,26 @@ struct udcFile *udcFile = udcFileMayOpen(url, cacheDir);
 if (udcFile == NULL)
     errAbort("Couldn't open %s", url);
 return udcFile;
+}
+
+
+struct slName *udcFileCacheFiles(char *url, char *cacheDir)
+/* Return low-level list of files used in cache. */
+{
+char *protocol, *afterProtocol, *colon;
+struct udcFile *file;
+udcParseUrl(url, &protocol, &afterProtocol, &colon);
+AllocVar(file);
+udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
+struct slName *list = NULL;
+slAddHead(&list, slNameNew(file->bitmapFileName));
+slAddHead(&list, slNameNew(file->sparseFileName));
+slReverse(&list);
+freeMem(file->cacheDir);
+freeMem(file->bitmapFileName);
+freeMem(file->sparseFileName);
+freeMem(file);
+return list;
 }
 
 void udcFileClose(struct udcFile **pFile)
