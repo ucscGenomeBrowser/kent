@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.64 2009/05/05 22:33:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.65 2009/05/18 20:45:14 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -198,6 +198,10 @@ else if (sameWord(var, "private"))
 else if (sameWord(var, "group"))
     {
     replaceStr(&td->grp, overTd->grp);
+    }
+else if (sameWord(var, "release"))
+    {
+    // ignore -- it was pruned by pruneRelease before this was called.
     }
 else	/* Add to settings. */
     {
