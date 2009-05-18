@@ -81,3 +81,9 @@ ActionMailer::Base.smtp_settings = {
 } 
 
 
+# Try to get the dropped mysql connections refreshed
+#   "Lost connection to MySQL server during query"
+# especially for the background runner
+ActiveRecord::Base.verification_timeout = 14400
+ActiveRecord::Base.connection.instance_eval {@connection.reconnect = true}
+

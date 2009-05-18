@@ -44,6 +44,8 @@ module PipelineBackground
     timeout = projectType['time_out']
 
     exitCode = run_with_timeout(cmd, timeout)
+    # Try to avoid error "Lost connection to MySQL server during query"
+    ActiveRecord::Base.verify_active_connections!
 
     if exitCode == 0
       new_status project, "validated"
@@ -70,6 +72,8 @@ module PipelineBackground
     timeout = projectType['load_time_out']
 
     exitCode = run_with_timeout(cmd, timeout)
+    # Try to avoid error "Lost connection to MySQL server during query"
+    ActiveRecord::Base.verify_active_connections!
 
     if exitCode == 0
       project.status = "loaded"
