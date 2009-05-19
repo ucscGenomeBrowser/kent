@@ -1834,6 +1834,17 @@ identifier ensemblTranscriptIdFelCat external=Ensembl dependency
     $felCat.ensGtp.transcript minCheck=0.99
     $felCat.ensPep.name minCheck=0.99
 
+# Ensembl Links
+identifier ensemblLinkId external=Ensembl dependency
+"Ensembl Links from hgTracks"
+    $hg.chromInfo.chrom
+    $hg.ucscToEnsembl.ucsc
+
+identifier ucscLinkId external=Ensembl dependency
+"Ensembl Mappings from hgTracks"
+    $hg.ucscToEnsembl.ensembl
+    $hg.ensemblLift.chrom
+
 # Ensembl EST
 
 identifier ensemblEstTranscriptId external=Ensembl dependency
