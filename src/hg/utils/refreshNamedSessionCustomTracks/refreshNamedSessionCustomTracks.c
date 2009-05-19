@@ -10,7 +10,7 @@
 #include "customFactory.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.9 2009/05/18 21:38:07 galt Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.10 2009/05/19 23:54:31 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -132,6 +132,14 @@ freeMem(contentsToChop);
 return updateIfAny;
 }
 
+struct sessionInfo
+    {
+    struct sessionInfo *next;
+    char userName[256];
+    char sessionName[256];
+    char *contents;
+    };
+
 void refreshNamedSessionCustomTracks(char *centralDbName)
 /* refreshNamedSessionCustomTracks -- cron robot for keeping alive custom 
  * tracks that are referenced by saved sessions. */
@@ -152,6 +160,7 @@ else
 
 if (sqlTableExists(conn, savedSessionTable))
     {
+    struct sessionInfo *sessionList = NULL, *si;
     struct sqlResult *sr = NULL;
     char **row = NULL;
     char query[512];
@@ -159,9 +168,20 @@ if (sqlTableExists(conn, savedSessionTable))
 	  "select userName,sessionName,contents from %s "
 	  "order by userName,sessionName", savedSessionTable);
     sr = sqlGetResult(conn, query);
+    // Slurp results into memory instead of processing row by row,
+    // reducing the chance of lost connection.
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	char *updateIfAny = scanSettingsForCT(row[0], row[1], row[2],
+	AllocVar(si);
+	safecpy(si->userName, sizeof(si->userName), row[0]);
+	safecpy(si->sessionName, sizeof(si->sessionName), row[1]);
+	si->contents = cloneString(row[2]);
+	slAddHead(&sessionList, si);
+	}
+    sqlFreeResult(&sr);
+    for (si = sessionList;  si != NULL;  si = si->next)
+	{
+	char *updateIfAny = scanSettingsForCT(si->userName, si->sessionName, si->contents,
 					      &liveCount, &expiredCount);
 	if (updateIfAny)
 	    {
@@ -170,7 +190,6 @@ if (sqlTableExists(conn, savedSessionTable))
 	    slAddHead(&updateList, update);
 	    }
 	}
-    sqlFreeResult(&sr);
     }
 
 /* Now that we're done reading from savedSessionTable, we can modify it: */
