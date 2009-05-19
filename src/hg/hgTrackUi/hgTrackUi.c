@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.488 2009/05/11 21:57:39 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.489 2009/05/19 20:38:57 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -306,6 +306,9 @@ void snp125Ui(struct trackDb *tdb)
 char autoSubmit[2048];
 char *orthoTable = snp125OrthoTable(tdb, NULL);
 int version = snpVersion(tdb->tableName);
+
+if (version < 130)
+    snp125ValidLabelsSize--; // no by-1000genomes
 
 if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     {

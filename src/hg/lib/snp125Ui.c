@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.31 2008/07/02 20:59:40 angie Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.32 2009/05/19 20:38:57 angie Exp $";
 
 char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount)
 /* Look for a setting that specifies a table with orthologous alleles.
@@ -260,6 +260,7 @@ char *snp125ValidLabels[] = {
     "By Submitter",
     "By 2 Hit / 2 Allele",
     "By HapMap",
+    "By 1000 Genomes Project",
 };
 char *snp125ValidStrings[] = {
     "snp125ValidUnknown",
@@ -268,6 +269,7 @@ char *snp125ValidStrings[] = {
     "snp125ValidSubmitter",
     "snp125Valid2H2A",
     "snp125ValidHapMap",
+    "snp125Valid1000Genomes",
 };
 char *snp125ValidDataName[] = {
     "unknown",
@@ -276,6 +278,7 @@ char *snp125ValidDataName[] = {
     "by-submitter",
     "by-2hit-2allele",
     "by-hapmap",
+    "by-1000genomes",
 };
 char *snp125ValidDefault[] = {
     "red",
@@ -284,6 +287,7 @@ char *snp125ValidDefault[] = {
     "black",
     "black",
     "green",
+    "blue",
 };
 char *snp125ValidCart[] = {
     "red",
@@ -292,6 +296,7 @@ char *snp125ValidCart[] = {
     "black",
     "black",
     "green",
+    "blue",
 };
 char *snp125ValidIncludeStrings[] = {
     "snp125ValidUnknownInclude",
@@ -300,8 +305,10 @@ char *snp125ValidIncludeStrings[] = {
     "snp125ValidSubmitterInclude",
     "snp125Valid2H2AInclude",
     "snp125ValidHapMapInclude",
+    "snp125Valid1000GenomesInclude",
 };
 boolean snp125ValidIncludeDefault[] = {
+    TRUE,
     TRUE,
     TRUE,
     TRUE,
@@ -316,15 +323,12 @@ boolean snp125ValidIncludeCart[] = {
     TRUE,
     TRUE,
     TRUE,
+    TRUE,
 };
 
 // all of these sizes are the same
 int snp125ValidLabelsSize   = ArraySize(snp125ValidLabels);
-int snp125ValidStringsSize  = ArraySize(snp125ValidStrings);
-int snp125ValidDataNameSize = ArraySize(snp125ValidDataName);
-int snp125ValidDefaultSize  = ArraySize(snp125ValidDefault);
 int snp125ValidCartSize     = ArraySize(snp125ValidCart);
-int snp125ValidIncludeStringsSize     = ArraySize(snp125ValidIncludeStrings);
 
 /****** function related controls *******/
 /* Values are a subset of snpNNN.func values:
