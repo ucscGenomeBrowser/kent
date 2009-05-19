@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.79 2009/05/18 21:17:41 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.80 2009/05/19 22:36:48 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -4698,6 +4698,9 @@ struct hash *gdHash;
 /* reserve space no more than 20 unique gad disease entries */
 char gadDiseaseClassBuffer[2000];
 
+/* reserve space no more than 20 unique decipher entries */
+char decipherBuffer[2000];
+
 char *gadDiseaseClassList(struct track *tg, struct bed *item)
 /* Return list of diseases associated with a GAD entry */
 {
@@ -4856,6 +4859,114 @@ if (tg->subType == lfWithBarbs)
 		dir, textColor, TRUE);
 	}
     }
+}
+
+char *decipherPhenotypeList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a DECIPHER entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+int i=0;
+
+conn = hAllocConn(database);
+
+sprintf(query, 
+        "select distinct phenotype from decipherRaw where id='%s' order by phenotype", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = decipherBuffer;
+while ((row != NULL) && i<20)
+    {
+    if (i != 0)
+	{
+	sprintf(chp, "; ");
+	chp++;chp++;
+	}
+    sprintf(chp, "%s", row[0]);
+    chp = chp+strlen(row[0]);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    sprintf(chp, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(decipherBuffer);
+}
+
+static void decipherDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sPhenotypes;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sPhenotypes = decipherPhenotypeList(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, sPhenotypes)-2, y,
+		    mgFontStringWidth(font, sPhenotypes),
+                    heightPer, MG_BLACK, font, sPhenotypes);
+        }
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = hvGfxContrastingColor(hvg, color);
+	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	}
+    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	     tg->mapName, tg->mapItemName(tg, bed), sPhenotypes);
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-')
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = hvGfxContrastingColor(hvg, color);
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		dir, textColor, TRUE);
+	}
+    }
+}
+
+void decipherMethods(struct track *tg)
+/* Methods for DECIPHER track. */
+{
+tg->drawItemAt 	= decipherDrawAt;
 }
 
 void gadMethods(struct track *tg)
@@ -10828,6 +10939,7 @@ registerTrackHandler("h1n1b_0514Seq", h1n1SeqMethods);
 registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
+registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
