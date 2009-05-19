@@ -49,14 +49,6 @@ if ( '' != $hasKGs ) then
  hgsql -Ne "SELECT spId, kgId FROM kgSpAlias WHERE spId != ''" \
   $db >> $db.rawDataForUniProt
 
- # find out the name of the organism for this database
- set org=`hgsql -Ne 'SELECT organism FROM dbDb where name = "'$db'" LIMIT 1' \
-  hgcentraltest | perl -wpe '$_ = lcfirst($_)'`
-
- # now add the organism name to every row
- cat $db.rawDataForUniProt | sed -e 's/$/ '"$org"'/g' \
-  > $db.rawDataForUniProt.plus
-
 else #non-UCSC Gene assembly
  # strip off the trailing digit(s)
  set d=`echo $db | sed -e 's/[1-9]*$//'`
@@ -83,12 +75,17 @@ else #non-UCSC Gene assembly
   echo " decided that they do not want to do that mapping...yet\n" 
   exit 1
  endif
+endif
 
- if ( -e $db.rawDataForUniProt ) then 
-  # now add the db name to every row (same for each of the orgs in the 'else')
-  cat $db.rawDataForUniProt \
-   | sed -e 's/$/ '"$db"'/g' > $db.rawDataForUniProt.plus
- else
+if ( -e $db.rawDataForUniProt ) then 
+ # find out the name of the organism for this database
+ set org=`hgsql -Ne 'SELECT organism FROM dbDb where name = "'$db'" LIMIT 1' \
+  hgcentraltest | perl -wpe '$_ = lcfirst($_)'`
+
+ # now add the organism name to every row
+ cat $db.rawDataForUniProt | sed -e 's/$/ '"$org"'/g' \
+  > $db.rawDataForUniProt.plus
+else
   echo " \nERROR: It is not possible to make a mapping file for UniProt from"
   echo " the database you entered: $db\n"
   exit 1
