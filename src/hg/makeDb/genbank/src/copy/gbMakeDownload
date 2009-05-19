@@ -9,7 +9,7 @@
 # to database.
 #
 #
-# $Id: gbMakeDownload,v 1.17 2009/05/16 23:29:14 markd Exp $
+# $Id: gbMakeDownload,v 1.18 2009/05/19 04:51:00 markd Exp $
 #
 use strict;
 use warnings;
@@ -447,6 +447,7 @@ if ($#outdatedDbs < 0) {
 }
              
 beginTask("mkdownload", "mkdownload");
+prMsg("outdated: " + join(" ", @outdatedDbs));
 my $upCnt = 0;
 foreach my $db (@outdatedDbs) {
     if (keepGoing($upCnt)) {

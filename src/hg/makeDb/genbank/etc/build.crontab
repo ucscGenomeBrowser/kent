@@ -16,10 +16,5 @@ MAILTO=genbank@cse.ucsc.edu
 # rsync back the table stats from hgnfs1 for analysis at 6am
 0 6 * * *	rsync --quiet -e 'ssh -x' --ignore-existing --archive hgnfs1:/genbank/var/tblstats /cluster/data/genbank/var
 
-# during the week only build downloads if they don't exist
-# to handle new genomes.
-# poll hourly 16:30 - 21:30
-30 16-21 * * 1-5	/cluster/data/genbank/etc/mkdownload
-
 # rebuild downloads if more than 7 days old
-30 0-23 * * *	/cluster/data/genbank/etc/mkdownload -getDownloadSeqs=7
+30 */2 * * *	/cluster/data/genbank/etc/mkdownload -getDownloadSeqs=7
