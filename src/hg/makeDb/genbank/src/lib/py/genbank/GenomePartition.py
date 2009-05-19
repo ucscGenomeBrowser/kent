@@ -145,7 +145,7 @@ class GenomePartition(object):
             unplacedChroms.flagSeqs(self.seqs)
 
         if liftFile != None:
-            self.seqs.addUnGappedRegions(liftFile)
+            self.seqs.defineSeqRegionsFromLifts(liftFile)
         self.windows = GenomeWindows(self.seqs, winSize, overlap, maxGap,
                                      minUnplacedSize)
 

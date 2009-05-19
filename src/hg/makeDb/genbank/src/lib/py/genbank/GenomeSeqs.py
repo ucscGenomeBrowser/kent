@@ -70,7 +70,7 @@ class GenomeSeqs(dict):
             l.sort()
         return lifts
 
-    def __addSeqRegions(self, seq, lifts):
+    def __addSeqRegionsFromLifts(self, seq, lifts):
         "add ungapped regions for a sequence"
         seq.regions = []
         start = lifts[0][0]
@@ -82,12 +82,12 @@ class GenomeSeqs(dict):
             end = lift[1]
         seq.regions.append((start, end))
 
-    def addUnGappedRegions(self, liftFile):
+    def defineSeqRegionsFromLifts(self, liftFile):
         """define regions without gaps from a lift file.  If a sequence
         is flagged as unplaced, adjacent lift entries are not joined"""
         lifts = self.__loadLift(liftFile)
         for id in lifts.iterkeys():
-            self.__addSeqRegions(self[id], lifts[id])
+            self.__addSeqRegionsFromLifts(self[id], lifts[id])
     
     def dump(self, fh):
         "print contents for debugging purposes"
