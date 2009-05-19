@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.9 2008/10/02 16:09:24 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.10 2009/05/19 04:42:27 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,12 +58,18 @@ if (strict)
 		printf("%s missing\n", hfs->searchTable);
             slRemoveEl(&hfsList, hfs);
             }
-	else if (hfs->xrefTable[0] != 0 &&
-                 ! hTableOrSplitExists(database, hfs->xrefTable))
+	else if (hfs->xrefTable[0] != 0)
 	    {
-	    if (verboseLevel() > 1)
-		printf("%s (xref) missing\n", hfs->xrefTable);
-            slRemoveEl(&hfsList, hfs);
+	    // Use sqlTableExists because xrefTable might be $db.$table,
+	    // not supported by hTableExists / hTableOrSplitExists
+	    struct sqlConnection *conn = hAllocConn(database);
+	    if (!sqlTableExists(conn, hfs->xrefTable))
+		{
+		if (verboseLevel() > 1)
+		    printf("%s (xref) missing\n", hfs->xrefTable);
+		slRemoveEl(&hfsList, hfs);
+		}
+	    hFreeConn(&conn);
 	    }
         }
     }
