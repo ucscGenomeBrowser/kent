@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.80 2009/05/19 22:36:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.81 2009/05/20 20:50:52 mikep Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2342,7 +2342,6 @@ struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 Color saveColor = color;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
-
 if (((vis == tvFull) || (vis == tvPack)) && (tg->subType == lfNoIntronLines))
     {
     hideLine = TRUE;
@@ -2449,7 +2448,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 	    (e-s <= 3 || psl != NULL))
                 baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y,
 				  scale, font, s, e, heightPer,
-				  zoomedToCodonLevel, mrnaSeq, psl,
+				  zoomedToCodonLevel, mrnaSeq, sf, psl,
 				  drawOpt,
 				  MAXPIXELS, winStart, color);
         else

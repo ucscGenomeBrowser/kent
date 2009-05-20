@@ -8,6 +8,7 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "hgTracks.h"
+#include "cds.h"
 
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
@@ -108,7 +109,9 @@ else
 	rowOffset = hOffsetPastBin(database, hDefaultChrom(database), topTable);
 	}
     else if(scoreFilterClause != NULL && tg->bedSize >= 5)
+	{
 	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
+	}
     else
 	{
 	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -625,6 +628,64 @@ tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
 
+struct linkedFeatures *simpleBedToLinkedFeatures(struct bed *b, int bedFields, boolean everyBase)
+/* Create a linked feature from a single bed item
+ * Any bed fields past the 6th field (strand) will be ignored
+ * Make one simpleFeature for every base of the bed if everyBase is TRUE,
+ * otherwise it will contain a single 'exon' corresponding to the bed (start,end)
+ * Dont free the bed as a pointer to each item is stored in lf->original 
+ */
+{
+struct linkedFeatures *lf = NULL;
+if (b)
+    {
+    AllocVar(lf);
+    lf->start = lf->tallStart = b->chromStart;
+    lf->end = lf->tallEnd = b->chromEnd;
+    struct simpleFeature *sf;
+    int s;
+    int stepSize = everyBase ? 1 : lf->end - lf->start;
+    lf->components = NULL;
+    for (s = lf->start ; s < lf->end ; s += stepSize)
+	{
+	AllocVar(sf);
+	sf->start = s;
+	sf->end = sf->start + stepSize;
+	sf->qStart = s - lf->start;
+	sf->qEnd = sf->qStart + stepSize;
+	slAddHead(&lf->components, sf);
+	}
+    slReverse(&lf->components);
+    if (bedFields > 3)
+	safecpy(lf->name, sizeof(lf->name), b->name);
+    if (bedFields > 4)
+	lf->score = b->score;
+    if (bedFields > 5)
+	lf->orientation = (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0)); 
+    lf->original = b;
+    }
+return lf;
+}
+
+struct linkedFeatures *simpleBedListToLinkedFeatures(struct bed *b, int bedFields, boolean everyBase)
+/* Create a list of linked features from a list of beds */
+{
+struct linkedFeatures *lfList = NULL;
+while (b)
+    {
+    slAddHead(&lfList, simpleBedToLinkedFeatures(b, bedFields, everyBase));
+    b = b->next;
+    }
+slReverse(&lfList);
+return lfList;
+}
+
+void loadSimpleBedAsLinkedFeaturesPerBase(struct track *tg)
+/* bed list not freed as pointer to it is stored in 'original' field */
+{
+loadSimpleBed(tg);
+tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE);
+}
 
 void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
                                 int wordCount, char *words[])
@@ -643,8 +704,18 @@ track->isBigBed = isBigBed;
 
 if (fieldCount < 8)
     {
-    bedMethods(track);
-    track->loadItems = loadSimpleBed;
+    if (baseColorGetDrawOpt(track) != baseColorDrawOff)
+	{
+	// data must be loaded as bed and converted to linkedFeatures 
+	// to draw each base character must make one simpleFeature per base
+	linkedFeaturesMethods(track);
+	track->loadItems = loadSimpleBedAsLinkedFeaturesPerBase;
+	}
+    else
+	{
+	bedMethods(track);
+	track->loadItems = loadSimpleBed;
+	}
     }
 else if (useItemRgb && fieldCount == 9)
     {

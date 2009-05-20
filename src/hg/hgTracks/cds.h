@@ -125,7 +125,7 @@ enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
         int grayIx, struct hvGfx *hvg, int xOff, int y,
         double scale, MgFont *font, int s, int e, int heightPer,
-        boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl *psl,
+        boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct simpleFeature *sf, struct psl *psl,
 	enum baseColorDrawOpt drawOpt,
         int maxPixels, int winStart, Color originalColor);
 /*draw a box that is colored by the bases inside it and its

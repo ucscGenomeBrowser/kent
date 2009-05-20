@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.94 2009/04/29 18:47:45 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.95 2009/05/20 20:50:51 mikep Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -285,7 +285,11 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
       continue;
     if (e > s)
 	{
-	int mrnaS = convertCoordUsingPsl(s, psl);
+	int mrnaS = -1;
+	if (psl)
+	    convertCoordUsingPsl(s, psl);
+	else
+	    mrnaS = sf->qStart;
 	if(mrnaS >= 0)
 	    {
 	    int i;
@@ -823,6 +827,12 @@ else if (startsWith("extFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, name);
 else if (endsWith("ExtFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+else if (sameString("nameIsSequence", seqSource))
+    {
+    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), cloneString(name));
+    if (lf->orientation == -1)
+	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+    }
 else
     mrnaSeq = hGenBankGetMrna(database, name, NULL);
 
@@ -1244,12 +1254,16 @@ if (isRc)
 
 static void drawDiffTextBox(struct hvGfx *hvg, int xOff, int y, 
         double scale, int heightPer, MgFont *font, Color color, 
-        char *chrom, unsigned s, unsigned e, struct psl *psl, 
+        char *chrom, unsigned s, unsigned e, struct simpleFeature *sf, struct psl *psl, 
         struct dnaSeq *mrnaSeq, struct linkedFeatures *lf,
         int grayIx, enum baseColorDrawOpt drawOpt,
         int maxPixels, Color *trackColors, Color ixColor)
 {
-int mrnaS = convertCoordUsingPsl( s, psl ); 
+int mrnaS = -1;
+if (psl)
+    mrnaS = convertCoordUsingPsl( s, psl ); 
+else if (sf)
+    mrnaS = sf->qStart;
 if(mrnaS >= 0)
     {
     struct dyString *dyMrnaSeq = newDyString(256);
@@ -1258,8 +1272,10 @@ if(mrnaS >= 0)
     char mrnaCodon[2]; 
     boolean queryInsertion = FALSE;
 
-    getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
-		 mrnaBases, &queryInsertion);
+    mrnaBases[0] = '\0';
+    if (psl)
+	getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
+		    mrnaBases, &queryInsertion);
     if (queryInsertion)
 	color = cdsColor[CDS_QUERY_INSERTION];
 
@@ -1356,7 +1372,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 		       int grayIx, struct hvGfx *hvg, int xOff, 
                        int y, double scale, MgFont *font, int s, int e, 
                        int heightPer, boolean zoomedToCodonLevel, 
-                       struct dnaSeq *mrnaSeq, struct psl *psl, 
+                       struct dnaSeq *mrnaSeq, struct simpleFeature *sf, struct psl *psl, 
 		       enum baseColorDrawOpt drawOpt,
                        int maxPixels, int winStart, 
                        Color originalColor)
@@ -1372,19 +1388,25 @@ boolean zoomedOutToPostProcessing =
      (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel));
 
 if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
+    {
     drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
                                 zoomedToCodonLevel, winStart, maxPixels);
-else if (mrnaSeq != NULL && psl != NULL && !zoomedOutToPostProcessing &&
+    }
+else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons)
+    {
     drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
-		    color, chromName, s, e, psl, mrnaSeq, lf,
+		    color, chromName, s, e, sf, psl, mrnaSeq, lf,
 		    grayIx, drawOpt, maxPixels,
 		    tg->colorShades, originalColor);
+    }
 else
+    {
     /* revert to normal coloring */
     drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
 			color, lf->score );
+    }
 }
 
 
@@ -1653,7 +1675,6 @@ enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 {
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
-
 indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
 	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
@@ -1677,7 +1698,7 @@ if (drawOpt == baseColorDrawItemBases ||
     indelShowPolyA)
     {
     *retMrnaSeq = maybeGetSeqUpper(lf, tg->mapName, tg);
-    if (*retMrnaSeq != NULL && *retPsl != NULL)
+    if (*retMrnaSeq != NULL && *retPsl != NULL) // we have both sequence and PSL
 	{
         if ((*retMrnaSeq)->size != (*retPsl)->qSize)
             errAbort("baseColorDrawSetup: %s: mRNA size (%d) != psl qSize (%d)",
@@ -1685,7 +1706,9 @@ if (drawOpt == baseColorDrawItemBases ||
 	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
 	    reverseComplement((*retMrnaSeq)->dna, strlen((*retMrnaSeq)->dna));
 	}
-    else
+    // if no sequence, no base color drawing
+    // Note: we could have sequence but no PSL (eg, tagAlign format)
+    else if (*retMrnaSeq == NULL) 
 	return baseColorDrawOff;
     }
 
