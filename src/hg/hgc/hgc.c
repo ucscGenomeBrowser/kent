@@ -222,7 +222,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1544 2009/05/15 09:25:54 mikep Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1545 2009/05/20 18:08:22 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14766,7 +14766,7 @@ void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTra
 			      struct genePred *gene, int exonIx, char *geneName)
 /* Show the effect of each observed allele of snp on the given exon of gene. */
 {
-char refAllele[256];
+char refAllele[1024];
 safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
 boolean refIsAlpha = isalpha(refAllele[0]);
 boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
@@ -14778,7 +14778,7 @@ int snpCodonPos = 0;
 char refCodon[4], refAA = '\0';
 if (refIsSingleBase)
     getSnp125RefCodonAndSnpPos(snp, gene, exonIx, &snpCodonPos, refCodon, &refAA);
-char alleleStr[256];
+char alleleStr[1024];
 safecpy(alleleStr, sizeof(alleleStr), snp->observed);
 char *indivAlleles[64];
 int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
