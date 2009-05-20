@@ -56,7 +56,7 @@ if ($ip == "all") then
 
   # get locations (strip off sessionID)
   set chopIPs=`echo $allIPs | sed "s/ /\n/"g \
-    | awk -F"." '{print $NF-3"."$NF-2"."$NF-1"."$NF}'`
+    | awk -F"." '{print $(NF-3)"."$(NF-2)"."$(NF-1)"."$NF}'`
   foreach ip (`echo $chopIPs`)
     set orgName=`ipw $ip | grep OrgName | sed -e "s/OrgName: //"` > /dev/null
     set current=`grep -w $ip ipFile | awk '{print $5}'`
