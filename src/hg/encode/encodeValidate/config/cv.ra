@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.96 2009/05/15 18:23:25 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.97 2009/05/20 21:01:45 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -14,6 +14,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 color 153,38,0
 tier 1
+protocol GM12878_protocol.pdf
 
 term K562
 type Cell Line
@@ -27,6 +28,7 @@ termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 color 46,0,184
 tier 1
+protocol K562_protocol.pdf
 
 term HepG2
 type Cell Line
@@ -40,6 +42,7 @@ termId BTO:0000559
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
 color 189,0,157
 tier 2
+protocol HepG2_protocol.pdf
 
 term HeLa-S3
 type Cell Line
@@ -53,6 +56,7 @@ termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
 color 0,119,158
 tier 2
+protocol HeLa-S3_protocol.pdf
 
 term HeLa-S3_IFNg
 description cervical carcinoma (Interferon gamma treatment)
@@ -66,6 +70,7 @@ termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
 color 0,119,158
 tier 3
+protocol HeLa-S3_protocol.pdf
 
 term HUVEC
 type Cell Line
@@ -79,6 +84,7 @@ termId BTO:0001949
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001949
 color 224,75,0
 tier 2
+protocol HUVEC_protocol.pdf
 
 term Keratinocyte
 type Cell Line
@@ -92,6 +98,7 @@ termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
 tier 2
+protocol Keratinocyte_protocol.pdf
 
 term H1_ES
 type Cell Line
@@ -104,6 +111,7 @@ karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
 tier 2
+protocol H1_ES_protocol.pdf
 
 ###### type 3 cells once they have been submitted.
 term A549
@@ -117,6 +125,7 @@ karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 tier 3
+protocol A549_protocol.pdf
 
 term astrocytes
 type Cell Line
@@ -189,6 +198,7 @@ karyotype relatively normal
 termId BTO:0001522 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
 tier 3
+protocol GM12801_Stam_protocol.pdf
 
 term GM18507
 type Cell Line
@@ -201,6 +211,7 @@ karyotype relatively normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
+protocol GM18507_protocol.pdf
 
 term HCT-116
 type Cell Line
@@ -213,6 +224,7 @@ karyotype cancer
 termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 tier 3
+protocol HCT-116_protocol.pdf
 
 term HEK293
 type Cell Line
@@ -249,6 +261,7 @@ karyotype cancer, female
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738&termName=HL-60%20cell
 tier 3
+protocol HL-60_Stam_protocol.pdf
 
 term HMEC
 type Cell Line
@@ -261,6 +274,7 @@ karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 tier 3
+protocol Stam:HMEK_Stam_protocol.pdf
 
 term Jurkat
 type Cell Line
@@ -273,6 +287,7 @@ karyotype cancer
 termId BTO:0001948
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 tier 3
+protocol Jurkat_protocol.pdf
 
 term LNCaP
 type Cell Line
@@ -285,6 +300,7 @@ karyotype cancer
 termId BTO:0002021
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002021
 tier 3
+protocol Farnham:LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 type Cell Line
@@ -309,6 +325,7 @@ karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 tier 3
+protocol NB4_protocol.pdf
 
 term NT2-D1
 type Cell Line
@@ -321,6 +338,7 @@ karyotype cancer
 termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
 tier 3
+protocol NT2-D1_protocol.pdf
 
 term osteoblast
 type Cell Line
@@ -357,6 +375,7 @@ karyotype cancer, male
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
 tier 3
+protocol PANC-1_protocol.pdf
 
 term PFSK-1
 type Cell Line
@@ -369,6 +388,7 @@ karyotype cancer
 termId BTO:0000690 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
 tier 3
+protocol PFSK-1_protocol.pdf
 
 term progeria
 type Cell Line
@@ -405,6 +425,7 @@ karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
+protocol SK-N-MC_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 term SK-N-SH_RA
@@ -430,6 +451,7 @@ karyotype
 termId BTO:0001801 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
 tier 3
+protocol SkMC_Stam_protocol.pdf
 
 term Th1
 type Cell Line
@@ -454,6 +476,7 @@ karyotype
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679&termName=Th2%20cell
 tier 3
+protocol Th2_Stam_protocol.pdf
 
 term WERI-Rb-1
 type Cell Line
@@ -466,6 +489,7 @@ karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178&termName=retinoblastoma%20cell
 tier 3
+protocol WERI-Rb-1_Stam_protocol.pdf
 
 # Gene types
 term Known
