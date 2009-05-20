@@ -7,21 +7,22 @@ source `which qaConfig.csh`
 #
 # Use this script to create a file for the folks at UnitProt.
 # They will use the file to create links from their web site back to our
-# UCSC Gene details pages.
+# Gene details pages.
 #
 ########################################
 
+onintr cleanup
+
 set db=''
-set d=''
 set org=''
 set hasKGs=''
 set num=''
 
 if ($#argv != 1 ) then
  echo
- echo " Use this script to create a mapping of UniProt IDs to UCSC Gene ID."
- echo " UniProt will pick it up from our download server and use it to"
- echo " create links from their web site to our gene details pages."
+ echo "  Use this script to create a mapping of UniProt IDs to Gene IDs. \
+  UniProt will pick it up from our download server and use it to \
+  create links from their web site to our gene details pages."
  echo
  echo "    usage: db"
  echo
@@ -50,27 +51,25 @@ if ( '' != $hasKGs ) then
   $db >> $db.rawDataForUniProt
 
 else #non-UCSC Gene assembly
- # strip off the trailing digit(s)
- set d=`echo $db | sed -e 's/[1-9]*$//'`
  # each of the non-KG assemblies are treated a little differently
- if ( "dm" == $d ) then
+ if ( $db =~ "dm*" ) then
   hgsql -Ne "SELECT alias, a.name FROM flyBase2004Xref AS a, \
    flyBaseToUniProt AS b WHERE a.name=b.name AND alias != 'n/a'" \
    $db > $db.rawDataForUniProt 
  endif
 
- if ( "ce" == $d ) then
+ if ( $db =~ "ce*" ) then
   hgsql -Ne "SELECT acc, name FROM sangerGene AS a, uniProt.gene AS b \
    WHERE a.proteinID=b.val and acc != 'n/a'" $db > $db.rawDataForUniProt
  endif
  
- if ( "danRer" == $d ) then
+ if ( $db =~ "danRer*" ) then
   echo " \nERROR: Although a file could be generated for danRer, uniProt has"
   echo " decided that they do not want to do that mapping...yet\n" 
   exit 1
  endif
  
- if ( "sacCer" == $d ) then
+ if ( $db =~ "sacCer*" ) then
   echo " \nERROR: Although a file could be generated for sacCer, uniProt has"
   echo " decided that they do not want to do that mapping...yet\n" 
   exit 1
@@ -83,8 +82,8 @@ if ( -e $db.rawDataForUniProt ) then
   hgcentraltest | perl -wpe '$_ = lcfirst($_)'`
 
  # now add the organism name to every row
- cat $db.rawDataForUniProt | sed -e 's/$/ '"$org"'/g' \
-  > $db.rawDataForUniProt.plus
+ sed -e 's/$/ '"$org"'/g' $db.rawDataForUniProt > $db.rawDataForUniProt.plus
+
 else
   echo " \nERROR: It is not possible to make a mapping file for UniProt from"
   echo " the database you entered: $db\n"
@@ -99,7 +98,7 @@ mkdir -p /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes
 cp $db.uniProtToUcscGenes.txt /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt
 
 # how big is the file
-set num=`cat $db.uniProtToUcscGenes.txt | wc -l`
+set num=`wc -l $db.uniProtToUcscGenes.txt`
 
 # explain the output to the user
 echo "\nSUCCESS!\n"
@@ -110,6 +109,7 @@ echo " \nAsk for a push of your new file to hgdownload:\n"
 echo " /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt"
 
 # clean up old files (except the real one)
-rm $db.rawDataForUniProt*
+cleanup:
+rm -f $db.rawDataForUniProt*
 
 exit 0
