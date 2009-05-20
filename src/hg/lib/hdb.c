@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.402 2009/04/29 22:27:07 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.403 2009/05/20 20:59:54 mikep Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4542,3 +4542,64 @@ safef(query, sizeof(query),
       "select moddate from gbCdnaInfo where (acc = '%s')", acc);
 return sqlQuickString(conn, query);
 }
+
+struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table))
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) 
+ * References an externally defined function ctLookupName() which looks up a 
+ * custom track by name
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
+{
+if(isEmpty(table))
+    return parent;
+struct trackDb *tdb = NULL;
+if (isCustomTrack(table))
+    {
+    if (!ctLookupName)
+	errAbort("No custom track lookup function provided\n");
+    struct customTrack *ct = (*ctLookupName)(table);
+    if (ct != NULL)
+        tdb = ct->tdb;
+    }
+else
+    tdb = tdbFindOrCreate(db,parent,table);
+return tdb;
+}
+
+char *findTypeForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table))
+/* Finds the TrackType for this Table
+ * if table has no parent trackDb pass NULL for parent 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
+{
+struct trackDb *tdb = findTdbForTable(db,parent,table, ctLookupName);
+if(tdb)
+    return tdb->type;
+return (parent?parent->type:NULL);
+}
+
+boolean trackIsType(char *database, char *table, struct trackDb *parent, char *type, struct customTrack *(*ctLookupName)(char *table))
+/* Return TRUE track is a specific type.  Type should be something like "bed" or
+ * "bigBed" or "bigWig" 
+ * if table has no parent trackDb pass NULL for parent 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
+{
+char *tdbType = findTypeForTable(database, parent, table, ctLookupName);
+return (tdbType && startsWithWord(type, tdbType));
+}
+
+boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
+/* Return TRUE if table corresponds to a bigBed file. 
+ * if table has no parent trackDb pass NULL for parent 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
+{
+return trackIsType(database, table, parent, "bigBed", ctLookupName);
+}
+
+

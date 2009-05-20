@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.50 2009/04/14 14:16:35 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.51 2009/05/20 20:59:56 mikep Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -40,7 +40,7 @@ void removeCartVars(struct cart *cart, char **vars, int varCount);
 static boolean canIntersect(char *db, char *table)
 /* Return true if table exists and is positional. */
 {
-if (isCustomTrack(table) && lookupCt(table) != NULL)
+if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))
     return TRUE;
@@ -612,7 +612,7 @@ else
     Bits *bits2 = NULL;
     struct bed *bedMerged = NULL;
     struct trackDb *subtrack = NULL;
-    char *primaryType = findTypeForTable(database,curTrack,table);
+    char *primaryType = findTypeForTable(database,curTrack,table, ctLookupName);
     char *op = cartString(cart, hgtaSubtrackMergeOp);
     boolean isBpWise = (sameString(op, "and") || sameString(op, "or"));
     double moreThresh = cartDouble(cart, hgtaSubtrackMergeMoreThreshold);

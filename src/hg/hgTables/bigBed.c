@@ -20,13 +20,8 @@
 #include "bigBed.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.8 2009/03/19 00:42:38 kent Exp $";
+static char const rcsid[] = "$Id: bigBed.c,v 1.9 2009/05/20 20:59:55 mikep Exp $";
 
-boolean isBigBed(char *table)
-/* Return TRUE if table corresponds to a bigBed file. */
-{
-return trackIsType(table, "bigBed");
-}
 
 char *bigBedFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigBed.  This handles differences whether it's

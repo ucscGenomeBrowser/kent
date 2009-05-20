@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.143 2009/05/05 22:39:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.144 2009/05/20 20:59:56 mikep Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -375,7 +375,7 @@ for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
     if (track != NULL)
-	tdb = findTdbForTable(database,track,name->name);
+	tdb = findTdbForTable(database,track,name->name, ctLookupName);
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     if (sameString(selTable, name->name))
         {
@@ -635,7 +635,7 @@ hPrintf("<TABLE BORDER=0>\n");
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
     isArray = isMicroarray(curTrack, curTable);
-    struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
+    struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
     isPal = isPalCompatible(conn, tdb, curTable);
     nbSpaces(1);
     if (isCustomTrack(curTable))
@@ -781,7 +781,7 @@ if (isPositional)
     }
 
 /* Correlation line. */
-struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
+struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
 if (correlateTrackTableOK(tdb, curTable))
     {
     char *table2 = cartUsualString(cart, hgtaCorrelateTable, "none");

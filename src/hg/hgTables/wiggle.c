@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.72 2009/04/10 20:04:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.73 2009/05/20 20:59:57 mikep Exp $";
 
 extern char *maxOutMenu[];
 
@@ -35,7 +35,7 @@ extern char *maxOutMenu[];
 #define WIG_INIT \
 if (isCustomTrack(table)) \
     { \
-    ct = lookupCt(table); \
+    ct = ctLookupName(table); \
     isCustom = TRUE; \
     if (! ct->wiggle) \
 	errAbort("called to work on a custom track '%s' that isn't wiggle data ?", table); \
@@ -521,7 +521,7 @@ if (isCustom)
 	else
 	    {
 	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
-	    struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 	    unsigned span = minSpan(trashConn, splitTableOrFileName,
 		region->chrom, region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
@@ -544,7 +544,7 @@ else
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	if (intersectBedList)
 	    {
-	    struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 	    unsigned span;
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
@@ -699,7 +699,7 @@ else
     struct trackDb *tdb;
     if (isCustomTrack(table))
         {
-        struct customTrack *ct = lookupCt(table);
+        struct customTrack *ct = ctLookupName(table);
         tdb = ct->tdb;
         conn = hAllocConn(CUSTOM_TRASH);
         }
@@ -774,7 +774,7 @@ if (db != NULL && table != NULL)
     {
     if (isCustomTrack(table))
 	{
-	struct customTrack *ct = lookupCt(table);
+	struct customTrack *ct = ctLookupName(table);
 	if (ct != NULL && ct->wiggle)
 	    typeWiggle = TRUE;
 	}
@@ -791,7 +791,7 @@ boolean isBedGraph(char *table)
 /* Return TRUE if table is specified as a bedGraph in the current database's
  * trackDb. */
 {
-return trackIsType(table, "bedGraph");
+return trackIsType(database, table, NULL, "bedGraph", ctLookupName);// Do we need to get parent track here?
 }
 
 struct bed *getWiggleAsBed(
@@ -841,7 +841,7 @@ if (isCustom)
 	{
 	unsigned span = 0;
 	struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
-	struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
 		splitTableOrFileName, operations);
@@ -863,7 +863,7 @@ else
 
     if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
 	{
-	struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 	unsigned span = 0;
 
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
@@ -1024,7 +1024,7 @@ for (region = regionList; region != NULL; region = region->next)
 	if (ct->dbTrack)
 	    {
 	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
-	    struct trackDb *tdb = findTdbForTable(database, curTrack, table);
+	    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 	    span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);

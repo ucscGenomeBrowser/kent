@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.185 2009/04/23 22:42:25 galt Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.186 2009/05/20 20:59:56 mikep Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -223,13 +223,6 @@ if (s != NULL)
     }
 }
 
-boolean trackIsType(char *table, char *type)
-/* Return TRUE track is a specific type.  Type should be something like "bed" or
- * "bigBed" or "bigWig" */
-{
-char *tdbType = findTypeForTable(database, curTrack, table);
-return (tdbType && startsWithWord(type, tdbType));
-}
 
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
@@ -555,13 +548,13 @@ struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn
 {
 struct hTableInfo *hti = NULL;
 
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
     }
 else if (isCustomTrack(table))
     {
-    struct customTrack *ct = lookupCt(table);
+    struct customTrack *ct = ctLookupName(table);
     hti = ctToHti(ct);
     }
 else if (sameWord(table, WIKI_TRACK_TABLE))
@@ -1163,7 +1156,7 @@ char *idField;
 boolean showItemRgb = FALSE;
 int itemRgbCol = -1;	/*	-1 means not found	*/
 boolean printedColumns = FALSE;
-struct trackDb *tdb = findTdbForTable(db, curTrack, table);
+struct trackDb *tdb = findTdbForTable(db, curTrack, table, ctLookupName);
 
 hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
@@ -1267,7 +1260,7 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
@@ -1284,7 +1277,7 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
@@ -1292,7 +1285,7 @@ if (isBigBed(table))
     }
 else if (isCustomTrack(table))
     {
-    struct customTrack *ct = lookupCt(table);
+    struct customTrack *ct = ctLookupName(table);
     if ((ct!= NULL) && (ct->dbTrackType != NULL) &&
 	    sameString(ct->dbTrackType, "maf"))
 	{

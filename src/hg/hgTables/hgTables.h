@@ -674,9 +674,6 @@ enum wigOutputType
     {
     wigOutData, wigOutBed, wigDataNoPrint,
     };
-boolean trackIsType(char *table, char *type);
-/* Return TRUE track is a specific type.  Type should be something like "bed" or
- * "bigBed" or "bigWig" */
 
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
@@ -749,9 +746,6 @@ void doSummaryStatsBigWig(struct sqlConnection *conn);
 
 /* ----------- BigBed business in bigBed.c -------------------- */
 
-boolean isBigBed(char *table);
-/* Return TRUE if table corresponds to a bigBed file. */
-
 char *bigBedFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigBed.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
@@ -783,6 +777,9 @@ void showSchemaBigBed(char *table);
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
 
+struct customTrack *ctLookupName(char *name);
+/* Lookup name in custom track list */
+
 void removeNamedCustom(struct customTrack **pList, char *name);
 /* Remove named custom track from list if it's on there. */
 
@@ -800,9 +797,6 @@ struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
  * this when done. */
-
-#define lookupCt(name) ctFind(getCustomTracks(),name)
-/* Find named custom track. */
 
 struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
 			  int fields);
@@ -1040,11 +1034,5 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 /* Show the microarray names from .ra file */
 
 #define uglyw warn	/* Warn for debugging purposes. */
-
-struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table);
-/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) */
-
-char *findTypeForTable(char *db,struct trackDb *parent,char *table);
-/* Finds the TrackType for this Table */
 
 #endif /* HGTABLES_H */

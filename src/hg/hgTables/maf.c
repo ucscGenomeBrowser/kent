@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.16 2008/09/29 22:33:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.17 2009/05/20 20:59:56 mikep Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -63,7 +63,7 @@ if (isCustomTrack(table))
     {
     ctConn = hAllocConn(CUSTOM_TRASH);
     ctConn2 = hAllocConn(CUSTOM_TRASH);
-    ct = lookupCt(table);
+    ct = ctLookupName(table);
     struct hash *settings = track->settingsHash;
     if ((mafFile = hashFindVal(settings, "mafFile")) == NULL)
 	{

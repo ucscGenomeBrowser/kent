@@ -12,7 +12,7 @@ boolean isMicroarray(struct trackDb *parent, char *table)
 /* Return TRUE if table is specified as a microarray in the current database's
  * trackDb. */
 {
-struct trackDb *tdb = findTdbForTable(database, parent, table);
+struct trackDb *tdb = findTdbForTable(database, parent, table, ctLookupName);
 return (tdb && (startsWith("expRatio", tdb->type) || startsWith("array", tdb->type)));
 }
 

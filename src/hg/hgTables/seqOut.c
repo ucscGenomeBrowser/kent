@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.22 2009/04/16 18:20:40 angie Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.23 2009/05/20 20:59:56 mikep Exp $";
 
 static char *genePredMenu[] =
     {
@@ -179,7 +179,7 @@ if (isRefGeneTrack(curTable))
     }
 else
     {
-    char *dupType = cloneString(findTypeForTable(database, curTrack, curTable));
+    char *dupType = cloneString(findTypeForTable(database, curTrack, curTable, ctLookupName));
     typeWordCount = chopLine(dupType, typeWords);
     if (typeIx >= typeWordCount)
 	internalErr();
@@ -300,7 +300,7 @@ else
 void doOutSequence(struct sqlConnection *conn)
 /* Output sequence page. */
 {
-struct trackDb *tdb = findTdbForTable(database, curTrack, curTable);
+struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
 if (tdb != NULL && startsWith("genePred", tdb->type))
     genePredOptions(tdb, curTrack->type, conn);
 else

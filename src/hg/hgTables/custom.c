@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.40 2009/04/10 20:04:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.41 2009/05/20 20:59:56 mikep Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -26,6 +26,12 @@ cartSetString(cart, "db", database);
 if (theCtList == NULL)
     theCtList = customTracksParseCart(database, cart, &browserLines, NULL);
 return(theCtList);
+}
+
+struct customTrack *ctLookupName(char *name)
+/* Lookup name in custom track list */
+{
+return ctFind(getCustomTracks(),name);
 }
 
 void flushCustomTracks()
@@ -460,7 +466,7 @@ struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
  * in current regions and that pass filters.  You can bedFree
  * this when done. */
 {
-struct customTrack *ct = lookupCt(name);
+struct customTrack *ct = ctLookupName(name);
 struct bedFilter *bf = NULL;
 struct bed *bedList = NULL;
 struct hash *idHash = NULL;
@@ -518,7 +524,7 @@ struct slName *chosenFields, *field;
 int count = 0;
 if (fields == NULL)
     {
-    struct customTrack *ct = lookupCt(track->tableName);
+    struct customTrack *ct = ctLookupName(track->tableName);
     chosenFields = getBedFields(ct->fieldCount);
     }
 else

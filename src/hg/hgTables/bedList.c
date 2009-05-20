@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.67 2009/05/04 19:07:52 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.68 2009/05/20 20:59:55 mikep Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -273,7 +273,7 @@ struct region *oldNext = region->next;
 struct bed *bedList = NULL;
 region->next = NULL;
 
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
     }

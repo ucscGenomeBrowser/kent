@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.16 2009/04/16 18:34:06 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.17 2009/05/20 20:59:55 mikep Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -148,33 +148,6 @@ makeOpButton("or", op);
 printf("Base-pair-wise union (OR) of %s and other selected subtracks<P>\n",
        curTable);
 }
-
-struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table)
-/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) */
-{
-if(isEmpty(table))
-    return parent;
-struct trackDb *tdb = NULL;
-if (isCustomTrack(table))
-    {
-    struct customTrack *ct = lookupCt(table);
-    if (ct != NULL)
-        tdb = ct->tdb;
-    }
-else
-    tdb = tdbFindOrCreate(db,parent,table);
-return tdb;
-}
-
-char *findTypeForTable(char *db,struct trackDb *parent,char *table)
-/* Finds the TrackType for this Table */
-{
-struct trackDb *tdb = findTdbForTable(db,parent,table);
-if(tdb)
-    return tdb->type;
-return (parent?parent->type:NULL);
-}
-
 
 void doSubtrackMergeMore(struct sqlConnection *conn)
 /* Respond to subtrack merge create/edit button */

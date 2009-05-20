@@ -7,14 +7,14 @@
 #include "errCatch.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: asObj.c,v 1.3 2009/03/17 17:24:50 kent Exp $";
+static char const rcsid[] = "$Id: asObj.c,v 1.4 2009/05/20 20:59:55 mikep Exp $";
 
 static struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
 /* Get autoSQL description if any associated with table.   Abort if
  * there's a problem*/
 {
 struct asObject *asObj = NULL;
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     asObj = bigBedAsForTable(table, conn);
     }

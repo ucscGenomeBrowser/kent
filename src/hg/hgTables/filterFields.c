@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.74 2009/04/16 18:55:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.75 2009/05/20 20:59:56 mikep Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -262,14 +262,14 @@ static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
-struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable);
+struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 struct asObject *asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
 
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 struct slName *fieldName, *fieldList;
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     fieldList = bigBedGetFields(table, conn);
 else
     fieldList = sqlListFields(conn, table);
@@ -310,7 +310,7 @@ static void showTableFieldCt(char *db, char *table, boolean withGetButton)
 /* Put up html table with a check box for each field of custom
  * track. */
 {
-struct customTrack *ct = lookupCt(table);
+struct customTrack *ct = ctLookupName(table);
 struct slName *field, *fieldList = getBedFields(ct->fieldCount);
 
 hTableStart();
@@ -778,7 +778,7 @@ static void filterControlsForTableDb(char *db, char *rootTable)
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
-struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable);
+struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean gotFirst = FALSE;
 boolean isSmallWig = isWiggle(db, table);
 boolean isWig = isSmallWig || isBigWig(table);
@@ -820,7 +820,7 @@ else
     int fieldNum = 0;
     int noBinBedGraphColumn = bedGraphColumn;
     struct sqlFieldType *ft, *ftList;
-    if (isBigBed(table))
+    if (hIsBigBed(database, table, curTrack, ctLookupName))
         {
         ftList = bigBedListFieldsAndTypes(table, conn);
         }
@@ -920,7 +920,7 @@ cgiMakeButton(hgtaDoMainPage, "cancel");
 static void filterControlsForTableCt(char *db, char *table)
 /* Put up filter controls for a custom track. */
 {
-struct customTrack *ct = lookupCt(table);
+struct customTrack *ct = ctLookupName(table);
 puts("<TABLE BORDER=0>");
 
 if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf"))

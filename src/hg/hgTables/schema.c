@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.59 2009/04/10 20:04:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.60 2009/05/20 20:59:56 mikep Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -82,7 +82,7 @@ char query[256];
 struct slName *exampleList, *example;
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table));
+showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table, ctLookupName));
 // should we expect itemRgb instead of "reserved"
 
 safef(query, sizeof(query), "select * from %s limit 1", table);
@@ -202,7 +202,7 @@ int i, columnCount = 0;
 int itemRgbCol = -1;
 boolean showItemRgb = FALSE;
 
-showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table));
+showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table, ctLookupName));
 // should we expect itemRgb	instead of "reserved"
 
 /* Make table with header row containing name of fields. */
@@ -518,7 +518,7 @@ else
 static void showSchemaCt(char *table)
 /* Show schema on custom track. */
 {
-struct customTrack *ct = lookupCt(table);
+struct customTrack *ct = ctLookupName(table);
 char *type = ct->tdb->type;
 if (startsWithWord("wig", type) || startsWithWord("bigWig", type))
     showSchemaCtWiggle(table, ct);
@@ -544,7 +544,7 @@ showSchemaDb(wikiDbName(), tdb, table);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (isBigBed(table))
+if (hIsBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
 else if (isCustomTrack(table))
     showSchemaCt(table);

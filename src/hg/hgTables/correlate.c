@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.76 2009/04/14 14:19:52 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.77 2009/05/20 20:59:55 mikep Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -321,7 +321,7 @@ static void fillInTrackTable(struct trackTable *table,
 {
 boolean isCustomDbTable = FALSE;
 struct customTrack *ct = NULL;
-struct trackDb *tdb = findTdbForTable(database,table->tdb,table->tableName);
+struct trackDb *tdb = findTdbForTable(database,table->tdb,table->tableName, ctLookupName);
 if (tdb == NULL)
     errAbort("fillInTrackTable: tdb is NULL!");
 table->shortLabel = cloneString(tdb->shortLabel);
@@ -335,7 +335,7 @@ table->dbTableName = NULL;
 
 if (isCustomTrack(table->actualTable))
     {
-    ct = lookupCt(table->actualTable);
+    ct = ctLookupName(table->actualTable);
     table->dbTableName = ct->dbTableName;
     isCustomDbTable = TRUE;
     }
@@ -525,7 +525,7 @@ hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
-    tdb = findTdbForTable(database,track, name->name);
+    tdb = findTdbForTable(database,track, name->name, ctLookupName);
     if (correlateTrackTableOK(tdb, name->name))
 	{
 	hPrintf("<OPTION VALUE=%s", name->name);
