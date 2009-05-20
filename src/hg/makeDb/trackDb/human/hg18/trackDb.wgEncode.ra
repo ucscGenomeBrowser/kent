@@ -10968,6 +10968,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     cell GM12878
     color 153,38,0
     antibody control
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Input type=wig view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=125 dateSubmitted=2008-12-11 dateUnrestricted=2009-08-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wig.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
     release alpha
@@ -10983,6 +10984,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     cell GM12878
     color 153,38,0
     antibody control
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Input type=wig view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=125 dateSubmitted=2008-12-11 dateUnrestricted=2009-08-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wig.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
     release alpha
@@ -11277,6 +11279,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     cell K562
     color 46,0,184
     antibody control
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Input type=wig view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=125 dateSubmitted=2008-12-11 dateUnrestricted=2009-08-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wig.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
     release alpha
@@ -11292,6 +11295,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     cell K562
     color 46,0,184
     antibody control
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Input type=wig view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=125 dateSubmitted=2008-12-11 dateUnrestricted=2009-08-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wig.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
     release alpha
