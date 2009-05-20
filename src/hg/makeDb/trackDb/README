@@ -60,9 +60,10 @@ trackDb.ra file is the type field.  Here's an explanation
 of that field.  Explanations of several other less-than-obvious
 fields follow.
 
-Currently there are fourteen different track types:
+Currently there are seventeen different track types:
 axt, bed, chain, clonePos, ctgPos, expRatio, genePred,
-maf, netAlign, psl, rmsk, sample, wigMaf and wig
+maf, netAlign, psl, rmsk, sample, wigMaf, wig, bedGraph, 
+chromGraph, bigBed
 
 	(notation: <angle brackets> indicate required field,
 		[square brackets] indicate optional field)
@@ -242,6 +243,9 @@ The format of the type fields:
                             # If present labeled horizontal lines will be drawn
 			    # at the given values in full mode.
 
+17. type bigBed
+   Need description here
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -389,15 +393,19 @@ Some settings used by various tracks:
       can be found (if any) so that codons can be drawn when viewing a
       sufficiently small region.  If `table' is specified, an additional
       parameter of a table name, in cdsSpec format, is required.
-    o baseColorUseSequence {genbank,seq,extFile,none} - For genePred or psl
-      tracks.  Specifies where item sequence can be found (if any) so that
+    o baseColorUseSequence {genbank,seq,extFile,nameIsSequence,none}
+      - For genePred or psl tracks, or bed/bigBed tracks where the sequence 
+      is stored in the name column (see kent/src/hg/lib/encode/tagAlign.as).
+      Specifies where item sequence can be found (if any) so that
       item sequence, or differences from genomic sequence, can be drawn when
       viewing a sufficiently small region.  If `extFile' is specified, two
       additional parameters are required, the name of the seq table followed
       by the name of the extFile table to use in looking up the sequence.
-      These tables are loaded by hgLoadSeq.
-    o baseColorDefaults {genomicCodons,itemBases,itemCodons,diffBases,
+      These tables are loaded by hgLoadSeq. If 'nameIsSequence' is specified
+      then the name column can be interpreted as the sequence.
+    o baseColorDefault {genomicCodons,itemBases,itemCodons,diffBases,
       diffCodons,none} - For tracks with CDS and/or sequence information.
+      (See baseColorUseSequence above)
       Specifies the default drawing mode.  itemBases, itemCodons, diffBases
       and diffCodons are applicable only if the track has sequence
       (baseColorUseSequence).  genomicCodons, itemCodons and diffCodons
