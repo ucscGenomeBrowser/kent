@@ -4198,6 +4198,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in prostate whole cell)
     subGroups view=5_Alignments cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
@@ -4213,6 +4217,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 cytosol)
     subGroups view=5_Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
@@ -4228,6 +4236,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 nucleus)
     subGroups view=5_Alignments cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
@@ -4401,6 +4413,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=5_Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
@@ -4418,6 +4434,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 nucleus)
     subGroups view=5_Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
     dataVersion ENCODE Feb 2009 Freeze
@@ -4571,6 +4591,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 polysome)
     subGroups view=5_Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
@@ -4588,6 +4612,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 nucleolus)
     subGroups view=5_Alignments cellType=K562 localization=nucleolus rnaExtract=total
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
@@ -4605,6 +4633,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 nucleoplasm)
     subGroups view=5_Alignments cellType=K562 localization=nucleoplasm rnaExtract=total
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
@@ -4622,6 +4654,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 chromatin)
     subGroups view=5_Alignments cellType=K562 localization=chromatin rnaExtract=total
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
@@ -4707,6 +4743,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 cytosol)
     subGroups view=5_Alignments cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
@@ -4724,6 +4764,10 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 nucleus)
     subGroups view=5_Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-08
     dateUnrestricted 2009-12-08
     dataVersion ENCODE Feb 2009 Freeze
