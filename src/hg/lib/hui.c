@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.196 2009/05/13 23:16:00 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.197 2009/05/20 16:01:34 mikep Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -858,11 +858,11 @@ if (isNotEmpty(setting))
     {
     if (sameString(setting, "genbank") || sameString(setting, "seq") ||
 	sameString(setting, "ss") || startsWith("extFile", setting) ||
-	sameString(setting, "hgPcrResult"))
+	sameString(setting, "hgPcrResult") || sameString(setting, "nameIsSequence") )
 	gotIt = TRUE;
-    else if (sameString(setting, "none"))
+    else if (differentString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
-		 "must be one of {none,genbank,seq,extFile}.",
+		 "must be one of {none,genbank,seq,ss,extFile,nameIsSequence,hgPcrResult}.",
 		 tdb->tableName, BASE_COLOR_USE_SEQUENCE, setting);
     }
 return gotIt;
