@@ -55,6 +55,12 @@ char *cgiRequestMethod();
 char *cgiRequestUri();
 /* Return CGI REQUEST_URI */
 
+char *cgiQueryString();
+/* Return CGI QUERY_STRING */
+
+char *cgiRequestContentType();
+/* Return HTTP REQUEST CONTENT_TYPE if available*/
+
 char *cgiRequestContentLength();
 /* Return HTTP REQUEST CONTENT_LENGTH if available*/
 

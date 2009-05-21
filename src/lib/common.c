@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.123.2.1 2009/04/21 18:52:20 mikep Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.123.2.2 2009/05/21 19:07:44 mikep Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -217,22 +217,6 @@ while (*ppt != NULL)
 n->next = NULL;
 *ppt = n;
 }
-
-/* Add new node to start of list.
- * Usage:
- *    slAddHead(&list, node);
- * where list and nodes are both pointers to structure
- * that begin with a next pointer.
- */
-void slSafeAddHead(void *listPt, void *node)
-{
-struct slList **ppt = (struct slList **)listPt;
-struct slList *n = (struct slList *)node;
-
-n->next = *ppt;
-*ppt = n;
-}
-
 
 void *slPopHead(void *vListPt)
 /* Return head of list and remove it from list. (Fast) */
@@ -1128,6 +1112,25 @@ for (;;)
     }
 return s;
 }
+
+
+char *strUcFirst(char *s)
+/* Uppercase first letter of string, lowercase the rest of the string. */
+{
+char c;
+char *ss;
+if (s[0] == 0)
+    return s;
+s[0] = toupper(s[0]);
+ss = s+1;
+for (;;)
+    {
+    if ((c = *ss) == 0) break;
+    *ss++ = tolower(c);
+    }
+return s;
+}
+
 
 char *replaceChars(char *string, char *old, char *new)
 /*

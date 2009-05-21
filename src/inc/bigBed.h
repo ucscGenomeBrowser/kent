@@ -71,26 +71,9 @@ void bigBedFileCreate(
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
+	boolean clip,     /* If set silently clip out of bound coordinates. */
 	char *outName);   /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
-
-void bigBedFileCreateReadInfile(
-	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
-	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
-	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
-	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
-	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
-				    * are the defined bed ones. */
-	char *asFileName, /* If non-null points to a .as file that describes fields. */
-	char *outName,    /* BigBed output file name. */
-	struct ppBed **ppbList,   /* Input bed data, will be sorted. */
-	bits64 *count,            /* size of input pbList */
-	double *averageSize,      /* average size of elements in pbList */
-	struct hash **pChromHash,  /* Hash containing sizes of all chroms. */
-	bits16 *fieldCount,       /* actual field count from input data. */
-	struct asObject **pAs,    /* If non-null contains as object that describes fields. */
-	bits64 *fullSize);         /* full size of ppBed on disk */
-/* Load data to prepare bigBed. */
 
 void bigBedFileCreateDetailed(
 	struct ppBed *pbList, 	  /* Input bed data. Must be sorted. */
@@ -109,7 +92,8 @@ void bigBedFileCreateDetailed(
 	char *outName);            /* BigBed output file name. */
 /* create zoomed bigBed version from ppBed list. */
 
-struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, struct hash *chromHash, struct lm *lm, struct asObject *as, bits64 *diskSize);
+struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf,
+        struct hash *chromHash, boolean clip, struct lm *lm, struct asObject *as, bits64 *diskSize);
 /* Return a ppBed record from a line of bed file in lf.
    Return the disk size it would occupy in *diskSize.
    row is a preallocated array of pointers to the individual fields in this row to load.
@@ -120,6 +104,7 @@ struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, stru
    list!
    as is the autoSql object describing this bed file or NULL if standard bed.
    */
+
 
 #endif /* BIGBED_H */
 

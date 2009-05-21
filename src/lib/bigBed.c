@@ -57,7 +57,8 @@ const struct ppBed *a = *((struct ppBed **)va);
 return a->fileOffset;
 }
 
-struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, struct hash *chromHash, struct lm *lm, struct asObject *as, bits64 *diskSize)
+struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, 
+	struct hash *chromHash, boolean clip, struct lm *lm, struct asObject *as, bits64 *diskSize)
 /* Return a ppBed record from a line of bed file in lf.
    Return the disk size it would occupy in *diskSize.
    row is a preallocated array of pointers to the individual fields in this row to load.
@@ -69,17 +70,45 @@ struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, stru
    as is the autoSql object describing this bed file or NULL if standard bed.
    */
 {
-struct ppBed *pb;
-
-/* Allocate variable and fill in first three fields. */
-lmAllocVar(lm, pb);
 char *chrom = row[0];
+int start = lineFileNeedNum(lf, row, 1);
+int end = lineFileNeedNum(lf, row, 2);
+
 struct hashEl *hel = hashLookup(chromHash, chrom);
 if (hel == NULL)
     errAbort("%s is not in chrom.sizes line %d of %s", chrom, lf->lineIx, lf->fileName);
+int chromSize = ptToInt(hel->val);
+
+if (start < 0)
+    {
+    if (clip)
+        start = 0;
+    else
+        errAbort("Start coordinate %d is negative line %d of %s", start, lf->lineIx, lf->fileName);
+    }
+if (end > chromSize)
+    {
+    if (clip)
+        end = chromSize;
+    else
+        errAbort("End coordinate %d is bigger than %s, which just has %d bases. Line %d of %s",
+		end, chrom, chromSize, lf->lineIx, lf->fileName);
+    }
+if (start > end)
+    {
+    if (clip)
+        return NULL;
+    else
+        errAbort("Start coordinate %d after end coordinate %d line %d of %s",
+		start, end, lf->lineIx, lf->fileName);
+    }
+
+/* Allocate variable and fill in first three fields. */
+struct ppBed *pb;
+lmAllocVar(lm, pb);
 pb->chrom = hel->name;
-pb->start = lineFileNeedNum(lf, row, 1);
-pb->end = lineFileNeedNum(lf, row, 2);
+pb->start = start;
+pb->end = end;
 int i;
 
 /* Check remaining fields are formatted right, and concatenate them into "rest" string. */
@@ -118,7 +147,9 @@ return pb;
 }
 
 static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct lm *lm, 
-	struct asObject *as, int definedFieldCount, bits64 *retDiskSize, bits16 *retFieldCount, boolean *isSorted, bits64 *count, double *avgSize)
+	struct asObject *as, int definedFieldCount, boolean clip,
+	bits64 *retDiskSize, bits16 *retFieldCount, boolean *isSorted, 
+	bits64 *count, double *avgSize)
 /* Read bed file and return it as list of ppBeds. The whole thing will
  * be allocated in the passed in lm - don't ppBedFreeList or slFree
  * list! 
@@ -164,7 +195,9 @@ while (lineFileNextReal(lf, &line))
     int wordCount = chopByWhite(line, row, fieldAlloc);
     lineFileExpectWords(lf, fieldCount, wordCount);
     bits64 diskSize = 0;
-    pb = ppBedLoadOne(row, fieldCount, lf, chromHash, lm, as, &diskSize);
+    pb = ppBedLoadOne(row, fieldCount, lf, chromHash, clip, lm, as, &diskSize);
+    if (pb == NULL)
+        continue;
     if (*isSorted && prevChrom && prevChrom == pb->chrom && pb->start < prevStart)
 	*isSorted = FALSE; // first time through the loop prevChrom is NULL so test fails
     prevChrom = pb->chrom;
@@ -276,7 +309,7 @@ slReverse(&outList);
 return outList;
 }
 
-void bigBedFileCreate(
+static void bigBedFileCreateReadInfile(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
@@ -284,30 +317,7 @@ void bigBedFileCreate(
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
-	char *outName)    /* BigBed output file name. */
-/* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
-{
-bits16 fieldCount;
-bits64 fullSize;
-bits64 count;
-double averageSize;
-struct asObject *as = NULL;
-struct hash *chromHash = NULL;
-struct ppBed *pbList = NULL;
-bigBedFileCreateReadInfile(inName, chromSizes, blockSize, itemsPerSlot, definedFieldCount, asFileName, 
-    outName, &pbList, &count, &averageSize, &chromHash, &fieldCount, &as, &fullSize);
-bigBedFileCreateDetailed(pbList, count, averageSize, inName, chromHash, blockSize, itemsPerSlot, 
-    definedFieldCount, fieldCount, asFileName, as, fullSize, outName);
-}
-
-void bigBedFileCreateReadInfile(
-	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
-	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
-	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
-	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
-	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
-				    * are the defined bed ones. */
-	char *asFileName, /* If non-null points to a .as file that describes fields. */
+	boolean clip,     /* If set silently clip out of bound coordinates. */
 	char *outName,    /* BigBed output file name. */
 	struct ppBed **ppbList,   /* Input bed data, will be sorted. */
 	bits64 *count,            /* size of input pbList */
@@ -333,7 +343,7 @@ struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
 verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chromSizes);
 /* Load and sort input file. */
 struct ppBed *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, as, 
-	definedFieldCount, fullSize, fieldCount, &sorted, count, averageSize);
+	definedFieldCount, clip, fullSize, fieldCount, &sorted, count, averageSize);
 verbose(1, "Read %llu items from %s\n", *count, inName);
 if (!sorted)
     slSort(&pbList, ppBedCmp);
@@ -554,6 +564,32 @@ for (i=0; i<summaryCount; ++i)
 
 carefulClose(&f);
 freez(&chromInfoArray);
+}
+
+void bigBedFileCreate(
+	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
+	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
+	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
+	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
+	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
+				    * are the defined bed ones. */
+	char *asFileName, /* If non-null points to a .as file that describes fields. */
+	boolean clip,     /* If set silently clip out of bound coordinates. */
+	char *outName)    /* BigBed output file name. */
+/* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
+{
+bits16 fieldCount;
+bits64 fullSize;
+bits64 count;
+double averageSize = 0;
+struct asObject *as = NULL;
+struct hash *chromHash = NULL;
+struct ppBed *pbList = NULL;
+bigBedFileCreateReadInfile(inName, chromSizes, blockSize, itemsPerSlot, definedFieldCount, 
+	asFileName, clip, outName, &pbList, &count, &averageSize, &chromHash, &fieldCount, &as, 
+	&fullSize);
+bigBedFileCreateDetailed(pbList, count, averageSize, inName, chromHash, blockSize, itemsPerSlot, 
+    definedFieldCount, fieldCount, asFileName, as, fullSize, outName);
 }
 
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
