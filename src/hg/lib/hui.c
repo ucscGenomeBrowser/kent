@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.198 2009/05/21 19:00:00 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.199 2009/05/21 20:30:50 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2061,6 +2061,21 @@ if(members && *members)
     }
 }
 
+int multViewCount(struct trackDb *parentTdb)
+/* returns the number of multiView views declared */
+{
+char *setting = subgroupSettingByTagOrName(parentTdb,"view");
+if(setting == NULL)
+    return 0;
+
+setting = cloneString(setting);
+int cnt;
+char *words[32];
+cnt = chopLine(setting, words);
+freeMem(setting);
+return (cnt - 1);
+}
+
 #ifdef ADD_MULT_SELECT_DIMENSIONS
 // This is the beginning of work on allowing subtrack selection by multi-select drop downs
 typedef struct _selectables {
@@ -3176,9 +3191,15 @@ safef(javascript, JBUFSIZE*sizeof(char),
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static void cfgBeginBoxAndTitle(boolean boxed, char *title)
+static boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title)
 /* Handle start of box and title for individual track type settings */
 {
+if(!boxed)
+    {
+    boxed = trackDbSettingOn(tdb,"boxedCfg");
+    if(boxed)
+        printf("<BR>");
+    }
 if (boxed)
     {
     printf("<TABLE class='blueBox' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD align='RIGHT'>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
@@ -3189,6 +3210,7 @@ else if (title)
     printf("<p><B>%s &nbsp;</b>", title );
 else
     printf("<p>");
+return boxed;
 }
 
 static void cfgEndBox(boolean boxed)
@@ -3220,7 +3242,7 @@ double yLineMark;       /*  from trackDb or cart    */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
 
-cfgBeginBoxAndTitle(boxed, title);
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 wigFetchMinMaxPixelsWithCart(cart,tdb,name,&minHeightPixels, &maxHeightPixels, &defaultHeight);
 typeLine = cloneString(tdb->type);
@@ -3528,7 +3550,7 @@ boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) !
 if (! (scoreFilterOk || glvlScoreMin))
     return;
 
-cfgBeginBoxAndTitle(boxed, title);
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 if (scoreFilterOk)
     {
@@ -3589,7 +3611,7 @@ cfgEndBox(boxed);
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for net tracks */
 {
-cfgBeginBoxAndTitle(boxed, title);
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
 
@@ -3614,7 +3636,7 @@ cfgEndBox(boxed);
 void chainCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for chain tracks */
 {
-cfgBeginBoxAndTitle(boxed, title);
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
 
@@ -3648,7 +3670,7 @@ if(setting)
     {
     if(*opened == FALSE)
         {
-        cfgBeginBoxAndTitle(boxed, title);
+        boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
         puts("<TABLE>");
         *opened = TRUE;
         }
@@ -3842,7 +3864,7 @@ if(setting)
     {
     if(!opened)
         {
-        cfgBeginBoxAndTitle(boxed, title);
+        boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
         puts("<TABLE>");
         opened = TRUE;
         }
@@ -3888,7 +3910,7 @@ char varName[64];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *geneLabel = cartUsualStringClosestToHome(cart, tdb,compositeLevel, "label", "gene");
 
-cfgBeginBoxAndTitle(boxed, title);
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 if (sameString(name, "acembly"))
     {
@@ -4203,7 +4225,7 @@ bool lowerFirstChar = TRUE;
 int i;
 char option[MAX_SP_SIZE];
 
-cfgBeginBoxAndTitle(boxed, title);
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *framesTable = trackDbSetting(tdb, "frames");
@@ -4551,8 +4573,6 @@ struct trackDb *subtrack;
 if(!dimensionsExist(parentTdb))
     return FALSE;
 
-hCompositeDisplayViewDropDowns(db, cart,parentTdb);  // If there is a view dimension, it is at top
-
 int ixX,ixY,ixZ;
 members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
 members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
@@ -4811,13 +4831,6 @@ bool hasSubgroups = (trackDbSetting(parentTdb, "subGroup1") != NULL);
 if(dimensionsExist(parentTdb))
     return FALSE;
 
-if(subgroupingExists(parentTdb,"view"))
-    {
-    hCompositeDisplayViewDropDowns(db, cart,parentTdb);
-    if(subgroupCount(parentTdb) <= 1)
-        return TRUE;
-    }
-
 puts ("<TABLE>");
 if (hasSubgroups)
     {
@@ -4957,6 +4970,7 @@ bool hasSubgroups = (trackDbSetting(tdb, "subGroup1") != NULL);
 boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
+boolean viewsOnly = FALSE;
 
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
@@ -4971,11 +4985,19 @@ if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
 
-if (!hasSubgroups || !isMatrix || primarySubtrack)
-    hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
-else
-    hCompositeUiByMatrix(db, cart,tdb,formName);
-
+if(subgroupingExists(tdb,"view"))
+    {
+    hCompositeDisplayViewDropDowns(db, cart,tdb);
+    if(subgroupCount(tdb) <= 1)
+        viewsOnly = TRUE;
+    }
+if(!viewsOnly)
+    {
+    if (!hasSubgroups || !isMatrix || primarySubtrack)
+        hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
+    else
+        hCompositeUiByMatrix(db, cart,tdb,formName);
+    }
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 if (displayAll)
