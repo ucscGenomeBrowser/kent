@@ -19,7 +19,7 @@
 #   - buildRoot - gbRoot directory on buildServer
 #   - db1 - List of databses to update
 #
-# $Id: gbCopyStep,v 1.17 2008/07/18 18:02:02 markd Exp $
+# $Id: gbCopyStep,v 1.18 2009/05/21 04:23:12 markd Exp $
 #
 use strict;
 use warnings;
@@ -29,18 +29,6 @@ use lib "$FindBin::Bin/../lib";
 use gbCommon;
 
 my $checksum = 0;
-
-# Get the port option to use with rsync
-sub getRSyncPortOpt($) {
-    my($rsyncPort) = @_;
-    if ($rsyncPort eq "rsh") {
-        return "--rsh=/usr/bin/rsh";
-    }
-    if ($rsyncPort eq "ssh") {
-        return "--rsh=ssh";
-    }
-    return "--port=$rsyncPort";
-}
 
 # use rsync to get build.time file, return path to file, or undef it
 # can't be retrieved.

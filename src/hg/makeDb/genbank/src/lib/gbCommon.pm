@@ -32,7 +32,7 @@ BEGIN {
                            getRelDownloadDir
                            getSeqDownloadDir getMafDownloadDir
                            getBlatTargetDbDir checkOnBuildServer
-                           unlinkFiles);
+                           unlinkFiles getRSyncPortOpt);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -1006,6 +1006,20 @@ sub unlinkFiles(@) {
         }
     }
 }
+
+# Get the port option to use with rsync, which can be rsh or ssh or a port
+# number
+sub getRSyncPortOpt($) {
+    my($rsyncPort) = @_;
+    if ($rsyncPort eq "rsh") {
+        return "--rsh=/usr/bin/rsh";
+    }
+    if ($rsyncPort eq "ssh") {
+        return "--rsh=ssh";
+    }
+    return "--port=$rsyncPort";
+}
+
 
 # perl requires a true value at the end
 1;
