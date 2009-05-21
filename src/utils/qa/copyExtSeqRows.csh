@@ -88,7 +88,7 @@ if ( "setup" != $run && "real" != $run ) then
 endif
 
 # check to see if it is a single fileName or a fileList
-file $filelist | egrep "ASCII text" > /dev/null
+file $filelist | egrep -q "ASCII"
 if (! $status) then
  set files=`cat $filelist`
 else
