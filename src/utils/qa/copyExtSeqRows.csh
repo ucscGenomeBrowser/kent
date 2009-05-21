@@ -35,19 +35,19 @@ set extraFiles='XXextFileDropFromBetaRealXX'
 # usage statement
 if ( $#argv != 4 ) then
  echo
- echo " Automatically copies appropriate rows from the extFile and seq tables"
- echo " from hgwdev to hgwbeta.  (You may want to send an email to browser-qa"
- echo " telling them 'hands off' the extFile and seq tables for now.)"
+ echo " Automatically copies appropriate rows from the extFile and seq tables\
+ from hgwdev to hgwbeta.  (You may want to send an email to browser-qa\
+ telling them 'hands off' the extFile and seq tables for now.)"
  echo 
  echo "    usage: db [file | fileList] [new | update] [setup | real]"
  echo 
- echo " Accepts either one fileName or a file containing a list of fileNames."
- echo " Does not accept wildcards (* or %)."
- echo " Use entire path to file like so: /gbdb/db/.../fileName."
- echo " If this is a data update to a track, even if the file names are unique,"
- echo "   run with 'update', else run with 'new'.\n"
- echo " This script must be run TWICE: first run with 'setup',"
- echo "   then review the output, if it's OK, then run again with 'real'.\n"
+ echo " Accepts either one fileName or a file containing a list of fileNames.\
+ Does not accept wildcards (* or %).\
+ Use entire path to file like so: /gbdb/db/.../fileName.\
+ If this is a data update to a track, even if the file names are unique,\
+  run with 'update', else run with 'new'.\n\
+ This script must be run TWICE: first run with 'setup',\
+  then review the output, if it's OK, then run again with 'real'.\n"
  exit 1
 else
  set db=$argv[1]
@@ -71,18 +71,18 @@ if ( "$dbs" != $db ) then
 endif
 
 if ( "new" != $type && "update" != $type ) then
- echo "\n ERROR: Third argument must specify if this is 'new' data or a data"
- echo " 'update'. If the track already exists, and these data will write"
- echo " over what's there (even if the old/new file names are different)"
- echo " choose 'update'.  Otherwise, choose 'new'.\n"
+ echo "\n ERROR: Third argument must specify if this is 'new' data or a data\
+  'update'. If the track already exists, and these data will write\
+  over what's there (even if the old/new file names are different)\
+  choose 'update'.  Otherwise, choose 'new'.\n"
  $0
  exit 1
 endif
 
 if ( "setup" != $run && "real" != $run ) then
- echo "\n ERROR: Fourth argument must specify if this is a setup run or a real"
- echo " run. Run it for the first time as 'setup', then review the output."
- echo " If everything looks okay, run it again as 'real'.\n"
+ echo "\n ERROR: Fourth argument must specify if this is a setup run or a real\
+  run. Run it for the first time as 'setup', then review the output.\
+  If everything looks okay, run it again as 'real'.\n"
  $0
  exit 1
 endif
@@ -111,11 +111,11 @@ endif
 foreach oneFile ( $files )
  ls -l $oneFile | egrep "$db|hgFixed" > /dev/null
  if ( $status ) then
-  echo "\n ERROR: one or more of the file name(s) you provided either doesn't"
-  echo " exist or the file path doesn't contain the database name you"
-  echo " provided. Are you sure you gave the correct file name and path?"
-  echo "        Your database name: $db"
-  echo "        Your bad file name: $oneFile\n"
+  echo "\n ERROR: one or more of the file name(s) you provided either doesn't\
+   exist or the file path doesn't contain the database name you\
+   provided. Are you sure you gave the correct file name and path?\
+        Your database name: $db\
+        Your bad file name: $oneFile\n"
   exit 1
  else
   echo $oneFile >> XXsetupFileListXX
@@ -130,7 +130,7 @@ if ( 'setup' == $run ) then
   if ( $status ) then
    echo "\n ERROR: one or more of the file(s) in your list are not of the"
    echo " expected type. Typical file types in the extFile table end in "
-   echo " .maf or .fa (or somtimes .fasta)\n"
+   echo " .maf or .fa (or sometimes .fasta)\n"
    echo "      Your bad file: $oneFile\n"
    exit 1
   endif
