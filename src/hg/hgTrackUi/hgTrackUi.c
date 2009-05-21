@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.489 2009/05/19 20:38:57 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.490 2009/05/21 20:32:35 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2471,7 +2471,7 @@ if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 /* Display visibility menu */
-if (tdbIsComposite(tdb) && dimensionsExist(tdb))
+if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
     printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
 else
     printf("<B>Display&nbsp;mode:&nbsp;</B>");
