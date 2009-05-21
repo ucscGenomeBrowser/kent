@@ -11,6 +11,7 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
+onintr cleanup
 
 set db=""
 set split=""
@@ -47,12 +48,11 @@ echo "Org: $Org"
 # -------------------------------------------------
 # get chroms from chromInfo:
 
-if ( $split == "unsplit" ) then
-  getChromlist.csh $db > /dev/null
-else
-  getChromlist.csh $db
-endif
+getChromlist.csh $db > $db.chromlist$$
 
+if ( $split != "unsplit" ) then
+  cat $db.chromlist$$
+endif
 
 
 # ------------------------------------------------
@@ -77,7 +77,7 @@ rm -f $db.$track.offEnd
 if ( $split == "unsplit" ) then
   checkOffend.csh $db $trackname
 else
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     # echo " chrom: $chrom"
     # echo " chrom_track:  ${chrom}_$track"
     hgsql -N -e "SELECT chromInfo.chrom, chromInfo.size, \
@@ -106,7 +106,7 @@ if ( $split == "unsplit" ) then
 else
 # not really needed and too complicated here.
 # the chances of this being broken are very small
-#   foreach chrom (`cat $db.chromlist`)
+#   foreach chrom (`cat $db.chromlist$$`)
 #     hgsql -N -e "SELECT DISTINCT qSize, qName FROM ${chrom}_chain$Org \
 #       GROUP by qSize" $db | sort -nr > ${chrom}.query.size
 #     commTrio.csh ${chrom}.query.size $otherDb.size   
@@ -123,8 +123,8 @@ if ( $split == "unsplit" ) then
   echo
   echo "checking that all chroms (scaffolds) have chains in chain table"
   hgsql -N -e "SELECT DISTINCT(tName) FROM $track" $db | sort > $db.$track.chroms
-  commTrio.csh $db.chromlist $db.$track.chroms
-  if ( `wc -l $db.chromlist.Only | awk '{print $1}'` > 0 ) then
+  commTrio.csh $db.chromlist$$ $db.$track.chroms
+  if ( `wc -l $db.chromlist$$.Only | awk '{print $1}'` > 0 ) then
     # some chroms have not chains.  display links.
     # get multiz info for link
     set multiz=`hgsql -N -e "SHOW TABLES LIKE 'multiz%'" $db | head -1`
@@ -132,7 +132,7 @@ if ( $split == "unsplit" ) then
     if ( $multiz != "" ) then
       set multiz="&${multiz}=pack"
     endif
-    foreach seq ( `head -3 $db.chromlist.Only` )
+    foreach seq ( `head -3 $db.chromlist$$.Only` )
       echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack$multiz"
     end
     echo "get some DNA from these and see how it blats on $otherDb"
@@ -166,7 +166,7 @@ if ( $split == "unsplit" ) then
     echo "${track} has $var3 records with tStart >= tEnd"
   endif
 else
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set var3=`hgsql -N -e "SELECT COUNT(*) FROM ${chrom}_${track} \
        WHERE tStart >= tEnd" $db`
     if ($var3 != 0) then
@@ -185,3 +185,5 @@ endif
 
 echo
 echo "the end."
+cleanup:
+rm -f $db.chromlist$$

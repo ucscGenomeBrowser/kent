@@ -11,6 +11,7 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
+onintr cleanup
 
 set db=""
 set split=""
@@ -80,7 +81,7 @@ findLevel.csh $db chain$Org
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo
 
-getChromlist.csh $db > /dev/null
+getChromlist.csh $db > $db.chromlist$$
 rm -f $db.$Org.pushlist
 rm -f $db.$Org.pushlistLink
 if ( $split == "unsplit" ) then
@@ -90,7 +91,7 @@ if ( $split == "unsplit" ) then
   echo
 else
   # make push list for split tables
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     echo $chrom
     echo ${chrom}_$track >> $db.$Org.pushlist
     echo ${chrom}_${track}Link >> $db.$Org.pushlist
@@ -126,7 +127,7 @@ if ( $split == "unsplit" ) then
   echo
 else
   echo "if there is no output here, then it passes."
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set numTNames=`hgsql -N -e "SELECT COUNT(DISTINCT(tName)) \
      FROM ${chrom}_chain$Org" $db`
     if ($numTNames != 1) then
@@ -173,7 +174,7 @@ endif
 # find size of longest chrom name for format purposes
 if ( $split != "unsplit" ) then
   set length=0
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set len=`echo $chrom | awk '{print length($1)}'`
     if ( $len > $length ) then
       set length=$len
@@ -200,7 +201,7 @@ else
     | gawk '{ printf("%-'${length}'s %8s %12s \n", $1, $2, $3) }'
   echo "-----" "---" "---" \
     | gawk '{ printf("%-'${length}'s %8s %12s \n", $1, $2, $3) }'
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set min = `hgsql -N -e "SELECT MIN(score) FROM ${chrom}_chain${Org}" $db`
     set max = `hgsql -N -e "SELECT MAX(score) FROM ${chrom}_chain${Org}" $db`  
     echo $chrom	$min $max \
@@ -228,14 +229,14 @@ else
   echo "rowcounts are listed - pay attention to counts of 0"
   echo
   echo "for chrN_chain${Org}:"
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set var1=`hgsql -N -e "SELECT COUNT(*) FROM ${chrom}_chain${Org}" $db`
     echo ${chrom}_chain${Org} $var1 \
       | gawk '{ printf("%-'${longlength}'s %6s \n", $1, $2) }'
   end
   echo
   echo "for chrN_chain${Org}Link:"
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set var1=`hgsql -N -e "SELECT COUNT(*) FROM ${chrom}_chain${Org}Link" $db`
     set longer=`echo $longlength | awk '{print $1+5}'`
     echo ${chrom}_chain${Org}Link $var1 \
@@ -280,7 +281,7 @@ else
   echo "------  ---------  ---------" \
       | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
   rm -f badStrands
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     set badStrands=`hgsql -N -e 'SELECT COUNT(*) FROM '$chrom'_chain'$Org' \
       WHERE qStrand != "-" AND qStrand != "+"' $db`
     # echo $badStrands
@@ -343,7 +344,7 @@ if ( $split == "unsplit" ) then
   echo "can't check chrom ordering on unsplit chroms right now"
 else
   echo  "tStart:"
-  foreach chrom (`cat $db.chromlist`)
+  foreach chrom (`cat $db.chromlist$$`)
     # echo $chrom
     hgsql -N -e "SELECT tStart FROM ${chrom}_${track}" $db \
       > $db.$track.tStart
@@ -387,3 +388,5 @@ echo  "-------------------------------------------------"
 echo
 
 echo "the end."
+cleanup:
+rm -f $db.chromlist$$

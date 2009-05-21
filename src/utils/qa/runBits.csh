@@ -10,6 +10,7 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
+onintr cleanup
 
 set checkUnbridged="false"
 set db=""
@@ -80,7 +81,6 @@ if ( -z $db.gapFile ) then
   # no overlap to gap.  clean up and quit
   echo
   rm -f $db.gapFile
-  rm -f $db.chromlist
   exit
 else
   set gapUrlFile[1]=$db.gapFile
@@ -100,10 +100,8 @@ if ( $checkUnbridged == "true" ) then
      WHERE bridge = 'no'" > $db.unbridgedGap.bed
   else
     # gap is split.  go thru all chroms
-    if (! -e $db.chromlist ) then
-      getChromlist.csh $db > /dev/null
-    endif
-    foreach chrom (`cat $db.chromlist`)
+    getChromlist.csh $db > $db.chromlist$$
+    foreach chrom (`cat $db.chromlist$$`)
       hgsql $db -N -e "SELECT chrom, chromStart, chromEnd FROM ${chrom}_gap \
        WHERE bridge = 'no'" >> $db.unbridgedGap.bed
     end
@@ -140,9 +138,10 @@ foreach n ( 1 2 )
   endif
 end
 
+cleanup:
 rm -f $db.unbridgedGap.bed
 rm -f $track.bed
-rm -f $db.chromlist
+rm -f $db.chromlist$$
 rm -f $db.gapFile
 rm -f $gapUrlFile[1]
 rm -f $gapUrlFile[2]

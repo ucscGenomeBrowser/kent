@@ -10,6 +10,7 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
+onintr cleanup
 
 set db=""
 set trackname=""
@@ -92,7 +93,7 @@ echo
 # -------------------------------------------------
 # get chroms from chromInfo:
 
-getChromlist.csh $db > /dev/null
+getChromlist.csh $db > $db.chromlist$$
 
 # -------------------------------------------------
 # check for each chrom having data:
@@ -105,7 +106,7 @@ echo 'if this list is long (as in scaffold assemblies), grep for "Look" \
       to get past the list'
 set var=""
 
-foreach chrom (`cat $db.chromlist`)
+foreach chrom (`cat $db.chromlist$$`)
   set var=` hgsql -N -e 'SELECT COUNT(*) from 'net$Org' \
      WHERE tName = "'$chrom'"' $db`
   if ($var == 0) then
@@ -510,3 +511,5 @@ getTableSize.csh $db pushlist2 hgwdev
 rm -f pushlist2
 
 echo "the end."
+cleanup:
+rm -f $db.chromlist$$

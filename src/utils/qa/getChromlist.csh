@@ -1,11 +1,10 @@
 #!/bin/tcsh
 source `which qaConfig.csh`
 
-
 ################################
-#  04-09-04
+#  04-09-04 (revised 5/20/09, brooke)
 #
-#  Writes a file with the chromnames for that assembly.
+#  Prints the chrom names for an assembly.
 #
 ################################
 
@@ -14,7 +13,7 @@ set norandom=""
 
 if ($#argv < 1 || $#argv >2 ) then
   echo
-  echo "  writes a file with the chromnames for an assembly."
+  echo "  prints the chrom names for an assembly."
   echo
   echo "    usage:  database [norandom]"
   echo
@@ -34,14 +33,8 @@ if ( $#argv == 2 ) then
   endif
 endif
 
-# echo "list chroms"
-
 if ($norandom == "true") then
-  hgsql -N -e "SELECT chrom FROM chromInfo" $db | grep -v "random" | sort \
-    > $db.chromlist
+  hgsql -N -e "SELECT chrom FROM chromInfo" $db | grep -v "random" | sort
 else
-  hgsql -N -e "SELECT chrom FROM chromInfo" $db | sort \
-    > $db.chromlist
+  hgsql -N -e "SELECT chrom FROM chromInfo" $db | sort
 endif
-
-cat $db.chromlist

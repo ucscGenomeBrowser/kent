@@ -8,6 +8,8 @@ source `which qaConfig.csh`
 #
 ####################
 
+onintr cleanup
+
 set split=""
 set db=""
 set table=""
@@ -72,13 +74,12 @@ rm -f $outfile
 if ( $split == "" ) then
     hgsql -Ne "SELECT $chr, $start, $end FROM $table" $db > $outfile
 else
-  if (! -e $db.chromlist ) then
-    getChromlist.csh $db > /dev/null
-  endif
-  foreach chrom (`cat $db.chromlist`)
+  getChromlist.csh $db > $db.chromlist$$
+  foreach chrom (`cat $db.chromlist$$`)
     hgsql -Ne "SELECT $chr, $start, $end FROM ${chrom}_$table" $db >> $outfile
   end
 endif
 
-rm -f $db.chromlist
+cleanup:
+rm -f $db.chromlist$$
 exit
