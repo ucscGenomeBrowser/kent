@@ -853,6 +853,9 @@ boolean subgroupFind(struct trackDb *childTrack, char *name,char **value);
 void subgroupFree(char **value);
 /* frees subgroup memory */
 
+int multViewCount(struct trackDb *parentTdb);
+/* returns the number of multiView views declared */
+
 int tvConvertToNumericOrder(enum trackVisibility v);
 /* Convert the enum to numeric order of display power full=4,hide=0 */
 
