@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.97 2009/05/20 21:01:45 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.98 2009/05/21 01:02:04 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -274,7 +274,7 @@ karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 tier 3
-protocol Stam:HMEK_Stam_protocol.pdf
+protocol HMEC_Stam_protocol.pdf
 
 term Jurkat
 type Cell Line
