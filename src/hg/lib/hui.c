@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.197 2009/05/20 16:01:34 mikep Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.198 2009/05/21 19:00:00 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3352,12 +3352,34 @@ if (scoreMinStr != NULL)
     }
 }
 
-static boolean getScoreLimits(struct trackDb *tdb, char *scoreName,char *defaults,char**min,char**max)
+static boolean getScoreDefaultsFromTdb(struct trackDb *tdb, char *scoreName,char *defaults,char**min,char**max)
+/* returns TRUE if defaults exist and sets the string pointer (because they may be float or int)
+   if min or max are set, then they should be freed */
+{
+if(min)
+    *min = NULL; // default these outs!
+if(max)
+    *max = NULL;
+char *setting = trackDbSettingClosestToHome(tdb, scoreName);
+if(setting)
+    {
+    if(strchr(setting,':') != NULL)
+        return colonPairToStrings(setting,min,max);
+    else if(min)
+        *min = cloneString(setting);
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean getScoreLimitsFromTdb(struct trackDb *tdb, char *scoreName,char *defaults,char**min,char**max)
 /* returns TRUE if limits exist and sets the string pointer (because they may be float or int)
    if min or max are set, then they should be freed */
 {
-*min = NULL; // default these outs!
-*max = NULL;
+if(min)
+    *min = NULL; // default these outs!
+if(max)
+    *max = NULL;
 char scoreLimitName[128];
 safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _LIMITS);
 char *setting = trackDbSettingClosestToHome(tdb, scoreLimitName);
@@ -3367,27 +3389,33 @@ if(setting)
     }
 else
     {
-    safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MIN);
-    setting = trackDbSettingClosestToHome(tdb, scoreLimitName);
-    if(setting)
-        *min = cloneString(setting);
-    safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MAX);
-    setting = trackDbSettingClosestToHome(tdb, scoreLimitName);
-    if(setting)
-        *max = cloneString(setting);
+    if(min)
+        {
+        safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MIN);
+        setting = trackDbSettingClosestToHome(tdb, scoreLimitName);
+        if(setting)
+            *min = cloneString(setting);
+        }
+    if(max)
+        {
+        safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MAX);
+        setting = trackDbSettingClosestToHome(tdb, scoreLimitName);
+        if(setting)
+            *max = cloneString(setting);
+        }
     return TRUE;
     }
-if(defaults != NULL && (*min == NULL || *max == NULL))
+if(defaults != NULL && ((min && *min == NULL) || (max && *max == NULL)))
     {
     char *minLoc=NULL;
     char *maxLoc=NULL;
     if(colonPairToStrings(defaults,&minLoc,&maxLoc))
         {
-        if(*min == NULL && minLoc != NULL)
+        if(min && *min == NULL && minLoc != NULL)
             *min=minLoc;
         else
             freeMem(minLoc);
-        if(*max == NULL && maxLoc != NULL)
+        if(max && *max == NULL && maxLoc != NULL)
             *max=maxLoc;
         else
             freeMem(maxLoc);
@@ -3405,23 +3433,24 @@ static void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, cha
 {
 char scoreLimitName[128];
 char *deMin=NULL,*deMax=NULL;
-if(limitMin || limitMax)
+if((limitMin || limitMax) && getScoreLimitsFromTdb(tdb,scoreName,NULL,&deMin,&deMax))
     {
-    getScoreLimits(tdb,scoreName,NULL,&deMin,&deMax);
-    if(deMin != NULL)
-        {
-        if(limitMin)
-            *limitMin = atoi(deMin);
-        freeMem(deMin);
-        }
-    if(deMax != NULL)
-        {
-        if(limitMax)
-            *limitMax = atoi(deMax);
-        freeMem(deMax);
-        }
+    if(deMin != NULL && limitMin)
+        *limitMin = atoi(deMin);
+    if(deMax != NULL && limitMax)
+        *limitMax = atoi(deMax);
+    freeMem(deMin);
+    freeMem(deMax);
     }
-
+if((min || max) && getScoreDefaultsFromTdb(tdb,scoreName,NULL,&deMin,&deMax))
+    {
+    if(deMin != NULL && min)
+        *min = atoi(deMin);
+    if(deMax != NULL && max)
+        *max =atoi(deMax);
+    freeMem(deMin);
+    freeMem(deMax);
+    }
 if(max)
     {
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MAX);
@@ -3436,6 +3465,10 @@ if(min)
     if(deMin != NULL)
         *min = atoi(deMin);
     }
+if(min && limitMin && *min < *limitMin) *min = *limitMin; // defaults within range
+if(min && limitMax && *min > *limitMax) *min = *limitMax;
+if(max && limitMax && *max > *limitMax) *max = *limitMax;
+if(max && limitMin && *max < *limitMin) *max = *limitMin;
 }
 
 static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, char *scoreName,
@@ -3446,23 +3479,24 @@ static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, c
 {
 char scoreLimitName[128];
 char *deMin=NULL,*deMax=NULL;
-if(limitMin || limitMax)
+if((limitMin || limitMax) && getScoreLimitsFromTdb(tdb,scoreName,NULL,&deMin,&deMax))
     {
-    getScoreLimits(tdb,scoreName,NULL,&deMin,&deMax);
-    if(deMin != NULL)
-        {
-        if(limitMin)
-            *limitMin = strtod(deMin,NULL);
-        freeMem(deMin);
-        }
-    if(deMax != NULL)
-        {
-        if(limitMax)
-            *limitMax =strtod(deMax,NULL);
-        freeMem(deMax);
-        }
+    if(deMin != NULL && limitMin)
+        *limitMin = strtod(deMin,NULL);
+    if(deMax != NULL && limitMax)
+        *limitMax =strtod(deMax,NULL);
+    freeMem(deMin);
+    freeMem(deMax);
     }
-
+if((min || max) && getScoreDefaultsFromTdb(tdb,scoreName,NULL,&deMin,&deMax))
+    {
+    if(deMin != NULL && min)
+        *min = strtod(deMin,NULL);
+    if(deMax != NULL && max)
+        *max =strtod(deMax,NULL);
+    freeMem(deMin);
+    freeMem(deMax);
+    }
 if(max)
     {
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MAX);
@@ -3477,6 +3511,10 @@ if(min)
     if(deMin != NULL)
         *min = strtod(deMin,NULL);
     }
+if(min && limitMin && *min < *limitMin) *min = *limitMin; // defaults within range
+if(min && limitMax && *min > *limitMax) *min = *limitMax;
+if(max && limitMax && *max > *limitMax) *max = *limitMax;
+if(max && limitMin && *max < *limitMin) *max = *limitMin;
 }
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
@@ -4608,9 +4646,12 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf("<TH align='right' WIDTH=\"100\"><EM><B>%s</EM></B>:</TH>", dimensionX->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)
             {
-            char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
-            printf("<TH WIDTH=\"100\">%s</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
-            freeMem(label);
+            if(tdbsX[ixX] != NULL)
+                {
+                char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
+                printf("<TH WIDTH=\"100\">%s</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
+                freeMem(label);
+                }
             }
         }
     else if(dimensionY)
@@ -4628,11 +4669,14 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=RIGHT><EM><B>%s</EM></B></TH><TD>&nbsp;</TD>",COLOR_BG_ALTDEFAULT, dimensionY->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
             {
-            puts("<TD>");
-            safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
-            BUTTON_PLUS_ONE( objName,dimensionX->names[ixX]);
-            BUTTON_MINUS_ONE(objName,dimensionX->names[ixX]);
-            puts("</TD>");
+            if(tdbsX[ixX] != NULL)
+                {
+                puts("<TD>");
+                safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
+                BUTTON_PLUS_ONE( objName,dimensionX->names[ixX]);
+                BUTTON_MINUS_ONE(objName,dimensionX->names[ixX]);
+                puts("</TD>");
+                }
             }
         puts("</TR>\n");
         }
@@ -4640,64 +4684,70 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     // Now the Y by X matrix
     for (ixY = 0; ixY < sizeOfY; ixY++)
         {
-        assert(!dimensionY || ixY < dimensionY->count);
-        printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
-        if(dimensionY == NULL) // 'All' buttons go here if no Y dimension
+        if(tdbsY[ixY] != NULL)
             {
-            printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-            BUTTON_PLUS_ALL();
-            BUTTON_MINUS_ALL();
-            puts("</TH>");
-            }
-        else if(ixY < dimensionY->count)
-            printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,tdbsY[ixY],dimensionY->tag,dimensionY->values[ixY]));
-        else
-            break;
-
-        if(dimensionX && dimensionY) // Both X and Y, then column of buttons
-            {
-            puts("<TD>");
-            safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
-            BUTTON_PLUS_ONE( objName,dimensionY->names[ixY]);
-            BUTTON_MINUS_ONE(objName,dimensionY->names[ixY]);
-            puts("</TD>");
-            }
-        for (ixX = 0; ixX < sizeOfX; ixX++)
-            {
-            assert(!dimensionX || ixX < dimensionX->count);
-            if(dimensionX && ixX == dimensionX->count)
-                break;
-            if(cells[ixX][ixY] > 0)
+            assert(!dimensionY || ixY < dimensionY->count);
+            printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
+            if(dimensionY == NULL) // 'All' buttons go here if no Y dimension
                 {
-                if(dimensionX && dimensionY)
-                    {
-                    safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
-                    safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\",\"%s\");'",
-                          dimensionX->names[ixX],dimensionY->names[ixY]);
-                    }
-                else
-                    {
-                    safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                    safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
-                          (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                    }
-                alreadySet = cartUsualBoolean(cart, objName, FALSE);
+                printf("<TH ALIGN=CENTER WIDTH=\"100\">");
+                BUTTON_PLUS_ALL();
+                BUTTON_MINUS_ALL();
+                puts("</TH>");
+                }
+            else if(ixY < dimensionY->count)
+                printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,tdbsY[ixY],dimensionY->tag,dimensionY->values[ixY]));
+            else
+                break;
+
+            if(dimensionX && dimensionY) // Both X and Y, then column of buttons
+                {
                 puts("<TD>");
-                struct dyString *dyJS = newDyString(100);
-                dyStringPrintf(dyJS, javascript);
-                dyStringPrintf(dyJS, " class=\"matrixCB");
-                if(dimensionX)
-                    dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
-                if(dimensionY)
-                    dyStringPrintf(dyJS, " %s",dimensionY->names[ixY]);
-                dyStringAppendC(dyJS,'"');
-                cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
+                safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
+                BUTTON_PLUS_ONE( objName,dimensionY->names[ixY]);
+                BUTTON_MINUS_ONE(objName,dimensionY->names[ixY]);
                 puts("</TD>");
                 }
-            else
-                puts("<TD>&nbsp;</TD>");
+            for (ixX = 0; ixX < sizeOfX; ixX++)
+                {
+                if(tdbsX[ixX] != NULL)
+                    {
+                    assert(!dimensionX || ixX < dimensionX->count);
+                    if(dimensionX && ixX == dimensionX->count)
+                        break;
+                    if(cells[ixX][ixY] > 0)
+                        {
+                        if(dimensionX && dimensionY)
+                            {
+                            safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
+                            safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\",\"%s\");'",
+                                dimensionX->names[ixX],dimensionY->names[ixY]);
+                            }
+                        else
+                            {
+                            safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
+                            safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
+                                (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
+                            }
+                        alreadySet = cartUsualBoolean(cart, objName, FALSE);
+                        puts("<TD>");
+                        struct dyString *dyJS = newDyString(100);
+                        dyStringPrintf(dyJS, javascript);
+                        dyStringPrintf(dyJS, " class=\"matrixCB");
+                        if(dimensionX)
+                            dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
+                        if(dimensionY)
+                            dyStringPrintf(dyJS, " %s",dimensionY->names[ixY]);
+                        dyStringAppendC(dyJS,'"');
+                        cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
+                        puts("</TD>");
+                        }
+                    else
+                        puts("<TD>&nbsp;</TD>");
+                    }
+                }
+            puts("</TR>\n");
             }
-        puts("</TR>\n");
         }
     if(dimensionZ)
         {
@@ -4705,13 +4755,13 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         printf("<TH class='greenRoof' STYLE='font-size: 2' colspan=50>&nbsp;</TH>");
         printf("<TR BGCOLOR='%s'><TH valign=top align=left colspan=2 rowspan=20><B><EM>%s</EM></B>:",
                COLOR_BG_ALTDEFAULT,dimensionZ->title);
+        int cntZ=0;
         for(ixZ=0;ixZ<sizeOfZ;ixZ++)
-            if(cellsZ[ixZ]>0)
+            {
+            if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
                 {
-                if(ixZ > 0 && (ixZ % sizeOfX) == 0)
-                    {
+                if(cntZ > 0 && (cntZ % sizeOfX) == 0)
                     printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-                    }
                 printf("<TH align=left nowrap>");
                 safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
                 safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
@@ -4722,7 +4772,14 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
                 printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
                 puts("</TH>");
+                cntZ++;
                 }
+            }
+        while((cntZ % sizeOfX) > 0) // fill in the rest of the row
+            {
+            printf("<TH>&nbsp;</TH>");
+            cntZ++;
+            }
         }
     puts("</TD></TR></TABLE>");
     subgroupMembersFree(&dimensionX);
