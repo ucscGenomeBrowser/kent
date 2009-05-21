@@ -109,7 +109,7 @@ endif
 # NOTE: This is a potential problem in the rare case where 
 # the db name (or hgFixed) is *not* embedded in the file path.
 foreach oneFile ( $files )
- ls -l $oneFile | egrep "$db|hgFixed" > /dev/null
+ ls -l $oneFile | egrep -q "$db|hgFixed"
  if ( $status ) then
   echo "\n ERROR: one or more of the file name(s) you provided either doesn't\
    exist or the file path doesn't contain the database name you\
@@ -126,7 +126,7 @@ end
 if ( 'setup' == $run ) then
  # check that the fileName(s) end in either .maf, .fa or .fasta (very rare)
  foreach oneFile ( $files )
-  ls $oneFile | egrep 'maf$|fa$|fasta$' > /dev/null
+  ls $oneFile | egrep -q 'maf$|fa$|fasta$'
   if ( $status ) then
    echo "\n ERROR: one or more of the file(s) in your list are not of the"
    echo " expected type. Typical file types in the extFile table end in "
