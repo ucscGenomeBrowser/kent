@@ -286,6 +286,8 @@ if ( 'setup' == $run ) then
  echo "  entires (quite often the items are preceeded by a '>')." 
  echo "    e.g. cat /gbdb/../../fileName | grep '>' | wc -l\n"
 
+echo "\nthe end.\n"
+exit 0
 ### END SETUP RUN
 endif
 
@@ -517,8 +519,7 @@ if ( 'real' == $run ) then
  echo "  deleted (it is OK if not all of the files exist):\n"
  echo "     $listOfFiles $extraFiles\n"
 
-### END REAL RUN
-endif
-
 echo "\nthe end.\n"
 exit 0
+### END REAL RUN
+endif
