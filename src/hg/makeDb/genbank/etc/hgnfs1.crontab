@@ -7,4 +7,4 @@ MAILTO=genbank@cse.ucsc.edu
 PATH=/usr/local/bin:/usr/bin:/bin
 
 # poll every hour at 20 minutes after
-20 0-23 * * */genbank/etc/hgnfs1-copy
+20 0-23 * * * /genbank/etc/hgnfs1-copy
