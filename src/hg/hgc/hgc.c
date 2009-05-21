@@ -222,7 +222,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1545 2009/05/20 18:08:22 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1546 2009/05/21 19:24:12 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8569,6 +8569,82 @@ void doGad(struct trackDb *tdb, char *item, char *itemForUrl)
 {
 genericHeader(tdb, item);
 printGadDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void printDecipherDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of a DECIPHER entry. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *strand={"+"};
+
+printf("<H3>Patient %s </H3>", itemName);
+
+/* print phenotypes */
+safef(query, sizeof(query),
+      "select distinct phenotype from decipherRaw where id ='%s'", itemName);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL) 
+    {
+    printf("<B>Phenotype: </B><UL>");
+    while (row != NULL)
+    	{
+	printf("<LI>");
+	printf("%s\n", row[0]);
+	row = sqlNextRow(sr);
+        }
+    printf("</UL>");
+    }
+sqlFreeResult(&sr);
+
+/* link to Ensembl DECIPHER Patient View page */
+printf("For more details of patient %s, click ", itemName);
+printf("<A HREF=\"%s%s\" target=_blank>",
+       "https://decipher.sanger.ac.uk/application/patient/", itemName);
+printf("here</A>.<BR><BR>");
+
+/* print position inof */
+safef(query, sizeof(query),
+      "select chrom, chromStart, chromEnd from decipher where name ='%s'", itemName);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL) 
+    {
+    printPosOnChrom(row[0], atoi(row[1]), atoi(row[2]), strand, TRUE, itemName);
+    }
+sqlFreeResult(&sr);
+    
+/* print UCSC Genes in the reported region */
+safef(query, sizeof(query),
+      "select distinct geneSymbol, kgId, description from decipher d, kgXref x, knownToDecipher t where value ='%s' and t.name=kgId", itemName);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL) 
+    {
+    printf("<BR><B>UCSC Gene(s) in this genomic region: </B><UL>");
+    while (row != NULL)
+    	{
+	printf("<LI>");
+        printf("<A HREF=\"%s%s\" target=_blank>","./hgGene\?hgg_chrom=none&hgg_gene=", row[1]);
+        printf("%s (%s)</A> ", row[0], row[1]);
+	printf(" %s", row[2]);
+	row = sqlNextRow(sr);
+        }
+    printf("</UL>");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doDecipher(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up DECIPHER track info. */
+{
+genericHeader(tdb, item);
+printDecipherDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -21566,6 +21642,10 @@ else if (sameWord(track, "rgdSslp"))
 else if (sameWord(track, "gad"))
     {
     doGad(tdb, item, NULL);
+    }
+else if (sameWord(track, "decipher"))
+    {
+    doDecipher(tdb, item, NULL);
     }
 else if (sameWord(track, "omimGene"))
     {
