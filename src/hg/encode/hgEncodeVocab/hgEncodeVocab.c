@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.21 2009/03/06 22:33:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.22 2009/05/21 01:05:12 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -65,7 +65,7 @@ else if (sameString(type,"localization"))
     }
 else if (sameString(type,"Cell Line"))
     {
-    puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
+    puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
     }
 #ifdef HANDLE_IMPLICIT_CONTROL
 else if (sameWord(type,"control") || sameWord(type,"input"))
@@ -203,16 +203,8 @@ else if (sameString(type,"Cell Line"))
     ++(*total);
     puts("<TR>");
 
-    /* add link to protocol doc if it exists */
-#define PROTOCOL_DIR "/ENCODE/protocols/cell/"
-    char protocolUrl[PATH_LEN];
-    safef(protocolUrl, sizeof(protocolUrl), "%s%s_protocol.pdf", PROTOCOL_DIR, term);
-    char protocolFile[PATH_LEN];
-    safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
-    if (fileExists(protocolFile))
-        printf(" <TD><A STYLE=\"text-decoration:none\"HREF=%s TARGET=_BLANK>%s</A></TD>\n", protocolUrl, term);
-    else
-        printf("  <TD>%s</TD>\n", term);
+    printf("  <TD>%s</TD>\n", term);
+
     s = hashFindVal(ra, "tier");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
     s = hashFindVal(ra, "description");
@@ -221,6 +213,48 @@ else if (sameString(type,"Cell Line"))
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
     s = hashFindVal(ra, "karyotype");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+
+#define PROTOCOL_DIR "/ENCODE/protocols/cell/"
+#define PROTOCOL_TITLE "protocol"
+    // add links to protocol doc if it exists
+    printf("  <TD>");
+    char protocolUrl[PATH_LEN];
+    char protocolFile[PATH_LEN];
+    // parse Protocol setting
+    s = hashFindVal(ra,"protocol");
+    if(s != NULL)
+        {
+        char *protocolSetting = cloneString(s);
+        char *settings=protocolSetting;
+        while((s = nextWord(&settings)) != NULL)
+            {
+            char *title = NULL;
+            char *fileName = NULL;
+            if(strchr(s,':')) // lab Specific setting
+                {
+                title = strSwapChar(s,':',0);
+                fileName = title + strlen(title) + 1;
+                }
+            else
+                {
+                title = PROTOCOL_TITLE;
+                fileName = s;
+                }
+            safef(protocolUrl, sizeof(protocolUrl), "%s%s", PROTOCOL_DIR, fileName);
+            safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
+            if (fileExists(protocolFile))
+                printf(" <A STYLE=\"text-decoration:none\"HREF=%s TARGET=_BLANK>%s</A>\n", protocolUrl,title);
+            }
+        freeMem(protocolSetting);
+        }
+    else
+        { // generate a standard name
+        safef(protocolUrl, sizeof(protocolUrl), "%s%s_protocol.pdf", PROTOCOL_DIR, term);
+        safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
+        if (fileExists(protocolFile))
+            printf(" <A STYLE=\"text-decoration:none\"HREF=%s TARGET=_BLANK>%s</A>\n", protocolUrl,PROTOCOL_TITLE);
+        }
+    printf("  &nbsp;</TD>\n");
 
     s = hashFindVal(ra, "vendorName");
     char *t = hashFindVal(ra, "vendorId");
