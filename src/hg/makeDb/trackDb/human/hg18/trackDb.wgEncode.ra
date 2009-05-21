@@ -4448,39 +4448,39 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya.tagAlign.gz
 
-    track wgEncodeRikenCagePlusClustersK562PolysomeLongpolya
+    track wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 psom pA+ +
-    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 polysome)
-    subGroups view=1_PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
+    shortLabel K562 psom pA- +
+    longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 polysome)
+    subGroups view=1_PlusClusters cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    rnaExtract longPolyA
+    rnaExtract longNonPolyA
     localization polysome
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=polysome view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562PolysomeLongpolya fileName=wgEncodeRikenCagePlusClustersK562PolysomeLongpolya.bedGraph4.gz
+    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=PlusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
-    track wgEncodeRikenCageMinusClustersK562PolysomeLongpolya
+    track wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 psom pA+ -
-    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 polysome)
-    subGroups view=3_MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
+    shortLabel K562 psom pA- -
+    longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 polysome)
+    subGroups view=3_MinusClusters cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type bedGraph 4
     dateSubmitted 2009-02-19
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    rnaExtract longPolyA
+    rnaExtract longNonPolyA
     localization polysome
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=polysome view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562PolysomeLongpolya fileName=wgEncodeRikenCageMinusClustersK562PolysomeLongpolya.bedGraph4.gz
+    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
 #    release alpha
@@ -4584,12 +4584,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562ChromatinTotal fileName=wgEncodeRikenCageMinusClustersK562ChromatinTotal.bedGraph4.gz
 
-    track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
+    track wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya
 #    release alpha
     subTrack wgEncodeRikenCage
-    shortLabel K562 psom pA+
-    longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 polysome)
-    subGroups view=5_Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
+    shortLabel K562 psom pA-
+    longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 polysome)
+    subGroups view=5_Alignments cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
@@ -4599,11 +4599,11 @@ wgEncode 1
     dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    rnaExtract longPolyA
+    rnaExtract longNonPolyA
     localization polysome
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=polysome view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562PolysomeLongpolya fileName=wgEncodeRikenCageAlignmentsK562PolysomeLongpolya.tagAlign.gz
+    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
 #    release alpha
