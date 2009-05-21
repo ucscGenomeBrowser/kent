@@ -30,6 +30,10 @@
 #ifndef BED_H
 #include "bed.h"
 #endif
+
+#ifndef CUSTOMTRACK_H
+#include "customTrack.h"
+#endif
 struct chromInfo;
 
 /* At or below this number of sequences, allow split tables: */
@@ -41,6 +45,7 @@ struct chromInfo;
 #define HDB_MAX_FIELD_STRING 32
 #define HDB_MAX_TABLE_STRING 128
 #define HDB_MAX_PATH_STRING 512
+
 
 struct blatServerTable
 /* Information about a BLAT server. */
@@ -793,5 +798,29 @@ boolean isUnknownChrom(char *dataBase, char *chromName);
 char *hGenbankModDate(char *acc, struct sqlConnection *conn);
 /* Get string for genbank last modification date, or NULL if not found..
  * Free resulting string. */
+
+struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table));
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
+
+char *findTypeForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table));
+/* Finds the TrackType for this Table */
+
+boolean trackIsType(char *database, char *table, struct trackDb *parent, char *type, struct customTrack *(*ctLookupName)(char *table));
+/* Return TRUE track is a specific type.  Type should be something like "bed" or
+ * "bigBed" or "bigWig" 
+ * if table has no parent trackDb pass NULL for parent 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
+
+boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table));
+/* Return TRUE if table corresponds to a bigBed file. 
+ * if table has no parent trackDb pass NULL for parent 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * custom track by name, otherwise pass NULL
+ */
 
 #endif /* HDB_H */

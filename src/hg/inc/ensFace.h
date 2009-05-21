@@ -6,11 +6,14 @@
 char *ensOrgName(char *ucscOrgName);
 /* Convert from ucsc to Ensembl organism name */
 
-struct dyString *ensContigViewUrl(char *ensOrg, char *chrom, int chromSize,
-	int winStart, int winEnd, char *archive);
+struct dyString *ensContigViewUrl(char *database, char *ensOrg, char *chrom,
+	int chromSize, int winStart, int winEnd, char *archive);
 /* Return a URL that will take you to ensembl's contig view on a chrom. */
 
 char *ensOrgNameFromScientificName(char *scientificName);
 /* Convert from ucsc to Ensembl organism name. */
+
+#define UCSC_TO_ENSEMBL "ucscToEnsembl"
+#define ENSEMBL_LIFT "ensemblLift"
 
 #endif /* ENSFACE_H */

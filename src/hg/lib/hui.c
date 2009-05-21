@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.141.2.2 2009/04/30 22:43:06 mikep Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.141.2.3 2009/05/21 21:02:34 mikep Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -44,7 +44,7 @@ static boolean makeNamedDownloadsLink(struct trackDb *tdb,char *name)
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    printf("<P><A HREF=\"http://%s/goldenPath/%s/%s/%s/\" TARGET=ucscDownloads>%s</A></P>\n",
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open dowloads directory in a new window' TARGET=ucscDownloads>%s</A>",
             cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu"),
             trackDbSettingOrDefault(tdb, "origAssembly","hg18"),
             ENCODE_DCC_DOWNLOADS,
@@ -63,7 +63,7 @@ return makeNamedDownloadsLink(tdb,"Downloads");
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
-#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>\n"
+#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
 if (hTableOrSplitExists(db, tdb->tableName))
     {
 	char *tableName  = tdb->tableName;
@@ -72,8 +72,6 @@ if (hTableOrSplitExists(db, tdb->tableName))
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
-    else
-        hint = " title='View table schema'";
 
     if(tdbIsCompositeChild(tdb))
         printf(SCHEMA_LINKED, db, tdb->parent->grp, tdb->parent->tableName,tableName,hint,label);
@@ -84,6 +82,77 @@ if (hTableOrSplitExists(db, tdb->tableName))
     }
 return FALSE;
 }
+
+boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel)
+/* If metadata exists, create a link that will allow toggling it's display */
+{
+metadata_t *metadata = metadataSettingGet(tdb);
+if(metadata != NULL)
+    {
+    printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
+           (embeddedInText?"&nbsp;":"<P>"),tdb->tableName,tdb->tableName, title);
+    printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->tableName);
+    if(showLongLabel)
+        printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+    printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    int ix = (sameString(metadata->values[0],"wgEncode")?1:0); // first should be project.
+    for(;ix<metadata->count;ix++)
+        {
+        if(sameString(metadata->tags[ix],"fileName"))
+            {
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",metadata->tags[ix]);
+            makeNamedDownloadsLink(tdb->parent != NULL? tdb->parent :tdb ,metadata->values[ix]);
+            printf("</td></tr>");
+            }
+        else
+            if(!sameString(metadata->tags[ix],"subId")
+                && !sameString(metadata->tags[ix],"composite"))
+            printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",metadata->tags[ix],metadata->values[ix]);
+        }
+    printf("</table>--></div>");
+    metadataFree(&metadata);
+    return TRUE;
+    }
+return FALSE;
+}
+
+void extraUiLinks(char *db,struct trackDb *tdb)
+/* Show downlaods, schema and metadata links where appropriate */
+{
+boolean schemaLink = (isCustomTrack(tdb->tableName) == FALSE)
+                  && (hTableOrSplitExists(db, tdb->tableName));
+boolean metadataLink = (!tdbIsComposite(tdb))
+                  && trackDbSetting(tdb, "metadata");
+boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL);
+boolean moreThanOne = (schemaLink && metadataLink)
+                   || (schemaLink && downloadLink)
+                   || (downloadLink && metadataLink);
+
+printf("<P>");
+if(moreThanOne)
+    printf("<table><tr><td nowrap>View table: ");
+
+if(schemaLink)
+    {
+    makeSchemaLink(db,tdb,(moreThanOne ? "schema":"View table schema"));
+    if(downloadLink || metadataLink)
+        printf(", ");
+    }
+if(downloadLink)
+    {
+    struct trackDb *trueTdb = tdbIsCompositeChild(tdb)? tdb->parent: tdb;
+    makeNamedDownloadsLink(trueTdb,(moreThanOne ? "downloads":"Downloads"));
+    if(metadataLink)
+        printf(",");
+    }
+if (metadataLink)
+    metadataToggle(tdb,"metadata", TRUE, TRUE);
+
+if(moreThanOne)
+    printf("</td></tr></table>");
+puts("</P>");
+}
+
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -789,11 +858,11 @@ if (isNotEmpty(setting))
     {
     if (sameString(setting, "genbank") || sameString(setting, "seq") ||
 	sameString(setting, "ss") || startsWith("extFile", setting) ||
-	sameString(setting, "hgPcrResult"))
+	sameString(setting, "hgPcrResult") || sameString(setting, "nameIsSequence") )
 	gotIt = TRUE;
-    else if (sameString(setting, "none"))
+    else if (differentString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
-		 "must be one of {none,genbank,seq,extFile}.",
+		 "must be one of {none,genbank,seq,ss,extFile,nameIsSequence,hgPcrResult}.",
 		 tdb->tableName, BASE_COLOR_USE_SEQUENCE, setting);
     }
 return gotIt;
@@ -2223,6 +2292,7 @@ if(sortOrder != NULL)   // Add some sort buttons
 return item;
 }
 
+
 static int sortableTdbItemsCmp(const void *va, const void *vb)
 // Compare two sortable tdb items based upon sort columns.
 {
@@ -2255,6 +2325,7 @@ if(items != NULL && *items != NULL)
     }
 }
 
+
 void sortableTdbItemsFree(sortableTdbItem **items)
 // Frees all memory associated with a list of sortable tdb items
 {
@@ -2271,6 +2342,7 @@ if(items != NULL && *items != NULL)
     slFreeList(items);
     }
 }
+
 
 static boolean colonPairToStrings(char * colonPair,char **first,char **second)
 { // Will set *first and *second to NULL.  Must free any string returned!  No colon: value goes to *first
@@ -2293,6 +2365,7 @@ if(colonPair != NULL)
     }
 return FALSE;
 }
+
 static boolean colonPairToInts(char * colonPair,int *first,int *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
@@ -2315,6 +2388,7 @@ if(colonPairToStrings(colonPair,&a,&b))
     }
 return FALSE;
 }
+
 static boolean colonPairToDoubles(char * colonPair,double *first,double *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
@@ -2484,17 +2558,18 @@ static void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
 if(filterBySet == NULL)
     return;
 
+#define FILTERBY_HELP_LINK  "<A HREF=\"../../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if(count == 1)
     puts("<BR><TABLE cellpadding=3><TR valign='top'>");
 else
-    puts("<BR><B>Filter by</B> (select multiple categories and items)<TABLE cellpadding=3><TR valign='top'>");
+    printf("<BR><B>Filter by</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 filterBy_t *filterBy = NULL;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     puts("<TD>");
     if(count == 1)
-        printf("<B>Filter by %s</B> (select multiple items)<BR>\n",filterBy->title);
+        printf("<B>Filter by %s</B> (select multiple items - %s)<BR>\n",filterBy->title,FILTERBY_HELP_LINK);
     else
         printf("<B>%s</B><BR>\n",filterBy->title);
     int fullSize = slCount(filterBy->slValues)+1;
@@ -2754,47 +2829,40 @@ switch(cType)
 }
 
 char *encodeRestrictionDateDisplay(struct trackDb *trackDb)
-/* Create a string for ENCODE restriction date of this track */
+/* Create a string for ENCODE restriction date of this track
+   if return is not null, then free it after use */
 {
 if (!trackDb)
     return NULL;
-char *date = NULL;
 boolean addMonths = FALSE;
-metadata_t *metadata = metadataSettingGet(trackDb);
-if(metadata != NULL)
+char *date = metadataSettingFind(trackDb,"dateUnrestricted");
+if(date == NULL)
     {
-    int ix=0;
-    for(;ix<metadata->count;ix++)
-        {
-        if (sameString(metadata->tags[ix],"dateUnrestricted"))
-            {
-            date = metadata->values[ix];
-            addMonths = FALSE;
-            break;
-            }
-        else  if (date == NULL && sameString(metadata->tags[ix],"dateSubmitted"))
-            {
-            date = metadata->values[ix];
-            addMonths = TRUE;
-            }
-        }
+    date = metadataSettingFind(trackDb,"dateSubmitted");
+    addMonths = TRUE;
     }
 if(date == NULL)
-    date = trackDbSetting(trackDb, "dateUnrestricted");
-if(date != NULL)
-    addMonths = FALSE;
-else
     {
-    addMonths = TRUE;
+    addMonths = FALSE;
+    date = trackDbSetting(trackDb, "dateUnrestricted");
+    if(date)
+        date = cloneString(date); // all returns should be freeable memory
+    }
+if(date == NULL)
+    {
     date = trackDbSetting(trackDb, "dateSubmitted");
+    if(date)
+        {
+        addMonths = TRUE;
+        date = cloneString(date); // all returns should be freeable memory
+        }
     }
 if (date != NULL)
     {
-    date = strSwapChar(cloneString(date), ' ', 0);   // Truncate time
+    date = strSwapChar(date, ' ', 0);   // Truncate time
     if(addMonths)
         date = dateAddToAndFormat(date, "%F", 0, 9, 0);
     }
-metadataFree(&metadata);
 return date;
 }
 
@@ -3038,6 +3106,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
+            metadataToggle(subtrack,"...",TRUE,FALSE);
+            printf("</div>");
 
             metadata_t *metadata = metadataSettingGet(subtrack);
             if(metadata != NULL)
@@ -3104,7 +3174,6 @@ sortOrderFree(&sortOrder);
 dividersFree(&dividers);
 hierarchyFree(&hierarchy);
 }
-
 
 static void compositeUiAllSubtracks(char *db, struct cart *cart, struct trackDb *tdb,
 				    char *primarySubtrack)
@@ -4296,6 +4365,8 @@ for(ix=0;ix<cnt;ix++)
         break;
         }
     }
+// At this point we need to search the cart to see if any others are already expanded.
+// cart var of style "wgEncodeYaleChIPseq.Peaks.showCfg" {parentTable}.{view}.showCfg value='on'
 freeMem(target);
 return expanded;
 }
@@ -4379,6 +4450,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         }
     }
 puts("<TD><A HREF=\"../../goldenPath/help/multiView.html\" TARGET=_BLANK>Help on views</A></TD>");
+// Need to do the same for ENCODE Gencode 'filterBy's
 puts("</TR>");
 if(makeCfgRows)
     {
@@ -4427,7 +4499,7 @@ if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=ucscVocab>%s</A>\n"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
         int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+strlen(label) + 2;
@@ -4442,13 +4514,14 @@ for(ix=1;ix<count && !found;ix++)
         if(sameString(vocabType,words[ix]))  // tags match, but search for term
             {
             char * cvSetting = words[ix] + strlen(words[ix]) + 1;
-            char * cvTerm = trackDbSetting(childTdb, cvSetting);
+            char * cvTerm = metadataSettingFind(childTdb, cvSetting);
             if(cvTerm != NULL)
                 {
                 int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(cvTerm)+strlen(label) + 2;
                 char *link=needMem(sz);
                 safef(link,sz,VOCAB_LINK,words[0],cvTerm,label);
                 freeMem(words[0]);
+                freeMem(cvTerm);
                 return link;
                 }
             }
@@ -4675,7 +4748,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 alreadySet = cartUsualBoolean(cart, objName, FALSE);
                 struct dyString *dyJS = newDyString(100);
                 dyStringPrintf(dyJS, javascript);
-                dyStringPrintf(dyJS, " class=\"matrixCB %s\"",dimensionZ->names[ixZ]);
+                dyStringPrintf(dyJS, " class=\"matrixCB dimZ %s\"",dimensionZ->names[ixZ]);
                 cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
                 printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
                 puts("</TH>");

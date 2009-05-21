@@ -29,7 +29,8 @@ char *wrapWhiteFont(char *s);
 
 #define ENCODE_DATA_RELEASE_POLICY "/ENCODE/terms.html"
 char *encodeRestrictionDateDisplay(struct trackDb *trackDb);
-/* Create a string for ENCODE restriction date of this track */
+/* Create a string for ENCODE restriction date of this track
+   if return is not null, then free it after use */
 
 char *hDocumentRoot();
 /* get the path to the DocumentRoot, or the default */
@@ -1012,5 +1013,11 @@ boolean makeDownloadsLink(struct trackDb *tdb);
 
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 // Make a table schema link (if appropriate and then returns TRUE)
+
+boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText,boolean showLongLabel);
+/* If metadata exists, create a link that will allow toggling it's display */
+
+void extraUiLinks(char *db,struct trackDb *tdb);
+/* Show downlaods, schema and metadata links where appropriate */
 
 #endif /* HUI_H */

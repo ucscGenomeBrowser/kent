@@ -24,8 +24,9 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
+#include "udc.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.92.4.1 2009/04/21 19:00:34 mikep Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.92.4.2 2009/05/21 21:02:33 mikep Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -2172,6 +2173,25 @@ hashElFreeList(&fileSettings);
 return isLive;
 }
 
+static void touchUdcSettings(struct trackDb *tdb)
+/* Touch existing local udcCache bitmap and sparse files.  */
+{
+char *url = trackDbSetting(tdb, "dataUrl");
+if (url)
+    {
+    struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
+    for (el = list; el; el = el->next)
+	{
+	if (fileExists(el->name))
+	    {
+	    readAndIgnore(el->name);
+	    verbose(4, "setting dataUrl: %s\n", el->name);
+	    }
+	}
+    slFreeList(&list);
+    }
+}
+
 void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
@@ -2236,7 +2256,13 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* don't verify database for custom track -- we might be testing existence 
      * for another database. */
 
+
+    /* Handle File* settings */
     isLive = (isLive && testFileSettings(track->tdb, fileName));
+
+    
+    /* Handle dataUrl udc settings */
+    touchUdcSettings(track->tdb);
 
     if (track->dbDataLoad)
 	/* Track was loaded into the database -- check if it still exists. */

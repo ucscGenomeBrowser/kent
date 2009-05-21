@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.45.16.2 2009/04/30 22:43:06 mikep Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.45.16.3 2009/05/21 21:02:35 mikep Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -198,6 +198,10 @@ else if (sameWord(var, "private"))
 else if (sameWord(var, "group"))
     {
     replaceStr(&td->grp, overTd->grp);
+    }
+else if (sameWord(var, "release"))
+    {
+    // ignore -- it was pruned by pruneRelease before this was called.
     }
 else	/* Add to settings. */
     {
@@ -745,7 +749,6 @@ if(tdbIsCompositeChild(tdb) && subgroupFind(tdb,"view",&view))
 return NULL;
 }
 
-
 char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name)
 /* Look for a trackDb setting from lowest level on up:
    from subtrack, then composite, then settingsByView, then composite */
@@ -873,3 +876,24 @@ if(metadata && *metadata)
     }
 }
 
+char *metadataSettingFind(struct trackDb *tdb,char *name)
+/* Looks for a specific metadata setting and returns the value or null
+   returned value should be freed */
+{
+metadata_t *metadata = metadataSettingGet(tdb);
+if(metadata == NULL)
+    return NULL;
+
+int ix=0;
+char *setting = NULL;
+for(;ix<metadata->count;ix++)
+    {
+    if (sameString(metadata->tags[ix],name))
+        {
+        setting = cloneString(metadata->values[ix]);
+        break;
+        }
+    }
+metadataFree(&metadata);
+return setting;
+}

@@ -49,6 +49,25 @@ fprintf(xfh, "(\"%s\", \"%c\", %d,%s), ", pdbSnp->snpId, pdbSnp->chain,
         pdbSnp->snpPdbLoc, (isPrimary ? " True" : ""));
 }
 
+static FILE *chimeraxBegin(char *outName)
+/* open chimerax file and write XML and python function definitions */
+{
+FILE *xfh = mustOpen(outName, "w");
+fputs(chimeraxHead, xfh);
+
+FILE *pxf = mustOpen(chimeraxPythonFile, "r");
+copyOpenFile(pxf, xfh);
+carefulClose(&pxf);
+return xfh;
+}
+
+static void chimeraxEnd(FILE **xfhPtr)
+/* finish writing XML and close chimerax function */
+{
+fputs(chimeraxTail, *xfhPtr);
+carefulClose(xfhPtr);
+}
+
 static void chimeraxGen(struct sqlConnection *conn,
                         char *pdbId, char *where,
                         char *primarySnpId,
@@ -58,12 +77,7 @@ static void chimeraxGen(struct sqlConnection *conn,
  * obtain from the lsSnpPdb table.
  */
 {
-FILE *xfh = mustOpen(outName, "w");
-fputs(chimeraxHead, xfh);
-
-FILE *pxf = mustOpen(chimeraxPythonFile, "r");
-copyOpenFile(pxf, xfh);
-carefulClose(&pxf);
+FILE *xfh = chimeraxBegin(outName);
 
 fprintf(xfh, "\ndisplayPdb(\"%s\", (", pdbId);
 
@@ -79,8 +93,7 @@ lsSnpPdbFreeList(&pdbSnps);
 
 fprintf(xfh, "))\n");
 
-fputs(chimeraxTail, xfh);
-carefulClose(&xfh);
+chimeraxEnd(&xfh);
 }
 
 void lsSnpPdbChimeraSnpAnn(struct sqlConnection *conn,
@@ -160,3 +173,23 @@ if (snpId != NULL)
     safecat(url, sizeof(url), fmtParam(sep, "snpId", snpId));
 return cloneString(url);
 }
+
+void lsSnpPdbChimeraGenericLink(char *pdbSpec, char *script,
+                                char *trashDirName, char *trashBaseName,
+                                struct tempName *chimerax)
+/* Generate a chimerax file for the given pdbSpec, which can be a PDB id or a
+ * URL.  Copies in the lsSnpPdbChimera.py file and then adds optional script python code.
+ * Fills in chimerax structure.
+ * FIXME: This is an experiment for H1N1 flu browser, this function has
+ * nothing to do with LS/SNP.  If we decide to keep this, this should be
+ * split into a generic chimera module.
+ */
+{
+trashDirFile(chimerax, trashDirName, trashBaseName, ".chimerax");
+FILE *xfh = chimeraxBegin(chimerax->forCgi);
+fprintf(xfh, "\ndisplayPdb(\"%s\", ())\n", pdbSpec);
+if (script != NULL)
+    fputs(script, xfh);
+chimeraxEnd(&xfh);
+}
+
