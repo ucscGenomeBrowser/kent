@@ -35,12 +35,11 @@ if ( $#argv < 2 ||  $#argv > 4 ) then
   echo "  check to see if there are annotations on all chroms."
   echo "    will check to see if chrom field is named tName or genoName."
   echo
-  echo "    usage:  database table [oldDb] [hgwbeta | hgsqlbeta | RR]"
+  echo "    usage:  database1 table [database2] [RR]"
   echo
-  echo "      checks on dev"
-  echo "      oldDb will be checked on other machine if specified"
-  echo "        otherwise checked on hgsqlbeta"
-  echo "      RR will use genome-mysql"
+  echo "      checks database1 on dev"
+  echo "      database2 will be checked on beta by default"
+  echo "        RR will use genome-mysql if specified"
   echo
   exit
 else
@@ -51,15 +50,12 @@ endif
 if ( $#argv == 3 ) then
   if ( $argv[3] == "RR" ) then
     set host2="mysql -h genome-mysql -u genome -A"
-  else
-    set host2="hgsql -h hgsqlbeta"
-  endif
-  if ( $argv[3] == "hgwbeta"|| $argv[3] == "hgsqlbeta" || $argv[3] == "RR") then
     set oldDb=$db
     set machineOut="(${argv[3]})"
   else
     # argv[3] must be a db
     set oldDb=$argv[3] 
+    set host2="hgsql -h $sqlbeta"
     set machineOut="(hgwbeta)"
   endif
 endif
@@ -67,8 +63,8 @@ endif
 if ( $#argv == 4 ) then
   set oldDb=$argv[3]
   set machineOut="(${argv[4]})"
-  if ( $argv[4] == "hgwbeta"|| $argv[4] == "hgsqlbeta" ) then
-    set host2="hgsql -h hgsqlbeta"
+  if ( $argv[4] == "hgwbeta" ) then
+    set host2="hgsql -h $sqlbeta"
   endif
   if ( $argv[4] == "RR" ) then
     set host2="mysql -h genome-mysql -u genome -A"
@@ -84,7 +80,7 @@ endif
 set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
 set split=`getSplit.csh $db $table`
 if ( $status ) then
-  echo "\n  maybe the database is not present?\n"
+  echo "\n  the database or table may not exist\n"
   exit
 endif
 
