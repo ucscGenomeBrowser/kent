@@ -56,9 +56,17 @@ endif
 
 set split=`getSplit.csh $db gap hgwdev` 
 
+#check to see if track can pack.
+if ( 1 == `hgsql -Ne 'SELECT canPack FROM trackDb \
+     WHERE tableName = "'$track'"' $db` ) then
+  set pack=pack
+else
+  set pack=full
+endif
+
 #set up urls
 set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
-set url3="&$track=pack&gap=pack"
+set url3="&$track=$pack&gap=pack"
 
 # ------------------------------------------------
 # featureBits
