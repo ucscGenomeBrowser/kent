@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.9 2009/05/18 17:25:09 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.10 2009/05/22 20:24:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,10 +22,10 @@ errAbort(
 "snpNcbiToUcsc - Reformat NCBI SNP field values into UCSC, and flag exceptions.\n"
 "usage:\n"
 "   snpNcbiToUcsc ucscNcbiSnp.bed db.2bit snpNNN\n"
-/* could add options to provide support for different dbSNP versions.
 "options:\n"
-"   -xxx=XXX\n"
-*/
+"   -1000GenomesRsIds=file      Text file with one number per line, numerically\n"
+"                               sorted, specifying RS IDs for submissions by the\n"
+"                               1000 Genomes Project.\n"
 "\n"
 "Converts NCBI's representation of SNP data into UCSC's, and checks for\n"
 "consistency.  Typically NNN is the dbSNP release number; snpNNN is the\n"
@@ -56,8 +56,11 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"1000GenomesRsIds", OPTION_STRING},
+    {NULL, 0},
 };
+
+char *oneKGenomesRsIds = NULL;
 
 #define UPDATE_CODE "update this program and possibly hgTracks/hgc/hgTrackUi."
 
@@ -149,8 +152,9 @@ char *validBitStrings[] = {
 "by-submitter",
 "by-2hit-2allele",
 "by-hapmap",
+"by-1000genomes", // UCSC's local addition
 };
-boolean validBitStringsUsed[VALID_BITS];
+boolean validBitStringsUsed[VALID_BITS+1];
 
 /* These strings and their positions must correspond to the values in
  * $ftpBcp/SnpFunctionCode.bcp.gz / ASN (but ASN doesn't have
@@ -225,7 +229,7 @@ for (i = 0;  i < MAX_CLASS+2+1;  i++)
     classStringsUsed[i] = FALSE;
 for (i = 0;  i < MAX_LOCTYPE+1;  i++)
     locTypeStringsUsed[i] = FALSE;
-for (i = 0;  i < VALID_BITS;  i++)
+for (i = 0;  i < VALID_BITS+1;  i++)
     validBitStringsUsed[i] = FALSE;
 for (i = 0;  i < MAX_FUNC+1;  i++)
     functionStringsUsed[i] = FALSE;
@@ -233,6 +237,8 @@ for (i = 0;  i < MAX_FUNC+1;  i++)
  * default value: */
 classStringsUsed[0] = 1;
 }
+
+#define isMissing(val) (sameString("MISSING", val) || sameString("NULL", val))
 
 void tallyMoltype(struct lineFile *lf, char *molType)
 /* Keep track of what molTypes are actually used. */
@@ -244,7 +250,7 @@ for (i = 0;  i < MAX_MOLTYPE+1;  i++)
 	molTypeStringsUsed[i] = TRUE;
 	return;
 	}
-if (sameString(molType, "MISSING"))
+if (isMissing(molType))
     molTypeStringsUsed[0] = TRUE;
 else
     lineFileAbort(lf, "Unrecognized molType %s", molType);
@@ -296,7 +302,7 @@ writeCodes(f, classStrings, classStringsUsed, MAX_CLASS+2+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  valid set(");
-writeCodes(f, validBitStrings, validBitStringsUsed, VALID_BITS+1);
+writeCodes(f, validBitStrings, validBitStringsUsed, VALID_BITS+1+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  avHet float NOT NULL default '0',\n"
@@ -597,23 +603,78 @@ safef(class, classSize, "%s", classStrings[classNum]);
 classStringsUsed[classNum] = TRUE;
 }
 
+static void chopTrailingComma(char *str)
+/* MySQL doesn't like trailing commas in set values, so if present, chop it. */
+{
+int last = strlen(str) - 1;
+if (last >= 0 && str[last] == ',')
+    str[last] = '\0';
+}
+
+#define ONEKG_MAXCOUNT (8 * 1024 * 1024)
+
+int *oneKGIds = NULL;
+int oneKGIdCount = 0;
+
+void read1KGIds()
+/* Slurp in file of numerically sorted rs IDs into array of ints. */
+{
+struct lineFile *lf = lineFileOpen(oneKGenomesRsIds, TRUE);
+char *words[1];
+oneKGIds = needMem(ONEKG_MAXCOUNT * sizeof(int));
+while (lineFileRow(lf, words))
+    {
+    oneKGIds[oneKGIdCount++] = lineFileNeedFullNum(lf, words, 0);
+    if (oneKGIdCount >= 2 && oneKGIds[oneKGIdCount-1] <= oneKGIds[oneKGIdCount-2])
+	lineFileAbort(lf, "Error: IDs must be sorted numerically and unique (use sort -nu).");
+    }
+}
+
+boolean binSearchInt(int *target, int targetSize, int query)
+/* Perform binary search in sorted array of integers, return TRUE if found. */
+{
+int low = 0, high = targetSize-1;
+while (high >= low)
+    {
+    int mid = (low + high) >> 1;
+    if (query < target[mid])
+	high = mid-1;
+    else if (query > target[mid])
+	low = mid+1;
+    else
+	return TRUE;
+    }
+return FALSE;
+}
+
+static boolean is1000Genomes(int rsId)
+/* Return TRUE if rsID appears in numerically sorted file named by -1000GenomesRsIds. */
+{
+if (oneKGIds == NULL)
+    read1KGIds();
+return binSearchInt(oneKGIds, oneKGIdCount, rsId);
+}
+
 void processValid(struct lineFile *lf, int validNum,
-		  char valid[], size_t validSize)
+		  char valid[], size_t validSize, int rsId)
 /* Translate and check validation status bit flags. */
 {
 static struct dyString *validList = NULL;
 if (validNum < 0)
     validNum = 0;
 if (validNum > MAX_VALID)
-    lineFileAbort(lf, "Unrecognized class number %d (max is %d).\n"
+    lineFileAbort(lf, "Unrecognized validation number %d (max is %d).\n"
 		  "If %d is valid now, "UPDATE_CODE,
 		  validNum, MAX_VALID, validNum);
 if (validList == NULL)
     validList = dyStringNew(validSize);
 dyStringClear(validList);
-if (validNum == 0)
-    dyStringAppend(validList, "unknown");
-else
+if (oneKGenomesRsIds != NULL && is1000Genomes(rsId))
+    {
+    dyStringPrintf(validList, "%s,", validBitStrings[VALID_BITS]); // UCSC "by-1000genomes"
+    validBitStringsUsed[VALID_BITS] = TRUE;
+    }
+if (validNum > 0)
     {
     /* Mask off each bit, most significant first.  If set, append 
      * string value to form a comma-separated list. */
@@ -627,12 +688,11 @@ else
 	    }
 	}
     }
-safef(valid, validSize, "%s", validList->string);
-if (endsWith(valid, ","))
-    {
-    int last = strlen(valid) - 1;
-    valid[last] = '\0';
-    }
+if (isEmpty(validList->string))
+    safecpy(valid, validSize, "unknown");
+else
+    safef(valid, validSize, "%s", validList->string);
+chopTrailingComma(valid);
 }
 
 void processFunc(struct lineFile *lf, char *funcCode,
@@ -644,7 +704,7 @@ if (funcList == NULL)
     funcList = dyStringNew(funcSize);
 dyStringClear(funcList);
 
-if (sameString("MISSING", funcCode))
+if (isMissing(funcCode))
     {
     dyStringAppend(funcList, functionStrings[0]);
     functionStringsUsed[0] = TRUE;
@@ -665,11 +725,7 @@ else
 	}
     }
 safef(func, funcSize, "%s", funcList->string);
-if (endsWith(func, ","))
-    {
-    int last = strlen(func) - 1;
-    func[last] = '\0';
-    }
+chopTrailingComma(func);
 }
 
 void processLocType(struct lineFile *lf, int locTypeNum,
@@ -791,7 +847,7 @@ if (expanded == NULL)
 
 dyStringClear(expanded);
 /* Common case: no expansion required; don't bother with regex. */
-if (sameString("MISSING", refNcbiEnc))
+if (isMissing(refNcbiEnc))
     {
     dyStringAppend(expanded, "unknown");
     writeError("Missing refNCBI");
@@ -1324,7 +1380,7 @@ boolean checkObserved(struct lineFile *lf, char *class, char *observed,
 		      char *refAllele)
 /* If there is a formatting problem, don't proceed with other checks. */
 {
-if (sameString(observed, "MISSING"))
+if (isMissing(observed))
     {
     writeError("Missing observed value (deleted SNP?).");
     return FALSE;
@@ -1517,10 +1573,10 @@ for (id = 0;  id <= lastRsId;  id++)
 }
 
 
-/* Several fields are numeric unless they have the placeholder "MISSING": */
-#define missingOrInt(lf, row, i) (sameString("MISSING", row[i]) ? -1 : lineFileNeedFullNum(lf, row, i))
+/* Several fields are numeric unless they have a placeholder value: */
+#define missingOrInt(lf, row, i) (isMissing(row[i]) ? -1 : lineFileNeedFullNum(lf, row, i))
 
-#define missingOrDouble(lf, row, i) (sameString("MISSING", row[i]) ? 0.0 : lineFileNeedDouble(lf, row, i))
+#define missingOrDouble(lf, row, i) (isMissing(row[i]) ? 0.0 : lineFileNeedDouble(lf, row, i))
 
 
 void snpNcbiToUcsc(char *rawFileName, char *twoBitFileName, char *outRoot)
@@ -1588,7 +1644,7 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     char locType[128];
     char refAllele[MAX_SNPSIZE+1];
     processClass(lf, classNum, class, sizeof(class));
-    processValid(lf, validNum, valid, sizeof(valid));
+    processValid(lf, validNum, valid, sizeof(valid), rsId);
     processFunc(lf, funcCode, func, sizeof(func));
     processLocType(lf, locTypeNum, locType, sizeof(locType));
     refNCBI = processRefAllele(lf, refNCBI, locType);
@@ -1662,6 +1718,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+oneKGenomesRsIds = optionVal("1000GenomesRsIds", oneKGenomesRsIds);
 if (argc != 4)
     usage();
 #ifdef DEBUG
