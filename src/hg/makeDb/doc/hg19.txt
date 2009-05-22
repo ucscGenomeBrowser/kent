@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.16 2009/05/14 23:44:55 hiram Exp $";
+#	"$Id: hg19.txt,v 1.17 2009/05/22 21:31:45 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -2416,7 +2416,7 @@ TMPDIR=/scratch/tmp
     #	31347143 bases of 2897316137 (1.082%) in intersection
 
 ##############################################################################
-# LASTZ Fugu Fr2 (WORKING - 2009-05-14 - Hiram)
+# LASTZ Fugu Fr2 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzFr2.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzFr2.2009-05-14
 
@@ -2461,7 +2461,16 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=encodek \
 	> do.log 2>&1 &
-XXX - running Thu May 14 10:18:26 PDT 2009
+    #	real    5797m9.288s
+    #	had a small problem finishing the fundamental batch run, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=encodek \
+	> cat.log 2>&1 &
+    cat fb.hg19.chainFr2Link.txt 
+    #	49309456 bases of 2897316137 (1.702%) in intersection
 
 ##############################################################################
 # LASTZ Tetraodon TetNig1 (DONE - 2009-05-14 - Hiram)
@@ -2630,11 +2639,72 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running 
-Thu May 14 16:30:50 PDT 2009
+    #	real    1724m48.032s
+XXX    #	need to load the chain table manually:
+    #	mySQL error 1114: The table 'chainTarSyr1Link' is full
+    cd /hive/data/genomes/hg19/bed/lastzTarSyr1.2009-05-14/axtChain
+    wc -l *.tab
+    #	 21882142 chain.tab
+    #	165017606 link.tab
+    #	186899748 total
+    awk '{print length($0)}' link.tab | sort | uniq -c | less
+      4 23
+      9 24
+     27 25
+    105 26
+    767 27
+   1401 28
+   5020 29
+   8472 30
+  24390 31
+ 117666 32
+ 264774 33
+ 776095 34
+1632393 35
+2672187 36
+7125988 37
+16831901 38
+34905113 39
+45218159 40
+31570706 41
+13746548 42
+5868689 43
+2460114 44
+1118556 45
+ 420826 46
+ 106674 47
+  36770 48
+  40719 49
+  36955 50
+  19389 51
+   5571 52
+   1557 53
+     61 54
+
+    time nice -n +19 hgsql -e "DROP TABLE chainTarSyr1Link;" hg19
+
+    cat << '_EOF_' | hgsql hg19
+    CREATE TABLE chainTarSyr1Link (
+      bin smallint(5) unsigned NOT NULL default 0,
+      tName varchar(255) NOT NULL default '',
+      tStart int(10) unsigned NOT NULL default 0,
+      tEnd int(10) unsigned NOT NULL default 0,
+      qStart int(10) unsigned NOT NULL default 0,
+      chainId int(10) unsigned NOT NULL default 0,
+      KEY tName (tName(16),bin),
+      KEY chainId (chainId)
+    ) ENGINE=MyISAM max_rows=166000000 avg_row_length=42 pack_keys=1 CHARSET=latin1;
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 hgsql -e \
+      "load data local infile \"link.tab\" into table chainTarSyr1Link;" hg19
+    #	this one took a number of hours
+    # real    272m44.943s
+
 
 #########################################################################
-# LASTZ Bushbaby OtoGar1 (WORKING - 2009-05-14 - Hiram)
+# LASTZ Bushbaby OtoGar1 (DONE - 2009-05-14,15 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzOtoGar1.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzOtoGar1.2009-05-14
 
@@ -2666,7 +2736,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Thu May 14 16:36:50 PDT 2009
+    #	real    762m56.055s
+    cat fb.hg19.chainOtoGar1Link.txt 
+    #	1264492372 bases of 2897316137 (43.644%) in intersection
 
 #########################################################################
 # LASTZ Mouse lemur MicMur1 (WORKING - 2009-05-14 - Hiram)
@@ -2701,6 +2773,257 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
-XXX - running Thu May 14 16:36:50 PDT 2009
+    #	real    5429m52.082s
+    #	there is one unusual long running job having trouble
+XXX - running Wed May 20 16:13:58 PDT 2009
+
+#########################################################################
+# LASTZ Baboon PapHam1 (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
+    cd /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
+
+    cat << '_EOF_' > DEF
+# human vs baboon
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Baboon papHam1
+SEQ2_DIR=/scratch/data/papHam1/papHam1.2bit
+SEQ2_LEN=/scratch/data/papHam1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	forgot that the synNet was not needed here, use recip best as below
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    cat fb.hg19.chainPapHam1Link.txt 
+    #	2399269031 bases of 2897316137 (82.810%) in intersection
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 papHam1 > rbest.log 2>&1
+XXX - running Fri May 22 11:25:41 PDT 2009
+
+#########################################################################
+# SGP GENES (DONE - 2009-05-22 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/sgpGene
+    cd /hive/data/genomes/hg19/bed/sgpGene
+    mkdir download
+    cd download
+for C in `cut -f1 ../../../chrom.sizes`
+do
+    echo $C
+    wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/golden_path_200902_x_mm9/SGP/${C}.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/golden_path_200902_x_mm9/SGP/${C}.prot
+done
+
+    cd ..
+    cat download/*.gtf | ldHgGene -gtf -genePredExt hg19 sgpGene stdin
+
+    #	Read 33994 transcripts in 291782 lines in 1 files
+    #	33994 groups 85 seqs 1 sources 3 feature types
+    #	33994 gene predictions
+    nice -n +19 featureBits -enrichment hg19 refGene:CDS sgpGene
+# refGene:CDS 1.181%, sgpGene 1.295%, both 1.011%, cover 85.59%, enrich 66.08x
+
+###########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2009-05-22 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg19/bed/geneid
+    cd /hive/data/genomes/hg19/bed/geneid
+    mkdir download
+    cd download
+    for C in `cut -f1 ../../../chrom.sizes`
+    do
+	echo $C
+ wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/golden_path_200902/geneid_v1.3/${C}.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/golden_path_200902/geneid_v1.3/${C}.prot
+    done
+
+    cd ..
+    cat download/*.gtf | ldHgGene -gtf -genePredExt hg19 geneid stdin
+    #	Read 33428 transcripts in 277332 lines in 1 files
+    #	33428 groups 92 seqs 1 sources 3 feature types
+    #	33428 gene predictions
+
+##########################################################################
+## 4-Way Multiz for UCSC Genes construction (DONE - 2009-05-22 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg19/bed/multiz4way
+    cd /hive/data/genomes/hg19/bed/multiz4way
+
+    #	extract our 4 organisms from the 44-way on hg18:
+    ln -s /hive/data/genomes/hg18/bed/multiz44way/44way.4d.nh ./44way.nh
+
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but hg18,mm9,canFam2,rheMac2 44way.nh \
+	| sed -e "s/hg18/hg19/" > 4way.nh
+
+    #	this looks like:
+    cat 4way.nh
+(((hg19:0.032973,rheMac2:0.036199):0.109706,mm9:0.352605):0.020666,canFam2:0.193569);
+
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/hg19_4way.gif
+
+    /cluster/bin/phast/all_dists 4way.nh > 4way.distances.txt
+    #	Use this output to create the table below
+    grep -y hg19 4way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainOryLat1Link   chain    linearGap
+#    distance                      on hg19    on other   minScore
+#  1  0.069172 - rhesus rheMac2 (% 82.744) (% xx.xxx)       5000     medium
+#  2  0.356914 - dog canFam2    (% 52.879) (% xx.xxx)       3000     medium
+#  3  0.495284 - mouse mm9      (% 35.299) (% 38.693)       3000     medium
+
+    #	using the syntenic nets
+    cd /cluster/data/hg19/bed/multiz4way
+    mkdir mafLinks
+    cd mafLinks
+    mkdir rheMac2 canFam2 mm9
+
+    cd mm9
+    ln -s ../../../lastz.mm9/mafSynNet/*.maf.gz .
+    cd ../canFam2
+    ln -s ../../../lastz.canFam2/mafSynNet/*.maf.gz .
+    cd ../rheMac2
+    ln -s ../../../lastz.rheMac2/mafSynNet/*.maf.gz .
+
+    #	determine what is the newest version of multiz and use that
+    cd /hive/data/genomes/hg19/bed/multiz4way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/multiz4way
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	4way.nh > tmp.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = hg19
+set c = $1
+set maf = $2
+set binDir = /hive/data/genomes/hg19/bed/multiz4way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/hg19/bed/multiz4way/mafLinks
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /hive/data/genomes/hg19/bed/multiz4way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/hg19/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 93 jobs
+    para try ... check ... push ... etc ...
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:      24282s     404.70m     6.75h    0.28d  0.001 y
+# IO & Wait Time:                  2362s      39.36m     0.66h    0.03d  0.000 y
+# Average job time:                 286s       4.77m     0.08h    0.00d
+# Longest finished job:            2235s      37.25m     0.62h    0.03d
+# Submission to last job:          2241s      37.35m     0.62h    0.03d
+
+    #	combine results into a single file for loading and gbdb reference
+    cd /hive/data/genomes/hg19/bed/multiz4way
+    time nice -n +19 catDir maf > multiz4way.maf
+    #	real    3m27.561s
+
+    #	makes a 8.5 Gb file:
+    #	-rw-rw-r-- 1 9026080732 May 22 11:11 multiz4way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz4way
+    mkdir /gbdb/hg19/multiz4way
+    ln -s /hive/data/genomes/hg19/bed/multiz4way/multiz4way.maf \
+	/gbdb/hg19/multiz4way
+    #	the hgLoadMaf generates huge tmp files, locate them in /scratch/tmp/
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf hg19 multiz4way
+    #	real    5m31.883s
+    #	Loaded 5788627 mafs in 1 files from /gbdb/hg19/multiz4way
+
+    cd /hive/data/genomes/hg19/bed/multiz4way
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 hg19 multiz4waySummary multiz4way.maf
+    #	Created 1238721 summary blocks from 11959676 components
+    #	and 5788627 mafs from multiz4way.maf
+    #	real    6m33.936s
 
 #########################################################################
