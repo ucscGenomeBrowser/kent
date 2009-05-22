@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.200 2009/05/22 19:37:05 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.201 2009/05/22 20:40:26 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3729,7 +3729,11 @@ else
 if(trackDbSettingClosestToHome(tdb, filterLimitName) != NULL)
     return extraWhere;
 
-char *setting = trackDbSettingClosestToHome(tdb, filter);
+char *setting = NULL;
+if(differentWord(filter,SCORE_FILTER))
+    setting = trackDbSettingClosestToHome(tdb, filter);
+else
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, filter,"0:1000");
 if(setting || sameWord(filter,NO_SCORE_FILTER))
     {
     boolean invalid = FALSE;
@@ -3770,15 +3774,29 @@ if(setting || sameWord(filter,NO_SCORE_FILTER))
         safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
         cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
         }
-    else if((min != 0 && min != NO_VALUE) || max != NO_VALUE) // Assumes min==0 is no filter!
+//#define FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
+#ifdef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
+    else if((min != 0 && (int)min != NO_VALUE) || (int)max != NO_VALUE) // Assumes min==0 is no filter!
         {
         if((min != 0 && min != NO_VALUE) && max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max);
+            dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max); // both min and max
         else if(min != 0 && min != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);
+            dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);  // min only
         else //if(max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s <= %d)", (*and?" and ":""),field,max);
+            dyStringPrintf(extraWhere, "%s(%s <= %d)", (*and?" and ":""),field,max);  // max only
+#else//ifndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
+    else if((min != NO_VALUE && (minLimit == NO_VALUE || minLimit != min))  // Assumes min==NO_VALUE or min==minLimit is no filter
+         || (max != NO_VALUE && (maxLimit == NO_VALUE || maxLimit != max))) // Assumes max==NO_VALUE or max==maxLimit is no filter!
+        {
+        if(max == NO_VALUE || (maxLimit != NO_VALUE && maxLimit == max))
+            dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);  // min only
+        else if(min == NO_VALUE || (minLimit != NO_VALUE && minLimit == min))
+            dyStringPrintf(extraWhere, "%s(%s <= %d)", (*and?" and ":""),field,max);  // max only
+        else
+            dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max); // both min and max
+#endif//ndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
         *and=TRUE;
+        //warn("%s: %s",tdb->tableName,extraWhere->string);
         }
     }
 return extraWhere;
@@ -3836,14 +3854,26 @@ if(setting)
         safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
         cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
         }
+#ifdef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
     else if((min != 0 && (int)min != NO_VALUE) || (int)max != NO_VALUE) // Assumes min==0 is no filter!
         {
         if((min != 0 && (int)min != NO_VALUE) && (int)max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s BETWEEN %g and %g)", (*and?" and ":""),field,min,max);
+            dyStringPrintf(extraWhere, "%s(%s BETWEEN %g and %g)", (*and?" and ":""),field,min,max); // both min and max
         else if(min != 0 && (int)min != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s >= %g)", (*and?" and ":""),field,min);
+            dyStringPrintf(extraWhere, "%s(%s >= %g)", (*and?" and ":""),field,min);  // min only
         else //if((int)max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s <= %g)", (*and?" and ":""),field,max);
+            dyStringPrintf(extraWhere, "%s(%s <= %g)", (*and?" and ":""),field,max);  // max only
+#else//ifndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
+    else if(((int)min != NO_VALUE && ((int)minLimit == NO_VALUE || minLimit != min))  // Assumes min==NO_VALUE or min==minLimit is no filter
+         || ((int)max != NO_VALUE && ((int)maxLimit == NO_VALUE || maxLimit != max))) // Assumes max==NO_VALUE or max==maxLimit is no filter!
+        {
+        if((int)max == NO_VALUE || ((int)maxLimit != NO_VALUE && maxLimit == max))
+            dyStringPrintf(extraWhere, "%s(%s >= %g)", (*and?" and ":""),field,min);  // min only
+        else if((int)min == NO_VALUE || ((int)minLimit != NO_VALUE && minLimit == min))
+            dyStringPrintf(extraWhere, "%s(%s <= %g)", (*and?" and ":""),field,max);  // max only
+        else
+            dyStringPrintf(extraWhere, "%s(%s BETWEEN %g and %g)", (*and?" and ":""),field,min,max); // both min and max
+#endif//ndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
         *and=TRUE;
         }
     }
