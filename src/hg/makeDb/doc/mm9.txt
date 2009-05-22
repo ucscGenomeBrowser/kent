@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.93 2009/05/08 21:26:54 angie Exp $"
+#	"$Id: mm9.txt,v 1.94 2009/05/22 21:32:06 hiram Exp $"
 #
 
 #######################################################################
@@ -9343,3 +9343,24 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+#############################################################################
+# LASTZ Swap Human Hg19 (DONE - 2009-05-14 - Hiram)
+    #	the original
+    cd /hive/data/genomes/hg19/bed/lastzMm9.2009-05-13
+    cat fb.hg19.chainMm9Link.txt 
+    #	1022734273 bases of 2897316137 (35.299%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm9/bed/blastz.hg19.swap
+    cd /hive/data/genomes/mm9/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzMm9.2009-05-13/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    131m58.763s
+    cat fb.mm9.chainHg19Link.txt 
+    #	1013880568 bases of 2620346127 (38.693%) in intersection
+
+#############################################################################
