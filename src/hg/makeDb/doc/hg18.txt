@@ -25813,6 +25813,132 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
+# Update phastCons44way tables from Adam (DONE - 2009-05-22 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/chrX.phastCons
+    cd /hive/data/genomes/hg18/bed/multiz44way/chrX.phastCons
+    mkdir  primates
+    cd primates
+    wget --timestamping \
+ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phastCons/primates/*
+    cd ..
+
+    mkdir placental
+    cd placental
+wget --timestamping \
+ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phastCons/placental/*
+    cd ..
+
+    mkdir all
+    cd all
+    wget --timestamping \
+ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phastCons/all/*
+
+    zcat all/*.wigFix.gz \
+	| wigEncode stdin phastCons44way_v2.wig phastCons44way_v2.wib
+    zcat primates/*.wigFix.gz \
+ | wigEncode stdin phastCons44wayPrimates_v2.wig phastCons44wayPrimates_v2.wib
+    zcat placental/*.wigFix.gz \
+ | wigEncode stdin phastCons44wayPlacental_v2.wig phastCons44wayPlacental_v2.wib
+
+    ln -s `pwd`/*.wib /gbdb/hg18/multiz44way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44way_v2 phastCons44way_v2.wig
+    #	real    0m43.022s
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44wayPrimates_v2 phastCons44wayPrimates_v2.wig
+    #	real    0m43.660s
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44wayPlacental_v2 phastCons44wayPlacental_v2.wig
+    #	real    0m44.607s
+
+    time nice -n +19 hgLoadBed hg18 phastConsElements44way_v2 \
+	all/mostConserved.bed
+    #	Loaded 4779670 elements of size 5
+    #	real    2m10.975s
+    time nice -n +19 hgLoadBed hg18 phastConsElements44wayPrimates_v2 \
+	primates/mostConserved.bed
+    #	Loaded 785075 elements of size 5
+    #	real    0m21.619s
+    time nice -n +19 hgLoadBed hg18 phastConsElements44wayPlacental_v2 \
+	placental/mostConserved.bed
+    #	Loaded 3862854 elements of size 5
+    #	real    1m41.223s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44wayPlacental_v2 > placental.histogram.data 2>&1
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44wayPrimates_v2 > primates.histogram.data 2>&1
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44way_v2 > vertebrate.histogram.data 2>&1
+
+    cat << '_EOF_' | gnuplot > placental.histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg18 Histogram phastCons44wayPlacental_v2 track"
+set xlabel " phastCons44wayPlacental_v2 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "placental.histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "placental.histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display placental.histo.png &
+
+    cat << '_EOF_' | gnuplot > primates.histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg18 Histogram phastCons44wayPrimates_v2 track"
+set xlabel " phastCons44wayPrimates_v2 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "primates.histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "primates.histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display primates.histo.png &
+
+    cat << '_EOF_' | gnuplot > vertebrate.histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg18 Histogram phastCons44way_v2 track"
+set xlabel " phastCons44way_v2 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "vertebrate.histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "vertebrate.histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display placental.histo.png &
+
+#########################################################################
 # phyloP conservation for 44-way (2009-01-05 kate)
 #
 # Vertebrate, Placental
