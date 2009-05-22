@@ -3764,7 +3764,7 @@ treeImage phylo/hg18_44way.gif
 priority 100
 
     # Conserved Elements (Most Conserved)
-    track phastConsElements44wayPrimates
+    track phastConsElements44wayPrimates_v2
     subTrack cons44way off
     subGroups view=elements clade=primate
     shortLabel Primate El
@@ -3774,7 +3774,7 @@ priority 100
     color 170,50,100
     priority 20
 
-    track phastConsElements44wayPlacental
+    track phastConsElements44wayPlacental_v2
     subTrack cons44way on
     subGroups view=elements clade=mammal
     shortLabel Mammal El
@@ -3784,7 +3784,7 @@ priority 100
     color 100,50,170
     priority 22
 
-    track phastConsElements44way
+    track phastConsElements44way_v2
     subTrack cons44way off
     subGroups view=elements clade=vert
     shortLabel Vertebrate El
@@ -3847,7 +3847,7 @@ priority 100
     priority 4
 
     # phastCons conservation
-    track phastCons44wayPrimates
+    track phastCons44wayPrimates_v2
     subTrack cons44way off
     subGroups view=phastcons clade=primate
     shortLabel Primate Cons
@@ -3863,7 +3863,7 @@ priority 100
     altColor 70,10,10
     priority 10
 
-    track phastCons44wayPlacental
+    track phastCons44wayPlacental_v2
     subTrack cons44way on
     subGroups view=phastcons clade=mammal
     shortLabel Mammal Cons
@@ -3879,7 +3879,7 @@ priority 100
     altColor 95,25,25
     priority 12
 
-    track phastCons44way
+    track phastCons44way_v2
     subTrack cons44way off
     subGroups view=phastcons clade=vert
     shortLabel Vertebrate Cons
