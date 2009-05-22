@@ -14,7 +14,7 @@ source `which qaConfig.csh`
 
 if ( $#argv != 1 ) then
   echo
-  echo "  runs sync on the database of the day."
+  echo "  checks for table sync on all machines for database of the day."
   echo "  replaces file in htdocs if run again same day."
   echo
   echo "    usage:  go"
