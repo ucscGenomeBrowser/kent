@@ -303,6 +303,12 @@ spectrum on
 type netAlign mm6 chainMm6
 otherDb mm6
 
+track chainMonDom5 override
+priority 105
+
+track netMonDom5 override
+priority 105.1
+
 track chainMonDom1
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
