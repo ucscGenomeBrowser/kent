@@ -1,4 +1,4 @@
-o# Genome-wide ENCODE tracks
+# Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
 
 track wgEncodeGisRnaPet
@@ -3019,7 +3019,7 @@ wgEncode 1
     type wig 1.00 910.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
     release alpha
@@ -3030,7 +3030,7 @@ wgEncode 1
     type wig 1.00 1241.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
     release alpha
@@ -3041,7 +3041,7 @@ wgEncode 1
     type wig 1.00 6350.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wig.gz
 
     track wgEncodeUncFAIREseqPeaksGm12878
     release alpha
@@ -3084,7 +3084,7 @@ wgEncode 1
     type wig 1.00 13040.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep1Gm12878.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep1Gm12878.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
     release alpha
@@ -3095,7 +3095,7 @@ wgEncode 1
     type wig 1.00 20932.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep2Gm12878.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep2Gm12878.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
     release alpha
@@ -3106,7 +3106,7 @@ wgEncode 1
     type wig 1.00 28132.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep3Gm12878.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep3Gm12878.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
     release alpha
@@ -3149,7 +3149,7 @@ wgEncode 1
     type wig 1.00 1561.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
     release alpha
@@ -3160,7 +3160,7 @@ wgEncode 1
     type wig 1.00 2940.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
     release alpha
@@ -3171,7 +3171,7 @@ wgEncode 1
     type wig 1.00 2940.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
     release alpha
@@ -3193,7 +3193,7 @@ wgEncode 1
     type wig 1.00 6605.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input type=wig fragLength=135 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=328 dateSubmitted=2008-11-07 dateRegenerated=2009-05-08 dateUnrestricted=2009-07-07 composite==wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalGm12878Input fileName=wgEncodeUtaChIPseqRawSignalGm12878Input.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input type=wig fragLength=135 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=328 dateSubmitted=2008-11-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-07-07 composite==wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalGm12878Input fileName=wgEncodeUtaChIPseqRawSignalGm12878Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHelas3
     release alpha
@@ -3236,7 +3236,7 @@ wgEncode 1
     type wig 1.00 664.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Helas3
     release alpha
@@ -3247,7 +3247,7 @@ wgEncode 1
     type wig 1.00 975.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Helas3
     release alpha
@@ -3258,7 +3258,7 @@ wgEncode 1
     type wig 1.00 1758.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHelas3
     release alpha
@@ -3268,7 +3268,7 @@ wgEncode 1
     subGroups view=Peaks EXP=FAIRE cellType=HeLa
     type narrowPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeUncFAIREseq tableName=wgEncodeUncFAIREseqPeaksHelas3 fileName=wgEncodeUncFAIREseqPeaksHelas3.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=336 dateSubmitted=2009-03-22 dateResubmitted=2009-05-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHelas3 fileName=wgEncodeUncFAIREseqPeaksHelas3.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalHelas3
     release alpha
@@ -3301,7 +3301,7 @@ wgEncode 1
     type wig 1.00 22750.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep1Helas3.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep1Helas3.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep2Helas3
     release alpha
@@ -3312,7 +3312,7 @@ wgEncode 1
     type wig 1.00 16242.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep2Helas3.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep2Helas3.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep3Helas3
     release alpha
@@ -3323,7 +3323,7 @@ wgEncode 1
     type wig 1.00 23788.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep3Helas3.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep3Helas3.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
     release alpha
@@ -3366,7 +3366,7 @@ wgEncode 1
     type wig 1.00 5570.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
     release alpha
@@ -3377,7 +3377,7 @@ wgEncode 1
     type wig 1.00 3780.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
     release alpha
@@ -3420,7 +3420,7 @@ wgEncode 1
     type wig 1.00 3520.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
     release alpha
@@ -3431,7 +3431,7 @@ wgEncode 1
     type wig 1.00 3585.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
     release alpha
@@ -3453,7 +3453,7 @@ wgEncode 1
     type wig 1.00 4504.00
     spanList first
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-16 dateRegenerated=2009-05-08 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHelas3Input fileName=wgEncodeUtaChIPseqRawSignalHelas3Input.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-16 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHelas3Input fileName=wgEncodeUtaChIPseqRawSignalHelas3Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
     release alpha
@@ -3496,7 +3496,7 @@ wgEncode 1
     type wig 1.00 625.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
     release alpha
@@ -3507,7 +3507,7 @@ wgEncode 1
     type wig 1.00 542.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
     release alpha
@@ -3518,7 +3518,7 @@ wgEncode 1
     type wig 1.00 1626.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHepg2
     release alpha
@@ -3561,7 +3561,7 @@ wgEncode 1
     type wig 1.00 11110.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-07 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep1Hepg2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-21 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep1Hepg2.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep2Hepg2
     release alpha
@@ -3572,7 +3572,7 @@ wgEncode 1
     type wig 1.00 8711.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-07 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep2Hepg2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-21 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep2Hepg2.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep3Hepg2
     release alpha
@@ -3583,7 +3583,7 @@ wgEncode 1
     type wig 1.00 13049.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-07 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep3Hepg2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-21 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep3Hepg2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Ctcf
     release alpha
@@ -3626,7 +3626,7 @@ wgEncode 1
     type wig 1.00 2580.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
     release alpha
@@ -3637,7 +3637,7 @@ wgEncode 1
     type wig 1.00 1927.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Cmyc
     release alpha
@@ -3680,7 +3680,7 @@ wgEncode 1
     type wig 1.00 3922.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
     release alpha
@@ -3691,7 +3691,7 @@ wgEncode 1
     type wig 1.00 3085.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
     release alpha
@@ -3702,7 +3702,7 @@ wgEncode 1
     type wig 1.00 2347.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-07 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE May 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHepg2Input
     release alpha
@@ -3724,7 +3724,7 @@ wgEncode 1
     type wig 1.00 4078.00
     spanList first
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-13 dateRegenerated=2009-05-08 dateUnrestricted=2009-12-13 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHepg2Input fileName=wgEncodeUtaChIPseqRawSignalHepg2Input.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-13 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-13 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHepg2Input fileName=wgEncodeUtaChIPseqRawSignalHepg2Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksK562
     release alpha
@@ -3767,7 +3767,7 @@ wgEncode 1
     type wig 1.00 1570.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=1 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep1K562.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=1 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep1K562.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2K562
     release alpha
@@ -3778,7 +3778,7 @@ wgEncode 1
     type wig 1.00 4222.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=2 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep2K562.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=2 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep2K562.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3K562
     release alpha
@@ -3789,7 +3789,7 @@ wgEncode 1
     type wig 1.00 3596.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep3K562.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep3K562.wig.gz
 
     track wgEncodeUncFAIREseqPeaksK562
     release alpha
@@ -3833,7 +3833,7 @@ wgEncode 1
     type wig 1.00 20293.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1K562 fileName=wgEncodeUncFAIREseqRawSignalRep1K562.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1K562 fileName=wgEncodeUncFAIREseqRawSignalRep1K562.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep2K562
     release alpha
@@ -3844,7 +3844,7 @@ wgEncode 1
     type wig 1.00 14278.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2K562 fileName=wgEncodeUncFAIREseqRawSignalRep2K562.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2K562 fileName=wgEncodeUncFAIREseqRawSignalRep2K562.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep3K562
     release alpha
@@ -3855,7 +3855,7 @@ wgEncode 1
     type wig 1.00 14947.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-07 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3K562 fileName=wgEncodeUncFAIREseqRawSignalRep3K562.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3K562 fileName=wgEncodeUncFAIREseqRawSignalRep3K562.wig.gz
 
     track wgEncodeUtaChIPseqPeaksK562Ctcf
     release alpha
@@ -3898,7 +3898,7 @@ wgEncode 1
     type wig 1.00 1821.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
     release alpha
@@ -3909,7 +3909,7 @@ wgEncode 1
     type wig 1.00 1836.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
     release alpha
@@ -3920,7 +3920,7 @@ wgEncode 1
     type wig 1.00 5111.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksK562Cmyc
     release alpha
@@ -3963,7 +3963,7 @@ wgEncode 1
     type wig 1.00 9378.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
     release alpha
@@ -3974,7 +3974,7 @@ wgEncode 1
     type wig 1.00 7237.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
     release alpha
@@ -3985,7 +3985,7 @@ wgEncode 1
     type wig 1.00 8553.00
     spanList first
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-07 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalK562Input
     release alpha
@@ -4007,7 +4007,7 @@ wgEncode 1
     type wig 1.00 9745.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2008-12-05 dateRegenerated=2009-05-08 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalK562Input fileName=wgEncodeUtaChIPseqRawSignalK562Input.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2008-12-05 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalK562Input fileName=wgEncodeUtaChIPseqRawSignalK562Input.wig.gz
 
     track wgEncodeDukeRegionsExcluded
     release alpha
