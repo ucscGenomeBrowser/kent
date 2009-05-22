@@ -700,8 +700,8 @@ unsigned char r, g, b;
 char *colors = cloneString(trackDbSetting(tg->tdb, "colorByStrand"));
 if (!colors)
     errAbort("colorByStrand setting missing (in %s)", tg->mapName);
-if (chopByChar(colors, ':', words, sizeof(words)) != 2)
-    errAbort("invalid colorByStrand setting %s (expecting pair of RGB values r,g,b:r,g,b)", colors);
+if (chopByWhite(colors, words, sizeof(words)) != 2)
+    errAbort("invalid colorByStrand setting %s (expecting pair of RGB values r,g,b r,g,b)", colors);
 if (lf->orientation == 1)
     parseColor(words[0], &r, &g, &b);
 else if (lf->orientation == -1) 
