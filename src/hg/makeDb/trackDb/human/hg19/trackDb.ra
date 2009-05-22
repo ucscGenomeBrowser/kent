@@ -322,3 +322,27 @@ shortCircuit 1
 termRegex contig[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
+
+track multiz4way
+shortLabel 4-way Multiz
+longLabel 4-Way Multiz Alignment & Conservation
+group compGeno
+priority 104.2
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons4way
+# spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz4wayFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz4waySummary
+speciesCodonDefault hg19
+speciesGroups mammal
+sGroup_mammal rheMac2 mm9 canFam2
+treeImage phylo/hg19_4way.gif
