@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.199 2009/05/21 20:30:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.200 2009/05/22 19:37:05 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2562,7 +2562,7 @@ if(dyStringLen(dyClause) == 0)
 return dyStringCannibalize(&dyClause);
 }
 
-static void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
+void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
 /* Does the UI for a list of filterBy structure */
 {
 if(filterBySet == NULL)
@@ -3487,10 +3487,10 @@ if(min)
     if(deMin != NULL)
         *min = atoi(deMin);
     }
-if(min && limitMin && *min < *limitMin) *min = *limitMin; // defaults within range
-if(min && limitMax && *min > *limitMax) *min = *limitMax;
-if(max && limitMax && *max > *limitMax) *max = *limitMax;
-if(max && limitMin && *max < *limitMin) *max = *limitMin;
+if(min && limitMin && *min != NO_VALUE && *min < *limitMin) *min = *limitMin; // defaults within range
+if(min && limitMax && *min != NO_VALUE && *min > *limitMax) *min = *limitMax;
+if(max && limitMax && *max != NO_VALUE && *max > *limitMax) *max = *limitMax;
+if(max && limitMin && *max != NO_VALUE && *max < *limitMin) *max = *limitMin;
 }
 
 static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, char *scoreName,
