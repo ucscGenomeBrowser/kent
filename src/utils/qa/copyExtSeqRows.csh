@@ -256,7 +256,9 @@ if ( 'setup' == $run ) then
   echo "2. Given your input parameters, there is no step two!\n" 
  endif
 
- echo "3. It is possible (even common) for there to be no seq table at all."
+ echo "3. It is possible (even common) for there to be no entries for your file"
+ echo "  in the seq table.  It is also possible (though less common) for there"
+ echo "  to be no seq table at all for this database."
  if ( 0 == $seqTable ) then
   echo "  For your database, there is no seq table on hgwbeta. Make sure"
   echo "  that makes sense to you before you run this script with 'real'."
@@ -282,8 +284,8 @@ if ( 'setup' == $run ) then
  echo "  which is $seqRowsDev (this only works for .fasta and .fa files, not"
  echo "  .maf files). You should expect them to be the same. Do not simply"
  echo "  compare the row counts of your file(s) with the $seqRowsDev rows in"
- echo "  the seq table, you will have to grep your files for actual item"
- echo "  entires (quite often the items are preceeded by a '>')." 
+ echo "  the seq table; instead you will have to grep your files for actual"
+ echo "  item entires (quite often the items are preceeded by a '>')." 
  echo "    e.g. cat /gbdb/../../fileName | grep '>' | wc -l\n"
 
 echo "\nthe end.\n"
