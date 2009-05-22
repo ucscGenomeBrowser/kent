@@ -59,7 +59,7 @@ shortLabel DECIPHER
 longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
 group phenDis
 priority 29.6
-visibility pack
+visibility hide
 color 200,0,100
 type bed 4
 
