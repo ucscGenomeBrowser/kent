@@ -273,6 +273,10 @@ color        -    r,g,b integer triplet       - specifies primary color
                                               - red,green,blue values 0 to 255
 altColor     -    r,g,b integer triplet       - specifies secondary color
                                               - for items
+colorByStrand -   r,g,b:r,g,b  triplet pair   - specifies plus and minus strand color
+                                              - rgb+:rgb- where rgb+ and rgb- are
+                                              - +/- strand red,green,blue values 0 to 255
+                                              - this has no effect for elements w/out strand
 priority     -    a decimal number            - used to order this track
                                               - within this track group
 chromosomes  -    comma separated list        - only these chroms have data

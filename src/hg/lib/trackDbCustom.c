@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.65 2009/05/18 20:45:14 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.66 2009/05/22 10:11:16 mikep Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -34,8 +34,7 @@ else
    return 1;
 }
 
-static void parseColor(struct lineFile *lf, char *text,
-	unsigned char *r, unsigned char *g, unsigned char *b)
+void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b)
 /* Turn comma-separated string of three numbers into three
  * color components. */
 {
@@ -43,8 +42,7 @@ char *words[4];
 int wordCount;
 wordCount = chopString(text, ", \t", words, ArraySize(words));
 if (wordCount != 3)
-    errAbort("Expecting 3 comma separated values line %d of %s",
-    		lf->lineIx, lf->fileName);
+    errAbort("Expecting 3 comma separated values in %s.", text);
 *r = atoi(words[0]);
 *g = atoi(words[1]);
 *b = atoi(words[2]);
@@ -106,11 +104,11 @@ else if (sameString(var, "visibility"))
     }
 else if (sameWord(var, "color"))
     {
-    parseColor(lf, value, &bt->colorR, &bt->colorG, &bt->colorB);
+    parseColor(value, &bt->colorR, &bt->colorG, &bt->colorB);
     }
 else if (sameWord(var, "altColor"))
     {
-    parseColor(lf, value, &bt->altColorR, &bt->altColorG, &bt->altColorB);
+    parseColor(value, &bt->altColorR, &bt->altColorG, &bt->altColorB);
     }
 else if (sameWord(var, "type"))
     {

@@ -300,5 +300,9 @@ char *metadataSettingFind(struct trackDb *tdb,char *name);
 /* Looks for a specific metadata setting and returns the value or null
    returned value should be freed */
 
+void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b);
+/* Turn comma-separated string of three numbers into three
+ * color components. */
+
 #endif /* TRACKDB_H */
 

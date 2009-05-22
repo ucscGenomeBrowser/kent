@@ -687,6 +687,34 @@ loadSimpleBed(tg);
 tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE);
 }
 
+
+Color lfItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg)
+/* Look up the RGB color from the trackDb setting 'colorByStrand' based on
+ * the linkedFeature item orientation, and convert this to a color index
+ * using hvGfx */
+{
+struct linkedFeatures *lf = item;
+char *words[3];
+unsigned char r, g, b;
+
+char *colors = cloneString(trackDbSetting(tg->tdb, "colorByStrand"));
+if (!colors)
+    errAbort("colorByStrand setting missing (in %s)", tg->mapName);
+if (chopByChar(colors, ':', words, sizeof(words)) != 2)
+    errAbort("invalid colorByStrand setting %s (expecting pair of RGB values r,g,b:r,g,b)", colors);
+if (lf->orientation == 1)
+    parseColor(words[0], &r, &g, &b);
+else if (lf->orientation == -1) 
+    parseColor(words[1], &r, &g, &b);
+else // return the main color
+    {
+    r = tg->color.r; g = tg->color.g; b = tg->color.b;
+    }
+freez(&colors);
+return hvGfxFindColorIx(hvg, r, g, b);
+}
+
+
 void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
                                 int wordCount, char *words[])
 /* Fill in methods for more complex bed tracks. */
@@ -710,6 +738,8 @@ if (fieldCount < 8)
 	// to draw each base character must make one simpleFeature per base
 	linkedFeaturesMethods(track);
 	track->loadItems = loadSimpleBedAsLinkedFeaturesPerBase;
+	if (trackDbSetting(tdb, "colorByStrand"))
+	    track->itemColor = lfItemColorByStrand;
 	}
     else
 	{
