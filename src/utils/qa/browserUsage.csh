@@ -22,7 +22,8 @@ set today=`date +%Y-%m-%d`
 if ( $argv != 'go' ) then
   echo
   echo " Checks stats for browser and o/s usage."
-  echo " Places report here: hgwdev:/qa/test-results/browserUsage"
+  echo " Places report here:\
+         http://hgwdev.cse.ucsc.edu/qa/test-results/browserUsage"
   echo "  usage: go"
   echo
   exit
