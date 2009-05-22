@@ -1011,6 +1011,10 @@ void filterBySetFree(filterBy_t **filterBySet);
 
 char *filterBySetClause(filterBy_t *filterBySet);
 /* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
+
+void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet);
+/* Does the UI for a list of filterBy structure */
+
 boolean makeDownloadsLink(struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
