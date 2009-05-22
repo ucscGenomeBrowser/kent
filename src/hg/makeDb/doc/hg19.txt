@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.17 2009/05/22 21:31:45 hiram Exp $";
+#	"$Id: hg19.txt,v 1.18 2009/05/22 23:52:09 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -2605,6 +2605,8 @@ TMPDIR=/scratch/tmp
     #	real    214m16.294s
     cat fb.hg19.chainCalJac1Link.txt 
     #	2053025318 bases of 2897316137 (70.860%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 calJac1 > rbest.log 2>&1 &
+XXX - running Fri May 22 15:33:57 PDT 2009
 
 #########################################################################
 # LASTZ Tarsier TarSyr1 (WORKING - 2009-05-14 - Hiram)
@@ -2739,6 +2741,8 @@ TMPDIR=/scratch/tmp
     #	real    762m56.055s
     cat fb.hg19.chainOtoGar1Link.txt 
     #	1264492372 bases of 2897316137 (43.644%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 otoGar1 > rbest.log 2>&1 &
+XXX - running Fri May 22 15:36:32 PDT 2009
 
 #########################################################################
 # LASTZ Mouse lemur MicMur1 (WORKING - 2009-05-14 - Hiram)
@@ -2775,10 +2779,17 @@ TMPDIR=/scratch/tmp
 	> do.log 2>&1 &
     #	real    5429m52.082s
     #	there is one unusual long running job having trouble
-XXX - running Wed May 20 16:13:58 PDT 2009
+    #	continuing after finishing the lastz run manually:
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-continue=cat -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> cat.log 2>&1 &
+XXX - running Fri May 22 15:39:19 PDT 2009
 
 #########################################################################
-# LASTZ Baboon PapHam1 (DONE - 2009-05-13 - Hiram)
+# LASTZ Baboon PapHam1 (DONE - 2009-05-20,22 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
     cd /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
 
@@ -2827,7 +2838,7 @@ TMPDIR=/scratch/tmp
     #	2399269031 bases of 2897316137 (82.810%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 papHam1 > rbest.log 2>&1
-XXX - running Fri May 22 11:25:41 PDT 2009
+    #	real    182m0.276s
 
 #########################################################################
 # SGP GENES (DONE - 2009-05-22 - Hiram)
@@ -3027,3 +3038,47 @@ cat  << '_EOF_' > template
     #	real    6m33.936s
 
 #########################################################################
+# LASTZ Medaka OryLat2 (DONE - 2009-05-22 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOryLat2.2009-05-22
+    cd /hive/data/genomes/hg19/bed/lastzOryLat2.2009-05-22
+
+    cat << '_EOF_' > DEF
+# Human vs. Medaka
+# typical parameters for a genome that is distant from human
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Medaka oryLat2 (40M chunks covers the largest chroms in one gulp)
+SEQ2_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ2_LEN=/hive/data/genomes/oryLat2/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOryLat2.2009-05-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+XXX - running Fri May 22 16:45:19 PDT 2009
+    #
+
+##############################################################################
