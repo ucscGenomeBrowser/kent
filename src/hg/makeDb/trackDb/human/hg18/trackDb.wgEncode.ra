@@ -4185,7 +4185,7 @@ wgEncode 1
     localization cell
     cell prostate
     color 0,119,158
-    colorByStrand 0,89,188:0,149,128
+    colorByStrand 0,89,188 0,149,128
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
@@ -4205,7 +4205,7 @@ wgEncode 1
     localization cytosol
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
@@ -4225,7 +4225,7 @@ wgEncode 1
     localization nucleus
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
@@ -4405,7 +4405,7 @@ wgEncode 1
     localization cytosol
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562CytosolLongpolya fileName=wgEncodeRikenCageAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
@@ -4427,7 +4427,7 @@ wgEncode 1
     localization nucleus
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
@@ -4585,7 +4585,7 @@ wgEncode 1
     localization polysome
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
@@ -4607,7 +4607,7 @@ wgEncode 1
     localization nucleolus
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleolusTotal fileName=wgEncodeRikenCageAlignmentsK562NucleolusTotal.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
@@ -4629,7 +4629,7 @@ wgEncode 1
     localization nucleoplasm
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleoplasmTotal fileName=wgEncodeRikenCageAlignmentsK562NucleoplasmTotal.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562ChromatinTotal
@@ -4651,7 +4651,7 @@ wgEncode 1
     localization chromatin
     cell K562
     color 46,0,184
-    colorByStrand 16,0,214:76,0,154
+    colorByStrand 16,0,214 76,0,154
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562ChromatinTotal fileName=wgEncodeRikenCageAlignmentsK562ChromatinTotal.tagAlign.gz
 
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
@@ -4741,7 +4741,7 @@ wgEncode 1
     localization cytosol
     cell GM12878
     color 153,38,0
-    colorByStrand 183,08,0:123,68,0
+    colorByStrand 183,08,0 123,68,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
@@ -4763,7 +4763,7 @@ wgEncode 1
     localization nucleus
     cell GM12878
     color 153,38,0
-    colorByStrand 183,08,0:123,68,0
+    colorByStrand 183,08,0 123,68,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya.tagAlign.gz
 
 # U. Washington Affy Exon (wrangler: Andy)
