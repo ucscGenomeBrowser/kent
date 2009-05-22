@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.201 2009/05/22 20:40:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.202 2009/05/22 23:04:11 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3533,10 +3533,10 @@ if(min)
     if(deMin != NULL)
         *min = strtod(deMin,NULL);
     }
-if(min && limitMin && *min < *limitMin) *min = *limitMin; // defaults within range
-if(min && limitMax && *min > *limitMax) *min = *limitMax;
-if(max && limitMax && *max > *limitMax) *max = *limitMax;
-if(max && limitMin && *max < *limitMin) *max = *limitMin;
+if(min && limitMin && (int)(*min) != NO_VALUE && *min < *limitMin) *min = *limitMin; // defaults within range
+if(min && limitMax && (int)(*min) != NO_VALUE && *min > *limitMax) *min = *limitMax;
+if(max && limitMax && (int)(*max) != NO_VALUE && *max > *limitMax) *max = *limitMax;
+if(max && limitMin && (int)(*max) != NO_VALUE && *max < *limitMin) *max = *limitMin;
 }
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
