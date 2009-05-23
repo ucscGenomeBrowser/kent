@@ -8704,9 +8704,9 @@ wgEncode 1
     shortLabel HeLa-S3 Large_Fragment 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Large_Fragment in HeLa-S3 cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
-    type wig 1.00 2899.00
+    type wig 1.00 4781.00
     color 0,119,158
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=575 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-22 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
     release beta
@@ -8730,9 +8730,9 @@ wgEncode 1
     shortLabel HeLa-S3 Large_Fragment 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Large_Fragment in HeLa-S3 cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
-    type wig 1.00 3007.00
+    type wig 1.00 3589.00
     color 0,119,158
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=575 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-22 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
     release beta
