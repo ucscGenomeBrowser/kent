@@ -8,4 +8,4 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 # copy new download files from genbank server
 # try hourly 
-30 0-23 * * * /genbank/etc/hgdownload-copy
+30 */6 * * * /genbank/etc/hgdownload-copy
