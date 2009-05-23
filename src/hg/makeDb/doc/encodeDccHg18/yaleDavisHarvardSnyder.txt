@@ -1881,4 +1881,39 @@ rename table wgEncodeYaleChIPseqSignalHepg2InputBg      to wgEncodeYaleChIPseqRe
 rename table wgEncodeYaleChIPseqSignalK562InputBg       to wgEncodeYaleChIPseqRel2SignalK562Input      ;
 rename table wgEncodeYaleChIPseqSignalNb4InputBg        to wgEncodeYaleChIPseqRel2SignalNb4Input       ;
 
+Latest 2009-5-16
+================
+# subIds: 333,334
+
+# 333 went in smoothely but nightly chron job:
+hg18.wgEncodeYaleChIPseqSignalHct116Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHct116Pol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHct116Pol2 has 1 records with end > chromSize.
+select t1.chrom,t1.chromEnd from wgEncodeYaleChIPseqSignalHct116Pol2 t1,chromInfo t2 where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+
+update wgEncodeYaleChIPseqSignalHct116Pol2 set chromEnd = 135374737 where chrom = "chr10" and chromEnd = 135374848;
+update wgEncodeYaleChIPseqSignalHct116Pol2 set chromEnd = 100338915 where chrom = "chr15" and chromEnd = 100338947;
+update wgEncodeYaleChIPseqSignalHct116Pol2 set chromEnd = 46944323 where chrom = "chr21" and chromEnd = 46944379;
+# 334 
+m validation error:
+ERROR: failed validateTagAlign : Error [file=Data/YDH_K562_E2F4_tagAlign_rep1_laneB_FC20891AAXX_2_s_5.bed, line=241926]: end(16572) > chromSize(chrM=16571) [chrM       16537   16572   CCCACACGTTCCCCTTAAATACGACATCAC
+GATGG   250     +]
+Error [file=Data/YDH_K562_E2F4_tagAlign_rep1_laneB_FC20891AAXX_2_s_5.bed, line=344184]: end(16572) > chromSize(chrM=16571) [chrM        16537   16572   CCCACACGTTCCCCTTAAATAAGACATCACGATGG     1000    +]
+Aborting ... found 2 errors in total
+
+### On hold until the 2 K562s and the 2 HepG2s are worked out!
+# Farnham has separate inputs for the same cell line.  But where are they different and when do we need a new cell line?
+
+Need to regenerate Large-Fragment (fragLength=575) 2009-05-22
+=============================================================
+tar -cpzf rawSigYaleLarge.tgz rawSigYale.DAF rawSigYaleLarge.DDF
+show tables like "wgEncodeYale%Rel2RawSignal%Large%";
+rename table wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment to wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment_old;
+rename table wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment to wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment_old;
+delete from trackDb where tableName = "wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment";
+delete from trackDb where tableName = "wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment";
+drop table wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment_old;
+drop table wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment_old;
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 343 displayed
 

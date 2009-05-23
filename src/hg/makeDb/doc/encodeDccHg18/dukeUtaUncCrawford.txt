@@ -965,10 +965,362 @@ Note: All (non-input) have 2 reps except GM12878/CTCF,HepG2/c-Myc,K562/c-Myc,K56
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 326 approved
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 327 approved
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 328 approved
+### Opps.  SOme have been superceded
+update projects set status = "superceded" where id = 233;
+update projects set status = "superceded" where id = 114;
+update projects set status = "superceded" where id = 79;
+update projects set status = "superceded" where id = 33;
+update projects set status = "superceded" where id = 115;
+update projects set status = "superceded" where id = 80;
+update projects set status = "superceded" where id = 32;
+# Move superceded dir out of the way:
+cd encpipeline_prod
+mkdir superceded
+mv 233 superceded/
+mv 114 superceded/
+79 superceded/
+mv 33 superceded/
+mv 115 superceded/
+mv 80 superceded/
+mv 32 superceded/
+mv 66 superceded/
+mv 108 superceded/
 
-# Not yeet for uniqueness tracks:
+# Not yet for uniqueness tracks:
 | wgEncodeDukeUniqueness20bp                     |
 | wgEncodeDukeUniqueness24bp                     |
 | wgEncodeDukeUniqueness35bp                     |
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 104 approved
+
+New ro reregnerate Raw Sigs 2009-05-22
+======================================
+drop table wgEncodeDukeDNaseSeqRawSignalRep1Gm12878_terry;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep1Helas3_terry ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep1Hepg2_terry  ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep1K562_terry   ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep2Gm12878_terry;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep2Helas3_terry ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep2Hepg2_terry  ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep2K562_terry   ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep3Gm12878_terry;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep3Helas3_terry ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep3Hepg2_terry  ;       
+drop table wgEncodeDukeDNaseSeqRawSignalRep3K562_terry   ;
+drop table wgEncodeUncFAIREseqRawSignalRep1Gm12878_terry ;     
+drop table wgEncodeUncFAIREseqRawSignalRep1Helas3_terry  ;     
+drop table wgEncodeUncFAIREseqRawSignalRep1Hepg2_terry   ;     
+drop table wgEncodeUncFAIREseqRawSignalRep1K562_terry    ;     
+drop table wgEncodeUncFAIREseqRawSignalRep2Gm12878_terry ;     
+drop table wgEncodeUncFAIREseqRawSignalRep2Helas3_terry  ;     
+drop table wgEncodeUncFAIREseqRawSignalRep2Hepg2_terry   ;     
+drop table wgEncodeUncFAIREseqRawSignalRep2K562_terry    ;     
+drop table wgEncodeUncFAIREseqRawSignalRep3Gm12878_terry ;     
+drop table wgEncodeUncFAIREseqRawSignalRep3Helas3_terry  ;     
+drop table wgEncodeUncFAIREseqRawSignalRep3Hepg2_terry   ;     
+drop table wgEncodeUncFAIREseqRawSignalRep3K562_terry    ;     
+drop table wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf_terry;        
+drop table wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc_terry ;        
+drop table wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf_terry ;        
+drop table wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc_terry  ;        
+drop table wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf_terry  ;        
+drop table wgEncodeUtaChIPseqRawSignalRep1K562Cmyc_terry   ;        
+drop table wgEncodeUtaChIPseqRawSignalRep1K562Ctcf_terry   ;        
+drop table wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf_terry;        
+drop table wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc_terry ;        
+drop table wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf_terry ;        
+drop table wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc_terry  ;        
+drop table wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf_terry  ;        
+drop table wgEncodeUtaChIPseqRawSignalRep2K562Cmyc_terry   ;        
+drop table wgEncodeUtaChIPseqRawSignalRep2K562Ctcf_terry   ;        
+drop table wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf_terry;        
+drop table wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc_terry  ;        
+drop table wgEncodeUtaChIPseqRawSignalRep3K562Cmyc_terry   ;        
+drop table wgEncodeUtaChIPseqRawSignalRep3K562Ctcf_terry   ;        
+drop table wgEncodeUtaustinChIPseqRawSignalGm12878Input_terry   ;        
+drop table wgEncodeUtaustinChIPseqRawSignalHelas3Input_terry    ;        
+drop table wgEncodeUtaustinChIPseqRawSignalHepg2Input_terry     ;        
+drop table wgEncodeUtaustinChIPseqRawSignalK562Input_terry      ;        
+       
+cd ../325; doEncodeValidate.pl -quick -allowReloads x ../325 > validate_errors 2>&1 &
+cd ../326; doEncodeValidate.pl -quick -allowReloads x ../326 > validate_errors 2>&1 &
+cd ../327; doEncodeValidate.pl -quick -allowReloads x ../327 > validate_errors 2>&1 &
+cd ../328; doEncodeValidate.pl -quick -allowReloads x ../328 > validate_errors 2>&1 &
+ll autoRawSignal?.bed 
+psg doEnc
+tail autoRawSignal3.bed
+cd ../325; doEncodeLoad.pl x ../325 > load_error 2>&1 &
+cd ../326; doEncodeLoad.pl x ../326 > load_error 2>&1 &
+cd ../327; doEncodeLoad.pl x ../327 > load_error 2>&1 &
+cd ../328; doEncodeLoad.pl x ../328 > load_error 2>&1 &
+
+# OUCH all wer loaded with the submission dir appended to the tablename!!!
+drop table wgEncodeDukeDNaseSeqRawSignalRep1Gm12878;
+drop table wgEncodeDukeDNaseSeqRawSignalRep1Helas3 ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep1Hepg2  ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep1K562   ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep2Gm12878;
+drop table wgEncodeDukeDNaseSeqRawSignalRep2Helas3 ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep2Hepg2  ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep2K562   ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep3Gm12878;
+drop table wgEncodeDukeDNaseSeqRawSignalRep3Helas3 ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep3Hepg2  ;
+drop table wgEncodeDukeDNaseSeqRawSignalRep3K562   ;
+
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Gm12878_325 to wgEncodeDukeDNaseSeqRawSignalRep1Gm12878;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Helas3_325  to wgEncodeDukeDNaseSeqRawSignalRep1Helas3 ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1Hepg2_325   to wgEncodeDukeDNaseSeqRawSignalRep1Hepg2  ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep1K562_325    to wgEncodeDukeDNaseSeqRawSignalRep1K562   ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Gm12878_325 to wgEncodeDukeDNaseSeqRawSignalRep2Gm12878;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Helas3_325  to wgEncodeDukeDNaseSeqRawSignalRep2Helas3 ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2Hepg2_325   to wgEncodeDukeDNaseSeqRawSignalRep2Hepg2  ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep2K562_325    to wgEncodeDukeDNaseSeqRawSignalRep2K562   ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Gm12878_325 to wgEncodeDukeDNaseSeqRawSignalRep3Gm12878;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Helas3_325  to wgEncodeDukeDNaseSeqRawSignalRep3Helas3 ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3Hepg2_325   to wgEncodeDukeDNaseSeqRawSignalRep3Hepg2  ;
+rename table wgEncodeDukeDNaseSeqRawSignalRep3K562_325    to wgEncodeDukeDNaseSeqRawSignalRep3K562   ;
+
+drop table wgEncodeUncFAIREseqRawSignalRep1Gm12878;
+drop table wgEncodeUncFAIREseqRawSignalRep1Helas3 ;
+drop table wgEncodeUncFAIREseqRawSignalRep1Hepg2  ;
+drop table wgEncodeUncFAIREseqRawSignalRep1K562   ;
+drop table wgEncodeUncFAIREseqRawSignalRep2Gm12878;
+drop table wgEncodeUncFAIREseqRawSignalRep2Helas3 ;
+drop table wgEncodeUncFAIREseqRawSignalRep2Hepg2  ;
+drop table wgEncodeUncFAIREseqRawSignalRep2K562   ;
+drop table wgEncodeUncFAIREseqRawSignalRep3Gm12878;
+drop table wgEncodeUncFAIREseqRawSignalRep3Helas3 ;
+drop table wgEncodeUncFAIREseqRawSignalRep3Hepg2  ;
+drop table wgEncodeUncFAIREseqRawSignalRep3K562   ;
+
+rename table wgEncodeUncFAIREseqRawSignalRep1Gm12878_326 to wgEncodeUncFAIREseqRawSignalRep1Gm12878;
+rename table wgEncodeUncFAIREseqRawSignalRep1Helas3_326  to wgEncodeUncFAIREseqRawSignalRep1Helas3 ;
+rename table wgEncodeUncFAIREseqRawSignalRep1Hepg2_326   to wgEncodeUncFAIREseqRawSignalRep1Hepg2  ;
+rename table wgEncodeUncFAIREseqRawSignalRep1K562_326    to wgEncodeUncFAIREseqRawSignalRep1K562   ;
+rename table wgEncodeUncFAIREseqRawSignalRep2Gm12878_326 to wgEncodeUncFAIREseqRawSignalRep2Gm12878;
+rename table wgEncodeUncFAIREseqRawSignalRep2Helas3_326  to wgEncodeUncFAIREseqRawSignalRep2Helas3 ;
+rename table wgEncodeUncFAIREseqRawSignalRep2Hepg2_326   to wgEncodeUncFAIREseqRawSignalRep2Hepg2  ;
+rename table wgEncodeUncFAIREseqRawSignalRep2K562_326    to wgEncodeUncFAIREseqRawSignalRep2K562   ;
+rename table wgEncodeUncFAIREseqRawSignalRep3Gm12878_326 to wgEncodeUncFAIREseqRawSignalRep3Gm12878;
+rename table wgEncodeUncFAIREseqRawSignalRep3Helas3_326  to wgEncodeUncFAIREseqRawSignalRep3Helas3 ;
+rename table wgEncodeUncFAIREseqRawSignalRep3Hepg2_326   to wgEncodeUncFAIREseqRawSignalRep3Hepg2  ;
+rename table wgEncodeUncFAIREseqRawSignalRep3K562_326    to wgEncodeUncFAIREseqRawSignalRep3K562   ;
+
+drop table wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf;
+drop table wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc ;
+drop table wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf ;
+drop table wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc  ;
+drop table wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf  ;
+drop table wgEncodeUtaChIPseqRawSignalRep1K562Cmyc   ;
+drop table wgEncodeUtaChIPseqRawSignalRep1K562Ctcf   ;
+drop table wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf;
+drop table wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc ;
+drop table wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf ;
+drop table wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc  ;
+drop table wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf  ;
+drop table wgEncodeUtaChIPseqRawSignalRep2K562Cmyc   ;
+drop table wgEncodeUtaChIPseqRawSignalRep2K562Ctcf   ;
+drop table wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf;
+drop table wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc  ;
+drop table wgEncodeUtaChIPseqRawSignalRep3K562Cmyc   ;
+drop table wgEncodeUtaChIPseqRawSignalRep3K562Ctcf   ;
+                                                     
+rename table wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf_327 to wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf;
+rename table wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc_327  to wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf_327  to wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc_327   to wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc  ;
+rename table wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf_327   to wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf  ;
+rename table wgEncodeUtaChIPseqRawSignalRep1K562Cmyc_327    to wgEncodeUtaChIPseqRawSignalRep1K562Cmyc   ;
+rename table wgEncodeUtaChIPseqRawSignalRep1K562Ctcf_327    to wgEncodeUtaChIPseqRawSignalRep1K562Ctcf   ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf_327 to wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf;
+rename table wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc_327  to wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf_327  to wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc_327   to wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc  ;
+rename table wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf_327   to wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf  ;
+rename table wgEncodeUtaChIPseqRawSignalRep2K562Cmyc_327    to wgEncodeUtaChIPseqRawSignalRep2K562Cmyc   ;
+rename table wgEncodeUtaChIPseqRawSignalRep2K562Ctcf_327    to wgEncodeUtaChIPseqRawSignalRep2K562Ctcf   ;
+rename table wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf_327 to wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf;
+rename table wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc_327   to wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc  ;
+rename table wgEncodeUtaChIPseqRawSignalRep3K562Cmyc_327    to wgEncodeUtaChIPseqRawSignalRep3K562Cmyc   ;
+rename table wgEncodeUtaChIPseqRawSignalRep3K562Ctcf_327    to wgEncodeUtaChIPseqRawSignalRep3K562Ctcf   ;
+
+drop table wgEncodeUtaChIPseqRawSignalGm12878Input;
+drop table wgEncodeUtaChIPseqRawSignalHelas3Input ;
+drop table wgEncodeUtaChIPseqRawSignalHepg2Input  ;
+drop table wgEncodeUtaChIPseqRawSignalK562Input   ;
+
+rename table wgEncodeUtaChIPseqRawSignalGm12878Input_328 to wgEncodeUtaChIPseqRawSignalGm12878Input;
+rename table wgEncodeUtaChIPseqRawSignalHelas3Input_328  to wgEncodeUtaChIPseqRawSignalHelas3Input ;
+rename table wgEncodeUtaChIPseqRawSignalHepg2Input_328   to wgEncodeUtaChIPseqRawSignalHepg2Input  ;
+rename table wgEncodeUtaChIPseqRawSignalK562Input_328    to wgEncodeUtaChIPseqRawSignalK562Input   ; 
+
+cd /hive/groups/encode/dcc/pipeline/encpipeline_prod/325
+mv wgEncodeDukeDNaseSeqRawSignalRep1Gm12878_325.wib wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep1Helas3_325.wib  wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep1Hepg2_325.wib   wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep1K562_325.wib    wgEncodeDukeDNaseSeqRawSignalRep1K562.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep2Gm12878_325.wib wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep2Helas3_325.wib  wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep2Hepg2_325.wib   wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep2K562_325.wib    wgEncodeDukeDNaseSeqRawSignalRep2K562.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep3Gm12878_325.wib wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep3Helas3_325.wib  wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep3Hepg2_325.wib   wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wib
+mv wgEncodeDukeDNaseSeqRawSignalRep3K562_325.wib    wgEncodeDukeDNaseSeqRawSignalRep3K562.wib
+
+cd /gbdb/hg18/wib/ 
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wib  wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wib   wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wib    wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep1K562.wib     wgEncodeDukeDNaseSeqRawSignalRep1K562.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wib  wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wib   wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wib    wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep2K562.wib     wgEncodeDukeDNaseSeqRawSignalRep2K562.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wib  wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wib   wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wib    wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/325/wgEncodeDukeDNaseSeqRawSignalRep3K562.wib     wgEncodeDukeDNaseSeqRawSignalRep3K562.wib
+
+update wgEncodeDukeDNaseSeqRawSignalRep1Gm12878 set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep1Helas3  set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep1Hepg2   set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep1Hepg2.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep1K562    set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep1K562.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep2Gm12878 set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep2Helas3  set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep2Hepg2   set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep2Hepg2.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep2K562    set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep2K562.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep3Gm12878 set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep3Helas3  set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep3Hepg2   set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wib";
+update wgEncodeDukeDNaseSeqRawSignalRep3K562    set file = "/gbdb/hg18/wib/wgEncodeDukeDNaseSeqRawSignalRep3K562.wib";
+
+
+cd /hive/groups/encode/dcc/pipeline/encpipeline_prod/326
+mv wgEncodeUncFAIREseqRawSignalRep1Gm12878_326.wib wgEncodeUncFAIREseqRawSignalRep1Gm12878.wib
+mv wgEncodeUncFAIREseqRawSignalRep1Helas3_326.wib  wgEncodeUncFAIREseqRawSignalRep1Helas3.wib
+mv wgEncodeUncFAIREseqRawSignalRep1Hepg2_326.wib   wgEncodeUncFAIREseqRawSignalRep1Hepg2.wib
+mv wgEncodeUncFAIREseqRawSignalRep1K562_326.wib    wgEncodeUncFAIREseqRawSignalRep1K562.wib
+mv wgEncodeUncFAIREseqRawSignalRep2Gm12878_326.wib wgEncodeUncFAIREseqRawSignalRep2Gm12878.wib
+mv wgEncodeUncFAIREseqRawSignalRep2Helas3_326.wib  wgEncodeUncFAIREseqRawSignalRep2Helas3.wib
+mv wgEncodeUncFAIREseqRawSignalRep2Hepg2_326.wib   wgEncodeUncFAIREseqRawSignalRep2Hepg2.wib
+mv wgEncodeUncFAIREseqRawSignalRep2K562_326.wib    wgEncodeUncFAIREseqRawSignalRep2K562.wib
+mv wgEncodeUncFAIREseqRawSignalRep3Gm12878_326.wib wgEncodeUncFAIREseqRawSignalRep3Gm12878.wib
+mv wgEncodeUncFAIREseqRawSignalRep3Helas3_326.wib  wgEncodeUncFAIREseqRawSignalRep3Helas3.wib
+mv wgEncodeUncFAIREseqRawSignalRep3Hepg2_326.wib   wgEncodeUncFAIREseqRawSignalRep3Hepg2.wib
+mv wgEncodeUncFAIREseqRawSignalRep3K562_326.wib    wgEncodeUncFAIREseqRawSignalRep3K562.wib
+
+cd /gbdb/hg18/wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep1Gm12878.wib wgEncodeUncFAIREseqRawSignalRep1Gm12878.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep1Helas3.wib  wgEncodeUncFAIREseqRawSignalRep1Helas3.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep1Hepg2.wib   wgEncodeUncFAIREseqRawSignalRep1Hepg2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep1K562.wib    wgEncodeUncFAIREseqRawSignalRep1K562.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep2Gm12878.wib wgEncodeUncFAIREseqRawSignalRep2Gm12878.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep2Helas3.wib  wgEncodeUncFAIREseqRawSignalRep2Helas3.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep2Hepg2.wib   wgEncodeUncFAIREseqRawSignalRep2Hepg2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep2K562.wib    wgEncodeUncFAIREseqRawSignalRep2K562.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep3Gm12878.wib wgEncodeUncFAIREseqRawSignalRep3Gm12878.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep3Helas3.wib  wgEncodeUncFAIREseqRawSignalRep3Helas3.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep3Hepg2.wib   wgEncodeUncFAIREseqRawSignalRep3Hepg2.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/326/wgEncodeUncFAIREseqRawSignalRep3K562.wib    wgEncodeUncFAIREseqRawSignalRep3K562.wib
+
+update wgEncodeUncFAIREseqRawSignalRep1Gm12878 set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep1Gm12878.wib";
+update wgEncodeUncFAIREseqRawSignalRep1Helas3  set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep1Helas3.wib";
+update wgEncodeUncFAIREseqRawSignalRep1Hepg2   set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep1Hepg2.wib";
+update wgEncodeUncFAIREseqRawSignalRep1K562    set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep1K562.wib";
+update wgEncodeUncFAIREseqRawSignalRep2Gm12878 set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep2Gm12878.wib";
+update wgEncodeUncFAIREseqRawSignalRep2Helas3  set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep2Helas3.wib";
+update wgEncodeUncFAIREseqRawSignalRep2Hepg2   set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep2Hepg2.wib";
+update wgEncodeUncFAIREseqRawSignalRep2K562    set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep2K562.wib";
+update wgEncodeUncFAIREseqRawSignalRep3Gm12878 set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep3Gm12878.wib";
+update wgEncodeUncFAIREseqRawSignalRep3Helas3  set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep3Helas3.wib";
+update wgEncodeUncFAIREseqRawSignalRep3Hepg2   set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep3Hepg2.wib";
+update wgEncodeUncFAIREseqRawSignalRep3K562    set file = "/gbdb/hg18/wib/wgEncodeUncFAIREseqRawSignalRep3K562.wib";
+
+
+cd /hive/groups/encode/dcc/pipeline/encpipeline_prod/327
+mv wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf_327.wib wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc_327.wib  wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf_327.wib  wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc_327.wib   wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf_327.wib   wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep1K562Cmyc_327.wib    wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep1K562Ctcf_327.wib    wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf_327.wib wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc_327.wib  wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf_327.wib  wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc_327.wib   wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf_327.wib   wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep2K562Cmyc_327.wib    wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep2K562Ctcf_327.wib    wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf_327.wib wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wib
+mv wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc_327.wib   wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep3K562Cmyc_327.wib    wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wib
+mv wgEncodeUtaChIPseqRawSignalRep3K562Ctcf_327.wib    wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wib
+
+cd /gbdb/hg18/wib/ 
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wib wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wib  wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wib  wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wib   wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wib   wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wib    wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wib    wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wib wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wib  wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wib  wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wib   wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wib   wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wib    wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wib    wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wib wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wib   wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wib    wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/327/wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wib    wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wib
+
+update wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc  set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf  set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc   set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf   set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep1K562Cmyc    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1K562Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep1K562Ctcf    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep1K562Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc  set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf  set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc   set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf   set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep2K562Cmyc    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2K562Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep2K562Ctcf    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep2K562Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wib";
+update wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc   set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep3K562Cmyc    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wib";
+update wgEncodeUtaChIPseqRawSignalRep3K562Ctcf    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wib";
+ 
+
+cd /hive/groups/encode/dcc/pipeline/encpipeline_prod/328
+mv wgEncodeUtaChIPseqRawSignalGm12878Input_328.wib wgEncodeUtaChIPseqRawSignalGm12878Input.wib
+mv wgEncodeUtaChIPseqRawSignalHelas3Input_328.wib  wgEncodeUtaChIPseqRawSignalHelas3Input.wib
+mv wgEncodeUtaChIPseqRawSignalHepg2Input_328.wib   wgEncodeUtaChIPseqRawSignalHepg2Input.wib
+mv wgEncodeUtaChIPseqRawSignalK562Input_328.wib    wgEncodeUtaChIPseqRawSignalK562Input.wib
+
+cd /gbdb/hg18/wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/328/wgEncodeUtaChIPseqRawSignalGm12878Input.wib wgEncodeUtaChIPseqRawSignalGm12878Input.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/328/wgEncodeUtaChIPseqRawSignalHelas3Input.wib  wgEncodeUtaChIPseqRawSignalHelas3Input.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/328/wgEncodeUtaChIPseqRawSignalHepg2Input.wib   wgEncodeUtaChIPseqRawSignalHepg2Input.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/328/wgEncodeUtaChIPseqRawSignalK562Input.wib    wgEncodeUtaChIPseqRawSignalK562Input.wib
+
+update wgEncodeUtaChIPseqRawSignalGm12878Input set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalGm12878Input.wib";
+update wgEncodeUtaChIPseqRawSignalHelas3Input  set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalHelas3Input.wib"; 
+update wgEncodeUtaChIPseqRawSignalHepg2Input   set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalHepg2Input.wib";  
+update wgEncodeUtaChIPseqRawSignalK562Input    set file = "/gbdb/hg18/wib/wgEncodeUtaChIPseqRawSignalK562Input.wib";   
+
+Load FAIRE Hela-S3 peaks which are missing 2009-05-22
+=====================================================
+# validation error on 336 because table in trackDb
+delete from trackDb where tableName like "wgEncodeUncFAIREseqPeaksHelas3";        
+# validation error because of zero length peak: Ask Terry.
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 336 displayed
+        

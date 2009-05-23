@@ -464,3 +464,141 @@ bedItemOverlapCount -verbose=2 hg18 manualSort.bed > manualRawSignal1.bed
 /cluster/bin/x86_64/bedExtendRanges hg18 300 data/Broad_Raw_GM12878_H3K4me1_rep1_chr22.bed data/Broad_Raw_GM12878_H3K4me1_rep1_chrX.bed | sort  -S 5G  -T /data/tmp -k1,1 -k2,2n  - | grep -v -E "^track" | bedItemOverlapCount -verbose=2 hg18 stdin > manualRawSignal1.bed 
 
 
+Regenerate Raw Signals because of bug in bedOverlap 2009-05-11
+==============================================================
+# Can't rename sig because wigs are attached to files.  The regeneration will merely add some data to the end of chrX.  
+# Could fly without a net and regen to the same name or could regen to Rel2, even though there is no real difference.
+# Regen to Rel to requires release alpha/beta but so be it.  List of table:
+subId=140 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me3  fragLength=300
+subId=140 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3  fragLength=300
+subId=141 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me2  fragLength=300
+subId=141 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2  fragLength=300
+subId=142 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me1  fragLength=300
+subId=142 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1  fragLength=300
+subId=143 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k36me3 fragLength=300
+subId=143 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3 fragLength=300
+subId=144 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27me3 fragLength=300
+subId=144 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3 fragLength=300
+subId=145 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27ac  fragLength=300
+subId=145 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac  fragLength=300
+subId=146 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k9ac   fragLength=300
+subId=146 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac   fragLength=300
+subId=147 wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1 fragLength=300
+subId=147 wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1 fragLength=300
+subId=148 wgEncodeBroadChipSeqAlignmentsRep1Gm12878Ctcf     fragLength=300
+subId=148 wgEncodeBroadChipSeqAlignmentsRep2Gm12878Ctcf     fragLength=300
+subId=149 wgEncodeBroadChipSeqAlignmentsRep1Gm12878Control  fragLength=300
+subId=149 wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control  fragLength=300
+subId=150 wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3     fragLength=300
+subId=150 wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me3     fragLength=300
+subId=151 wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2     fragLength=300
+subId=151 wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me2     fragLength=300
+subId=152 wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1     fragLength=300
+subId=152 wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me1     fragLength=300
+subId=153 wgEncodeBroadChipSeqAlignmentsRep1K562H3k27me3    fragLength=300
+subId=153 wgEncodeBroadChipSeqAlignmentsRep2K562H3k27me3    fragLength=300
+subId=154 wgEncodeBroadChipSeqAlignmentsRep1K562H3k36me3    fragLength=300
+subId=154 wgEncodeBroadChipSeqAlignmentsRep2K562H3k36me3    fragLength=300
+subId=155 wgEncodeBroadChipSeqAlignmentsRep1K562H3k9ac      fragLength=300
+subId=155 wgEncodeBroadChipSeqAlignmentsRep2K562H3k9ac      fragLength=300
+subId=156 wgEncodeBroadChipSeqAlignmentsRep1K562H3k27ac     fragLength=300
+subId=156 wgEncodeBroadChipSeqAlignmentsRep2K562H3k27ac     fragLength=300
+subId=157 wgEncodeBroadChipSeqAlignmentsRep1K562Ctcf        fragLength=300
+subId=157 wgEncodeBroadChipSeqAlignmentsRep2K562Ctcf        fragLength=300
+subId=158 wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1     fragLength=300
+subId=158 wgEncodeBroadChipSeqAlignmentsRep2K562H3k9me1     fragLength=300
+subId=159 wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1    fragLength=300
+subId=159 wgEncodeBroadChipSeqAlignmentsRep2K562H4k20me1    fragLength=300
+subId=160 wgEncodeBroadChipSeqAlignmentsRep1K562Pol2b       fragLength=300
+subId=160 wgEncodeBroadChipSeqAlignmentsRep2K562Pol2b       fragLength=300
+subId=161 wgEncodeBroadChipSeqAlignmentsRep1K562Control     fragLength=300
+subId=161 wgEncodeBroadChipSeqAlignmentsRep2K562Control     fragLength=300
+subId=162 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me3    fragLength=300
+subId=162 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3    fragLength=300
+subId=163 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me2    fragLength=300
+subId=163 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2    fragLength=300
+subId=164 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me1    fragLength=300
+subId=164 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1    fragLength=300
+subId=165 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27me3   fragLength=300
+subId=165 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3   fragLength=300
+subId=166 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k36me3   fragLength=300
+subId=166 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3   fragLength=300
+subId=167 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9ac     fragLength=300
+subId=167 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9ac     fragLength=300
+subId=168 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27ac    fragLength=300
+subId=168 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27ac    fragLength=300
+subId=169 wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9me1    fragLength=300
+subId=169 wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1    fragLength=300
+subId=170 wgEncodeBroadChipSeqAlignmentsRep1HuvecH4k20me1   fragLength=300
+subId=170 wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1   fragLength=300
+subId=171 wgEncodeBroadChipSeqAlignmentsRep1HuvecCtcf       fragLength=300
+subId=171 wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcf       fragLength=300
+subId=172 wgEncodeBroadChipSeqAlignmentsRep1HuvecPol2b      fragLength=300
+subId=172 wgEncodeBroadChipSeqAlignmentsRep2HuvecPol2b      fragLength=300
+subId=173 wgEncodeBroadChipSeqAlignmentsRep1HuvecControl    fragLength=300
+subId=173 wgEncodeBroadChipSeqAlignmentsRep2HuvecControl    fragLength=300
+subId=174 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k4me3     fragLength=300
+subId=174 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k4me3     fragLength=300
+subId=175 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k4me2     fragLength=300
+subId=175 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k4me2     fragLength=300
+subId=176 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k4me1     fragLength=300
+subId=176 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k4me1     fragLength=300
+subId=177 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k27me3    fragLength=300
+subId=177 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k27me3    fragLength=300
+subId=178 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k36me3    fragLength=300
+subId=178 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k36me3    fragLength=300
+subId=179 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k9ac      fragLength=300
+subId=179 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k9ac      fragLength=300
+subId=180 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k27ac     fragLength=300
+subId=180 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k27ac     fragLength=300
+subId=181 wgEncodeBroadChipSeqAlignmentsRep1NhekH3k9me1     fragLength=300
+subId=181 wgEncodeBroadChipSeqAlignmentsRep2NhekH3k9me1     fragLength=300
+subId=182 wgEncodeBroadChipSeqAlignmentsRep1NhekH4k20me1    fragLength=300
+subId=182 wgEncodeBroadChipSeqAlignmentsRep2NhekH4k20me1    fragLength=300
+subId=183 wgEncodeBroadChipSeqAlignmentsRep1NhekCtcf        fragLength=300
+subId=183 wgEncodeBroadChipSeqAlignmentsRep2NhekCtcf        fragLength=300
+subId=184 wgEncodeBroadChipSeqAlignmentsRep1NhekPol2b       fragLength=300
+subId=184 wgEncodeBroadChipSeqAlignmentsRep2NhekPol2b       fragLength=300
+subId=185 wgEncodeBroadChipSeqAlignmentsRep1NhekControl     fragLength=300
+subId=185 wgEncodeBroadChipSeqAlignmentsRep2NhekControl     fragLength=300
+
+List of submission dirs: 140-185
+# make rawSigBroad.D*F
+tar -cpzf rawSigBroad.tgz rawSigBroad.D*F
+Made new submission dir=332
+
+# Move superceded dir out of the way:
+cd encpipeline_prod
+mv 66 superceded/
+mv 108 superceded/
+
+validate errors:
+ERROR: failed validateTagAlign : Error [file=../140/data/Broad_Raw_GM12878_H3K4me3_rep1_chr11.bed, line=229165]: end(134452385) > chromSize(chr11=134452384) [chr11     134452333       134452385       TAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAGGGTTAG     1000    +]
+Aborting ... found 1 errors in total
+
+
+grep chromSize validate_error | grep -v chr11 | grep -v chr7 | grep -v chr10 | grep -v chr15 | grep -v chr21 | grep -v chr18 | grep -v chrX| wc -l
+0
+chr7,chr10,chr15,chr10,chr11,chr18,chr21
+Sequences length 51, end - start = 52  Bad news
+
+Are they all 51/52?
+awk '{printf "%d\n",$3 - $2;}' ../140/data/Broad_Raw_GM12878_H3K4me3_rep1_chr1.bed | uniq -c | wc -l
+1
+awk '{printf "%d\n",$3 - $2;}' ../140/data/Broad_Raw_GM12878_H3K4me3_rep1_chr1.bed | head
+52
+52
+head ../140/data/Broad_Raw_GM12878_H3K4me3_rep1_chr1.bed       
+chr1    68004439        68004491        AGACAAGCCCCTTTCAACGTCCCACCCAATTATCGGCTGACAAACTTTCCA     1000    +
+chr1    216184249       216184301       CTATAATCCCAGCTACTTGGAAGGCTGAGGCAGGAGAATCGCTTGAACCTG     1000    -
+head ../140/data/Broad_Raw_GM12878_H3K4me3_rep1_chr1.bed | awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n",$1,$2,$3 - 1,$4,$5,$6;}' 
+chr1    68004439        68004490        AGACAAGCCCCTTTCAACGTCCCACCCAATTATCGGCTGACAAACTTTCCA     1000    +
+chr1    216184249       216184300       CTATAATCCCAGCTACTTGGAAGGCTGAGGCAGGAGAATCGCTTGAACCTG     1000    -
+
+### So it appears that all Broad tagAlign files have and end position 1 past where it should be !!!
+# it also appears that this can be remedied here, but not without a lot of processing.
+ 
+# created 332/fixTagAlign.sh script for all of the Broad tagAlign files 
+
+
+ 
