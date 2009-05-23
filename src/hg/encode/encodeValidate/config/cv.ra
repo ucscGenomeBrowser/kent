@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.98 2009/05/21 01:02:04 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.99 2009/05/23 16:42:32 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -559,7 +559,7 @@ vendorId 612044
 
 term E2F4
 type Antibody
-targetDescription mapping at the C-turminus of E2F4 of human origin
+targetDescription mapping at the C-terminus of E2F4 of human origin
 antibodyDescription rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-866
