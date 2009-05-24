@@ -39,7 +39,10 @@ return result;
 struct bed *bedLoadPairedTagAlign(char **row)
 /* Load first six fields of bed. 
  * Add ~seq1~seq2 to end of name
- * Then remove the sequence to extra field when we convert to linkedFeature */
+ * Then remove the sequence to extra field when we convert to linkedFeature.
+ * Assumes seq1 and seq2 are in row[6] and row[7], as they would be with a 
+ * pairedTagAlign type (hg/lib/encode/pairedTagAlign.as). It would be good to be
+ * able to check these columns exist but we dont have the sqlResult here. */
 {
 char buf[1024];
 struct bed *ret = bedLoad6(row);
@@ -76,6 +79,8 @@ else
     loader = bedLoad6;
 
 // pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
+// after removing optional bin column, this loader assumes seq1 and seq2 are in
+// row[6] and row[7] respectively of the sql result.
 if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE)) 
 	&& sameString(setting, "seq1Seq2"))
     loader = bedLoadPairedTagAlign;
@@ -648,10 +653,14 @@ tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
 
-void addSimpleFeatures(struct simpleFeature **pSfList, int start, int end, int qStart, int stepSize)
+void addSimpleFeatures(struct simpleFeature **pSfList, int start, int end, int qStart, boolean  everyBase)
+/* Add simple features from start to end to the list. 
+ * qStart is the offset in the query.
+ * If everyBase is TRUE then add a simpleFeature for every base in the start,end region */
 {
 int s;
 struct simpleFeature *sf;
+int stepSize = everyBase ? 1 : end - start;
 for (s = start ; s < end ; s += stepSize)
     {
     AllocVar(sf);
@@ -675,7 +684,6 @@ struct linkedFeatures *simpleBedToLinkedFeatures(struct bed *b, int bedFields,
  */
 {
 struct linkedFeatures *lf = NULL;
-int stepSize;
 if (b)
     {
     AllocVar(lf);
@@ -703,15 +711,12 @@ if (b)
 	dyStringAppend(d, seq1);
 	dyStringAppend(d, seq2);
 	lf->extra = newDnaSeq(dyStringCannibalize(&d), l1+l2, lf->name);
-	stepSize = everyBase ? 1 : l1;
-	addSimpleFeatures(&lf->components, lf->start, lf->start + l1, 0, stepSize);
-	stepSize = everyBase ? 1 : l2;
-	addSimpleFeatures(&lf->components, lf->end - l2, lf->end, l1, stepSize);
+	addSimpleFeatures(&lf->components, lf->start, lf->start + l1, 0, everyBase);
+	addSimpleFeatures(&lf->components, lf->end - l2, lf->end, l1, everyBase);
 	}
     else
 	{
-	stepSize = everyBase ? 1 : lf->end - lf->start;
-	addSimpleFeatures(&lf->components, lf->start, lf->end, 0, stepSize);
+	addSimpleFeatures(&lf->components, lf->start, lf->end, 0, everyBase);
 	}
     slReverse(&lf->components);
     if (bedFields > 3)
