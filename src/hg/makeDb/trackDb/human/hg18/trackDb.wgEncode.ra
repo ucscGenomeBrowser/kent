@@ -11590,6 +11590,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -11610,6 +11614,10 @@ wgEncode 1
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -11631,6 +11639,10 @@ wgEncode 1
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -11729,6 +11741,10 @@ wgEncode 1
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -11749,6 +11765,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -11768,6 +11788,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -11787,6 +11811,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
     dateUnrestricted 2009-12-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -13361,6 +13389,10 @@ wgEncode 1
     subGroups view=Alignments cellType=GM12878 fragSize=10k
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-04
     dateUnrestricted 2010-01-04
     dataVersion ENCODE Feb 2009 Freeze
@@ -13379,6 +13411,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 fragSize=1k
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-04
     dateUnrestricted 2010-01-04
     dataVersion ENCODE Feb 2009 Freeze
@@ -13397,6 +13433,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 fragSize=10k
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-04
     dateUnrestricted 2010-01-04
     dataVersion ENCODE Feb 2009 Freeze
@@ -13415,6 +13455,10 @@ wgEncode 1
     subGroups view=Alignments cellType=GM12878 fragSize=1k
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-07
     dateUnrestricted 2010-01-07
     dataVersion ENCODE Feb 2009 Freeze
@@ -13433,6 +13477,10 @@ wgEncode 1
     subGroups view=Alignments cellType=GM12878 fragSize=5k
     #type pairedTagAlign
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-07
     dateUnrestricted 2010-01-07
     dataVersion ENCODE Feb 2009 Freeze

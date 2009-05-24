@@ -273,9 +273,9 @@ color        -    r,g,b integer triplet       - specifies primary color
                                               - red,green,blue values 0 to 255
 altColor     -    r,g,b integer triplet       - specifies secondary color
                                               - for items
-colorByStrand -   r,g,b:r,g,b  triplet pair   - specifies plus and minus strand color
-                                              - rgb+:rgb- where rgb+ and rgb- are
-                                              - +/- strand red,green,blue values 0 to 255
+colorByStrand -   r,g,b r,g,b                 - specifies plus and minus strand color as above
+                                              - first rgb is plus strand
+                                              - second rgb is minus strand
                                               - this has no effect for elements w/out strand
 priority     -    a decimal number            - used to order this track
                                               - within this track group
@@ -397,16 +397,21 @@ Some settings used by various tracks:
       can be found (if any) so that codons can be drawn when viewing a
       sufficiently small region.  If `table' is specified, an additional
       parameter of a table name, in cdsSpec format, is required.
-    o baseColorUseSequence {genbank,seq,extFile,nameIsSequence,none}
-      - For genePred or psl tracks, or bed/bigBed tracks where the sequence 
-      is stored in the name column (see kent/src/hg/lib/encode/tagAlign.as).
+    o baseColorUseSequence 
+      {genbank,seq,ss,extFile,nameIsSequence,seq1Seq2,hgPcrResult,none}
+      - For genePred or psl tracks, or bed/bigBed tracks. 
       Specifies where item sequence can be found (if any) so that
       item sequence, or differences from genomic sequence, can be drawn when
-      viewing a sufficiently small region.  If `extFile' is specified, two
-      additional parameters are required, the name of the seq table followed
-      by the name of the extFile table to use in looking up the sequence.
-      These tables are loaded by hgLoadSeq. If 'nameIsSequence' is specified
-      then the name column can be interpreted as the sequence.
+      viewing a sufficiently small region.  
+      If `extFile' is specified, two additional parameters are required, 
+      the name of the seq table followed by the name of the extFile 
+      table to use in looking up the sequence. 
+      These tables are loaded by hgLoadSeq. 
+      If 'nameIsSequence' is specified then the 4th column ('name' or 
+      'sequence') contains the sequence. (see hg/lib/encode/tagAlign.as)
+      If 'seq1Seq2' is specified then the 7th & 8th columns ('seq1' and
+      'seq2') contain the left and right pairs of the sequence. 
+      (see hg/lib/encode/pairedTagAlign.as)
     o baseColorDefault {genomicCodons,itemBases,itemCodons,diffBases,
       diffCodons,none} - For tracks with CDS and/or sequence information.
       (See baseColorUseSequence above)

@@ -10,6 +10,8 @@
 #include "hgTracks.h"
 #include "cds.h"
 
+#define SEQ_DELIM '~'
+
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
 {
@@ -32,6 +34,19 @@ struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 bbiFileClose(&bbi);
 return result;
+}
+
+struct bed *bedLoadPairedTagAlign(char **row)
+/* Load first six fields of bed. 
+ * Add ~seq1~seq2 to end of name
+ * Then remove the sequence to extra field when we convert to linkedFeature */
+{
+char buf[1024];
+struct bed *ret = bedLoad6(row);
+safef(buf, sizeof(buf), "%s%c%s%c%s", ret->name, SEQ_DELIM, row[6], SEQ_DELIM, row[7]);
+freez(&(ret->name));
+ret->name = cloneString(buf);
+return ret;
 }
 
 void loadSimpleBed(struct track *tg)
@@ -59,6 +74,11 @@ else if (tg->bedSize == 5)
     loader = bedLoad5;
 else
     loader = bedLoad6;
+
+// pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
+if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE)) 
+	&& sameString(setting, "seq1Seq2"))
+    loader = bedLoadPairedTagAlign;
 
 /* limit to a specified count of top scoring items.
  * If this is selected, it overrides selecting item by specified score */
@@ -628,32 +648,70 @@ tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
 
-struct linkedFeatures *simpleBedToLinkedFeatures(struct bed *b, int bedFields, boolean everyBase)
+void addSimpleFeatures(struct simpleFeature **pSfList, int start, int end, int qStart, int stepSize)
+{
+int s;
+struct simpleFeature *sf;
+for (s = start ; s < end ; s += stepSize)
+    {
+    AllocVar(sf);
+    sf->start = s;
+    sf->end = sf->start + stepSize;
+    sf->qStart = qStart + (s - start);
+    sf->qEnd = sf->qStart + stepSize;
+    slAddHead(pSfList, sf);
+    }
+}
+
+struct linkedFeatures *simpleBedToLinkedFeatures(struct bed *b, int bedFields, 
+    boolean everyBase, boolean paired)
 /* Create a linked feature from a single bed item
  * Any bed fields past the 6th field (strand) will be ignored
  * Make one simpleFeature for every base of the bed if everyBase is TRUE,
  * otherwise it will contain a single 'exon' corresponding to the bed (start,end)
  * Dont free the bed as a pointer to each item is stored in lf->original 
+ * If paired then need to strip ~seq1~seq2 from name and set it as DNA in lf->extra 
+ *  and treat bed as 2-exon bed.
  */
 {
 struct linkedFeatures *lf = NULL;
+int stepSize;
 if (b)
     {
     AllocVar(lf);
     lf->start = lf->tallStart = b->chromStart;
     lf->end = lf->tallEnd = b->chromEnd;
-    struct simpleFeature *sf;
-    int s;
-    int stepSize = everyBase ? 1 : lf->end - lf->start;
     lf->components = NULL;
-    for (s = lf->start ; s < lf->end ; s += stepSize)
+    if (paired)
 	{
-	AllocVar(sf);
-	sf->start = s;
-	sf->end = sf->start + stepSize;
-	sf->qStart = s - lf->start;
-	sf->qEnd = sf->qStart + stepSize;
-	slAddHead(&lf->components, sf);
+	// Find seq1 & seq2, strip them from the name,
+	// add them as two blocks of simpleFeatures,
+	// concatenate seq1 & seq2 into one dnaSeq,
+	// and store in lf->extra field
+	char *seq2 = strrchr(b->name, SEQ_DELIM);
+	if (!seq2)
+	    errAbort("Could not find seq2 in paired sequence");
+	*(seq2++) = '\0';
+	// Find seq1 and strip it from the name
+	char *seq1 = strrchr(b->name, SEQ_DELIM);
+	if (!seq1)
+	    errAbort("Could not find seq1 in paired sequence");
+	*(seq1++) = '\0';
+	int l1 = strlen(seq1);
+	int l2 = strlen(seq2);
+	struct dyString *d = dyStringNew(l1+l2+1);
+	dyStringAppend(d, seq1);
+	dyStringAppend(d, seq2);
+	lf->extra = newDnaSeq(dyStringCannibalize(&d), l1+l2, lf->name);
+	stepSize = everyBase ? 1 : l1;
+	addSimpleFeatures(&lf->components, lf->start, lf->start + l1, 0, stepSize);
+	stepSize = everyBase ? 1 : l2;
+	addSimpleFeatures(&lf->components, lf->end - l2, lf->end, l1, stepSize);
+	}
+    else
+	{
+	stepSize = everyBase ? 1 : lf->end - lf->start;
+	addSimpleFeatures(&lf->components, lf->start, lf->end, 0, stepSize);
 	}
     slReverse(&lf->components);
     if (bedFields > 3)
@@ -667,13 +725,14 @@ if (b)
 return lf;
 }
 
-struct linkedFeatures *simpleBedListToLinkedFeatures(struct bed *b, int bedFields, boolean everyBase)
+struct linkedFeatures *simpleBedListToLinkedFeatures(struct bed *b, int bedFields, 
+    boolean everyBase, boolean paired)
 /* Create a list of linked features from a list of beds */
 {
 struct linkedFeatures *lfList = NULL;
 while (b)
     {
-    slAddHead(&lfList, simpleBedToLinkedFeatures(b, bedFields, everyBase));
+    slAddHead(&lfList, simpleBedToLinkedFeatures(b, bedFields, everyBase, paired));
     b = b->next;
     }
 slReverse(&lfList);
@@ -684,7 +743,14 @@ void loadSimpleBedAsLinkedFeaturesPerBase(struct track *tg)
 /* bed list not freed as pointer to it is stored in 'original' field */
 {
 loadSimpleBed(tg);
-tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE);
+tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, FALSE);
+}
+
+void loadPairedTagAlignAsLinkedFeaturesPerBase(struct track *tg)
+/* bed list not freed as pointer to it is stored in 'original' field */
+{
+loadSimpleBed(tg);
+tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, TRUE);
 }
 
 
@@ -737,7 +803,11 @@ if (fieldCount < 8)
 	// data must be loaded as bed and converted to linkedFeatures 
 	// to draw each base character must make one simpleFeature per base
 	linkedFeaturesMethods(track);
-	track->loadItems = loadSimpleBedAsLinkedFeaturesPerBase;
+	char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+	if (isNotEmpty(setting) && sameString(setting, "seq1Seq2"))
+	    track->loadItems = loadPairedTagAlignAsLinkedFeaturesPerBase;
+	else
+	    track->loadItems = loadSimpleBedAsLinkedFeaturesPerBase;
 	if (trackDbSetting(tdb, "colorByStrand"))
 	    track->itemColor = lfItemColorByStrand;
 	}

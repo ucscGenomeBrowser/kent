@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.95 2009/05/20 20:50:51 mikep Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.96 2009/05/24 09:10:38 mikep Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -830,6 +830,12 @@ else if (endsWith("ExtFile", seqSource))
 else if (sameString("nameIsSequence", seqSource))
     {
     mrnaSeq = newDnaSeq(cloneString(name), strlen(name), cloneString(name));
+    if (lf->orientation == -1)
+	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+    }
+else if (sameString("seq1Seq2", seqSource))
+    {
+    mrnaSeq = lf->extra;
     if (lf->orientation == -1)
 	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
     }
