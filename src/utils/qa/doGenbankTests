@@ -49,7 +49,9 @@ getShortLabel() {
   echo $res
 }
 
+# keep track of errors vs. no errors
 allOk=yes
+
 # specify tables that should get each test
 allTables="refGene xenoRefGene mgcFullMrna orfeomeMrna all_mrna intronEst /
            all_est xenoMrna xenoEst"
@@ -59,17 +61,15 @@ pslTables="mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli /
 featureTables="refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes /
                orfeomeMrna all_mrna intronEst all_est xenoMrna xenoEst"
 
-# check host, set path to genbank table list
+# check host, set path to genbank sanity location 
 if [ "$HOST" != hgwdev -a "$HOST" != hgwbeta ]
 then
   echo "This script must be run from hgwdev or hgwbeta." >&2
   exit 1
 elif [ "$HOST" = hgwdev ]
 then
-  genbankPath="/cluster/data/genbank/etc/genbank.tbls"
   sanityPath="/cluster/data/genbank"
 else #host is hgwbeta
-  genbankPath="/genbank/etc/genbank.tbls"
   sanityPath="/genbank"
 fi
 
@@ -167,7 +167,7 @@ done
 echo
 
 # run gbSanity
-filename=${db}.sanity.$(date +%m.%d.%Y-%R%p)
+filename=${db}.sanity.$(date +%m-%d-%Y.%R%p)
 echo -e "--> Running gbSanity, and putting output in:"
 echo -e "${HOST}:$sanityPath/misc/$filename"
 # need to run in a subshell, since gbSanity wants to be run from this dir
