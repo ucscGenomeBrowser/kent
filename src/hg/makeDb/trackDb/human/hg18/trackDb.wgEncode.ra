@@ -13520,10 +13520,10 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type tagAlign
     type bigBed 6
-    baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
+    #baseColorDefault diffBases
+    #baseColorUseSequence nameIsSequence
+    #showDiffBasesAllScales .
+    #showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-13
     dateUnrestricted 2010-01-13
     dataVersion ENCODE Feb 2009 Freeze
