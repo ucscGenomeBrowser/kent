@@ -13519,7 +13519,11 @@ wgEncode 1
     longLabel ENCODE Helicos RNA-Seq Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     #type tagAlign
-    type bigBed
+    type bigBed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-13
     dateUnrestricted 2010-01-13
     dataVersion ENCODE Feb 2009 Freeze
