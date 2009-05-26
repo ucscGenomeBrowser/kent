@@ -22345,6 +22345,490 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 
 
 ############################################################################
+# dbSNP BUILD 130 (DONE 5/22/09 angie)
+    # Set up build directory
+    mkdir -p /hive/data/outside/dbSNP/130/{human,shared}
+
+    # Get field encodings -- if there are changes or additions to the
+    # encoding of the corresponding fields, you might need to update
+    # snpNcbiToUcsc, hgTracks, hgc and hgTrackUi (see also
+    # hg/lib/snp125Ui.c).
+    cd /hive/data/outside/dbSNP/130/shared
+    alias wg wget --timestamping
+    set ftpSnpDb = ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database
+    wg $ftpSnpDb/shared_data/LocTypeCode.bcp.gz
+    wg $ftpSnpDb/shared_data/SnpClassCode.bcp.gz
+    wg $ftpSnpDb/shared_data/SnpFunctionCode.bcp.gz
+    wg $ftpSnpDb/shared_data/SnpValidationCode.bcp.gz
+    # Here is another source -- it is not as up-to-date as the above, but
+    # our encodings (enums and sets in snp130.sql) are named more similar
+    # to those in the 2005 ASN:
+    # ftp://ftp.ncbi.nih.gov/snp/specs/docsum_2005.asn
+
+    ########################## DOWNLOAD #############################
+    cd /hive/data/outside/dbSNP/130/human
+    mkdir data schema rs_fasta
+    # Get data from NCBI (anonymous FTP)
+    wg ftp://ftp.ncbi.nih.gov/snp/00readme.txt
+    cd /hive/data/outside/dbSNP/130/human/data
+    # ContigLoc table has coords, orientation, loc_type, and refNCBI allele
+    wg $ftpSnpDb/organism_data/b130_SNPContigLoc_36_3.bcp.gz
+    wg $ftpSnpDb/organism_data/b130_SNPContigLocusId_36_3.bcp.gz
+    wg $ftpSnpDb/organism_data/b130_ContigInfo_36_3.bcp.gz
+    # MapInfo has alignment weights
+    wg $ftpSnpDb/organism_data/b130_SNPMapInfo_36_3.bcp.gz
+    # SNP has univar_id, validation status and heterozygosity
+    wg $ftpSnpDb/organism_data/SNP.bcp.gz
+
+    # Get schema
+    cd /hive/data/outside/dbSNP/130/human/schema
+    wg $ftpSnpDb/organism_schema/human_9606_table.sql.gz
+    wg $ftpSnpDb/shared_schema/dbSNP_main_table.sql.gz
+
+    # Get fasta files
+    # using headers of fasta files for molType, class, observed
+    cd /hive/data/outside/dbSNP/130/human/rs_fasta
+    wg ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/rs_fasta/\*.gz
+
+    # Get 1000 Genomes IDs (unfortunately not in validation field as Sol suggested)
+    cd /hive/data/outside/dbSNP/130/human/data
+    wg -O 1000Genomes_README ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/1000Genomes/ReadMe.txt
+    wg ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/1000Genomes/B130_1000G_RsClusterReport.txt.gz
+    zcat B130_1000G_RsClusterReport.txt.gz | wc -l
+#7512342
+    # Make a uniquified list of only the numeric portion of the assigned rs IDs:
+    zcat B130_1000G_RsClusterReport.txt.gz \
+    | cut -d, -f 3 | sed -e 's/^rs//' \
+    | sort -nu > 1000GenomesRsIds.txt
+    wc -l 1000GenomesRsIds.txt
+#5611085 1000GenomesRsIds.txt
+
+    ########################## LOAD NCBI TABLES #############################
+    # Simplify names of data files -- strip version & extras to get
+    # local canonical table names.
+    cd /hive/data/outside/dbSNP/130/human/data
+    foreach f (*.bcp.gz)
+      set new = `echo $f \
+                 | sed -e 's/^b130_SNP//; s/^b130_//; s/_36_3//; s/.bcp//;'`
+      mv $f $new
+      echo $new
+    end
+
+    cd /hive/data/outside/dbSNP/130/human/schema
+    zcat human_9606_table.sql.gz \
+    | perl -we '$/ = "\nGO\n\n\n"; \
+        while (<>) { \
+          next unless /^CREATE TABLE \[(b130_(SNP)?)?(ContigInfo|ContigLoc|ContigLocusId|MapInfo|SNP)(_36_3)?\]/; \
+          s/b130_(SNP)?//; s/_36_3//; \
+          s/[\[\]]//g;  s/GO\n\n/;/;  s/smalldatetime/datetime/g; \
+          s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g; \
+          s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g; \
+          s/nvarchar/varchar/g;  s/set quoted/--set quoted/g; \
+          s/(image|varchar\s+\(\d+\))/BLOB/g; \
+          print; \
+        }' \
+      > table.sql
+
+    # load on hgwdev (kolossus disk almost full, no more small cluster mysql5's):
+    hgsql '' -e 'create database hg18snp130'
+    cd /hive/data/outside/dbSNP/130/human/schema
+    hgsql hg18snp130 < table.sql
+    cd ../data
+
+    # Avoid wasting space by excluding mappings to non-reference contigs:
+    foreach t (ContigInfo MapInfo)
+      zcat $t.gz \
+      | egrep -vw '(Celera|HuRef|CRA_TCAGchr7v2)' \
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+      | hgLoadSqlTab -oldTable hg18snp130 $t placeholder stdin
+    end
+#load of ContigInfo did not go as planned: 379 record(s), 0 row(s) skipped, 88 warning(s) loading /dev/stdin
+    # Checked ContigInfo visually, looks OK.
+    # Compare contig list between our ctgPos and reference contigs in
+    # ContigInfo:
+    ssh hgwdev-10 hgsql hg18 -N -B -e '"select contig from ctgPos;"' \
+    | sort > /tmp/1
+    hgsql hg18snp130 -NBe 'select distinct(group_label) from ContigInfo'
+    # --> reference, c5_H2, c6_COX, c6_QBL, c22_H2, DR53
+    # (HuRef, Celera, CRA_TCAGchr7v2 grepped out above)
+    hgsql hg18snp130 -N -B -e 'select contig_acc from ContigInfo \
+        where group_label in \
+        ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");' | sort > /tmp/2
+    diff /tmp/1 /tmp/2
+    # No diff.
+    # Make sure there are no orient != 0 contigs among those selected.
+    hgsql hg18snp130 -NBe \
+      'select count(*) from ContigInfo where orient != 0 and \
+         group_label in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");'
+#0
+
+    # ContigLoc is huge, and we want just the reference contig mappings.
+    # So, based on the reference & haplo ctg_id values in ContigInfo,
+    # filter to get just the mappings for those contigs:
+    zcat ContigLoc.gz \
+    | awk '$3 <= 377 || $3 == 7015' \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+    | hgLoadSqlTab -oldTable hg18snp130 ContigLoc placeholder stdin
+    zcat SNP.gz \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+    | hgLoadSqlTab -oldTable hg18snp130 SNP placeholder stdin
+    zcat ContigLocusId.gz \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+    | hgLoadSqlTab -oldTable hg18snp130 ContigLocusId placeholder stdin
+    # There were some warnings (many cleared up by the perl substitution)
+    # but no rows were dropped.  In mysql5, 'show warnings' after a manual 'load data'
+    # complains about missing values (OK when e.g. position is not known).
+    foreach t (ContigInfo ContigLoc ContigLocusId MapInfo SNP)
+     echo -n "${t}:\t"
+      hgsql -N -B hg18snp130 -e 'select count(*) from '$t
+    end
+#ContigInfo:     379
+#ContigLoc:      19189750
+#ContigLocusId:  11790054
+#MapInfo:        17928700
+#SNP:    	 17804034
+
+
+    #################### EXTRACT INFO FROM NCBI TABLES ####################
+    # Glom each SNP's function codes together and load up a new hg18Snp130 table.
+    # Also extract NCBI's annotations of coding SNPs' effects on translation.
+    # ContigLocusId includes contig_acc and asn_{from,to} but those are not comprehensive!
+    # If a SNP has been mapped to multiple contigs, one is randomly selected, and if 
+    # it is not a reference contig, we miss out if we restrict by contig.  We may end
+    # up getting a few spurious functional annotations from mappings to other assemblies
+    # but them's the breaks.
+    cd /hive/data/outside/dbSNP/130/human
+    hgsql hg18snp130 -NBe 'select snp_id, mrna_acc, fxn_class, \
+                           reading_frame, allele, residue, codon from ContigLocusId' \
+      > ncbiFuncAnnotations.txt
+    cut -f 1,3 ncbiFuncAnnotations.txt \
+    | sort -u -k1,1 -k2,2n  \
+    | awk '{if (prevId == $1) { prevFunc = prevFunc $2 ","; } \
+            else { if (prevId) {print prevId "\t" prevFunc;} \
+                                prevFunc = $2 ","; }} \
+           {prevId = $1;} \
+           END {print prevId "\t" prevFunc;}' \
+      > ucscFunc.txt
+
+    wc -l ucscFunc.txt
+#7344853 ucscFunc.txt
+    cat > ucscFunc.sql <<EOF
+CREATE TABLE ucscFunc (
+        snp_id int NOT NULL ,
+        fxn_class varchar(255) NOT NULL ,
+        INDEX snp_id (snp_id)
+);
+EOF
+    hgLoadSqlTab hg18snp130 ucscFunc{,.sql,.txt}
+
+    # Extract observed allele, molType and snp class from FASTA headers gnl
+    zcat /hive/data/outside/dbSNP/130/human/rs_fasta/rs_ch*.fas.gz \
+    | grep '^>gnl' \
+    | perl -wpe 's/^\S+rs(\d+) .*mol="(\w+)"\|class=(\d+)\|alleles="([^"]+)"\|build.*/$1\t$4\t$2\t$3/ || die "Parse error line $.:\n$_\n\t";' \
+    | sort -n \
+      > ucscGnl.txt
+#407.555u 57.499s 4:32.89 170.4% 0+0k 0+0io 0pf+0w
+    wc -l ucscGnl.txt
+#17804034 ucscGnl.txt
+    cut -f 1 ucscGnl.txt | uniq | wc -l
+#17804034
+    cat > ucscGnl.sql <<EOF
+CREATE TABLE ucscGnl (
+        snp_id int NOT NULL ,
+        observed varchar(255) NOT NULL,
+        molType varchar(255) NOT NULL,
+        class varchar(255) NULL ,
+        INDEX snp_id (snp_id)
+);
+EOF
+    hgLoadSqlTab hg18snp130 ucscGnl{,.sql,.txt}
+
+    # Add indices to tables for a big join (5 or 6 minutes):
+    hgsql hg18snp130 -e \
+      'alter table ContigLoc  add index (ctg_id); \
+       alter table ContigInfo add index (ctg_id); \
+       alter table ContigLoc  add index (snp_id); \
+       alter table SNP        add index (snp_id); \
+       alter table MapInfo    add index (snp_id);'
+
+    # Big leftie join to bring together all of the columns that we want in snp130,
+    # using all of the available joining info:
+    hgsql hg18snp130 -NBe \
+     'SELECT ci.contig_acc, cl.asn_from, cl.asn_to, cl.snp_id, cl.orientation, cl.allele, \
+             ug.observed, ug.molType, ug.class, \
+             s.validation_status, s.avg_heterozygosity, s.het_se, \
+             uf.fxn_class, cl.loc_type, mi.weight, cl.phys_pos_from \
+      FROM \
+      ((((ContigLoc as cl JOIN ContigInfo as ci \
+               ON cl.ctg_id = ci.ctg_id and \
+                  ci.group_label in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2")) \
+          LEFT JOIN MapInfo as mi ON mi.snp_id = cl.snp_id and mi.assembly = ci.group_label) \
+         LEFT JOIN SNP as s ON s.snp_id = cl.snp_id) \
+        LEFT JOIN ucscGnl as ug ON ug.snp_id = cl.snp_id) \
+       LEFT JOIN ucscFunc as uf ON uf.snp_id = cl.snp_id;' \
+      > ucscNcbiSnp.ctg.bed
+#on a not-so busy hgwdev: 80.735u 36.958s 8:54.76 22.0%   0+0k 0+0io 0pf+0w
+#on a very busy hgwdev:   78.753u 41.304s 30:19.77 6.5%   0+0k 0+0io 0pf+0w
+    wc -l ucscNcbiSnp.ctg.bed 
+#19189750 ucscNcbiSnp.ctg.bed
+    liftUp ucscNcbiSnp.bed \
+      /cluster/data/hg18/jkStuff/liftContigs.lft warn \
+      ucscNcbiSnp.ctg.bed
+#116.027u 7.078s 2:27.93 83.2%   0+0k 0+0io 0pf+0w
+
+    # Drum roll please... translate NCBI's encoding into UCSC's, and
+    # perform a bunch of checks.  This is where developer involvement
+    # is most likely as NCBI extends the encodings used in dbSNP.
+    cd /hive/data/outside/dbSNP/130/human/
+    snpNcbiToUcsc ucscNcbiSnp.bed /cluster/data/hg18/hg18.2bit \
+      -1000GenomesRsIds=data/1000GenomesRsIds.txt snp130
+#spaces stripped from observed:
+#chr12   5963395 5963395 rs41402545
+#Line 8106609 of ucscNcbiSnp.bed: Encountered something that doesn't fit observedMixedFormat: GCAACTTCA
+#count of snps with weight  0 = 74828
+#count of snps with weight  1 = 17254041
+#count of snps with weight  2 = 389501
+#count of snps with weight  3 = 1189989
+#count of snps with weight 10 = 281391
+#Found no errors.
+#143.111u 14.313s 3:15.18 80.6%  0+0k 0+0io 0pf+0w
+    wc -l snp*
+#  18833531 snp130.bed
+#        22 snp130.sql
+#         0 snp130Errors.bed
+#        18 snp130ExceptionDesc.tab
+#   2631563 snp130Exceptions.bed
+    # More SNPs but 0 errors and a bit fewer exceptions that snp129, cool!
+
+    # Make one big fasta file.
+    # It's a monster: 18G!  Can we split by hashing rsId?
+    zcat rs_fasta/rs_ch*.fas.gz \
+    | perl -wpe 's/^>gnl\|dbSNP\|(rs\d+) .*/>$1/ || ! /^>/ || die;' \
+      > snp130.fa
+    # Check for duplicates.
+    grep ^\>rs snp130.fa | sort > /scratch/tmp/seqHeaders
+    wc -l /scratch/tmp/seqHeaders
+#17804034 /scratch/tmp/seqHeaders
+    uniq /scratch/tmp/seqHeaders | wc -l
+#17804034
+    # Use hgLoadSeq to generate .tab output for sequence file offsets,
+    # and keep only the columns that we need: acc and file_offset.
+    # Index it and translate to snpSeq table format.
+    time hgLoadSeq -test placeholder snp130.fa
+#107.748u 24.338s 6:58.50 31.5%  0+0k 0+0io 0pf+0w
+    cut -f 2,6 seq.tab > snp130Seq.tab
+    rm seq.tab
+
+    # Load up main track tables.
+    cd /hive/data/outside/dbSNP/130/human
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg18 snp130 -sqlTable=snp130.sql snp130.bed
+#Loaded 18833531 elements of size 17
+#107.246u 11.546s 10:49.23 18.2% 0+0k 0+0io 0pf+0w
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg18 snp130Exceptions -sqlTable=$HOME/kent/src/hg/lib/snp125Exceptions.sql -renameSqlTable \
+      snp130Exceptions.bed
+#15.255u 1.257s 1:11.11 23.2%    0+0k 0+0io 0pf+0w
+    sed -e 's/snp125/snp130/' ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      > snp130ExceptionDesc.sql
+    hgLoadSqlTab hg18 snp130ExceptionDesc snp130ExceptionDesc.sql \
+      snp130ExceptionDesc.tab
+    # Load up sequences.
+    sed -e 's/snpSeq/snp130Seq/' ~/kent/src/hg/lib/snpSeq.sql \
+      > snp130Seq.sql
+    mkdir -p /gbdb/hg18/snp
+    ln -s /hive/data/outside/dbSNP/130/human/snp130.fa /gbdb/hg18/snp/snp130.fa
+    time nice hgLoadSqlTab hg18 snp130Seq snp130Seq.sql snp130Seq.tab
+#0.001u 0.004s 3:41.13 0.0%      0+0k 0+0io 0pf+0w
+
+    # Put in a link where one would expect to find the track build dir...
+    ln -s /hive/data/outside/dbSNP/130/human /cluster/data/hg18/bed/snp130
+
+    # Look at the breakdown of exception categories:
+    cd /hive/data/outside/dbSNP/130/human
+    cut -f 5 snp130Exceptions.bed | sort | uniq -c | sort -nr
+#1960737 MultipleAlignments
+# 519222 ObservedMismatch
+#  38444 ObservedTooLong
+#  32069 SingleClassTriAllelic
+#  26351 FlankMismatchGenomeShorter
+#  19089 SingleClassLongerSpan
+#  15441 SingleClassZeroSpan
+#   6583 FlankMismatchGenomeLonger
+#   4108 DuplicateObserved
+#   3627 SingleClassQuadAllelic
+#   3473 MixedObserved
+#   1369 NamedDeletionZeroSpan
+#    547 FlankMismatchGenomeEqual
+#    355 NamedInsertionNonzeroSpan
+#    136 ObservedContainsIupac
+#      8 ObservedWrongFormat
+#      4 RefAlleleMismatch
+
+#TODO: go through those above and send some bug reports to dbSNP.
+
+
+#######################################################################
+# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP130 (DONE 5/15/09 angie)
+    mkdir /hive/data/genomes/hg18/bed/snp130Ortho
+    cd /hive/data/genomes/hg18/bed/snp130Ortho
+
+    # Following Heather's lead in snp126orthos, filter SNPs to to keep
+    # only those with class=single, length=1, chrom!~random;
+    # Exclude those with exceptions MultipleAlignments,
+    # SingleClassTriAllelic or SingleClassQuadAllelic.
+    # Unlike snp masking, we do not filter for weight -- don't know why.
+    awk '$5 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+      /hive/data/outside/dbSNP/130/human/snp130Exceptions.bed \
+    | sort -u \
+      > snp130ExcludeIds.txt
+    awk '$3-$2 == 1 && $1 !~ /_random/ && $11 == "single" {print;}' \
+      /hive/data/outside/dbSNP/130/human/snp130.bed \
+    | grep -vFwf snp130ExcludeIds.txt \
+      > snp130Simple.bed
+#182.396u 12.388s 2:10.30 149.4% 0+0k 0+0io 0pf+0w
+    wc -l snp130Simple.bed
+#12141377 snp130Simple.bed
+
+    # Glom all human info that we need for the final table onto the
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      snp130Simple.bed > snp130ForLiftOver.bed
+
+    # Map coords to chimp using liftOver.
+    # I don't know why chimp took so much longer than macaque... the
+    # chimp .over has fewer chains and fewer bytes than the macaque .over.
+    mkdir run.liftOChimp
+    cd run.liftOChimp
+    mkdir split out
+    splitFile ../snp130ForLiftOver.bed 25000 split/chunk
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToPanTro2.over.chain.gz \
+        \{check out exists out/panTro2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    ssh pk
+    cd /hive/data/genomes/hg18/bed/snp130Ortho/run.liftOChimp
+    para make jobList
+#Completed: 486 of 486 jobs
+#CPU time in finished jobs:      76679s    1277.99m    21.30h    0.89d  0.002 y
+#IO & Wait Time:                  1828s      30.46m     0.51h    0.02d  0.000 y
+#Average job time:                 162s       2.69m     0.04h    0.00d
+#Longest finished job:             486s       8.10m     0.14h    0.01d
+#Submission to last job:           513s       8.55m     0.14h    0.01d
+
+    # Map coords to orangutan using liftOver.
+    mkdir ../run.liftOPon
+    cd ../run.liftOPon
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToPonAbe2.over.chain.gz \
+        \{check out exists out/ponAbe2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 486 of 486 jobs
+#CPU time in finished jobs:     165378s    2756.31m    45.94h    1.91d  0.005 y
+#IO & Wait Time:                  2614s      43.56m     0.73h    0.03d  0.000 y
+#Average job time:                 346s       5.76m     0.10h    0.00d
+#Longest finished job:            1017s      16.95m     0.28h    0.01d
+#Submission to last job:          1051s      17.52m     0.29h    0.01d
+
+    # Map coords to macaque using liftOver.
+    mkdir ../run.liftOMac
+    cd ../run.liftOMac
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToRheMac2.over.chain.gz \
+        \{check out exists out/rheMac2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 486 of 486 jobs
+#CPU time in finished jobs:       4068s      67.80m     1.13h    0.05d  0.000 y
+#IO & Wait Time:                  1944s      32.40m     0.54h    0.02d  0.000 y
+#Average job time:                  12s       0.21m     0.00h    0.00d
+#Longest finished job:              38s       0.63m     0.01h    0.00d
+#Submission to last job:           126s       2.10m     0.04h    0.00d
+
+    cd /hive/data/genomes/hg18/bed/snp130Ortho
+    # Concatenate the chimp results, sorting by chimp pos in order to
+    # efficiently access 2bit sequence in getOrthoSeq.  The output of
+    # that is then sorted by the glommed human info field, so that we
+    # can use join to combine chimp and macaque results in the next step.
+    # Ditto for macaque and orangutan.  Each command pipe takes ~5 minutes:
+    sort -k1,1 -k2n,2n run.liftOChimp/out/panTro2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/panTro2/panTro2.2bit \
+    | sort > panTro2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOPon/out/ponAbe2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/ponAbe2/ponAbe2.2bit \
+    | sort > ponAbe2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
+    | sort > rheMac2.orthoGlom.txt
+    wc -l panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac2.orthoGlom.txt
+#  11318466 panTro2.orthoGlom.txt
+#  10976821 ponAbe2.orthoGlom.txt
+#   9702063 rheMac2.orthoGlom.txt
+
+    # Use the glommed name field as a key to join up chimp and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom fields from each file, which are in the same order
+    # as the chimp and macaque columns of snp130OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt \
+    | awk '{if ($1 != "?") { print $1, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; } \
+            else           { print $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; }}' \
+      > tmp.txt
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      tmp.txt rheMac2.orthoGlom.txt \
+    | perl -wpe 'chomp; \
+        ($glom12, $glom3, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) = split; \
+        $glomKey = ($glom12 ne "?") ? $glom12 : $glom3; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Start =~ s/^\?$/0/;  $o2Start =~ s/^\?$/0/;  $o3Start =~ s/^\?$/0/; \
+        $o1End   =~ s/^\?$/0/;  $o2End   =~ s/^\?$/0/;  $o3End   =~ s/^\?$/0/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+                         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) . "\n"; \
+        s/^.*$//;' \
+    | sort -k1,1 -k2n,2n > snp130OrthoPt2Pa2Rm2.bed
+#300.357u 31.419s 4:33.00 121.5% 0+0k 0+0io 0pf+0w
+    wc -l snp130OrthoPt2Pa2Rm2.bed
+#11797184 snp130OrthoPt2Pa2Rm2.bed
+
+    cd /hive/data/genomes/hg18/bed/snp130Ortho
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
+      hg18 snp130OrthoPt2Pa2Rm2 snp130OrthoPt2Pa2Rm2.bed
+#Loaded 11797184 elements of size 22
+#83.624u 9.627s 10:19.26 15.0%   0+0k 0+0io 0pf+0w
+
+    # Cleanup fileserver:
+    cd /hive/data/genomes/hg18/bed/snp130Ortho
+    nice gzip snp130Simple.bed snp130ExcludeIds.txt snp130ForLiftOver.bed
+    rm -r run*/split tmp.txt *.orthoGlom.txt
+
+
+############################################################################
 # TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
