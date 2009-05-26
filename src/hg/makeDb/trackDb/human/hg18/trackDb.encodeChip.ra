@@ -2178,3 +2178,4 @@ searchType bed
 termRegex uutbs.[0-9]+
 shortCircuit 1
 searchPriority 50
+
