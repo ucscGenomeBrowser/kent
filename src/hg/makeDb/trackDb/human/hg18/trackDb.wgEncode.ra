@@ -2225,6 +2225,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide sXREG=hide uniq=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
+configurable on
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
 useScore 0
 priority 0
