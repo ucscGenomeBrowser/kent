@@ -65,6 +65,7 @@ type wig 0.0 40.39
 viewLimits 1:10
 maxHeightPixels 100:15:10
 autoScale off
+boxedCfg on
 
     # Anterior-posterior early: green
     track bdtnpBcd1Fdr1
