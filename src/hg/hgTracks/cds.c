@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.96 2009/05/24 09:10:38 mikep Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.97 2009/05/27 23:45:41 angie Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -287,7 +287,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	int mrnaS = -1;
 	if (psl)
-	    convertCoordUsingPsl(s, psl);
+	    mrnaS = convertCoordUsingPsl(s, psl);
 	else
 	    mrnaS = sf->qStart;
 	if(mrnaS >= 0)
