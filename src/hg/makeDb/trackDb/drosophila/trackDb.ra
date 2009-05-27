@@ -62,12 +62,11 @@ group regulation
 priority 71
 # Setting type to bed3, even though all subtracks are wig, to suppress composite-level
 # controls (per Tim).
-type wig 0.0 40.39
+type bed 3
+noInherit on
+settingsByView best1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others25:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off
 visibility full
-visibilityViewDefaults best1=full best25=hide other1=hide other25=hide
-viewLimits 1:10
-maxHeightPixels 100:15:10
-autoScale off
+visibilityViewDefaults best1=pack best25=hide other1=hide other25=hide
 boxedCfg on
 
     # Anterior-posterior early: green
