@@ -62,7 +62,7 @@ group regulation
 priority 71
 # Setting type to bed3, even though all subtracks are wig, to suppress composite-level
 # controls (per Tim).
-type bed 3
+type wig 0.0 40.39
 visibility full
 visibilityViewDefaults best1=full best25=hide other1=hide other25=hide
 viewLimits 1:10
