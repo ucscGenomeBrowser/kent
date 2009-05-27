@@ -5336,7 +5336,7 @@ compositeTrack on
 shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix Subcellular RNA Localization by Tiling Array
 group expression
-subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FilteredRawSignal=Filtered_Raw_Signal
+subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
@@ -5344,9 +5344,9 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Transfrags=hide FiltTransfrags=pack RawSignal=hide FilteredRawSignal=full
+visibilityViewDefaults Transfrags=hide FiltTransfrags=pack RawSignal=hide FiltRawSignal=full
 noInherit on
-settingsByView RawSignal:maxHeightPixels=100:16:16,windowingFunction=mean FilteredRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView RawSignal:maxHeightPixels=100:16:16,windowingFunction=mean FiltRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -5383,12 +5383,12 @@ wgEncode 1
     color 0,119,158
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya
+    track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in prostate whole cell)
-    subGroups view=FilteredRawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type wig -62124.00 54385.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
@@ -5398,7 +5398,7 @@ wgEncode 1
     localization cell
     cell prostate
     color 0,119,158
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
     release alpha
@@ -5466,12 +5466,12 @@ wgEncode 1
     color 0,119,158
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongpolya
+    track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in prostate whole cell)
-    subGroups view=FilteredRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
+    subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type wig -62728.00 56449.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
@@ -5481,7 +5481,7 @@ wgEncode 1
     localization cell
     cell prostate
     color 0,119,158
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
     release alpha
@@ -5532,12 +5532,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya
+    track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 nucleus)
-    subGroups view=FilteredRawSignal cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type wig -56486.00 45415.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5547,7 +5547,7 @@ wgEncode 1
     localization nucleus
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562CellTotal
     release alpha
@@ -5581,12 +5581,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal
+    track wgEncodeAffyRnaChipFiltRawSignalK562CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell total
     longLabel ENCODE Affy Filtered Signal (Total RNA in K562 whole cell)
-    subGroups view=FilteredRawSignal cellType=K562 localization=0-cell rnaExtract=total
+    subGroups view=FiltRawSignal cellType=K562 localization=0-cell rnaExtract=total
     type wig -40989.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5596,7 +5596,7 @@ wgEncode 1
     localization cell
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562CellTotal
     release alpha
@@ -5664,12 +5664,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya
+    track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in K562 nucleus)
-    subGroups view=FilteredRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
+    subGroups view=FiltRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type wig -49290.00 43018.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5679,7 +5679,7 @@ wgEncode 1
     localization nucleus
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
     release alpha
@@ -5730,12 +5730,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya
+    track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 cytosol)
-    subGroups view=FilteredRawSignal cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -55473.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5745,7 +5745,7 @@ wgEncode 1
     localization cytosol
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
     release alpha
@@ -5779,12 +5779,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya
+    track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in K562 cytosol)
-    subGroups view=FilteredRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=FiltRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig -42328.00 61956.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5794,7 +5794,7 @@ wgEncode 1
     localization cytosol
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
     release alpha
@@ -5862,12 +5862,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562PolysomeLongnonpolya
+    track wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 polysome)
-    subGroups view=FilteredRawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
     type wig -52880.00 48739.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5877,7 +5877,7 @@ wgEncode 1
     localization polysome
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalK562PolysomeLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
     release alpha
@@ -5928,12 +5928,12 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nuc pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in GM12878 nucleus)
-    subGroups view=FilteredRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
     type wig -52768.00 58546.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -5943,7 +5943,7 @@ wgEncode 1
     localization nucleus
     cell GM12878
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
     release alpha
@@ -5994,12 +5994,12 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongpolya
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+
     longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in GM12878 cytosol)
-    subGroups view=FilteredRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=FiltRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type wig -61519.00 60470.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
@@ -6009,7 +6009,7 @@ wgEncode 1
     localization cytosol
     cell GM12878
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya
     release alpha
@@ -6060,12 +6060,12 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya.wig.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongnonpolya
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in GM12878 cytosol)
-    subGroups view=FilteredRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -58491.00 61097.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
@@ -6075,7 +6075,7 @@ wgEncode 1
     localization cytosol
     cell GM12878
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FilteredRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
     release alpha
@@ -6113,12 +6113,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562ChromatinTotal
+    track wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm total
     longLabel ENCODE Affy Filtered Signal (Total RNA in K562 chromatin)
-    subGroups view=FilteredRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
+    subGroups view=FiltRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
     type wig -61688.00 49221.00
     dateSubmitted 2009-02-04
     dateUnrestricted 2009-11-04
@@ -6132,7 +6132,7 @@ wgEncode 1
     localization chromatin
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FilteredRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562ChromatinTotal fileName=wgEncodeAffyRnaChipFilteredRawSignalK562ChromatinTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
     release alpha
@@ -6270,12 +6270,12 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusTotal
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl tot
     longLabel ENCODE Affy Filtered Signal (Total RNA in GM12878 nucleus)
-    subGroups view=FilteredRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=total
+    subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=total
     type wig -56831.00 59145.00
     dateSubmitted 2009-03-10
     dateUnrestricted 2009-12-10
@@ -6290,7 +6290,7 @@ wgEncode 1
     localization nucleus
     cell GM12878
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=FilteredRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusTotal fileName=wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal
     release alpha
@@ -6352,12 +6352,12 @@ wgEncode 1
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalGm12878CellTotal
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot
     longLabel ENCODE Affy Filtered Signal (Total RNA in GM12878 whole cell)
-    subGroups view=FilteredRawSignal cellType=GM12878 localization=0-cell rnaExtract=total
+    subGroups view=FiltRawSignal cellType=GM12878 localization=0-cell rnaExtract=total
     type wig -48860.00 60644.00
     dateSubmitted 2009-03-10
     dateUnrestricted 2009-12-10
@@ -6372,7 +6372,7 @@ wgEncode 1
     localization cell
     cell GM12878
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FilteredRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipFilteredRawSignalGm12878CellTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
     release alpha
@@ -6415,12 +6415,12 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal
+    track wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplsm total
     longLabel ENCODE Affy Filtered Signal (Total RNA in K562 nucleoplasm)
-    subGroups view=FilteredRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
+    subGroups view=FiltRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type wig -54090.00 55745.00
     dateSubmitted 2009-03-10
     dateUnrestricted 2009-12-10
@@ -6435,7 +6435,7 @@ wgEncode 1
     localization nucleoplasm
     cell K562
     color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FilteredRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFilteredRawSignalK562NucleoplasmTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal.wig.gz
 
 
 # SUNY Albany genechp (wrangler: mikep)
