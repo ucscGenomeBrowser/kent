@@ -85,12 +85,7 @@ fi
 
 # specify tables that should get each test
 # intronEst is a special case; it may exist only in split form
-if tableExists $db intronEst 
-then
-  intronEstTables=$(hgsql -Ne "show tables like '%intronEst'" $db)
-else
-  intronEstTables=intronEst
-fi
+intronEstTables=$(hgsql -Ne "show tables like '%intronEst'" $db)
 
 trackTables="refGene xenoRefGene mgcFullMrna orfeomeMrna all_mrna intronEst /
            all_est xenoMrna xenoEst"
@@ -99,7 +94,6 @@ pslTables="mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli /
            xenoRefSeqAli xenoEst $intronEstTables"
 featureTables="refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes /
                orfeomeMrna all_mrna intronEst all_est xenoMrna xenoEst"
-
 
 # print information about the script at the top of the output
 echo "$(basename $0) output on $db"
@@ -113,7 +107,7 @@ do
   tableExists $db $table && getShortLabel $db $table
 done
 # intronEst is a special case; it may exist only in split form
-if ! tableExists $db intronEst # table is split
+if ! tableExists $db intronEst # table is split, but not in trackDb
 then
   getShortLabel $db intronEst
 fi
