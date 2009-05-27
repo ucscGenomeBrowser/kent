@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.19 2009/05/26 23:28:38 hiram Exp $";
+#	"$Id: hg19.txt,v 1.20 2009/05/27 23:14:37 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -3176,12 +3176,13 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
     #	finished the lastz run manually after hive maintenance outages
-XXX - running Sat May 23 15:18:48 PDT 2009
+    #	then, continuing:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-continue=cat > cat.log 2>&1 &
+XXX - running Wed May 27 10:59:18 PDT 2009
 
 ##############################################################################
 # LASTZ Rock Hyrax ProCap1 (WORKING - 2009-05-23 - Hiram)
@@ -3235,7 +3236,7 @@ TMPDIR=/scratch/tmp
     #	894221652 bases of 2897316137 (30.864%) in intersection
     time nice -n +19 doRecipBest.pl -buildDir=`pwd` hg19 proCap1 \
 	> rbest.log 2>&1
-XXX - running Tue May 26 16:04:55 PDT 2009
+    #	real    251m59.549s
 
 ##############################################################################
 # LASTZ Zebra Finch TaeGut1 (DONE - 2009-05-26 - Hiram)
@@ -3328,7 +3329,14 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
-XXX - running Tue May 26 11:27:47 PDT 2009
+    #	real    369m5.335s
+    #	problem on memk during cat step, finish than, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-continue=chainRun -qRepeats=windowmaskerSdust > chainRun.log 2>&1 &
+    #	real    16m31.552s
 
 ##############################################################################
 # LASTZ X. tropicalis XenTro2 (WORKING - 2009-05-26 - Hiram)
@@ -3368,7 +3376,14 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Tue May 26 15:02:27 PDT 2009
+    #	real    1129m11.568s
+    #	finished the lastz run manually after hive difficulties, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=cat > cat.log 2>&1 &
+XXX - running Wed May 27 10:42:27 PDT 2009
 
 ##############################################################################
 # LASTZ Zebrafish DanRer5 (WORKING - 2009-05-26 - Hiram)
@@ -3408,7 +3423,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Tue May 26 15:02:27 PDT 2009
+    #	real    311m39.817s
+    cat fb.hg19.chainDanRer5Link.txt 
+    #	74229561 bases of 2897316137 (2.562%) in intersection
 
 ##############################################################################
 # LASTZ Platypus OrnAna1 (WORKING - 2009-05-26 - Hiram)
@@ -3448,6 +3465,86 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Tue May 26 16:28:05 PDT 2009
+    #	real    572m18.808s
+    cat fb.hg19.chainOrnAna1Link.txt 
+    #	220977689 bases of 2897316137 (7.627%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 ornAna1 > rbest.log 2>&1
+XXX - running Wed May 27 10:48:56 PDT 2009
+
+##############################################################################
+# LASTZ Elephant LoxAfr2 (WORKING - 2009-05-27 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzLoxAfr2.2009-05-27
+    cd /hive/data/genomes/hg19/bed/lastzLoxAfr2.2009-05-27
+
+    cat << '_EOF_' > DEF
+# Human vs. Elephant
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Elephant
+SEQ2_DIR=/scratch/data/loxAfr2/loxAfr2.2bit
+SEQ2_LEN=/scratch/data/loxAfr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzLoxAfr2.2009-05-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Wed May 27 11:18:13 PDT 2009
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+
+##############################################################################
+# LASTZ Tenrec EchTel1 (WORKING - 2009-05-27 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzEchTel1.2009-05-27
+    cd /hive/data/genomes/hg19/bed/lastzEchTel1.2009-05-27
+
+    cat << '_EOF_' > DEF
+# Human vs. Tenrec
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Tenrec
+SEQ2_DIR=/scratch/data/echTel1/echTel1.2bit
+SEQ2_LEN=/scratch/data/echTel1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzEchTel1.2009-05-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Wed May 27 11:18:13 PDT 2009
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
 
 ##############################################################################
