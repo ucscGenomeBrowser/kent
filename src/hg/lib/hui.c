@@ -22,7 +22,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.204 2009/05/24 09:24:14 mikep Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.205 2009/05/27 21:36:17 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3214,6 +3214,13 @@ else
 return boxed;
 }
 
+static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
+/* Link composite or view level controls to all associateled lower level controls */
+{
+if(tdbIsComposite(tdb))
+    printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
+}
+
 static void cfgEndBox(boolean boxed)
 /* Handle end of box and title for individual track type settings */
 {
@@ -4460,6 +4467,9 @@ char configurable[membersOfView->count];
 memset(configurable,cfgNone,sizeof(configurable));
 boolean makeCfgRows = FALSE;
 struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
+char *setting = trackDbSetting(parentTdb,"settingsByView");
+boolean blockCfgs = (setting != NULL && (sameWord(setting,"off") || sameWord(setting,"disabled") || sameWord(setting,"false")));
+
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -4470,10 +4480,12 @@ for (ix = 0; ix < membersOfView->count; ix++)
         if(differentString(stView,membersOfView->names[ix]))
             continue;
         matchedSubtracks[ix] = subtrack;
-        configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
-        // Need to find maximum wig range
-        if(configurable[ix] != cfgNone)
-            makeCfgRows = TRUE;
+        if(!blockCfgs)
+            {
+            configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
+            if(configurable[ix] != cfgNone)
+                makeCfgRows = TRUE;
+            }
         break;
         }
     }
@@ -4534,7 +4546,7 @@ if(makeCfgRows)
             if(configurable[ix] != cfgNone)
                 {
                 cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
-                printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",objName);
+                cfgLinkToDependentCfgs(parentTdb,objName);
                 }
             }
         }
@@ -4697,7 +4709,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf("<TH align='right' WIDTH=\"100\"><EM><B>%s</EM></B>:</TH>", dimensionX->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)
             {
-            if(tdbsX[ixX] != NULL)
+            if(tdbsX[ixX] != NULL || dimensionX == NULL)
                 {
                 char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
                 printf("<TH WIDTH=\"100\">%s</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
@@ -4720,7 +4732,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=RIGHT><EM><B>%s</EM></B></TH><TD>&nbsp;</TD>",COLOR_BG_ALTDEFAULT, dimensionY->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
             {
-            if(tdbsX[ixX] != NULL)
+            if(tdbsX[ixX] != NULL || dimensionX == NULL)
                 {
                 puts("<TD>");
                 safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
@@ -4735,7 +4747,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     // Now the Y by X matrix
     for (ixY = 0; ixY < sizeOfY; ixY++)
         {
-        if(tdbsY[ixY] != NULL)
+        if(tdbsY[ixY] != NULL || dimensionY == NULL)
             {
             assert(!dimensionY || ixY < dimensionY->count);
             printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
@@ -4761,7 +4773,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 }
             for (ixX = 0; ixX < sizeOfX; ixX++)
                 {
-                if(tdbsX[ixX] != NULL)
+                if(tdbsX[ixX] != NULL || dimensionX == NULL)
                     {
                     assert(!dimensionX || ixX < dimensionX->count);
                     if(dimensionX && ixX == dimensionX->count)
@@ -4826,11 +4838,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 cntZ++;
                 }
             }
-        while((cntZ % sizeOfX) > 0) // fill in the rest of the row
-            {
-            printf("<TH>&nbsp;</TH>");
-            cntZ++;
-            }
+        if((cntZ % sizeOfX) > 0)
+            printf("<TH colspan=%d>&nbsp;</TH>",sizeOfX);
         }
     puts("</TD></TR></TABLE>");
     subgroupMembersFree(&dimensionX);
@@ -5035,6 +5044,8 @@ if (displayAll)
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
+
+cfgLinkToDependentCfgs(tdb,tdb->tableName);
 
 if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
     {
