@@ -2735,7 +2735,7 @@ url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=
 track uniqueness
 shortLabel Uniqueness
 longLabel 35mer alignment scores from BWA/MAQ, where 37 indicates a unique alignment
-group expression
+group varRep
 priority 79.1
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM,chrX,chrY,
