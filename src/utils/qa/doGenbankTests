@@ -52,15 +52,6 @@ getShortLabel() {
 # keep track of errors vs. no errors
 allOk=yes
 
-# specify tables that should get each test
-allTables="refGene xenoRefGene mgcFullMrna orfeomeMrna all_mrna intronEst /
-           all_est xenoMrna xenoEst"
-genePredTables="refGene xenoRefGene mgcGenes orfeomeGenes"
-pslTables="mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli /
-           xenoRefSeqAli xenoEst"
-featureTables="refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes /
-               orfeomeMrna all_mrna intronEst all_est xenoMrna xenoEst"
-
 # check host, set path to genbank sanity location 
 if [ "$HOST" != hgwdev -a "$HOST" != hgwbeta ]
 then
@@ -92,6 +83,26 @@ else
   fi
 fi
 
+# specify tables that should get each test
+# intronEst is a special case; it may exist only in split form
+tableExists $db intronEst 
+intronEstExists=$?
+if [ 1 -eq "$intronEstExists" ] # table is split
+then
+  intronEstTables=$(hgsql -Ne "show tables like '%intronEst'" $db)
+else
+  intronEstTables=intronEst
+fi
+
+trackTables="refGene xenoRefGene mgcFullMrna orfeomeMrna all_mrna intronEst /
+           all_est xenoMrna xenoEst"
+genePredTables="refGene xenoRefGene mgcGenes orfeomeGenes"
+pslTables="mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli /
+           xenoRefSeqAli xenoEst $intronEstTables"
+featureTables="refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes /
+               orfeomeMrna all_mrna intronEst all_est xenoMrna xenoEst"
+
+
 # print information about the script at the top of the output
 echo "$(basename $0) output on $db"
 date
@@ -99,10 +110,15 @@ echo
 
 # get a list of all genbank tracks present in this assembly
 echo -e "The following GenBank tracks are present in this assembly:\n"
-for table in $allTables
+for table in $trackTables
 do
   tableExists $db $table && getShortLabel $db $table
 done
+# intronEst is a special case; it may exist only in split form
+if [ 1 -eq "$intronEstExists" ] # table is split
+then
+  getShortLabel $db intronEst
+fi
 echo
 
 # run genePredChecks and pslChecks
