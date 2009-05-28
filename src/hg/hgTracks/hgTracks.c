@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1566 2009/05/15 17:02:32 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1567 2009/05/28 21:57:49 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1737,13 +1737,24 @@ if (withLeftLabels)
 	if (baseShowRuler)
 	    {
 	    char rulerLabel[SMALLBUF];
+	    char *shortChromName = cloneString(chromName);
+	    safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
+	    int labelWidth = mgFontStringWidth(font,rulerLabel);
+	    while ((labelWidth > 0) && (labelWidth > leftLabelWidth))
+		{
+		int len = strlen(shortChromName);
+		shortChromName[len-1] = 0;
+		safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
+		labelWidth = mgFontStringWidth(font,rulerLabel);
+		}
 	    if (hvg->rc)
-		safef(rulerLabel,ArraySize(rulerLabel),":%s",chromName);
+		safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
 	    else
-		safef(rulerLabel,ArraySize(rulerLabel),"%s:",chromName);
+		safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
 	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight,
 			   MG_BLACK, font, rulerLabel);
 	    y += rulerHeight;
+	    freeMem(shortChromName);
 	    }
 	if (zoomedToBaseLevel || rulerCds)
 	    {
