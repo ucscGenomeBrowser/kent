@@ -7,8 +7,9 @@
 #include "hCommon.h"
 #include "hgColors.h"
 #include "bigBed.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.4 2009/05/28 15:30:40 mikep Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.5 2009/05/28 16:49:28 mikep Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -53,18 +54,26 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 if (bbMatch != NULL)
     {
-    char *fields[bedSize];
+    int extraFields = 0;
+    // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
+    char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+    if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
+	extraFields = 2;
+    char *fields[bedSize+extraFields];
     char startBuf[16], endBuf[16];
     char *rest = cloneString(bbMatch->rest);
-    int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields, bedSize); 
-    if (bbFieldCount != bedSize)
+    int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields, bedSize+extraFields); 
+    if (bbFieldCount != bedSize+extraFields)
         {
 	errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)", 
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
     bedPrintPos(bed, bedSize, tdb);
-    if (bedSize > 6) // we have more fields to print
+    // display seq1 and seq2 
+    if (bedSize+extraFields == 8 && setting && sameString(setting, "seq1Seq2"))
+        printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr><tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
+    else if (bedSize+extraFields > 6) // we have more fields to print
 	printf("Full bed record:<BR><PRE><TT>%s\t%u\t%u\t%s\n</TT></PRE>\n",
 		chrom, bb->start, bb->end, rest);
     }
