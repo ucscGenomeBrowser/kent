@@ -2,7 +2,7 @@
 #
 # aplCal1 = Aplysia californica 
 #
-#
+# (Galt)
 
 # set up main genome directory
 
@@ -241,4 +241,102 @@ hgLoadBed aplCal1 cpgIslandExt -tab \
 #Creating table definition for cpgIslandExt
 #Saving bed.tab
 #Loading aplCal1
+
+
+#############################################################
+#
+# Since there is no chrUn and no huge gaps,
+# MarkD and Hiram say we can skip the unbridged-lift step
+#
+
+############################################################################
+# AUTO UPDATE GENBANK RUN  (DONE - 2009-05-27,13 - Galt)
+    # align with latest genbank process.
+
+    # first time species step
+    cd ~/kent/src/hg/makeDb/genbank/src/lib
+    vi gbGenome.c
+    # add aplCal
+    cd ~/kent/src/hg/makeDb/genbank
+    make server-install
+
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add aplCal1 
+
+# aplCal1 - (Sea Hare Broad WGS Aplcal 2.0)
+#       Assembly Accession: AASC00000000.2
+aplCal1.serverGenome = /hive/data/genomes/aplCal1/aplCal1.2bit
+aplCal1.clusterGenome = /scratch/data/aplCal1/aplCal1.2bit
+aplCal1.ooc = /scratch/data/aplCal1/11.ooc
+aplCal1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+aplCal1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+aplCal1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+aplCal1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+aplCal1.genbank.est.native.pslCDnaFilter = ${lowCover.genbank.est.native.pslCDnaFilter}
+aplCal1.genbank.est.xeno.pslCDnaFilter   = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+aplCal1.genbank.est.native.load = yes
+aplCal1.genbank.est.xeno.load = no
+aplCal1.refseq.mrna.xeno.load  = yes
+aplCal1.refseq.mrna.xeno.loadDesc = yes
+aplCal1.perChromTables = no
+aplCal1.downloadDir = aplCal1
+aplCal1.genbank.mrna.blatTargetDb = yes
+aplCal1.lift = no
+
+    cvs ci -m "Added aplCal1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice +19 bin/gbAlignStep -initial aplCal1 &
+    #   real 3:21:30.93
+    #   var/build/logs/2009.05.27-20:11:50.aplCal1.initalign.log
+
+    # load database when finished
+    ssh hgwdev
+    screen	# use screen to manage this long running command
+    cd /cluster/data/genbank
+    time nice +19 ./bin/gbDbLoadStep -drop -initialLoad aplCal1 &
+    # logFile: var/dbload/hgwdev/logs/2009.05.27-23:42:23.dbload.log
+    # real   23:26.57
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add aplCal1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added aplCal1" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-05-28 - Galt)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("aplCal1", "blat13", "17822", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("aplCal1", "blat13", "17823", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# Making download files (DONE - 2009-05-28 - Galt)
+
+
+    cd /hive/data/genomes/aplCal1
+    ln -s bed/RepeatMasker.2009-05-13/aplCal1.fa.out .
+    cd bed
+    ln -s simpleRepeat.2009-05-13 simpleRepeat
+    cd ..
+
+    makeDownloads.pl aplCal1 >& downloads.log
+
+    (*** book mark of stuff actually done to here ***)
+
+
 
