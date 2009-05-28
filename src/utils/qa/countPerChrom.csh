@@ -33,7 +33,7 @@ if ( $#argv < 2 ||  $#argv > 4 ) then
   # no command line args
   echo
   echo "  check to see if there are annotations on all chroms."
-  echo "    will check to see if chrom field is named tName or genoName."
+  echo "  will check to see if chrom field is named tName or genoName."
   echo
   echo "    usage:  database1 table [database2] [RR]"
   echo
@@ -65,10 +65,16 @@ if ( $#argv == 4 ) then
   set machineOut="(${argv[4]})"
   if ( $argv[4] == "hgwbeta" ) then
     set host2="hgsql -h $sqlbeta"
-  endif
-  if ( $argv[4] == "RR" ) then
-    set host2="mysql -h genome-mysql -u genome -A"
-  endif
+  else 
+    if ( $argv[4] == "RR" ) then
+      set host2="mysql -h genome-mysql -u genome -A"
+    else
+      echo
+      echo "4th parameter must be RR or hgwbeta"
+      echo
+      $0
+      exit 1
+    endif
 endif
 
 # echo "db = $db"
