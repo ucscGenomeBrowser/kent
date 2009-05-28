@@ -132,7 +132,7 @@ struct sqlConnection *conn = hAllocConn(database);
 cartWebStart(cart, database, "Regulatory Motif Info");
 genericBedClick(conn, tdb, item, start, 6);
 
-sprintf(query, 
+sprintf(query,
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -206,7 +206,7 @@ printTrackHtml(tdb);
 }
 
 
-static void wrapHgGeneLink(struct sqlConnection *conn, char *name, 
+static void wrapHgGeneLink(struct sqlConnection *conn, char *name,
 	char *label, char *geneTable)
 /* Wrap label with link to hgGene if possible. */
 {
@@ -214,7 +214,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 int rowOffset = hOffsetPastBin(database, seqName, "sgdGene");
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
     "select * from %s where name = '%s'", geneTable, name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -250,8 +250,8 @@ static void sacCerHgGeneLinkName(struct sqlConnection *conn, char *name)
 {
 char query[256];
 char *orf;
-safef(query, sizeof(query), 
-	"select name from sgdToName where value = '%s'", name); 
+safef(query, sizeof(query),
+	"select name from sgdToName where value = '%s'", name);
 orf = sqlQuickString(conn, query);
 if (orf != NULL)
     wrapHgGeneLink(conn, orf, name, "sgdGene");
@@ -275,7 +275,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct transRegCode *trc = NULL;
 
 cartWebStart(cart, database, "Regulatory Code Info");
-sprintf(query, 
+sprintf(query,
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -290,7 +290,7 @@ if (trc != NULL)
     seq = hDnaFromSeq(database, trc->chrom, trc->chromStart, trc->chromEnd, dnaLower);
     if (seq->size != motif->columnCount)
 	{
-        printf("WARNING: seq->size = %d, motif->colCount=%d<BR>\n", 
+        printf("WARNING: seq->size = %d, motif->colCount=%d<BR>\n",
 		seq->size, motif->columnCount);
 	strand[0] = '?';
 	seq = NULL;
@@ -308,8 +308,9 @@ if (trc != NULL)
     printf("<B>ChIP-chip Evidence:</B> %s<BR>\n", trc->chipEvidence);
     printf("<B>Species conserved in:</B> %d of 2<BR>\n", trc->consSpecies);
     if (seq != NULL)
-	printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n", 
+	printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n",
 	    dnaMotifBitScore(motif, seq->dna));
+    printf("<B>Item score:</B> %d<BR>\n", trc->score);
     printPosOnChrom(trc->chrom, trc->chromStart, trc->chromEnd, strand, TRUE, trc->name);
     }
 motifHitSection(seq, motif);
@@ -376,9 +377,9 @@ const struct tfData *b = *((struct tfData **)vb);
 return strcmp(a->name, b->name);
 }
 
-static void ipPrintInRange(struct tfCond *condList, 
+static void ipPrintInRange(struct tfCond *condList,
 	double minVal, double maxVal, struct hash *boundHash)
-/* Print growth conditions that bind within range of E values. 
+/* Print growth conditions that bind within range of E values.
  * Add these to boundHash. */
 {
 struct tfCond *cond;
@@ -404,7 +405,7 @@ if (!gotAny)
 printf("</TD>");
 }
 
-static void tfBindLevelSection(struct tfData *tfList, struct sqlConnection *conn, 
+static void tfBindLevelSection(struct tfData *tfList, struct sqlConnection *conn,
 	char *motifTable, char *tfToConditionTable)
 /* Print info on individual transcription factors that bind
  * with e-val between minVal and maxVal. */
@@ -451,7 +452,7 @@ for (tf = tfList; tf != NULL; tf = tf->next)
 	 struct sqlResult *sr;
 	 boolean isFirst = TRUE;
 	 boolean gotAny = FALSE;
-	 safef(query, sizeof(query), 
+	 safef(query, sizeof(query),
 	 	"select growthCondition from %s where name='%s'",
 		tfToConditionTable, tf->name);
 	 sr = sqlGetResult(conn, query);
@@ -530,8 +531,8 @@ printf("</UL>");
 sqlFreeResult(&sr);
 }
 
-void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
-	char *codeTable, char *motifTable, 
+void doTransRegCodeProbe(struct trackDb *tdb, char *item,
+	char *codeTable, char *motifTable,
 	char *tfToConditionTable, char *conditionTable)
 /* Display detailed info on a ChIP-chip probe from transRegCode experiments. */
 /* Display detailed info on a ChIP-chip probe from transRegCode experiments. */
@@ -559,7 +560,7 @@ if (probe != NULL)
 
     /* Print basic info. */
     printf("<B>Name:</B> %s<BR>\n", probe->name);
-    printPosOnChrom(probe->chrom, probe->chromStart, probe->chromEnd, 
+    printPosOnChrom(probe->chrom, probe->chromStart, probe->chromEnd,
     	NULL, TRUE, probe->name);
 
     /* Make up list of all transcriptionFactors. */
@@ -590,7 +591,7 @@ if (probe != NULL)
     /* Fold in motif hits in region. */
     if (sqlTableExists(conn, codeTable))
         {
-	sr = hRangeQuery(conn, codeTable, 
+	sr = hRangeQuery(conn, codeTable,
 		probe->chrom, probe->chromStart, probe->chromEnd,
 		"chipEvidence != 'none'", &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
