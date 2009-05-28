@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.3 2009/03/17 16:28:02 kent Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.4 2009/05/28 15:30:40 mikep Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -64,8 +64,9 @@ if (bbMatch != NULL)
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
     bedPrintPos(bed, bedSize, tdb);
-    printf("Full bed record:<BR><PRE><TT>%s\t%u\t%u\t%s\n</TT></PRE>\n",
-	    chrom, bb->start, bb->end, rest);
+    if (bedSize > 6) // we have more fields to print
+	printf("Full bed record:<BR><PRE><TT>%s\t%u\t%u\t%s\n</TT></PRE>\n",
+		chrom, bb->start, bb->end, rest);
     }
 else
     {
