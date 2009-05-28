@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.64 2009/04/29 23:24:09 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.65 2009/05/28 22:17:00 tdreszer Exp $
 
 # Usage:
 #
@@ -242,18 +242,18 @@ sub loadBedFromSchema
 sub loadBigBed
 {
 # Load bigBed using a .as file
-    my ($assembly, $tableName, $fileList, $sqlTable, $pushQ) = @_;
+    my ($assembly, $tableName, $fileList, $sqlTable, $pushQ, $configPath) = @_;
     HgAutomate::verbose(2, "loadBigBed ($assembly, $tableName, $fileList, $sqlTable, $pushQ)\n");
 
     if(!$opt_skipLoad) {
         if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
             die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
         }
-	if (scalar(split(" ", $filelist)) != 1) {
-	    die "BigBed must be loaded with a single file but a list of files was supplied ($filelist)\n";
+	if (scalar(split(" ", $fileList)) != 1) {
+	    die "BigBed must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
 	# Create bigBed binary file
-        my @cmds = ( "/cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as $filelist $configPath/${assembly}_chromInfo.txt ${tableName}.bb");
+        my @cmds = ( "/cluster/bin/x86_64/bedToBigBed -as=$Encode::sqlCreate/${sqlTable}.as $fileList $configPath/${assembly}_chromInfo.txt ${tableName}.bb");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
@@ -264,7 +264,7 @@ sub loadBigBed
 	# symlink bigBed binary file into gbdb bbi directory
         @cmds = ( "ln -sf ${tableName}.bb /gbdb/${assembly}/bbi/");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
-        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
             die("ERROR: File(s) '$fileList' failed symbolic link to gbdb bigBed directory:\n" . $safe->stderr() . "\n");
         } else {
@@ -273,7 +273,7 @@ sub loadBigBed
 	# create BigBed link table from trackDb to gbdb bigBed binary file
         @cmds = ( "/cluster/bin/x86_64/hgBbiDbLink $assembly $tableName /gbdb/${assembly}/bbi/${tableName}.bb");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
-        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
             die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
         } else {
@@ -441,17 +441,18 @@ for my $key (keys %ra) {
         loadGene($assembly, $tablename, $files, $pushQ, "-genePredExt");
     } elsif ($type eq "wig") {
         # Copy signal data to hgdownload (unless we created it).
-        if(@files == 1) {
-            $hgdownload = $files[0] !~ /^$Encode::autoCreatedPrefix/;
-        } else {
+        # NOTE: We are now making the RawSignals but they are put in the subdirectory "raw"
+        #if(@files == 1) {
+        #    $hgdownload = $files[0] !~ /^$Encode::autoCreatedPrefix/;
+        #} else {
             $hgdownload = 1;
-        }
+        #}
         loadWig($assembly, $tablename, $files, $pushQ);
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
         $hgdownload = @files;
     } elsif ($bigBedTypes{$type}) {
-        loadBigBed($assembly, $tablename, $files, $type, $pushQ);
+        loadBigBed($assembly, $tablename, $files, $type, $pushQ, $configPath);
         $hgdownload = @files;
     } elsif ($type =~ /^bed (3|4|5|6|8|9|12)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
@@ -466,6 +467,10 @@ for my $key (keys %ra) {
     if(!$opt_skipDownload and $hgdownload) {
         # soft link file(s) into download dir - gzip files as appropriate
         my $target = "$downloadDir/$tablename.$type.gz";
+        # NOTE: We are now making the RawSignals but they are put in the subdirectory "raw"
+        if(@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
+            $target = "$downloadDir/raw/$tablename.$type.gz";
+        }
         $target =~ s/ //g;  # removes space in ".bed 6.gz" for example
         unlink($target);
         HgAutomate::verbose(2, "unlink($target)\n");
