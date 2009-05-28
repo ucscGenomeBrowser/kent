@@ -222,7 +222,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1546 2009/05/21 19:24:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1547 2009/05/28 16:48:30 mikep Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1303,6 +1303,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
     bedPrintPos(bed, bedSize, tdb);
+    // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
+    char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+    if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
+	printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr><tr><td> %s </td><td> %s </td></tr></table>", row[hasBin+6], row[hasBin+7]);
     printCompareGenomeLinks(tdb,bed->name);
     }
 sqlFreeResult(&sr);
