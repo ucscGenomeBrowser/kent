@@ -69,7 +69,8 @@ group regulation
 priority 92.5
 visibility pack
 spectrum on
-scoreFilter 200
+scoreFilter 500
+scoreFilterLimits 200:1000
 type bed 5 +
 exonArrows off
 
