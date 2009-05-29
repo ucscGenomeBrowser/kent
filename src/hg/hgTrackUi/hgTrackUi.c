@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.490 2009/05/21 20:32:35 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.491 2009/05/29 21:06:52 kuhn Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1564,10 +1564,10 @@ printf("%s",
 	"<P>The scoring ranges from 0 to 1000 and is based on the number of lines "
 	"of evidence that support the motif being active.  Each of the two "
 	"<I>sensu stricto</I> species in which the motif was conserved counts "
-	"as a line of evidence.  If the CHIP/CHIP data showed good (P 0.001) "
+	"as a line of evidence.  If the ChIP-chip data showed good (P &le; 0.001) "
 	"evidence of binding to the transcription factor associated with the "
-	"motif, that counts as two lines of evidence.  If the CHIP/CHIP data "
-	"showed weaker (P 0.005) evidence of binding, that counts as just one line "
+	"motif, that counts as two lines of evidence.  If the ChIP-chip data "
+	"showed weaker (P &le; 0.005) evidence of binding, that counts as just one line "
 	"of evidence.  The following table shows the relationship between lines "
 	"of evidence and score:");
 printf("<P>");
