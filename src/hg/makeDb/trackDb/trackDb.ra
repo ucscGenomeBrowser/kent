@@ -4382,26 +4382,40 @@ searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
 
-track chainVenter1
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 250
+track venterChainNet
+compositeTrack on
+shortLabel Venter Chain/Net
+longLabel J. Craig Venter Chain and Net alignment tracks
+subGroup1 view Views chain=Chains net=Nets
+dragAndDrop subTracks
 visibility hide
-color 100,50,0
-altColor 255,240,200
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-spectrum on
-type chain venter1
-otherDb venter1
-
-track netVenter1
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+visibilityViewDefaults chain=pack net=dense
 group compGeno
-priority 250.1
-visibility hide 
-spectrum on
-type netAlign venter1 chainVenter1
-otherDb venter1
+noInherit on
+priority 500
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+dimensions dimensionX=species 
+sortOrder species=+ view=+
+
+    track chainVenter1
+    subTrack venterChainNet off
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    color 100,50,0
+    altColor 255,240,200
+    matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+    matrixHeader A, C, G, T
+    type chain venter1
+    otherDb venter1
+
+    track netVenter1
+    subTrack venterChainNet off
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign venter1 chainVenter1
+    otherDb venter1
