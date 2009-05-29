@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1567 2009/05/28 21:57:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1568 2009/05/29 21:00:33 kuhn Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3696,8 +3696,8 @@ if (!hideControls)
 	    hPrintf("%s %s on Archaeon %s Assembly",
 	    	organization, browserName, freezeName);
 	else
-	    hPrintf("%s %s on %s %s Assembly",
-	    	organization, browserName, organism, freezeName);
+	    hPrintf("%s %s on %s %s Assembly (%s)",
+	    	organization, browserName, organism, freezeName, database);
 	}
     hPrintf("</B></FONT><BR>\n");
 
