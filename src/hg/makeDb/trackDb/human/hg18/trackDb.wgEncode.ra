@@ -3586,6 +3586,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3601,6 +3602,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3696,6 +3698,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3711,6 +3714,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3726,6 +3730,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3741,6 +3746,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3796,6 +3802,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 153,38,0
@@ -3811,6 +3818,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 153,38,0
@@ -10506,6 +10514,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -10530,6 +10539,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -10555,6 +10565,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -10657,6 +10668,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -10681,6 +10693,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -10704,6 +10717,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -10727,6 +10741,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-03-16
@@ -12305,6 +12320,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-04
@@ -12327,6 +12343,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-04
@@ -12349,6 +12366,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-04
@@ -12371,6 +12389,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-07
@@ -12393,6 +12412,7 @@ wgEncode 1
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     dateSubmitted 2009-04-07
