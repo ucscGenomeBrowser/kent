@@ -353,6 +353,7 @@ compositeTrack on
 shortLabel Primates Chain/Net
 longLabel Primate genomes, Chain and Net alignment tracks
 subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMac=Rhesus ePapHam=Baboon fCalJac=Marmoset gTarSyr=Tarsier hOtoGar=Bushbaby iMicMur=Mouse_lemur
 dragAndDrop subTracks
 visibility hide
 visibilityViewDefaults chain=pack net=dense
@@ -363,11 +364,12 @@ color 0,0,0
 altColor 255,255,0
 type bed 3
 settingsByView chain:spectrum=on
-sortOrder view=+
+dimensions dimensionX=species 
+sortOrder species=+ view=+
 
     track chainPanTro2
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=aPanTro
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain panTro2
@@ -375,7 +377,7 @@ sortOrder view=+
 
     track netPanTro2
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=aPanTro
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign panTro2 chainPanTro2
@@ -383,7 +385,7 @@ sortOrder view=+
 
     track chainGorGor1
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=bGorGor
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain gorGor1
@@ -391,7 +393,7 @@ sortOrder view=+
 
     track netGorGor1
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=bGorGor
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign gorGor1 chainGorGor1
@@ -399,7 +401,7 @@ sortOrder view=+
 
     track chainPonAbe2
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=cPonAbe
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain ponAbe2
@@ -407,7 +409,7 @@ sortOrder view=+
 
     track netPonAbe2
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=cPonAbe
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign ponAbe2 chainPonAbe2
@@ -415,7 +417,7 @@ sortOrder view=+
 
     track chainRheMac2
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=dRheMac
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain rheMac2
@@ -423,7 +425,7 @@ sortOrder view=+
 
     track netRheMac2
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=dRheMac
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign rheMac2 chainRheMac2
@@ -431,7 +433,7 @@ sortOrder view=+
 
     track chainPapHam1
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=ePapHam
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain papHam1
@@ -439,7 +441,7 @@ sortOrder view=+
 
     track netPapHam1
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=ePapHam
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign papHam1 chainPapHam1
@@ -447,7 +449,7 @@ sortOrder view=+
 
     track chainCalJac1
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=fCalJac
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain calJac1
@@ -455,7 +457,7 @@ sortOrder view=+
 
     track netCalJac1
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=fCalJac
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign calJac1 chainCalJac1
@@ -463,7 +465,7 @@ sortOrder view=+
 
     track chainTarSyr1
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=gTarSyr
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain tarSyr1
@@ -471,31 +473,15 @@ sortOrder view=+
 
     track netTarSyr1
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=gTarSyr
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign tarSyr1 chainTarSyr1
     otherDb tarSyr1
 
-    track chainOtoGar1
-    subTrack primateChainNet off
-    subGroups view=chain
-    shortLabel $o_Organism Chain
-    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain otoGar1
-    otherDb otoGar1
-
-    track netOtoGar1
-    subTrack primateChainNet off
-    subGroups view=net
-    shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
-    type netAlign otoGar1 chainOtoGar1
-    otherDb otoGar1
-
     track chainMicMur1
     subTrack primateChainNet off
-    subGroups view=chain
+    subGroups view=chain species=iMicMur
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain micMur1
@@ -503,11 +489,27 @@ sortOrder view=+
 
     track netMicMur1
     subTrack primateChainNet off
-    subGroups view=net
+    subGroups view=net species=iMicMur
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign micMur1 chainMicMur1
     otherDb micMur1
+
+    track chainOtoGar1
+    subTrack primateChainNet off
+    subGroups view=chain species=hOtoGar
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain otoGar1
+    otherDb otoGar1
+
+    track netOtoGar1
+    subTrack primateChainNet off
+    subGroups view=net species=hOtoGar
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    type netAlign otoGar1 chainOtoGar1
+    otherDb otoGar1
 
 track placentalChainNet
 release alpha
