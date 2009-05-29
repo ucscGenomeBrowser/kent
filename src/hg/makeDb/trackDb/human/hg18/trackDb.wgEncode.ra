@@ -484,7 +484,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
     subGroups view=Signal factor=H3K09ac cellType=GM12878
-    type wig 0.00 8338.25
+    type wig 0.00 83.25
     spanList first
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=146 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878H3k9ac fileName=wgEncodeBroadChipSeqSignalGm12878H3k9ac.wig.gz
@@ -667,7 +667,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel GM12878 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
     subGroups view=Signal factor=H3K27me3 cellType=GM12878
-    type wig 0.00 60338.25
+    type wig 0.00 603.25
     spanList first
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=144 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878H3k27me3 fileName=wgEncodeBroadChipSeqSignalGm12878H3k27me3.wig.gz
@@ -930,7 +930,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel HUVEC H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
-    type wig 1.00 7138.00
+    type wig 1.00 71.00
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=HUVEC antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1HuvecH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1HuvecH3k4me2.wig.gz
 
@@ -1019,7 +1019,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel HUVEC H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in HUVEC cells)
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
-    type wig 1.00 1338.00
+    type wig 1.00 13.00
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=HUVEC antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2HuvecH3k9ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep2HuvecH3k9ac.wig.gz
 
@@ -1918,7 +1918,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in Keratin cells)
     subGroups view=Signal factor=H3K09ac cellType=Kera
-    type wig 0.00 3816.00
+    type wig 0.00 16.00
     spanList first
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9ac fileName=wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
@@ -2173,7 +2173,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel Kera Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
     subGroups view=zRAW factor=Pol2b cellType=Kera
-    type wig 1.00 1938.00
+    type wig 1.00 19.00
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=Pol2(b) type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b.wig.gz
 
@@ -2456,7 +2456,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=DNase cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHelas3 fileName=wgEncodeDukeDNaseSeqPeaksHelas3.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHelas3
@@ -2467,7 +2467,7 @@ wgEncode 1
     subGroups view=Signal EXP=DNase cellType=HeLa
     type wig 0.00 1.50
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHelas3 fileName=wgEncodeDukeDNaseSeqSignalHelas3.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3
@@ -2478,7 +2478,7 @@ wgEncode 1
     subGroups view=SignalBO EXP=DNase cellType=HeLa
     type wig 0.00 277.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Helas3
@@ -2489,7 +2489,7 @@ wgEncode 1
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 1.00 664.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Helas3.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Helas3
@@ -2500,7 +2500,7 @@ wgEncode 1
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 1.00 975.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Helas3.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Helas3
@@ -2511,7 +2511,7 @@ wgEncode 1
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 1.00 1758.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHelas3
@@ -2521,7 +2521,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=FAIRE cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=336 dateSubmitted=2009-03-22 dateResubmitted=2009-05-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHelas3 fileName=wgEncodeUncFAIREseqPeaksHelas3.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalHelas3
@@ -2532,7 +2532,7 @@ wgEncode 1
     subGroups view=Signal EXP=FAIRE cellType=HeLa
     type wig 0.00 0.74
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHelas3 fileName=wgEncodeUncFAIREseqSignalHelas3.wig.gz
 
     track wgEncodeUncFAIREseqBaseOverlapSignalHelas3
@@ -2543,7 +2543,7 @@ wgEncode 1
     subGroups view=SignalBO EXP=FAIRE cellType=HeLa
     type wig 0.00 3729.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep1Helas3
@@ -2554,7 +2554,7 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 1.00 22750.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep1Helas3.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep2Helas3
@@ -2565,7 +2565,7 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 1.00 16242.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep2Helas3.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep3Helas3
@@ -2576,7 +2576,7 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 1.00 23788.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep3Helas3.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
@@ -2586,7 +2586,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Peaks labVersion="ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3Ctcf fileName=wgEncodeUtaChIPseqPeaksHelas3Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3Ctcf
@@ -2597,7 +2597,7 @@ wgEncode 1
     subGroups view=Signal EXP=IP-CTCF cellType=HeLa
     type wig 0.00 8.59
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqSignalHelas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf
@@ -2608,7 +2608,7 @@ wgEncode 1
     subGroups view=SignalBO EXP=IP-CTCF cellType=HeLa
     type wig 0.00 1920.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
@@ -2619,7 +2619,7 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 1.00 5570.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
@@ -2630,7 +2630,7 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 1.00 3780.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
@@ -2640,7 +2640,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="ROC analysis" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3Cmyc fileName=wgEncodeUtaChIPseqPeaksHelas3Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3Cmyc
@@ -2651,7 +2651,7 @@ wgEncode 1
     subGroups view=Signal EXP=IP-cMyc cellType=HeLa
     type wig 0.00 0.77
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc
@@ -2662,7 +2662,7 @@ wgEncode 1
     subGroups view=SignalBO EXP=IP-cMyc cellType=HeLa
     type wig 0.00 170.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
@@ -2673,7 +2673,7 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 1.00 3520.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=1 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
@@ -2684,7 +2684,7 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 1.00 3585.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
@@ -2695,7 +2695,7 @@ wgEncode 1
     subGroups view=Signal EXP=zCTRL cellType=HeLa
     type wig 0.00 3.70
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=275 dateSubmitted=2009-03-16 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHelas3Input fileName=wgEncodeUtaustinChIPseqSignalHelas3Input.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalHelas3Input
@@ -2706,7 +2706,7 @@ wgEncode 1
     subGroups view=rRAW EXP=zCTRL cellType=HeLa
     type wig 1.00 4504.00
     spanList first
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-16 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHelas3Input fileName=wgEncodeUtaChIPseqRawSignalHelas3Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
@@ -3423,25 +3423,10 @@ dragAndDrop subTracks
 visibilityViewDefaults 1-PlusClusters=full 3-MinusClusters=full 2-PlusRawSignal=hide 4-MinusRawSignal=hide 5-Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView 1-PlusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:50,autoScale=off,windowingFunction=mean 2-PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 3-MinusClusters:maxHeightPixels=100:16:16,viewLimitsMax=.005:25183,viewLimits=0:50,windowingFunction=mean,autoScale=off 4-MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
+settingsByView 1-PlusClusters:maxHeightPixels=100:32:16,viewLimitsMax=.005:25183,viewLimits=0:30,autoScale=off,windowingFunction=mean 2-PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 3-MinusClusters:maxHeightPixels=100:24:16,viewLimitsMax=.005:25183,viewLimits=0:30,windowingFunction=mean,autoScale=off 4-MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
 priority 0
 type bed 3
 wgEncode 1
-
-    track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
-#    release alpha
-    subTrack wgEncodeRikenCage off
-    shortLabel pros cell pA-
-    longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in prostate whole cell)
-    subGroups view=5-Alignments cellType=prostate localization=0-cell rnaExtract=longNonPolyA
-    type bed 6
-    baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
-    color 0,119,158
-    colorByStrand 0,89,188 0,149,128
-    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
 #    release alpha
@@ -3450,12 +3435,14 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 cytosol)
     subGroups view=5-Alignments cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type bed 6
-    baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
+    # leave out until code translates from colorspace to base space
+    #baseColorDefault diffBases
+    #baseColorUseSequence nameIsSequence
+    #showDiffBasesAllScales .
+    #showDiffBasesMaxZoom 10000.0
+    exonArrows off
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
@@ -3465,13 +3452,30 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 nucleus)
     subGroups view=5-Alignments cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type bed 6
-    baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
+    #baseColorDefault diffBases
+    #baseColorUseSequence nameIsSequence
+    #showDiffBasesAllScales .
+    #showDiffBasesMaxZoom 10000.0
+    exonArrows off
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya.tagAlign.gz
+
+    track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
+#    release alpha
+    subTrack wgEncodeRikenCage off
+    shortLabel pros cell pA-
+    longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in prostate whole cell)
+    subGroups view=5-Alignments cellType=prostate localization=0-cell rnaExtract=longNonPolyA
+    type bed 6
+    #baseColorDefault diffBases
+    #baseColorUseSequence nameIsSequence
+    #showDiffBasesAllScales .
+    #showDiffBasesMaxZoom 10000.0
+    exonArrows off
+    color 0,102,136
+    colorByStrand 0,102,136 221,17,153
+    metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
 #   release alpha
@@ -3480,7 +3484,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in prostate whole cell)
     subGroups view=1-PlusClusters cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type bedGraph 4
-    color 0,119,158
+    color 0,100,140
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
@@ -3490,7 +3494,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in prostate whole cell)
     subGroups view=3-MinusClusters cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type bedGraph 4
-    color 0,119,158
+    color 221,17,153
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
@@ -3510,7 +3514,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 cytosol)
     subGroups view=3-MinusClusters cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
@@ -3530,7 +3534,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 nucleus)
     subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
@@ -3550,7 +3554,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 cytosol)
     subGroups view=3-MinusClusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya fileName=wgEncodeRikenCageMinusClustersK562CytosolLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
@@ -3570,7 +3574,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 nucleus)
     subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleusLongpolya fileName=wgEncodeRikenCageMinusClustersK562NucleusLongpolya.bedGraph4.gz
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongpolya
@@ -3585,7 +3589,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562CytosolLongpolya fileName=wgEncodeRikenCageAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
@@ -3600,7 +3604,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=202 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya fileName=wgEncodeRikenCageAlignmentsK562NucleusLongpolya.tagAlign.gz
 
     track wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
@@ -3620,7 +3624,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 polysome)
     subGroups view=3-MinusClusters cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya fileName=wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
@@ -3640,7 +3644,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleolus)
     subGroups view=3-MinusClusters cellType=K562 localization=60-nucleolus rnaExtract=total
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleolusTotal fileName=wgEncodeRikenCageMinusClustersK562NucleolusTotal.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
@@ -3660,7 +3664,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleoplasm)
     subGroups view=3-MinusClusters cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal fileName=wgEncodeRikenCageMinusClustersK562NucleoplasmTotal.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersK562ChromatinTotal
@@ -3680,7 +3684,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 chromatin)
     subGroups view=3-MinusClusters cellType=K562 localization=50-chromatin rnaExtract=total
     type bedGraph 4
-    color 46,0,184
+    color 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersK562ChromatinTotal fileName=wgEncodeRikenCageMinusClustersK562ChromatinTotal.bedGraph4.gz
 
     track wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya
@@ -3695,7 +3699,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=longNonPolyA localization=polysome view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya fileName=wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
@@ -3710,7 +3714,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleolus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleolusTotal fileName=wgEncodeRikenCageAlignmentsK562NucleolusTotal.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
@@ -3725,7 +3729,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=nucleoplasm view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562NucleoplasmTotal fileName=wgEncodeRikenCageAlignmentsK562NucleoplasmTotal.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsK562ChromatinTotal
@@ -3740,7 +3744,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
-    colorByStrand 16,0,214 76,0,154
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=K562 rnaExtract=total localization=chromatin view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=212 dateSubmitted=2009-02-19 dateUnrestricted=2009-11-19 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsK562ChromatinTotal fileName=wgEncodeRikenCageAlignmentsK562ChromatinTotal.tagAlign.gz
 
     track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
@@ -3750,7 +3754,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 cytosol)
     subGroups view=3-MinusClusters cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
     type bedGraph 4
-    color 153,38,0
+    color 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
@@ -3770,7 +3774,7 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 nucleus)
     subGroups view=3-MinusClusters cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
     type bedGraph 4
-    color 153,38,0
+    color 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=MinusClusters dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 
     track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
@@ -3795,7 +3799,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 153,38,0
-    colorByStrand 183,08,0 123,68,0
+    colorByStrand 153,38,0 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya.tagAlign.gz
 
     track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
@@ -3810,7 +3814,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 153,38,0
-    colorByStrand 183,08,0 123,68,0
+    colorByStrand 153,38,0 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=232 dateSubmitted=2009-03-09 dateUnrestricted=2009-12-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya fileName=wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya.tagAlign.gz
 
 # U. Washington Affy Exon (wrangler: Andy)
@@ -4799,7 +4803,7 @@ scoreMin 500
     shortLabel HUVEC Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HUVEC cells)
     subGroups view=RawSignal cellType=HUVEC
-    type wig 1.00 38367.00
+    type wig 1.00 367.00
     dateSubmitted 2009-04-27
     dateUnrestricted 2010-01-27
     dataVersion ENCODE July 2009 Freeze
@@ -5250,7 +5254,7 @@ scoreMin 500
     maxHeightPixels 100:50:16
     viewLimits 1:150
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HeLa-S3 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Nov 2008 Freeze" subId=47 dateSubmitted=2008-11-19 dateUnrestricted=2009-08-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep1Helas3 fileName=wgEncodeUwDnaseSeqRawSignalRep1Helas3.wig.gz
 
     track wgEncodeUwDnaseSeqPeaksHelas3
@@ -5266,7 +5270,7 @@ scoreMin 500
     priority 14
     noInherit on
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HeLa-S3 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=47 dateSubmitted=2008-11-19 dateUnrestricted=2009-08-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksHelas3 fileName=wgEncodeUwDnaseSeqPeaksHelas3.narrowPeak.gz
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
@@ -5282,7 +5286,7 @@ scoreMin 500
     priority 13
     noInherit on
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HeLa-S3 view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE Nov 2008 Freeze" subId=47 dateSubmitted=2008-11-19 dateUnrestricted=2009-08-19 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Helas3 fileName=wgEncodeUwDnaseSeqHotspotsRep1Helas3.broadPeak.gz
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
@@ -5364,7 +5368,7 @@ wgEncode 1
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in prostate whole cell)
     subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type broadPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
@@ -5374,7 +5378,7 @@ wgEncode 1
     longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type broadPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya
@@ -5383,9 +5387,9 @@ wgEncode 1
     shortLabel pros cell pA-
     longLabel ENCODE Affy Filtered Signal (PolyA- RNA in prostate whole cell)
     subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
-    type wig -62124.00 54385.00
+    type wig -62124.00 545.00
     spanList 1
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
@@ -5396,7 +5400,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type wig -62124.00 50627.00
     spanList 1
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
@@ -5406,7 +5410,7 @@ wgEncode 1
     longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
     type broadPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya
@@ -5416,7 +5420,7 @@ wgEncode 1
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in prostate whole cell)
     subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
     type broadPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
@@ -5427,7 +5431,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type wig -62728.00 58726.00
     spanList 1
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
@@ -5438,7 +5442,7 @@ wgEncode 1
     subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type wig -62728.00 56449.00
     spanList 1
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
@@ -5918,7 +5922,7 @@ wgEncode 1
     shortLabel K562 nplm tot Rw
     longLabel ENCODE Affy Raw Signal (Total RNA in K562 nucleoplasm)
     subGroups view=RawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
-    type wig -52041.00 55384.00
+    type wig -52041.00 554.00
     priority 48
     noInherit on
     spanList first
@@ -7339,7 +7343,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa cells)
     subGroups view=Peaks factor=Pol2 cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=323 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2.narrowPeak.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=323 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2PeaksHelas3Pol2.narrowPeak.gz
 
@@ -7354,7 +7358,7 @@ wgEncode 1
     dateSubmitted 2008-10-01
     dateUnrestricted 2009-07-01
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Pol2
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 accession=GSE12781 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=12 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Pol2 fileName=wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz
@@ -7366,7 +7370,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HeLa cells)
     subGroups view=Signal factor=Pol2 cellType=HeLa
     type bedGraph 4
-    color 0,119,158
+    color 0,102,136
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=324 dateSubmitted=2009-05-02 dateUnrestricted=2010-02-02 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=324 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz
 
@@ -7382,7 +7386,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Pol2
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=12 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Pol2 fileName=wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz
@@ -7398,7 +7402,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Pol2
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 type=wig fragLength=200 accession=GSE12781 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=12 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2.wig.gz
@@ -7414,7 +7418,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Pol2
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 type=wig fragLength=200 accession=GSE12781 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=12 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2.wig.gz
@@ -7430,7 +7434,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Pol2
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 type=wig fragLength=200 accession=GSE12781 view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=12 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2 fileName=wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2.wig.gz
@@ -7442,7 +7446,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Fos in HeLa-S3 cells)
     subGroups view=Peaks factor=cFos cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Cfos fileName=wgEncodeYaleChIPseqPeaksHelas3Cfos.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Cfos
@@ -7452,7 +7456,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (c-Fos in HeLa-S3 cells)
     subGroups view=Signal factor=cFos cellType=HeLa
     type bedGraph 4
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Cfos fileName=wgEncodeYaleChIPseqSignalHelas3Cfos.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Cfos
@@ -7462,7 +7466,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 1333.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cfos fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cfos.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Cfos
@@ -7472,7 +7476,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 2081.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Fos type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=315 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cfos fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cfos.wig.gz
 
     track wgEncodeYaleChIPseqPeaksHelas3Cmyc
@@ -7482,7 +7486,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks factor=cMyc cellType=HeLa
     type narrowPeak
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Cmyc fileName=wgEncodeYaleChIPseqPeaksHelas3Cmyc.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHelas3Cmyc
@@ -7492,7 +7496,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal factor=cMyc cellType=HeLa
     type bedGraph 4
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Cmyc fileName=wgEncodeYaleChIPseqSignalHelas3Cmyc.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Cmyc
@@ -7502,7 +7506,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1236.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cmyc fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Cmyc.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Cmyc
@@ -7512,7 +7516,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1677.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=316 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Cmyc.wig.gz
 
     track wgEncodeYaleChIPseqRel2SignalHelas3Input
@@ -7522,7 +7526,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa
     type bedGraph 4
-    color 0,119,158
+    color 0,102,136
     accession GSE12781
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3InputBg fileName=wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3Input fileName=wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz
@@ -7540,7 +7544,7 @@ wgEncode 1
     dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Input
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=14 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Input fileName=wgEncodeYaleChIPseqSignalHelas3Input.wig.gz
@@ -7556,7 +7560,7 @@ wgEncode 1
     dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Input
     accession GSE12781
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Input type=wig fragLength=200 view=RawSignal labVersion=GSE12781 dataVersion="ENCODE Nov 2008 Freeze" subId=107 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalHelas3Input fileName=wgEncodeYaleChIPseqRawSignalHelas3Input.wig.gz
@@ -7571,7 +7575,7 @@ wgEncode 1
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Large_Fragment
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Largefragment fileName=wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz
 
@@ -7586,7 +7590,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Large_Fragment
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Largefragment fileName=wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
 
@@ -7597,7 +7601,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Large_Fragment in HeLa-S3 cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 4781.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=575 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-22 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
@@ -7612,7 +7616,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Large_Fragment
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment.wig.gz
 
@@ -7623,7 +7627,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Large_Fragment in HeLa-S3 cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 3589.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=575 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-22 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
@@ -7638,7 +7642,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Large_Fragment
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment.wig.gz
 
@@ -7653,7 +7657,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody MNase
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mnase fileName=wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
 
@@ -7664,7 +7668,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (MNase in HeLa-S3 cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 6215.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mnase fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mnase.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
@@ -7679,7 +7683,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody MNase
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase.wig.gz
 
@@ -7690,7 +7694,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (MNase in HeLa-S3 cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 7693.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mnase fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mnase.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
@@ -7705,7 +7709,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody MNase
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase.wig.gz
 
@@ -7719,7 +7723,7 @@ wgEncode 1
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Mouse_IgG
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg fileName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
 
@@ -7734,7 +7738,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Mouse_IgG
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mouseigg fileName=wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
 
@@ -7745,7 +7749,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Mouse_IgG in HeLa-S3 cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 2816.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
@@ -7760,7 +7764,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Mouse_IgG
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg.wig.gz
 
@@ -7771,7 +7775,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Mouse_IgG in HeLa-S3 cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 3901.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2010-02-07 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
@@ -7786,7 +7790,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Mouse_IgG
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg.wig.gz
 
@@ -7801,7 +7805,7 @@ wgEncode 1
     dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Nakeddna fileName=wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
 
@@ -7812,7 +7816,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Naked_DNA in HeLa-S3 cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 4017.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Nakeddna fileName=wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Nakeddna.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
@@ -7827,7 +7831,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna.wig.gz
 
@@ -7838,7 +7842,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Naked_DNA in HeLa-S3 cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 2497.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Nakeddna fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Nakeddna.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
@@ -7853,7 +7857,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna.wig.gz
 
@@ -7864,7 +7868,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Naked_DNA in HeLa-S3 cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 2191.00
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=200 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep3Helas3Nakeddna fileName=wgEncodeYaleChIPseqRel2RawSignalRep3Helas3Nakeddna.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
@@ -7879,7 +7883,7 @@ wgEncode 1
     dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
-    color 0,119,158
+    color 0,102,136
     antibody Naked_DNA
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA type=wig fragLength=700 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna fileName=wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna.wig.gz
 
@@ -7893,7 +7897,7 @@ wgEncode 1
     dateSubmitted 2008-10-01
     dateUnrestricted 2009-07-01
     cell HeLa-S3_IFNg
-    color 0,119,158
+    color 0,102,136
     antibody STAT1
     accession GSE12782
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 accession=GSE12782 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1 fileName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
@@ -7909,7 +7913,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
-    color 0,119,158
+    color 0,102,136
     antibody STAT1
     accession GSE12782
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngStat1 fileName=wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz
@@ -7925,7 +7929,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
-    color 0,119,158
+    color 0,102,136
     antibody STAT1
     accession GSE12782
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 type=wig fragLength=200 accession=GSE12782 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1 fileName=wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1.wig.gz
@@ -7941,7 +7945,7 @@ wgEncode 1
     dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
-    color 0,119,158
+    color 0,102,136
     antibody STAT1
     accession GSE12782
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=STAT1 type=wig fragLength=200 accession=GSE12782 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1 fileName=wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1.wig.gz
@@ -7953,7 +7957,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa_IFN cells)
     subGroups view=Signal factor=zCTRL cellType=HeLaIF
     type bedGraph 4
-    color 0,119,158
+    color 0,102,136
     accession GSE12782
     #metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=279 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngInputBg fileName=wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=279 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3ifngInput fileName=wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
@@ -7970,7 +7974,7 @@ wgEncode 1
     dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3_IFNg
-    color 0,119,158
+    color 0,102,136
     antibody Input
     accession GSE12782
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=15 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngInput fileName=wgEncodeYaleChIPseqSignalHelas3ifngInput.wig.gz
@@ -7986,7 +7990,7 @@ wgEncode 1
     dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3_IFNg
-    color 0,119,158
+    color 0,102,136
     antibody Input
     accession GSE12782
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3_IFNg antibody=Input type=wig fragLength=200 view=RawSignal labVersion=GSE12782 dataVersion="ENCODE Nov 2008 Freeze" subId=107 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalHelas3ifngInput fileName=wgEncodeYaleChIPseqRawSignalHelas3ifngInput.wig.gz
@@ -8488,7 +8492,7 @@ wgEncode 1
     shortLabel K562 GATA1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
-    type wig 1.00 2385.00
+    type wig 1.00 25.00
     dateSubmitted 2009-02-27
     dateUnrestricted 2009-11-27
     dataVersion ENCODE Feb 2009 Freeze
@@ -8548,7 +8552,7 @@ wgEncode 1
     cell K562
     color 46,0,184
     antibody JunD
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Jund fileName=wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=2 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562Jund fileName=wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz
 
     track wgEncodeYaleChIPseqRel2SignalK562Jund
     release alpha
@@ -8575,7 +8579,7 @@ wgEncode 1
     cell K562
     color 46,0,184
     antibody JunD
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Jund fileName=wgEncodeYaleChIPseqSignalK562Jund.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=2 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562Jund fileName=wgEncodeYaleChIPseqSignalK562Jund.wig.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1K562Jund
     release alpha
@@ -8601,7 +8605,7 @@ wgEncode 1
     cell K562
     color 46,0,184
     antibody JunD
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Jund fileName=wgEncodeYaleChIPseqRawSignalRep1K562Jund.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=2 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562Jund fileName=wgEncodeYaleChIPseqRawSignalRep1K562Jund.wig.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep2K562Jund
     release alpha
@@ -8627,7 +8631,7 @@ wgEncode 1
     cell K562
     color 46,0,184
     antibody JunD
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=238 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Jund fileName=wgEncodeYaleChIPseqRawSignalRep2K562Jund.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=JunD type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=2 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Jund fileName=wgEncodeYaleChIPseqRawSignalRep2K562Jund.wig.gz
 
     track wgEncodeYaleChIPseqRel2PeaksK562Max
     release alpha
@@ -8793,7 +8797,7 @@ wgEncode 1
     shortLabel K562 NF-E2 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NFe2 cellType=K562
-    type wig 1.00 8338.00
+    type wig 1.00 83.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=NF-E2 type=wig fragLength=200 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-01-09 dateRegenerated=2009-05-08 dateUnrestricted=2009-10-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Nfe2 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562Nfe2.wig.gz
 
@@ -10583,7 +10587,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cell
     cell prostate
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Tags dataVersion="ENCODE Feb 2009 Freeze" subId=105 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetTagsProstateCellLongpolya fileName=wgEncodeGisPetTagsProstateCellLongpolya.gappedPeak.gz
 
     track wgEncodeGisPetTagsK562CytosolLongpolya
@@ -10664,7 +10668,7 @@ wgEncode 1
     rnaExtract longPolyA
     localization cell
     cell prostate
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=105 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsProstateCellLongpolya fileName=wgEncodeGisPetAlignmentsProstateCellLongpolya.pairedTagAlign.gz
 
     track wgEncodeGisPetAlignmentsK562CytosolLongpolya
@@ -11102,7 +11106,7 @@ wgEncode 1
     rnaExtract shortDeplRrna
     localization cell
     cell prostate
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=prostate rnaExtract=shortDeplRrna localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=221 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqTransfragsProstateCellShortdeplrrna fileName=wgEncodeCshlRnaSeqTransfragsProstateCellShortdeplrrna.broadPeak.gz
 
     track wgEncodeCshlRnaSeqTransfragsProstateCellShort
@@ -11121,7 +11125,7 @@ wgEncode 1
     rnaExtract short
     localization cell
     cell prostate
-    color 0,119,158
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=221 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlRnaSeqTransfragsProstateCellShort.broadPeak.gz
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
