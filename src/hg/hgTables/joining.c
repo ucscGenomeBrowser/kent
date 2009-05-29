@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.54 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.55 2009/05/29 22:07:01 mikep Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -971,7 +971,7 @@ if (! doJoin)
     struct sqlConnection *conn = sqlConnect(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
-    if (hIsBigBed(database, dtfList->table, NULL, ctLookupName)) // Do we need to get parent track here?
+    if (hIsBigBed(database, dtfList->table, NULL, ctLookupName))
 	makeBigBedOrderedCommaFieldList(dtfList, dy);
     else if (isCustomTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);

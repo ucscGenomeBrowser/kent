@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.73 2009/05/20 20:59:57 mikep Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.74 2009/05/29 22:07:01 mikep Exp $";
 
 extern char *maxOutMenu[];
 
@@ -791,7 +791,7 @@ boolean isBedGraph(char *table)
 /* Return TRUE if table is specified as a bedGraph in the current database's
  * trackDb. */
 {
-return trackIsType(database, table, NULL, "bedGraph", ctLookupName);// Do we need to get parent track here?
+return trackIsType(database, table, NULL, "bedGraph", ctLookupName);
 }
 
 struct bed *getWiggleAsBed(
