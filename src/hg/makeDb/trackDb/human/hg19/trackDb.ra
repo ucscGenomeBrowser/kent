@@ -59,6 +59,7 @@ otherDb hg19
 type bed 3
 settingsByView chain:spectrum=on
 sortOrder refChr=+ view=+
+chainNormScoreAvailable yes
 
     track hapRegions
     subTrack hapChainNet off
