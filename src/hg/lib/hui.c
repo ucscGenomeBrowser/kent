@@ -13,6 +13,7 @@
 #include "hCommon.h"
 #include "hgConfig.h"
 #include "chainCart.h"
+#include "chainDb.h"
 #include "netCart.h"
 #include "obscure.h"
 #include "wiggle.h"
@@ -22,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.205 2009/05/27 21:36:17 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.206 2009/05/29 22:19:50 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3651,11 +3652,52 @@ boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
 enum chainColorEnum chainColor =
 	chainFetchColorOption(cart, tdb, compositeLevel);
 
-char optString[256];
-safef(optString, ArraySize(optString), "%s.%s", prefix, OPT_CHROM_COLORS );
-printf("<p><b>Color chains by:&nbsp;</b>");
-chainColorDropDown(optString, chainColorEnumToString(chainColor));
+/* check if we have normalized scores available */
+boolean normScoreAvailable = FALSE;
 
+if (! compositeLevel)
+    {
+    // This will not work if tableName is a split table, we don't know
+    //	the chromosome at this point here
+    struct sqlConnection *conn = hAllocConn(db);
+    int tblIx = sqlFieldIndex(conn, tdb->tableName, "normScore");
+    normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
+    hFreeConn(&conn);
+    }
+else
+    {
+    char * colorOptionType =
+     trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
+    if (differentWord(colorOptionType, "no"))
+	normScoreAvailable = TRUE;
+    }
+
+char optString[256];
+if (normScoreAvailable)
+    {
+    safef(optString, ArraySize(optString), "%s.%s", prefix, OPT_CHROM_COLORS );
+    printf("<p><b>Color chains by:&nbsp;</b>");
+    chainColorDropDown(optString, chainColorEnumToString(chainColor));
+    }
+else
+    {
+    printf("<p><b>Color track based on chromosome:</b>&nbsp;");
+
+    char optString[256];
+    /* initial value of chromosome coloring option is "on", unless
+     * overridden by the colorChromDefault setting in the track */
+    char *binaryColorDefault =
+	    trackDbSettingClosestToHomeOrDefault(tdb, "colorChromDefault", "on");
+    /* allow cart to override trackDb setting */
+    safef(optString, sizeof(optString), "%s.color", prefix);
+    char * colorSetting = cartUsualStringClosestToHome(cart, tdb,
+	compositeLevel, "color", binaryColorDefault);
+    cgiMakeRadioButton(optString, "on", sameString(colorSetting, "on"));
+    printf(" on ");
+    cgiMakeRadioButton(optString, "off", sameString(colorSetting, "off"));
+    printf(" off ");
+    printf("<br>\n");
+    }
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
 safef(optString, ArraySize(optString), "%s.%s", prefix, OPT_CHROM_FILTER);
@@ -3663,7 +3705,8 @@ cgiMakeTextVar(optString,
     cartUsualStringClosestToHome(cart, tdb, compositeLevel,
 	OPT_CHROM_FILTER, ""), 15);
 
-scoreCfgUi(db, cart,tdb,prefix,NULL,CHAIN_SCORE_MAXIMUM,FALSE);
+if (normScoreAvailable)
+    scoreCfgUi(db, cart,tdb,prefix,NULL,CHAIN_SCORE_MAXIMUM,FALSE);
 
 cfgEndBox(boxed);
 }
