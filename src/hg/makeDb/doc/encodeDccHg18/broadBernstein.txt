@@ -600,5 +600,17 @@ chr1    216184249       216184300       CTATAATCCCAGCTACTTGGAAGGCTGAGGCAGGAGAATC
  
 # created 332/fixTagAlign.sh script for all of the Broad tagAlign files 
 
+Generate RawSignal files for download 2009-5-28
+===============================================
+from pip
+grep RawSignal 332/out/load.ra | grep auto >> 325/out/mkRawSigsFiles.sh 
+grep RawSignal 332/out/load.ra | grep wgEncode >> 325/out/mkRawSigsFiles.sh 
+...
+Edit and then run 332/out/mkRawSigsFiles.sh
+placing *.wig.gz into downloads/wgEncodeBroadChipSeq/raw
+cd downloads/wgEncodeBroadChipSeq/raw
+cp ../preamble.html
+cp ../fileDb.ra
+edit preamble.html to note the subdirectory only contains Raw Signals
+encodeDownloadsPage.pl index.html
 
- 

@@ -1917,3 +1917,17 @@ drop table wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment_old;
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 343 displayed
 
+Generate RawSignal files for download 2009-5-28
+===============================================
+from pip
+grep RawSignal 329/out/load.ra | grep auto >> 325/out/mkRawSigsFiles.sh 
+grep RawSignal 329/out/load.ra | grep wgEncode >> 325/out/mkRawSigsFiles.sh 
+...
+Edit and then run 329/out/mkRawSigsFiles.sh
+placing *.wig.gz into downloads/wgEncodeYaleChIPseq/raw
+cd downloads/wgEncodeYaleChIPseq/raw
+cp ../preamble.html
+cp ../fileDb.ra
+edit preamble.html to note the subdirectory only contains Raw Signals
+encodeDownloadsPage.pl index.html
+

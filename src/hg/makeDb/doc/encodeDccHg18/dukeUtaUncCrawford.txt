@@ -1324,3 +1324,17 @@ delete from trackDb where tableName like "wgEncodeUncFAIREseqPeaksHelas3";
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 336 displayed
         
+Generate RawSignal files for download 2009-5-28
+===============================================
+from pip
+grep RawSignal 325/out/load.ra | grep auto >> 325/out/mkRawSigsFiles.sh 
+grep RawSignal 325/out/load.ra | grep wgEncode >> 325/out/mkRawSigsFiles.sh 
+...
+Edit and then run 325/out/mkRawSigsFiles.sh
+placing *.wig.gz into downloads/wgEncodeChromatinMap/raw
+cd downloads/wgEncodeChromatinMap/raw
+cp ../preamble.html
+cp ../fileDb.ra
+edit preamble.html to note the subdirectory only contains Raw Signals
+encodeDownloadsPage.pl index.html
+
