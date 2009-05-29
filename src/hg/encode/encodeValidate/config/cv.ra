@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.101 2009/05/29 18:52:33 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.102 2009/05/29 19:18:12 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -509,7 +509,7 @@ karyotype cancer, male
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
 tier 3
-protocol PANC-1_protocol.pdf
+protocol PANC-1_Stam_protocol.pdf
 
 term PFSK-1
 type Cell Line
