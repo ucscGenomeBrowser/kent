@@ -96,6 +96,12 @@ BEGIN {
             $main::ENV{TMPDIR} = "/var/tmp";
         }
     }
+
+    # mappings of host names to hg.conf files
+    %gbCommon::hgConfs = (
+        "hgwbeta" => "etc/.hg.hgsqlbeta.conf",
+        "hgw1" => "etc/.hg.hgsqlrr.conf",
+    );
 }
 
 # Enable to track programs execution for debugging.
@@ -891,8 +897,8 @@ sub splitSpaceList($) {
 sub getHgConf() {
     my $hgConf = $ENV{"HGDB_CONF"};
     if (!defined($hgConf) || (! -r $hgConf)) {
-        if ($gbCommon::hostName eq "hgwbeta") {
-            $hgConf = "etc/.hg.hgsqlbeta.conf";
+        if (defined($gbCommon::hgConfs{$gbCommon::hostName})) {
+            $hgConf = $gbCommon::hgConfs{$gbCommon::hostName};
         } else {
             $hgConf = "etc/.hg.conf";
         }
