@@ -71,7 +71,7 @@ endif
 
 # Keep a history of cvs-reports by creating a new directory, and setting a symlink (cvs-reports-latest) to it. 
 # The webserver has symlinks to the latest one and the history:
-#   /usr/local/apache/htdocs/cvs-reports -> /cluster/hive/groups/qa/cvs-reports-latest
+#   /usr/local/apache/htdocs/cvs-reports -> /hive/groups/qa/cvs-reports-latest
 #   /usr/local/apache/htdocs/cvs-reports-history -> /hive/groups/qa/cvs-reports-history
 
 # The script which builds the repoerts (cvs-reports-delta) also has a setting which points to this: 
