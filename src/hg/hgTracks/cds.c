@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.97 2009/05/27 23:45:41 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.98 2009/05/29 19:22:45 mikep Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -277,6 +277,14 @@ static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 {
 struct simpleFeature *sf = NULL;
 char *winDna = getCachedDna(winStart, winEnd);
+Color c = cdsColor[CDS_STOP];
+// check if we need a contrasting color instead of default 'red' (CDS_STOP)
+char *tickColor = NULL;
+if ( tg->itemColor && (tickColor = trackDbSetting(tg->tdb, "baseColorTickColor")) && sameString(tickColor, "contrastingColor"))
+    {
+    Color ci = tg->itemColor(tg, lf, hvg);
+    c = hvGfxContrastingColor(hvg, ci);
+    }
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int s = max(winStart, sf->start);
@@ -296,10 +304,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    for (i=0; i < (e - s); i++)
 		{
 		if (mrnaSeq->dna[mrnaS+i] != winDna[s-winStart+i])
-		    {
-		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale,
-				 cdsColor[CDS_STOP]);
-		    }
+		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale, c);
 		}
 	    }
 	}

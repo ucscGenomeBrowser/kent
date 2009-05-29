@@ -419,6 +419,11 @@ Some settings used by various tracks:
       and diffCodons are applicable only if the track has sequence
       (baseColorUseSequence).  genomicCodons, itemCodons and diffCodons
       are applicable only if the track has CDS info (baseColorUseCds).
+    o baseColorTickColor {contrastingColor}
+      Choose a contrasting color (same color as would be chosen for the 
+      base text if we were zoomed in to base level. Only applies if
+      baseColorDefault is set. Defaults to 'red' (the CDS_STOP color)
+      if this option is not  supplied.
     o indelDoubleInsert {on,off} - For psl tracks.  If on, then highlight
       alignment gaps in both target and query using double lines (like
       chain tracks).
