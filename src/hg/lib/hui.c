@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.206 2009/05/29 22:19:50 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.207 2009/05/29 23:23:44 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3094,7 +3094,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);                        // TODO: Sort needs to expand from subGroups to labels as well
                     if(ix >= 0)
                         {
-#define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Configure Subtrack Settings'>%s</A>\n"
+#define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Subtrack Configuration'>%s</A>\n"
 #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
                         printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
@@ -4499,8 +4499,8 @@ int ix;
 struct trackDb *subtrack;
 char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
-#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(tbl),(name),((open)?"on":"off"))
+#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -4508,6 +4508,7 @@ if(membersOfView == NULL)
 
 char configurable[membersOfView->count];
 memset(configurable,cfgNone,sizeof(configurable));
+int firstOpened = -1;
 boolean makeCfgRows = FALSE;
 struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
 char *setting = trackDbSetting(parentTdb,"settingsByView");
@@ -4527,14 +4528,22 @@ for (ix = 0; ix < membersOfView->count; ix++)
             {
             configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
             if(configurable[ix] != cfgNone)
+                {
+                if(firstOpened == -1)
+                    {
+                    safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
+                    if(cartUsualBoolean(cart,objName,FALSE))
+                        firstOpened = ix;
+                    }
                 makeCfgRows = TRUE;
+                }
             }
         break;
         }
     }
 
 toLowerN(membersOfView->title, 1);
-printf("<B>Select %s:</B><BR>\n", membersOfView->title);
+printf("<B>Select %s </B>(<A HREF=\"../../goldenPath/help/multiView.html\" title='Help on views' TARGET=_BLANK>help</A>):<BR>\n", membersOfView->title);
 puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
@@ -4543,9 +4552,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         printf("<TD>");
         if(configurable[ix] != cfgNone)
             {
-            safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
-            boolean open = cartUsualBoolean(cart,objName,FALSE);
-            MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,open);
+            MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,(firstOpened == ix));
             }
         else
             printf("<B>%s</B>\n",membersOfView->values[ix]);
@@ -4565,7 +4572,6 @@ for (ix = 0; ix < membersOfView->count; ix++)
         //    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
         }
     }
-puts("<TD><A HREF=\"../../goldenPath/help/multiView.html\" TARGET=_BLANK>Help on views</A></TD>");
 // Need to do the same for ENCODE Gencode 'filterBy's
 puts("</TR>");
 if(makeCfgRows)
@@ -4576,9 +4582,8 @@ if(makeCfgRows)
         if(matchedSubtracks[ix] != NULL)
             {
             printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
-            safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
-            boolean open = cartUsualBoolean(cart,objName,FALSE);
-            if(!open && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
+            if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
+            ||  firstOpened != ix)
                 printf(" style=\"display:none\"");
             printf("><TD width=10>&nbsp;</TD>");
             int ix2=ix;
@@ -4615,12 +4620,12 @@ if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=ucscVocab>%s</A>\n"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>\n"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
-        int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+strlen(label) + 2;
+        int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
         char *link=needMem(sz);
-        safef(link,sz,VOCAB_LINK,words[0],words[ix],label);
+        safef(link,sz,VOCAB_LINK,words[0],words[ix],label,label);
         freeMem(words[0]);
         return link;
         }
@@ -4633,9 +4638,9 @@ for(ix=1;ix<count && !found;ix++)
             char * cvTerm = metadataSettingFind(childTdb, cvSetting);
             if(cvTerm != NULL)
                 {
-                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(cvTerm)+strlen(label) + 2;
+                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(cvTerm)+2*strlen(label) + 2;
                 char *link=needMem(sz);
-                safef(link,sz,VOCAB_LINK,words[0],cvTerm,label);
+                safef(link,sz,VOCAB_LINK,words[0],cvTerm,label,label);
                 freeMem(words[0]);
                 freeMem(cvTerm);
                 return link;
