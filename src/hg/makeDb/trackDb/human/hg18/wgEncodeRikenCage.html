@@ -28,11 +28,13 @@ This track contains the following views:
 <DD>These views display clusters of overlapping read mappings on the
 forward and reverse genomic strands.
 <DT><i>Alignments</i>
-<DD>The alignments view shows the individual tags (read mappings).
+<DD>The alignments view shows the individual tags (read mappings), with
+mismatches from the genomic reference highlighted.
 </DL>
 
 <P>Color differences in subtracks are are used as a visual cue to
-distinguish between the different cell types.
+distinguish between the different cell types, and between annotations
+on the plus and minus strand.
 
 <H2>Methods</H2>
 <P>
@@ -51,18 +53,20 @@ To create the tag, a linker was attached to the 5'
 end of polyA+ or polyA- reverse-transcribed cDNAs which were selected by cap
 trapping (Carninci <EM>et al</EM>. 1996). The first 27 bp of
 the cDNA were cleaved using class II restriction enzymes. A linker was then
-attached to the 3' end of the cDNA. After PCR amplification,
-the tags were then sequenced (36 bp single reads).
-All tags were mapped to the human genome
+attached to the 3' end of the cDNA. 
+</P>
+<P>After PCR amplification,
+the tags were sequenced (36 bp single reads) using ABI SOLiD technology
+(polyA- RNA from the cytosol and nucleus of K562 cell lines, and from whole cell in prostate cells)
+or Illumina/Solexa GA (all other data).
+Tags were mapped to the human genome
 (NCBI Build36, hg18) using the program <em>nexalign</em> 
 (T. Lassmann manuscript in preparation). 
+SOlid CAGE sequences were mapped with up to 3 mismatches; 2 mismatches were allowed for Solexa CAGE. 
+Alignments of sequences mapping 10 times or fewer were retained.
 The expression level was computed as the number of reads making up the cluster,
 divided by the total number of reads sequenced, times 1 million.
 </P>
-<P>Data for polyA- RNA from the cytosol and nucleus of K562 cell lines,
-and from whole cell in prostate cells, were sequenced with ABI 
-SOLiD technology. 
-The remaining data were sequenced using the Illumina GA.
 
 <H2>Credits</H2>
 <P>
