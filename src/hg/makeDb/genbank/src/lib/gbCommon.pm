@@ -98,6 +98,7 @@ BEGIN {
     }
 
     # mappings of host names to hg.conf files
+    # WARNING: must also be changed in etc/dbload
     %gbCommon::hgConfs = (
         "hgwbeta" => "etc/.hg.hgsqlbeta.conf",
         "hgw1" => "etc/.hg.hgsqlrr.conf",
