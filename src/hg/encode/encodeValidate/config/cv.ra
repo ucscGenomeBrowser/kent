@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.99 2009/05/23 16:42:32 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.100 2009/05/29 01:02:18 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -139,6 +139,28 @@ termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 tier 3
 
+term BG02ES
+type Cell Line
+description H9 Conditioned Medium
+tier 3
+lineage human Embryonic Stem Cell (hESC) BG02
+karyotype XY euploid
+vendorName BresaGen, Inc.
+vendorId BG02 (hESBGN.02)
+orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term BG02ES-EBD
+type Cell Line
+description BG02 EmbryoidBody-Derived
+tier 3
+lineage human Embryonic Stem Cell (hESC) BG02
+karyotype XY euploid
+vendorName BresaGen, Inc.
+vendorId BG02 (hESBGN.02)
+orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
 term BJ-tert
 type Cell Line
 description skin fibroblast
@@ -213,6 +235,94 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol GM18507_protocol.pdf
 
+term H9ES
+type Cell Line
+description H9 human ES cells
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term H9ES-E
+type Cell Line
+description H9 Endoderm
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term H9ES-AFP+
+type Cell Line
+description H9 AFP+ human ESCells-derived
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term H9ES-AFP-
+type Cell Line
+description H9 AFP- human ESCells-derived
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term H9ES-EB
+type Cell Line
+description H9 Embryoid Bodies
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term H9ES-EBD
+type Cell Line
+description H9 EmbryoidBody-Derived
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term H9ES-CM
+type Cell Line
+description H9 Conditioned Medium
+tier 3
+lineage human Embryonic Stem Cell (hESC) H9
+karyotype XX euploid
+vendorName WiCell
+vendorId WA09 (H9)
+orderUrl http://www.wicell.org/index.php
+protocol BG02ES_and_H9ES_Myers_protocols.pdf
+
+term HAL
+type Cell Line
+description Human Adult Liver
+tier 3
+lineage Genomic DNA purified from surgically excised adult human liver was purchased from Asterand, Inc. (Detroit, MI).
+color 189,0,157
+vendorName Asterand, Inc.
+vendorId HAL
+orderUrl http://www.asterand.com/Asterand/
+protocol HAL_Myers_protocol.pdf
+
 term HCT-116
 type Cell Line
 description colorectal carcinoma
@@ -249,6 +359,22 @@ karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 tier 3
+
+term HFL11W
+type Cell Line
+description Human Fetal Liver 11 weeks
+tier 3
+lineage Consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
+color 189,0,157
+protocol HFL11W_and_HFL24W_Myers_protocols.pdf
+
+term HFL24W
+type Cell Line
+description Human Fetal Liver 24 weeks
+tier 3
+lineage Consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
+color 189,0,157
+protocol HFL11W_and_HFL24W_Myers_protocols.pdf
 
 term HL-60
 type Cell Line
@@ -1093,66 +1219,3 @@ description Control signal from Naked DNA.
 term Reference_Genome
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
-
-term H9ES
-type Cell Line
-description H9 human ES cells
-tier 3
-
-term H9ES-E
-type Cell Line
-description H9 Endoderm
-tier 3
-
-term H9ES-AFP+
-type Cell Line
-description H9 AFP+ human ESCells-derived
-tier 3
-
-term H9ES-AFP-
-type Cell Line
-description H9 AFP- human ESCells-derived
-tier 3
-
-term H9ES-EB
-type Cell Line
-description H9 Embryoid Bodies
-tier 3
-
-term H9ES-EBD
-type Cell Line
-description H9 EmbryoidBody-Derived
-tier 3
-
-term H9ES-CM
-type Cell Line
-description H9 Conditioned Medium
-tier 3
-
-term BG02ES
-type Cell Line
-description H9 Conditioned Medium
-tier 3
-
-term BG02ES-EBD
-type Cell Line
-description BG02 EmbryoidBody-Derived
-tier 3
-
-term HFL11W
-type Cell Line
-description Human Fetal Liver 11 weeks
-tier 3
-color 189,0,157
-
-term HFL24W
-type Cell Line
-description Human Fetal Liver 24 weeks
-tier 3
-color 189,0,157
-
-term HAL
-type Cell Line
-description Human Adult Liver
-tier 3
-color 189,0,157
