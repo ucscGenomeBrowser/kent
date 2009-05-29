@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.100 2009/05/29 01:02:18 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.101 2009/05/29 18:52:33 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -172,6 +172,7 @@ karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
+protocol Stam_15_protocols.pdf
 
 term Caco-2
 type Cell Line
@@ -184,6 +185,7 @@ karyotype cancer
 termId BTO:0000195
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195&termName=Caco-2%20cell
 tier 3
+protocol Stam_15_protocols.pdf
 
 term fibroblast
 type Cell Line
@@ -196,6 +198,7 @@ karyotype normal
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
 tier 3
+protocol fibroblast_Crawford_protocol.pdf
 
 term GM06990
 type Cell Line
@@ -208,6 +211,7 @@ karyotype relatively normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
+protocol Stam_15_protocols.pdf
 
 term GM12801
 type Cell Line
@@ -347,6 +351,7 @@ karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 tier 3
+protocol Stam_15_protocols.pdf
 
 term HEK293(b)
 type Cell Line
@@ -359,6 +364,7 @@ karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 tier 3
+protocol HEK293b_Snyder_protocol.pdf
 
 term HFL11W
 type Cell Line
@@ -439,6 +445,7 @@ karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 tier 3
+protocol Stam_15_protocols.pdf
 
 term NB4
 type Cell Line
@@ -489,6 +496,7 @@ karyotype cancer
 termId BTO:0000812
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000812&termName=OVCAR-3%20cell
 tier 3
+protocol Stam_15_protocols.pdf
 
 term PANC-1
 type Cell Line
@@ -527,6 +535,7 @@ karyotype progeria
 termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
+protocol progeria_Crawford_protocol.pdf
 
 term prostate
 type Cell Line
@@ -565,6 +574,7 @@ karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
+protocol Stam_15_protocols.pdf
 
 term SKMC
 type Cell Line
@@ -590,6 +600,7 @@ karyotype
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678&termName=Th1%20cell
 tier 3
+protocol Stam_15_protocols.pdf
 
 term Th2
 type Cell Line
