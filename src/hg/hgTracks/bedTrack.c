@@ -813,14 +813,14 @@ if (fieldCount < 8)
 	    track->loadItems = loadPairedTagAlignAsLinkedFeaturesPerBase;
 	else
 	    track->loadItems = loadSimpleBedAsLinkedFeaturesPerBase;
-	if (trackDbSetting(tdb, "colorByStrand"))
-	    track->itemColor = lfItemColorByStrand;
 	}
     else
 	{
 	bedMethods(track);
 	track->loadItems = loadSimpleBed;
 	}
+    if (trackDbSetting(tdb, "colorByStrand"))
+	track->itemColor = lfItemColorByStrand;
     }
 else if (useItemRgb && fieldCount == 9)
     {
