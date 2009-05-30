@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.20 2009/05/27 23:14:37 hiram Exp $";
+#	"$Id: hg19.txt,v 1.21 2009/05/30 03:22:22 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -3138,10 +3138,31 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Sat May 23 15:11:31 PDT 2009
+    #	One job took a long time to complete, had to run it manually on
+    #	swarm:
+# /cluster/bin/scripts/blastz-run-ucsc -outFormat psl \
+#	/scratch/data/hg19/hg19.2bit:chr19:50000000-59128983 \
+#	/scratch/data/monDom5/monDom5.2bit:chr4:390000000-420000000 \
+#	../DEF \
+#	../psl/hg19.2bit:chr19:50000000-59128983/hg19.2bit:chr19:50000000-59128983_monDom5.2bit:chr4:390000000-420000000.psl
+    #	took about 48 hours, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=cat > cat.log 2>&1 &
+    #	real    1508m18.471s ==	about 25h08m
+    cat fb.hg19.chainMonDom5Link.txt 
+    #	415997117 bases of 2897316137 (14.358%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=syntenicNet -syntenicNet > syntenicNet.log 2>&1 &
+XXX - running Fri May 29 20:14:45 PDT 2009
 
 ##############################################################################
-# LASTZ Armadillo DasNov2 (WORKING - 2009-05-23 - Hiram)
+# LASTZ Armadillo DasNov2 (DONE - 2009-05-23,28 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzDasNov2.2009-05-23
     cd /hive/data/genomes/hg19/bed/lastzDasNov2.2009-05-23
 
@@ -3182,7 +3203,12 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-continue=cat > cat.log 2>&1 &
-XXX - running Wed May 27 10:59:18 PDT 2009
+    #	real    458m11.304s
+    cat fb.hg19.chainDasNov2Link.txt 
+    #	971847303 bases of 2897316137 (33.543%) in intersection
+    time nice -n +19 doRecipBest.pl -buildDir=`pwd` hg19 dasNov2 \
+	> rbest.log 2>&1
+    #	time about 6h30m
 
 ##############################################################################
 # LASTZ Rock Hyrax ProCap1 (WORKING - 2009-05-23 - Hiram)
@@ -3339,7 +3365,7 @@ TMPDIR=/scratch/tmp
     #	real    16m31.552s
 
 ##############################################################################
-# LASTZ X. tropicalis XenTro2 (WORKING - 2009-05-26 - Hiram)
+# LASTZ X. tropicalis XenTro2 (DONE - 2009-05-26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzXenTro2.2009-05-26
     cd /hive/data/genomes/hg19/bed/lastzXenTro2.2009-05-26
 
@@ -3383,7 +3409,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-continue=cat > cat.log 2>&1 &
-XXX - running Wed May 27 10:42:27 PDT 2009
+    #	time about 1h30m
+    cat fb.hg19.chainXenTro2Link.txt 
+    #	92015242 bases of 2897316137 (3.176%) in intersection
 
 ##############################################################################
 # LASTZ Zebrafish DanRer5 (WORKING - 2009-05-26 - Hiram)
@@ -3428,7 +3456,7 @@ TMPDIR=/scratch/tmp
     #	74229561 bases of 2897316137 (2.562%) in intersection
 
 ##############################################################################
-# LASTZ Platypus OrnAna1 (WORKING - 2009-05-26 - Hiram)
+# LASTZ Platypus OrnAna1 (DONE - 2009-05-26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzOrnAna1.2009-05-26
     cd /hive/data/genomes/hg19/bed/lastzOrnAna1.2009-05-26
 
@@ -3469,7 +3497,7 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainOrnAna1Link.txt 
     #	220977689 bases of 2897316137 (7.627%) in intersection
     time doRecipBest.pl -buildDir=`pwd` hg19 ornAna1 > rbest.log 2>&1
-XXX - running Wed May 27 10:48:56 PDT 2009
+    #	time about 1h32m
 
 ##############################################################################
 # LASTZ Elephant LoxAfr2 (WORKING - 2009-05-27 - Hiram)
@@ -3505,12 +3533,16 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Wed May 27 11:18:13 PDT 2009
+    # time about 3h23m
+    cat fb.hg19.chainLoxAfr2Link.txt 
+    #	1018502258 bases of 2897316137 (35.153%) in intersection
 
-    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr2 > rbest.log 2>&1
+    #	real    322m37.502s
+XXX - running Thu May 28 22:40:56 PDT 2009
 
 ##############################################################################
-# LASTZ Tenrec EchTel1 (WORKING - 2009-05-27 - Hiram)
+# LASTZ Tenrec EchTel1 (DONE - 2009-05-27 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzEchTel1.2009-05-27
     cd /hive/data/genomes/hg19/bed/lastzEchTel1.2009-05-27
 
@@ -3543,7 +3575,245 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Wed May 27 11:18:13 PDT 2009
+    #	real    1153m34.595s
+    cat fb.hg19.chainEchTel1Link.txt 
+    #	669856841 bases of 2897316137 (23.120%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 echTel1 > rbest.log 2>&1
+    # time about 7h13m
+
+##############################################################################
+# LASTZ Tree Shrew TupBel1 (WORKING - 2009-05-27 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzTupBel1.2009-05-27
+    cd /hive/data/genomes/hg19/bed/lastzTupBel1.2009-05-27
+
+    cat << '_EOF_' > DEF
+# Human vs. Tree Shrew
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Tree Shrew
+SEQ2_DIR=/scratch/data/tupBel1/tupBel1.2bit
+SEQ2_LEN=/scratch/data/tupBel1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzTupBel1.2009-05-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	> do.log 2>&1 &
+    #	real 811m54.095s
+    #	having trouble with pk, finished manually
+XXX - running Thu May 28 10:38:42 PDT 2009
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+
+##############################################################################
+# LASTZ Shrew SorAra1 (WORKING - 2009-05-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzSorAra1.2009-05-28
+    cd /hive/data/genomes/hg19/bed/lastzSorAra1.2009-05-28
+
+    cat << '_EOF_' > DEF
+# Human vs. Shrew
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Shrew
+SEQ2_DIR=/scratch/data/sorAra1/sorAra1.2bit
+SEQ2_LEN=/scratch/data/sorAra1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzSorAra1.2009-05-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	time about 23h26m
+    cat fb.hg19.chainSorAra1Link.txt 
+    #	572519288 bases of 2897316137 (19.760%) in intersection
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 sorAra1 > rbest.log 2>&1
+XXX - running Fri May 29 20:17:16 PDT 2009
+
+##############################################################################
+# LASTZ Rabbit OryCun1 (WORKING - 2009-05-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOryCun1.2009-05-28
+    cd /hive/data/genomes/hg19/bed/lastzOryCun1.2009-05-28
+
+    cat << '_EOF_' > DEF
+# Human vs. Rabbit
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rabbit
+SEQ2_DIR=/scratch/data/oryCun1/oryCun1.2bit
+SEQ2_LEN=/scratch/data/oryCun1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOryCun1.2009-05-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	time about 23h09m
+    cat fb.hg19.chainOryCun1Link.txt 
+    #	975693323 bases of 2897316137 (33.676%) in intersection
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 oryCun1 > rbest.log 2>&1
+XXX - running Fri May 29 20:18:53 PDT 2009
+
+##############################################################################
+# LASTZ Rabbit EriEur1 (WORKING - 2009-05-28 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzEriEur1.2009-05-28
+    cd /hive/data/genomes/hg19/bed/lastzEriEur1.2009-05-28
+
+    cat << '_EOF_' > DEF
+# Human vs. Hedgehog
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Hedgehog
+SEQ2_DIR=/scratch/data/eriEur1/eriEur1.2bit
+SEQ2_LEN=/scratch/data/eriEur1/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzEriEur1.2009-05-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+XXX - running Thu May 28 11:29:22 PDT 2009
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+
+##############################################################################
+# LASTZ Pika OchPri2 (WORKING - 2009-05-29 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOchPri2.2009-05-29
+    cd /hive/data/genomes/hg19/bed/lastzOchPri2.2009-05-29
+
+    cat << '_EOF_' > DEF
+# Human vs. Pika
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Pika
+SEQ2_DIR=/scratch/data/ochPri2/ochPri2.2bit
+SEQ2_LEN=/scratch/data/ochPri2/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOchPri2.2009-05-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Fri May 29 20:21:44 PDT 2009
+
+    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+
+##############################################################################
+# LASTZ Kangaroo Rat DipOrd1 (WORKING - 2009-05-29 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29
+    cd /hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29
+
+    cat << '_EOF_' > DEF
+# Human vs. Kangaroo Rat
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Kangaroo Rat
+SEQ2_DIR=/scratch/data/dipOrd1/dipOrd1.2bit
+SEQ2_LEN=/scratch/data/dipOrd1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Fri May 29 09:58:08 PDT 2009
 
     time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
 
