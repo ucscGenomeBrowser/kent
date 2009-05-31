@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.80 2008/05/19 18:14:36 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.81 2009/05/31 07:28:33 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1681,89 +1681,44 @@ lineFileClose(&sf);
 return hash;
 }
 
-static int countInitialChars(char *s, char c)
-/* Count number of initial chars in s that match c. */
+static boolean isDelChar(char c)
+/* is this a indel character? */
 {
-int count = 0;
-char d;
-while ((d = *s++) != 0)
-    {
-    if (c == d)
-        ++count;
-    else
-        break;
-    }
-return count;
+return (c == '-') || (c == '.') || (c == '=') || (c == '_');
 }
 
-static int countTerminalChars(char *s, char c)
-/* Count number of terminal chars in s that match c. */
-{
-int len = strlen(s), i;
-int count = 0;
-for (i=len-1; i>=0; --i)
-    {
-    if (c == s[i])
-        ++count;
-    else
-        break;
-    }
-return count;
-}
-
-static int countNonInsert(char *s, int size)
-/* Count number of characters in initial part of s that
- * are not '-'. */
-{
-int count = 0;
-int i;
-for (i=0; i<size; ++i)
-    if (*s++ != '-')
-        ++count;
-return count;
-}
-
-static void trimAlignment(struct psl* psl, char** qStringPtr, char** tStringPtr,
+static void trimAlignment(struct psl* psl, char** qStrPtr, char** tStrPtr,
                           int* aliSizePtr)
 /* remove leading or trailing indels from alignment */
 {
-char* qString = *qStringPtr;
-char* tString = *tStringPtr;
+char* qStr = *qStrPtr;
+char* tStr = *tStrPtr;
 int aliSize = *aliSizePtr;
-int qStartInsert = countInitialChars(qString, '-');
-int tStartInsert = countInitialChars(tString, '-');
-int qEndInsert = countTerminalChars(qString, '-');
-int tEndInsert = countTerminalChars(tString, '-');
-int startInsert = max(qStartInsert, tStartInsert);
-int endInsert = max(qEndInsert, tEndInsert);
-int qNonCount, tNonCount;
 
-if (startInsert > 0)
+// skip lending indels
+while ((aliSize > 0) && (isDelChar(*qStr) || isDelChar(*tStr)))
     {
-    qNonCount = countNonInsert(qString, startInsert);
-    tNonCount = countNonInsert(tString, startInsert);
-    qString += startInsert;
-    tString += startInsert;
-    aliSize -= startInsert;
-    psl->qStart += qNonCount;
-    psl->tStart += tNonCount;
+    if (!isDelChar(*qStr))
+        psl->qStart++;
+    else if (!isDelChar(*tStr))
+        psl->tStart++;
+    qStr++;
+    tStr++;
+    aliSize--;
     }
-if (endInsert > 0)
+
+// skip trailing indels
+while ((aliSize > 0) && (isDelChar(qStr[aliSize-1]) || isDelChar(tStr[aliSize-1])))
     {
-    aliSize -= endInsert;
-    qNonCount = countNonInsert(qString+aliSize, endInsert);
-    tNonCount = countNonInsert(tString+aliSize, endInsert);
-    qString[aliSize] = 0;
-    tString[aliSize] = 0;
-    psl->qEnd -= qNonCount;
-    psl->tEnd -= tNonCount;
+    if (!isDelChar(qStr[aliSize-1]))
+        psl->qEnd--;
+    else if (!isDelChar(tStr[aliSize-1]))
+        psl->tEnd--;
+    aliSize--;
     }
-*qStringPtr = qString;
-*tStringPtr = tString;
+*qStrPtr = qStr;
+*tStrPtr = tStr;
 *aliSizePtr = aliSize;
-/* recursive call to handle double gap */
-if (startInsert > 0 || endInsert > 0)
-    trimAlignment(psl, qStringPtr, tStringPtr, aliSizePtr);
 }
 
 static void addBlock(struct psl* psl, int qs, int qe, int ts, int te,
@@ -1783,7 +1738,7 @@ static void accumCounts(struct psl *psl, char prevQ, char prevT,
                         char q, char t, unsigned options)
 /* accumulate block and base counts  */
 {
-if ((q != '-') && (t != '-'))
+if (!isDelChar(q) && !isDelChar(t))
     {
     /* aligned column. */
     char qu = toupper(q);
@@ -1800,18 +1755,18 @@ if ((q != '-') && (t != '-'))
     else
         psl->misMatch++;
     }
-else if ((q == '-') && (t != '-'))
+else if (isDelChar(q) && !isDelChar(t))
     {
     /* target insert */
     psl->tBaseInsert++;
-    if (prevQ != '-')
+    if (!isDelChar(prevQ))
         psl->tNumInsert++;
     }
-else if ((t == '-') && (q != '-'))
+else if (isDelChar(t) && !isDelChar(q))
     {
     /* query insert */
     psl->qBaseInsert++;
-    if (prevT != '-')
+    if (!isDelChar(prevT))
         psl->qNumInsert++;
     }
 }
@@ -1869,11 +1824,11 @@ for (i=0; i<aliSize; ++i)
     {
     char q = qString[i];
     char t = tString[i];
-    if ((q == '-') && (t == '-'))
+    if (isDelChar(q) && isDelChar(t))
         {
         continue; /* nothing in this column, just ignore it */
         }
-    else if ((q == '-') || (t == '-'))
+    else if (isDelChar(q) || isDelChar(t))
         {
         /* insert in one of the columns */
 	if (!eitherInsert)
@@ -1882,9 +1837,9 @@ for (i=0; i<aliSize; ++i)
             addBlock(psl, qs, qe, ts, te, &blockSpace);
 	    eitherInsert = TRUE;
 	    }
-	if (q != '-')
+	if (!isDelChar(q))
             qe += 1;
-	if (t != '-')
+	if (!isDelChar(t))
             te += 1;
 	}
     else
