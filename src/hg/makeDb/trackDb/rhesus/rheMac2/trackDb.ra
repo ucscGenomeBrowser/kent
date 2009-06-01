@@ -275,7 +275,7 @@ type bed 6
 track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
-longLabel ENCODE Elnitski Bi-directional Promoters
+longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
 visibility hide
 group regulation
 type bed 8 +

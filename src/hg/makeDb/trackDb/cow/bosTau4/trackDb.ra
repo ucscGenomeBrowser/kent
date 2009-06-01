@@ -93,7 +93,7 @@ informant Cow N-SCAN uses mouse (mm9) as the informant.
 track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
-longLabel ENCODE Elnitski Bi-directional Promoters
+longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
 visibility hide
 group regulation
 type bed 8 +
