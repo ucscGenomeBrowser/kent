@@ -3277,7 +3277,7 @@ track wgEncodeMapability
 compositeTrack on
 shortLabel Mapability
 longLabel ENCODE Mapability
-group varRep
+group map
 subGroup1 win Sequence_size w20=20bp w24=24bp w35=35bp
 dimensions dimensionX=win
 dragAndDrop subTracks
