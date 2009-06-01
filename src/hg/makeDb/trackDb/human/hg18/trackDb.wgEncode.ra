@@ -3327,7 +3327,7 @@ boxedCfg on
 track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
-longLabel ENCODE Elnitski Bi-directional Promoters
+longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
 visibility hide
 group regulation
 type bed 8 +
@@ -3349,7 +3349,7 @@ metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_G
 track wgEncodeNhgriNre
 compositeTrack on
 shortLabel NHGRI NRE
-longLabel ENCODE NHGRI Negative Regulatory Elements
+longLabel ENCODE NHGRI Elnitski Negative Regulatory Elements
 group regulation
 subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
 subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3
@@ -3369,7 +3369,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 gamma Si
-    longLabel ENCODE NHGRI NRE Silencers (Ggamin prom. in K562 cells)
+    longLabel ENCODE NHGRI Elnitski NRE Silencers (Ggamin prom. in K562 cells)
     subGroups view=SI cellType=K562 promoter=Ggam
     type bed 6
     color 46,0,184
@@ -3379,7 +3379,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 gamma EB
-    longLabel ENCODE NHGRI NRE Enhancer Blockers (Ggam prom. in K562 cells)
+    longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (Ggam prom. in K562 cells)
     subGroups view=EB cellType=K562 promoter=Ggam
     type bed 6
     color 46,0,184
@@ -3389,7 +3389,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 Si
-    longLabel ENCODE NHGRI NRE Silencers (SV40 prom. in K562 cells)
+    longLabel ENCODE NHGRI Elnitski NRE Silencers (SV40 prom. in K562 cells)
     subGroups view=SI cellType=K562 promoter=SV40
     type bed 6
     color 46,0,184
@@ -3399,7 +3399,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 EB
-    longLabel ENCODE NHGRI NRE Enhancer Blockers (NRE-EBs) (SV40 prom. in K562 cells)
+    longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (NRE-EBs) (SV40 prom. in K562 cells)
     subGroups view=EB cellType=K562 promoter=SV40
     type bed 6
     color 46,0,184
@@ -6087,7 +6087,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol 
+    shortLabel longNonPolyA HepG2 cytosol
     longLabel ENCODE Affy Filtered Transfrags (longNonPolyA in HepG2 cell cytosol using )
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -6099,7 +6099,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol 
+    shortLabel longNonPolyA HepG2 cytosol
     longLabel ENCODE Affy Transfrags (longNonPolyA in HepG2 cell cytosol using )
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -6111,7 +6111,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol 
+    shortLabel longNonPolyA HepG2 cytosol
     longLabel ENCODE (longNonPolyA in HepG2 cell cytosol using )
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -51212.00 53928.00
@@ -6141,7 +6141,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol 
+    shortLabel longPolyA HepG2 cytosol
     longLabel ENCODE Affy Filtered Transfrags (longPolyA in HepG2 cell cytosol using )
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -6153,7 +6153,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol 
+    shortLabel longPolyA HepG2 cytosol
     longLabel ENCODE Affy Transfrags (longPolyA in HepG2 cell cytosol using )
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -6180,7 +6180,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol 
+    shortLabel longPolyA HepG2 cytosol
     longLabel ENCODE (longPolyA in HepG2 cell cytosol using )
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -61267.00 58237.00
@@ -6195,7 +6195,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol 
+    shortLabel longNonPolyA Keratinocyte cytosol
     longLabel ENCODE Affy Transfrags (longNonPolyA in Keratinocyte cell cytosol using )
     subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -6207,7 +6207,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol 
+    shortLabel longNonPolyA Keratinocyte cytosol
     longLabel ENCODE Affy Filtered Transfrags (longNonPolyA in Keratinocyte cell cytosol using )
     subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -6234,7 +6234,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol 
+    shortLabel longNonPolyA Keratinocyte cytosol
     longLabel ENCODE (longNonPolyA in Keratinocyte cell cytosol using )
     subGroups view=FiltRawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type wig -59096.00 56826.00
@@ -6249,7 +6249,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol 
+    shortLabel longPolyA Keratinocyte cytosol
     longLabel ENCODE Affy Filtered Transfrags (longPolyA in Keratinocyte cell cytosol using )
     subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -6261,7 +6261,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol 
+    shortLabel longPolyA Keratinocyte cytosol
     longLabel ENCODE Affy Transfrags (longPolyA in Keratinocyte cell cytosol using )
     subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -6288,7 +6288,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol 
+    shortLabel longPolyA Keratinocyte cytosol
     longLabel ENCODE (longPolyA in Keratinocyte cell cytosol using )
     subGroups view=FiltRawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
