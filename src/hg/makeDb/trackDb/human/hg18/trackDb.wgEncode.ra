@@ -2226,7 +2226,7 @@ visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide sXREG=hide uniq=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=on,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.07,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
 useScore 0
 priority 0
 type bed 3
@@ -2301,7 +2301,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in GM12878 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
     color 153,38,0
@@ -2453,7 +2453,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase Pk
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=DNase cellType=HeLa
     type narrowPeak
     color 0,102,136
@@ -2463,7 +2463,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=DNase cellType=HeLa
     type wig 0.00 1.50
     spanList first
@@ -2474,7 +2474,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase BO
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=DNase cellType=HeLa
     type wig 0.00 277.00
     spanList first
@@ -2485,7 +2485,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase 1
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 1.00 664.00
     spanList first
@@ -2496,7 +2496,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase 2
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 1.00 975.00
     spanList first
@@ -2507,7 +2507,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase 3
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=DNase cellType=HeLa
     type wig 1.00 1758.00
     spanList first
@@ -2518,7 +2518,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HeLa-S3 cells)
     subGroups view=Peaks EXP=FAIRE cellType=HeLa
     type narrowPeak
     color 0,102,136
@@ -2528,7 +2528,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=FAIRE cellType=HeLa
     type wig 0.00 0.74
     spanList first
@@ -2539,7 +2539,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE BO
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HeLa
     type wig 0.00 3729.00
     spanList first
@@ -2550,7 +2550,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE 1
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Replicate 1 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 1.00 22750.00
     spanList first
@@ -2561,7 +2561,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE 2
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Replicate 2 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 1.00 16242.00
     spanList first
@@ -2572,7 +2572,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE 3
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Replicate 3 (in HeLa-S3 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HeLa
     type wig 1.00 23788.00
     spanList first
@@ -2583,7 +2583,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF Pk
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HeLa
     type narrowPeak
     color 0,102,136
@@ -2593,7 +2593,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HeLa
     type wig 0.00 8.59
     spanList first
@@ -2604,7 +2604,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF BO
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HeLa
     type wig 0.00 1920.00
     spanList first
@@ -2615,7 +2615,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF 1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 1.00 5570.00
     spanList first
@@ -2626,7 +2626,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF 2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HeLa
     type wig 1.00 3780.00
     spanList first
@@ -2637,7 +2637,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc Pk
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HeLa
     type narrowPeak
     color 0,102,136
@@ -2647,7 +2647,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HeLa
     type wig 0.00 0.77
     spanList first
@@ -2658,7 +2658,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc BO
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HeLa
     type wig 0.00 170.00
     spanList first
@@ -2669,7 +2669,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc 1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 1.00 3520.00
     spanList first
@@ -2680,7 +2680,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc 2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HeLa
     type wig 1.00 3585.00
     spanList first
@@ -2713,7 +2713,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase Pk
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=DNase cellType=HepG2
     type narrowPeak
     color 189,0,157
@@ -2723,7 +2723,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=DNase cellType=HepG2
     type wig 0.00 2.70
     spanList first
@@ -2734,7 +2734,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase BO
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Base Overlap Signal (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=DNase cellType=HepG2
     type wig 0.00 288.00
     spanList first
@@ -2745,7 +2745,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase 1
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 1 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 1.00 625.00
     spanList first
@@ -2756,7 +2756,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase 2
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 2 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 1.00 542.00
     spanList first
@@ -2767,7 +2767,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase 3
-    longLabel ENCODE Open Chromatin, Duke DNase-Seq Raw Signal Rep 3 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in HepG2 cells)
     subGroups view=rRAW EXP=DNase cellType=HepG2
     type wig 1.00 1626.00
     spanList first
@@ -2778,7 +2778,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=FAIRE cellType=HepG2
     type narrowPeak
     color 189,0,157
@@ -2788,7 +2788,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=FAIRE cellType=HepG2
     type wig 0.00 1.60
     spanList first
@@ -2799,7 +2799,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE BO
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Base Overlap Signal (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HepG2
     type wig 0.00 5987.00
     spanList first
@@ -2810,7 +2810,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE 1
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 1 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Replicate 1 (in HepG2 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HepG2
     type wig 1.00 11110.00
     spanList first
@@ -2821,7 +2821,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE 2
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 2 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Replicate 2 (in HepG2 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HepG2
     type wig 1.00 8711.00
     spanList first
@@ -2832,7 +2832,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE 3
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Raw Signal Replicate 3 (in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Replicate 3 (in HepG2 cells)
     subGroups view=rRAW EXP=FAIRE cellType=HepG2
     type wig 1.00 13049.00
     spanList first
@@ -2843,7 +2843,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Pk
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (CTCF in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HepG2 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=HepG2
     type narrowPeak
     color 189,0,157
@@ -2853,7 +2853,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (CTCF in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HepG2 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HepG2
     type wig 0.00 6.75
     spanList first
@@ -2864,7 +2864,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF BO
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (CTCF in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HepG2 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HepG2
     type wig 0.00 654.00
     spanList first
@@ -2875,7 +2875,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Raw 1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (CTCF in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
     type wig 1.00 2580.00
     spanList first
@@ -2886,7 +2886,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF 2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (CTCF in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in HepG2 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=HepG2
     type wig 1.00 1927.00
     spanList first
@@ -2897,7 +2897,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc Pk
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Peaks (c-Myc in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HepG2 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=HepG2
     type narrowPeak
     color 189,0,157
@@ -2907,7 +2907,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Signal (c-Myc in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HepG2 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HepG2
     type wig 0.00 0.99
     spanList first
@@ -2918,7 +2918,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc BO
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Base Overlap Signal (c-Myc in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HepG2 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HepG2
     type wig 0.00 528.00
     spanList first
@@ -2929,7 +2929,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc 1
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 1 (c-Myc in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 1.00 3922.00
     spanList first
@@ -2940,7 +2940,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc 2
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 2 (c-Myc in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 1.00 3085.00
     spanList first
@@ -2951,7 +2951,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc 3
-    longLabel ENCODE Open Chromatin, UT ChIP-Seq Raw Signal Rep 3 (c-Myc in HepG2 cells)
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (c-Myc in HepG2 cells)
     subGroups view=rRAW EXP=IP-cMyc cellType=HepG2
     type wig 1.00 2347.00
     spanList first
@@ -3049,7 +3049,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in K562 cells)
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
     subGroups view=Peaks EXP=FAIRE cellType=K562
     type narrowPeak
     color 46,0,184
@@ -4025,7 +4025,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel WERI-Rb-1 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in WERI-Rb-1 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in WERI-Rb-1 cells)
     subGroups view=Hotspots factor=CTCF cellType=WERIRb1
     type broadPeak
     dateSubmitted 2009-05-05
@@ -4039,7 +4039,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel WERI-Rb-1 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in WERI-Rb-1 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in WERI-Rb-1 cells)
     subGroups view=Peaks factor=CTCF cellType=WERIRb1
     type narrowPeak
     dateSubmitted 2009-05-05
@@ -4053,7 +4053,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel WERI-Rb-1 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in WERI-Rb-1 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in WERI-Rb-1 cells)
     subGroups view=Signal factor=CTCF cellType=WERIRb1
     type wig 1.00 3005.00
     dateSubmitted 2009-05-05
@@ -4067,7 +4067,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel WERI-Rb-1 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in WERI-Rb-1 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in WERI-Rb-1 cells)
     subGroups view=RawSignal factor=CTCF cellType=WERIRb1
     type wig 1.00 4968.00
     dateSubmitted 2009-05-05
@@ -4081,7 +4081,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM06990 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in GM06990 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in GM06990 cells)
     subGroups view=Hotspots factor=CTCF cellType=GM06990
     type broadPeak
     dateSubmitted 2009-04-30
@@ -4095,7 +4095,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM06990 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in GM06990 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in GM06990 cells)
     subGroups view=Peaks factor=CTCF cellType=GM06990
     type narrowPeak
     dateSubmitted 2009-04-30
@@ -4109,7 +4109,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM06990 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in GM06990 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in GM06990 cells)
     subGroups view=Signal factor=CTCF cellType=GM06990
     type wig 1.00 2002.00
     dateSubmitted 2009-04-30
@@ -4123,7 +4123,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM06990 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in GM06990 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in GM06990 cells)
     subGroups view=RawSignal factor=CTCF cellType=GM06990
     type wig 1.00 2918.00
     dateSubmitted 2009-04-30
@@ -4137,7 +4137,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12801 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in GM12801 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in GM12801 cells)
     subGroups view=Hotspots factor=CTCF cellType=GM12801
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4151,7 +4151,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12801 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in GM12801 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in GM12801 cells)
     subGroups view=Peaks factor=CTCF cellType=GM12801
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4165,7 +4165,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12801 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in GM12801 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in GM12801 cells)
     subGroups view=Signal factor=CTCF cellType=GM12801
     type wig 1.00 1582.00
     dateSubmitted 2009-05-01
@@ -4179,7 +4179,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12801 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12801 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in GM12801 cells)
     subGroups view=RawSignal factor=CTCF cellType=GM12801
     type wig 1.00 2118.00
     dateSubmitted 2009-05-01
@@ -4193,7 +4193,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in GM12878 cells)
     subGroups view=Hotspots factor=CTCF cellType=GM12878
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4207,7 +4207,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=Peaks factor=CTCF cellType=GM12878
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4221,7 +4221,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in GM12878 cells)
     subGroups view=Signal factor=CTCF cellType=GM12878
     type wig 1.00 4454.00
     dateSubmitted 2009-05-01
@@ -4235,7 +4235,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
     subGroups view=RawSignal factor=CTCF cellType=GM12878
     type wig 1.00 5699.00
     dateSubmitted 2009-05-01
@@ -4249,7 +4249,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 H3K4me3 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in GM12878 cells)
     subGroups view=Hotspots factor=H3K4me3 cellType=GM12878
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4263,7 +4263,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 H3K4me3 Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (H3K4me3 in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K4me3 cellType=GM12878
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4277,7 +4277,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 H3K4me3 Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (H3K4me3 in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (H3K4me3 in GM12878 cells)
     subGroups view=Signal factor=H3K4me3 cellType=GM12878
     type wig 1.00 711.00
     dateSubmitted 2009-05-01
@@ -4291,7 +4291,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel GM12878 H3K4me3 Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in GM12878 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in GM12878 cells)
     subGroups view=RawSignal factor=H3K4me3 cellType=GM12878
     type wig 1.00 1020.00
     dateSubmitted 2009-05-01
@@ -4305,7 +4305,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HEK293 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in HEK293 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in HEK293 cells)
     subGroups view=Hotspots factor=CTCF cellType=HEK293
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4319,7 +4319,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HEK293 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in HEK293 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in HEK293 cells)
     subGroups view=Peaks factor=CTCF cellType=HEK293
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4333,7 +4333,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HEK293 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in HEK293 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in HEK293 cells)
     subGroups view=Signal factor=CTCF cellType=HEK293
     type wig 1.00 10986.00
     dateSubmitted 2009-05-01
@@ -4347,7 +4347,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HEK293 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HEK293 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HEK293 cells)
     subGroups view=RawSignal factor=CTCF cellType=HEK293
     type wig 1.00 15790.00
     dateSubmitted 2009-05-01
@@ -4361,7 +4361,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HeLa-S3 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in HeLa-S3 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in HeLa-S3 cells)
     subGroups view=Hotspots factor=CTCF cellType=HeLaS3
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4375,7 +4375,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HeLa-S3 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in HeLa-S3 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in HeLa-S3 cells)
     subGroups view=Peaks factor=CTCF cellType=HeLaS3
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4389,7 +4389,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HeLa-S3 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in HeLa-S3 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in HeLa-S3 cells)
     subGroups view=Signal factor=CTCF cellType=HeLaS3
     type wig 1.00 10106.00
     dateSubmitted 2009-05-01
@@ -4403,7 +4403,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HeLa-S3 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HeLa-S3 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HeLa-S3 cells)
     subGroups view=RawSignal factor=CTCF cellType=HeLaS3
     type wig 1.00 14363.00
     dateSubmitted 2009-05-01
@@ -4417,7 +4417,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in HepG2 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in HepG2 cells)
     subGroups view=Hotspots factor=CTCF cellType=HepG2
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4431,7 +4431,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in HepG2 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in HepG2 cells)
     subGroups view=Peaks factor=CTCF cellType=HepG2
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4445,7 +4445,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in HepG2 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in HepG2 cells)
     subGroups view=Signal factor=CTCF cellType=HepG2
     type wig 1.00 1963.00
     dateSubmitted 2009-05-01
@@ -4459,7 +4459,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HepG2 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HepG2 cells)
     subGroups view=RawSignal factor=CTCF cellType=HepG2
     type wig 1.00 3065.00
     dateSubmitted 2009-05-01
@@ -4473,7 +4473,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HL-60 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in HL-60 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in HL-60 cells)
     subGroups view=Hotspots factor=CTCF cellType=HL60
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4487,7 +4487,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HL-60 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in HL-60 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in HL-60 cells)
     subGroups view=Peaks factor=CTCF cellType=HL60
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4501,7 +4501,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HL-60 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in HL-60 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in HL-60 cells)
     subGroups view=Signal factor=CTCF cellType=HL60
     type wig 1.00 2306.00
     dateSubmitted 2009-05-01
@@ -4515,7 +4515,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel HL-60 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HL-60 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HL-60 cells)
     subGroups view=RawSignal factor=CTCF cellType=HL60
     type wig 1.00 4558.00
     dateSubmitted 2009-05-01
@@ -4529,7 +4529,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 CTCF 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in K562 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in K562 cells)
     subGroups view=Hotspots factor=CTCF cellType=K562
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4543,7 +4543,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 CTCF Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (CTCF in K562 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in K562 cells)
     subGroups view=Peaks factor=CTCF cellType=K562
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4557,7 +4557,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 CTCF Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (CTCF in K562 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (CTCF in K562 cells)
     subGroups view=Signal factor=CTCF cellType=K562
     type wig 1.00 2509.00
     dateSubmitted 2009-05-01
@@ -4571,7 +4571,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 CTCF Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in K562 cells)
     subGroups view=RawSignal factor=CTCF cellType=K562
     type wig 1.00 3545.00
     dateSubmitted 2009-05-01
@@ -4585,7 +4585,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 H3K4me3 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in K562 cells)
+    longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in K562 cells)
     subGroups view=Hotspots factor=H3K4me3 cellType=K562
     type broadPeak
     dateSubmitted 2009-05-01
@@ -4599,7 +4599,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 H3K4me3 Pk
-    longLabel ENCODE UW ChIP-Seq Peaks (H3K4me3 in K562 cells)
+    longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in K562 cells)
     subGroups view=Peaks factor=H3K4me3 cellType=K562
     type narrowPeak
     dateSubmitted 2009-05-01
@@ -4613,7 +4613,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 H3K4me3 Sig
-    longLabel ENCODE UW ChIP-Seq Pooled Signal (H3K4me3 in K562 cells)
+    longLabel ENCODE UW ChIP-seq Pooled Signal (H3K4me3 in K562 cells)
     subGroups view=Signal factor=H3K4me3 cellType=K562
     type wig 1.00 1987.00
     dateSubmitted 2009-05-01
@@ -4627,7 +4627,7 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     release alpha
     subTrack wgEncodeUwChIPSeq off
     shortLabel K562 H3K4me3 Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
+    longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
     subGroups view=RawSignal factor=H3K4me3 cellType=K562
     type wig 1.00 3014.00
     dateSubmitted 2009-05-01
@@ -4666,7 +4666,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel SKMC 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in SKMC cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in SKMC cells)
     subGroups view=Hotspots cellType=SKMC
     type broadPeak
     dateSubmitted 2009-04-29
@@ -4679,7 +4679,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel SKMC Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in SKMC cells)
+    longLabel ENCODE UW DNase-seq Peaks (in SKMC cells)
     subGroups view=Peaks cellType=SKMC
     type narrowPeak
     dateSubmitted 2009-04-29
@@ -4692,7 +4692,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel SKMC Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in SKMC cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in SKMC cells)
     subGroups view=RawSignal cellType=SKMC
     type wig 1.00 32371.00
     dateSubmitted 2009-04-29
@@ -4705,7 +4705,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel Th2 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in Th2 cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in Th2 cells)
     subGroups view=Hotspots cellType=Th2
     type broadPeak
     dateSubmitted 2009-04-29
@@ -4718,7 +4718,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel Th2 Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in Th2 cells)
+    longLabel ENCODE UW DNase-seq Peaks (in Th2 cells)
     subGroups view=Peaks cellType=Th2
     type narrowPeak
     dateSubmitted 2009-04-29
@@ -4731,7 +4731,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel Th2 Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in Th2 cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in Th2 cells)
     subGroups view=RawSignal cellType=Th2
     type wig 1.00 59010.00
     dateSubmitted 2009-04-29
@@ -4744,7 +4744,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HL-60 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in HL-60 cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in HL-60 cells)
     subGroups view=Hotspots cellType=HL60
     type broadPeak
     dateSubmitted 2009-04-29
@@ -4757,7 +4757,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HL-60 Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in HL-60 cells)
+    longLabel ENCODE UW DNase-seq Peaks (in HL-60 cells)
     subGroups view=Peaks cellType=HL60
     type narrowPeak
     dateSubmitted 2009-04-29
@@ -4770,7 +4770,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HL-60 Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HL-60 cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in HL-60 cells)
     subGroups view=RawSignal cellType=HL60
     type wig 1.00 11758.00
     dateSubmitted 2009-04-29
@@ -4783,7 +4783,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HUVEC 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in HUVEC cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in HUVEC cells)
     subGroups view=Hotspots cellType=HUVEC
     type broadPeak
     dateSubmitted 2009-04-27
@@ -4796,7 +4796,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HUVEC Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in HUVEC cells)
+    longLabel ENCODE UW DNase-seq Peaks (in HUVEC cells)
     subGroups view=Peaks cellType=HUVEC
     type narrowPeak
     dateSubmitted 2009-04-27
@@ -4809,7 +4809,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HUVEC Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HUVEC cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in HUVEC cells)
     subGroups view=RawSignal cellType=HUVEC
     type wig 1.00 367.00
     dateSubmitted 2009-04-27
@@ -4822,7 +4822,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM12878 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in GM12878 cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in GM12878 cells)
     subGroups view=Hotspots cellType=GM12878
     type broadPeak
     dateSubmitted 2009-04-28
@@ -4835,7 +4835,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM12878 Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in GM12878 cells)
+    longLabel ENCODE UW DNase-seq Peaks (in GM12878 cells)
     subGroups view=Peaks cellType=GM12878
     type narrowPeak
     dateSubmitted 2009-04-28
@@ -4848,7 +4848,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM12878 Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in GM12878 cells)
     subGroups view=RawSignal cellType=GM12878
     type wig 1.00 30968.00
     dateSubmitted 2009-04-28
@@ -4861,7 +4861,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel BJ-tert 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in BJ-tert cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in BJ-tert cells)
     subGroups view=Hotspots cellType=BJtert
     type broadPeak
     dateSubmitted 2009-04-27
@@ -4875,7 +4875,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel BJ-tert Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in BJ-tert cells)
+    longLabel ENCODE UW DNase-seq Peaks (in BJ-tert cells)
     subGroups view=Peaks cellType=BJtert
     type narrowPeak
     dateSubmitted 2009-04-27
@@ -4888,7 +4888,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel BJ-tert Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in BJ-tert cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in BJ-tert cells)
     subGroups view=RawSignal cellType=BJtert
     type wig 1.00 227006.00
     dateSubmitted 2009-04-27
@@ -4901,7 +4901,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel Caco-2 1
-    longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in Caco-2 cells)
+    longLabel ENCODE UW DNase-seq Hotspots Replicate 1 (in Caco-2 cells)
     subGroups view=Hotspots cellType=Caco2
     type broadPeak
     dateSubmitted 2009-04-24
@@ -4914,7 +4914,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel Caco-2 Pk
-    longLabel ENCODE UW DNase-Seq Peaks (in Caco-2 cells)
+    longLabel ENCODE UW DNase-seq Peaks (in Caco-2 cells)
     subGroups view=Peaks cellType=Caco2
     type narrowPeak
     dateSubmitted 2009-04-24
@@ -4927,7 +4927,7 @@ scoreMin 500
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel Caco-2 Raw 1
-    longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in Caco-2 cells)
+    longLabel ENCODE UW DNase-seq Raw Signal Replicate 1 (in Caco-2 cells)
     subGroups view=RawSignal cellType=Caco2
     type wig 1.00 59677.00
     dateSubmitted 2009-04-24
@@ -6513,7 +6513,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 JunD 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (JunD in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in GM12878 cells)
     subGroups view=zRAW factor=JunD cellType=GM12878
     type wig 1.00 1439.00
     color 153,38,0
@@ -6539,7 +6539,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 JunD 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (JunD in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in GM12878 cells)
     subGroups view=zRAW factor=JunD cellType=GM12878
     type wig 1.00 1970.00
     color 153,38,0
@@ -6618,7 +6618,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Max 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Max in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 2293.00
     color 153,38,0
@@ -6644,7 +6644,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Max 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Max in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 2048.00
     color 153,38,0
@@ -6753,7 +6753,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol3 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Pol3 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol3 in GM12878 cells)
     subGroups view=Peaks factor=Pol3 cellType=GM12878
     type narrowPeak
     color 153,38,0
@@ -6763,7 +6763,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol3 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Pol3 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol3 in GM12878 cells)
     subGroups view=Signal factor=Pol3 cellType=GM12878
     type bedGraph 4
     color 153,38,0
@@ -6773,7 +6773,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol3 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Pol3 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol3 in GM12878 cells)
     subGroups view=zRAW factor=Pol3 cellType=GM12878
     type wig 1.00 835.00
     color 153,38,0
@@ -6783,7 +6783,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol3 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Pol3 in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol3 in GM12878 cells)
     subGroups view=zRAW factor=Pol3 cellType=GM12878
     type wig 1.00 939.00
     color 153,38,0
@@ -6793,7 +6793,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
     subGroups view=Peaks factor=cFos cellType=GM12878
     type narrowPeak
     color 153,38,0
@@ -6846,7 +6846,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=cFos cellType=GM12878
     type wig 1.00 1507.00
     color 153,38,0
@@ -6872,7 +6872,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=cFos cellType=GM12878
     type wig 1.00 1828.00
     color 153,38,0
@@ -6898,7 +6898,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=cFos cellType=GM12878
     type wig 1.00 1740.00
     color 153,38,0
@@ -7019,7 +7019,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT-116 TCF4 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
     subGroups view=zRAW factor=TCF4 cellType=HCT116
     type wig 1.00 3367.00
     color 0,55,219
@@ -7045,7 +7045,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT-116 TCF4 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
     subGroups view=zRAW factor=TCF4 cellType=HCT116
     type wig 1.00 1533.00
     color 0,55,219
@@ -7098,7 +7098,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HCT116 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal (Input in HCT-116 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HCT-116 cells)
     subGroups view=zRAW factor=zCTRL cellType=HCT116
     type wig 1.00 3439.00
     color 0,55,219
@@ -7177,7 +7177,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1982.00
     color 133,0,173
@@ -7203,7 +7203,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1221.00
     color 133,0,173
@@ -7229,7 +7229,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1913.00
     color 133,0,173
@@ -7282,7 +7282,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal (Input in HEK293 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HEK293 cells)
     subGroups view=zRAW factor=zCTRL cellType=HEK293b
     type wig 1.00 4758.00
     color 133,0,173
@@ -7308,7 +7308,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Max Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Max in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in HeLa-S3 cells)
     subGroups view=Peaks factor=Max cellType=HeLa
     type narrowPeak
     color 133,0,173
@@ -7318,7 +7318,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa3 Max Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Max in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in HeLa-S3 cells)
     subGroups view=Signal factor=Max cellType=HeLa
     type bedGraph 4
     color 133,0,173
@@ -7328,7 +7328,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Max 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Max in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in HeLa-S3 cells)
     subGroups view=zRAW factor=Max cellType=HeLa
     type wig 1.00 2286.00
     color 133,0,173
@@ -7338,7 +7338,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Max 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Max in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in HeLa-S3 cells)
     subGroups view=zRAW factor=Max cellType=HeLa
     type wig 1.00 2626.00
     color 133,0,173
@@ -7451,7 +7451,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Fos Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Fos in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in HeLa-S3 cells)
     subGroups view=Peaks factor=cFos cellType=HeLa
     type narrowPeak
     color 0,102,136
@@ -7461,7 +7461,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Fos Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (c-Fos in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in HeLa-S3 cells)
     subGroups view=Signal factor=cFos cellType=HeLa
     type bedGraph 4
     color 0,102,136
@@ -7471,7 +7471,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Fos 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Fos in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 1333.00
     color 0,102,136
@@ -7481,7 +7481,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Fos 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Fos in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Fos in HeLa-S3 cells)
     subGroups view=zRAW factor=cFos cellType=HeLa
     type wig 1.00 2081.00
     color 0,102,136
@@ -7491,7 +7491,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Myc Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
     subGroups view=Peaks factor=cMyc cellType=HeLa
     type narrowPeak
     color 0,102,136
@@ -7501,7 +7501,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Myc Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal factor=cMyc cellType=HeLa
     type bedGraph 4
     color 0,102,136
@@ -7511,7 +7511,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Myc 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1236.00
     color 0,102,136
@@ -7521,7 +7521,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa c-Myc 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (c-Myc in HeLa-S3 cells)
     subGroups view=zRAW factor=cMyc cellType=HeLa
     type wig 1.00 1677.00
     color 0,102,136
@@ -7606,7 +7606,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Large_Fragment 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Large_Fragment in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Large_Fragment in HeLa-S3 cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 4781.00
     color 0,102,136
@@ -7632,7 +7632,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Large_Fragment 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Large_Fragment in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Large_Fragment in HeLa-S3 cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 3589.00
     color 0,102,136
@@ -7673,7 +7673,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 MNase 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (MNase in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (MNase in HeLa-S3 cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 6215.00
     color 0,102,136
@@ -7699,7 +7699,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 MNase 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (MNase in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (MNase in HeLa-S3 cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 7693.00
     color 0,102,136
@@ -7754,7 +7754,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Mouse_IgG 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Mouse_IgG in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Mouse_IgG in HeLa-S3 cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 2816.00
     color 0,102,136
@@ -7780,7 +7780,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Mouse_IgG 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Mouse_IgG in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Mouse_IgG in HeLa-S3 cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 3901.00
     color 0,102,136
@@ -7821,7 +7821,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Naked_DNA 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Naked_DNA in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Naked_DNA in HeLa-S3 cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 4017.00
     color 0,102,136
@@ -7847,7 +7847,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Naked_DNA 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Naked_DNA in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Naked_DNA in HeLa-S3 cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 2497.00
     color 0,102,136
@@ -7873,7 +7873,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 Naked_DNA 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Naked_DNA in HeLa-S3 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Naked_DNA in HeLa-S3 cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 2191.00
     color 0,102,136
@@ -8036,7 +8036,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 418.00
     color 189,0,157
@@ -8062,7 +8062,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 1067.00
     color 189,0,157
@@ -8088,7 +8088,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Pol2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Pol2 in HepG2 cells)
     subGroups view=zRAW factor=Pol2 cellType=HepG2
     type wig 1.00 1454.00
     color 189,0,157
@@ -8143,7 +8143,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 1394.00
     color 189,0,157
@@ -8169,7 +8169,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 2321.00
     color 189,0,157
@@ -8195,7 +8195,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (SREBP1A in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP1A in HepG2 cells)
     subGroups view=zRAW factor=SREBP1A cellType=HepG2
     type wig 1.00 3157.00
     color 189,0,157
@@ -8250,7 +8250,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 481.00
     color 189,0,157
@@ -8276,7 +8276,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 1256.00
     color 189,0,157
@@ -8302,7 +8302,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (SREBP2 in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (SREBP2 in HepG2 cells)
     subGroups view=zRAW factor=SREBP2 cellType=HepG2
     type wig 1.00 1432.00
     color 189,0,157
@@ -8355,7 +8355,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 487.00
     color 189,0,157
@@ -8381,7 +8381,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 1885.00
     color 189,0,157
@@ -8407,7 +8407,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Input 3
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 3 (Input in HepG2 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 3 (Input in HepG2 cells)
     subGroups view=zRAW factor=zCTRL cellType=HepG2
     type wig 1.00 1953.00
     color 189,0,157
@@ -8488,7 +8488,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA-1 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (GATA-1 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 1124.00
     color 46,0,184
@@ -8514,7 +8514,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA-1 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (GATA-1 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (GATA-1 in K562 cells)
     subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 4603.00
     color 46,0,184
@@ -8593,7 +8593,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (JunD in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (JunD in K562 cells)
     subGroups view=zRAW factor=JunD cellType=K562
     type wig 1.00 2922.00
     color 46,0,184
@@ -8619,7 +8619,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 JunD 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (JunD in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (JunD in K562 cells)
     subGroups view=zRAW factor=JunD cellType=K562
     type wig 1.00 3242.00
     color 46,0,184
@@ -8698,7 +8698,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Max in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Max in K562 cells)
     subGroups view=zRAW factor=Max cellType=K562
     type wig 1.00 5249.00
     color 46,0,184
@@ -8724,7 +8724,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Max 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Max in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Max in K562 cells)
     subGroups view=zRAW factor=Max cellType=K562
     type wig 1.00 3573.00
     color 46,0,184
@@ -8803,7 +8803,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (NF-E2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NFe2 cellType=K562
     type wig 1.00 83.00
     color 46,0,184
@@ -8829,7 +8829,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (NF-E2 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NFe2 cellType=K562
     type wig 1.00 6906.00
     color 46,0,184
@@ -8938,7 +8938,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Rad21 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in K562 cells)
     subGroups view=Peaks factor=Rad21 cellType=K562
     type narrowPeak
     color 46,0,184
@@ -8948,7 +8948,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Rad21 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21 in K562 cells)
     subGroups view=Signal factor=Rad21 cellType=K562
     type bedGraph 4
     color 46,0,184
@@ -8958,7 +8958,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (Rad21 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (Rad21 in K562 cells)
     subGroups view=zRAW factor=Rad21 cellType=K562
     type wig 1.00 4565.00
     color 46,0,184
@@ -8968,7 +8968,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Rad21 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (Rad21 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (Rad21 in K562 cells)
     subGroups view=zRAW factor=Rad21 cellType=K562
     type wig 1.00 4666.00
     color 46,0,184
@@ -8978,7 +8978,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 XRCC4 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (XRCC4 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (XRCC4 in K562 cells)
     subGroups view=Peaks factor=XRCC4 cellType=K562
     type narrowPeak
     color 46,0,184
@@ -8988,7 +8988,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 XRCC4 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (XRCC4 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (XRCC4 in K562 cells)
     subGroups view=Signal factor=XRCC4 cellType=K562
     type bedGraph 4
     color 46,0,184
@@ -8998,7 +8998,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 XRCC4 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (XRCC4 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (XRCC4 in K562 cells)
     subGroups view=zRAW factor=XRCC4 cellType=K562
     type wig 1.00 5645.00
     color 46,0,184
@@ -9008,7 +9008,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 XRCC4 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (XRCC4 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (XRCC4 in K562 cells)
     subGroups view=zRAW factor=XRCC4 cellType=K562
     type wig 1.00 4628.00
     color 46,0,184
@@ -9071,7 +9071,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 1 (ZNF263 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 1197.00
     color 46,0,184
@@ -9097,7 +9097,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal Rep 2 (ZNF263 in K562 cells)
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 1128.00
     color 46,0,184
