@@ -708,3 +708,8 @@ featureBits taeGut1 rmsk
     termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
     searchPriority 50
 
+    # a mismatch was found in nscanPep; WUStL recreate
+    wget -nv http://mblab.wustl.edu/predictions/taeGut1/taeGut1.prot.fa
+    bzip2 taeGut1.prot.fa
+    chmod a-w *
+    hgPepPred taeGut1 generic nscanPep  taeGut1.prot.fa.bz2
