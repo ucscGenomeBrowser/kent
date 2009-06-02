@@ -3200,7 +3200,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 c-Myc
+    shortLabel K562 c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=K562
     type wig 0.00 1925.00
