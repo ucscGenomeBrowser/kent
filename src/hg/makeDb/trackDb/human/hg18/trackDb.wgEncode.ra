@@ -2222,7 +2222,7 @@ subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF I
 sortOrder cellType=+ EXP=+ view=+
 dimensions dimensionX=cellType dimensionY=EXP
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide sXREG=hide uniq=hide
+visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide sXREG=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
