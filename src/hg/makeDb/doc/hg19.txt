@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.21 2009/05/30 03:22:22 hiram Exp $";
+#	"$Id: hg19.txt,v 1.22 2009/06/02 18:35:57 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -660,7 +660,7 @@ TMPDIR=/scratch/tmp
     #	chrY 59034049 59363566
 
 ############################################################################
-# Gorilla Lastz run (WORKING - 2009-03-21 - Hiram)
+# Gorilla Lastz run (DONE - 2009-03-21,05-13 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzGorGor1.2009-03-21
     cd /hive/data/genomes/hg19/bed/lastzGorGor1.2009-03-21
     cat << '_EOF_'
@@ -992,7 +992,7 @@ done | gzip > all.txt.gz
     # All done
 
 ##############################################################################
-# BACEND SEQUENCE ALIGNMENTS (WORKING - 2009-04-28 - Hiram)
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2009-04-28,05-20 - Hiram)
     mkdir -p /hive/data/genomes/hg19/bed/bacends/run.blat
     cd /hive/data/genomes/hg19/bed/bacends/run.blat
     #	going to run separate runs for the golden path sequence vs. the
@@ -1100,7 +1100,7 @@ rm -f $tmpFile.lift $tmpFile.psl
 	    > bacEndPairs.load.psl
 
 ############################################################################
-# BACEND Randoms SEQUENCE ALIGNMENTS (WORKING - 2009-04-28 - Hiram)
+# BACEND Randoms SEQUENCE ALIGNMENTS (DONE - 2009-04-28,05-20 - Hiram)
     mkdir -p /hive/data/genomes/hg19/bed/bacends/run.randoms
     cd /hive/data/genomes/hg19/bed/bacends/run.randoms
     #	this separate run for the randoms, haplotypes, chrUn and chrM
@@ -1898,6 +1898,7 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
     $HOME/kent/src/hg/fishClones/fixup.hbrc.pl hbrc.txt \
 	/hive/data/genomes/hg19/bed/fishClones/seq_clone.pmd > fixed.hbrc.txt \
 	    2> dbg
+XXX - need to get this seq_clone.pmd from NCBI, maybe Paul Kitts
     #	the seq_clone.pmd file was obtained via email from Wonhee Jang
     #	jang at ncbi.nlm.nih.gov - I have asked for clarification where
     #	such a file can be fetched without resorting to email.
@@ -2192,6 +2193,18 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainCanFam2Link.txt 
     #	1532073507 bases of 2897316137 (52.879%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/canFam2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/canFam2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCanFam2.2009-05-13/DEF \
+	-noLoadChainSplit -swap \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:19:50 PDT 2009
+    #	real    723m41.377s
+    cat fb.canFam2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 #########################################################################
 # LASTZ Chicken GalGal3 (DONE - 2009-05-13 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzGalGal3.2009-05-13
@@ -2235,6 +2248,19 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainGalGal3Link.txt 
     #	104053179 bases of 2897316137 (3.591%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/galGal3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/galGal3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGalGal3.2009-05-13/DEF \
+	-swap \
+	-noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+XXX - running Tue Jun  2 11:24:11 PDT 2009
+    #	real    723m41.377s
+    cat fb.galGal3.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 #########################################################################
 # LASTZ Macaca Mulatta RheMac2 (DONE - 2009-05-13 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzRheMac2.2009-05-13
@@ -2283,6 +2309,19 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainRheMac2Link.txt 
     #	2397361211 bases of 2897316137 (82.744%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/rheMac2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rheMac2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzRheMac2.2009-05-13/DEF \
+	-swap \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+XXX - running Tue Jun  2 11:16:25 PDT 2009
+    #	real    723m41.377s
+    cat fb.rheMac2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 #########################################################################
 # LASTZ Rat Rn4 (DONE - 2009-05-13 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzRn4.2009-05-13
@@ -2322,6 +2361,18 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainRn4Link.txt 
     #	952605822 bases of 2897316137 (32.879%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/rn4/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rn4/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzRn4.2009-05-13/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:21:44 PDT 2009
+    #	real    723m41.377s
+    cat fb.rn4.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Orangutan PonAbe2 (DONE - 2009-05-13 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPonAbe2.2009-05-13
@@ -2371,6 +2422,19 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainPonAbe2Link.txt 
     #	2646687531 bases of 2897316137 (91.350%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/ponAbe2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/ponAbe2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzPonAbe2.2009-05-13/DEF \
+	-swap \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> swap.log 2>&1 &
+XXX - running Tue Jun  2 11:08:17 PDT 2009
+    #	real    723m41.377s
+    cat fb.ponAbe2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Lamprey PetMar1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPetMar1.2009-05-14
@@ -2415,6 +2479,19 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainPetMar1Link.txt 
     #	31347143 bases of 2897316137 (1.082%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/petMar1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/petMar1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzPetMar1.2009-05-14/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:35:37 PDT 2009
+    #	real    723m41.377s
+    cat fb.petMar1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Fugu Fr2 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzFr2.2009-05-14
@@ -2472,6 +2549,19 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainFr2Link.txt 
     #	49309456 bases of 2897316137 (1.702%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/fr2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/fr2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzFr2.2009-05-14/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=encodek \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:30:44 PDT 2009
+    #	real    723m41.377s
+    cat fb.fr2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Tetraodon TetNig1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14
@@ -2515,6 +2605,18 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainTetNig1Link.txt 
     #	58038079 bases of 2897316137 (2.003%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/tetNig1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/tetNig1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzTetNig1.2009-05-14/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:33:01 PDT 2009
+    #	real    723m41.377s
+    cat fb.tetNig1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Stickleback GasAcu1 (DONE - 2009-05-14 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14
@@ -2558,6 +2660,18 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainGasAcu1Link.txt 
     #	55509003 bases of 2897316137 (1.916%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGasAcu1.2009-05-14/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:08:17 PDT 2009
+    #	real    723m41.377s
+    cat fb.gasAcu1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Marmoset CalJac1 (DONE - 2009-05-14,22 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14
@@ -2608,8 +2722,22 @@ TMPDIR=/scratch/tmp
     time doRecipBest.pl -buildDir=`pwd` hg19 calJac1 > rbest.log 2>&1 &
     #	real    97m17.207s
 
+    #	running the swap
+    mkdir /hive/data/genomes/calJac1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/calJac1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCalJac1.2009-05-14/DEF \
+	-swap \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+XXX - running Tue Jun  2 11:17:56 PDT 2009
+    #	real    723m41.377s
+    cat fb.calJac1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
+
 #########################################################################
-# LASTZ Tarsier TarSyr1 (WORKING - 2009-05-14 - Hiram)
+# LASTZ Tarsier TarSyr1 (DONE - 2009-05-14,30 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzTarSyr1.2009-05-14
     cd /hive/data/genomes/hg19/bed/lastzTarSyr1.2009-05-14
 
@@ -2714,9 +2842,11 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> download.log 2>&1 &
     #	real    48m6.573s
+    #	ran the script on swarm to recover after hive outages
     time doRecipBest.pl -buildDir=`pwd` hg19 tarSyr1 > rbest.log 2>&1 &
-    #	real 150m27.228s
-XXX failed
+    #	real    404m0.201s
+    time doRecipBest.pl -continue=download -buildDir=`pwd` \
+	hg19 tarSyr1 > rbest.download.log 2>&1 &
 
 #########################################################################
 # LASTZ Bushbaby OtoGar1 (DONE - 2009-05-14,22 - Hiram)
@@ -3099,8 +3229,21 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainOryLat2Link.txt 
     #	53571737 bases of 2897316137 (1.849%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/oryLat2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oryLat2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzOryLat2.2009-05-22/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:08:17 PDT 2009
+    #	real    723m41.377s
+    cat fb.oryLat2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
-# LASTZ Opossum MonDom5 (WORKING - 2009-05-23 - Hiram)
+# LASTZ Opossum MonDom5 (DONE - 2009-05-23,29 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzMonDom5.2009-05-23
     cd /hive/data/genomes/hg19/bed/lastzMonDom5.2009-05-23
 
@@ -3159,7 +3302,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-continue=syntenicNet -syntenicNet > syntenicNet.log 2>&1 &
-XXX - running Fri May 29 20:14:45 PDT 2009
+    #	real    20m29.049s
 
 ##############################################################################
 # LASTZ Armadillo DasNov2 (DONE - 2009-05-23,28 - Hiram)
@@ -3211,7 +3354,7 @@ TMPDIR=/scratch/tmp
     #	time about 6h30m
 
 ##############################################################################
-# LASTZ Rock Hyrax ProCap1 (WORKING - 2009-05-23 - Hiram)
+# LASTZ Rock Hyrax ProCap1 (DONE - 2009-05-23,26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzProCap1.2009-05-23
     cd /hive/data/genomes/hg19/bed/lastzProCap1.2009-05-23
 
@@ -3317,10 +3460,24 @@ TMPDIR=/scratch/tmp
 	-continue=syntenicNet -qRepeats=windowmaskerSdust > synNet.log 2>&1 &
     #	real    4m10.261s
 
+    #	running the swap
+    mkdir /hive/data/genomes/taeGut1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/taeGut1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzTaeGut1.2009-05-26/DEF \
+	-swap -noLoadChainSplit -chainMinScore=5000 \
+	-chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-qRepeats=windowmaskerSdust > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:25:44 PDT 2009
+    #	real    723m41.377s
+    cat fb.taeGut1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
+
 ##############################################################################
-# LASTZ Lizard AnoCar1 (WORKING - 2009-05-26 - Hiram)
-    mkdir /hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-26
-    cd /hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-26
+# LASTZ Lizard AnoCar1 (DONE - 2009-05-30,31 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-30
+    cd /hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-30
 
     cat << '_EOF_' > DEF
 # human vs lizard
@@ -3338,12 +3495,12 @@ SEQ1_LAP=10000
 
 # QUERY: Lizard anoCar1
 SEQ2_DIR=/scratch/data/anoCar1/anoCar1.2bit
-SEQ2_LEN=/hive/data/genomes/anoCar1/chrom.sizes
+SEQ2_LEN=/scratch/data/anoCar1/chrom.sizes
 SEQ2_CHUNK=20000000
 SEQ2_LAP=0
 SEQ2_LIMIT=50
 
-BASE=/hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-26
+BASE=/hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-30
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -3353,17 +3510,26 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
-    #	real    369m5.335s
-    #	problem on memk during cat step, finish than, then continuing:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
-	-continue=chainRun -qRepeats=windowmaskerSdust > chainRun.log 2>&1 &
-    #	real    16m31.552s
+    #	real    168m32.016s
+    cat fb.hg19.chainAnoCar1Link.txt 
+    #	104045950 bases of 2897316137 (3.591%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 anoCar1 > rbest.log 2>&1
+    #	real    45m58.001s
 
+    #	running the swap
+    mkdir /hive/data/genomes/anoCar1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/anoCar1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAnoCar1.2009-05-30/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:26:55 PDT 2009
+    #	real    723m41.377s
+    cat fb.anoCar1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ X. tropicalis XenTro2 (DONE - 2009-05-26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzXenTro2.2009-05-26
@@ -3413,8 +3579,20 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainXenTro2Link.txt 
     #	92015242 bases of 2897316137 (3.176%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzXenTro2.2009-05-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:28:06 PDT 2009
+    #	real    723m41.377s
+    cat fb.xenTro2.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
-# LASTZ Zebrafish DanRer5 (WORKING - 2009-05-26 - Hiram)
+# LASTZ Zebrafish DanRer5 (DONE - 2009-05-26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzDanRer5.2009-05-26
     cd /hive/data/genomes/hg19/bed/lastzDanRer5.2009-05-26
 
@@ -3455,6 +3633,18 @@ TMPDIR=/scratch/tmp
     cat fb.hg19.chainDanRer5Link.txt 
     #	74229561 bases of 2897316137 (2.562%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/danRer5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer5/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer5.2009-05-26/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+XXX - running Tue Jun  2 11:31:49 PDT 2009
+    #	real    723m41.377s
+    cat fb.danRer5.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
 ##############################################################################
 # LASTZ Platypus OrnAna1 (DONE - 2009-05-26 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzOrnAna1.2009-05-26
@@ -3499,8 +3689,21 @@ TMPDIR=/scratch/tmp
     time doRecipBest.pl -buildDir=`pwd` hg19 ornAna1 > rbest.log 2>&1
     #	time about 1h32m
 
+    #	running the swap
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzOrnAna1.2009-05-26/DEF \
+	-swap -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+XXX - running Tue Jun  2 11:23:00 PDT 2009
+    #	real    723m41.377s
+    cat fb.ornAna1.chainHg19Link.txt 
+    #	2761343871 bases of 2909485072 (94.908%) in intersection
+
 ##############################################################################
-# LASTZ Elephant LoxAfr2 (WORKING - 2009-05-27 - Hiram)
+# LASTZ Elephant LoxAfr2 (DONE - 2009-05-27,29 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzLoxAfr2.2009-05-27
     cd /hive/data/genomes/hg19/bed/lastzLoxAfr2.2009-05-27
 
@@ -3539,7 +3742,6 @@ TMPDIR=/scratch/tmp
 
     time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr2 > rbest.log 2>&1
     #	real    322m37.502s
-XXX - running Thu May 28 22:40:56 PDT 2009
 
 ##############################################################################
 # LASTZ Tenrec EchTel1 (DONE - 2009-05-27 - Hiram)
@@ -3617,12 +3819,44 @@ TMPDIR=/scratch/tmp
 	> do.log 2>&1 &
     #	real 811m54.095s
     #	having trouble with pk, finished manually
-XXX - running Thu May 28 10:38:42 PDT 2009
+    #	XXX there is one job that is taking forever ...
+    #	finished it in pieces on swarm in a few minutes, like this:
+    mkdir /hive/data/genomes/hg19/bed/lastzTupBel1.2009-05-27/run.blastz/lastJob
+    cd /hive/data/genomes/hg19/bed/lastzTupBel1.2009-05-27/run.blastz/lastJob
+#!/bin/sh
 
-    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+S=100000000
+E=101010000
+export S E
+for I in 0 1 2 3 4 5 6 7 8 9
+do
+echo $S $E
+/usr/bin/time -p /cluster/bin/scripts/blastz-run-ucsc -outFormat psl \
+/scratch/data/hg19/nib/chr1.nib:chr1:${S}-${E} ../qParts/part019.lst \
+../../DEF psl/chr1.nib:chr1:${S}-${E}_part019.lst.psl
+nextS=`echo $S | awk '{printf "%d", $1 + 1000000}'`
+nextE=`echo $E | awk '{printf "%d", $1 + 1000000}'`
+S=$nextS
+E=$nextE
+done
+
+    grep -h "^#" psl/chr* | sort -u > result.psl
+    grep -h -v "^#" psl/chr* | sort -k14,14 -k16,16n >> result.psl
+    cp -p result.psl \
+../../psl/chr1.nib:chr1:100000000-110010000/chr1.nib:chr1:100000000-110010000_part019.lst.psl
+
+    #	then, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-continue=cat > cat.log 2>&1 &
+    #	real    212m22.707s
+    time doRecipBest.pl -buildDir=`pwd` hg19 tupBel1 > rbest.log 2>&1
+XXX - running Tue Jun  2 10:15:24 PDT 2009
 
 ##############################################################################
-# LASTZ Shrew SorAra1 (WORKING - 2009-05-28 - Hiram)
+# LASTZ Shrew SorAra1 (DONE - 2009-05-28,30 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzSorAra1.2009-05-28
     cd /hive/data/genomes/hg19/bed/lastzSorAra1.2009-05-28
 
@@ -3660,10 +3894,10 @@ TMPDIR=/scratch/tmp
     #	572519288 bases of 2897316137 (19.760%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 sorAra1 > rbest.log 2>&1
-XXX - running Fri May 29 20:17:16 PDT 2009
+    #	real    251m20.055s
 
 ##############################################################################
-# LASTZ Rabbit OryCun1 (WORKING - 2009-05-28 - Hiram)
+# LASTZ Rabbit OryCun1 (DONE - 2009-05-28,30 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzOryCun1.2009-05-28
     cd /hive/data/genomes/hg19/bed/lastzOryCun1.2009-05-28
 
@@ -3701,10 +3935,10 @@ TMPDIR=/scratch/tmp
     #	975693323 bases of 2897316137 (33.676%) in intersection
 
     time doRecipBest.pl -buildDir=`pwd` hg19 oryCun1 > rbest.log 2>&1
-XXX - running Fri May 29 20:18:53 PDT 2009
+    #	real    318m1.142s
 
 ##############################################################################
-# LASTZ Rabbit EriEur1 (WORKING - 2009-05-28 - Hiram)
+# LASTZ Hedgehog EriEur1 (DONE - 2009-05-28,30 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzEriEur1.2009-05-28
     cd /hive/data/genomes/hg19/bed/lastzEriEur1.2009-05-28
 
@@ -3737,12 +3971,14 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	> do.log 2>&1 &
-XXX - running Thu May 28 11:29:22 PDT 2009
-
-    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+    #	real    2043m33.198s
+    cat fb.hg19.chainEriEur1Link.txt 
+    #	560965051 bases of 2897316137 (19.362%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 eriEur1 > rbest.log 2>&1
+    #	real    350m17.737s
 
 ##############################################################################
-# LASTZ Pika OchPri2 (WORKING - 2009-05-29 - Hiram)
+# LASTZ Pika OchPri2 (DONE - 2009-05-29,30 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzOchPri2.2009-05-29
     cd /hive/data/genomes/hg19/bed/lastzOchPri2.2009-05-29
 
@@ -3775,12 +4011,14 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Fri May 29 20:21:44 PDT 2009
-
-    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+    #	real    393m42.569s
+    cat fb.hg19.chainOchPri2Link.txt 
+    #	804516397 bases of 2897316137 (27.768%) in intersection
+    time doRecipBest.pl -buildDir=`pwd` hg19 ochPri2 > rbest.log 2>&1
+    #	real    224m47.979s
 
 ##############################################################################
-# LASTZ Kangaroo Rat DipOrd1 (WORKING - 2009-05-29 - Hiram)
+# LASTZ Kangaroo Rat DipOrd1 (DONE - 2009-05-29,30 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29
     cd /hive/data/genomes/hg19/bed/lastzDipOrd1.2009-05-29
 
@@ -3813,8 +4051,8 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Fri May 29 09:58:08 PDT 2009
-
-    time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr1 > rbest.log 2>&1
+    #	real    688m47.595s
+    time doRecipBest.pl -buildDir=`pwd` hg19 dipOrd1 > rbest.log 2>&1
+    #	real    140m42.014s
 
 ##############################################################################
