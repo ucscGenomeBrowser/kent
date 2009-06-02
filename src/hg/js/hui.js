@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.28 2009/05/14 19:31:02 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.29 2009/06/02 19:12:17 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -108,6 +108,13 @@ function matSelectViewForSubTracks(obj,view)
 //   return( views );
 //}
 
+function checkBoxSet(CB,state)
+{
+    CB.checked = state;
+    setCheckBoxShadow(CB);
+    hideOrShowSubtrack(CB);
+}
+
 function matSetMatrixCheckBoxes(state)
 {
 // Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
@@ -129,28 +136,25 @@ function matSetMatrixCheckBoxes(state)
     for(var vIx=1;vIx<arguments.length;vIx++) {
         CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
-    //if(matCBwithViewDD) {
-    //    if(state) { // further filter by view
-    //        views = getViewNamesSelected(false); // get views (strings) that are off
-    //        for(var vIx=0;vIx<views.length;vIx++) {
-    //            CBs = CBs.not("."+views[vIx]);  // Successively limit list by additional classes.
-    //        }
-    //    }
-    //}
-    CBs.each( function (i) {
-        this.checked = state;
-        setCheckBoxShadow(this);
-        hideOrShowSubtrack(this);
-    });
+    CBs.each( function (i) { checkBoxSet(this,state); });
 
     return true;
 }
 
-function checkBoxSet(CB,state)
+function subtrackCBsSetAll(state)
 {
-    CB.checked = state;
-    setCheckBoxShadow(CB);
-    hideOrShowSubtrack(CB);
+// Set all subtrack checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
+    var CBs;
+    if(state)
+        CBs = $("input.subtrackCB").not(":checked");
+    else
+        CBs = $("input.subtrackCB").filter(":checked");
+    for(var vIx=1;vIx<arguments.length;vIx++) {
+        CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+    }
+    CBs.each( function (i) { checkBoxSet(this,state); });
+
+    return true;
 }
 
 function matSetSubtrackCheckBoxes(state)
