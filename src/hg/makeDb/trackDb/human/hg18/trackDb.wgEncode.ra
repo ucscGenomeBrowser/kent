@@ -9607,19 +9607,18 @@ compositeTrack on
 shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
-# subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
 subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II zControl=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=pack RawSignal=full+
+visibilityViewDefaults Peaks=pack+ RawSignal=full
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0,minScore=0 RawSignal:viewLimitsMax=1:19628,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
-priority 0
+settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 RawSignal:viewLimitsMax=1:19628,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 type bed 3
+priority 0
 nextItemButton on
 wgEncode 1
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
