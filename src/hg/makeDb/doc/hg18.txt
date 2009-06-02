@@ -23854,6 +23854,7 @@ cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
 
 #######################################################
 # UW nucleosome occupancy predictions  (2008-08-13 markd)
+# update due to chr3 being truncated (2009-05-12 markd)
 # contact  William Stafford Noble <noble@gs.washington.edu>
     # obtain data:
     mkdir -p /cluster/data/hg18/bed/uwNucOcc
@@ -23890,6 +23891,27 @@ cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
     hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccMec uwNucOccMec.wig
 
     rm wiggle.tab
+
+    # noble lab supplied update due to chr3 being truncated (2009-05-12 markd)
+    cd /cluster/data/hg18/bed/uwNucOcc
+    mkdir bad
+    mv wig/*/*.chr3.hg18.wig.gz bad/
+    mv wib  bad/
+    wget http://USER:PASS@noble.gs.washington.edu/~wnoble/proj/dennis/results/2008-08-11/a375/a375.chr3.hg18.wig.gz
+    wget http://USER:PASS@noble.gs.washington.edu/~wnoble/proj/dennis/results/2008-08-11/mec/mec.chr3.hg18.wig.gz
+    wget http://USER:PASS@noble.gs.washington.edu/~wnoble/proj/dennis/results/2008-08-11/dennis/dennis.chr3.hg18.wig.gz
+    mv dennis.chr3.hg18.wig.gz wig/dennis/
+    mv mec.chr3.hg18.wig.gz wig/mec/
+    mv a375.chr3.hg18.wig.gz wig/a375/
+
+    cd /cluster/data/hg18/bed/uwNucOcc/wib
+    zcat ../wig/a375/a375.chr*.wig.gz|wigEncode stdin uwNucOccA375.wig uwNucOccA375.wib
+    zcat ../wig/dennis/dennis.chr*.wig.gz|wigEncode stdin uwNucOccDennis.wig uwNucOccDennis.wib
+    zcat ../wig/mec/mec.chr*.wig.gz|wigEncode stdin uwNucOccMec.wig uwNucOccMec.wib
+    cd ..
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccA375 uwNucOccA375.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccDennis uwNucOccDennis.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccMec uwNucOccMec.wig
 
 #########################################################################
 # BLASTZ/CHAIN/NET oryLat2 (DONE - 2008-08-19,25 - Hiram)
