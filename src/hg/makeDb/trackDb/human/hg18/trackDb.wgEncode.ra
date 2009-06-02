@@ -3327,7 +3327,7 @@ allButtonPair on
 
     track wgEncodeBroadMapabilityAlign36mer
     release alpha
-    subTrack wgEncodeMapability off
+    subTrack wgEncodeMapability
     shortLabel Alignability 36
     longLabel ENCODE Mapability - Alignability of 36mers with no more than 2 mismatches
     subGroups view=ALN win=w36
