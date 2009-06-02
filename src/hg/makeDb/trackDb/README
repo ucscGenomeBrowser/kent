@@ -62,7 +62,7 @@ fields follow.
 
 Currently there are seventeen different track types:
 axt, bed, chain, clonePos, ctgPos, expRatio, genePred,
-maf, netAlign, psl, rmsk, sample, wigMaf, wig, bedGraph, 
+maf, netAlign, psl, rmsk, sample, wigMaf, wig, bedGraph,
 chromGraph, bigBed
 
 	(notation: <angle brackets> indicate required field,
@@ -282,6 +282,9 @@ priority     -    a decimal number            - used to order this track
 chromosomes  -    comma separated list        - only these chroms have data
                                               - for this track, this track is
                                               - not shown on other chroms
+metadata     - space delimited name=val pairs - Purely informational.  Gives additional information
+                                              - about a track which will be displayed in hgTrackUi
+                                              - and hgc. Especially useful for subtracks (see below)
 scoreFilter        - integer                  - default score filter value for a track
 scoreFilterLimits  - integer:integer          - min:max range that score can take.
                                               - (default 0:1000.  Single value N implies N:1000)
@@ -397,20 +400,20 @@ Some settings used by various tracks:
       can be found (if any) so that codons can be drawn when viewing a
       sufficiently small region.  If `table' is specified, an additional
       parameter of a table name, in cdsSpec format, is required.
-    o baseColorUseSequence 
+    o baseColorUseSequence
       {genbank,seq,ss,extFile,nameIsSequence,seq1Seq2,hgPcrResult,none}
-      - For genePred or psl tracks, or bed/bigBed tracks. 
+      - For genePred or psl tracks, or bed/bigBed tracks.
       Specifies where item sequence can be found (if any) so that
       item sequence, or differences from genomic sequence, can be drawn when
-      viewing a sufficiently small region.  
-      If `extFile' is specified, two additional parameters are required, 
-      the name of the seq table followed by the name of the extFile 
-      table to use in looking up the sequence. 
-      These tables are loaded by hgLoadSeq. 
-      If 'nameIsSequence' is specified then the 4th column ('name' or 
+      viewing a sufficiently small region.
+      If `extFile' is specified, two additional parameters are required,
+      the name of the seq table followed by the name of the extFile
+      table to use in looking up the sequence.
+      These tables are loaded by hgLoadSeq.
+      If 'nameIsSequence' is specified then the 4th column ('name' or
       'sequence') contains the sequence. (see hg/lib/encode/tagAlign.as)
       If 'seq1Seq2' is specified then the 7th & 8th columns ('seq1' and
-      'seq2') contain the left and right pairs of the sequence. 
+      'seq2') contain the left and right pairs of the sequence.
       (see hg/lib/encode/pairedTagAlign.as)
     o baseColorDefault {genomicCodons,itemBases,itemCodons,diffBases,
       diffCodons,none} - For tracks with CDS and/or sequence information.
@@ -420,10 +423,10 @@ Some settings used by various tracks:
       (baseColorUseSequence).  genomicCodons, itemCodons and diffCodons
       are applicable only if the track has CDS info (baseColorUseCds).
     o baseColorTickColor {contrastingColor,lighterShade}
-      Choose a contrasting color (this is often white) or lighter shade 
-      of color (should be the same color as would be chosen for the base 
-      text if we were zoomed in to base level. 
-      Only applies if baseColorDefault is set. Defaults to 'red' 
+      Choose a contrasting color (this is often white) or lighter shade
+      of color (should be the same color as would be chosen for the base
+      text if we were zoomed in to base level.
+      Only applies if baseColorDefault is set. Defaults to 'red'
       (the CDS_STOP color) if this option is not  supplied.
     o indelDoubleInsert {on,off} - For psl tracks.  If on, then highlight
       alignment gaps in both target and query using double lines (like
@@ -534,18 +537,46 @@ visibility, subtracks can be grouped.  A subtrack group
 (composite track subgroup) is defined with a trackDb setting,
 in the format:
 
-   subGroup# name label id1=val1 id2=val2 ...
+   subGroup# name label tag1=title1 tag2=title2 ...
 
 where # is assigned 1-N based on the number of groups.
-The "name" is an identifier for the group; the "label"
-indicates how the group is labeled on the track configuration
-screen.  Similarly, the "id" fields indicate possible
-values for the group, while the "val" fields are how
-they appear on the screen.
+The "name" and "tag" are identifiers used to tie subgroups together
+in C and javascript code.  They should have no special characters.
+The "label" and "title" appear in the UI and are human readable.
+Any "_" chars in a label or title will be replaced by " " on the
+generated html page.
 
 Subgroups for a subtrack are set as so:
 
-    subGroups grp1=val1 grp2=val2 ...
+    subGroups name1=tag1 name2=tag2 ...
+
+with the subgroup "name" accociated with the one "tag" in that subgroup
+that the subtrack actually belongs to.  All subtracks should belong to
+one tag in each of all the subgroups.
+
+COMPOSITE SUBTRACK SELECTION - 4 ways
+-------------------------------------
+1) Select the check boxes for individual subtracks - no special settings needed
+2) Add All [+][-] buttons - To the composte track add the setting below.
+   allButtonPair on
+   Not compatible with either of the next two methods
+3) Matrix selection of subgroups.  A 2 or 3 "demension" grid of subgroups.
+   See MATRIX below.
+4) Subgroup buttons.  This happens if you have subgroups but no 'allButtonPair"
+   or "dimensions" defined.
+
+COMPOSITE SUBTRACK CONFIGURATION - 3 ways
+-------------------------------------
+1) All subtracks have the same type.
+   trackDb cfg settings can be at composite level (noInherit off - default)
+   Optionally use 'boxedCfg" to put a box around setting controls.
+2) Subtrack settings have different types.  "Multi-view" required (see below).
+   "noInherit on" is required.
+   Cfg settings in "settingsByView" or in all related subtracks.
+3) Individual subtracks configurable - used in combination with 1 or 2.
+   "configurable on" at composite level makes all subtracks configurable.
+   settingsByView {view}:configurable=on,... all subtracks per view are configurable
+   "configurable on" in subtrack settings makes that one subtrack configurable.
 
 Composite Track ADDITIONAL OPTIONS
 ----------------------------------
@@ -665,6 +696,20 @@ between the dividers the HMM and WIN type subtracks have no indentation, while
 the signal track is indented by one and the alignment subtrack by two.
 NOTE: This setting is incompatible with and overridden by sortOrder.
 
+METADATA
+--------
+With many subtracks it can be important to give further distinguishing details.
+In the subtracks list in hgTrackUi the long label can be followed by a "..."
+which, when clicked will open a list of name=value pairs which have few requirements.
+    metadata name1=value1 name2="value 2" ...
+Certain specific terms may carry special meanings in code:
+  (see controlledVvocabulary below)
+  dateSubmitted,dateUnrestricted used by ENCODE
+  fileName is converted into a link to the downloads directory in wgEncode
+  dataVersion is show separately from metadata
+
+which is seen below.
+
 CONTROLLED VOCABULARY
 ---------------------
 A special feature of the whole genome ENCODE consortium effort is that there
@@ -675,15 +720,20 @@ the trackDb.ra file.  To do this, use the controlledVocabulary setting.  Its
 contents will first refer to the cv.ra file to be referenced, then the
 subGroups that are controlled vocabulary:
     controlledVocabulary encode/cv.ra cellType factor
-The term that is sought in the controlled vocabulary is the label of the individual
-subgroup.  That is
-    subGroup2 cellTreat Cell_Treatment SK=SK-N-MC SK_E=SK-N-MC;Estrogen
-    controlledVocabulary encode/cv.ra cellTreat
-will look for the term "SK-N-MC" in the controlled vocabulary.
-NOTE: The special character ';' allows the lookup of multiple terms.  In the
-example above, both terms "SK-N-MC" and "Estrogen" may be found in the
-controlled vocabulary.
+The term that is sought in the controlled vocabulary is defined in the metadata.
+That is the following composite/subtrack settings
 
+subGroup2 cellTreat Cell_Treatment ES=Estrogen_alone ESP=Estrogen_and_Progesterone
+controlledVocabulary encode/cv.ra cellTreat=treatment cell=cell factor=antibody
+
+    track yaleChipseqTreatmentsA43567
+    subGroups factor=CTCF cellType=K562 view=PK cellTreat=ESP
+    metadata cell=K562 antibody=CTCF treatment=estro-134/Pro-93a
+
+will show "Estrogen and Progesterone" in the UI, but tie that to the specific treatment
+term "estro-134/Pro-93a" in the controlled vocabulary file.  A more complete definition
+of what that term means, including a protocol, may be provided when the controlled
+vocab term is looked up and presented to the user.
 
 EXAMPLE of Composite Track with ADITIONAL OPTIONS
 -------------------------------------------------
@@ -700,10 +750,11 @@ sortOrder cellType=+ factor=+ view=-
 dragAndDrop subTracks
 #dividers cellType factor
 #hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+noInherit on
 visibility hide
 visibilityViewDefaults HMM=pack WIN=pack+ SIG=full ALN=hide
-settingsByView SIG:viewLimits=0:2,viewLimitsMax=0:40
-controlledVocabulary encode/cv.ra cellType factor
+settingsByView SIG:viewLimits=0:2,viewLimitsMax=0:40,maxHeightPixels=100:32:8,configurable=on ALN:configurable=off
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 priority 130
 type bed 3
 
@@ -714,9 +765,8 @@ type bed 3
     subGroups factor=K04 cellType=ES view=HMM
     type bed 3
     color 25,25,150
-    noInherit off
     configurable on
-    priority 1
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="PeakSeq v2.1"
 
     track broadStemChipWinSitesH3K4me3Es
     shortLabel H3K4me3-ES Win
@@ -726,9 +776,8 @@ type bed 3
     type bed 5 +
     useScore 1
     color 25,25,150
-    noInherit off
     configurable on
-    priority 2
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
 
     track broadStemChipSignalH3K4Es
     shortLabel H3K4me3-ES Sig
@@ -736,14 +785,11 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K04 cellType=ES view=SIG
     type wig 0 35
-    viewLimits 0:2
     yLineOnOff On
     yLineMark 1.0
-    maxHeightPixels 100:32:8
     color 25,150,25
-    noInherit on
-    configurable on
-    priority 3
+
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
 
     track broadStemChipAlignmentsH3K4Me3Es
     shortLabel H3K4me3-ES Align
@@ -752,8 +798,7 @@ type bed 3
     subGroups factor=K04 cellType=ES view=ALN
     type bed 9 +
     useScore 1
-    noInherit off
-    priority 4
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1, unique, mismatch<=2"
      . . .
 
 This example set up a composite track configuration page with an X and Y
@@ -768,11 +813,11 @@ of subtracks will be displayed as packed, the signal will be displayed as
 full and the alignments subtracks will still be hidden.  Also, the configurable
 settings for "Sites-Windowing" will be displayed by default.  Additionally all
 of the subtracks are individually configurable except alignments.  The wigs have
-many default settings but two my very from wig to wig so defaults have been set
-at the view level for viewLimits and viewLimitsMax. Finally, notice this example
+many default settings but only the one wig shown has yLine. Notice this example
 defines a controlled vocabulary for both cellTypes and factors with definitions
-found in the encode/cv.ra directory (off the pache/cgi-bin/). (Don't be confused
+found in the encode/cv.ra directory (off apache/cgi-bin/). (Don't be confused
 though, this example mm8 composite track doesn't really have controlled vocabulary.)
+Finally, metadata settings were added to provide further subtrack details.
 
 ---------------------
 
