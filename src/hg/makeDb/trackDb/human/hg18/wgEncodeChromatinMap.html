@@ -1,32 +1,38 @@
 <H2>Description</H2>
 <P>
-These tracks display evidence of open chromatin from the Duke/UNC/UT-Austin/EBI
-ENCODE group. We identified open chromatin using two independent and complementary
+These tracks display evidence of open chromatin from the 
+Duke/UNC/UT-Austin/EBI ENCODE group. 
+Open chromatin is identified using two independent and complementary
 methods: DNaseI hypersensitivity (HS) and Formaldehyde-Assisted Isolation of
 Regulatory Elements (FAIRE), combined with chromatin immunoprecipitation (ChIP)
-for select regulatory factors. Each method is verified by two detection platforms:
-Illumina (formerly Solexa) sequencing by synthesis, and high-resolution 1% ENCODE
-tiled microarrays supplied by NimbleGen.
+for select regulatory factors. 
+Each method is verified by two detection platforms:
+Illumina (formerly Solexa) sequencing by synthesis, 
+and high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P><P>
-<B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map general
-chromatin accessibility and the DNaseI "hyperaccessibility" or "hypersensitivity"
-is a feature of active cis-regulatory sequences. The use of this method has led
-to the discovery of functional regulatory elements that include enhancers, silencers,
-insulators, promotors, locus control regions and novel elements. DNaseI
-hypersensitivity signifies chromatin accessibility following binding of trans-acting
-factors in place of a canonical nucleosome.
+<B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map 
+general chromatin accessibility and the DNaseI "hyperaccessibility" or
+"hypersensitivity" is a feature of active cis-regulatory sequences. 
+The use of this method has led to the discovery of functional regulatory 
+elements that include enhancers, silencers, insulators, promotors, 
+locus control regions and novel elements. 
+DNaseI hypersensitivity signifies chromatin accessibility following 
+binding of trans-acting factors in place of a canonical nucleosome.
 </P><P>
-<B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)
-is a method to isolate and identify nucleosome-depleted regions of the genome.
-FAIRE was initially discovered in yeast and subsequently shown to identify active
-regulatory elements in human cells (Giresi <em>et al.</em>, 2006). Although less
-well-characterized than DNase, FAIRE also appears to identify functional regulatory
-elements that include enhancers, silencers, insulators, promotors, locus control
-regions and novel elements. DNA fragments isolated by FAIRE are 100-200 bp in length,
-with the average length being 140 bp.
+<B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory 
+Elements) is a method to isolate and identify nucleosome-depleted regions
+of the genome.  FAIRE was initially discovered in yeast and subsequently
+shown to identify active regulatory elements in human cells 
+(Giresi <em>et al.</em>, 2006). 
+Although less well-characterized than DNase, FAIRE also appears to 
+identify functional regulatory elements that include enhancers, silencers, 
+insulators, promotors, locus control regions and novel elements. 
+DNA fragments isolated by FAIRE are 100-200 bp in length, with the average 
+length being 140 bp.
 </P><P>
-<B>ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to identify the
-specific location of proteins that are directly or indirectly bound to genomic DNA.
+<B>ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to 
+identify the specific location of proteins that are directly or indirectly
+bound to genomic DNA.
 By identifying the binding location of sequence-specific transcription factors,
 general transcription machinery components, and chromatin factors, ChIP can help
 in the functional annotation of the open chromatin regions identified by DNaseI
@@ -60,14 +66,14 @@ or less times in the genome, and uses a alignability background model to
 try and correct for regions where sequences cannot be aligned.  For certain
 cell types (K562, HepG2, HelaS3) where there is an abnormal karyotype, a
 model to try and correct for amplifications and deletions is also used.
-No control data was used in the creation of these annotations.<DD>
+No control data were used in the creation of these annotations.<DD>
 <DT><I>Signal (Base Overlap)</I></DT><DD> An alternative version of the
 <I>Signal</I> track annotation that provides a higher resolution view of the
 raw sequence data. This track also includes the combined set of sequences from
 all replicates.  For each sequence, the aligned read is extended in the
-following way: for DNase, the read is extended 5bp in both directions from
+following way: for DNase, the read is extended 5 bp in both directions from
 it's 5' aligned end where DNase cut the DNA; for FAIRE and ChIP, the sequence
-is extend to a fragment length of 134bps from the 5' aligned end representing
+is extend to a fragment length of 134 bp from the 5' aligned end representing
 the approximate average fragment length.  The score at each base pair
 represents the number of extended fragments that overlap the base pair.<DD>
 <DT><I>Raw Signal</I></DT><DD> Density graph (wiggle) of signal from raw data
@@ -92,7 +98,7 @@ DNase-chip (Boyle <em>et al.</em>, 2008, Crawford <em>et al.</em>, 2006).
 Briefly, cells were lysed with NP40 and intact nuclei were digested with
 optimal levels of DNaseI enzyme. DNaseI digested ends were captured from
 three different DNase concentrations and material was sequenced using Illumina
-(Solexa) sequencing. DNase-seq data was verified using material that was
+(Solexa) sequencing. DNase-seq data were verified using material that was
 hybridized to NimbleGen Human ENCODE tiled array (1% of the genome).  Multiple
 independent growths (replicates) were compared to verify the reproducibility
 of the data.
@@ -102,7 +108,7 @@ to DNA using 1% formaldehyde solution, and the complex was sheared using
 sonication.  Phenol/chloroform extractions were performed to remove DNA
 fragments crosslinked to protein. The DNA recovered in the aqueous phase
 was hybridized to NimbleGen Human ENCODE arrays (1% of the genome) and
-sequenced using a Solexa sequencing system.  The ENCODE array data was used
+sequenced using a Solexa sequencing system.  The ENCODE array data were used
 to verify the accuracy of the sequencing data, and multiple independent
 growths (replicates) were compared to assess the reproducibility of the data.
 </P><P>
@@ -115,16 +121,16 @@ location of transcription factor binding. This was accomplished by Solexa
 sequencing of the ends of the immunoprecipitated DNA (ChIP-seq) as well as
 labeling and hybridization of the immunoprecipitated DNA to NimbleGen Human
 ENCODE tiling arrays (1% of the genome) along with the input DNA as reference
-(ChIP-chip). The ENCODE array data was used to verify the accuracy of the
+(ChIP-chip). The ENCODE array data were used to verify the accuracy of the
 sequencing data, and multiple independent growths (replicates) were compared
 to assess the reproducibility of the data.
-
+</P><P>
 ENCODE Array data were normalized using the Tukey biweight
 normalization, and peaks were called using ChIPotle (Buck, <em>et al.</em>,
 2005) at multiple levels of significance.  Regions matched on size to these
 peaks that were devoid of any significant signal were also created to allow
 for ROC analysis.
-
+</P><P>
 Sequences from each experiment were aligned to the genome using Maq
 (Li <em>et al.</em>, 2008) and those aligned to 4 or less locations were
 retained. Other sequences were also filtered based either on their alignment
