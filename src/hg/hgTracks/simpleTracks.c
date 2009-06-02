@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.81 2009/05/20 20:50:52 mikep Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.82 2009/06/02 07:00:25 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5077,16 +5077,25 @@ return shortOrg;
 }
 
 char *getOrganism(struct sqlConnection *conn, char *acc)
-/* lookup the organism for an mrna, or NULL if not found.
- * WARNING: static return */
+/* lookup the organism for an mrna, or NULL if not found */
 {
-static char orgBuf[256];
-char query[256], *org;
-sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
-org = sqlQuickQuery(conn, query, orgBuf, sizeof(orgBuf));
-if ((org != NULL) && (org[0] == '\0'))
-    org = NULL;
-return org;
+// cache results, as this can be called a lot of times trying to pack tracks and test
+// for row overflow
+static struct hash *cache = NULL;
+if (cache == NULL)
+    cache = hashNew(0);
+// N.B. NULL is a valid value in the cache
+struct hashEl *cacheEl = hashLookup(cache, acc);
+if (cacheEl == NULL)
+    {
+    char query[256];
+    sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+    char *org = sqlQuickString(conn, query);
+    if ((org != NULL) && (org[0] == '\0'))
+        org = NULL;
+    cacheEl = hashAdd(cache, acc, org);
+    }
+return cacheEl->val;
 }
 
 char *getOrganismShort(struct sqlConnection *conn, char *acc)
