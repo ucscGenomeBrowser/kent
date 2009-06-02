@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.207 2009/05/29 23:23:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.208 2009/06/02 19:13:32 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4898,6 +4898,25 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     return TRUE;
 }
 
+static boolean hCompositeUiAllButtons(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
+/* UI for composite tracks: all/none buttons only (as opposed to matrix or lots of buttons */
+{
+if(slCount(parentTdb->subtracks) <= 1)
+    return FALSE;
+
+if(dimensionsExist(parentTdb))
+    return FALSE;
+
+#define PM_BUTTON_GLOBAL "<A NAME='%s'></A><A HREF='#%s'><IMG height=18 width=18 onclick=\"return (subtrackCBsSetAll(%s) == false);\" id='btn_%s' src='../images/%s'></A>"
+#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL, "plus_all", "plus_all", "true", "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"minus_all","minus_all","false","minus_all","remove_sm.gif")
+printf("<P><B>Select subtracks:</B><P>All:&nbsp;");
+BUTTON_PLUS_ALL_GLOBAL();
+BUTTON_MINUS_ALL_GLOBAL();
+puts("</P>");
+return TRUE;
+}
+
 static boolean hCompositeUiNoMatrix(char *db, struct cart *cart, struct trackDb *parentTdb,
           char *primarySubtrack, char *formName)
 /* UI for composite tracks: subtrack selection.  This is the default UI
@@ -5081,10 +5100,12 @@ if(subgroupingExists(tdb,"view"))
     }
 if(!viewsOnly)
     {
-    if (!hasSubgroups || !isMatrix || primarySubtrack)
+    if(trackDbSettingOn(tdb, "allButtonPair"))
+        hCompositeUiAllButtons(db, cart, tdb, formName);
+    else if (!hasSubgroups || !isMatrix || primarySubtrack)
         hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
     else
-        hCompositeUiByMatrix(db, cart,tdb,formName);
+        hCompositeUiByMatrix(db, cart, tdb, formName);
     }
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
