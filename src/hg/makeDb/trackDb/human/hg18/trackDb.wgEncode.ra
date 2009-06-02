@@ -3287,7 +3287,7 @@ noInherit on
 priority 0
 type bed 3
 noInherit on
-settingsByView ALN:viewLimits=0:1,autoscale=off,windowingFunction=maximum,maxHeightPixels=100:16:16 UNIQ:viewLimits=0:1,autoscale=off,windowingFunction=maximum,maxHeightPixels=100:16:16
+settingsByView ALN:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:16:16 UNIQ:viewLimits=0:1,autoscale=off,windowingFunction=maximum,maxHeightPixels=100:16:16
 wgEncode 1
 #configurable on
 allButtonPair on
