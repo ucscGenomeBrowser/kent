@@ -103,6 +103,10 @@ public class TrackCheck {
 	  // get tracks for this assembly (read track controls from web)
 	  String hgtracksURL = "http://" + target.server + "/cgi-bin/hgTracks?db=";
 	  hgtracksURL = hgtracksURL + assembly;
+          if (debug) {
+            System.out.println("HgTracks.getTrackControlOrAll(url=" + hgtracksURL +", pos="+defaultPos+", table=" + target.table+", debug="+debug+")");
+          }
+
 	  ArrayList trackList = 
 	    // HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
 	    HgTracks.getTrackControlOrAll(hgtracksURL, defaultPos, target.table, debug);

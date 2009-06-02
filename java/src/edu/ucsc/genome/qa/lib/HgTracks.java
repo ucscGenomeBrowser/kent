@@ -200,7 +200,8 @@ public class HgTracks {
 
         WebRequest req = new GetMethodWebRequest(url);
         try {
-          // System.out.print("trying to get response");
+          // System.out.println("hggene: disable JavaScript");
+          HttpUnitOptions.setScriptingEnabled( false ); /* dont run the javascript */
           WebResponse page = wc.getResponse(req);
           int    code = page.getResponseCode();
           String text = page.getText();
@@ -289,7 +290,8 @@ public class HgTracks {
 
         WebRequest req = new GetMethodWebRequest(url);
         try {
-          // System.out.print("trying to get response");
+          // System.out.println("pbgene: disable JavaScript");
+          HttpUnitOptions.setScriptingEnabled( false ); /* dont run the javascript */
           WebResponse page = wc.getResponse(req);
           code = page.getResponseCode();
           String text = page.getText();
@@ -414,6 +416,8 @@ public class HgTracks {
 
       WebRequest req = new GetMethodWebRequest(url3);
 
+      //System.out.println("exerciseTrack: disable JavaScript"); 
+      HttpUnitOptions.setScriptingEnabled( false ); /* dont run the javascript */
       WebResponse page = wc.getResponse(req);
       int code = page.getResponseCode();
       if (code != 200) {
@@ -543,6 +547,7 @@ public class HgTracks {
     WebRequest req = new GetMethodWebRequest(myURL);
 
     try {
+      if (debug) { System.out.println("getTrackControls: disable JavaScript"); }
       HttpUnitOptions.setScriptingEnabled( false ); /* dont run the javascript */
       WebResponse page = wc.getResponse(req);
       int code = page.getResponseCode();
@@ -694,6 +699,8 @@ public class HgTracks {
     try {
 
       // hide all
+      if (debug) { System.out.println("getListFromImage: disable JavaScript"); }
+      HttpUnitOptions.setScriptingEnabled( false ); /* dont run the javascript */
       WebResponse page = wc.getResponse(req);
 
       // get the page again
