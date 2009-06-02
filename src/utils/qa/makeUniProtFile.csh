@@ -82,7 +82,7 @@ if ( -e $db.rawDataForUniProt ) then
   hgcentraltest | perl -wpe '$_ = lcfirst($_)'`
 
  # now add the organism name to every row
- sed -e 's/$/ '"$org"'/g' $db.rawDataForUniProt > $db.rawDataForUniProt.plus
+ sed -e 's/$/ '$org'/' $db.rawDataForUniProt > $db.rawDataForUniProt.plus
 
 else
   echo " \nERROR: It is not possible to make a mapping file for UniProt from"
@@ -98,7 +98,7 @@ mkdir -p /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes
 cp $db.uniProtToUcscGenes.txt /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt
 
 # how big is the file
-set num=`wc -l $db.uniProtToUcscGenes.txt`
+set num=`wc -l $db.uniProtToUcscGenes.txt | awk '{print $1}'`
 
 # explain the output to the user
 echo "\nSUCCESS!\n"
