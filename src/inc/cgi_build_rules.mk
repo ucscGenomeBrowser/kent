@@ -10,8 +10,8 @@ alpha:: strip
 beta:: strip
 	mv $A${EXE} ${CGI_BIN}-beta/$A
 
+# don't actually strip so we can get stack traces
 strip::  compile
-	${STRIP} $A${EXE}
 	chmod g+w $A${EXE}
 	chmod a+rx $A${EXE}
 
