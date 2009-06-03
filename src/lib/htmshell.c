@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.50 2009/06/03 07:07:51 markd Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.51 2009/06/03 18:25:35 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -208,7 +208,7 @@ va_copy(argscp, args);
 #ifdef WARN_USE_ALERT
 static boolean noWarningsYet = TRUE;
 char warning[512];
-vsprintf(warning,format, args);
+vsnprintf(warning,sizeof(warning),format, args);
 if(noWarningsYet)
     {
     // This will only be put into the document once (DO NOT depend on jQuery!) (IE is a royale pain with innerHTML: used textarea)
