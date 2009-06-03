@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.49 2009/05/28 18:30:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.50 2009/06/03 07:07:51 markd Exp $";
 
 jmp_buf htmlRecover;
 
@@ -237,7 +237,6 @@ logCgiToStderr();
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
 va_end(argscp);
-fputc('\n', stderr);
 fflush(stderr);
 }
 
