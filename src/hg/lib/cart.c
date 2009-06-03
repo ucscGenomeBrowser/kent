@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.108 2009/06/03 00:34:09 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.109 2009/06/03 04:30:19 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1240,8 +1240,10 @@ static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
 {
 int status = setjmp(htmlRecover);
 pushAbortHandler(htmlAbort);
+webDumpStackPushAbortHandler();
 if (status == 0)
     doMiddle(cart);
+webDumpStackPopAbortHandler();
 popAbortHandler();
 }
 
@@ -1263,9 +1265,7 @@ void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, War
 /* Wrap error and warning handlers around doMiddle. */
 {
 pushWarnHandler(warner);
-webPushDumpStackHandler();
 cartErrorCatcher(doMiddle, cart);
-webPopDumpStackHandler();
 popWarnHandler();
 }
 

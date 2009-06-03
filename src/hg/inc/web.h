@@ -258,11 +258,14 @@ void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow);
 boolean webDumpStackEnabled(void);
 /* is browser.dumpStack enabled?  */
 
-void webPushDumpStackHandler(void);
-/* push the stack dump handler on the stack if it's enabled.  This should be pushed
+void webDumpStackDisallow(void);
+/* prevent any dumping of the stack */
+
+void webDumpStackPushAbortHandler(void);
+/* push the stack dump abort handler on the stack if it's enabled.  This should be pushed
  * after the warn handle that will do the actual reporting */
 
-void webPopDumpStackHandler(void);
-/* pop the stack dump handler from the stack if it's enabled */
+void webDumpStackPopAbortHandler(void);
+/* pop the stack dump abort handler from the stack if it's enabled */
 
 #endif /* WEB_H */

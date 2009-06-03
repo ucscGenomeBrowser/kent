@@ -17,7 +17,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.161 2009/06/03 00:34:09 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.162 2009/06/03 04:30:19 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -31,22 +31,19 @@ static char *extraStyle = NULL;
 /* global: a cart for use in error handlers. */
 static struct cart *errCart = NULL;
 
-static boolean stackWarnHasBeenDone = FALSE;  // prevent accidental recursion, only allow once
+static boolean stackDumpHasBeenDone = FALSE;  // prevent accidental recursion, only allow once
 
-static void webDumpStackWarnHandler(char *format, va_list args)
-/* warn handle that generates a warning and then invokes the previous error
+static void webDumpStackAbortHandler()
+/* abort handle that prints stack dump then invokes the previous abort
  * handler on the stack. */
 {
-if (!stackWarnHasBeenDone)
+if (!stackDumpHasBeenDone)
     {
-    stackWarnHasBeenDone = TRUE;
+    stackDumpHasBeenDone = TRUE;
     popWarnHandler(); // remove us from the stack
-    va_list localArgs;
-    va_copy(localArgs, args);
-    vaDumpStack(format, localArgs);
-    va_end(localArgs);
-    // continue with next warn handler
-    vaWarn(format, args);
+    dumpStack("Stack dump:");
+    // continue with next abort handler
+    noWarnAbort();
     }
 }
 
@@ -56,17 +53,25 @@ boolean webDumpStackEnabled(void)
 return cfgOptionBooleanDefault("browser.dumpStack", FALSE);
 }
 
-void webPushDumpStackHandler(void)
+void webDumpStackDisallow(void)
+/* prevent any dumping of the stack */
 {
-if (webDumpStackEnabled())
-    pushWarnHandler(webDumpStackWarnHandler);
+stackDumpHasBeenDone = TRUE;
 }
 
-void webPopDumpStackHandler(void)
-/* pop the stack dump handler from the stack if it's enabled */
+void webDumpStackPushAbortHandler(void)
+/* push the stack dump abort handler on the stack if it's enabled.  This should be pushed
+ * after the warn handle that will do the actual reporting */
 {
-if (webDumpStackEnabled() && !stackWarnHasBeenDone)
-    popWarnHandler();
+if (webDumpStackEnabled())
+    pushAbortHandler(webDumpStackAbortHandler);
+}
+
+void webDumpStackPopAbortHandler(void)
+/* pop the stack dump abort handler from the stack if it's enabled */
+{
+if (webDumpStackEnabled() && !stackDumpHasBeenDone)
+    popAbortHandler();
 }
 
 void textVaWarn(char *format, va_list args)
@@ -87,7 +92,7 @@ if (webInTextMode)
     pushWarnHandler(textVaWarn);
 else
     pushWarnHandler(webVaWarn);
-webPushDumpStackHandler();
+webDumpStackPushAbortHandler();
 pushAbortHandler(softAbort);
 }
 
@@ -102,7 +107,7 @@ void webPopErrHandlers(void)
 /* Pop warn and abort handler for errAbort(). */
 {
 popWarnHandler();
-webPopDumpStackHandler();
+webDumpStackPopAbortHandler();
 popAbortHandler();
 }
 
