@@ -75,6 +75,7 @@ if ( $#argv == 4 ) then
       $0
       exit 1
     endif
+  endif
 endif
 
 # echo "db = $db"
