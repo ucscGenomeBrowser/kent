@@ -6466,7 +6466,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 #settingsByView Peaks:qValueFilter=0.0,qValueFilterLimits=0:300,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=400 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 settingsByView Peaks:signalFilter=0,signalFilterLimits=0:18241,pValueFilter=0,pValueFilterLimits=0:300,qValueFilter=0,qValueFilterLimits=0:300 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
-dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
+dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 wgEncode 1
 
     track wgEncodeYaleChIPseqRel2PeaksGm12878Jund
@@ -9621,7 +9621,7 @@ type bed 3
 priority 0
 nextItemButton on
 wgEncode 1
-dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
+dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
     release alpha
