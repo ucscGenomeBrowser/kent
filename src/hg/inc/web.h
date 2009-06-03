@@ -255,4 +255,14 @@ void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
 void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow);
 /* Fill out partially empty last row. */
 
+boolean webDumpStackEnabled(void);
+/* is browser.dumpStack enabled?  */
+
+void webPushDumpStackHandler(void);
+/* push the stack dump handler on the stack if it's enabled.  This should be pushed
+ * after the warn handle that will do the actual reporting */
+
+void webPopDumpStackHandler(void);
+/* pop the stack dump handler from the stack if it's enabled */
+
 #endif /* WEB_H */

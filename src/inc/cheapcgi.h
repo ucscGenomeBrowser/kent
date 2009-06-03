@@ -25,8 +25,9 @@
 #define COLOR_DARKBLUE          "#000088"
 #define COLOR_LTGREY            "#CCCCCC"
 
-void initSigHandlers();
-/* set handler for various terminal signals for logging purposes */
+void initSigHandlers(boolean dumpStack);
+/* set handler for various terminal signals for logging purposes.
+ * if dumpStack is TRUE, attempt to dump the stack. */
 
 struct cgiVar
 /* Info on one cgi variable. */

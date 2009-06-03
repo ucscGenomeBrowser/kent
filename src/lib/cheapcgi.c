@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.121 2009/05/05 23:35:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.122 2009/06/03 00:34:11 markd Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -512,6 +512,7 @@ return ok;
 }
 
 
+static boolean dumpStackOnSignal = FALSE;  // should a stack dump be generated?
 
 static void catchSignal(int sigNum)
 /* handler for various terminal signals for logging purposes */
@@ -534,11 +535,14 @@ switch (sigNum)
     }
     logCgiToStderr();
     fprintf(stderr, "Received signal %s\n", sig);
+    if (dumpStackOnSignal)
+        dumpStack("Stack for signal %s\n", sig);
     raise(SIGKILL);
 }
 
-void initSigHandlers()
-/* set handler for various terminal signals for logging purposes */
+void initSigHandlers(boolean dumpStack)
+/* set handler for various terminal signals for logging purposes.
+ * if dumpStack is TRUE, attempt to dump the stack. */
 {
 if (cgiIsOnWeb())
     {
@@ -546,6 +550,7 @@ if (cgiIsOnWeb())
     signal(SIGSEGV, catchSignal);
     signal(SIGFPE, catchSignal);
     signal(SIGBUS, catchSignal);
+    dumpStackOnSignal = dumpStack;
     }
 }
 

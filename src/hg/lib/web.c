@@ -7,6 +7,7 @@
 #include "web.h"
 #include "hdb.h"
 #include "hui.h"
+#include "hgConfig.h"
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
@@ -16,7 +17,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.160 2009/04/01 19:59:39 tdreszer Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.161 2009/06/03 00:34:09 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -30,6 +31,44 @@ static char *extraStyle = NULL;
 /* global: a cart for use in error handlers. */
 static struct cart *errCart = NULL;
 
+static boolean stackWarnHasBeenDone = FALSE;  // prevent accidental recursion, only allow once
+
+static void webDumpStackWarnHandler(char *format, va_list args)
+/* warn handle that generates a warning and then invokes the previous error
+ * handler on the stack. */
+{
+if (!stackWarnHasBeenDone)
+    {
+    stackWarnHasBeenDone = TRUE;
+    popWarnHandler(); // remove us from the stack
+    va_list localArgs;
+    va_copy(localArgs, args);
+    vaDumpStack(format, localArgs);
+    va_end(localArgs);
+    // continue with next warn handler
+    vaWarn(format, args);
+    }
+}
+
+boolean webDumpStackEnabled(void)
+/* is browser.pstack enabled?  */
+{
+return cfgOptionBooleanDefault("browser.dumpStack", FALSE);
+}
+
+void webPushDumpStackHandler(void)
+{
+if (webDumpStackEnabled())
+    pushWarnHandler(webDumpStackWarnHandler);
+}
+
+void webPopDumpStackHandler(void)
+/* pop the stack dump handler from the stack if it's enabled */
+{
+if (webDumpStackEnabled() && !stackWarnHasBeenDone)
+    popWarnHandler();
+}
+
 void textVaWarn(char *format, va_list args)
 {
 vprintf(format, args);
@@ -41,13 +80,14 @@ void softAbort()
 exit(0);
 }
 
-void webPushErrHandlers()
+void webPushErrHandlers(void)
 /* Push warn and abort handler for errAbort(). */
 {
 if (webInTextMode)
     pushWarnHandler(textVaWarn);
 else
     pushWarnHandler(webVaWarn);
+webPushDumpStackHandler();
 pushAbortHandler(softAbort);
 }
 
@@ -58,10 +98,11 @@ errCart = cart;
 webPushErrHandlers();
 }
 
-void webPopErrHandlers()
+void webPopErrHandlers(void)
 /* Pop warn and abort handler for errAbort(). */
 {
 popWarnHandler();
+webPopDumpStackHandler();
 popAbortHandler();
 }
 

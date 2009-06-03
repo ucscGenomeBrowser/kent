@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.107 2009/05/22 18:30:14 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.108 2009/06/03 00:34:09 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1193,7 +1193,7 @@ int hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
-    initSigHandlers();
+    initSigHandlers(webDumpStackEnabled());
 return cart;
 }
 
@@ -1263,7 +1263,9 @@ void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, War
 /* Wrap error and warning handlers around doMiddle. */
 {
 pushWarnHandler(warner);
+webPushDumpStackHandler();
 cartErrorCatcher(doMiddle, cart);
+webPopDumpStackHandler();
 popWarnHandler();
 }
 

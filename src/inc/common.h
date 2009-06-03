@@ -1164,13 +1164,15 @@ char *splitOffNumber(char *db);
 
 void vaDumpStack(char *format, va_list args);
 /* debugging function to run the pstack program on the current process. In
- * prints a message, following by a new line, and then the stack track.
- * For debugging purposes only.  */
+ * prints a message, following by a new line, and then the stack track.  Just
+ * prints errors to stderr rather than aborts. For debugging purposes
+ * only.  */
 
 void dumpStack(char *format, ...)
 /* debugging function to run the pstack program on the current process. In
- * prints a message, following by a new line, and then the stack track.
- * For debugging purposes only.  */
+ * prints a message, following by a new line, and then the stack track.  Just
+ * prints errors to stderr rather than aborts. For debugging purposes
+ * only.  */
 #if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
