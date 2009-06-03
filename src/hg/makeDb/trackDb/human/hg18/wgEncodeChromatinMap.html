@@ -1,42 +1,43 @@
 <H2>Description</H2>
 <P>
-These tracks display evidence of open chromatin from the 
-Duke/UNC/UT-Austin/EBI ENCODE group. 
+These tracks display evidence of open chromatin from the
+Duke/UNC/UT-Austin/EBI ENCODE group.
 Open chromatin is identified using two independent and complementary
 methods: DNaseI hypersensitivity (HS) and Formaldehyde-Assisted Isolation of
 Regulatory Elements (FAIRE), combined with chromatin immunoprecipitation (ChIP)
-for select regulatory factors. 
+for select regulatory factors.
 Each method is verified by two detection platforms:
-Illumina (formerly Solexa) sequencing by synthesis, 
+Illumina (formerly Solexa) sequencing by synthesis,
 and high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P><P>
-<B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map 
+<B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map
 general chromatin accessibility and the DNaseI "hyperaccessibility" or
-"hypersensitivity" is a feature of active cis-regulatory sequences. 
-The use of this method has led to the discovery of functional regulatory 
-elements that include enhancers, silencers, insulators, promotors, 
-locus control regions and novel elements. 
-DNaseI hypersensitivity signifies chromatin accessibility following 
+"hypersensitivity" is a feature of active cis-regulatory sequences.
+The use of this method has led to the discovery of functional regulatory
+elements that include enhancers, silencers, insulators, promotors,
+locus control regions and novel elements.
+DNaseI hypersensitivity signifies chromatin accessibility following
 binding of trans-acting factors in place of a canonical nucleosome.
 </P><P>
-<B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory 
+<B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory
 Elements) is a method to isolate and identify nucleosome-depleted regions
 of the genome.  FAIRE was initially discovered in yeast and subsequently
-shown to identify active regulatory elements in human cells 
-(Giresi <em>et al.</em>, 2006). 
-Although less well-characterized than DNase, FAIRE also appears to 
-identify functional regulatory elements that include enhancers, silencers, 
-insulators, promotors, locus control regions and novel elements. 
-DNA fragments isolated by FAIRE are 100-200 bp in length, with the average 
+shown to identify active regulatory elements in human cells
+(Giresi <em>et al.</em>, 2006).
+Although less well-characterized than DNase, FAIRE also appears to
+identify functional regulatory elements that include enhancers, silencers,
+insulators, promotors, locus control regions and novel elements.
+DNA fragments isolated by FAIRE are 100-200 bp in length, with the average
 length being 140 bp.
 </P><P>
-<B>ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to 
+<B>ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to
 identify the specific location of proteins that are directly or indirectly
 bound to genomic DNA.
 By identifying the binding location of sequence-specific transcription factors,
 general transcription machinery components, and chromatin factors, ChIP can help
 in the functional annotation of the open chromatin regions identified by DNaseI
 HS mapping and FAIRE.
+</P>
 
 <H2> Display Conventions and Configuration </H2>
 <P>
@@ -55,7 +56,7 @@ sequence data using data from the 1% ENCODE arrays, and determining a
 cut-off value at approximately the 95% sensitivity level.  The solid vertical
 line in the peak represents the point with highest signal.   ENCODE Peaks
 tables contain a p-value for statistical significance.  For these data, this
-was determined by fitting the data to a gamma distribution.<DD>
+was determined by fitting the data to a gamma distribution.</DD>
 <DT><I>Signal</I></DT><DD> Density graph (wiggle) of signal enrichment
 calculated using F-Seq for the combined set of sequences from all replicates.
 F-Seq employs Parzen kernel density estimation to create base pair scores
@@ -66,7 +67,7 @@ or less times in the genome, and uses a alignability background model to
 try and correct for regions where sequences cannot be aligned.  For certain
 cell types (K562, HepG2, HelaS3) where there is an abnormal karyotype, a
 model to try and correct for amplifications and deletions is also used.
-No control data were used in the creation of these annotations.<DD>
+No control data were used in the creation of these annotations.</DD>
 <DT><I>Signal (Base Overlap)</I></DT><DD> An alternative version of the
 <I>Signal</I> track annotation that provides a higher resolution view of the
 raw sequence data. This track also includes the combined set of sequences from
@@ -75,16 +76,17 @@ following way: for DNase, the read is extended 5 bp in both directions from
 it's 5' aligned end where DNase cut the DNA; for FAIRE and ChIP, the sequence
 is extend to a fragment length of 134 bp from the 5' aligned end representing
 the approximate average fragment length.  The score at each base pair
-represents the number of extended fragments that overlap the base pair.<DD>
+represents the number of extended fragments that overlap the base pair.</DD>
 <DT><I>Raw Signal</I></DT><DD> Density graph (wiggle) of signal from raw data
 (single replicates, no control). For these high-throughput sequencing data,
-this reflects the aligned read density.  (Currently not available).<DD>
+this reflects the aligned read density.  (Currently not available).</DD>
 <DT><I>Alignments</I></DT><DD> Mappings of short reads to the genome
-(currently only available for download).<DD>
+(currently only available for download).</DD>
 <DT><I>Regions Excluded</I></DT><DD>Genomic regions which were excluded from
 calling <I>Peaks</I> due to various reasons such as repetitive sequence or
-genomic gaps.<DD>
+genomic gaps.</DD>
 </DL>
+</P>
 
 <H2>Methods</H2>
 <P>
@@ -164,15 +166,15 @@ Zheng Liu, Ryan McDaniell, Bum-Kyu Lee, and <A HREF="http://microarray.icmb.utex
 Paul Flicek, Stefan Graf, Damian Keefe, and <A HREF="http://www.ebi.ac.uk/~birney/" TARGET=_blank>Ewan Birney</a>
 </P><P>
 We thank NHGRI for ENCODE funding support.
-
 </P>
+
 <H2>References</H2>
 
 <P>
  <A HREF="http://www.nature.com/nature/journal/v447/n7146/abs/nature05874.html" TARGET=_blank>
  The ENCODE Project Consortium. Identification and analysis of functional elements in 1% of the human genome by the ENCODE pilot project.</A>
  <EM>Nature</EM> 2007;447:799-816
-</P><P>
+</P>
 
 <P>
 Bhinge, A.A., Kim, J., Euskirchen, G.M., Snyder, M., & Iyer, V.R.
