@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.102 2009/05/29 19:18:12 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.103 2009/06/04 00:13:04 mikep Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -850,9 +850,9 @@ term NRSF
 type Antibody
 antibodyDescription Mouse monoclonal
 targetDescription Neuron-restrictive silencer transcription factor
-vendorName David Anderson, Caltech
+vendorName David Anderson, Caltech (Made by Protein Expression Center: pec@caltech.edu)
 vendorId
-orderUrl Made by Protein Expression Center: pec@caltech.edu
+orderUrl
 
 term Pol2
 type Antibody
