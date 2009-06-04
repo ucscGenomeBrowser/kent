@@ -45,10 +45,10 @@ static char *lookupTrackDbSubVar(char *desc, struct trackDb *tdb, char *settingN
 /* get the specified track setting to substitute or die trying; more useful
  * message than trackDbRequiredSetting when doing substitution */
 {
-char *val = trackDbSetting(tdb, settingName);
+char *val = trackDbSettingClosestToHome(tdb, settingName);
 if (val == NULL)
-   errAbort("trackDb setting \"%s\" not found for variable substitution of \"$%s\" in %s",
-            settingName, varName, desc);
+   errAbort("trackDb (%s) setting \"%s\" not found for variable substitution of \"$%s\" in %s",
+            tdb->tableName, settingName, varName, desc);
 return val;
 }
 
@@ -56,6 +56,36 @@ static char *lookupOtherDb(char *desc, struct trackDb *tdb, char *varName)
 /* look up the otherDb variable, which is needed for substituting varName */
 {
 return lookupTrackDbSubVar(desc, tdb, "otherDb", varName);
+}
+
+static void insertLinearGapHtml(struct trackDb *tdb, char *linearGap,
+                             struct dyString *dest)
+/* Generate HTML table from chain linearGap variable */
+{
+if (sameWord("medium",linearGap))
+    {
+dyStringPrintf(dest, "<PRE>-linearGap=%s\n\n\
+tableSize    11\n\
+smallSize   111\n\
+position  1   2   3   11  111  2111  12111  32111   72111  152111  252111\n\
+qGap    350 425 450  600  900  2900  22900  57900  117900  217900  317900\n\
+tGap    350 425 450  600  900  2900  22900  57900  117900  217900  317900\n\
+bothGap 750 825 850 1000 1300  3300  23300  58300  118300  218300  318300\n\
+</PRE>", linearGap);
+    }
+else if (sameWord("loose", linearGap))
+    {
+dyStringPrintf(dest, "<PRE>-linearGap=%s\n\n\
+tablesize    11\n\
+smallSize   111\n\
+position  1   2   3   11  111  2111  12111  32111  72111  152111  252111\n\
+qGap    325 360 400  450  600  1100   3600   7600  15600   31600   56600\n\
+tGap    325 360 400  450  600  1100   3600   7600  15600   31600   56600\n\
+bothGap 625 660 700  750  900  1400   4000   8000  16000   32000   57000\n\
+</PRE>", linearGap);
+    }
+else
+    errAbort("Invalid chainLinearGap specified '%s', can only be 'medium' or 'loose'", linearGap);
 }
 
 static void insertMatrixHtml(struct trackDb *tdb, char *matrix,
@@ -100,14 +130,24 @@ for (i = 0; i < size; i++)
 dyStringAppend(dest, "</TABLE></BLOCKQUOTE></P>\n");
 }
 
+static void substLinearGap(struct trackDb *tdb, struct dyString *dest)
+/* Generate HTML table from matrix setting in trackDb.  Note: for
+ * compatibility, substitutes and empty string if matrix setting not found in
+ * trackDb. */
+{
+char *linearGap = trackDbSettingClosestToHome(tdb, "chainLinearGap");
+if (linearGap != NULL)
+    insertLinearGapHtml(tdb, linearGap, dest);
+}
+
 static void substMatrixHtml(struct trackDb *tdb, struct dyString *dest)
 /* Generate HTML table from matrix setting in trackDb.  Note: for
  * compatibility, substitutes and empty string if matrix setting not found in
  * trackDb. */
 {
-char *matrix = trackDbSetting(tdb, "matrix");
+char *matrix = trackDbSettingClosestToHome(tdb, "matrix");
 if (matrix != NULL)
-    insertMatrixHtml(tdb, matrix, trackDbSetting(tdb, "matrixHeader"), dest);
+    insertMatrixHtml(tdb, matrix, trackDbSettingClosestToHome(tdb, "matrixHeader"), dest);
 }
 
 static boolean isAbbrevScientificName(char *name)
@@ -185,6 +225,8 @@ static void substTrackDbVar(char *desc, struct trackDb *tdb, char *database,
 {
 if (sameString(varName, "matrix"))
     substMatrixHtml(tdb, dest);
+else if (sameString(varName, "chainLinearGap"))
+    substLinearGap(tdb, dest);
 else
     dyStringAppend(dest, lookupTrackDbSubVar(desc, tdb, varName, varName));
 }
