@@ -55,7 +55,7 @@ allOk=yes
 # check host, set path to genbank sanity location 
 if [ "$HOST" != hgwdev -a "$HOST" != hgwbeta ]
 then
-  echo "This script must be run from hgwdev or hgwbeta." >&2
+  echo -e "\nThis script must be run from hgwdev or hgwbeta.\n" >&2
   exit 1
 elif [ "$HOST" = hgwdev ]
 then
@@ -67,8 +67,8 @@ fi
 # get arguments / give usage statement
 if [ $# -lt 1 -o $# -gt 2 ]
 then
-  echo "usage:  $(basename $0) db [outFile]
-where outFile is the name of a file in which to record results" >&2
+  echo -e "\n usage:  $(basename $0) db [outFile]
+ where outFile is the name of a file in which to record results\n" >&2
   exit 1
 else
   db="$1"
@@ -87,12 +87,12 @@ fi
 # intronEst is a special case; it may exist only in split form
 intronEstTables=$(hgsql -Ne "show tables like '%intronEst'" $db)
 
-trackTables="refGene xenoRefGene mgcFullMrna orfeomeMrna all_mrna intronEst /
+trackTables="refGene xenoRefGene mgcFullMrna orfeomeMrna all_mrna intronEst  
            all_est xenoMrna xenoEst"
 genePredTables="refGene xenoRefGene mgcGenes orfeomeGenes"
-pslTables="mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli /
+pslTables="mgcFullMrna orfeomeMrna all_mrna xenoMrna all_est refSeqAli 
            xenoRefSeqAli xenoEst $intronEstTables"
-featureTables="refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes /
+featureTables="refGene xenoRefGene mgcGenes mgcFullMrna orfeomeGenes 
                orfeomeMrna all_mrna intronEst all_est xenoMrna xenoEst"
 
 # print information about the script at the top of the output
