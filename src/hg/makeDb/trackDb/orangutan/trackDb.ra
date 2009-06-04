@@ -12,3 +12,5 @@ spectrum on
 type chain calJac1
 otherDb calJac1
 
+track humanChainNet override
+chainMinScore 5000

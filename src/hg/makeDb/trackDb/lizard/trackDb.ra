@@ -4,3 +4,6 @@
 # track netGalGal3
 # priority 255.1
 
+track humanChainNet override
+chainMinScore 5000
+chainLinearGap loose

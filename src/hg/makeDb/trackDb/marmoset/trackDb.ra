@@ -54,4 +54,5 @@ spectrum on
 type chain ponAbe2
 otherDb ponAbe2
 
-
+track humanChainNet override
+chainMinScore 5000

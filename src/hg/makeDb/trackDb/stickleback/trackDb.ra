@@ -214,3 +214,6 @@ otherDb oryLat1
 # track netAnoCar1
 # priority 275.6
 
+track humanChainNet override
+chainMinScore 5000
+chainLinearGap loose

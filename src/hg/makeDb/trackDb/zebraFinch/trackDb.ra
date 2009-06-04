@@ -30,3 +30,7 @@ matrixHeader A, C, G, T
 type chain galGal3
 otherDb galGal3
 release beta
+
+track humanChainNet override
+chainMinScore 5000
+chainLinearGap loose

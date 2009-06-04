@@ -125,3 +125,6 @@ spectrum on
 type netAlign rn4 chainRn4
 otherDb rn4
 
+track humanChainNet override
+chainMinScore 5000
+chainLinearGap loose

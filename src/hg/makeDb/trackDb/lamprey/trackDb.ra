@@ -28,3 +28,6 @@ spectrum on
 type chain oryLat1
 otherDb oryLat1
 
+track humanChainNet override
+chainMinScore 5000
+chainLinearGap loose

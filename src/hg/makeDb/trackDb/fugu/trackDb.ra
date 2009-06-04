@@ -449,3 +449,6 @@ spectrum on
 type netAlign mm9 chainMm9
 otherDb mm9
 
+track humanChainNet override
+chainMinScore 5000
+chainLinearGap loose

@@ -169,3 +169,6 @@ otherDb calJac1
 # 
 # track netMm8
 # priority 245.1 
+
+track humanChainNet override
+chainMinScore 5000
