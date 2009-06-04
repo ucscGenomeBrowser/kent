@@ -1967,12 +1967,28 @@ identifier snpAnnotations125
     $snpDb125.snp125.name dupeOk
     $snpDb125.snp125Exceptions.name
     $snpDb125.snpSeq.acc minCheck=.8
+    hg17.snpArrayAffy10.rsId minCheck=0.98
+    hg17.snpArrayAffy10v2.rsId minCheck=0.98
+    hg17.snpArrayAffy250Nsp.rsId minCheck=0.98
+    hg17.snpArrayAffy250Sty.rsId minCheck=0.98
+    hg17.snpArrayAffy50HindIII.rsId minCheck=0.98
+    hg17.snpArrayAffy50XbaI.rsId minCheck=0.98
+    hg17.snpArrayIllumina300.name
 
 identifier snpAnnotations126
 "SNP annotations"
     $snpDb126.snp126.name dupeOk
     $snpDb126.snp126Exceptions.name
     $snpDb126.snpSeq.acc minCheck=.8
+    hg18.snp126ortho.name
+    hg18.snp126orthoPanTro2RheMac2.name
+    hg18.snpArrayAffy5.rsId minCheck=0.98
+    hg18.snpArrayAffy6.rsId minCheck=0.98
+    hg18.snpArrayAffy250Nsp.rsId
+    hg18.snpArrayAffy250Sty.rsId
+    hg18.snpArrayIllumina300.name
+    hg18.snpArrayIllumina550.name
+    hg18.snpArrayIllumina650.name
 
 identifier snpAnnotations127
 "SNP annotations"
@@ -1985,6 +2001,7 @@ identifier snpName128
     $gbd.snp128.name dupeOk
     $gbd.snp128Exceptions.name
     $gbd.snp128Seq.acc minCheck=.9
+    hg18.snp128OrthoPanTro2RheMac2.name
 
 identifier snpExceptions128
 "Annotations of unusual conditions in dbSNP version 128"
@@ -1996,6 +2013,8 @@ identifier snpName129
     $gbd.snp129.name dupeOk
     $gbd.snp129Exceptions.name minCheck=.99
     $gbd.snp129Seq.acc minCheck=.99
+    hg18.snp129OrthoPt2Pa2Rm2.name
+    hg18.snpArrayIllumina1M.name minCheck=0.95
 
 identifier snpExceptions129
 "Annotations of unusual conditions in dbSNP version 129"
@@ -2007,59 +2026,13 @@ identifier snpName130
     $gbd.snp130.name dupeOk
     $gbd.snp130Exceptions.name
     $gbd.snp130Seq.acc minCheck=.98
+    $gbd.snp130CodingDbSnp.name minCheck=.99
+    $hg.snp130OrthoPt2Pa2Rm2.name
 
 identifier snpExceptions130
 "Annotations of unusual conditions in dbSNP version 130"
     $gbd.snp130ExceptionDesc.exception
     $gbd.snp130Exceptions.exception
-
-identifier snpArrayHg17
-"SNP array track for hg17"
-    hg17.snp125.name dupeOk
-    hg17.snpArrayAffy10.rsId minCheck=0.98
-    hg17.snpArrayAffy10v2.rsId minCheck=0.98
-    hg17.snpArrayAffy250Nsp.rsId minCheck=0.98
-    hg17.snpArrayAffy250Sty.rsId minCheck=0.98
-    hg17.snpArrayAffy50HindIII.rsId minCheck=0.98
-    hg17.snpArrayAffy50XbaI.rsId minCheck=0.98
-    hg17.snpArrayIllumina300.name
-
-identifier snpArrayHg18
-"SNP array track for hg18"
-    hg18.snp126.name dupeOk
-    hg18.snpArrayAffy5.rsId minCheck=0.98
-    hg18.snpArrayAffy6.rsId minCheck=0.98
-    hg18.snpArrayAffy250Nsp.rsId
-    hg18.snpArrayAffy250Sty.rsId
-    hg18.snpArrayIllumina300.name
-    hg18.snpArrayIllumina550.name
-    hg18.snpArrayIllumina650.name
-
-identifier snp129ArrayHg18
-"SNP array track for hg18"
-    hg18.snp129.name dupeOk
-    hg18.snpArrayIllumina1M.name minCheck=0.95
-
-identifier snpOrtho126
-"Ortho SNPs for hg18 only (dbSNP 126)"
-    hg18.snp126.name dupeOk
-    hg18.snp126ortho.name
-    hg18.snp126orthoPanTro2RheMac2.name
-
-identifier snpOrtho128
-"Ortho SNPs for hg18 only (dbSNP 128)"
-    hg18.snp128.name dupeOk
-    hg18.snp128OrthoPanTro2RheMac2.name
-
-identifier snpOrtho129
-"Ortho SNPs for hg18 only (dbSNP 129)"
-    hg18.snp129.name dupeOk
-    hg18.snp129OrthoPt2Pa2Rm2.name
-
-identifier snpOrtho130
-"Ortho SNPs for hg18 only (dbSNP 130)"
-    hg18.snp130.name dupeOk
-    hg18.snp130OrthoPt2Pa2Rm2.name
 
 # Other NCBI Identifiers
 
