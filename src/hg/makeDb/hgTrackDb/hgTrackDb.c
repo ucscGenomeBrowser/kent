@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.50 2009/02/26 04:07:21 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.51 2009/06/04 19:14:43 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -298,7 +298,7 @@ for (td = tdList; td != NULL; td = td->next)
     {
     if (isEmpty(td->html))
         {
-        char *htmlName = trackDbSetting(td, "html");
+        char *htmlName = trackDbSettingClosestToHome(td, "html");
         if (htmlName == NULL)
             htmlName = td->tableName;
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
@@ -340,6 +340,7 @@ struct subGroupData
 int numSubGroups;        /* count of subGroups */
 struct hash *nameHash;   /* hash of subGroup names */
 struct hash *values[10]; /* array of value hash pointers in order */
+struct trackDb *compositeTdb;  /* tdb of composite parent */
 };
 
 static void checkSubGroups(struct trackDb *tdList)
@@ -359,6 +360,8 @@ for (td = tdList; td != NULL; td = tdNext)
         char subGroupName[256];
         AllocVar(sgd);
 	sgd->nameHash = newHash(3);
+	sgd->compositeTdb = td;
+	tdbMarkAsComposite(td);
 	while(i<10)
 	    {
 	    safef(subGroupName, sizeof(subGroupName), "subGroup%d", i+1);
@@ -404,7 +407,10 @@ for (td = tdList; td != NULL; td = tdNext)
 	    chopLine(cloneString(trackName), words);
 	    trackName = words[0];
 
+
 	    struct subGroupData *sgd = hashFindVal(compositeHash, trackName);
+	    td->parent = sgd->compositeTdb;
+	    tdbMarkAsCompositeChild(td);
 	    if (!sgd)
 		{
 		verbose(1,"parent %s missing for subtrack %s\n", trackName, td->tableName);
@@ -613,7 +619,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
     /* Load in html and settings fields. */
     for (td = tdList; td != NULL; td = td->next)
 	{
-        if (isEmpty(td->html))
+        if ( (! tdbIsCompositeChild(td)) && isEmpty(td->html))
 	    {
 	    if (strict && !trackDbSetting(td, "subTrack") && !sameString(td->tableName,"cytoBandIdeo"))
 		{
@@ -622,8 +628,9 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 	    }
 	else
 	    {
-	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName,
-	    	"html", td->html);
+	    if (! tdbIsCompositeChild(td))
+		updateBigTextField(conn,  trackDbName, "tableName",
+		    td->tableName, "html", td->html);
 	    }
 	if (td->settingsHash != NULL)
 	    {
