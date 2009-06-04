@@ -64,6 +64,10 @@ boolean hIsMgcServer();
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
 
+boolean hIsGisaidServer();
+/* Is this the GISAID-customized server? Change for config variable
+ * gisaid.server=yes */
+
 boolean hIsGsidServer();
 /* Is this the GSID-customized server? Change for config variable
  * gsid.server=yes */
