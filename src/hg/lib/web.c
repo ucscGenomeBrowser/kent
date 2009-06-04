@@ -16,8 +16,9 @@
 #include "wikiLink.h"
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
+#include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.162 2009/06/03 04:30:19 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.163 2009/06/04 17:53:21 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -64,7 +65,10 @@ void webDumpStackPushAbortHandler(void)
  * after the warn handle that will do the actual reporting */
 {
 if (webDumpStackEnabled())
+    {
+    errAbortDebugPopUnderflow = TRUE;
     pushAbortHandler(webDumpStackAbortHandler);
+    }
 }
 
 void webDumpStackPopAbortHandler(void)

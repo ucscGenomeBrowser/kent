@@ -15,7 +15,9 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.13 2004/11/10 00:10:50 markd Exp $";
+static char const rcsid[] = "$Id: errabort.c,v 1.14 2009/06/04 17:53:20 markd Exp $";
+
+int errAbortDebugPopUnderflow = FALSE;  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
@@ -70,7 +72,11 @@ void popWarnHandler()
 /* Revert to old warn handler. */
 {
 if (warnIx <= 0)
+    {
+    if (errAbortDebugPopUnderflow)
+        dumpStack("popWarnHandler underflow");
     errAbort("Too many popWarnHandlers\n");
+    }
 --warnIx;
 }
 
@@ -134,7 +140,11 @@ void popAbortHandler()
 /* Revert to old abort handler. */
 {
 if (abortIx <= 0)
+    {
+    if (errAbortDebugPopUnderflow)
+        dumpStack("popWarnHandler underflow");
     errAbort("Too many popAbortHandlers\n");
+    }
 --abortIx;
 }
 
