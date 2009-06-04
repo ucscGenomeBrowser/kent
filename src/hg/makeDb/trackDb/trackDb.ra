@@ -4420,7 +4420,6 @@ sortOrder view=+
     otherDb venter1
 
 track humanChainNet
-release alpha
 compositeTrack on
 shortLabel Human Chain/Net
 longLabel Human (Feb. 2009/hg19), Chain and Net alignment tracks
@@ -4436,9 +4435,11 @@ altColor 255,255,0
 type bed 3
 settingsByView chain:spectrum=on
 sortOrder view=+
-configurable on
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 matrixHeader A, C, G, T
+otherDb hg19
+chainMinScore 3000
+chainLinearGap medium
 
     track chainHg19
     subTrack humanChainNet off
@@ -4446,7 +4447,6 @@ matrixHeader A, C, G, T
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain hg19
-    otherDb hg19
 
     track netHg19
     subTrack humanChainNet off
@@ -4454,4 +4454,3 @@ matrixHeader A, C, G, T
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign hg19 chainHg19
-    otherDb hg19
