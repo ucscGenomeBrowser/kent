@@ -76,6 +76,7 @@
 #include "snpMap.h"
 #include "snpExceptions.h"
 #include "snp125Exceptions.h"
+#include "snp125CodingCoordless.h"
 #include "cnpIafrate.h"
 #include "cnpIafrate2.h"
 #include "cnpLocke.h"
@@ -222,7 +223,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1547 2009/05/28 16:48:30 mikep Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1548 2009/06/04 20:15:07 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14842,6 +14843,28 @@ if (pRefAA != NULL)
     }
 }
 
+static char *highlightCodonBase(char *codon, int offset)
+/* If codon is a triplet and offset is 0 to 2, highlight the base at the offset.
+ * Otherwise just return the given codon sequence unmodified.
+ * Don't free the return value! */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+if (strlen(codon) != 3)
+    dyStringAppend(dy, codon);
+else if (offset == 0)
+    dyStringPrintf(dy, "<B>%c</B>%c%c", codon[0], codon[1], codon[2]);
+else if (offset == 1)
+    dyStringPrintf(dy, "%c<B>%c</B>%c", codon[0], codon[1], codon[2]);
+else if (offset == 2)
+    dyStringPrintf(dy, "%c%c<B>%c</B>", codon[0], codon[1], codon[2]);
+else
+    dyStringAppend(dy, codon);
+return dy->string;
+}
+
 void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTrack,
 			      struct genePred *gene, int exonIx, char *geneName)
 /* Show the effect of each observed allele of snp on the given exon of gene. */
@@ -14877,13 +14900,15 @@ for (j = 0;  j < alleleCount;  j++)
 	{
 	int diff = alSize - refAlleleSize;
 	if ((diff % 3) != 0)
-	    printf(firstTwoColumnsPctS "cds-reference, frameshift</TD></TR>\n",
+	    printf(firstTwoColumnsPctS "frameshift</TD></TR>\n",
 		   geneTrack, geneName);
 	else if (diff > 0)
-	    printf(firstTwoColumnsPctS "cds-reference, insertion of %d codon%s</TD></TR>\n",
+	    printf(firstTwoColumnsPctS "%sinsertion of %d codon%s</TD></TR>\n",
+		   (snpCodonPos == 0 ? "" : "frameshift and"),
 		   geneTrack, geneName, (int)(diff/3), (diff > 3) ?  "s" : "");
 	else
-	    printf(firstTwoColumnsPctS "cds-reference, deletion of %d codon%s</TD></TR>\n",
+	    printf(firstTwoColumnsPctS "%sdeletion of %d codon%s</TD></TR>\n",
+		   (snpCodonPos == 0 ? "" : "frameshift and"),
 		   geneTrack, geneName, (int)(-diff/3), (diff < -3) ?  "s" : "");
 	}
     else if (alSize == 1 && refIsSingleBase)
@@ -14893,18 +14918,21 @@ for (j = 0;  j < alleleCount;  j++)
 	snpCodon[snpCodonPos] = alBase;
 	char snpAA = lookupCodon(snpCodon);
 	if (snpAA == '\0') snpAA = '*';
+	char refCodonHtml[16], snpCodonHtml[16];
+	safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
+	safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
 	if (refAA != snpAA)
-	    printf(firstTwoColumnsPctS "cds-reference, %ssense %c (%s) --> %c (%s)</TD></TR>\n",
+	    printf(firstTwoColumnsPctS "%ssense %c (%s) --> %c (%s)</TD></TR>\n",
 		   geneTrack, geneName,
 		   ((refAA == '*' || snpAA == '*') ? "non" : "mis"),
-		   refAA, refCodon, snpAA, snpCodon);
+		   refAA, refCodonHtml, snpAA, snpCodonHtml);
 	else
 	    printf(firstTwoColumnsPctS
-		   "cds-reference, coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
-		   geneTrack, geneName, refAA, refCodon, snpAA, snpCodon);
+		   "coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
+		   geneTrack, geneName, refAA, refCodonHtml, snpAA, snpCodonHtml);
 	}
     else
-	printf(firstTwoColumnsPctS "cds-reference, %s -> %s</TD></TR>\n",
+	printf(firstTwoColumnsPctS "%s --> %s</TD></TR>\n",
 	       geneTrack, geneName, refAllele, al);
     }
 }
@@ -15060,6 +15088,93 @@ printf("</TABLE>\n");
 hFreeConn(&conn);
 }
 
+char *dbSnpFuncFromInt(unsigned char funcCode)
+/* Translate an integer function code from NCBI into an abbreviated description.
+ * Do not free return value! */
+// Might be a good idea to flesh this out with all codes, libify, and share with
+// snpNcbiToUcsc instead of partially duplicating.
+{
+switch (funcCode)
+    {
+    case 3:
+	return "coding-synon";
+    case 8:
+	return "cds-reference";
+    case 41:
+	return "nonsense";
+    case 42:
+	return "missense";
+    case 44:
+	return "frameshift";
+    default:
+	{
+	static char buf[16];
+	safef(buf, sizeof(buf), "%d", funcCode);
+	return buf;
+	}
+    }
+
+}
+
+void printSnp125CodingAnnotations(struct trackDb *tdb, struct snp125 *snp)
+/* If tdb specifies extra table(s) that contain protein-coding annotations,
+ * show the effects of SNP on transcript coding sequences. */
+{
+char *tables = trackDbSetting(tdb, "codingAnnotations");
+if (isEmpty(tables))
+    return;
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *tbl, *tableList = slNameListFromString(tables, ',');
+struct dyString *query = dyStringNew(0);
+for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
+    {
+    char setting[512];
+    safef(setting, sizeof(setting), "codingAnnoLabel_%s", tbl->name);
+    char *label = trackDbSettingOrDefault(tdb, setting, tbl->name);
+    boolean hasBin = hIsBinned(database, tbl->name);
+    boolean hasCoords = (sqlFieldIndex(conn, tbl->name, "chrom") != -1);
+    int rowOffset = hasBin + (hasCoords ? 3 : 0);
+    dyStringClear(query);
+    dyStringPrintf(query, "select * from %s where name = '%s'", tbl->name, snp->name);
+    if (hasCoords)
+	dyStringPrintf(query, " and chrom = '%s' and chromStart = %d", seqName, snp->chromStart);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    char **row;
+    boolean first = TRUE;
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (first)
+	    {
+	    printf("<BR><B>Coding annotations by %s:</B><BR>\n", label);
+	    first = FALSE;
+	    }
+	struct snp125CodingCoordless *anno = snp125CodingCoordlessLoad(row+rowOffset);
+	int i;
+	boolean gotRef = (anno->funcCodes[0] == 8);
+	for (i = 0;  i < anno->alleleCount;  i++)
+	    {
+	    memSwapChar(anno->peptides[i], strlen(anno->peptides[i]), 'X', '*');
+	    if (anno->funcCodes[i] == 8)
+		continue;
+	    char *func = dbSnpFuncFromInt(anno->funcCodes[i]);
+	    printf("%s: %s ", anno->transcript, func);
+	    if (sameString(func, "frameshift"))
+		{
+		puts("<BR>");
+		continue;
+		}
+	    if (gotRef)
+		printf("%s (%s) --> ", anno->peptides[0],
+		       highlightCodonBase(anno->codons[0], anno->frame));
+	    printf("%s (%s)<BR>\n", anno->peptides[i],
+		   highlightCodonBase(anno->codons[i], anno->frame));
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
+
 void printSnp125Info(struct trackDb *tdb, struct snp125 snp, int version)
 /* print info on a snp125 */
 {
@@ -15079,6 +15194,7 @@ if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
 printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",           snp.weight);
 printf("<BR>\n");
+printSnp125CodingAnnotations(tdb, &snp);
 printSnp125Function(tdb, &snp);
 }
 
