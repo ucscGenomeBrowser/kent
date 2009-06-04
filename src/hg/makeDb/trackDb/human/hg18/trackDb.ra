@@ -2059,6 +2059,8 @@ chimpDb panTro2
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
+codingAnnotations snp130CodingDbSnp,
+codingAnnoLabel_snp130CodingDbSnp dbSNP
 
 track snp129 override
 chimpOrangMacOrthoTable snp129OrthoPt2Pa2Rm2
