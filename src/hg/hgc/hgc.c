@@ -223,7 +223,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1549 2009/06/05 17:07:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1550 2009/06/05 21:14:06 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18567,7 +18567,7 @@ if (sqlTableExists(conn, "sgdClone"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	sgdCloneStaticLoad(row+1, &sgd);
-	dyStringPrintf(dy, "<B>ATCC catalog number:</B> %s <BR>\n", sgd.atccName);
+	dyStringPrintf(dy, "<B>ATCC catalog number:</B><A HREF=\"http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=%s&Template=uniqueClones\" TARGET=_blank>%s</A><BR>\n", sgd.atccName, sgd.atccName);
 	}
     sqlFreeResult(&sr);
     }
