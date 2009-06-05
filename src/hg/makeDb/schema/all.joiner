@@ -2929,6 +2929,10 @@ tablesIgnored $gbd
     jaxQtl
     jaxQtlAsIs
     jaxQtlPadded
+    uwNucOccA375
+    uwNucOccDennis
+    uwNucOccMec
+
 
 tablesIgnored $kgDb
     pbAaDist_
