@@ -29,6 +29,9 @@
 #define gsidSubjList "gsidTable.gsidSubjList"
 #define gsidSeqList "gsidTable.gsidSeqList"
 
+#define gisaidSubjList "gisaidTable.gisaidSubjList"
+#define gisaidSeqList "gisaidTable.gisaidSeqList"
+
 struct mafAli *mafLoadInRegion2(struct sqlConnection *conn,
     struct sqlConnection *conn2, char *table, char *chrom,
     int start, int end, char *file);
