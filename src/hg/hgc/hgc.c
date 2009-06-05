@@ -223,7 +223,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1548 2009/06/04 20:15:07 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1549 2009/06/05 17:07:27 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9592,6 +9592,184 @@ else
 lsSnpPdbChimeraGenericLink(usePdbUrl, NULL, "hgct", item, chimerax);
 }
 
+void showProtH1n1(char *item)
+{
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+struct sqlConnection *conn2 = hAllocConn(database);
+
+char *subjId, *dnaSeqId;
+char *aaSeqId= NULL;
+char *gene=NULL;
+
+char cond_str[256];
+char *predFN;
+char *homologID;
+char *SCOPdomain;
+char *chain;
+char goodSCOPdomain[40];
+int  first = 1;
+float  eValue;
+char *chp;
+int homologCount;
+int gotPDBFile = 0;
+char *extUrl = "http://users.soe.ucsc.edu/~karplus/h1n1";
+
+safef(query2, sizeof(query2),
+	"select subjId, dnaSeqId, aaSeqId, gene from gisaidXref where dnaSeqId='%s'", item);
+sr2 = sqlMustGetResult(conn2, query2);
+row2 = sqlNextRow(sr2);
+if (row2 != NULL)
+    {
+    subjId = strdup(row2[0]);
+    dnaSeqId = strdup(row2[1]);
+    aaSeqId  = strdup(row2[2]);
+    gene     = strdup(row2[3]);
+    }
+sqlFreeResult(&sr2);
+
+printf("<H3>Protein Structure Analysis and Prediction</H3>");
+
+printf("<B>Comparison to 1918 Flu Virus:</B> ");
+printf("<A HREF=\"%s/%s/%s/1918_%s.mutate", extUrl, gene, aaSeqId, aaSeqId);
+printf("\" TARGET=_blank>%s</A><BR>\n", aaSeqId);
+
+printf("<B>Comparison to A H1N1 gene %s concensus:</B> ", gene);
+printf("<A HREF=\"%s/%s/%s/consensus_%s.mutate", extUrl, gene, aaSeqId, aaSeqId);
+printf("\" TARGET=_blank>%s</A><BR>\n", aaSeqId);
+
+//printf("<BR><B>3D structure prediction:</B> ");
+
+printf("<BR><B>3D Structure Prediction (PDB file):</B> ");
+char pdbUrl[PATH_LEN];
+safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", extUrl, item, item);
+
+// resurect after Keven is done with new Modeller stuff
+printf("  To be done.");
+//struct tempName chimerax;
+
+//h1n1MkChimerax(item, pdbUrl, &chimerax);
+
+//printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", pdbUrl, item, chimerax.forHtml);
+
+printf("<TABLE>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><img src=\"");
+
+printf("%s/%s/%s/%s_400.jpeg", extUrl, gene, aaSeqId, aaSeqId);
+printf("\"></TD>");
+printf("</TR>\n");
+printf("</TABLE>\n");
+
+return;
+
+gotPDBFile = 0;
+safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", item);
+
+printf("<TABLE>\n");
+printf("<TR><TD ALIGN=\"center\">Front</TD>\n");
+printf("<TD ALIGN=\"center\">Top</TD>\n");
+printf("<TD ALIGN=\"center\">Side</TD>\n");
+printf("</TR>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", extUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", extUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", extUrl, item, item);
+printf("</TR>\n");
+printf("<TR>\n");
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view2_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view3_500.jpg\">500x500</A></TD>",
+	extUrl, item, item);
+printf("</TR>\n");
+printf("</TABLE>\n");
+
+printf("<BR><B>Detailed results of SAM-T02:</B> ");
+printf("<A HREF=\"%s/%s/summary.html", extUrl, item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+/* by pass the following additional processing for now, until two necessary tables are built */
+hFreeConn(&conn2);
+return;
+
+if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
+    {
+    safef(cond_str, sizeof(cond_str), "proteinID='%s'", item);
+    predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
+    if (predFN != NULL)
+	{
+	printf("<A HREF=\"../SARS/%s/", item);
+	/* printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", item,item); */
+	printf("%s\">%s</A><BR>\n", predFN,item);
+	gotPDBFile = 1;
+	}
+    }
+if (!gotPDBFile)
+    {
+    printf("No high confidence level structure prediction available for this sequence.");
+    printf("<BR>\n");
+    }
+printf("<B>3D Structure of Close Homologs:</B> ");
+homologCount = 0;
+strcpy(goodSCOPdomain, "dummy");
+
+conn2= hAllocConn(database);
+safef(query2, sizeof(query2),
+	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
+	item);
+sr2 = sqlMustGetResult(conn2, query2);
+row2 = sqlNextRow(sr2);
+if (row2 != NULL)
+    {
+    while (row2 != NULL)
+	{
+	homologID = row2[0];
+	sscanf(row2[1], "%e", &eValue);
+	SCOPdomain = row2[2];
+	chp = SCOPdomain+strlen(SCOPdomain)-1;
+	while (*chp != '.') chp--;
+	*chp = '\0';
+	chain = row2[3];
+	if (eValue <= 1.0e-10)
+	    strcpy(goodSCOPdomain, SCOPdomain);
+	else
+	    {
+	    if (strcmp(goodSCOPdomain,SCOPdomain) != 0)
+		goto skip;
+	    else
+		if (eValue > 0.1) goto skip;
+	    }
+	if (first)
+	    first = 0;
+	else
+	    printf(", ");
+
+	printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s",
+	       homologID);
+	if (strlen(chain) >= 1)
+	    printf("\"TARGET=_blank>%s(chain %s)</A>", homologID, chain);
+	else
+	    printf("\"TARGET=_blank>%s</A>", homologID);
+	homologCount++;
+
+	skip:
+	row2 = sqlNextRow(sr2);
+	}
+    }
+hFreeConn(&conn2);
+sqlFreeResult(&sr2);
+if (homologCount == 0)
+    printf("None<BR>\n");
+
+printf("<BR><B>Details:</B> ");
+printf("<A HREF=\"../SARS/%s/summary.html", item);
+printf("\" TARGET=_blank>%s</A><BR>\n", item);
+
+htmlHorizontalLine();
+}
 void showSAM_h1n1(char *item)
 {
 char query2[256];
@@ -16156,7 +16334,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strain: %s</B> <BR>", strain);
     }
 htmlHorizontalLine();
-showSAM_h1n1(item);
+//showSAM_h1n1(item);
+showProtH1n1(item);
 
 htmlHorizontalLine();
 printTrackHtml(tdb);
