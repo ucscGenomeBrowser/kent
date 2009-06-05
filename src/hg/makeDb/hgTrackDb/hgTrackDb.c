@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.51 2009/06/04 19:14:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.52 2009/06/05 19:27:44 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -168,6 +168,9 @@ hashFree(&superHash);
 *tdListPtr = strictList;
 }
 
+/* keep track of prunedTracks so their subTracks can also be pruned */
+static struct hash *prunedTracks = NULL;
+
 static void pruneRelease(struct trackDb **tdListPtr, char *database)
 /* prune out alternate track entries for another release */
 {
@@ -187,6 +190,12 @@ while ((td = slPopHead(tdListPtr)) != NULL)
              * confuses Q/A */
             hashRemove(td->settingsHash, "release");
             slSafeAddHead(&relList, td);
+            }
+	else
+            {
+	    if (prunedTracks == NULL)
+		prunedTracks = newHash(8);
+	    hashAddInt(prunedTracks, td->tableName, 1);
             }
         }
     else
@@ -392,6 +401,8 @@ for (td = tdList; td != NULL; td = tdNext)
 	}
     }
 
+struct hash *removeSubTracks = newHash(8);
+
 /* now verify subtracks */
 for (td = tdList; td != NULL; td = tdNext)
     {
@@ -409,11 +420,22 @@ for (td = tdList; td != NULL; td = tdNext)
 
 
 	    struct subGroupData *sgd = hashFindVal(compositeHash, trackName);
-	    td->parent = sgd->compositeTdb;
-	    tdbMarkAsCompositeChild(td);
-	    if (!sgd)
+	    if ( sgd )
 		{
-		verbose(1,"parent %s missing for subtrack %s\n", trackName, td->tableName);
+		td->parent = sgd->compositeTdb;
+		tdbMarkAsCompositeChild(td);
+		}
+	    else
+		{
+		if (hashFindVal(prunedTracks, trackName))
+		    {	/* parent was pruned, get rid of subTrack too */
+		    hashAdd(removeSubTracks, td->tableName, td);
+		    }
+		else
+		    {
+		    verbose(1,"parent %s missing for subtrack %s\n",
+			trackName, td->tableName);
+		    }
 		continue;
 		}
 	    char *subGroups = trackDbSetting(td, "subGroups");
@@ -463,6 +485,12 @@ for (td = tdList; td != NULL; td = tdNext)
 	    }
 	}
     }
+/* clean up subTracks that had parents disappear */
+struct hashCookie cookie = hashFirst(removeSubTracks);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slRemoveEl(&tdList, (struct trackDb*)hel->val);
+
 }
 
 static void prioritizeContainerItems(struct trackDb *tdbList)
