@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.163 2009/06/04 17:53:21 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.164 2009/06/05 08:30:06 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -598,12 +598,14 @@ void webVaWarn(char *format, va_list args)
 /* Warning handler that closes out page and stuff in
  * the fancy form. */
 {
-if (! webHeadAlreadyOutputed)
+boolean needStart = !webHeadAlreadyOutputed;
+if (needStart)
     webStart(errCart, NULL, "Error");
 htmlVaWarn(format, args);
 printf("\n<!-- HGERROR -->\n");
 printf("\n\n");
-webEnd();
+if (needStart)
+    webEnd();
 }
 
 
