@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.105 2009/06/05 18:07:29 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.106 2009/06/05 18:14:43 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -970,6 +970,7 @@ vendorName Abcam
 vendorId ab992
 
 term SETDB1
+type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved, approximately 150-amino acid motif implicated in the modulation of chromatin structure
 vendorName Proteintech Group
