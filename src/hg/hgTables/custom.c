@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.41 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.42 2009/06/05 21:59:00 angie Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -549,6 +549,7 @@ for (region = regionList; region != NULL; region = region->next)
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	tabBedRowFile(bed, chosenFields, f);
+	++count;
 	}
     lmCleanup(&lm);
     }
