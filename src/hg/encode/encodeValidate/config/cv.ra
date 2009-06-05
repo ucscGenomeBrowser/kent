@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.104 2009/06/05 17:16:32 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.105 2009/06/05 18:07:29 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -138,6 +138,7 @@ karyotype normal
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 tier 3
+protocol Astrocytes_Crawford_protocol.pdf
 
 term BG02ES
 type Cell Line
@@ -187,6 +188,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Stam_15_protocols.pdf
 
+term D54
+type Cell Line
+description (aka H54) Glioblastoma
+vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+termId BTO:0000527
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
+tier 3
+protocol D54_Crawford_protocols.pdf
+
+term D721
+type Cell Line
+description Medulloblastoma
+vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+termId BTO:0001359
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
+tier 3
+protocol D721_Crawford_protocols.pdf
+
 term fibroblast
 type Cell Line
 description Normal child fibroblast; donor sex: female
@@ -225,6 +244,61 @@ termId BTO:0001522 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
 tier 3
 protocol GM12801_Stam_protocol.pdf
+
+term GM12891
+type Cell Line
+description B-Lymphocyte
+karyotype CEPH/UTAH PEDIGREE 1463, Epstein-Barr Virus, Male
+vendorName Coriell
+vendorId GM12891
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+protocol GM12891_Crawford_protocol.pdf
+
+term GM12892
+type Cell Line
+description B-Lymphocyte
+karyotype CEPH/UTAH PEDIGREE 1463, Epstein-Barr Virus, Female
+vendorName Coriell
+vendorId GM12892
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+protocol GM12892_Crawford_protocol.pdf
+
+term GM19238
+type Cell Line
+description B-Lymphocyte
+karyotype YORUBA, Epstein-Barr Virus, Female
+vendorName Coriell
+vendorId GM19238
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+protocol GM19238_Crawford_protocol.pdf
+
+term GM19239
+type Cell Line
+description B-Lymphocyte
+karyotype YORUBA, Epstein-Barr Virus, Male
+vendorName Coriell
+vendorId GM19239
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+protocol GM19239_Crawford_protocol.pdf
+
+term GM19240
+type Cell Line
+description B-Lymphocyte
+karyotype YORUBA, Epstein-Barr Virus, Female
+vendorName Coriell
+vendorId GM19240
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+tier 3
+protocol GM19240_Crawford_protocol.pdf
 
 term GM18507
 type Cell Line
@@ -406,7 +480,7 @@ karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 tier 3
-protocol HMEC_Stam_protocol.pdf
+protocol Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
 term Jurkat
 type Cell Line
@@ -432,7 +506,7 @@ karyotype cancer
 termId BTO:0002021
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002021
 tier 3
-protocol Farnham:LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
+protocol Crawford:LNCaP_Crawford_protocol.pdf Farnham:LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 type Cell Line
@@ -445,7 +519,7 @@ karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 tier 3
-protocol Stam_15_protocols.pdf
+protocol Crawford:MCF-7_Crawford_protocol.pdf Stam:Stam_15_protocols.pdf
 
 term NB4
 type Cell Line
@@ -484,6 +558,7 @@ karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593&termName=osteoblast
 tier 3
+protocol Osteoblast_Crawford_protocol.pdf
 
 term ovcar-3
 type Cell Line
