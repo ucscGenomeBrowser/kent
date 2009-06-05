@@ -37,7 +37,11 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.96 2009/05/24 09:10:38 mikep Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.99 2009/05/29 21:05:04 mikep Exp $";
+
+Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
+/* Find a color which is a percentless 'lighter' shade of color */
+/* Forward declaration */
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -277,6 +281,17 @@ static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 {
 struct simpleFeature *sf = NULL;
 char *winDna = getCachedDna(winStart, winEnd);
+Color c = cdsColor[CDS_STOP];
+// check if we need a contrasting color instead of default 'red' (CDS_STOP)
+char *tickColor = NULL;
+if ( tg->itemColor && (tickColor = trackDbSetting(tg->tdb, "baseColorTickColor")))
+    {
+    Color ci = tg->itemColor(tg, lf, hvg);
+    if (sameString(tickColor, "contrastingColor"))
+	c = hvGfxContrastingColor(hvg, ci);
+    else if (sameString(tickColor, "lighterShade"))
+	c = lighterShade(hvg, ci, 1.5);
+    }
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int s = max(winStart, sf->start);
@@ -287,7 +302,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	int mrnaS = -1;
 	if (psl)
-	    convertCoordUsingPsl(s, psl);
+	    mrnaS = convertCoordUsingPsl(s, psl);
 	else
 	    mrnaS = sf->qStart;
 	if(mrnaS >= 0)
@@ -296,10 +311,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    for (i=0; i < (e - s); i++)
 		{
 		if (mrnaSeq->dna[mrnaS+i] != winDna[s-winStart+i])
-		    {
-		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale,
-				 cdsColor[CDS_STOP]);
-		    }
+		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale, c);
 		}
 	    }
 	}

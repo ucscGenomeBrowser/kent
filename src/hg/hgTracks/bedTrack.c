@@ -546,7 +546,9 @@ boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
 boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
 
 if (tg->itemColor != NULL)
+    {
     color = tg->itemColor(tg, bed, hvg);
+    }
 else if (tg->colorShades)
     {
     adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
@@ -759,12 +761,11 @@ tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, TRUE);
 }
 
 
-Color lfItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg)
+static Color itemColorByStrand(struct track *tg, int orientation, struct hvGfx *hvg)
 /* Look up the RGB color from the trackDb setting 'colorByStrand' based on
- * the linkedFeature item orientation, and convert this to a color index
+ * the orientation (1='+', 0=unknown, -1='-'), and convert this to a color index
  * using hvGfx */
 {
-struct linkedFeatures *lf = item;
 char *words[3];
 unsigned char r, g, b;
 
@@ -773,9 +774,9 @@ if (!colors)
     errAbort("colorByStrand setting missing (in %s)", tg->mapName);
 if (chopByWhite(colors, words, sizeof(words)) != 2)
     errAbort("invalid colorByStrand setting %s (expecting pair of RGB values r,g,b r,g,b)", colors);
-if (lf->orientation == 1)
+if (orientation == 1)
     parseColor(words[0], &r, &g, &b);
-else if (lf->orientation == -1) 
+else if (orientation == -1) 
     parseColor(words[1], &r, &g, &b);
 else // return the main color
     {
@@ -785,6 +786,23 @@ freez(&colors);
 return hvGfxFindColorIx(hvg, r, g, b);
 }
 
+Color lfItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg)
+/* Look up the RGB color from the trackDb setting 'colorByStrand' based on
+ * the linkedFeature item orientation, and convert this to a color index
+ * using hvGfx */
+{
+struct linkedFeatures *lf = item;
+return itemColorByStrand(tg, lf->orientation, hvg);
+}
+
+Color bedItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg)
+/* Look up the RGB color from the trackDb setting 'colorByStrand' based on
+ * the bed item strand, and convert this to a color index
+ * using hvGfx */
+{
+struct bed *b = item;
+return itemColorByStrand(tg, (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0)), hvg);
+}
 
 void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
                                 int wordCount, char *words[])
@@ -814,12 +832,18 @@ if (fieldCount < 8)
 	else
 	    track->loadItems = loadSimpleBedAsLinkedFeaturesPerBase;
 	if (trackDbSetting(tdb, "colorByStrand"))
+	    {
 	    track->itemColor = lfItemColorByStrand;
+	    }
 	}
     else
 	{
 	bedMethods(track);
 	track->loadItems = loadSimpleBed;
+	if (trackDbSetting(tdb, "colorByStrand"))
+	    {
+	    track->itemColor = bedItemColorByStrand;
+	    }
 	}
     }
 else if (useItemRgb && fieldCount == 9)

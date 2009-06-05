@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.75 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.76 2009/06/05 20:52:49 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1671,6 +1671,8 @@ assert(retVals != NULL);
 /* catch null-constraint cases: */
 if (pat == NULL)
     pat = "";
+if (cmp == NULL)
+    errAbort("Null cmp passed to cgiToDoubleFilter (pattern=%s)", pat);
 pat = trimSpaces(pat);
 if ((pat[0] == 0) || sameString(pat, "*") || sameString(cmp, "ignored"))
     {
@@ -1684,7 +1686,7 @@ else if (sameString(cmp, "in range"))
     numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
     if (numWords != 2)
 	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
-    vals = needMem(2 * sizeof(int));
+    vals = needMem(2 * sizeof(double));
     vals[0] = atof(ptrs[0]);
     vals[1] = atof(ptrs[1]);
     if (vals[0] > vals[1])
@@ -1711,7 +1713,7 @@ else
 	*retNft = nftGreaterThan;
     else
 	errAbort("Unrecognized comparison operator %s", cmp);
-    vals = needMem(2*sizeof(int));	// 2* simplifies int conversion elsewhere.
+    vals = needMem(2*sizeof(double));	// 2* simplifies conversion elsewhere.
     vals[0] = atof(pat);
     *retVals = vals;
     }
@@ -1724,6 +1726,11 @@ void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
 {
 double *doubleVals;
 cgiToDoubleFilter(cmp, pat, retNft, &doubleVals);
+if (doubleVals == NULL)
+    {
+    *retVals = NULL;
+    return;
+    }
 int *intVals = needMem(2*sizeof(int));
 intVals[0] = doubleVals[0];
 intVals[1] = doubleVals[1];
@@ -1738,6 +1745,11 @@ void cgiToLongFilter(char *cmp, char *pat, enum numericFilterType *retNft,
 {
 double *doubleVals;
 cgiToDoubleFilter(cmp, pat, retNft, &doubleVals);
+if (doubleVals == NULL)
+    {
+    *retVals = NULL;
+    return;
+    }
 long long *longVals = needMem(2*sizeof(long long));
 longVals[0] = doubleVals[0];
 longVals[1] = doubleVals[1];
