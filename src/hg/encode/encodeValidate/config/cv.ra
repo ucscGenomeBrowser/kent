@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.103 2009/06/04 00:13:04 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.104 2009/06/05 17:16:32 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -702,6 +702,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-866
 orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 
+term Egr-1
+type Antibody
+antibodyDescription Rabbit polyclonal, EGR-1 (588).
+targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III). Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its own gene promoter in a dose dependent manner.
+vendorName Santa Cruz Biotech
+vendorId sc-110
+orderUrl http://www.scbt.com/product.php?datasheet=110
+
 term FOXP2
 type Antibody
 targetDescription transcriptional repressor, involved in development of speech
@@ -886,6 +894,21 @@ orderUrl http://www.abcam.com/index.html?datasheet=992
 vendorName Abcam
 vendorId ab992
 
+term SETDB1
+antibodyDescription Rabbit polyclonal
+targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved, approximately 150-amino acid motif implicated in the modulation of chromatin structure
+vendorName Proteintech Group
+vendorId  11231-1-AP
+orderUrl http://www.ptglab.com/data/image/pdf/E__web_pdf_11231-1-AP.pdf
+
+term Sin3Ak-20
+type Antibody
+antibodyDescription Rabbit polyclonal, Sin3A (k-20).
+targetDescription Co-repressor interacting with HDAC1, N-coR, SMRT, and MeCP2
+vendorName Santa Cruz Biotech
+vendorId sc-994
+orderUrl http://www.scbt.com/product.php?datasheet=994
+
 term SREBP1A
 type Antibody
 targetDescription Sterol regulatory element binding transcription factor 1
@@ -918,6 +941,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-345
 orderUrl http://www.scbt.com/product.php?datasheet=345
 
+term SUZ12
+type Antibody
+targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
+antibodyDescription rabbit polyclonal
+vendorName Antibody made by Farnham lab
+vendorId
+orderUrl
+
 term TAF-II
 type Antibody
 targetDescription General transcription factor; TBP-associated factor p250kDa
@@ -934,6 +965,20 @@ vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
 
+term TR4
+type Antibody
+antibodyDescription Rabbit polyclonal
+targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
+vendorName Donated by Dr. J.D.Engel, University of Michigan
+
+term USF-1
+type Antibody
+antibodyDescription Rabbit polyclonal, USF-1 (C-20).
+targetDescription The ubiquitously expressed cellular upstream stimulatory factor (USF) consists of USF-1 and USF-2 polypeptides which independently exhibit site-specific DNA binding and are members of the c-Myc-related family of regulatory factors containing helix-loop-helix domains. USF also contains a leucine repeat that is required for efficient DNA binding. USF was originally identified as an up- stream stimulatory factor that binds the core sequence CACGTG in the adeno- virus late promoter. These findings, together with the demonstration of coop- erative interaction between USF and the initiator-binding protein, TFII-I, raises the possibility of a more general involvement of USF in transcriptional regula- tion. While expression of both USF-1 and USF-2 species is ubiquitous, different ratios of USF homo- and heterodimers are found in different cell types.
+vendorName Santa Cruz Biotech
+vendorId sc-229
+orderUrl http://www.scbt.com/product.php?datasheet=229
+
 term XRCC4
 type Antibody
 targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
@@ -941,6 +986,14 @@ antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=1451
 vendorName Abcam
 vendorId ab1451
+
+term YY1
+type Antibody
+antibodyDescription Rabbit polyclonal
+targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
+vendorName Santa Cruz Biotech
+vendorId sc-1703X
+orderUrl http://www.scbt.com/product.php?datasheet=1703
 
 term ZNF263
 type Antibody
