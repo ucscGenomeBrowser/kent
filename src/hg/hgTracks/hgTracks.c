@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1568 2009/05/29 21:00:33 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1569 2009/06/05 17:14:02 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2918,6 +2918,14 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A></TD>",
     orgEnc, database, cartSessionVarName(), cartSessionId(cart));
 
+if (hIsGisaidServer())
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
+    hPrintf(
+    "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A></TD>",
+    '%', '%', "Select Subjects");
+    }
+else
 if (hIsGsidServer())
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
@@ -2933,6 +2941,12 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
     }
+if (hIsGisaidServer())
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?db=%s\" class=\"topbar\">%s</A></TD>",
+       database, "Table View");
+    }
+else
 if (hIsGsidServer())
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A></TD>",
@@ -3147,6 +3161,11 @@ if (wikiLinkEnabled())
 	   "&hgS_doMainPage=1\" class=\"topbar\">Session</A></TD>",
 	   cartSessionVarName(), cartSessionId(cart));
     }
+if (hIsGisaidServer())
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    }
+else
 if (hIsGsidServer())
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
