@@ -78,6 +78,7 @@ void popWarnHandler();
 void pushWarnAbort();
 /* Push handler that will abort on warnings. */
 
-extern int errAbortDebugPopUnderflow;  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
+void errAbortDebugnPushPopErr();
+/*  generate stack dump if there is a error in the push/pop functions */
 
 #endif /* ERRABORT_H */

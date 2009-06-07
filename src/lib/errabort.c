@@ -15,9 +15,9 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.14 2009/06/04 17:53:20 markd Exp $";
+static char const rcsid[] = "$Id: errabort.c,v 1.15 2009/06/07 07:13:37 markd Exp $";
 
-int errAbortDebugPopUnderflow = FALSE;  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
+static boolean debugPushPopErr = FALSE; // generate stack dump on push/pop error
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
@@ -64,7 +64,11 @@ void pushWarnHandler(WarnHandler handler)
 /* Set abort handler */
 {
 if (warnIx >= maxWarnHandlers-1)
+    {
+    if (debugPushPopErr)
+        dumpStack("pushWarnHandler overflow");
     errAbort("Too many pushWarnHandlers, can only handle %d\n", maxWarnHandlers-1);
+    }
 warnArray[++warnIx] = handler;
 }
 
@@ -73,7 +77,7 @@ void popWarnHandler()
 {
 if (warnIx <= 0)
     {
-    if (errAbortDebugPopUnderflow)
+    if (debugPushPopErr)
         dumpStack("popWarnHandler underflow");
     errAbort("Too many popWarnHandlers\n");
     }
@@ -132,7 +136,11 @@ void pushAbortHandler(AbortHandler handler)
 /* Set abort handler */
 {
 if (abortIx >= maxAbortHandlers-1)
+    {
+    if (debugPushPopErr)
+        dumpStack("pushAbortHandler overflow");
     errAbort("Too many pushAbortHandlers, can only handle %d\n", maxAbortHandlers-1);
+    }
 abortArray[++abortIx] = handler;
 }
 
@@ -141,8 +149,8 @@ void popAbortHandler()
 {
 if (abortIx <= 0)
     {
-    if (errAbortDebugPopUnderflow)
-        dumpStack("popWarnHandler underflow");
+    if (debugPushPopErr)
+        dumpStack("popAbortHandler underflow");
     errAbort("Too many popAbortHandlers\n");
     }
 --abortIx;
@@ -173,4 +181,10 @@ void pushWarnAbort()
 /* Push handler that will abort on warnings. */
 {
 pushWarnHandler(warnAbortHandler);
+}
+
+void errAbortDebugnPushPopErr()
+/*  generate stack dump if there is a error in the push/pop functions */
+{
+debugPushPopErr = TRUE;
 }

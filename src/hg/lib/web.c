@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.164 2009/06/05 08:30:06 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.165 2009/06/07 07:13:37 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -66,7 +66,7 @@ void webDumpStackPushAbortHandler(void)
 {
 if (webDumpStackEnabled())
     {
-    errAbortDebugPopUnderflow = TRUE;
+    errAbortDebugnPushPopErr();
     pushAbortHandler(webDumpStackAbortHandler);
     }
 }
