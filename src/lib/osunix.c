@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.40 2009/06/03 00:34:11 markd Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.41 2009/06/07 07:11:55 markd Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -391,6 +391,11 @@ void vaDumpStack(char *format, va_list args)
  * prints errors to stderr rather than aborts. For debugging purposes
  * only.  */
 {
+static boolean inDumpStack = FALSE;  // don't allow re-entry if called from error handler
+if (inDumpStack)
+    return;
+inDumpStack = TRUE;
+
 vfprintf(stderr, format, args);
 fputc('\n', stderr);
 fflush(stderr);
@@ -405,23 +410,18 @@ if (pid == 0)
     execPStack(ppid);
 int wstat;
 if (waitpid(pid, &wstat, 0) < 0)
-    {
     perror("waitpid on pstack failed");
-    return;
-    }
-if (WIFEXITED(wstat))
+else
     {
-    if (WEXITSTATUS(wstat) != 0)
+    if (WIFEXITED(wstat))
         {
-        fprintf(stderr, "pstack failed\n");
-        return;
+        if (WEXITSTATUS(wstat) != 0)
+            fprintf(stderr, "pstack failed\n");
         }
+    else if (WIFSIGNALED(wstat))
+        fprintf(stderr, "pstack signaled %d\n", WTERMSIG(wstat));
     }
-else if (WIFSIGNALED(wstat))
-    {
-    fprintf(stderr, "pstack signaled %d\n", WTERMSIG(wstat));
-    return;
-    }
+inDumpStack = FALSE;
 }
 
 void dumpStack(char *format, ...)
