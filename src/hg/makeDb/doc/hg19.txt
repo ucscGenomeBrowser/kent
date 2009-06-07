@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.23 2009/06/02 21:43:00 hiram Exp $";
+#	"$Id: hg19.txt,v 1.24 2009/06/07 23:47:50 aamp Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -4042,3 +4042,247 @@ TMPDIR=/scratch/tmp
     #	real    140m42.014s
 
 ##############################################################################
+# BLASTZ/CHAIN/NET/ETC 11 GENOMES TO HG19 (DONE, Andy 2009-06-06)
+ssh hgwdev
+cd /hive/data/genomes/hg19/bed
+mkdir lastz{SpeTri1,FelCat3,CavPor3,BosTau4,PteVam1,EquCab2,VicPac1,MyoLuc1,TurTru1,ChoHof1}.2009-06-04
+ln -s lastzSpeTri1.2009-06-04 lastz.speTri1
+ln -s lastzFelCat3.2009-06-04 lastz.felCat3
+ln -s lastzCavPor3.2009-06-04 lastz.cavPor3
+ln -s lastzBosTau4.2009-06-04 lastz.bosTau4
+ln -s lastzPteVam1.2009-06-04 lastz.pteVam1
+ln -s lastzEquCab2.2009-06-04 lastz.equCab2
+ln -s lastzVicPac1.2009-06-04 lastz.vicPac1
+ln -s lastzMyoLuc1.2009-06-04 lastz.myoLuc1
+ln -s lastzTurTru1.2009-06-04 lastz.turTru1
+ln -s lastzChoHof1.2009-06-04 lastz.choHof1
+cat > lastz.speTri1/DEF << 'EOF'
+# human vs squirrel
+
+# TARGET: human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: squirrel speTri1 
+SEQ2_DIR=/hive/data/genomes/speTri1/speTri1.2bit
+SEQ2_LEN=/hive/data/genomes/speTri1/chrom.sizes
+SEQ2_LIMIT=100
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastz.speTri1
+TMPDIR=/scratch/tmp
+EOF
+
+sed 's/speTri1/felCat3/g; s/squirrel/cat/;' lastz.speTr1/DEF | \
+   sed 's/SEQ1_CHUNK=1/SEQ1_CHUNK=2/; s/SEQ2_LIMIT=1/SEQ2_LIMIT=3/' \
+   > lastz.felCat3/DEF
+sed 's/speTri1/cavPor3/g; s/squirrel/guinea pig/;' lastz.speTr1/DEF | \
+   sed 's/SEQ1_CHUNK=1/SEQ1_CHUNK=2/' | \
+   sed 's/hive\/data\/genomes\/cavPor3/scratch\/data\/cavPor3/' \
+   > lastz.cavPor3/DEF
+sed 's/speTri1/bosTau4/g; s/squirrel/cow/;' lastz.speTr1/DEF | \
+   sed 's/SEQ1_CHUNK=1/SEQ1_CHUNK=2/; s/SEQ2_LIMIT=1/SEQ2_LIMIT=3/' \
+   > lastz.bosTau4/DEF
+sed 's/speTri1/pteVam1/g; s/squirrel/megabat/;' lastz.speTr1/DEF | \
+   sed 's/SEQ1_CHUNK=1/SEQ1_CHUNK=2/; s/SEQ2_LIMIT=1/SEQ2_LIMIT=2/' \
+   > lastz.pteVam1/DEF
+sed 's/cavPor3/equCab2/g; s/guinea pig/horse/' lastz.cavPor3/DEF | \ 
+   sed 's/SEQ2_LIMIT=1/SEQ2_LIMIT=3/' > lastz.equCab2/DEF
+sed 's/equCab2/vicPac1/g; s/horse/alpaca/' lastz.equCab2/DEF > lastz.vicPac1/DEF
+sed 's/pteVam1/myoLuc1/g; s/megabat/microbat/' lastz.pteVam1/DEF | \
+   sed 's/SEQ2_LIMIT=3/SEQ2_LIMIT=2/' > lastz.myoLuc1/DEF
+sed 's/equCab2/turTru1/g; s/horse/dolphin/' lastz.equCab2/DEF | \
+   sed 's/SEQ2_LIMIT=3/SEQ2_LIMIT=2/' > lastz.turTru1/DEF
+sed 's/equCab2/choHof11/g; s/horse/sloth/' lastz.equCab2/DEF > lastz.choHof1/DEF
+
+cd andy/
+for db in speTri1 felCat3 cavPor3 bosTau4 pteVam1 equCab2 vicPac1 myoLuc1 turTru1 choHof1; do
+    ln -s ../lastz.${db}/DEF ${db}.DEF
+done
+
+screen -S speTri1
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium speTri1.DEF >& speTri1.do.log
+# [detach screen]
+#real    2059m30.699s
+
+screen -S felCat3
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium felCat3.DEF >& felCat3.do.log
+# [detach screen]
+#real    1574m47.522s
+
+screen -S bosTau4
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium bosTau4.DEF >& bosTau4.do.log
+# [detach screen]
+#real    1474m54.655s
+
+screen -S pteVam1
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm
+  -chainMinScore=3000 -chainLinearGap=medium pteVam1.DEF >& pteVam1.do.log
+# [detach screen]
+#real    1168m33.923s
+
+screen -S equCab2
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium -syntenicNet equCab2.DEF >& equCab2.do.log
+# [detach screen]
+#real    1662m56.158s
+# (included syntenic net)
+
+screen -S vicPac1
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium vicPac1.DEF >& vicPac1.do.log
+# [detach screen]
+#real    1495m48.173s
+
+screen -S turTru1
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium turTru1.DEF >& turTru1.do.log
+# [detach screen]
+#real    1079m17.234s
+
+screen -S choHof1
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+  -chainMinScore=3000 -chainLinearGap=medium choHof1.DEF >& choHof1.do.log
+# [detach screen]
+#real    1310m49.287s (script and cluster run stopped after halfway...
+# pk was too slow... remaining jobs started on swarm)
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium -continue=cat \
+  choHof1.DEF >& choHof1.doAfterBlastz.log
+#real    257m32.701s
+
+screen -S cavPor3
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+  -smallClusterHub=memk -bigClusterHub=pk cavPor3.DEF >& cavPor3.do.log
+# [detach screen]
+#real    1370m5.258s
+# TROUBLE!  got to the 'load' step and failed.  This one needs a special
+# chain table and chainLink table to get loaded.
+cd ../lastz.cavPor3/axtChain/
+# figure out number of rows and average length
+wc -l *.tab
+#   27186468 chain.tab
+#  240602108 link.tab
+randomLines link.tab 10000000 stdout | awk '{print length($0)}' | sort | uniq -c
+randomLines chain.tab 1000000 stdout | awk '{print length($0)}' | sort | uniq -c
+# about 43 average length for the chainLink and 100 for the chain
+sed "s/hgLoadChain.*/hgsqldump hg19 chainSpeTri1Link --no-data --skip-comments | sed \'s\/SpeTri1\/CavPor3\/; s\/TYPE=MyISAM\/ENGINE=MyISAM max_rows=241000000 avg_row_length=43 pack_keys=1 CHARSET=latin1\/\' | hgsql hg19 \n\
+hgsqldump hg19 chainSpeTri1 --no-data --skip-comments | sed \'s\/SpeTri1\/CavPor3\/; s\/TYPE=MyISAM\/ENGINE=MyISAM max_rows=27200000 avg_row_length=100 pack_keys=1 CHARSET=latin1\/\' | hgsql hg19 \n\
+hgsql hg19 -e \"load data local infile \'chain.tab\' into table chainCavPor3\"\n\
+hgsql hg19 -e \"load data local infile \'link.tab\' into table chainCavPor3Link\"\n\
+hgsql hg19 -e \"INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,0,\'aamp\',\'Loaded 27186468 chains into cavPor3 chain table manually\', NOW(), NULL)\"\
+/" loadUp.csh > manualLoadUp.csh
+chmod +x manualLoadUp.csh
+time nice -n +19 ./manualLoadUp.csh
+# [detach screen]
+#real    584m4.093s
+cd ../../andy/
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+  -smallClusterHub=memk -bigClusterHub=swarm -continue=download \
+  cavPor3.DEF >& cavPor3.doAfterLoad.log
+#real    5m45.122s
+
+# syntenic nets 
+
+screen -r bosTau4
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit \
+  -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+  -chainMinScore=3000 -chainLinearGap=medium -syntenicNet \
+  -continue=syntenicNet bosTau4.DEF >& bosTau4.syn.log
+#real    31m48.545s
+
+# reciprocal best choHof1 and cavPor3
+screen -r choHof1
+time nice -n +19 doRecipBest.pl -buildDir=/hive/data/genomes/hg19/bed/lastz.choHof1 \
+  -workhorse=hgwdev hg19 choHof1 >& choHof1.doRecip.log
+#real    367m52.993s
+
+screen -r cavPor3
+time nice -n +19 doRecipBest.pl -buildDir=/hive/data/genomes/hg19/bed/lastz.cavPor3 \
+  -workhorse=hgwdev hg19 cavPor3 >& cavPor3.doRecip.log
+#real    123m3.795s
+
+# reciprocal best small six genome memk run
+
+screen -S recipRun
+mkdir recipRun
+cd recipRun/
+cat > gsub << 'EOF'
+#LOOP
+./doRecip.sh $(path1) 
+#ENDLOOP
+'EOF'
+cat > doRecip.sh << 'EOF'
+#!/bin/csh -ef
+set db = $1
+/cluster/bin/scripts/doRecipBest.pl -workhorse=`uname -n` -stop=recipBest -buildDir=/hive/data/genomes/hg19/bed/lastz.$db hg19 $db >& $db.recipBest.log
+'EOF'
+chmod +x doRecip.sh
+cat > db.lst << 'EOF'
+speTri1
+vicPac1
+myoLuc1
+turTru1
+pteVam1
+felCat3
+EOF
+ssh memk
+cd /hive/data/genomes/hg19/bed/andy/recipRun
+gensub2 db.lst single gsub jobList
+para create jobList
+para push
+# finished overnight
+exit # to hgwdev
+for log in *.recipBest.log; do 
+  db=${log%.recipBest.log}; 
+  echo $db;
+  doRecipBest.pl -workhorse=hgwdev -continue=download \
+    -buildDir=/hive/data/genomes/hg19/bed/lastz.$db \
+     hg19 $db >& $db.recipBestDownload.log;
+done
+
+# swaps for equCab2, felCat3, bostTau4, cavPor3
+
+cd /hive/data/genomes/hg19/bed/andy
+screen -r equCab2
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit -workhorse=kkr14u01 \
+  -chainMinScore=3000 -chainLinearGap=medium -swap equCab2.DEF >& equCab2.doSwap.log
+# [detach screen]
+#real    486m35.206s
+
+screen -r felCat3
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit -workhorse=kkr14u02 \
+  -chainMinScore=3000 -chainLinearGap=medium -swap felCat3.DEF >& felCat3.doSwap.log
+# [detach screen]
+#real    463m5.257s
+
+screen -r bosTau4
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit -workhorse=kkr14u03 \
+  -chainMinScore=3000 -chainLinearGap=medium -swap bosTau4.DEF >& bosTau4.doSwap.log
+# [detach screen]
+#real    391m40.132s
+
+screen -r cavPor3
+time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit -workhorse=hgwdev
+  -chainMinScore=3000 -chainLinearGap=medium -swap cavPor3.DEF >& cavPor3.doSwap.log
+# [detach screen]
+real    192m39.792s
+
+##########################################################################
