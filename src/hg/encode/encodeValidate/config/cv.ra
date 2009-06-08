@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.110 2009/06/08 18:53:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.111 2009/06/08 18:55:21 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1028,7 +1028,7 @@ targetDescription peptide mapping at c-terminus of Human STAT2 p-113 (C-20) X
 antibodyDescription Rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-476x
-orderUrl http://www.scbt.com/product.php?datasheet=376
+orderUrl http://www.scbt.com/product.php?datasheet=476
 
 term SUZ12
 type Antibody
