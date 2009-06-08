@@ -223,7 +223,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1550 2009/06/05 21:14:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1551 2009/06/08 23:07:27 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9626,6 +9626,10 @@ if (row2 != NULL)
     dnaSeqId = strdup(row2[1]);
     aaSeqId  = strdup(row2[2]);
     gene     = strdup(row2[3]);
+    }
+else
+    {
+    errAbort("%s not found.", item);
     }
 sqlFreeResult(&sr2);
 
