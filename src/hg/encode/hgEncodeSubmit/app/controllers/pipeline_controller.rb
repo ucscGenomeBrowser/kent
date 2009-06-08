@@ -134,7 +134,7 @@ class PipelineController < ApplicationController
       redirect_to :action => 'show', :id => @project.id
       return
     end
-    if @project.status == "uploaded"
+    if (@project.status == "uploaded") or (@project.status == "validate failed")
       new_status @project, "validate requested"
       unless queue_job "validate_background(#{@project.id})"
         flash[:error] = "System error - queued_jobs save failed."
