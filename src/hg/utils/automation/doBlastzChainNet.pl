@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.28 2009/03/19 16:15:29 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.29 2009/06/08 18:42:40 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -389,6 +389,15 @@ sub requirePath {
   my $val = $defVars{$var};
   die "Error: $DEF $var=$val must specify a complete path\n"
     if ($val !~ m@^/\S+/\S+@);
+  if ( -d $val ) {
+    my $fileCount = `find $val -maxdepth 1 -type f | wc -l`;
+    chomp $fileCount;
+    if ($fileCount < 1) {
+	die "Error: $DEF variable: $var=$val specifies an empty directory.\n";
+    }
+  } elsif ( ! -s $val ) {
+    die "Error: $DEF variable: $var=$val is not a file or directory.\n";
+  }
 }
 
 sub requireNum {
@@ -419,6 +428,11 @@ sub getDbFromPath {
 	$val =~ s#/.*##;
 	$db = $val;
 	warn "Warning: assuming database $db from /hive/data/genomes/<db>/ path\n";
+    } elsif ($val =~ m#^/scratch/data/#) {
+	$val =~ s#^/scratch/data/##;
+	$val =~ s#/.*##;
+	$db = $val;
+	warn "Warning: assuming database $db from /scratch/data/<db>/ path\n";
     }
   }
 return $db;
@@ -510,7 +524,7 @@ _EOF_
   $bossScript->execute();
   my $mkOutRootHost = $opt_blastzOutRoot ? $paraHub : $fileServer;
   my $mkOutRoot =     $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot;" : "";
-  &HgAutomate::run("ssh -x $mkOutRootHost " .
+  &HgAutomate::run("$HgAutomate::runSSH $mkOutRootHost " .
 		   "'(cd $runDir; $mkOutRoot csh -ef xdir.sh)'");
 }
 
@@ -605,7 +619,7 @@ each subdirectory of $outRoot into a per-target-chunk file.";
   my $bossScript = new HgRemoteScript("$runDir/doCatRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
-(cd $outRoot; find . -type d -maxdepth 1 | grep '^./') \\
+(cd $outRoot; find . -maxdepth 1 -type d | grep '^./') \\
         | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
 $HgAutomate::gensub2 tParts.lst single gsub jobList
@@ -766,13 +780,13 @@ sub postProcessChains {
     die "postProcessChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
-  my $cmd="ssh -x $workhorse nice ";
+  my $cmd="$HgAutomate::runSSH $workhorse nice ";
   $cmd .= "'find $runDir/run/chain -name \"*.chain\" ";
   $cmd .= "| chainMergeSort -inputList=stdin ";
   $cmd .= "| nice gzip -c > $runDir/$chain'";
   &HgAutomate::run($cmd);
   if ($splitRef) {
-    &HgAutomate::run("ssh -x $fileServer nice " .
+    &HgAutomate::run("$HgAutomate::runSSH $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$chain");
   }
   &HgAutomate::nfsNoodge("$runDir/$chain");
@@ -814,13 +828,13 @@ sub swapChains {
      "later stage, or move aside/remove $runDir/all.chain[.gz] and run again.\n";
   }
   # Main routine already made sure that $buildDir/axtChain/all.chain is there.
-  &HgAutomate::run("ssh -x $workhorse nice " .
+  &HgAutomate::run("$HgAutomate::runSSH $workhorse nice " .
        "'chainSwap $buildDir/axtChain/$inChain stdout " .
        "| nice chainSort stdin stdout " .
        "| nice gzip -c > $runDir/$swappedChain'");
   &HgAutomate::nfsNoodge("$runDir/$swappedChain");
   if ($splitRef) {
-    &HgAutomate::run("ssh -x $fileServer nice " .
+    &HgAutomate::run("$HgAutomate::runSSH $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$swappedChain");
   }
 }	#	sub swapChains {}
@@ -1021,7 +1035,7 @@ sub makeDownloads {
   # compressed already).
   my $runDir = "$buildDir/axtChain";
   if (-e "$runDir/$tDb.$qDb.net") {
-    &HgAutomate::run("ssh -x $fileServer nice " .
+    &HgAutomate::run("$HgAutomate::runSSH $fileServer nice " .
 	 "gzip $runDir/$tDb.$qDb.net");
   }
   # Make an md5sum.txt file.
