@@ -706,3 +706,54 @@ catDir pep | sed 's/chunk/opossum/' > genscan.pep.fa
 ldHgGene -gtf monDom5 genscan genscan.gtf 
 hgPepPred monDom5 generic genscanPep genscan.pep.fa 
 hgLoadBed monDom5 genscanSubopt genscan.subopt.bed 
+
+#########################################################################
+#  BIGZIPS/DOWNLOADS (DONE, 2009-06-08 Andy)
+    ssh hgwdev
+    mkdir /hive/data/genomes/monDom5/downloads
+    mkdir /hive/data/genomes/monDom5/downloads/bigZips
+    mkdir /hive/data/genomes/monDom5/downloads/chromosomes
+    cd /hive/data/genomes/monDom5/downloads/chromosomes
+    cp /usr/local/apache/htdocs/goldenPath/monDom4/chromosomes/README.txt .
+    #	edit that readme to provide correct references and details
+    ln -s `pwd` /usr/local/apache/htdocs/goldenPath/monDom5/chromosomes
+    cd /hive/data/genomes/monDom5/downloads/chromosomes
+    for c in `cut -f1 ../../chrom.sizes`; do
+      echo $c;
+      twoBitToFa ../../monDom5.unmasked.2bit:$c stdout \
+        | gzip -c > $c.fa.gz; 
+    done
+    md5sum *.fa.gz R*.txt > md5sum.txt
+    cd ../../
+    for c in `cut -f1 chrom.sizes`; do 
+      echo ${c#chr};
+      pushd ${c#chr};
+        cp ../downloads/chromosomes/${c}.fa.gz .
+        gunzip ${c}.fa.gz;
+      popd;
+    done
+    tar cvzf downloads/bigZips/chromFa.tar.gz ?/chr*.fa Un/chrUn.fa
+    tar cvzf downloads/bigZips/chromOut.tar.gz ?/chr*.fa.out Un/chrUn.fa.out
+    for c in `cut -f1 chrom.sizes`; do echo $c; twoBitToFa monDom5.2bit:$c ${c#chr}/${c}.fa.masked; done   
+    tar cvzf downloads/bigZips/chromFaMasked.tar.gz ?/chr*.fa.masked \
+	Un/chrUn.fa.masked 
+    #real    17m19.439s
+    cd bed/simpleRepeat/
+    mkdir trfMask
+    cd trfMask
+    ln -s ../trfMaskChrom/* .
+    cd ../
+    tar -hcvzf chromTrf.tar.gz ./trfMask
+    mv chromTrf.tar.gz ../../downloads/bigZips/
+    cd ../../downloads/bigZips/
+    cp ../../broad/Monodelphis5.0.agp .
+    gzip Monodelphis5.0.agp
+    cp /usr/local/apache/htdocs/goldenPath/monDom4/bigZips/README.txt .
+    # [edit]
+    ln -s /hive/data/genomes/monDom5/downloads/bigZips \
+	/usr/local/apache/htdocs/goldenPath/monDom5/bigZips
+    cd /usr/local/apache/htdocs/goldenPath/monDom5/bigZips
+    ln -s /hive/data/genomes/monDom5/monDom5.2bit .
+    md5sum *.gz *.2bit README.txt > md5sum.txt
+    cd ../chromosomes/
+    md5sum *.gz R*.txt > md5sum.txt
