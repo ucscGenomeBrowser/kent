@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.108 2009/06/05 18:25:30 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.109 2009/06/08 18:21:13 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1364,3 +1364,24 @@ description Control signal from Naked DNA.
 term Reference_Genome
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+
+#term IFNg
+#description Interferon gamma treatment
+#type treatment
+
+term IFNa30
+description Interferon alpha treatment - 30 minutes
+type treatment
+
+term IFNa6h
+description Interferon alpha treatment - 6 hours
+type treatment
+
+term IFNg30
+description Interferon gamma treatment - 30 minutes
+type treatment
+
+term IFNg6h
+description Interferon gamma treatment - 6 hours
+type treatment
+
