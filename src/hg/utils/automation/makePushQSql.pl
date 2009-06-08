@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.24 2009/05/08 23:05:22 hiram Exp $
+# $Id: makePushQSql.pl,v 1.25 2009/06/08 18:37:16 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -72,7 +72,7 @@ my %chromInfoDb = ();
 sub isChrom($$) {
   # Return true if $str is in chromInfo.chrom.
   my ($str, $localDb) = @_;
-  my $localSql = "ssh -x $dbHost hgsql -N $localDb";
+  my $localSql = "$HgAutomate::runSSH $dbHost hgsql -N $localDb";
   my %localHash = ();
   my $hashRef = \%localHash;
   if (exists($chromInfoDb{$localDb})) {
@@ -94,7 +94,7 @@ sub getAllTables($) {
   # cron-generated tableDescriptions, and tables that we never push.
   # And collapse split tables.
   my ($localDb) = @_;
-  my $localSql = "ssh -x $dbHost hgsql -N $localDb";
+  my $localSql = "$HgAutomate::runSSH $dbHost hgsql -N $localDb";
   my %tables = ();
   foreach my $t (`echo show tables | $localSql`) {
     chomp $t;
@@ -582,7 +582,7 @@ sub printMainPushQEntry {
   my $date = `date +%Y-%m-%d`;
   my $size = 0;
   chomp $date;
-  my $qapushqSql = 'ssh -x hgwbeta hgsql -h hgofbeta -N qapushq';
+  my $qapushqSql = "$HgAutomate::runSSH hgwbeta hgsql -h hgsqlbeta -N qapushq";
   my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
   my $rank = `echo $rankQuery | $qapushqSql`;
   $rank += 1;
@@ -649,12 +649,12 @@ _EOF_
         has any composite tracks, you should manually merge the separate
         per-table entries into one entry.
  *** 6. Make sure that qapushq does not already have a table named $db:
-          ssh hgwbeta hgsql -h hgofbeta qapushq -NBe "'desc $db;'"
+          ssh hgwbeta hgsql -h hgsqlbeta qapushq -NBe "'desc $db;'"
         You *should* see this error:
           ERROR 1146 at line 1: Table 'qapushq.$db' doesn't exist
         If it already has that table, talk to QA and figure out whether
         it can be dropped or fixed up (by sql or the Push Queue web app).
- *** When everything is complete and correct, use hgsql -h hgofbeta to
+ *** When everything is complete and correct, use hgsql -h hgsqlbeta to
      execute the sql file.  Then use the Push Queue web app to check the
      contents of all entries.
  *** If you haven't already, please add $db to makeDb/schema/all.joiner !
@@ -684,7 +684,7 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 1);
 ($db) = @ARGV;
 
-$sql = "ssh -x $dbHost hgsql -N $db";
+$sql = "$HgAutomate::runSSH $dbHost hgsql -N $db";
 
 &makePushQSql();
 
