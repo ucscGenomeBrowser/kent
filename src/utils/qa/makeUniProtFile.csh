@@ -3,7 +3,7 @@ source `which qaConfig.csh`
 
 ########################################
 # 
-# Ann Zweig 5-2009
+# Ann Zweig 05-2009
 #
 # Use this script to create a file for the folks at UnitProt.
 # They will use the file to create links from their web site back to our
@@ -102,12 +102,11 @@ set num=`wc -l $db.uniProtToUcscGenes.txt | awk '{print $1}'`
 
 # explain the output to the user
 echo "\nSUCCESS!\n"
-echo "Here's a sample of the $num line file you just created"
+echo "Here's a sample of the ${num}-line file you just created"
 echo " (expect: UniProtId ucscGeneId orgName)"
 head $db.uniProtToUcscGenes.txt
 echo " \nAsk for a push of your new file to hgdownload:\n"
 echo " /usr/local/apache/htdocs/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt"
-
 # clean up old files (except the real one)
 cleanup:
 rm -f $db.rawDataForUniProt*
