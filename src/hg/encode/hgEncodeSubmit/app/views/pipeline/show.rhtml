@@ -59,7 +59,8 @@ end
     <%= ' ] ' -%> </td>
   <% end %>
 
-  <% if @project.status == "uploaded" %> 
+  <% if @project.status == "uploaded" \
+     or @project.status == "validate failed" %>
     <td><%= ' [ ' -%> 
     <%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
     <%= ' ] ' -%> </td>
