@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.26 2009/05/08 23:05:21 hiram Exp $
+# $Id: HgAutomate.pm,v 1.27 2009/06/08 18:40:49 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -37,7 +37,7 @@ use File::Basename;
     # Hardcoded paths/commands/constants:
     qw( $gensub2 $para $paraRun $centralDbSql $cvs
 	$clusterData $trackBuild $goldenPath $images $gbdb
-	$splitThreshold $setMachtype
+	$splitThreshold $runSSH $setMachtype
       ),
 );
 
@@ -198,7 +198,7 @@ sub getLoadFactor {
   # very high load.
   my ($mach) = @_;
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
-  my $cmd = "ssh -x $mach uptime 2>&1 | grep load";
+  my $cmd = "$HgAutomate::runSSH $mach uptime 2>&1 | grep load";
   verbose(4, "about to run '$cmd'\n");
   my $load = `$cmd`;
   if ($load =~ s/.*load average: (\d+\.\d+).*/$1/) {
@@ -215,8 +215,8 @@ sub getWorkhorseLoads {
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
   foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
-	`ssh -x encodek parasol list machines | grep idle`,
-	`ssh -x memk parasol list machines | grep idle`) {
+	`$HgAutomate::runSSH encodek parasol list machines | grep idle`,
+	`$HgAutomate::runSSH memk parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
@@ -315,7 +315,7 @@ sub chooseClusterByBandwidth {
     my $clusterInfo = $cluster{$paraHub};
     next if (! $clusterInfo->{'enabled'});
     next if ($onlySmallFast && $clusterInfo->{'gigaHz'} < 2.0);
-    my @machInfo = `ssh -x $paraHub parasol list machines | grep -v dead`;
+    my @machInfo = `$HgAutomate::runSSH $paraHub parasol list machines | grep -v dead`;
     my $idleCount = 0;
     my $busyCount = 0;
     foreach my $info (@machInfo) {
@@ -326,7 +326,7 @@ sub chooseClusterByBandwidth {
       }
     }
     my $batchCount =
-      `ssh -x $paraHub parasol list batches | grep -v ^# | wc -l`;
+      `$HgAutomate::runSSH $paraHub parasol list batches | grep -v ^# | wc -l`;
     my $expectedPortion = 1 / (1 + $batchCount);
     my $oomph = (($idleCount + ($busyCount * $expectedPortion)) *
 		 $clusterInfo->{'gigaHz'});
@@ -481,10 +481,10 @@ sub processCommonOptions {
 # Hardcoded paths/command sequences:
 use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
 		$clusterData $trackBuild $goldenPath $images $gbdb
-		$splitThreshold $setMachtype
+		$splitThreshold $runSSH $setMachtype
 	   );
 use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
-	     $goldenPath $gbdb $centralDbSql $splitThreshold );
+	     $goldenPath $gbdb $centralDbSql $splitThreshold $runSSH );
 $gensub2 = '/parasol/bin/gensub2';
 $para = '/parasol/bin/para';
 $paraRun = ("$para make jobList\n" .
@@ -506,6 +506,10 @@ $gbdb = '/gbdb';
 # as opposed to "scaffold-based" (no split tables; multi-level directory for
 # per-seq files, or use set of multi-seq files).
 $splitThreshold = 100;
+
+# ssh command and its options, the extra -o options prevent asking
+# questions about adding machines to known hosts
+$runSSH = "ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes'";
 
 $setMachtype = "setenv MACHTYPE `uname -m | sed -e 's/i686/i386/;'`";
 
@@ -570,7 +574,7 @@ sub getAssemblyInfo {
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   my $query = "select genome,description,sourceName from dbDb " .
               "where name = \"$db\";";
-  my $line = `echo '$query' | ssh -x $dbHost $centralDbSql`;
+  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
   chomp $line;
   my ($genome, $date, $source) = split("\t", $line);
   return ($genome, $date, $source);
@@ -582,7 +586,7 @@ sub getSpecies {
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   my $query = "select scientificName from dbDb " .
               "where name = \"$db\";";
-  my $line = `echo '$query' | ssh -x $dbHost $centralDbSql`;
+  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
   chomp $line;
   my ($scientificName) = split("\t", $line);
   return ($scientificName);
@@ -594,7 +598,7 @@ sub machineHasFile {
   my ($mach, $file) = @_;
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   confess "undef input" if (! defined $mach || ! defined $file);
-  my $count = `ssh -x $mach ls -1 $file 2>>/dev/null | wc -l`;
+  my $count = `$HgAutomate::runSSH $mach ls -1 $file 2>>/dev/null | wc -l`;
   chomp $count;
   return $count + 0;
 }

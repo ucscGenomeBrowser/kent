@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.21 2009/05/12 03:16:20 galt Exp $
+# $Id: makeGenomeDb.pl,v 1.22 2009/06/08 18:38:57 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -516,7 +516,7 @@ sub requireFakeAgpParams {
     warn "See usage messages of hgFakeAgp and faGapSizes for more hints.\n\n";
     my $fileServer = &HgAutomate::chooseFileServer($topDir);
     print "\n";
-    &HgAutomate::run("ssh -x $fileServer nice " .
+    &HgAutomate::run("$HgAutomate::runSSH $fileServer nice " .
 		     "twoBitToFa $topDir/$db.unmasked.2bit stdout " .
 		     "\\| faGapSizes stdin -niceSizes=" .
 		     "10,20,25,50,100,1000,2000,5000,10000,20000,50000");
@@ -825,7 +825,7 @@ VALUES
 _EOF_
   ;
   close($fh);
-  my $centDbSql = "ssh -x $dbHost $HgAutomate::centralDbSql";
+  my $centDbSql = "$HgAutomate::runSSH $dbHost $HgAutomate::centralDbSql";
   &HgAutomate::run("$centDbSql < $dbDbInsert");
 
   # Add a row to defaultDb if this is the first usage of $genome.
@@ -1260,7 +1260,7 @@ _EOF_
 
   $bossScript->add(<<_EOF_
 # These directories are necessary for running make in trackDb:
-$HgAutomate::cvs -q co -P \\
+$HgAutomate::cvs -Q co -P \\
   kent/src/inc kent/src/hg/lib kent/src/hg/makeDb/trackDb
 
 cd kent/src/hg/makeDb/trackDb

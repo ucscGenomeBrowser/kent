@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.6 2009/03/05 18:37:03 hiram Exp $
+# $Id: doHgNearBlastp.pl,v 1.7 2009/06/08 18:41:32 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -248,7 +248,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
-  &HgAutomate::run("ssh -x $distrHost nice $bossScript");
+  &HgAutomate::run("$HgAutomate::runSSH $distrHost nice $bossScript");
 }
 
 sub formatSequence {
@@ -274,7 +274,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
-  &HgAutomate::run("ssh -x $distrHost nice $bossScript");
+  &HgAutomate::run("$HgAutomate::runSSH $distrHost nice $bossScript");
 } # formatSequence
 
 sub runPairwiseBlastp {
@@ -319,7 +319,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
-  &HgAutomate::run("ssh -x $clusterHub $bossScript");
+  &HgAutomate::run("$HgAutomate::runSSH $clusterHub $bossScript");
 } # runPairwiseBlastp
 
 
@@ -364,7 +364,7 @@ _EOF_
 
   return if ($opt_noLoad);
 
-  &HgAutomate::run("ssh -x $dbHost nice $bossScript");
+  &HgAutomate::run("$HgAutomate::runSSH $dbHost nice $bossScript");
 } # loadPairwise
 
 
@@ -393,10 +393,10 @@ _EOF_
 sub cleanup {
   # Remove what we added in $scratchDir.
   foreach my $db (@_) {
-    &HgAutomate::run("ssh -x $distrHost rm -rf $scratchDir/$db.split");
-    &HgAutomate::run("ssh -x $distrHost rm -rf $scratchDir/$db.formatdb");
+    &HgAutomate::run("$HgAutomate::runSSH $distrHost rm -rf $scratchDir/$db.split");
+    &HgAutomate::run("$HgAutomate::runSSH $distrHost rm -rf $scratchDir/$db.formatdb");
   }
-  &HgAutomate::run("ssh -x $distrHost rmdir $scratchDir");
+  &HgAutomate::run("$HgAutomate::runSSH $distrHost rmdir $scratchDir");
 } # cleanup
 
 sub celebrate {
@@ -475,7 +475,7 @@ sub celebrate {
 &parseConfig($CONFIG);
 
 # Split target fasta.
-&HgAutomate::run("ssh -x $distrHost mkdir $scratchDir");
+&HgAutomate::run("$HgAutomate::runSSH $distrHost mkdir $scratchDir");
 my $tFasta = $dbToFasta{$tDb};
 &splitSequence($tDb, $tFasta);
 

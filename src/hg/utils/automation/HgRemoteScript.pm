@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgRemoteScript.pm instead.
 
-# $Id: HgRemoteScript.pm,v 1.1 2006/10/09 20:44:34 angie Exp $
+# $Id: HgRemoteScript.pm,v 1.2 2009/06/08 18:40:49 hiram Exp $
 package HgRemoteScript;
 
 use warnings;
@@ -75,7 +75,7 @@ sub execute {
   $this->{'hasBeenExecuted'} = 1;
   close($this->{'fh'});
   &HgAutomate::run("chmod a+x $this->{fileName}");
-  &HgAutomate::run("ssh -x $this->{runHost} nice $this->{fileName}");
+  &HgAutomate::run("$HgAutomate::runSSH $this->{runHost} nice $this->{fileName}");
 }
 
 # perl packages need to end by returning a positive value:

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.21 2009/04/24 00:21:50 rhead Exp $
+# $Id: makeDownloads.pl,v 1.22 2009/06/08 18:38:58 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -107,7 +107,7 @@ sub checkOptions {
 sub dbHasTable {
   my ($dbHost, $db, $table) = @_;
   my $rows = `echo show tables like "'$table'" |
-              ssh -x $dbHost hgsql -N $db | wc -l`;
+              $HgAutomate::runSSH $dbHost hgsql -N $db | wc -l`;
   return ($rows > 0);
 } # dbHasTable
 

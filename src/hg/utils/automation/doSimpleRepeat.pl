@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doSimpleRepeat.pl instead.
 
-# $Id: doSimpleRepeat.pl,v 1.4 2008/10/17 18:29:12 hiram Exp $
+# $Id: doSimpleRepeat.pl,v 1.5 2009/06/08 18:38:58 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -199,6 +199,7 @@ _EOF_
 
   &HgAutomate::makeGsub($runDir,
       "./TrfRun.csh $partDir/\$(path1).bed");
+  `touch "$runDir/para_hub_$paraHub"`;
 
   my $chunkM = $chunkSize;
   $chunkM =~ s/000000$/Mb/;
