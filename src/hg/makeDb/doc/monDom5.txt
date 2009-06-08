@@ -757,3 +757,9 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
     md5sum *.gz *.2bit README.txt > md5sum.txt
     cd ../chromosomes/
     md5sum *.gz R*.txt > md5sum.txt
+    cd ../
+    mkdir database
+    cd database/
+    cp ../../monDom4/database/README.txt .
+    # [edit README.txt]
+  
