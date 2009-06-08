@@ -39,7 +39,7 @@ if ( $#argv < 2 ||  $#argv > 4 ) then
   echo
   echo "      checks database1 on dev"
   echo "      database2 will be checked on beta by default"
-  echo "        RR will use genome-mysql if specified"
+  echo "        if RR is specified, will use genome-mysql"
   echo
   exit
 else
@@ -53,10 +53,15 @@ if ( $#argv == 3 ) then
     set oldDb=$db
     set machineOut="(${argv[3]})"
   else
-    # argv[3] must be a db
-    set oldDb=$argv[3] 
     set host2="hgsql -h $sqlbeta"
     set machineOut="(hgwbeta)"
+    if ( $argv[3] == "hgwbeta" ) then
+      # allow use of "hgwbeta to check same db in two places
+      set oldDb=$db
+    else
+      # argv[3] must be a db
+      set oldDb=$argv[3] 
+    endif
   endif
 endif
 
