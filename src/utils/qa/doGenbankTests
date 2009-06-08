@@ -183,6 +183,7 @@ echo -e "${HOST}:$sanityPath/misc/$filename"
 echo -e "The last line of the gbSanity output gives a summary of errors. 
 Here is the last line of the file. If there are errors, consult Mark Diekhans:\n"
 tail -1 $sanityPath/misc/$filename
+echo
 
 # run countPerChrom??
 
