@@ -22,7 +22,7 @@ if ($#argv != 2) then
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo
-  echo "    usage: RRmachine, database"
+  echo "    usage: RRmachine database"
   echo
   exit
 else
