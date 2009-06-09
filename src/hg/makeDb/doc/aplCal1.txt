@@ -336,9 +336,6 @@ aplCal1.lift = no
 
     makeDownloads.pl aplCal1 >& downloads.log
 
-    (*** book mark of stuff actually done to here ***)
-
-
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE 2009-06-08 braney )
@@ -504,3 +501,14 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+
+############################################################################
+# Creating the pushQ entry (DONE - 2009-06-08 - Galt)
+    mkdir /hive/data/genomes/aplCal1/pushQ
+    cd /hive/data/genomes/aplCal1/pushQ
+    makePushQSql.pl aplCal1 > aplCal1.pushQ.sql
+    #	aplCal1 does not have seq
+    #	aplCal1 does not have extFile
+    ssh hgwbeta hgsql -h hgsqlbeta qapushq < /hive/data/genomes/aplCal1/pushQ/aplCal1.pushQ.sql
+
