@@ -306,7 +306,14 @@ int lineSize;
 
 char *subjListFileName;
 
-subjListFileName = cartOptionalString(cart, gsidSubjList);
+if (hIsGisaidServer())
+    {
+    subjListFileName = cartOptionalString(cart, gisaidSubjList);
+    }
+else
+    {
+    subjListFileName = cartOptionalString(cart, gsidSubjList);
+    }
 if (subjListFileName)
     {
     lf = lineFileOpen(subjListFileName, TRUE);
@@ -338,7 +345,14 @@ if (!gsidSelectedSubjListLoaded) initializeGsidSubjList();
 
 conn= hAllocConn(database);
 
-sprintf(query,"select subjId from gsIdXref where dnaSeqId='%s'", seqId);
+if (hIsGsidServer())
+    {
+    sprintf(query,"select subjId from gsIdXref where dnaSeqId='%s'", seqId);
+    }
+else
+    {
+    sprintf(query,"select subjId from gisaidXref where dnaSeqId='%s'", seqId);
+    }
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL) 
