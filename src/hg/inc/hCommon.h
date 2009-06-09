@@ -89,4 +89,9 @@ void hTableEnd();
 #define	hgDefaultLeftLabelWidth	120
 #define	hgDefaultGfxBorder	1
 
+/* gisaid selection file option variable names */ 
+#define gisaidSubjList "gisaidTable.gisaidSubjList"
+#define gisaidSeqList "gisaidTable.gisaidSeqList"
+#define gisaidAaSeqList "gisaidTable.gisaidAaSeqList"
+
 #endif /* HCOMMON_H */
