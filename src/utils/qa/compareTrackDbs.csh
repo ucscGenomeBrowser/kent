@@ -1,6 +1,8 @@
 #!/bin/tcsh
 source `which qaConfig.csh`
 
+onintr cleanup
+
 set table = "trackDb"
 set field = "tableName"
 set cent=""
@@ -99,7 +101,7 @@ else
   echo "\n$db.$table.$field : No differences between $machine1 and $machine2 \n"
 endif
 
-# clean up
+cleanup:
 rm -f $machine1.$db.out*
 rm -f $machine2.$db.out*
 rm -f $db.temp

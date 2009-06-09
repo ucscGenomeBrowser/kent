@@ -1,6 +1,8 @@
 #!/bin/tcsh
 source `which qaConfig.csh`
 
+onintr cleanup
+
 if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares trackDb on two machines."
@@ -137,7 +139,7 @@ else
   echo "\n$db.$table.$field : No differences between $machine1 and $machine2 \n"
 endif
 
-# clean up
+cleanup:
 rm -f $machine1.$db.$table 
 rm -f $machine2.$db.$table 
 rm -f $db.temp 
