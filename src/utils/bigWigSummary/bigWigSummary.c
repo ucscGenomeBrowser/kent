@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.9 2009/02/02 06:05:52 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.10 2009/06/09 17:42:33 markd Exp $";
 
 char *summaryType = "mean";
 
@@ -38,7 +38,7 @@ void bigWigSummary(char *bigWigFile, char *chrom, int start, int end, int dataPo
 /* bigWigSummary - Extract summary information from a bigWig file.. */
 {
 /* Make up values array initialized to not-a-number. */
-double nan0 = nan("");
+double nan0 = strtod("NaN", NULL);
 double summaryValues[dataPoints];
 int i;
 for (i=0; i<dataPoints; ++i)

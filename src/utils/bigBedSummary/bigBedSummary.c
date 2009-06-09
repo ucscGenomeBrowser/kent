@@ -7,7 +7,7 @@
 #include "bigBed.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.5 2009/04/17 20:54:35 kent Exp $";
+static char const rcsid[] = "$Id: bigBedSummary.c,v 1.6 2009/06/09 17:41:28 markd Exp $";
 
 char *summaryType = "coverage";
 
@@ -42,7 +42,7 @@ void bigBedSummary(char *fileName, char *chrom, int start, int end, int dataPoin
 /* bigBedSummary - Extract summary information from a bigBed file.. */
 {
 /* Make up values array initialized to not-a-number. */
-double nan0 = nan("");
+double nan0 = strtod("NaN", NULL);
 double summaryValues[dataPoints];
 int i;
 for (i=0; i<dataPoints; ++i)
