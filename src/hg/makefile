@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.150 2009/04/29 23:21:57 mikep Exp $
+# 	$Id: makefile,v 1.151 2009/06/09 17:56:06 markd Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -13,7 +13,10 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
 
-ENCODE_FILES = encode/encodeValidate
+ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
+    ENCODE_FILES = encode/encodeValidate
+endif
+
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToGtf \
@@ -217,8 +220,7 @@ compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
 # Build cgi's
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
-cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi}
-	( cd encode/encodeValidate && $(MAKE) cgi)
+cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
 %.bins: hgLib
 	( cd $* && echo $* && $(MAKE) )
 %.cgi: hgLib
