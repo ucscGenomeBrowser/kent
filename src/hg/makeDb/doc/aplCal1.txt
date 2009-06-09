@@ -512,3 +512,12 @@ chainOne $(path1)
     #	aplCal1 does not have extFile
     ssh hgwbeta hgsql -h hgsqlbeta qapushq < /hive/data/genomes/aplCal1/pushQ/aplCal1.pushQ.sql
 
+    # Then, look at file(s) named in each of the following
+    # wiggle tables and added these to the files section of qapushq.aplCal1
+    # queue table:
+          hgsql aplCal1 -e 'select distinct(file) from gc5Base'
+          hgsql aplCal1 -e 'select distinct(file) from quality'
+
+    # added to all.joiner both $gbd and $chainDest
+
+
