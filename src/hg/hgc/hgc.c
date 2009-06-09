@@ -223,7 +223,7 @@
 #include "net.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1551 2009/06/08 23:07:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1552 2009/06/09 15:55:39 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9599,6 +9599,9 @@ struct sqlResult *sr2;
 char **row2;
 struct sqlConnection *conn2 = hAllocConn(database);
 
+char *gisaidAaSeqSelectFileName;
+//= cartOptionalString(cart, gisaidAaSeqList);
+
 char *subjId, *dnaSeqId;
 char *aaSeqId= NULL;
 char *gene=NULL;
@@ -9648,6 +9651,15 @@ printf("\" TARGET=_blank>%s</A><BR>\n", aaSeqId);
 printf("<BR><B>3D Structure Prediction (PDB file):</B> ");
 char pdbUrl[PATH_LEN];
 safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", extUrl, item, item);
+
+// Mark: please use cartOptionalString(cart, gisaidAaSeqList) 
+// to get the actual file name of aa Seqs selected 
+
+gisaidAaSeqSelectFileName = cartOptionalString(cart, gisaidAaSeqList);
+if (gisaidAaSeqSelectFileName != NULL)
+{
+printf("<br>gisaidAaSeqSelectionFile is at: %s<br>\n", gisaidAaSeqSelectFileName);fflush(stdout);
+}
 
 // resurect after Keven is done with new Modeller stuff
 printf("  To be done.");
