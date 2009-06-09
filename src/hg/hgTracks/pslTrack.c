@@ -350,7 +350,7 @@ if (row != NULL)
     while (subj != NULL)
     	{
     	testSubjId = subj->subjId;
-    	if (sameWord(subjId, testSubjId))
+	if (sameWord(subjId, testSubjId))
 	    {
 	    sqlFreeResult(&sr);
 	    hFreeConn(&conn); 
@@ -367,6 +367,7 @@ return(FALSE);
 boolean gsidCheckSelected(struct track *tg)
 {
 char *setting; 
+char *subjListFileName;
 
 /* check subject only if the selectSubject is set to on in trackDb for this track */
 setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
@@ -375,7 +376,15 @@ if (isNotEmpty(setting))
     if (sameString(setting, "on")) 
 	{
 	/* return TRUE only if the user has selected the subjects */
-	if (cartOptionalString(cart, gsidSubjList))
+	if (hIsGisaidServer())
+	    {
+	    subjListFileName = strdup(gisaidSubjList);
+	    }
+	else
+	    {
+	    subjListFileName = gsidSubjList;
+	    }
+	if (cartOptionalString(cart, subjListFileName))
 	    {
 	    return(TRUE);
 	    }
@@ -427,6 +436,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     	if (isSelected(lf->name))
 	    slAddHead(&lfList, lf);
 	}
+
     else
 #endif /* GBROWSE */
     	slAddHead(&lfList, lf);
