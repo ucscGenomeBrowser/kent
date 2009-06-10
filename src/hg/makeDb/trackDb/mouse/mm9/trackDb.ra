@@ -211,6 +211,7 @@ group genes
 priority 63
 visibility hide
 color 255,64,64
+useScore 1
 type bed 6 .
 url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 urlLabel miRBase:
