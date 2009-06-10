@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.95 2009/06/10 19:16:49 hartera Exp $"
+#	"$Id: mm9.txt,v 1.96 2009/06/10 23:12:29 hartera Exp $"
 #
 
 #######################################################################
@@ -9393,8 +9393,11 @@ ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/mmu.gff
        | sed -e 's/ACC=\"MI[0-9]*\s//' > mmMirBaseFormatIdOnly.gff
     # chr1    .       miRNA   20669091        20669163        .       +
     # .       mmu-mir-206
+    # use score 906 for + strand and 480 for - strand. This will show 
+    # up black on the track for + strand and grey for - strand.
     awk 'BEGIN {FS="\t"} {OFS="\t"} \
-        {if ($0 !~ /#/) print $1, $4, $5, $9, "0", $7}' \
+        {if ($0 !~ /#/ && $7 == "+") print $1, $4, $5, $9, 960, $7; \
+       else if ($0 !~ /#/ && $7 == "-") print $1, $4, $5, $9, 480, $7;}' \
         mmMirBaseFormatIdOnly.gff > mmMirBaseFormatIdOnly.bed
     # Remove previous table
     hgsql -e 'drop table miRNA' mm9
