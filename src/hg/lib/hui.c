@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.208 2009/06/02 19:13:32 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.209 2009/06/10 04:42:29 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2946,9 +2946,10 @@ if (!primarySubtrack)
     boolean restrictions = FALSE;
     for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
-        if(trackDbSetting(subtrack, "dateReleased")
-        || trackDbSetting(subtrack, "dateSubmitted"))
+        char *date = metadataSettingFind(subtrack,"dateUnrestricted");
+        if(date != NULL)
             {
+            freeMem(date);
             restrictions = TRUE;
             break;
             }
