@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.209 2009/06/10 04:42:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.210 2009/06/10 23:27:08 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4677,8 +4677,8 @@ char *value;
 int sizeOfX = dimensionX?dimensionX->count:1;
 int sizeOfY = dimensionY?dimensionY->count:1;
 int sizeOfZ = dimensionZ?dimensionZ->count:1;
-char cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
-char cellsZ[sizeOfX];         // The Z dimension is a separate 1D matrix
+int cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
+int cellsZ[sizeOfX];         // The Z dimension is a separate 1D matrix
 struct trackDb *tdbsX[sizeOfX]; // Representative subtracks
 struct trackDb *tdbsY[sizeOfY];
 struct trackDb *tdbsZ[sizeOfZ];
