@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.94 2009/05/22 21:32:06 hiram Exp $"
+#	"$Id: mm9.txt,v 1.95 2009/06/10 19:16:49 hartera Exp $"
 #
 
 #######################################################################
@@ -9364,3 +9364,50 @@ chainOne $(path1)
     #	1013880568 bases of 2620346127 (38.693%) in intersection
 
 #############################################################################
+#  RE-BUILD miRNA TRACK (DONE, 2009-06-09-2009-06-10, hartera)
+    # The miRNA track from miRBase is out of date so update the track. 
+    mkdir -p /hive/data/genomes/mm9/bed/miRNA-2009-06-09
+    cd /hive/data/genomes/mm9/bed/miRNA-2009-06-09
+    # Download GFF file of latest miRNA annotations from miRBase at the
+    # Wellcome Trust Sanger Institute (WTSI). This is Release 13.0.
+    wget --timestamping \
+ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/mmu.gff
+    # The previous version that is currently on the Genome Browser has 493 
+    # annotations. This version has 470 miRNAs.
+    # Re-format, need to add "chr" to the beginning of each line.
+    sed -e 's/^/chr/' mmu.gff > mmMirBaseFormat.gff
+    # Remove extra "chr" in comment lines
+    perl -pi.bak -e 's/chr#/#/' mmMirBaseFormat.gff
+    # Change chrMT to chrM
+    perl -pi.bak -e 's/chrMT/chrM/' mmMirBaseFormat.gff
+    # Remove all but ID name in last field
+    sed -e 's/\";//g' mmMirBaseFormat.gff | sed -e 's/ID=\"/transcript_id=/g' \
+       | sed -e 's/ACC=\"MI[0-9]*\s//' > mmMirBaseFormatIdOnly.gff
+
+    # Load into database. 
+    ldHgGene -exon=miRNA mm9 miRNARel13 mmMirBaseFormatIdOnly.gff
+    # Does not load as mmu-mir-692-2 is on two chroms, chr4 and chr13.
+    # These are alignments not genePreds so convert to BED for loading into
+    # the database.
+    sed -e 's/\";//g' mmMirBaseFormat.gff | sed -e 's/ID=\"//g' \
+       | sed -e 's/ACC=\"MI[0-9]*\s//' > mmMirBaseFormatIdOnly.gff
+    # chr1    .       miRNA   20669091        20669163        .       +
+    # .       mmu-mir-206
+    awk 'BEGIN {FS="\t"} {OFS="\t"} \
+        {if ($0 !~ /#/) print $1, $4, $5, $9, "0", $7}' \
+        mmMirBaseFormatIdOnly.gff > mmMirBaseFormatIdOnly.bed
+    # Remove previous table
+    hgsql -e 'drop table miRNA' mm9
+    hgLoadBed mm9 miRNA mmMirBaseFormatIdOnly.bed
+# Reading mmMirBaseFormatIdOnly.bed
+# Loaded 568 elements of size 6
+# Sorted
+# Creating table definition for miRNARel13
+# Saving bed.tab
+# Loading mm9
+    hgsql -e 'select count(*) from miRNARel13;' mm9 
+# 568
+# The previous version had 493 miRNAs.
+hgsql -e 'select count(distinct name) from miRNARel13;' mm9
+# 541
+# The previous version had 466 unique miRNAs. 
