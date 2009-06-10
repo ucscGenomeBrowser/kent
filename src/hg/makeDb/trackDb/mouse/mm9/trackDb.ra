@@ -210,11 +210,11 @@ longLabel MicroRNAs from miRBase
 group genes
 priority 63
 visibility hide
-useScore 1
 color 255,64,64
 type bed 6 .
 url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 urlLabel miRBase:
+dataVersion Release 13.0 (March 2009)
 
 track multiz30way
 shortLabel Conservation
