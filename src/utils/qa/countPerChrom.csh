@@ -56,7 +56,7 @@ if ( $#argv == 3 ) then
     set host2="hgsql -h $sqlbeta"
     set machineOut="(hgwbeta)"
     if ( $argv[3] == "hgwbeta" ) then
-      # allow use of "hgwbeta to check same db in two places
+      # allow use of "hgwbeta" to check same db in two places
       set oldDb=$db
     else
       # argv[3] must be a db
