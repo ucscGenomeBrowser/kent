@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1569 2009/06/05 17:14:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1570 2009/06/10 18:47:09 kuhn Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4350,7 +4350,7 @@ insideWidth = tl.picWidth-gfxBorder-insideX;
 
 baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
-baseShowScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, FALSE);
+baseShowScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, TRUE);
 baseShowRuler = cartUsualBoolean(cart, BASE_SHOWRULER, TRUE);
 safef(titleVar,sizeof(titleVar),"%s_%s", BASE_TITLE, database);
 baseTitle = cartUsualString(cart, titleVar, "");
