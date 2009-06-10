@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.99 2009/05/29 21:05:04 mikep Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.100 2009/06/10 19:46:20 angie Exp $";
 
 Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
 /* Find a color which is a percentless 'lighter' shade of color */
@@ -58,7 +58,7 @@ static void drawScaledBoxSampleWithText(struct hvGfx *hvg,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
                                         MgFont *font, char *text, bool zoomed,
-                                        int winStart, int maxPixels)
+                                        int winStart, int maxPixels, boolean isCoding)
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
@@ -83,10 +83,10 @@ if (zoomed)
     if (w < 1)
         w = 1;
 
-    if (chromEnd - chromStart == 3)
+    if (chromEnd - chromStart == 3 && isCoding)
         spreadBasesString(hvg,x1,y,w,height,whiteIndex(),
 		     font,text,strlen(text), TRUE);
-    else if (chromEnd - chromStart < 3)
+    else if (chromEnd - chromStart < 3 && isCoding)
         spreadBasesString(hvg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
 		     text,strlen(text), TRUE);
     else
@@ -1289,12 +1289,13 @@ if(mrnaS >= 0)
     char genomicCodon[2];
     char mrnaCodon[2]; 
     boolean queryInsertion = FALSE;
+    boolean isCoding = (drawOpt == baseColorDrawItemCodons || drawOpt == baseColorDrawDiffCodons);
 
     mrnaBases[0] = '\0';
-    if (psl)
+    if (psl && isCoding)
 	getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
 		    mrnaBases, &queryInsertion);
-    if (queryInsertion)
+    if (queryInsertion && isCoding)
 	color = cdsColor[CDS_QUERY_INSERTION];
 
     dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS], e-s);
@@ -1305,7 +1306,7 @@ if(mrnaS >= 0)
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
-				    zoomedToBaseLevel, winStart, maxPixels);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
 	}
     else if (drawOpt == baseColorDrawItemCodons)
 	{
@@ -1325,7 +1326,7 @@ if(mrnaS >= 0)
 	    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 					color, lf->score, font, mrnaCodon,
 					zoomedToCodonLevel, winStart,
-					maxPixels);
+					maxPixels, isCoding);
 	    }
 	else
 	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1341,7 +1342,7 @@ if(mrnaS >= 0)
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
-				    zoomedToBaseLevel, winStart, maxPixels);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
 	freeMem(diffStr);
 	dnaSeqFree(&genoSeq);
 	}
@@ -1364,7 +1365,7 @@ if(mrnaS >= 0)
 		drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, 
 					    heightPer, color, lf->score, font,
 					    mrnaCodon, zoomedToCodonLevel,
-					    winStart, maxPixels );
+					    winStart, maxPixels, isCoding);
 		}
 	    else
 		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1409,7 +1410,7 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
     {
     drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
-                                zoomedToCodonLevel, winStart, maxPixels);
+                                zoomedToCodonLevel, winStart, maxPixels, TRUE);
     }
 else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons)
@@ -1754,7 +1755,7 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     if (zoomedToText)
         drawScaledBoxSampleWithText(hvg, sf->start, sf->end, scale, insideX, y,
 				    height, color, 1.0, font, codon, TRUE,
-				    winStart, maxPixels);
+				    winStart, maxPixels, TRUE);
     else
         /* zoomed in just enough to see colored boxes */
         drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, height, color);
