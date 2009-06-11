@@ -21,7 +21,7 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.3 2009/06/11 23:26:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidTable.c,v 1.4 2009/06/11 23:51:55 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -330,8 +330,8 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\
 /* Blat */
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
-/* Subject View */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
+/* Sample View */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
 
 /* Sequence View */
 if (hIsGisaidServer())
