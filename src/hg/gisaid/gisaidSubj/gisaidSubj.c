@@ -1,5 +1,6 @@
 /* gisaidSubj - A CGI script to display the subject details page.. */
 #include "common.h"
+#include "hCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "jksql.h"
@@ -18,7 +19,7 @@
 //#include "gisaid.h"
 #include "gisaidSubj.h"
 
-static char const rcsid[] = "$Id: gisaidSubj.c,v 1.1 2009/06/09 16:03:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidSubj.c,v 1.2 2009/06/11 19:44:05 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -205,8 +206,13 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
 /* Sequence View */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
-
+if (hIsGisaidServer())
+    {hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+    }
+else
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
+    }
 /* Table View */
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
 
