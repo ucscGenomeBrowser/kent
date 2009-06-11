@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1571 2009/06/11 16:15:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1572 2009/06/11 17:37:06 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2920,7 +2920,8 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"t
 
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
+    /* disable hgGateway for gisaid for now */
+    //hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
     hPrintf(
     "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A></TD>",
     '%', '%', "Select Subjects");
