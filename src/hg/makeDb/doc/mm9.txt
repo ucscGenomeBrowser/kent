@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.97 2009/06/11 00:11:49 hartera Exp $"
+#	"$Id: mm9.txt,v 1.98 2009/06/11 22:28:31 hartera Exp $"
 #
 
 #######################################################################
@@ -9364,7 +9364,7 @@ chainOne $(path1)
     #	1013880568 bases of 2620346127 (38.693%) in intersection
 
 #############################################################################
-#  RE-BUILD miRNA TRACK (DONE, 2009-06-09-2009-06-10, hartera)
+#  RE-BUILD miRNA TRACK (DONE, 2009-06-09-2009-06-11, hartera)
     # The miRNA track from miRBase is out of date so update the track. 
     mkdir -p /hive/data/genomes/mm9/bed/miRNA-2009-06-09
     cd /hive/data/genomes/mm9/bed/miRNA-2009-06-09
@@ -9394,9 +9394,11 @@ ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/mmu.gff
     # .       mmu-mir-206
     # use score 906 for + strand and 480 for - strand. This will show 
     # up black on the track for + strand and grey for - strand.
+    # Re-do below and re-load track as appears off by 1 compared to 
+    # Ensembl track and other miRNA resources (2009-06-11)
     awk 'BEGIN {FS="\t"} {OFS="\t"} \
-        {if ($0 !~ /#/ && $7 == "+") print $1, $4, $5, $9, 960, $7; \
-       else if ($0 !~ /#/ && $7 == "-") print $1, $4, $5, $9, 480, $7;}' \
+        {if ($0 !~ /#/ && $7 == "+") print $1, $4-1, $5, $9, 960, $7; \
+       else if ($0 !~ /#/ && $7 == "-") print $1, $4-1, $5, $9, 480, $7;}' \
         mmMirBaseFormatIdOnly.gff > mmMirBaseFormatIdOnly.bed
     # Remove previous table
     hgsql -e 'drop table miRNA' mm9
