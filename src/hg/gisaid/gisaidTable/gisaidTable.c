@@ -1,6 +1,7 @@
 /* gisaidTable - GISAID Table View */
 
 #include "common.h"
+#include "hCommon.h"
 #include "dystring.h"
 #include "hash.h"
 #include "obscure.h"
@@ -20,7 +21,7 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.1 2009/06/09 15:57:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidTable.c,v 1.2 2009/06/11 19:40:40 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -333,7 +334,14 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"to
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
 
 /* Sequence View */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
+if (hIsGisaidServer())
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+    }
+else
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
+    }
 
 /* Help */
 
