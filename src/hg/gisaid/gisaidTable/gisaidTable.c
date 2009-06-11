@@ -21,7 +21,7 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.2 2009/06/11 19:40:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidTable.c,v 1.3 2009/06/11 23:26:03 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -609,7 +609,8 @@ void cellSimplePrint(struct column *col, struct subjInfo *si,
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, si, conn);
-boolean isSubjID = sameString(col->name,"subjId");
+//boolean isSubjID = sameString(col->name,"subjId");
+boolean isSampleID = sameString(col->name,"EPI_ISOLATE_ID");
 hPrintf("<TD>");
 if (s == NULL)
     {
@@ -617,8 +618,10 @@ if (s == NULL)
     }
 else
     {
-    if (isSubjID)
-	hPrintf("<A HREF=\"gisaidSubj?%s&hgs_subj=%s&submit=Go%c21\">",cartSidUrlString(cart),s, '%');
+    if (isSampleID)
+	hPrintf("<A HREF=\"gisaidSample?%s&hgs_sample=%s&submit=Go%c21\">",cartSidUrlString(cart),s, '%');
+    //if (isSubjID)
+    //hPrintf("<A HREF=\"gisaidSubj?%s&hgs_subj=%s&submit=Go%c21\">",cartSidUrlString(cart),s, '%');
     if (sameString(s,""))
 	{
 	freeMem(s);
@@ -631,8 +634,10 @@ else
         /* special processing for DNA and protein sequences */
     	hPrintf("%s", s);
 
-    if (isSubjID)
+    if (isSampleID)
 	hPrintf("</A>");
+    //if (isSubjID)
+    //	hPrintf("</A>");
     freeMem(s);
     }
 hPrintf("</TD>\n");

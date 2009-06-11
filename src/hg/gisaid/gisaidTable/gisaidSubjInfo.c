@@ -6,7 +6,7 @@
 
 #include "gisaidTable.h"
 
-static char const rcsid[] = "$Id: gisaidSubjInfo.c,v 1.1 2009/06/09 15:57:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidSubjInfo.c,v 1.2 2009/06/11 23:27:16 fanhsu Exp $";
 
 struct subjInfo *readAllSubjInfo(struct sqlConnection *conn, struct column *columns)
 /* Get all main table gisaidSubjInfo columns in use. */
@@ -18,8 +18,12 @@ struct column *column = NULL;
 int colCount = 0;
 struct dyString *query = dyStringNew(256);
 char *sep="";
-if (!sameString(columns->name,"subjId"))
-    errAbort("subjId must be the first column in columnDb.ra");
+//if (!sameString(columns->name,"subjId"))
+    //errAbort("subjId must be the first column in columnDb.ra");
+if (!sameString(columns->name,"EPI_ISOLATE_ID"))
+    {
+    errAbort("EPI_ISOLATE_ID must be the first column in columnDb.ra %s", columns->name);
+    }
 dyStringAppend(query,"select ");
 for (column=columns;column;column=column->next)
     {
