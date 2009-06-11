@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.90 2009/02/04 23:57:03 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.91 2009/06/11 19:52:31 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -1402,28 +1402,27 @@ int maxHeight = atoi(DEFAULT_HEIGHT_PER);
 int minHeight = MIN_HEIGHT_PER;
 
 AllocVar(wigCart);
-char *name = compositeViewControlNameFromTdb(tdb);
 
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,name, (char **) NULL);
-wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,name, (char **) NULL);
+wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
-wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,name, (char **) NULL);
-wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,name, (char **) NULL);
-wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,name, (char **) NULL);
+wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
-wigFetchMinMaxPixelsWithCart(cart,tdb,name, &minHeight, &maxHeight, &defaultHeight);
-wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
+wigFetchMinMaxPixelsWithCart(cart,tdb,tdb->tableName, &minHeight, &maxHeight, &defaultHeight);
+wigFetchYLineMarkValueWithCart(cart,tdb,tdb->tableName, &yLineMark);
 wigCart->yLineMark = yLineMark;
-wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,name, (char **) NULL);
+wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
 
-wigFetchMinMaxYWithCart(cart,tdb,name, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
+wigFetchMinMaxYWithCart(cart,tdb,tdb->tableName, &wigCart->minY, &wigCart->maxY, NULL, NULL, wordCount, words);
 
 wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 
