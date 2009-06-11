@@ -49,11 +49,15 @@ and 0.25 for four times.
 
 <P>
 The <em>UMass uniqueness</em> track displays a uniqueness signal for each
-base which represents the degree to which all windows of 15 overlapping that
-base are unique in the genome.  A value of 1 at a single base means that the
-sequence of 29 bases with that base at its center is unique in the genome.
-If every window of 15 overlapping that base were found twice in the genome,
-the signal value would be would be 0.5.
+base which represents the sum of both plus and minus strand 15mer occurrences
+of that particular 5'->3' (plus strand) sequence throughout the genome.  Scores
+are normalized between 0 and 1 by calculating ( 1 / N ) where N is the number
+of genome wide occurrences of the 15mer starting at position X.  A score of 1
+represents a single genome wide occurrence of that 15mer.  A 0.5 would
+represent either 2 plus strand occurrences or 1 plus and 1 minus strand
+occurrence, and so on.  Ratios are rounded to 3 significant digits.  Therefore
+a 0.000 would represent > 2000 occurrences.  A 0 is reserved for a given 15mer
+that is either not assembled or contains at least one N at position X.
 
 <H2>Credits</H2>
 <P>
@@ -81,7 +85,9 @@ title="&#98;&#114;y&#97;&#110;.l&#97;&#106;&#111;&#105;&#101;&#64;&#117;&#109;&#
 &#98;&#114;y&#97;&#110;.l&#97;&#106;&#111;&#105;&#101;&#64;&#117;&#109;&#97;s&#115;&#109;&#101;&#100;.&#101;&#100;&#117;</A>)
 <!-- above address is bryan.lajoie at umassmed.edu -->
 in <A HREF="http://www.umassmed.edu/pgfe/faculty/Dekker.cfm?start=0&" traget=_BLANK>Job Dekker's Lab</a>
-at the University of Massachusetts Medical School, Worcester, MA 01605.
+at the University of Massachusetts Medical School.  Funding Support: NIH grant
+HG003143 to JD.  Keck Distinguished Young Scholar Award to JD.  This track was
+generated as part of the ENCODE project funded by the NHGRI.
 </P>
 
 <!--
