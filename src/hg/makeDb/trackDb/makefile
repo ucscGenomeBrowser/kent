@@ -90,7 +90,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	caePb1 caePb2 \
 	falciparum \
 	choHof1 \
-	sacCer1 \
+	sacCer1 sacCer2 \
 	sc1 \
 	h1n1 \
 	gliRes13 homIni13 homIni14 priMat13 canHg12 borEut13 \
