@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.112 2009/06/11 21:20:59 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.113 2009/06/11 23:52:50 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -809,6 +809,14 @@ antibodyDescription rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-866
 orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
+
+term E2F6
+type Antibody
+targetDescription epitope corresponding to amino acids 232-281 mapping at the C-terminus of E2F-6 of human origin
+antibodyDescription rabbit polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-22823
+orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
 
 term Egr-1
 type Antibody
