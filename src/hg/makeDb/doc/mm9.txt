@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.96 2009/06/10 23:12:29 hartera Exp $"
+#	"$Id: mm9.txt,v 1.97 2009/06/11 00:11:49 hartera Exp $"
 #
 
 #######################################################################
@@ -9370,10 +9370,9 @@ chainOne $(path1)
     cd /hive/data/genomes/mm9/bed/miRNA-2009-06-09
     # Download GFF file of latest miRNA annotations from miRBase at the
     # Wellcome Trust Sanger Institute (WTSI). This is Release 13.0.
+    # (March 2009)
     wget --timestamping \
 ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/mmu.gff
-    # The previous version that is currently on the Genome Browser has 493 
-    # annotations. This version has 470 miRNAs.
     # Re-format, need to add "chr" to the beginning of each line.
     sed -e 's/^/chr/' mmu.gff > mmMirBaseFormat.gff
     # Remove extra "chr" in comment lines
@@ -9408,9 +9407,9 @@ ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/mmu.gff
 # Creating table definition for miRNARel13
 # Saving bed.tab
 # Loading mm9
-    hgsql -e 'select count(*) from miRNARel13;' mm9 
+    hgsql -e 'select count(*) from miRNA;' mm9 
 # 568
 # The previous version had 493 miRNAs.
-hgsql -e 'select count(distinct name) from miRNARel13;' mm9
+hgsql -e 'select count(distinct name) from miRNA;' mm9
 # 541
 # The previous version had 466 unique miRNAs. 
