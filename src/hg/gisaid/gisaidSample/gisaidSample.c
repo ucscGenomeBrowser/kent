@@ -1,4 +1,4 @@
-/* gisaidSubj - A CGI script to display the subject details page.. */
+/* gisaidSample - A CGI script to display the sample details page.. */
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "gisaidSample.h"
 
-static char const rcsid[] = "$Id: gisaidSample.c,v 1.1 2009/06/11 23:15:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidSample.c,v 1.2 2009/06/11 23:44:51 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -26,25 +26,25 @@ struct hash *oldCart;	/* Old cart hash. */
 char *genome;           /* Name of genome - mouse, human, etc. */
 char organism[20] = {"hiv"};
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
-char *curSubjId = NULL;	/* Current Sample ID */
+char *curSampleId = NULL;	/* Current Sample ID */
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gisaidSubj - A CGI script to display the subject details page.\n"
+  "gisaidSample - A CGI script to display the sample details page.\n"
   "usage:\n"
-  "   gisaidSubj cgi-vars in var=val format\n"
+  "   gisaidSample cgi-vars in var=val format\n"
   "options:\n"
   "   -hgisaid=XXX Session ID to grab vars from session database\n"
   "   -db=XXX  Genome database associated with gene\n"
   "   -org=XXX  Organism associated with gene\n"
-  "   -hgs_subj=XXX ID of subject\n"
+  "   -hgs_sample=XXX ID of subject\n"
   );
 }
 
 /* --------------- Low level utility functions. ----------------- */
 
-static char *rootDir = "gisaidSubjData";
+static char *rootDir = "gisaidSampleData";
 
 struct hash *readRa(char *rootName, struct hash **retHashOfHash)
 /* Read in ra in root, root/org, and root/org/database. */
@@ -157,7 +157,7 @@ static void addGoodSection(struct section *section,
 /* Add section to list if it is non-null and exists returns ok. */
 {
 if (section != NULL && hashLookup(section->settings, "hide") == NULL
-   && section->exists(section, conn, curSubjId))
+   && section->exists(section, conn, curSampleId))
      slAddHead(pList, section);
 }
 
@@ -233,7 +233,7 @@ char **row;
 
 sectionList = loadSectionList(conn);
 
-puts("<FORM ACTION=\"/cgi-bin/gisaidSubj\" NAME=\"mainForm\" METHOD=\"GET\">\n");
+puts("<FORM ACTION=\"/cgi-bin/gisaidSample\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 
 /* display GISAID logo image here */
 //printf("<img src=\"/images/gisaid_header.jpg\" alt=\"\" name=\"gisaid_header\" width=\"800\" height=\"86\" border=\"1\" usemap=\"#gisaid_headerMap\">");
@@ -243,36 +243,36 @@ hotLinks();
 
 printf("<font size=\"5\"><BR><B>Sample View   </B></font>");
 
-if (sameWord(curSubjId, ""))
+if (sameWord(curSampleId, ""))
     {
-    printf("<BR><H3>Please enter a subject ID.\n");
-    printf("<input type=\"text\" name=\"hgs_subj\" value=\"%s\">\n", curSubjId);
+    printf("<BR><H3>Please enter a sample ID.\n");
+    printf("<input type=\"text\" name=\"hgs_sample\" value=\"%s\">\n", curSampleId);
     cgiMakeButton("submit", "Go!");
     printf("</H3>");
-    printf("For example: A/California/04/2009");fflush(stdout);
+    printf("For example: EPI_ISL_29573");fflush(stdout);
     }
 else
     {
     safef(query, sizeof(query), 
     	  "select EPI_ISOLATE_ID from %s.gisaidSubjInfo where EPI_ISOLATE_ID = '%s'", 
-    	  database, curSubjId);
+    	  database, curSampleId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     sqlFreeResult(&sr);
     if (row != NULL)
     	{
     	printf(
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;search for another subject:&nbsp;");
-    	printf("<input type=\"text\" name=\"hgs_subj\" value=\"\">\n");
+	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;search for another sample:&nbsp;");
+    	printf("<input type=\"text\" name=\"hgs_sample\" value=\"\">\n");
 	cgiMakeButton("submit", "Go!");
-    	printSections(sectionList, conn, curSubjId);
+    	printSections(sectionList, conn, curSampleId);
     	}
     else
     	{
-    	printf("<H3><font color=red>%s</font> is not a valid subject ID.</H3>", curSubjId);
+    	printf("<H3><font color=red>%s</font> is not a valid sample ID.</H3>", curSampleId);
 	
-    	printf("<H3>Please enter a valid subject ID.\n");
-    	printf("<input type=\"text\" name=\"hgs_subj\" value=\"%s\">\n", "");
+    	printf("<H3>Please enter a valid sample ID.\n");
+    	printf("<input type=\"text\" name=\"hgs_sample\" value=\"%s\">\n", "");
     	cgiMakeButton("submit", "Go!");
     	printf("<BR><BR>For example: GISAID4123");
 	printf("</H3>");
@@ -295,8 +295,8 @@ getDbAndGenome(cart, &database, &genome, oldCart);
 
 conn = hAllocConn(database);
 
-curSubjId = cgiOptionalString("hgs_subj");
-if (curSubjId == NULL) curSubjId = strdup("");
+curSampleId = cgiOptionalString("hgs_sample");
+if (curSampleId == NULL) curSampleId = strdup("");
 
 cartHtmlStart("GISAID Sample View");
 webMain(conn);
