@@ -17,6 +17,14 @@ priority 1
 visibility hide
 type bed 4 +
 
+track hg18cytoBand
+shortLabel hg18 Chromosome Band
+longLabel Chromosome Bands (hg18)
+group map
+priority 1
+visibility hide
+type bed 4 +
+
 track ctgPos
 shortLabel Map Contigs
 longLabel Physical Map Contigs
