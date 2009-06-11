@@ -2,20 +2,20 @@
 # main table is gisaidSubjInfo table (hivQuan,cd4 are in gisaidClinicRec table)
 #  the name must also be the fieldname in the table
 #
-name subjId
-shortLabel subject
-longLabel GISAID identification number
-priority 1
-visibility on
-type string
-
 name EPI_ISOLATE_ID
 shortLabel EPI ISOLATE
 longLabel EPI Isolate
-priority 5
+priority 1
 visibility on
 type string
 query select EPI_ISOLATE_ID from gisaidSubjInfo where subjId='%s';
+
+name subjId
+shortLabel subject
+longLabel GISAID identification number
+priority 3
+visibility on
+type string
 
 name location
 shortLabel LOCATION
