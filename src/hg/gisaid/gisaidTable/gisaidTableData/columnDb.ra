@@ -85,7 +85,7 @@ name dnaSeqs
 shortLabel DNA Sequences
 longLabel DNA Sequence IDs
 priority 80
-visibility on
+visibility off
 type string
 query select dnaSeqIds from gisaidSubjSeq where subjId='%s';
 
@@ -93,7 +93,7 @@ name aaSeqs
 shortLabel Protein Sequences
 longLabel Protein Sequence IDs
 priority 90
-visibility on
+visibility off
 type string
 query select aaSeqIds from gisaidSubjSeq where subjId='%s';
 
