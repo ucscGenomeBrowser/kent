@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.111 2009/06/08 18:55:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.112 2009/06/11 21:20:59 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -30,9 +30,37 @@ color 46,0,184
 tier 1
 protocol K562_protocol.pdf
 
+term K562b
+type Cell Line
+description leukemia (UCDavis alternate)
+vendorName ATCC
+vendorId CCL-243
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
+karyotype cancer
+lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+termId BTO:0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+color 46,0,184
+tier 1
+protocol K562_protocol.pdf
+
 term HepG2
 type Cell Line
 description liver carcinoma
+vendorName ATCC
+vendorId HB-8065
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
+lineage endoderm
+karyotype cancer
+termId BTO:0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+color 189,0,157
+tier 2
+protocol HepG2_protocol.pdf
+
+term HepG2b
+type Cell Line
+description liver carcinoma (UCDavis alternate)
 vendorName ATCC
 vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
@@ -1372,6 +1400,10 @@ description Control signal from Naked DNA.
 term Reference_Genome
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+
+term None
+description No special treatment applied
+type treatment
 
 #term IFNg
 #description Interferon gamma treatment
