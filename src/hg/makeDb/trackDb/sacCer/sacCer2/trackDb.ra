@@ -64,3 +64,6 @@ html phastConsElements
 
 track transRegCode override
 visibility hide
+
+track sgdOther override
+noScoreFilter .
