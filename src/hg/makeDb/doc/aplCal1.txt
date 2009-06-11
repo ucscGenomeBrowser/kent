@@ -521,3 +521,7 @@ chainOne $(path1)
     # added to all.joiner both $gbd and $chainDest
 
 
+#######################################################################
+#  see hg19.txt for chain to hg19 assembly
+
+

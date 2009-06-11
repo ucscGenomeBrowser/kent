@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.24 2009/06/07 23:47:50 aamp Exp $";
+#	"$Id: hg19.txt,v 1.25 2009/06/11 18:17:32 galt Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -4285,4 +4285,95 @@ time nice -n +19 doBlastzChainNet.pl -verbose=2 -noLoadChainSplit -workhorse=hgw
 # [detach screen]
 real    192m39.792s
 
-##########################################################################
+
+
+##############################################################################
+# LASTZ Sea Hare aplCal1 (STARTING - 2009-06-08 - Galt)
+    mkdir /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
+    cd /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
+
+    cat << '_EOF_' > DEF
+# Human vs. Sea Hare
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ2_LIMIT=5
+
+# QUERY: Sea Hare aplCal1
+SEQ2_DIR=/scratch/data/aplCal1/aplCal1.2bit
+SEQ2_LEN=/scratch/data/aplCal1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    #   (NOTE I SHOULD NOT HAVE USED  -qRepeats=windowmaskerSdust)
+    screen
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	>& do.log &
+    #	real ?? about one hour but one job hung
+
+    # resuming from failure 
+    # edited loadUp.csh, commenting out the first completed step
+    # and removing the unneeded -qRepeats=windowmaskerSdust
+    # from the next step, now run it to complete the load step.
+    /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08/axtChain/loadUp.csh \ 
+        >& continue-loadUp.log&
+
+    # continue from step 'download'
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -continue download \
+        >& continue-download.log &
+ 
+    cat fb.hg19.chainAplCal1Link.txt 
+    #   19675762 bases of 2897316137 (0.679%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    #   (NOTE I SHOULD NOT HAVE USED  -qRepeats=windowmaskerSdust)
+    mkdir /hive/data/genomes/aplCal1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/aplCal1/bed/blastz.hg19.swap
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+	-swap >& swap.log &
+    #	real  time not long
+
+    # resuming from failure
+    # edited loadUp.csh, commenting out the first completed step
+    # and removing the unneeded -tRepeats=windowmaskerSdust
+    # from the next step, now run it to complete the load step.
+    /hive/data/genomes/aplCal1/bed/blastz.hg19.swap/axtChain/loadUp.csh \
+        >& continue-loadUp.log&
+
+    time nice +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -continue download \
+	-swap >& continue-download.log &
+
+    cat fb.aplCal1.chainHg19Link.txt 
+    #   14163455 bases of 619228098 (2.287%) in intersection
+
