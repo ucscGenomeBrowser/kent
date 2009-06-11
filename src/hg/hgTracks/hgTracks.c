@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1570 2009/06/10 18:47:09 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1571 2009/06/11 16:15:14 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3163,7 +3163,8 @@ if (wikiLinkEnabled())
     }
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    //hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNotYet\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
     }
 else
 if (hIsGsidServer())
@@ -4774,6 +4775,7 @@ organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
 /* change title if this is for GSID */
 browserName = (hIsGsidServer() ? "Sequence View" : browserName);
 organization = (hIsGsidServer() ? "GSID" : organization);
+organization = (hIsGisaidServer() ? "GISAID" : organization);
 
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which
