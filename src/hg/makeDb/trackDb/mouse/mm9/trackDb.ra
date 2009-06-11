@@ -214,7 +214,7 @@ visibility hide
 color 255,64,64
 useScore 1
 type bed 6 .
-html miRNAMay2008.html
+html miRNAMay2008
 url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 urlLabel miRBase:
 
