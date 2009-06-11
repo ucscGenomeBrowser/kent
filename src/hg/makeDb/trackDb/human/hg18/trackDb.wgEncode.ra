@@ -10226,8 +10226,6 @@ searchName wgEncodeGencodeManual
 searchTable wgEncodeGencodeManualRel2
 searchMethod exact
 searchType genePred
-shortCircuit 1
-semiShortCircuit 1
 termRegex OTTHUMT[0-9]+
 searchPriority 2.2
 
@@ -10235,8 +10233,6 @@ searchName wgEncodeGencodeAuto
 searchTable wgEncodeGencodeAutoRel2
 searchMethod exact
 searchType genePred
-shortCircuit 1
-semiShortCircuit 1
 termRegex ENST[0-9]+
 searchPriority 2.3
 
@@ -10244,8 +10240,6 @@ searchName wgEncodeGencodeManualGene
 searchTable wgEncodeGencodeManualRel2
 searchMethod exact
 searchType genePred
-shortCircuit 1
-semiShortCircuit 1
 #termRegex [a-z][a-z0-9][0-9]+
 searchPriority 2.4
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
@@ -10254,8 +10248,6 @@ searchName wgEncodeGencodeAutoGene
 searchTable wgEncodeGencodeAutoRel2
 searchMethod exact
 searchType genePred
-shortCircuit 1
-semiShortCircuit 1
 #termRegex [a-z][a-z0-9][0-9]+
 searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
