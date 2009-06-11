@@ -12,7 +12,7 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.5 2008/09/03 19:21:16 markd Exp $";
+static char const rcsid[] = "$Id: mafSplitPos.c,v 1.6 2009/06/11 16:01:38 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,25 +35,35 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *chrom = NULL;
-int minGap = 100;
-int minRepeat = 100;
+static char *chrom = NULL;
+static int minGap = 100;
+static int minRepeat = 100;
+static char *db = NULL;
 
 int nextGapPos(char *chrom, int desiredPos, struct sqlConnection *conn)
 {
 /* Find next gap on the chrom and return midpoint */
-char where[256];
 struct sqlResult *sr;
 char **row;
 int pos = -1;
 int start, end;
+struct hTableInfo *hti = hFindTableInfo(db, chrom, "gap");
+struct dyString *query = newDyString(1024);
 
-safef(where, sizeof where, 
-    "chromStart >= %d and chromEnd-chromStart > %d\
+if (hti == NULL)
+    errAbort("table %s.gap doesn't exist", db);
+dyStringPrintf(query, "select chromStart,chromEnd from ");
+if (hti->isSplit)
+    dyStringPrintf(query, "%s_gap where ", chrom);
+else
+    dyStringPrintf(query, "gap where %s='%s' AND ", hti->chromField, chrom);
+
+dyStringPrintf(query, "(chromStart >= %d and chromEnd-chromStart > %d)\
     order by chromStart limit 1",
         desiredPos, minGap);
-sr = hExtendedChromQuery(conn, "gap", chrom, where, FALSE,
-        "chromStart, chromEnd", NULL);
+sr = sqlGetResult(conn, query->string);
+freeDyString(&query);
+
 if ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlSigned(row[0]);
@@ -67,20 +77,29 @@ return pos;
 int nextRepeatPos(char *chrom, int desiredPos, struct sqlConnection *conn)
 /* Find next 0% diverged repeat on the chrom and return midpoint */
 {
-char where[256];
 struct sqlResult *sr;
 char **row;
 int pos = -1;
 int start, end;
+struct hTableInfo *hti = hFindTableInfo(db, chrom, "rmsk");
+struct dyString *query = newDyString(1024);
 
-safef(where, sizeof where, 
-    "genoStart >= %d and \
-    milliDiv=0 and \
-    repClass<>'Simple_repeat' and repClass<>'Low_complexity' and \
-    genoEnd-genoStart>%d order by genoStart limit 1",
+if (hti == NULL)
+    errAbort("table %s.rmsk doesn't exist", db);
+dyStringPrintf(query, "select genoStart,genoEnd from ");
+if (hti->isSplit)
+    dyStringPrintf(query, "%s_rmsk where ", chrom);
+else
+    dyStringPrintf(query, "rmsk where %s='%s' AND ", hti->chromField, chrom);
+dyStringPrintf(query,
+    "(genoStart >= %d AND \
+    milliDiv=0 AND \
+    repClass<>'Simple_repeat' AND repClass<>'Low_complexity' AND \
+    genoEnd-genoStart>%d) order by genoStart limit 1",
         desiredPos, minRepeat);
-sr = hExtendedChromQuery(conn, "rmsk", chrom, where, FALSE,
-        "genoStart, genoEnd", NULL);
+sr = sqlGetResult(conn, query->string);
+freeDyString(&query);
+
 if ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlSigned(row[0]);
@@ -134,6 +153,8 @@ struct hashCookie hc;
 struct hashEl *hel;
 struct sqlConnection *conn = sqlConnect(database);
 FILE *f;
+
+db = database;
 
 verbose(1, "Finding split positions for %s at ~%s Mbp intervals\n", 
                 database, size);
