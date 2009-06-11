@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.167 2009/06/11 16:10:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.168 2009/06/11 23:49:10 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -257,7 +257,7 @@ if (isGisaid)
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
 
     /* Sequence View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>",
