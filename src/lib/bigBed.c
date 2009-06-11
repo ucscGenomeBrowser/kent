@@ -125,10 +125,13 @@ if (fieldCount > 3)
     for (i=3; i<fieldCount; ++i)
 	{
 	enum asTypes type = asCol->lowType->type;
-	if (asTypesIsInt(type))
-	    lineFileNeedFullNum(lf, row, i);
-	else if (asTypesIsFloating(type))
-	    lineFileNeedDouble(lf, row, i);
+        if (! (asCol->isList || asCol->isArray))
+            {
+            if (asTypesIsInt(type))
+                lineFileNeedFullNum(lf, row, i);
+            else if (asTypesIsFloating(type))
+                lineFileNeedDouble(lf, row, i);
+            }
 	int len = strlen(row[i]);
 	memcpy(s, row[i], len);
 	s[len] = '\t';
