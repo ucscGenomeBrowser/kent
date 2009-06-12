@@ -457,6 +457,20 @@ Some settings used by various tracks:
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
 
+Specific, optional settings used only by snp125, snp126, and so on:
+    o chimpMacaqueOrthoTable table - table contains orthologous
+      alleles from the reference assemblies of chimp and macaque.
+    o chimpOrangMacOrthoTable table - same as above, plus orangutan.
+    o {chimpDb,orangDb,macaqueDb} db - database used for the
+      respective species' alignments when generating the OrthoTable.
+    o codingAnnotations table1,table2,... - each table describes
+      changes in a particular gene set's coding sequence caused by SNPs.
+    o codingAnnoLabel_<tableN> - proper name of geneSet for tableN in 
+      codingAnnotations' table list
+    o hapmapPhase {II,III} - older tracks used HapMap Phase II data
+      collected in a table "hapmapAllelesSummary".  Newer tracks use
+      hapmapSnps* tables directly.
+
 
 Note: We have a restriction on table names: Track names (i.e. table
 names, but omitting any chr*_ prefix) should not contain any
