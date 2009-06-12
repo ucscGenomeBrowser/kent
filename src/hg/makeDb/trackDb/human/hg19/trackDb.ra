@@ -32,13 +32,6 @@ maxItems 300
 track refGene override
 visibility pack
 
-track chainPanTro2 override
-matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-matrixHeader A, C, G, T
-
-track netPanTro2 override
-visibility dense
-
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
@@ -348,6 +341,42 @@ speciesGroups mammal
 sGroup_mammal rheMac2 mm9 canFam2
 treeImage phylo/hg19_4way.gif
 
+# track chainPanTro2 override
+# matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+# matrixHeader A, C, G, T
+
+# track netPanTro2 override
+# visibility dense
+
+
+track chainPanTro2
+release beta
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 240
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain panTro2
+otherDb panTro2
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+
+
+track netPanTro2
+release beta
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 240.1
+visibility dense
+spectrum on
+type netAlign panTro2 chainPanTro2
+otherDb panTro2
+
+
 track primateChainNet
 release alpha
 compositeTrack on
@@ -370,14 +399,17 @@ sortOrder species=+ view=+
 configurable on
 
     track chainPanTro2
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=aPanTro
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain panTro2
+    visibility dense
     otherDb panTro2
 
     track netPanTro2
+    release alpha
     subTrack primateChainNet off
     subGroups view=net species=aPanTro
     shortLabel $o_Organism Net
