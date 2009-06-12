@@ -11,7 +11,7 @@
 #include "netCart.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.25 2009/03/18 18:27:00 hiram Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.26 2009/06/12 22:19:35 hiram Exp $";
 
 struct cartOptions
     {
@@ -204,8 +204,8 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
     /* Draw single solid box if no gaps or no room to draw gaps. */
         {
-	rNetBox(hvg, fill, fill->tStart, fill->tStart + fill->tSize, y, level,
-		color, invColor, orientation);
+	rNetBox(hvg, fill, fill->tStart, fill->tStart + fill->tSize,
+		y, level, color, invColor, orientation);
 	}
     else
         {
@@ -256,7 +256,7 @@ if (net != NULL)
     /* Compute a few other positional things for recursive routine. */
     rHeightPer = tg->heightPer;
     rMidLineOff = rHeightPer/2;
-    rIsFull = (vis == tvFull);
+    rIsFull = (vis == tvFull || vis == tvPack || vis == tvSquish);
     if (rIsFull)
 	rNextLine = tg->lineHeight;
     else
@@ -269,6 +269,31 @@ if (net != NULL)
     }
 if (vis == tvDense)
     mapBoxToggleVis(hvg, xOff, yOff, width, tg->heightPer, tg);
+}
+
+static int netTotalHeight(struct track *tg, enum trackVisibility vis)
+/* A copy of tgFixedTotalHeightNoOverflow() with visibility forced */
+{
+int ret = 0;
+switch (vis)
+    {
+    case tvSquish:
+	ret = tgFixedTotalHeightOptionalOverflow(tg, tvFull, (tl.fontHeight/3)+1, (tl.fontHeight/3), FALSE);
+	break;
+    case tvPack:
+	ret = tgFixedTotalHeightOptionalOverflow(tg, tvFull, (tl.fontHeight/2)+1, (tl.fontHeight/2), FALSE);
+	break;
+    case tvFull:
+	ret = tgFixedTotalHeightOptionalOverflow(tg, tvFull, tl.fontHeight+1, tl.fontHeight, FALSE);
+	break;
+    case tvDense:
+	ret = tgFixedTotalHeightOptionalOverflow(tg, tvDense, tl.fontHeight+1, tl.fontHeight, FALSE);
+	break;
+    case tvHide:
+    default:
+	break;
+    }
+return(ret);
 }
 
 void netMethods(struct track *tg)
@@ -286,7 +311,7 @@ tg->freeItems = netFree;
 tg->drawItems = netDraw;
 tg->itemName = netName;
 tg->mapItemName = netName;
-tg->totalHeight = tgFixedTotalHeightNoOverflow;
+tg->totalHeight = netTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
