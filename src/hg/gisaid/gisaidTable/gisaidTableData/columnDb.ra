@@ -75,14 +75,14 @@ type string
 name dnaSeqIds
 shortLabel DNA Sequences
 longLabel DNA Sequence IDs
-priority 80
-visibility off
+priority 8
+visibility on
 type string
 
 name aaSeqIds
 shortLabel Protein Sequences
 longLabel Protein Sequence IDs
-priority 90
-visibility off
+priority 9
+visibility on
 type string
 
