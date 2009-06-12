@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.186 2009/05/20 20:59:56 mikep Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.187 2009/06/12 14:18:04 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1581,8 +1581,23 @@ if (hIsCgbServer() || hIsGsidServer())
 	}
     else
 	{
-	errAbort("Sorry, currently only the \"View Table Schema\" function of the Table Browser is available on this server.");
+        if (cartVarExists(cart, hgtaDoValueRange))
+	    {
+    	    doValueRange(cartString(cart, hgtaDoValueRange));
+	    }
+	else
+	    {
+	    if (cartVarExists(cart, hgtaDoValueHistogram))
+    		{
+		doValueHistogram(cartString(cart, hgtaDoValueHistogram));
+	    	}
+	    else
+	    	{
+	    	errAbort("Sorry, currently only the \"View Table Schema\" function of the Table Browser is available on this server.");
+	    	}
+	    }
 	}
+
     }
 else if (cartVarExists(cart, hgtaDoTest))
     doTest();
