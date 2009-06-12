@@ -34,7 +34,14 @@ elsewhere  in the genome have at most 2 mismatches, and as "non-unique"
 otherwise. Position X in the alignable track is marked by 1 if >50% of the
 bases in [X-200,X+200] are "unique" and by 0 otherwise. Every point in the
 alignable track has a corresponding position in  each of the ChIP signal
-tracks.
+tracks. This track was used in the developement of the
+<A HREF="hgTrackUi?g=wgEncodeBroadChipSeq">Broad Histone</A> tracks.
+
+<P>
+The <em>Duke excludable regions</em> track displays genomic regions which
+were excluded from calling Peaks due to various reasons such as repetitive
+sequence or genomic gaps. This track was used in the developement of the
+<A HREF="hgTrackUi?g=wgEncodeChromatinMap">Open Chromatin</A> tracks.
 
 <P>
 The <em>Duke uniqueness</em> tracks display how unique is each sequence on the
@@ -45,7 +52,8 @@ normalized to between 0 and 1 with 1 representing a completely unique
 sequence and 0 representing the sequence occurs >4 times in the genome
 (excluding chrN_random and alternative haplotypes).  A score of 0.5
 indicates the sequence occurs exactly twice, likewise 0.33 for three times
-and 0.25 for four times.
+and 0.25 for four times. These tracks were used in the developement of the
+<A HREF="hgTrackUi?g=wgEncodeChromatinMap">Open Chromatin</A> tracks.
 
 <P>
 The <em>UMass uniqueness</em> track displays a uniqueness signal for each
@@ -68,7 +76,7 @@ title="&#110;&#115;h&#111;&#114;&#101;&#115;h&#64;&#98;r&#111;&#97;&#100;.&#109;
 Data generation and analysis was supported by funds from the NHGRI, the
 Burroughs Wellcome Fund, Massachusetts General Hospital and the Broad Institute.
 <P>
-The <em>Duke uniqueness</em> tracks were created by Terry Furey (contact:
+The <em>Duke uniqueness</em> and <em>excludable regions</em> tracks were created by Terry Furey (contact:
 <A HREF="mailto:&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u"
 title="&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u" rel="nofollow" TARGET=_BLANK>
 &#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u</A>)

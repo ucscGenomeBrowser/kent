@@ -82,9 +82,24 @@ represents the number of extended fragments that overlap the base pair.</DD>
 this reflects the aligned read density.  (Currently not available).</DD>
 <DT><I>Alignments</I></DT><DD> Mappings of short reads to the genome
 (currently only available for download).</DD>
-<DT><I>Regions Excluded</I></DT><DD>Genomic regions which were excluded from
+<!--<DT><I>Regions Excluded</I></DT><DD>Genomic regions which were excluded from
 calling <I>Peaks</I> due to various reasons such as repetitive sequence or
-genomic gaps.</DD>
+genomic gaps.</DD> -->
+<DT><I>Uniqueness</I></DT><DD>Three tracks identified as <em>Duke uniqueness</em>
+were used in identifying regions of unique sequence can be mapped are found in
+the set of <A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A>
+tracks.  These tracks show regions where <em>Alignments</em> can be expected to
+map well.</DD>
+<DT><I>Excluded Regions</I></DT><DD>A track identified as
+<em>Duke excludable regions</em> was used in identifying regions which were
+excluded from peak calling can be found in the set of
+<A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A>
+tracks.</DD>
+<!--<DT><I>Mapability</I></DT><DD>Two additional views which should be used in
+conjunction with these datasets can be found on the set of
+<A HREF="hgTrackUi?g=wgEncodeMapability" TARGET=_BLANK>Mapability</A>
+tracks.  Specifically, the <em>Duke uniqueness</em> and <em>excludable regions</em>
+tracks were used in identifying valid peaks.</DD>-->
 </DL>
 </P>
 

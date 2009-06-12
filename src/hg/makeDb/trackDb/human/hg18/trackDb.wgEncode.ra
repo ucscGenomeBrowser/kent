@@ -2216,13 +2216,17 @@ compositeTrack on
 shortLabel Open Chromatin
 longLabel ENCODE Open Chromatin, Duke/UNC/UT
 group regulation
-subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal zREG=Regions
-subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562 zRG=Reference_Genome
-subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control zXR=Excluded
+#subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal zREG=Regions
+#subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562 zRG=Reference_Genome
+#subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control zXR=Excluded
+#visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide sXREG=hide
+subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal
+subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562
+subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control
 sortOrder cellType=+ EXP=+ view=+
 dimensions dimensionX=cellType dimensionY=EXP
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide sXREG=hide
+visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
@@ -3263,23 +3267,24 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2008-12-05 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalK562Input fileName=wgEncodeUtaChIPseqRawSignalK562Input.wig.gz
 
-    track wgEncodeDukeRegionsExcluded
-    release alpha
-    subTrack wgEncodeChromatinMap off
-    shortLabel Excluded Regions
-    longLabel ENCODE Open Chromatin, Regions Excluded
-    subGroups view=zREG EXP=zXR cellType=zRG
-    type bed 6
-    noScoreFilter on
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability cell=Reference_Genome view=Regions_Excluded labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+    #track wgEncodeDukeRegionsExcluded
+    #release alpha
+    #subTrack wgEncodeChromatinMap off
+    #shortLabel Excluded Regions
+    #longLabel ENCODE Open Chromatin, Regions Excluded
+    #subGroups view=zREG EXP=zXR cellType=zRG
+    #type bed 6
+    #noScoreFilter on
+    #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability cell=Reference_Genome view=Regions_Excluded labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
 track wgEncodeMapability
 compositeTrack on
 shortLabel Mapability
 longLabel ENCODE Mapability
 group map
-subGroup1 view Mapability ALN=Alignability UNIQ=Uniqueness
-subGroup2 win Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp
+subGroup1 view Mapability ALN=Alignability EXR=Excludable UNIQ=Uniqueness
+subGroup2 win Size NA=N/A w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp
+visibilityViewDefaults ALN=hide EXR=hide UNIQ=full
 #dimensions dimensionX=win
 sortOrder view=+ win=+
 dragAndDrop subTracks
@@ -3344,6 +3349,17 @@ allButtonPair on
     spanList 1
     #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateLoaded=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
+
+    track wgEncodeDukeRegionsExcluded
+    release alpha
+    subTrack wgEncodeMapability off
+    shortLabel Exclude Regions
+    longLabel ENCODE Mapability - Duke Excludable Regions
+    subGroups view=EXR win=NA
+    type bed 6
+    noScoreFilter on
+    #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability cell=Reference_Genome view=Regions_Excluded labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability cell=Reference_Genome view=Regions_Excluded labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateLoaded=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 
