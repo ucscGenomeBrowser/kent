@@ -6715,7 +6715,7 @@ wgEncode 1
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mouseigg fileName=wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
 
-    track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseiggv
+    track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-S3 MusIgG 1
