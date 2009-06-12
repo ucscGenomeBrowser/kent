@@ -894,7 +894,7 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *na
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
 /* Put up UI for net tracks */
 
-void chainCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
+void chainCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed, char *chromosome);
 /* Put up UI for chain tracks */
 
 void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax);
