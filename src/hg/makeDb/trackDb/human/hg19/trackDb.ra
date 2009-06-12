@@ -1130,3 +1130,12 @@ configurable on
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign petMar1 chainPetMar1
     otherDb petMar1
+
+track hg18cytoBand
+shortLabel hg18 Chromosome Band
+longLabel Chromosome Bands (hg18)
+group map
+priority 1
+visibility hide
+type bed 4 +
+
