@@ -8,7 +8,6 @@ longLabel EPI Isolate
 priority 1
 visibility on
 type string
-query select EPI_ISOLATE_ID from gisaidSubjInfo where subjId='%s';
 
 name subjId
 shortLabel subject
@@ -23,7 +22,6 @@ longLabel LOCATION
 priority 5
 visibility on
 type string
-query select LOCATION from gisaidSubjInfo where subjId='%s';
 
 name COLLECT_DATE
 shortLabel COLLECT_DATE
@@ -31,15 +29,13 @@ longLabel Collection Date
 priority 12
 visibility on
 type string
-query select COLLECT_DATE from gisaidSubjInfo where subjId='%s';
 
 name ISOLATE_SUBMITTER
 shortLabel ISOLATE_SUBMITTER
 longLabel Isolate Submitter
-priority 12
-visibility off
+priority 65
+visibility on
 type string
-query select ISOLATE_SUBMITTER from gisaidSubjInfo where subjId='%s';
 
 name RESIST_TO_ADAMANTANES
 shortLabel RESIST_TO_ADAMANTANES
@@ -47,7 +43,6 @@ longLabel Resistance to Adamantanes
 priority 15
 visibility off
 type string
-query select RESIST_TO_ADAMANTANES from gisaidSubjInfo where subjId='%s';
 
 name RESIST_TO_OSELTAMIVIR
 shortLabel RESIST_TO_OSELTAMIVIR
@@ -55,7 +50,6 @@ longLabel Resistance to Oseltamivir
 priority 25
 visibility on
 type string
-query select RESIST_TO_OSELTAMIVIR from gisaidSubjInfo where subjId='%s';
 
 name RESIST_TO_ZANAMIVIR
 shortLabel RESIST_TO_ZANAMIVIR
@@ -63,7 +57,6 @@ longLabel Resistance to Zanamivir
 priority 35
 visibility on
 type string
-query select RESIST_TO_ZANAMIVIR from gisaidSubjInfo where subjId='%s';
 
 name RESIST_TO_PERAMIVIR
 shortLabel RESIST_TO_PERAMIVIR
@@ -71,7 +64,6 @@ longLabel Resistance to Peramivir
 priority 45
 visibility off
 type string
-query select RESIST_TO_PERAMIVIR from gisaidSubjInfo where subjId='%s';
 
 name RESIST_TO_OTHER
 shortLabel RESIST_TO_OTHER
@@ -79,21 +71,18 @@ longLabel Resistance to Other
 priority 55
 visibility off
 type string
-query select RESIST_TO_OTHER from gisaidSubjInfo where subjId='%s';
 
-name dnaSeqs
+name dnaSeqIds
 shortLabel DNA Sequences
 longLabel DNA Sequence IDs
 priority 80
 visibility off
 type string
-query select dnaSeqIds from gisaidSubjSeq where subjId='%s';
 
-name aaSeqs
+name aaSeqIds
 shortLabel Protein Sequences
 longLabel Protein Sequence IDs
 priority 90
 visibility off
 type string
-query select aaSeqIds from gisaidSubjSeq where subjId='%s';
 
