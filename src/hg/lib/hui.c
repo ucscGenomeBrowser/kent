@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.211 2009/06/12 15:52:22 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.212 2009/06/12 21:05:51 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4629,7 +4629,7 @@ if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>\n"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
         int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
@@ -4660,6 +4660,137 @@ for(ix=1;ix<count && !found;ix++)
 freeMem(words[0]);
 return cloneString(label);
 }
+
+#define PM_BUTTON_UC "<A NAME='%s'></A><A HREF='#%s'><IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'></A>"
+static void buttonsForAll()
+{
+printf(PM_BUTTON_UC, "plus_all", "plus_all", "true",  "", "", "", "", "",  "plus_all",    "add_sm.gif");
+printf(PM_BUTTON_UC,"minus_all","minus_all","false",  "", "", "", "", "", "minus_all", "remove_sm.gif");
+}
+static void buttonsForOne(char *name,char *class)
+{
+printf(PM_BUTTON_UC, name, name,  "true", ",'", class, "'", "", "", name,    "add_sm.gif");
+printf(PM_BUTTON_UC, name, name, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
+}
+
+#define MATRIX_RIGHT_BUTTONS_AFTER 8
+#define MATRIX_BOTTOM_BUTTONS_AFTER 20
+static void matrixXheadingsRow1(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
+/* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
+{
+printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=%s>\n",COLOR_BG_ALTDEFAULT,top?"BOTTOM":"TOP");
+if(dimensionX && dimensionY)
+    {
+    printf("<TH ALIGN=LEFT valign=%s>",top?"TOP":"BOTTOM");
+    buttonsForAll();
+    puts("&nbsp;All</TH>");
+    }
+
+// If there is an X dimension, then titles go across the top
+if(dimensionX)
+    {
+    int ixX;
+    if(dimensionY)
+        printf("<TH align=RIGHT><EM><B>%s</EM></B>:</TH>", dimensionX->title);
+    else
+        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<EM><B>%s</EM></B></TH>",top?"TOP":"BOTTOM", dimensionX->title);
+    for (ixX = 0; ixX < dimensionX->count; ixX++)
+        {
+        if(tdbsX[ixX] != NULL || dimensionX == NULL)
+            {
+            char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
+            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
+            freeMem(label);
+            }
+        }
+    // If dimension is big enough, then add Y buttons to righ as well
+    if(dimensionX->count>MATRIX_RIGHT_BUTTONS_AFTER)
+        {
+        if(dimensionY)
+            {
+            printf("<TH align=LEFT>:<EM><B>%s</EM></B></TH>", dimensionX->title);
+            printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
+            buttonsForAll();
+            puts("</TH>");
+            }
+        else
+            printf("<TH ALIGN=LEFT valign=%s><EM><B>%s</EM></B>&nbsp;&nbsp;</TH>",top?"TOP":"BOTTOM", dimensionX->title);
+        }
+    }
+else if(dimensionY)
+    {
+    printf("<TH ALIGN=RIGHT WIDTH=100 nowrap>");
+    printf("<EM><B>%s</EM></B>", dimensionY->title);
+    printf("</TH><TH ALIGN=CENTER WIDTH=60>");
+    buttonsForAll();
+    puts("</TH>");
+    }
+puts("</TR>\n");
+}
+
+static void matrixXheadingsRow2(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX)
+/* prints the 2nd row of a matrix: Y title; X buttons; title Y */
+{
+// If there are both X and Y dimensions, then there is a row of buttons in X
+if(dimensionX && dimensionY)
+    {
+    int ixX;
+    printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->title);
+    for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
+        {
+        if(tdbsX[ixX] != NULL || dimensionX == NULL)
+            {
+            char objName[SMALLBUF];
+            puts("<TD>");
+            safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
+            buttonsForOne( objName, dimensionX->names[ixX] );
+            puts("</TD>");
+            }
+        }
+    // If dimension is big enough, then add Y buttons to righ as well
+    if(dimensionX->count>MATRIX_RIGHT_BUTTONS_AFTER)
+        printf("<TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>", dimensionY->title);
+    puts("</TR>\n");
+    }
+}
+
+static void matrixXheadings(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,struct trackDb **tdbsX,boolean top)
+/* UI for X headings in matrix */
+{
+if(top)
+    matrixXheadingsRow1(parentTdb,dimensionX,dimensionY,tdbsX,top);
+
+    matrixXheadingsRow2(parentTdb,dimensionX,dimensionY,tdbsX);
+
+if(!top)
+    matrixXheadingsRow1(parentTdb,dimensionX,dimensionY,tdbsX,top);
+}
+
+static void matrixYheadings(struct trackDb *parentTdb, members_t *dimensionX,members_t *dimensionY,int ixY,struct trackDb *childTdb,boolean left)
+/* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
+{
+if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of buttons
+    {
+    char objName[SMALLBUF];
+    printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
+    if(left)
+        printf("%s&nbsp;",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
+    safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
+    buttonsForOne( objName, dimensionY->names[ixY] );
+    if(!left)
+        printf("&nbsp;%s",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
+    puts("</TH>");
+    }
+else if (dimensionX)
+    {
+    printf("<TH ALIGN=%s>",left?"RIGHT":"LEFT");
+    buttonsForAll();
+    puts("</TH>");
+    }
+else if (left && dimensionY && childTdb != NULL)
+    printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
+}
+
 
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
@@ -4724,187 +4855,115 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         cellsZ[ixZ]++;
     }
 
-    // Regardless of whether there is a dimension X or Y, there will be 'all' buttons
-    //puts("<B>Select subtracks by characterization:</B><BR>");
-    printf("<B>Select subtracks by ");
-    if(dimensionX && !dimensionY)
-        safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionX->title);
-    else if(!dimensionX && dimensionY)
-        safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionY->title);
-    else if(dimensionX && dimensionY && !dimensionZ)
-        safef(javascript, sizeof(javascript), "%s and %s:</B><BR>",dimensionX->title,dimensionY->title);
-    else //if(dimensionX && dimensionY && dimensionZ)
-        safef(javascript, sizeof(javascript), "%s, %s and %s:</B><BR>",dimensionX->title,dimensionY->title,dimensionZ->title);
-    puts(strLower(javascript));
+//puts("<B>Select subtracks by characterization:</B><BR>");
+printf("<B>Select subtracks by ");
+if(dimensionX && !dimensionY)
+    safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionX->title);
+else if(!dimensionX && dimensionY)
+    safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionY->title);
+else if(dimensionX && dimensionY && !dimensionZ)
+    safef(javascript, sizeof(javascript), "%s and %s:</B><BR>",dimensionX->title,dimensionY->title);
+else //if(dimensionX && dimensionY && dimensionZ)
+    safef(javascript, sizeof(javascript), "%s, %s and %s:</B><BR>",dimensionX->title,dimensionY->title,dimensionZ->title);
+puts(strLower(javascript));
 
-    printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
+printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
-    printf("<TR ALIGN=CENTER BGCOLOR='%s'>\n",COLOR_BG_ALTDEFAULT);
-    if(dimensionX && dimensionY)
+matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,TRUE);
+
+// Now the Y by X matrix
+for (ixY = 0; ixY < sizeOfY; ixY++)
+    {
+    if(tdbsY[ixY] != NULL || dimensionY == NULL)
         {
-        printf("<TH ALIGN=LEFT WIDTH='100'>All&nbsp;&nbsp;");
-#define PM_BUTTON_UC "<A NAME='%s'></A><A HREF='#%s'><IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'></A>"
-#define    BUTTON_PLUS_ALL()                   printf(PM_BUTTON_UC, "plus_all", "plus_all", "true",  "",     "",   "",      "", "", "plus_all",   "add_sm.gif")
-#define    BUTTON_MINUS_ALL()                  printf(PM_BUTTON_UC,"minus_all","minus_all","false",  "",     "",   "",      "", "","minus_all","remove_sm.gif")
-#define    BUTTON_PLUS_ONE( name,class)        printf(PM_BUTTON_UC,     (name),     (name), "true",",'",(class),  "'",      "", "",     (name),   "add_sm.gif")
-#define    BUTTON_MINUS_ONE(name,class)        printf(PM_BUTTON_UC,     (name),     (name),"false",",'",(class),  "'",      "", "",     (name),"remove_sm.gif")
-//#define    BUTTON_PLUS_TWO( name,class,class2) printf(PM_BUTTON_UC,     (name),     (name), "true",",'",(class),"','",(class2),"'",     (name),   "add_sm.gif")
-//#define    BUTTON_MINUS_TWO(name,class,class2) printf(PM_BUTTON_UC,     (name),     (name),"false",",'",(class),"','",(class2),"'",     (name),"remove_sm.gif")
-        BUTTON_PLUS_ALL();
-        BUTTON_MINUS_ALL();
-        puts("</TH>");
-        }
-    else if(dimensionX)
-        printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionX->title);
-    else if(dimensionY)
-        printf("<TH ALIGN=RIGHT WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionY->title);
+        assert(!dimensionY || ixY < dimensionY->count);
+        printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
 
-    // If there is an X dimension, then titles go across the top
-    if(dimensionX)
-        {
-        if(dimensionY)
-            printf("<TH align='right' WIDTH=\"100\"><EM><B>%s</EM></B>:</TH>", dimensionX->title);
-        for (ixX = 0; ixX < dimensionX->count; ixX++)
+        matrixYheadings(parentTdb, dimensionX,dimensionY,ixY,tdbsY[ixY],TRUE);
+
+        for (ixX = 0; ixX < sizeOfX; ixX++)
             {
             if(tdbsX[ixX] != NULL || dimensionX == NULL)
                 {
-                char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
-                printf("<TH WIDTH=\"100\">%s</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
-                freeMem(label);
-                }
-            }
-        }
-    else if(dimensionY)
-        {
-        printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-        BUTTON_PLUS_ALL();
-        BUTTON_MINUS_ALL();
-        puts("</TH>");
-        }
-    puts("</TR>\n");
-
-    // If there are both X and Y dimensions, then there is a row of buttons in X
-    if(dimensionX && dimensionY)
-        {
-        printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=RIGHT><EM><B>%s</EM></B></TH><TD>&nbsp;</TD>",COLOR_BG_ALTDEFAULT, dimensionY->title);
-        for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
-            {
-            if(tdbsX[ixX] != NULL || dimensionX == NULL)
-                {
-                puts("<TD>");
-                safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
-                BUTTON_PLUS_ONE( objName,dimensionX->names[ixX]);
-                BUTTON_MINUS_ONE(objName,dimensionX->names[ixX]);
-                puts("</TD>");
-                }
-            }
-        puts("</TR>\n");
-        }
-
-    // Now the Y by X matrix
-    for (ixY = 0; ixY < sizeOfY; ixY++)
-        {
-        if(tdbsY[ixY] != NULL || dimensionY == NULL)
-            {
-            assert(!dimensionY || ixY < dimensionY->count);
-            printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
-            if(dimensionY == NULL) // 'All' buttons go here if no Y dimension
-                {
-                printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-                BUTTON_PLUS_ALL();
-                BUTTON_MINUS_ALL();
-                puts("</TH>");
-                }
-            else if(ixY < dimensionY->count)
-                printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,tdbsY[ixY],dimensionY->tag,dimensionY->values[ixY]));
-            else
-                break;
-
-            if(dimensionX && dimensionY) // Both X and Y, then column of buttons
-                {
-                puts("<TD>");
-                safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
-                BUTTON_PLUS_ONE( objName,dimensionY->names[ixY]);
-                BUTTON_MINUS_ONE(objName,dimensionY->names[ixY]);
-                puts("</TD>");
-                }
-            for (ixX = 0; ixX < sizeOfX; ixX++)
-                {
-                if(tdbsX[ixX] != NULL || dimensionX == NULL)
+                assert(!dimensionX || ixX < dimensionX->count);
+                if(dimensionX && ixX == dimensionX->count)
+                    break;
+                if(cells[ixX][ixY] > 0)
                     {
-                    assert(!dimensionX || ixX < dimensionX->count);
-                    if(dimensionX && ixX == dimensionX->count)
-                        break;
-                    if(cells[ixX][ixY] > 0)
+                    if(dimensionX && dimensionY)
                         {
-                        if(dimensionX && dimensionY)
-                            {
-                            safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
-                            safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\",\"%s\");'",
-                                dimensionX->names[ixX],dimensionY->names[ixY]);
-                            }
-                        else
-                            {
-                            safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                            safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
-                                (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                            }
-                        alreadySet = cartUsualBoolean(cart, objName, FALSE);
-                        puts("<TD>");
-                        struct dyString *dyJS = newDyString(100);
-                        dyStringPrintf(dyJS, javascript);
-                        dyStringPrintf(dyJS, " class=\"matrixCB");
-                        if(dimensionX)
-                            dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
-                        if(dimensionY)
-                            dyStringPrintf(dyJS, " %s",dimensionY->names[ixY]);
-                        dyStringAppendC(dyJS,'"');
-                        cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
-                        puts("</TD>");
+                        safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
+                        safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\",\"%s\");'",
+                            dimensionX->names[ixX],dimensionY->names[ixY]);
                         }
                     else
-                        puts("<TD>&nbsp;</TD>");
+                        {
+                        safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
+                        safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
+                            (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
+                        }
+                    alreadySet = cartUsualBoolean(cart, objName, FALSE);
+                    puts("<TD>");
+                    struct dyString *dyJS = newDyString(100);
+                    dyStringPrintf(dyJS, javascript);
+                    dyStringPrintf(dyJS, " class=\"matrixCB");
+                    if(dimensionX)
+                        dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
+                    if(dimensionY)
+                        dyStringPrintf(dyJS, " %s",dimensionY->names[ixY]);
+                    dyStringAppendC(dyJS,'"');
+                    cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
+                    puts("</TD>");
                     }
-                }
-            puts("</TR>\n");
-            }
-        }
-    if(dimensionZ)
-        {
-        printf("<TR align='center' valign='bottom' BGCOLOR='%s''>",COLOR_BG_ALTDEFAULT);
-        printf("<TH class='greenRoof' STYLE='font-size: 2' colspan=50>&nbsp;</TH>");
-        printf("<TR BGCOLOR='%s'><TH valign=top align=left colspan=2 rowspan=20><B><EM>%s</EM></B>:",
-               COLOR_BG_ALTDEFAULT,dimensionZ->title);
-        int cntZ=0;
-        for(ixZ=0;ixZ<sizeOfZ;ixZ++)
-            {
-            if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
-                {
-                if(cntZ > 0 && (cntZ % sizeOfX) == 0)
-                    printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-                printf("<TH align=left nowrap>");
-                safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
-                safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
-                alreadySet = cartUsualBoolean(cart, objName, FALSE);
-                struct dyString *dyJS = newDyString(100);
-                dyStringPrintf(dyJS, javascript);
-                dyStringPrintf(dyJS, " class=\"matrixCB dimZ %s\"",dimensionZ->names[ixZ]);
-                cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
-                printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
-                puts("</TH>");
-                cntZ++;
+                else
+                    puts("<TD>&nbsp;</TD>");
                 }
             }
-        if((cntZ % sizeOfX) > 0)
-            printf("<TH colspan=%d>&nbsp;</TH>",sizeOfX);
+        if(dimensionX && dimensionX->count>MATRIX_RIGHT_BUTTONS_AFTER)
+            matrixYheadings(parentTdb, dimensionX,dimensionY,ixY,tdbsY[ixY],FALSE);
+        puts("</TR>\n");
         }
-    puts("</TD></TR></TABLE>");
-    subgroupMembersFree(&dimensionX);
-    subgroupMembersFree(&dimensionY);
-    subgroupMembersFree(&dimensionZ);
-    puts("<BR>\n");
+    }
+if(dimensionY && dimensionY->count>MATRIX_BOTTOM_BUTTONS_AFTER)
+    matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,FALSE);
 
-    return TRUE;
+if(dimensionZ)
+    {
+    printf("<TR align='center' valign='bottom' BGCOLOR='%s''>",COLOR_BG_ALTDEFAULT);
+    printf("<TH class='greenRoof' STYLE='font-size: 2' colspan=50>&nbsp;</TH>");
+    printf("<TR BGCOLOR='%s'><TH valign=top align=left colspan=2 rowspan=20><B><EM>%s</EM></B>:",
+            COLOR_BG_ALTDEFAULT,dimensionZ->title);
+    int cntZ=0;
+    for(ixZ=0;ixZ<sizeOfZ;ixZ++)
+        {
+        if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
+            {
+            if(cntZ > 0 && (cntZ % sizeOfX) == 0)
+                printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
+            printf("<TH align=left nowrap>");
+            safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
+            safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
+            alreadySet = cartUsualBoolean(cart, objName, FALSE);
+            struct dyString *dyJS = newDyString(100);
+            dyStringPrintf(dyJS, javascript);
+            dyStringPrintf(dyJS, " class=\"matrixCB dimZ %s\"",dimensionZ->names[ixZ]);
+            cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
+            printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
+            puts("</TH>");
+            cntZ++;
+            }
+        }
+    if((cntZ % sizeOfX) > 0)
+        printf("<TH colspan=%d>&nbsp;</TH>",sizeOfX);
+    }
+puts("</TD></TR></TABLE>");
+
+subgroupMembersFree(&dimensionX);
+subgroupMembersFree(&dimensionY);
+subgroupMembersFree(&dimensionZ);
+puts("<BR>\n");
+
+return TRUE;
 }
 
 static boolean hCompositeUiAllButtons(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
