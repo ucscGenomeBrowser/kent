@@ -21,7 +21,7 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.4 2009/06/11 23:51:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidTable.c,v 1.5 2009/06/12 18:23:57 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -287,7 +287,7 @@ for (si = subjList; si != NULL; si = si->next)
 			special = TRUE;
 			}
     		    }
-		if ((sameWord(col->name, "dnaSeqs")) || (sameWord(col->name, "aaSeqs")))
+		if ((sameWord(col->name, "dnaSeqIds")) || (sameWord(col->name, "aaSeqIds")))
     		    {
       		    chp = val;
 		    chp = strstr(chp, "#35;");
@@ -628,7 +628,7 @@ else
 	s = cloneString("&nbsp;");
 	}
 
-    if (! (sameString(col->name,"dnaSeqs") || sameString(col->name,"aaSeqs")) )
+    if (! (sameString(col->name,"dnaSeqIds") || sameString(col->name,"aaSeqIds")) )
     	hPrintNonBreak(s);
     else
         /* special processing for DNA and protein sequences */
