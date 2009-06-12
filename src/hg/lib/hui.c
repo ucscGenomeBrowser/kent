@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.208 2009/06/02 19:13:32 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.211 2009/06/12 15:52:22 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2831,7 +2831,7 @@ switch(cType)
                         break;
     case cfgGenePred:   genePredCfgUi(cart,tdb,prefix,title,boxed);
                         break;
-    case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed);
+    case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
                         break;
     case cfgNetAlign:	netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
@@ -2946,9 +2946,10 @@ if (!primarySubtrack)
     boolean restrictions = FALSE;
     for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
-        if(trackDbSetting(subtrack, "dateReleased")
-        || trackDbSetting(subtrack, "dateSubmitted"))
+        char *date = metadataSettingFind(subtrack,"dateUnrestricted");
+        if(date != NULL)
             {
+            freeMem(date);
             restrictions = TRUE;
             break;
             }
@@ -3642,7 +3643,7 @@ netLevelDropDown(optString, netLevelEnumToString(netLevel));
 cfgEndBox(boxed);
 }
 
-void chainCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+void chainCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed, char *chromosome)
 /* Put up UI for chain tracks */
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
@@ -3657,12 +3658,20 @@ boolean normScoreAvailable = FALSE;
 
 if (! compositeLevel)
     {
-    // This will not work if tableName is a split table, we don't know
-    //	the chromosome at this point here
-    struct sqlConnection *conn = hAllocConn(db);
-    int tblIx = sqlFieldIndex(conn, tdb->tableName, "normScore");
-    normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
-    hFreeConn(&conn);
+    if (chromosome)
+	{
+	if (chainDbNormScoreAvailable(db, chromosome, tdb->tableName, NULL))
+	    normScoreAvailable = TRUE;
+	}
+    else
+	{
+	// This will not work if tableName is a split table, we don't know
+	//	the chromosome at this point here
+	struct sqlConnection *conn = hAllocConn(db);
+	int tblIx = sqlFieldIndex(conn, tdb->tableName, "normScore");
+	normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
+	hFreeConn(&conn);
+	}
     }
 else
     {
@@ -4676,8 +4685,8 @@ char *value;
 int sizeOfX = dimensionX?dimensionX->count:1;
 int sizeOfY = dimensionY?dimensionY->count:1;
 int sizeOfZ = dimensionZ?dimensionZ->count:1;
-char cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
-char cellsZ[sizeOfX];         // The Z dimension is a separate 1D matrix
+int cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
+int cellsZ[sizeOfX];         // The Z dimension is a separate 1D matrix
 struct trackDb *tdbsX[sizeOfX]; // Representative subtracks
 struct trackDb *tdbsY[sizeOfY];
 struct trackDb *tdbsZ[sizeOfZ];
