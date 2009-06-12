@@ -21,7 +21,7 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.5 2009/06/12 18:23:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidTable.c,v 1.6 2009/06/12 22:52:14 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1414,20 +1414,18 @@ cnt = 0;
 subjList = subjListIn;
 while (subjList)
     {
-    fprintf(outF, "%s\n", subjList->fields[0]);
+    fprintf(outF, "%s\n", subjList->fields[1]);
     
     safef(query, sizeof(query), 
-	  "select distinct dnaSeqId from gisaidXref where subjId='%s'",
-	  //"select seqId from gisaidXref where subjId='%s'",
+	  "select distinct seqId from h1n1SeqXref where islId='%s'",
 	  subjList->fields[0]);
-
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{
 	/* Remove "ss." from the front of the DNA sequence ID, 
 	   so that they could be used both for DNA and protein MSA maf display */
 	
-	fprintf(outF2, "%s\t%s\n", row[0], subjList->fields[0]);
+	fprintf(outF2, "%s\t%s\n", row[0], subjList->fields[1]);
 	cnt++;
 	}
     sqlFreeResult(&sr);
@@ -1441,8 +1439,7 @@ while (subjList)
     fprintf(outF, "%s\n", subjList->fields[0]);
     
     safef(query, sizeof(query), 
-	  "select distinct aaSeqId from gisaidXref where subjId='%s'",
-	  //"select seqId from gisaidXref where subjId='%s'",
+	  "select distinct seqId, geneSymbol from h1n1SeqXref where islId='%s'",
 	  subjList->fields[0]);
 
     sr = sqlGetResult(conn, query);
@@ -1451,7 +1448,7 @@ while (subjList)
 	/* Remove "ss." from the front of the DNA sequence ID, 
 	   so that they could be used both for DNA and protein MSA maf display */
 	
-	fprintf(outF3, "%s\t%s\n", row[0], subjList->fields[0]);
+	fprintf(outF3, "%s_%s\t%s\n", row[0], row[1], subjList->fields[1]);
 	cnt++;
 	}
     sqlFreeResult(&sr);
