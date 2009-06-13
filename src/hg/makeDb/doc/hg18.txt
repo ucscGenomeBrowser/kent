@@ -27973,3 +27973,82 @@ CREATE TABLE ensemblLift (
     hgLoadBed hg18 fox2ClipClusters{,.bed}
 
 ##############################################################################
+#  RE-BUILD sno/miRNA TRACK (DONE, 2009-06-11 - 2009-06-13, hartera)
+    # The data in this track is out of date so update the track. 
+    mkdir -p /hive/data/genomes/hg18/bed/wgRna-2009-06-11
+    cd /hive/data/genomes/hg18/bed/wgRna-2009-06-11
+    # Download GFF file of latest miRNA annotations from miRBase at the
+    # Wellcome Trust Sanger Institute (WTSI). This is Release 13.0 (March
+    # 2009)
+    wget --timestamping \
+ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/hsa.gff
+    # Re-format, need to add "chr" to the beginning of each line.
+    sed -e 's/^/chr/' hsa.gff > hsMirBaseFormat.gff
+    # Remove extra "chr" in comment lines
+    perl -pi.bak -e 's/chr#/#/' hsMirBaseFormat.gff
+    # Change chrMT to chrM
+    perl -pi.bak -e 's/chrMT/chrM/' hsMirBaseFormat.gff
+    # Remove all but ID name in last field
+    sed -e 's/\";//g' hsMirBaseFormat.gff | sed -e 's/ID=\"//g' \
+       | sed -e 's/ACC=\"MI[0-9]*\s//' > hsMirBaseFormatIdOnly.gff
+
+    # use score 906 for + strand and 480 for - strand. This will show 
+    # up black on the track for + strand and grey for - strand.
+    # Starts appear to be 1-based when compared to miRNAs in current track
+    # and those in Ensembl.
+    # Confirmed with Sam Griffith-Jones (one of the authors of miRBase,
+    # sam.griffith-jones@manchester.ac.uk) that these GFF coordinates
+    # are 1-based. 
+    # Also add thickStart and thickEnd columns and "miRNA" for type.
+    awk 'BEGIN {FS="\t"} {OFS="\t"} \
+        {if ($0 !~ /#/ && $7 == "+") \
+         print $1, $4-1, $5, $9, 960, $7, 0, 0, "miRNA"; \
+       else if ($0 !~ /#/ && $7 == "-") \
+         print $1, $4-1, $5, $9, 480, $7, 0, 0, "miRNA";}' \
+        hsMirBaseFormatIdOnly.gff > hsMirBaseFormatIdOnly.bed
+    # 2009-06-12
+    # snoRNAs are from snoRNABase at http://www-snorna.biotoul.fr/
+    # Download coordinates for hg18 from
+    # http://www-snorna.biotoul.fr/coordinates.php
+    # This is version 3 of the database.
+    # save as tab-separated file: snoRNABaseVersion3Coords.txt and remove
+    # first and last lines.
+    perl -pi.bak -e 's/\"//g' snoRNABaseVersion3Coords.txt
+    # Reformat to BED format with thickStart and thickEnd set to 0.
+    awk 'BEGIN {FS="\t"} {OFS="\t"} \
+        {if ($4 == "+") \
+         print $1, $2-1, $3, $5, 960, $4, 0, 0,$6; \
+       else if ($4 == "-") \
+         print $1, $2-1, $3, $5, 480, $4, 0, 0,$6;}' \
+       snoRNABaseVersion3Coords.txt > snoRNABaseVersion3Coords.bed
+   # Merge the miRNA and snoRNA files together
+   cat hsMirBaseFormatIdOnly.bed snoRNABaseVersion3Coords.bed \
+       > wgRna20090611.bed
+   # Load into separate table rather than overwriting wgRna
+   cp -p /cluster/home/hartera/src/hg/lib/wgRna.sql wgRnaJun09.sql
+   perl -pi.bak -e 's/TABLE wgRna/TABLE wgRnaJun09/' wgRnaJun09.sql
+   hgLoadBed -sqlTable=wgRnaJun09.sql hg18 wgRnaJun09 wgRna20090611.bed
+# Reading wgRna20090611.bed
+# Loaded 1120 elements of size 9
+# Sorted
+# Creating table definition for wgRnaJun09
+# Saving bed.tab
+# Loading hg18
+
+   # Clean up
+   rm *.bak
+
+hgsql -e 'select count(*) from wgRna;' hg18 
+# 1059
+# for miRNAs: 685 (676 unique names)
+# and others: 374 including 21 scaRNA
+hgsql -e 'select count(*) from wgRnaJun09;' hg18
+# 1120
+# for miRNAs: 718 (705 unique)
+# and others: 402 including 21 scaRNA
+   # 2009-06-13
+   # Renamed the old wgRna track to wgRnaOld and renamed the new wgRnaJun09
+   # track to wgRna. Will keep the old track around for a while until
+   # new track checked and QA'd.
+   hgsql -e 'alter table wgRna rename wgRnaOld;' hg18
+   hgsql -e 'alter table wgRnaJun09 rename wgRna;' hg18
