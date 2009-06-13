@@ -1931,3 +1931,169 @@ cp ../fileDb.ra
 edit preamble.html to note the subdirectory only contains Raw Signals
 encodeDownloadsPage.pl index.html
 
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation x ../349 > validate_error 2>&1
+
+Catch up with HCT-116 and add NT2-D1 2009-06-08
+===============================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 333 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 346 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 347 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 348 displayed
+
+To be done:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 349 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 351 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 354 displayed
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 358 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 359 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 360 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 361 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 362 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 363 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 364 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 365 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 366 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 367 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 368 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 369 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 370 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 373 displayed
+
+# Mike Wilson provided this list of datasets that belong to Yale or UCDavis.
+# Since K562 and HepG2 have separate inputs for Yale and UCDavis, these two cell lines must be broken down into
+# K562/K562b and HepG2/HepG2b (the 'b' version is UCDavis, sorry Peggy)
+YHD_NB4_Pol2  	Yale
+YHD_NB4_Input 	Yale
+YHD_K562_PolyA_RNA 	Yale
+YHD_K562_Pol2 	Yale
+YHD_K562_NF-E2 	Yale
+YHD_K562_Myc 	Yale
+YHD_K562_Max 	Yale
+YHD_K562_JunD 	Yale
+YHD_K562_Jun 	Yale
+YHD_K562_Input 	Yale
+YHD_K562_Fos 	Yale
+YHD_HepG2_SREBP2 	Yale
+YHD_HepG2_SREBP1A 	Yale
+YHD_HepG2_Pol2 	Yale
+YHD_HepG2_Input 	Yale
+YHD_HeLa-S3_Pol2 	Yale
+YHD_HeLa-S3_Naked_DNA_Control 	Yale
+YHD_HeLa-S3_MouseIgG_Control 	Yale
+YHD_HeLa-S3_MNase_Control 	Yale
+YHD_HeLa-S3_Large_Fragment_Control 	Yale
+YHD_HeLa-S3_Input 	Yale
+YHD_HeLa-S3_IFNg_STAT1 	Yale
+YHD_HeLa-S3_IFNg_Input 	Yale
+YHD_HEK293_Pol2 	Yale
+YHD_HEK293_Input 	Yale
+YHD_GM12878_Pol2 	Yale
+YHD_GM12878_Max 	Yale
+YHD_GM12878_JunD 	Yale
+YHD_GM12878_Input 	Yale
+YHD_GM12878_c-Fos 	Yale
+YDH_K562_XRCC4 	Yale
+YDH_K562_Rad21 	Yale
+YDH_K562-IFNg6h_Pol2 	Yale
+YDH_K562-IFNg6h_Myc 	Yale
+YDH_K562-IFNg6h_Jun 	Yale
+YDH_K562-IFNg6h_Input 	Yale
+YDH_K562-IFNg30_Input 	Yale
+YDH_K562-IFNa6h_STAT2 	Yale
+YDH_K562-IFNa6h_STAT1 	Yale
+YDH_K562-IFNa6h_Pol2 	Yale
+YDH_K562-IFNa6h_Myc 	Yale
+YDH_K562-IFNa6h_Jun 	Yale
+YDH_K562-IFNa6h_Input 	Yale
+YDH_K562-IFNa30_STAT2 	Yale
+YDH_K562-IFNa30_STAT1 	Yale
+YDH_K562-IFNa30_Pol2 	Yale
+YDH_K562-IFNa30_Myc 	Yale
+YDH_K562-IFNa30_Jun 	Yale
+YDH_K562-IFNa30_Input 	Yale
+YDH_HeLa-S3_Myc 	Yale
+YDH_HeLa-S3_Max 	Yale
+YDH_HeLa-S3_c-Fos 	Yale
+YDH_GM12878_Pol3 	Yale
+
+YDH_K562_E2F4 	UCD
+YDH_K562_E2F6 	UCD
+YHD_K562_GATA-1 	UCD
+YHD_K562_ZNF263 	UCD
+YDH_K562_Farnham_Input 	UCD
+
+YDH_HCT-116_Pol2 	UCD
+YHD_HCT-116_TCF4 	UCD
+YHD_HCT-116_Input 	UCD
+
+YDH_NT2-D1_YY1 	UCD
+YDH_NT2-D1_SUZ12 	UCD
+YDH_NT2-D1_Input 	UCD
+
+YDH_HepG2b_TR4 	UCD
+YDH_HepG2b_Input 	UCD
+
+# Of these the following have been submitted but really need to be renamed for the b version:
+# NOTE that they are all Rel2 which saves some worry over alpha/beta versions
+
+rename table wgEncodeYaleChIPseqRel2PeaksK562Gata1         to wgEncodeYaleChIPseqRel2PeaksK562bGata1;
+rename table wgEncodeYaleChIPseqRel2SignalK562Gata1        to wgEncodeYaleChIPseqRel2SignalK562bGata1;
+rename table wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1 to wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1;
+rename table wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1 to wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1;
+
+rename table wgEncodeYaleChIPseqRel2PeaksK562Znf263         to wgEncodeYaleChIPseqRel2PeaksK562bZnf263;
+rename table wgEncodeYaleChIPseqRel2SignalK562Znf263        to wgEncodeYaleChIPseqRel2SignalK562bZnf263;
+rename table wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263 to wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263;
+rename table wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263 to wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263;
+
+cd /gbdb/hg18/wib/
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/329/wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1.wib wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1.wib 
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/329/wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1.wib wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1.wib 
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/329/wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263.wib wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263.wib 
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/329/wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263.wib wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263.wib 
+update wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1 set file = "/gbdb/hg18/wib/wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1.wib";
+update wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1 set file = "/gbdb/hg18/wib/wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1.wib";
+update wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263 set file = "/gbdb/hg18/wib/wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263.wib";
+update wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263 set file = "/gbdb/hg18/wib/wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263.wib";
+rm wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1.wib
+rm wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1.wib
+rm wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263.wib
+rm wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263.wib
+
+# gold; cd wgEncodeYaleChipSeq
+mv wgEncodeYaleChIPseqRel2PeaksK562Gata1.narrowPeak.gz wgEncodeYaleChIPseqRel2PeaksK562bGata1.narrowPeak.gz
+mv wgEncodeYaleChIPseqRel2SignalK562Gata1.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz
+mv wgEncodeYaleChIPseqRel2PeaksK562Znf263.narrowPeak.gz wgEncodeYaleChIPseqRel2PeaksK562bZnf263.narrowPeak.gz
+mv wgEncodeYaleChIPseqRel2SignalK562Znf263.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz
+# cd raw
+mv wgEncodeYaleChIPseqRel2RawSignalRep1K562Gata1.wig.gz wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1.wig.gz
+mv wgEncodeYaleChIPseqRel2RawSignalRep2K562Gata1.wig.gz wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1.wig.gz
+mv wgEncodeYaleChIPseqRel2RawSignalRep1K562Znf263.wig.gz wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263.wig.gz
+mv wgEncodeYaleChIPseqRel2RawSignalRep2K562Znf263.wig.gz wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263.wig.gz
+
+### Where are the tagAligns? The Rel2 Raw are built from non-Rel2.  These need renaming.  Files in beta will be renamed in alpha!
+mv wgEncodeYaleChIPseqAlignmentsRep1K562Gata1.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2K562Gata1.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep1K562Znf263.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2K562Znf263.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263.tagAlign.gz
+
+Need to patch trackDb.ra nd fileDb.ra for name changes!  Therefore, all file names have been changed to the 'b' versions for K562/Gata1 and K562/ZNF263
+
+ 
+mv wgEncodeYaleChIPseqSignalGm12878Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalGm12878Input.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalHct116Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalHct116Input.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalHek293Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalHelas3Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalHelas3ifngInput.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalHepg2Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalHepg2Input.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalK562E2f4.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalK562E2f4.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalK562Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalK562Input.bedGraph4.gz
+mv wgEncodeYaleChIPseqSignalNb4Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalNb4Input.bedGraph4.gz
+
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 334 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 335 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 372 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 374 displayed
+
