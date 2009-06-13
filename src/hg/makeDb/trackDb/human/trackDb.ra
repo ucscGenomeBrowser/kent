@@ -2068,7 +2068,7 @@ mafTrack mzPt1Mm3Rn3Gg2_pHMM
 
 track wgRnaOld
 shortLabel sno/miRNA Old
-longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
+longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase (Old Track)
 group genes
 priority 63.5
 visibility hide
