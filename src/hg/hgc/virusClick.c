@@ -135,18 +135,25 @@ safef(pdbPath, sizeof(pdbPath), "%s/%s", h1n1StructDir, relPath);
 return fileExists(pdbPath);
 }
 
-static void mkH1n1StructData(char *gene, char *idFile,
+static void mkH1n1StructData(char *gene, char *idPairFile,
                              struct tempName *imageFile, struct tempName *chimeraScript)
-/* generate 3D structure files; idFile can be NULL */
+/* generate 3D structure files; idPairFile can be NULL */
 {
 struct tempName prefix;
 trashDirFile(&prefix, "hgct", gene, "tmp");
 
-// dynamic_highlight.pl knows locations of model files
-char idArg[PATH_LEN], logFile[PATH_LEN], cmd[2*PATH_LEN];
+char idFile[PATH_LEN], idArg[PATH_LEN], logFile[PATH_LEN], cmd[2*PATH_LEN];
 idArg[0] = '\0';
-if (idFile != NULL)
+if (idPairFile != NULL)
+    {
+    // extract first column
+    safef(idFile, sizeof(idFile), "%s.ids", idPairFile);
+    safef(cmd, sizeof(cmd), "cut -f 1 %s >%s", idPairFile, idFile);
+    if (system(cmd) != 0)
+        errAbort("extracting protein ids failed: %s", cmd);
     safef(idArg, sizeof(idArg), "--ids %s", idFile);
+    }
+// dynamic_highlight.pl knows locations of model files
 safef(logFile, sizeof(logFile), "%s.log", prefix.forCgi);
 safef(cmd, sizeof(cmd), "%s/dynamic_highlight.pl --rasmol --chimera --protein %s --consensus 0602 %s --base %s >%s 2>&1",
       h1n1StructDir, gene, idArg, prefix.forCgi, logFile);
