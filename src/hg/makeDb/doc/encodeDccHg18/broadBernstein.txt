@@ -613,4 +613,37 @@ cp ../preamble.html
 cp ../fileDb.ra
 edit preamble.html to note the subdirectory only contains Raw Signals
 encodeDownloadsPage.pl index.html
+mkdir old
+mv *.tagAlign.gz old
+mv ../wgEncodeBoradChipSeqRel2/*.tagAlign.gz .
+grep metatdata /hive/groups/encode/dcc/pipeline/encpipeline_prod/332/out/fileDb.ra | grep tagAlign > /hive/groups/encode/dcc/pipeline/encpipeline_prod/332/out/fileDb.tagAgling.ra
+# edit /hive/groups/encode/dcc/pipeline/encpipeline_prod/332/out/fileDb.tagAgling.ra 
+grep metatdata /hive/groups/encode/dcc/pipeline/encpipeline_prod/332/out/fileDb.tagAgling.ra >> fileDb.ra
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 332 displayed
+
+
+Tarjei sends alignability track as tar.gz 2009-06-02
+====================================================
+# in /cse/staff/tdreszer/docs/ENCODE/broad/mapability
+tar -xzf Broad_Alignable.tar.gz
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/107/DukeExtraTracks.DAF broadAlignability.DAF
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/107/DukeExtraTracks.DDF broadAlignability.DDF
+# edit DDF and DAF
+tar -cpzf broadAlignability.tgz broadAlignability.DAF broadAlignability.DDF Broad_Alignable_chr*.wig
+# log into submission page as tarjei and submit this 
+rename table wgEncodeBroadMapabilityAlignability36bpReferencegenome to wgEncodeBroadMapabilityAlign36mer;
+update wgEncodeBroadMapabilityAlign36mer set file = "/gbdb/hg18/wib/wgEncodeBroadMapabilityAlign36mer.wib";
+cd 344
+mv wgEncodeBroadMapabilityAlignability36bpReferencegenome.wib wgEncodeBroadMapabilityAlign36mer.wib
+rm /gbdb/hg18/wib/wgEncodeBroadMapabilityAlignability36bpReferencegenome.wib
+cd /gbdb/hg18/wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/344/wgEncodeBroadMapabilityAlign36mer.wib wgEncodeBroadMapabilityAlign36mer.wib
+# in downloads dir: wgEncodeMapability
+mv ../wgEncodeBroadMapability/wgEncodeBroadMapabilityAlignability36bpReferencegenome.wib wgEncodeBroadMapabilityAlign36mer.wib
+# edit trackDb.wgEncode.ra
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 344 displayed
 
