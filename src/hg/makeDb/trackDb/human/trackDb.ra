@@ -2067,7 +2067,7 @@ type bed 6 +
 mafTrack mzPt1Mm3Rn3Gg2_pHMM
 
 track wgRnaOld
-shortLabel sno/miRNA
+shortLabel sno/miRNA Old
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
 group genes
 priority 63.5
@@ -2080,7 +2080,7 @@ url2Label The miRNA Registry:
 url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 
 track wgRna
-shortLabel sno/miRNA June09
+shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
 group genes
 priority 63.6
