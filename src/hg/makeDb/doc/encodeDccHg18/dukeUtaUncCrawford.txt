@@ -1338,3 +1338,41 @@ cp ../fileDb.ra
 edit preamble.html to note the subdirectory only contains Raw Signals
 encodeDownloadsPage.pl index.html
 
+Pushed into QA 2009-06-02
+=========================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 336 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  31 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  34 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 109 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 112 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 113 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 116 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 117 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 127 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 131 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 228 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 231 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 234 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 235 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 244 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 245 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 258 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 272 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 274 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 275 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 278 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 280 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 281 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 282 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 283 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 284 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 285 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 286 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 287 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 325 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 326 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 327 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 328 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 336 reviewing
+
+
