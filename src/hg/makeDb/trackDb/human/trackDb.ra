@@ -2066,7 +2066,7 @@ color 20,90,0
 type bed 6 +
 mafTrack mzPt1Mm3Rn3Gg2_pHMM
 
-track wgRna
+track wgRnaOld
 shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
 group genes
@@ -2078,6 +2078,20 @@ urlLabel Laboratoire de Biologie Mol&#233;culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
 url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+
+track wgRna
+shortLabel sno/miRNA June09
+longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
+group genes
+priority 63.6
+visibility hide
+color 200,80,0
+type bed 8 +
+urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
+url http://www-snorna.biotoul.fr/plus.php?id=$$
+url2Label The miRNA Registry:
+url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0
@@ -2763,6 +2777,19 @@ type bedGraph 4
 # track netCanFam2
 # track netOryLat1
 # track netGasAcu1
+
+searchTable wgRnaOld
+searchMethod fuzzy
+searchType bed
+searchPriority 10
+
+searchName wgRnaOldExact
+searchTable wgRnaOld
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [A-Z0-9\(\)/-]+
+searchPriority 20
 
 searchTable wgRna
 searchMethod fuzzy
