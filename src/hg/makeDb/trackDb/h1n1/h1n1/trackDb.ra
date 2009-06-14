@@ -27,3 +27,11 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+
+searchName h1n1GeneAcc
+searchTable h1n1Gene
+searchMethod exact
+termRegex [A-Z0-9][A-Z0-9_\']+
+searchType bed
+searchPriority 4
+
