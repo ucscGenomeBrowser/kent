@@ -503,19 +503,23 @@ genericHeader(tdb, item);
 /*pslList = getAlignments(conn, track, item);
 printAlignmentsSimple(pslList, start, "h1n1Seq", track, item);
 */
-sprintf(query, "select * from h1n1SeqXref where seqId = '%s'", item);
+sprintf(query, "select seqId, geneSymbol, strain, islId from h1n1SeqXref where seqId = '%s'", item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    char *seqId, *geneSymbol, *strain;
+    char *seqId, *geneSymbol, *strain, *islId;
 
-    seqId = row[0];
+    seqId      = row[0];
     geneSymbol = row[1];
-    strain = row[2];
+    strain     = row[2];
+    islId      = row[3];
 
     printf("<B>Sequence ID: %s</B> <BR>", seqId);
     printf("<B>Gene: %s</B> <BR>", geneSymbol);
     printf("<B>Strain: %s</B> <BR>", strain);
+    printf("<B>Isolate: </B> ");
+    printf("<A HREF=\"../cgi-bin/gisaidSample?hgs_sample=%s&submit=Go\">%s</A>", 
+    	   islId, islId);
     }
 htmlHorizontalLine();
 //showSAM_h1n1(item);
