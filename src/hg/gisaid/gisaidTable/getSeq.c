@@ -9,7 +9,7 @@
 #include "hPrint.h"
 #include "gisaidTable.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.1 2009/06/09 15:57:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.2 2009/06/14 16:58:02 fanhsu Exp $";
 
 
 static void getSeqFromBlob(struct sqlConnection *conn,
@@ -24,10 +24,9 @@ int seqCnt = 0;
 hPrintf("<TT><PRE>");
 for (si = siList; si != NULL; si = si->next)
     {
-    char *subjId = si->fields[0];
+    char *subjId = si->fields[1];
     /* currently just 3 Thailand or 4 US */
     safef(query, sizeof(query),
-        //"select id, seq from %s s, gsIdXref g where g.subjId='%s' and g.%s=s.id", 
         "select id, seq from %s s, gisaidXref g where g.subjId='%s' and g.%s=s.id", 
 	tableName, subjId, xrefField);
     sr = sqlGetResult(conn, query);
@@ -60,8 +59,6 @@ static void getGenomic( struct sqlConnection *conn, struct subjInfo *siList)
 getSeqFromBlob(conn, siList, "dnaSeq", "dnaSeqId");
 }
 
-
-
 void doGetSeq(struct sqlConnection *conn, 
         struct subjInfo *siList, char *how)
 /* Put up the get sequence page. */
@@ -73,8 +70,6 @@ else if (sameString(how, "genomic"))
 else
     errAbort("Unrecognized %s value %s", getSeqHowVarName, how);
 }
-
-
 
 static void howRadioButton(char *how)
 /* Put up a getSeqHow radio button. */
