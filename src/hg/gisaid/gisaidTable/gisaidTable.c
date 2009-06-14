@@ -21,7 +21,7 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.6 2009/06/12 22:52:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidTable.c,v 1.7 2009/06/14 16:52:10 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -327,9 +327,6 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 //, orgEnc);
 
-/* Blat */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
-
 /* Sample View */
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
 
@@ -342,6 +339,14 @@ else
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
     }
+
+/* select Subjects */
+hPrintf(
+        "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">%s</FONT></A></TD>",
+	    '%', '%', "Select Subjects");
+
+/* Blat */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
 /* Help */
 
