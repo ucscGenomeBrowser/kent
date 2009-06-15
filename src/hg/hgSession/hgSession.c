@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.50 2009/03/19 21:38:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.51 2009/06/15 18:15:53 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -606,6 +606,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
     dyStringPrintf(dy, "%s, now(), %d);", firstUse, useCount);
     sqlUpdate(conn, dy->string);
+    dyStringFree(&dy);
 
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
@@ -622,29 +623,7 @@ if (sqlTableExists(conn, namedSessionTable))
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
 	  getSessionLink(encUserName, encSessionName),
 	  getSessionEmailLink(encUserName, encSessionName));
-    if (cartFindPrefix(cart, CT_FILE_VAR_PREFIX) != NULL)
-	{
-	dyStringPrintf(dyMessage,
-		"<P>The session contains a reference to at least one "
-		"custom track.  Custom tracks are "
-		"subject to an expiration policy described in the "
-		"<A HREF=\"../goldenPath/help/customTrack.html\" "
-		"TARGET=_BLANK>custom track documentation</A>.  "
-		"In order to keep a custom track from expiring, you can "
-		"periodically view the custom track in the genome browser."
-		"</P>");
-	checkForCustomTracks(dyMessage);
-	}
-    if (cartOptionalString(cart, "ss") != NULL)
-	dyStringPrintf(dyMessage,
-		"<P>Note: the session contains a reference to saved BLAT "
-		"results, which are subject to the same expiration policy as "
-		"<A HREF=\"../goldenPath/help/customTrack.html\" "
-		"TARGET=_BLANK>custom tracks</A>.  "
-		"In order to keep BLAT results from expiring, you can "
-		"periodically view them in the genome browser."
-		"</P>");
-    dyStringFree(&dy);
+    checkForCustomTracks(dyMessage);
     }
 else
     dyStringPrintf(dyMessage,
@@ -704,7 +683,7 @@ if (helList != NULL)
 			   cartSidUrlString(cart), sln->name,
 			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
 	dyStringAppend(dyMessage, "; click on the database link "
-		       "to manage custom tracks).");
+		       "to manage custom tracks).  ");
 
 	}
     if (gotExpiredCT)
@@ -717,9 +696,13 @@ if (helList != NULL)
 	    dyStringPrintf(dyMessage, "%s%s",
 			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
 	dyStringPrintf(dyMessage,
-		       "), so it may not appear as originally intended."
-		       "</P>");
+		       "), so it may not appear as originally intended.  ");
 	}
+    dyStringPrintf(dyMessage,
+		   "Custom tracks are subject to an expiration policy described in the "
+		   "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_BLANK>custom "
+		   "track documentation</A>.  In order to keep a custom track from expiring, "
+		   "you can periodically view the custom track in the genome browser.</P>");
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
     }
@@ -740,18 +723,17 @@ if (isNotEmpty(ss))
 
     if (exists)
 	dyStringPrintf(dyMessage,
-		"<P>Note: the session contains saved BLAT results "
-		"which are subject to the same expiration policy as "
-		"<A HREF=\"../goldenPath/help/customTrack.html\" "
-		"TARGET=_BLANK>custom tracks</A>.  "
-		"In order to keep blat results from expiring, you can "
-		"periodically view them in the genome browser."
-		"</P>");
+		       "<P>Note: the session contains saved BLAT results.  ");
     else
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains an expired reference to "
 		"previously saved BLAT results, so it may not appear as "
-		"originally intended.</P>");
+		"originally intended.  ");
+    dyStringPrintf(dyMessage,
+		   "BLAT results are subject to the same expiration policy as "
+		   "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_BLANK>custom "
+		   "tracks</A>.  In order to keep BLAT results from expiring, you can "
+		   "periodically view them in the genome browser.</P>");
     }
 }
 
