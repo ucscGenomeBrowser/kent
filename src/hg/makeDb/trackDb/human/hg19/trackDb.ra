@@ -398,6 +398,7 @@ settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
+html hg19ChainNet
 
     track chainPanTro2
     release alpha
@@ -567,6 +568,7 @@ settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
+html hg19ChainNet
 
     track chainEquCab2
     subTrack placentalChainNet off
@@ -958,6 +960,7 @@ settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
+html hg19ChainNet
 
     track chainMacEug1
     subTrack vertebrateChainNet off
