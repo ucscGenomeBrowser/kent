@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.114 2009/03/12 21:51:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.115 2009/06/15 23:47:29 angie Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -607,6 +607,13 @@ void cartMain(struct cart *theCart)
 {
 struct sqlConnection *conn = NULL;
 cart = theCart;
+char *geneName = cartUsualString(cart, hggGene, NULL);
+if (isEmpty(geneName))
+    {
+    // Silly googlebots.
+    webDumpStackDisallow();
+    errAbort("Error: the hgg_gene parameter is missing from the cart and the CGI params.");
+    }
 getDbAndGenome(cart, &database, &genome, oldVars);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
@@ -614,7 +621,7 @@ if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
 conn = hAllocConn(database);
 getGenomeSettings();
-curGeneId = findGeneId(conn, cartString(cart, hggGene));
+curGeneId = findGeneId(conn, geneName);
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
