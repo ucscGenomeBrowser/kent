@@ -135,22 +135,32 @@ safef(pdbPath, sizeof(pdbPath), "%s/%s", h1n1StructDir, relPath);
 return fileExists(pdbPath);
 }
 
-static void mkH1n1StructData(char *gene, char *idPairFile,
+static void mkH1n1StructData(char *gene, char *idPairFile, char *highlightId,
                              struct tempName *imageFile, struct tempName *chimeraScript)
-/* generate 3D structure files; idPairFile can be NULL */
+/* generate 3D structure files; difference highlighting is generate only idPairFile or
+ * idPairFile, if specified, but not both. */
 {
 struct tempName prefix;
 trashDirFile(&prefix, "hgct", gene, "tmp");
 
 char idFile[PATH_LEN], idArg[PATH_LEN], logFile[PATH_LEN], cmd[2*PATH_LEN];
 idArg[0] = '\0';
-if (idPairFile != NULL)
+if ((idPairFile != NULL) || (highlightId != NULL))
     {
-    // extract first column
-    safef(idFile, sizeof(idFile), "%s.ids", idPairFile);
-    safef(cmd, sizeof(cmd), "cut -f 1 %s >%s", idPairFile, idFile);
-    if (system(cmd) != 0)
-        errAbort("extracting protein ids failed: %s", cmd);
+    safef(idFile, sizeof(idFile), "%s.ids", prefix.forCgi);
+    if (idPairFile != NULL)
+        {
+        // extract first column
+        safef(cmd, sizeof(cmd), "cut -f 1 %s >%s", idPairFile, idFile);
+        if (system(cmd) != 0)
+            errAbort("extracting protein ids failed: %s", cmd);
+        }
+    else
+        {
+        FILE *fh = mustOpen(idFile, "w");
+        fprintf(fh, "%s\n", highlightId);
+        carefulClose(&fh);
+        }
     safef(idArg, sizeof(idArg), "--ids %s", idFile);
     }
 // dynamic_highlight.pl knows locations of model files
@@ -225,9 +235,8 @@ safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", h1n1StructUrl,
 char modelPdbUrl[PATH_LEN];
 if (getH1n1Model(gene, modelPdbUrl))
     {
-    char *selectFile = cartOptionalString(cart, gisaidAaSeqList);
     struct tempName imageFile, chimeraScript, chimerax;
-    mkH1n1StructData(gene, selectFile, &imageFile, &chimeraScript);
+    mkH1n1StructData(gene, NULL, aaSeqId, &imageFile, &chimeraScript);
     mkChimerax(gene, modelPdbUrl, chimeraScript.forCgi, &chimerax);
     printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", modelPdbUrl, gene, chimerax.forHtml);
     printf("<TABLE>\n");
@@ -573,7 +582,7 @@ if (getH1n1Model(gene, modelPdbUrl))
     {
     char *selectFile = cartOptionalString(cart, gisaidAaSeqList);
     struct tempName imageFile, chimeraScript, chimerax;
-    mkH1n1StructData(gene, selectFile, &imageFile, &chimeraScript);
+    mkH1n1StructData(gene, selectFile, NULL, &imageFile, &chimeraScript);
     mkChimerax(gene, modelPdbUrl, chimeraScript.forCgi, &chimerax);
     printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", 
     	   modelPdbUrl, gene, chimerax.forHtml);
