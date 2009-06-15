@@ -692,6 +692,8 @@ if (b)
     lf->start = lf->tallStart = b->chromStart;
     lf->end = lf->tallEnd = b->chromEnd;
     lf->components = NULL;
+    if (bedFields > 5) // need to know orientation before checking if paired
+	lf->orientation = (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0)); 
     if (paired)
 	{
 	// Find seq1 & seq2, strip them from the name,
@@ -713,8 +715,15 @@ if (b)
 	dyStringAppend(d, seq1);
 	dyStringAppend(d, seq2);
 	lf->extra = newDnaSeq(dyStringCannibalize(&d), l1+l2, lf->name);
-	addSimpleFeatures(&lf->components, lf->start, lf->start + l1, 0, everyBase);
-	addSimpleFeatures(&lf->components, lf->end - l2, lf->end, l1, everyBase);
+	// seq1 + seq2 are concatenated for drawing code
+	// in - orientation they are also reverse complemented, 
+	// and the query start is relative to the reverse complement, so:
+	// in + orientation first feature (f1) is seq1, second (f2) is seq2
+	// in - orientation first feature (f1) is seq2, second (f2) is seq1
+	int f1 = lf->orientation == -1 ? l2 : l1;
+	int f2 = lf->orientation == -1 ? l1 : l2;
+	addSimpleFeatures(&lf->components, lf->start, lf->start + f1, 0, everyBase);
+	addSimpleFeatures(&lf->components, lf->end - f2, lf->end, f1, everyBase);
 	}
     else
 	{
@@ -725,8 +734,6 @@ if (b)
 	safecpy(lf->name, sizeof(lf->name), b->name);
     if (bedFields > 4)
 	lf->score = b->score;
-    if (bedFields > 5)
-	lf->orientation = (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0)); 
     lf->original = b;
     }
 return lf;
