@@ -532,3 +532,62 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doH1n1Gene(struct trackDb *tdb, char *item)
+/* Show details page for H1N1 Genes and Regions annotations track. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlResult *sr;
+char query[256];
+char **row;
+char *chrom, *chromStart, *chromEnd;
+char *gene=NULL;
+
+genericHeader(tdb, item);
+
+gene = item;
+printf("<B>Gene: </B> %s\n<BR>", gene);
+sprintf(query, "select chrom, chromStart, chromEnd from h1n1Gene where name='%s';", gene);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+   {
+   chrom      = row[0];
+   chromStart = row[1];
+   chromEnd   = row[2];
+   printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, item);
+   }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+htmlHorizontalLine();
+
+printf("<H3>Protein Structure Analysis and Prediction</H3>");
+printf("<B>3D Structure Prediction of consensus sequence (with variations of all selected sequences highlighted)");
+printf("<BR>PDB file:</B> ");
+
+char pdbUrl[PATH_LEN];
+safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", h1n1StructUrl, item, item);
+
+// Modeller stuff
+char modelPdbUrl[PATH_LEN];
+if (getH1n1Model(gene, modelPdbUrl))
+    {
+    char *selectFile = cartOptionalString(cart, gisaidAaSeqList);
+    struct tempName imageFile, chimeraScript, chimerax;
+    mkH1n1StructData(gene, selectFile, &imageFile, &chimeraScript);
+    mkChimerax(gene, modelPdbUrl, chimeraScript.forCgi, &chimerax);
+    printf("<A HREF=\"%s\" TARGET=_blank>%s</A>, view with <A HREF=\"%s\">Chimera</A><BR>\n", 
+    	   modelPdbUrl, gene, chimerax.forHtml);
+    printf("<TABLE>\n");
+    printf("<TR>\n");
+    printf("<TD ALIGN=\"center\"><img src=\"%s\"></TD>", imageFile.forHtml);
+    printf("</TR>\n");
+    printf("</TABLE>\n");
+    }
+
+htmlHorizontalLine();
+printTrackHtml(tdb);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
