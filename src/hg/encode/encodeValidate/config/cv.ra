@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.113 2009/06/11 23:52:50 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.114 2009/06/15 17:56:02 kate Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -119,7 +119,7 @@ type Cell Line
 description keratinocyte
 vendorName Lonza
 vendorId CC-2501
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(isQuery=yes&xcm=lonza_b2b&query=CC2501&layout=6_1_65_52_7&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10)/.do
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10&cpgnum=1)/.do
 lineage ectoderm
 karyotype normal
 termId BTO:0000375
@@ -538,6 +538,7 @@ lineage "LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from 
 karyotype cancer
 termId BTO:0002021
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002021
+color 0,119,158
 tier 3
 protocol Crawford:LNCaP_Crawford_protocol.pdf Farnham:LNCaP_protocol.pdf Stam:LNCaP_Stam_protocol.pdf
 
