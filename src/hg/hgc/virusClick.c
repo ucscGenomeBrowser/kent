@@ -165,7 +165,7 @@ tempNameFromPrefix(imageFile, &prefix, "_highlight.jpg");
 tempNameFromPrefix(chimeraScript, &prefix, "_highlight.cmd");
 }
 
-static void showProtH1n1(char *item)
+static void showProtH1n1(char *item, char *geneSymbol)
 {
 char query2[256];
 struct sqlResult *sr2;
@@ -215,9 +215,8 @@ printf("<B>Comparison to A H1N1 gene %s concensus:</B> ", gene);
 printf("<A HREF=\"%s/%s/%s/consensus_%s.mutate", h1n1StructUrl, gene, aaSeqId, aaSeqId);
 printf("\" TARGET=_blank>%s</A><BR>\n", aaSeqId);
 
-//printf("<BR><B>3D structure prediction:</B> ");
-
-printf("<BR><B>3D Structure Prediction (PDB file):</B> ");
+printf("<BR><B>3D Structure Prediction of %s concensus sequence (with variation of sequence %s highlighted):", geneSymbol, item);
+printf("<BR>PDB file:</B> ");
 char pdbUrl[PATH_LEN];
 safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", h1n1StructUrl, item, item);
 
@@ -498,6 +497,7 @@ struct sqlConnection *conn  = hAllocConn(database);
 struct sqlResult *sr;
 char query[256];
 char **row;
+char *geneSymbol=NULL;
 genericHeader(tdb, item);
 
 /*pslList = getAlignments(conn, track, item);
@@ -507,7 +507,7 @@ sprintf(query, "select seqId, geneSymbol, strain, islId from h1n1SeqXref where s
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    char *seqId, *geneSymbol, *strain, *islId;
+    char *seqId, *strain, *islId;
 
     seqId      = row[0];
     geneSymbol = row[1];
@@ -523,7 +523,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 htmlHorizontalLine();
 //showSAM_h1n1(item);
-showProtH1n1(item);
+showProtH1n1(item, geneSymbol);
 
 htmlHorizontalLine();
 printTrackHtml(tdb);
@@ -561,7 +561,7 @@ hFreeConn(&conn);
 htmlHorizontalLine();
 
 printf("<H3>Protein Structure Analysis and Prediction</H3>");
-printf("<B>3D Structure Prediction of consensus sequence (with variations of all selected sequences highlighted)");
+printf("<B>3D Structure Prediction of consensus sequence (with variations of all selected sequences highlighted):");
 printf("<BR>PDB file:</B> ");
 
 char pdbUrl[PATH_LEN];
