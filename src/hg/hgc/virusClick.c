@@ -4,6 +4,7 @@
 #include "hgc.h"
 #include "virusClick.h"
 #include "hCommon.h"
+#include "hgConfig.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "lsSnpPdbChimera.h"
@@ -11,6 +12,8 @@
 #include "net.h"
 #include "trashDir.h"
 #include "htmshell.h"
+
+static char const rcsid[] = "$Id: virusClick.c,v 1.7 2009/06/15 23:56:50 markd Exp $";
 
 static void h1n1DownloadPdb(char *item, char *pdbUrl, struct tempName *tmpPdb)
 /* uncompress PDB to trash */
@@ -113,9 +116,31 @@ safecpy(name->forHtml, sizeof(name->forHtml), prefix->forHtml);
 safecat(name->forHtml, sizeof(name->forHtml), suffix);
 }
 
-/* location and url of h1n1 modeling directory */
-static char *h1n1StructDir = "/projects/compbio/experiments/protein-predict/h1n1";
-static char *h1n1StructUrl = "http://users.soe.ucsc.edu/~karplus/h1n1";
+static char *getH1n1StructDir()
+/* get location of h1n1 modeling directory */
+{
+static char *dir = NULL;
+if (dir == NULL)
+    {
+    dir = cfgOption("gisaid.structDir");
+    if (dir == NULL)
+        errAbort("gisaid.structDir not set in hg.conf");
+    }
+return dir;
+}
+
+static char *getH1n1StructUrl()
+/* get URL of h1n1 modeling directory */
+{
+static char *url = NULL;
+if (url == NULL)
+    {
+    url = cfgOption("gisaid.structUrl");
+    if (url == NULL)
+        errAbort("gisaid.structUrl not set in hg.conf");
+    }
+return url;
+}
 
 static boolean getH1n1Model(char *gene, char *pdbUrl)
 /* Find model PDB file URL, return false if does not exist.  URL is
@@ -130,8 +155,8 @@ else
     return FALSE;
 
 if (pdbUrl != NULL)
-    safef(pdbUrl, PATH_LEN, "%s/%s", h1n1StructUrl, relPath);
-safef(pdbPath, sizeof(pdbPath), "%s/%s", h1n1StructDir, relPath);
+    safef(pdbUrl, PATH_LEN, "%s/%s", getH1n1StructUrl(), relPath);
+safef(pdbPath, sizeof(pdbPath), "%s/%s", getH1n1StructDir(), relPath);
 return fileExists(pdbPath);
 }
 
@@ -166,7 +191,7 @@ if ((idPairFile != NULL) || (highlightId != NULL))
 // dynamic_highlight.pl knows locations of model files
 safef(logFile, sizeof(logFile), "%s.log", prefix.forCgi);
 safef(cmd, sizeof(cmd), "%s/dynamic_highlight.pl --rasmol --chimera --protein %s --consensus 0602 %s --base %s >%s 2>&1",
-      h1n1StructDir, gene, idArg, prefix.forCgi, logFile);
+      getH1n1StructDir(), gene, idArg, prefix.forCgi, logFile);
 if (system(cmd) != 0)
     errAbort("creation of 3D structure highlight files failed: %s", cmd);
 
@@ -218,17 +243,17 @@ sqlFreeResult(&sr2);
 printf("<H3>Protein Structure Analysis and Prediction</H3>");
 
 printf("<B>Comparison to 1918 Flu Virus:</B> ");
-printf("<A HREF=\"%s/%s/%s/1918_%s.mutate", h1n1StructUrl, gene, aaSeqId, aaSeqId);
+printf("<A HREF=\"%s/%s/%s/1918_%s.mutate", getH1n1StructUrl(), gene, aaSeqId, aaSeqId);
 printf("\" TARGET=_blank>%s</A><BR>\n", aaSeqId);
 
 printf("<B>Comparison to A H1N1 gene %s concensus:</B> ", gene);
-printf("<A HREF=\"%s/%s/%s/consensus_%s.mutate", h1n1StructUrl, gene, aaSeqId, aaSeqId);
+printf("<A HREF=\"%s/%s/%s/consensus_%s.mutate", getH1n1StructUrl(), gene, aaSeqId, aaSeqId);
 printf("\" TARGET=_blank>%s</A><BR>\n", aaSeqId);
 
 printf("<BR><B>3D Structure Prediction of %s concensus sequence (with variation of sequence %s highlighted):", geneSymbol, item);
 printf("<BR>PDB file:</B> ");
 char pdbUrl[PATH_LEN];
-safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", h1n1StructUrl, item, item);
+safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", getH1n1StructUrl(), item, item);
 
 
 // Modeller stuff
@@ -256,22 +281,22 @@ printf("<TD ALIGN=\"center\">Top</TD>\n");
 printf("<TD ALIGN=\"center\">Side</TD>\n");
 printf("</TR>\n");
 printf("<TR>\n");
-printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", h1n1StructUrl, item, item);
-printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", h1n1StructUrl, item, item);
-printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", h1n1StructUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", getH1n1StructUrl(), item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", getH1n1StructUrl(), item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", getH1n1StructUrl(), item, item);
 printf("</TR>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>",
-	h1n1StructUrl, item, item);
+	getH1n1StructUrl(), item, item);
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view2_500.jpg\">500x500</A></TD>",
-	h1n1StructUrl, item, item);
+	getH1n1StructUrl(), item, item);
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view3_500.jpg\">500x500</A></TD>",
-	h1n1StructUrl, item, item);
+	getH1n1StructUrl(), item, item);
 printf("</TR>\n");
 printf("</TABLE>\n");
 
 printf("<BR><B>Detailed results of SAM-T02:</B> ");
-printf("<A HREF=\"%s/%s/summary.html", h1n1StructUrl, item);
+printf("<A HREF=\"%s/%s/summary.html", getH1n1StructUrl(), item);
 printf("\" TARGET=_blank>%s</A><BR>\n", item);
 
 /* by pass the following additional processing for now, until two necessary tables are built */
@@ -377,16 +402,16 @@ printf("<A HREF=\"http://www.soe.ucsc.edu/research/compbio/SAM_T02/sam-t02-faq.h
 printf(" TARGET=_blank>SAM-T02</A></H3>\n");
 
 printf("<B>Multiple Alignment:</B> ");
-printf("<A HREF=\"%s/%s/summary.html#alignment", h1n1StructUrl, item);
+printf("<A HREF=\"%s/%s/summary.html#alignment", getH1n1StructUrl(), item);
 printf("\" TARGET=_blank>%s</A><BR>\n", item);
 
 printf("<B>Secondary Structure Predictions:</B> ");
-printf("<A HREF=\"%s/%s/summary.html#secondary-structure", h1n1StructUrl, item);
+printf("<A HREF=\"%s/%s/summary.html#secondary-structure", getH1n1StructUrl(), item);
 printf("\" TARGET=_blank>%s</A><BR>\n", item);
 
 printf("<B>3D Structure Prediction (PDB file):</B> ");
 char pdbUrl[PATH_LEN];
-safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", h1n1StructUrl, item, item);
+safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", getH1n1StructUrl(), item, item);
 struct tempName chimerax;
 mkChimerax(item, pdbUrl, NULL, &chimerax);
 
@@ -401,22 +426,22 @@ printf("<TD ALIGN=\"center\">Top</TD>\n");
 printf("<TD ALIGN=\"center\">Side</TD>\n");
 printf("</TR>\n");
 printf("<TR>\n");
-printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", h1n1StructUrl, item, item);
-printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", h1n1StructUrl, item, item);
-printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", h1n1StructUrl, item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view1_200.jpg\"></TD>", getH1n1StructUrl(), item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view2_200.jpg\"></TD>", getH1n1StructUrl(), item, item);
+printf("<TD ALIGN=\"center\"><img src=\"%s/%s/%s.undertaker-align.view3_200.jpg\"></TD>", getH1n1StructUrl(), item, item);
 printf("</TR>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view1_500.jpg\">500x500</A></TD>",
-	h1n1StructUrl, item, item);
+	getH1n1StructUrl(), item, item);
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view2_500.jpg\">500x500</A></TD>",
-	h1n1StructUrl, item, item);
+	getH1n1StructUrl(), item, item);
 printf("<TD ALIGN=\"center\"><A HREF=\"%s/%s/%s.undertaker-align.view3_500.jpg\">500x500</A></TD>",
-	h1n1StructUrl, item, item);
+	getH1n1StructUrl(), item, item);
 printf("</TR>\n");
 printf("</TABLE>\n");
 
 printf("<BR><B>Detailed results of SAM-T02:</B> ");
-printf("<A HREF=\"%s/%s/summary.html", h1n1StructUrl, item);
+printf("<A HREF=\"%s/%s/summary.html", getH1n1StructUrl(), item);
 printf("\" TARGET=_blank>%s</A><BR>\n", item);
 
 /* by pass the following additional processing for now, until two necessary tables are built */
@@ -574,7 +599,7 @@ printf("<B>3D Structure Prediction of consensus sequence (with variations of all
 printf("<BR>PDB file:</B> ");
 
 char pdbUrl[PATH_LEN];
-safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", h1n1StructUrl, item, item);
+safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", getH1n1StructUrl(), item, item);
 
 // Modeller stuff
 char modelPdbUrl[PATH_LEN];
