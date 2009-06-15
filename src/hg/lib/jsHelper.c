@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.25 2009/03/19 18:29:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.26 2009/06/15 20:47:06 tdreszer Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -382,7 +382,8 @@ if(hashLookup(includedFiles, fileName) == NULL)
         noScriptBuf[0] = 0;
     // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
     // which fixes bugs, odd behavior that occurs when the browser caches modified js files
-    hPrintf("<script type='text/javascript' src='../%s/%s?v=%ld'></script>\n%s", dirName, fileName, mtime, noScriptBuf);
+    //hPrintf("<script type='text/javascript' src='../%s/%s?v=%ld'></script>\n%s", dirName, fileName, mtime, noScriptBuf);
+    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n%s", dirName, fileName, noScriptBuf);
     }
 }
 
