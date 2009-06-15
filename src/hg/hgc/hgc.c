@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1553 2009/06/12 07:21:29 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1554 2009/06/15 21:34:49 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -22084,6 +22084,10 @@ else if (sameWord(track, "ncRna"))
 else if (sameWord(track, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
+    }
+else if (sameWord(track, "h1n1Gene"))
+    {
+    doH1n1Gene(tdb, item);
     }
 else if (startsWith("h1n1_", track) || startsWith("h1n1b_", track))
     {
