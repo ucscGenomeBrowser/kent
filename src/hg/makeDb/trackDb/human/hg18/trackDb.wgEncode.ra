@@ -5512,7 +5512,6 @@ wgEncode 1
     type broadPeak
     priority 54
     noInherit on
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusTotal.broadPeak.gz
 
@@ -5525,7 +5524,6 @@ wgEncode 1
     type broadPeak
     priority 53
     noInherit on
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal.broadPeak.gz
 
@@ -5538,7 +5536,6 @@ wgEncode 1
     type wig -56831.00 59145.00
     priority 55
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5554,7 +5551,6 @@ wgEncode 1
     type wig -53310.00 54732.00
     priority 56
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5570,7 +5566,6 @@ wgEncode 1
     type broadPeak
     priority 54
     noInherit on
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
 
@@ -5583,7 +5578,6 @@ wgEncode 1
     type broadPeak
     priority 53
     noInherit on
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
 
@@ -5596,7 +5590,6 @@ wgEncode 1
     type wig -48860.00 60644.00
     priority 55
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5612,7 +5605,6 @@ wgEncode 1
     type wig -50917.00 62561.00
     priority 56
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5628,7 +5620,6 @@ wgEncode 1
     type broadPeak
     priority 54
     noInherit on
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 
@@ -5641,7 +5632,6 @@ wgEncode 1
     type wig -54090.00 55745.00
     priority 55
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5652,11 +5642,10 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel longNonPolyA HepG2 cytosol
-    longLabel ENCODE Affy Filtered Transfrags (longNonPolyA in HepG2 cell cytosol using )
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 189,0,157
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
@@ -5664,11 +5653,10 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel longNonPolyA HepG2 cytosol
-    longLabel ENCODE Affy Transfrags (longNonPolyA in HepG2 cell cytosol using )
+    longLabel ENCODE Affy Transfrags (PolyA- RNA in HepG2 cytosol)
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 189,0,157
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
@@ -5676,11 +5664,10 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel longNonPolyA HepG2 cytosol
-    longLabel ENCODE (longNonPolyA in HepG2 cell cytosol using )
+    longLabel ENCODE (PolyA- in HepG2 cytosol)
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -51212.00 53928.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5691,11 +5678,10 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel longNonPolyA HepG2 cytosol  Raw
-    longLabel ENCODE (longNonPolyA in HepG2 cell cytosol using )
+    longLabel ENCODE (PolyA- in HepG2 cytosol)
     subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -50875.00 56171.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5710,7 +5696,6 @@ wgEncode 1
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 189,0,157
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
@@ -5722,7 +5707,6 @@ wgEncode 1
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 189,0,157
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
@@ -5734,7 +5718,6 @@ wgEncode 1
     subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -62864.00 52910.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5749,7 +5732,6 @@ wgEncode 1
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -61267.00 58237.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5764,7 +5746,6 @@ wgEncode 1
     subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
@@ -5776,7 +5757,6 @@ wgEncode 1
     subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
@@ -5788,7 +5768,6 @@ wgEncode 1
     subGroups view=RawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type wig -61219.00 57907.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5803,7 +5782,6 @@ wgEncode 1
     subGroups view=FiltRawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type wig -59096.00 56826.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5818,7 +5796,6 @@ wgEncode 1
     subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
@@ -5830,7 +5807,6 @@ wgEncode 1
     subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
-    configurable on
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
@@ -5842,7 +5818,6 @@ wgEncode 1
     subGroups view=RawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5857,7 +5832,6 @@ wgEncode 1
     subGroups view=FiltRawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
