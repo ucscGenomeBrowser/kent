@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.109 2009/06/03 04:30:19 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.110 2009/06/15 23:37:20 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1251,6 +1251,8 @@ void cartEarlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
+va_list argscp;
+va_copy(argscp, args);
 if (!initted)
     {
     htmStart(stdout, "Early Error");
@@ -1259,6 +1261,13 @@ if (!initted)
 printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
+
+/* write warning/error message to stderr so they get logged. */
+logCgiToStderr();
+vfprintf(stderr, format, argscp);
+va_end(argscp);
+putc('\n', stderr);
+fflush(stderr);
 }
 
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
