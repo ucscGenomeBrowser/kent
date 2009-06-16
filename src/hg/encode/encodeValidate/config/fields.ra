@@ -76,6 +76,11 @@ file dafHeader
 type in
 required no
 
+field dataVersion
+file dafHeader
+type in
+required no
+
 field fragmentLengthRange
 file dafHeader
 type in
