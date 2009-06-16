@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.212 2009/06/12 21:05:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.213 2009/06/16 01:25:46 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4689,26 +4689,27 @@ if(dimensionX && dimensionY)
 // If there is an X dimension, then titles go across the top
 if(dimensionX)
     {
-    int ixX;
+    int ixX,cntX=0;
     if(dimensionY)
-        printf("<TH align=RIGHT><EM><B>%s</EM></B>:</TH>", dimensionX->title);
+        printf("<TH align=RIGHT><EM><B>%s</EM></B></TH>", dimensionX->title);
     else
         printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<EM><B>%s</EM></B></TH>",top?"TOP":"BOTTOM", dimensionX->title);
     for (ixX = 0; ixX < dimensionX->count; ixX++)
         {
-        if(tdbsX[ixX] != NULL || dimensionX == NULL)
+        if(tdbsX[ixX] != NULL)
             {
             char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
             printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
             freeMem(label);
+            cntX++;
             }
         }
     // If dimension is big enough, then add Y buttons to righ as well
-    if(dimensionX->count>MATRIX_RIGHT_BUTTONS_AFTER)
+    if(cntX>MATRIX_RIGHT_BUTTONS_AFTER)
         {
         if(dimensionY)
             {
-            printf("<TH align=LEFT>:<EM><B>%s</EM></B></TH>", dimensionX->title);
+            printf("<TH align=LEFT><EM><B>%s</EM></B></TH>", dimensionX->title);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
             buttonsForAll();
             puts("</TH>");
@@ -4734,21 +4735,22 @@ static void matrixXheadingsRow2(struct trackDb *parentTdb, members_t *dimensionX
 // If there are both X and Y dimensions, then there is a row of buttons in X
 if(dimensionX && dimensionY)
     {
-    int ixX;
+    int ixX,cntX=0;
     printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->title);
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
-        if(tdbsX[ixX] != NULL || dimensionX == NULL)
+        if(tdbsX[ixX] != NULL)
             {
             char objName[SMALLBUF];
             puts("<TD>");
             safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
             buttonsForOne( objName, dimensionX->names[ixX] );
             puts("</TD>");
+            cntX++;
             }
         }
     // If dimension is big enough, then add Y buttons to righ as well
-    if(dimensionX->count>MATRIX_RIGHT_BUTTONS_AFTER)
+    if(cntX>MATRIX_RIGHT_BUTTONS_AFTER)
         printf("<TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>", dimensionY->title);
     puts("</TR>\n");
     }
@@ -4872,10 +4874,12 @@ printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFA
 matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,TRUE);
 
 // Now the Y by X matrix
+int cntY=0;
 for (ixY = 0; ixY < sizeOfY; ixY++)
     {
     if(tdbsY[ixY] != NULL || dimensionY == NULL)
         {
+        cntY++;
         assert(!dimensionY || ixY < dimensionY->count);
         printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
 
@@ -4924,7 +4928,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         puts("</TR>\n");
         }
     }
-if(dimensionY && dimensionY->count>MATRIX_BOTTOM_BUTTONS_AFTER)
+if(dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
     matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,FALSE);
 
 if(dimensionZ)
@@ -5267,7 +5271,7 @@ char *rootName = NULL;
 // This routine should give these results: compositeName.viewName or else subtrackName.viewName or else compositeName or else subtrackName
 if(tdbIsCompositeChild(tdb) == TRUE && trackDbSetting(tdb, "subTrack") != NULL)
     {
-    if(trackDbSettingOn(tdb, "configurable"))
+    if(trackDbSettingClosestToHomeOn(tdb, "configurable"))
         rootName = tdb->tableName;  // subtrackName
     else
         rootName = firstWordInLine(cloneString(trackDbSetting(tdb, "subTrack"))); // compositeName
