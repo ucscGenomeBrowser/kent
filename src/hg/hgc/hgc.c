@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1554 2009/06/15 21:34:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1555 2009/06/16 06:17:38 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -285,6 +285,9 @@ struct customTrack *theCtList = NULL;
 /* getDNA stuff actually works when the database doesn't exist! */
 boolean dbIsFound = FALSE;
 
+/* was cartHtmlStart done?  */
+static boolean didCartHtmlStart = FALSE;
+
 /* forwards */
 char *getPredMRnaProtSeq(struct genePred *gp);
 void doAltGraphXDetails(struct trackDb *tdb, char *item);
@@ -294,6 +297,7 @@ void hgcStart(char *title)
  * error handler to normal html error handler. */
 {
 cartHtmlStart(title);
+didCartHtmlStart = TRUE;
 }
 
 char* getEntrezNucleotideUrl(char *accession)
@@ -22343,7 +22347,8 @@ else
     cartWebStart(cart, database, track);
     printf("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
-cartHtmlEnd();
+if (didCartHtmlStart)
+    cartHtmlEnd();
 }
 
 struct hash *orgDbHash = NULL;
