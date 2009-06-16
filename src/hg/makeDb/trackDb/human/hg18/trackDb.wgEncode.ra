@@ -2230,7 +2230,7 @@ visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.07,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.08,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0:20,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
 useScore 0
 priority 0
 type bed 3
@@ -2383,6 +2383,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=GM12878
     type wig 0.00 11.12
+    viewLimits 0:0.4
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalGm12878Ctcf fileName=wgEncodeUtaChIPseqSignalGm12878Ctcf.wig.gz
@@ -2394,6 +2395,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=GM12878
     type wig 0.00 1956.00
+    viewLimits 0:100
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf.wig.gz
@@ -2600,6 +2602,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HeLa
     type wig 0.00 8.59
+    viewLimits 0:0.4
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqSignalHelas3Ctcf.wig.gz
@@ -2611,6 +2614,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HeLa
     type wig 0.00 1920.00
+    viewLimits 0:100
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf.wig.gz
@@ -2860,6 +2864,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HepG2 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=HepG2
     type wig 0.00 6.75
+    viewLimits 0:0.4
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Ctcf fileName=wgEncodeUtaChIPseqSignalHepg2Ctcf.wig.gz
@@ -2871,6 +2876,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HepG2 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=HepG2
     type wig 0.00 654.00
+    viewLimits 0:100
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf.wig.gz
@@ -3132,6 +3138,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in K562 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=K562
     type wig 0.00 6.78
+    viewLimits 0:0.4
     spanList first
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562Ctcf fileName=wgEncodeUtaChIPseqSignalK562Ctcf.wig.gz
@@ -3143,6 +3150,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
     subGroups view=SignalBO EXP=IP-CTCF cellType=K562
     type wig 0.00 3339.00
+    viewLimits 0:100
     spanList first
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf.wig.gz
