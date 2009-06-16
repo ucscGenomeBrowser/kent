@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.115 2009/06/15 18:06:56 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.116 2009/06/16 18:34:16 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -515,6 +515,32 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
+term HRCEpiC
+type Cell Line
+description Human renal cortical epithelial cells
+vendorName ScienCell
+vendorId #4110
+orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_32&products_id=44
+lineage
+karyotype normal
+termId BTO:0000059 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
+tier 3
+protocol HRCEpiC_Stam_protocol.pdf
+
+term HRE
+type Cell Line
+description Human renal epithelial cells
+vendorName Lonza
+vendorId CC-2556
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA20FB87F582F18C7C001A4B525E10&cpgnum=1)/.do
+lineage
+karyotype normal
+termId BTO:0000059 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
+tier 3
+protocol HRE_Stam_protocol.pdf
+
 term Jurkat
 type Cell Line
 description T lymphoblastoid cell line derived from an acute T cell leukemia
@@ -657,6 +683,19 @@ karyotype
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
+
+term SAEC
+type Cell Line
+description Small airway epithelial cells
+vendorName Lonza
+vendorId CC-2547
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA173DD30B73F18C7C001A4B525E10&cpgnum=1)/.do
+lineage
+karyotype normal
+termId BTO:0002022 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022&termName=bronchial%20epithelial%20cell%20line
+tier 3
+protocol SAEC_Stam_protocol.pdf
 
 term SK-N-MC
 type Cell Line
