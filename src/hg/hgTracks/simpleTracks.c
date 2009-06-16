@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.83 2009/06/05 17:16:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.84 2009/06/16 19:51:17 galt Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3751,6 +3751,10 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     }
 slReverse(&lfList);
 genePredReaderFree(&gpr);
+
+if (tg->visibility != tvDense)
+    slSort(&lfList, linkedFeaturesCmpStart);
+
 return lfList;
 }
 
@@ -4062,7 +4066,6 @@ tg->items = lfFromGenePredInRange(tg, "hg17Kg", chromName, winStart, winEnd);
 if (vis != tvDense)
     {
     lookupHg17KgNames(tg->items);
-    slSort(&tg->items, linkedFeaturesCmpStart);
     }
 limitVisibility(tg);
 }
@@ -4286,7 +4289,6 @@ if (!showSpliceVariants)
 	}
     }
 lookupKnownGeneNames(tg->items);
-slSort(&tg->items, linkedFeaturesCmpStart);
 limitVisibility(tg);
 }
 
@@ -5353,7 +5355,6 @@ tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 if (vis != tvDense)
     {
     lookupRefNames(tg);
-    slSort(&tg->items, linkedFeaturesCmpStart);
     }
 vis = limitVisibility(tg);
 }
@@ -9248,7 +9249,6 @@ loadXenoPsl(tg);
 if (vis != tvDense)
     {
     lookupProteinNames(tg);
-    slSort(&tg->items, linkedFeaturesCmpStart);
     }
 vis = limitVisibility(tg);
 }
@@ -9260,7 +9260,6 @@ loadProteinPsl(tg);
 if (vis != tvDense)
     {
     lookupProteinNames(tg);
-    slSort(&tg->items, linkedFeaturesCmpStart);
     }
 vis = limitVisibility(tg);
 }
