@@ -2237,7 +2237,6 @@ type bed 3
 wgEncode 1
 
     track wgEncodeDukeDNaseSeqPeaksGm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
@@ -2247,7 +2246,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=277 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksGm12878 fileName=wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalGm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase Sig
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
@@ -2258,7 +2256,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Signal labVersion="F-Seq 1.81, average reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalGm12878 fileName=wgEncodeDukeDNaseSeqSignalGm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
@@ -2269,7 +2266,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
@@ -2280,7 +2276,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep1Gm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase 2
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
@@ -2291,7 +2286,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep2Gm12878.wig.gz
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase 3
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
@@ -2302,7 +2296,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 type=wig view=RawSignal replicate=3 dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-11-08 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-08 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Gm12878.wig.gz
 
     track wgEncodeUncFAIREseqPeaksGm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12878 cells)
@@ -2312,7 +2305,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878 fileName=wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalGm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE Sig
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in GM12878 cells)
@@ -2323,7 +2315,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalGm12878 fileName=wgEncodeUncFAIREseqSignalGm12878.wig.gz
 
     track wgEncodeUncFAIREseqBaseOverlapSignalGm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
@@ -2334,7 +2325,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep1Gm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in GM12878 cells)
@@ -2345,7 +2335,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=1 softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep1Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep1Gm12878.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE 2
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in GM12878 cells)
@@ -2356,7 +2345,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=2 softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep2Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep2Gm12878.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE 3
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in GM12878 cells)
@@ -2367,7 +2355,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=326 dateSubmitted=2009-02-25 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Gm12878 fileName=wgEncodeUncFAIREseqRawSignalRep3Gm12878.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12878 cells)
@@ -2377,7 +2364,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Peaks labVersion="F-Seq 1.81, ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=278 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksGm12878Ctcf fileName=wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalGm12878Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in GM12878 cells)
@@ -2389,7 +2375,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalGm12878Ctcf fileName=wgEncodeUtaChIPseqSignalGm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
@@ -2401,7 +2386,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=228 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
@@ -2412,7 +2396,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF 2
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
@@ -2423,7 +2406,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF 3
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in GM12878 cells)
@@ -2434,7 +2416,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=3 dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-24 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 Input Sig
     longLabel ENCODE Open Chromatin, UT Input Signal (GM12878 cells)
@@ -2445,7 +2426,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input view=Signal labVersion=1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=34 dateSubmitted=2008-11-07 dateUnrestricted=2009-07-07 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalGm12878Input fileName=wgEncodeUtaustinChIPseqSignalGm12878Input.wig.gz
 
     track wgEncodeUtaChIPseqRawSignalGm12878Input
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel GM128 Input Raw
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (GM12878 cells)
@@ -2456,7 +2436,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input type=wig fragLength=135 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=328 dateSubmitted=2008-11-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-07-07 composite==wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalGm12878Input fileName=wgEncodeUtaChIPseqRawSignalGm12878Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHelas3
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HeLa-S3 cells)
@@ -2466,7 +2445,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHelas3 fileName=wgEncodeDukeDNaseSeqPeaksHelas3.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHelas3
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase Sig
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HeLa-S3 cells)
@@ -2477,7 +2455,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHelas3 fileName=wgEncodeDukeDNaseSeqSignalHelas3.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
@@ -2531,7 +2508,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=336 dateSubmitted=2009-03-22 dateResubmitted=2009-05-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHelas3 fileName=wgEncodeUncFAIREseqPeaksHelas3.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalHelas3
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE Sig
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HeLa-S3 cells)
@@ -2542,7 +2518,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHelas3 fileName=wgEncodeUncFAIREseqSignalHelas3.wig.gz
 
     track wgEncodeUncFAIREseqBaseOverlapSignalHelas3
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3 cells)
@@ -2586,7 +2561,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=326 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Helas3 fileName=wgEncodeUncFAIREseqRawSignalRep3Helas3.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HeLa-S3 cells)
@@ -2596,7 +2570,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Peaks labVersion="ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3Ctcf fileName=wgEncodeUtaChIPseqPeaksHelas3Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HeLa-S3 cells)
@@ -2608,7 +2581,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=281 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Ctcf fileName=wgEncodeUtaChIPseqSignalHelas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HeLa-S3 cells)
@@ -2642,7 +2614,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
@@ -2652,7 +2623,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="ROC analysis" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3Cmyc fileName=wgEncodeUtaChIPseqPeaksHelas3Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HeLa-S3 cells)
@@ -2663,7 +2633,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
@@ -2696,7 +2665,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa Input Sig
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HeLa-S3 cells)
@@ -2718,7 +2686,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-16 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHelas3Input fileName=wgEncodeUtaChIPseqRawSignalHelas3Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HepG2 cells)
@@ -2728,7 +2695,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=277 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHepg2 fileName=wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHepg2
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase Sig
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HepG2 cells)
@@ -2739,7 +2705,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHepg2 fileName=wgEncodeDukeDNaseSeqSignalHepg2.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
@@ -2783,7 +2748,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-11 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Hepg2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHepg2
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HepG2 cells)
@@ -2793,7 +2757,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2 fileName=wgEncodeUncFAIREseqPeaksHepg2.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalHepg2
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE Sig
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HepG2 cells)
@@ -2804,7 +2767,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2 fileName=wgEncodeUncFAIREseqSignalHepg2.wig.gz
 
     track wgEncodeUncFAIREseqBaseOverlapSignalHepg2
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HepG2 cells)
@@ -2848,7 +2810,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=326 dateSubmitted=2009-04-17 dateRegenerated=2009-05-21 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3Hepg2 fileName=wgEncodeUncFAIREseqRawSignalRep3Hepg2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HepG2 cells)
@@ -2858,7 +2819,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Peaks labVersion="ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2Ctcf fileName=wgEncodeUtaChIPseqPeaksHepg2Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HepG2 cells)
@@ -2870,7 +2830,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=283 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Ctcf fileName=wgEncodeUtaChIPseqSignalHepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HepG2 cells)
@@ -2904,7 +2863,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=2 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HepG2 cells)
@@ -2914,7 +2872,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Peaks labVersion="ROC analysis" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2Cmyc fileName=wgEncodeUtaChIPseqPeaksHepg2Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HepG2 cells)
@@ -2925,7 +2882,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Cmyc fileName=wgEncodeUtaChIPseqSignalHepg2Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HepG2 cells)
@@ -2969,7 +2925,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=327 dateSubmitted=2009-03-22 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalHepg2Input
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 Input Sig
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HepG2 cells)
@@ -2991,7 +2946,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Input type=wig fragLength=135 view=RawSignal labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=328 dateSubmitted=2009-03-13 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-13 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalHepg2Input fileName=wgEncodeUtaChIPseqRawSignalHepg2Input.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksK562
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
@@ -3001,7 +2955,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Peaks labVersion="F-Seq 1.81, ROC score" dataVersion="ENCODE Feb 2009 Freeze" subId=277 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksK562 fileName=wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalK562
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 DNase Sig
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
@@ -3012,7 +2965,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Signal labVersion="F-Seq 1.81, average reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=235 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalK562 fileName=wgEncodeDukeDNaseSeqSignalK562.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
@@ -3056,7 +3008,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 type=wig view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=325 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3K562 fileName=wgEncodeDukeDNaseSeqRawSignalRep3K562.wig.gz
 
     track wgEncodeUncFAIREseqPeaksK562
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
@@ -3067,7 +3018,6 @@ wgEncode 1
 
 
     track wgEncodeUncFAIREseqSignalK562
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE Sig
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
@@ -3078,7 +3028,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal softwareVersion="F-Seq, 1.81, combined seqs, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=234 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalK562 fileName=wgEncodeUncFAIREseqSignalK562.wig.gz
 
     track wgEncodeUncFAIREseqBaseOverlapSignalK562
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
@@ -3122,7 +3071,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 type=wig fragLength=135 view=RawSignal replicate=3 softwareVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=326 dateSubmitted=2008-12-07 dateRegenerated=2009-05-21 dateUnrestricted=2009-08-07 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqRawSignalRep3K562 fileName=wgEncodeUncFAIREseqRawSignalRep3K562.wig.gz
 
     track wgEncodeUtaChIPseqPeaksK562Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in K562 cells)
@@ -3132,7 +3080,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Peaks labVersion="F-Seq 1.81, ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=278 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562Ctcf fileName=wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalK562Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in K562 cells)
@@ -3144,7 +3091,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=244 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562Ctcf fileName=wgEncodeUtaChIPseqSignalK562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
@@ -3189,7 +3135,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf fileName=wgEncodeUtaChIPseqRawSignalRep3K562Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksK562Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in K562 cells)
@@ -3199,7 +3144,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Peaks labVersion="F-Seq 1.81, ROC aalysis" dataVersion="ENCODE Feb 2009 Freeze" subId=278 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562Cmyc fileName=wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalK562Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in K562 cells)
@@ -3210,7 +3154,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562Cmyc fileName=wgEncodeUtaChIPseqSignalK562Cmyc.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
@@ -3254,7 +3197,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc type=wig fragLength=135 view=RawSignal replicate=3 labVersion="Maq 0.6.5, F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=327 dateSubmitted=2009-02-27 dateRegenerated=2009-05-21 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc fileName=wgEncodeUtaChIPseqRawSignalRep3K562Cmyc.wig.gz
 
     track wgEncodeUtaustinChIPseqSignalK562Input
-    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel K562 Input Sig
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in K562 cells)
