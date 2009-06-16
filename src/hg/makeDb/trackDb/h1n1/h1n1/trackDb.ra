@@ -28,6 +28,29 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
+track humanHA
+shortLabel Human HA
+longLabel Human H1N1 HA Sequences (GISAID 4/26/09)
+group map
+priority 100
+visibility pack
+color 100,52,200
+indelQueryInsert on
+maxItems 2000
+type psl
+
+track swineHA
+shortLabel Swine HA
+longLabel Swine H1N1 HA Sequences (GISAID 4/26/09)
+group map
+priority 110
+visibility hide
+color 100,100,200
+indelQueryInsert on
+maxItems 2000
+type psl
+
+
 searchName h1n1GeneAcc
 searchTable h1n1Gene
 searchMethod exact
