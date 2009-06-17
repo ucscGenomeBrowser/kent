@@ -2220,17 +2220,17 @@ group regulation
 #subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562 zRG=Reference_Genome
 #subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control zXR=Excluded
 #visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide sXREG=hide
-subGroup1 view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal
+subGroup1 view Views Peaks=Peaks Signal=Signal_(F-Seq_Density) SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control
 sortOrder cellType=+ EXP=+ view=+
 dimensions dimensionX=cellType dimensionY=EXP
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide
+visibilityViewDefaults Peaks=pack Signal=full SignalBO=full rRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.08,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0:20,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 Signal:viewLimits=0:0.4,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SignalBO:viewLimits=0:100,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:28132,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:16:16 zREG=noScoreFilter,configurable=no
 useScore 0
 priority 0
 type bed 3
@@ -2251,6 +2251,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=DNase cellType=GM12878
     type wig 0.00 2.54
+    viewLimits 0:0.15
     spanList first
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Signal labVersion="F-Seq 1.81, average reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalGm12878 fileName=wgEncodeDukeDNaseSeqSignalGm12878.wig.gz
@@ -2261,6 +2262,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=DNase cellType=GM12878
     type wig 0.00 570.00
+    viewLimits 0:12
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878.wig.gz
@@ -2313,6 +2315,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=FAIRE cellType=GM12878
     type wig 0.00 4.28
+    viewLimits 0.0005:0.04
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalGm12878 fileName=wgEncodeUncFAIREseqSignalGm12878.wig.gz
@@ -2323,6 +2326,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=GM12878
     type wig 0.00 6800.00
+    viewLimits 4:20
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=231 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878.wig.gz
@@ -2430,6 +2434,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (GM12878 cells)
     subGroups view=Signal EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
+    viewLimits 0:0.1
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=Input view=Signal labVersion=1.0 dataVersion="ENCODE Nov 2008 Freeze" subId=34 dateSubmitted=2008-11-07 dateUnrestricted=2009-07-07 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalGm12878Input fileName=wgEncodeUtaustinChIPseqSignalGm12878Input.wig.gz
@@ -2460,6 +2465,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=DNase cellType=HeLa
     type wig 0.00 1.50
+    viewLimits 0:0.15
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHelas3 fileName=wgEncodeDukeDNaseSeqSignalHelas3.wig.gz
@@ -2470,6 +2476,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=DNase cellType=HeLa
     type wig 0.00 277.00
+    viewLimits 0:12
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3.wig.gz
@@ -2523,6 +2530,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HeLa-S3 cells)
     subGroups view=Signal EXP=FAIRE cellType=HeLa
     type wig 0.00 0.74
+    viewLimits 0.0005:0.04
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHelas3 fileName=wgEncodeUncFAIREseqSignalHelas3.wig.gz
@@ -2533,6 +2541,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HeLa
     type wig 0.00 3729.00
+    viewLimits 4:20
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=285 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3.wig.gz
@@ -2638,6 +2647,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HeLa-S3 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HeLa
     type wig 0.00 0.77
+    viewLimits 0:0.08
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz
@@ -2648,6 +2658,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HeLa
     type wig 0.00 170.00
+    viewLimits 0:20
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=282 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc.wig.gz
@@ -2680,6 +2691,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HeLa-S3 cells)
     subGroups view=Signal EXP=zCTRL cellType=HeLa
     type wig 0.00 3.70
+    viewLimits 0:0.1
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=Input view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=275 dateSubmitted=2009-03-16 dateUnrestricted=2009-12-16 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHelas3Input fileName=wgEncodeUtaustinChIPseqSignalHelas3Input.wig.gz
@@ -2710,6 +2722,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=DNase cellType=HepG2
     type wig 0.00 2.70
+    viewLimits 0:0.15
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Signal labVersion="F-Seq 1.81, pooled reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHepg2 fileName=wgEncodeDukeDNaseSeqSignalHepg2.wig.gz
@@ -2720,6 +2733,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=DNase cellType=HepG2
     type wig 0.00 288.00
+    viewLimits 0:12
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2.wig.gz
@@ -2772,6 +2786,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HepG2 cells)
     subGroups view=Signal EXP=FAIRE cellType=HepG2
     type wig 0.00 1.60
+    viewLimits 0.0005:0.04
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2 fileName=wgEncodeUncFAIREseqSignalHepg2.wig.gz
@@ -2782,6 +2797,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=HepG2
     type wig 0.00 5987.00
+    viewLimits 4:20
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE July 2009 Freeze" subId=286 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2.wig.gz
@@ -2887,6 +2903,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HepG2 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=HepG2
     type wig 0.00 0.99
+    viewLimits 0:0.08
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2Cmyc fileName=wgEncodeUtaChIPseqSignalHepg2Cmyc.wig.gz
@@ -2897,6 +2914,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HepG2 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=HepG2
     type wig 0.00 528.00
+    viewLimits 0:20
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=284 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc.wig.gz
@@ -2940,6 +2958,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in HepG2 cells)
     subGroups view=Signal EXP=zCTRL cellType=HepG2
     type wig 0.00 2.78
+    viewLimits 0:0.1
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Input view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=274 dateSubmitted=2009-03-13 dateUnrestricted=2009-12-13 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHepg2Input fileName=wgEncodeUtaustinChIPseqSignalHepg2Input.wig.gz
@@ -2970,6 +2989,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
     subGroups view=Signal EXP=DNase cellType=K562
     type wig 0.00 1.56
+    viewLimits 0:0.15
     spanList first
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Signal labVersion="F-Seq 1.81, average reps, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=235 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalK562 fileName=wgEncodeDukeDNaseSeqSignalK562.wig.gz
@@ -2980,6 +3000,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
     subGroups view=SignalBO EXP=DNase cellType=K562
     type wig 0.00 445.00
+    viewLimits 0:12
     spanList 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=116 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562.wig.gz
@@ -3033,6 +3054,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
     subGroups view=Signal EXP=FAIRE cellType=K562
     type wig 0.00 1.10
+    viewLimits 0.0005:0.04
     spanList first
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal softwareVersion="F-Seq, 1.81, combined seqs, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=234 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalK562 fileName=wgEncodeUncFAIREseqSignalK562.wig.gz
@@ -3043,6 +3065,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=K562
     type wig 0.00 8719.00
+    viewLimits 4:20
     spanList 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=117 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
@@ -3159,6 +3182,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in K562 cells)
     subGroups view=Signal EXP=IP-cMyc cellType=K562
     type wig 0.00 1.97
+    viewLimits 0:0.08
     spanList first
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Signal labVersion="F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562Cmyc fileName=wgEncodeUtaChIPseqSignalK562Cmyc.wig.gz
@@ -3169,6 +3193,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
     subGroups view=SignalBO EXP=IP-cMyc cellType=K562
     type wig 0.00 1925.00
+    viewLimits 0:20
     spanList first
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=245 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc.wig.gz
@@ -3212,6 +3237,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT Input Signal (Input in K562 cells)
     subGroups view=Signal EXP=zCTRL cellType=K562
     type wig 0.00 2.98
+    viewLimits 0:0.1
     spanList 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input view=Signal labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=109 dateSubmitted=2008-12-05 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalK562Input fileName=wgEncodeUtaustinChIPseqSignalK562Input.wig.gz
