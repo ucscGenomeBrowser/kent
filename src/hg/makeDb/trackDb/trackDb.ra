@@ -303,8 +303,8 @@ color 20,20,170
 type genePred
 
 track knownGene
-shortLabel Known Genes
-longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
+shortLabel UCSC Genes
+longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
 group genes
 priority 34
 visibility pack
