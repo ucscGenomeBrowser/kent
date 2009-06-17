@@ -456,6 +456,8 @@ Some settings used by various tracks:
       than showCdsMaxZoom  to make this useful.
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
+    o defaultLinkedTables table1,table2,... - in hgTables, when selecting
+      output fields, display these all.joiner-linked tables by default.
 
 Specific, optional settings used only by snp125, snp126, and so on:
     o chimpMacaqueOrthoTable table - table contains orthologous
