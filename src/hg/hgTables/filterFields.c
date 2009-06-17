@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.76 2009/06/05 20:52:49 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.77 2009/06/17 16:49:03 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -119,6 +119,22 @@ for (var = varList; var != NULL; var = var->next)
 	dt = dbTableNew(db, table);
 	slAddHead(&dtList, dt);
 	freez(&dbTab);
+	}
+    }
+if (varList == NULL && curTrack != NULL)
+    {
+    char *defaultLinkedTables = trackDbSetting(curTrack, "defaultLinkedTables");
+    if (defaultLinkedTables != NULL)
+	{
+	struct slName *t, *tables = slNameListFromString(defaultLinkedTables, ',');
+	for (t = tables;  t != NULL;  t = t->next)
+	    {
+	    char varName[1024];
+	    safef(varName, sizeof(varName), "%s%s.%s", prefix, database, t->name);
+	    cartSetBoolean(cart, varName, TRUE);
+	    dt = dbTableNew(database, t->name);
+	    slAddHead(&dtList, dt);
+	    }
 	}
     }
 slSort(&dtList, dbTableCmp);
