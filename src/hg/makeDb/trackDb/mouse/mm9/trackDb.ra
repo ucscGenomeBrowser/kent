@@ -44,6 +44,18 @@ url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 release beta
 
+track jaxRepTranscriptSep09
+shortLabel MGI RepTrns Sep08
+longLabel Mouse Genome Informatics Representative Transcript ***Sept. 2008***
+group phenoAllele
+visibility pack
+color 0,0,150
+priority 70.01
+type genePred
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
+urlLabel MGI Gene Detail:
+baseColorUseCds none
+
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
 longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***
@@ -170,21 +182,6 @@ speciesCodonDefault mm9
 speciesGroups mammal
 sGroup_mammal rn4 hg18 canFam2
 treeImage phylo/mm9_4way.gif
-
-track knownGene
-shortLabel UCSC Genes
-longLabel UCSC Gene Predictions Based on RefSeq, UniProt, GenBank, and Comparative Genomics
-group genes
-priority 34
-visibility pack
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
 
 track knownAlt
 shortLabel Alt Events
