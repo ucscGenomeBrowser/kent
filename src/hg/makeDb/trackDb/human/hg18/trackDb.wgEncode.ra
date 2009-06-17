@@ -2220,7 +2220,7 @@ group regulation
 #subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562 zRG=Reference_Genome
 #subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control zXR=Excluded
 #visibilityViewDefaults Peaks=pack Signal=full SignalBO=hide rRAW=hide sXREG=hide
-subGroup1 view Views Peaks=Peaks Signal=Signal_(F-Seq_Density) SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal
+subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Base_Overlap_Signal rRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HepG2=HepG2 K562=K562
 subGroup3 EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF IP-cMyc=ChIP-seq_c-Myc zCTRL=Input_Control
 sortOrder cellType=+ EXP=+ view=+
@@ -2247,9 +2247,9 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
-    subGroups view=Signal EXP=DNase cellType=GM12878
+    shortLabel GM128 DNase FD
+    longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM12878 cells)
+    subGroups view=SIG EXP=DNase cellType=GM12878
     type wig 0.00 2.54
     viewLimits 0:0.15
     spanList first
@@ -2260,7 +2260,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel GM128 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
-    subGroups view=SignalBO EXP=DNase cellType=GM12878
+    subGroups view=SIGBO EXP=DNase cellType=GM12878
     type wig 0.00 570.00
     viewLimits 0:12
     spanList 1
@@ -2311,9 +2311,9 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqSignalGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in GM12878 cells)
-    subGroups view=Signal EXP=FAIRE cellType=GM12878
+    shortLabel GM128 FAIRE FD
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12878 cells)
+    subGroups view=SIG EXP=FAIRE cellType=GM12878
     type wig 0.00 4.28
     viewLimits 0.0005:0.04
     spanList 1
@@ -2324,7 +2324,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel GM128 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
-    subGroups view=SignalBO EXP=FAIRE cellType=GM12878
+    subGroups view=SIGBO EXP=FAIRE cellType=GM12878
     type wig 0.00 6800.00
     viewLimits 4:20
     spanList 1
@@ -2375,9 +2375,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalGm12878Ctcf
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in GM12878 cells)
-    subGroups view=Signal EXP=IP-CTCF cellType=GM12878
+    shortLabel GM128 CTCF FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM12878 cells)
+    subGroups view=SIG EXP=IP-CTCF cellType=GM12878
     type wig 0.00 11.12
     viewLimits 0:0.4
     spanList 1
@@ -2388,7 +2388,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel GM128 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
-    subGroups view=SignalBO EXP=IP-CTCF cellType=GM12878
+    subGroups view=SIGBO EXP=IP-CTCF cellType=GM12878
     type wig 0.00 1956.00
     viewLimits 0:100
     spanList 1
@@ -2430,9 +2430,9 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 Input Sig
-    longLabel ENCODE Open Chromatin, UT Input Signal (GM12878 cells)
-    subGroups view=Signal EXP=zCTRL cellType=GM12878
+    shortLabel GM128 Input FD
+    longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (GM12878 cells)
+    subGroups view=SIG EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
     viewLimits 0:0.1
     spanList 1
@@ -2461,9 +2461,9 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalHelas3
     subTrack wgEncodeChromatinMap off
-    shortLabel HeLa DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HeLa-S3 cells)
-    subGroups view=Signal EXP=DNase cellType=HeLa
+    shortLabel HeLa DNase FD
+    longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HeLa-S3 cells)
+    subGroups view=SIG EXP=DNase cellType=HeLa
     type wig 0.00 1.50
     viewLimits 0:0.15
     spanList first
@@ -2474,7 +2474,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
-    subGroups view=SignalBO EXP=DNase cellType=HeLa
+    subGroups view=SIGBO EXP=DNase cellType=HeLa
     type wig 0.00 277.00
     viewLimits 0:12
     spanList first
@@ -2526,9 +2526,9 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqSignalHelas3
     subTrack wgEncodeChromatinMap off
-    shortLabel HeLa FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HeLa-S3 cells)
-    subGroups view=Signal EXP=FAIRE cellType=HeLa
+    shortLabel HeLa FAIRE FD
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HeLa-S3 cells)
+    subGroups view=SIG EXP=FAIRE cellType=HeLa
     type wig 0.00 0.74
     viewLimits 0.0005:0.04
     spanList first
@@ -2539,7 +2539,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HeLa-S3 cells)
-    subGroups view=SignalBO EXP=FAIRE cellType=HeLa
+    subGroups view=SIGBO EXP=FAIRE cellType=HeLa
     type wig 0.00 3729.00
     viewLimits 4:20
     spanList first
@@ -2590,9 +2590,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHelas3Ctcf
     subTrack wgEncodeChromatinMap off
-    shortLabel HeLa CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HeLa-S3 cells)
-    subGroups view=Signal EXP=IP-CTCF cellType=HeLa
+    shortLabel HeLa CTCF FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HeLa-S3 cells)
+    subGroups view=SIG EXP=IP-CTCF cellType=HeLa
     type wig 0.00 8.59
     viewLimits 0:0.4
     spanList first
@@ -2603,7 +2603,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HeLa-S3 cells)
-    subGroups view=SignalBO EXP=IP-CTCF cellType=HeLa
+    subGroups view=SIGBO EXP=IP-CTCF cellType=HeLa
     type wig 0.00 1920.00
     viewLimits 0:100
     spanList first
@@ -2643,9 +2643,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHelas3Cmyc
     subTrack wgEncodeChromatinMap off
-    shortLabel HeLa c-Myc Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HeLa-S3 cells)
-    subGroups view=Signal EXP=IP-cMyc cellType=HeLa
+    shortLabel HeLa c-Myc FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HeLa-S3 cells)
+    subGroups view=SIG EXP=IP-cMyc cellType=HeLa
     type wig 0.00 0.77
     viewLimits 0:0.08
     spanList first
@@ -2656,7 +2656,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
-    subGroups view=SignalBO EXP=IP-cMyc cellType=HeLa
+    subGroups view=SIGBO EXP=IP-cMyc cellType=HeLa
     type wig 0.00 170.00
     viewLimits 0:20
     spanList first
@@ -2687,9 +2687,9 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalHelas3Input
     subTrack wgEncodeChromatinMap off
-    shortLabel HeLa Input Sig
-    longLabel ENCODE Open Chromatin, UT Input Signal (Input in HeLa-S3 cells)
-    subGroups view=Signal EXP=zCTRL cellType=HeLa
+    shortLabel HeLa Input FD
+    longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HeLa-S3 cells)
+    subGroups view=SIG EXP=zCTRL cellType=HeLa
     type wig 0.00 3.70
     viewLimits 0:0.1
     spanList first
@@ -2718,9 +2718,9 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalHepg2
     subTrack wgEncodeChromatinMap off
-    shortLabel HepG2 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in HepG2 cells)
-    subGroups view=Signal EXP=DNase cellType=HepG2
+    shortLabel HepG2 DNase FD
+    longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HepG2 cells)
+    subGroups view=SIG EXP=DNase cellType=HepG2
     type wig 0.00 2.70
     viewLimits 0:0.15
     spanList first
@@ -2731,7 +2731,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
-    subGroups view=SignalBO EXP=DNase cellType=HepG2
+    subGroups view=SIGBO EXP=DNase cellType=HepG2
     type wig 0.00 288.00
     viewLimits 0:12
     spanList first
@@ -2782,9 +2782,9 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqSignalHepg2
     subTrack wgEncodeChromatinMap off
-    shortLabel HepG2 FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in HepG2 cells)
-    subGroups view=Signal EXP=FAIRE cellType=HepG2
+    shortLabel HepG2 FAIRE FD
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in HepG2 cells)
+    subGroups view=SIG EXP=FAIRE cellType=HepG2
     type wig 0.00 1.60
     viewLimits 0.0005:0.04
     spanList first
@@ -2795,7 +2795,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in HepG2 cells)
-    subGroups view=SignalBO EXP=FAIRE cellType=HepG2
+    subGroups view=SIGBO EXP=FAIRE cellType=HepG2
     type wig 0.00 5987.00
     viewLimits 4:20
     spanList first
@@ -2846,9 +2846,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHepg2Ctcf
     subTrack wgEncodeChromatinMap off
-    shortLabel HepG2 CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in HepG2 cells)
-    subGroups view=Signal EXP=IP-CTCF cellType=HepG2
+    shortLabel HepG2 CTCF FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HepG2 cells)
+    subGroups view=SIG EXP=IP-CTCF cellType=HepG2
     type wig 0.00 6.75
     viewLimits 0:0.4
     spanList first
@@ -2859,7 +2859,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HepG2 cells)
-    subGroups view=SignalBO EXP=IP-CTCF cellType=HepG2
+    subGroups view=SIGBO EXP=IP-CTCF cellType=HepG2
     type wig 0.00 654.00
     viewLimits 0:100
     spanList first
@@ -2899,9 +2899,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalHepg2Cmyc
     subTrack wgEncodeChromatinMap off
-    shortLabel HepG2 c-Myc Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in HepG2 cells)
-    subGroups view=Signal EXP=IP-cMyc cellType=HepG2
+    shortLabel HepG2 c-Myc FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HepG2 cells)
+    subGroups view=SIG EXP=IP-cMyc cellType=HepG2
     type wig 0.00 0.99
     viewLimits 0:0.08
     spanList first
@@ -2912,7 +2912,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap off
     shortLabel HepG2 c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HepG2 cells)
-    subGroups view=SignalBO EXP=IP-cMyc cellType=HepG2
+    subGroups view=SIGBO EXP=IP-cMyc cellType=HepG2
     type wig 0.00 528.00
     viewLimits 0:20
     spanList first
@@ -2954,9 +2954,9 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalHepg2Input
     subTrack wgEncodeChromatinMap off
-    shortLabel HepG2 Input Sig
-    longLabel ENCODE Open Chromatin, UT Input Signal (Input in HepG2 cells)
-    subGroups view=Signal EXP=zCTRL cellType=HepG2
+    shortLabel HepG2 Input FD
+    longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HepG2 cells)
+    subGroups view=SIG EXP=zCTRL cellType=HepG2
     type wig 0.00 2.78
     viewLimits 0:0.1
     spanList first
@@ -2985,9 +2985,9 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalK562
     subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
-    subGroups view=Signal EXP=DNase cellType=K562
+    shortLabel K562 DNase FD
+    longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in K562 cells)
+    subGroups view=SIG EXP=DNase cellType=K562
     type wig 0.00 1.56
     viewLimits 0:0.15
     spanList first
@@ -2998,7 +2998,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel K562 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
-    subGroups view=SignalBO EXP=DNase cellType=K562
+    subGroups view=SIGBO EXP=DNase cellType=K562
     type wig 0.00 445.00
     viewLimits 0:12
     spanList 1
@@ -3050,9 +3050,9 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqSignalK562
     subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
-    subGroups view=Signal EXP=FAIRE cellType=K562
+    shortLabel K562 FAIRE FD
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in K562 cells)
+    subGroups view=SIG EXP=FAIRE cellType=K562
     type wig 0.00 1.10
     viewLimits 0.0005:0.04
     spanList first
@@ -3063,7 +3063,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
-    subGroups view=SignalBO EXP=FAIRE cellType=K562
+    subGroups view=SIGBO EXP=FAIRE cellType=K562
     type wig 0.00 8719.00
     viewLimits 4:20
     spanList 1
@@ -3114,9 +3114,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalK562Ctcf
     subTrack wgEncodeChromatinMap
-    shortLabel K562 CTCF Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in K562 cells)
-    subGroups view=Signal EXP=IP-CTCF cellType=K562
+    shortLabel K562 CTCF FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in K562 cells)
+    subGroups view=SIG EXP=IP-CTCF cellType=K562
     type wig 0.00 6.78
     viewLimits 0:0.4
     spanList first
@@ -3127,7 +3127,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel K562 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
-    subGroups view=SignalBO EXP=IP-CTCF cellType=K562
+    subGroups view=SIGBO EXP=IP-CTCF cellType=K562
     type wig 0.00 3339.00
     viewLimits 0:100
     spanList first
@@ -3178,9 +3178,9 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalK562Cmyc
     subTrack wgEncodeChromatinMap
-    shortLabel K562 c-Myc Sig
-    longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (c-Myc in K562 cells)
-    subGroups view=Signal EXP=IP-cMyc cellType=K562
+    shortLabel K562 c-Myc FD
+    longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in K562 cells)
+    subGroups view=SIG EXP=IP-cMyc cellType=K562
     type wig 0.00 1.97
     viewLimits 0:0.08
     spanList first
@@ -3191,7 +3191,7 @@ wgEncode 1
     subTrack wgEncodeChromatinMap
     shortLabel K562 c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
-    subGroups view=SignalBO EXP=IP-cMyc cellType=K562
+    subGroups view=SIGBO EXP=IP-cMyc cellType=K562
     type wig 0.00 1925.00
     viewLimits 0:20
     spanList first
@@ -3233,9 +3233,9 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalK562Input
     subTrack wgEncodeChromatinMap
-    shortLabel K562 Input Sig
-    longLabel ENCODE Open Chromatin, UT Input Signal (Input in K562 cells)
-    subGroups view=Signal EXP=zCTRL cellType=K562
+    shortLabel K562 Input FD
+    longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in K562 cells)
+    subGroups view=SIG EXP=zCTRL cellType=K562
     type wig 0.00 2.98
     viewLimits 0:0.1
     spanList 1
