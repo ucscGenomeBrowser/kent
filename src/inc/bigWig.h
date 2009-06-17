@@ -12,7 +12,7 @@
  * To read all the data out of a bigWig get the chromosome info with bbiChromList
  * and then fetch all of it for each chromosome using bigWigIntervalQuery.
  *
- * See also the module bwgInternal that has a description of they structure of
+ * See also the module bbiFile that has a description of they structure of
  * a bigWig file, and lower level routines used to implement this interface.
  */
 
@@ -35,7 +35,7 @@ void bigWigFileCreate(
  * to binary big wig format. */
 
 struct bbiFile *bigWigFileOpen(char *fileName);
-/* Open up big wig file.   Free this up with bbiFileFree */
+/* Open up big wig file.   Free this up with bbiFileClose */
 
 struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	struct lm *lm);

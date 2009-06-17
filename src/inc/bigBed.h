@@ -30,7 +30,7 @@ struct ppBed
     };
 
 struct bbiFile *bigBedFileOpen(char *fileName);
-/* Open up big bed file.   Free this up with bbiFileFree */
+/* Open up big bed file.   Free this up with bbiFileClose. */
 
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
 	bits32 start, bits32 end, int maxItems, struct lm *lm);

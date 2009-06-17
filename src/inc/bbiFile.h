@@ -192,7 +192,7 @@ struct bbiSummaryElement
 boolean bbiSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	BbiFetchIntervals fetchIntervals,
 	int summarySize, struct bbiSummaryElement *summary);
-/* Fill in summary with  data from indicated chromosome range in bigWig file. 
+/* Fill in summary with  data from indicated chromosome range in bigWig/bigBed file. 
  * Returns FALSE if no data at that position. */
 
 boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
