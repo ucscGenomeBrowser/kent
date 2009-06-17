@@ -494,21 +494,8 @@ type bedGraph 4
     altColor 0,100,200
     priority 6
 
-track knownGene
-shortLabel UCSC Genes
-longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
-group genes
+track knownGene override
 priority 10
-visibility pack
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-defaultLinkedTables kgXref
 
 track knownAlt
 shortLabel Alt Events
