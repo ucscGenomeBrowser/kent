@@ -42,11 +42,20 @@ HS mapping and FAIRE.
 <H2> Display Conventions and Configuration </H2>
 <P>
 This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+Chromatin data displayed here represents a continuum of signal intensities.
+Therefore we believe the optimal way to view our data is to set the "Data
+view scaling" to "<EM>auto-scale<EM>".  In general, for each experiment in
+each cell types, the Open Chromatin tracks contain the following views:
+<!--
+This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>).  For each view, there are multiple subtracks that display
 individually on the browser. Instructions for configuring multi-view tracks
 are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 In general, for each experiment in each cell types, the Open Chromatin tracks
-contain the following views:
+contain the following views: -->
 <DL>
 <DT><I>Peaks</I></DT><DD> These are regions of enriched signal in either
 DNaseI HS, FAIRE, or ChIP experiments.  Peaks were called based on signals
@@ -57,26 +66,27 @@ cut-off value at approximately the 95% sensitivity level.  The solid vertical
 line in the peak represents the point with highest signal.   ENCODE Peaks
 tables contain a p-value for statistical significance.  For these data, this
 was determined by fitting the data to a gamma distribution.</DD>
-<DT><I>Signal</I></DT><DD> Density graph (wiggle) of signal enrichment
-calculated using F-Seq for the combined set of sequences from all replicates.
-F-Seq employs Parzen kernel density estimation to create base pair scores
-(Boyle <em>et al.</em>, 2008b). This method does not look at fixed-length
-windows but rather weights contributions of nearby sequences in proportion
-to their distance from that base.  It only considers sequences aligned 4
-or less times in the genome, and uses a alignability background model to
-try and correct for regions where sequences cannot be aligned.  For certain
+<DT><I>Signal (F-Seq Density)</I></DT><DD> Density graph (wiggle) of
+signal enrichment calculated using F-Seq for the combined set of sequences from
+all replicates. F-Seq employs Parzen kernel density estimation to create base
+pair scores (Boyle <em>et al.</em>, 2008b). This method does not look at
+fixed-length windows but rather weights contributions of nearby sequences in
+proportion to their distance from that base.  It only considers sequences
+aligned 4 or less times in the genome, and uses a alignability background model
+to try and correct for regions where sequences cannot be aligned.  For certain
 cell types (K562, HepG2, HelaS3) where there is an abnormal karyotype, a
 model to try and correct for amplifications and deletions is also used.
 No control data were used in the creation of these annotations.</DD>
 <DT><I>Signal (Base Overlap)</I></DT><DD> An alternative version of the
-<I>Signal</I> track annotation that provides a higher resolution view of the
-raw sequence data. This track also includes the combined set of sequences from
-all replicates.  For each sequence, the aligned read is extended in the
-following way: for DNase, the read is extended 5 bp in both directions from
-it's 5' aligned end where DNase cut the DNA; for FAIRE and ChIP, the sequence
-is extend to a fragment length of 134 bp from the 5' aligned end representing
-the approximate average fragment length.  The score at each base pair
-represents the number of extended fragments that overlap the base pair.</DD>
+<I>Signal (F-Seq Density)</I> track annotation that provides a higher resolution
+view of the raw sequence data. This track also includes the combined set of
+sequences from all replicates.  For each sequence, the aligned read is extended
+in the following way: for DNase, the read is extended 5 bp in both directions
+from it's 5' aligned end where DNase cut the DNA; for FAIRE and ChIP, the
+sequence is extend to a fragment length of 134 bp from the 5' aligned end
+representing the approximate average fragment length.  The score at each base
+pair represents the number of extended fragments that overlap the base pair.
+</DD>
 <DT><I>Raw Signal</I></DT><DD> Density graph (wiggle) of signal from raw data
 (single replicates, no control). For these high-throughput sequencing data,
 this reflects the aligned read density.  (Currently not available).</DD>
