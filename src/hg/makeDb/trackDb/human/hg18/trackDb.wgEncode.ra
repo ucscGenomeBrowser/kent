@@ -2238,7 +2238,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqPeaksGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Pk
+    shortLabel GM12878 DNase Pk
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=DNase cellType=GM12878
     type narrowPeak
@@ -2247,7 +2247,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqSignalGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase FD
+    shortLabel GM12878 DNase FD
     longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM12878 cells)
     subGroups view=SIG EXP=DNase cellType=GM12878
     type wig 0.00 2.54
@@ -2258,7 +2258,7 @@ wgEncode 1
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase BO
+    shortLabel GM12878 DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SIGBO EXP=DNase cellType=GM12878
     type wig 0.00 570.00
@@ -2270,7 +2270,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase 1
+    shortLabel GM12878 DNase 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 1.00 910.00
@@ -2281,7 +2281,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase 2
+    shortLabel GM12878 DNase 2
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 1.00 1241.00
@@ -2292,7 +2292,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase 3
+    shortLabel GM12878 DNase 3
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 1.00 6350.00
@@ -2302,7 +2302,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqPeaksGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE Pk
+    shortLabel GM12878 FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
@@ -2311,7 +2311,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqSignalGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE FD
+    shortLabel GM12878 FAIRE FD
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12878 cells)
     subGroups view=SIG EXP=FAIRE cellType=GM12878
     type wig 0.00 4.28
@@ -2322,7 +2322,7 @@ wgEncode 1
 
     track wgEncodeUncFAIREseqBaseOverlapSignalGm12878
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE BO
+    shortLabel GM12878 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SIGBO EXP=FAIRE cellType=GM12878
     type wig 0.00 6800.00
@@ -2334,7 +2334,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep1Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE 1
+    shortLabel GM12878 FAIRE 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 1.00 13040.00
@@ -2345,7 +2345,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE 2
+    shortLabel GM12878 FAIRE 2
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 1.00 20932.00
@@ -2356,7 +2356,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE 3
+    shortLabel GM12878 FAIRE 3
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 1.00 28132.00
@@ -2366,7 +2366,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF Pk
+    shortLabel GM12878 CTCF Pk
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=GM12878
     type narrowPeak
@@ -2375,7 +2375,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqSignalGm12878Ctcf
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF FD
+    shortLabel GM12878 CTCF FD
     longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM12878 cells)
     subGroups view=SIG EXP=IP-CTCF cellType=GM12878
     type wig 0.00 11.12
@@ -2386,7 +2386,7 @@ wgEncode 1
 
     track wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF BO
+    shortLabel GM12878 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM12878
     type wig 0.00 1956.00
@@ -2398,7 +2398,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF 1
+    shortLabel GM12878 CTCF 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 1.00 1561.00
@@ -2409,7 +2409,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF 2
+    shortLabel GM12878 CTCF 2
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 1.00 2940.00
@@ -2420,7 +2420,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF 3
+    shortLabel GM12878 CTCF 3
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 1.00 2940.00
@@ -2430,7 +2430,7 @@ wgEncode 1
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 Input FD
+    shortLabel GM12878 Input FD
     longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (GM12878 cells)
     subGroups view=SIG EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
@@ -2442,7 +2442,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalGm12878Input
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 Input Raw
+    shortLabel GM12878 Input Rw
     longLabel ENCODE Open Chromatin, UT Input Raw Signal (GM12878 cells)
     subGroups view=rRAW EXP=zCTRL cellType=GM12878
     type wig 1.00 6605.00
