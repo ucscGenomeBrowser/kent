@@ -5728,7 +5728,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel longNonPolyA Keratinocyte cytosol
-    longLabel ENCODE Affy Transfrags (longNonPolyA in Keratinocyte cell cytosol using )
+    longLabel ENCODE Affy Transfrags (PolyA- RNA in Keratinocyte cytosol)
     subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
@@ -5739,7 +5739,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel longNonPolyA Keratinocyte cytosol
-    longLabel ENCODE Affy Filtered Transfrags (longNonPolyA in Keratinocyte cell cytosol using )
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in Keratinocyte cytosol)
     subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
