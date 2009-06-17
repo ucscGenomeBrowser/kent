@@ -11,7 +11,7 @@ track sgdGene
 shortLabel SGD Genes
 longLabel Protein-Coding Genes from Saccharomyces Genome Database
 group genes
-priority 45.5
+priority 39
 visibility pack
 color 0,100,180
 type genePred sgdPep
@@ -24,7 +24,7 @@ track sgdOther
 shortLabel SGD Other
 longLabel Other Features from Saccharomyces Genome Database
 group genes
-priority 46
+priority 39.1
 visibility pack
 color 30,130,210
 type bed 6 +
