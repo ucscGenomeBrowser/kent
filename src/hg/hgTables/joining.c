@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.55 2009/05/29 22:07:01 mikep Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.56 2009/06/17 18:54:50 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -824,6 +824,8 @@ for (tj = tjList; tj != NULL; tj = tj->next)
 orderTables(&tjList, primaryDb, primaryTable);
 tableDtfs = tableToDtfs(tjList);
 routeList = joinerFindRouteThroughAll(joiner, tableDtfs);
+if (routeList == NULL)
+    errAbort("Can't find route from %s to %s via all.joiner", primaryTable, tjList->next->table);
 addOutKeys(tableHash, routeList, &tjList);
 
 /* If first table is non-positional then it will lead to a lot
