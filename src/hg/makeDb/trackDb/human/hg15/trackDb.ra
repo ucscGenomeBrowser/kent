@@ -15,6 +15,10 @@ visibility hide
 altColor 180,180,180 
 type clonePos
 
+track knownGene override
+shortLabel Known Genes
+longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
+
 track vegaGene
 shortLabel Vega Genes
 longLabel Vega Annotations 
