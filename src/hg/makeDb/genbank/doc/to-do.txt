@@ -1164,3 +1164,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - mRNA BX161433 flagged invitroNorm in gbWarn; BX356367 seems to be from
   same clone and should be flagged
 
+- MGC Clone BC065513.1 hg18 mapped to chr6, plus 2 hap chroms, but RefSeq CDS similarity
+  shows only haps
