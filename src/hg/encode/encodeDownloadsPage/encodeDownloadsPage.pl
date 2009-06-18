@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.13 2009/05/13 17:29:21 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.14 2009/06/18 00:26:10 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -157,41 +157,6 @@ sub htmlTableRow {
         print OUT_FILE "<TD nowrap>$metaData\n";
     }
     print OUT_FILE "</TR>\n";
-}
-
-sub metadataLineToArrays {
-# Creates pair of arrays that contain the settings in a metadata setting line (retains order)
-    my ($line) = @_;
-
-    my @tags;
-    my @vals;
-    my $tix = 0;
-    while($line && length($line)>0) {
-        my $tag;
-        my $val;
-        ( $tag,$line ) = split(/=/, $line,2);
-        $tag =~ s/\s+//g;
-        my @chars = split(//,$line);
-        if($chars[0] ne "\"") {
-            ( $val,$line ) = split(/\s+/, $line,2);
-        } else {
-            my $ix=1;
-            while($ix < length($line) && ($chars[$ix] ne '"' || $chars[$ix - 1] eq '\\')) {  # Find next " skipping escaped \"
-                $ix++;
-            }
-            if($ix < length($line)) {
-                $val  = substr($line,1,$ix - 1);
-                $line = substr($line,  $ix + 1);
-                $val  =~ s/\\"/\"/g;
-            } else {
-                $val = $line;
-                $line = "";
-            }
-        }
-        $tags[$tix  ] = $tag;
-        $vals[$tix++] = $val;
-    }
-    return ( \@tags, \@vals );
 }
 
 sub metadataArraysRemoveHash {
@@ -379,7 +344,7 @@ for my $line (@fileList) {
     my %metaData;
 
     ### TODO: Developer: set sort order here; sortables must have same number of strings and '~' is lowest val printable
-    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","antibody","lab","type","view","level","annotation","replicate","subId");
+    my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","lab","type","view","level","annotation","replicate","subId");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my $typePrefix = "";
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
@@ -426,7 +391,7 @@ for my $line (@fileList) {
                 @sortables = sortablesSet( \@sortables,\@sortFields,$pair[0],$pair[1] );
             } elsif($pair[0] eq "metadata") {
                 # Use metadata setting with priority
-                my ( $tagRef, $valRef ) = metadataLineToArrays($pair[1]);
+                my ( $tagRef, $valRef ) = Encode::metadataLineToArrays($pair[1]);
                 my @tags = @{$tagRef};
                 my @vals = @{$valRef};
                 my $tix = 0;
