@@ -68,6 +68,9 @@ char *cgiServerName();
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
 
+char *cgiUserAgent();
+/* Return remote user agent (HTTP_USER_AGENT) or NULL if remote user agent is not known */
+
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
 char *cgiString(char *varName);

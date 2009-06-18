@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.122 2009/06/03 00:34:11 markd Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.123 2009/06/18 17:53:38 larrym Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -88,6 +88,12 @@ char *remoteAddr = getenv("REMOTE_ADDR");
 if (remoteAddr == NULL)
     remoteAddr = dunno;
 return remoteAddr;
+}
+
+char *cgiUserAgent()
+/* Return remote user agent (HTTP_USER_AGENT) or NULL if remote user agent is not known */
+{
+return getenv("HTTP_USER_AGENT");
 }
 
 char *_cgiRawInput()
