@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.116 2009/06/16 18:34:16 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.117 2009/06/18 00:21:38 kate Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -102,7 +102,7 @@ protocol HeLa-S3_protocol.pdf
 
 term HUVEC
 type Cell Line
-description umbilical vein endothelial
+description Human Umbilical Vein Endothelial Cell
 vendorName Lonza
 vendorId CC-2517
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
@@ -114,9 +114,9 @@ color 224,75,0
 tier 2
 protocol HUVEC_protocol.pdf
 
-term Keratinocyte
+term NHEK
 type Cell Line
-description normal adult human epidermal keratinocyte
+description Normal Human Epidermal Keratinocyte
 vendorName Lonza
 vendorId CC-2501
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10&cpgnum=1)/.do
