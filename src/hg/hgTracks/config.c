@@ -403,7 +403,7 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", TRUE));
+hCheckBox("dragZooming", dragZoomingConfig(cart));
 hPrintf("</TD><TD>");
 hPrintf("Enable drag-and-zoom");
 hPrintf("</TD></TR>\n");
@@ -439,4 +439,14 @@ void configPage()
 /* Put up configuration page. */
 {
 configPageSetTrackVis(-2);
+}
+
+boolean dragZoomingConfig(struct cart *cart)
+// Returns TRUE if drag-and-zoom is currently on
+{
+// dragZooming defaults to on, except for AppleWebKit browsers (Chrome and Safari), where drag-and-zoom
+// does not currently work (may want to use "KHTML" as the test string instead of "AppleWebKit").
+
+char *ua = cgiUserAgent();
+return cartUsualBoolean(cart, "dragZooming", !stringIn("AppleWebKit", ua));
 }

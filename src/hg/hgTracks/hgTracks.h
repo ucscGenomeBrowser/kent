@@ -960,6 +960,7 @@ void setRulerMode();
 #define configShowEncodeGroups "hgt_doConfigShowEncodeGroups"
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
+#define searchTracks "hgt_searchTracks"
 
 void configPage();
 /* Put up configuration page. */
@@ -1086,11 +1087,18 @@ char *getItemDataName(struct track *tg, char *itemName);
 void registerTrackHandler(char *name, TrackHandler handler);
 /* Register a track handling function. */
 
+void doSearchTracks(struct group *groupList);
+
+boolean superTrackHasVisibleMembers(struct trackDb *tdb);
+
 enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
+
+boolean dragZoomingConfig(struct cart *cart);
+// Returns TRUE if drag-and-zoom is currently on
 
 #define SMALLBUF 128
 
