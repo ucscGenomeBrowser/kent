@@ -46,9 +46,6 @@ while [[ $1 == -* ]] ; do
     esac
 done
 
-# allow 250mb core dumps
-ulimit -c 256000
-
 # setup workdir unless specified on command line
 if [ "x$workdir" = "x" ] ; then
     date=`date +"%Y.%m.%d"`
