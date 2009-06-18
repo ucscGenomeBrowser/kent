@@ -2264,7 +2264,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SIGBO EXP=DNase cellType=GM12878
     type wig 0.00 570.00
-    viewLimits 0:12
+    viewLimits 0:25
     spanList 1
     color 153,38,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=258 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878.wig.gz
@@ -2478,7 +2478,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
     subGroups view=SIGBO EXP=DNase cellType=HeLa
     type wig 0.00 277.00
-    viewLimits 0:12
+    viewLimits 0:25
     spanList first
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=280 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3.wig.gz
@@ -2735,7 +2735,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
     subGroups view=SIGBO EXP=DNase cellType=HepG2
     type wig 0.00 288.00
-    viewLimits 0:12
+    viewLimits 0:25
     spanList first
     color 189,0,157
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=272 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2.wig.gz
@@ -3002,7 +3002,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
     subGroups view=SIGBO EXP=DNase cellType=K562
     type wig 0.00 445.00
-    viewLimits 0:12
+    viewLimits 0:25
     spanList 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=116 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562.wig.gz
