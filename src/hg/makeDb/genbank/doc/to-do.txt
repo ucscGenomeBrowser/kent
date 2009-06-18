@@ -1166,3 +1166,11 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - MGC Clone BC065513.1 hg18 mapped to chr6, plus 2 hap chroms, but RefSeq CDS similarity
   shows only haps
+
+- MGCs mapped only to haplotypes chrosm, although refseqs are mapped to both hap and ref chroms
+   BC021708
+   BC003069
+   BC125044
+   BC013184
+   BC012106
+
