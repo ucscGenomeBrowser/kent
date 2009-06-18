@@ -3049,7 +3049,6 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks softwareVersion="F-Seq 1.81" dataVersion="ENCODE July 2009 Freeze" subId=287 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562 fileName=wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz
 
-
     track wgEncodeUncFAIREseqSignalK562
     subTrack wgEncodeChromatinMap
     shortLabel K562 FAIRE FD
@@ -3061,16 +3060,16 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal softwareVersion="F-Seq, 1.81, combined seqs, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=234 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalK562 fileName=wgEncodeUncFAIREseqSignalK562.wig.gz
 
-    track wgEncodeUncFAIREseqBaseOverlapSignalK562
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE BO
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
-    subGroups view=SIGBO EXP=FAIRE cellType=K562
-    type wig 0.00 8719.00
-    viewLimits 4:20
-    spanList 1
-    color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=117 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
+    #track wgEncodeUncFAIREseqBaseOverlapSignalK562
+    #subTrack wgEncodeChromatinMap
+    #shortLabel K562 FAIRE BO
+    #longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+    #subGroups view=SIGBO EXP=FAIRE cellType=K562
+    #type wig 0.00 8719.00
+    #viewLimits 4:20
+    #spanList 1
+    #color 46,0,184
+    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=117 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep1K562
     release alpha
@@ -5679,7 +5678,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel HepG2 cyto pA+ 
+    shortLabel HepG2 cyto pA+
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -5715,7 +5714,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel HepG2 cyto pA+ 
+    shortLabel HepG2 cyto pA+
     longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -61267.00 58237.00
@@ -5740,7 +5739,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel NHEK cyto pA- 
+    shortLabel NHEK cyto pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in NHEK cytosol)
     subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -5765,7 +5764,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel NHEK cyto pA- 
+    shortLabel NHEK cyto pA-
     longLabel ENCODE Affy Filtered Raw Signal (PolyA- in NHEK cytosol)
     subGroups view=FiltRawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type wig -59096.00 56826.00
@@ -5779,7 +5778,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel NHEK cyto pA+ 
+    shortLabel NHEK cyto pA+
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
     subGroups view=FiltTransfrags cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -5790,7 +5789,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel NHEK cyto pA+ 
+    shortLabel NHEK cyto pA+
     longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in NHEK cytosol)
     subGroups view=Transfrags cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
@@ -5815,7 +5814,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel NHEK cyto pA+ 
+    shortLabel NHEK cyto pA+
     longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
     subGroups view=FiltRawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
