@@ -206,13 +206,14 @@ priority 300
 
 
 # BROAD ChIP-seq (wrangler: tdreszer)
+
 track wgEncodeBroadChipSeq
 compositeTrack on
 shortLabel Broad Histone
 longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 Kera=Keratinocyte
+subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 NHEK=NHEK
 subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Input_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -1750,463 +1751,464 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqPeaksNhekCtcf
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera CTCF
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in Keratin cells)
-    subGroups view=Peaks factor=CTCF cellType=Kera
+    shortLabel NHEK CTCF
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in NHEK cells)
+    subGroups view=Peaks factor=CTCF cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=CTCF view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=183 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekCtcf fileName=wgEncodeBroadChipSeqPeaksNhekCtcf.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=CTCF view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=183 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekCtcf fileName=wgEncodeBroadChipSeqPeaksNhekCtcf.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekCtcf
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera CTCF
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in Keratin cells)
-    subGroups view=Signal factor=CTCF cellType=Kera
+    shortLabel NHEK CTCF
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in NHEK cells)
+    subGroups view=Signal factor=CTCF cellType=NHEK
     type wig 0.00 4674.50
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=CTCF view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=183 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekCtcf fileName=wgEncodeBroadChipSeqSignalNhekCtcf.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=CTCF view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=183 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekCtcf fileName=wgEncodeBroadChipSeqSignalNhekCtcf.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera CTCF 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in Keratin cells)
-    subGroups view=zRAW factor=CTCF cellType=Kera
+    shortLabel NHEK CTCF 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in NHEK cells)
+    subGroups view=zRAW factor=CTCF cellType=NHEK
     type wig 1.00 4282.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=CTCF type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteCtcf fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteCtcf.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=CTCF type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteCtcf fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteCtcf.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera CTCF 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in Keratin cells)
-    subGroups view=zRAW factor=CTCF cellType=Kera
+    shortLabel NHEK CTCF 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in NHEK cells)
+    subGroups view=zRAW factor=CTCF cellType=NHEK
     type wig 1.00 1313.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=CTCF type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteCtcf fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteCtcf.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=CTCF type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteCtcf fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteCtcf.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in Keratin cells)
-    subGroups view=Peaks factor=H3K04me1 cellType=Kera
+    shortLabel NHEK H3K4me1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in NHEK cells)
+    subGroups view=Peaks factor=H3K04me1 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K4me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=176 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k4me1 fileName=wgEncodeBroadChipSeqPeaksNhekH3k4me1.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=176 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k4me1 fileName=wgEncodeBroadChipSeqPeaksNhekH3k4me1.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in Keratin cells)
-    subGroups view=Signal factor=H3K04me1 cellType=Kera
+    shortLabel NHEK H3K4me1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in NHEK cells)
+    subGroups view=Signal factor=H3K04me1 cellType=NHEK
     type wig 0.00 4240.50
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K4me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=176 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me1 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=176 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me1 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me1.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me1 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in Keratin cells)
-    subGroups view=zRAW factor=H3K04me1 cellType=Kera
+    shortLabel NHEK H3K4me1 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in NHEK cells)
+    subGroups view=zRAW factor=H3K04me1 cellType=NHEK
     type wig 1.00 4850.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K4me1 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K4me1 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me1.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me1 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in Keratin cells)
-    subGroups view=zRAW factor=H3K04me1 cellType=Kera
+    shortLabel NHEK H3K4me1 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in NHEK cells)
+    subGroups view=zRAW factor=H3K04me1 cellType=NHEK
     type wig 1.00 593.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K4me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K4me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me1.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me2
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in Keratin cells)
-    subGroups view=Peaks factor=H3K04me2 cellType=Kera
+    shortLabel NHEK H3K4me2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in NHEK cells)
+    subGroups view=Peaks factor=H3K04me2 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K4me2 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=175 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k4me2 fileName=wgEncodeBroadChipSeqPeaksNhekH3k4me2.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me2 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=175 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k4me2 fileName=wgEncodeBroadChipSeqPeaksNhekH3k4me2.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me2
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in Keratin cells)
-    subGroups view=Signal factor=H3K04me2 cellType=Kera
+    shortLabel NHEK H3K4me2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in NHEK cells)
+    subGroups view=Signal factor=H3K04me2 cellType=NHEK
     type wig 0.00 3789.50
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K4me2 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=175 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me2 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me2.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me2 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=175 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me2 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me2.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me2 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in Keratin cells)
-    subGroups view=zRAW factor=H3K04me2 cellType=Kera
+    shortLabel NHEK H3K4me2 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in NHEK cells)
+    subGroups view=zRAW factor=H3K04me2 cellType=NHEK
     type wig 1.00 3316.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me2.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me2.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me2 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in Keratin cells)
-    subGroups view=zRAW factor=H3K04me2 cellType=Kera
+    shortLabel NHEK H3K4me2 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in NHEK cells)
+    subGroups view=zRAW factor=H3K04me2 cellType=NHEK
     type wig 1.00 2225.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me2.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me2.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me3
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me3
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in Keratin cells)
-    subGroups view=Peaks factor=H3K04me3 cellType=Kera
+    shortLabel NHEK H3K4me3
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in NHEK cells)
+    subGroups view=Peaks factor=H3K04me3 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K4me3 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=174 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k4me3 fileName=wgEncodeBroadChipSeqPeaksNhekH3k4me3.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me3 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=174 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k4me3 fileName=wgEncodeBroadChipSeqPeaksNhekH3k4me3.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me3
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me3
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in Keratin cells)
-    subGroups view=Signal factor=H3K04me3 cellType=Kera
+    shortLabel NHEK H3K4me3
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in NHEK cells)
+    subGroups view=Signal factor=H3K04me3 cellType=NHEK
     type wig 0.00 12229.50
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K4me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=174 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=174 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me3.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me3 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in Keratin cells)
-    subGroups view=zRAW factor=H3K04me3 cellType=Kera
+    shortLabel NHEK H3K4me3 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in NHEK cells)
+    subGroups view=zRAW factor=H3K04me3 cellType=NHEK
     type wig 1.00 15513.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K4me3 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K4me3 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k4me3.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K4me3 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in Keratin cells)
-    subGroups view=zRAW factor=H3K04me3 cellType=Kera
+    shortLabel NHEK H3K4me3 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in NHEK cells)
+    subGroups view=zRAW factor=H3K04me3 cellType=NHEK
     type wig 1.00 2047.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K4me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K4me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k4me3.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9ac
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9ac
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in Keratin cells)
-    subGroups view=Peaks factor=H3K09ac cellType=Kera
+    shortLabel NHEK H3K9ac
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in NHEK cells)
+    subGroups view=Peaks factor=H3K09ac cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K9ac view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k9ac fileName=wgEncodeBroadChipSeqPeaksNhekH3k9ac.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9ac view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k9ac fileName=wgEncodeBroadChipSeqPeaksNhekH3k9ac.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k9ac
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9ac
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in Keratin cells)
-    subGroups view=Signal factor=H3K09ac cellType=Kera
+    shortLabel NHEK H3K9ac
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in NHEK cells)
+    subGroups view=Signal factor=H3K09ac cellType=NHEK
     type wig 0.00 16.00
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9ac fileName=wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9ac fileName=wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9ac 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in Keratin cells)
-    subGroups view=zRAW factor=H3K09ac cellType=Kera
+    shortLabel NHEK H3K9ac 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in NHEK cells)
+    subGroups view=zRAW factor=H3K09ac cellType=NHEK
     type wig 1.00 3055.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9ac.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9ac 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in Keratin cells)
-    subGroups view=zRAW factor=H3K09ac cellType=Kera
+    shortLabel NHEK H3K9ac 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in NHEK cells)
+    subGroups view=zRAW factor=H3K09ac cellType=NHEK
     type wig 1.00 1328.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9ac.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9me1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in Keratin cells)
-    subGroups view=Peaks factor=H3K09me1 cellType=Kera
+    shortLabel NHEK H3K9me1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in NHEK cells)
+    subGroups view=Peaks factor=H3K09me1 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K9me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=181 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k9me1 fileName=wgEncodeBroadChipSeqPeaksNhekH3k9me1.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=181 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k9me1 fileName=wgEncodeBroadChipSeqPeaksNhekH3k9me1.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k9me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9me1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in Keratin cells)
-    subGroups view=Signal factor=H3K09me1 cellType=Kera
+    shortLabel NHEK H3K9me1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in NHEK cells)
+    subGroups view=Signal factor=H3K09me1 cellType=NHEK
     type wig 0.00 6121.25
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K9me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=181 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9me1 fileName=wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=181 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9me1 fileName=wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9me1 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in Keratin cells)
-    subGroups view=zRAW factor=H3K09me1 cellType=Kera
+    shortLabel NHEK H3K9me1 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in NHEK cells)
+    subGroups view=zRAW factor=H3K09me1 cellType=NHEK
     type wig 1.00 5264.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K9me1 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K9me1 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k9me1.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K9me1 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in Keratin cells)
-    subGroups view=zRAW factor=H3K09me1 cellType=Kera
+    shortLabel NHEK H3K9me1 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in NHEK cells)
+    subGroups view=zRAW factor=H3K09me1 cellType=NHEK
     type wig 1.00 1889.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K9me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K9me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k9me1.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27ac
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27ac
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in Keratin cells)
-    subGroups view=Peaks factor=H3K27ac cellType=Kera
+    shortLabel NHEK H3K27ac
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in NHEK cells)
+    subGroups view=Peaks factor=H3K27ac cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K27ac view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=180 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k27ac fileName=wgEncodeBroadChipSeqPeaksNhekH3k27ac.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K27ac view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=180 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k27ac fileName=wgEncodeBroadChipSeqPeaksNhekH3k27ac.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k27ac
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27ac
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in Keratin cells)
-    subGroups view=Signal factor=H3K27ac cellType=Kera
+    shortLabel NHEK H3K27ac
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in NHEK cells)
+    subGroups view=Signal factor=H3K27ac cellType=NHEK
     type wig 0.00 45249.50
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K27ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=180 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k27ac fileName=wgEncodeBroadChipSeqSignalNhekH3k27ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K27ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=180 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k27ac fileName=wgEncodeBroadChipSeqSignalNhekH3k27ac.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27ac 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in Keratin cells)
-    subGroups view=zRAW factor=H3K27ac cellType=Kera
+    shortLabel NHEK H3K27ac 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in NHEK cells)
+    subGroups view=zRAW factor=H3K27ac cellType=NHEK
     type wig 1.00 57868.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K27ac type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K27ac type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27ac.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27ac 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in Keratin cells)
-    subGroups view=zRAW factor=H3K27ac cellType=Kera
+    shortLabel NHEK H3K27ac 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in NHEK cells)
+    subGroups view=zRAW factor=H3K27ac cellType=NHEK
     type wig 1.00 2101.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K27ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K27ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27ac.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27me3
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27me3
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in Keratin cells)
-    subGroups view=Peaks factor=H3K27me3 cellType=Kera
+    shortLabel NHEK H3K27me3
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in NHEK cells)
+    subGroups view=Peaks factor=H3K27me3 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K27me3 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=177 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k27me3 fileName=wgEncodeBroadChipSeqPeaksNhekH3k27me3.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K27me3 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=177 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k27me3 fileName=wgEncodeBroadChipSeqPeaksNhekH3k27me3.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k27me3
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27me3
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in Keratin cells)
-    subGroups view=Signal factor=H3K27me3 cellType=Kera
+    shortLabel NHEK H3K27me3
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in NHEK cells)
+    subGroups view=Signal factor=H3K27me3 cellType=NHEK
     type wig 0.00 5062.25
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=177 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k27me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k27me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=177 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k27me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k27me3.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27me3 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in Keratin cells)
-    subGroups view=zRAW factor=H3K27me3 cellType=Kera
+    shortLabel NHEK H3K27me3 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in NHEK cells)
+    subGroups view=zRAW factor=H3K27me3 cellType=NHEK
     type wig 1.00 4726.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K27me3 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K27me3 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k27me3.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K27me3 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in Keratin cells)
-    subGroups view=zRAW factor=H3K27me3 cellType=Kera
+    shortLabel NHEK H3K27me3 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in NHEK cells)
+    subGroups view=zRAW factor=H3K27me3 cellType=NHEK
     type wig 1.00 1256.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K27me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K27me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k27me3.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH3k36me3
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K36me3
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in Keratin cells)
-    subGroups view=Peaks factor=H3K36me3 cellType=Kera
+    shortLabel NHEK H3K36me3
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in NHEK cells)
+    subGroups view=Peaks factor=H3K36me3 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K36me3 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=178 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k36me3 fileName=wgEncodeBroadChipSeqPeaksNhekH3k36me3.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K36me3 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=178 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH3k36me3 fileName=wgEncodeBroadChipSeqPeaksNhekH3k36me3.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH3k36me3
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K36me3
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in Keratin cells)
-    subGroups view=Signal factor=H3K36me3 cellType=Kera
+    shortLabel NHEK H3K36me3
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in NHEK cells)
+    subGroups view=Signal factor=H3K36me3 cellType=NHEK
     type wig 0.00 4663.25
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H3K36me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=178 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k36me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k36me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K36me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=178 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k36me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k36me3.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K36me3 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in Keratin cells)
-    subGroups view=zRAW factor=H3K36me3 cellType=Kera
+    shortLabel NHEK H3K36me3 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in NHEK cells)
+    subGroups view=zRAW factor=H3K36me3 cellType=NHEK
     type wig 1.00 4552.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K36me3 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k36me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k36me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K36me3 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k36me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH3k36me3.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H3K36me3 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in Keratin cells)
-    subGroups view=zRAW factor=H3K36me3 cellType=Kera
+    shortLabel NHEK H3K36me3 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in NHEK cells)
+    subGroups view=zRAW factor=H3K36me3 cellType=NHEK
     type wig 1.00 711.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H3K36me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k36me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k36me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H3K36me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k36me3 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH3k36me3.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekH4k20me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H4K20me1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in Keratin cells)
-    subGroups view=Peaks factor=H4K20me1 cellType=Kera
+    shortLabel NHEK H4K20me1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in NHEK cells)
+    subGroups view=Peaks factor=H4K20me1 cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H4K20me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=182 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH4k20me1 fileName=wgEncodeBroadChipSeqPeaksNhekH4k20me1.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H4K20me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=182 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekH4k20me1 fileName=wgEncodeBroadChipSeqPeaksNhekH4k20me1.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekH4k20me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H4K20me1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in Keratin cells)
-    subGroups view=Signal factor=H4K20me1 cellType=Kera
+    shortLabel NHEK H4K20me1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in NHEK cells)
+    subGroups view=Signal factor=H4K20me1 cellType=NHEK
     type wig 0.00 7443.75
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=H4K20me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=182 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH4k20me1 fileName=wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H4K20me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=182 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH4k20me1 fileName=wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H4K20me1 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in Keratin cells)
-    subGroups view=zRAW factor=H4K20me1 cellType=Kera
+    shortLabel NHEK H4K20me1 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in NHEK cells)
+    subGroups view=zRAW factor=H4K20me1 cellType=NHEK
     type wig 1.00 7351.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H4K20me1 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH4k20me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH4k20me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H4K20me1 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH4k20me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteH4k20me1.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera H4K20me1 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in Keratin cells)
-    subGroups view=zRAW factor=H4K20me1 cellType=Kera
+    shortLabel NHEK H4K20me1 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in NHEK cells)
+    subGroups view=zRAW factor=H4K20me1 cellType=NHEK
     type wig 1.00 3335.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=H4K20me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH4k20me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH4k20me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=H4K20me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH4k20me1 fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteH4k20me1.wig.gz
 
     track wgEncodeBroadChipSeqPeaksNhekPol2b
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera Pol2(b)
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in Keratin cells)
-    subGroups view=Peaks factor=Pol2b cellType=Kera
+    shortLabel NHEK Pol2(b)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in NHEK cells)
+    subGroups view=Peaks factor=Pol2b cellType=NHEK
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Pol2(b) view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=184 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekPol2b fileName=wgEncodeBroadChipSeqPeaksNhekPol2b.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=Pol2(b) view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=184 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhekPol2b fileName=wgEncodeBroadChipSeqPeaksNhekPol2b.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalNhekPol2b
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera Pol2(b)
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in Keratin cells)
-    subGroups view=Signal factor=Pol2b cellType=Kera
+    shortLabel NHEK Pol2(b)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in NHEK cells)
+    subGroups view=Signal factor=Pol2b cellType=NHEK
     type wig 0.00 5604.25
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Pol2(b) view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=184 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekPol2b fileName=wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=Pol2(b) view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=184 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekPol2b fileName=wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocytePol2b
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera Pol2(b) 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in Keratin cells)
-    subGroups view=zRAW factor=Pol2b cellType=Kera
+    shortLabel NHEK Pol2(b) 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in NHEK cells)
+    subGroups view=zRAW factor=Pol2b cellType=NHEK
     type wig 1.00 2349.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=Pol2(b) type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocytePol2b fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocytePol2b.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=Pol2(b) type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocytePol2b fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocytePol2b.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera Pol2(b) 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
-    subGroups view=zRAW factor=Pol2b cellType=Kera
+    shortLabel NHEK Pol2(b) 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in NHEK cells)
+    subGroups view=zRAW factor=Pol2b cellType=NHEK
     type wig 1.00 19.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=Pol2(b) type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=Pol2(b) type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b.wig.gz
 
     track wgEncodeBroadChipSeqSignalNhekControl
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera control
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Keratinocyte Control)
-    subGroups view=Signal factor=zCTRL cellType=Kera
+    shortLabel NHEK control
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (NHEK Control)
+    subGroups view=Signal factor=zCTRL cellType=NHEK
     type wig 0.00 13497.25
     color 179,0,134
     spanList first
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=Keratinocyte antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekControl fileName=wgEncodeBroadChipSeqSignalNhekControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekControl fileName=wgEncodeBroadChipSeqSignalNhekControl.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteControl
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera Control 1
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Keratinocyte Control)
-    subGroups view=zRAW factor=zCTRL cellType=Kera
+    shortLabel NHEK Control 1
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (NHEK Control)
+    subGroups view=zRAW factor=zCTRL cellType=NHEK
     type wig 1.00 12205.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=Control type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteControl fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=Control type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteControl fileName=wgEncodeBroadChipSeqRel2RawSignalRep1KeratinocyteControl.wig.gz
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteControl
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel Kera Control 2
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Keratinocyte Control)
-    subGroups view=zRAW factor=zCTRL cellType=Kera
+    shortLabel NHEK Control 2
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (NHEK Control)
+    subGroups view=zRAW factor=zCTRL cellType=NHEK
     type wig 1.00 3351.00
     color 179,0,134
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=Keratinocyte antibody=Control type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteControl fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteControl.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=Control type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateResubmitted=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteControl fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocyteControl.wig.gz
+
 
 
 # Duke/UT/UNC Chromatin Map (wrangler: tdreszer)
@@ -4905,7 +4907,7 @@ shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix Subcellular RNA Localization by Tiling Array
 group expression
 subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate HepG2=HepG2 Keratinocyte=Keratinocyte
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate HepG2=HepG2 NHEK=NHEK
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
@@ -4985,7 +4987,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+ Rw
-    longLabel ENCODE Affy Raw Signal (PolyA+ RnA in prostate whole cell)
+    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in prostate whole cell)
     subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type wig -62728.00 58726.00
     spanList 1
@@ -5504,7 +5506,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl tot
+    shortLabel GM128 nucl tot R
     longLabel ENCODE Affy Raw Transfrags (Total RNA in GM12878 in nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=total
     type broadPeak
@@ -5627,7 +5629,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol
+    shortLabel HepG2 cyto pA-
     longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
@@ -5638,8 +5640,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol
-    longLabel ENCODE Affy Transfrags (PolyA- RNA in HepG2 cytosol)
+    shortLabel HepG2 cyto pA- R
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in HepG2 cytosol)
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
@@ -5649,8 +5651,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol
-    longLabel ENCODE (PolyA- in HepG2 cytosol)
+    shortLabel HepG2 cyto pA- R
+    longLabel ENCODE Affy Filtered Raw Signal (PolyA- RNA in HepG2 cytosol)
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -51212.00 53928.00
     noInherit on
@@ -5663,8 +5665,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA HepG2 cytosol  Raw
-    longLabel ENCODE (PolyA- in HepG2 cytosol)
+    shortLabel HepG2 cyto A- R
+    longLabel ENCODE Affy Raw Signal (PolyA- RNA in HepG2 cytosol)
     subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -50875.00 56171.00
     noInherit on
@@ -5677,8 +5679,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol
-    longLabel ENCODE Affy Filtered Transfrags (longPolyA in HepG2 cell cytosol using )
+    shortLabel HepG2 cyto pA+ 
+    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
@@ -5688,8 +5690,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol
-    longLabel ENCODE Affy Transfrags (longPolyA in HepG2 cell cytosol using )
+    shortLabel HepG2 cyto pA+ R
+    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
@@ -5699,8 +5701,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol  Raw
-    longLabel ENCODE (longPolyA in HepG2 cell cytosol using )
+    shortLabel HepG2 cyto pA+ R
+    longLabel ENCODE Affy Raw Transfrags(PolyA+ RNA in HepG2 cytosol)
     subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -62864.00 52910.00
     noInherit on
@@ -5713,8 +5715,8 @@ wgEncode 1
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA HepG2 cytosol
-    longLabel ENCODE (longPolyA in HepG2 cell cytosol using )
+    shortLabel HepG2 cyto pA+ 
+    longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -61267.00 58237.00
     noInherit on
@@ -5727,102 +5729,102 @@ wgEncode 1
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol
-    longLabel ENCODE Affy Transfrags (PolyA- RNA in Keratinocyte cytosol)
-    subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
+    shortLabel NHEK cyto pA- R
+    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in NHEK cytosol)
+    subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in Keratinocyte cytosol)
-    subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
+    shortLabel NHEK cyto pA- 
+    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in NHEK cytosol)
+    subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol  Raw
-    longLabel ENCODE (longNonPolyA in Keratinocyte cell cytosol using )
-    subGroups view=RawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
+    shortLabel NHEK cyto pA- R
+    longLabel ENCODE Affy Raw Signal(PolyA- in NHEK cytosol)
+    subGroups view=RawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type wig -61219.00 57907.00
     noInherit on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longNonPolyA Keratinocyte cytosol
-    longLabel ENCODE (longNonPolyA in Keratinocyte cell cytosol using )
-    subGroups view=FiltRawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longNonPolyA
+    shortLabel NHEK cyto pA- 
+    longLabel ENCODE Affy Filtered Raw Signal (PolyA- in NHEK cytosol)
+    subGroups view=FiltRawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longNonPolyA
     type wig -59096.00 56826.00
     noInherit on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol
-    longLabel ENCODE Affy Filtered Transfrags (longPolyA in Keratinocyte cell cytosol using )
-    subGroups view=FiltTransfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
+    shortLabel NHEK cyto pA+ 
+    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
+    subGroups view=FiltTransfrags cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol
-    longLabel ENCODE Affy Transfrags (longPolyA in Keratinocyte cell cytosol using )
-    subGroups view=Transfrags cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
+    shortLabel NHEK cyto pA+ 
+    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in NHEK cytosol)
+    subGroups view=Transfrags cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol  Raw
-    longLabel ENCODE (longPolyA in Keratinocyte cell cytosol using )
-    subGroups view=RawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
+    shortLabel NHEK cyto pA+ R
+    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in NHEK cytosol)
+    subGroups view=RawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip off
-    shortLabel longPolyA Keratinocyte cytosol
-    longLabel ENCODE (longPolyA in Keratinocyte cell cytosol using )
-    subGroups view=FiltRawSignal cellType=Keratinocyte localization=20-cytosol rnaExtract=longPolyA
+    shortLabel NHEK cyto pA+ 
+    longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
+    subGroups view=FiltRawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
     color 179,0,134
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=Keratinocyte rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
 
 
 # SUNY Albany genechp (wrangler: mikep)
