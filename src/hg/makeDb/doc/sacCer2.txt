@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.6 2009/04/06 05:42:22 markd Exp $
+#  $Id: sacCer2.txt,v 1.7 2009/06/18 21:59:48 kuhn Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1197,6 +1197,12 @@ scratchDir /hive/data/genomes/sacCer2/bed/hgNearBlastp/tmp
 do
     hgsql -e "delete from knownBlastTab where query=\"${N}\";" sacCer2
 done
+
+# knownBlastTab does not run any columnsin yeast GS.  
+ CREATE TABLE sgdBlastTab SELECT * FROM knownBlastTab;
+# (I know, could have used rename, but wanted to keep other table
+# around just to see...) 
+#  kuhn and katrina 06-18-2009
 
 #########################################################################
 #  creating download files and pushQ (DONE - 2009-02-24 - Hiram)
