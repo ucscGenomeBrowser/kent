@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.183 2009/06/18 00:18:14 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.184 2009/06/18 16:38:16 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1692,7 +1692,7 @@ foreach my $ddfLine (@ddfLines) {
 
 
     # dataVersion means the tableName must be different (append Vn), and the old metaddata should be used for dateSubmitted and dateUnrestricted
-    if(!defined($daf->{dataVersion}) || $daf->{dataVersion} > 1) {
+    if(defined($daf->{dataVersion}) && $daf->{dataVersion} > 1) {
         my $prevTableName = "$tableName";
         # Find old metadata to lookup dateSubmitted and dateUnrestricted
         my $prevTableFound = 0;
