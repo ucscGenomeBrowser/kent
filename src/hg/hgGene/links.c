@@ -10,7 +10,7 @@
 #include "hgGene.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.37 2008/12/19 23:55:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.38 2009/06/18 20:19:18 hiram Exp $";
 
 struct link
 /* A link to another web site. */
@@ -231,6 +231,7 @@ printGenomicSeqLink(conn, geneId, curGeneChrom, curGeneStart, curGeneEnd);
 printMrnaSeqLink(conn,geneId);
 printProteinSeqLink(conn,geneId);
 hPrintf("</TR>\n<TR>");
+++rowIx;
 
 for (link = linkList; link != NULL; link = link->next)
     {
