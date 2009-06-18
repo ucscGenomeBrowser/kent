@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1572 2009/06/11 17:37:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1573 2009/06/18 17:57:03 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3187,7 +3187,7 @@ static void setSuperTrackHasVisibleMembers(struct trackDb *tdb)
 tdb->visibility = tvDense;
 }
 
-static boolean superTrackHasVisibleMembers(struct trackDb *tdb)
+boolean superTrackHasVisibleMembers(struct trackDb *tdb)
 /* Determine if any member tracks are visible -- currently
  * recording this in the parent's visibility setting */
 {
@@ -4659,7 +4659,7 @@ setUdcCacheDir();
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
-dragZooming = cartUsualBoolean(cart, "dragZooming", TRUE);
+dragZooming = dragZoomingConfig(cart);
 
 /* Do main display. */
 
