@@ -3060,16 +3060,16 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal softwareVersion="F-Seq, 1.81, combined seqs, pipeline 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=234 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalK562 fileName=wgEncodeUncFAIREseqSignalK562.wig.gz
 
-    #track wgEncodeUncFAIREseqBaseOverlapSignalK562
-    #subTrack wgEncodeChromatinMap
-    #shortLabel K562 FAIRE BO
-    #longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
-    #subGroups view=SIGBO EXP=FAIRE cellType=K562
-    #type wig 0.00 8719.00
-    #viewLimits 4:20
-    #spanList 1
-    #color 46,0,184
-    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=117 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
+    track wgEncodeUncFAIREseqBaseOverlapSignalK562
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE BO
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+    subGroups view=SIGBO EXP=FAIRE cellType=K562
+    type wig 0.00 8719.00
+    viewLimits 4:20
+    spanList 1
+    color 46,0,184
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal softwareVersion="baseAlignCounts.pl 1.0" dataVersion="ENCODE Nov 2008 Freeze" subId=117 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz
 
     track wgEncodeUncFAIREseqRawSignalRep1K562
     release alpha
