@@ -5752,7 +5752,7 @@ wgEncode 1
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA- R
     longLabel ENCODE Affy Raw Signal(PolyA- in NHEK cytosol)
-    subGroups view=RawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longNonPolyA
+    subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type wig -61219.00 57907.00
     noInherit on
     spanList first
@@ -5766,7 +5766,7 @@ wgEncode 1
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA-
     longLabel ENCODE Affy Filtered Raw Signal (PolyA- in NHEK cytosol)
-    subGroups view=FiltRawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longNonPolyA
+    subGroups view=FiltRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type wig -59096.00 56826.00
     noInherit on
     spanList first
@@ -5780,7 +5780,7 @@ wgEncode 1
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
     longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
-    subGroups view=FiltTransfrags cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
     color 179,0,134
@@ -5791,7 +5791,7 @@ wgEncode 1
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
     longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in NHEK cytosol)
-    subGroups view=Transfrags cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
     color 179,0,134
@@ -5802,7 +5802,7 @@ wgEncode 1
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+ R
     longLabel ENCODE Affy Raw Signal (PolyA+ RNA in NHEK cytosol)
-    subGroups view=RawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
     spanList first
@@ -5816,7 +5816,7 @@ wgEncode 1
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
     longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
-    subGroups view=FiltRawSignal cellType=NHEKtinocyte localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=FiltRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
     spanList first
