@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.52 2009/06/05 19:27:44 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.53 2009/06/19 23:53:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -427,7 +427,7 @@ for (td = tdList; td != NULL; td = tdNext)
 		}
 	    else
 		{
-		if (hashFindVal(prunedTracks, trackName))
+		if ((prunedTracks != NULL) && hashFindVal(prunedTracks, trackName))
 		    {	/* parent was pruned, get rid of subTrack too */
 		    hashAdd(removeSubTracks, td->tableName, td);
 		    }
