@@ -12,7 +12,18 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.48 2008/02/20 00:42:33 markd Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.49 2009/06/19 19:14:42 mikep Exp $";
+
+#ifndef min3
+#define min3(x,y,z) (min(x,min(y,z)))
+/* Return min of x,y, and z. */
+#endif
+
+#ifndef max3
+#define max3(x,y,z) (max(x,max(y,z)))
+/* Return max of x,y, and z. */
+#endif
+
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -675,3 +686,246 @@ vg->getHint = (vg_getHint)mgGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)mgGetFontPixelHeight;
 vg->getFontStringWidth = (vg_getFontStringWidth)mgGetFontStringWidth;
 }
+
+
+struct hslColor mgRgbToHsl(struct rgbColor rgb)
+/* Convert RGB to HSL colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV)
+ * In HSL, Hue is the color in the range [0,360) with 0=red 120=green 240=blue,
+ * Saturation goes from a shade of grey (0) to fully saturated color (1000), and
+ * Lightness goes from black (0) through the hue (500) to white (1000). */
+{
+unsigned char rgbMax = max3(rgb.r, rgb.g, rgb.b);
+unsigned char rgbMin = min3(rgb.r, rgb.g, rgb.b);
+unsigned char delta = rgbMax - rgbMin;
+unsigned short minMax = rgbMax + rgbMin;
+int divisor;
+struct hslColor hsl = { 0.0, 0, (1000*minMax+255)/(2*255) }; // round up
+
+// if max=min then no saturation, and this is gray
+if (rgbMax == rgbMin)
+    return hsl;
+else if (hsl.l <= 500)
+    divisor = minMax;
+else
+    divisor = (2*255-minMax);
+hsl.s = (1000*delta + divisor/2)/divisor; // round up
+
+// Saturation so compute hue 0..360 degrees (same as for HSV)
+if (rgbMax == rgb.r) // red is 0 +/- offset in blue or green direction
+    {
+    hsl.h = 0 + 60.0*(rgb.g - rgb.b)/delta;
+    }
+else if (rgbMax == rgb.g) // green is 120 +/- offset in blue or red direction
+    {
+    hsl.h = 120 + 60.0*(rgb.b - rgb.r)/delta;
+    }
+else // rgb_max == rgb.b // blue is 240 +/- offset in red or green direction
+    {
+    hsl.h = 240 + 60.0*(rgb.r - rgb.g)/delta;
+    }
+// normalize to [0,360)
+if (hsl.h < 0.0)
+    hsl.h += 360.0;
+else if (hsl.h >= 360.0)
+    hsl.h -= 360.0;
+return hsl;
+}
+
+
+struct hsvColor mgRgbToHsv(struct rgbColor rgb) 
+/* Convert RGB to HSV colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV)
+ * In HSV, Hue is the color in the range [0,360) with 0=red 120=green 240=blue,
+ * Saturation goes from white (0) to fully saturated color (1000), and
+ * Value goes from black (0) through to the hue (1000). */
+{
+unsigned char rgbMax = max3(rgb.r, rgb.g, rgb.b);
+unsigned char rgbMin = min3(rgb.r, rgb.g, rgb.b);
+unsigned char delta = rgbMax - rgbMin;
+struct hsvColor hsv = {0.0, 0, 1000*rgbMax/255};
+
+if (hsv.v == 0) 
+    return hsv;
+hsv.s = 1000*delta/rgbMax;
+// if no saturation, then this is gray
+if (hsv.s == 0) 
+    return hsv;
+// Saturation so compute hue 0..360 degrees (same as for HSL)
+if (rgbMax == rgb.r) // red is 0 +/- offset in blue or green direction
+    {
+    hsv.h = 0 + 60.0*(rgb.g - rgb.b)/delta;
+    } 
+else if (rgbMax == rgb.g) // green is 120 +/- offset in blue or red direction
+    {
+    hsv.h = 120 + 60.0*(rgb.b - rgb.r)/delta;
+    } 
+else // rgb_max == rgb.b // blue is 240 +/- offset in red or green direction
+    {
+    hsv.h = 240 + 60.0*(rgb.r - rgb.g)/delta;
+    }
+// normalize to [0,360)
+if (hsv.h < 0.0)
+    hsv.h += 360.0;
+else if (hsv.h >= 360.0)
+    hsv.h -= 360.0;
+return hsv;
+}
+
+
+struct rgbColor mgHslToRgb(struct hslColor hsl)
+/* Convert HSL to RGB colorspace http://en.wikipedia.org/wiki/HSL_and_HSV */
+{
+int p, q;
+double r, g, b;
+//unsigned short p, q, r, g, b;
+double tR, tG, tB;
+
+if( hsl.s == 0 ) // achromatic (grey)
+    return (struct rgbColor) {(255*hsl.l+500)/1000, (255*hsl.l+500)/1000, (255*hsl.l+500)/1000};
+if (hsl.l <= 500)
+    q = hsl.l + (hsl.l*hsl.s+500)/1000;
+else
+    q = hsl.l + hsl.s - (hsl.l*hsl.s+500)/1000;
+p = 2 * hsl.l - q;
+hsl.h /= 360.0; // normalize h to 0..1
+tR = hsl.h + 1/3.0;
+tG = hsl.h;
+tB = hsl.h - 1/3.0;
+if (tR < 0.0)
+    tR += 1.0;
+else if (tR > 1.0)
+    tR -= 1.0;
+if (tG < 0.0)
+    tG += 1.0;
+else if (tG > 1.0)
+    tG -= 1.0;
+if (tB < 0.0)
+    tB += 1.0;
+else if (tB > 1.0)
+    tB -= 1.0;
+// Red
+if (tR < 1/6.0)
+    r = p + (q-p)*6*tR;
+else if (tR < 0.5)
+    r = q;
+else if (tR < 2/3.0)
+    r = p + (q-p)*6*(2/3.0 - tR);
+else
+    r = p;
+// Green
+if (tG < 1/6.0)
+    g = p + (q-p)*6*tG;
+else if (tG < 0.5)
+    g = q;
+else if (tG < 2/3.0)
+    g = p + (q-p)*6*(2/3.0 - tG);
+else
+    g = p;
+// Blue
+if (tB < 1/6.0)
+    b = p + (q-p)*6*tB;
+else if (tB < 0.5)
+    b = q;
+else if (tB < 2/3.0)
+    b = p + (q-p)*6*(2/3.0 - tB);
+else
+    b = p;
+return (struct rgbColor) {(255*r+500)/1000, (255*g+500)/1000, (255*b+500)/1000}; // round up
+}
+
+
+struct rgbColor mgHsvToRgb(struct hsvColor hsv)
+/* Convert HSV to RGB colorspace http://en.wikipedia.org/wiki/HSL_and_HSV */
+{
+int i;
+double f;
+unsigned short low, q, t, r, g, b;
+
+if( hsv.s == 0 ) // achromatic (grey)
+    return (struct rgbColor) {(255*hsv.v+500)/1000, (255*hsv.v+500)/1000, (255*hsv.v+500)/1000};
+hsv.h /= 60.0; 
+i = (int)floor( hsv.h );             // sector 0 to 5
+f = hsv.h - i;                       // fractional part (distance) from hue 
+// hsv.v is highest r,g, or b value
+// low value is related to saturation
+low = hsv.v - (hsv.v * hsv.s / 1000); // lowest r,g, or b value
+t = low + (hsv.v - low) * f;         // scaled value from low..high
+q = low + (hsv.v - low) * (1.0-f);   // scaled value from low..high
+
+switch( i )
+    {
+    case 0:
+	r = hsv.v;
+        g = t;
+        b = low;
+        break;
+    case 1:
+        r = q;
+        g = hsv.v;
+        b = low;
+        break;
+    case 2:
+        r = low;
+        g = hsv.v;
+        b = t;
+        break;
+    case 3:
+        r = low;
+        g = q;
+        b = hsv.v;
+        break;
+    case 4:
+        r = t;
+        g = low;
+        b = hsv.v;
+        break;
+    default:                // case 5:
+        r = hsv.v;
+        g = low;
+        b = q;
+        break;
+    }
+return (struct rgbColor) {(255*r+500)/1000, (255*g+500)/1000, (255*b+500)/1000};
+}
+
+
+struct rgbColor mgRgbTransformHsl(struct rgbColor in, double h, double s, double l)
+/* Transform rgb 'in' value using
+ *   hue shift 'h' (0..360 degrees), 
+ *   saturation scale 's', and 
+ *   lightness scale 'l'
+ * Returns the transformed rgb value 
+ * Use H=0, S=L=1 for identity transformation
+ */
+{
+struct hslColor hsl = mgRgbToHsl(in);
+hsl.h += h;
+while (hsl.h < 0.0)
+    hsl.h += 360.0;
+while (hsl.h > 360.0)
+    hsl.h -= 360.0;
+hsl.s = min(max(hsl.s * s, 0), 1000);
+hsl.l = min(max(hsl.l * l, 0), 1000);
+return mgHslToRgb(hsl);
+}
+
+
+struct rgbColor mgRgbTransformHsv(struct rgbColor in, double h, double s, double v)
+/* Transform rgb 'in' value using
+ *   hue shift 'h' (0..360 degrees), 
+ *   saturation scale 's', and 
+ *   value scale 'v'
+ * Returns the transformed rgb value 
+ * Use H=0, S=V=1 for identity transformation
+ */
+{
+struct hsvColor hsv = mgRgbToHsv(in);
+hsv.h += h;
+while (hsv.h < 0.0)
+    hsv.h += 360.0;
+while (hsv.h > 360.0)
+    hsv.h -= 360.0;
+hsv.s = min(max(hsv.s * s, 0), 1000);
+hsv.v = min(max(hsv.v * v, 0), 1000);
+return mgHsvToRgb(hsv);
+}
+

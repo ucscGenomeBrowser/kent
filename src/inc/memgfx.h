@@ -34,6 +34,27 @@ struct rgbColor
     unsigned char r, g, b;
     };
 
+/* HSV and HSL structs can be used for changing lightness, darkness, or
+ * color of RGB colors. Convert RGB->HS[LV], modify hue, saturation, or
+ * value/lightness, then convert back to RGB.
+ * The datatypes were chosen to be fast but also give accurate conversion
+ * back to RGB.
+ * Hue is a float [0,360) degrees 0=red, 120=green, 240=blue
+ * S/V/L are integers [0,1000]
+ */
+
+struct hsvColor
+    {
+    double h;
+    unsigned short s, v;
+    };
+
+struct hslColor
+    {
+    double h;
+    unsigned short s, l;
+    };
+
 extern struct rgbColor mgFixedColors[9];  /* Contains MG_WHITE - MG_GRAY */
 
 struct memGfx
@@ -214,5 +235,41 @@ void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad,
 void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 	boolean filled);
 /* Draw polygon, possibly filled in color. */
+
+struct hslColor mgRgbToHsl(struct rgbColor rgb);
+/* Convert RGB to HSL colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV) 
+ * In HSL, Hue is the color in the range [0,360) with 0=red 120=green 240=blue,
+ * Saturation goes from a shade of grey (0) to fully saturated color (1000), and
+ * Lightness goes from black (0) through the hue (500) to white (1000). */
+
+struct hsvColor mgRgbToHsv(struct rgbColor rgb);
+/* Convert RGB to HSV colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV)
+ * In HSV, Hue is the color in the range [0,360) with 0=red 120=green 240=blue,
+ * Saturation goes from white (0) to fully saturated color (1000), and
+ * Value goes from black (0) through to the hue (1000). */
+
+struct rgbColor mgHslToRgb(struct hslColor hsl);
+/* Convert HSL to RGB colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV) */
+
+struct rgbColor mgHsvToRgb(struct hsvColor hsv);
+/* Convert HSV to RGB colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV) */
+
+struct rgbColor mgRgbTransformHsl(struct rgbColor in, double h, double s, double l);
+/* Transform rgb 'in' value using
+ *   hue shift 'h' (0..360 degrees), 
+ *   saturation scale 's', and 
+ *   lightness scale 'l'
+ * Returns the transformed rgb value 
+ * Use H=0, S=L=1 for identity transformation
+ */
+
+struct rgbColor mgRgbTransformHsv(struct rgbColor in, double h, double s, double v);
+/* Transform rgb 'in' value using
+ *   hue shift 'h' (0..360 degrees), 
+ *   saturation scale 's', and 
+ *   value scale 'v'
+ * Returns the transformed rgb value 
+ * Use H=0, S=V=1 for identity transformation
+ */
 
 #endif /* MEMGFX_H */
