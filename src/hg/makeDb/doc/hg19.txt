@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.26 2009/06/19 21:37:32 hiram Exp $";
+#	"$Id: hg19.txt,v 1.27 2009/06/19 21:54:43 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -5064,9 +5064,17 @@ TMPDIR=/scratch/tmp
     #	178109 exoniphyHg19.gp
     #	   106 unmapped
 
-    nice -n +19 hgLoadGenePred -genePredExt hg19 exoniphy exoniphyHg19.gp
+    mkdir dump
+    cd dump
+    hgsqldump --all -c --tab=. hg18 exoniphy
+    cd ..
+    chmod 775 dump
+    hgsql hg19 < dump/exoniphy.sql
+    hgsql hg19 \
+-e "load data local infile \"exoniphyHg19.gp\" into table exoniphy;"
     nice -n +19 featureBits hg19 exoniphy
     #	27421336 bases of 2897316137 (0.946%) in intersection
     nice -n +19 featureBits hg18 exoniphy
     #	27475705 bases of 2881515245 (0.954%) in intersection
+
 #########################################################################
