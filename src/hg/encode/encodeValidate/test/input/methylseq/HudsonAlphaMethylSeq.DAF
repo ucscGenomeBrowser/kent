@@ -21,3 +21,8 @@ longLabelPrefix  HudsonAlpha Methyl-Seq Sites
 type             tagAlign
 hasReplicates    yes
 required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes 
+required         yes
