@@ -4905,8 +4905,8 @@ compositeTrack on
 shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix Subcellular RNA Localization by Tiling Array
 group expression
-subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate HepG2=HepG2 NHEK=NHEK
+subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Signal
+subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate 
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
@@ -4915,7 +4915,7 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 visibilityViewDefaults Transfrags=hide FiltTransfrags=pack RawSignal=hide FiltRawSignal=full
 noInherit on
-settingsByView RawSignal:maxHeightPixels=100:16:16,windowingFunction=mean FiltRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100 FiltTransfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100  RawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 FiltRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 
 priority 0
 type bed 3
 wgEncode 1
