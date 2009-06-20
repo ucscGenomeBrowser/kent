@@ -4903,7 +4903,7 @@ scoreMin 500
 track wgEncodeAffyRnaChip
 compositeTrack on
 shortLabel Affy RNA Loc
-longLabel ENCODE Affymetrix Subcellular RNA Localization by Tiling Array
+longLabel ENCODE Affy/CSHLmetrix/CSHL Subcellular RNA Localization by Tiling Array
 group expression
 subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate 
@@ -4924,7 +4924,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in prostate whole cell)
     subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type broadPeak
     color 0,102,136
@@ -4934,7 +4934,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA- Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type broadPeak
     color 0,102,136
@@ -4944,7 +4944,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA-
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in prostate whole cell)
     subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type wig -62124.00 545.00
     spanList 1
@@ -4955,7 +4955,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA- Rw
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in prostate whole cell)
     subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
     type wig -62124.00 50627.00
     spanList 1
@@ -4966,7 +4966,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+ Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
     type broadPeak
     color 0,102,136
@@ -4976,7 +4976,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+
-    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in prostate whole cell)
     subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
     type broadPeak
     color 0,102,136
@@ -4986,7 +4986,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+ Rw
-    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in prostate whole cell)
     subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type wig -62728.00 58726.00
     spanList 1
@@ -4997,7 +4997,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+
-    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in prostate whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in prostate whole cell)
     subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type wig -62728.00 56449.00
     spanList 1
@@ -5008,7 +5008,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA- Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 nucleus)
     subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type broadPeak
     color 46,0,184
@@ -5018,7 +5018,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 nucleus)
     subGroups view=FiltTransfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type broadPeak
     color 46,0,184
@@ -5028,7 +5028,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA- Rw
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 nucleus)
     subGroups view=RawSignal cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type wig -56486.00 59077.00
     spanList 1
@@ -5039,7 +5039,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA-
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 nucleus)
     subGroups view=FiltRawSignal cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
     type wig -56486.00 45415.00
     spanList 1
@@ -5050,7 +5050,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell tot Rw
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in K562 whole cell)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 whole cell)
     subGroups view=Transfrags cellType=K562 localization=0-cell rnaExtract=total
     type broadPeak
     color 46,0,184
@@ -5060,7 +5060,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell total
-    longLabel ENCODE Affy Filtered Transfrags (Total RNA in K562 whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 whole cell)
     subGroups view=FiltTransfrags cellType=K562 localization=0-cell rnaExtract=total
     type broadPeak
     color 46,0,184
@@ -5070,7 +5070,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell total
-    longLabel ENCODE Affy Filtered Signal (Total RNA in K562 whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 whole cell)
     subGroups view=FiltRawSignal cellType=K562 localization=0-cell rnaExtract=total
     type wig -40989.00 59494.00
     spanList 1
@@ -5081,7 +5081,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell tot Rw
-    longLabel ENCODE Affy Raw Signal (Total RNA in K562 whole cell)
+    longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 whole cell)
     subGroups view=RawSignal cellType=K562 localization=0-cell rnaExtract=total
     type wig -43345.00 59494.00
     spanList 1
@@ -5092,7 +5092,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+ Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 nucleus)
     subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type broadPeak
     color 46,0,184
@@ -5102,7 +5102,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+
-    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 nucleus)
     subGroups view=FiltTransfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type broadPeak
     color 46,0,184
@@ -5112,7 +5112,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+ Rw
-    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 nucleus)
     subGroups view=RawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type wig -47465.00 52826.00
     spanList 1
@@ -5123,7 +5123,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+
-    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in K562 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 nucleus)
     subGroups view=FiltRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type wig -49290.00 43018.00
     spanList 1
@@ -5134,7 +5134,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 cytosol)
     subGroups view=FiltTransfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     color 46,0,184
@@ -5144,7 +5144,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA- Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     color 46,0,184
@@ -5154,7 +5154,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA- Rw
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 cytosol)
     subGroups view=RawSignal cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -52894.00 56092.00
     spanList 1
@@ -5165,7 +5165,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA-
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 cytosol)
     subGroups view=FiltRawSignal cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -55473.00 56092.00
     spanList 1
@@ -5176,7 +5176,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+
-    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 cytosol)
     subGroups view=FiltTransfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     color 46,0,184
@@ -5186,7 +5186,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+ Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     color 46,0,184
@@ -5196,7 +5196,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+
-    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=FiltRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig -42328.00 61956.00
     spanList 1
@@ -5207,7 +5207,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+ Rw
-    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in K562 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=RawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig -58407.00 60582.00
     spanList 1
@@ -5218,7 +5218,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in K562 polysome)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 polysome)
     subGroups view=FiltTransfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
     type broadPeak
     color 46,0,184
@@ -5228,7 +5228,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA- Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in K562 polysome)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 polysome)
     subGroups view=Transfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
     type broadPeak
     color 46,0,184
@@ -5238,7 +5238,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA- Rw
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in K562 polysome)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 polysome)
     subGroups view=RawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
     type wig -50161.00 55400.00
     spanList 1
@@ -5249,7 +5249,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA-
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in K562 polysome)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 polysome)
     subGroups view=FiltRawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
     type wig -52880.00 48739.00
     spanList 1
@@ -5260,7 +5260,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nuc pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 nucleus)
     subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
     type broadPeak
     color 153,38,0
@@ -5270,7 +5270,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nuc pA- Rw
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
     type broadPeak
     color 153,38,0
@@ -5280,7 +5280,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nuc pA- Rw
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 nucleus)
     subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
     type wig -59319.00 55161.00
     spanList 1
@@ -5291,7 +5291,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nuc pA-
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 nucleus)
     subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
     type wig -52768.00 58546.00
     spanList 1
@@ -5302,7 +5302,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+ R
-    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     color 153,38,0
@@ -5312,7 +5312,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+
-    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA GM12878 cytosol)
     subGroups view=FiltTransfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     color 153,38,0
@@ -5322,7 +5322,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+ R
-    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 cytosol)
     subGroups view=RawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type wig -61519.00 60416.00
     spanList 1
@@ -5333,7 +5333,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+
-    longLabel ENCODE Affy Filtered Signal (PolyA+ RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 cytosol)
     subGroups view=FiltRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type wig -61519.00 60470.00
     spanList 1
@@ -5344,7 +5344,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 cytosol)
     subGroups view=FiltTransfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     color 153,38,0
@@ -5354,7 +5354,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA- R
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     color 153,38,0
@@ -5364,7 +5364,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA- R
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 cytosol)
     subGroups view=RawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -58491.00 56453.00
     spanList 1
@@ -5375,7 +5375,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA-
-    longLabel ENCODE Affy Filtered Signal (PolyA- RNA in GM12878 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 cytosol)
     subGroups view=FiltRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -58491.00 61097.00
     spanList 1
@@ -5386,7 +5386,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm tot Rw
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in K562 chromatin)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 chromatin)
     subGroups view=Transfrags cellType=K562 localization=50-chromatin rnaExtract=total
     type broadPeak
     priority 45
@@ -5398,7 +5398,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm total
-    longLabel ENCODE Affy Filtered Transfrags (Total RNA in K562 chromatin)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 chromatin)
     subGroups view=FiltTransfrags cellType=K562 localization=50-chromatin rnaExtract=total
     type broadPeak
     priority 46
@@ -5410,7 +5410,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm total
-    longLabel ENCODE Affy Filtered Signal (Total RNA in K562 chromatin)
+    longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 chromatin)
     subGroups view=FiltRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
     type wig -61688.00 49221.00
     priority 47
@@ -5425,7 +5425,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm tot Rw
-    longLabel ENCODE Affy Raw Signal (Total RNA in K562 chromatin)
+    longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 chromatin)
     subGroups view=RawSignal cellType=K562 localization=50-chromatin rnaExtract=total
     type wig -61688.00 55955.00
     priority 48
@@ -5440,7 +5440,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot Rw
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in K562 nucleolus)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleolus)
     subGroups view=Transfrags cellType=K562 localization=60-nucleolus rnaExtract=total
     type broadPeak
     priority 45
@@ -5452,7 +5452,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot Rw
-    longLabel ENCODE Affy Raw Signal (Total RNA in K562 nucleolus)
+    longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleolus)
     subGroups view=RawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
     type wig -63262.00 58632.00
     priority 48
@@ -5467,7 +5467,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplm tot Rw
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in K562 nucleoplasm)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleoplasm)
     subGroups view=Transfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type broadPeak
     priority 45
@@ -5479,7 +5479,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplm tot Rw
-    longLabel ENCODE Affy Raw Signal (Total RNA in K562 nucleoplasm)
+    longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleoplasm)
     subGroups view=RawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type wig -52041.00 554.00
     priority 48
@@ -5494,7 +5494,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl tot
-    longLabel ENCODE Affy Filtered Transfrags (Total RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 nucleus)
     subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=total
     type broadPeak
     priority 54
@@ -5506,7 +5506,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl tot R
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in GM12878 in nucleus)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 in nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=total
     type broadPeak
     priority 53
@@ -5518,7 +5518,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl tot
-    longLabel ENCODE Affy Filtered Signal (Total RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 nucleus)
     subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=total
     type wig -56831.00 59145.00
     priority 55
@@ -5533,7 +5533,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl tot R
-    longLabel ENCODE Affy Raw Signal (Total RNA in GM12878 nucleus)
+    longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 nucleus)
     subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=total
     type wig -53310.00 54732.00
     priority 56
@@ -5548,7 +5548,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot
-    longLabel ENCODE Affy Filtered Transfrags (Total RNA in GM12878 whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 whole cell)
     subGroups view=FiltTransfrags cellType=GM12878 localization=0-cell rnaExtract=total
     type broadPeak
     priority 54
@@ -5560,7 +5560,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in GM12878 whole cell)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
     subGroups view=Transfrags cellType=GM12878 localization=0-cell rnaExtract=total
     type broadPeak
     priority 53
@@ -5572,7 +5572,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot
-    longLabel ENCODE Affy Filtered Signal (Total RNA in GM12878 whole cell)
+    longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 whole cell)
     subGroups view=FiltRawSignal cellType=GM12878 localization=0-cell rnaExtract=total
     type wig -48860.00 60644.00
     priority 55
@@ -5587,7 +5587,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot R
-    longLabel ENCODE Affy Raw Transfrags (Total RNA in GM12878 whole cell)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell rnaExtract=total
     type wig -50917.00 62561.00
     priority 56
@@ -5602,7 +5602,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplsm total
-    longLabel ENCODE Affy Filtered Transfrags (Total RNA in K562 nucleoplasm)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleoplasm)
     subGroups view=FiltTransfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type broadPeak
     priority 54
@@ -5614,7 +5614,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplsm total
-    longLabel ENCODE Affy Filtered Signal (Total RNA in K562 nucleoplasm)
+    longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 nucleoplasm)
     subGroups view=FiltRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type wig -54090.00 55745.00
     priority 55
@@ -5629,7 +5629,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
@@ -5640,7 +5640,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA- R
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in HepG2 cytosol)
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
@@ -5651,7 +5651,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA- R
-    longLabel ENCODE Affy Filtered Raw Signal (PolyA- RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in HepG2 cytosol)
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -51212.00 53928.00
     noInherit on
@@ -5665,7 +5665,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto A- R
-    longLabel ENCODE Affy Raw Signal (PolyA- RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in HepG2 cytosol)
     subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
     type wig -50875.00 56171.00
     noInherit on
@@ -5679,7 +5679,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+
-    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
     subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
@@ -5690,7 +5690,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+ R
-    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
     subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
@@ -5701,7 +5701,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+ R
-    longLabel ENCODE Affy Raw Transfrags(PolyA+ RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags(PolyA+ RNA in HepG2 cytosol)
     subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -62864.00 52910.00
     noInherit on
@@ -5715,7 +5715,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+
-    longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
     subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type wig -61267.00 58237.00
     noInherit on
@@ -5729,7 +5729,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA- R
-    longLabel ENCODE Affy Raw Transfrags (PolyA- RNA in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in NHEK cytosol)
     subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
@@ -5740,7 +5740,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA-
-    longLabel ENCODE Affy Filtered Transfrags (PolyA- RNA in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK cytosol)
     subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type broadPeak
     noInherit on
@@ -5751,7 +5751,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA- R
-    longLabel ENCODE Affy Raw Signal(PolyA- in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal(PolyA- in NHEK cytosol)
     subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type wig -61219.00 57907.00
     noInherit on
@@ -5765,7 +5765,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA-
-    longLabel ENCODE Affy Filtered Raw Signal (PolyA- in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- in NHEK cytosol)
     subGroups view=FiltRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type wig -59096.00 56826.00
     noInherit on
@@ -5779,7 +5779,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
-    longLabel ENCODE Affy Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
     subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
@@ -5790,7 +5790,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
-    longLabel ENCODE Affy Raw Transfrags (PolyA+ RNA in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in NHEK cytosol)
     subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type broadPeak
     noInherit on
@@ -5801,7 +5801,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+ R
-    longLabel ENCODE Affy Raw Signal (PolyA+ RNA in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK cytosol)
     subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
@@ -5815,7 +5815,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
-    longLabel ENCODE Affy Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
     subGroups view=FiltRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type wig -57145.00 52544.00
     noInherit on
