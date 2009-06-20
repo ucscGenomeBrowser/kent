@@ -11,8 +11,9 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 #include "colHash.h"
+#include "math.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.49 2009/06/19 19:14:42 mikep Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.50 2009/06/20 16:08:01 mikep Exp $";
 
 #ifndef min3
 #define min3(x,y,z) (min(x,min(y,z)))
