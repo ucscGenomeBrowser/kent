@@ -11,9 +11,8 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 #include "colHash.h"
-#include "math.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.50 2009/06/20 16:08:01 mikep Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.51 2009/06/20 17:25:10 mikep Exp $";
 
 #ifndef min3
 #define min3(x,y,z) (min(x,min(y,z)))
@@ -844,7 +843,7 @@ unsigned short low, q, t, r, g, b;
 if( hsv.s == 0 ) // achromatic (grey)
     return (struct rgbColor) {(255*hsv.v+500)/1000, (255*hsv.v+500)/1000, (255*hsv.v+500)/1000};
 hsv.h /= 60.0; 
-i = (int)floor( hsv.h );             // sector 0 to 5
+i = (int) hsv.h;                     // floor the floating point value, sector 0 to 5
 f = hsv.h - i;                       // fractional part (distance) from hue 
 // hsv.v is highest r,g, or b value
 // low value is related to saturation
