@@ -4903,7 +4903,7 @@ scoreMin 500
 track wgEncodeAffyRnaChip
 compositeTrack on
 shortLabel Affy RNA Loc
-longLabel ENCODE Affy/CSHLmetrix/CSHL Subcellular RNA Localization by Tiling Array
+longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
 group expression
 subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate 
