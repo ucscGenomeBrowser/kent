@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1556 2009/06/22 21:50:30 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1557 2009/06/22 22:25:22 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15065,7 +15065,10 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgdpGeo geo;
     hgdpGeoStaticLoad(row+1, &geo);
-    printf("<B>Human Genome Diversity Project SNP</B><BR>\n");
+    printf("<BR><B>Human Genome Diversity Project SNP</B><BR>\n");
+    printf("Note: These annotations are taken directly from the "
+	   "<A HREF=\"http://hgdp.uchicago.edu/\" TARGET=_BLANK>HGDP Selection Browser</A>, "
+	   "and may indicate the allele on the opposite strand from that given above.<BR>\n");
     printf("<B>Ancestral Allele:</B> %c<BR>\n", geo.ancestralAllele);
     printf("<B>Derived Allele:</B> %c<BR>\n", geo.derivedAllele);
     printf("<TABLE><TR><TD>\n");
