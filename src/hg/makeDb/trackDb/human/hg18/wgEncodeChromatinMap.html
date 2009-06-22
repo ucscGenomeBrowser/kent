@@ -1,6 +1,8 @@
 <H2>Description</H2>
 <P>
-These tracks display evidence of open chromatin from the Duke/UNC/UT-Austin/EBI
+These tracks display evidence of open chromatin in <A TARGET=_BLANK
+HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
+from the Duke/UNC/UT-Austin/EBI
 ENCODE group. Open chromatin was identified using two independent and
 complementary methods: DNaseI hypersensitivity (HS) and Formaldehyde-Assisted
 Isolation of Regulatory Elements (FAIRE), combined with chromatin
@@ -21,7 +23,7 @@ following binding of trans-acting factors in place of a canonical nucleosome.
 Elements) is a method to isolate and identify nucleosome-depleted regions of
 the genome.  FAIRE was initially discovered in yeast and subsequently shown to
 identify active regulatory elements in human cells (Giresi <em>et al.</em>,
-2006). Although less well-characterized than DNase, FAIRE also appears to
+2007). Although less well-characterized than DNase, FAIRE also appears to
 identify functional regulatory elements that include enhancers, silencers,
 insulators, promotors, locus control regions and novel elements. DNA fragments
 isolated by FAIRE are 100-200 bp in length, with the average length being 140
@@ -42,16 +44,10 @@ This track is a multi-view composite track that contains multiple data types
 individually on the browser. Instructions for configuring multi-view tracks
 are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 Chromatin data displayed here represents a continuum of signal intensities.
-Therefore, we believe the optimal way to view our data is to set the &quot;Data
-view scaling&quot; to &quot;<EM>auto-scale</EM>&quot;.  In general, for each experiment in
-each of the cell types, the Open Chromatin tracks contain the following views:
-<!--
-This track is a multi-view composite track that contains multiple data types
-(<EM>views</EM>).  For each view, there are multiple subtracks that display
-individually on the browser. Instructions for configuring multi-view tracks
-are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-In general, for each experiment in each cell types, the Open Chromatin tracks
-contain the following views: -->
+The Crawford lab recommends setting the &quot;Data view scaling:
+<EM>auto-scale</EM>&quot; option when viewing signal data in <EM>full</EM>
+mode. In general, for each experiment in each of the cell types, the Open
+Chromatin tracks contain the following views:
 <DL>
 <DT><I>Peaks</I></DT><DD> Regions of enriched signal in either
 DNaseI HS, FAIRE, or ChIP experiments.  Peaks were called based on signals
@@ -88,23 +84,24 @@ pair represents the number of extended fragments that overlap the base pair.
 this reflects the aligned read density.  (Currently not available).</DD>
 <DT><I>Alignments</I></DT><DD> Mappings of short reads to the genome (currently
 only available for download).</DD>
-<!--<DT><I>Regions Excluded</I></DT><DD>Genomic regions which were excluded from
-calling <I>Peaks</I> due to various reasons such as repetitive sequence or
-genomic gaps.</DD> -->
-<DT><I>Uniqueness</I></DT><DD>Three tracks identified as <em>Duke uniqueness</em>
-were used in identifying regions of unique sequence can be mapped are found in
-the set of <A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A> tracks.
-These tracks show regions where <em>Alignments</em> can be expected to map
-well.</DD>
-<DT><I>Excluded Regions</I></DT><DD>A track identified as <em>Duke excluded
-regions</em> was used in identifying regions which were excluded from peak
-calling can be found in the set of <A HREF="hgTrackUi?g=wgEncodeMapability">
-Mapability</A> tracks.</DD>
-<!--<DT><I>Mapability</I></DT><DD>Two additional views which should be used in
-conjunction with these datasets can be found on the set of
-<A HREF="hgTrackUi?g=wgEncodeMapability" TARGET=_BLANK>Mapability</A> tracks.
-Specifically, the <em>Duke uniqueness</em> and <em>excludable regions</em>
-tracks were used in identifying valid peaks.</DD>-->
+<DT><I>Uniqueness</I></DT><DD>
+The <EM>Duke uniqueness</EM> tracks (located with the ENCODE
+Mapability tracks, available soon) were used in
+<!-- when Mapability is available, replace line above with this line:
+<A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A> tracks) were used in
+-->
+identifying regions of unique sequence for different tag lengths. The tracks
+also identify regions where high-throughput sequence tags cannot be mapped.</DD>
+<DT><I>Excluded Regions</I></DT><DD>The <EM>Duke excluded regions</EM> track
+(located with the ENCODE Mapability tracks, available soon) was used in
+identifying problematic regions for short sequence tag signal
+<!-- when Mapability is available, replace the 2 lines above with these lines:
+(located with the ENCODE <A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A>
+tracks) was used in identifying problematic regions for short sequence tag signal
+-->
+tracks) was used in identifying problematic regions for short sequence tag signal
+detection (such as satellites and rRNA genes). These regions of the genome were
+excluded from the Open Chromatin tracks.</DD>
 </DL>
 </P>
 
@@ -120,30 +117,36 @@ Briefly, cells were lysed with NP40, and intact nuclei were digested with optima
 levels of DNaseI enzyme. DNaseI digested ends were captured from three different
 DNase concentrations, and material was sequenced using Illumina (Solexa)
 sequencing. DNase-seq data were verified using material that was hybridized to
-NimbleGen Human ENCODE tiled arrays (1% of the genome).  Multiple independent
+NimbleGen Human ENCODE tiling arrays (1% of the genome).  Multiple independent
 growths (replicates) were compared to verify the reproducibility of the data.
+A more detailed protocol is available
+<A HREF="../../ENCODE/protocols/general/Duke_DNase_protocol.pdf">here</A>.</P>
 </P><P>
-FAIRE was performed (Giresi <em>et al.</em>, 2007) by crosslinking proteins
+FAIRE was performed (Giresi <em>et al.</em>, 2007) by cross-linking proteins
 to DNA using 1% formaldehyde solution, and the complex was sheared using
 sonication.  Phenol/chloroform extractions were performed to remove DNA
-fragments crosslinked to protein. The DNA recovered in the aqueous phase was
-hybridized to NimbleGen Human ENCODE arrays (1% of the genome) and sequenced
+fragments cross-linked to protein. The DNA recovered in the aqueous phase was
+hybridized to NimbleGen Human ENCODE tiling arrays (1% of the genome) and sequenced
 using a Solexa sequencing system.  The ENCODE array data were used to verify
 the accuracy of the sequencing data, and multiple independent growths
 (replicates) were compared to assess the reproducibility of the data.
+A more detailed protocol is available
+<A HREF="../../ENCODE/protocols/general/FAIRE_UNC_procedure.pdf">here</A>.
+Also see Giresi <em>et al.</em>, 2009.</P>
 </P><P>
 To perform ChIP, proteins were cross-linked to DNA <em>in vivo</em> using 1% formaldehyde
 solution (Bhinge <em>et al.</em>, 2007, ENCODE Project Consortium., 2007).
-Crosslinked chromatin was sheared by sonication and immunoprecipitated using a
+Cross-linked chromatin was sheared by sonication and immunoprecipitated using a
 specific antibody against the protein of interest. After reversal of the
-crosslinks, the immunoprecipitated DNA was used to identify the genomic location
+cross-links, the immunoprecipitated DNA was used to identify the genomic location
 of transcription factor binding. This was accomplished by Solexa sequencing of
 the ends of the immunoprecipitated DNA (ChIP-seq), as well as labeling and
 hybridization of the immunoprecipitated DNA to NimbleGen Human ENCODE tiling
 arrays (1% of the genome) along with the input DNA as reference (ChIP-chip).
 The ENCODE array data were used to verify the accuracy of the sequencing data,
 and multiple independent growths (replicates) were compared to assess the
-reproducibility of the data.
+reproducibility of the data. A more detailed protocol is available
+<A HREF="../../ENCODE/protocols/general/UTA_ChIPseq_protocol.pdf">here</A>.</P>
 </P><P>
 ENCODE Array data were normalized using the Tukey biweight normalization, and
 peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
@@ -159,7 +162,7 @@ density estimation to create base pair scores (Boyle <em>et al.</em>, 2008b).
 Discrete DNase HS, FAIRE, and ChIP sites (peaks) were identified from
 DNase/FAIRE/ChIP-seq using F-Seq by setting a Parzen cutoff based on ROC curve
 analysis using peaks and non-peaks identified from DNase/FAIRE/ChIP-chip using
-1% ENCODE NimbleGen arrays.
+NimbleGen Human ENCODE tiling arrays (1% of the genome).
 </P>
 
 <H2>Credits</H2>
@@ -250,6 +253,11 @@ FAIRE (Formaldehyde-Assisted Isolation of Regulatory Elements) isolated active
 regulatory elements in human chromatin</A>.
 <EM>Genome Res.</EM> 2007 Jun;17(6):877-85.
 </P><P>
+
+Giresi PG, Lieb JD. <A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19303047"
+TARGET=blank>Isolation of active regulatory elements from eukaryotic chromatin
+using FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)</A>.
+<EM>Methods.</EM> 2009 Mar 18. [Epub ahead of print]
 
 Li H, Ruan J, and Durbin R.
 <A HREF="http://genome.cshlp.org/content/early/2008/09/25/gr.078212.108.short"
