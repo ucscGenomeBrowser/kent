@@ -3635,6 +3635,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3651,6 +3652,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3747,6 +3749,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3763,6 +3766,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3779,6 +3783,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3795,6 +3800,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -3851,6 +3857,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 153,38,0
@@ -3867,6 +3874,7 @@ wgEncode 1
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
+    #baseColorBaseColor alternating
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 153,38,0
@@ -5824,6 +5832,79 @@ wgEncode 1
     maxHeightPixels 100:16:16
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
+
+    ###### MJP Added 6/22
+    track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longNonPolyA Keratinocyte nucleus 
+    longLabel ENCODE Affy Transfrags (longNonPolyA in NHEK cell nucleus using )
+    subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=Transfrags dataVersion="ENCODE May 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
+
+    track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longNonPolyA Keratinocyte nucleus 
+    longLabel ENCODE Affy Filtered Transfrags (longNonPolyA in NHEK cell nucleus using )
+    subGroups view=FiltTransfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=FiltTransfrags dataVersion="ENCODE May 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
+
+    track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longNonPolyA Keratinocyte nucleus 
+    longLabel ENCODE (longNonPolyA in NHEK cell nucleus using )
+    subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
+    type wig -56603.00 59926.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=FiltRawSignal dataVersion="ENCODE May 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
+
+    track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longNonPolyA Keratinocyte nucleus  Raw
+    longLabel ENCODE (longNonPolyA in NHEK cell nucleus using )
+    subGroups view=RawSignal cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
+    type wig -56603.00 59926.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=RawSignal dataVersion="ENCODE May 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
+
+    track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longPolyA Keratinocyte nucleus 
+    longLabel ENCODE Affy Filtered Transfrags (longPolyA in NHEK cell nucleus using )
+    subGroups view=FiltTransfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=FiltTransfrags dataVersion="ENCODE May 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
+
+    track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longPolyA Keratinocyte nucleus 
+    longLabel ENCODE Affy Transfrags (longPolyA in NHEK cell nucleus using )
+    subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=Transfrags dataVersion="ENCODE May 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
+
+    track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longPolyA Keratinocyte nucleus  Raw
+    longLabel ENCODE (longPolyA in NHEK cell nucleus using )
+    subGroups view=RawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type wig -58826.00 50541.50
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=RawSignal dataVersion="ENCODE May 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya.wig.gz
+
+    track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel longPolyA Keratinocyte nucleus 
+    longLabel ENCODE (longPolyA in NHEK cell nucleus using )
+    subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type wig -58826.00 51082.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=FiltRawSignal dataVersion="ENCODE May 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya.wig.gz
 
 
 # SUNY Albany genechp (wrangler: mikep)
