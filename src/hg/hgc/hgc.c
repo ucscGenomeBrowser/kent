@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1555 2009/06/16 06:17:38 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1556 2009/06/22 21:50:30 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14848,7 +14848,13 @@ char varName[512];
 safef(varName, sizeof(varName), "%s_geneTrack", tdb->tableName);
 struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
 if (geneTracks == NULL)
-    return;
+    {
+    char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
+    if (isNotEmpty(defaultGeneTracks))
+	geneTracks = slNameListFromComma(defaultGeneTracks);
+    else
+	return;
+    }
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *gt;
 printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");

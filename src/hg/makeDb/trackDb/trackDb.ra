@@ -1519,6 +1519,7 @@ priority 100.094
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+defaultGeneTracks knownGene
 type bed 6 +
 
 track snp129
@@ -1529,6 +1530,7 @@ priority 100.095
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+defaultGeneTracks knownGene
 type bed 6 +
 
 track snp128

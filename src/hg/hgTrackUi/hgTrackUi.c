@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.492 2009/06/12 15:52:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.493 2009/06/22 21:50:31 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -191,6 +191,12 @@ if (genePredTables != NULL)
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     struct slName *selectedGeneTracks = cartOptionalSlNameList(cart, cartVar);
+    if (selectedGeneTracks == NULL)
+	{
+	char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
+	if (isNotEmpty(defaultGeneTracks))
+	    selectedGeneTracks = slNameListFromComma(defaultGeneTracks);
+	}
     int numCols = 4, i;
     int menuSize = slCount(geneTdbList);
     char **values = needMem(menuSize*sizeof(char *));

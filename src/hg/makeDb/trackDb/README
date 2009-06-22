@@ -469,6 +469,8 @@ Specific, optional settings used only by snp125, snp126, and so on:
       changes in a particular gene set's coding sequence caused by SNPs.
     o codingAnnoLabel_<tableN> - proper name of geneSet for tableN in 
       codingAnnotations' table list
+    o defaultGeneTracks table1,table2,... - hgc shows functional annotations
+      of SNPs relative to these genePred tracks by default.
     o hapmapPhase {II,III} - older tracks used HapMap Phase II data
       collected in a table "hapmapAllelesSummary".  Newer tracks use
       hapmapSnps* tables directly.
