@@ -6,8 +6,8 @@
 #include "chromInfo.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.17 2009/05/04 19:36:03 tdreszer Exp $";
-static char *version = "$Revision: 1.17 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.18 2009/06/22 21:32:44 mikep Exp $";
+static char *version = "$Revision: 1.18 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -597,10 +597,9 @@ char *words[PEAK_WORDS];
 int line = 0;
 int errs = 0;
 unsigned chromSize;
-int size;
 int gappedOffset = (type == GAPPED_PEAK ? 6 : 0);
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
-while (lineFileNext(lf, &row, &size))
+while (lineFileNextReal(lf, &row))
     {
     ++line;
     if (quick && line > quick)
