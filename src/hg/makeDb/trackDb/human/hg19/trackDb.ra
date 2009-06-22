@@ -1348,3 +1348,11 @@ priority 103.29
     altColor 120,40,40
     priority 13
 
+track nscanGene override
+informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
+searchPriority 50
+
