@@ -101,10 +101,6 @@ press the <EM>submit</EM> button.
 On the following page, press the <EM>chr21</EM> link in the custom track
 listing to view the bigBed track in the Genome Browser.</P>
 
-<HR>
-<HR>
-
-
 <P><H3>Example Two</H3></P>
 <P>In this example, you will create your own bigBed file from an existing 
 bed file.
@@ -126,15 +122,19 @@ bed file.
   (see <EM>step 7</EM>).
  <LI> Create the custom track on the human assembly hg19 (Feb. 2009), and 
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
-  bed file contains data only on chromsome 21.
+  bed file contains data on only chromsome 21.
 </UL>
 
 <P><H3>Example Three</H3></P>
 <P>In this example, you will create your own bigBed file</P>
-BigBeds also can store extra columns past the predefined bed columns.  In this
-case you should include a .as (AutoSQL) format file describing the fields.  See
-<http://www.linuxjournal.com/article/5949> for information on AutoSQL
 
+<P>
+BigBed files can store extra fields past the 
+<A HREF="customTrack.html#BED">predefined bed fields</A>.  
+If you intend to add extra fields to your bigBed file, you should include
+a <TT>.as</TT> (AutoSQL) format file describing the fields.  See
+<A HREF="http://www.linuxjournal.com/article/5949" TARGET=_blank>this paper</A>
+for information on AutoSQL.</P>
 
 
 
