@@ -5,6 +5,8 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
+#	"$Id: hg19.ucscGenes11.csh,v 1.2 2009/06/22 17:01:57 hiram Exp $"
+
 # Directories
 set genomes = /hive/data/genomes
 set dir = $genomes/hg19/bed/ucsc.11
@@ -99,9 +101,6 @@ hgsql -N $db -e 'select distinct name,sizePolyA from mrnaOrientInfo' | \
 #	creates the files:
 #	sizePolyA.miss  sizePolyA.tab
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Get CCDS for human (or else just an empty file)
 if ($db =~ hg* && \
   `hgsql -N $db -e "show tables;" | grep -E -c "ccdsGene|chromInfo"` == 2) then
@@ -112,10 +111,7 @@ else
     echo -n "" > ccds.bed
     echo -n "" > refToCcds.tab
 endif
-   
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
+ 
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna
 pslSplitOnTarget refSeq.psl refSeq
@@ -183,8 +179,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     endif
 end
 
-
-
 #  seven minutes to this point
 
 # Create mrna splicing graphs.  Takes 10 seconds.
@@ -194,13 +188,10 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	bedToGraph/$c.txg
 end
 
-
 # Create est splicing graphs.  Takes 6 minutes.
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     txBedToGraph -prefix=e$c. est/$c.bed est est/$c.txg
 end
-
-
 
 # Create an evidence weight file
 cat > trim.weights <<end
@@ -219,8 +210,8 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 # Setup other species dir
-mkdir -p $xdb
-cd $xdb
+mkdir -p $dir/$xdb
+cd $dir/$xdb
 
 # Get other species mrna including ESTs.  Takes about three minutes
 mkdir -p refSeq mrna est
@@ -247,14 +238,16 @@ rm -r est mrna refSeq
 # Takes 5 minutes.  Make up phony empty nets for ones that are empty after
 # synteny filter.
 cd $dir/$xdb
-zcat $genomes/$db/bed/blastz.$xdb/axtChain/$db.$xdb.all.chain.gz | chainSplit chains stdin
-zcat $genomes/$db/bed/blastz.$xdb/axtChain/$db.$xdb.net.gz | netFilter -syn stdin | netSplit stdin nets
+chainSplit chains $genomes/$db/bed/lastz.$xdb/axtChain/$db.$xdb.all.chain.gz
+netFilter -syn $genomes/$db/bed/lastz.$xdb/axtChain/$db.$xdb.net.gz \
+	| netSplit stdin nets
 cd nets
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e $c.net) then
         echo -n > $c.net
     endif
 end
+
 
 # Make txOrtho directory and a para spec file
 cd $dir
@@ -299,12 +292,12 @@ ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
 ssh $ramFarm "cd $dir/txOrtho; para make jobList"
 ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
 cat txOrtho/run.time
-# Completed: 47 of 47 jobs
-# CPU time in finished jobs:       1897s      31.62m     0.53h    0.02d  0.000 y
-# IO & Wait Time:                   395s       6.58m     0.11h    0.00d  0.000 y
-# Average job time:                  49s       0.81m     0.01h    0.00d
-# Longest finished job:             296s       4.93m     0.08h    0.00d
-# Submission to last job:           296s       4.93m     0.08h    0.00d
+# Completed: 68 of 68 jobs
+# CPU time in finished jobs:       2169s      36.15m     0.60h    0.03d  0.000 y
+# IO & Wait Time:                   317s       5.28m     0.09h    0.00d  0.000 y
+# Average job time:                  37s       0.61m     0.01h    0.00d
+# Longest finished job:             280s       4.67m     0.08h    0.00d
+# Submission to last job:           281s       4.68m     0.08h    0.00d
 
 # Filter out some duplicate edges. These are legitimate from txOrtho's point
 # of view, since they represent two different mouse edges both supporting
@@ -331,9 +324,13 @@ bedToTxEdges exoniphy.bed exoniphy.edges
 mkdir -p graphWithEvidence
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     echo adding evidence for $c
+    if ( -s bedToGraph/$c.txg ) then
     txgAddEvidence -chrom=$c bedToGraph/$c.txg exoniphy.edges exoniphy stdout \
 	   | txgAddEvidence stdin txOrtho/uniqEdges/$c.edges txOrtho stdout \
 	   | txgAddEvidence stdin est/$c.edges est graphWithEvidence/$c.txg
+    else
+	touch graphWithEvidence/$c.txg
+    endif
 end
 
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
@@ -350,6 +347,8 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	    -singleExonFactor=$sef
 end
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Make a file that lists the various categories of alt-splicing we see.
 # Do this by making and analysing splicing graphs of just the transcripts
@@ -371,6 +370,9 @@ end
 rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 
 # Fetch human protein set and table that describes if curated or not.
