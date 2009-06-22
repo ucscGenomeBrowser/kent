@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.151 2009/06/09 17:56:06 markd Exp $
+# 	$Id: makefile,v 1.152 2009/06/22 17:27:23 hiram Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -57,6 +57,7 @@ UTIL_DIRS = \
 	bedItemOverlapCount \
 	bedSort \
 	bedToGenePred \
+	bedSplitOnChrom \
 	blastToPsl \
 	borfBig \
 	checkHgFindSpec \
