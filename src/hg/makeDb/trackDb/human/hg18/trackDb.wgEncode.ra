@@ -5498,36 +5498,36 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal.wig.gz
 
-    track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusTotal
+    track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl tot
-    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 nucleus)
-    subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=total
+    shortLabel GM128 nucl pA+
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in GM12878 nucleus)
+    subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type broadPeak
     priority 54
     noInherit on
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusTotal.broadPeak.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
-    track wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal
+    track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl tot R
-    longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 in nucleus)
-    subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=total
+    shortLabel GM128 nucl pA+ R
+    longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 in nucleus)
+    subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type broadPeak
     priority 53
     noInherit on
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusTotal.broadPeak.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
-    track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusTotal
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl tot
-    longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 nucleus)
-    subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=total
+    shortLabel GM128 nucl pA+
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 nucleus)
+    subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type wig -56831.00 59145.00
     priority 55
     noInherit on
@@ -5535,14 +5535,14 @@ wgEncode 1
     windowingFunction mean
     maxHeightPixels 100:16:16
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya.wig.gz
 
-    track wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal
+    track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel GM128 nucl tot R
-    longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 nucleus)
-    subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=total
+    shortLabel GM128 nucl pA+ R
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 nucleus)
+    subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type wig -53310.00 54732.00
     priority 56
     noInherit on
@@ -5550,7 +5550,7 @@ wgEncode 1
     windowingFunction mean
     maxHeightPixels 100:16:16
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusTotal.wig.gz
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
     release alpha
