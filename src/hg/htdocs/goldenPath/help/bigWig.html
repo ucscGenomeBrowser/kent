@@ -64,11 +64,11 @@ To create a bigWig track, follow these steps:<BR>
  <LI> Create the bigWig file from your wig file using the <TT>wigToBigWig</TT>
   utility like so: 
   <TT>wigToBigWig input.wig.gz chrom.sizes myBigWig.bw</TT>
- <LI> Move the output bigWig file (<TT>myBigWig.bw</TT>) to a http, https, or 
-  ftp location.
+ <LI> Move the newly created bigWig file (<TT>myBigWig.bw</TT>) to a http, 
+  https, or ftp location.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A> 
-  using a single track line. Note that any of the track values listed on the
-  <A HREF="wiggle.html">wiggle track format</A> page are also applicable to
+  using a single track line. Note that any of the track attributes listed on 
+  the <A HREF="wiggle.html">wiggle track format</A> page are applicable to
   tracks of type bigWig. 
   The most basic version of the &quot;track&quot; line will look something 
   like this:<BR>
@@ -96,7 +96,7 @@ track opens at the correct position:</P>
 
 <P>Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
 <A HREF="../../cgi-bin/hgCustom">custom track</A> management page for the
-human assembly hg19 (Feb. 2009) , then
+human assembly hg19 (Feb. 2009), then
 press the <EM>submit</EM> button.
 On the following page, press the <EM>chr21</EM> link in the custom track
 listing to view the bigWig track in the Genome Browser.</P>
