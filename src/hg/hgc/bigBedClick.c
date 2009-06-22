@@ -9,7 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.5 2009/05/28 16:49:28 mikep Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.6 2009/06/22 21:02:36 kent Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -104,10 +104,5 @@ void bigBedCustomClick(struct trackDb *tdb)
 char *fileName = trackDbSetting(tdb, "dataUrl");
 char *item = cartOptionalString(cart, "i");
 int start = cartInt(cart, "o");
-uglyf("fileName=%s, item=%s, start=%d<BR>\n", fileName, item, start);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
-uglyf("bbi->fieldCount = %d, ->definedFieldCount=%d<BR>\n", bbi->fieldCount, bbi->definedFieldCount);
 bigBedClick(fileName, tdb, item, start, 0);
-#ifdef SOON
-#endif
 }
