@@ -106,28 +106,37 @@ listing to view the bigBed track in the Genome Browser.</P>
 
 
 <P><H3>Example Two</H3></P>
-<P>In this example, you will create your own bigWig file from an existing 
-wiggle file.
+<P>In this example, you will create your own bigBed file from an existing 
+bed file.
 
 <UL>
- <LI> Save this <A HREF="wigVarStepExample.gz">wiggle file</A> 
+ <LI> Save this <A HREF="bedExample.txt.gz">bed file</A> 
   to your machine 
   (this satisfies <EM>steps 1</EM> and <EM>2</EM> above).
  <LI> Save this <A HREF="hg19.chrom.sizes">text file</A> to your machine.
   It contains the chrom.sizes for the human (hg19) assembly 
   (this satisfies <EM>step 4</EM> above).
- <LI> Download the <TT>wigToBigWig</TT> utility (see <EM>step 3</EM>).
- <LI> Run the utility to create the bigWig output file 
+ <LI> Download the <TT>bedToBigBed</TT> utility (see <EM>step 3</EM>).
+ <LI> Run the utility to create the bigBed output file 
   (see <EM>step 5</EM>):<BR>
-  <TT>wigToBigWig wigVarStepExample.gz hg19.chrom.sizes myBigWig.bw</TT>
- <LI> Place the bigWig file you just created (<TT>myBigWig.bw</TT>) on a 
+  <TT>bedToBigBed bedExample.txt.gz hg19.chrom.sizes myBigBed.bb</TT>
+ <LI> Place the bigBed file you just created (<TT>myBigBed.bb</TT>) on a 
   web-accessible server (see <EM>step 6</EM>).
- <LI> Construct a &quot;track&quot; line that points to your bigWig file
+ <LI> Construct a &quot;track&quot; line that points to your bigBed file
   (see <EM>step 7</EM>).
  <LI> Create the custom track on the human assembly hg19 (Feb. 2009), and 
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
-  wiggle file spans only chromsome 21.
+  bed file contains data only on chromsome 21.
 </UL>
+
+<P><H3>Example Three</H3></P>
+<P>In this example, you will create your own bigBed file</P>
+BigBeds also can store extra columns past the predefined bed columns.  In this
+case you should include a .as (AutoSQL) format file describing the fields.  See
+<http://www.linuxjournal.com/article/5949> for information on AutoSQL
+
+
+
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
