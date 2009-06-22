@@ -5444,6 +5444,16 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal fileName=tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal.wig.gz
 
+    track wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip 
+    shortLabel K562 nlos tot filt
+    longLabel ENCODE Affy/CSHL Filt Transfrags (Total RNA in K562 nucleolus)
+    subGroups view=FiltTransfrags cellType=K562 localization=60-nucleolus rnaExtract=total
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal.broadPeak.gz
+
+
     track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
@@ -5455,6 +5465,15 @@ wgEncode 1
     noInherit on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
+
+    track wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip 
+    shortLabel K562 nlos tot 
+    longLabel ENCODE Affy/CSHL Filt Raw Signal (Total RNA in K562 nucleolus)
+    subGroups view=FiltRawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
+    type wig -46635.00 54187.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
     release alpha
