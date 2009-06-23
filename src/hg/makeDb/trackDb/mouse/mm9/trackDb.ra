@@ -44,18 +44,6 @@ url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 release beta
 
-track jaxRepTranscriptSep09
-shortLabel MGI RepTrns Sep08
-longLabel Mouse Genome Informatics Representative Transcript ***Sept. 2008***
-group phenoAllele
-visibility pack
-color 0,0,150
-priority 70.01
-type genePred
-url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
-urlLabel MGI Gene Detail:
-baseColorUseCds none
-
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
 longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***
