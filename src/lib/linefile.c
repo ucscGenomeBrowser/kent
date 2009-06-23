@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.59 2009/04/17 23:21:56 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.60 2009/06/23 23:39:10 kent Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -262,6 +262,13 @@ else
     if ((lf->bufOffsetInFile = lseek(lf->fd, offset, whence)) == -1)
 	errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
     }
+}
+
+void lineFileRewind(struct lineFile *lf)
+/* Return lineFile to start. */
+{
+lineFileSeek(lf, 0, SEEK_SET);
+lf->lineIx = 0;
 }
 
 int lineFileLongNetRead(int fd, char *buf, int size)

@@ -103,6 +103,9 @@ void lineFileReuse(struct lineFile *lf);
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 /* Seek to read next line from given position. */
 
+void lineFileRewind(struct lineFile *lf);
+/* Return lineFile to start. */
+
 void lineFileAbort(struct lineFile *lf, char *format, ...)
 /* Print file name, line number, and error message, and abort. */
 #if defined(__GNUC__)
