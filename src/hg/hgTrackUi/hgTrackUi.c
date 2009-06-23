@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.493 2009/06/22 21:50:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.494 2009/06/23 05:52:28 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1725,7 +1725,7 @@ return;	// currently empty
 void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
-boolean showScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, FALSE);
+boolean showScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, TRUE);
 boolean showRuler = cartUsualBoolean(cart, BASE_SHOWRULER, TRUE);
 boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 boolean showPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
