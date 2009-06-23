@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.7 2009/06/18 21:59:48 kuhn Exp $
+#  $Id: sacCer2.txt,v 1.8 2009/06/23 21:04:04 kuhn Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1199,9 +1199,7 @@ do
 done
 
 # knownBlastTab does not run any columnsin yeast GS.  
- CREATE TABLE sgdBlastTab SELECT * FROM knownBlastTab;
-# (I know, could have used rename, but wanted to keep other table
-# around just to see...) 
+ RENAME TABLE sgdBlastTab SELECT * FROM knownBlastTab;
 #  kuhn and katrina 06-18-2009
 
 #########################################################################
