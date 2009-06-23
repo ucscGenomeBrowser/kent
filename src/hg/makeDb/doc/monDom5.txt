@@ -763,3 +763,27 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
     cp ../../monDom4/database/README.txt .
     # [edit README.txt]
   
+#########################################################################
+#nscanGene (2009-06-23 markd)
+   # nscanGene track from WUSTL
+   cd /hive/data/genomes/monDom5/bed/nscan
+
+
+   wget http://mblab.wustl.edu/predictions/possum/monDom5/README
+   wget http://mblab.wustl.edu/predictions/possum/monDom5/monDom5.gtf
+   wget -r -np  -e robots=off -l 1 http://mblab.wustl.edu/predictions/possum/monDom5/chr_ptx/
+    nice bzip2 chr_ptx/* monDom5.gtf 
+
+   # load track
+   gtfToGenePred -genePredExt monDom5.gtf.bz2 stdout| hgLoadGenePred -genePredExt monDom5 nscanGene stdin
+   bzcat chr_ptx/*.fa.bz2 | hgPepPred monDom5 generic nscanPep stdin
+   rm *.tab
+
+   # validate same number of transcripts and peptides are loaded
+   hgsql -Ne 'select count(*) from nscanGene' monDom5
+   hgsql -Ne 'select count(*) from nscanPep' monDom5
+
+   # validate search expression
+   hgc-sql -Ne 'select name from nscanGene' monDom5 | egrep -v -e '^chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+(\.[0-9a-z]+)?$' |wc -l
+
+#########################################################################
