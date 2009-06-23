@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.117 2009/06/18 00:21:38 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.118 2009/06/23 19:36:11 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -794,6 +794,22 @@ type Gene Type
 description pseudogene
 
 # Antibodies
+term BDP1
+type Antibody
+antibodyDescription Rabbit polyclonal - Antiserum 2663 was raised by immunizing rabbits with synthetic peptide CSDRYRIYKAQKLRE (human Bdp1 residues 139?153) coupled to KLH.
+targetDescription 'B double-prime 1', subunit of RNA polymerase III transcription initiation factor IIIB
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 2663
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+
+term BRF1
+type Antibody
+antibodyDescription Rabbit polyclonal - Anti-BRF antibody 128 was raised by immunising rabbits with synthetic peptide KISSKINYSVLRGLS (human BRF residues 533? 547) coupled to keyhole limpet haemocyanin.
+targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 128
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+
 term c-Fos
 type Antibody
 antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin
@@ -1050,6 +1066,14 @@ orderUrl http://www.abcam.com/index.html?datasheet=992
 vendorName Abcam
 vendorId ab992
 
+term RPC155
+type Antibody
+antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH.
+targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 1900
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+
 term SETDB1
 type Antibody
 antibodyDescription Rabbit polyclonal
@@ -1065,6 +1089,14 @@ targetDescription Co-repressor interacting with HDAC1, N-coR, SMRT, and MeCP2
 vendorName Santa Cruz Biotech
 vendorId sc-994
 orderUrl http://www.scbt.com/product.php?datasheet=994
+
+term SIRT6
+type Antibody
+antibodyDescription Rabbit polyclonal
+targetDescription A synthetic peptide made to an internal region of the human SIRT6 protein
+vendorName Abcam
+vendorId ab48192
+orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 
 term SREBP1A
 type Antibody
