@@ -11786,8 +11786,14 @@ wgEncode 1
     longLabel ENCODE GIS RNA-Seq Tags (PolyA+ RNA in GM12878 cytosol)
     subGroups view=Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     configurable on
     color 153,38,0
+    colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=264 dateSubmitted=2009-04-04 dateUnrestricted=2010-01-04 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsGm12878CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsGm12878CytosolLongpolya.tagAlign.gz
 
     track wgEncodeGisRnaSeqPlusRawSignalGm12878CytosolLongpolya
@@ -11825,8 +11831,15 @@ wgEncode 1
     longLabel ENCODE GIS RNA-Seq Tags (PolyA+ in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence nameIsSequence
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     configurable on
     color 46,0,184
+    colorByStrand 46,0,184 238,85,34
+
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=263 dateSubmitted=2009-04-04 dateUnrestricted=2010-01-04 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeGisRnaSeqPlusRawSignalK562CytosolLongpolya
