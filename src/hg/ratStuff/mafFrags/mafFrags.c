@@ -11,9 +11,9 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.9 2008/10/31 00:38:35 markd Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.10 2009/06/23 16:40:19 hiram Exp $";
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -39,13 +39,13 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean bed12 = FALSE;
-boolean thickOnly = FALSE;
-boolean meFirst = FALSE;
-boolean txStarts = FALSE;
+static boolean bed12 = FALSE;
+static boolean thickOnly = FALSE;
+static boolean meFirst = FALSE;
+static boolean txStarts = FALSE;
 
-struct mafAli *mafFromBed12(char *database, char *track, struct bed *bed, 
-	struct slName *orgList)
+static struct mafAli *mafFromBed12(char *database, char *track,
+    struct bed *bed, struct slName *orgList)
 /* Construct a maf out of exons in bed. */
 {
 /* Loop through all block in bed, collecting a list of mafs, one
@@ -145,10 +145,12 @@ mafAliFreeList(&mafList);
 return bigMaf;
 }
 
-void moveMeToFirst(struct mafAli *maf, char *myName)
+static void moveMeToFirst(struct mafAli *maf, char *myName)
 /* Find component matching myName, and move it to first. */
 {
-struct mafComp *comp = mafFindCompPrefix(maf, myName, ".");
+struct mafComp *comp = mafMayFindCompPrefix(maf, myName, ".");
+if (NULL == comp)
+    comp = mafFindCompPrefix(maf, myName, NULL);
 slRemoveEl(&maf->components, comp);
 slAddHead(&maf->components, comp);
 }
@@ -181,7 +183,7 @@ mafWrite(f, maf);
 mafAliFree(&maf);
 } 
 
-void mafFrags(char *database, char *track, char *bedFile, char *mafFile)
+static void mafFrags(char *database, char *track, char *bedFile, char *mafFile)
 /* mafFrags - Collect MAFs from regions specified in a 6 column bed file. */
 {
 struct slName *orgList = NULL;
