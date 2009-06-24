@@ -3,7 +3,7 @@
 #include "dystring.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: phyloTree.c,v 1.9 2008/09/17 17:56:38 kent Exp $";
+static char const rcsid[] = "$Id: phyloTree.c,v 1.10 2009/06/24 01:19:55 galt Exp $";
 
 struct phyloTree *phyloReadTree(struct lineFile *lf)
 /* reads a phyloTree from lineFile (first line only) */
@@ -84,6 +84,9 @@ if (parent->numEdges > parent->allocedEdges)
     parent->edges = needMoreMem(parent->edges, oldSize, newSize);
     }
 
+if (!child)
+    errAbort("unexpected error: child is null in phyloTree.c::newEdge()");
+
 child->parent = parent;
 return parent->edges[parent->numEdges -1 ] = child;
 }
@@ -113,7 +116,10 @@ if (*ptr == '(')
 
     do
 	{
-	edge = newEdge(node,parseSubTree(&ptr));
+	struct phyloTree *child = parseSubTree(&ptr);
+	if (!child)
+	    errAbort("missing child/subTree at (%s)",ptr-1);
+	edge = newEdge(node,child);
 	edge->parent = node;
 	} while (*ptr++ == ',');
     --ptr;
