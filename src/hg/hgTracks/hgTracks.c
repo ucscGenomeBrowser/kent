@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1573 2009/06/18 17:57:03 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1574 2009/06/24 18:53:56 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4657,6 +4657,7 @@ else
 setUdcCacheDir();
 
 initTl();
+measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 dragZooming = dragZoomingConfig(cart);

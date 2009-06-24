@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.84 2009/06/16 19:51:17 galt Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.85 2009/06/24 18:53:57 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -189,8 +189,7 @@ boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
 boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
-boolean measureTiming = FALSE;	/* Flip this on to display timing
-                                 * stats on each track at bottom of page. */
+boolean measureTiming = FALSE;	/* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
 struct track *trackList = NULL;    /* List of all tracks. */
 struct cart *cart;	/* The cart where we keep persistent variables. */
 
