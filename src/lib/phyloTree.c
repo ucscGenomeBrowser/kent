@@ -3,7 +3,7 @@
 #include "dystring.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: phyloTree.c,v 1.10 2009/06/24 01:19:55 galt Exp $";
+static char const rcsid[] = "$Id: phyloTree.c,v 1.11 2009/06/24 03:25:31 galt Exp $";
 
 struct phyloTree *phyloReadTree(struct lineFile *lf)
 /* reads a phyloTree from lineFile (first line only) */
@@ -163,7 +163,7 @@ eraseWhiteSpace(string);
 tree = parseSubTree(&ptr);
 
 if (*ptr != ';')
-    errAbort("trees must terminated by ';'");
+    errAbort("expecting tree terminator ';', found '%s'", ptr);
 
 return tree;
 }

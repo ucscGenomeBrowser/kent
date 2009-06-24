@@ -67,7 +67,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.20 2009/06/24 02:19:23 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.21 2009/06/24 03:26:11 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -620,8 +620,9 @@ if (errMsg)
 	puts("<html><head><title>PhyloTree parse error</title></head><body><pre>");
 	/* we dont think the specific error message coming back are correct or useful
 	 * so supply a generic err msg */
-	errMsg = cloneString("syntax error.");
-    	printf("input tree: [%s]\n\n%s",cgiString("phyloGif_tree"),errMsg);
+    	printf("Original input tree:\n[%s]\n\n",cgiString("phyloGif_tree"));
+    	printf("Input tree as passed to parser:\n[%s]\n\n",phyloData);
+    	printf("Parser syntax error:\n%s",errMsg);
     	puts("</pre></body></html>");
 	}
     else
