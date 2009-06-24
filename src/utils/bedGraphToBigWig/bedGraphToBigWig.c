@@ -10,7 +10,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.1 2009/06/23 21:29:08 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.2 2009/06/24 00:38:35 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -62,20 +62,25 @@ struct chromUsage
     bits32 id;	/* Unique ID for chromosome. */
     };
 
-struct chromUsage *readPass1(struct lineFile *lf)
+
+
+struct chromUsage *readPass1(struct lineFile *lf, int *retMinDiff)
 /* Go through chromGraph file and collect chromosomes and statistics. */
 {
-char *row[1];
+char *row[2];
 struct hash *uniqHash = hashNew(0);
 struct chromUsage *usage = NULL, *usageList = NULL;
-int lastEnd = 0;
+int lastStart = -1;
 bits32 id = 0;
+int minDiff = BIGNUM;
 for (;;)
     {
-    int wordCount = lineFileChopNext(lf, row, ArraySize(row));
-    if (wordCount == 0)
+    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
+    if (rowSize == 0)
         break;
+    lineFileExpectWords(lf, 2, rowSize);
     char *chrom = row[0];
+    int start = lineFileNeedNum(lf, row, 1);
     if (usage == NULL || differentString(usage->name, chrom))
         {
 	if (hashLookup(uniqHash, chrom))
@@ -88,10 +93,19 @@ for (;;)
 	usage->name = cloneString(chrom);
 	usage->id = id++;
 	slAddHead(&usageList, usage);
+	lastStart = -1;
 	}
     usage->itemCount += 1;
+    if (lastStart >= 0)
+        {
+	int diff = start - lastStart;
+	if (diff < minDiff)
+	    minDiff = diff;
+	}
+    lastStart = start;
     }
 slReverse(&usageList);
+*retMinDiff = minDiff;
 return usageList;
 }
 
@@ -162,6 +176,20 @@ struct sectionBounds
     struct cirTreeRange range;	/* What is covered. */
     };
 
+static struct cirTreeRange sectionBoundsFetchKey(const void *va, void *context)
+/* Fetch sectionBounds key for r-tree */
+{
+const struct sectionBounds *a = ((struct sectionBounds *)va);
+return a->range;
+}
+
+static bits64 sectionBoundsFetchOffset(const void *va, void *context)
+/* Fetch sectionBounds file offset for r-tree */
+{
+const struct sectionBounds *a = ((struct sectionBounds *)va);
+return a->offset;
+}
+
 struct sectionItem
 /* An item in a section of a bedGraph. */
     {
@@ -170,7 +198,8 @@ struct sectionItem
     };
 
 void writeSections(struct chromUsage *usageList, struct lineFile *lf, 
-	int itemsPerSlot, struct sectionBounds *bounds, int sectionCount, FILE *f)
+	int itemsPerSlot, struct sectionBounds *bounds, int sectionCount, FILE *f,
+	int resTryCount, int resScales[], int resSizes[])
 /* Read through lf, chunking it into sections that get written to f.  Save info
  * about sections in bounds. */
 {
@@ -181,6 +210,10 @@ bits16 reserved16 = 0;
 UBYTE reserved8 = 0;
 struct sectionItem items[itemsPerSlot];
 struct sectionItem *lastB = NULL;
+bits32 resEnds[resTryCount];
+int resTry;
+for (resTry = 0; resTry < resTryCount; ++resTry)
+    resEnds[resTry] = 0;
 for (;;)
     {
     /* Get next line of input if any. */
@@ -241,6 +274,8 @@ for (;;)
 	    assert(usage != NULL);
 	    assert(sameString(row[0], usage->name));
 	    lastB = NULL;
+	    for (resTry = 0; resTry < resTryCount; ++resTry)
+		resEnds[resTry] = 0;
 	    }
 	}
 
@@ -262,6 +297,22 @@ for (;;)
 	}
 
 
+    /* Do zoom counting. */
+    for (resTry = 0; resTry < resTryCount; ++resTry)
+        {
+	bits32 resEnd = resEnds[resTry];
+	if (start >= resEnd)
+	    {
+	    resSizes[resTry] += 1;
+	    resEnds[resTry] = resEnd = start + resScales[resTry];
+	    }
+	while (end > resEnd)
+	    {
+	    resSizes[resTry] += 1;
+	    resEnds[resTry] = resEnd = resEnd + resScales[resTry];
+	    }
+	}
+
     /* Save values in output array. */
     struct sectionItem *b = &items[itemIx];
     b->start = start;
@@ -279,24 +330,67 @@ void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
-struct chromUsage *usage, *usageList = readPass1(lf);
+int minDiff;
+bits64 totalDiff, diffCount;
+struct chromUsage *usage, *usageList = readPass1(lf, &minDiff);
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 for (usage = usageList; usage != NULL; usage = usage->next)
     uglyf("%s\t%d\n", usage->name, usage->itemCount);
 
+/* Write out dummy header, zoom offsets. */
 FILE *f = mustOpen(outName, "wb");
 writeDummyHeader(f);
 writeDummyZooms(f);
+
+/* Write out chromosome/size database. */
 bits64 chromTreeOffset = ftell(f);
 writeChromInfo(usageList, blockSize, chromSizesHash, f);
 
+/* Set up to keep track of reduction levels. */
+int resTryCount = 10, resTry;
+int resIncrement = 4;
+int resScales[resTryCount], resSizes[resTryCount];
+int res = minDiff * 10;
+if (res > 0)
+    {
+    for (resTry = 0; resTry < resTryCount; ++resTry)
+	{
+	resSizes[resTry] = 0;
+	resScales[resTry] = res;
+	res *= resIncrement;
+	}
+    }
+else
+    resTryCount = 0;
+
+/* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
 bits32 sectionCount = countSectionsNeeded(usageList, itemsPerSlot);
 struct sectionBounds *sectionBounds;
 AllocArray(sectionBounds, sectionCount);
-lineFileSeek(lf, 0, SEEK_SET);
-writeSections(usageList, lf, itemsPerSlot, sectionBounds, sectionCount, f);
+lineFileRewind(lf);
+writeSections(usageList, lf, itemsPerSlot, sectionBounds, sectionCount, f,
+	resTryCount, resScales, resSizes);
 
+for (resTry = 0; resTry < resTryCount; ++resTry)
+    uglyf("%d scale %d, size %d\n", resTry, resScales[resTry], resSizes[resTry]);
+
+/* Write out primary data index. */
+bits64 indexOffset = ftell(f);
+cirTreeFileBulkIndexToOpenFile(sectionBounds, sizeof(sectionBounds[0]), sectionCount,
+    blockSize, 1, NULL, sectionBoundsFetchKey, sectionBoundsFetchOffset, 
+    indexOffset, f);
+
+/* Write out first zoomed section while storing in memory next zoom level. */
+if (minDiff > 0)
+    {
+    uglyf("minDiff %d\n", minDiff);
+    lineFileRewind(lf);
+#ifdef SOON
+    writeReducedOnceReturnReducedTwice(usageList, lf, minDiff, maxDiff, aveDiff, f);
+#endif /* SOON */
+    }
+lineFileClose(&lf);
 carefulClose(&f);
 }
 
