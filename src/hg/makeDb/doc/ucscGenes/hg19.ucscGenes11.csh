@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes11.csh,v 1.2 2009/06/22 17:01:57 hiram Exp $"
+#	"$Id: hg19.ucscGenes11.csh,v 1.3 2009/06/24 22:11:38 hiram Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -347,9 +347,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	    -singleExonFactor=$sef
 end
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Make a file that lists the various categories of alt-splicing we see.
 # Do this by making and analysing splicing graphs of just the transcripts
 # that have passed our process so far.  The txgAnalyze program occassionally
@@ -371,17 +368,12 @@ rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 # Fetch human protein set and table that describes if curated or not.
 # Takes about a minute
 hgsql -N $spDb -e \
   "select p.acc, p.val from protein p, accToTaxon x where x.taxon=$taxon and p.acc=x.acc" \
   | awk '{print ">" $1;print $2}' >uniProt.fa
 hgsql -N $spDb -e "select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=$taxon and i.acc=x.acc" > uniCurated.tab
-
 
 echo "continuing after first kki job"
 echo "preparing $cpuFarm job"
@@ -393,7 +385,7 @@ echo '#ENDLOOP' >> blat/rna/template
  
 cat << '_EOF_' > blat/rna/runTxBlats
 #!/bin/csh -ef
-set ooc = $genomes/$2/11.ooc
+set ooc = /hive/data/genomes/$2/11.ooc
 set target = ../../txFaSplit/$1
 set out1 = raw/mrna_$3.psl
 set out2 = raw/ref_$3.psl
@@ -405,9 +397,7 @@ blat -ooc=$ooc -minIdentity=95 $target ../../mrna.fa $workDir/mrna_$3.psl
 blat -ooc=$ooc -minIdentity=97 $target ../../refSeq.fa $workDir/ref_$3.psl
 mv $workDir/mrna_$3.psl raw/mrna_$3.psl
 mv $workDir/ref_$3.psl raw/ref_$3.psl
-if (-e $workDir) then
-    rmdir $workDir
-endif
+rmdir $workDir
 rmdir --ignore-fail-on-non-empty $tmpDir
 '_EOF_'
     #	<< happy emacs
@@ -417,18 +407,17 @@ ls -1 *.fa > ../blat/rna/toDoList
 cd ..
 
 ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
-
 ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
+
 ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
 cat blat/rna/run.time
 
 # Completed: 194 of 194 jobs
-# CPU time in finished jobs:      23790s     396.50m     6.61h    0.28d  0.001 y
-# IO & Wait Time:                   604s      10.06m     0.17h    0.01d  0.000 y
-# Average job time:                 126s       2.10m     0.03h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1078s      17.97m     0.30h    0.01d
-# Submission to last job:          1354s      22.57m     0.38h    0.02d
+# CPU time in finished jobs:      35143s     585.72m     9.76h    0.41d  0.001 y
+# IO & Wait Time:                  1751s      29.18m     0.49h    0.02d  0.000 y
+# Average job time:                 190s       3.17m     0.05h    0.00d
+# Longest finished job:            2023s      33.72m     0.56h    0.02d
+# Submission to last job:          2205s      36.75m     0.61h    0.03d
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 mkdir -p blat/protein/raw
@@ -438,7 +427,7 @@ echo '#ENDLOOP' >> blat/protein/template
 
 cat << '_EOF_' > blat/protein/runTxBlats
 #!/bin/csh -ef
-set ooc = $genomes/$2/11.ooc
+set ooc = /hive/data/genomes/$2/11.ooc
 set target = ../../txFaSplit/$1
 set out1 = uni_$3.psl
 set out2 = ref_$3.psl
@@ -450,9 +439,7 @@ blat -t=dnax -q=prot -minIdentity=90 $target ../../uniProt.fa $workDir/$out1
 blat -t=dnax -q=prot -minIdentity=90 $target ../../refPep.fa $workDir/$out2
 mv $workDir/$out1 raw/$out1
 mv $workDir/$out2 raw/$out2
-if (-e $workDir) then
-    rmdir $workDir
-endif
+rmdir $workDir
 rmdir --ignore-fail-on-non-empty $tmpDir
 '_EOF_'
     #	<< happy emacs
@@ -463,18 +450,17 @@ cd ..
 
 # Run protein/transcript blat job on cluster
 ssh $cpuFarm "cd $dir/blat/protein; gensub2 toDoList single template jobList"
+
 ssh $cpuFarm "cd $dir/blat/protein; para make jobList"
 ssh $cpuFarm "cd $dir/blat/protein; para time > run.time"
+
 cat blat/protein/run.time
 # Completed: 194 of 194 jobs
-# CPU time in finished jobs:      18304s     305.07m     5.08h    0.21d  0.001 y
-# IO & Wait Time:                   726s      12.10m     0.20h    0.01d  0.000 y
-# Average job time:                  98s       1.63m     0.03h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             275s       4.58m     0.08h    0.00d
-# Submission to last job:           529s       8.82m     0.15h    0.01d
-
-
+# CPU time in finished jobs:      14718s     245.31m     4.09h    0.17d  0.000 y
+# IO & Wait Time:                   966s      16.09m     0.27h    0.01d  0.000 y
+# Average job time:                  81s       1.35m     0.02h    0.00d
+# Longest finished job:             279s       4.65m     0.08h    0.00d
+# Submission to last job:           465s       7.75m     0.13h    0.01d
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -492,16 +478,21 @@ pslCat -nohead protein/raw/ref*.psl | sort -k 10 | \
 pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
-cd ..
+
+cd $dir
+
 # Get parts of multiple alignments corresponding to transcripts.
-# Takes 1 hour.
+# Takes a couple of hours.  Could do this is a small cluster job
+# to speed it up.
 echo $db $xdb $ydb $zdb > ourOrgs.txt
-foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
+foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
     if (-s txWalk/$c.bed ) then
 	mafFrags $db $multiz txWalk/$c.bed stdout -bed12 -meFirst \
 	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
     endif
 end
+
+cd $dir
 
 # Create and populate directory with various CDS evidence
 mkdir -p cdsEvidence
@@ -520,6 +511,7 @@ txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa \
 txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
 	-unmapped=cdsEvidence/uniProt.unmapped -source=trembl
+
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
@@ -527,8 +519,6 @@ cat cdsEvidence/*.tce | sort  > unweighted.tce
 cat txWalk.bed antibody.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 cat txWalk.fa antibody.fa > abWalk.fa
-
-
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -618,6 +608,11 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
