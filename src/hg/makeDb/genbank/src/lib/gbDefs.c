@@ -7,7 +7,7 @@
 #include "gbGenome.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.8 2007/11/16 18:19:50 markd Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.9 2009/06/24 01:26:23 genbank Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -330,7 +330,11 @@ if (molSymToType == NULL)
     buildMolTypeHash();
 struct hashEl *hel = hashLookup(molSymToType, molTypeStr);
 if (hel == NULL)
+    {
+    // FIXME: tmp capture stack to attempt to find bug.
+    dumpStack("unknown molecule type: %s", molTypeStr);
     errAbort("unknown molecule type: %s", molTypeStr);
+    }
 return ptrToLL(hel->val);;
 }
 
