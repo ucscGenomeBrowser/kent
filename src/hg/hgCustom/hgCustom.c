@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.128 2008/09/03 19:18:49 markd Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.129 2009/06/24 23:14:39 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,10 +87,12 @@ if (hIsGsidServer())
   {
   puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/bigBed.html'>bigBed</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>BEDGRAPH</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
   " or <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#PSL'>PSL</A>\n"
   " formats. To configure the display, set\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
@@ -104,10 +106,12 @@ else
   {
   puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/bigBed.html'>bigBed</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>BEDGRAPH</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/maf.html'>MAF</A>\n"
   " or <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#PSL'>PSL</A>\n"
   " formats. To configure the display, set\n"
