@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.27 2009/06/19 21:54:43 hiram Exp $";
+#	"$Id: hg19.txt,v 1.28 2009/06/24 01:22:17 markd Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -5076,5 +5076,26 @@ TMPDIR=/scratch/tmp
     #	27421336 bases of 2897316137 (0.946%) in intersection
     nice -n +19 featureBits hg18 exoniphy
     #	27475705 bases of 2881515245 (0.954%) in intersection
+
+#########################################################################
+nscanGene (2009-06-22 markd)
+   # nscanGene track from WUSTL
+   cd /cluster/data/hg19/bed/nscan
+   wget http://mblab.wustl.edu/~jeltje/hg19_tracks/hg19.updated.gtf
+   wget http://mblab.wustl.edu/~jeltje/hg19_tracks/hg19.readme
+   wget -r -np -l 1 http://mblab.wustl.edu/~jeltje/hg19_tracks/hg19_proteins
+   bzip2 hg19.updated.gtf hg19_proteins/*.fa
+
+   # load track
+   gtfToGenePred -genePredExt hg19.updated.gtf.bz2 stdout| hgLoadGenePred -genePredExt hg19 nscanGene stdin
+   bzcat hg19_proteins/chr*.fa.bz2 | hgPepPred hg19 generic nscanPep stdin
+   rm *.tab
+
+   # validate same number of transcripts and peptides are loaded
+   hgsql -Ne 'select count(*) from nscanGene' hg19
+   hgsql -Ne 'select count(*) from nscanPep' hg19
+
+   # validate search expression
+   hgc-sql -Ne 'select name from nscanGene' hg19 | egrep -v -e '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |wc -l
 
 #########################################################################
