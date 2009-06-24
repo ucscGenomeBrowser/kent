@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.8 2007/04/20 04:37:44 markd Exp $";
+static char const rcsid[] = "$Id: gbProcessed.c,v 1.9 2009/06/24 05:32:59 genbank Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0
@@ -144,6 +144,17 @@ if (gbIgnoreGet(select->release->ignore, acc, modDate) == NULL)
         entry = gbEntryNew(select->release, acc, select->type);
     else
         checkRowEntry(select, lf, entry, organism, modDate);
+    if (numCols > GBIDX_MOL_COL)
+        {
+        // FIXME: detect mRN -> mRNA type corruption that is seen on RR.
+        char *p;
+        for (p = row[GBIDX_MOL_COL]; *p != '\0'; p++)
+            {
+            if (!isprint(*p))
+                fprintf(stderr, "WARNING: non-ascii character in %s molType \'%s\': %s\n",
+                        acc, row[GBIDX_MOL_COL], lf->fileName);
+            }
+        }
     gbEntryAddProcessed(entry, select->update,
                         gbParseInt(lf, row[GBIDX_VERSION_COL]), modDate,
                         organism,
