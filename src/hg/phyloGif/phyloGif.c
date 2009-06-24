@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.18 2008/09/03 19:20:54 markd Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.19 2009/06/24 01:48:57 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -207,6 +207,14 @@ else if (phyloTree->numEdges == 0)  /* leaf */
     this->depth=0;
     this->vPos=*pNumLeafs;
     (*pNumLeafs)++;
+
+    if(!phyloTree->ident->name)
+	{
+	safef(layoutErrMsg,sizeof(layoutErrMsg),
+	"leaf is missing label\n");
+	return;
+	}
+
     /* de-escape name if needed */
     if(stringIn(escapePattern,phyloTree->ident->name))
 	{
