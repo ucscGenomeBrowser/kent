@@ -21,6 +21,17 @@ endif
 
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
+#default to not using bam
+ifeq (${USE_BAM},)
+    USE_BAM=0
+endif
+
+ifeq (${USE_BAM},1)
+    SAMPATH = /hive/data/outside/samtools/samtools
+    HG_INC += -I${SAMPATH}
+    HG_DEFS+=-DUSE_BAM
+endif
+
 ifeq (${HG_WARN},)
   ifeq (darwin,$(findstring darwin,${OSTYPE}))
       HG_WARN = -Wall -Wno-unused-variable -Wno-long-double
