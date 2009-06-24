@@ -62,7 +62,7 @@ HG_APPLIST = liftOver bedItemOverlapCount
 
 HG_UTILS_APPLIST = bedExtendRanges
 
-userApps: topLibs
+userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
 	    ( cd utils/$${P} && echo utils/$${P} && $(MAKE) ) ; \
 	done
