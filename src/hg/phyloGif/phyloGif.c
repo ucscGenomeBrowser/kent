@@ -47,6 +47,7 @@
  
  */
 
+
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -66,7 +67,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.19 2009/06/24 01:48:57 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.20 2009/06/24 02:19:23 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -336,6 +337,12 @@ struct memGfx *mg = NULL;
 boolean useCart = FALSE;
 oldVars = hashNew(8);
 onWeb = cgiIsOnWeb();
+boolean isMSIE = FALSE;
+char *userAgent = getenv("HTTP_USER_AGENT");
+if (userAgent && strstr(userAgent ,"MSIE"))
+    isMSIE = TRUE;
+	
+
 cgiSpoof(&argc, argv);
 if (argc != 1)
     usage("wrong number of args");
@@ -402,7 +409,12 @@ if (useCart)
     	printf("Content-type: text/html\r\n");
 	printf("\r\n");
 	cartWebStart(cart, NULL, "%s", "phyloGif Interactive Phylogenetic Tree Gif Maker");
-	puts("<form method=\"GET\" action=\"phyloGif\" name=\"mainForm\">");
+
+	if (isMSIE)  /* cannot handle long urls */
+	    puts("<form method=\"POST\" action=\"phyloGif\" name=\"mainForm\">");
+	else
+	    puts("<form method=\"GET\" action=\"phyloGif\" name=\"mainForm\">");
+
 	cartSaveSession(cart);
 	puts("<table>");
 	puts("<tr><td>Width:</td><td>"); cartMakeIntVar(cart, "phyloGif_width", width, 4); puts("</td></tr>");
