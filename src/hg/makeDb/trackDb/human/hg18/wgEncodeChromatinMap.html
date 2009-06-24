@@ -79,29 +79,27 @@ sequence is extend to a fragment length of 134 bp from the 5' aligned end
 representing the approximate average fragment length.  The score at each base
 pair represents the number of extended fragments that overlap the base pair.
 </DD>
-<DT><I>Raw Signal</I></DT><DD> Density graph (wiggle) of signal from raw data
-(single replicates, no control). For these high-throughput sequencing data,
-this reflects the aligned read density.  (Currently not available).</DD>
 <DT><I>Alignments</I></DT><DD> Mappings of short reads to the genome (currently
 only available for <A TARGET=_BLANK
 HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/">
 download</A>).</DD>
+</DL>
+Additional data that were used to generate these tracks
+are located in the ENCODE Mapability track (available soon):
+<DL>
 <DT><I>Uniqueness</I></DT><DD>
-The <EM>Duke uniqueness</EM> tracks (located with the ENCODE
-Mapability tracks, available soon) were used in
+The <EM>Duke uniqueness</EM> tracks were used in
 <!-- when Mapability is available, replace line above with this line:
-<A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A> tracks) were used in
+<A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A> tracks) were used to
 -->
-identifying regions of unique sequence for different tag lengths. The tracks
+identify regions of unique sequence for different tag lengths. The tracks
 also identify regions where high-throughput sequence tags cannot be mapped.</DD>
 <DT><I>Excluded Regions</I></DT><DD>The <EM>Duke excluded regions</EM> track
-(located with the ENCODE Mapability tracks, available soon) was used in
-identifying problematic regions for short sequence tag signal
+was used to identify problematic regions for short sequence tag signal
 <!-- when Mapability is available, replace the 2 lines above with these lines:
 (located with the ENCODE <A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A>
 tracks) was used in identifying problematic regions for short sequence tag signal
 -->
-tracks) was used in identifying problematic regions for short sequence tag signal
 detection (such as satellites and rRNA genes). These regions of the genome were
 excluded from the Open Chromatin tracks.</DD>
 </DL>
