@@ -15,7 +15,7 @@
 #include "bam.h"
 #include "sam.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.1 2009/06/24 20:33:03 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.2 2009/06/24 23:57:05 angie Exp $";
 
 #define BAM_MAX_ZOOM 200000
 
@@ -93,6 +93,8 @@ char *qSeq = needMem(core->l_qseq + 1);
 int i;
 for (i = 0; i < core->l_qseq; i++)
     qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
+if (lf->orientation == -1)
+    reverseComplement(qSeq, core->l_qseq);
 lf->extra = qSeq;
 slAddHead(&(tg->items), lf);
 return 0;
