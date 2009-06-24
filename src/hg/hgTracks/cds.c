@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.100 2009/06/10 19:46:20 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.101 2009/06/24 22:32:24 angie Exp $";
 
 Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
 /* Find a color which is a percentless 'lighter' shade of color */
@@ -304,7 +304,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	if (psl)
 	    mrnaS = convertCoordUsingPsl(s, psl);
 	else
-	    mrnaS = sf->qStart;
+	    mrnaS = sf->qStart + (s - sf->start);
 	if(mrnaS >= 0)
 	    {
 	    int i;
