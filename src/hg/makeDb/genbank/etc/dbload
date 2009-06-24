@@ -81,7 +81,7 @@ dbloadTime=$dbloadVar/dbload.time
 # WARNING: must also be changed in etc/gbCommon.pm
 if [ $(hostname) = "hgwbeta" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.hgsqlbeta.conf
-elif [ $(hostname) = "hgw1" ] ; then
+elif [ $(hostname) = "hgw2" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.hgsqlrr.conf
 else
     export HGDB_CONF=$gbRoot/etc/.hg.conf

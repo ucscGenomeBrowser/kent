@@ -101,7 +101,7 @@ BEGIN {
     # WARNING: must also be changed in etc/dbload
     %gbCommon::hgConfs = (
         "hgwbeta" => "etc/.hg.hgsqlbeta.conf",
-        "hgw1" => "etc/.hg.hgsqlrr.conf",
+        "hgw2" => "etc/.hg.hgsqlrr.conf",
     );
 }
 
