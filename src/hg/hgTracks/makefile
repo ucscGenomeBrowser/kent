@@ -3,10 +3,13 @@ include ../../inc/common.mk
 L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+ifeq (${USE_BAM},1)
+    MYLIBS += ${SAMPATH}/libbam.a
+endif
 
 A = hgTracks
 
-O = $A.o altGraphXTrack.o bedGraph.o bedTrack.o bigWigTrack.o chainTrack.o \
+O = $A.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigWigTrack.o chainTrack.o \
 	cgapSageTrack.o chromGraphTrack.o config.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
         expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \

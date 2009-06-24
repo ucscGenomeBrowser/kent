@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.85 2009/06/24 18:53:57 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.86 2009/06/24 20:33:04 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10503,6 +10503,12 @@ else if (sameWord(type, "maf"))
     {
     mafMethods(track);
     }
+#ifdef USE_BAM
+else if (sameWord(type, "bam"))
+    {
+    bamMethods(track);
+    }
+#endif /* USE_BAM */
 #ifndef GBROWSE
 else if (sameWord(type, "coloredExon"))
     {

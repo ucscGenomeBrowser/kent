@@ -713,6 +713,11 @@ void netMethods(struct track *tg);
 void mafMethods(struct track *tg);
 /* Make track group for maf multiple alignment. */
 
+#ifdef USE_BAM
+void bamMethods(struct track *track);
+/* Methods for BAM alignment files. */
+#endif /* USE_BAM */
+
 void altGraphXMethods(struct track *tg);
 /* setup special methods for altGraphX track */
 
