@@ -12,7 +12,7 @@
 
 #define SEQ_DELIM '~'
 
-static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
+char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
 {
 char query[256];

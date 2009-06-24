@@ -1102,5 +1102,8 @@ boolean dragZoomingConfig(struct cart *cart);
 
 #define SMALLBUF 128
 
+char *bbiNameFromTable(struct sqlConnection *conn, char *table);
+/* Return file name from little track table. */
+
 #endif /* HGTRACKS_H */
 
