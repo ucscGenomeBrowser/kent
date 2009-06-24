@@ -46,7 +46,8 @@ standard <A HREF="#GFF">GFF</A> format or in a format designed specifically
 for the Human Genome Project or UCSC Genome Browser, including 
 <A HREF="bedgraph.html">BEDGRAPH</A>,
 <A HREF="#GTF">GTF</A>, <A HREF="#PSL">PSL</A>, <A HREF="#BED">BED</A>, 
-<A HREF="wiggle.html">WIG</A>,
+<A HREF="bigBed.html">bigBed</A>, <A HREF="wiggle.html">WIG</A>, 
+<A HREF="bigWig.html">bigWig</A>, 
 <A HREF="maf.html">MAF</A>, and <A HREF="#microarray">microarray</A>
 (BED15). 
 GFF and GTF files <I>must</I> be tab-delimited rather than
@@ -670,6 +671,10 @@ nine additional optional fields. The number of fields per line must be consisten
 throughout any single set of data in an annotation track.  The order of the
 optional fields is binding: lower-numbered fields must always be populated if
 higher-numbered fields are used.
+
+<P>If your data set is BED-like, but it is very large and you would like to 
+keep it on your own server, you should use the <A HREF="bigBed.html">bigBed</A>
+data format. 
 
 <P>The first three required BED fields are:</P>
 <OL>
