@@ -3953,3 +3953,25 @@ priority 110
     scoreFilterLimits 0:99
     minScore 0
     maxScore 99
+
+track bamNA12878
+shortLabel NA12878 Slx BAM
+longLabel 1000Genomes NA12878 chr22 Solexa aligned reads
+group x
+priority 4.1
+visibility dense
+type bam
+chromosomes chr22
+
+track NA12878Slx
+shortLabel NA12878 depth
+longLabel 1000Genomes NA12878 chr22 Solexa read depth
+group x
+priority 4.11
+visibility full
+type wig 1 11161
+defaultViewLimits 1:50
+maxHeightPixels 128:32:16
+autoScale off
+chromosomes chr22
+
