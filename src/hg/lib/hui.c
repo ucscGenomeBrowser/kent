@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.213 2009/06/16 01:25:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.214 2009/06/24 23:23:50 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4874,7 +4874,7 @@ printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFA
 matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,TRUE);
 
 // Now the Y by X matrix
-int cntY=0;
+int cntX=0,cntY=0;
 for (ixY = 0; ixY < sizeOfY; ixY++)
     {
     if(tdbsY[ixY] != NULL || dimensionY == NULL)
@@ -4890,6 +4890,9 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
             if(tdbsX[ixX] != NULL || dimensionX == NULL)
                 {
                 assert(!dimensionX || ixX < dimensionX->count);
+                if(cntY==1) // Only do this on the first good Y
+                    cntX++;
+
                 if(dimensionX && ixX == dimensionX->count)
                     break;
                 if(cells[ixX][ixY] > 0)
@@ -4923,7 +4926,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     puts("<TD>&nbsp;</TD>");
                 }
             }
-        if(dimensionX && dimensionX->count>MATRIX_RIGHT_BUTTONS_AFTER)
+        if(dimensionX && cntX>MATRIX_RIGHT_BUTTONS_AFTER)
             matrixYheadings(parentTdb, dimensionX,dimensionY,ixY,tdbsY[ixY],FALSE);
         puts("</TR>\n");
         }
