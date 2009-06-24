@@ -3959,7 +3959,7 @@ shortLabel NA12878 Slx BAM
 longLabel 1000Genomes NA12878 chr22 Solexa aligned reads
 group x
 priority 4.1
-visibility dense
+visibility hide
 type bam
 chromosomes chr22
 
@@ -3968,7 +3968,7 @@ shortLabel NA12878 depth
 longLabel 1000Genomes NA12878 chr22 Solexa read depth
 group x
 priority 4.11
-visibility full
+visibility hide
 type wig 1 11161
 defaultViewLimits 1:50
 maxHeightPixels 128:32:16
