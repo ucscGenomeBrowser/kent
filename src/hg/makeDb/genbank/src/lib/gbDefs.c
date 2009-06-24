@@ -7,7 +7,7 @@
 #include "gbGenome.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.9 2009/06/24 01:26:23 genbank Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.10 2009/06/24 04:48:43 genbank Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -333,8 +333,20 @@ if (hel == NULL)
     {
     // FIXME: tmp capture stack to attempt to find bug.
     dumpStack("unknown molecule type: %s", molTypeStr);
-    errAbort("unknown molecule type: %s", molTypeStr);
+    // FIXME: attempt to correct mRN -> mRNA corruption that is seen on RR.
+    // no idea why this happens, but it's observed only in this column, however it's
+    // corrupt when first read into memory in lineFile.
+    int l = strlen(molTypeStr);
+    if ((l > 0) && ((molTypeStr[l-1] & 0xf0) == 0))
+        {
+        char fixed = molTypeStr[l-1] |  0x40;
+        fprintf(stderr, "attempting to fix changing '%c' to '%c'\n", molTypeStr[l-1], fixed);
+        molTypeStr[l-1] = fixed;
+        hel = hashLookup(molSymToType, molTypeStr);
+        }
     }
+if (hel == NULL)
+    errAbort("unknown molecule type: %s", molTypeStr);
 return ptrToLL(hel->val);;
 }
 
