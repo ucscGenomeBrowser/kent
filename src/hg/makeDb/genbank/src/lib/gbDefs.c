@@ -7,7 +7,7 @@
 #include "gbGenome.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.11 2009/06/24 05:32:59 genbank Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.12 2009/06/24 17:00:37 genbank Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -329,6 +329,7 @@ enum molType gbParseMolType(char* molTypeStr)
 if (molSymToType == NULL)
     buildMolTypeHash();
 struct hashEl *hel = hashLookup(molSymToType, molTypeStr);
+#if 0 // Disable hack, looks like it occurs only on hgw1
 if (hel == NULL)
     {
     // FIXME: attempt to correct mRN -> mRNA corruption that is seen on RR.
@@ -343,6 +344,7 @@ if (hel == NULL)
         hel = hashLookup(molSymToType, molTypeStr);
         }
     }
+#endif
 if (hel == NULL)
     errAbort("unknown molecule type: %s", molTypeStr);
 return ptrToLL(hel->val);;
