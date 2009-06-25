@@ -18,6 +18,8 @@
 #   -rebuildDerived - see gbDbLoadStep
 #   -delayDays=n - delay dbload until build is at least n days older
 #    than last load time.
+#   -grepIndexRootDir=dir - Location to build grepIndex files. overrides genbank.conf
+#    grepIndex.rootDir variable.
 
 # errors terminate with message
 set -e
@@ -44,10 +46,11 @@ while [[ $1 == -* ]] ; do
             largeDeletes=YES
             ;;
         -rebuildDerived)
-            opts="$opts $opt"
-            ;;
-        -delayDays=*) 
-            delayDays=`echo "$opt" |sed -e 's/-delayDays=//'` ;;
+            opts="$opts $opt" ;;
+        -delayDays=*)
+            delayDays=$(echo "$opt" | sed -e 's/-delayDays=//') ;;
+        -grepIndexRootDir=*)
+            opts="$opts $opt" ;;
         -*) echo "Error: invalid option $opt" >&2
             exit 1 ;;
     esac
@@ -83,6 +86,8 @@ if [ $(hostname) = "hgwbeta" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.hgsqlbeta.conf
 elif [ $(hostname) = "hgnfs1" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.hgsqlrr.conf
+    # FIXME: tmp hack during transtion to Arnolds
+    opts="$opts -grepIndexRootDir=/gbdb/grepIndex"
 else
     export HGDB_CONF=$gbRoot/etc/.hg.conf
 fi
