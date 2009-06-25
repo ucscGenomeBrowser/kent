@@ -3961,6 +3961,10 @@ group x
 priority 4.1
 visibility hide
 type bam
+baseColorUseSequence lfExtra
+baseColorDefault diffBases
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 100
 chromosomes chr22
 
 track NA12878Slx
