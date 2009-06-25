@@ -401,7 +401,7 @@ Some settings used by various tracks:
       sufficiently small region.  If `table' is specified, an additional
       parameter of a table name, in cdsSpec format, is required.
     o baseColorUseSequence
-      {genbank,seq,ss,extFile,nameIsSequence,seq1Seq2,hgPcrResult,none}
+      {genbank,seq,ss,extFile,nameIsSequence,seq1Seq2,hgPcrResult,lfExtra,none}
       - For genePred or psl tracks, or bed/bigBed tracks.
       Specifies where item sequence can be found (if any) so that
       item sequence, or differences from genomic sequence, can be drawn when
