@@ -61,7 +61,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	petMar1 \
 	braFlo1 \
 	cioSav1 \
-	danRer3 danRer4 danRer5 \
+	danRer3 danRer4 danRer5 danRer6\
 	gasAcu1 \
 	dm1 dm2 dm3 \
 	dp2 dp3 \
