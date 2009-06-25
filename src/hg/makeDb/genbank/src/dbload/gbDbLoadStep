@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.47 2008/10/13 17:32:24 markd Exp $
+# $Id: gbDbLoadStep,v 1.48 2009/06/25 07:03:25 genbank Exp $
 #
 use strict;
 use warnings;
@@ -245,7 +245,10 @@ sub dbLoad($) {
     if (defined($dbVarReloadFile)) {
         renameVarReloadFile($dbVarReloadFile);
     }
-    setupGrepIndex($db);
+    # FIXME: hack to allow hgnfs1 until continue until the grepIndex stuff gets straightened out
+    if ($gbCommon::hostName ne "hgnfs1") {
+        setupGrepIndex($db);
+    }
 
     my $ccdsNcbiBuild = getDbConfUndef($db, "ccds.ncbiBuild");
     if (defined($ccdsNcbiBuild)) {
