@@ -305,6 +305,8 @@ may have the following variables, which will be substituted:
      $matrix - content of the matrix and optional matrixHeader trackDb setting
                which will be converted to an HTML table. If there is no matrix
                setting, an empty string is substituted.
+     $downloadsServer - the value of the hg.conf downloads.server variable, or
+                         hgdownload.cse.ucsc.edu if not set.
 In addition, if there is an $otherDb field set in the .ra file, these
 variables are available:
      $o_ORGANISM - all upper case other organism, like 'MOUSE'

@@ -10,6 +10,9 @@ struct lineFile;
 void setUdcCacheDir();
 /* set the path to the udc cache dir */
 
+char *hDownloadsServer();
+/* get the downloads server from hg.conf or the default */
+
 char *hUserCookie();
 /* Return our cookie name. */
 

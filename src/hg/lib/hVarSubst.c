@@ -5,6 +5,7 @@
 #include "common.h"
 #include "trackDb.h"
 #include "hdb.h"
+#include "hui.h"
 #include "sqlNum.h"
 #include "hVarSubst.h"
 
@@ -227,6 +228,8 @@ if (sameString(varName, "matrix"))
     substMatrixHtml(tdb, dest);
 else if (sameString(varName, "chainLinearGap"))
     substLinearGap(tdb, dest);
+else if (sameString(varName, "downloadsServer"))
+    dyStringAppend(dest, hDownloadsServer());
 else
     dyStringAppend(dest, lookupTrackDbSubVar(desc, tdb, varName, varName));
 }
