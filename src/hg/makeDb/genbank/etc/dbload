@@ -87,7 +87,7 @@ if [ $(hostname) = "hgwbeta" ] ; then
 elif [ $(hostname) = "hgnfs1" ] ; then
     export HGDB_CONF=$gbRoot/etc/.hg.hgsqlrr.conf
     # FIXME: tmp hack during transtion to Arnolds
-    opts="$opts -grepIndexRootDir=/gbdb/grepIndex"
+    opts="$opts -grepIndexRootDir=/gbdb/genbank/grepIndex"
 else
     export HGDB_CONF=$gbRoot/etc/.hg.conf
 fi
