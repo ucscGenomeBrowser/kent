@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.216 2009/06/25 05:34:41 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.217 2009/06/25 08:43:07 markd Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -158,10 +158,7 @@ puts("</P>");
 char *hUserCookie()
 /* Return our cookie name. */
 {
-if (hIsMgcServer())
-    return "mgcuid";
-else
-    return cfgOptionDefault("central.cookie", "hguid");
+return cfgOptionDefault("central.cookie", "hguid");
 }
 
 char *hDownloadsServer()

@@ -15,7 +15,7 @@
 #include "customTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.111 2009/03/12 15:44:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.112 2009/06/25 08:43:09 markd Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -229,8 +229,6 @@ if (! hDbIsActive(db))
 scientificName = hScientificName(db);
 if (hIsGsidServer())
     cartWebStart(theCart, db, "GSID %s Sequence View (UCSC Genome Browser) Gateway \n", organism);
-else if (hIsMgcServer())
-    cartWebStart(theCart, db, "MGC/ORFeome %s Genome Browser Gateway \n", organism);
 else
     {
     char buffer[128];

@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgNotYet.c,v 1.6 2009/06/11 16:17:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgNotYet.c,v 1.7 2009/06/25 08:43:09 markd Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -44,9 +44,7 @@ if (! hDbIsActive(db))
     clade = hClade(organism);
     }
 scientificName = hScientificName(db);
-if (hIsMgcServer())
-    cartWebStart(theCart, db, "MGC/ORFeome %s Genome Browser \n", organism);
-else if (hIsGisaidServer())
+if (hIsGisaidServer())
     cartWebStart(theCart, db, "GISAID %s Genome Browser \n", organism);
 else if (hIsGsidServer())
     cartWebStart(theCart, db, "GSID %s Genome Browser \n", organism);

@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1574 2009/06/24 18:53:56 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1575 2009/06/25 08:43:07 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -104,7 +104,7 @@ struct hgPositions *hgp = NULL;
 /* Other global variables. */
 struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test or public browser */
-char *organization;             /* UCSC or MGC */
+char *organization;             /* UCSC */
 
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
@@ -4772,7 +4772,7 @@ int main(int argc, char *argv[])
 enteredMainTime = clock1000();
 uglyTime(NULL);
 browserName = (hIsPrivateHost() ? "Test Browser" : "Genome Browser");
-organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
+organization = "UCSC";
 
 /* change title if this is for GSID */
 browserName = (hIsGsidServer() ? "Sequence View" : browserName);
