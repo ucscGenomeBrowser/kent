@@ -29,7 +29,7 @@ created initially from <A HREF="wiggle.html">wiggle</A> (wig) type
 files, using the program <TT>wigToBigWig</TT>.  The resulting bigWig files are 
 in an indexed binary format.  The main advantage of the bigWig files 
 is that only the portions of the files needed to display a particular 
-region are transfered to UCSC, so for large data sets bigWig is 
+region are transferred to UCSC, so for large data sets bigWig is 
 considerably faster than regular wiggle files.
 The bigWig file remains on your web accessible server (http, 
 https, or ftp), not on the UCSC server. Only the portion that is needed
@@ -43,6 +43,10 @@ See
 TARGET=_blank>this page</A> for help in selecting a graphing track data format
 that is most approriate for the type of data you have.
 </P>
+
+<P>At this time the <TT>wigToBigWig</TT> utility uses a lot of memory.  We are
+currently working to reduce the amount of RAM it takes to run the program.
+When this message is no longer on this page, the problem has been solved.</P>
 
 <P>
 To create a bigWig track, follow these steps:<BR>
