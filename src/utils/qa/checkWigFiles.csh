@@ -27,7 +27,7 @@ if ( $#argv < 3 || $#argv > 4 ) then
  echo "   fileName includes path of wig download file "
  echo "    (.txt and/or .gz files are OK)"
  echo
- echo "    e.g. /goldenPath/<db>/wig/fileName.wig"
+ echo "    e.g. /usr/local/apache/htdocs/goldenPath/<db>/wig/fileName.wig"
  echo
  echo "    add rm if you would like the output files to be removed."
  echo
@@ -51,7 +51,7 @@ endif
 
 if ( ! -e $file ) then
  echo "\nERROR: sorry I can't find the original wig file here:"
- echo " /usr/local/apahce/htdocs$file\n"
+ echo " $file\n"
  exit 1
 endif
 
