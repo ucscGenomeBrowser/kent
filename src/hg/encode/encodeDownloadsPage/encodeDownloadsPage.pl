@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.14 2009/06/18 00:26:10 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.15 2009/06/25 01:01:24 kate Exp $
 
 use warnings;
 use strict;
@@ -302,6 +302,7 @@ my $db = HgDb->new(DB => $opt_db);
 open( OUT_FILE, "> $downloadsDir/$indexHtml") || die "SYS ERROR: Can't write to \'$downloadsDir/$indexHtml\' file; error: $!\n";
 #print OUT_FILE @fileList;
 
+
 my @readme;
 if(open(README, "$downloadsDir/README.txt")) {
     @readme = <README>;
@@ -482,5 +483,8 @@ sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
 print OUT_FILE "</TABLE>\n";
 
 htmlEndPage(*OUT_FILE);
+
+chdir $downloadsDir;
+chmod 0755, $indexHtml;
 
 exit 0;
