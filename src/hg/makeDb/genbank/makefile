@@ -17,7 +17,7 @@ clean: ${SUBDIRS:%=%.subclean}
 install-server: all
 	${MAKE} install PREFIX=/cluster/data/genbank
 
-install-rr: all
+install-rr: ${GB_BINARCH}/hgsql all
 	${MAKE} install PREFIX=/genbank
 
 etc-update:
@@ -42,6 +42,10 @@ install-etc: check-prefix
 check-prefix:
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)
 
+# need a copy of hgsql for rr
+hgsqlSrcDir = ../../hgsql
+${GB_BINARCH}/hgsql: ${hgsqlSrcDir}/hgsql.c
+	${CC} ${CFLAGS} -o $@ $< $(LIBS)
 
 # build emacs tags for all files
 .PHONY: etags-all
