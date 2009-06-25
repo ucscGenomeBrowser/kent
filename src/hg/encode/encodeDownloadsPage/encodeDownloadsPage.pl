@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.15 2009/06/25 01:01:24 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.16 2009/06/25 01:26:53 kate Exp $
 
 use warnings;
 use strict;
@@ -485,6 +485,6 @@ print OUT_FILE "</TABLE>\n";
 htmlEndPage(*OUT_FILE);
 
 chdir $downloadsDir;
-chmod 0755, $indexHtml;
+chmod 0775, $indexHtml;
 
 exit 0;
