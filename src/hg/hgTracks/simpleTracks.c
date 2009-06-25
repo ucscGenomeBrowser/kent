@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.86 2009/06/24 20:33:04 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.87 2009/06/25 00:09:32 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2373,8 +2373,10 @@ lfColors(tg, lf, hvg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
-if (psl && (drawOpt == baseColorDrawItemCodons || drawOpt == baseColorDrawDiffCodons ||
-	    drawOpt == baseColorDrawGenomicCodons))
+boolean baseColorNeedsCodons = (drawOpt == baseColorDrawItemCodons ||
+				drawOpt == baseColorDrawDiffCodons ||
+				drawOpt == baseColorDrawGenomicCodons);
+if (psl && baseColorNeedsCodons)
     {
     boolean isXeno = ((tg->subType == lfSubXeno) || (tg->subType == lfSubChain) ||
 		      startsWith("mrnaBla", tg->mapName));
@@ -2444,7 +2446,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
         if (drawOpt > baseColorDrawOff &&
             e + 6 >= winStart && s - 6 < winEnd &&
-	    (e-s <= 3 || psl != NULL))
+	    (e-s <= 3 || !baseColorNeedsCodons))
                 baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y,
 				  scale, font, s, e, heightPer,
 				  zoomedToCodonLevel, mrnaSeq, sf, psl,
