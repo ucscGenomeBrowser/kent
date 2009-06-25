@@ -94,4 +94,6 @@ void hTableEnd();
 #define gisaidSeqList "gisaidTable.gisaidSeqList"
 #define gisaidAaSeqList "gisaidTable.gisaidAaSeqList"
 
+boolean validateGisaidUser();
+
 #endif /* HCOMMON_H */
