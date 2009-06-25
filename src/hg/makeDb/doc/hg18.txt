@@ -28052,3 +28052,243 @@ hgsql -e 'select count(*) from wgRnaJun09;' hg18
    # new track checked and QA'd.
    hgsql -e 'alter table wgRna rename wgRnaOld;' hg18
    hgsql -e 'alter table wgRnaJun09 rename wgRna;' hg18
+
+
+
+##################
+## Uniqueness Track: Step one (courtesy of John Castle, Rosetta)
+## Make oligos of length XX
+
+# Perl one-liner to make a batch file
+# I've included the perl files CNV_makereads2.pl (simply uses substr on a chromosome) and fastagrep.pl (to remove sequences with Ns # The files chr$x.fa are the individual chromosomes
+
+perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i == 24) {$x = 'Y';} if ($i == 25) {$x = 'M';} print "~/DTcode/CNV_makereads2.pl 100 /info/genome/Projects/721/ref/chr$x.fa | fastagrep.pl -v n > chr$x.fa\n";}' > batch_chr_get
+
+#!/usr/bin/perl -w
+#---------------------------------------------------------------------
+#                   C O P Y R I G H T   N O T I C E
+#---------------------------------------------------------------------
+#            Copyright (c) 2001 Rosetta Inpharmatics, Inc. 
+#           12040 115th Avenue NE, Kirkland, WA 98034-6900
+#         All Rights Reserved.  Reproduction, adaptation, or
+#          translation without prior written permission of 
+#             Rosetta Inpharmatics, Inc. is prohibited.
+#---------------------------------------------------------------------
+# CNV_makereads.pl
+# $Id: hg18.txt,v 1.366 2009/06/25 18:15:15 cline Exp $
+
+
+#use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
+#use strict;
+
+my $oligo_length = $ARGV[0];
+my $file = $ARGV[1];
+
+open(IN,$file);
+$/ = "\n>";# change input line separator to '>' to suck up FASTA sequences
+while ($line= <IN>) {
+  $line =~ s/^>//m;
+  # remove '>' from end of $line 
+  $line =~ s/>$//m;
+  # remove Unigene lines starting with '#'
+  $line =~ s/\n\#.*$//m;
+  # get sequence id
+  $line =~ /^\s*(\S+).*([^\0]*)/;
+  $id = $1;
+  $seq = $2;
+  $seq =~ s/\n//g;
+}
+
+if ($id =~ /(chr\S+)\.nib/) {
+  $chr = $1;
+} elsif ($id =~ /(chr\S+)/) {
+  $chr = $1;
+}
+
+for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
+  $a = substr($seq,$i,$oligo_length);
+  $j = $i+$oligo_length;
+  print ">$chr:$i-$j\n$a\n";
+}
+
+
+#!/usr/bin/perl -w
+#---------------------------------------------------------------------
+#                   C O P Y R I G H T   N O T I C E
+#---------------------------------------------------------------------
+#      Copyright (c) 2000,2001,2002 Rosetta Inpharmatics, Inc. 
+#           12040 115th Avenue NE, Kirkland, WA 98034-6900
+#         All Rights Reserved.  Reproduction, adaptation, or
+#          translation without prior written permission of 
+#             Rosetta Inpharmatics, Inc. is prohibited.
+#---------------------------------------------------------------------
+#
+# $Id: hg18.txt,v 1.366 2009/06/25 18:15:15 cline Exp $
+#
+# finds selected sequences in FASTA by regex matching in defline or sequence
+
+use strict;
+
+my( $option,
+    $regex,
+    @regexes,
+    %tofind,
+    $exceptflag,
+    $key, 
+    $value,
+    $line,
+    );
+
+$exceptflag = 0;
+
+unless (scalar(@ARGV)) {
+  print "\nUsage: $0 [OPTION] PATTERN [FASTAFILE]\n";
+  print "$0 finds sequences by pattern matching in FASTA format data\n\n";
+  exit;
+}
+
+while ((scalar(@ARGV)) && ($ARGV[0] =~ /^-(\w+)/)) {
+  $option = $1;
+  shift(@ARGV);
+  if ($option =~ /v/) { # user wants sequences NOT matching regex(es)
+    $exceptflag = 1;
+  }
+  if ($option =~ /s/) { # regex on command line
+    push(@regexes, shift(@ARGV));
+  }
+  
+  if ($option =~ /f/) { # user wants list of regexes from file
+    open(INHANDLE, "<$ARGV[0]") || 
+      die "$0: error, can't open regex list file $ARGV[0]\n";
+    while (defined($regex = <INHANDLE>)) {
+      chomp $regex;
+      push(@regexes, $regex);
+    }
+    shift(@ARGV);
+  }
+}
+
+if (scalar(@regexes) < 1) { push(@regexes, shift(@ARGV)); }
+$/ = "\n>"; # change input line separator to suck up FASTA sequences
+
+SEQUENCE:
+while (defined($line = <>)) {
+  # remove '>' from start of first $line
+  $line =~ s/^>//m;
+  # stick '>' back on all $lines
+  $line = '>'.$line;
+  # remove '>' from end of $line 
+  $line =~ s/>$//m;
+  # remove Unigene lines starting with '#'
+  $line =~ s/\n\#.*$//m;
+  foreach $regex (@regexes) {
+    if ($line =~ /$regex/) { 
+      unless ($exceptflag) { print $line; }
+      next SEQUENCE; 
+    }
+  }
+  if ($exceptflag) { print $line; }
+}
+
+
+
+# Submit batch file to cluster (we use LSF), each line is a submission
+perl -ne 'chomp; $a = "bsub -q short64  \"$_\"\n"; system($a);' batch_chr_get
+
+
+
+####################
+# Uniqueness Step two # I've used an older version of BWA.  The newer version from sourceforge outputs a binary file which then must be converted to a text file
+# HG18 is the human genome
+# I could include banything_2GBNew.pl but it is simply a cluster "chunk and submit" code 
+# Method 1 perl -e 'for ($i =1;$i<= 25; $i++) {$x = $i;  if ($i == 23) {$x = 'X';} elsif ($i == 24) {$x = 'Y';} elsif ($i == 25) {$x = 'M';} print "banything_2GbNew2.pl -a /ifs65/dtap/bin/bwa/bwa-0.2.0/bwa  -z 1000000 -in chr$x.fa -o chr$x.bwa  -stdout chr$x.bwa  -pre \"aln -o 0 /info/dtap/projects/1057_CNV/HG18/HG18 \" -suf \" \"  \n";}' >! batch_banything
+ chmod +777  batch_banything
+batch_banything
+
+# Method 2 perl -e 'for ($i =1;$i<= 25; $i++) {$x = $i;  if ($i == 23) {$x = 'X';} elsif ($i == 24) {$x = 'Y';} elsif ($i == 25) {$x = 'M';} print "/ifs65/dtap/bin/bwa/bwa-0.2.0/bwa aln -o 0 /info/dtap/projects/1057_CNV/HG18/HG18  chr$x.fa >  chr$x.bwa\n"}' >!  batch_banything
+ chmod +777  batch_banything
+perl -ne 'chomp; $a = "bsub -q long64  \"$_\"\n"; system($a);' batch_anything
+
+
+#####################
+# Uniqueness Step three 
+# I ran this one-liner from a higher level directory
+perl -e '$pwd = `pwd`; chomp($pwd); @a = `ls`; foreach $dir (@a) {chomp ($dir); unless ($dir =~ /(\d+)mer_2nd/) {next;}; @b = `ls $dir/*fa.bwa`; foreach $file (@b) {chomp($file); $f = "$pwd/$file"; $f =~ /^(\S+chr[^\.]+)\.*/; $e = $1; print "~/DTcode/CNV_parseBWA_wiggle.pl 100 1 $f\* > $e.quality.100.wiggle\n";}}' > batch_wiggle
+# Submit batch file to cluster (we use LSF), each line is a submission
+perl -ne 'chomp; $a = "bsub -q long64  \"$_\"\n"; system($a);' batch_wiggle
+
+#!/usr/bin/perl -w
+# John Castle
+# May 19, 2009
+# $Cap          a maximum value to clip data with
+# $Use_score    whether to output the uniqueness score or the number of hits
+# @FilesIn      the BWA text output files to scan
+#  ** NOTE ** The newer BWA algorithm outputs a binary file that is then made into a text file using BWA again.  
+# However, the text file output has a slightly different format so the parsing will need to change.
+
+
+($Cap, $Use_score, @FilesIn)      = @ARGV;
+
+if ($FilesIn[0] =~ /\.gz/) {
+  open(IN,"gzip -dc $FilesIn[0] |")
+} else {
+  open(IN,$FilesIn[0]);
+}
+
+#### Description
+@a = split("\t",<IN>);
+$a[6] =~ /(\d+)/;
+$len = $1;
+close(IN);
+
+### Wiggle header text
+if ($Use_score == 0) {
+  print "track type=wiggle_0 name=\"Alignment scores of $len\mer as\" description=\"Unique $len mer alignments\" color=100,50,150 gridDefault=on yLineOnOff=on visibility=full maxHeightPixels=40:40:12\n";
+} else {
+  print "track type=wiggle_0 name=\"$len\mer alignment scores\" description=\"$len\mer alignment scores from BWA/MAQ, where 37 indicates a unique alignment\" color=100,50,150 gridDefault=on yLineOnOff=on visibility=full maxHeightPixels=40:40:12\n";
+}
+
+### Parse through file(s)
+foreach $file (@FilesIn) {
+  if ($file =~ /\.gz/) {
+    open(IN,"gzip -dc $file |");
+  } else {
+    open(IN,$file);
+  }
+  @a = split("\t",<IN>);
+  $a[0]    =~ /(chr\S+):(\d+)/;
+  $Chr     = $1;
+  $start   = $2;
+  $score   = $a[5];
+  $hits    = $a[11];
+  if ($hits > $Cap) {$hits = $Cap;}
+  if ($Use_score == 1) {$value = $score;}
+  else {$value = $hits;}
+
+  while (<IN>) { # Make wiggle track, with start and end coordinates for same scoring regions
+    @a = split("\t",$_);
+    if ($#a <15) {
+      next;
+    }
+    
+    $a[0] =~ /(chr\S+):(\d+)/;
+    $chr   = $1;
+    $pos   = $2;
+    $score = $a[5];
+    $hits  = $a[11];
+    if ($hits > $Cap) {$hits = $Cap;}
+    
+    if ($Use_score == 1) {$x = $score;
+    } else {$x = $hits;}
+    
+    if ($x != $value) {
+      print "$Chr\t$start\t$pos\t$value\n";
+      $Chr   = $chr;
+      $value = $x;
+      $start = $pos;
+    }
+  }
+  print "$Chr\t$start\t$pos\t$value\n";
+  close(IN);
+}
+
