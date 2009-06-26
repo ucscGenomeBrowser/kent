@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "gisaidSample.h"
 
-static char const rcsid[] = "$Id: gisaidSample.c,v 1.2 2009/06/11 23:44:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: gisaidSample.c,v 1.3 2009/06/26 18:17:16 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -230,6 +230,11 @@ struct section *sectionList = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
+
+if (hIsGisaidServer())
+    {
+    validateGisaidUser(cart);
+    }
 
 sectionList = loadSectionList(conn);
 
