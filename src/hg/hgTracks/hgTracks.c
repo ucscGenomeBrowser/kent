@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1575 2009/06/25 08:43:07 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1576 2009/06/26 14:49:43 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2923,8 +2923,11 @@ if (hIsGisaidServer())
     /* disable hgGateway for gisaid for now */
     //hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
     hPrintf(
-    "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A></TD>",
-    '%', '%', "Select Subjects");
+    "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks&%s=%u\" class=\"topbar\">%s</A></TD>",
+    '%', '%', 
+    cartSessionVarName(),
+    cartSessionId(cart), 
+    "Select Subjects");
     }
 else
 if (hIsGsidServer())
@@ -2944,8 +2947,11 @@ if (gotBlat)
     }
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?db=%s\" class=\"topbar\">%s</A></TD>",
-       database, "Table View");
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A></TD>",
+       database, 
+       cartSessionVarName(), 
+       cartSessionId(cart), 
+       "Table View");
     }
 else
 if (hIsGsidServer())
@@ -2959,8 +2965,10 @@ else
     if (!hIsCgbServer())
 	{
     	hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
-       	database, chromName, winStart+1, winEnd, cartSessionVarName(),
-       	cartSessionId(cart), "Tables");
+       	database, chromName, winStart+1, winEnd, 
+	cartSessionVarName(),
+       	cartSessionId(cart), 
+	"Tables");
     	}
     }
 
@@ -4653,6 +4661,11 @@ if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
+
+if (hIsGisaidServer())
+    {
+    validateGisaidUser(cart);
+    }
 
 setUdcCacheDir();
 
