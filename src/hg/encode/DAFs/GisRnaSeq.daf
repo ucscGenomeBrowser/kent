@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.3 $
+# Data Agreement File for RNA-seq project $Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -30,19 +30,33 @@ type             wig
 hasReplicates    no
 required         no
 
+# Alignments of reads which are not split on the genome
 view             Alignments
 longLabelPrefix  GIS RNA-Seq Tags
 type             tagAlign
 hasReplicates    no
-required         yes
+required         no
 
+# Alignments of reads which are split on the genome (eg, spliced)
+view             SplitAlign
+longLabelPrefix  GIS RNA-Seq Split Tags
+type             pairedTagAlign
+hasReplicates    no
+required         no
+
+# Raw data for SOLID
 view             RawData
 type             csfasta
 hasReplicates    no
-required         yes
+required         no
 
 view             RawData2
 type             csqual
 hasReplicates    no
-required         yes
+required         no
 
+# Raw data for Solexa
+view             RawData3
+type             fastq
+hasReplicates    no
+required         no
