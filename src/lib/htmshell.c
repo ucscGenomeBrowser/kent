@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.51 2009/06/03 18:25:35 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.52 2009/06/26 17:42:15 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -199,11 +199,43 @@ char *htmlWarnEndPattern()
 return "<!-- HGERROR-END -->\n";
 }
 
+#define WARNBOX_IN_USE
+#ifdef WARNBOX_IN_USE
+static void htmlWarnBoxSetup()
+/* Creates an empty warning box than can be filled with errors and then made visible */
+{
+// NOTE: Making both IE and FF work is almost impossible.  Currently, in IE, if the message is forced to the top (calling this routine after <BODY> then the box is not
+// resizable (dynamically adjusting to its contents). But if this setup is done later in the page (at first warning), then IE des resize it.  Why?
+// FF is resizable now, but it took some experimentation.
+#define WARNBOX_LINE1 "<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'>"
+#define WARNBOX_LINE2 "<CENTER><B style='text-decoration:blink; color:DarkRed;'>Warning(s):</CENTER></B><UL id='warnList'></UL><CENTER><input type='reset' value='OK' onclick='hideWarnBox();return false;'></CENTER></div></center>"
+#define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display='inline-block'; warnBox.style.width='auto';}}}"
+#define WARNBOX_HIDE  "function hideWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display='none';var warnList=document.getElementById('warnList'); warnList.innerHTML='';}}"
+printf("<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
+}
+#endif//ifdef WARNBOX_IN_USE
+
 void htmlVaWarn(char *format, va_list args)
 /* Write an error message. */
 {
 va_list argscp;
 va_copy(argscp, args);
+#ifdef WARNBOX_IN_USE
+static boolean noWarningsYet = TRUE;
+if(noWarningsYet)
+    {
+    htmlWarnBoxSetup();
+    noWarningsYet=FALSE;
+    }
+
+char warning[512];
+vsnprintf(warning,sizeof(warning),format, args);
+// NOTE: While some HTML in the message should work, I believe a single quote (') will will screw it all up.  Thus replacing them with (")
+strSwapChar(warning,'\'','"');
+printf("<script type='text/javascript'>{var warnList=document.getElementById('warnList'); warnList.innerHTML += '<li>%s</li>'; showWarnBox();}</script>\n",warning);
+
+#else//ifndef WARNBOX_IN_USE
+
 #define WARN_USE_ALERT
 #ifdef WARN_USE_ALERT
 static boolean noWarningsYet = TRUE;
@@ -230,6 +262,8 @@ htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
 #endif//ndef WARN_USE_ALERT
+
+#endif//def WARNBOX_IN_USE
 
 /* Log useful CGI info to stderr */
 logCgiToStderr();
@@ -370,6 +404,10 @@ if (htmlBackground != NULL )
 if (gotBgColor)
     fprintf(f, " BGCOLOR=\"%X\"", htmlBgColor);
 fputs(">\n",f);
+
+#ifdef WARNBOX_IN_USE
+htmlWarnBoxSetup();// Sets up a warning box which can be filled with errors as they occur
+#endif//def WARNBOX_IN_USE
 }
 
 void _htmStart(FILE *f, char *title)
@@ -509,6 +547,10 @@ if (htmlBackground == NULL)
     puts("<BODY>\n");
 else
     printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
+
+#ifdef WARNBOX_IN_USE
+htmlWarnBoxSetup();// Sets up a warning box which can be filled with errors as they occur
+#endif//def WARNBOX_IN_USE
 
 /* Call wrapper for error handling. */
 htmEmptyShell(doMiddle, method);
