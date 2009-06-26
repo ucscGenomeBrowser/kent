@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.26 2009/04/07 20:17:02 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.27 2009/06/26 20:53:18 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -227,6 +227,7 @@ function setAllTrackGroupVisibility(newState)
 
 $(document).ready(function()
 {
+    // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
         var thisForm=$(this).parents('form');
         if(thisForm != undefined && thisForm.length == 1)
@@ -234,4 +235,21 @@ $(document).ready(function()
 
         return true;
     });
+    if($('table#imgTbl').length == 1) {
+        // Make imgTbl allow draw reorder of imgTrack rows
+        if($(".tableWithDragAndDrop").length > 0) {
+            $(".tableWithDragAndDrop").tableDnD({
+                onDragClass: "trDrag",
+                dragHandle: "dragHandle"
+                });
+        }
+
+        // Turn on drag scrolling.
+        //$(".panDivScroller").panImages($(".panDivScroller").width(),0,0);
+
+        // Temporary warning while new imageV2 code is being worked through
+        if($('map#map').children().length > 0) {
+            alert('Using imageV2, but old map is not empty!');
+        }
+    }
 });
