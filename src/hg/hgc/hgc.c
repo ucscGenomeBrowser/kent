@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1557 2009/06/22 22:25:22 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1558 2009/06/26 22:18:57 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21275,6 +21275,11 @@ char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
+
+if (hIsGisaidServer())
+    {
+    validateGisaidUser(cart);
+    }
 
 /*	database and organism are global variables used in many places	*/
 getDbAndGenome(cart, &database, &genome, NULL);
