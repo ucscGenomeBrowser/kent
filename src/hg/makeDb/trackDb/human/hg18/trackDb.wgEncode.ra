@@ -11035,6 +11035,7 @@ wgEncode 1
     itemRgb on
     cell HepG2
     color 189,0,157
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 view=Peaks replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
     release alpha
@@ -11048,6 +11049,7 @@ wgEncode 1
     itemRgb on
     cell HepG2
     color 189,0,157
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 view=Peaks replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
     release alpha
@@ -11059,8 +11061,9 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     itemRgb on
-    cell GM128
+    cell GM12878
     color 153,38,0
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 view=Peaks replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
     release alpha
@@ -11074,6 +11077,7 @@ wgEncode 1
     itemRgb on
     cell GM12878
     color 153,38,0
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 view=Peaks replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2
 
     track wgEncodeHudsonalphaMethyl27K562r1
     release alpha
@@ -11087,6 +11091,7 @@ wgEncode 1
     itemRgb on
     cell K562
     color 46,0,184
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 view=Peaks replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1
 
     track wgEncodeHudsonalphaMethyl27K562r2
     release alpha
@@ -11100,7 +11105,7 @@ wgEncode 1
     itemRgb on
     cell K562
     color 46,0,184
-
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 view=Peaks replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2
 
 # HudsonAlpha CNV (wrangler: kate)
 
