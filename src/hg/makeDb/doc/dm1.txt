@@ -550,7 +550,7 @@
     hgsql dm1 -e 'insert into pscreen values(720, "chr2R", 17764291, 17764292, "EY12526", 0, "-", 0, 1, "CG30092,");'
 
 #QA NOTE: [ASZ, 10-1-2008] mytouch dm1 pscreen 200501071700.00
-#(becuase it was not updated after a bdgpGene update (pscreen is outdated)
+#(because it was not updated after a bdgpGene update (pscreen is outdated)
 
 
 # FLYBASE IN SITU IMAGES / EXPRESSION (REDONE 6/17/04 angie)
