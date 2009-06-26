@@ -43,8 +43,10 @@
 #include "hgConfig.h"
 #include "encode.h"
 #include "agpFrag.h"
+#include "imageV2.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1576 2009/06/26 14:49:43 fanhsu Exp $";
+
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1577 2009/06/26 20:24:57 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -283,11 +285,24 @@ static void mapBoxTrackUi(struct hvGfx *hvg, int x, int y, int width,
 x = hvGfxAdjXW(hvg, x, width);
 char *encodedName = cgiEncode(name);
 
+#ifdef IMAGEv2_UI
+if(curMap != NULL)
+    {
+    char link[512];
+    safef(link,sizeof(link),"%s?%s=%u&c=%s&g=%s",
+        hgTrackUiName(), cartSessionVarName(),cartSessionId(cart), chromName, encodedName);
+    char title[128];
+    safef(title,sizeof(title),"%s controls", shortLabel);
+    // Add map item to currnent map (TODO: pass in map)
+    mapSetItemAdd(curMap,link,title,x, y, x+width, y+height);
+    }
+#else//ifndef IMAGEv2_UI
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), cartSessionVarName(),
                          cartSessionId(cart), chromName, encodedName);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
+#endif//ndef IMAGEv2_UI
 freeMem(encodedName);
 }
 
@@ -299,6 +314,16 @@ static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, i
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 x = hvGfxAdjXW(hvg, x, width);
+#ifdef IMAGEv2_UI
+if(curMap != NULL)
+    {
+    char link[512];
+    safef(link,sizeof(link),"%s?complement_%s=%d&%s",
+        hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
+    // Add map item to currnent map (TODO: pass in map)
+    mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
+    }
+#else//ifndef IMAGEv2_UI
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement_%s=%d",
 	hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
@@ -307,6 +332,7 @@ freeDyString(&ui);
 if (message != NULL)
     mapStatusMessage("%s", message);
 hPrintf(">\n");
+#endif//ndef IMAGEv2_UI
 }
 
 void smallBreak()
@@ -1515,7 +1541,7 @@ int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackTabX = gfxBorder;
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
-int y;
+int y=0;
 int titleHeight = fontHeight;
 int scaleBarPad = 2;
 int scaleBarHeight = fontHeight;
@@ -1537,6 +1563,17 @@ int newWinWidth = 0;
 trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
+
+#ifdef IMAGEv2_UI
+// Start an imagebox (temproarily global in order to avoid massive changes)
+theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),withLeftLabels,pixWidth);
+int sideSliceWidth  = 0;   // Just being explicit
+int dataSliceWidth  = 0;
+int sideSliceOffsetX = 0;
+int dataSliceOffsetX = 0;
+int sliceHeight  = 0;
+int sliceOffsetY = 0;
+#endif//def IMAGEv2_UI
 
 if (rulerMode != tvFull)
     {
@@ -1646,6 +1683,13 @@ else
     {
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    #ifdef IMAGEv2_UI
+    // Adds one single image for all tracks (TODO: build the track by track images)
+    theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,
+        (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
+        pixWidth, pixHeight,FALSE);
+    //curMap = imgMapStart(theOneImg,"theOne",NULL); // No common linkRoot (TODO: Drop image map in favor of slice maps)
+    #endif//def IMAGEv2_UI
     }
 hvg->rc = revCmplDisp;
 initColors(hvg);
@@ -1658,6 +1702,16 @@ findTrackColors(hvg, trackList);
 
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
+
+#ifdef IMAGEv2_UI
+if (withLeftLabels)
+    {
+    sideSliceWidth   = leftLabelWidth + 2;   // Just being explicit
+    sideSliceOffsetX = 0;                        // FIXME: Reverse?
+    }
+dataSliceWidth   = tl.picWidth - sideSliceWidth;
+dataSliceOffsetX = sideSliceWidth;               // FIXME: Reverse?
+#endif//def IMAGEv2_UI
 
 /* Draw mini-buttons. */
 if (withLeftLabels && psOutput == NULL)
@@ -1672,6 +1726,16 @@ if (withLeftLabels && psOutput == NULL)
         int height = basePositionHeight;
         if (rulerCds)
             height += rulerTranslationHeight;
+        #ifdef IMAGEv2_UI
+            {
+            // Start Track, Add slice and start mapping the slice
+            sliceHeight      = height + 1;
+            sliceOffsetY     = 0;
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,FALSE); // No tdb, no centerlabel, not reorderable
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+            }
+        #endif//def IMAGEv2_UI
         drawGrayButtonBox(hvg, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxTrackUi(hvg, trackTabX, y, trackTabWidth, height,
 		      RULER_TRACK_NAME, RULER_TRACK_LABEL);
@@ -1679,12 +1743,12 @@ if (withLeftLabels && psOutput == NULL)
         }
     for (track = trackList; track != NULL; track = track->next)
         {
-	int h, yStart = y, yEnd;
-	if (track->limitedVis != tvHide)
-	    {
-	    y += trackPlusLabelHeight(track, fontHeight);
-	    yEnd = y;
-	    h = yEnd - yStart - 1;
+        int h, yStart = y, yEnd;
+        if (track->limitedVis != tvHide)
+            {
+            y += trackPlusLabelHeight(track, fontHeight);
+            yEnd = y;
+            h = yEnd - yStart - 1;
 
             /* alternate button colors for track groups*/
             if (track->group != lastGroup)
@@ -1692,13 +1756,23 @@ if (withLeftLabels && psOutput == NULL)
             lastGroup = track->group;
             if (grayButtonGroup)
                 drawGrayButtonBox(hvg, trackTabX, yStart, trackTabWidth,
-	    	                h, track->hasUi);
+                            h, track->hasUi);
             else
                 drawBlueButtonBox(hvg, trackTabX, yStart, trackTabWidth,
-	    	                h, track->hasUi);
-	    if (track->hasUi)
+                            h, track->hasUi);
+            if (track->hasUi)
+                {
+                #ifdef IMAGEv2_UI
+                // Start Track, Add slice and start mapping the slice
+                sliceHeight      = h;
+                sliceOffsetY     = yStart;
+                curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+                curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                #endif//def IMAGEv2_UI
                 mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h,
 			      track->mapName, track->shortLabel);
+            }
 	    }
 	}
     butOff = trackTabX + trackTabWidth;
@@ -1714,64 +1788,86 @@ if (withLeftLabels)
     	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
     if (rulerMode != tvHide)
-	{
-	if (baseTitle)
-	    {
-	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, titleHeight,
-			MG_BLACK, font, WIN_TITLE_LABEL);
-	    y += titleHeight;
-	    }
-	if (baseShowPos||baseShowAsm)
-	    {
-	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, showPosHeight,
-			MG_BLACK, font, WIN_POS_LABEL);
-	    y += showPosHeight;
-	    }
-	if (baseShowScaleBar)
-	    {
-	    y += scaleBarPad;
-	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, scaleBarHeight,
-			MG_BLACK, font, SCALE_BAR_LABEL);
-	    y += scaleBarHeight + scaleBarPad;
-	    }
-	if (baseShowRuler)
-	    {
-	    char rulerLabel[SMALLBUF];
-	    char *shortChromName = cloneString(chromName);
-	    safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
-	    int labelWidth = mgFontStringWidth(font,rulerLabel);
-	    while ((labelWidth > 0) && (labelWidth > leftLabelWidth))
-		{
-		int len = strlen(shortChromName);
-		shortChromName[len-1] = 0;
-		safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
-		labelWidth = mgFontStringWidth(font,rulerLabel);
-		}
-	    if (hvg->rc)
-		safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
-	    else
-		safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
-	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight,
-			   MG_BLACK, font, rulerLabel);
-	    y += rulerHeight;
-	    freeMem(shortChromName);
-	    }
-	if (zoomedToBaseLevel || rulerCds)
-	    {
-	    /* disable complement toggle for HIV because HIV is single stranded RNA */
-	    if (!hIsGsidServer())
-                drawComplementArrow(hvg,leftLabelX, y,
-                                    leftLabelWidth-1, baseHeight, font);
-	    if (zoomedToBaseLevel)
-    		y += baseHeight;
-	    }
-        if (rulerCds)
-            y += rulerTranslationHeight;
+        {
+        #ifdef IMAGEv2_UI
+            {
+            // Start Track, Add slice and start mapping the slice
+            sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
+            sliceOffsetY     = 0;
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,FALSE); // No tdb, no centerlabel,not reorderable
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+            }
+        #endif//def IMAGEv2_UI
+        if (baseTitle)
+            {
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, titleHeight,
+                MG_BLACK, font, WIN_TITLE_LABEL);
+            y += titleHeight;
+            }
+        if (baseShowPos||baseShowAsm)
+            {
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, showPosHeight,
+                MG_BLACK, font, WIN_POS_LABEL);
+            y += showPosHeight;
+            }
+        if (baseShowScaleBar)
+            {
+            y += scaleBarPad;
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, scaleBarHeight,
+                MG_BLACK, font, SCALE_BAR_LABEL);
+            y += scaleBarHeight + scaleBarPad;
+            }
+        if (baseShowRuler)
+            {
+            char rulerLabel[SMALLBUF];
+            char *shortChromName = cloneString(chromName);
+            safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
+            int labelWidth = mgFontStringWidth(font,rulerLabel);
+            while ((labelWidth > 0) && (labelWidth > leftLabelWidth))
+                {
+                int len = strlen(shortChromName);
+                shortChromName[len-1] = 0;
+                safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
+                labelWidth = mgFontStringWidth(font,rulerLabel);
+                }
+            if (hvg->rc)
+            safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
+            else
+                safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight,
+                MG_BLACK, font, rulerLabel);
+            y += rulerHeight;
+            freeMem(shortChromName);
+            }
+        if (zoomedToBaseLevel || rulerCds)
+            {
+            /* disable complement toggle for HIV because HIV is single stranded RNA */
+            if (!hIsGsidServer())
+                    drawComplementArrow(hvg,leftLabelX, y,
+                                        leftLabelWidth-1, baseHeight, font);
+            if (zoomedToBaseLevel)
+                y += baseHeight;
+            }
+            if (rulerCds)
+                y += rulerTranslationHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
         if (track->limitedVis == tvHide)
             continue;
+        #ifdef IMAGEv2_UI
+            {
+            // FIXME: Notice I am treating all subtracks as indivisible from their composite
+            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
+            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
+            sliceHeight      = trackPlusLabelHeight(track, fontHeight);
+            sliceOffsetY     = y;
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            }
+        #endif//def IMAGEv2_UI
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
             struct track *subtrack;
@@ -1798,6 +1894,14 @@ else
 /* Draw guidelines. */
 if (withGuidelines)
     {
+    #ifdef IMAGEv2_UI
+        // TODO: We should be making transparent data images and a separate background img for guidelines.
+        // This will allow the guidelines to dragscroll while the center labels are static.
+        // NOTE: The background image could easily be a reusable file, based upon zoom level and width.  Height could propbaby easily be stretched.
+        // struct image *bgImg = imgBoxImageAdd(theImgBox,gifBg.forHtml,
+        //    (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
+        //    pixWidth, pixHeight,FALSE);
+    #endif//def IMAGEv2_UI
     int height = pixHeight - 2*gfxBorder;
     int x;
     Color lightBlue = hvGfxFindRgb(hvg, &guidelineColor);
@@ -1813,6 +1917,15 @@ if (withGuidelines)
 /* Show ruler at top. */
 if (rulerMode != tvHide)
     {
+    #ifdef IMAGEv2_UI
+        {
+        sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
+        sliceOffsetY     = 0;
+        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,FALSE); // No tdb, no centerlabel,not reorderable
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+        curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+        }
+    #endif//def IMAGEv2_UI
     struct dnaSeq *seq = NULL;
     int rulerClickY = 0;
     rulerClickHeight = rulerHeight;
@@ -2028,23 +2141,45 @@ if (withCenterLabels)
     for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
-	if (track->limitedVis == tvHide)
-	    continue;
+        if (track->limitedVis == tvHide)
+            continue;
+        #ifdef IMAGEv2_UI
+        //if (isWithCenterLabels(track))  // NOTE: Since track may not have centerlabel but subtrack may (How?), then must always make this slice!
+            {
+            // FIXME: Notice I am treating all subtracks as indivisible from their composite
+            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
+            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
+            sliceHeight      = fontHeight;
+            sliceOffsetY     = y;
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isCenter,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            }
+        #endif//def IMAGEv2_UI
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
-	    if (isWithCenterLabels(track))
-		y = doCenterLabels(track, track, hvg, font, y)
-		    - track->height; /* subtrack heights tallied below: */
-	    for (subtrack = track->subtracks; subtrack != NULL;
-		 subtrack = subtrack->next)
-		if (isSubtrackVisible(subtrack))
-		    {
-		    if (isWithCenterLabels(subtrack))
-			y = doCenterLabels(subtrack, track, hvg, font, y);
-		    else
-			y += subtrack->totalHeight(subtrack,
-						   subtrack->limitedVis);
-		    }
+            if (isWithCenterLabels(track))
+                y = doCenterLabels(track, track, hvg, font, y) - track->height; /* subtrack heights tallied below: */
+            #ifdef IMAGEv2_UI
+                {
+                // FIXME: This special case allows the subtrack center label map items to be put into the data slice
+                // When subtracks are carved up into individual imgTracks, then this will not be necessary
+                sliceHeight      = trackPlusLabelHeight(track, fontHeight) - fontHeight;
+                sliceOffsetY     = y;
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+                curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                }
+            #endif//def IMAGEv2_UI
+            for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+                {
+                if (isSubtrackVisible(subtrack))
+                    {
+                    if (isWithCenterLabels(subtrack))
+                        y = doCenterLabels(subtrack, track, hvg, font, y);
+                    else
+                        y += subtrack->totalHeight(subtrack,subtrack->limitedVis);
+                    }
+                }
             }
         else
             y = doCenterLabels(track, track, hvg, font, y);
@@ -2059,18 +2194,31 @@ if (withCenterLabels)
     if (measureTiming)
         lastTime = clock1000();
     for (track = trackList; track != NULL; track = track->next)
-	{
-	if (track->limitedVis == tvHide)
-            continue;
+        {
+        if (track->limitedVis == tvHide)
+                continue;
+        #ifdef IMAGEv2_UI
+            {
+            // FIXME: Notice I am treating all subtracks as indivisible from their composite
+            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
+            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
+            sliceHeight      = trackPlusLabelHeight(track, fontHeight) - (isWithCenterLabels(track) ? fontHeight : 0);
+            sliceOffsetY     = y + (isWithCenterLabels(track) ? fontHeight : 0);
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            }
+        #endif//def IMAGEv2_UI
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
             struct track *subtrack;
-	    if (isWithCenterLabels(track))
-		y += fontHeight;
-            for (subtrack = track->subtracks; subtrack != NULL;
-                         subtrack = subtrack->next)
+            if (isWithCenterLabels(track))
+                y += fontHeight;
+            for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
+                {
                 if (isSubtrackVisible(subtrack))
                     y = doDrawItems(subtrack, hvg, font, y, &lastTime);
+                }
             }
         else
             y = doDrawItems(track, hvg, font, y, &lastTime);
@@ -2086,6 +2234,18 @@ if (withLeftLabels)
 	{
 	if (track->limitedVis == tvHide)
             continue;
+    #ifdef IMAGEv2_UI
+        {
+        // FIXME: Notice I am treating all subtracks as indivisible from their composite
+        // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
+        // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
+        sliceHeight      = trackPlusLabelHeight(track, fontHeight);
+        sliceOffsetY     = y;
+        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+        curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+        }
+    #endif//def IMAGEv2_UI
     if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
 	    {
 	    struct track *subtrack;
@@ -2136,12 +2296,16 @@ if(newWinWidth)
 
 /* Save out picture and tell html file about it. */
 hvGfxClose(&hvg);
+#ifdef IMAGEv2_UI
+imageBoxDraw(theImgBox);
+imgBoxFree(&theImgBox);
+#else//ifndef IMAGEv2_UI
 char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
 hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
     gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
 hPrintf("><BR>\n");
+#endif//ndef IMAGEv2_UI
 }
-
 
 static void printEnsemblAnchor(char *database, char* archive,
 	char *chrName, int start, int end)
@@ -2924,9 +3088,9 @@ if (hIsGisaidServer())
     //hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
     hPrintf(
     "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks&%s=%u\" class=\"topbar\">%s</A></TD>",
-    '%', '%', 
+    '%', '%',
     cartSessionVarName(),
-    cartSessionId(cart), 
+    cartSessionId(cart),
     "Select Subjects");
     }
 else
@@ -2948,9 +3112,9 @@ if (gotBlat)
 if (hIsGisaidServer())
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A></TD>",
-       database, 
-       cartSessionVarName(), 
-       cartSessionId(cart), 
+       database,
+       cartSessionVarName(),
+       cartSessionId(cart),
        "Table View");
     }
 else
@@ -2965,9 +3129,9 @@ else
     if (!hIsCgbServer())
 	{
     	hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
-       	database, chromName, winStart+1, winEnd, 
+       	database, chromName, winStart+1, winEnd,
 	cartSessionVarName(),
-       	cartSessionId(cart), 
+       	cartSessionId(cart),
 	"Tables");
     	}
     }
