@@ -268,4 +268,6 @@ void webDumpStackPushAbortHandler(void);
 void webDumpStackPopAbortHandler(void);
 /* pop the stack dump abort handler from the stack if it's enabled */
 
+boolean validateGisaidUser(struct cart *cart);
+/* validate if the web user is an authenticated GISAID user */
 #endif /* WEB_H */
