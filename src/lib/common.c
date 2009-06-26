@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.130 2009/05/10 02:09:16 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.131 2009/06/26 19:57:33 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1155,6 +1155,27 @@ strcpy(resultPtr, string);
 return result;
 }
 
+int strSwapStrs(char *string, int sz,char *old, char *new)
+/* Swaps all occurnces of the old with the new in string. Need not be same size
+   Swaps in place but restricted by sz.  Returns count of swaps or -1 for sz failure. */
+{
+// WARNING: called at low level, so no errors allowed.
+int count = 0;
+char *p=NULL;
+for(p=strstr(string,old);p!=NULL;p=strstr(p+strlen(old),old))
+    count++;
+if(count == 0)
+    return 0;
+if((strlen(string)+(count*(strlen(new) - strlen(old))))>=sz)
+    return -1;
+for(p=strstr(string,old);p!=NULL;p=strstr(p+strlen(new),old))
+    {
+    memmove(p+strlen(new),p+strlen(old),strlen(p+strlen(old))+1); // NULL at end is also moved!
+    memcpy(p,new,strlen(new));
+    }
+return count;
+}
+
 char *strLower(char *s)
 /* Convert entire string to lower case */
 {
@@ -1303,14 +1324,14 @@ for (;;)
 
    // If different sizes of non-numerical part, then don't match, let strcmp sort out how
    if (aNonNum != bNonNum)
-       return strcmp(a,b);  
+       return strcmp(a,b);
    // If no characters left then they are the same!
    else if (aNonNum == 0)
        return 0;
    // Non-numerical part is the same length and non-zero.  See if it is identical.  Return if not.
    else
        {
-       int diff = memcmp(a,b,aNonNum);   
+       int diff = memcmp(a,b,aNonNum);
        if (diff != 0)
             return diff;
        a += aNonNum;
@@ -2055,7 +2076,7 @@ return val;
 }
 
 bits64 memReadBits64(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by 
+/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
 {
 bits64 val;
@@ -2089,7 +2110,7 @@ return val;
 }
 
 bits32 memReadBits32(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
+/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
 {
 bits32 val;
@@ -2121,7 +2142,7 @@ return val;
 }
 
 bits16 memReadBits16(char **pPt, boolean isSwapped)
-/* Read and optionally byte-swap 16 bit entity from memory buffer pointed to by 
+/* Read and optionally byte-swap 16 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
 {
 bits16 val;

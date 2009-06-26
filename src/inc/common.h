@@ -287,6 +287,7 @@ void verbose(int verbosity, char *format, ...)
 __attribute__((format(printf, 2, 3)))
 #endif
     ;
+#define debugMsg(verbosity, format, args...)  { verbose(verbosity,"[%s(%d)::%s] ", __FILE__, __LINE__, __func__); verbose(verbosity, format, ##args); }
 
 void verboseTime(int verbosity, char *label, ...)
 /* Print label and how long it's been since last call.  Call with
@@ -737,6 +738,10 @@ char *replaceChars(char *string, char *oldStr, char *newStr);
  Return value needs to be freeMem'd.
 */
 
+int strSwapStrs(char *string, int sz,char *old, char *new);
+/* Swaps all occurnces of the old with the new in string. Need not be same size
+   Swaps in place but restricted by sz.  Returns count of swaps or -1 for sz failure.*/
+
 char * memSwapChar(char *s, int len, char oldChar, char newChar);
 /* Substitute newChar for oldChar throughout memory of given length.
    old or new may be null */
@@ -1025,7 +1030,7 @@ bits64 readBits64(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 64 bit entity. */
 
 bits64 memReadBits64(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by 
+/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
 
 bits32 byteSwap32(bits32 a);
@@ -1035,7 +1040,7 @@ bits32 readBits32(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity. */
 
 bits32 memReadBits32(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
+/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
 
 bits16 byteSwap16(bits16 a);
@@ -1045,7 +1050,7 @@ bits16 readBits16(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 16 bit entity. */
 
 bits16 memReadBits16(char **pPt, boolean isSwapped);
-/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
+/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by
  * *pPt, and advance *pPt past read area. */
 
 double byteSwapDouble(double a);
