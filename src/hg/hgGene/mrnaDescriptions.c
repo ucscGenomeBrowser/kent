@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.8 2008/09/03 19:18:50 markd Exp $";
+static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.9 2009/06/26 21:28:23 hiram Exp $";
 
 static boolean mrnaDescriptionsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -25,7 +25,7 @@ if (hTableExists(sqlGetDatabase(conn), "all_mrna"))
     int rowOffset;
     char extra[64];
     safef(extra, sizeof(extra), "strand='%c'", curGenePred->strand[0]);
-    sr = hRangeQuery(conn, "mrna", curGeneChrom, curGeneStart, curGeneEnd,
+    sr = hRangeQuery(conn, "all_mrna", curGeneChrom, curGeneStart, curGeneEnd,
     	extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
          {
