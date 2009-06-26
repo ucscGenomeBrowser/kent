@@ -6,8 +6,11 @@ associated with that promoter.
 
 <h2>Track Conventions</h2>
 <p>
-Methylated regions are shown in <font color="#FF7F00">orange</font> (bed score = 1000); non-methylated regions are
-shown in <font color="#0000FF">blue</font> (bed score = 0). 
+Methylation status is color-coded as:
+<ul>
+<li><font color="#FF7F00">orange</font> = methylated (bed score = 1000)</li>
+<li><font color="#0000FF">blue</font> = non-methylated (bed score = 0)</li>
+</ul>
 </p>
 
 <a name="Methods"></a><h2>Methods</h2>
@@ -57,6 +60,11 @@ the manufacturer. DNA concentrations and a level of quality of each
 preparation is determined by UV absorbance.
 </p>
 <h3>HpaII and MspI digestions</h3>
+<p>
+Cleavage of DNA by restriction endonuclease HpaII is prevented by the presence
+of a 5-methyl group at the internal C residue of its recognition sequence
+CCGG.  MspI, an isoschizomer of HpaII, cleaves DNA irrespective of the
+presence of a methyl group at this position.
 <p>
 For the MspI library, we digested 5 &mu;g genomic DNA in a 100 &mu;l reaction
 with 1X NEB Buffer2 and 20 units MspI restriction enzyme and incubated for 18 hr
