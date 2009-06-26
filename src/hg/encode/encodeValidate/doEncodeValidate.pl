@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.184 2009/06/18 16:38:16 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.185 2009/06/26 16:09:18 larrym Exp $
 
 use warnings;
 use strict;
@@ -95,7 +95,7 @@ options:
     -skipAll            Turn on all "-skip..." options
     -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal, PlusRawSignal, MinusRawSignal)
                         this can save you a lot of time when you are debugging and re-running the script on large projects
-    -skipOutput         Dont write the various output files
+    -skipOutput         Don't write the various output files
     -skipValidateFiles  Tells script skip the file validation step; to save a lot of time during testing
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
     -validateFile	exit after validating file (project-submission-dir is the file name;
@@ -1750,7 +1750,9 @@ foreach my $ddfLine (@ddfLines) {
     # would be better in the DAF except we'd have to go change all the DAFs :(
     my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab}, $daf);
 
-    print FILE_RA "    filename $tableName.$type.gz\n";
+    my $fileType = $type;
+    $fileType =~ s/ //g;
+    print FILE_RA "    filename $tableName.$fileType.gz\n";
     $metadata .= " composite=$compositeTrack";
 
     if($downloadOnly) {
@@ -1764,8 +1766,6 @@ foreach my $ddfLine (@ddfLines) {
         $metadata .= " tableName=$tableName";
     }
     print FILE_RA "    composite $compositeTrack\n";
-    my $fileType = $type;
-    $fileType =~ s/ //g;
     $metadata .= " fileName=$tableName.$fileType.gz";
 
     print LOADER_RA "tablename $tableName\n";
