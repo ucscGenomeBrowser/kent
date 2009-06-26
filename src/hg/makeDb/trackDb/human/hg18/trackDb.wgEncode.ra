@@ -12128,7 +12128,7 @@ longLabel ENCODE GIS gDNA PET
 group regulation
 subGroup1 view Views Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3 fragSize FragSize 1k=1k 5k=5k 10k=10k
+subGroup3 fragSize Frag_Size 1k=1k 5k=5k 10k=10k
 dimensions dimensionX=cellType dimensionY=fragSize
 sortOrder cellType=+ fragSize=+ view=+
 controlledVocabulary encode/cv.ra cellType fragSize
