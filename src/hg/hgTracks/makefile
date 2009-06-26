@@ -18,7 +18,7 @@ O = $A.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigWigTrack.o chainTr
 	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
-	wiki.o wikiTrack.o
+	wiki.o wikiTrack.o imageV2.o
 
 include ../../inc/cgi_build_rules.mk
 
@@ -27,7 +27,7 @@ ifeq (${GBROWSE}, 1)
   A = gbrowseTest
   O = $A.o oneTrack.o \
       bedGraph.o cds.o chainTrack.o mafTrack.o netTrack.o pslTrack.o \
-      simpleTracks.o wigMafTrack.o wigTrack.o
+      simpleTracks.o wigMafTrack.o wigTrack.o imageV2.o
 else
   GBROWSE_D=
 endif
@@ -38,7 +38,7 @@ endif
 mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
-compile: $O 
+compile: $O
 	${CC} -o $A $O ${MYLIBS} ${L}
 
 wigTrack.o:	wigCommon.h
