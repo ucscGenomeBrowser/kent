@@ -1,13 +1,14 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.27 2009/06/26 20:53:18 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.28 2009/06/26 23:35:15 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
 var originalSize;
 var clickClipHeight;
-var start;
+var startDragZoom = null;
 var mapHtml;
 var newWinWidth;
+var imageV2 = false;
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -37,17 +38,21 @@ function selectStart(img, selection)
 {
     initVars();
     var now = new Date();
-    start = now.getTime();
-    jQuery.each(jQuery.browser, function(i, val) {
-        if(i=="msie" && val) {
-            // Very hacky way to solve following probem specif to IE:
-            // If the user ends selection with the mouse in a map box item, the map item
-            // is choosen instead of the selection; to fix this, we remove map box items
-            // during the mouse selection process.
-            mapHtml = $('#map').html();
-            $('#map').empty();
-        }
-    });
+    startDragZoom = now.getTime();
+    // vvvvvvv Should be obsolete since maps items are ignored when startDragZoom is set
+    if(imageV2 == false) {
+        jQuery.each(jQuery.browser, function(i, val) {
+            if(i=="msie" && val) {
+                // Very hacky way to solve following probem specif to IE:
+                // If the user ends selection with the mouse in a map box item, the map item
+                // is choosen instead of the selection; to fix this, we remove map box items
+                // during the mouse selection process.
+                mapHtml = $('#map').html();
+                $('#map').empty();
+            }
+        });
+    }
+    // ^^^^^^^^ Should be obsolete since maps items are ignored when startDragZoom is set
 }
 
 function setPosition(position, size)
@@ -146,11 +151,11 @@ function selectEnd(img, selection)
        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
-       doIt = start != null || selection.y1 <= clickClipHeight;
+       doIt = startDragZoom != null || selection.y1 <= clickClipHeight;
     }
     if(doIt) {
-        // start is null if mouse has never been moved
-	if(updatePosition(img, selection, (selection.x2 == selection.x1) || start == null || (now.getTime() - start) < 100)) {
+        // startDragZoom is null if mouse has never been moved
+	if(updatePosition(img, selection, (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100)) {
 	    document.TrackHeaderForm.submit();
 	}
     } else {
@@ -160,7 +165,7 @@ function selectEnd(img, selection)
             $('#map').append(mapHtml);
         }
     }
-    mapHtml = start = null;
+    setTimeout('mapHtml = startDragZoom = null;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
     return true;
 }
 
@@ -170,19 +175,27 @@ $(window).load(function () {
 	var dragSelectionEle = document.getElementById("hgt.dragSelection");
 	// disable if ruler is not visible.
 	if((dragSelectionEle != null) && (dragSelectionEle.value == '1') && (rulerEle != null)) {
-		var img = $('#trackMap');
-		var imgHeight = jQuery(img).height();
-		var imgWidth = jQuery(img).width();
-		var imgOfs = jQuery(img).offset();
-		clickClipHeight = parseInt(rulerEle.value);
+        var imgHeight = 0;
+        var imgWidth  = 0;
+        var img = $('#img_data_ruler');
+        if(img==undefined || img.length == 0) {  // Revert to old imageV1
+            img = $('#trackMap');
+            imgHeight = jQuery(img).height();
+            imgWidth  = jQuery(img).width();
+        } else {
+            imageV2   = true;
+            imgHeight = $('#imgTbl').height();
+            imgWidth  =  $('#td_data_ruler').width();
+        }
+        clickClipHeight = parseInt(rulerEle.value);
                 newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
 
-		img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
-			minHeight: imgHeight, maxHeight: imgHeight,
-			onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
-			autoHide: true, movable: false,
-			clickClipHeight: clickClipHeight});
-	}
+        img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
+            minHeight: imgHeight, maxHeight: imgHeight,
+            onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
+            autoHide: true, movable: false,
+            clickClipHeight: clickClipHeight});
+    }
 });
 
 function toggleTrackGroupVisibility(button, prefix)
@@ -229,13 +242,16 @@ $(document).ready(function()
 {
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
+        if(startDragZoom != null)
+            return false;
         var thisForm=$(this).parents('form');
         if(thisForm != undefined && thisForm.length == 1)
             return postTheForm($(thisForm).attr('name'),this.href);
 
         return true;
     });
-    if($('table#imgTbl').length == 1) {
+    if($('#imgTbl').length == 1) {
+        imageV2   = true;
         // Make imgTbl allow draw reorder of imgTrack rows
         if($(".tableWithDragAndDrop").length > 0) {
             $(".tableWithDragAndDrop").tableDnD({
@@ -248,7 +264,7 @@ $(document).ready(function()
         //$(".panDivScroller").panImages($(".panDivScroller").width(),0,0);
 
         // Temporary warning while new imageV2 code is being worked through
-        if($('map#map').children().length > 0) {
+        if($('#map').children().length > 0) {
             alert('Using imageV2, but old map is not empty!');
         }
     }
