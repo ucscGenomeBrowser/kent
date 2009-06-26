@@ -10639,15 +10639,6 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     color 107,112,43
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=7 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2.wig.gz
 
-    track wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
-    release alpha
-    subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel PFSK1 Input
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in PFSK-1 cells)
-    subGroups view=RawSignal factor=zControl cellType=PFSK-1
-    type wig 1.00 4125.00
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=Control type=wig fragLength=225 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=6 dateSubmitted=2008-09-11 dateUnrestricted=2009-06-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control fileName=wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control.wig.gz
-
     track wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -10690,14 +10681,46 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     color 107,112,43
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=7 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2.wig.gz
 
+track wgEncodeHudsonalphaChipSeqProv
+# testing PROVISIONAL release of subtracks.  
+# these are subtracks that will be joined with above track at some point.
+compositeTrack on
+shortLabel HAIB TFBS
+longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
+group encodeProv
+subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
+subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II zControl=Input
+dimensions dimensionX=cellType dimensionY=factor
+sortOrder cellType=+ factor=+ view=+
+dragAndDrop subTracks
+visibilityViewDefaults Peaks=pack+ RawSignal=full
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+noInherit on
+settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 RawSignal:viewLimitsMax=1:19628,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+type bed 3
+priority 0
+nextItemButton on
+wgEncode 1
+dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
+
     track wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq off
+    subTrack wgEncodeHudsonalphaChipSeqProv off
     shortLabel SKNMC Input
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in SK-N-MC cells)
     subGroups view=RawSignal factor=zControl cellType=SK-N-MC
     type wig 1.00 835.00
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=Control type=wig fragLength=225 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=6 dateSubmitted=2008-09-11 dateUnrestricted=2009-06-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalSknmcControl fileName=wgEncodeHudsonalphaChipSeqRawSignalSknmcControl.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeqProv off
+    shortLabel PFSK1 Input
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in PFSK-1 cells)
+    subGroups view=RawSignal factor=zControl cellType=PFSK-1
+    type wig 1.00 4125.00
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=Control type=wig fragLength=225 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=6 dateSubmitted=2008-09-11 dateUnrestricted=2009-06-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control fileName=wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control.wig.gz
 
 
 #  GENCODE genes (wrangler: tdreszer)
