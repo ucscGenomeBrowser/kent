@@ -28,6 +28,7 @@
 #include "mafTrack.h"
 #include "wigCommon.h"
 #include "hui.h"
+#include "imageV2.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -126,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.87 2009/06/25 00:09:32 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.88 2009/06/26 20:14:45 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -513,20 +514,31 @@ if (extra != NULL)
     dyStringAppend(ui, "&");
     dyStringAppend(ui, extra);
     }
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 if (chrom == NULL)
     {
     chrom = chromName;
     start = winStart;
     end = winEnd;
     }
+#ifdef IMAGEv2_UI
+if(curMap != NULL)
+    {
+    char link[512];
+    safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",
+        hgTracksName(), chrom, start+1, end,ui->string);
+    // Add map item to currnent map (TODO: pass in map)
+    mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
+    }
+#else//ndef IMAGEv2_UI
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?position=%s:%d-%d",
 	hgTracksName(), chrom, start+1, end);
 hPrintf("&%s\"", ui->string);
-freeDyString(&ui);
 if (message != NULL)
     mapStatusMessage("%s", message);
 hPrintf(">\n");
+#endif//ndef IMAGEv2_UI
+freeDyString(&ui);
 }
 
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -579,6 +591,29 @@ if (x < xEnd)
     char *encodedItem = cgiEncode(item);
     char *encodedTrack = cgiEncode(track);
 
+    #ifdef IMAGEv2_UI
+    if(curMap != NULL)
+        {
+        char link[512];
+        if (directUrl)
+            {
+        	safef(link,sizeof(link),directUrl, item, chromName, start, end, encodedTrack, database);
+            if (withHgsid)
+                safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", cartSidUrlString(cart));
+            }
+        else
+            {
+            safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
+                chromName, winStart, winEnd,
+                database, tl.picWidth);
+            }
+        if (extra != NULL)
+            safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
+        // Add map item to currnent map (TODO: pass in map)
+        mapSetItemAdd(curMap,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
+        }
+    #else//ifndef IMAGEv2_UI
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (directUrl)
 	{
@@ -598,8 +633,9 @@ if (x < xEnd)
         hPrintf("&%s", extra);
     hPrintf("\" ");
     if (statusLine != NULL)
-	mapStatusMessage("%s", statusLine);
+	   mapStatusMessage("%s", statusLine);
     hPrintf(">\n");
+    #endif//ndef IMAGEv2_UI
     freeMem(encodedItem);
     freeMem(encodedTrack);
     }
@@ -4875,7 +4911,7 @@ int i=0;
 
 conn = hAllocConn(database);
 
-sprintf(query, 
+sprintf(query,
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

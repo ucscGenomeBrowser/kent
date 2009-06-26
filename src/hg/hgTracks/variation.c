@@ -2,8 +2,9 @@
  * the variation group */
 
 #include "variation.h"
+#include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.141 2008/10/24 17:53:54 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.142 2009/06/26 20:16:56 tdreszer Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -121,7 +122,7 @@ int i;
 
 for (i=0; i<snp125MolTypeLabelsSize; i++)
     {
-    if (!sameString(snp125MolTypeDataName[i], el->molType)) 
+    if (!sameString(snp125MolTypeDataName[i], el->molType))
 	continue;
     if (snp125MolTypeIncludeCart[i])
 	return TRUE;
@@ -150,7 +151,7 @@ int i;
 
 for (i=0; i<snp125ClassLabelsSize; i++)
     {
-    if (!sameString(snp125ClassDataName[i], el->class)) 
+    if (!sameString(snp125ClassDataName[i], el->class))
 	continue;
     if (snp125ClassIncludeCart[i])
 	return TRUE;
@@ -179,7 +180,7 @@ int i;
 
 for (i=0; i<snp125ValidLabelsSize; i++)
     {
-    if (!containsStringNoCase(el->valid, snp125ValidDataName[i])) 
+    if (!containsStringNoCase(el->valid, snp125ValidDataName[i]))
 	continue;
     if (snp125ValidIncludeCart[i])
 	return TRUE;
@@ -244,7 +245,7 @@ int i;
 
 for (i=0; i<snp125LocTypeLabelsSize; i++)
     {
-    if (!sameString(snp125LocTypeDataName[i], el->locType)) 
+    if (!sameString(snp125LocTypeDataName[i], el->locType))
 	continue;
     if (snp125LocTypeIncludeCart[i])
 	return TRUE;
@@ -317,7 +318,7 @@ void setSnp125ExtendedNameExtra(struct track *tg)
 {
 struct sqlConnection *conn          = hAllocConn(database);
 int                   rowOffset     = 0;
-char                **row           = NULL;      
+char                **row           = NULL;
 struct slList        *snpItemList   = tg->items; /* list of SNPs */
 struct slList        *snpItem       = snpItemList;
 struct slList        *orthoItemList = NULL;      /* list of orthologous state info */
@@ -385,7 +386,7 @@ return ((struct snp125Extended *)item)->color;
 
 int snp125ExtendedColorCmpRaw(const Color ca, const char *aName,
 			      const Color cb, const char *bName)
-/* Compare to sort based on color -- black first, red last.  This is not 
+/* Compare to sort based on color -- black first, red last.  This is not
  * a slSort Cmp function, just a comparator of the values. */
 {
 /* order is important here */
@@ -552,10 +553,10 @@ void loadSnpMap(struct track *tg)
 int  snpMapSource, snpMapType;
 
 for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
-    snpMapSourceCart[snpMapSource] = cartUsualString(cart, 
+    snpMapSourceCart[snpMapSource] = cartUsualString(cart,
        snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
-    snpMapTypeCart[snpMapType] = cartUsualString(cart, 
+    snpMapTypeCart[snpMapType] = cartUsualString(cart,
        snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
 if (!startsWith("hg",database))
@@ -692,13 +693,13 @@ switch (index1)
     {
     case snp125ColorSourceMolType:
 	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeDataNameSize);
-	if (index2 < 0) 
+	if (index2 < 0)
 	    index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125MolTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     case snp125ColorSourceClass:
 	index2 = stringArrayIx(el->class,snp125ClassDataName,snp125ClassDataNameSize);
-	if (index2 < 0) 
+	if (index2 < 0)
 	    index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
@@ -730,7 +731,7 @@ switch (index1)
 	break;
     case snp125ColorSourceLocType:
 	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
-	if (index2 < 0) 
+	if (index2 < 0)
 	    index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
@@ -808,7 +809,7 @@ switch (thisSnpColor)
     }
 }
 
-void snpMapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
+void snpMapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snpMap item at position. */
 {
@@ -827,7 +828,7 @@ if (tg->drawName && vis != tvSquish)
     mapBoxHc(hvg, sm->chromStart, sm->chromEnd, x1, y, w, heightPer, tg->mapName, tg->mapItemName(tg, sm), NULL);
 }
 
-void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
+void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp item at position. */
 {
@@ -847,7 +848,7 @@ if (tg->drawName && vis != tvSquish)
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
-void snp125DrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
+void snp125DrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp125 item at position. */
 {
@@ -868,7 +869,7 @@ if (tg->drawName && vis != tvSquish)
 }
 
 static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw snpMap items. */
 {
@@ -897,7 +898,7 @@ if (vis == tvPack || vis == tvSquish)
         char *name = tg->itemName(tg, item);
 	Color itemColor = tg->itemColor(tg, item, hvg);
 	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
-	
+
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (withLabels)
@@ -916,7 +917,7 @@ if (vis == tvPack || vis == tvSquish)
 		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, 
+		hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
 			    itemNameColor, font, name);
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ))
@@ -932,14 +933,14 @@ else
         {
 	Color itemColor = tg->itemColor(tg, item, hvg);
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
-        if (vis == tvFull) 
+        if (vis == tvFull)
 	    y += lineHeight;
-        } 
+        }
     }
 }
 
 static void snpDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw snp items. */
 {
@@ -968,7 +969,7 @@ if (vis == tvPack || vis == tvSquish)
 	Color itemColor = tg->itemColor(tg, item, hvg);
 	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
 	boolean drawNameInverted = FALSE;
-	
+
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (withLabels)
@@ -1005,7 +1006,7 @@ if (vis == tvPack || vis == tvSquish)
 		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
 		    }
 		else
-		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, 
+		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
 			    itemNameColor, font, name);
 		}
             }
@@ -1022,9 +1023,9 @@ else
         {
 	Color itemColor = tg->itemColor(tg, item, hvg);
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
-        if (vis == tvFull) 
+        if (vis == tvFull)
 	    y += lineHeight;
-        } 
+        }
     }
 }
 
@@ -1087,7 +1088,7 @@ return (tg->heightPer-4);
 }
 
 static void haplotypeLinkedFeaturesDrawAt(struct track *tg, void *item,
-               struct hvGfx *hvg, int xOff, int y, double scale, 
+               struct hvGfx *hvg, int xOff, int y, double scale,
 	       MgFont *font, Color color, enum trackVisibility vis)
 /* draws and individual haplotype and a given location */
 {
@@ -1154,7 +1155,7 @@ Color ldHighLodLowDprime; /* pink */
 Color ldHighDprimeLowLod; /* blue */
 int colorLookup[256];
 
-void ldShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime) 
+void ldShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime)
 /* Allocate the LD for positive and negative values, and error cases */
 {
 static struct rgbColor white = {255, 255, 255};
@@ -1169,7 +1170,7 @@ safef(var, sizeof(var), "%s_pos", track);
 ldPos = cartUsualString(cart, var, ldPosDefault);
 ldHighLodLowDprime = hvGfxFindColorIx(hvg, 255, 224, 224); /* pink */
 ldHighDprimeLowLod = hvGfxFindColorIx(hvg, 192, 192, 240); /* blue */
-if (sameString(ldPos,"red")) 
+if (sameString(ldPos,"red"))
     hvGfxMakeColorGradient(hvg, &white, &red,   LD_DATA_SHADES, ldShadesPos);
 else if (sameString(ldPos,"blue"))
     hvGfxMakeColorGradient(hvg, &white, &blue,  LD_DATA_SHADES, ldShadesPos);
@@ -1179,7 +1180,7 @@ else
     errAbort("LD fill color must be 'red', 'blue', or 'green'; '%s' is not recognized", ldPos);
 }
 
-void bedLoadLdItemByQuery(struct track *tg, char *table, 
+void bedLoadLdItemByQuery(struct track *tg, char *table,
 			char *query, ItemLoader loader)
 /* LD specific tg->item loader, as we need to load items beyond
    the current window to load the chromEnd positions for LD values. */
@@ -1223,39 +1224,74 @@ else
 tg->canPack = FALSE;
 }
 
-void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt, 
-		  int xr, int yr, int xb, int yb, 
+void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt,
+		  int xr, int yr, int xb, int yb,
 		  char *name, char *shortLabel, char *trackName)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
-hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
-	hvGfxAdjX(hvg, xl), yl, 
+#ifdef IMAGEv2_UI
+if(curMap != NULL)
+    {
+    char link[512];
+    safef(link,sizeof(link),"%s?%s=%u&c=%s&g=%s&i=%s", hgTrackUiName(),
+	   cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
+    char title[128];
+    safef(title,sizeof(title),"%s controls", shortLabel);
+    // Add map item to currnent map (TODO: pass in map)
+    // FIXME: What am I going to do about poly cords???
+    // FIXME: What am I going to do about poly cords???
+    // FIXME: mapSetItemAdd(curMap,link,title,
+    // FIXME:     hvGfxAdjX(hvg, xl), yl,
+    // FIXME:     hvGfxAdjX(hvg, xt), yt,
+    // FIXME:     hvGfxAdjX(hvg, xr), yr,
+    // FIXME:    hvGfxAdjX(hvg, xb), yb));
+    // FIXME: What am I going to do about poly cords???
+    // FIXME: What am I going to do about poly cords???
+    warn("Track named %s has called for a POLY map titled '%s controls', but imageV2 doesn't yet support this. No map item made.",trackName,shortLabel);
+    }
+#else//ifndef IMAGEv2_UI
+hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ",
+	hvGfxAdjX(hvg, xl), yl,
         hvGfxAdjX(hvg, xt), yt,
         hvGfxAdjX(hvg, xr), yr,
         hvGfxAdjX(hvg, xb), yb);
 /* move this to hgTracks when finished */
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(), 
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
 	cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
+#endif//ndef IMAGEv2_UI
 }
 
 void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 xOff = hvGfxAdjXW(hvg, xOff, insideWidth);
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
-	xOff, yOff, xOff+insideWidth, yOff+tg->height);
 char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+#ifdef IMAGEv2_UI
+if(curMap != NULL)
+    {
+    char link[512];
+    safef(link,sizeof(link),"%s?%s=%u&c=%s&g=%s&i=%s",hgTrackUiName(),
+	   cartSessionVarName(), cartSessionId(cart), chromName, track, track);
+    char title[128];
+    safef(title,sizeof(title),"%s controls", tg->mapName);
+    // Add map item to currnent map (TODO: pass in map)
+    mapSetItemAdd(curMap,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
+    }
+#else//ifndef IMAGEv2_UI
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
+	xOff, yOff, xOff+insideWidth, yOff+tg->height);
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
 	cartSessionVarName(), cartSessionId(cart), chromName, track, track);
 mapStatusMessage("%s controls", tg->mapName);
 hPrintf(">\n");
+#endif//ndef IMAGEv2_UI
 }
 
 int ldTotalHeight(struct track *tg, enum trackVisibility vis)
-/* Return total height. Called before and after drawItems. 
- * Must set height, lineHeight, heightPer */ 
+/* Return total height. Called before and after drawItems.
+ * Must set height, lineHeight, heightPer */
 {
 tg->lineHeight = tl.fontHeight + 1;
 tg->heightPer  = tg->lineHeight - 1;
@@ -1285,8 +1321,8 @@ colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
 colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 }
 
-void drawDiamond(struct hvGfx *hvg, 
-	 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
+void drawDiamond(struct hvGfx *hvg,
+	 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb,
 	 Color fillColor, Color outlineColor)
 /* Draw diamond shape. */
 {
@@ -1301,9 +1337,9 @@ if (outlineColor != 0)
 gfxPolyFree(&poly);
 }
 
-void ldDrawDiamond(struct hvGfx *hvg, struct track *tg, int width, 
-		   int xOff, int yOff, int a, int b, int c, int d, 
-		   Color shade, Color outlineColor, double scale, 
+void ldDrawDiamond(struct hvGfx *hvg, struct track *tg, int width,
+		   int xOff, int yOff, int a, int b, int c, int d,
+		   Color shade, Color outlineColor, double scale,
 		   boolean drawMap, char *name, enum trackVisibility vis,
 		   boolean trim, boolean ldInv)
 /* Draw and map a single pairwise LD box */
@@ -1332,11 +1368,11 @@ if (yb<=0)
 if (yt>yMax && trim)
     yt=yMax;
 drawDiamond(hvg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
-return; /* mapDiamondUI is working well, but there is a bug with 
-	   AREA=POLY on the Mac browsers, so this will be 
+return; /* mapDiamondUI is working well, but there is a bug with
+	   AREA=POLY on the Mac browsers, so this will be
 	   postponed for now by not using this code */
 	/* also, since it only goes to hgTrackUi, it is redundant with mapTrackBackground.
-	 * so keep this disabled until there is something more specific like an hgc 
+	 * so keep this disabled until there is something more specific like an hgc
 	 * handler for diamonds. */
 if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
@@ -1443,7 +1479,7 @@ int incrementN = 1;
 
 if (a<winStart || a>winEnd)
     return;
-/* Include SNPs with error codes, but don't add their values. 
+/* Include SNPs with error codes, but don't add their values.
  * This will allow the marker to be drawn, even if all values
  *   are missing. */
 if (indexValue<0)
@@ -1468,7 +1504,7 @@ else
     }
 }
 
-void ldDrawDenseValue(struct hvGfx *hvg, struct track *tg, int xOff, int y1, 
+void ldDrawDenseValue(struct hvGfx *hvg, struct track *tg, int xOff, int y1,
 		      double scale, Color outlineColor, struct ldStats *d)
 /* Draw single dense LD value */
 {
@@ -1492,7 +1528,7 @@ if (outlineColor!=0)
     }
 }
 
-void ldDrawDenseValueHash(struct hvGfx *hvg, struct track *tg, int xOff, int yOff, 
+void ldDrawDenseValueHash(struct hvGfx *hvg, struct track *tg, int xOff, int yOff,
 			  double scale, Color outlineColor, struct hash *ldHash)
 /* Draw dynamically computed dense LD values */
 {
@@ -1502,7 +1538,7 @@ for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
 hashElFreeList(&stats);
 }
 
-void ldDrawDense(struct hvGfx *hvg, struct track *tg, int xOff, int yOff, 
+void ldDrawDense(struct hvGfx *hvg, struct track *tg, int xOff, int yOff,
 		 double scale, Color outlineColor,
 		 boolean isLod, boolean isRsquared)
 /* Draw precomputed dense LD values from ld2 table. */
@@ -1541,7 +1577,7 @@ for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
 }
 
 void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis)
 /* Draw left labels. */
@@ -1599,7 +1635,7 @@ hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 }
 
 
-/* ldDrawItems -- lots of disk and cpu optimizations here.  
+/* ldDrawItems -- lots of disk and cpu optimizations here.
  * There are three data fields, (lod, rsquared, and dprime) in each
    item, and each is a list of pairwise values.  The values are
    encoded in ascii to save disk space and color calculation (drawing)
@@ -1617,15 +1653,15 @@ hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
      after this marker are stored in the avg{Dprime,Rsquared,Lod} fields.
    * The T-int measure of LD info content between markers is in the tInt field.
  * The ascii values are mapped to colors in the colorLookup[] array.
- * The four points of each diamond are calculated from the chromosomal 
+ * The four points of each diamond are calculated from the chromosomal
    coordinates of four SNPs:
      a: the SNP at dPtr->chromStart
      b: the SNP immediately 3' of the chromStart (dPtr->next->chromStart)
      c: the SNP immediately 5' of the second position's chromStart (sPtr->chromStart)
-     d: the SNP at the second position's chromStart (sPtr->next->chromStart) 
+     d: the SNP at the second position's chromStart (sPtr->next->chromStart)
  * The chromosome coordinates are converted into hvg coordinates in
    ldDrawDiamond.
- * A counter (i) is used to keep from reading beyond the end of the 
+ * A counter (i) is used to keep from reading beyond the end of the
    value array.  */
 void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
 		 struct hvGfx *hvg, int xOff, int yOff, int width,

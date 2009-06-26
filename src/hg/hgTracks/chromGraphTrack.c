@@ -10,6 +10,7 @@
 #include "hgTracks.h"
 #include "hvGfx.h"
 #include "chromGraph.h"
+#include "imageV2.h"
 
 Color colorFromAscii(struct hvGfx *hvg, char *asciiColor)
 /* Get color index for a named color. */
@@ -68,7 +69,7 @@ return ret;
 }
 
 static void cgDrawEither(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis,
 	char *binFileName)
 /* Draw chromosome graph - either built in or not. */
@@ -138,10 +139,10 @@ else
     char **row;
     /* Construct query.  Set up a little more than window so that
      * we can draw connecting lines. */
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
 	"select chromStart,val from %s "
 	"where chrom='%s' and chromStart>=%d and chromStart<%d",
-	tg->mapName, chromName, 
+	tg->mapName, chromName,
 	seqStart - cgs->maxGapToFill, seqEnd + cgs->maxGapToFill);
     sr = sqlGetResult(conn, query);
 
@@ -179,15 +180,26 @@ else
 xOff = hvGfxAdjXW(hvg, xOff, width);
 
 char *encodedTrack = cgiEncode(tg->mapName);
+#ifdef IMAGEv2_UI
+if(curMap != NULL)
+    {
+    char link[512];
+    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d", hgcNameAndSettings(),
+        winStart, winEnd, encodedTrack, chromName, winStart, winEnd, database, tl.picWidth);
+    // Add map item to currnent map (TODO: pass in map)
+    mapSetItemAdd(curMap,link,NULL,xOff,yOff,xOff+width,yOff+height);
+    }
+#else//ifndef IMAGEv2_UI
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
 	yOff+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n", 
-	    hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd, 
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n",
+	    hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd,
 	    database, tl.picWidth);
+#endif//ndef IMAGEv2_UI
 }
 
 static void cgDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chromosome graph for built-in track. */
 {
@@ -196,7 +208,7 @@ cgDrawEither(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 }
 
 static void cgDrawItemsCt(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chromosome graph for customTrack. */
 {
@@ -206,7 +218,7 @@ cgDrawEither(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 
 
 int cgTotalHeight(struct track *tg, enum trackVisibility vis)
-/* Most fixed height track groups will use this to figure out the height 
+/* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
 struct chromGraphSettings *cgs = tg->customPt;
@@ -279,7 +291,7 @@ else
 	char numText[16];
 	hvGfxBox(hvg, xOff + width - tickSize, y, tickSize, 1, color);
 	safef(numText, sizeof(numText), "%g", val);
-	hvGfxTextRight(hvg, xOff, y - tl.fontHeight+2, 
+	hvGfxTextRight(hvg, xOff, y - tl.fontHeight+2,
 		width - numPos, tl.fontHeight,
 		color, font, numText);
 	}
