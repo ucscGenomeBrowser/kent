@@ -11,7 +11,9 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.4 2009/06/27 00:02:20 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.5 2009/06/27 00:41:57 kent Exp $";
+
+#define maxZoomLevels 10
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -121,7 +123,6 @@ repeatCharOut(f, 0, 64);
 void writeDummyZooms(FILE *f)
 /* Write out zeroes to reserve space for ten zoom levels. */
 {
-int maxZoomLevels = 10;
 repeatCharOut(f, 0, maxZoomLevels * 24);
 }
 
@@ -489,29 +490,32 @@ slReverse(&twiceReducedList);
 return twiceReducedList;
 }
 
-#ifdef EXAMPLE
-struct bbiSummary **summaryArray;
-AllocArray(summaryArray, count);
-writeOne(f, count);
-struct bbiSummary *summary;
-for (summary = summaryList, i=0; summary != NULL; summary = summary->next, ++i)
+struct bbiSummary *simpleReduce(struct bbiSummary *list, int reduction, struct lm *lm)
+/* Do a simple reduction - where among other things the reduction level is an integral
+ * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
+{
+struct bbiSummary *newList = NULL, *sum, *newSum = NULL;
+for (sum = list; sum != NULL; sum = sum->next)
     {
-    summaryArray[i] = summary;
-    summary->fileOffset = ftell(f);
-    writeOne(f, summary->chromId);
-    writeOne(f, summary->start);
-    writeOne(f, summary->end);
-    writeOne(f, summary->validCount);
-    bbiWriteFloat(f, summary->minVal);
-    bbiWriteFloat(f, summary->maxVal);
-    bbiWriteFloat(f, summary->sumData);
-    bbiWriteFloat(f, summary->sumSquares);
+    if (newSum == NULL || newSum->chromId != sum->chromId || sum->end > newSum->start + reduction)
+        {
+	lmAllocVar(lm, newSum);
+	*newSum = *sum;
+	slAddHead(&newList, newSum);
+	}
+    else
+        {
+	newSum->end = sum->end;
+	newSum->validCount += sum->validCount;
+	if (newSum->minVal > sum->minVal) newSum->minVal = sum->minVal;
+	if (newSum->maxVal < sum->maxVal) newSum->maxVal = sum->maxVal;
+	newSum->sumData += sum->sumData;
+	newSum->sumSquares += sum->sumSquares;
+	}
     }
-bits64 indexOffset = ftell(f);
-cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
-    blockSize, itemsPerSlot, NULL, bbiSummaryFetchKey, bbiSummaryFetchOffset, 
-    indexOffset, f);
-#endif /* EXAMPLE */
+slReverse(&newList);
+return newList;
+}
 
 void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
@@ -567,6 +571,12 @@ cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), sectionCount
     blockSize, 1, NULL, boundsArrayFetchKey, boundsArrayFetchOffset, 
     indexOffset, f);
 
+/* Declare arrays and vars that track the zoom levels we actually output. */
+bits32 zoomAmounts[maxZoomLevels];
+bits64 zoomDataOffsets[maxZoomLevels];
+bits64 zoomIndexOffsets[maxZoomLevels];
+int zoomLevels = 0;
+
 /* Write out first zoomed section while storing in memory next zoom level. */
 if (minDiff > 0)
     {
@@ -595,8 +605,24 @@ if (minDiff > 0)
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
-		f, &zoomStartData, &zoomStartIndex);
-	uglyf("%d in rezoomedList\n", slCount(rezoomedList));
+		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
+	zoomLevels = 1;
+
+	int zoomCount = initialReducedCount;
+	int reduction = initialReduction * resIncrement;
+	while (zoomLevels < maxZoomLevels)
+	    {
+	    int rezoomCount = slCount(rezoomedList);
+	    uglyf("%d in rezoomedList\n", rezoomCount);
+	    if (rezoomCount >= zoomCount)
+	        break;
+	    ++zoomLevels;
+	    zoomCount = rezoomCount;
+	    zoomDataOffsets[zoomLevels] = ftell(f);
+	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
+	    	blockSize, itemsPerSlot, f);
+	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
+	    }
 	lmCleanup(&lm);
 	}
 
