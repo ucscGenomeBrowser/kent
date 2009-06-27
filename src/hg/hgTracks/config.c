@@ -446,7 +446,11 @@ boolean dragZoomingConfig(struct cart *cart)
 {
 // dragZooming defaults to on, except for AppleWebKit browsers (Chrome and Safari), where drag-and-zoom
 // does not currently work (may want to use "KHTML" as the test string instead of "AppleWebKit").
+// This code is overly conservative, because drag-and-zoom did work with older (pre 4.0) versions of
+// safari. Unfortunately, safari numbering is weird; e.g. version 1.3.2 shows up as 
+// "Safari/312.6" in the web logs, so for now, I'm defaulting drag-and-zoom to off
+// for all versions of Safari.
 
 char *ua = cgiUserAgent();
-return cartUsualBoolean(cart, "dragZooming", !stringIn("AppleWebKit", ua));
+return cartUsualBoolean(cart, "dragZooming", ua == NULL || !stringIn("AppleWebKit", ua));
 }
