@@ -6,12 +6,13 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "cirTree.h"
+#include "sig.h"
 #include "bPlusTree.h"
 #include "bbiFile.h"
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.5 2009/06/27 00:41:57 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.6 2009/06/27 19:22:24 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -145,7 +146,7 @@ for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
         maxChromNameSize = len;
     chromInfoArray[i].name = chromName;
     chromInfoArray[i].id = usage->id;
-    chromInfoArray[i].id = usage->size;
+    chromInfoArray[i].size = usage->size;
     }
 
 /* Write chromosome bPlusTree */
@@ -523,7 +524,7 @@ void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
-int minDiff;
+int minDiff, i;
 bits64 totalDiff, diffCount;
 struct chromUsage *usage, *usageList = readPass1(lf, chromSizesHash, &minDiff);
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
@@ -606,6 +607,7 @@ if (minDiff > 0)
 		lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
+	zoomAmounts[0] = initialReduction;
 	zoomLevels = 1;
 
 	int zoomCount = initialReducedCount;
@@ -621,12 +623,50 @@ if (minDiff > 0)
 	    zoomDataOffsets[zoomLevels] = ftell(f);
 	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
 	    	blockSize, itemsPerSlot, f);
+	    zoomAmounts[zoomLevels] = reduction;
+	    reduction *= resIncrement;
 	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
 	    }
 	lmCleanup(&lm);
 	}
 
     }
+
+/* Go back and rewrite header. */
+rewind(f);
+bits32 sig = bigWigSig;
+bits16 version = 1;
+bits16 summaryCount = zoomLevels;
+bits32 reserved32 = 0;
+bits32 reserved64 = 0;
+
+/* Write fixed header */
+writeOne(f, sig);
+writeOne(f, version);
+writeOne(f, summaryCount);
+writeOne(f, chromTreeOffset);
+writeOne(f, dataOffset);
+writeOne(f, indexOffset);
+for (i=0; i<8; ++i)
+    writeOne(f, reserved32);
+
+/* Write summary headers with data. */
+for (i=0; i<zoomLevels; ++i)
+    {
+    writeOne(f, zoomAmounts[i]);
+    writeOne(f, reserved32);
+    writeOne(f, zoomDataOffsets[i]);
+    writeOne(f, zoomIndexOffsets[i]);
+    }
+/* Write rest of summary headers with no data. */
+for (i=zoomLevels; i<maxZoomLevels; ++i)
+    {
+    writeOne(f, reserved32);
+    writeOne(f, reserved32);
+    writeOne(f, reserved64);
+    writeOne(f, reserved64);
+    }
+
 lineFileClose(&lf);
 carefulClose(&f);
 }
