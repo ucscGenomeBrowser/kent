@@ -11,7 +11,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.3 2009/06/26 21:57:27 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.4 2009/06/27 00:02:20 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -332,6 +332,8 @@ void outputOneSummaryFurtherReduce(struct bbiSummary *sum, struct bbiSummary **p
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */
 {
+uglyf("outputOneSummaryFurtherReduce(%u:%d-%d valid %d, min %f, max %f, ave %f\n",
+	sum->chromId, sum->start, sum->end, sum->validCount, sum->minVal, sum->maxVal, sum->sumData/sum->validCount);
 /* Get place to store file offset etc and make sure we have not gone off end. */
 struct boundsArray *bounds = *pBoundsPt;
 assert(bounds < boundsEnd);
@@ -355,7 +357,7 @@ bbiWriteFloat(f, sum->sumSquares);
 
 /* Fold summary info into pTwiceReducedList. */
 struct bbiSummary *twiceReduced = *pTwiceReducedList;
-if (twiceReduced == NULL || twiceReduced->end < sum->end)
+if (twiceReduced == NULL || twiceReduced->chromId != sum->chromId || twiceReduced->end < sum->end)
     {
     lmAllocVar(lm, twiceReduced);
     twiceReduced->chromId = sum->chromId;
@@ -376,7 +378,8 @@ else
 
 struct bbiSummary *writeReducedOnceReturnReducedTwice(struct chromUsage *usageList, 
 	struct lineFile *lf, int initialReduction, int initialReductionCount, 
-	int resIncrement, struct lm *lm, FILE *f)
+	int resIncrement, int blockSize, int itemsPerSlot, 
+	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
  * next reduction level.  This is more work than some ways, but it keeps us from having to
  * keep the first reduction entirely in memory. */
@@ -390,6 +393,7 @@ struct boundsArray *boundsArray, *boundsPt, *boundsEnd;
 boundsPt = AllocArray(boundsArray, initialReductionCount);
 boundsEnd = boundsPt + initialReductionCount;
 
+*retDataStart = ftell(f);
 for (;;)
     {
     /* Get next line of input if any. */
@@ -472,8 +476,16 @@ for (;;)
     sum->sumData += val * size;
     sum->sumSquares += val * size;
     }
-slReverse(&twiceReducedList);
+
+/* Write out 1st zoom index. */
+int indexOffset = *retIndexStart = ftell(f);
+assert(boundsPt == boundsEnd);
+cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), initialReductionCount,
+    blockSize, itemsPerSlot, NULL, boundsArrayFetchKey, boundsArrayFetchOffset, 
+    indexOffset, f);
+
 freez(&boundsArray);
+slReverse(&twiceReducedList);
 return twiceReducedList;
 }
 
@@ -579,8 +591,12 @@ if (minDiff > 0)
     if (initialReduction > 0)
         {
 	struct lm *lm = lmInit(0);
-	writeReducedOnceReturnReducedTwice(usageList, lf, initialReduction, initialReducedCount,
-		resIncrement, lm, f);
+	bits64 zoomStartData, zoomStartIndex;
+	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
+		lf, initialReduction, initialReducedCount,
+		resIncrement, blockSize, itemsPerSlot, lm, 
+		f, &zoomStartData, &zoomStartIndex);
+	uglyf("%d in rezoomedList\n", slCount(rezoomedList));
 	lmCleanup(&lm);
 	}
 
