@@ -222,7 +222,7 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
     struct trackDb *tdb;	  // trackDb entry (should this be struct track* entry?)
-    char *name;	            // It is possible to have an imgTrack without a tdb, but then it mist have a name
+    char *name;	              // It is possible to have an imgTrack without a tdb, but then it mist have a name
     char *db;                 // Image for db (species) (assert imgTrack matches imgBox)
     char *chrom;              // Image for chrom (assert imgTrack matches imgBox)
     int  chromStart;          // Image start (absolute, not portal position)
@@ -230,15 +230,20 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     boolean plusStrand;       // Image covers plus strand, not minus strand
     boolean showCenterLabel;  // Initially display center label? TODO: Isn't this redundent with vis?
     boolean reorderable;      // Is this track reorderable (by drag and drop) ?
+    int order;                // Image order: This keeps track of dragReorder
     enum trackVisibility vis; // Current visibility of track image
     struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
     };
-
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,boolean reorderable);
+#define IMG_ANYORDER  -2
+#define IMG_FIXEDPOS  -1
+#define IMG_ORDER_VAR "imgOrd"
+struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,boolean reorderable);
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
 /* Updates an already existing image track */
+int imgTrackOrderCmp(const void *va, const void *vb);
+/* Compare to sort on label. */
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Adds slices to an image track.  Expected are types: isData, isSide and isCenter */
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type);
@@ -280,14 +285,16 @@ struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int wid
 /* Adds an image to an imgBox.  The image may be extended with imgMapStart(),mapSetItemAdd() */
 struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif);
 /* Finds a specific image already added to this imgBox */
-struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,boolean reorderable);
+struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
 /* Adds an imgTrack to an imgBox.  The imgTrack needs to be extended with imgTrackAddSlice() */
 struct imgTrack *imgBoxTrackFind(struct imgBox *imgBox,struct trackDb *tdb,char *name);
 /* Finds a specific imgTrack already added to this imgBox */
-struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,boolean reorderable);
+struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
 /* Find the imgTrack, or adds it if not found */
-struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,boolean reorderable);
+struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
 /* Updates the imgTrack, or adds it if not found */
+void imgBoxTracksNormalizeOrder(struct imgBox *imgBox);
+/* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose);
 /* Tests the completeness and consistency of an imgBox. */
 void imgBoxFree(struct imgBox **pImgBox);

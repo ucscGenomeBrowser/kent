@@ -45,7 +45,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.1 2009/06/26 17:49:09 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.2 2009/06/27 20:12:27 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -327,11 +327,11 @@ struct imgSlice *sliceUpdate(struct imgSlice *slice,enum sliceType type,struct i
 slice->type      = type;
 if(img != NULL && slice->parentImg != img)
     slice->parentImg = img;
-if(title != NULL && differentStringNullOk(title,img->title))
+if(title != NULL && differentStringNullOk(title,slice->title))
     {
-    if(img->title != NULL)
-        freeMem(img->title);
-    img->title   = cloneString(title);
+    if(slice->title != NULL)
+        freeMem(slice->title);
+    slice->title   = cloneString(title);
     }
 slice->width     = width;
 slice->height    = height;
@@ -417,7 +417,15 @@ if (slice->width == 0  || slice->width  > slice->parentImg->width)
              sliceTypeToString(slice->type),slice->width,slice->parentImg->width);
     return FALSE;
     }
-if (slice->height == 0 || slice->height > slice->parentImg->height)
+if (slice->height == 0)
+    {
+    //if (verbose)
+    //    warn("slice(%s) has an invalid height %d (image height %d)",
+    //         sliceTypeToString(slice->type),slice->height,slice->parentImg->height);
+    //return FALSE;
+    return TRUE; // This may be valid (but is sloppy) when there is no data for the slice.
+    }
+if (slice->height > slice->parentImg->height)
     {
     if (verbose)
         warn("slice(%s) has an invalid height %d (image height %d)",
@@ -484,17 +492,18 @@ if(pSlice != NULL && *pSlice != NULL)
 //    enum trackVisibility vis; // Current visibility of track image
 //    struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
 //    };
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,boolean reorderable)
+struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
 {
 struct imgTrack *imgTrack;     //  gifTn.forHtml, pixWidth, mapName
 AllocVar(imgTrack);
-return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,showCenterLabel,vis,reorderable);
+return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,showCenterLabel,vis,order);
 }
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,boolean reorderable)
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
 /* Updates an already existing image track */
 {
+static int lastOrder = 900; // keep track of the order these images get added
 if(tdb != NULL && tdb != imgTrack->tdb)
     imgTrack->tdb    = tdb;
 if(name != NULL && differentStringNullOk(imgTrack->name,name))
@@ -512,8 +521,33 @@ imgTrack->chromEnd   = chromEnd;
 imgTrack->plusStrand = plusStrand;
 imgTrack->showCenterLabel = showCenterLabel;
 imgTrack->vis             = vis;
-imgTrack->reorderable     = reorderable;
+if(order == IMG_FIXEDPOS)
+    {
+    imgTrack->reorderable = FALSE;
+    if(name != NULL && sameString(RULER_TRACK_NAME,name))
+        imgTrack->order = 0;
+    else
+        imgTrack->order = 9999;
+    }
+else
+    {
+    imgTrack->reorderable = TRUE;
+    if(order == IMG_ANYORDER)
+        {
+        if(imgTrack->order <= 0)
+            imgTrack->order = ++lastOrder;
+        }
+    else if(imgTrack->order != order)
+        imgTrack->order = order;
+    }
 return imgTrack;
+}
+int imgTrackOrderCmp(const void *va, const void *vb)
+/* Compare to sort on label. */
+{
+const struct imgTrack *a = *((struct imgTrack **)va);
+const struct imgTrack *b = *((struct imgTrack **)vb);
+return (a->order - b->order);
 }
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* Adds slices to an image track.  Expected are types: isData, isSide and isCenter */
@@ -553,8 +587,7 @@ return sliceUpdate(slice,type,img,title,width,height,offsetX,offsetY);
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type)
 /* Gets the map assocated with a specific slice belonging to the imgTrack */
 {
-struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,type);
-if(slice == NULL)
+struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,type); if(slice == NULL)
     return NULL;
 return sliceGetMap(slice,FALSE); // Map could belong to image or could be slice specific
 }
@@ -621,12 +654,13 @@ for(; slice != NULL; slice = slice->next )
         return FALSE;
         }
     }
-if(!found[isData])
-    {
-    if (verbose)
-        warn("imgTrack(%s) has no DATA slice.",name);
-    return FALSE;
-    }
+// This is not a requirement as the data portion could be empty (height==0)
+//if(!found[isData])
+//    {
+//    if (verbose)
+//        warn("imgTrack(%s) has no DATA slice.",name);
+//    return FALSE;
+//    }
 
 return TRUE;
 }
@@ -685,7 +719,7 @@ imgBox->portalEnd     = chromEnd - oneThird;
 imgBox->portalWidth   = portalWidth;
 // images are added with imgBoxImageAdd()
 // imgTracks are added with imgBoxTrackAdd()
-// Plans for slices and maps:  Fill in imgTracks with slices as the map is created.
+// Fill in imgTracks with slices as the map is created.
 return imgBox;
 }
 
@@ -722,10 +756,10 @@ return NULL;
 //return slRemoveEl(&(imgBox->images),img);
 //}
 
-struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,boolean reorderable)
+struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
 /* Adds an imgTrack to an imgBox.  The imgTrack needs to be extended with imgTrackAddSlice() */
 {
-struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,reorderable);
+struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
 slAddHead(&(imgBox->imgTracks),imgTrack);
 return imgBox->imgTracks;
 }
@@ -742,27 +776,39 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
     }
 return NULL;
 }
-struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,boolean reorderable)
+struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
 /* Find the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
-    imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,reorderable);
+    imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
 return imgTrack;
-}
-struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,boolean reorderable)
+} struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
 /* Updates the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
-    return imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,reorderable);
+    return imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
 
-return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,reorderable);
+return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
 }
 //boolean imgBoxTrackRemove(struct imgBox *imgBox,struct imgTrack *imgTrack)
 //{
 //return slRemoveEl(&(imgBox->imgTracks),imgTrack);
 //}
+
+void imgBoxTracksNormalizeOrder(struct imgBox *imgBox)
+/* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
+{
+slSort(&(imgBox->imgTracks), imgTrackOrderCmp);
+struct imgTrack *imgTrack = NULL;
+int lastOrder = 0;
+for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
+    {
+    if(imgTrack->reorderable)
+        imgTrack->order = ++lastOrder;
+    }
+}
 
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose)
 /* Tests the completeness and consistency of an imgBox. */
@@ -820,8 +866,12 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
     if(!imgTrackIsComplete(imgTrack,verbose))
         {
         if (verbose)
-            warn("imgBox(%s.%s:%d-%d) has bad track",imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
-        return FALSE;
+            warn("imgBox(%s.%s:%d-%d) has bad track - being skipped.",imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
+        slRemoveEl(&(imgBox->imgTracks),imgTrack);
+        imgTrackFree(&imgTrack);
+        imgTrack = imgBox->imgTracks; // start over
+        continue;
+        //return FALSE;
         }
     if(differentWord(imgTrack->db,           imgBox->db)
     || differentWord(imgTrack->chrom,        imgBox->chrom)
@@ -917,6 +967,8 @@ hPrintf("</MAP>\n");
 void sliceAndMapDraw(struct imgSlice *slice,char *name)
 /* writes a slice of an image and any assocated image map as HTML */
 {
+if(slice==NULL || slice->height == 0)
+    return;
 hPrintf("<div style='width:%dpx; height:%dpx; overflow:hidden;'",slice->width,slice->height);
 if(slice->type==isData)
     hPrintf(" class='panDiv'");
@@ -952,8 +1004,10 @@ if(!imgBoxIsComplete(imgBox,TRUE))
 char name[128];
 
 // TODO: Add in sorting
-if(differentStringNullOk(imgBox->imgTracks->name,RULER_TRACK_NAME))
-    slReverse(&(imgBox->imgTracks));
+//if(differentStringNullOk(imgBox->imgTracks->name,RULER_TRACK_NAME))
+//    slReverse(&(imgBox->imgTracks));
+imgBoxTracksNormalizeOrder(imgBox);
+
 
 hPrintf("<!--------------- IMAGEv2 ---------------->\n");
 //commonCssStyles();
@@ -992,6 +1046,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
     // Main/Data image region
     hPrintf("<TD id='td_data_%s' width=%d>\n", trackName, imgBox->portalWidth);
+    hPrintf("<input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
     // centerLabel
     if(imgTrack->showCenterLabel)
         {

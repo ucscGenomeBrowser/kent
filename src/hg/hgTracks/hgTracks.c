@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1577 2009/06/26 20:24:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1578 2009/06/27 20:12:07 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1573,6 +1573,8 @@ int sideSliceOffsetX = 0;
 int dataSliceOffsetX = 0;
 int sliceHeight  = 0;
 int sliceOffsetY = 0;
+char *rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
+char *sideTtl  = "Drag to reorder tracks";
 #endif//def IMAGEv2_UI
 
 if (rulerMode != tvFull)
@@ -1685,8 +1687,8 @@ else
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     #ifdef IMAGEv2_UI
     // Adds one single image for all tracks (TODO: build the track by track images)
-    theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,
-        (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
+    theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,
+       // (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
         pixWidth, pixHeight,FALSE);
     //curMap = imgMapStart(theOneImg,"theOne",NULL); // No common linkRoot (TODO: Drop image map in favor of slice maps)
     #endif//def IMAGEv2_UI
@@ -1728,10 +1730,10 @@ if (withLeftLabels && psOutput == NULL)
             height += rulerTranslationHeight;
         #ifdef IMAGEv2_UI
             {
-            // Start Track, Add slice and start mapping the slice
+            // Mini-buttons (side label slice) for ruler
             sliceHeight      = height + 1;
             sliceOffsetY     = 0;
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,FALSE); // No tdb, no centerlabel, not reorderable
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel, not reorderable
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
@@ -1763,10 +1765,10 @@ if (withLeftLabels && psOutput == NULL)
             if (track->hasUi)
                 {
                 #ifdef IMAGEv2_UI
-                // Start Track, Add slice and start mapping the slice
+                // Mini-buttons (side label slice) for tracks
                 sliceHeight      = h;
                 sliceOffsetY     = yStart;
-                curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+                curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
                 #endif//def IMAGEv2_UI
@@ -1791,10 +1793,10 @@ if (withLeftLabels)
         {
         #ifdef IMAGEv2_UI
             {
-            // Start Track, Add slice and start mapping the slice
+            // side label slice for ruler
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
             sliceOffsetY     = 0;
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,FALSE); // No tdb, no centerlabel,not reorderable
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel,not reorderable
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
@@ -1858,13 +1860,14 @@ if (withLeftLabels)
             continue;
         #ifdef IMAGEv2_UI
             {
+            // side label slice for tracks
             // FIXME: Notice I am treating all subtracks as indivisible from their composite
             // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
             // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,sideTtl,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
         #endif//def IMAGEv2_UI
@@ -1919,10 +1922,11 @@ if (rulerMode != tvHide)
     {
     #ifdef IMAGEv2_UI
         {
+        // data slice for ruler
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
         sliceOffsetY     = 0;
-        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,FALSE); // No tdb, no centerlabel,not reorderable
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel,not reorderable
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,rulerTtl,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
         curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
         }
     #endif//def IMAGEv2_UI
@@ -2146,12 +2150,13 @@ if (withCenterLabels)
         #ifdef IMAGEv2_UI
         //if (isWithCenterLabels(track))  // NOTE: Since track may not have centerlabel but subtrack may (How?), then must always make this slice!
             {
+            // center label slice of tracks
             // FIXME: Notice I am treating all subtracks as indivisible from their composite
             // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
             // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isCenter,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
@@ -2162,6 +2167,7 @@ if (withCenterLabels)
                 y = doCenterLabels(track, track, hvg, font, y) - track->height; /* subtrack heights tallied below: */
             #ifdef IMAGEv2_UI
                 {
+                // Special case: data slice of tracks
                 // FIXME: This special case allows the subtrack center label map items to be put into the data slice
                 // When subtracks are carved up into individual imgTracks, then this will not be necessary
                 sliceHeight      = trackPlusLabelHeight(track, fontHeight) - fontHeight;
@@ -2199,14 +2205,22 @@ if (withCenterLabels)
                 continue;
         #ifdef IMAGEv2_UI
             {
+            // data slice of tracks
             // FIXME: Notice I am treating all subtracks as indivisible from their composite
             // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
             // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = trackPlusLabelHeight(track, fontHeight) - (isWithCenterLabels(track) ? fontHeight : 0);
             sliceOffsetY     = y + (isWithCenterLabels(track) ? fontHeight : 0);
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            char var[128];
+            safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
+            int order = cartUsualInt(cart, var,IMG_ANYORDER);
+            //warn("Found:%s has order:%d",var,order);
+            curImgTrack = imgBoxTrackUpdateOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),order);
+            if(sliceHeight > 0)
+                {
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+                curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                }
             }
         #endif//def IMAGEv2_UI
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
@@ -2236,13 +2250,14 @@ if (withLeftLabels)
             continue;
     #ifdef IMAGEv2_UI
         {
+        // side label slice of tracks
         // FIXME: Notice I am treating all subtracks as indivisible from their composite
         // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
         // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
         sliceHeight      = trackPlusLabelHeight(track, fontHeight);
         sliceOffsetY     = y;
-        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),TRUE);
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,sideTtl,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
         curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
         }
     #endif//def IMAGEv2_UI
