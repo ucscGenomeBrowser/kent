@@ -3894,9 +3894,10 @@ dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
+canPack On
 visibilityViewDefaults  SimpleSignal=pack
 priority 0
-type bed 3
+type broadPeak
 wgEncode 1
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Caco2

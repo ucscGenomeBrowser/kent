@@ -1,4 +1,40 @@
-<H2>Overview</H2>
+<H2>Description</H2>
+<P>
+This track is produced as part of the ENCODE Project.
+This track displays human tissue microarray data using
+<A HREF="http://www.affymetrix.com/products/arrays/specific/exon.affx" 
+TARGET=_blank>Affymetrix Human Exon 1.0</A> GeneChip.  The track 
+The overall goal of the ENCODE project is to identify and characterize
+all functional elements in the sequence of the human genome. 
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+The display for this track are grayscale-colored items where higher
+signal values correspond to darker-colored blocks.  Items with score of 1000
+are in the highest 10% quantile for signal value of that particular cell type.
+Similarly, items scoring 900 are the next 10% quantile and at the bottom of
+scale, items scoring 100 are in the lowest 10% quantile for signal value.
+</P>
+<P>The subtracks within this composite annotation track correspond to data from 
+different cell types and tissues.  The graphical configuration options are 
+shown at the top of the track description page, followed by a list of 
+subtracks. To 
+display only selected subtracks, uncheck the boxes next to the tracks you 
+wish to 
+hide.
+<DL>
+<DT><I>SimpleSignal</I>
+<DD>Probe location and signal value.
+</DL>
+</P>
+<P>
+For information regarding specific microarray probes, turn on the 
+<B>Affy Exon Probes</B> track, which can be found inside the 
+<B>Affy Exon</B> supertrack in the &quot;Expression&quot; track group.
+</P>
+
+<H2>Methods</H2>
 <P>
 At cell harvest, a subset of cells was stored at -20 degrees C in RNALater.
 Total RNA from 5 X 10^6 cells were purified using Ribopure (Ambion) according
@@ -15,8 +51,6 @@ ExACT 1.2.1 software) and the gene level (Affymetrix Expression Console 1.1
 software).  Samples were quantile normalized with PM-GCBG background correction
 and PLIER (Probe Logarithmic Intensity Error) summarized. 
 </P>
-
-<H2>Methods</H2>
 <P>
 Cells were grown according to the approved ENCODE cell culture protocols. A
 subset of the cells was stored frozen in RNALater.  Total RNA was labeled and
@@ -26,8 +60,7 @@ Expression Console 1.1 software tools. Samples were quantile normalized for
 background correction and Probe Logarithmic Intensity Error summarized. 
 </P>
 
-<H2>Verification</H2>
-
+<H3>Verification</H3>
 <P>
 Data were verified by sequencing biological replicates displaying correlation
 coefficient >0.9.
