@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.6 2009/06/27 19:22:24 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.7 2009/06/27 22:07:43 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -359,17 +359,16 @@ bbiWriteFloat(f, sum->sumSquares);
 
 /* Fold summary info into pTwiceReducedList. */
 struct bbiSummary *twiceReduced = *pTwiceReducedList;
-if (twiceReduced == NULL || twiceReduced->chromId != sum->chromId || twiceReduced->end < sum->end)
+if (twiceReduced == NULL || twiceReduced->chromId != sum->chromId || twiceReduced->start + doubleReductionSize < sum->end)
     {
     lmAllocVar(lm, twiceReduced);
-    twiceReduced->chromId = sum->chromId;
-    twiceReduced->start = sum->start;
-    twiceReduced->end = twiceReduced->start + doubleReductionSize;
-    if (twiceReduced->end > chromSize) twiceReduced->end = chromSize;
+    *twiceReduced = *sum;
     slAddHead(pTwiceReducedList, twiceReduced);
+    // uglyf("new twiceReduced %d:%d-%d valid %d, ave %f\n", sum->chromId, sum->start, sum->end, sum->validCount, (double)sum->sumData/sum->validCount);
     }
 else
     {
+    twiceReduced->end = sum->end;
     twiceReduced->validCount += sum->validCount;
     if (sum->minVal < twiceReduced->minVal) twiceReduced->minVal = sum->minVal;
     if (sum->maxVal < twiceReduced->maxVal) twiceReduced->maxVal = sum->maxVal;
@@ -585,7 +584,8 @@ if (minDiff > 0)
     int maxReducedSize = dataSize/2;
     int initialReduction = 0, initialReducedCount = 0;
     uglyf("minDiff %d\n", minDiff);
-    lineFileRewind(lf);
+
+    /* Figure out initialReduction for zoom. */
     for (resTry = 0; resTry < resTryCount; ++resTry)
 	{
 	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
@@ -597,12 +597,13 @@ if (minDiff > 0)
 	    break;
 	    }
 	}
-    uglyf("initialReduction %d\n", initialReduction);
+    uglyf("initialReduction %d, initialReducedCount = %d\n", initialReduction, initialReducedCount);
 
     if (initialReduction > 0)
         {
 	struct lm *lm = lmInit(0);
 	bits64 zoomStartData, zoomStartIndex;
+	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
@@ -615,17 +616,19 @@ if (minDiff > 0)
 	while (zoomLevels < maxZoomLevels)
 	    {
 	    int rezoomCount = slCount(rezoomedList);
-	    uglyf("%d in rezoomedList\n", rezoomCount);
+	    uglyf("%d in rezoomedList, reduction=%d\n", rezoomCount, reduction);
 	    if (rezoomCount >= zoomCount)
 	        break;
-	    ++zoomLevels;
 	    zoomCount = rezoomCount;
 	    zoomDataOffsets[zoomLevels] = ftell(f);
 	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
 	    	blockSize, itemsPerSlot, f);
 	    zoomAmounts[zoomLevels] = reduction;
+	    ++zoomLevels;
 	    reduction *= resIncrement;
+#ifdef SOON
 	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
+#endif /* SOON */
 	    }
 	lmCleanup(&lm);
 	}
@@ -651,8 +654,10 @@ for (i=0; i<8; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers with data. */
+verbose(2, "Writing %d levels of zoom\n", zoomLevels);
 for (i=0; i<zoomLevels; ++i)
     {
+    verbose(3, "zoomAmounts[%d] = %d\n", i, (int)zoomAmounts[i]);
     writeOne(f, zoomAmounts[i]);
     writeOne(f, reserved32);
     writeOne(f, zoomDataOffsets[i]);
