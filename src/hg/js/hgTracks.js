@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.28 2009/06/26 23:35:15 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.29 2009/06/27 20:10:53 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -238,6 +238,17 @@ function setAllTrackGroupVisibility(newState)
     return false;
 }
 
+function imgTblSetOrder(table)
+{
+// Sets the 'order' value for the image table after a drag reorder
+    $("input[name$='_imgOrd']").each(function (i) {
+        var tr = $(this).parents('tr');
+        if($(this).val() != $(tr).attr('rowIndex')) {
+            //alert('Reordered '+$(this).val() + " to "+$(tr).attr('rowIndex'));
+            $(this).val($(tr).attr('rowIndex'));
+        }
+    });
+}
 $(document).ready(function()
 {
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
@@ -245,8 +256,14 @@ $(document).ready(function()
         if(startDragZoom != null)
             return false;
         var thisForm=$(this).parents('form');
-        if(thisForm != undefined && thisForm.length == 1)
+        if(thisForm == undefined || $(thisForm).length == 0)
+            thisForm=$("FORM");
+        if($(thisForm).length > 1)
+            thisForm=$(thisForm)[0];
+        if(thisForm != undefined && $(thisForm).length == 1) {
+            //alert("posting form:"+$(thisForm).attr('name'));
             return postTheForm($(thisForm).attr('name'),this.href);
+        }
 
         return true;
     });
@@ -256,7 +273,12 @@ $(document).ready(function()
         if($(".tableWithDragAndDrop").length > 0) {
             $(".tableWithDragAndDrop").tableDnD({
                 onDragClass: "trDrag",
-                dragHandle: "dragHandle"
+                dragHandle: "dragHandle",
+                onDrop: function(table, row) {
+                        if(imgTblSetOrder) {
+                            imgTblSetOrder(table);
+                        }
+                    }
                 });
         }
 
@@ -264,7 +286,7 @@ $(document).ready(function()
         //$(".panDivScroller").panImages($(".panDivScroller").width(),0,0);
 
         // Temporary warning while new imageV2 code is being worked through
-        if($('#map').children().length > 0) {
+        if($('#map').children("AREA").length > 0) {
             alert('Using imageV2, but old map is not empty!');
         }
     }
