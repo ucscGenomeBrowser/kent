@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.7 2009/06/27 22:07:43 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.8 2009/06/28 00:09:27 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -334,8 +334,8 @@ void outputOneSummaryFurtherReduce(struct bbiSummary *sum, struct bbiSummary **p
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */
 {
-uglyf("outputOneSummaryFurtherReduce(%u:%d-%d valid %d, min %f, max %f, ave %f\n",
-	sum->chromId, sum->start, sum->end, sum->validCount, sum->minVal, sum->maxVal, sum->sumData/sum->validCount);
+// uglyf("outputOneSummaryFurtherReduce(%u:%d-%d valid %d, min %f, max %f, ave %f\n", sum->chromId, sum->start, sum->end, sum->validCount, sum->minVal, sum->maxVal, sum->sumData/sum->validCount);
+
 /* Get place to store file offset etc and make sure we have not gone off end. */
 struct boundsArray *bounds = *pBoundsPt;
 assert(bounds < boundsEnd);
@@ -379,14 +379,14 @@ else
 
 struct bbiSummary *writeReducedOnceReturnReducedTwice(struct chromUsage *usageList, 
 	struct lineFile *lf, int initialReduction, int initialReductionCount, 
-	int resIncrement, int blockSize, int itemsPerSlot, 
+	int zoomIncrement, int blockSize, int itemsPerSlot, 
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
  * next reduction level.  This is more work than some ways, but it keeps us from having to
  * keep the first reduction entirely in memory. */
 {
 struct bbiSummary *twiceReducedList = NULL;
-bits32 doubleReductionSize = initialReduction * resIncrement;
+bits32 doubleReductionSize = initialReduction * zoomIncrement;
 struct chromUsage *usage = usageList;
 struct bbiSummary oneSummary, *sum = NULL;
 int outCount = 0;
@@ -494,9 +494,13 @@ struct bbiSummary *simpleReduce(struct bbiSummary *list, int reduction, struct l
 /* Do a simple reduction - where among other things the reduction level is an integral
  * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
 {
-struct bbiSummary *newList = NULL, *sum, *newSum = NULL;
-for (sum = list; sum != NULL; sum = sum->next)
+struct bbiSummary *newList = NULL, *sum, *newSum = NULL, *next;
+for (sum = list; sum != NULL; sum = next)
     {
+    next = sum->next;
+    if (next != NULL && sum->chromId == next->chromId)
+        if (sum->start > next->start)
+	    internalErr();
     if (newSum == NULL || newSum->chromId != sum->chromId || sum->end > newSum->start + reduction)
         {
 	lmAllocVar(lm, newSum);
@@ -539,7 +543,7 @@ writeDummyZooms(f);
 bits64 chromTreeOffset = ftell(f);
 writeChromInfo(usageList, blockSize, f);
 
-/* Set up to keep track of reduction levels. */
+/* Set up to keep track of possible initial reduction levels. */
 int resTryCount = 10, resTry;
 int resIncrement = 4;
 int resScales[resTryCount], resSizes[resTryCount];
@@ -602,6 +606,7 @@ if (minDiff > 0)
     if (initialReduction > 0)
         {
 	struct lm *lm = lmInit(0);
+	int zoomIncrement = 4;
 	bits64 zoomStartData, zoomStartIndex;
 	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
@@ -612,7 +617,7 @@ if (minDiff > 0)
 	zoomLevels = 1;
 
 	int zoomCount = initialReducedCount;
-	int reduction = initialReduction * resIncrement;
+	int reduction = initialReduction * zoomIncrement;
 	while (zoomLevels < maxZoomLevels)
 	    {
 	    int rezoomCount = slCount(rezoomedList);
@@ -625,15 +630,15 @@ if (minDiff > 0)
 	    	blockSize, itemsPerSlot, f);
 	    zoomAmounts[zoomLevels] = reduction;
 	    ++zoomLevels;
-	    reduction *= resIncrement;
-#ifdef SOON
+	    reduction *= zoomIncrement;
 	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
-#endif /* SOON */
 	    }
 	lmCleanup(&lm);
 	}
 
     }
+
+// zoomLevels = 1;	// ugly
 
 /* Go back and rewrite header. */
 rewind(f);
