@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.8 2009/06/28 00:09:27 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.9 2009/06/28 00:14:25 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -494,13 +494,9 @@ struct bbiSummary *simpleReduce(struct bbiSummary *list, int reduction, struct l
 /* Do a simple reduction - where among other things the reduction level is an integral
  * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
 {
-struct bbiSummary *newList = NULL, *sum, *newSum = NULL, *next;
-for (sum = list; sum != NULL; sum = next)
+struct bbiSummary *newList = NULL, *sum, *newSum = NULL;
+for (sum = list; sum != NULL; sum = sum->next)
     {
-    next = sum->next;
-    if (next != NULL && sum->chromId == next->chromId)
-        if (sum->start > next->start)
-	    internalErr();
     if (newSum == NULL || newSum->chromId != sum->chromId || sum->end > newSum->start + reduction)
         {
 	lmAllocVar(lm, newSum);
@@ -509,6 +505,7 @@ for (sum = list; sum != NULL; sum = next)
 	}
     else
         {
+	assert(newSum->end < sum->end);	// enforce sorting
 	newSum->end = sum->end;
 	newSum->validCount += sum->validCount;
 	if (newSum->minVal > sum->minVal) newSum->minVal = sum->minVal;
