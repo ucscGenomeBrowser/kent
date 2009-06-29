@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1578 2009/06/27 20:12:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1579 2009/06/29 18:14:46 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1709,10 +1709,10 @@ leftLabelWidth = insideX - gfxBorder*3;
 if (withLeftLabels)
     {
     sideSliceWidth   = leftLabelWidth + 2;   // Just being explicit
-    sideSliceOffsetX = 0;                        // FIXME: Reverse?
+    sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
     }
 dataSliceWidth   = tl.picWidth - sideSliceWidth;
-dataSliceOffsetX = sideSliceWidth;               // FIXME: Reverse?
+dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
 #endif//def IMAGEv2_UI
 
 /* Draw mini-buttons. */
@@ -2211,7 +2211,7 @@ if (withCenterLabels)
             // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
             sliceHeight      = trackPlusLabelHeight(track, fontHeight) - (isWithCenterLabels(track) ? fontHeight : 0);
             sliceOffsetY     = y + (isWithCenterLabels(track) ? fontHeight : 0);
-            char var[128];
+            char var[128];     // FIXME: The cart var should update the tracks and the sort should be on the tracks.  This would allow printing the image
             safef(var,sizeof(var),"%s_%s",track->tdb->tableName,IMG_ORDER_VAR);
             int order = cartUsualInt(cart, var,IMG_ANYORDER);
             //warn("Found:%s has order:%d",var,order);

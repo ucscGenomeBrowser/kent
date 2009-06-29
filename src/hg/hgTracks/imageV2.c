@@ -45,7 +45,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.2 2009/06/27 20:12:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.3 2009/06/29 18:15:03 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -173,9 +173,9 @@ boolean mapItemConsistentWithImage(struct mapItem *item,struct image *img,boolea
 /* Test whether a map item is consistent with the image it is supposed to be for */
 {
 if ((item->topLeftX     < 0 || item->topLeftX     >= img->width)
-||  (item->bottomRightX < 0 || item->bottomRightX >  img->width  || item->bottomRightX <= item->topLeftX)
+||  (item->bottomRightX < 0 || item->bottomRightX >  img->width  || item->bottomRightX < item->topLeftX)
 ||  (item->topLeftY     < 0 || item->topLeftY     >= img->height)
-||  (item->bottomRightY < 0 || item->bottomRightY >  img->height || item->bottomRightY <= item->topLeftY))
+||  (item->bottomRightY < 0 || item->bottomRightY >  img->height || item->bottomRightY < item->topLeftY))
     {
     if (verbose)
         warn("mapItem has coordinates (topX:%d topY:%d botX:%d botY:%d) outside of image (width:%d height:%d)",
@@ -1063,7 +1063,8 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     if(imgBox->showSideLabel && !imgTrack->plusStrand)
         {
         safef(name, sizeof(name), "right_%s", trackName);
-        hPrintf("<TD id='td_%s'>\n", name);
+        hPrintf("<TD id='td_%s'%s>\n", name,
+            (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
         sliceAndMapDraw(imgTrackSliceGetByType(imgTrack,isSide), name);
         hPrintf("</TD>");
         }
