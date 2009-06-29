@@ -2097,3 +2097,102 @@ mv wgEncodeYaleChIPseqSignalNb4Input.bedGraph4.gz wgEncodeYaleChIPseqRel2SignalN
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 372 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 374 displayed
 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 371 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 377 displayed
+
+Fix nightly chron job output 2009-06-16
+=======================================
+hg18.wgEncodeYaleChIPseqSignalK562Ifna30Cmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna30Input has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna6hInput has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng30Input has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng6hInput has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalNt2d1Input has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna30Stat1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna6hCjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna6hCmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna6hStat1 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifna6hStat2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng6hCjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng6hCmyc has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng6hPol2 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2bInput has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalHepg2bTr4 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Ifng30Cjun has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562bInput has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562bE2f6 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562bSetdb1 has 1 records with end > chromSize.
+
+select t2.size,t1.chrom,t1.chromEnd from wgEncodeYaleChIPseqSignalK562Ifna30Stat1 t1,chromInfo t2 where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+| 158821424 | chr7  | 158821429 |
+
+update wgEncodeYaleChIPseqSignalHepg2bTr4 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 4  Changed: 4  Warnings: 0
+update wgEncodeYaleChIPseqSignalHepg2bInput t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 2  Changed: 2  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna30Cmyc t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 4  Changed: 4  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna30Stat1 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 1  Changed: 1  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna30Input t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 4  Changed: 4  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna6hCjun t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 3  Changed: 3  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna6hCmyc t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 2  Changed: 2  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna6hStat1 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 2  Changed: 2  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna6hStat2 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 1  Changed: 1  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifna6hInput t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 4  Changed: 4  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifng30Cjun t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 3  Changed: 3  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifng30Input t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 1  Changed: 1  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifng6hCjun t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 2  Changed: 2  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifng6hCmyc t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 4  Changed: 4  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifng6hPol2 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 2  Changed: 2  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562Ifng6hInput t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 3  Changed: 3  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562bE2f6 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 3  Changed: 3  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562bSetdb1 t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 3  Changed: 3  Warnings: 0
+update wgEncodeYaleChIPseqSignalK562bInput t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 4  Changed: 4  Warnings: 0
+update wgEncodeYaleChIPseqSignalNt2d1Input t1,chromInfo t2 set t1.chromEnd = t2.size where t1.chrom = t2.chrom and t1.chromEnd > t2.size;
+Rows matched: 2  Changed: 2  Warnings: 0
+
+New submissions 2009-06-24
+==========================
+# Fix my screwup in doEncodeValidate.pl
+rename table wgEncodeYaleChIPseqSignalK562bTr4V         to wgEncodeYaleChIPseqSignalK562bTr4;
+rename table wgEncodeYaleChIPseqPeaksK562bTr4V          to wgEncodeYaleChIPseqPeaksK562bTr4;
+rename table wgEncodeYaleChIPseqRawSignalRep2K562bTr4V  to wgEncodeYaleChIPseqRawSignalRep2K562bTr4;
+rename table wgEncodeYaleChIPseqRawSignalRep1K562bTr4V  to wgEncodeYaleChIPseqRawSignalRep1K562bTr4;
+
+mv wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1K562bTr4.tagAlign.gz
+mv wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2K562bTr4.tagAlign.gz
+mv wgEncodeYaleChIPseqPeaksK562bTr4V.narrowPeak.gz        wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
+mv wgEncodeYaleChIPseqRawDataRep1K562bTr4V.fastq.gz       wgEncodeYaleChIPseqRawDataRep1K562bTr4.fastq.gz
+mv wgEncodeYaleChIPseqRawDataRep2K562bTr4V.fastq.gz       wgEncodeYaleChIPseqRawDataRep2K562bTr4.fastq.gz
+mv wgEncodeYaleChIPseqSignalK562bTr4V.bedGraph4.gz        wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
+
+mv wgEncodeYaleChIPseqRawSignalRep1K562bTr4V.wib wgEncodeYaleChIPseqRawSignalRep1K562bTr4.wib
+mv wgEncodeYaleChIPseqRawSignalRep2K562bTr4V.wib wgEncodeYaleChIPseqRawSignalRep2K562bTr4.wib
+
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/380/wgEncodeYaleChIPseqRawSignalRep1K562bTr4.wib /gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalRep1K562bTr4.wib
+ln -sf /hive/groups/encode/dcc/pipeline/encpipeline_prod/380/wgEncodeYaleChIPseqRawSignalRep2K562bTr4.wib /gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalRep2K562bTr4.wib
+
+update wgEncodeYaleChIPseqRawSignalRep1K562bTr4 set file = "/gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalRep1K562bTr4.wib";
+update wgEncodeYaleChIPseqRawSignalRep2K562bTr4 set file = "/gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalRep2K562bTr4.wib";
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 380 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 383 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 384 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 385 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 386 displayed
