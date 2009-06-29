@@ -1375,4 +1375,13 @@ Pushed into QA 2009-06-02
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 328 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 336 reviewing
 
+Pushed Mapability into QA 2009-06-15
+====================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 104 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 344 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 345 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 104 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 344 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 345 reviewing
+
 
