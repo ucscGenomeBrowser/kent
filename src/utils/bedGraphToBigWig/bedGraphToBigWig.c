@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.11 2009/06/29 19:29:33 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.12 2009/06/29 19:52:25 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -215,7 +215,6 @@ void writeSections(struct chromUsage *usageList, struct lineFile *lf,
 struct chromUsage *usage = usageList;
 int itemIx = 0, sectionIx = 0;
 bits32 reserved32 = 0;
-bits16 reserved16 = 0;
 UBYTE reserved8 = 0;
 struct sectionItem items[itemsPerSlot];
 struct sectionItem *lastB = NULL;
@@ -392,7 +391,6 @@ struct bbiSummary *twiceReducedList = NULL;
 bits32 doubleReductionSize = initialReduction * zoomIncrement;
 struct chromUsage *usage = usageList;
 struct bbiSummary oneSummary, *sum = NULL;
-int outCount = 0;
 struct boundsArray *boundsArray, *boundsPt, *boundsEnd;
 boundsPt = AllocArray(boundsArray, initialReductionCount);
 boundsEnd = boundsPt + initialReductionCount;
@@ -529,8 +527,7 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
 int minDiff, i;
-bits64 totalDiff, diffCount;
-struct chromUsage *usage, *usageList = readPass1(lf, chromSizesHash, &minDiff);
+struct chromUsage *usageList = readPass1(lf, chromSizesHash, &minDiff);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 
@@ -608,7 +605,6 @@ if (minDiff > 0)
         {
 	struct lm *lm = lmInit(0);
 	int zoomIncrement = 4;
-	bits64 zoomStartData, zoomStartIndex;
 	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		lf, initialReduction, initialReducedCount,
