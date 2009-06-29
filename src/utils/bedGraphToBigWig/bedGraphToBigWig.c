@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.10 2009/06/29 18:04:42 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.11 2009/06/29 19:29:33 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -173,7 +173,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
     {
     int countOne = (usage->itemCount + itemsPerSlot - 1)/itemsPerSlot;
     count += countOne;
-    uglyf("%s %d, %d blocks of %d\n", usage->name, usage->itemCount, countOne, itemsPerSlot);
+    verbose(2, "%s %d, %d blocks of %d\n", usage->name, usage->itemCount, countOne, itemsPerSlot);
     }
 return count;
 }
@@ -339,7 +339,6 @@ void outputOneSummaryFurtherReduce(struct bbiSummary *sum, struct bbiSummary **p
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */
 {
-// uglyf("outputOneSummaryFurtherReduce(%u:%d-%d valid %d, min %f, max %f, ave %f\n", sum->chromId, sum->start, sum->end, sum->validCount, sum->minVal, sum->maxVal, sum->sumData/sum->validCount);
 
 /* Get place to store file offset etc and make sure we have not gone off end. */
 struct boundsArray *bounds = *pBoundsPt;
@@ -369,7 +368,6 @@ if (twiceReduced == NULL || twiceReduced->chromId != sum->chromId || twiceReduce
     lmAllocVar(lm, twiceReduced);
     *twiceReduced = *sum;
     slAddHead(pTwiceReducedList, twiceReduced);
-    // uglyf("new twiceReduced %d:%d-%d valid %d, ave %f\n", sum->chromId, sum->start, sum->end, sum->validCount, (double)sum->sumData/sum->validCount);
     }
 else
     {
@@ -454,7 +452,7 @@ for (;;)
      * loop handles all but the final affected summary in that case. */
     while (end > sum->end)
         {
-	uglyf("Splitting\n");
+	verbose(2, "Splitting\n");
 	/* Fold in bits that overlap with existing summary and output. */
 	bits32 overlap = rangeIntersection(start, end, sum->start, sum->end);
 	sum->validCount += overlap;
@@ -526,14 +524,14 @@ return newList;
 void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
 {
-uglyTime(NULL);
+verboseTime(2, NULL);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
 int minDiff, i;
 bits64 totalDiff, diffCount;
 struct chromUsage *usage, *usageList = readPass1(lf, chromSizesHash, &minDiff);
-uglyTime("pass1");
+verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 
 /* Write out dummy header, zoom offsets. */
@@ -570,14 +568,14 @@ AllocArray(boundsArray, sectionCount);
 lineFileRewind(lf);
 writeSections(usageList, lf, itemsPerSlot, boundsArray, sectionCount, f,
 	resTryCount, resScales, resSizes);
-uglyTime("pass2");
+verboseTime(2, "pass2");
 
 /* Write out primary data index. */
 bits64 indexOffset = ftell(f);
 cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), sectionCount,
     blockSize, 1, NULL, boundsArrayFetchKey, boundsArrayFetchOffset, 
     indexOffset, f);
-uglyTime("index write");
+verboseTime(2, "index write");
 
 /* Declare arrays and vars that track the zoom levels we actually output. */
 bits32 zoomAmounts[maxZoomLevels];
@@ -603,7 +601,8 @@ if (minDiff > 0)
 	    break;
 	    }
 	}
-    uglyf("initialReduction %d, initialReducedCount = %d\n", initialReduction, initialReducedCount);
+    verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
+    	initialReduction, initialReducedCount);
 
     if (initialReduction > 0)
         {
@@ -615,7 +614,7 @@ if (minDiff > 0)
 		lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
-	uglyTime("writeReducedOnceReturnReducedTwice");
+	verboseTime(2, "writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
 	zoomLevels = 1;
 
@@ -636,7 +635,7 @@ if (minDiff > 0)
 	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
 	    }
 	lmCleanup(&lm);
-	uglyTime("further reductions");
+	verboseTime(2, "further reductions");
 	}
 
     }
