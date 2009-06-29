@@ -18,7 +18,7 @@
 #include "binRange.h"
 #include "basicBed.h"
 
-static char const rcsid[] = "$Id: basicBed.c,v 1.1 2009/04/17 22:02:51 kent Exp $";
+static char const rcsid[] = "$Id: basicBed.c,v 1.2 2009/06/29 20:29:44 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1237,7 +1237,7 @@ if (bedFieldCount >= 7)
 if (bedFieldCount >= 8)
     dyStringAppend(dy, "   uint thickEnd;     \"End of where display should be thick (stop codon)\"\n");
 if (bedFieldCount >= 9)
-    dyStringAppend(dy, "   uint reserved;     \"Used as itemRgb as of 2004-11-22\"\n");
+    dyStringAppend(dy, "   string reserved;     \"Used as itemRgb as of 2004-11-22\"\n");
 if (bedFieldCount >= 10)
     dyStringAppend(dy, "   int blockCount;    \"Number of blocks\"\n");
 if (bedFieldCount >= 11)
