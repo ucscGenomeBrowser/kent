@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.9 2009/06/28 00:14:25 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.10 2009/06/29 18:04:42 kent Exp $";
 
 #define maxZoomLevels 10
 
@@ -106,7 +106,12 @@ for (;;)
         {
 	int diff = start - lastStart;
 	if (diff < minDiff)
+	    {
+	    if (diff < 0)
+		errAbort("%s is not sorted.  Please use \"sort -k1 -k2n\" or bedSort and try again.",
+		    lf->fileName);
 	    minDiff = diff;
+	    }
 	}
     lastStart = start;
     }
@@ -233,7 +238,7 @@ for (;;)
 	/* Figure out section position. */
 	bits32 chromId = usage->id;
 	bits32 sectionStart = items[0].start;
-	bits32 sectionEnd = items[itemIx-1].start;
+	bits32 sectionEnd = items[itemIx-1].end;
 
 	/* Save section info for indexing. */
 	assert(sectionIx < sectionCount);
@@ -505,7 +510,7 @@ for (sum = list; sum != NULL; sum = sum->next)
 	}
     else
         {
-	assert(newSum->end < sum->end);	// enforce sorting
+	assert(newSum->end < sum->end);	// check sorted input assumption
 	newSum->end = sum->end;
 	newSum->validCount += sum->validCount;
 	if (newSum->minVal > sum->minVal) newSum->minVal = sum->minVal;
@@ -521,15 +526,15 @@ return newList;
 void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
 {
+uglyTime(NULL);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
 int minDiff, i;
 bits64 totalDiff, diffCount;
 struct chromUsage *usage, *usageList = readPass1(lf, chromSizesHash, &minDiff);
+uglyTime("pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
-for (usage = usageList; usage != NULL; usage = usage->next)
-    uglyf("%s\t%d\n", usage->name, usage->itemCount);
 
 /* Write out dummy header, zoom offsets. */
 FILE *f = mustOpen(outName, "wb");
@@ -565,12 +570,14 @@ AllocArray(boundsArray, sectionCount);
 lineFileRewind(lf);
 writeSections(usageList, lf, itemsPerSlot, boundsArray, sectionCount, f,
 	resTryCount, resScales, resSizes);
+uglyTime("pass2");
 
 /* Write out primary data index. */
 bits64 indexOffset = ftell(f);
 cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), sectionCount,
     blockSize, 1, NULL, boundsArrayFetchKey, boundsArrayFetchOffset, 
     indexOffset, f);
+uglyTime("index write");
 
 /* Declare arrays and vars that track the zoom levels we actually output. */
 bits32 zoomAmounts[maxZoomLevels];
@@ -584,13 +591,11 @@ if (minDiff > 0)
     bits64 dataSize = indexOffset - dataOffset;
     int maxReducedSize = dataSize/2;
     int initialReduction = 0, initialReducedCount = 0;
-    uglyf("minDiff %d\n", minDiff);
 
     /* Figure out initialReduction for zoom. */
     for (resTry = 0; resTry < resTryCount; ++resTry)
 	{
 	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
-	uglyf("%d scale %d, size %d\n", resTry, resScales[resTry], resSizes[resTry]);
 	if (reducedSize <= maxReducedSize)
 	    {
 	    initialReduction = resScales[resTry];
@@ -610,6 +615,7 @@ if (minDiff > 0)
 		lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
+	uglyTime("writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
 	zoomLevels = 1;
 
@@ -618,7 +624,6 @@ if (minDiff > 0)
 	while (zoomLevels < maxZoomLevels)
 	    {
 	    int rezoomCount = slCount(rezoomedList);
-	    uglyf("%d in rezoomedList, reduction=%d\n", rezoomCount, reduction);
 	    if (rezoomCount >= zoomCount)
 	        break;
 	    zoomCount = rezoomCount;
@@ -631,6 +636,7 @@ if (minDiff > 0)
 	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
 	    }
 	lmCleanup(&lm);
+	uglyTime("further reductions");
 	}
 
     }
