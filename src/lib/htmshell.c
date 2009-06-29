@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.54 2009/06/29 17:28:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.55 2009/06/29 17:45:39 angie Exp $";
 
 jmp_buf htmlRecover;
 
@@ -201,7 +201,7 @@ return "<!-- HGERROR-END -->\n";
 
 #define WARNBOX_IN_USE
 #ifdef WARNBOX_IN_USE
-static void htmlWarnBoxSetup()
+static void htmlWarnBoxSetup(FILE *f)
 /* Creates an empty warning box than can be filled with errors and then made visible */
 {
 // NOTE: Making both IE and FF work is almost impossible.  Currently, in IE, if the message is forced to the top (calling this routine after <BODY> then the box is not
@@ -211,7 +211,7 @@ static void htmlWarnBoxSetup()
 #define WARNBOX_LINE2 "<CENTER><B style='text-decoration:blink; color:DarkRed;'>Warning(s):</CENTER></B><UL id='warnList'></UL><CENTER><input type='reset' value='OK' onclick='hideWarnBox();return false;'></CENTER></div></center>"
 #define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display='inline-block'; warnBox.style.width='auto';}}}"
 #define WARNBOX_HIDE  "function hideWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display='none';var warnList=document.getElementById('warnList'); warnList.innerHTML='';}}"
-printf("<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
+fprintf(f, "<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
 }
 #endif//ifdef WARNBOX_IN_USE
 
@@ -224,7 +224,7 @@ va_copy(argscp, args);
 static boolean noWarningsYet = TRUE;
 if(noWarningsYet)
     {
-    htmlWarnBoxSetup();
+    htmlWarnBoxSetup(stdout);
     noWarningsYet=FALSE;
     }
 
@@ -409,7 +409,7 @@ if (gotBgColor)
 fputs(">\n",f);
 
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup();// Sets up a warning box which can be filled with errors as they occur
+htmlWarnBoxSetup(f);// Sets up a warning box which can be filled with errors as they occur
 #endif//def WARNBOX_IN_USE
 }
 
@@ -552,7 +552,7 @@ else
     printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
 
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup();// Sets up a warning box which can be filled with errors as they occur
+htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
 #endif//def WARNBOX_IN_USE
 
 /* Call wrapper for error handling. */
