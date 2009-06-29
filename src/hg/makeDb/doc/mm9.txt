@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.99 2009/06/12 17:10:13 hartera Exp $"
+#	"$Id: mm9.txt,v 1.100 2009/06/29 23:19:15 angie Exp $"
 #
 
 #######################################################################
@@ -8232,20 +8232,22 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
-# JAX/MGI TRACKS (DONE 4/24/09 angie)
+# JAX/MGI TRACKS (DONE 6/11/09 angie)
+# Previously done 4/24/09 in /hive/data/genomes/mm9/bed/jax/2009_06 (not pushed)
 # Previously done 9/24/08 in /cluster/data/mm9/bed/jax/2008_09
-    mkdir -p /hive/data/genomes/mm9/bed/jax/2009_04
-    cd /hive/data/genomes/mm9/bed/jax/2009_04
+    mkdir -p /hive/data/genomes/mm9/bed/jax/2009_06
+    cd /hive/data/genomes/mm9/bed/jax/2009_06
     wget ftp://ftp.informatics.jax.org/pub/gbrowse/\*
     wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
+
     # Jax Rep Transcript track
     # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
     # -- names like AK016604_4933401J01Rik, NM_001011874_AY534250
     # -- aliases ~ MGI:\d+
     # Use simple perl script to uniquify transcript names and make alias.tab.
-    # Inspired by the mm6 version, but format has changed.
-    /cluster/data/mm8/bed/jax/2007_07/parseRepTranscript.pl \
-      SEQ_RepTransGenomic_rpt.gff \
+    # (Copied /hive/data/genomes/mm8/bed/jax/2007_07/parseRepTranscript.pl and
+    # modified to tweak a regex for tweaked name NR_027008_Gt(ROSA)26Sor_1)
+    ./parseRepTranscript.pl SEQ_RepTransGenomic_rpt.gff \
     | sed -e 's/^/chr/; s/chrMT/chrM/;' \
       > jaxRepTranscript.gff
 
@@ -8260,7 +8262,7 @@ see doc/builds.txt for specific details.
         | sed -e 's/AL_//; s/GTRAP/GeneTrapped/; s/IND/Induced/; \
             s/OTHER/Other/; s/SPON/Spontaneous/; s/TARG/Targeted/; \
             s/TRANS/Transgenic/;'`
-      /cluster/data/mm8/bed/jax//2007_09/parseAllele.pl $f \
+      /hive/data/genomes/mm8/bed/jax//2007_09/parseAllele.pl $f \
       | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
       | sed -e 's/^/chr/; s/$/'"\t$type"'/;' \
@@ -8306,7 +8308,7 @@ see doc/builds.txt for specific details.
                     s@Tumorigenesis@Tumorigenesis@; \
                     s@VisionEye@Vision/Eye@;'`
       echo $type
-      /cluster/data/mm8/bed/jax/2006_10/parsePhenotype.pl $f \
+      /hive/data/genomes/mm8/bed/jax/2006_10/parsePhenotype.pl $f \
       | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
       | sed -e 's/^/chr/; s@$@'"\t$type"'@;' \
@@ -8334,7 +8336,7 @@ see doc/builds.txt for specific details.
     cp /dev/null MP_0003012_no_phenotypic_analysis
     # Wrote a script to extract the phenotype-allele relationships --
     # it uses the filenames to map MP:* codes to our phenotype names.
-    /cluster/data/mm8/bed/jax/2007_07/parsePhenotypicAllele.pl \
+    /hive/data/genomes/mm8/bed/jax/2007_07/parsePhenotypicAllele.pl \
       MGI_PhenotypicAllele.rpt > jaxAllelePheno.tab
     # The file "err" has messages about missing data (no gene name in 
     # PhenotypicAllele.rpt, or gene/mgiId not found in jaxAlleleInfo).
@@ -8342,6 +8344,7 @@ see doc/builds.txt for specific details.
     # Load tables
     # jaxRepTranscript
     ldHgGene mm9 jaxRepTranscript jaxRepTranscript.gff
+#35313 gene predictions
     hgsql mm9 < fixJaxRepTranscript.sql
     sed -e 's/genericAlias/jaxRepTranscriptAlias/g' \
       ~/kent/src/hg/lib/genericAlias.sql > jaxRepTranscriptAlias.sql 
@@ -8351,6 +8354,7 @@ see doc/builds.txt for specific details.
     # jaxAllele
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       mm9 jaxAllele jaxAllele.bed
+#Loaded 15526 elements of size 13
     # fixJaxAllele.sql is empty so don't need to do this:
     # hgsql mm9 < fixJaxAllele.sql
     hgLoadSqlTab mm9 jaxAlleleInfo \
@@ -8358,6 +8362,7 @@ see doc/builds.txt for specific details.
     # jaxPhenotype
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       -tab mm9 jaxPhenotype jaxPhenotype.bed
+#Loaded 32061 elements of size 13
     # fixJaxPhenotype.sql is empty so don't need to do this:
     # hgsql mm9 < fixJaxPhenotype.sql
     sed -e 's/genericAlias/jaxPhenotypeAlias/' \
@@ -8369,6 +8374,7 @@ see doc/builds.txt for specific details.
       -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql \
       mm9 jaxQtl jaxQtl.bed
     checkTableCoords -verbose=2 mm9 jaxQtl
+#Loaded 1892 elements of size 10
 #mm9.jaxQtl item Ath13 chr14:51915898-165887941: chromEnd > chromSize 125194864
 #mm9.jaxQtl item Ity2 chr11:145756703-145756947: chromEnd > chromSize 121843856
     perl -wpe 's/^(\w+)\t(\d+)$/ \
@@ -8382,6 +8388,7 @@ see doc/builds.txt for specific details.
       ~/kent/src/hg/lib/jaxAllelePheno.sql jaxAllelePheno.tab
 
     # Check joiner:
+    runJoiner.csh mm9 jaxRepTranscript
     runJoiner.csh mm9 jaxAllele
     runJoiner.csh mm9 jaxPhenotype
 
