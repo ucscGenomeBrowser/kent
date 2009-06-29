@@ -63,7 +63,6 @@ DIRS = \
 	tfbsConsLoc \
 	tfbsConsSort \
 	outside \
-	genbank \
         trackDbRaFormat
 
 all: $(USE_DIRS:%=%.all)
