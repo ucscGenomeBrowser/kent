@@ -280,7 +280,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878Ctcf
     release alpha
-    subTrack wgEncodeBroadChipSeqf
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
@@ -1389,7 +1389,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeqf
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in K562 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=K562
