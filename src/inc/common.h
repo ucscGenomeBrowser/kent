@@ -287,7 +287,6 @@ void verbose(int verbosity, char *format, ...)
 __attribute__((format(printf, 2, 3)))
 #endif
     ;
-#define debugMsg(verbosity, format, args...)  { verbose(verbosity,"[%s(%d)::%s] ", __FILE__, __LINE__, __func__); verbose(verbosity, format, ##args); }
 
 void verboseTime(int verbosity, char *label, ...)
 /* Print label and how long it's been since last call.  Call with
