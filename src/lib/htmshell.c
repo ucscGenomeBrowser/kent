@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.53 2009/06/26 20:02:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.54 2009/06/29 17:28:18 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -233,6 +233,8 @@ vsnprintf(warning,sizeof(warning),format, args);
 // NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
 if( strSwapStrs(warning, sizeof(warning),"'","&#39;") == -1) // Sheild single quotes
     strSwapChar(warning,'\'','`');  // ran out of memory, replacing them with (`)
+if( strSwapStrs(warning, sizeof(warning),"\n","<BR>") == -1) // new lines also break the code
+    strSwapChar(warning,'\n',' ');  // ran out of memory, replacing them with ( )
 printf("<script type='text/javascript'>{var warnList=document.getElementById('warnList'); warnList.innerHTML += '<li>%s</li>'; showWarnBox();}</script>\n",warning);
 
 #else//ifndef WARNBOX_IN_USE
