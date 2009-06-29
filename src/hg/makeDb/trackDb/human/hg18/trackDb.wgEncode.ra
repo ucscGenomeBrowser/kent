@@ -270,7 +270,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878Ctcf
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
@@ -280,7 +280,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878Ctcf
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeqf
     shortLabel GM12878 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
@@ -331,7 +331,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=GM12878
@@ -341,7 +341,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=GM12878
@@ -392,7 +392,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=GM12878
@@ -402,7 +402,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=GM12878
@@ -453,7 +453,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=GM12878
@@ -463,7 +463,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=GM12878
@@ -514,7 +514,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
@@ -524,7 +524,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
@@ -575,7 +575,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in GM12878 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
@@ -585,7 +585,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in GM12878 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
@@ -636,7 +636,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in GM12878 cells)
     subGroups view=zRAW factor=H3K27ac cellType=GM12878
@@ -646,7 +646,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in GM12878 cells)
     subGroups view=zRAW factor=H3K27ac cellType=GM12878
@@ -697,7 +697,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
@@ -707,7 +707,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
@@ -758,7 +758,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878H3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
@@ -768,7 +768,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878H3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
@@ -810,7 +810,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1Gm12878Control
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 Control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Control in GM12878 cells)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
@@ -820,7 +820,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2Gm12878Control
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 Control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Control in GM12878 cells)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
@@ -1310,7 +1310,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562Ctcf
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in K562 cells)
     subGroups view=zRAW factor=CTCF cellType=K562
@@ -1320,7 +1320,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562Ctcf
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in K562 cells)
     subGroups view=zRAW factor=CTCF cellType=K562
@@ -1350,7 +1350,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in K562 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=K562
@@ -1360,7 +1360,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k4me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in K562 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=K562
@@ -1389,7 +1389,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeqf
     shortLabel K562 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in K562 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=K562
@@ -1399,7 +1399,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k4me2
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in K562 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=K562
@@ -1428,7 +1428,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in K562 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=K562
@@ -1438,7 +1438,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k4me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in K562 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=K562
@@ -1467,7 +1467,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in K562 cells)
     subGroups view=zRAW factor=H3K09ac cellType=K562
@@ -1477,7 +1477,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k9ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in K562 cells)
     subGroups view=zRAW factor=H3K09ac cellType=K562
@@ -1506,7 +1506,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in K562 cells)
     subGroups view=zRAW factor=H3K09me1 cellType=K562
@@ -1516,7 +1516,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k9me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in K562 cells)
     subGroups view=zRAW factor=H3K09me1 cellType=K562
@@ -1545,7 +1545,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in K562 cells)
     subGroups view=zRAW factor=H3K27ac cellType=K562
@@ -1555,7 +1555,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k27ac
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in K562 cells)
     subGroups view=zRAW factor=H3K27ac cellType=K562
@@ -1584,7 +1584,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in K562 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=K562
@@ -1594,7 +1594,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k27me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in K562 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=K562
@@ -1623,7 +1623,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in K562 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=K562
@@ -1633,7 +1633,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H3k36me3
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in K562 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=K562
@@ -1662,7 +1662,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562H4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in K562 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=K562
@@ -1672,7 +1672,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562H4k20me1
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in K562 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=K562
@@ -1701,7 +1701,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562Pol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in K562 cells)
     subGroups view=zRAW factor=Pol2b cellType=K562
@@ -1711,7 +1711,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562Pol2b
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in K562 cells)
     subGroups view=zRAW factor=Pol2b cellType=K562
@@ -1731,7 +1731,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep1K562Control
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 Control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (K562 control)
     subGroups view=zRAW factor=zCTRL cellType=K562
@@ -1741,7 +1741,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqRel2RawSignalRep2K562Control
     release alpha
-    subTrack wgEncodeBroadChipSeq off
+    subTrack wgEncodeBroadChipSeq
     shortLabel K562 Control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (K562 control)
     subGroups view=zRAW factor=zCTRL cellType=K562
@@ -8589,7 +8589,7 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqSignalK562bInput
     release alpha
-    subTrack wgEncodeYaleChIPseq off
+    subTrack wgEncodeYaleChIPseq
     shortLabel K562b Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input in K562b cells)
     subGroups view=Signal factor=zCTRL cellType=K562b
@@ -8599,7 +8599,7 @@ wgEncode 1
 
     track wgEncodeYaleChIPseqRawSignalK562bInput
     release alpha
-    subTrack wgEncodeYaleChIPseq off
+    subTrack wgEncodeYaleChIPseq
     shortLabel K562b Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Raw Signal (Input in K562b cells)
     subGroups view=zRAW factor=zCTRL cellType=K562b
@@ -10683,7 +10683,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=7 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2.wig.gz
 
 track wgEncodeHudsonalphaChipSeqProv
-# testing PROVISIONAL release of subtracks.  
+# testing PROVISIONAL release of subtracks.
 # these are subtracks that will be joined with above track at some point.
 compositeTrack on
 shortLabel HAIB TFBS
@@ -11418,13 +11418,13 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol    
+    shortLabel short K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 cytosol)
-    subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short    
+    subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence    
+    baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -11438,9 +11438,9 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (19-40 in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short19-40
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence    
+    baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -11454,9 +11454,9 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (40-60 in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short40-60
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence    
+    baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -11470,9 +11470,9 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (60-200 in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short60-200
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence    
+    baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     color 46,0,184
@@ -11486,7 +11486,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (nucleolus in K562 short)
     subGroups view=Alignments cellType=K562 localization=60-nucleolus rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11502,7 +11502,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (nucleus in K562 short)
     subGroups view=Alignments cellType=K562 localization=30-nucleus rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11517,7 +11517,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (nucleoplasm in K562 short)
     subGroups view=Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11532,7 +11532,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (polysome in K562 short)
     subGroups view=Alignments cellType=K562 localization=10-polysome rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11547,7 +11547,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (whole cell in Prostate short depl rRNA)
     subGroups view=Alignments cellType=prostate localization=0-cell rnaExtract=shortDeplRrna
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11562,7 +11562,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (whole cell in Prostate short)
     subGroups view=Alignments cellType=prostate localization=0-cell rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11577,7 +11577,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (cytosol in GM12878 short)
     subGroups view=Alignments cellType=GM12878 localization=20-cytosol rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11592,7 +11592,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (cytosol in GM12878 short depl rRNA)
     subGroups view=Alignments cellType=GM12878 localization=20-cytosol rnaExtract=shortDeplRrna
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11607,7 +11607,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (nucleus in GM12878 short depl rRNA)
     subGroups view=Alignments cellType=GM12878 localization=30-nucleus rnaExtract=shortDeplRrna
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
@@ -11622,7 +11622,7 @@ wgEncode 1
     longLabel ENCODE CSHL RNA-Seq Alignments (nucleus in GM12878 short)
     subGroups view=Alignments cellType=GM12878 localization=30-nucleus rnaExtract=short
     #type tagAlign
-    type bigBed 6    
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
