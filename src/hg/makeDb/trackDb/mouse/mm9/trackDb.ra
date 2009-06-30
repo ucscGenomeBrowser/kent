@@ -190,21 +190,6 @@ color 173,17,162
 type genePred
 
 track miRNA
-release beta
-shortLabel miRNA
-longLabel MicroRNAs from miRBase
-group genes
-priority 63
-visibility hide
-color 255,64,64
-useScore 1
-type bed 6 .
-html miRNAMay2008
-url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
-urlLabel miRBase:
-
-track miRNA
-release alpha
 shortLabel miRNA
 longLabel MicroRNAs from miRBase
 group genes
