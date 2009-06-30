@@ -1755,6 +1755,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.esRegGeneToModule.gene minCheck=0.94
     $sacCer.esRegGeneToMotif.gene minCheck=0.97
     $sacCer.esRegUpstreamRegion.name minCheck=0.96
+    $sacCer.sgdToPfam.name minCheck=0.55
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -3373,7 +3374,6 @@ tablesIgnored $sacCer
     2micron_gold
     2micron_gap
     sgdClone
-    sgdToPfam
     yeastP2P
     uwFootprintsMappability
     uwFootprintsPrints
