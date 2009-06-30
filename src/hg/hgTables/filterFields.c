@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.77 2009/06/17 16:49:03 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.78 2009/06/30 22:47:09 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -789,13 +789,78 @@ if (logOp == NULL)
 hPrintf("<TD>%s</TD></TR>\n", logOp);
 }
 
+static void printSqlFieldListAsControlTable(struct sqlFieldType *ftList, char *db, 
+	char *rootTable, struct trackDb *tdb, boolean isBedGr)
+/* Print out table of controls for fields. */
+{
+int fieldNum = 0;
+int bedGraphColumn = 5;		/*	default score column	*/
+int noBinBedGraphColumn = bedGraphColumn;
+boolean gotFirst = FALSE;
+struct sqlFieldType *ft;
+hPrintf("<TABLE BORDER=0>\n");
+for (ft = ftList; ft != NULL; ft = ft->next)
+    {
+    char *field = ft->name;
+    char *type = ft->type;
+    char *logic = "";
+
+    if ((0 == fieldNum) && (!sameWord(field,"bin")))
+	noBinBedGraphColumn -= 1;
+    if (!sameWord(type, "longblob"))
+	{
+	if (!gotFirst)
+	    gotFirst = TRUE;
+	else if (!isBedGr)
+	    logic = " AND ";
+	}
+    if (!isBedGr || (noBinBedGraphColumn == fieldNum))
+	{
+	if (isSqlEnumType(type) || isSqlSetType(type))
+	    {
+	    enumFilterOption(db, rootTable, field, type, logic);
+	    }
+	else if(isSqlIntType(type))
+	    {
+	    integerFilter(db, rootTable, field, field, logic);
+	    }
+	else if(isSqlNumType(type))
+	    {
+	    if(isBedGr)
+		{
+		double min, max;
+		double tDbMin, tDbMax;
+
+		wigFetchMinMaxLimits(tdb, &min, &max, &tDbMin, &tDbMax);
+		if (tDbMin < min)
+		    min = tDbMin;
+		if (tDbMax > max)
+		    max = tDbMax;
+		numericFilterWithLimits(db, rootTable, field, field, min, max, logic);
+		hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
+		    "</TD></TR>\n", field, min, max);
+		}
+	    else
+		{
+		numericFilter(db, rootTable, field, field, logic);
+		}
+	    }
+	else //if (isSqlStringType(type))
+	    {
+	    stringFilterOption(db, rootTable, field, logic);
+	    }
+	}
+    ++fieldNum;
+    }
+hPrintf("</TABLE>\n");
+}
+
 static void filterControlsForTableDb(char *db, char *rootTable)
 /* Put up filter controls for a single database table. */
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
-boolean gotFirst = FALSE;
 boolean isSmallWig = isWiggle(db, table);
 boolean isWig = isSmallWig || isBigWig(table);
 boolean isBedGr = isBedGraph(rootTable);
@@ -833,9 +898,7 @@ if (isWig)
     }
 else
     {
-    int fieldNum = 0;
-    int noBinBedGraphColumn = bedGraphColumn;
-    struct sqlFieldType *ft, *ftList;
+    struct sqlFieldType *ftList;
     if (hIsBigBed(database, table, curTrack, ctLookupName))
         {
         ftList = bigBedListFieldsAndTypes(table, conn);
@@ -844,61 +907,7 @@ else
         {
         ftList = sqlListFieldsAndTypes(conn, table);
         }
-    hPrintf("<TABLE BORDER=0>\n");
-    for (ft = ftList; ft != NULL; ft = ft->next)
-        {
-        char *field = ft->name;
-        char *type = ft->type;
-        char *logic = "";
-
-        if ((0 == fieldNum) && (!sameWord(field,"bin")))
-            noBinBedGraphColumn -= 1;
-        if (!sameWord(type, "longblob"))
-            {
-            if (!gotFirst)
-                gotFirst = TRUE;
-            else if (!isBedGr)
-                logic = " AND ";
-            }
-        if (!isBedGr || (noBinBedGraphColumn == fieldNum))
-            {
-            if (isSqlEnumType(type) || isSqlSetType(type))
-                {
-                enumFilterOption(db, rootTable, field, type, logic);
-                }
-            else if(isSqlIntType(type))
-                {
-                integerFilter(db, rootTable, field, field, logic);
-                }
-            else if(isSqlNumType(type))
-                {
-                if(isBedGr)
-                    {
-                    double min, max;
-                    double tDbMin, tDbMax;
-
-                    wigFetchMinMaxLimits(tdb, &min, &max, &tDbMin, &tDbMax);
-                    if (tDbMin < min)
-                        min = tDbMin;
-                    if (tDbMax > max)
-                        max = tDbMax;
-                    numericFilterWithLimits(db, rootTable, field, field, min, max, logic);
-                    hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
-                        "</TD></TR>\n", field, min, max);
-                    }
-                else
-                    {
-                    numericFilter(db, rootTable, field, field, logic);
-                    }
-                }
-            else //if (isSqlStringType(type))
-                {
-                stringFilterOption(db, rootTable, field, logic);
-                }
-            }
-        ++fieldNum;
-        }
-    hPrintf("</TABLE>\n");
+    printSqlFieldListAsControlTable(ftList, db, rootTable, tdb, isBedGr);
     }
 
 /* Printf free-form query row. */
@@ -960,6 +969,11 @@ else if (ct->wiggle)
         {
         numericFilter("ct", table, filterDataValueVar, filterDataValueVar,"");
         }
+    }
+else if (hIsBigBed(db, table, curTrack, ctLookupName))
+    {
+    struct sqlFieldType *ftList = bigBedListFieldsAndTypes(table, NULL);
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
 else
     {
