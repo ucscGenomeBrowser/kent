@@ -44,13 +44,16 @@ endif
 
 echo
 echo "Push request:"
-echo "Please push from dev-->hgdownload "
+echo "Please push from dev --> hgdownload "
 echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
 echo
-echo "Please also push the hgcentral/blatServers table"
-echo "from hgnfs1 to hgdownload."
-echo
 echo "reason: (describe here)"
+echo
+echo "NOTE:  If this is an update of hgcentral that is not part of a new"
+echo "build, also ask for the relevant tables to be pushed to hgdownload"
+echo "for mirror site access. For example:"
+echo "  Please also push the hgcentral/blatServers table"
+echo "  from hgnfs1 --> hgdownload."
 echo
 
 exit 0
