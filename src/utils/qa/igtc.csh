@@ -307,7 +307,7 @@ echo
 foreach i ( $counter )
   set extFileId[$i]=`hgsql -Ne "SELECT id FROM extFile WHERE name \
     LIKE 'genetrap.$update.fasta'" $mice[$i]`
-  echo "$mice[$i].extFileId = $extFileId[$i]"
+  echo "$mice[$i].extFile.id = $extFileId[$i]"
 end
 
 # compare counts with file counts
@@ -346,7 +346,7 @@ commTrio.csh $mice[2].seq.acc $mice[3].seq.acc
 echo "\n\n----------------------"
 echo "Creating files with the new rows from the extFile and seq tables \
   on dev"
-echo "(these rows will need to be moved to the approriate table on beta)\n"
+echo "(these rows will need to be moved to the appropriate table on beta)\n"
 
 foreach i ( $counter )
   hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId[$i]'" $mice[$i] \
@@ -498,7 +498,7 @@ wc -l *devOnly | grep -v total
 echo
 echo "beta"
 foreach i ( $counter )
-  hgsql -h '$sqlbeta' -Ne 'SELECT COUNT(*) FROM seq \
+  hgsql -h $sqlbeta -Ne 'SELECT COUNT(*) FROM seq \
     WHERE extFile = "'$extFileIdOld[$i]'"' $mice[$i]
 end
 wc -l *betaOnly | grep -v total
