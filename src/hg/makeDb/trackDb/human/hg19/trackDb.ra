@@ -412,11 +412,12 @@ html hg19ChainNet
 
     track netPanTro2
     release alpha
-    subTrack primateChainNet off
+    subTrack primateChainNet on 
     subGroups view=net species=aPanTro clade=aHom
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign panTro2 chainPanTro2
+    visibility dense
     otherDb panTro2
 
     track chainGorGor1
@@ -444,11 +445,12 @@ html hg19ChainNet
     otherDb ponAbe2
 
     track netPonAbe2
-    subTrack primateChainNet off
+    subTrack primateChainNet on 
     subGroups view=net species=cPonAbe clade=aHom
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign ponAbe2 chainPonAbe2
+    visibility dense
     otherDb ponAbe2
 
     track chainRheMac2
@@ -460,11 +462,12 @@ html hg19ChainNet
     otherDb rheMac2
 
     track netRheMac2
-    subTrack primateChainNet off
+    subTrack primateChainNet on 
     subGroups view=net species=dRheMac clade=bCerco
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign rheMac2 chainRheMac2
+    visibility dense
     otherDb rheMac2
 
     track chainPapHam1
@@ -540,11 +543,12 @@ html hg19ChainNet
     otherDb otoGar1
 
     track netOtoGar1
-    subTrack primateChainNet off
+    subTrack primateChainNet on
     subGroups view=net species=hOtoGar clade=dStrep
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign otoGar1 chainOtoGar1
+    visibility dense
     otherDb otoGar1
 
 track placentalChainNet
