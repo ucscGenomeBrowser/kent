@@ -6028,8 +6028,8 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLaIg30=HeLa-S3_IFN&gamma;_30min HepG2=HepG2 HepG2b=HepG2b_UCDavis K562=K562 K562b=K562b_UCDavis K562Ia30=K562_IFN&alpha;_30min K562Ia6=K562_IFN&alpha;_6hrs K562Ig30=K562_IFN&gamma;_30min K562Ig6=K562_IFN&gamma;_6hrs NB4=NB4 NT2D1=NT2-D1_(NTera2)
-subGroup3 factor Antibody BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 JUND=JunD MAX=Max NFE2=NF-E2 POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF4=TCF4 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zCTRL=Input_Control
+subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLaIg30=HeLa-S3_IFN&gamma;_30min HepG2=HepG2 HepG2b=HepG2b_UCDavis K562=K562 K562Ia30=K562_IFN&alpha;_30min K562Ia6=K562_IFN&alpha;_6hrs K562Ig30=K562_IFN&gamma;_30min K562Ig6=K562_IFN&gamma;_6hrs NB4=NB4 NT2D1=NT2-D1_(NTera2)
+subGroup3 factor Antibody BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 JUND=JunD MAX=Max NFE2=NF-E2 POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF4=TCF4 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(UCDavis) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -8360,7 +8360,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F4 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in K562b cells)
-    subGroups view=Peaks factor=E2F4 cellType=K562b
+    subGroups view=Peaks factor=E2F4 cellType=K562
     type narrowPeak
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F4 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=334 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bE2f4 fileName=wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
@@ -8370,7 +8370,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F4 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F4 in K562b cells)
-    subGroups view=Signal factor=E2F4 cellType=K562b
+    subGroups view=Signal factor=E2F4 cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F4 view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=334 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bE2f4 fileName=wgEncodeYaleChIPseqSignalK562bE2f4.bedGraph4.gz
@@ -8380,7 +8380,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F4 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (E2F4 in K562b cells)
-    subGroups view=zRAW factor=E2F4 cellType=K562b
+    subGroups view=zRAW factor=E2F4 cellType=K562
     type wig 1.00 947.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F4 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=334 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562bE2f4 fileName=wgEncodeYaleChIPseqRawSignalRep1K562bE2f4.wig.gz
@@ -8390,7 +8390,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F4 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (E2F4 in K562b cells)
-    subGroups view=zRAW factor=E2F4 cellType=K562b
+    subGroups view=zRAW factor=E2F4 cellType=K562
     type wig 1.00 5462.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F4 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=334 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562bE2f4 fileName=wgEncodeYaleChIPseqRawSignalRep2K562bE2f4.wig.gz
@@ -8400,7 +8400,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F6 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in K562b cells)
-    subGroups view=Peaks factor=E2F6 cellType=K562b
+    subGroups view=Peaks factor=E2F6 cellType=K562
     type narrowPeak
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F6 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=371 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bE2f6 fileName=wgEncodeYaleChIPseqPeaksK562bE2f6.narrowPeak.gz
@@ -8410,7 +8410,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F6 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in K562b cells)
-    subGroups view=Signal factor=E2F6 cellType=K562b
+    subGroups view=Signal factor=E2F6 cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F6 view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=371 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bE2f6 fileName=wgEncodeYaleChIPseqSignalK562bE2f6.bedGraph4.gz
@@ -8420,7 +8420,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F6 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (E2F6 in K562b cells)
-    subGroups view=zRAW factor=E2F6 cellType=K562b
+    subGroups view=zRAW factor=E2F6 cellType=K562
     type wig 1.00 5761.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F6 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=371 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562bE2f6 fileName=wgEncodeYaleChIPseqRawSignalRep1K562bE2f6.wig.gz
@@ -8430,7 +8430,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b E2F6 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (E2F6 in K562b cells)
-    subGroups view=zRAW factor=E2F6 cellType=K562b
+    subGroups view=zRAW factor=E2F6 cellType=K562
     type wig 1.00 3037.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=E2F6 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=371 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562bE2f6 fileName=wgEncodeYaleChIPseqRawSignalRep2K562bE2f6.wig.gz
@@ -8440,7 +8440,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b GATA-1 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562b cells)
-    subGroups view=Peaks factor=GATA1 cellType=K562b
+    subGroups view=Peaks factor=GATA1 cellType=K562
     type narrowPeak
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=GATA-1 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=404 submittedDataVersion=V2 dateSubmitted=2009-02-27 dateResubmitted=2009-06-30 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bGata1V2 fileName=wgEncodeYaleChIPseqPeaksK562bGata1V2.narrowPeak.gz
@@ -8450,7 +8450,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA1 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562 cells)
-    subGroups view=Signal factor=GATA1 cellType=K562b
+    subGroups view=Signal factor=GATA1 cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=GATA-1 view=Signal labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=324 submittedDataVersion=V2 dateSubmitted=2009-02-27 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562bGata1 fileName=wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz
@@ -8460,7 +8460,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA-1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (GATA-1 in K562 cells)
-    subGroups view=zRAW factor=GATA1 cellType=K562b
+    subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 1124.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=GATA-1 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562bGata1.wig.gz
@@ -8470,7 +8470,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 GATA-1 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (GATA-1 in K562 cells)
-    subGroups view=zRAW factor=GATA1 cellType=K562b
+    subGroups view=zRAW factor=GATA1 cellType=K562
     type wig 1.00 4603.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=GATA-1 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-27 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562bGata1.wig.gz
@@ -8480,7 +8480,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b SETDB1 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in K562b cells)
-    subGroups view=Peaks factor=SETDB1 cellType=K562b
+    subGroups view=Peaks factor=SETDB1 cellType=K562
     type narrowPeak
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=SETDB1 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=377 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bSetdb1 fileName=wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
@@ -8490,7 +8490,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b SETDB1 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in K562b cells)
-    subGroups view=Signal factor=SETDB1 cellType=K562b
+    subGroups view=Signal factor=SETDB1 cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=SETDB1 view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=377 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bSetdb1 fileName=wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
@@ -8500,7 +8500,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b SETDB1 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (SETDB1 in K562b cells)
-    subGroups view=zRAW factor=SETDB1 cellType=K562b
+    subGroups view=zRAW factor=SETDB1 cellType=K562
     type wig 1.00 4564.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=SETDB1 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=377 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562bSetdb1 fileName=wgEncodeYaleChIPseqRawSignalRep1K562bSetdb1.wig.gz
@@ -8510,7 +8510,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b SETDB1 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (SETDB1 in K562b cells)
-    subGroups view=zRAW factor=SETDB1 cellType=K562b
+    subGroups view=zRAW factor=SETDB1 cellType=K562
     type wig 1.00 3508.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=SETDB1 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=377 dateSubmitted=2009-06-15 dateUnrestricted=2010-03-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562bSetdb1 fileName=wgEncodeYaleChIPseqRawSignalRep2K562bSetdb1.wig.gz
@@ -8520,7 +8520,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b TR4 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in K562b cells)
-    subGroups view=Peaks factor=TR4 cellType=K562b
+    subGroups view=Peaks factor=TR4 cellType=K562
     type narrowPeak
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=TR4 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=380 dateSubmitted=2009-06-22 dateUnrestricted=2010-03-22 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bTr4 fileName=wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
@@ -8530,7 +8530,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b TR4 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in K562b cells)
-    subGroups view=Signal factor=TR4 cellType=K562b
+    subGroups view=Signal factor=TR4 cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=TR4 view=Signal labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=380 dateSubmitted=2009-06-22 dateUnrestricted=2010-03-22 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bTr4 fileName=wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
@@ -8540,7 +8540,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b TR4 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TR4 in K562b cells)
-    subGroups view=zRAW factor=TR4 cellType=K562b
+    subGroups view=zRAW factor=TR4 cellType=K562
     type wig 1.00 3805.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=TR4 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=380 dateSubmitted=2009-06-22 dateUnrestricted=2010-03-22 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1K562bTr4 fileName=wgEncodeYaleChIPseqRawSignalRep1K562bTr4.wig.gz
@@ -8550,7 +8550,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b TR4 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TR4 in K562b cells)
-    subGroups view=zRAW factor=TR4 cellType=K562b
+    subGroups view=zRAW factor=TR4 cellType=K562
     type wig 1.00 4903.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=TR4 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=380 dateSubmitted=2009-06-22 dateUnrestricted=2010-03-22 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562bTr4 fileName=wgEncodeYaleChIPseqRawSignalRep2K562bTr4.wig.gz
@@ -8560,7 +8560,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b ZNF263 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562b cells)
-    subGroups view=Peaks factor=ZNF263 cellType=K562b
+    subGroups view=Peaks factor=ZNF263 cellType=K562
     type narrowPeak
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=ZNF263 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=404 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-06-30 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksK562bZnf263V2 fileName=wgEncodeYaleChIPseqPeaksK562bZnf263V2.narrowPeak.gz
@@ -8570,7 +8570,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
-    subGroups view=Signal factor=ZNF263 cellType=K562b
+    subGroups view=Signal factor=ZNF263 cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=ZNF263 view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=324 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalK562bZnf263 fileName=wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz
@@ -8580,7 +8580,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (ZNF263 in K562 cells)
-    subGroups view=zRAW factor=ZNF263 cellType=K562b
+    subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 1197.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=ZNF263 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263 fileName=wgEncodeYaleChIPseqRel2RawSignalRep1K562bZnf263.wig.gz
@@ -8590,7 +8590,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 ZNF263 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (ZNF263 in K562 cells)
-    subGroups view=zRAW factor=ZNF263 cellType=K562b
+    subGroups view=zRAW factor=ZNF263 cellType=K562
     type wig 1.00 1128.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=ZNF263 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Feb 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263 fileName=wgEncodeYaleChIPseqRel2RawSignalRep2K562bZnf263.wig.gz
@@ -8600,7 +8600,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562b cells)
-    subGroups view=Signal factor=zCTRL cellType=K562b
+    subGroups view=Signal factor=zaCTRL cellType=K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=335 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalK562bInput fileName=wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
@@ -8610,7 +8610,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq
     shortLabel K562b Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in K562b cells)
-    subGroups view=zRAW factor=zCTRL cellType=K562b
+    subGroups view=zRAW factor=zaCTRL cellType=K562
     type wig 1.00 14919.00
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=K562b antibody=Input type=wig fragLength=200 view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=335 dateSubmitted=2009-06-11 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalK562bInput fileName=wgEncodeYaleChIPseqRawSignalK562bInput.wig.gz
