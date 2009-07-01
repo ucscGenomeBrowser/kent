@@ -37,16 +37,17 @@ for the chromosomal position you are currently viewing is locally cached as a
 &quot;sparse file&quot;.</P>
 
 <P>
-Wiggle data must be continuious and the elements must be equally sized. 
+Wiggle data must be continuous and the elements must be equally sized. 
 See 
 <A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format"
 TARGET=_blank>this page</A> for help in selecting a graphing track data format
 that is most approriate for the type of data you have.
 </P>
 
-<P>At this time the <TT>wigToBigWig</TT> utility uses a lot of memory.  We are
-currently working to reduce the amount of RAM it takes to run the program.
-When this message is no longer on this page, the problem has been solved.</P>
+<P>Please note that the <TT>wigToBigWig</TT> utility uses a lot of memory;
+somewhere on the order of 1.5 times more memory than the uncompressed 
+wiggle input file.  We recommend that you monitor your memory usage by 
+using the <TT>top</TT> command while you are running the program.</P>
 
 <P>
 To create a bigWig track, follow these steps:<BR>
@@ -56,7 +57,8 @@ To create a bigWig track, follow these steps:<BR>
   <A HREF="wiggle.html">here</A>.  
   Note that when converting a wig file to a bigWig file, you are limited to 
   one track of data in your input file; you must create a separate wig file
-  for each data track.
+  for each data track.  Note that this is the file that is referred to as
+  <TT>input.wig</TT> in <EM>step 5</EM> below.
  <LI> Remove any existing 'track' or 'browser' lines from your wig file
   so that it contains only data.
  <LI> Download the <TT>wigToBigWig</TT> program from the 
@@ -64,10 +66,13 @@ To create a bigWig track, follow these steps:<BR>
   of binary utilities.
  <LI> Use the <TT>fetchChromSizes</TT> script from the same 
   <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">directory</A> 
-  to create the chrom.sizes file for the UCSC database you are working with (e.g. hg19).
+  to create the chrom.sizes file for the UCSC database you are working with 
+  (e.g. hg19).  Note that this is the file that is referred to as
+  <TT>chrom.sizes</TT> in <EM>step 5</EM> below.
  <LI> Create the bigWig file from your wig file using the <TT>wigToBigWig</TT>
   utility like so: 
-  <TT>wigToBigWig input.wig.gz chrom.sizes myBigWig.bw</TT>
+  <TT><B>wigToBigWig</B> input.wig chrom.sizes myBigWig.bw</TT>
+  Note that you can also use a gzipped input file.
  <LI> Move the newly created bigWig file (<TT>myBigWig.bw</TT>) to a http, 
   https, or ftp location.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A> 
@@ -119,7 +124,7 @@ wiggle file.
  <LI> Download the <TT>wigToBigWig</TT> utility (see <EM>step 3</EM>).
  <LI> Run the utility to create the bigWig output file 
   (see <EM>step 5</EM>):<BR>
-  <TT>wigToBigWig wigVarStepExample.gz hg19.chrom.sizes myBigWig.bw</TT>
+  <TT><B>wigToBigWig</B> wigVarStepExample.gz hg19.chrom.sizes myBigWig.bw</TT>
  <LI> Place the bigWig file you just created (<TT>myBigWig.bw</TT>) on a 
   web-accessible server (see <EM>step 6</EM>).
  <LI> Construct a &quot;track&quot; line that points to your bigWig file
