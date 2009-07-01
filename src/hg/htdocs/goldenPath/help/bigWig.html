@@ -46,8 +46,8 @@ that is most approriate for the type of data you have.
 
 <P>Please note that the <TT>wigToBigWig</TT> utility uses a lot of memory;
 somewhere on the order of 1.5 times more memory than the uncompressed 
-wiggle input file.  We recommend that you monitor your memory usage by 
-using the <TT>top</TT> command while you are running the program.</P>
+wiggle input file.  We recommend that as you run the program you monitor your 
+memory usage by using the <TT>top</TT> command.</P>
 
 <P>
 To create a bigWig track, follow these steps:<BR>
@@ -71,8 +71,8 @@ To create a bigWig track, follow these steps:<BR>
   <TT>chrom.sizes</TT> in <EM>step 5</EM> below.
  <LI> Create the bigWig file from your wig file using the <TT>wigToBigWig</TT>
   utility like so: 
-  <TT><B>wigToBigWig</B> input.wig chrom.sizes myBigWig.bw</TT>
-  Note that you can also use a gzipped input file.
+  <TT><B>wigToBigWig</B> input.wig chrom.sizes myBigWig.bw</TT><BR>
+  (Note that the program also accepts a gzipped input file.)
  <LI> Move the newly created bigWig file (<TT>myBigWig.bw</TT>) to a http, 
   https, or ftp location.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A> 
