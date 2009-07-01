@@ -14,7 +14,7 @@ if ($#argv < 1 || $#argv > 2) then
   echo "    usage:  database Tablename"
   echo
   echo "    database is the 'from' database  "
-  echo "    Tablename is the name of the chain tables (must be capitalized)"
+  echo "    Tablename is the name of the chain tables (need not be capitalized)"
   echo "    e.g. chainNetTrio.csh mm8 Hg18"
   echo
   exit
