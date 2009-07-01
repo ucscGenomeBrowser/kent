@@ -7081,7 +7081,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2b TR4 Pk
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in HepG2b cells)
-    subGroups view=Peaks factor=TR4 cellType=HepG2b
+    subGroups view=Peaks factor=TR4 cellType=HepG2
     type narrowPeak
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HepG2b antibody=TR4 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=372 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2bTr4 fileName=wgEncodeYaleChIPseqPeaksHepg2bTr4.narrowPeak.gz
@@ -7091,7 +7091,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2b TR4 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in HepG2b cells)
-    subGroups view=Signal factor=TR4 cellType=HepG2b
+    subGroups view=Signal factor=TR4 cellType=HepG2
     type bedGraph 4
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HepG2b antibody=TR4 view=Signal labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=372 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2bTr4 fileName=wgEncodeYaleChIPseqSignalHepg2bTr4.bedGraph4.gz
@@ -7101,7 +7101,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2b TR4 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TR4 in HepG2b cells)
-    subGroups view=zRAW factor=TR4 cellType=HepG2b
+    subGroups view=zRAW factor=TR4 cellType=HepG2
     type wig 1.00 2683.00
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HepG2b antibody=TR4 type=wig fragLength=200 view=RawSignal replicate=1 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=372 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hepg2bTr4 fileName=wgEncodeYaleChIPseqRawSignalRep1Hepg2bTr4.wig.gz
@@ -7111,7 +7111,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2b TR4 2
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TR4 in HepG2b cells)
-    subGroups view=zRAW factor=TR4 cellType=HepG2b
+    subGroups view=zRAW factor=TR4 cellType=HepG2
     type wig 1.00 4061.00
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HepG2b antibody=TR4 type=wig fragLength=200 view=RawSignal replicate=2 labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=372 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hepg2bTr4 fileName=wgEncodeYaleChIPseqRawSignalRep2Hepg2bTr4.wig.gz
@@ -7121,7 +7121,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2b Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2b cells)
-    subGroups view=Signal factor=zCTRL cellType=HepG2b
+    subGroups view=Signal factor=zaCTRL cellType=HepG2
     type bedGraph 4
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HepG2b antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=374 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2bInput fileName=wgEncodeYaleChIPseqSignalHepg2bInput.bedGraph4.gz
@@ -7131,7 +7131,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2b Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal (Input in HepG2b cells)
-    subGroups view=zRAW factor=zCTRL cellType=HepG2b
+    subGroups view=zRAW factor=zaCTRL cellType=HepG2
     type wig 1.00 6753.00
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HepG2b antibody=Input type=wig fragLength=200 view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=374 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-11 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalHepg2bInput fileName=wgEncodeYaleChIPseqRawSignalHepg2bInput.wig.gz
