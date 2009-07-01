@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.185 2009/06/26 16:09:18 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.186 2009/07/01 20:33:34 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1576,6 +1576,7 @@ foreach my $ddfLine (@ddfLines) {
     if($submitDir =~ /(\d+)$/) {
         $metadata .= " subId=$1";
     }
+    $metadata .= " submittedDataVersion=V$daf->{dataVersion}" if(defined($daf->{dataVersion}) && $daf->{dataVersion} > 1);
 
     HgAutomate::verbose(2, "  View: $view\n");
     my $replicate;
