@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.27 2009/03/30 17:21:33 hiram Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.28 2009/07/02 17:14:39 angie Exp $";
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
@@ -139,7 +139,7 @@ if (cgi)
     fprintf(f, "#include \"hui.h\"\n");
     }
 fprintf(f, "\n");
-fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.27 2009/03/30 17:21:33 hiram Exp $\";\n");
+fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.28 2009/07/02 17:14:39 angie Exp $\";\n");
 fprintf(f, "\n");
 
 if (cgi)
@@ -175,12 +175,12 @@ else
 
 if (jkhgap || cgi)
     {
-    L = cloneString("L = $(MYSQLLIBS) -lm");
+    L = cloneString("L += $(MYSQLLIBS) -lm");
     myLibs = cloneString("MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a");
     }
 else
     {
-    L = cloneString("L = -lm");
+    L = cloneString("L += -lm");
     myLibs = cloneString("MYLIBS =  ${MYLIBDIR}/jkweb.a");
     }
 
