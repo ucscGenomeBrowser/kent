@@ -1438,3 +1438,21 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/ornAna1/bed/ensGene.51
 
 ############################################################################
+# lastz swap from Horse EquCab2 (DONE - 2009-07-02 - Hiram)
+    # original lastz run
+    cd /hive/data/genomes/equCab2/bed/lastzOrnAna1.2009-07-01
+    cat fb.equCab2.chainOrnAna1Link.txt 
+    #	132750149 bases of 2428790173 (5.466%) in intersection
+
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.equCab2.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.equCab2.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/equCab2/bed/lastzOrnAna1.2009-07-01/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    115m47.611s
+    cat fb.ornAna1.chainEquCab2Link.txt 
+    #	132776204 bases of 1842236818 (7.207%) in intersection
+
+############################################################################

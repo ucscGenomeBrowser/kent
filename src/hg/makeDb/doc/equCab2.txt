@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.25 2008/12/03 01:05:20 markd Exp $"
+#	"$Id: equCab2.txt,v 1.26 2009/07/02 22:21:45 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.25 2008/12/03 01:05:20 markd Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.26 2009/07/02 22:21:45 hiram Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -2208,3 +2208,144 @@ update equCab2.transMapAlnRefSeq set tSize=39960074 where tName="chr27" and tSiz
 update equCab2.transMapAlnMRna set tSize=39960074 where tName="chr27" and tSize=65921033;
 update equCab2.transMapAlnSplicedEst set tSize=39960074 where tName="chr27" and tSize=65921033;
 
+############################################################################
+# Re-Run GalGal3 lastz (DONE - 2009-07-01 - Hiram)
+    #	 primary run
+    cd /hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29
+    cat fb.galGal3.chainEquCab2Link.txt 
+    #	68476046 bases of 1042591351 (6.568%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/equCab2/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=pk \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    10m1.381s
+    cat fb.equCab2.chainGalGal3Link.txt 
+    #	73336799 bases of 2428790173 (3.019%) in intersection
+
+############################################################################
+# Re-Run ornAna1 alignment (DONE - 2009-07-01,02 - Hiram)
+    mkdir /hive/data/genomes/equCab2/bed/lastzOrnAna1.2009-07-01
+    cd /hive/data/genomes/equCab2/bed/lastzOrnAna1.2009-07-01
+
+    cat << '_EOF_' > DEF
+# Horse vs. Platypus
+
+BLASTZ_M=50
+
+# TARGET: Horse
+SEQ1_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ1_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ1_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ1_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=0
+
+# QUERY: Platypus ornAna1
+SEQ2_DIR=/scratch/data/ornAna1/ornAna1.2bit
+SEQ2_LEN=/scratch/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/equCab2/bed/lastzOrnAna1.2009-07-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1413m12.090s
+    cat fb.equCab2.chainOrnAna1Link.txt 
+    #	132750149 bases of 2428790173 (5.466%) in intersection
+
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.equCab2.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.equCab2.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/equCab2/bed/lastzOrnAna1.2009-07-01/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    115m47.611s
+    cat fb.ornAna1.chainEquCab2Link.txt 
+    #	132776204 bases of 1842236818 (7.207%) in intersection
+
+############################################################################
+# lastz swap to Dog CanFam2 (DONE - 2009-07-01 - Hiram)
+    #	the original lastz
+    cd /hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29
+    cat fb.canFam2.chainEquCab2Link.txt 
+    #	1676663178 bases of 2384996543 (70.300%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.canFam2.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29/DEF \
+	-swap -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    286m51.658s
+    fb.equCab2.chainCanFam2Link.txt 
+    #	1721407500 bases of 2428790173 (70.875%) in intersection
+
+############################################################################
+# lastz swap to Mouse Mm9 (DONE - 2009-07-02 - Hiram)
+    #	the original lastz
+    cd /hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29
+    cat fb.mm9.chainEquCab2Link.txt 
+    #	912421053 bases of 2620346127 (34.821%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29/DEF \
+	-swap -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real  122m25.314s
+    cat fb.equCab2.chainMm9Link.txt 
+    #	902295813 bases of 2428790173 (37.150%) in intersection
+
+############################################################################
+# lastz swap to Opossum MonDom5 (DONE - 2009-07-02 - Hiram)
+    #	the original lastz
+    cd /hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29
+    cat fb.monDom5.chainEquCab2Link.txt 
+    #	355004426 bases of 3501660299 (10.138%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.monDom5.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    320m3.573s
+    cat fb.equCab2.chainMonDom5Link.txt 
+    #	351787662 bases of 2428790173 (14.484%) in intersection
+
+#########################################################################
+# lastz swap to Human Hg18 (DONE - 2009-07-02 - Hiram)
+    #	the original lastz
+    cd /hive/data/genomes/hg18/bed/lastzEquCab2.2009-06-29
+    cat fb.hg18.chainEquCab2Link.txt 
+    #	1647122438 bases of 2881515245 (57.162%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.hg18.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/hg18/bed/lastzEquCab2.2009-06-29/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    238m42.004s
+    cat fb.equCab2.chainHg18Link.txt 
+    #	1622340736 bases of 2428790173 (66.796%) in intersection
+
+############################################################################

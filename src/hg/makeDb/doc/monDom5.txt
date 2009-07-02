@@ -787,3 +787,66 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
    hgc-sql -Ne 'select name from nscanGene' monDom5 | egrep -v -e '^chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+(\.[0-9a-z]+)?$' |wc -l
 
 #########################################################################
+# lastz Horse equCab2 (DONE - 2009-06-29,07-02 - Hiram)
+    mkdir /hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29
+    cd /hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29
+
+    cat << '_EOF_' > DEF
+# opossum vs. Horse
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Opossum (monDom5)
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse equCab2
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1353m4.161s
+    #	had some trouble with the first kluster run due to various factors
+    #	not the least of which was a major power outage
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-continue=cat -workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    957m25.164s
+    cat fb.monDom5.chainEquCab2Link.txt 
+    #	355004426 bases of 3501660299 (10.138%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.monDom5.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    320m3.573s
+    cat fb.equCab2.chainMonDom5Link.txt 
+    #	351787662 bases of 2428790173 (14.484%) in intersection
+
+#########################################################################

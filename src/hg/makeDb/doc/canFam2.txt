@@ -2777,4 +2777,127 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# lastz Poodle canFamPoodle1 (DONE - 2009-06-06,22 - Hiram)
+    mkdir /hive/data/genomes/canFam2/bed/lastzCanFamPoodle1.2009-06-06
+    cd /hive/data/genomes/canFam2/bed/lastzCanFamPoodle1.2009-06-06
+
+    cat << '_EOF_' > DEF
+# Tasha boxer dog vs Shadow poodle
+# parameters for very close alignment from human-chimp example
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Tasha, canFam2
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2
+SEQ2_DIR=/scratch/data/canFamPoodle1/canFamPoodle1.2bit
+SEQ2_LEN=/scratch/data/canFamPoodle1/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LAP=0
+SEQ2_LIMIT=800
+
+BASE=/hive/data/genomes/canFam2/bed/lastzCanFamPoodle1.2009-06-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+        -verbose=2 \
+        `pwd`/DEF \
+        -noDbNameCheck -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=medium > do.log 2>&1
+    #	real    8250m12.188s
+# Completed: 374825 of 374825 jobs
+# CPU time in finished jobs:  187350504s 3122508.40m 52041.81h 2168.41d  5.941 y
+# IO & Wait Time:               4127960s   68799.33m  1146.66h   47.78d  0.131 y
+# Average job time:                 511s       8.51m     0.14h    0.01d
+# Longest finished job:            2339s      38.98m     0.65h    0.03d
+# Submission to last job:        494836s    8247.27m   137.45h    5.73d
+
+    #	the lastz run thought it failed, but it didn't, continuing:
+    time nice -n +19 doBlastzChainNet.pl \
+        -verbose=2 \
+        `pwd`/DEF \
+        -continue=cat -noDbNameCheck -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=medium > cat.log 2>&1
+    #	real    4841m48.581s <- this is actually a fb time on cavPor3
+    #	this finish step was less than an hour
+    fb.canFam2.chainCanFamPoodle1Link.txt 
+    #	1405528799 bases of 2384996543 (58.932%) in intersection
+
+    mkdir /hive/data/genomes/canFamPoodle1/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/canFamPoodle1/bed/blastz.canFam2.swap
+
+    time nice -n +19 doBlastzChainNet.pl \
+        -verbose=2 \
+	/hive/data/genomes/canFam2/bed/lastzCanFamPoodle1.2009-06-06/DEF \
+        -swap -noDbNameCheck -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1
+    #	real    8585m58.789s
+    cat fb.canFamPoodle1.chainCanFam2Link.txt 
+    #	1377478896 bases of 1517497798 (90.773%) in intersection
+
+############################################################################
+# Re-Run equCab2 alignment (DONE - 2009-06-29 - Hiram
+    mkdir /hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29
+    cd /hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29
+
+    cat << '_EOF_' > DEF
+# Dog vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Dog canFam2
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/cluster/data/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    338m57.973s
+    cat fb.canFam2.chainEquCab2Link.txt 
+    #	1676663178 bases of 2384996543 (70.300%) in intersection
+    #	this is identical to what went down before ?
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.canFam2.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29/DEF \
+	-swap -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    286m51.658s
+    fb.equCab2.chainCanFam2Link.txt 
+    #	1721407500 bases of 2428790173 (70.875%) in intersection
+
 ############################################################################

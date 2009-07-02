@@ -2674,3 +2674,54 @@ done >> galGal3.agp
     termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)\.[0-9]+(\.[0-9a-z]+)?
     searchPriority 50
 
+############################################################################
+# Re-Run equCab2 alignment (DONE - 2009-06-29,07-01 - Hiram)
+    mkdir /hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29
+    cd /hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29
+
+    cat << '_EOF_' > DEF
+# Chicken vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Human galGal3
+SEQ1_DIR=/scratch/data/galGal3/bothMaskedNibs
+SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=pk \
+	-workhorse=hgwdev \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    220m54.623s
+    #	 cat fb.galGal3.chainEquCab2Link.txt 
+    #	68476046 bases of 1042591351 (6.568%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=pk \
+	-swap -workhorse=hgwdev \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    10m1.381s
+    cat fb.equCab2.chainGalGal3Link.txt 
+    #	73336799 bases of 2428790173 (3.019%) in intersection
+
+############################################################################

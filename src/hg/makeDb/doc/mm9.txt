@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.100 2009/06/29 23:19:15 angie Exp $"
+#	"$Id: mm9.txt,v 1.101 2009/07/02 22:21:44 hiram Exp $"
 #
 
 #######################################################################
@@ -9424,3 +9424,57 @@ ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/CURRENT/genomes/mmu.gff
 hgsql -e 'select count(distinct name) from miRNA;' mm9
 # 541
 # The previous version had 466 unique miRNAs. 
+
+############################################################################
+# Re-Run equCab2 alignment (DONE - 2009-06-29,07-02 - Hiram
+    mkdir /hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29
+    cd /hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Mouse MM9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    360m10.094s
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-continue=chainMerge -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1 &
+    #	real    225m4.178s
+    cat fb.mm9.chainEquCab2Link.txt 
+    #	912421053 bases of 2620346127 (34.821%) in intersection
+
+    mkdir /hive/data/genomes/equCab2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29/DEF \
+	-swap -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real  122m25.314s
+    cat fb.equCab2.chainMm9Link.txt 
+    #	902295813 bases of 2428790173 (37.150%) in intersection
+
+############################################################################
