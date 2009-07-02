@@ -3269,9 +3269,9 @@ compositeTrack on
 shortLabel Mapability
 longLabel ENCODE Mapability
 group map
-subGroup1 view Mapability ALN=Alignability UNIQ=Uniqueness XR=Excluded_Regions
+subGroup1 view Mapability ALN=Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Excluded_Regions
 subGroup2 win Sequence_Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp zNA=Varied
-visibilityViewDefaults ALN=hide EXR=hide UNIQ=full
+visibilityViewDefaults ALN=hide EXR=hide DUNIQ=full RUNIQ=hide UUNIQ=full
 #dimensions dimensionX=win
 allButtonPair on
 sortOrder view=+ win=+
@@ -3280,9 +3280,8 @@ noInherit on
 priority 0
 type bed 3
 noInherit on
-settingsByView ALN:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:16:16 UNIQ:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView ALN:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16 DUNIQ:configurable=on,viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16 RUNIQ:viewLimits=0:37,minLimit=0,maxLimit=37,gridDefault=on,yLineOnOff=on,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16 UUNIQ:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeightPixels=100:32:16
 wgEncode 1
-configurable on
 
     track wgEncodeBroadMapabilityAlign36mer
     release alpha
@@ -3291,6 +3290,7 @@ configurable on
     longLabel ENCODE Mapability - Broad Alignability of 36mers with no more than 2 mismatches
     subGroups view=ALN win=w36
     type wig 0.00 1.00
+    color 133,0,173
     #metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2010-03-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateLoaded=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
@@ -3299,8 +3299,9 @@ configurable on
     subTrack wgEncodeMapability
     shortLabel Uniqueness 15
     longLabel ENCODE Mapability - UMass Uniqueness at 15bp
-    subGroups view=UNIQ win=w15
+    subGroups view=UUNIQ win=w15
     type wig 0.00 1.00
+    color 46,0,184
     #metadata project=wgEncode grant=Dekker lab=UMass dataType=Mapability view=Uniqueness dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2010-03-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
     metadata project=wgEncode grant=Dekker lab=UMass dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateLoaded=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
@@ -3310,8 +3311,9 @@ configurable on
     shortLabel Uniqueness 20
     longLabel ENCODE Mapability - Duke Uniqueness of 20bp sequences
     type wig 0.00 1.00
-    subGroups view=UNIQ win=w20
+    subGroups view=DUNIQ win=w20
     spanList 1
+    color 153,38,0
     #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateLoaded=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
@@ -3321,8 +3323,9 @@ configurable on
     shortLabel Uniqueness 24
     longLabel ENCODE Mapability - Duke Uniqueness of 24bp sequences
     type wig 0.00 1.00
-    subGroups view=UNIQ win=w24
+    subGroups view=DUNIQ win=w24
     spanList 1
+    color 153,38,0
     #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateLoaded=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
@@ -3332,8 +3335,9 @@ configurable on
     shortLabel Uniqueness 35
     longLabel ENCODE Mapability - Duke Uniqueness of 35bp sequences
     type wig 0.00 1.00
-    subGroups view=UNIQ win=w35
+    subGroups view=DUNIQ win=w35
     spanList 1
+    color 153,38,0
     #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateLoaded=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
@@ -3347,6 +3351,18 @@ configurable on
     noScoreFilter on
     #metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability cell=Reference_Genome view=Regions_Excluded labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2009-08-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateLoaded=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
+
+    track uniqueness
+    release alpha
+    subTrack wgEncodeMapability
+    shortLabel BWA/MAQ Uniqueness
+    longLabel Mapability - Rosetta Uniqueness 35-mer alignment (BWA/MAQ, 37 indicates a unique alignment)
+    subGroups view=RUNIQ win=w35
+    #defaultViewLimits 0:37
+    #minLimit 0
+    #maxLimit 37
+    color 100,50,150
+    type bedGraph 4
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 

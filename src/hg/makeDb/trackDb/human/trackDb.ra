@@ -27,8 +27,8 @@ color 150,0,0
 type ctgPos
 
 track gold
-shortLabel Assembly 
-longLabel Assembly from Fragments 
+shortLabel Assembly
+longLabel Assembly from Fragments
 group map
 priority 10
 visibility hide
@@ -153,7 +153,7 @@ type genePred xenoRefPep xenoRefMrna
 track vegaGene
 release beta
 shortLabel Vega Genes
-longLabel Vega Annotations 
+longLabel Vega Annotations
 group genes
 priority 37.1
 visibility hide
@@ -177,7 +177,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 track vegaGene
 release alpha
 shortLabel Vega Genes
-longLabel Vega Annotations 
+longLabel Vega Annotations
 group genes
 priority 37.1
 visibility hide
@@ -204,7 +204,7 @@ longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
 group genes
 priority 37.12
 visibility hide
-nextItemButton on 
+nextItemButton on
 spectrum on
 type bed 12 .
 
@@ -214,7 +214,7 @@ longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroInfo3]
 group genes
 priority 37.13
 visibility hide
-nextItemButton on 
+nextItemButton on
 spectrum on
 type bed 12 .
 
@@ -230,7 +230,7 @@ retroMrnaInfo ucscRetroInfo3
 #transMapTypeDesc UCSC retrocopies
 baseColorDefault diffCodons
 baseColorUseCds table retroCds
-baseColorUseSequence extFile retroSeq retroExtFile 
+baseColorUseSequence extFile retroSeq retroExtFile
 indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
@@ -292,7 +292,7 @@ priority 45.5
 visibility hide
 color 100,50,0
 altColor 175,150,128
-type genePred 
+type genePred
 
 track slamRat
 shortLabel Slam Rat
@@ -302,7 +302,7 @@ priority 45.6
 visibility hide
 color 100,50,0
 altColor 175,150,128
-type genePred 
+type genePred
 
 track pseudoYale
 shortLabel Yale Pseudo
@@ -361,7 +361,7 @@ type altGraphX
 
 track sibTxGraph
 shortLabel SIB Alt-Splicing
-longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics
 group rna
 priority 74.5
 visibility hide
@@ -508,9 +508,9 @@ visibility hide
 color 50,100,50
 url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
 urlLabel Yale DART Link:
-type psl . 
+type psl .
 
-track affyTranscriptome 
+track affyTranscriptome
 shortLabel Transcriptome
 longLabel Affymetrix Experimentally Derived Transcriptome
 group expression
@@ -615,7 +615,7 @@ searchMethod exact
 searchType bed
 
 track ux16
-shortLabel Extended Ultras 
+shortLabel Extended Ultras
 longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
 group compGeno
 priority 109.32
@@ -624,7 +624,7 @@ exonArrows off
 color 100,0,100
 type bed 4 .
 
-track humMusL 
+track humMusL
 shortLabel Mouse Cons
 longLabel Human/Mouse Evolutionary Conservation Score (std units)
 group compGeno
@@ -706,7 +706,7 @@ group varRep
 priority 102
 visibility hide
 url http://hgdp.uchicago.edu/cgi-bin/gbrowse/HGDP/?name=$$
-urlLabel HGDP Selection Browser: 
+urlLabel HGDP Selection Browser:
 type bed 4 +
 
 track hgdpFst
@@ -972,7 +972,7 @@ itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
-urlLabel DGV Browser and Report: 
+urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v7
 
@@ -985,7 +985,7 @@ priority 144.85
 visibility hide
 itemRgb on
 type bed 12
-urlLabel Clone Summary (Eichler Lab Browser): 
+urlLabel Clone Summary (Eichler Lab Browser):
 url http://mrhgsv.gs.washington.edu/cgi-bin/hgc?i=$$&c=$S&l=$[&r=$]&db=$D&position=$S:$[-$]
 ncbiAccXref kiddEichlerToNcbi
 pairedEndUrlFormat http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?&cmd=retrieve&val=CENTER_NAME%%3D'ABC'%%20and%%20LIBRARY_ID%%3D'%s'%%20and%%20TRACE_NAME%%3D'%s'&retrieve=Submit
@@ -1120,7 +1120,7 @@ type bed 4 .
 otherDb mm8
 otherDbTable jaxQTL
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
-urlLabel MGI QTL Detail: 
+urlLabel MGI QTL Detail:
 
     track jaxQtlAsIs
     subTrack jaxQtlMapped
@@ -1147,7 +1147,7 @@ defaultViewLimits 0:16
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
-type bedGraph 4 
+type bedGraph 4
 
     track hapmapLdHotspotYRI
     subTrack hapmapLdHotspot
@@ -1160,7 +1160,7 @@ type bedGraph 4
     shortLabel CEU
     longLabel  Hotspots of Linkage Disequilibrium in the CEPH HapMap (CEU)
     priority 2
-    
+
     track hapmapLdHotspotCJ
     subTrack hapmapLdHotspot
     shortLabel CHB + JPT
@@ -1174,7 +1174,7 @@ longLabel Tajima's D SNPs
 group varRep
 priority 144.6
 visibility hide
-type bed 4 . 
+type bed 4 .
 
     track tajdSnpAd
     subTrack tajdSnp
@@ -1212,16 +1212,16 @@ maxLimit 5
 autoScaleDefault Off
 maxHeightPixels 128:64:11
 priority 144.65
-type bedGraph 4 
+type bedGraph 4
 
     track tajdAd
     subTrack tajD
     shortLabel Tajima's D AD
-    longLabel  Tajima's D from African Descent 
+    longLabel  Tajima's D from African Descent
     color 200,100,0
     altColor 0,100,200
     priority 2
-    
+
     track tajdEd
     subTrack tajD
     shortLabel Tajima's D ED
@@ -1257,7 +1257,7 @@ longLabel HapMap SNPs
 group varRep
 priority 144.48
 visibility hide
-type bed 6 + 
+type bed 6 +
 exonArrows off
 
     track hapmapSnpsASW
@@ -1400,7 +1400,7 @@ visibility hide
 type bed 3 .
 
 track chainSelf
-shortLabel Self Chain 
+shortLabel Self Chain
 longLabel Chained Self-Alignments
 group varRep
 priority 400
@@ -1782,7 +1782,7 @@ maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 
+type wig
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy U87CytosolicPolyAPlusTnFg
@@ -2058,7 +2058,7 @@ type bed 4 .
 
 track evofold
 shortLabel EvoFold
-longLabel EvoFold Predictions of RNA Secondary Structure 
+longLabel EvoFold Predictions of RNA Secondary Structure
 group genes
 priority 63
 visibility hide
@@ -2215,13 +2215,13 @@ type wigMaf
 speciesGroups primate placental mammal vertebrate
 sGroup_primate panTro1 baboon rheMac1 marmoset galago
 sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog armadillo elephant tenrec
-sGroup_mammal monDom1 platypus 
+sGroup_mammal monDom1 platypus
 sGroup_vertebrate galGal2 xenTro1 danRer2 tetNig1 fr1
 # speciesGroups primate placental mammal vertebrate
 # sGroup_primate chimp baboon marmoset galago
-# sGroup_placental rat mouse cow dog armadillo 
-# sGroup_mammal platypus 
-# sGroup_vertebrate chicken 
+# sGroup_placental rat mouse cow dog armadillo
+# sGroup_mammal platypus
+# sGroup_vertebrate chicken
 irows on
 summary xTBAmafSum
 
@@ -2318,7 +2318,7 @@ altColor 255,240,200
 type bed 6 .
 
 track chainMonDom4
-shortLabel $o_Organism Chain 
+shortLabel $o_Organism Chain
 longLabel monDom4 ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 164.1
@@ -2687,13 +2687,13 @@ dataVersion Mar 2007
 
     track stanfordChipNRSFMono
     subTrack stanfordChip
-    shortLabel Stan Jurkat NRSF/REST/Mono 
+    shortLabel Stan Jurkat NRSF/REST/Mono
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Mono ChIP)
     priority 11
 
     track stanfordChipNRSFUpstate
     subTrack stanfordChip
-    shortLabel Stan Jurkat NRSF/REST/Upstate 
+    shortLabel Stan Jurkat NRSF/REST/Upstate
     longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Upstate ChIP)
     priority 12
 
@@ -2728,7 +2728,7 @@ type psl .
 track eponine
 shortLabel Eponine TSS
 longLabel Eponine Predicted Transcription Start Sites
-group regulation 
+group regulation
 priority 0
 visibility hide
 color 0,100,100
@@ -2745,25 +2745,7 @@ type bed 4
 hgsid on
 url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=
 
-
-track uniqueness
-shortLabel Uniqueness
-longLabel 35mer alignment scores from BWA/MAQ, where 37 indicates a unique alignment
-group map
-priority 79.1
-visibility hide
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM,chrX,chrY,
-defaultViewLimits 0:37
-minLimit 0
-maxLimit 37
-autoScaleDefault Off
-color 100,50,150 
-maxHeightPixels 40:40:12
-gridDefault on 
-yLineOnOff on 
-type bedGraph 4
-
-# in priority.ra 
+# in priority.ra
 #
 # track chainDanRer4
 # track chainDanRer5
@@ -3197,7 +3179,7 @@ dataVersion January 2009
     priority 4
     type bed 4 .
     noInherit on
-    noScoreFilter .    
+    noScoreFilter .
 
 searchName fox2ClipSeq
 searchTable fox2ClipSeq
