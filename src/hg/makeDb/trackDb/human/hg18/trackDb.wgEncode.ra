@@ -5108,6 +5108,7 @@ noInherit on
 settingsByView Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=300 FiltTransfrags:scoreFilter=0,scoreFilterLimits=100:1000,scoreMin=300  RawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 FiltRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
 priority 0
 type bed 3
+dataVersion ENCODE Nov 2008, Feb 2009, and July 2009 Freezes
 wgEncode 1
 
     track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya
