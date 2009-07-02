@@ -5095,7 +5095,7 @@ compositeTrack on
 shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
 group expression
-subGroup1 view Views Transfrags=Transfrags FiltTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FiltRawSignal=Filtered_Signal
+subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
@@ -5626,7 +5626,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot
-    longLabel ENCODE Affy/CSHL Filt Transfrags (Total RNA in K562 nucleolus)
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleolus)
     subGroups view=FiltTransfrags cellType=K562 localization=60-nucleolus rnaExtract=total
     type broadPeak
     color 46,0,184
@@ -5648,7 +5648,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot
-    longLabel ENCODE Affy/CSHL Filt Raw Signal (Total RNA in K562 nucleolus)
+    longLabel ENCODE Affy/CSHL Filtered Raw Signal (Total RNA in K562 nucleolus)
     subGroups view=FiltRawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
     type wig -46635.00 54187.00
     color 46,0,184
@@ -5944,7 +5944,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA- R
-    longLabel ENCODE Affy/CSHL Raw Signal(PolyA- in NHEK cytosol)
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- in NHEK cytosol)
     subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
     type wig -61219.00 57907.00
     noInherit on
