@@ -124,12 +124,6 @@ track netBosTau1
 priority 256.8
 
 # horse
-track chainEquCab2
-priority 264.0
-
-track netEquCab2
-priority 264.1
-
 track chainEquCab1
 priority 264.2
 

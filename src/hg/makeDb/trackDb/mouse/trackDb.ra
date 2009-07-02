@@ -1263,7 +1263,7 @@ visibility hide
 url https://www.affymetrix.com/LinkServlet?probeset=$$
 type psl .
 
-track gnfMOE430v2
+track gnfMouseAtlas3
 shortLabel GNF Atlas 3
 longLabel GNF Expression Atlas 3
 group regulation
@@ -1272,4 +1272,12 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-groupings gnfMOE430v2Groups
+url http://biogps.gnf.org/?query=$$
+urlLabel BioGPS:
+groupings gnfMouseAtlas3Groups
+
+track horseChainNet override
+priority 264
+
+track humanChainNet override
+priority 279
