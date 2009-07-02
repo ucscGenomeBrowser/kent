@@ -3368,7 +3368,7 @@ wgEncode 1
 
 track wgEncodeNhgriBip
 release alpha
-shortLabel NHGRI BiP
+shortLabel NHGRI Bi-Pro
 longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
 visibility hide
 group regulation
@@ -5095,7 +5095,7 @@ compositeTrack on
 shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
 group expression
-subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal 
+subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
