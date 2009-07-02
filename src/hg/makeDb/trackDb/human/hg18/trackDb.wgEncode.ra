@@ -5111,7 +5111,6 @@ type bed 3
 wgEncode 1
 
     track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in prostate whole cell)
@@ -5121,7 +5120,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA- Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in prostate whole cell)
@@ -5131,7 +5129,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA-
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in prostate whole cell)
@@ -5142,7 +5139,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA- Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in prostate whole cell)
@@ -5153,7 +5149,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in prostate whole cell)
@@ -5163,7 +5158,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in prostate whole cell)
@@ -5173,7 +5167,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in prostate whole cell)
@@ -5184,7 +5177,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel pros cell pA+
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in prostate whole cell)
@@ -5195,7 +5187,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA- Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 nucleus)
@@ -5205,7 +5196,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 nucleus)
@@ -5215,7 +5205,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA- Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 nucleus)
@@ -5226,7 +5215,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 nucleus)
@@ -5237,7 +5225,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell tot Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 whole cell)
@@ -5247,7 +5234,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipTransfragsK562CellTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell total
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 whole cell)
@@ -5257,7 +5243,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell total
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 whole cell)
@@ -5268,7 +5253,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cell tot Rw
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 whole cell)
@@ -5279,7 +5263,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipRawSignalK562CellTotal.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 nucleus)
@@ -5289,7 +5272,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 nucleus)
@@ -5299,7 +5281,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 nucleus)
@@ -5310,7 +5291,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 nucleus)
@@ -5321,7 +5301,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 cytosol)
@@ -5331,7 +5310,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA- Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 cytosol)
@@ -5341,7 +5319,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA- Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 cytosol)
@@ -5352,7 +5329,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 cytosol)
@@ -5363,7 +5339,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 cytosol)
@@ -5373,7 +5348,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 cytosol)
@@ -5383,7 +5357,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 cytosol)
@@ -5394,7 +5367,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 cyto pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 cytosol)
@@ -5405,7 +5377,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 polysome)
@@ -5415,7 +5386,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA- Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 polysome)
@@ -5425,7 +5395,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA- Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 polysome)
@@ -5436,7 +5405,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 psom pA-
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 polysome)
@@ -5447,7 +5415,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 nucleus)
@@ -5457,7 +5424,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA- R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 nucleus)
@@ -5467,7 +5433,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA- R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 nucleus)
@@ -5478,7 +5443,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 nucleus)
@@ -5489,7 +5453,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+ R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 cytosol)
@@ -5499,7 +5462,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA GM12878 cytosol)
@@ -5509,7 +5471,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+ R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 cytosol)
@@ -5520,7 +5481,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 cytosol)
@@ -5531,7 +5491,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 cytosol)
@@ -5541,7 +5500,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA- R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 cytosol)
@@ -5551,7 +5509,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA- R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 cytosol)
@@ -5562,7 +5519,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 cytosol)
@@ -5573,7 +5529,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm tot Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 chromatin)
@@ -5584,7 +5539,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm total
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 chromatin)
@@ -5595,7 +5549,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm total
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 chromatin)
@@ -5609,7 +5562,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 chrm tot Rw
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 chromatin)
@@ -5623,7 +5575,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal fileName=tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleolus)
@@ -5634,7 +5585,6 @@ wgEncode 1
 
 
     track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleolus)
@@ -5645,7 +5595,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (Total RNA in K562 nucleolus)
@@ -5655,7 +5604,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nlos tot Rw
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleolus)
@@ -5669,7 +5617,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplm tot Rw
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleoplasm)
@@ -5680,7 +5627,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplm tot Rw
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleoplasm)
@@ -5694,7 +5640,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in GM12878 nucleus)
@@ -5705,7 +5650,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA+ R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 in nucleus)
@@ -5716,7 +5660,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 nucleus)
@@ -5730,7 +5673,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 nucl pA+ R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 nucleus)
@@ -5744,7 +5686,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 whole cell)
@@ -5755,7 +5696,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot R
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
@@ -5766,7 +5706,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 whole cell)
@@ -5780,7 +5719,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel GM128 cell tot R
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 whole cell)
@@ -5794,7 +5732,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878CellTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplsm total
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleoplasm)
@@ -5805,7 +5742,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel K562 nplsm total
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 nucleoplasm)
@@ -5819,7 +5755,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
@@ -5830,7 +5765,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA- R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in HepG2 cytosol)
@@ -5841,7 +5775,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in HepG2 cytosol)
@@ -5855,7 +5788,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA- R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in HepG2 cytosol)
@@ -5869,7 +5801,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
@@ -5880,7 +5811,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+ R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
@@ -5891,7 +5821,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+ R
     longLabel ENCODE Affy/CSHL Raw Transfrags(PolyA+ RNA in HepG2 cytosol)
@@ -5905,7 +5834,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
@@ -5919,7 +5847,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA- R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in NHEK cytosol)
@@ -5930,7 +5857,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK cytosol)
@@ -5941,7 +5867,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA- R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- in NHEK cytosol)
@@ -5955,7 +5880,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA-
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- in NHEK cytosol)
@@ -5969,7 +5893,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
@@ -5980,7 +5903,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+ R
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in NHEK cytosol)
@@ -5991,7 +5913,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+ R
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK cytosol)
@@ -6005,7 +5926,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK cyto pA+
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
@@ -6020,7 +5940,6 @@ wgEncode 1
 
     ###### MJP Added 6/22
     track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA- Rw
     longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in NHEK nucleus )
@@ -6030,7 +5949,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK nucleus )
@@ -6040,7 +5958,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in NHEK nucleus )
@@ -6050,7 +5967,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA- Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in NHEK nucleus )
@@ -6060,7 +5976,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=30-nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK nucleus )
@@ -6070,7 +5985,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA+ Rw
     longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in NHEK nucleus )
@@ -6080,7 +5994,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK nucleus )
@@ -6090,7 +6003,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in NHEK nucleus )
