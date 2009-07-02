@@ -6093,7 +6093,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel NHEK nucl pA+
-    longLabel ENCODE Affy/CSHL (PolyA+ RNA in NHEK nucleus )
+    longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in NHEK nucleus )
     subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
     type wig -58826.00 51082.00
     color 179,0,134
