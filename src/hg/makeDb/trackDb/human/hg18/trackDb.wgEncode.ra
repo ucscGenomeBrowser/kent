@@ -5579,7 +5579,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 chromatin)
     subGroups view=Transfrags cellType=K562 localization=50-chromatin rnaExtract=total
     type broadPeak
-    priority 45
     noInherit on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal.broadPeak.gz
@@ -5591,7 +5590,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 chromatin)
     subGroups view=FiltTransfrags cellType=K562 localization=50-chromatin rnaExtract=total
     type broadPeak
-    priority 46
     noInherit on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
@@ -5603,7 +5601,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 chromatin)
     subGroups view=FiltRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
     type wig -61688.00 49221.00
-    priority 47
     noInherit on
     spanList first
     windowingFunction mean
@@ -5618,7 +5615,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 chromatin)
     subGroups view=RawSignal cellType=K562 localization=50-chromatin rnaExtract=total
     type wig -61688.00 55955.00
-    priority 48
     noInherit on
     spanList first
     windowingFunction mean
@@ -5644,7 +5640,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleolus)
     subGroups view=Transfrags cellType=K562 localization=60-nucleolus rnaExtract=total
     type broadPeak
-    priority 45
     noInherit on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
@@ -5666,7 +5661,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleolus)
     subGroups view=RawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
     type wig -63262.00 58632.00
-    priority 48
     noInherit on
     spanList first
     windowingFunction mean
@@ -5681,7 +5675,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleoplasm)
     subGroups view=Transfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type broadPeak
-    priority 45
     noInherit on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal.broadPeak.gz
@@ -5693,7 +5686,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleoplasm)
     subGroups view=RawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type wig -52041.00 554.00
-    priority 48
     noInherit on
     spanList first
     windowingFunction mean
@@ -5708,7 +5700,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in GM12878 nucleus)
     subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type broadPeak
-    priority 54
     noInherit on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
@@ -5720,7 +5711,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 in nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type broadPeak
-    priority 53
     noInherit on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
@@ -5732,7 +5722,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 nucleus)
     subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type wig -56831.00 59145.00
-    priority 55
     noInherit on
     spanList first
     windowingFunction mean
@@ -5747,7 +5736,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 nucleus)
     subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type wig -53310.00 54732.00
-    priority 56
     noInherit on
     spanList first
     windowingFunction mean
@@ -5762,7 +5750,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 whole cell)
     subGroups view=FiltTransfrags cellType=GM12878 localization=0-cell rnaExtract=total
     type broadPeak
-    priority 54
     noInherit on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
@@ -5774,7 +5761,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
     subGroups view=Transfrags cellType=GM12878 localization=0-cell rnaExtract=total
     type broadPeak
-    priority 53
     noInherit on
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
@@ -5786,7 +5772,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 whole cell)
     subGroups view=FiltRawSignal cellType=GM12878 localization=0-cell rnaExtract=total
     type wig -48860.00 60644.00
-    priority 55
     noInherit on
     spanList first
     windowingFunction mean
@@ -5801,7 +5786,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 whole cell)
     subGroups view=RawSignal cellType=GM12878 localization=0-cell rnaExtract=total
     type wig -50917.00 62561.00
-    priority 56
     noInherit on
     spanList first
     windowingFunction mean
@@ -5816,7 +5800,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleoplasm)
     subGroups view=FiltTransfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type broadPeak
-    priority 54
     noInherit on
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
@@ -5828,7 +5811,6 @@ wgEncode 1
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 nucleoplasm)
     subGroups view=FiltRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type wig -54090.00 55745.00
-    priority 55
     noInherit on
     spanList first
     windowingFunction mean
