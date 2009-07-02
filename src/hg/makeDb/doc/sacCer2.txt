@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.9 2009/07/01 22:39:45 kuhn Exp $
+#  $Id: sacCer2.txt,v 1.10 2009/07/02 22:25:06 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1001,6 +1001,33 @@ sacCer2 genes/sacCer2.sgdGene.gz \
 
     zcat multiz7way.mafFrames.gz \
 	| sort -k1,1 -k2,2n | hgLoadMafFrames sacCer2 multiz7wayFrames stdin
+
+############################################################################
+# creating upstream mafs (DONE - 2009-06-26 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer2/goldenPath/multiz7way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+DB=sacCer2
+GENE=sgdGene
+NWAY=multiz7way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    ./mkUpstream.sh
 
 #########################################################################
 ## simpleRepeats (DONE - 2009-02-12 - Hiram)
