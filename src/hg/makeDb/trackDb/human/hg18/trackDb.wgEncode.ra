@@ -3355,7 +3355,7 @@ wgEncode 1
     track uniqueness
     release alpha
     subTrack wgEncodeMapability
-    shortLabel BWA/MAQ Uniqueness
+    shortLabel Rosetta Uniqueness
     longLabel Mapability - Rosetta Uniqueness 35-mer alignment (BWA/MAQ, 37 indicates a unique alignment)
     subGroups view=RUNIQ win=w35
     #defaultViewLimits 0:37
