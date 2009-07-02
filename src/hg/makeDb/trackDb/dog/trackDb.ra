@@ -239,3 +239,9 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 spectrum on
 type chain calJac1
 otherDb calJac1
+
+track horseChainNet override
+priority 253
+
+track humanChainNet override
+priority 210
