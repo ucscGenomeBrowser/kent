@@ -6,6 +6,8 @@
 BEGIN {
   if (ARGC != 3) {
     print "wrong # args: removeAlphas tableList trackDb.ra" > "/dev/stderr"
+    print "Takes a list of tables and a trackDb.ra file, and removes the release" > "/dev/stderr"
+    print "alpha lines from the corresponding blocks.  Writes whole file to stdout." > "/dev/stderr"
     exit 1
   }
   tblFile = ARGV[1]
