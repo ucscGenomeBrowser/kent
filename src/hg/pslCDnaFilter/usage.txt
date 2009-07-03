@@ -77,7 +77,8 @@ Options:
 
    -bestOverlap - filter overlapping alignments, keeping the
     best of aligments that are similar, but not discarding ones
-    with weird overlap.
+    with weird overlap.  This is designed to be used with overlapping,
+    windowed alignments, so one alignment might be truncated.
 
    -hapRegions=psl - PSL format alignments of each haplotype pseudo-chromosome
     to the corresponding reference chromosome region.  This is used to map
