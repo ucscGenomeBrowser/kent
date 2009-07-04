@@ -6,7 +6,8 @@
 #RefSeq Gene Status.
 CREATE TABLE refSeqStatus (
     mrnaAcc varchar(255) not null,	# RefSeq gene accession name
-    status varchar(255) not null,	# Status (Reviewed, Provisional, Predicted)
+    status enum("Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred")  not null,	# Status of RefSeq
+    mol enum("DNA", "RNA", "ds-RNA", "ds-mRNA", "ds-rRNA", "mRNA", "ms-DNA", "ms-RNA", "rRNA", "scRNA", "snRNA", "snoRNA", "ss-DNA", "ss-RNA", "ss-snoRNA", "tRNA")  not null,	# molecule type
               #Indices
     PRIMARY KEY(mrnaAcc)
 );

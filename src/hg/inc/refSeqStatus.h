@@ -5,12 +5,43 @@
 #ifndef REFSEQSTATUS_H
 #define REFSEQSTATUS_H
 
+#define REFSEQSTATUS_NUM_COLS 3
+
+enum refSeqStatusStatus
+    {
+    refSeqStatusUnknown = 0,
+    refSeqStatusReviewed = 1,
+    refSeqStatusValidated = 2,
+    refSeqStatusProvisional = 3,
+    refSeqStatusPredicted = 4,
+    refSeqStatusInferred = 5,
+    };
+enum refSeqStatusMol
+    {
+    refSeqStatusDNA = 0,
+    refSeqStatusRNA = 1,
+    refSeqStatusDs_RNA = 2,
+    refSeqStatusDs_mRNA = 3,
+    refSeqStatusDs_rRNA = 4,
+    refSeqStatusMRNA = 5,
+    refSeqStatusMs_DNA = 6,
+    refSeqStatusMs_RNA = 7,
+    refSeqStatusRRNA = 8,
+    refSeqStatusScRNA = 9,
+    refSeqStatusSnRNA = 10,
+    refSeqStatusSnoRNA = 11,
+    refSeqStatusSs_DNA = 12,
+    refSeqStatusSs_RNA = 13,
+    refSeqStatusSs_snoRNA = 14,
+    refSeqStatusTRNA = 15,
+    };
 struct refSeqStatus
 /* RefSeq Gene Status. */
     {
     struct refSeqStatus *next;  /* Next in singly linked list. */
     char *mrnaAcc;	/* RefSeq gene accession name */
-    char *status;	/* Status (Reviewed, Provisional, Predicted) */
+    enum refSeqStatusStatus status;	/* Status of RefSeq */
+    enum refSeqStatusMol mol;	/* molecule type */
     };
 
 void refSeqStatusStaticLoad(char **row, struct refSeqStatus *ret);
@@ -22,12 +53,15 @@ struct refSeqStatus *refSeqStatusLoad(char **row);
  * from database.  Dispose of this with refSeqStatusFree(). */
 
 struct refSeqStatus *refSeqStatusLoadAll(char *fileName);
-/* Load all refSeqStatus from a tab-separated file.
+/* Load all refSeqStatus from whitespace-separated file.
  * Dispose of this with refSeqStatusFreeList(). */
 
-struct refSeqStatus *refSeqStatusLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all refSeqStatus from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct refSeqStatus *refSeqStatusLoadAllByChar(char *fileName, char chopper);
+/* Load all refSeqStatus from chopper separated file.
+ * Dispose of this with refSeqStatusFreeList(). */
+
+#define refSeqStatusLoadAllByTab(a) refSeqStatusLoadAllByChar(a, '\t');
+/* Load all refSeqStatus from tab separated file.
  * Dispose of this with refSeqStatusFreeList(). */
 
 struct refSeqStatus *refSeqStatusCommaIn(char **pS, struct refSeqStatus *ret);
@@ -50,6 +84,8 @@ void refSeqStatusOutput(struct refSeqStatus *el, FILE *f, char sep, char lastSep
 
 #define refSeqStatusCommaOut(el,f) refSeqStatusOutput(el,f,',',',');
 /* Print out refSeqStatus as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* REFSEQSTATUS_H */
 

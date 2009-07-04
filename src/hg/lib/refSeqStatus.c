@@ -8,7 +8,15 @@
 #include "jksql.h"
 #include "refSeqStatus.h"
 
-static char const rcsid[] = "$Id: refSeqStatus.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
+static char const rcsid[] = "$Id: refSeqStatus.c,v 1.4 2009/07/04 07:14:20 markd Exp $";
+
+/* definitions for status column */
+static char *values_status[] = {"Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL};
+static struct hash *valhash_status = NULL;
+
+/* definitions for mol column */
+static char *values_mol[] = {"DNA", "RNA", "ds-RNA", "ds-mRNA", "ds-rRNA", "mRNA", "ms-DNA", "ms-RNA", "rRNA", "scRNA", "snRNA", "snoRNA", "ss-DNA", "ss-RNA", "ss-snoRNA", "tRNA", NULL};
+static struct hash *valhash_mol = NULL;
 
 void refSeqStatusStaticLoad(char **row, struct refSeqStatus *ret)
 /* Load a row from refSeqStatus table into ret.  The contents of ret will
@@ -16,7 +24,8 @@ void refSeqStatusStaticLoad(char **row, struct refSeqStatus *ret)
 {
 
 ret->mrnaAcc = row[0];
-ret->status = row[1];
+ret->status = sqlEnumParse(row[1], values_status, &valhash_status);
+ret->mol = sqlEnumParse(row[2], values_mol, &valhash_mol);
 }
 
 struct refSeqStatus *refSeqStatusLoad(char **row)
@@ -27,17 +36,18 @@ struct refSeqStatus *ret;
 
 AllocVar(ret);
 ret->mrnaAcc = cloneString(row[0]);
-ret->status = cloneString(row[1]);
+ret->status = sqlEnumParse(row[1], values_status, &valhash_status);
+ret->mol = sqlEnumParse(row[2], values_mol, &valhash_mol);
 return ret;
 }
 
 struct refSeqStatus *refSeqStatusLoadAll(char *fileName) 
-/* Load all refSeqStatus from a tab-separated file.
+/* Load all refSeqStatus from a whitespace-separated file.
  * Dispose of this with refSeqStatusFreeList(). */
 {
 struct refSeqStatus *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -49,28 +59,21 @@ slReverse(&list);
 return list;
 }
 
-struct refSeqStatus *refSeqStatusLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all refSeqStatus from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct refSeqStatus *refSeqStatusLoadAllByChar(char *fileName, char chopper) 
+/* Load all refSeqStatus from a chopper separated file.
  * Dispose of this with refSeqStatusFreeList(). */
 {
 struct refSeqStatus *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = refSeqStatusLoad(row);
     slAddHead(&list, el);
     }
+lineFileClose(&lf);
 slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -84,7 +87,8 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->mrnaAcc = sqlStringComma(&s);
-ret->status = sqlStringComma(&s);
+ret->status = sqlEnumComma(&s, values_status, &valhash_status);
+ret->mol = sqlEnumComma(&s, values_mol, &valhash_mol);
 *pS = s;
 return ret;
 }
@@ -97,7 +101,6 @@ struct refSeqStatus *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->mrnaAcc);
-freeMem(el->status);
 freez(pEl);
 }
 
@@ -122,8 +125,14 @@ fprintf(f, "%s", el->mrnaAcc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->status);
+sqlEnumPrint(f, el->status, values_status);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+sqlEnumPrint(f, el->mol, values_mol);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
