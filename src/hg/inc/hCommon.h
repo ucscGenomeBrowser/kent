@@ -60,10 +60,6 @@ int chromToInt(char *s);
 /* converts a chrom name chrXX into an integer from 1 to 54. 
  *  X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
 
-boolean hIsMgcServer();
-/* Is this the MGC-customized server? Change for config variable
- * mgc.server=yes */
-
 boolean hIsGisaidServer();
 /* Is this the GISAID-customized server? Change for config variable
  * gisaid.server=yes */
