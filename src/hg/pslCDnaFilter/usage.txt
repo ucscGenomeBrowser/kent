@@ -5,7 +5,7 @@ comparative, selecting near best in genome alignments for each
 given cDNA and non-comparative, based only on the quality of an
 individual alignment.
 
-WARNING: comparive filters requires that the input is sorted by
+WARNING: comparative filters requires that the input is sorted by
 query name.  The command: 'sort -k 10,10' will do the trick.
 
 Each alignment is assigned a score that is based on identity and
@@ -119,4 +119,4 @@ The default options don't do any filtering. If no filtering
 criteria are specified, all PSLs will be passed though, except
 those that are internally inconsistent.
 
-THE INPUT MUST BE BE SORTED BY QUERY for the comparitive filters.
+THE INPUT MUST BE BE SORTED BY QUERY for the comparative filters.

@@ -67,7 +67,7 @@ filtering has take place, which limits problem cases.
        o link refAln and hapAln if any of the same bases aligned
 
    o Alignments that are not linked are treated as independent
-     alignments by the comparitive filtering.
+     alignments by the comparative filtering.
 
    o When a near-best comparative filter is applied, each
      refAln and it's linked set of hapAlns are treated as if it
