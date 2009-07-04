@@ -28,6 +28,9 @@ alignments for a given cDNA sequence.
 
   o Filter by minSpan.
 
+  o Filter sets of weirdly overlapping alignments, keeping only the best scoring from
+    a set of overlaps.
+
   o Filter by either global or local near best in genome.
     See notes below for handling of haplotype pseudochromsomes.
 

@@ -7,7 +7,8 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	repMatchTest minAlnSizeTest nonRepSizeTest nonRepMismatchTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
-	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest
+	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
+	weirdOverlappedFilter
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -80,6 +81,13 @@ hapLocalTest:
 hapLocalXenoTest:
 	${MAKE} doFilter name=$@ inPsl=xenoHap.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
 
+
+# filter weird overlapping
+weirdOverlappedFilter:
+	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
+	    filtArgs='-filterWeirdOverlapped'
+
+####
 # Recursive targets.  Results are sorted to allow consistent comparisons, as
 # sometimes internal sorting done by pslCDnaFilter is not stable.
 #  o name - test name

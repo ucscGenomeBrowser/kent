@@ -23,6 +23,12 @@ struct alignSimilarities
     unsigned diff;      /* bases aligned by both to different locations */
 };
 
+static float alignSimilaritiesFrac(struct alignSimilarities as)
+/* compute the similarity as a fraction */
+{
+return ((float)(as.same)/((float)(as.same + as.diff)));
+}
+
 static int findOverlappedBlock(unsigned qStart1, unsigned qEnd1,
                                struct psl *psl2)
 /* find a psl block that overlapps the query range, or -1 if not found */
@@ -42,7 +48,7 @@ static unsigned blockSimCount(struct alignSimilarities *alnSim,
                               unsigned tStart1, struct psl *psl2)
 /* given a block range from one psl, update alnSim from the first overlapped
  * block on the other psl.  Return the number block bases check. Called in
- * a loop until a psl block has been checked*/
+ * a loop until a psl block has been checked */
 {
 unsigned qStart2, qEnd2, tStart2, subSize, consumed = 0;
 int iBlk2 = findOverlappedBlock(qStart1, qEnd1, psl2);
@@ -106,14 +112,15 @@ assert(qStart1 == qEnd1);
 assert(tStart1 == (psl1->tStarts[iBlk1]+psl1->blockSizes[iBlk1]));
 }
 
-static boolean similarAligns(struct cDnaQuery *cdna,
-                             struct cDnaAlign *aln1,
-                             struct cDnaAlign *aln2)
-/* Test if two genes have similar alignments.  Similar means that two
- * alignments of the same cDNA align to the same location, allowing for a
- * small amount of disagreement.  The idea is to not to discard some kind of
- * weird, shifted alignment to the same region. */
+static void weirdOverlapCheck(struct cDnaQuery *cdna,
+                              struct cDnaAlign *aln1,
+                              struct cDnaAlign *aln2)
+/* Check if two overlapping cDNAs have dissimilar alignments.  Similar means
+ * that two alignments of the same cDNA align to the same location, allowing
+ * for a small amount of disagreement.  The idea is to find weird, shifted
+ * alignment to the same region.  Flags these cases. */
 {
+assert(overlapTest(aln1, aln2));
 static float dissimFrac = 0.98;
 struct alignSimilarities alnSim;
 int iBlk1;
@@ -122,12 +129,9 @@ ZeroVar(&alnSim);
 for (iBlk1 = 0; iBlk1 < aln1->psl->blockCount; iBlk1++)
     blockSimCheck(&alnSim, aln1->psl, iBlk1, aln2->psl);
 
-/* weird case: they overlap and don't share bases */
-if ((alnSim.same + alnSim.diff) == 0)
-    return FALSE;
-
-/* check for a high level of similarity */
-if (((float)(alnSim.same)/((float)(alnSim.same + alnSim.diff))) < dissimFrac)
+/* Check for overlap and don't share bases and check for a low level of
+ * similarity */
+if (((alnSim.same + alnSim.diff) == 0) || (alignSimilaritiesFrac(alnSim) < dissimFrac))
     {
     if (verboseLevel() >= 2)
         {
@@ -143,9 +147,30 @@ if (((float)(alnSim.same)/((float)(alnSim.same + alnSim.diff))) < dissimFrac)
     if (!aln2->weirdOverlap)
         cdna->stats->weirdOverCnts.aligns++;
     aln2->weirdOverlap = TRUE;
-    return FALSE;
     }
-return TRUE;
+}
+
+static void flagWeird(struct cDnaQuery *cdna,
+                      struct cDnaAlign *aln)
+/* Flag alignments that have weird overlap with other alignmentst */
+{
+struct cDnaAlign *aln2;
+for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
+    {
+    if (overlapTest(aln, aln2))
+        weirdOverlapCheck(cdna, aln, aln2);
+    }
+}
+
+void overlapFilterFlagWeird(struct cDnaQuery *cdna)
+/* Flag alignments that have weird overlap with other alignments */
+{
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    if (!aln->drop)
+        flagWeird(cdna, aln);
+    }
 }
 
 static int overlapCmp(struct cDnaQuery *cdna,
@@ -154,7 +179,7 @@ static int overlapCmp(struct cDnaQuery *cdna,
 /* compare two overlapping alignments to see which to keep. Returns 
  * -1 to keep the first, 1 to keep the second, or 0 to keep both */
 {
-if (!similarAligns(cdna, aln1, aln2))
+if (aln1->weirdOverlap && aln2->weirdOverlap)
     return 0;  /* weird alignment, keep both */
 
 /* next criteria, keep one with the most coverage */
@@ -182,22 +207,14 @@ for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
         {
         int cmp = overlapCmp(cdna, aln, aln2);
         if (cmp < 0)
-            {
-            aln2->drop = TRUE;
-            cDnaAlignVerb(3, aln2, "drop: overlap");
-            }
+            cDnaAlignDrop(aln2, &cdna->stats->overlapDropCnts, "overlap");
         else if (cmp > 0)
-            {
-            aln->drop = TRUE;
-            cDnaAlignVerb(3, aln, "drop: overlap");
-            }
-        if (cmp != 0)
-            cdna->stats->overlapCnts.aligns++;
+            cDnaAlignDrop(aln, &cdna->stats->overlapDropCnts, "overlap");
         }
     }
 }
 
-void overlapFilter(struct cDnaQuery *cdna)
+void overlapFilterOverlapping(struct cDnaQuery *cdna)
 /* Remove overlapping alignments, keeping only one by some criteria.  This is
  * designed to be used with overlapping, windowed alignments, so one alignment
  * might be truncated. */
@@ -207,6 +224,42 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (!aln->drop)
         overlapFilterAln(cdna, aln);
+    }
+}
+
+static struct cDnaAlign *dropWeirdLowScore(struct cDnaAlign *aln, struct cDnaAlign *aln2)
+/* drop the lower scoring of two weirdly overlapping alignments, returning the one to keep */
+{
+if (aln->score < aln2->score)
+    {
+    struct cDnaAlign *hold = aln;
+    aln = aln2;
+    aln2 = hold;
+    }
+cDnaAlignDrop(aln2, &aln2->cdna->stats->weirdDropCnts,  "weird overlap");
+return aln;
+}
+
+static void dropWeirdOverlapped(struct cDnaQuery *cdna, struct cDnaAlign *aln)
+/* overlapping aln, dropping all but the best scoring. */
+{
+struct cDnaAlign *aln2;
+for (aln2 = aln->next; aln2 != NULL; aln2 = aln2->next)
+    {
+    if (!aln2->drop && aln2->weirdOverlap && overlapTest(aln, aln2))
+        aln = dropWeirdLowScore(aln, aln2);
+    }
+}
+
+void overlapFilterWeirdFilter(struct cDnaQuery *cdna)
+/* Filter alignments identified as weirdly overlapping, keeping only the
+ * highest scoring ones. */
+{
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    if (!aln->drop && aln->weirdOverlap)
+        dropWeirdOverlapped(cdna, aln);
     }
 }
 

@@ -75,10 +75,11 @@ Options:
     than the poly-A tail, it is used when calculating coverage
     instead of the poly-A head.
 
-   -bestOverlap - filter overlapping alignments, keeping the
-    best of aligments that are similar, but not discarding ones
-    with weird overlap.  This is designed to be used with overlapping,
-    windowed alignments, so one alignment might be truncated.
+   -bestOverlap - filter overlapping alignments, keeping the best of
+    alignments that are similar.  This is designed to be used with
+    overlapping, windowed alignments, where one alignment might be truncated.
+    Does not discarding ones with weird overlap unless -dropWeirdOverlapped is
+    specified.
 
    -hapRegions=psl - PSL format alignments of each haplotype pseudo-chromosome
     to the corresponding reference chromosome region.  This is used to map
@@ -88,6 +89,10 @@ Options:
 
    -weirdOverlapped=psl - output weirdly overlapping PSLs to
     this file.
+
+   -filterWeirdOverlapped - Filter weirdly overlapped alignments, keeping
+    the single highest scoring one or an arbitrary one if multiple with
+    the same high score.
 
    -alignStats=file - output the per-alignment statistics to this file
 

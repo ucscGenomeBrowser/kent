@@ -107,7 +107,7 @@ struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna,
 void cDnaAlnLinkHapAln(struct cDnaAlign *aln, struct cDnaAlign *hapAln, float score);
 /* link a reference alignment to a happlotype alignment */
 
-void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts);
+void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts, char *reasonFmt, ...);
 /* flag an alignment as dropped */
 
 /* should alignment ids be added to qNames? */

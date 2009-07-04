@@ -50,6 +50,7 @@ static struct optionSpec optionSpecs[] =
     {"bestOverlap", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
     {"weirdOverlapped", OPTION_STRING},
+    {"filterWeirdOverlapped", OPTION_BOOLEAN},
     {"noValidate", OPTION_BOOLEAN},
     {"alignStats", OPTION_STRING},
     {"hapRefMapped", OPTION_STRING},
@@ -75,6 +76,7 @@ static char *gHapRegions = NULL;       /* haplotype regions file */
 static boolean gBestOverlap = FALSE;   /* filter overlaping, keeping only the best */
 static char *gDropped = NULL;          /* save dropped psls here */
 static char *gWeirdOverlappped = NULL; /* save weird overlapping psls here */
+static boolean gFilterWeirdOverlapped = FALSE; /* save only highest scoring of weirdly overlapped alignments. */
 static int gMinLocalBestCnt = 30;      /* minimum number of bases that are over threshold
                                         * for local best */
 #if 0 // FIXME:
@@ -91,7 +93,7 @@ struct outFiles
 {
     FILE *passFh;              /* filtered psls */
     FILE *dropFh;              /* dropped psls, or NULL */
-    FILE *weirdOverFh;         /* wierd overlap psls, or NULL */
+    FILE *weirdOverFh;         /* weird overlap psls, or NULL */
     FILE *hapRefMappedFh;      /* hap to ref cDNA alignment mappings */
     FILE *hapRefCDnaAlnsFh;    /* cDNA to cDNA alignments. */
 };
@@ -105,16 +107,26 @@ if (devNull == NULL)
 return (pslCheck("", devNull, psl) == 0);
 }
 
+static void invalidPslFind(struct cDnaQuery *cdna)
+/* find invalid PSL for verbose messages */
+{
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    if (!validPsl(aln->psl))
+        cDnaAlignVerb(2, aln, "invalid PSL");
+    }
+}
+
 static void invalidPslFilter(struct cDnaQuery *cdna)
 /* filter for invalid PSL */
 {
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
     if (!aln->drop && !validPsl(aln->psl))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->badCnts);
-        cDnaAlignVerb(2, aln, "drop: invalid psl");
-        }
+        cDnaAlignDrop(aln, &cdna->stats->badDropCnts, "invalid PSL");
+    }
 }
 
 static void minQSizeFilter(struct cDnaQuery *cdna)
@@ -123,11 +135,10 @@ static void minQSizeFilter(struct cDnaQuery *cdna)
 struct cDnaAlign *aln;
 /* note that qSize is actually the same for all alignments */
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
     if (!aln->drop && (aln->psl->qSize < gMinQSize))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->minQSizeCnts);
-        cDnaAlignVerb(3, aln, "drop: min query size %0.4g", aln->psl->qSize);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->minQSizeDropCnts, "min query size %0.4g", aln->psl->qSize);
+    }
 }
 
 static void identFilter(struct cDnaQuery *cdna)
@@ -135,11 +146,10 @@ static void identFilter(struct cDnaQuery *cdna)
 {
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
     if (!aln->drop && (aln->ident < gMinId))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->minIdCnts);
-        cDnaAlignVerb(3, aln, "drop: min ident %0.4g", aln->ident);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->minIdDropCnts, "min ident %0.4g", aln->ident);
+    }
 }
 
 static void coverFilter(struct cDnaQuery *cdna)
@@ -149,11 +159,10 @@ struct cDnaAlign *aln;
 
 /* drop those that are under min */
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
     if (!aln->drop && (aln->cover < gMinCover))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->minCoverCnts);
-        cDnaAlignVerb(3, aln, "drop: min cover %0.4g", aln->cover);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->minCoverDropCnts, "min cover %0.4g", aln->cover);
+    }
 }
 
 static void alnSizeFilter(struct cDnaQuery *cdna)
@@ -168,10 +177,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     struct psl *psl = aln->psl;
     int alnSize = ((psl->match + psl->repMatch + aln->adjMisMatch) - aln->alnPolyAT);
     if (!aln->drop && (alnSize < gMinAlnSize))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->minAlnSizeCnts);
-        cDnaAlignVerb(3, aln, "drop: min align size %d", alnSize);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->minAlnSizeDropCnts, "min align size %d", alnSize);
     }
 }
 
@@ -190,10 +196,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if (nonRepSize < 0)
         nonRepSize = 0;
     if (!aln->drop && (nonRepSize < gMinNonRepSize))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->minNonRepSizeCnts);
-        cDnaAlignVerb(3, aln, "drop: min non-rep size %d", nonRepSize);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->minNonRepSizeDropCnts, "min non-rep size %d", nonRepSize);
     }
 }
 
@@ -206,10 +209,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (!aln->drop && (aln->repMatch > gMaxRepMatch))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->maxRepMatchCnts);
-        cDnaAlignVerb(3, aln, "drop: max repMatch %0.4g", aln->repMatch);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->maxRepMatchDropCnts, "max repMatch %0.4g", aln->repMatch);
     }
 }
 
@@ -233,11 +233,10 @@ static void maxAlignFilter(struct cDnaQuery *cdna)
 struct cDnaAlign *aln;
 cDnaQueryRevScoreSort(cdna);
 for (aln = findMaxAlign(cdna); aln != NULL; aln = aln->next)
+    {
     if (!aln->drop)
-        {
-        cDnaAlignDrop(aln, &cdna->stats->maxAlignsCnts);
-        cDnaAlignVerb(3, aln, "drop: max aligns");
-        }
+        cDnaAlignDrop(aln, &cdna->stats->maxAlignsDropCnts, "max aligns");
+    }
 }
 
 static int getTargetSpan(struct cDnaAlign *aln)
@@ -263,12 +262,11 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
 /* filter by under this amount  */
 minSpanLen = gMinSpan*longestSpan;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
     if (!aln->drop && (getTargetSpan(aln) < minSpanLen))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->minSpanCnts);
-        cDnaAlignVerb(3, aln, "drop: minSpan span %d, min is %d (%0.2f)",
+        cDnaAlignDrop(aln, &cdna->stats->minSpanDropCnts, "minSpan span %d, min is %d (%0.2f)",
                       getTargetSpan(aln), minSpanLen, ((float)getTargetSpan(aln))/longestSpan);
-        }
+    }
 }
 
 static void baseScoreUpdate(struct cDnaQuery *cdna, struct cDnaAlign *aln,
@@ -375,11 +373,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (!aln->drop && !isLocalNearBest(cdna, aln, baseScores))
-        {
-        cDnaAlignDrop(aln, &cdna->stats->localBestCnts);
-        cDnaAlignVerb(3, aln, "drop: local near best %0.4g",
-                      aln->score);
-        }
+        cDnaAlignDrop(aln, &cdna->stats->localBestDropCnts, "local near best %0.4g", aln->score);
     }
 
 freeMem(baseScores);
@@ -425,8 +419,7 @@ static void globalNearBestDrop(struct cDnaAlign *aln, float score, float best,
                                float thresh)
 /* drop alignment for global near best */
 {
-cDnaAlignDrop(aln, &aln->cdna->stats->globalBestCnts);
-cDnaAlignVerb(3, aln, "drop: global near best %0.4g, best=%0.4g, th=%0.4g%s",
+cDnaAlignDrop(aln, &aln->cdna->stats->globalBestDropCnts, "global near best %0.4g, best=%0.4g, th=%0.4g%s",
               score, best, thresh, ((aln->hapAlns != NULL) ? " refLinked" : ""));
 
 /* if there are referenced alignments, decrement ref count, maybe dropping */
@@ -434,12 +427,11 @@ if (aln->hapAlns != NULL)
     {
     struct cDnaHapAln *hapAln;
     for (hapAln = aln->hapAlns; hapAln != NULL; hapAln = hapAln->next)
+        {
         if (--hapAln->hapAln->refLinkCount == 0)
-            {
-            cDnaAlignDrop(hapAln->hapAln, &hapAln->hapAln->cdna->stats->globalBestCnts);
-            cDnaAlignVerb(3, hapAln->hapAln, "drop: global near best hapLinked %0.4g ",
-                          hapAln->hapAln->score);
-            }
+            cDnaAlignDrop(hapAln->hapAln, &hapAln->hapAln->cdna->stats->globalBestDropCnts,
+                          "global near best hapLinked %0.4g", hapAln->hapAln->score);
+        }
     }
 }
 
@@ -462,6 +454,10 @@ static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
                         struct outFiles *outFiles)
 /* filter the current query set of alignments in cdna */
 {
+/* setup */
+invalidPslFind(cdna);
+overlapFilterFlagWeird(cdna);
+
 /* n.b. order should agree with doc */
 if (gValidate)
     invalidPslFilter(cdna);
@@ -478,12 +474,14 @@ if (gMinId > 0.0)
 if (gMinCover > 0.0)
     coverFilter(cdna);
 if (gBestOverlap)
-    overlapFilter(cdna);
+    overlapFilterOverlapping(cdna);
 if (gMinSpan > 0.0)
     minSpanFilter(cdna);
 /* begin comparative filters */
 if (hapRegions != NULL)
     hapRegionsLink(hapRegions, cdna, outFiles->hapRefMappedFh, outFiles->hapRefCDnaAlnsFh);
+if (gFilterWeirdOverlapped)
+    overlapFilterWeirdFilter(cdna);
 if (gLocalNearBest >= 0.0)
     localNearBestFilter(cdna);
 if (gGlobalNearBest >= 0.0)
@@ -568,6 +566,7 @@ gHapRegions = optionVal("hapRegions", NULL);
 gBestOverlap = optionExists("bestOverlap");
 gDropped = optionVal("dropped", NULL);
 gWeirdOverlappped = optionVal("weirdOverlapped", NULL);
+gFilterWeirdOverlapped = optionExists("filterWeirdOverlapped");
 gHapRefMapped = optionVal("hapRefMapped", NULL);
 gHapRefCDnaAlns = optionVal("hapRefCDnaAlns", NULL);
 if (optionExists("noValidate"))

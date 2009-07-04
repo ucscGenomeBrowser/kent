@@ -180,7 +180,7 @@ else
 assert(cdna->adjQStart <= cdna->adjQEnd);
 }
 
-void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts)
+void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts, char *reasonFmt, ...)
 /* flag an alignment as dropped */
 {
 assert(!aln->drop);       /* not allowing multiple drops keeps counts sane */
@@ -188,6 +188,15 @@ aln->drop = TRUE;
 aln->cdna->numDrop++;
 cnts->aligns++;
 assert(aln->cdna->numDrop <= aln->cdna->numAln);
+if (verboseLevel() >= 3)
+    {
+    char reasonBuf[512];
+    va_list ap;
+    va_start(ap, reasonFmt);
+    vasafef(reasonBuf, sizeof(reasonBuf), reasonFmt, ap);
+    va_end(ap);
+    cDnaAlignVerb(3, aln, "drop: %s", reasonBuf);
+    }
 }
 
 struct cDnaQuery *cDnaQueryNew(unsigned opts, struct cDnaStats *stats,
