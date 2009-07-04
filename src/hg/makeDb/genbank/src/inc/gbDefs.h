@@ -42,7 +42,7 @@
 
 
 /* Enumerated type for RefSeq status */
-enum refSeqStatus {
+enum refSeqStat {
     RS_UNKNOWN     = 0,
     RS_REVIEWED    = 1,
     RS_VALIDATED   = 2,
