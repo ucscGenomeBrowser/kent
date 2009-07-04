@@ -71,9 +71,6 @@ cd $gbRoot
 
 verb=3
 
-# allow 250mb core dumps
-ulimit -c 256000
-
 # data files and dirs
 dbloadVar=var/dbload/`hostname`
 lastTime=$dbloadVar/`basename $timeFile`
