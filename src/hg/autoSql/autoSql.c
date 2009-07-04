@@ -18,7 +18,7 @@
 #include "asParse.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.37 2009/03/17 23:31:45 kent Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.38 2009/07/04 04:45:29 markd Exp $";
 
 boolean withNull = FALSE;
 boolean makeJson = FALSE;
@@ -85,7 +85,16 @@ fprintf(f, ");\n");
 static void cSymTypePrName(struct asObject *dbObj, char *name, FILE *f)
 /* print the C type name, prefixed with the object name */
 {
-fprintf(f, "%s%c%s", dbObj->name, toupper(name[0]), name+1);
+char cname[1024];
+safef(cname, sizeof(cname), "%s%c%s", dbObj->name, toupper(name[0]), name+1);
+// Fix name so that it is a valid C identifier.
+char *c;
+for (c = cname; *c != '\0'; c++)
+    {
+    if (!(isalnum(*c) || (*c == '_')))
+        *c = '_';
+    }
+fputs(cname, f);
 }
 
 void cSymTypeDef(struct asObject *dbObj, struct asColumn *col, FILE *f)
