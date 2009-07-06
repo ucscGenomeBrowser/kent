@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.218 2009/07/06 17:43:08 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.219 2009/07/06 18:58:18 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2459,7 +2459,24 @@ for(ix=0;ix<filterCount;ix++)
         filter += 1;
         filterBy->useIndex = TRUE;
         }
+    filterBy->valueAndLabel = (strchr(filter,'|') != NULL);
     filterBy->slValues = slNameListFromComma(filter);
+    if(filterBy->valueAndLabel)
+        {
+        struct slName *val = filterBy->slValues;
+        for(;val!=NULL;val=val->next)
+            {
+            char * lab =strchr(val->name,'|');
+            if(lab == NULL)
+                {
+                warn("Using filterBy but only some values contain labels in form of value|label.");
+                filterBy->valueAndLabel = FALSE;
+                break;
+                }
+            *lab++ = 0;
+            strSwapChar(lab,'_',' '); // Title does not have underscores
+            }
+        }
     slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
 
     if(cart != NULL)
@@ -2541,6 +2558,40 @@ if(count > 1)
 return dyStringCannibalize(&dyClause);
 }
 
+struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *column, boolean *and)
+/* creates the where clause condition to support a filterBy setting.
+   Format: filterBy column:Title=value,value [column:Title=value|label,value|label,value|label])
+   filterBy filters are multiselect's so could have multiple values selected.
+   thus returns the "column1 in (...) and column2 in (...)" clause.
+   if 'column' is provided, and there are multiple filterBy columns, only the named column's clause is returned.
+   The 'and' param and dyString in/out allows stringing multiple where clauses together
+*/
+{
+filterBy_t *filterBySet = filterBySetGet(tdb, cart,NULL);
+if(filterBySet== NULL)
+    return extraWhere;
+
+filterBy_t *filterBy = filterBySet;
+for(;filterBy != NULL; filterBy = filterBy->next)
+    {
+    if(column != NULL && differentString(column,filterBy->column))
+        continue;
+
+    char *clause = filterByClause(filterBy);
+    if(clause != NULL)
+        {
+        if(*and)
+            dyStringPrintf(extraWhere, " AND ");
+        dyStringPrintf(extraWhere, clause);
+        freeMem(clause);
+        *and = TRUE;
+        }
+    }
+filterBySetFree(&filterBySet);
+return extraWhere;
+}
+
 char *filterBySetClause(filterBy_t *filterBySet)
 /* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
 {
@@ -2608,6 +2659,11 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
                 printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
             freeMem(name);
             }
+        }
+    if(filterBy->valueAndLabel)
+        {
+        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
+            printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name,slValue->name+strlen(slValue->name)+1);
         }
     else
         {
@@ -3559,6 +3615,18 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 
+filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+if(filterBySet != NULL)
+    {
+    if(!tdbIsComposite(tdb) && !tdbIsCompositeChild(tdb))
+        jsIncludeFile("hui.js",NULL);
+
+    filterBySetCfgUi(tdb,filterBySet);
+    filterBySetFree(&filterBySet);
+    return; // Cannot have both 'filterBy' score and 'scoreFilter'
+    }
+
+
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
 if (! (scoreFilterOk || glvlScoreMin))
@@ -4069,7 +4137,7 @@ else
 	char *viewString;
 	if (subgroupFind(tdb, "view", &viewString))
 	    {
-	    safef(option, optionSize, "%s.%s.%s", 
+	    safef(option, optionSize, "%s.%s.%s",
 		tdb->parent->tableName, viewString,  species);
 	    ret = cartUsualBoolean(cart, option, TRUE);
 	    }
