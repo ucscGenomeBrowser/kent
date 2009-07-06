@@ -996,12 +996,13 @@ void sortableTdbItemsFree(sortableTdbItem **items);
 
 #define FILTER_BY "filterBy"
 typedef struct _filterBy {
-// A single filterBy set (from trackDb.ra filterBy column:Title=value,value [column:Title=value,value,value])
+// A single filterBy set (from trackDb.ra filterBy column:Title=value,value [column:Title=value|label,value|label,value|label])
     struct _filterBy *next;   // SL list
     char*column;              // field that will be filtered on
     char*title;               // Title that User sees
     char*htmlName;            // Name used in HTML/CGI
     boolean useIndex;         // The returned values should be indexes
+    boolean valueAndLabel;    // If values list is value|label, then label is shown to the user
     struct slName *slValues;  // Values that can be filtered on (All is always implied)
     struct slName *slChoices; // Values that have been chosen
 } filterBy_t;
@@ -1018,6 +1019,15 @@ char *filterBySetClause(filterBy_t *filterBySet);
 void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet);
 /* Does the UI for a list of filterBy structure */
 
+struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *column, boolean *and);
+/* creates the where clause condition to support a filterBy setting.
+   Format: filterBy column:Title=value,value [column:Title=value|label,value|label,value|label])
+   filterBy filters are multiselect's so could have multiple values selected.
+   thus returns the "column1 in (...) and column2 in (...)" clause.
+   if 'column' is provided, and there are multiple filterBy columns, only the named column's clause is returned.
+   The 'and' param and dyString in/out allows stringing multiple where clauses together
+*/
 boolean makeDownloadsLink(struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
