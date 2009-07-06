@@ -3364,12 +3364,12 @@ wgEncode 1
     color 100,50,150
     type bedGraph 4
 
-# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+# NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 
 track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI Bi-Pro
-longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
+longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide
 group regulation
 type bed 8 +

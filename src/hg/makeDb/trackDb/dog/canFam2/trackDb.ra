@@ -127,11 +127,11 @@ priority 1.1
 visibility hide
 type bed 6
 
-# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+# ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
-longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
+longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide
 group regulation
 type bed 8 +

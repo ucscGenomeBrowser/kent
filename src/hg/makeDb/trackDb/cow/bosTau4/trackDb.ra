@@ -89,11 +89,11 @@ type bed 5 .
 track nscanGene override
 informant Cow N-SCAN uses mouse (mm9) as the informant.
 
-# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+# ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
-longLabel ENCODE NHGRI Elnitski Bi-directional Promoters
+longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide
 group regulation
 type bed 8 +
