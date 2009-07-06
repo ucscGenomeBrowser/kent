@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.217 2009/06/25 08:43:07 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.218 2009/07/06 17:43:08 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4051,6 +4051,34 @@ if(filterBySet != NULL)
 cfgEndBox(boxed);
 }
 
+static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species, char *option, int optionSize)
+/* check the cart to see if species is turned off or on (default on) */
+{
+boolean ret = TRUE;
+safef(option, optionSize, "%s.%s", tdb->tableName, species);
+
+/* see if this is a simple multiz (not composite track) */
+char *s = cartOptionalString(cart, option);
+if (s != NULL)
+    ret =  (sameString(s, "on") || atoi(s) > 0);
+else
+    {
+    /* check parent to see if it has these variables */
+    if (tdb->parent != NULL)
+	{
+	char *viewString;
+	if (subgroupFind(tdb, "view", &viewString))
+	    {
+	    safef(option, optionSize, "%s.%s.%s", 
+		tdb->parent->tableName, viewString,  species);
+	    ret = cartUsualBoolean(cart, option, TRUE);
+	    }
+	}
+    }
+
+return ret;
+}
+
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt)
 {
 int speciesCt = 0;
@@ -4100,9 +4128,7 @@ for (group = 0; group < *groupCt; group++)
         {
         AllocVar(wmSpecies);
         wmSpecies->name = cloneString(species[i]);
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
-	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
-	//printf("checking %s and is %d\n",option,wmSpecies->on);
+	wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option);
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
         }
@@ -4112,6 +4138,7 @@ slReverse(&wmSpeciesList);
 
 return groups;
 }
+
 
 struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart,
     struct trackDb *tdb, char *name, char *db)
@@ -4293,8 +4320,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     else
     	{
     	puts("<TD>");
-    	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
-        wmSpecies->on = cartUsualBoolean(cart, option, checked);
+        wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option);
         cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)

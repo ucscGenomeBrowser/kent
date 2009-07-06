@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.13 2009/01/06 17:26:22 ann Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.14 2009/07/06 17:43:08 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -47,6 +47,9 @@ char *database = sqlGetDatabase(conn);
 struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
 struct wigMafSpecies *wmSpecies;
 int groupCnt;
+
+/* get maf parent (if any) */
+maftdb->parent = hCompositeTrackDbForSubtrack(database,maftdb);
 
 /* this queries the state of the getSpecies dialog */
 wigMafGetSpecies(cart, maftdb, database, &wmSpecies, &groupCnt);
@@ -270,6 +273,10 @@ printf("characters (enter zero for no headers)<BR>");
 
 printf("<BR>");
 struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
+
+/* get maf parent (if any) */
+maftdb->parent = hCompositeTrackDbForSubtrack(database,maftdb);
+
 wigMafSpeciesTable(cart, maftdb, mafTable, database);
 
 addButtons();
