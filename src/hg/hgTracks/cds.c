@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.102 2009/06/25 00:05:51 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.103 2009/07/06 23:59:37 angie Exp $";
 
 Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
 /* Find a color which is a percentless 'lighter' shade of color */
@@ -841,7 +841,7 @@ else if (endsWith("ExtFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, name);
 else if (sameString("nameIsSequence", seqSource))
     {
-    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), cloneString(name));
+    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), name);
     if (lf->orientation == -1)
 	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
     }
@@ -853,7 +853,7 @@ else if (sameString("seq1Seq2", seqSource))
     }
 else if (sameString("lfExtra", seqSource))
     {
-    mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), cloneString(lf->extra));
+    mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
     if (lf->orientation == -1)
 	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
     }
