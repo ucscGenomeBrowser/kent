@@ -36,6 +36,11 @@ file ddf
 type string
 required no
 
+field restrictionEnzyme
+file ddf
+type string
+required no
+
 field treatment
 file ddf
 type string
