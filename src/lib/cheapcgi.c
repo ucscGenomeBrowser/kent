@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.123 2009/06/18 17:53:38 larrym Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.124 2009/07/06 22:56:22 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1644,7 +1644,10 @@ if (gotAny)
     }
 putenv("REQUEST_METHOD=GET");
 putenv(queryString);
-safef(hostLine, sizeof(hostLine), "SERVER_NAME=%s", getenv("HOST"));
+char *host = getenv("HOST");
+if (host == NULL)
+    host = "unknown";
+safef(hostLine, sizeof(hostLine), "SERVER_NAME=%s", host);
 putenv(hostLine);
 initCgiInput();
 return gotAny;
