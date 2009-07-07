@@ -5105,7 +5105,7 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 visibilityViewDefaults Transfrags=hide FiltTransfrags=pack RawSignal=hide FiltRawSignal=full
 noInherit on
-settingsByView Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=300 FiltTransfrags:scoreFilter=0,scoreFilterLimits=100:1000,scoreMin=300  RawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 FiltRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
+settingsByView Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 FiltTransfrags:scoreFilter=0,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4  RawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 FiltRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
 priority 0
 type bed 3
 dataVersion ENCODE Nov 2008, Feb 2009, and July 2009 Freezes
