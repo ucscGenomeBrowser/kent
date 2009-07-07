@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.219 2009/07/06 18:58:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.220 2009/07/07 00:10:43 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2625,7 +2625,7 @@ void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
 if(filterBySet == NULL)
     return;
 
-#define FILTERBY_HELP_LINK  "<A HREF=\"../../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
+#define FILTERBY_HELP_LINK  "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if(count == 1)
     puts("<BR><TABLE cellpadding=3><TR valign='top'>");
@@ -4650,7 +4650,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
     }
 
 toLowerN(membersOfView->title, 1);
-printf("<B>Select %s </B>(<A HREF=\"../../goldenPath/help/multiView.html\" title='Help on views' TARGET=_BLANK>help</A>):<BR>\n", membersOfView->title);
+printf("<B>Select %s </B>(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on views' TARGET=_BLANK>help</A>):<BR>\n", membersOfView->title);
 puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
