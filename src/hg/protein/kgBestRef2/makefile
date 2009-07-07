@@ -11,8 +11,8 @@ A2 = kgResultBestRef2
 O2 = ${A2}.o
 
 all::
-	make ${A1}
-	make ${A2}
+	${MAKE} ${A1}
+	${MAKE} ${A2}
 
 ${A1}: ${O1} ${MYLIBS}
 	${CC} ${COPT} ${HG_WARN} ${HG_DEFS} \
