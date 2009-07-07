@@ -196,7 +196,7 @@ origAssembly mm5
     color 43,51,109
 
 track jaxRepTranscript
-shortLabel MGI Rep Transcript
+shortLabel MGI RepTranscrpt
 longLabel Jackson Laboratory / Mouse Genome Informatics Representative Transcript
 group phenoAllele
 visibility hide
