@@ -137,7 +137,8 @@ bed file.
 <H3>Example Three</H3>
 <P>In this example, you will create your own bigBed file from a fully-featured
 existing bed file that contains the standard bed fields up to and including 
-the color field (field 9), plus a few additional fields.  
+the color field (field 9), plus two additional non-standard fields (two 
+alternate names for each item in the file).  
 BigBed files can store extra fields in addition to the 
 <A HREF="customTrack.html#BED">predefined bed fields</A>.  
 If you add extra fields to your bigBed file, you must include
@@ -146,8 +147,6 @@ a <TT>.as</TT> (AutoSQL) format file describing the fields.  See
 for information on AutoSQL.  There are several sample <TT>.as</TT> files 
 <A HREF="http://genome-test.cse.ucsc.edu/~kent/src/unzipped/hg/lib/">here</A>.
 </P>
-
-
 
 <UL>
  <LI> Save this <A HREF="bedExample2.bed.gz">bed file</A> 
@@ -160,21 +159,21 @@ for information on AutoSQL.  There are several sample <TT>.as</TT> files
   The <TT>.as</TT> file contains a description of the fields in the bed file.  
   This is required when the bed file contains a field for color.
  <LI> Download the <TT>bedToBigBed</TT> utility (see <EM>step 3</EM>).
- <LI> Run the utility to create the bigBed output file 
+ <LI> Run the utility to create the bigBed output file
   (see <EM>step 5</EM>):<BR>
-  <TT><B>bedToBigBed</B> -as=bedExample2.as bedExample2.bed.gz 
+  <TT><B>bedToBigBed</B> -as=bedExample2.as -bedFields=9 bedExample2.bed.gz
    hg18.chrom.sizes myBigBed2.bb</TT>
- <LI> Place the bigBed file you just created (<TT>myBigBed2.bb</TT>) on a 
+ <LI> Place the bigBed file you just created (<TT>myBigBed2.bb</TT>) on a
   web-accessible server (see <EM>step 6</EM>).
  <LI> Construct a &quot;track&quot; line that points to your bigBed file
   (see <EM>step 7</EM>).  Because this bigBed file includes a field for color,
-  you must include the <A HREF="customTrack.html#BED"><TT>itemRgb</TT></A> 
-  attribute in the &quot;track&quot; line. It will look somewhat similar to 
+  you must include the <A HREF="customTrack.html#BED"><TT>itemRgb</TT></A>
+  attribute in the &quot;track&quot; line. It will look somewhat similar to
   this (note that you must insert the correct URL to your bigBed file):<BR>
-   <TT>track type=bigBed name="bigBed Example Three" 
-   description="A bigBed File with Color" itemRgb="On" 
-   dataUrl=http://yourWebAddress/bigBedExample2.bb</TT>
- <LI> Create the custom track on the human assembly hg18 (Mar. 2006), and 
+   <TT>track type=bigBed name="bigBed Example Three"
+   description="A bigBed File with Color and two Extra Fields" itemRgb="On"
+   dataUrl=http://yourWebAddress/myBigBed2.bb</TT>
+ <LI> Create the custom track on the human assembly hg18 (Mar. 2006), and
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
   bed file contains data only on chromsome 7.
 </UL>
