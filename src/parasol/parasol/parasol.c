@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.45 2008/09/11 23:17:01 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.46 2009/07/07 21:08:38 markd Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -160,8 +160,8 @@ void addJob(int argc, char *argv[], boolean printId)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
-char defaultResults[512];
+char curDir[PATH_LEN];
+char defaultResults[PATH_LEN];
 char *in = optionVal("in", "/dev/null"); 
 char *out = optionVal("out", "/dev/null"); 
 char *jobIdString;
