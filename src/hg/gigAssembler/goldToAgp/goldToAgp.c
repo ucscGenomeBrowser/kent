@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: goldToAgp.c,v 1.3 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: goldToAgp.c,v 1.4 2009/07/07 18:45:01 hiram Exp $";
 
 
 void usage()
@@ -37,7 +37,6 @@ struct fragData *parseFragData(char *words[], char *phase, int whereIx)
 /* Parse frag data from a line. */
 {
 struct fragData *fd;
-int wordCount;
 char *s, *e;
 
 AllocVar(fd);
@@ -96,7 +95,6 @@ struct lineFile *lf = lineFileOpen(goldName, TRUE);
 FILE *f = mustOpen(agpName, "w");
 int lineSize, wordCount;
 char *line, *words[16];
-int i;
 
 printf("Translating %s to %s\n", goldName, agpName);
 while (lineFileNext(lf, &line, &lineSize))

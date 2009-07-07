@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gapper.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
+static char const rcsid[] = "$Id: gapper.c,v 1.4 2009/07/07 18:44:59 hiram Exp $";
 
 FILE *logFile;		/* Report stuff here. */
 struct lm *lm;		/* Fast local memory pool. */
@@ -309,7 +309,6 @@ void readNaContigs(struct lineFile *in, struct gChromosome *chrom, boolean isOrd
 int lineSize, wordCount;
 char *line, *words[20];
 boolean gotEnd = FALSE;
-char *lastCtgName = "";
 char *acc, *bac;
 struct gContig *contig = NULL;
 struct gContigRef *contigRef;
@@ -403,7 +402,7 @@ while (lineFileNext(in, &line, &lineSize))
 	errAbort("Odd start line %d of %s\n", in->lineIx, in->fileName);
     s = strrchr(words[2], '.');
     if (s == NULL)
-	errAbort("Couldn't find chromosome line %d of 5s\n", in->lineIx, in->fileName);
+	errAbort("Couldn't find chromosome line %d of %5s\n", in->lineIx, in->fileName);
     s += 1;
     strncpy(chromName, s, sizeof(chromName));
     if (!sameString(chromName, lastChromName))
@@ -692,9 +691,7 @@ struct bConnect *bcList = NULL, *bc;
 bits32 count;
 bits32 i;
 char s[256];
-int slen;
 struct hashEl *hel;
-struct gClone *clone;
 
 mustReadOne(f, count);
 for (i=0; i<count; ++i)
@@ -812,7 +809,7 @@ int tot = 0;
 
 mustReadOne(f, sig);
 if (sig != bcTempSig)
-    errAbort("%s isn't a valid gapPreProc file\n");
+    errAbort("%s isn't a valid gapPreProc file\n", fileName);
 mustReadOne(f, count);
 for (i=0; i<count; ++i)
     {
@@ -1424,10 +1421,6 @@ void joinBarges()
 struct joinedBarges *jb;
 char *jbName;
 struct joinedClones *jc;
-int selfSingleCount = 0;
-int selfDoubleCount = 0;
-int otherSingleCount = 0;
-int otherDoubleCount = 0;
 struct gBarge *bargeA, *bargeB;
 struct hashEl *hel;
 struct connectPair *cp;

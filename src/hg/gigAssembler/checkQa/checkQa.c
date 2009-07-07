@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: checkQa.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
+static char const rcsid[] = "$Id: checkQa.c,v 1.3 2009/07/07 18:44:58 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,7 +39,7 @@ char faName[512];
 char cloneName[512];
 int ix = 0;
 struct slName *el, *list;
-struct qaSeq *qaList, *qa;
+struct qaSeq *qaList;
 
 printf("Comparing %s and %s\n", qaDir, faDir);
 list = listDir(faDir, "*.fa");

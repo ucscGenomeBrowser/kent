@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: checkNt.c,v 1.5 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: checkNt.c,v 1.6 2009/07/07 18:44:54 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,7 +43,7 @@ return nt;
 void addAgpSize(struct hash *ntHash, char *fileName)
 /* Read an agp file and store size of each NT contig. */
 {
-char *line, *row[5];
+char *row[5];
 int wordCount;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 while ((wordCount = lineFileChop(lf, row)) > 0)
@@ -88,11 +88,10 @@ lineFileClose(&lf);
 void addInCoor(struct hash *ntHash, char *fileName)
 /* Check if NT's are present in ctg_coords file. */
 {
-char *line, *row[8];
+char *row[8];
 int wordCount;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct nt *nt;
-int end;
 while ((wordCount = lineFileChop(lf, row)) > 0)
     {
     lineFileExpectWords(lf, ArraySize(row), wordCount);

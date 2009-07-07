@@ -5,14 +5,14 @@
 #include "hash.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkOut.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
+static char const rcsid[] = "$Id: checkOut.c,v 1.3 2009/07/07 18:44:57 hiram Exp $";
 
 void checkOut(char *dir)
 /* Check out - check directory to make sure it has
  * a .out file for each .fa file, and that .out file
  * is non-empty. */
 {
-char faName[512], outName[512];
+char outName[512];
 struct slName *outList, *outEl, *faList, *faEl;
 struct hash *outHash = newHash(16);
 boolean missingAny = FALSE, zeroAny = FALSE;

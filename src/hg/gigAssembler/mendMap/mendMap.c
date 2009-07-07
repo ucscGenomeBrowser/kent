@@ -15,7 +15,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: mendMap.c,v 1.10 2003/09/05 21:30:43 kent Exp $";
+static char const rcsid[] = "$Id: mendMap.c,v 1.11 2009/07/07 18:45:02 hiram Exp $";
 
 int version = 23;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
@@ -186,7 +186,6 @@ else return '-';
 int maxMapDif(struct mmClone *a, struct mmClone *b)
 /* Return max distance between clones in map coordinates. */
 {
-int fDif, rDif;
 int aStart, aEnd, bStart, bEnd;
 
 aStart = a->mapPos;
@@ -294,8 +293,6 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[7];
 struct mmClone *cloneList = NULL, *clone;
 struct hash *cloneHash = newHash(11);
-struct cloneEnd *ce;
-int endCount;
 
 while (lineFileRow(lf, words))
     {
@@ -563,7 +560,6 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[12];
 struct overlappingClonePair *ocpList = NULL, *ocp;
 struct hash *ocpHash = newHash(12);
-int score;
 
 while (lineFileRow(lf, words))
     {
@@ -992,8 +988,6 @@ struct dlNode *n1, *n2;
 struct dlNode *innerStart, *outerEnd;
 struct cloneEnd *ce;
 struct mmClone *clone;
-struct overlappingClonePair *ocp;
-char how;
 struct fitAt *fit;
 int score, minScore;
 int missingOverlap, presentOverlap;
@@ -1188,7 +1182,6 @@ enum orientTypes ocpCloneOrientation(struct overlappingClonePair *ocp,
 /* Return orientation of clone relative to other clone in pair based on end matches. 
  * Returns 1 (orientForward) if it appears clone comes after other clone. */
 {
-int orientation = orientUnknown;
 char how, howFlip;
 
 how = ocpHitsHow(ocp, clone, -1, ignoreEnds);
@@ -1221,14 +1214,13 @@ struct fitAt *bargeFitListLeft(struct barge *barge,
 /* Return scored list of all places newbie could fit overlapping member
  * to left in barge. */
 {
-char how, howFlip, newHow;
+char how, howFlip;
 int newbieOrientation = 0, memberOrientation;
 struct dlNode *node, *firstStart, *n1, *n2;
 struct cloneEnd *ce;
 struct mmClone *clone;
 struct overlappingClonePair *ocp;
 struct fitAt *fitList = NULL, *fit;
-int score;
 
 uglyerf("bargeFitListLeft(newbie %s, member %s)\n", newbie->name, member->name);
 ce = memStart->val;
@@ -1325,7 +1317,7 @@ struct fitAt *bargeFitListRight(struct barge *barge,
 /* Return scored list of all places newbie could fit overlapping member
  * to right in barge. */
 {
-char how, howFlip, newHow;
+char how, howFlip;
 int newbieOrientation = 0, memberOrientation ;
 struct dlNode *node, *lastEnd, *n1, *n2;
 struct cloneEnd *ce;
@@ -1442,7 +1434,6 @@ boolean bargeAdd(struct barge *barge, struct mmClone *newbie, struct mmClone *me
 {
 struct dlNode *memStart, *memEnd;	/* Start/end nodes of member. */
 struct overlappingClonePair *ocp;
-int ori;
 struct fitAt *leftFits, *rightFits, *fitList, *fit;
 
 logIt("bargeAdd: newbie %s, member %s\n", newbie->name, member->name);
@@ -1534,7 +1525,6 @@ struct dlNode *n1;
 struct cloneEnd *ce;
 boolean leftOk, rightOk, addAfter;
 struct overlappingClonePair *ocp;
-char *newbieName;
 
 /* Figure out which clone is already part of big barge. */
 if (joiningOcp->a->barge == big)
@@ -2274,7 +2264,6 @@ struct mmClone *findNextUnenclosed(struct dlNode *node)
 /* Find next clone in double-linked clone end list that is
  * not enclosed. */
 {
-struct mmClone *clone = NULL;
 struct cloneEnd *ce;
 
 for (; !dlEnd(node); node = node->next)
@@ -2433,11 +2422,7 @@ boolean evalGapInfo(FILE *f, struct barge *aBarge, struct barge *bBarge,
 struct cloneRef *aEnd = NULL, *bStart = NULL;
 struct bepRef *aBep = NULL, *bBep = NULL, *joiningBep = NULL, *bepRef;
 struct bep *bep;
-struct dlNode *node;
 int bigEnough = 200000;
-int aEndSize = 0, bStartSize = 0;
-struct mmClone *clone, *lastClone = NULL;
-struct cloneEnd *ce;
 boolean bridged = FALSE;
 
 aEnd = getLastClones(aBarge, bigEnough, ocpHash);
@@ -2473,14 +2458,6 @@ slFreeList(&joiningBep);
 slFreeList(&aEnd);
 slFreeList(&bStart);
 return bridged;
-}
-
-char *naForNull(char *s)
-/* Return s, or if s is null "n/a" */
-{
-if (s != NULL)
-    return s;
-return "n/a";
 }
 
 char cloneDir(struct cloneEnd *ce)
@@ -2520,7 +2497,7 @@ for (bNode = bargeList->head; !dlEnd(bNode); bNode = bNode->next)
     for (eNode = barge->cloneEndList->head; !dlEnd(eNode); eNode = eNode->next)
         {
 	char os, ot, is, it;
-	int prevOverlap, nextOverlap;
+	int nextOverlap;
 
 	ce = eNode->val;
 	if (ce->isStart)
@@ -2608,14 +2585,10 @@ struct dlNode *bNode, *eNode;
 int pos = 0;
 struct barge *barge;
 struct cloneEnd *ce;
-struct mmClone *clone;
-boolean lastBridged = FALSE;
-
 
 for (bNode = bargeList->head; !dlEnd(bNode); bNode = bNode->next)
     {
-    struct mmClone *clone, *lastUnenclosed = NULL, *nextUnenclosed;
-    struct overlappingClonePair *ocp;
+    struct mmClone *clone, *lastUnenclosed = NULL;
 
     barge = bNode->val;
     for (eNode = barge->cloneEndList->head; !dlEnd(eNode); eNode = eNode->next)
@@ -2679,6 +2652,7 @@ for (; !dlEnd(eNode); eNode = eNode->next)
         return ce;
     }
 errAbort("Internal error. Couldn't find end of %s", clone->name);
+return NULL;
 }
 
 void setEnclosedPos(struct dlList *bargeList, struct hash *ocpHash, struct hash *bepHash)
@@ -2688,7 +2662,6 @@ struct dlNode *bNode, *eNode, *nextEnode = NULL;
 int lastPos = 0;
 struct barge *barge;
 struct cloneEnd *ce, *nextKnownCe, *endCe;
-struct mmClone *clone;
 int lastKnownPos, nextKnownPos, knownSpan;
 int encCount;
 int i;
@@ -2757,7 +2730,7 @@ void orderAndOrientBarges(struct dlList *bargeList, struct hash *ocpHash, struct
 /* Orient barges according to map and set barge->mapPos field
  * according to first clone. */
 {
-struct dlNode *bNode, eNode;
+struct dlNode *bNode;
 struct barge *barge;
 
 for (bNode = bargeList->head; !dlEnd(bNode); bNode = bNode->next)
@@ -2830,7 +2803,7 @@ void saveLiteralEnds(char *fileName, struct mmClone *cloneList)
 struct cloneEnd *ce;
 struct barge *barge = NULL;
 struct dlList *bargeList = newDlList();
-int end, lastEnd = -BIGNUM;
+int lastEnd = -BIGNUM;
 struct mmClone *clone;
 struct dlNode *node;
 
@@ -2949,14 +2922,11 @@ void mm(char *contigDir)
 char fileName[512];
 struct mmClone *cloneList = NULL, *clone;
 struct hash *cloneHash = NULL;
-struct overlappingClonePair *ocpList = NULL, *ocp;
+struct overlappingClonePair *ocpList = NULL;
 struct hash *ocpHash = NULL;
 struct dlList *bargeList = NULL;
-struct barge  *barge;
-struct dlNode *node;
 struct hash *bepHash = NULL;
 struct bep *bepList = NULL;
-FILE *f;
 
 /* Set up logging of error and status messages. */
 sprintf(fileName, "%s/mmLog.%d", contigDir, version);
