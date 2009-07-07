@@ -1185,6 +1185,12 @@ searchMethod fuzzy
 termRegex [[:alpha:]0-9]+
 searchPriority 50
 
+searchTable jaxQtl
+searchType bed
+searchMethod fuzzy
+termRegex [[:alpha:]0-9]+
+searchPriority 50
+
 searchTable jaxQTL3
 searchType bed
 searchMethod fuzzy
