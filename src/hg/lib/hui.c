@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.220 2009/07/07 00:10:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.221 2009/07/07 01:07:13 kate Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3408,7 +3408,9 @@ if (scoreMinStr != NULL)
     int maxShade = 9;
     int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
-    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, compositeLevel, MIN_GRAY_LEVEL, scoreMinGrayLevel);
+    char *setting = trackDbSettingClosestToHome(tdb, MIN_GRAY_LEVEL);
+    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, compositeLevel, MIN_GRAY_LEVEL, 
+                        setting ? atoi(setting) : scoreMinGrayLevel);
     if (minGrayLevel <= 0) minGrayLevel = 1;
     if (minGrayLevel > maxShade) minGrayLevel = maxShade;
     puts("\n<P><B>Shade of lowest-scoring items: </B>");

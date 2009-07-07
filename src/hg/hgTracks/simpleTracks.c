@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.89 2009/07/06 19:00:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.90 2009/07/07 01:07:13 kate Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5940,7 +5940,7 @@ void adjustBedScoreGrayLevel(struct trackDb *tdb, struct bed *bed, int scoreMin,
 {
 static char *prevTrackName = NULL;
 static int scoreMinGrayLevel = 0;
-static int cartMinGrayLevel = 0;
+static int cartMinGrayLevel = 0; /* from cart, or trackDb setting */
 static float newScoreMin = 0;
 
 if (tdb->tableName != prevTrackName)
@@ -5948,7 +5948,9 @@ if (tdb->tableName != prevTrackName)
     scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0)
         scoreMinGrayLevel = 1;
-    cartMinGrayLevel = cartUsualIntClosestToHome(cart, tdb, FALSE, "minGrayLevel", scoreMinGrayLevel);
+    char *setting = trackDbSettingClosestToHome(tdb, MIN_GRAY_LEVEL);
+    cartMinGrayLevel = cartUsualIntClosestToHome(cart, tdb, FALSE, MIN_GRAY_LEVEL,
+                                setting ? atoi(setting) : scoreMinGrayLevel);
     newScoreMin = cartMinGrayLevel * scoreMax/maxShade;
     prevTrackName = tdb->tableName;
     }

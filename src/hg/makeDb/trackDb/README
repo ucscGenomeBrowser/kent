@@ -397,6 +397,8 @@ Some settings used by various tracks:
     o scoreMin, scoreMax - sets the range used to color the track if
         colored by score.  Allows use of the whole color range when data
         has scores with a smaller range than 0-1000.
+    o minGrayLevel - sets a minimum color shade to display for a scored BED.
+        Range is 1-9 (indicates 11% - 99%).
     o baseColorUseCds {genbank,given,table,none} - For genePred or psl+cds
       (such as genbank mRNA, EST etc) tracks.  Specifies where CDS coordinates
       can be found (if any) so that codons can be drawn when viewing a
