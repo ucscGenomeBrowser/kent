@@ -18,20 +18,6 @@ table gbLoaded
     boolean extFileUpdated;	"true if extFile has been updated"
     )
 
-table gbSeq
-"GenBank sequence metadata"
-    (
-    uint id;		"ID/index"
-    string acc;		"GenBank accession"
-    short version;	"GenBank version number suffix"
-    uint size;		"number of bases in sequence"
-    uint gbExtFile;	"ID/index of sequence file record in gbExtFile table"
-    long file_offset;	"byte offset in sequence file"
-    uint file_size;	"byte length of sequence in sequence file"
-    enum type;		"Full length ('mRNA') or EST ('EST')"
-    enum srcDb;		"Source database: 'GenBank' or 'RefSeq'"
-    )
-
 table gbStatus
 "GenBank version info for alignments in the database"
     (
