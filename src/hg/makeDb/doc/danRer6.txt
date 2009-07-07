@@ -34,7 +34,8 @@
     mkdir download
     cd download
 
-    # get sequence from Sanger
+    # get sequence from Sanger  
+    # (See below, they later give us corrected files at another location)
 
     wget --timestamping -r -np -l 2 -nd -L 'ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv8release'
 
@@ -115,4 +116,340 @@
     tail -1 checkAgpAndFa.log
 #All AGP and FASTA entries agree - both files are valid
 
+-------------------------------------------------------------------
+#RE-DOING with their corrected clone names:  (done 2009-06-24 galt)
 
+
+ftp://ftp.sanger.ac.uk/pub/zfish/jt8/rt
+
+"
+I should stress that the sequence content of the FASTA file has not changed
+from the versions you
+already have; I have just altered the headers for the first set of clones
+mentioned in the previous
+email. Only the contig-level FASTA file is affected; the scaffold-level and
+top-level FASTA files are
+not concerned with the names of clones, so they remain as before.
+"
+
+    # move old version out of the way
+    cd /hive/data/genomes/danRer6
+    mv download download0
+    mkdir download
+    cd download
+
+    # get sequence from Sanger
+    # James Torrance <jt8@sanger.ac.uk> 
+    # created this version of Zv8 with fixed clone-ids.
+    wget --timestamping -r -np -l 2 -nd -L 'ftp://ftp.sanger.ac.uk/pub/zfish/jt8/rt'
+
+[hgwdev:download> ll
+-rw-rw-r-- 1 galt protein   1051781 Jun 23 17:23 Zv8_chr.agp.gz
+-rw-rw-r-- 1 galt protein 468741052 Jun 23 22:43 Zv8_contigs.fa.gz
+-rw-rw-r-- 1 galt protein   1683358 Jun 23 17:23 Zv8_scaffold.agp.gz
+-rw-rw-r-- 1 galt protein       155 Jun 23 22:44 md5sum.dat
+
+[hgwdev:download> cat md5sum.dat 
+1bb31f1f3290038066f74680a854ff69  Zv8_chr.agp.gz
+c4cc4c9574721ce57fde0c79357a4a13  Zv8_contigs.fa.gz
+fc4f9261b77fd177096f0cc9c8718a8d  Zv8_scaffold.agp.gz
+
+[hgwdev:download> md5sum *.gz
+1bb31f1f3290038066f74680a854ff69  Zv8_chr.agp.gz
+c4cc4c9574721ce57fde0c79357a4a13  Zv8_contigs.fa.gz
+fc4f9261b77fd177096f0cc9c8718a8d  Zv8_scaffold.agp.gz
+# they match! no corruption during transfer
+
+
+    # decompress
+    gunzip *.gz
+
+[hgwdev:download> ll
+-rw-rw-r-- 1 galt protein    4094225 Jun 23 17:23 Zv8_chr.agp
+-rw-rw-r-- 1 galt protein 1591157262 Jun 23 22:43 Zv8_contigs.fa
+-rw-rw-r-- 1 galt protein    6630120 Jun 23 17:23 Zv8_scaffold.agp
+
+    # repeat all of the above steps from the first section
+    # (after the wget) down to where it says
+#All AGP and FASTA entries agree - both files are valid
+
+
+#######################################################################
+# MAKE GENOME DB FROM CHROMOSOMES AND UNMAPPED SCAFFOLDS 
+# (DONE, 2009-06-24, galt)
+# CHANGE dbDb ENTRY MADE BY SCRIPT TO DISPLAY SAME DEFAULT POSITION 
+# AS FOR DANRER5, GENE vdac2 (DONE, 2007-09-10, hartera)
+
+    # To find the accession number for chrM, go to http://www.ncbi.nih.gov/ and search
+    # Nucleotide for "Danio mitochondrion genome". 
+    # That shows accession: NC_002333.2, 16596 bp
+    # wget for mitochondron genome so:
+    # http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&rettype=fasta&id=NC_002333.2&retmode=text
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/
+    cat << 'EOF' > danRer6.config.ra
+db danRer6
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Dec. 2008
+assemblyLabel Wellcome Trust Sanger Institute, Zv8 assembly (CAAK00000000.5)
+orderKey 449
+genomeCladePriority 90
+dbDbSpeciesDir zebrafish
+mitoAcc NC_002333.2
+agpFiles /hive/data/genomes/danRer6/download/danRer6.agp
+fastaFiles /hive/data/genomes/danRer6/download/danRer6.fa
+taxId 7955
+'EOF'    
+ # << keep emacs coloring happy
+
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/
+
+    # makeGenomeDb.pl creates the db for the genome, makes the hgcentraltest
+    # entries and loads the gold and gap tables. Creates the GC
+    # percent, short match and restriction enzyme tracks. It also creates
+    # a danRer6 directory in the trackDb/zebrafish directory with a trackDb.ra 
+    # file and a template for the assembly descripton, and for the 
+    # gold and gap track tracks 
+
+    # Run makeGenomeDb.pl
+    makeGenomeDb.pl danRer6.config.ra > & makeGenomeDb.pl.out &
+
+    # Follow the directions at the end of the log 
+    tail -20 makeGenomeDb.log
+
+#----
+#NOTES -- STUFF THAT YOU WILL HAVE TO DO --
+#cd /hive/data/genomes/danRer6/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/zebrafish/danRer6
+#
+#Search for '***' notes in each file in and make corrections (sometimes the
+#files used for a previous assembly might make a better template):
+#  description.html /hive/data/genomes/danRer6/html/{trackDb.ra,gap.html,gold.html}
+#
+#Then cd ../.. (to trackDb/) and
+# - edit makefile to add danRer6 to DBS.
+# - (if necessary) cvs add zebrafish
+# - cvs add zebrafish/danRer6
+# - cvs add zebrafish/danRer6/*.{ra,html}
+# - cvs ci -m "Added danRer6 to DBS." makefile
+# - cvs ci -m "Initial descriptions for danRer6." zebrafish/danRer6
+# - (if necessary) cvs ci zebrafish
+# - Run make update DBS=danRer6 and make alpha when done.
+# - (optional) Clean up /hive/data/genomes/danRer6/TemporaryTrackDbCheckout
+# - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
+#----
+
+
+    cd /hive/data/genomes/danRer6/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/zebrafish/danRer6
+    # save in case
+    mkdir orig
+    cp * orig/
+    # start with version from danRer5
+    cp ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer5/description.html .
+    cp ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer5/gap.html .
+    cp ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer5/gold.html .
+    # edit them for danRer6
+    vi description.html
+    vi gap.html
+    vi gold.html
+
+    cd ../.. 
+    vi makefile    # - edit makefile to add danRer6 to DBS.
+    cvs add zebrafish/danRer6
+    cvs add zebrafish/danRer6/*.{ra,html}
+    cvs ci -m "Added danRer6 to DBS." makefile
+    cvs ci -m "Initial descriptions for danRer6." zebrafish/danRer6
+    make update DBS=danRer6
+    make alpha  DBS=danRer6
+    
+   
+    # (2009-06-24, galt), Change the default Browser position in dbDb
+    # so that it displays vdac2 - chr13:14,786,820-14,801,993 - same as for 
+    # danRer5.
+    ssh hgwdev
+    hgsql -h genome-testdb \
+ 	-e 'update dbDb set defaultPos = "chr13:14,786,820-14,801,993" where name = "danRer6";' \
+	hgcentraltest
+
+
+    # temporarily add in a 2bit file so we can run the browser:
+    ln -s `pwd`/danRer6.unmasked.2bit /gbdb/danRer6/danRer6.2bit 
+    
+
+###########################################################
+# Repeatmasking  (DONE 2009-06-26 galt)
+# 
+#
+
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/
+
+    screen
+
+    # repeat mask
+    doRepeatMasker.pl danRer6 > & doRepeatMasker.pl.out &
+
+    # about 12 hours.
+
+#/cluster/bin/scripts/extractNestedRepeats.pl danRer6.fa.out
+#RepeatMasker bug?: Undefined id, line 330298 of input:
+#  261  27.7  3.1  1.2  Zv8_NA4692   12290   12450   (10778) C ERV1-N3-I_DR-int LTR (824) 3767   3604
+#At least one ID was missing (see warnings above) -- please report to Robert
+#Hubley.  -continue at your disgression.
+
+    # Seems to only be one line that is a problem, and it may even have
+    # been duplicated, so remove the problem line from danRer6.fa.out
+#261  27.7  3.1  1.2  Zv8_NA4692   12290   12450   (10778) C ERV1-N3-I_DR-int LTR                  (824) 3767   3604
+#267  24.9  1.8  1.2  Zv8_NA4692   12300   12313   (10915) C ERV1-N3-I_DR-int LTR                  (824) 3722   3604 298373
+    # keep the second of these lines, remove the first (line 330298) which is missing the last column.
+
+    # since danRer6.nestedRepeats.bed did get created,
+    #  and doCat.csh appears to have finished,
+    # I am going to ignore this error and continue
+
+    doRepeatMasker.pl -continue mask  \
+      -buildDir /hive/data/genomes/danRer6/bed/RepeatMasker.2009-06-26/ danRer6 \
+      >> & doRepeatMasker.pl.out &
+
+    cat bed/RepeatMasker.2009-06-26/faSize.rmsk.txt 
+    #1512402306 bases (5525484 N's 1506876822 real 729112148 upper 777764674 lower)
+    #in 11724 sequences in 1 files
+
+
+    [hgwdev:danRer6> featureBits -countGaps danRer6 rmsk
+    #777997590 bases of 1512402306 (51.441%) in intersection
+
+    # simple repeat masker trf
+    doSimpleRepeat.pl danRer6 > & doSimpleRepeat.pl.out &
+    #[1]    Exit 25   doSimpleRepeat.pl danRer6 >& doSimpleRepeat.pl.out
+    #oops messed up on chrM producing no output, liftUp produced nothing
+    #this is not a problem, and the bug is in the automated process,
+    #they should either tolerate nothing to do and create an empty output,
+    #or just filter chrM out of the input.
+
+    doSimpleRepeat.pl -continue filter  \
+      -buildDir /hive/data/genomes/danRer6/bed/simpleRepeat.2009-06-29/ danRer6 \
+      >> & doSimpleRepeat.pl.out &
+
+    featureBits -countGaps danRer6 simpleRepeat
+    #111749881 bases of 1512402306 (7.389%) in intersection
+
+    # make final masked .2bit
+    twoBitMask danRer6.rmsk.2bit -add bed/simpleRepeat.2009-06-29/trfMask.bed danRer6.2bit
+    #Warning: BED file bed/simpleRepeat.2009-06-29/trfMask.bed has >=13 fields
+    #which means it might contain block coordinates, but this program uses only the
+    #first three fields (the entire span -- no support for blocks).
+    #(this seems to be normal/ok)
+
+############################################################################
+#  prepare cluster data (DONE - 2009-07-06 - Galt)
+    
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6
+
+    # create gbdb symlink
+    rm /gbdb/danRer6/danRer6.2bit
+    ln -s `pwd`/danRer6.2bit /gbdb/danRer6/
+
+    calc '1024*1.14/2.88'
+    #405
+
+    blat danRer6.2bit /dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=405
+    #Wrote 71088 overused 11-mers to 11.ooc
+
+    mkdir /hive/data/staging/data/danRer6
+    cp -p danRer6.2bit /hive/data/staging/data/danRer6
+    cp -p 11.ooc /hive/data/staging/data/danRer6
+    cp -p chrom.sizes /hive/data/staging/data/danRer6
+
+    # ask admin to sync this directory: /hive/data/staging/data/danRer6/
+    #       to the kluster nodes /scratch/data/danRer6/
+
+############################################################################
+# running cpgIsland (DONE - 2009-07-07 - Galt)
+    
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6
+
+    mkdir bed/cpgIsland
+    cd bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    # comment out the following two lines if it compiles cleanly
+    # some day  (there were some other fixups too, adding include lines)
+    sed -i -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c
+    make
+    #warning: incompatible implicit declaration of built-in function
+    # ignore the warnings
+    cd ../../ 
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+
+    # make hardmasked fasta files
+    mkdir -p hardMaskedFa
+    bash
+    cut -f1 ../../chrom.sizes | while read C
+    do
+    echo ${C}
+    twoBitToFa ../../danRer6.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+    done
+
+    #exit bash 
+    exit
+
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+    #LOOP
+    ./runOne $(root1) {check out line results/$(root1).cpg}
+    #ENDLOOP
+    '_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > runOne
+    #!/bin/csh -fe
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+    '_EOF_'
+    # << happy emacs
+
+    chmod +x runOne
+    mkdir results
+
+    pk
+    cd /hive/data/genomes/danRer6/bed/cpgIsland
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+    #Completed: 11724 of 11724 jobs
+    #CPU time in finished jobs:        111s       1.85m     0.03h    0.00d  0.000 y
+    #IO & Wait Time:                 73830s    1230.50m    20.51h    0.85d  0.002 y
+    #Average job time:                   6s       0.11m     0.00h    0.00d
+    #Longest finished job:              41s       0.68m     0.01h    0.00d
+    #Submission to last job:          1141s      19.02m     0.32h    0.01d
+
+    exit # return to hgwdev
+    # should be in /hive/data/genomes/danRer6/bed/cpgIsland
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{ \
+    $2 = $2 - 1; \
+    width = $3 - $2; \
+    printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n", \
+       $1, $2, $3, $5,$6, width, \
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9); \
+    }' > cpgIsland.bed
+
+    # took around 2 minutes
+
+    hgLoadBed danRer6 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+
+    #Loaded 13361 elements of size 10
+
+    
