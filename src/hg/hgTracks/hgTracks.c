@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1579 2009/06/29 18:14:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1580 2009/07/07 16:40:45 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1574,7 +1574,6 @@ int dataSliceOffsetX = 0;
 int sliceHeight  = 0;
 int sliceOffsetY = 0;
 char *rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
-char *sideTtl  = "Drag to reorder tracks";
 #endif//def IMAGEv2_UI
 
 if (rulerMode != tvFull)
@@ -1713,6 +1712,8 @@ if (withLeftLabels)
     }
 dataSliceWidth   = tl.picWidth - sideSliceWidth;
 dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
+// FIXME: Up top I could create new beg/end and then widen winStart, winEnd and pixWidth. It will take some playing with.
+imgBoxDefinePortal(theImgBox,winStart,winEnd,dataSliceWidth);
 #endif//def IMAGEv2_UI
 
 /* Draw mini-buttons. */
@@ -1867,7 +1868,7 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,sideTtl,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
         #endif//def IMAGEv2_UI
@@ -2257,7 +2258,7 @@ if (withLeftLabels)
         sliceHeight      = trackPlusLabelHeight(track, fontHeight);
         sliceOffsetY     = y;
         curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,sideTtl,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
         curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
         }
     #endif//def IMAGEv2_UI
@@ -4476,7 +4477,7 @@ if (((position == NULL) || sameString(position, "default"))
     position = cloneString(defaultPosition);
 if (sameString(position, ""))
     {
-    errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
+    errAbort("Please go back and enter a coordinate rangeor a search term in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
     }
 
 chromName = NULL;

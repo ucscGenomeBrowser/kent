@@ -1,51 +1,11 @@
-/* hgTracks - Human Genome browser main cgi script. */
+/* imageV2 - API for creating the image V2 features. */
 #include "common.h"
-#include "hCommon.h"
-#include "linefile.h"
-#include "portable.h"
-#include "memalloc.h"
-#include "localmem.h"
-#include "obscure.h"
-#include "dystring.h"
-#include "hash.h"
-#include "jksql.h"
-#include "gfxPoly.h"
-#include "memgfx.h"
-#include "hvGfx.h"
-#include "psGfx.h"
-#include "cheapcgi.h"
 #include "hPrint.h"
-#include "htmshell.h"
-#include "cart.h"
-#include "hdb.h"
 #include "hui.h"
-#include "hgFind.h"
-#include "hgTracks.h"
-#include "trashDir.h"
-#include "grp.h"
-#include "versionInfo.h"
-#include "web.h"
-#include "cds.h"
-#include "cutterTrack.h"
-#include "wikiTrack.h"
-#include "ctgPos.h"
-#include "bed.h"
-#include "bigBed.h"
-#include "bedCart.h"
-#include "customTrack.h"
-#include "cytoBand.h"
-#include "ensFace.h"
-#include "liftOver.h"
-#include "pcrResult.h"
-#include "wikiLink.h"
 #include "jsHelper.h"
-#include "mafTrack.h"
-#include "hgConfig.h"
-#include "encode.h"
-#include "agpFrag.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.3 2009/06/29 18:15:03 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.4 2009/07/07 16:40:46 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -56,56 +16,15 @@ struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge r
 
 //#define IMAGEv2_UI
 #ifdef IMAGEv2_UI
+/////////////////////////
 // IMAGEv2
-// The new way to do images
-// Terms:
-// "image box": The new version of the image on the html page.  It is a table with rows that contain tracks which are made up of parts of images.
-//    "imgBox": The C struct that contains all information to render the image box on the html page.
-//    "imgTbl": The HTML structure that contains individual track images.  The javascript client controls the imgTbl.
-//          Thus cgi knows imgBox while html/js knows imgTbl.
-// "image": A single gif.  An image may contain mutilple tracks.
-//          Even as a single track and image may contain a data image, sideLabel and centerLabel
-// "map" or "mapSet": The image map for providing links to items in a data image.
-//          An image and map are a 1 to 1 pair and pixel coordinates are alway image relative.
-// "slice" or "imgSlice": The cgi concept of the portion of an image that is sent to the html/js side.
-//          Thus, if we are sending a 3X sized image, the "slice" spans the entire 3X.
-//          Frequently a subset of an image, but possibly the whole image.
-//          Even if the image is of a single track, it might still be cut into data image, sideLabel and centerLabel slices.
-// "sliceMap": The portion of a map that belongs to a slice.  The pixel coordinates are always image relative, not sice relative.
-// "portal" or "imgPortal": The html/js concept of the portion of a slice that is visible in the browser.
-//          Thus, if we are sending a 3X sized data image slice, the "portal" seen in the browser spans only 1X.
-//          Frequently a subset of a slice, but possibly the whole image slice.
-// "imgTrack" or track image: The cgi side whole shabang for rendering one track.
-//          It contains track specific information and three slices: data, sideLabel and centerLabel
-//          The imgBox contains N imgTracks.  Typically an ajax/JSON request gets a single imgTrack returned.
-// image box support: This can contain all the support variables that are global to the image box (like font size, box width, etc.).
-//          At this point, lets not talk structure or cgi vs. html/js but leave this container as a concept that we know needs filling.
-// imgBox is the top level and contains all info to draw the image in HTML
-//    - contains slList of all imgTrack structs shown
-// imgTrack contains all info to display one track/subtrack in the imgBox
-//    - contains 3 imgSlice structs (data, centerLabel, sideLabel
-// imgSlice contains all info to display a portion of an image file
-//    - contains 1 image struct
-// image contains all information about an image file and associated map box
-//
-//////// Maps
-//struct mapItem // IMAGEv2: single map item in an image map.
-//   {
-//   struct mapItem *next;      // slList
-//   char *linkVar;             // the get variables associated with the map link
-//   char *title;               // item title
-//   int topLeftX;              // in pixels relative to image
-//   int topLeftY;              // in pixels relative to image
-//   int bottomRightX;          // in pixels relative to image
-//   int bottomRightY;          // in pixels relative to image
-//   };
-//struct mapSet // IMAGEv2: full map for image OR partial map for slice
-//   {
-//   char *name;                // to point an image to a map in HTML
-//   struct image *parentImg;   // points to the image this map belongs to
-//   char *linkRoot;            // the common or static portion of the link for the entire image
-//   struct mapItem *items;     // list of items
-//   };
+// The new way to do images: PLEASE REFER TO imageV2.h FOR A DETAILED DESCRIPTION
+/////////////////////////
+
+
+
+/////////////////////// Maps
+
 struct mapSet *mapSetStart(char *name,struct image *img,char *linkRoot)
 /* Starts a map (aka mapSet) which is the seet of links and image locations used in HTML.
    Complete a map by adding items with mapItemAdd() */
@@ -114,6 +33,7 @@ struct mapSet *map;
 AllocVar(map);
 return mapSetUpdate(map,name,img,linkRoot);
 }
+
 struct mapSet *mapSetUpdate(struct mapSet *map,char *name,struct image *img,char *linkRoot)
 /* Updates an existing map (aka mapSet) */
 {
@@ -133,6 +53,7 @@ if(linkRoot != NULL && differentStringNullOk(linkRoot,map->linkRoot))
     }
 return map;
 }
+
 struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
 /* Added a single mapItem to a growing mapSet */
 {
@@ -155,6 +76,7 @@ slAddHead(&(map->items),item);
 //warn("Added map(%s) item '%s' count:%d",map->name,title,slCount(map->items));
 return map->items;
 }
+
 void mapItemFree(struct mapItem **pItem)
 /* frees all memory assocated with a single mapItem */
 {
@@ -169,6 +91,7 @@ if(pItem != NULL && *pItem != NULL)
     *pItem = NULL;
     }
 }
+
 boolean mapItemConsistentWithImage(struct mapItem *item,struct image *img,boolean verbose)
 /* Test whether a map item is consistent with the image it is supposed to be for */
 {
@@ -184,6 +107,7 @@ if ((item->topLeftX     < 0 || item->topLeftX     >= img->width)
     }
 return TRUE;
 }
+
 boolean mapSetIsComplete(struct mapSet *map,boolean verbose)
 /* Tests the completeness and consistency of this map (mapSet) */
 {
@@ -226,7 +150,7 @@ for (;item != NULL; item = item->next)
     }
 return TRUE;
 }
-/* Tests the completeness and consistency of this imgTrack (not including slices) */
+
 void mapSetFree(struct mapSet **pMap)
 /* frees all memory (including items) assocated with a single mapSet */
 {
@@ -244,16 +168,10 @@ if(pMap != NULL && *pMap != NULL)
     }
 }
 
-//////// Images
-//struct image // IMAGEv2: single image which may have multiple imgSlices focused on it
-//    {
-//    struct image *next;       // slList (Not yet used)
-//    char *file;               // name of file that hold the image
-//    char *title;              // image wide title
-//    int  width;               // in pixels
-//    int  height;              // in pixels
-//    struct mapSet *map;       // map assocated with this image (may be NULL)
-//    };
+
+
+/////////////////////// Images
+
 struct image *imgCreate(char *gif,char *title,int width,int height)
 /* Creates a single image container.
    A map map be added with imgMapStart(),mapSetItemAdd() */
@@ -269,6 +187,7 @@ img->width  = width;
 img->map    = NULL;
 return img;
 }
+
 struct mapSet *imgMapStart(struct image *img,char *name,char *linkRoot)
 /* Starts a map associated with an image. Map items can then be added to the returned pointer with mapSetItemAdd() */
 {
@@ -280,11 +199,13 @@ if(img->map != NULL)
 img->map = mapSetStart(name,img,linkRoot);
 return img->map;
 }
+
 struct mapSet *imgGetMap(struct image *img)
 /* Gets the map associated with this image. Map items can then be added to the map with mapSetItemAdd() */
 {
 return img->map;
 }
+
 void imgFree(struct image **pImg)
 /* frees all memory assocated with an image (including a map) */
 {
@@ -299,19 +220,10 @@ if(pImg != NULL && *pImg != NULL)
     }
 }
 
-//////// Slices
-//struct imgSlice // IMAGEv2: the portion of an image that is displayable for one track
-//    {
-//    struct imgSlice *next;  // slList
-//    enum sliceType type;    // Type of slice (currently only 3)
-//    struct image *parentImg;// the actual image/gif
-//    char *title;            // slice wide title
-//    struct mapSet *map;     // A slice specific map.  It contains a subset of the img->map. Coordinates must be img relative NOT slice relative!
-//    int  width;             // in pixels (differs from img->width if img contains sideLabel)
-//    int  height;            // in pixels (differs from img->height if img contains centerLabel and/or multiple tracks)
-//    int  offsetX;           // offset from left (when img->width > slice->width)
-//    int  offsetY;           // offset from top (when img->height > slice->height)
-//    };
+
+
+/////////////////////// Slices
+
 struct imgSlice *sliceCreate(enum sliceType type,struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* Creates of a slice which is a portion of an image.
    A slice specific map map be added with sliceMapStart(),mapSetItemAdd() */
@@ -321,6 +233,7 @@ AllocVar(slice);
 slice->map       = NULL; // This is the same as defaulting to slice->parentImg->map
 return sliceUpdate(slice,type,img,title,width,height,offsetX,offsetY);
 }
+
 struct imgSlice *sliceUpdate(struct imgSlice *slice,enum sliceType type,struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* updates an already created slice */
 {
@@ -339,6 +252,7 @@ slice->offsetX   = offsetX;
 slice->offsetY   = offsetY;
 return slice;
 }
+
 char *sliceTypeToString(enum sliceType type)
 /* Translate enum slice type to string */
 {
@@ -350,6 +264,7 @@ switch(type)
     default:       return "unknown";
     }
 }
+
 struct mapSet *sliceMapStart(struct imgSlice *slice,char *name,char *linkRoot)
 /* Adds a slice specific map to a slice of an image. Map items can then be added to the returned pointer with mapSetItemAdd()*/
 {
@@ -368,6 +283,7 @@ safef(qualifiedName,sizeof(qualifiedName),"%s_%s",sliceTypeToString(slice->type)
 slice->map = mapSetStart(qualifiedName,slice->parentImg,linkRoot);
 return slice->map;
 }
+
 struct mapSet *sliceGetMap(struct imgSlice *slice,boolean sliceSpecific)
 /* Gets the map associate with a slice which male be sliceSpecific or it map belong to the slices' image.
    Map items can then be added to the map returned with mapSetItemAdd() */
@@ -376,6 +292,7 @@ if(!sliceSpecific && slice->map == NULL && slice->parentImg != NULL)
         return slice->parentImg->map;
 return slice->map;
 }
+
 struct mapSet *sliceMapFindOrStart(struct imgSlice *slice,char *name,char *linkRoot)
 /* Finds the slice specific map or starts it */
 {
@@ -384,6 +301,7 @@ if (map == NULL)
     map = sliceMapStart(slice,name,linkRoot);
 return map;
 }
+
 struct mapSet *sliceMapUpdateOrStart(struct imgSlice *slice,char *name,char *linkRoot)
 /* Updates the slice specific map or starts it */
 {
@@ -394,7 +312,7 @@ char qualifiedName[128];
 safef(qualifiedName,sizeof(qualifiedName),"%s_%s",sliceTypeToString(slice->type),name);
 return mapSetUpdate(map,qualifiedName,slice->parentImg,linkRoot);
 }
-/* Adds a slice specific map to a slice of an image. Map items can then be added to the returned pointer with mapSetItemAdd()*/
+
 boolean sliceIsConsistent(struct imgSlice *slice,boolean verbose)
 /* Test whether the slice and it's associated image and map are consistent with each other */
 {
@@ -417,7 +335,7 @@ if (slice->width == 0  || slice->width  > slice->parentImg->width)
              sliceTypeToString(slice->type),slice->width,slice->parentImg->width);
     return FALSE;
     }
-if (slice->height == 0)
+if (slice->height == 0) // FIXME: This may be a temporary solution to empty data slices
     {
     //if (verbose)
     //    warn("slice(%s) has an invalid height %d (image height %d)",
@@ -461,6 +379,7 @@ if (slice->map != NULL)
     }
 return TRUE;
 }
+
 void sliceFree(struct imgSlice **pSlice)
 /* frees all memory assocated with a slice (not including the image or a map belonging to the image) */
 {
@@ -477,21 +396,10 @@ if(pSlice != NULL && *pSlice != NULL)
     }
 }
 
-//////// imgTracks
-//struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
-//    {
-//    struct imgTrack *next;    // slList
-//    struct trackDb *tdb;	    // trackDb entry (should this be struct track* entry?)
-//    char *name;	            // It is possible to have an imgTrack without a tdb, but then it mist have a name
-//    char *db;                 // Image for db (species) (assert imgTrack matches imgBox)
-//    char *chrom;              // Image for chrom (assert imgTrack matches imgBox)
-//    int  chromStart;          // Image start (absolute, not portal position)
-//    int  chromEnd;            // Image end (absolute, not portal position)
-//    boolean plusStrand;       // Image covers plus strand, not minus strand
-//    boolean showCenterLabel;  // Initially display center label? TODO: Isn't this redundent with vis?
-//    enum trackVisibility vis; // Current visibility of track image
-//    struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
-//    };
+
+
+/////////////////////// imgTracks
+
 struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
@@ -500,6 +408,7 @@ struct imgTrack *imgTrack;     //  gifTn.forHtml, pixWidth, mapName
 AllocVar(imgTrack);
 return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,showCenterLabel,vis,order);
 }
+
 struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
 /* Updates an already existing image track */
 {
@@ -542,6 +451,7 @@ else
     }
 return imgTrack;
 }
+
 int imgTrackOrderCmp(const void *va, const void *vb)
 /* Compare to sort on label. */
 {
@@ -549,6 +459,7 @@ const struct imgTrack *a = *((struct imgTrack **)va);
 const struct imgTrack *b = *((struct imgTrack **)vb);
 return (a->order - b->order);
 }
+
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* Adds slices to an image track.  Expected are types: isData, isSide and isCenter */
 {
@@ -556,6 +467,7 @@ struct imgSlice *slice = sliceCreate(type,img,title,width,height,offsetX,offsetY
 slAddHead(&(imgTrack->slices),slice);
 return imgTrack->slices;
 }
+
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type)
 /* Gets a specific slice already added to an image track.  Expected are types: isData, isSide and isCenter */
 {
@@ -567,6 +479,7 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
     }
 return NULL;
 }
+
 struct imgSlice *imgTrackSliceFindOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* Find the slice or adds it */
 {
@@ -575,6 +488,7 @@ if (slice == NULL)
     slice = imgTrackSliceAdd(imgTrack,type,img,title,width,height,offsetX,offsetY);
 return slice;
 }
+
 struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY)
 /* Updates the slice or adds it */
 {
@@ -587,7 +501,8 @@ return sliceUpdate(slice,type,img,title,width,height,offsetX,offsetY);
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type)
 /* Gets the map assocated with a specific slice belonging to the imgTrack */
 {
-struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,type); if(slice == NULL)
+struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,type);
+if(slice == NULL)
     return NULL;
 return sliceGetMap(slice,FALSE); // Map could belong to image or could be slice specific
 }
@@ -654,7 +569,7 @@ for(; slice != NULL; slice = slice->next )
         return FALSE;
         }
     }
-// This is not a requirement as the data portion could be empty (height==0)
+// This is not a requirement as the data portion could be empty (height==0) FIXME This still needs to be properly resolved
 //if(!found[isData])
 //    {
 //    if (verbose)
@@ -664,6 +579,7 @@ for(; slice != NULL; slice = slice->next )
 
 return TRUE;
 }
+
 void imgTrackFree(struct imgTrack **pImgTrack)
 /* frees all memory assocated with an imgTrack (including slices) */
 {
@@ -680,24 +596,10 @@ if(pImgTrack != NULL && *pImgTrack != NULL)
 }
 
 
-//////// Image Box
-//struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image in hgTracks
-//    {
-//    char *db;                 // database (species)
-//    char *chrom;              // chrom
-//    int  chromStart;          // imageBox displays this position (though images may cover more)
-//    int  chromEnd;            // imageBox displays this position (though images may cover more)
-//    boolean plusStrand;       // imgBox currently shows plus strand, not minus strand
-//    boolean showSideLabel;    // Initially display side label? (use 'plusStrand' for left/right)
-//    struct image *images;     // Contains all images for the imgBox. TEMPORARY: hgTracks creates it's current one image and I'll store it here
-//    struct image *bgImg;      // When track images are transparent, bgImage contains blue lines that are db coordinate granularity.
-//    int  portalStart;         // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
-//    int  portalEnd;           // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
-//    int  portalWidth;         // in pixels (note that width in visible position within image position (db coodinates)
-//    // TODO: I am certain there are more details needed
-//    struct imgTrack *imgTracks; // slList of all images to display
-//    };
-struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showSideLabel,int portalWidth)
+
+/////////////////////// Image Box
+
+struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showSideLabel,int width)
 /* Starts an imgBox which should contain all info needed to draw the hgTracks image with multiple tracks
    The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd() */
 {
@@ -713,14 +615,31 @@ imgBox->plusStrand    = plusStrand;
 imgBox->showSideLabel = showSideLabel;
 imgBox->images        = NULL;
 imgBox->bgImg         = NULL;
-int oneThird = (chromEnd - chromStart)/3; // TODO: Currently defaulting to 1/3 of image width
-imgBox->portalStart   = chromStart + oneThird;
-imgBox->portalEnd     = chromEnd - oneThird;
-imgBox->portalWidth   = portalWidth;
-// images are added with imgBoxImageAdd()
-// imgTracks are added with imgBoxTrackAdd()
-// Fill in imgTracks with slices as the map is created.
+imgBox->width         = width;
+imgBox->showPortal    = FALSE;
+//int oneThird = (chromEnd - chromStart)/3; // TODO: Currently defaulting to 1/3 of image width
+imgBox->portalStart   = chromStart;// + oneThird;
+imgBox->portalEnd     = chromEnd;// - oneThird;
+imgBox->portalWidth   = chromEnd - chromStart;
+imgBox->basesPerPixel    = ((double)imgBox->chromEnd - imgBox->chromStart)/imgBox->width; // FIXME: Shouldn't ignore sideLabel
 return imgBox;
+}
+
+boolean imgBoxDefinePortal(struct imgBox *imgBox,int portalStart,int portalEnd,int portalWidthInPixels)
+/* Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll is being used.
+   returns TRUE if the portal is a proper subset of the imgBox as currently defined. */
+{
+if(portalStart <  imgBox->chromStart || portalStart >= imgBox->chromEnd
+|| portalEnd   <= imgBox->chromStart || portalEnd   >  imgBox->chromEnd)
+    return FALSE;
+if(portalWidthInPixels == 0 || portalWidthInPixels > imgBox->width)
+    return FALSE;
+imgBox->portalStart   = portalStart;
+imgBox->portalEnd     = portalEnd;
+imgBox->portalWidth   = portalEnd - portalStart;
+imgBox->basesPerPixel = ((double)imgBox->chromEnd - imgBox->chromStart)/portalWidthInPixels;
+imgBox->showPortal    = TRUE;
+return imgBox->showPortal;
 }
 
 struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int width,int height,boolean backGround)
@@ -740,6 +659,7 @@ if(backGround)
 slAddHead(&(imgBox->images),img);
 return imgBox->images;
 }
+
 struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif)
 /* Finds a specific image already added to this imgBox */
 {
@@ -751,6 +671,8 @@ for (img = imgBox->images; img != NULL; img = img->next )
     }
 return NULL;
 }
+
+// TODO: Will we need this?
 //boolean imgBoxImageRemove(struct imgBox *imgBox,struct image *img)
 //{
 //return slRemoveEl(&(imgBox->images),img);
@@ -763,6 +685,7 @@ struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgB
 slAddHead(&(imgBox->imgTracks),imgTrack);
 return imgBox->imgTracks;
 }
+
 struct imgTrack *imgBoxTrackFind(struct imgBox *imgBox,struct trackDb *tdb,char *name)
 /* Finds a specific imgTrack already added to this imgBox */
 {
@@ -776,6 +699,7 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
     }
 return NULL;
 }
+
 struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
 /* Find the imgTrack, or adds it if not found */
 {
@@ -783,7 +707,9 @@ struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
     imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
 return imgTrack;
-} struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+}
+
+struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
 /* Updates the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
@@ -792,6 +718,8 @@ if( imgTrack == NULL)
 
 return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
 }
+
+// TODO: Will we need this?
 //boolean imgBoxTrackRemove(struct imgBox *imgBox,struct imgTrack *imgTrack)
 //{
 //return slRemoveEl(&(imgBox->imgTracks),imgTrack);
@@ -936,7 +864,10 @@ if(pImgBox != NULL && *pImgBox != NULL)
     }
 }
 
-// Now the real work:
+
+
+/////////////////////// imageV2 UI API
+
 void imageMapDraw(struct mapSet *map,char *name)
 /* writes an image map as HTML */
 {
@@ -964,6 +895,7 @@ for(;item!=NULL;item=item->next)
     }
 hPrintf("</MAP>\n");
 }
+
 void sliceAndMapDraw(struct imgSlice *slice,char *name)
 /* writes a slice of an image and any assocated image map as HTML */
 {
@@ -996,6 +928,7 @@ else if(slice->parentImg->title != NULL)
     hPrintf(" title='%s'",slice->parentImg->title);// Adds image wide title
 hPrintf("></div>");
 }
+
 void imageBoxDraw(struct imgBox *imgBox)
 /* writes a entire imgBox including all tracksas HTML */
 {
@@ -1008,7 +941,6 @@ char name[128];
 //    slReverse(&(imgBox->imgTracks));
 imgBoxTracksNormalizeOrder(imgBox);
 
-
 hPrintf("<!--------------- IMAGEv2 ---------------->\n");
 //commonCssStyles();
 jsIncludeFile("jquery.tablednd.js", NULL);
@@ -1017,15 +949,15 @@ hPrintf("<style type='text/css'>\n");
 hPrintf(".trDrag {opacity:0.4; padding:1px; background-color:red;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
 hPrintf(".dragHandle {cursor: s-resize;}\n");
 hPrintf("div.dragZoom       { cursor: text; }\n");
-//hPrintf("div.panDiv         { width: %dpx; overflow: hidden; }\n",imgBox->portalWidth);
-//hPrintf("div.panDivScroller { width: %dpx; overflow: hidden; }\n",imgBox->portalWidth);
-//hPrintf("img.panImg    { position: relative; left: -%dpx; top: 0px; border: 0; }\n",imgBox->portalWidth);
-//hPrintf("img.centerLab { position: relative; left: -%dpx; top: 0px; border: 0; }\n",imgBox->portalWidth);
+//hPrintf("div.panDiv         { width: %dpx; overflow: hidden; }\n",imgBox->width);
+//hPrintf("div.panDivScroller { width: %dpx; overflow: hidden; }\n",imgBox->width);
+//hPrintf("img.panImg    { position: relative; left: -%dpx; top: 0px; border: 0; }\n",imgBox->width);
+//hPrintf("img.centerLab { position: relative; left: -%dpx; top: 0px; border: 0; }\n",imgBox->width);
 //hPrintf("img.sideLab { border: 0; }\n");
 hPrintf("</style>\n");
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0");
-hPrintf(" width=%d",imgBox->portalWidth);
+hPrintf(" width=%d",imgBox->width);
 hPrintf(" class='tableWithDragAndDrop' style='border:1px solid blue;border-collapse:separate'");
 hPrintf(">\n");
 
@@ -1045,7 +977,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         hPrintf("</TD>");
         }
     // Main/Data image region
-    hPrintf("<TD id='td_data_%s' width=%d>\n", trackName, imgBox->portalWidth);
+    hPrintf("<TD id='td_data_%s' width=%d>\n", trackName, imgBox->width);
     hPrintf("<input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
     // centerLabel
     if(imgTrack->showCenterLabel)
@@ -1073,4 +1005,5 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 hPrintf("</TABLE>\n");
 hPrintf("<!--------------- IMAGEv2 ---------------->\n");
 }
+
 #endif//def IMAGEv2_UI

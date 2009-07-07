@@ -1,4 +1,4 @@
-/* hgTracks - Human Genome browser main cgi script. */
+/* imageV2 - API for creating the image V2 features. */
 
 // Must define IMAGEv2_UI outside of #ifndef IMAGEV2_H
 //#define IMAGEv2_UI
@@ -14,6 +14,7 @@ extern struct mapSet   *curMap;      // Make this global for now to avoid huge r
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
 
 #ifdef IMAGEv2_UI
+/////////////////////////
 // IMAGEv2
 // The new way to do images
 // Terms:
@@ -45,82 +46,11 @@ extern struct mapSet   *curMap;      // Make this global for now to avoid huge r
 // imgSlice contains all info to display a portion of an image file
 //    - contains 1 image struct
 // image contains all information about an image file and associated map box
-//
-//struct mapItem // IMAGEv2: single map item in an image map.
-//    {
-//    struct mapItem *next;     // slList
-//    char *linkVar;            // the get variables associated with the map link
-//    char *title;              // item title
-//    int topLeftX;             // in pixels relative to image
-//    int topLeftY;             // in pixels relative to image
-//    int bottomRightX;         // in pixels relative to image
-//    int bottomRightY;         // in pixels relative to image
-//    };
-//struct mapSet // IMAGEv2: full map for image OR partial map for slice
-//    {
-//    char *name;               // to point an image to a map in HTML
-//    struct image *parentImg;  // points to the image this map belongs to
-//    char *linkRoot;           // the common or static portion of the link for the entire image
-//    struct mapItem *items;    // list of items
-//    };
-//struct image // IMAGEv2: single image which may have multiple imgSlices focused on it
-//    {
-//    struct image *next;       // slList (Not yet used)
-//    char *file;               // name of file that hold the image
-//    char *title;              // image wide title
-//    int  width;               // in pixels
-//    int  height;              // in pixels
-//    struct mapSet *map;       // map assocated with this image (may be NULL)
-//    };
-//enum sliceType // IMAGEv2: currently just the 3
-//    {
-//    isUnknown=0,              // Invalid
-//    isData=1,                 // Data or track slice of an image
-//    isCenter=2,               // Top or centerLabel slice of an image
-//    isSide=3                  // Side or leftLabel slice of an image
-//    };
-//struct imgSlice // IMAGEv2: the portion of an image that is displayable for one track
-//    {
-//    struct imgSlice *next;    // slList
-//    enum sliceType type;      // Type of slice (currently only 3)
-//    struct image *img;        // the actual image/gif
-//    struct mapSet *map;       // A slice specific map.  It contains a subset of the img->map. Coordinates must be img relative NOT slice relative!
-//    int  width;               // in pixels (differs from img->width if img contains sideLabel)
-//    int  height;              // in pixels (differs from img->height if img contains centerLabel and/or multiple tracks)
-//    int  offsetX;             // offset from left (when img->width > slice->width)
-//    int  offsetY;             // offset from top (when img->height > slice->height)
-//    };
-//struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
-//    {
-//    struct imgTrack *next;    // slList
-//    struct trackDb *tdb;	    // trackDb entry (should this be struct track* entry?)
-//    char *db;                 // Image for db (species) (assert imgTrack matches imgBox)
-//    char *chrom;              // Image for chrom (assert imgTrack matches imgBox)
-//    int  chromStart;          // Image start (absolute, not portal position)
-//    int  chromEnd;            // Image end (absolute, not portal position)
-//    boolean plusStrand;       // Image covers plus strand, not minus strand
-//    boolean showCenterLabel;  // Initially display center label? TODO: Isn't this redundent with vis?
-//    enum trackVisibility vis; // Current visibility of track image
-//    struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
-//    };
-//struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image in hgTracks
-//    {
-//    char *db;                 // database (species)
-//    char *chrom;              // chrom
-//    int  chromStart;          // Image start (absolute, not portal position)
-//    int  chromEnd;            // Image end (absolute, not portal position)
-//    boolean plusStrand;       // imgBox currently shows plus strand, not minus strand
-//    boolean showSideLabel;    // Initially display side label? (use 'plusStrand' for left/right)
-//    struct image *images;     // Contains all images for the imgBox. TEMPORARY: hgTracks creates it's current one image and I'll store it here
-//    struct image *bgImg;      // When track images are transparent, bgImage contains blue lines that are db coordinate granularity.
-//    int  portalStart;         // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
-//    int  portalEnd;           // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
-//    int  portalWidth;         // in pixels (note that width in visible position within image position (db coodinates)
-//    // TODO: I am certain there are more details needed
-//    struct imgTrack *imgTracks; // slList of all images to display
-//    };
+/////////////////////////
 
-//////// Maps
+
+
+/////////////////////// Maps
 struct mapItem // IMAGEv2: single map item in an image map.
     {
     struct mapItem *next;     // slList
@@ -154,7 +84,9 @@ boolean mapSetIsComplete(struct mapSet *map,boolean verbose);
 void mapSetFree(struct mapSet **pMap);
 /* frees all memory (including items) assocated with a single mapSet */
 
-//////// Images
+
+
+/////////////////////// Images
 struct image // IMAGEv2: single image which may have multiple imgSlices focused on it
     {
     struct image *next;       // slList (Not yet used)
@@ -174,7 +106,9 @@ struct mapSet *imgGetMap(struct image *img);
 void imgFree(struct image **pImg);
 /* frees all memory assocated with an image (including a map) */
 
-//////// Slices
+
+
+/////////////////////// Slices
 enum sliceType // IMAGEv2: currently just the 3
     {
     isUnknown=0,              // Invalid
@@ -217,7 +151,9 @@ boolean sliceIsConsistent(struct imgSlice *slice,boolean verbose);
 void sliceFree(struct imgSlice **pSlice);
 /* frees all memory assocated with a slice (not including the image or a map belonging to the image) */
 
-//////// imgTracks
+
+
+/////////////////////// imgTracks
 struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
@@ -260,7 +196,7 @@ void imgTrackFree(struct imgTrack **pImgTrack);
 /* frees all memory assocated with an imgTrack (including slices) */
 
 
-//////// Image Box
+/////////////////////// Image Box
 struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image in hgTracks
     {
     char *db;                 // database (species)
@@ -271,6 +207,9 @@ struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image
     boolean showSideLabel;    // Initially display side label? (use 'plusStrand' for left/right)
     struct image *images;     // Contains all images for the imgBox. TEMPORARY: hgTracks creates it's current one image and I'll store it here
     struct image *bgImg;      // When track images are transparent, bgImage contains blue lines that are db coordinate granularity.
+    int  width;               // in pixels (note that portalWidth in visible position within image position  in db coodinates)
+    boolean showPortal;       // Rather than showing the entire data range, only show a portion, and allow dragScrolling
+    double basesPerPixel;     // number of bases covered by a single pixel
     int  portalStart;         // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
     int  portalEnd;           // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
     int  portalWidth;         // in pixels (note that width in visible position within image position (db coodinates)
@@ -278,9 +217,12 @@ struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image
     struct imgTrack *imgTracks; // slList of all images to display
     };
 
-struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showSideLabel,int portalWidth);
+struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showSideLabel,int width);
 /* Starts an imgBox which should contain all info needed to draw the hgTracks image with multiple tracks
    The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd() */
+boolean imgBoxDefinePortal(struct imgBox *imgBox,int portalStart,int portalEnd,int portalWidthInPixels);
+/* Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll is being used.
+   returns TRUE if the portal is a proper subset of the imgBox as currently defined. */
 struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int width,int height,boolean backGround);
 /* Adds an image to an imgBox.  The image may be extended with imgMapStart(),mapSetItemAdd() */
 struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif);
@@ -300,7 +242,9 @@ boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose);
 void imgBoxFree(struct imgBox **pImgBox);
 /* frees all memory assocated with an imgBox (including images and imgTracks) */
 
-// Now the real work:
+
+
+/////////////////////// imageV2 UI API
 void imageMapDraw(struct mapSet *map,char *name);
 /* writes an image map as HTML */
 void sliceAndMapDraw(struct imgSlice *slice,char *name);
