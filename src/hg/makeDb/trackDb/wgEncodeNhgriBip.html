@@ -7,27 +7,33 @@ in opposite directions. The formal definition of a bidirectional promoter
 requires that the transcription initiation sites are separated by no more than
 1,000 bp from one another. Using these criteria we have comprehensively
 annotated the human and mouse genomes for the presence of bidirectional
-promoters, using in silico approaches  . The identification of these promoters
+promoters, using in silico approaches. The identification of these promoters
 is contingent upon the presence of adjacent, oppositely oriented pairs of
 genes, because few distinguishing features are available to uniquely identify
 bidirectional promoters de novo. Genomic annotations used for our
-identification phase include (1) curated protein-coding gene annotations,
-(2) spliced ESTs and (3) 5' "end-capped" transcript data, e.g., Cap-Analysis
-of Gene Expression Database (i.e., CAGE). The annotations for protein coding
-genes are strongly supported and therefore provide a high quality dataset for
-mapping bidirectional promoters. In contrast, bidirectional promoters supported
-by RNA evidence alone (as in (2)) have varying levels of evidence, ranging
-from one characterized transcript to hundreds of them. For this reason, dataset
-(3) - the CAGE data - provide a stringent level of validation for the start
-sites of the EST transcripts. As a large class of regulatory sequences,
-bidirectional promoters exemplify a rich source of unexplored biological
-information in the human genome. When compared to the mouse genome, these
-promoters are identifiable as truly orthologous locations, being maintained
-in regions of conserved synteny (including both genes and the intervening
-promoter region) that have undergone no rearrangements since the last common
-ancestor of mammals, and in some cases fish. We use this approach to annotate
-orthologous bidirectional promoters in nonhuman species as genomic annotations
-become available.
+identification phase include:
+<ul>
+<li><em>A</em>) <a href="hgTrackUi?g=knownGene">UCSC known genes</a>
+annotations (items with score=800).
+<li><em>B</em>) <a href="hgTrackUi?g=mrna">GenBank mRNA</a> annotations
+(score=600).
+<li><em>C</em>) <a href="hgTrackUi?g=intronEst">spliced ESTs</a> (score=400).
+</ul>
+The annotations for protein coding genes are strongly supported
+and therefore provide a high quality dataset for mapping bidirectional
+promoters. In contrast, bidirectional promoters supported by RNA evidence
+alone (as in <em>C</em>) have varying levels of evidence, ranging from one
+characterized transcript to hundreds of them. For this reason, the mRNA
+annotation (<em>B</em>) from GenBank provides a stringent level of validation
+for the start sites of the EST transcripts. As a large class of regulatory
+sequences, bidirectional promoters exemplify a rich source of unexplored
+biological information in the human genome. When compared to the mouse genome,
+these promoters are identifiable as truly orthologous locations, being
+maintained in regions of conserved synteny (including both genes and the
+intervening promoter region) that have undergone no rearrangements since the
+last common ancestor of mammals, and in some cases fish. We use this approach
+to annotate orthologous bidirectional promoters in nonhuman species until
+genomic annotations become available.
 </p>
 
 <h2> Methods </h2>
@@ -63,40 +69,56 @@ bidirectional promoter was confirmed. After orthologous assignments were
 confirmed for pairs of human genes, the reciprocal assignments were analyzed
 from mouse to human.
 
-Currently orthologous bi-directional promoter regions have been mapped in
-human, chimp, macaque, mouse, rat, dog and cow genomes.
+Currently orthologous bidirectional promoter regions (that have been identified
+using UCSC known genes) have been mapped in human, chimp, macaque, mouse, rat,
+dog and cow genomes).
 </p>
 
 <h2> Credits </h2>
 
 <p>These data were produced by Mary Yang in the
 <a href="http://www.genome.gov/12514761" title="http://www.genome.gov/12514761"
-rel="nofollow">Elnitski lab</a> at NHGRI, NIH. (contact:
-<A HREF="mailto:&#101;&#108;&#110;&#105;&#116;&#115;ki&#64;&#109;&#97;&#105;l.n&#105;&#104;.g&#111;&#118;">
-&#101;&#108;&#110;&#105;&#116;&#115;ki&#64;&#109;&#97;&#105;l.n&#105;&#104;.g&#111;&#118;</A>)
-<!-- above address is elnitski at mail.nih.gov -->
+ rel="nofollow" TARGET=_BLANK>Elnitski lab</a> at NHGRI, NIH. (contact:
+ <A HREF="mailto:&#101;&#108;&#110;&#105;&#116;&#115;ki&#64;&#109;&#97;&#105;l.n&#105;&#104;.g&#111;&#118;">
+ &#101;&#108;&#110;&#105;&#116;&#115;ki&#64;&#109;&#97;&#105;l.n&#105;&#104;.g&#111;&#118;</A>)
+ <!-- above address is elnitski at mail.nih.gov -->
 </p>
 
 <h2> References </h2>
-<p>Yang MQ, Elnitski L:
+<p>Yang MQ, Elnitski L.
  <a href="http://www.springerlink.com/content/q86486k52kr84j06/"
- title="http://www.springerlink.com/content/q86486k52kr84j06/" rel="nofollow">
+ title="http://www.springerlink.com/content/q86486k52kr84j06/"
+ rel="nofollow" TARGET=_BLANK>
  A computational study of bidirectional promoters in the human genome</a>.
 <i>Springer Lecture Series: Notes in Bioinformatics</i> 2007.
 
-</p><p>Yang MQ, Elnitski L: Orthology of Bidirectional Promoters Enables Use of
+</p><p>Yang MQ, Elnitski L. Orthology of Bidirectional Promoters Enables Use of
  a Multiple Class Predictor for Discriminating Functional Elements in the
- Human Genome. <i>Proceedings of the 2007 International Conference on
- Bioinformatics & Computational Biology.</i> pp. 218-228. 2007.
-</p><p>Yang MQ, Koehly L, Elnitski L:
+ Human Genome.
+ <a href="http://www.world-academy-of-science.org/worldcomp07/ws/BIOCOMP07"
+ title="http://www.world-academy-of-science.org/worldcomp07/ws/BIOCOMP07"
+ rel="nofollow" TARGET=_BLANK>
+ Proceedings of the 2007 International Conference on Bioinformatics &
+ Computational Biology.</a> pp. 218-228. 2007. ISBN: 1-60132-042-6.
+</p><p>Yang MQ, Koehly L, Elnitski L.
  <a href="http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0030072"
  title="http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0030072"
- rel="nofollow"> Comprehensive annotation of human bidirectional promoters
- identifies co-regulatory relationships among somatic breast and ovarian cancer
+ rel="nofollow" TARGET=_BLANK>
+ Comprehensive annotation of human bidirectional promoters identifies
+ co-regulatory relationships among somatic breast and ovarian cancer
  genes</a>. <i>PLOS Computational Biolog</i>y 2007.
 </p><p>Yang MQ, Taylor J, Elnitski L.
  <a href="http://www.biomedcentral.com/1471-2105/9/S6/S9"
- title="http://www.biomedcentral.com/1471-2105/9/S6/S9" rel="nofollow">
+ title="http://www.biomedcentral.com/1471-2105/9/S6/S9"
+ rel="nofollow" TARGET=_BLANK>
  Comparative analyses of bidirectional promoters in vertebrates</a>.
  <i>BMC Bioinformatics</i> May 2008.
+</p><p>Piontkivska H, Yang MQ, Larkin DM, Lewin HA, Reecy J, Elnitski L.
+<a href="http://www.biomedcentral.com/1471-2164/10/189"
+ title="http://www.biomedcentral.com/1471-2164/10/189"
+ rel="nofollow" TARGET=_BLANK>
+ Cross-species mapping of bidirectional promoters enables prediction of
+ unannotated 5' UTRs and identification of species-specific transcripts</a>.
+ <i>BMC Genomics</i>. 2009 Apr 24;10:189. PMID: 19393065.
 </p>
+
