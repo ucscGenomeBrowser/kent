@@ -52,6 +52,7 @@ DIRS = \
 	bedToBigBed \
 	bigBedSummary \
 	bigBedToBed \
+	bigWigInfo \
 	bigWigSummary \
 	bigWigToBedGraph \
 	calc \
