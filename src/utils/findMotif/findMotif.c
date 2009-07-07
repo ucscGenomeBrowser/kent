@@ -10,7 +10,7 @@
 #include "memalloc.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.12 2008/05/15 16:32:29 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.13 2009/07/07 17:58:56 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -69,6 +69,7 @@ unsigned long long negPreviousPosition = 0;
 register unsigned long long posNeedle = motifVal;
 register unsigned long long negNeedle = complementVal;
 unsigned long long enterGap = 1;
+boolean inGap = FALSE;
 unsigned long long gapCount = 0;
 
 mask = 3;
@@ -93,7 +94,8 @@ for (i=0; i < seq->size; ++i)
 	    incomingVal = mask & ((incomingVal << 2) | val);
 	    if (! incomingLength)
 		{
-		if (((long long int)chromPosition - (long long int)enterGap) > 0)
+		if (inGap &&
+		 (((long long int)chromPosition - (long long int)enterGap) > 0))
 		    {
 		    ++gapCount;
 		    verbose(3,
@@ -107,6 +109,7 @@ for (i=0; i < seq->size; ++i)
 		    enterGap = (unsigned long long)BIGNUM << 10;
 		    }
 		}
+	    inGap = FALSE;
 	    ++incomingLength;
 	    
 	    if (doPlusStrand && (incomingLength >= motifLen)
@@ -144,12 +147,13 @@ for (i=0; i < seq->size; ++i)
 		verbose(3, "#\tenter gap at %llu\n", chromPosition);
 		enterGap = chromPosition;
 		}
+	    inGap = TRUE;
 	    incomingVal = 0;
 	    incomingLength = 0;
 	    break;
 	}
     }
-if (((long long int)chromPosition - (long long int)enterGap) > 0)
+if (inGap && (((long long int)chromPosition - (long long int)enterGap) > 0))
     {
     ++gapCount;
     verbose(3,
