@@ -453,3 +453,103 @@ taxId 7955
     #Loaded 13361 elements of size 10
 
     
+############################################################################
+# create lift file on unBridged gaps for genbank splits (2009-07-07 - Hiram)
+    mkdir /hive/data/genomes/danRer6/bed/gap
+    cd /hive/data/genomes/danRer6/bed/gap
+    gapToLift danRer6 danRer6.unBridged.lift -bedFile=unBridged.lift.bed
+    cp -p danRer6.unBridged.lift ../../jkStuff
+    cp -p danRer6.unBridged.lift /hive/data/staging/data/danRer6
+
+    # ask admin to sync this directory: /hive/data/staging/data/danRer6/
+    #       to the kluster nodes /scratch/data/danRer6/
+
+###########################################################################
+# AUTO UPDATE GENBANK MRNA AND EST AND ZGC GENES RUN
+# (DONE, 2009-07-07, galt)
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    cvs update -dP
+    # edit etc/genbank.conf to add danRer6 and commit to CVS
+    # done already for first run so no need to update.
+# danRer6 (zebrafish)
+danRer6.serverGenome = /hive/data/genomes/danRer6/danRer6.2bit
+danRer6.clusterGenome = /scratch/data/danRer6/danRer6.2bit
+danRer6.ooc = /scratch/data/danRer6/11.ooc
+danRer6.lift = /hive/data/genomes/danRer6/jkStuff/danRer6.unBridged.lift
+danRer6.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+danRer6.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+danRer6.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+danRer6.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+danRer6.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+danRer6.downloadDir = danRer6
+danRer6.perChromTables = no
+danRer6.refseq.mrna.xeno.load  = yes
+
+    # end of section added to etc/genbank.conf
+    cvs commit -m "Added danRer6." etc/genbank.conf
+    # also added the perChromTables line afterwards. This means that there
+    # will not be one table per chromosome. Would be too many tables as 
+    # there are 5010 scaffolds.
+    # update /cluster/data/genbank/
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # danRer genome information
+
+    ssh genbank
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial danRer6 &
+
+    #var/build/logs/2009.07.07-20:23:34.danRer6.initalign.log
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad danRer6 &
+
+    #var/dbload/hgwdev/logs/2009.07.08-09:59:18.dbload.log
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add danRer6 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added danRer6." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-07-08 - Galt)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer6", "blat14", "17790", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer6", "blat14", "17791", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# Making download files (DONE - 2009-07-08 - Galt)
+
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6
+
+    ln -s bed/RepeatMasker.2009-06-26/danRer6.fa.out .
+    cd bed
+    ln -s simpleRepeat.2009-06-29 simpleRepeat
+    cd ..
+
+    makeDownloads.pl danRer6 >& downloads.log
+
+# *** Please take a look at the downloads for danRer6 using a web browser.
+# *** The downloads url is: http://hgwdev.cse.ucsc.edu/goldenPath/danRer6. 
+# *** Edit each README.txt to resolve any notes marked with "***":
+#     /hive/data/genomes/danRer6/goldenPath/database/README.txt
+#     /hive/data/genomes/danRer6/goldenPath/bigZips/README.txt
+#     (The htdocs/goldenPath/danRer6/*/README.txt "files" are just links to those.)
+
+
