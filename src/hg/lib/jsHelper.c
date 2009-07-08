@@ -23,11 +23,12 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.26 2009/06/15 20:47:06 tdreszer Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.27 2009/07/08 17:09:51 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
 struct hash *includedFiles = NULL;
+boolean symlinkFailed = FALSE;    // true when we can't create symlinks in js directory
 
 void jsInit()
 /* If this is the first call, set window.onload to the operations
@@ -344,31 +345,72 @@ if(!includedFiles)
 if(hashLookup(includedFiles, fileName) == NULL)
     {
     char *docRoot = hDocumentRoot();
-    char noScriptBuf[2048];
-    long mtime = 0;
+    struct dyString *noScriptBuf = dyStringNew(0);
+    char baseName[PATH_LEN];
+    struct dyString *fileNameWithVersion = dyStringNew(0);
     // dirName is configurable to allow developer specific javascript for developers on hgwdev;
     // e.g. "javaScriptDir js/larrym"
     char *dirName = cfgOptionDefault("browser.javaScriptDir", "js");
+    splitPath(fileName, NULL, baseName, NULL);
 
     /* tolerate missing docRoot (i.e. when running from command line) */
     if(docRoot != NULL)
         {
-        char fullDirName[2048];
-        safef(fullDirName, sizeof(fullDirName), "%s/%s", docRoot, dirName);
-        if(fileExists(fullDirName))
+        struct dyString *fullDirName = dyStringNew(0);
+        dyStringPrintf(fullDirName, "%s/%s", docRoot, dirName);
+        if(fileExists(dyStringContents(fullDirName)))
             {
-            char realFileName[2048];
-            safef(realFileName, sizeof(realFileName), "%s/%s", fullDirName, fileName);
-            if(!fileExists(realFileName))
+            struct dyString *realFileName = dyStringNew(0);
+            dyStringPrintf(realFileName, "%s/%s", dyStringContents(fullDirName), fileName);
+            if(!fileExists(dyStringContents(realFileName)))
                 {
-                errAbort("jsIncludeFile: javascript file: %s doesn't exist.\n", realFileName);
+                errAbort("jsIncludeFile: javascript file: %s doesn't exist.\n", dyStringContents(realFileName));
                 }
-            mtime = fileModTime(realFileName);
+            if(!symlinkFailed)
+                {
+                // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
+                // which fixes bugs and odd behavior that occurs when the browser caches modified js files
+
+                long mtime = fileModTime(dyStringContents(realFileName));
+                struct dyString *fullNameWithVersion = dyStringNew(0);
+                dyStringPrintf(fileNameWithVersion, "%s-%ld.js", baseName, mtime);
+                dyStringPrintf(fullNameWithVersion, "%s/%s", dyStringContents(fullDirName), dyStringContents(fileNameWithVersion));
+                if(!fileExists(dyStringContents(fullNameWithVersion)))
+                    {
+                    // Make a new, versioned symlinks and delete any older versioned symlinks.
+                    struct dyString *pattern = dyStringNew(0);
+                    struct slName *files, *file;
+                    dyStringPrintf(pattern, "%s-[0-9]+\\.js", baseName);
+                    files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
+                    for (file = files; file != NULL; file = file->next)
+                        {
+                        struct dyString *tmp = dyStringNew(0);
+                        dyStringPrintf(tmp, "%s/%s", dyStringContents(fullDirName), file->name);
+                        unlink(dyStringContents(tmp));
+                        dyStringFree(&tmp);
+                        }
+                    slFreeList(&files);
+                    dyStringFree(&pattern);
+                    if(symlink(dyStringContents(realFileName), dyStringContents(fullNameWithVersion)))
+                        {
+                        // We do not report failed creation of symlinks b/c I think it will be common in mirrors for the
+                        // www user to not have write permission to the js directory. When this happens,
+                        // we fall back to using non-versioned javascript references
+
+                        // fprintf(stderr, "jsIncludeFile: symlink failed: errno: %d (%s)\n", errno, strerror(errno));
+                        symlinkFailed = TRUE;
+                        dyStringClear(fileNameWithVersion);
+                        }
+                    }
+                dyStringFree(&fullNameWithVersion);
+                }
+            dyStringFree(&fullDirName);
             }
         else
             {
-            errAbort("jsIncludeFile: javascript dir: %s doesn't exist.\n", fullDirName);
+            errAbort("jsIncludeFile: javascript dir: %s doesn't exist.\n", dyStringContents(fullDirName));
             }
+        dyStringFree(&fullDirName);
         }
     hashAdd(includedFiles, fileName, NULL);
     if(noScriptMsg == NULL && !defaultWarningShown)
@@ -377,13 +419,11 @@ if(hashLookup(includedFiles, fileName) == NULL)
         defaultWarningShown = 1;
         }
     if(noScriptMsg && strlen(noScriptMsg))
-        safef(noScriptBuf, sizeof(noScriptBuf), "<noscript>%s</noscript>\n", noScriptMsg);
-    else
-        noScriptBuf[0] = 0;
-    // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
-    // which fixes bugs, odd behavior that occurs when the browser caches modified js files
-    //hPrintf("<script type='text/javascript' src='../%s/%s?v=%ld'></script>\n%s", dirName, fileName, mtime, noScriptBuf);
-    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n%s", dirName, fileName, noScriptBuf);
+        dyStringPrintf(noScriptBuf, "<noscript>%s</noscript>\n", noScriptMsg);
+    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n%s", dirName, 
+            dyStringLen(fileNameWithVersion) ? dyStringContents(fileNameWithVersion) : fileName, dyStringContents(noScriptBuf));
+    dyStringFree(&fileNameWithVersion);
+    dyStringFree(&noScriptBuf);
     }
 }
 
