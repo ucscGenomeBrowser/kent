@@ -19,7 +19,7 @@ class PipelineController < ApplicationController
   layout 'main'
   
   def list
-    sort_init 'name'
+    sort_init 'updated_at', {:default_order => 'desc'}
     sort_update
     #@autoRefresh = true
     @sort_key = params[:sort_key]
@@ -28,19 +28,19 @@ class PipelineController < ApplicationController
     elsif @sort_key
       @projects = Project.find(:all, :order => sort_clause)
     else
-      @projects = Project.find(:all)
+      @projects = Project.find(:all, :order => 'updated_at DESC')
     end
   end
   
   def show_user
-    sort_init 'name'
+    sort_init 'updated_at', {:default_order => 'desc'}
     sort_update
-    @sort_key = params[:sort_key]
-    @user = User.find(current_user.id)
+    @sort_key = params[:sort_key]    
+    @user = params[:submitter] ? User.find(:first, :conditions => {:login => params[:submitter]}) : User.find(current_user.id)
     if @sort_key
-      @projects = Project.find(:all, :conditions => ["user_id = ?", current_user.id], :order => sort_clause)
+      @projects = Project.find(:all, :conditions => {:user_id => @user.id}, :order => sort_clause)
     else 
-      @projects = @user.projects
+      @projects = Project.find(:all, :conditions => {:user_id => @user.id}, :order => 'updated_at DESC')
     end
     @projects.each do 
       |p|
