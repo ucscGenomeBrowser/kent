@@ -4,27 +4,6 @@ These tracks display the level of sequence uniqueness of the reference hg18
 genome.  They were generated using different window sizes and high signal
 will be found in areas where the sequence is unique.
 
-<!--
-<H2> Display Conventions and Configuration </H2>
-<P>
-This track is a multi-view composite track that contains multiple data types
-(<EM>views</EM>).  For each view, there are multiple subtracks that
-display individually on the browser.  Instructions for configuring multi-view
-tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-ENCODE tracks typically contain one or more of the following views:
-<DL>
-<DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
-(usually normalized data from pooled replicates). ENCODE Peaks tables contain
-fields for statistical significance, including FDR
-(<A HREF="../../goldenPath/help/qValue.html" TARGET=_BLANK>qValue</A>).</DD>
-<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
-processed data.</DD>
-<DT><I>Raw Signal</I></DT><DD>Density graph (wiggle) of signal from raw data
-(single replicates, no control). For high-throughput sequencing data, this
-reflects the aligned read density.</DD>
-<DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome.<DD>
-</DL>
--->
 <H2>Methods</H2>
 <P>
 The <em>Broad alignability</em> track displays whether a region is made up of
@@ -48,9 +27,8 @@ sequence and 0 representing the sequence occurs >4 times in the genome
 (excluding chrN_random and alternative haplotypes).  A score of 0.5
 indicates the sequence occurs exactly twice, likewise 0.33 for three times
 and 0.25 for four times. The <em>Duke uniqueness</em> tracks were generated
-for the ENCODE project as tools in the developement of the
-<A HREF="hgTrackUi?g=wgEncodeChromatinMap">Open Chromatin</A> tracks.  The
-<em>Duke uniqueness</em> tracks were generated for the ENCODE project.
+for the ENCODE project as tools in the development of the
+<A HREF="hgTrackUi?g=wgEncodeChromatinMap">Open Chromatin</A> tracks. 
 
 <P>
 The <em>Duke excluded regions</em> track displays genomic regions for
@@ -93,7 +71,7 @@ Data generation and analysis was supported by funds from the NHGRI (the ENCODE
 project), the
 Burroughs Wellcome Fund, Massachusetts General Hospital and the Broad Institute.
 <P>
-The <em>Duke uniqueness</em> and <em>excluded regions</em> tracks were created
+The <em>Duke uniqueness</em> and <em>Duke excluded regions</em> tracks were created
 by Terry Furey (contact:
 <A HREF="mailto:&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u"
 title="&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u" rel="nofollow" TARGET=_BLANK>
@@ -124,13 +102,8 @@ HG003143 to JD.  Keck Distinguished Young Scholar Award to JD.  This track was
 generated as part of the ENCODE project funded by the NHGRI.
 </P>
 
-<!--
 <H2> Data Release Policy </H2>
 
-<P>Data users may freely use ENCODE data, but may not, without prior
-consent, submit publications that use an unpublished ENCODE dataset until
-nine months following the release of the dataset.  This date is listed in
-the <EM>Restricted Until</EM> column on the track configuration page and
-the download page.  The full data release policy for ENCODE is available
-<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
--->
+<P>Data users may freely use all data in this track.  ENCODE labs that 
+contributed annotations have exempted their data here from the
+ENCODE data release policy restrictions.
