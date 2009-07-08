@@ -62,7 +62,7 @@ sed -i -e "s/gbWarn//g" make.utils.log
 set res = `/bin/egrep -i "error|warn" make.utils.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "errs found on $HOST:"
+ echo "errs found on $HOST"
  echo "$res"
  $WEEKLYBLD/unsymtrick.csh
  exit 1
