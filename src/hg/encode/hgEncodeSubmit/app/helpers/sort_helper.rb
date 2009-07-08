@@ -109,7 +109,7 @@ module SortHelper
   #   /images
   #
   def sort_init(default_key, options={})
-    options = { :default_order => 'asc',
+    options = { :default_order => params[:default_order] ? params[:default_order] : 'asc',
                 :name => params[:controller] + '_sort',
               }.merge(options)
     @sort_name = options[:name]
@@ -159,7 +159,7 @@ module SortHelper
   # - The optional text explicitly specifies the displayed link text.
   # - A sort icon image is positioned to the right of the sort link.
   #
-  def sort_link(column, text=nil)
+  def sort_link(column, text=nil, optional_params={})
     key, order = session[@sort_name][:key], session[@sort_name][:order]
     if key == column || key.is_a?(Array) && key.join(',') == column
       if order.downcase == 'asc'
@@ -186,7 +186,7 @@ module SortHelper
     if params[:search_terms] then terms = params[:search_terms]
     elsif params[:search] then terms = params[:search] end
 
-    params = {:params => {:sort_key => sort_key, :sort_order => order, :search_terms => terms}}
+    params = {:params => {:sort_key => sort_key, :sort_order => order, :search_terms => terms}.merge(optional_params)}
     link_to(text, params)
 # +
 #      (icon ? nbsp(2) + image_tag(File.join(@icons_dir,icon)) : '')
