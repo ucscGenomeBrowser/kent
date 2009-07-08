@@ -62,7 +62,7 @@ if (navigator.appName=="Netscape") {
     -%> 
     <%= ' | ' -%>
     <%= 
-        if params[:controller] == 'pipeline' && params[:action] == 'show_user'
+        if params[:controller] == 'pipeline' && params[:action] == 'show_user' && !params[:submitter]
 	    "My Submissions"
         else 
             link_to 'My Submissions', :controller => 'pipeline', :action => 'show_user' 
