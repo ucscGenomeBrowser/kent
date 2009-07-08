@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.56 2009/07/08 22:07:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.57 2009/07/08 23:10:38 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -208,7 +208,7 @@ static void htmlWarnBoxSetup(FILE *f)
 // resizable (dynamically adjusting to its contents). But if this setup is done later in the page (at first warning), then IE des resize it.  Why?
 // FF is resizable now, but it took some experimentation.
 #define WARNBOX_LINE1 "<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'>"
-#define WARNBOX_LINE2 "<CENTER><B style='color:DarkRed;'>Warning(s):</CENTER></B><UL id='warnList'></UL><CENTER><input type='reset' value='OK' onclick='hideWarnBox();return false;'></CENTER></div></center>"
+#define WARNBOX_LINE2 "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL><CENTER><input type='reset' value='OK' onclick='hideWarnBox();return false;'></CENTER></div></center>"
 #define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display='inline-block'; warnBox.style.width='auto';}}}"
 #define WARNBOX_HIDE  "function hideWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display='none';var warnList=document.getElementById('warnList'); warnList.innerHTML='';}}"
 fprintf(f, "<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
