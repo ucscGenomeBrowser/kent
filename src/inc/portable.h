@@ -14,6 +14,12 @@ struct slName *listDir(char *dir, char *pattern);
 /* Return an alphabetized list of all files that match 
  * the wildcard pattern in directory. */
 
+struct slName *listDirRegEx(char *dir, char *regEx, int flags);
+/* Return an alphabetized list of all files that match 
+ * the regular expression pattern in directory.
+ * See REGCOMP(3) for flags (e.g. REG_ICASE)  */
+
+
 struct fileInfo 
 /* Info about a file. */
     {

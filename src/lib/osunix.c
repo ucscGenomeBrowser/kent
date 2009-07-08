@@ -12,8 +12,10 @@
 #include "portable.h"
 #include "portimpl.h"
 #include <sys/wait.h>
+#include <regex.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.41 2009/06/07 07:11:55 markd Exp $";
+
+static char const rcsid[] = "$Id: osunix.c,v 1.42 2009/07/08 16:24:25 larrym Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -113,6 +115,39 @@ while ((de = readdir(d)) != NULL)
 	}
     }
 closedir(d);
+slNameSort(&list);
+return list;
+}
+
+struct slName *listDirRegEx(char *dir, char *regEx, int flags)
+/* Return an alphabetized list of all files that match 
+ * the regular expression pattern in directory.
+ * See REGCOMP(3) for flags (e.g. REG_ICASE)  */
+{
+struct slName *list = NULL, *name;
+struct dirent *de;
+DIR *d;
+regex_t re;
+int err = regcomp(&re, regEx, flags | REG_NOSUB);
+if(err)
+    errAbort("regcomp failed; err: %d", err);
+
+if ((d = opendir(dir)) == NULL)
+    return NULL;
+while ((de = readdir(d)) != NULL)
+    {
+    char *fileName = de->d_name;
+    if (differentString(fileName, ".") && differentString(fileName, ".."))
+	{
+	if (!regexec(&re, fileName, 0, NULL, 0))
+	    {
+	    name = newSlName(fileName);
+	    slAddHead(&list, name);
+	    }
+	}
+    }
+closedir(d);
+regfree(&re);
 slNameSort(&list);
 return list;
 }
