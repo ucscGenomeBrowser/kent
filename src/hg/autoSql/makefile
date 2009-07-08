@@ -11,7 +11,8 @@ O = autoSql.o
 all: ${BINDIR}/autoSql
 
 ${BINDIR}/autoSql: autoSql
-	cp -f autoSql ${BINDIR}
+	rm -f $@
+	cp -p $< $@
 
 autoSql: ${O}
 	${CC} ${COPT} -o autoSql $O ../../lib/${MACHTYPE}/jkweb.a ${L}
