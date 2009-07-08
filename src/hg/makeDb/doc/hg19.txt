@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.28 2009/06/24 01:22:17 markd Exp $";
+#	"$Id: hg19.txt,v 1.29 2009/07/08 03:32:16 galt Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -376,7 +376,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 hg19.serverGenome = /hive/data/genomes/hg19/hg19.2bit
 hg19.clusterGenome = /scratch/data/hg19/hg19.2bit
 hg19.ooc = /scratch/data/hg19/11.ooc
-hg19.lift = /scratch/data/hg19/hg19.unBridged.lift
+hg19.lift = /hive/data/genomes/hg19/jkStuff/hg19.unBridged.lift
 # hg19.hapRegions = /hive/data/genomes/hg19/bed/haplotypePos/haplotypePos.psl
 hg19.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 hg19.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
