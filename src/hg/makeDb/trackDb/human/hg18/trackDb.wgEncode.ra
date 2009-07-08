@@ -3267,9 +3267,9 @@ wgEncode 1
 track wgEncodeMapability
 compositeTrack on
 shortLabel Mapability
-longLabel Mapability
+longLabel Mapability or Uniqueness of Reference Genome 
 group map
-subGroup1 view Mapability ALN=Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Excluded_Regions
+subGroup1 view Mapability ALN=Broad_Alignability DUNIQ=Duke_Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Duke_Excluded_Regions
 subGroup2 win Sequence_Size w15=15bp w20=20bp w24=24bp w35=35bp w36=36bp zNA=Varied
 visibilityViewDefaults ALN=hide EXR=hide DUNIQ=full RUNIQ=hide UUNIQ=full
 #dimensions dimensionX=win
@@ -3355,8 +3355,8 @@ wgEncode 1
     track uniqueness
     release alpha
     subTrack wgEncodeMapability
-    shortLabel Rosetta Uniqueness
-    longLabel Mapability - Rosetta Uniqueness 35-mer alignment (BWA/MAQ, 37 indicates a unique alignment)
+    shortLabel Roset Uniqueness
+    longLabel Mapability - Rosetta Uniqueness 35-mer alignment (BWA/MAQ, unique alignment=37)
     subGroups view=RUNIQ win=w35
     #defaultViewLimits 0:37
     #minLimit 0
