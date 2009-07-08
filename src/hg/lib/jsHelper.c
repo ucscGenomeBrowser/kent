@@ -23,12 +23,11 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.27 2009/07/08 17:09:51 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.28 2009/07/08 19:48:54 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
 struct hash *includedFiles = NULL;
-boolean symlinkFailed = FALSE;    // true when we can't create symlinks in js directory
 
 void jsInit()
 /* If this is the first call, set window.onload to the operations
@@ -361,49 +360,44 @@ if(hashLookup(includedFiles, fileName) == NULL)
         if(fileExists(dyStringContents(fullDirName)))
             {
             struct dyString *realFileName = dyStringNew(0);
+            struct dyString *fullNameWithVersion = dyStringNew(0);
+            long mtime;
+            
             dyStringPrintf(realFileName, "%s/%s", dyStringContents(fullDirName), fileName);
             if(!fileExists(dyStringContents(realFileName)))
                 {
                 errAbort("jsIncludeFile: javascript file: %s doesn't exist.\n", dyStringContents(realFileName));
                 }
-            if(!symlinkFailed)
+            mtime = fileModTime(dyStringContents(realFileName));
+
+            // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
+            // which fixes bugs and odd behavior that occurs when the browser caches modified js files
+
+            dyStringPrintf(fileNameWithVersion, "%s-%ld.js", baseName, mtime);
+            dyStringPrintf(fullNameWithVersion, "%s/%s", dyStringContents(fullDirName), dyStringContents(fileNameWithVersion));
+            if(!fileExists(dyStringContents(fullNameWithVersion)))
                 {
-                // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
-                // which fixes bugs and odd behavior that occurs when the browser caches modified js files
-
-                long mtime = fileModTime(dyStringContents(realFileName));
-                struct dyString *fullNameWithVersion = dyStringNew(0);
-                dyStringPrintf(fileNameWithVersion, "%s-%ld.js", baseName, mtime);
-                dyStringPrintf(fullNameWithVersion, "%s/%s", dyStringContents(fullDirName), dyStringContents(fileNameWithVersion));
-                if(!fileExists(dyStringContents(fullNameWithVersion)))
+                // Make a new, versioned symlinks and delete any older versioned symlinks.
+                struct dyString *pattern = dyStringNew(0);
+                struct slName *files, *file;
+                dyStringPrintf(pattern, "%s-[0-9]+\\.js", baseName);
+                files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
+                for (file = files; file != NULL; file = file->next)
                     {
-                    // Make a new, versioned symlinks and delete any older versioned symlinks.
-                    struct dyString *pattern = dyStringNew(0);
-                    struct slName *files, *file;
-                    dyStringPrintf(pattern, "%s-[0-9]+\\.js", baseName);
-                    files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
-                    for (file = files; file != NULL; file = file->next)
-                        {
-                        struct dyString *tmp = dyStringNew(0);
-                        dyStringPrintf(tmp, "%s/%s", dyStringContents(fullDirName), file->name);
-                        unlink(dyStringContents(tmp));
-                        dyStringFree(&tmp);
-                        }
-                    slFreeList(&files);
-                    dyStringFree(&pattern);
-                    if(symlink(dyStringContents(realFileName), dyStringContents(fullNameWithVersion)))
-                        {
-                        // We do not report failed creation of symlinks b/c I think it will be common in mirrors for the
-                        // www user to not have write permission to the js directory. When this happens,
-                        // we fall back to using non-versioned javascript references
-
-                        // fprintf(stderr, "jsIncludeFile: symlink failed: errno: %d (%s)\n", errno, strerror(errno));
-                        symlinkFailed = TRUE;
-                        dyStringClear(fileNameWithVersion);
-                        }
+                    struct dyString *tmp = dyStringNew(0);
+                    dyStringPrintf(tmp, "%s/%s", dyStringContents(fullDirName), file->name);
+                    unlink(dyStringContents(tmp));
+                    dyStringFree(&tmp);
                     }
-                dyStringFree(&fullNameWithVersion);
+                slFreeList(&files);
+                dyStringFree(&pattern);
+                if(symlink(dyStringContents(realFileName), dyStringContents(fullNameWithVersion)))
+                    {
+                    errAbort("jsIncludeFile: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'\n", 
+                             errno, strerror(errno), dyStringContents(fullDirName), getUser());
+                    }
                 }
+            dyStringFree(&fullNameWithVersion);
             dyStringFree(&fullDirName);
             }
         else
