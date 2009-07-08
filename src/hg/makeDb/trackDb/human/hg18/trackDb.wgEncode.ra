@@ -4438,16 +4438,15 @@ subGroup2 cellType Cell_Line BJtert=BJ-tert Caco2=Caco-2 GM06990=GM06990 GM12878
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
+visibilityViewDefaults Peaks=pack Hotspots=pack RawSignal=full
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0 Hotspots:pValueFilter=0.0,qValueFilter=0.0 RawSignal:viewLimits=1:10,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 RawSignal:viewLimits=1:50,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
+#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:50,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3 +
 wgEncode 1
 # project dirs: 111 110 106 50 48 49 47 46
-noScoreFilter .
-scoreMin 500
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
     release alpha
