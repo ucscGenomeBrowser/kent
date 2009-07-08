@@ -3286,7 +3286,7 @@ wgEncode 1
     track wgEncodeBroadMapabilityAlign36mer
     release alpha
     subTrack wgEncodeMapability
-    shortLabel Alignability 36
+    shortLabel Broad Align 36
     longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
     subGroups view=ALN win=w36
     type wig 0.00 1.00
@@ -3297,7 +3297,7 @@ wgEncode 1
     track wgEncodeUmassMapabilityUniq15
     release alpha
     subTrack wgEncodeMapability
-    shortLabel Uniqueness 15
+    shortLabel Umass Uniq 15
     longLabel Mapability - ENCODE UMass Uniqueness at 15bp
     subGroups view=UUNIQ win=w15
     type wig 0.00 1.00
@@ -3308,7 +3308,7 @@ wgEncode 1
     track wgEncodeDukeUniqueness20bp
     release alpha
     subTrack wgEncodeMapability off
-    shortLabel Uniqueness 20
+    shortLabel Duke Uniq 20
     longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
     type wig 0.00 1.00
     subGroups view=DUNIQ win=w20
@@ -3320,7 +3320,7 @@ wgEncode 1
     track wgEncodeDukeUniqueness24bp
     release alpha
     subTrack wgEncodeMapability off
-    shortLabel Uniqueness 24
+    shortLabel Duke Uniq 24
     longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
     type wig 0.00 1.00
     subGroups view=DUNIQ win=w24
@@ -3332,7 +3332,7 @@ wgEncode 1
     track wgEncodeDukeUniqueness35bp
     release alpha
     subTrack wgEncodeMapability
-    shortLabel Uniqueness 35
+    shortLabel Duke Uniq 35
     longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
     type wig 0.00 1.00
     subGroups view=DUNIQ win=w35
@@ -3355,7 +3355,7 @@ wgEncode 1
     track uniqueness
     release alpha
     subTrack wgEncodeMapability
-    shortLabel Roset Uniqueness
+    shortLabel Rosetta Uniq 35
     longLabel Mapability - Rosetta Uniqueness 35-mer alignment (BWA/MAQ, unique alignment=37)
     subGroups view=RUNIQ win=w35
     #defaultViewLimits 0:37
