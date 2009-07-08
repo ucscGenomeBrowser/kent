@@ -33,6 +33,7 @@ end
 </tr>
 
 <% if advancedView %>
+<tr><td>Submission ID: &nbsp;&nbsp;&nbsp;</td><td><%= @project.id -%></td></tr>
 <tr><td>Type: </td><td> <%= @project.project_type.short_label -%></td></tr>
 <tr><td>Active: </td><td><%= @project.archives_active -%></td></tr>
 <% end %>

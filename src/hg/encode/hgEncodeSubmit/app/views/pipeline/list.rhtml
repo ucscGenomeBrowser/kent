@@ -4,26 +4,24 @@
 
 <p>
  <table id="projects" cellpadding=1 cellspacing=3>
- <tr><td align="left"><b><%= sort_link('name', 'Name') -%></b></td><td>&nbsp;</td>
-
- <% if current_user.login == "admin" %>
-   <td align="left"><b><%= sort_link('Type') -%></b></td><td>&nbsp;</td>
- <% end %>
- <td align="left"><b><%= sort_link('Status') -%></b></td><td>&nbsp;</td>
+ <tr> 
+<% if current_user.role == "admin" %>
+  <td align="left"><b><%= sort_link('id', 'Submission ID', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
+<% end %>
+<td align="left"><b><%= sort_link('name', 'Name', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
+ <td align="left"><b><%= sort_link('Status', nil, {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
  <% if !defined? @user %>
-   <td align="left"><b><%= sort_link('pi', 'Investigator') -%></b></td><td>&nbsp;</td>
-   <td align="left"><b><%= sort_link('login', 'Submitter') -%></b></td><td>&nbsp;</td>
- <% end %>
- <td align="left"><b><%= sort_link('updated_at', 'Updated PST') -%></b></td></tr>
+   <td align="left"><b><%= sort_link('pi', 'Investigator', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
+   <td align="left"><b><%= sort_link('login', 'Submitter', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td> 
+<% end %>
+ <td align="left"><b><%= sort_link('updated_at', 'Updated PST', {:submitter => params[:submitter]}) -%></b></td></tr>
 
  <% @projects.each do |c| %>
   <tr>
-  <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
-
-  <% if current_user.login == "admin" %>
-  <td><%= c.project_type.short_label -%></td><td>&nbsp;</td><td>&nbsp;</td>
+  <% if current_user.role == "admin" %>
+    <td align="right"><%= link_to c.id, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
   <% end %>
-
+  <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
   <td> 
   <%= 
   if c.status == "validate failed"
@@ -56,7 +54,7 @@
 
   <% if !defined? @user %>
     <td><%= c.user.pi -%></td><td>&nbsp;</td>
-    <td><%= c.user.login -%></td><td>&nbsp;</td>    
+    <td><%= link_to c.user.login, {:action => 'show_user', :params => {:submitter => c.user.login}} -%></td><td>&nbsp;</td>    
   <% end %>
   <td><%= c.updated_at.strftime("%b %d %H:%M") -%></td>
   </tr>
