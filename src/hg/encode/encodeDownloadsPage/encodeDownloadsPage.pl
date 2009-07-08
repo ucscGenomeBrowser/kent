@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.16 2009/06/25 01:26:53 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.17 2009/07/08 23:54:49 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -476,6 +476,18 @@ for my $line (@fileList) {
         push(@tmp, "$_=" . $metaData{$_}) for (sort keys %metaData);
     }
     my $details = join("; ", @tmp);
+
+    # If releaseDate is in the past then don't bother showing it.
+    if(length($releaseDate) > 0) {
+        my ($YYYY,$MM,$DD) = split('-',$releaseDate);
+        my $then = timegm(0,0,0,$DD,$MM-1,$YYYY);
+        my $now = time();
+        my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($now);
+        if($then -$now < 0) {
+            $releaseDate = "";
+        }
+    }
+
     #htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$details);
     push @rows, sortableHtmlRow(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$details);
 }
