@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.27 2009/03/17 04:28:39 kent Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.28 2009/07/08 23:18:53 angie Exp $";
 
 
 static boolean forCurTable()
@@ -83,7 +83,12 @@ hPrintf("The items must be values of the <B>%s</B> field of the currently "
 if (aliasField != NULL)
     {
     if (sameString(curTable, xrefTable))
-	hPrintf(", or the <B>%s</B> field.\n", aliasField);
+	{
+	if (!sameString(idField, aliasField))
+	    hPrintf(", or the <B>%s</B> field.\n", aliasField);
+	else
+	    hPrintf(".\n");
+	}
     else
 	hPrintf(", or the <B>%s</B> field of the alias table <B>%s</B>.\n",
 		aliasField, xrefTable);
