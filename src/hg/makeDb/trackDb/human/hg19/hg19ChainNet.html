@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <H3>Chain Track</H3>
 <P>
-The chain track shows alignments of human (Feb. 2009/hg19) to
+The chain track shows alignments of human ($date/$db) to
 other genomes using a gap scoring system that allows longer gaps 
 than traditional affine gap scoring systems. It can also tolerate gaps in both
 human and the other genome simultaneously. These 
@@ -30,7 +30,7 @@ The net track shows the best human/other chain for
 every part of the other genome. It is useful for
 finding orthologous regions and for studying genome
 rearrangement.  The human sequence used in this annotation is from
-the Feb. 2009 (hg19) assembly.</P>
+the $date ($db) assembly.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <H3>Chain Track</H3>
@@ -87,8 +87,42 @@ of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
 blocks.
 
-Chains scoring below a minimum score were discarded,
-the remaining chains are displayed in this track.
+<BLOCKQUOTE><TABLE BORDER=0 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TD>
+<P>
+The following lastz matrix was used<BR>for the alignments to: Chimp,<BR>
+Gorilla, Orangutan, Rhesus,<BR>Baboon and Marmoset
+</P>
+
+<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=right><TD>&nbsp;</TD><TD><B>A</B></TD><TD><B>C</B></TD><TD><B>G</B></TD><TD><B>T</B></TD></TR>
+<TR ALIGN=right><TD><B>A<B></TD><TD>90</TD><TD>-330</TD><TD>-236</TD><TD>-356</TD></TR>
+<TR ALIGN=right><TD><B>C<B></TD><TD>-330</TD><TD>100</TD><TD>-318</TD><TD>-236</TD></TR>
+
+<TR ALIGN=right><TD><B>G<B></TD><TD>-236</TD><TD>-318</TD><TD>100</TD><TD>-330</TD></TR>
+<TR ALIGN=right><TD><B>T<B></TD><TD>-356</TD><TD>-236</TD><TD>-330</TD><TD>90</TD></TR>
+</TABLE></BLOCKQUOTE>
+
+</TD><TD WIDTH=40>&nbsp;</TD><TD>
+<P>
+The following lastz matrix was used<BR>for the alignments to: Tarsier,<BR>
+Mouse Lemur and Bushbaby
+</P>
+<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=right><TD>&nbsp;</TD><TD><B>A</B></TD><TD><B>C</B></TD><TD><B>G</B></TD><TD><B>T</B></TD></TR>
+<TR ALIGN=right><TD><B>A<B></TD><TD>91</TD><TD>-114</TD><TD>-31</TD><TD>-123</TD></TR>
+<TR ALIGN=right><TD><B>C<B></TD><TD>-114</TD><TD>100</TD><TD>-125</TD><TD>-31</TD></TR>
+
+<TR ALIGN=right><TD><B>G<B></TD><TD>-31</TD><TD>-125</TD><TD>100</TD><TD>-114</TD></TR>
+<TR ALIGN=right><TD><B>T<B></TD><TD>-123</TD><TD>-31</TD><TD>-114</TD><TD>91</TD></TR>
+</TABLE></BLOCKQUOTE>
+</TD></TR></TABLE></BLOCKQUOTE></P>
+
+Chains scoring below a minimum score of '$chainMinScore' were discarded;
+the remaining chains are displayed in this track.  The linear gap
+matrix used with axtChain:<BR>
+$chainLinearGap
+
 See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Hg19_conservation_lastz_parameters"
 TARGET=_blank>lastz parameters</A> used in these alignments,
 and chain <A HREF="http://genomewiki.ucsc.edu/index.php/Hg19_Genome_size_statistics"
