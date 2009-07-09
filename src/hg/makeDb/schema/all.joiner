@@ -60,6 +60,7 @@ set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryLat,
 set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut
 
 # Define organism databases for which we build a SNP track:
+set snpDb130 hg18
 set snpDb129 hg18
 set snpDb128 hg18,mm9
 set snpDb127 hg18,bosTau3
