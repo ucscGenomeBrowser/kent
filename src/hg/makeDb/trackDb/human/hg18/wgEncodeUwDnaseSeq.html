@@ -11,37 +11,35 @@ DNaseI hypersensitivity is a universal feature of active
 to the discovery of functional regulatory elements that include enhancers, 
 insulators, promotors, locus control regions and novel elements.
 For each experiment (cell type) this track shows DNaseI hypersensitive zones 
-(<I>HotSpots</I>),
+(<I>HotSpots</I>) and
 hypersensitive sites (<I>Peaks</I>) based on the sequencing tag density 
 (<I>Signal</I>).
 </P>
 
 <H2>Display Conventions and Configuration</H2>
-
-<P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
-cleavage sites across the genome mapped using the Digital DNasI methodology 
-(see below).  Data have been normalized to 25 million reads per cell type.  
-DNaseI hypersensitive sites (DHSs) at False Discovery Rate (FDR) 0.5% are shown 
-within each density track as colored red subregions.</P>
- 
-<P>The subtracks within this composite annotation track correspond to data from 
-different cell types and tissues.  The graphical configuration options are 
-shown at the top of the track description page, followed by a list of 
-subtracks. To 
-display only selected subtracks, uncheck the boxes next to the tracks you 
-wish to 
-hide. For more information about the graphical configuration options, click 
-the <A TARGET=_BLANK HREF="http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html">Graph configuration help</A> link.</P>
-
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+<P>
+For each cell type, this track contains the following views:
 <DL>
 <DT><I>HotSpots</I>
 <DD> DNaseI hypersensitive zones identified using the HotSpot algorithm.
 <DT><I>Peaks</I>
 <DD> DNaseI hypersensitive sites (DHSs) identified as signal peaks within 
 FDR 0.5% hypersensitive zones.
-<DT><I>Signal</I>
+<DT><I>Raw Signal</I>
 <DD>Density graph (wiggle) of signal enrichment based on aligned read density.
 </DL>
+<P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
+cleavage sites across the genome mapped using the Digital DNaseI methodology 
+(see below).  Data have been normalized to 25 million reads per cell type.  
+<!-- TODO
+DNaseI hypersensitive sites (DHSs) at False Discovery Rate (FDR) 0.5% are shown 
+within each density track as colored red subregions.</P>
+-->
 
 <H2>Methods</H2>
 
