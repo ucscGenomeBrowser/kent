@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.404 2009/07/08 21:50:18 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.405 2009/07/09 04:13:05 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -720,27 +720,17 @@ if (!sameString(CUSTOM_TRASH,db) && hCanHaveSplitTables(db))
 	    hashAdd(dbTblHash, trackName, tbl);
 	else if (! sameString(tbl->name, trackName))
 	    slAddHead(&(tHel->val), tbl);
-	if (sameString("all_mrna", tbl->name) || sameString("all_est", tbl->name))
-	    {
-	    struct slName *sln = slNameNew(tbl->name + strlen("all_"));
-	    hashAdd(dbTblHash, sln->name, tbl);
-	    }
 	}
     }
 else
     {
-    /* Just hash all table names (watch out for all_mrna and all_est): */
+    /* Just hash all table names: */
     struct slName *tbl = NULL, *nextTbl = NULL;
     for (tbl = allTables;  tbl != NULL;  tbl = nextTbl)
 	{
 	nextTbl = tbl->next;
 	tbl->next = NULL;
 	hashAdd(dbTblHash, tbl->name, tbl);
-	if (sameString("all_mrna", tbl->name) || sameString("all_est", tbl->name))
-	    {
-	    struct slName *sln = slNameNew(tbl->name + strlen("all_"));
-	    hashAdd(dbTblHash, sln->name, tbl);
-	    }
 	}
     }
 hFreeConn(&conn);
@@ -2878,16 +2868,7 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
         {
 	safef(fullName, sizeof(fullName), "%s", rootName);
 	if (!hTableExists(db, fullName))
-	    {
-	    if (sameString(rootName, "mrna") || sameString(rootName, "est"))
-		{
-		safef(fullName, sizeof(fullName), "all_%s", rootName);
-		if (!hTableExists(db, fullName))
-		    return NULL;
-		}
-	    else
-		return NULL;
-	    }
+	    return NULL;
 	}
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
@@ -3157,9 +3138,8 @@ else
     else
         {
 	table = rootTable;
-	char *prefix = (sameString(table, "mrna") || sameString(table, "est")) ? "all_" : "";
-	dyStringPrintf(query, "%s%s where %s='%s' and ",
-		       prefix, table, hti->chromField, chrom);
+	dyStringPrintf(query, "%s where %s='%s' and ",
+	    table, hti->chromField, chrom);
 	}
     }
 if (table != NULL)
