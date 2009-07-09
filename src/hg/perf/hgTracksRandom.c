@@ -12,7 +12,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.14 2009/01/23 22:24:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.15 2009/07/09 20:06:38 mikep Exp $";
 
 static char *database = NULL;
 static boolean quiet = FALSE;
@@ -37,7 +37,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgTracksRandom - Time default view for random position\n"
+  "hgTracksRandom - Time default view for random position of default genome\n"
   "usage:\n"
   "  hgTracksRandom <machines> [options]\n"
   "options:\n"
@@ -154,8 +154,7 @@ if (argc != 2)
 
 srand( (unsigned) time(NULL) );
 
-database = needMem(16);
-strcpy(database, "hg17");
+database = hDefaultDbForGenome(NULL); // default human db
 
 chromHash = loadAllChromInfo();
 chromSize = getChromSize(chrom);
@@ -168,8 +167,8 @@ getMachines(argv[1]);
 for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next)
     {
     dy = newDyString(256);
-    dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=hg17&position=%s:%d-%d", machinePos->name, 
-                   chrom, startPos, startPos + windowSize);
+    dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d", machinePos->name, 
+                   database, chrom, startPos, startPos + windowSize);
     elapsedTime = hgTracksRandom(dy->string);
     if (quiet)
 	{
