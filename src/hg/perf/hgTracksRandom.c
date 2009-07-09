@@ -12,7 +12,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.15 2009/07/09 20:06:38 mikep Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.16 2009/07/09 20:10:05 mikep Exp $";
 
 static char *database = NULL;
 static boolean quiet = FALSE;
@@ -160,7 +160,7 @@ chromHash = loadAllChromInfo();
 chromSize = getChromSize(chrom);
 startPos = getStartPos(chromSize, windowSize);
 if (! quiet)
-    printf("%s:%d-%d\n\n", chrom, startPos, startPos + windowSize);
+    printf("%s %s:%d-%d\n\n", database, chrom, startPos, startPos + windowSize);
 
 getMachines(argv[1]);
 
