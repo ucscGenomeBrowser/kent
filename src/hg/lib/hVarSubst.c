@@ -114,7 +114,7 @@ k = 1;
 dyStringAppend(dest, "<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR=\"#aaaaaa\">\n");
 if (matrixHeader)
     {
-    dyStringAppend(dest, "<TR ALIGN=right><TD></TD>");
+    dyStringAppend(dest, "<TR ALIGN=right><TD>&nbsp;</TD>");
     for (i = 0; i < size && i < headerCount; i++)
         dyStringPrintf(dest, "<TD><B>%s</B></TD>", headerWords[i]);
     dyStringAppend(dest, "</TR>\n");
