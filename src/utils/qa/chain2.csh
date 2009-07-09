@@ -64,6 +64,21 @@ echo
 
 runBits.csh $db $track
 
+# -------------------------------------------------
+# check sort
+# note:  chain*Link tables do not need to be sorted if they have an index
+
+echo
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "check sort:"
+
+positionalTblCheck -verbose=0 $db chain$Org
+if ( ! $status ) then
+  echo "sort is ok"
+endif
+echo
+
+exit
 
 # -------------------------------------------------
 # check ends for off-end coords:

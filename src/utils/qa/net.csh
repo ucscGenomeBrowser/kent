@@ -13,6 +13,7 @@ source `which qaConfig.csh`
 onintr cleanup
 
 set db=""
+set chromNum=""
 set trackname=""
 set currDir=$cwd
 
@@ -116,7 +117,9 @@ foreach chrom (`cat $db.chromlist$$`)
   endif
 end
 
-
+if ( `egrep . chromlist$$` < 100 ) then
+  set chromNum="small"
+endif
 
 # -------------------------------------------------
 # check ends for off-end coords:
@@ -125,6 +128,30 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 
 checkOffend.csh $db net$Org
+
+# -------------------------------------------------
+# check sort
+
+echo
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "check sort:"
+
+positionalTblCheck -verbose=0 $db net$Org
+if ( ! $status ) then
+  echo "sort is ok"
+endif
+echo
+
+# -------------------------------------------------
+# check countPerChrom
+
+echo "check countPerChrom"
+if ( $chromNum == "small" ) then
+  countPerChrom.csh $db net$Org
+else
+  echo "too many chroms to do a count per chrom"
+endif
+echo
 
 
 # -------------------------------------------------
