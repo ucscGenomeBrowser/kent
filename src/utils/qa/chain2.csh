@@ -78,8 +78,6 @@ if ( ! $status ) then
 endif
 echo
 
-exit
-
 # -------------------------------------------------
 # check ends for off-end coords:
 
