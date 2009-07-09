@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.36 2008/09/18 21:46:22 hiram Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.37 2009/07/09 19:35:23 mikep Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1662,7 +1662,7 @@ checkTagIsInside(page, "DIR MENU OL UL", "LI", startTag, endTag);
 checkTagIsInside(page, "DL", "DD DT", startTag, endTag);
 checkTagIsInside(page, "COLGROUP TABLE", "COL", startTag, endTag);
 checkTagIsInside(page, "MAP", "AREA", startTag, endTag);
-checkTagIsInside(page, "FORM", 
+checkTagIsInside(page, "FORM SCRIPT", 
 	"INPUT BUTTON /BUTTON OPTION SELECT /SELECT TEXTAREA /TEXTAREA"
 	"FIELDSET /FIELDSET"
 	, 
