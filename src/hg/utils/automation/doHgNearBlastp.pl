@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.7 2009/06/08 18:41:32 hiram Exp $
+# $Id: doHgNearBlastp.pl,v 1.8 2009/07/09 22:21:24 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -14,8 +14,8 @@ use HgAutomate;
 use HgRemoteScript;
 
 # Hardcoded params:
-my $blastpParams = '-e 0.01 -m 8 -b'; # Keep -b at end -- value provided below.
 my $tSplitCount = 1000;
+my $selfE = 0.01;
 my $selfMaxPer = 1000;
 my $pairwiseMaxPer = 1;
 
@@ -277,10 +277,44 @@ _EOF_
   &HgAutomate::run("$HgAutomate::runSSH $distrHost nice $bossScript");
 } # formatSequence
 
+# Make a matrix of clade-pair -e (max error) values:
+my ($mammal, $fish, $fly, $worm, $yeast) = (0..5);
+my %dbToClade = ( hg => $mammal, mm => $mammal, rn => $mammal,
+		  danRer => $fish,
+		  dm => $fly,
+		  ce => $worm,
+		  sacCer => $yeast, );
+my @cladeEs;
+# Different species within clade (not self alignments -- see $selfE):
+$cladeEs[$mammal][$mammal] = $cladeEs[$fish][$fish] = $cladeEs[$fly][$fly] =
+    $cladeEs[$worm][$worm] = $cladeEs[$yeast][$yeast] = 0.001;
+# Cross-clade:
+$cladeEs[$mammal][$fish]  = $cladeEs[$fish][$mammal]  = 0.005;
+$cladeEs[$mammal][$fly]   = $cladeEs[$fly][$mammal]   = 0.01;
+$cladeEs[$mammal][$worm]  = $cladeEs[$worm][$mammal]  = 0.01;
+$cladeEs[$mammal][$yeast] = $cladeEs[$yeast][$mammal] = 0.01;
+$cladeEs[$fish][$fly]   = $cladeEs[$fly][$fish]   = 0.01;
+$cladeEs[$fish][$worm]  = $cladeEs[$worm][$fish]  = 0.01;
+$cladeEs[$fish][$yeast] = $cladeEs[$yeast][$fish] = 0.01;
+$cladeEs[$fly][$worm]  = $cladeEs[$worm][$fly]  = 0.01;
+$cladeEs[$fly][$yeast] = $cladeEs[$yeast][$fly] = 0.01;
+$cladeEs[$yeast][$yeast] = $cladeEs[$yeast][$yeast] = 0.01;
+
+sub calcE {
+  # Look up the blastp e parameter (max error) by clade distances
+  my ($tDb, $qDb) = @_;
+  (my $t = $tDb) =~ s/\d+$//;
+  defined ($t = $dbToClade{$t}) || die "Can't figure out clade of '$tDb'";
+  (my $q = $qDb) =~ s/\d+$//;
+  defined ($q = $dbToClade{$q}) || die "Can't figure out clade of '$qDb'";
+  my $e = $cladeEs[$t][$q] || die "No e for clades '$t', '$q'";
+  return $e;
+} # calcE
+
 sub runPairwiseBlastp {
   # Do a pairwise blastp cluster run for the given query.  
   # $b is the blastp -b param value... note -b is at the end of $blastpParams.
-  my ($tDb, $qDb, $b) = @_;
+  my ($tDb, $qDb, $e, $b) = @_;
 
   my $runDir = "$buildDir/run.$tDb.$qDb";
   &HgAutomate::mustMkdir($runDir);
@@ -289,7 +323,7 @@ sub runPairwiseBlastp {
 #!/bin/csh -ef
 setenv BLASTMAT $blastPath/data
 $blastPath/bin/blastall -p blastp -d $scratchDir/$qDb.formatdb/$qDb \\
-    -i \$1 -o \$2 $blastpParams $b
+    -i \$1 -o \$2 -e $e -m 8 -b $b
 _EOF_
     ;
   close($fh);
@@ -482,7 +516,7 @@ my $tFasta = $dbToFasta{$tDb};
 # Self blastp.
 &formatSequence($tDb, $tFasta);
 if (! $opt_noSelf && ! $opt_queryOnly) {
-  &runPairwiseBlastp($tDb, $tDb, $selfMaxPer);
+  &runPairwiseBlastp($tDb, $tDb, $selfE, $selfMaxPer);
   &loadPairwise($tDb, $tDb, $tGenesetPrefix, $selfMaxPer);
 }
 
@@ -491,10 +525,11 @@ my $tPrefix = &dbToPrefix($tDb);
 foreach my $qDb (@qDbs) {
   my $qFasta = $dbToFasta{$qDb};
   my $qPrefix = &dbToPrefix($qDb);
+  my $e = &calcE($tDb, $qDb);
   if ($recipBest{$qDb} || ! $opt_queryOnly) {
     # tDb vs qDb
     &formatSequence($qDb, $qFasta);
-    &runPairwiseBlastp($tDb, $qDb, $pairwiseMaxPer);
+    &runPairwiseBlastp($tDb, $qDb, $e, $pairwiseMaxPer);
   }
   if (! $recipBest{$qDb} && ! $opt_queryOnly) {
     &loadPairwise($tDb, $qDb, $qPrefix, $pairwiseMaxPer);
@@ -502,7 +537,7 @@ foreach my $qDb (@qDbs) {
   if ($recipBest{$qDb} || ! $opt_targetOnly) {
     # qDb vs tDb
     &splitSequence($qDb, $qFasta);
-    &runPairwiseBlastp($qDb, $tDb, $pairwiseMaxPer);
+    &runPairwiseBlastp($qDb, $tDb, $e, $pairwiseMaxPer);
   }
   if (! $recipBest{$qDb} && ! $opt_targetOnly) {
     &loadPairwise($qDb, $tDb, $tPrefix, $pairwiseMaxPer);
