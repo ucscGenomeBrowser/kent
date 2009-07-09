@@ -535,7 +535,6 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 	char *codeTable, char *motifTable,
 	char *tfToConditionTable, char *conditionTable)
 /* Display detailed info on a ChIP-chip probe from transRegCode experiments. */
-/* Display detailed info on a ChIP-chip probe from transRegCode experiments. */
 {
 char query[256];
 struct sqlResult *sr;
@@ -612,6 +611,7 @@ if (probe != NULL)
     transRegCodeProbeFree(&probe);
     growthConditionSection(conn, conditionTable);
     }
+printf("\n<HR>\n");
+printTrackHtml(tdb);
 hFreeConn(&conn);
 }
-
