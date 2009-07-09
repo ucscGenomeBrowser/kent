@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.8 2009/07/09 22:21:24 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.9 2009/07/09 23:17:51 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -277,7 +277,7 @@ _EOF_
   &HgAutomate::run("$HgAutomate::runSSH $distrHost nice $bossScript");
 } # formatSequence
 
-# Make a matrix of clade-pair -e (max error) values:
+# Make a matrix of clade-pair -e (max E-value) threshold:
 my ($mammal, $fish, $fly, $worm, $yeast) = (0..5);
 my %dbToClade = ( hg => $mammal, mm => $mammal, rn => $mammal,
 		  danRer => $fish,
@@ -301,7 +301,7 @@ $cladeEs[$fly][$yeast] = $cladeEs[$yeast][$fly] = 0.01;
 $cladeEs[$yeast][$yeast] = $cladeEs[$yeast][$yeast] = 0.01;
 
 sub calcE {
-  # Look up the blastp e parameter (max error) by clade distances
+  # Look up the blastp e parameter (max E-value) by clade distances
   my ($tDb, $qDb) = @_;
   (my $t = $tDb) =~ s/\d+$//;
   defined ($t = $dbToClade{$t}) || die "Can't figure out clade of '$tDb'";
