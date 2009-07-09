@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.219 2009/06/03 04:30:19 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.220 2009/07/09 00:06:02 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1321,7 +1321,11 @@ slAddHead(&hgp->tableList, table);
 dyStringPrintf(dy, "%s Alignments in %s", acc, shortLabel);
 table->description = cloneString(dy->string);
 if (startsWith("all_", tableName))
-    tableName += 4;
+    {
+    struct hTableInfo *hti = hFindTableInfo(db, NULL, tableName+4);
+    if (hti && hti->isSplit)
+	tableName += 4;
+    }
 table->name = cloneString(tableName);
 slSort(&pslList, pslCmpScore);
 for (psl = pslList; psl != NULL; psl = psl->next)
@@ -1728,7 +1732,13 @@ if (alignCount > 0)
 			aligns ?  "A" : "Una");
     freeMem(organism);
     table->description = cloneString(title);
-    table->name = isXeno ? cloneString("xenoMrna") : cloneString("mrna");
+    if (isXeno)
+	table->name = cloneString("xenoMrna");
+    else
+	{
+	struct hTableInfo *hti = hFindTableInfo(db, NULL, "mrna");
+	table->name = cloneString((hti && hti->isSplit) ? "mrna" : "all_mrna");
+	}
     table->htmlOnePos = mrnaKeysHtmlOnePos;
     slAddHead(&hgp->tableList, table);
     }
