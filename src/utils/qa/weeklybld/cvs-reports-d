@@ -750,7 +750,7 @@ package require Itcl
 
     # do unified context diff on a file, requires a working directory
     # rev1 of 1.0 for a new file, rev maybe a file or date.  rev2 maybe
-    # emptry.
+    # empty.
     public method uniDiff {contextSize rev1 rev2 file} {
         # -N required to make -r 1.0 work
         set cmd [list cvs -q diff -bB -U$contextSize -kk -N]
