@@ -481,19 +481,20 @@ semiShortCircuit 1
 
 
 track transMap
-superTrack on
+compositeTrack on
 shortLabel TransMap
 longLabel TransMap Alignments
 group genes
 priority 37.001
+type psl
 
     track transMapAlnUcscGenes
-    superTrack transMap pack
+    subTrack transMap pack
     shortLabel TransMap UCSC
     longLabel TransMap UCSC Gene Mappings
     group genes
     type psl
-    priority 37.002
+    priority 1
     color 0,100,0
     visibility pack
     transMapInfo transMapInfoUcscGenes
@@ -516,12 +517,12 @@ searchMethod prefix
 searchPriority 2.31
 
     track transMapAlnRefSeq
-    superTrack transMap pack
+    subTrack transMap pack
     shortLabel TransMap RefGene
     longLabel TransMap RefSeq Gene Mappings
     group genes
     type psl
-    priority 37.003
+    priority 2
     color 0,100,0
     visibility pack
     transMapInfo transMapInfoRefSeq
@@ -543,12 +544,12 @@ searchMethod prefix
 searchPriority 2.31
 
     track transMapAlnMRna
-    superTrack transMap pack
+    subTrack transMap pack
     shortLabel TransMap mRNA
     longLabel TransMap GenBank mRNA Mappings
     group genes
     type psl
-    priority 37.004
+    priority 3
     color 0,100,0
     visibility pack
     transMapInfo transMapInfoMRna
@@ -570,12 +571,12 @@ searchMethod prefix
 searchPriority 2.31
 
     track transMapAlnSplicedEst
-    superTrack transMap hide
+    subTrack transMap hide
     shortLabel TransMap ESTs
     longLabel TransMap Spliced EST Mappings
     group genes
     type psl
-    priority 37.005
+    priority 4
     color 0,100,0
     visibility hide
     transMapInfo transMapInfoSplicedEst
@@ -594,14 +595,14 @@ searchMethod prefix
 searchPriority 2.31
 
 track reconTransMap
-superTrack on
+subTrack on
 shortLabel Recon TransMap
 longLabel Reconstruction TransMap Alignments
 group genes
 priority 38.001
 
     track reconTransMapAlnRefSeq
-    superTrack reconTransMap pack
+    subTrack reconTransMap pack
     shortLabel Recon TransMap RefGene
     longLabel Reconstruction TransMap RefSeq Gene Mappings
     group genes
