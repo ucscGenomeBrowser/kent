@@ -9,7 +9,7 @@
 #include "chromInfo.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.12 2008/03/11 21:56:27 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.13 2009/07/10 17:48:36 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -211,9 +211,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+void checkFileTbl(struct sqlConnection *conn, char *fileTblName,
+                  FILE *errFh, FILE *passFh, FILE *failFh)
+/* check a PSL file or table. */
+{
+if (fileExists(fileTblName))
+    checkPslFile(fileTblName, errFh, passFh, failFh);
+else if (conn == NULL)
+    errAbort("file %s does not exist and no database specified", fileTblName);
+else
+    checkPslTbl(conn, fileTblName, errFh, passFh, failFh);
+}
+
 void checkFilesTbls(struct sqlConnection *conn,
                     int fileTblCount, char *fileTblNames[])
-/* checkPsl file or tables. */
+/* check PSL files or tables. */
 {
 int i;
 FILE *errFh = quiet ? mustOpen("/dev/null", "w") : stderr;
@@ -221,12 +233,7 @@ FILE *passFh = passFile ? mustOpen(passFile, "w") : NULL;
 FILE *failFh = failFile ? mustOpen(failFile, "w") : NULL;
 
 for (i = 0; i< fileTblCount; i++)
-    {
-    if (fileExists(fileTblNames[i]))
-        checkPslFile(fileTblNames[i], errFh, passFh, failFh);
-    else
-        checkPslTbl(conn, fileTblNames[i], errFh, passFh, failFh);
-    }
+    checkFileTbl(conn, fileTblNames[i], errFh, passFh, failFh);
 carefulClose(&passFh);
 carefulClose(&failFh);
 }
