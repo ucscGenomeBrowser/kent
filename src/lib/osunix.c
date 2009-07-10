@@ -15,7 +15,7 @@
 #include <regex.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.42 2009/07/08 16:24:25 larrym Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.43 2009/07/10 01:52:27 markd Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -431,6 +431,7 @@ if (inDumpStack)
     return;
 inDumpStack = TRUE;
 
+fflush(stdout);  // clear buffer before forking
 vfprintf(stderr, format, args);
 fputc('\n', stderr);
 fflush(stderr);
