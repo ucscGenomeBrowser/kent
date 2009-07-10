@@ -1,14 +1,16 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.29 2009/06/27 20:10:53 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.30 2009/07/10 19:49:58 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
 var originalSize;
 var clickClipHeight;
 var startDragZoom = null;
-var mapHtml;
+//var mapHtml;
 var newWinWidth;
 var imageV2 = false;
+var imgBoxPortal = false;
+var blockUseMap = false;
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -39,19 +41,20 @@ function selectStart(img, selection)
     initVars();
     var now = new Date();
     startDragZoom = now.getTime();
+    blockUseMap = true;
     // vvvvvvv Should be obsolete since maps items are ignored when startDragZoom is set
-    if(imageV2 == false) {
-        jQuery.each(jQuery.browser, function(i, val) {
-            if(i=="msie" && val) {
-                // Very hacky way to solve following probem specif to IE:
-                // If the user ends selection with the mouse in a map box item, the map item
-                // is choosen instead of the selection; to fix this, we remove map box items
-                // during the mouse selection process.
-                mapHtml = $('#map').html();
-                $('#map').empty();
-            }
-        });
-    }
+//    if(imageV2 == false) {
+//        jQuery.each(jQuery.browser, function(i, val) {
+//            if(i=="msie" && val) {
+//                // Very hacky way to solve following probem specif to IE:
+//                // If the user ends selection with the mouse in a map box item, the map item
+//                // is choosen instead of the selection; to fix this, we remove map box items
+//                // during the mouse selection process.
+//                mapHtml = $('#map').html();
+//                $('#map').empty();
+//            }
+//        });
+//    }
     // ^^^^^^^^ Should be obsolete since maps items are ignored when startDragZoom is set
 }
 
@@ -161,11 +164,13 @@ function selectEnd(img, selection)
     } else {
         setPosition(originalPosition, originalSize);
         originalPosition = originalSize = null;
-        if(mapHtml) {
-            $('#map').append(mapHtml);
-        }
+//        if(mapHtml) {
+//            $('#map').append(mapHtml);
+//        }
     }
-    setTimeout('mapHtml = startDragZoom = null;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+//    mapHtml = null;
+    startDragZoom = null;
+    setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
     return true;
 }
 
@@ -249,12 +254,118 @@ function imgTblSetOrder(table)
         }
     });
 }
+
+/////////////////////////////////////////////////////
+jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
+this.each(function(){
+
+    var pic;
+    var pan;
+
+    if ( $(this).is("img") ) {
+        pan = $(this).parent("div");
+        pic = $(this);
+    }
+    else if ( $(this).is("div.scroller")  ) {
+        pan = $(this);
+        pic = $(this).children("img#panImg"); // Get the real pic
+    }
+
+    if(pan == undefined || pic == undefined) {
+        throw "Not a div with a child image! 'panImages' can only be used with divs contain images.";
+    }
+
+    var leftLimit   = imgBoxLeftOffset*-1; // This hides the leftLabel if the image contains it
+    var prevX       = imgOffset*-1;
+    var newX        = 0;
+    var mouseDownX  = 0;
+    var mouseIsDown = false;
+
+    initialize();
+
+    function initialize(){
+
+        pan.css( 'cursor', 'w-resize');//'move');
+
+        pan.mousedown(function(e){
+            mouseIsDown = true;
+
+            mouseDownX = e.clientX;
+            $(document).bind( 'mouseup',  panMouseUp);  // Will exec only once
+            $(document).bind('mousemove',panner)
+            return false;
+        });
+    }
+
+    function panner(e) {
+        if ( mouseIsDown ) {
+            var relativeX = (e.clientX - mouseDownX);
+
+            if(relativeX != 0) {
+                blockUseMap = true;
+                // Remeber that offsetX (prevX) is negative
+                if ( (prevX + relativeX) >= leftLimit ) { // scrolled all the way to the left
+                    newX = leftLimit;
+                } else if ( (prevX + relativeX) < (imgBoxPortalWidth - imgBoxWidth + leftLimit) ) { // scrolled all the way to the left
+                    newX = (imgBoxPortalWidth - imgBoxWidth + leftLimit);
+                } else
+                    newX = prevX + relativeX;
+
+                $(".panImg").css( {'left': newX.toString() + "px" });
+                panUpdatePosition(newX);
+            }
+        }
+    }
+    function panMouseUp(e) {  // Must be a separate function instead of pan.mouseup event.
+        if(mouseIsDown) {
+            panner(e);
+
+            prevX = newX;
+            $(document).unbind('mousemove',panner);
+            $(document).unbind('mouseup',panMouseUp);
+            mouseIsDown = false;
+            setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+        }
+    }
+    function panUpdatePosition(newOffsetX)
+    {
+        // Updates the 'position/search" display with change due to panning
+        var portalWidthBases = imgBoxPortalEnd - imgBoxPortalStart;
+        var portalScrolledX  = (imgBoxPortalOffsetX+imgBoxLeftLabel) + newOffsetX;
+
+        var newPortalStart = imgBoxPortalStart - Math.round(portalScrolledX*imgBoxBasesPerPixel); // As offset goes down, bases seen goes up!
+        if( newPortalStart < imgBoxChromStart)     // Stay within bounds
+            newPortalStart = imgBoxChromStart;
+        var newPortalEnd = newPortalStart + portalWidthBases;
+        if( newPortalEnd > imgBoxChromEnd) {
+            newPortalEnd = imgBoxChromEnd;
+            newPortalStart = newPortalEnd - portalWidthBases;
+        }
+        if(newPortalStart > 0) {
+            var newPos = document.getElementById("hgt.chromName").value + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
+            setPosition(newPos, (newPortalEnd - newPortalStart + 1));
+        }
+        return true;
+    }
+});
+
+};
+
+/////////////////////////////////////////////////////
+
+function blockTheMap(e)
+{
+    blockUseMap=true;
+}
+
 $(document).ready(function()
 {
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
-        if(startDragZoom != null)
+        if(blockUseMap==true) {
+            //alert("blockUseMap");
             return false;
+        }
         var thisForm=$(this).parents('form');
         if(thisForm == undefined || $(thisForm).length == 0)
             thisForm=$("FORM");
@@ -274,17 +385,22 @@ $(document).ready(function()
             $(".tableWithDragAndDrop").tableDnD({
                 onDragClass: "trDrag",
                 dragHandle: "dragHandle",
+                onDragStart: function(table, row) {
+                    $(document).bind('mousemove',blockTheMap);
+                },
                 onDrop: function(table, row) {
-                        if(imgTblSetOrder) {
-                            imgTblSetOrder(table);
-                        }
+                        if(imgTblSetOrder) { imgTblSetOrder(table); }
+                        $(document).unbind('mousemove',blockTheMap);
+                        setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
                     }
                 });
         }
+        if(imgBoxPortal) {
+            //alert("imgBox("+imgBoxChromStart+"-"+imgBoxChromEnd+","+imgBoxWidth+") bases/pix:"+imgBoxBasesPerPixel+"\nportal("+imgBoxPortalStart+"-"+imgBoxPortalEnd+","+imgBoxPortalWidth+") offset:"+imgBoxPortalOffsetX);
 
-        // Turn on drag scrolling.
-        //$(".panDivScroller").panImages($(".panDivScroller").width(),0,0);
-
+            // Turn on drag scrolling.
+            $("div.scroller").panImages(imgBoxPortalOffsetX,imgBoxLeftLabel);
+        }
         // Temporary warning while new imageV2 code is being worked through
         if($('#map').children("AREA").length > 0) {
             alert('Using imageV2, but old map is not empty!');

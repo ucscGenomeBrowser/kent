@@ -5,12 +5,12 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.4 2009/07/07 16:40:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.5 2009/07/10 19:48:18 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
-struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
-struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
+//struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
+//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
+//struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 //struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
@@ -599,46 +599,125 @@ if(pImgTrack != NULL && *pImgTrack != NULL)
 
 /////////////////////// Image Box
 
-struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showSideLabel,int width)
+struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,int sideLabelWidth,int width)
 /* Starts an imgBox which should contain all info needed to draw the hgTracks image with multiple tracks
    The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd() */
 {
 struct imgBox * imgBox;     //  gifTn.forHtml, pixWidth, mapName
 AllocVar(imgBox);
 if(db != NULL)
-    imgBox->db        = cloneString(db);     // NOTE: Is allocated
+    imgBox->db         = cloneString(db);     // NOTE: Is allocated
 if(chrom != NULL)
-    imgBox->chrom     = cloneString(chrom);  // NOTE: Is allocated
-imgBox->chromStart    = chromStart;
-imgBox->chromEnd      = chromEnd;
-imgBox->plusStrand    = plusStrand;
-imgBox->showSideLabel = showSideLabel;
-imgBox->images        = NULL;
-imgBox->bgImg         = NULL;
-imgBox->width         = width;
-imgBox->showPortal    = FALSE;
+    imgBox->chrom      = cloneString(chrom);  // NOTE: Is allocated
+imgBox->chromStart     = chromStart;
+imgBox->chromEnd       = chromEnd;
+imgBox->plusStrand     = plusStrand;
+imgBox->showSideLabel  = (sideLabelWidth != 0);
+imgBox->sideLabelWidth = sideLabelWidth;
+imgBox->images         = NULL;
+imgBox->bgImg          = NULL;
+imgBox->width          = width;
+imgBox->showPortal     = FALSE;
 //int oneThird = (chromEnd - chromStart)/3; // TODO: Currently defaulting to 1/3 of image width
-imgBox->portalStart   = chromStart;// + oneThird;
-imgBox->portalEnd     = chromEnd;// - oneThird;
-imgBox->portalWidth   = chromEnd - chromStart;
-imgBox->basesPerPixel    = ((double)imgBox->chromEnd - imgBox->chromStart)/imgBox->width; // FIXME: Shouldn't ignore sideLabel
+imgBox->portalStart    = chromStart;// + oneThird;
+imgBox->portalEnd      = chromEnd;// - oneThird;
+imgBox->portalWidth    = chromEnd - chromStart;
+imgBox->basesPerPixel  = ((double)imgBox->chromEnd - imgBox->chromStart)/(imgBox->width - imgBox->sideLabelWidth);
 return imgBox;
 }
 
-boolean imgBoxDefinePortal(struct imgBox *imgBox,int portalStart,int portalEnd,int portalWidthInPixels)
+boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth,double imageMultiple)
 /* Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll is being used.
-   returns TRUE if the portal is a proper subset of the imgBox as currently defined. */
+   the new chromStart,chromEnd and imgWidth are returned as OUTs, while the portal becomes the initial defined size
+   returns TRUE if successfully defined as having a portal */
 {
-if(portalStart <  imgBox->chromStart || portalStart >= imgBox->chromEnd
-|| portalEnd   <= imgBox->chromStart || portalEnd   >  imgBox->chromEnd)
+if( (int)imageMultiple == 0)
+    imageMultiple = 3;
+
+imgBox->portalStart = imgBox->chromStart;
+imgBox->portalEnd   = imgBox->chromEnd;
+imgBox->portalWidth = imgBox->width - imgBox->sideLabelWidth;
+imgBox->showPortal  = FALSE; // Guilty until proven innocent
+
+int positionWidth = (int)((imgBox->portalEnd - imgBox->portalStart) * imageMultiple);
+*chromStart = imgBox->chromStart - (int)(positionWidth/imageMultiple);
+if( *chromStart < 0)
+    *chromStart = 0;
+*chromEnd = *chromStart + positionWidth;
+// TODO: Bound by chrom length
+// TODO: Normalize to power of 10 boundary
+double growthOfImage = (*chromEnd - *chromStart)/(imgBox->portalEnd - imgBox->portalStart);
+*imgWidth = (imgBox->portalWidth * growthOfImage) + imgBox->sideLabelWidth;
+
+if(imgBox->portalStart <  *chromStart || imgBox->portalStart >= *chromEnd
+|| imgBox->portalEnd   <= *chromStart || imgBox->portalEnd   >  *chromEnd
+|| imgBox->portalWidth >= *imgWidth)
+    {
+    *imgWidth   = imgBox->width;  // Undo damage
+    *chromStart = imgBox->chromStart;
+    *chromEnd   = imgBox->chromEnd;
     return FALSE;
-if(portalWidthInPixels == 0 || portalWidthInPixels > imgBox->width)
-    return FALSE;
-imgBox->portalStart   = portalStart;
-imgBox->portalEnd     = portalEnd;
-imgBox->portalWidth   = portalEnd - portalStart;
-imgBox->basesPerPixel = ((double)imgBox->chromEnd - imgBox->chromStart)/portalWidthInPixels;
+    }
+imgBox->width      = *imgWidth;
+imgBox->chromStart = *chromStart;
+imgBox->chromEnd   = *chromEnd;
+imgBox->basesPerPixel = ((double)imgBox->chromEnd - imgBox->chromStart)/(imgBox->width - imgBox->sideLabelWidth);
 imgBox->showPortal    = TRUE;
+//warn("portal(%d,%d,%d)\nimage(%d,%d,%d) growth:%G",imgBox->portalStart,imgBox->portalEnd,imgBox->portalWidth,
+//     imgBox->chromStart,imgBox->chromEnd,(imgBox->width - imgBox->sideLabelWidth),growthOfImage);
+
+return imgBox->showPortal;
+}
+
+boolean imgBoxPortalRemove(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth)
+/* Will redefine the imgBox as the portal dimensions and return the dimensions as OUTs.
+   Returns TRUE if a portal was defined in the first place */
+{
+if(imgBox->showPortal == FALSE)
+    {
+    *chromStart=imgBox->chromStart;  // return to original coordinates
+    *chromEnd  =imgBox->chromEnd;
+    *imgWidth  =imgBox->width;
+    return FALSE;
+    }
+*chromStart=imgBox->chromStart=imgBox->portalStart;  // return to original coordinates
+*chromEnd  =imgBox->chromEnd  =imgBox->portalEnd;
+*imgWidth  =imgBox->width     = (imgBox->portalWidth + imgBox->sideLabelWidth);
+imgBox->showPortal = FALSE;
+return TRUE;
+}
+
+boolean imgBoxPortalDimensions(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth,int *sideLabelWidth,int *portalStart,int *portalEnd,int *portalWidth,double *basesPerPixel)
+/* returns the imgBox portal dimensions in the OUTs  returns TRUE if portal defined */
+{
+if ( chromStart )
+    *chromStart      = imgBox->chromStart;
+if ( chromEnd )
+    *chromEnd        = imgBox->chromEnd;
+if ( imgWidth )
+    *imgWidth        = imgBox->width;
+if ( sideLabelWidth )
+    *sideLabelWidth  = imgBox->sideLabelWidth;
+if(imgBox->showPortal)
+    {
+    if ( portalStart )
+        *portalStart = imgBox->portalStart;
+    if ( portalEnd   )
+        *portalEnd   = imgBox->portalEnd;
+    if ( portalWidth )
+        *portalWidth = imgBox->portalWidth + imgBox->sideLabelWidth;
+    }
+else
+    {
+    if ( portalStart )
+        *portalStart = imgBox->chromStart;
+    if ( portalEnd   )
+        *portalEnd   = imgBox->chromEnd;
+    if ( portalWidth )
+        *portalWidth = imgBox->width;
+    }
+if ( basesPerPixel   )
+    *basesPerPixel   = imgBox->basesPerPixel;
 return imgBox->showPortal;
 }
 
@@ -875,11 +954,11 @@ void imageMapDraw(struct mapSet *map,char *name)
 if(map == NULL || map->items == NULL)
     return;
 
-hPrintf("<MAP name='map_%s'>\n", name); // map_ prefix is implicit
+hPrintf("  <MAP name='map_%s'>\n", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("<AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
+    hPrintf("   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
@@ -893,32 +972,53 @@ for(;item!=NULL;item=item->next)
         hPrintf(" TITLE='%s'", item->title );
     hPrintf(">\n" );
     }
-hPrintf("</MAP>\n");
+hPrintf("  </MAP>\n");
 }
 
-void sliceAndMapDraw(struct imgSlice *slice,char *name)
+void sliceAndMapDraw(struct imgBox *imgBox,struct imgSlice *slice,char *name,boolean scrollHandle)
 /* writes a slice of an image and any assocated image map as HTML */
 {
 if(slice==NULL || slice->height == 0)
     return;
-hPrintf("<div style='width:%dpx; height:%dpx; overflow:hidden;'",slice->width,slice->height);
-if(slice->type==isData)
-    hPrintf(" class='panDiv'");
+// Adjustment for portal
+int offsetX=slice->offsetX;
+int width=slice->width;
+if(imgBox->showPortal && imgBox->basesPerPixel > 0
+&& (slice->type==isData || slice->type==isCenter))
+    {
+    offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
+    width=imgBox->portalWidth;
+    }
+
+hPrintf(" <div style='width:%dpx; height:%dpx; overflow:hidden;'",width,slice->height);
+if(imgBox->showPortal && slice->type==isData)
+    {
+    if(scrollHandle)
+        hPrintf(" class='panDiv scroller'");
+    else
+        hPrintf(" class='panDiv'");
+    }
 hPrintf(">\n");
 
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
+//#define NO_MAP_SCROLLER
+#ifdef NO_MAP_SCROLLER
+if(imgBox->showPortal && scrollHandle)
+    map = NULL;
+#endif//def NO_MAP_SCROLLER
 if(map)
     imageMapDraw(map,name);
 
-hPrintf("<IMG id='img_%s' src='%s' style='position:relative; left:-%dpx; top: -%dpx; border:0;'",
-        name,slice->parentImg->file,slice->offsetX,slice->offsetY);
+hPrintf("  <IMG id='img_%s' src='%s' style='position:relative; left:-%dpx; top: -%dpx; border:0;'",
+        name,slice->parentImg->file,offsetX,slice->offsetY);
+
 if(map && map->items)
     hPrintf(" usemap='#map_%s'",name);
 if(slice->type==isSide)
     hPrintf(" class='sideLab'");
 else if(slice->type==isCenter)
     hPrintf(" class='centerLab'");
-else if(slice->type==isData)
+else if(slice->type==isData && imgBox->showPortal)
     hPrintf(" class='panImg'");
 //hPrintf(" title='[%s] width:%d  height: %d  offsetX: %d  offsetY: %d'",
 //        sliceTypeToString(slice->type),slice->width,slice->height,slice->offsetX,slice->offsetY);
@@ -926,7 +1026,7 @@ if(slice->title != NULL)
     hPrintf(" title='%s'",slice->title);           // Adds slice wide title
 else if(slice->parentImg->title != NULL)
     hPrintf(" title='%s'",slice->parentImg->title);// Adds image wide title
-hPrintf("></div>");
+hPrintf("></div>\n");
 }
 
 void imageBoxDraw(struct imgBox *imgBox)
@@ -941,23 +1041,35 @@ char name[128];
 //    slReverse(&(imgBox->imgTracks));
 imgBoxTracksNormalizeOrder(imgBox);
 
-hPrintf("<!--------------- IMAGEv2 ---------------->\n");
+hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
 //commonCssStyles();
 jsIncludeFile("jquery.tablednd.js", NULL);
 // TODO: jsIncludeFile("dragScroll.js", NULL);
 hPrintf("<style type='text/css'>\n");
 hPrintf(".trDrag {opacity:0.4; padding:1px; background-color:red;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
 hPrintf(".dragHandle {cursor: s-resize;}\n");
-hPrintf("div.dragZoom       { cursor: text; }\n");
-//hPrintf("div.panDiv         { width: %dpx; overflow: hidden; }\n",imgBox->width);
-//hPrintf("div.panDivScroller { width: %dpx; overflow: hidden; }\n",imgBox->width);
-//hPrintf("img.panImg    { position: relative; left: -%dpx; top: 0px; border: 0; }\n",imgBox->width);
-//hPrintf("img.centerLab { position: relative; left: -%dpx; top: 0px; border: 0; }\n",imgBox->width);
-//hPrintf("img.sideLab { border: 0; }\n");
+hPrintf("div.dragZoom {cursor: text;}\n");
 hPrintf("</style>\n");
 
+if(imgBox->showPortal)
+    {
+    hPrintf("<script type='text/javascript'>var imgBoxPortal=true;");
+    hPrintf("var imgBoxChromStart=%d;var imgBoxChromEnd=%d;var imgBoxWidth=%d;",
+            imgBox->chromStart, imgBox->chromEnd,(imgBox->width - imgBox->sideLabelWidth));
+    hPrintf("var imgBoxPortalStart=%d;var imgBoxPortalEnd=%d;var imgBoxPortalWidth=%d;",
+            imgBox->portalStart, imgBox->portalEnd, imgBox->portalWidth);
+    hPrintf("var imgBoxLeftLabel=%d;var imgBoxPortalOffsetX=%d;var imgBoxBasesPerPixel=%lf;</script>\n",
+            (imgBox->plusStrand?imgBox->sideLabelWidth:0),
+            (int)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel),imgBox->basesPerPixel);
+    //warn("image(%d-%d,%d)\nportal(%d-%d,%d)\nleftLimit:%d offsetX:%d basesPerPixel:%g",
+    //        imgBox->chromStart, imgBox->chromEnd,(imgBox->width - imgBox->sideLabelWidth),
+    //        imgBox->portalStart, imgBox->portalEnd, imgBox->portalWidth,
+    //        (imgBox->plusStrand?imgBox->sideLabelWidth:0),
+    //        (int)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel),imgBox->basesPerPixel);
+    }
+
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0");
-hPrintf(" width=%d",imgBox->width);
+hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
 hPrintf(" class='tableWithDragAndDrop' style='border:1px solid blue;border-collapse:separate'");
 hPrintf(">\n");
 
@@ -971,39 +1083,39 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
         safef(name,sizeof(name),"left_%s",trackName);
-        hPrintf("<TD id='td_%s'%s>\n",name,
+        hPrintf(" <TD id='td_%s'%s>\n",name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
-        sliceAndMapDraw(imgTrackSliceGetByType(imgTrack,isSide), name);
-        hPrintf("</TD>");
+        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);
+        hPrintf(" </TD>");
         }
     // Main/Data image region
-    hPrintf("<TD id='td_data_%s' width=%d>\n", trackName, imgBox->width);
-    hPrintf("<input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
+    hPrintf(" <TD id='td_data_%s' width=%d>\n", trackName, imgBox->width);
+    hPrintf("  <input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
     // centerLabel
     if(imgTrack->showCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgTrackSliceGetByType(imgTrack,isCenter), name);
+        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isCenter), name,FALSE);
         //hPrintf("<BR>\n");
         }
     // data image
     safef(name, sizeof(name), "data_%s", trackName);
-    sliceAndMapDraw(imgTrackSliceGetByType(imgTrack,isData), name);
-    hPrintf("</TD>");
+    sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isData), name,imgTrack->reorderable);
+    hPrintf(" </TD>");
 
     // rightLabel
     if(imgBox->showSideLabel && !imgTrack->plusStrand)
         {
         safef(name, sizeof(name), "right_%s", trackName);
-        hPrintf("<TD id='td_%s'%s>\n", name,
+        hPrintf(" <TD id='td_%s'%s>\n", name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
-        sliceAndMapDraw(imgTrackSliceGetByType(imgTrack,isSide), name);
-        hPrintf("</TD>");
+        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);
+        hPrintf(" </TD>\n");
         }
-    hPrintf("</TR>");
+    hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
-hPrintf("<!--------------- IMAGEv2 ---------------->\n");
+hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
 }
 
 #endif//def IMAGEv2_UI

@@ -1,15 +1,24 @@
 /* imageV2 - API for creating the image V2 features. */
 
-// Must define IMAGEv2_UI outside of #ifndef IMAGEV2_H
+// UNCOMMENT IMAGEv2_UI to have the new image with dragReorder
+// also UNCOMMENT IMAGEv2_UI_PORTAL to allow dragScroll
 //#define IMAGEv2_UI
+//#define IMAGEv2_USE_PORTAL
+
+// CURRENT PROBLEMS:
+// o subrtacks should be dragReorderable!!!  Make them individual imgTracks
+// o centerlabel next feature '>>' arrows are scrolled off screen: fix when centerlabels are small and don't scroll
+// o subtrack center labels currently scroll with portal: fixed with subtracks being individual imgTracks
+// o image should be clear and background image should contain stripes
+// o Ambitious?  Dynamic height for data/label based on image map currently in portal: problem if map does not cover.
 
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
 
 extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge rewrite
-extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
-extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
-extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
+//extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
+//extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
+//extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
 extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
 
@@ -204,25 +213,32 @@ struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image
     int  chromStart;          // Image start (absolute, not portal position)
     int  chromEnd;            // Image end (absolute, not portal position)
     boolean plusStrand;       // imgBox currently shows plus strand, not minus strand
-    boolean showSideLabel;    // Initially display side label? (use 'plusStrand' for left/right)
     struct image *images;     // Contains all images for the imgBox. TEMPORARY: hgTracks creates it's current one image and I'll store it here
     struct image *bgImg;      // When track images are transparent, bgImage contains blue lines that are db coordinate granularity.
     int  width;               // in pixels (note that portalWidth in visible position within image position  in db coodinates)
+    boolean showSideLabel;    // Initially display side label? (use 'plusStrand' for left/right)
+    int  sideLabelWidth;      // in pixels (note this is needed when setting up a portal and dragScrolling)
     boolean showPortal;       // Rather than showing the entire data range, only show a portion, and allow dragScrolling
     double basesPerPixel;     // number of bases covered by a single pixel
     int  portalStart;         // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
     int  portalEnd;           // initial visible portal within html image table (db coodinates) [May be obsoleted by js client]
-    int  portalWidth;         // in pixels (note that width in visible position within image position (db coodinates)
+    int  portalWidth;         // in pixels (should be equal to the visible position of the data slice)
     // TODO: I am certain there are more details needed
     struct imgTrack *imgTracks; // slList of all images to display
     };
 
-struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showSideLabel,int width);
+struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,int sideLabelWidth,int width);
 /* Starts an imgBox which should contain all info needed to draw the hgTracks image with multiple tracks
    The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd() */
-boolean imgBoxDefinePortal(struct imgBox *imgBox,int portalStart,int portalEnd,int portalWidthInPixels);
+boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth,double imageMultiple);
 /* Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll is being used.
-   returns TRUE if the portal is a proper subset of the imgBox as currently defined. */
+   the new chromStart,chromEnd and imgWidth are returned as OUTs, while the portal becomes the initial defined size
+   returns TRUE if successfully defined as having a portal */
+boolean imgBoxPortalRemove(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth);
+/* Will redefine the imgBox as the portal dimensions and return the dimensions as OUTs.
+   Returns TRUE if a portal was defined in the first place */
+boolean imgBoxPortalDimensions(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth,int *sideLabelWidth,int *portalStart,int *portalEnd,int *portalWidth,double *basesPerPixel);
+/* returns the imgBox portal dimensions in the OUTs  returns TRUE if portal defined */
 struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int width,int height,boolean backGround);
 /* Adds an image to an imgBox.  The image may be extended with imgMapStart(),mapSetItemAdd() */
 struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif);
@@ -247,7 +263,7 @@ void imgBoxFree(struct imgBox **pImgBox);
 /////////////////////// imageV2 UI API
 void imageMapDraw(struct mapSet *map,char *name);
 /* writes an image map as HTML */
-void sliceAndMapDraw(struct imgSlice *slice,char *name);
+void sliceAndMapDraw(struct imgBox *imgBox,struct imgSlice *slice,char *name,boolean scrollHandle);
 /* writes a slice of an image and any assocated image map as HTML */
 void imageBoxDraw(struct imgBox *imgBox);
 /* writes a entire imgBox including all tracksas HTML */

@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1581 2009/07/10 01:42:21 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1582 2009/07/10 19:48:17 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1564,16 +1564,41 @@ trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
+leftLabelX = gfxBorder;
+leftLabelWidth = insideX - gfxBorder*3;
+
 #ifdef IMAGEv2_UI
-// Start an imagebox (temproarily global in order to avoid massive changes)
-theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),withLeftLabels,pixWidth);
+struct image    *theOneImg   = NULL; // No need to be global, only the map needs to be global
+struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
+struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
+// Set up imgBox dimensions
 int sideSliceWidth  = 0;   // Just being explicit
 int dataSliceWidth  = 0;
 int sideSliceOffsetX = 0;
 int dataSliceOffsetX = 0;
 int sliceHeight  = 0;
 int sliceOffsetY = 0;
+if (withLeftLabels)
+    {
+    sideSliceWidth   = leftLabelWidth + 2;
+    sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
+    }
+dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
 char *rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
+// theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started prior to this in doTrackForm()
+//theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,pixWidth);
+#ifdef IMAGEv2_USE_PORTAL
+// If a portal was established, then set the global dimensions to the entire image size
+if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
+    {
+    pixWidth = tl.picWidth;
+    winBaseCount = winEnd - winStart;
+    insideWidth = tl.picWidth-gfxBorder-insideX;
+    if (withLeftLabels)
+        sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
+    }
+#endif//def IMAGEv2_USE_PORTAL
+dataSliceWidth   = tl.picWidth - sideSliceWidth;
 #endif//def IMAGEv2_UI
 
 if (rulerMode != tvFull)
@@ -1686,10 +1711,8 @@ else
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     #ifdef IMAGEv2_UI
     // Adds one single image for all tracks (TODO: build the track by track images)
-    theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,
-       // (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
-        pixWidth, pixHeight,FALSE);
-    //curMap = imgMapStart(theOneImg,"theOne",NULL); // No common linkRoot (TODO: Drop image map in favor of slice maps)
+    theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
+    //curMap = imgMapStart(theOneImg,"theOne",NULL); // TODO: Not using image map in favor of slice maps, so get rid of hPrintf(<MAP... below
     #endif//def IMAGEv2_UI
     }
 hvg->rc = revCmplDisp;
@@ -1700,21 +1723,6 @@ hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
 /* Find colors to draw in. */
 findTrackColors(hvg, trackList);
-
-leftLabelX = gfxBorder;
-leftLabelWidth = insideX - gfxBorder*3;
-
-#ifdef IMAGEv2_UI
-if (withLeftLabels)
-    {
-    sideSliceWidth   = leftLabelWidth + 2;   // Just being explicit
-    sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
-    }
-dataSliceWidth   = tl.picWidth - sideSliceWidth;
-dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
-// FIXME: Up top I could create new beg/end and then widen winStart, winEnd and pixWidth. It will take some playing with.
-imgBoxDefinePortal(theImgBox,winStart,winEnd,dataSliceWidth);
-#endif//def IMAGEv2_UI
 
 /* Draw mini-buttons. */
 if (withLeftLabels && psOutput == NULL)
@@ -2314,6 +2322,15 @@ if(newWinWidth)
 hvGfxClose(&hvg);
 #ifdef IMAGEv2_UI
 imageBoxDraw(theImgBox);
+#ifdef IMAGEv2_USE_PORTAL
+// If a portal was established, then set the global dimensions back to the portal size
+if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+    {
+    pixWidth = tl.picWidth;
+    winBaseCount = winEnd - winStart;
+    insideWidth = tl.picWidth-gfxBorder-insideX;
+    }
+#endif//def IMAGEv2_USE_PORTAL
 imgBoxFree(&theImgBox);
 #else//ifndef IMAGEv2_UI
 char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
@@ -3828,6 +3845,22 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
+#ifdef IMAGEv2_UI
+// Start an imagebox (global for now to avoid huge rewrite of hgTracks)
+// Set up imgBox dimensions
+int sideSliceWidth  = 0;   // Just being explicit
+if (withLeftLabels)
+    sideSliceWidth   = leftLabelWidth + 2;
+theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
+#ifdef IMAGEv2_USE_PORTAL
+// Define a portal with a default expansion size, then set the global dimensions to the full image size
+if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
+    {
+    winBaseCount = winEnd - winStart;
+    insideWidth = tl.picWidth-gfxBorder-insideX;
+    }
+#endif//def IMAGEv2_USE_PORTAL
+#endif//def IMAGEv2_UI
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -3877,6 +3910,16 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
+#ifdef IMAGEv2_UI
+#ifdef IMAGEv2_USE_PORTAL
+// If a portal was established, then set the global dimensions back to the portal size
+if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+    {
+    winBaseCount = winEnd - winStart;
+    insideWidth = tl.picWidth-gfxBorder-insideX;
+    }
+#endif//def IMAGEv2_USE_PORTAL
+#endif//def IMAGEv2_UI
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
