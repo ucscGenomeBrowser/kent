@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.57 2009/07/08 23:10:38 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.58 2009/07/10 18:23:57 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -208,7 +208,7 @@ static void htmlWarnBoxSetup(FILE *f)
 // resizable (dynamically adjusting to its contents). But if this setup is done later in the page (at first warning), then IE des resize it.  Why?
 // FF is resizable now, but it took some experimentation.
 #define WARNBOX_LINE1 "<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'>"
-#define WARNBOX_LINE2 "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL><CENTER><input type='reset' value='OK' onclick='hideWarnBox();return false;'></CENTER></div></center>"
+#define WARNBOX_LINE2 "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL><CENTER><img src='../images/ok.jpg' onclick='hideWarnBox();return false;'></CENTER></div></center>"
 #define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display='inline-block'; warnBox.style.width='auto';}}}"
 #define WARNBOX_HIDE  "function hideWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display='none';var warnList=document.getElementById('warnList'); warnList.innerHTML='';}}"
 fprintf(f, "<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
@@ -239,33 +239,11 @@ printf("<script type='text/javascript'>{var warnList=document.getElementById('wa
 
 #else//ifndef WARNBOX_IN_USE
 
-#define WARN_USE_ALERT
-#ifdef WARN_USE_ALERT
-static boolean noWarningsYet = TRUE;
-char warning[1024];
-vsnprintf(warning,sizeof(warning),format, args);
-warning[sizeof(warning)-1] = '\0'; // Make certain that this string is terminated!
-if(noWarningsYet)
-    {
-    // This will only be put into the document once (DO NOT depend on jQuery!) (IE is a royale pain with innerHTML: used textarea)
-    puts("<textarea id='allWarnings' style='display:none;'>Warning(s):</textarea>");
-    puts("<script type='text/javascript'>function doWarn() {var msg=document.getElementById('allWarnings'); if(msg.value.length> 5) {alert(msg.value);} msg.value='';};</script>");
-    puts("<script type='text/javascript'>function warn() {setTimeout(\"doWarn()\",50); return true;};document.onload=warn();</script>");
-    puts("<script type='text/javascript'>function addWarning(warning) {var msg=document.getElementById('allWarnings'); if(msg.value.length> 5) {msg.value+=\"\\n\\n\"+warning;}};</script>");
-    noWarningsYet=FALSE;
-    }
-
-strSwapChar(warning,'\n',' ');
-printf("%s", htmlWarnStartPattern());
-printf("<script type='text/javascript'>addWarning(\"%s\");</script>\n",warning);
-printf("%s", htmlWarnEndPattern());
-#else//ifndef WARN_USE_ALERT
 htmlHorizontalLine();
 printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
-#endif//ndef WARN_USE_ALERT
 
 #endif//def WARNBOX_IN_USE
 
