@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.56 2009/02/09 18:19:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.57 2009/07/10 01:42:22 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -405,7 +405,7 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("'%s' does not seem to be a valid UniProtKB protein ID.", proteinID);
+	hUserAbort("'%s' does not seem to be a valid UniProtKB protein ID.", proteinID);
 	}
     else
 	{

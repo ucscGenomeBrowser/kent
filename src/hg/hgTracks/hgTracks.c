@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1580 2009/07/07 16:40:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1581 2009/07/10 01:42:21 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4477,7 +4477,7 @@ if (((position == NULL) || sameString(position, "default"))
     position = cloneString(defaultPosition);
 if (sameString(position, ""))
     {
-    errAbort("Please go back and enter a coordinate rangeor a search term in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
+    hUserAbort("Please go back and enter a coordinate rangeor a search term in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
     }
 
 chromName = NULL;

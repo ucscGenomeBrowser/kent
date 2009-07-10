@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.44 2009/01/30 23:36:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.45 2009/07/10 01:42:22 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -467,7 +467,7 @@ cart = theCart;
 queryID = cartOptionalString(cart, "proteinID");
 if (sameString(queryID, ""))
     {
-    errAbort("Please go back and enter a gene symbol or a Swiss-Prot/TrEMBL protein ID.\n");
+    hUserAbort("Please go back and enter a gene symbol or a Swiss-Prot/TrEMBL protein ID.\n");
     }
 	    
 if (cgiVarExists("db"))

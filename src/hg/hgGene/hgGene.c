@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.115 2009/06/15 23:47:29 angie Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.116 2009/07/10 01:42:21 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -611,8 +611,7 @@ char *geneName = cartUsualString(cart, hggGene, NULL);
 if (isEmpty(geneName))
     {
     // Silly googlebots.
-    webDumpStackDisallow();
-    errAbort("Error: the hgg_gene parameter is missing from the cart and the CGI params.");
+    hUserAbort("Error: the hgg_gene parameter is missing from the cart and the CGI params.");
     }
 getDbAndGenome(cart, &database, &genome, oldVars);
 
