@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.11 2009/07/10 19:30:37 hiram Exp $
+#  $Id: sacCer2.txt,v 1.12 2009/07/10 20:27:40 katrina Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1330,4 +1330,21 @@ done
 	-e 'load data local infile "addSgdGeneNames.tab" into table sgdToName;'
     hgsql -e "select count(*) from sgdToName;" sacCer2
     #	6726
+
+# Removed extraneous records from sgdToName (DONE - 2009-07-10 - Katrina)
+	#sgdGene has 6717 records (all of which have a distinct value in the
+	#name field) and sgdToName has 6726 (all of which have a distinct value
+	#in the name field).I searched for these 9 gene names in the SGD web
+	#site (yeastgenome.org). Most are alias' of another gene or something
+	#that was originally characterized as a separate gene but later found
+	#to be a part of another gene.
+	mysql> delete  from sgdToName where name= "YBL039W-A";
+	mysql> delete from sgdToName where name= "YBL101W-A";
+	mysql> delete from sgdToName where name= "YBL101W-C";
+	mysql> delete from sgdToName where name= "YDL038C";
+	mysql> delete from sgdToName where name= "YDR524W-A";
+	mysql> delete from sgdToName where name= "YGR272C";
+	mysql> delete from sgdToName where name= "YLR157W-A";
+	mysql> delete from sgdToName where name= "YLR157W-C";
+	mysql> delete from sgdToName where name= "YNL097C-A";
 ############################################################################
