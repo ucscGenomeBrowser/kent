@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.10 2009/07/02 22:25:06 hiram Exp $
+#  $Id: sacCer2.txt,v 1.11 2009/07/10 19:30:37 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1302,3 +1302,32 @@ done
 
     hgLoadBed -tab -tmpDir=/data/tmp sacCer2 uwFootprintsMappability yeast.mappability.bed
     hgLoadBed -tmpDir=/data/tmp sacCer2 uwFootprintsPrints yeast.footprints.bed
+
+############################################################################
+# fixup sgdToName table (DONE - 2009-07-09 - Hiram)
+    # this table is missing a name correspondence for some of
+    #	the gene names in sgdGene.name
+    #	to fixup, any names in sgdGene.name that are not in sgdToName,
+    #	simply add those names and reference themselves
+    mkdir /hive/data/genomes/sacCer2/bed/fixSgdToName
+    cd /hive/data/genomes/sacCer2/bed/fixSgdToName
+    hgsql -N -e "select name from sgdGene;" sacCer2 | sort -u > sgdGene.name
+    hgsql -N -e "select name from sgdToName;" sacCer2 > sgdToName.tab
+    #	convert the two columns of names to a single list of unique names
+    cat sgdToName.tab | tr '[\t]' '[\n]' | sort -u > all.sgdToName.name
+    comm -12 sgdGene.name all.sgdToName.name > commonToBoth
+    comm -23 sgdGene.name all.sgdToName.name > uniqueToSgdGene
+    comm -13 sgdGene.name all.sgdToName.name > uniqueToSgdToName
+    awk '{printf "%s\t%s\n", $1, $1}' uniqueToSgdGene > addSgdGeneNames.tab
+    #	count before load
+    hgsql -e "select count(*) from sgdToName;" sacCer2
+    #	6254
+    # adding names:
+    wc -l addSgdGeneNames.tab
+    #	472
+    #	6254 + 472 = 6726
+    hgsql sacCer2 \
+	-e 'load data local infile "addSgdGeneNames.tab" into table sgdToName;'
+    hgsql -e "select count(*) from sgdToName;" sacCer2
+    #	6726
+############################################################################
