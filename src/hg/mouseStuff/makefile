@@ -52,6 +52,7 @@ DIRS = \
 	mafFetch \
 	mafRanges \
 	mafToAxt \
+	mafToPsl \
 	mousePoster \
 	netChainSubset \
 	netClass \
