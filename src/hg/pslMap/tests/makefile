@@ -45,16 +45,20 @@ mrnaMapOver: mkdirs
 # swapped mapping psl, same result as mrnaMapOver
 mrnaMapOverSwap: mkdirs
 	pslSwap -noRc input/mm6ToHg17.psl output/hg17ToMm6.psl
-	${pslMap} -swapMap -mapInfo=output/$@.mapinfo input/mrnaToMm6.psl output/hg17ToMm6.psl output/$@.psl
+	${pslMap} -swapMap -mappingPsls=output/$@.mapping.psl -mapInfo=output/$@.mapinfo input/mrnaToMm6.psl output/hg17ToMm6.psl output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
+	pslCheck -verbose=0 output/$@.mapping.psl
 	diff -u expected/mrnaMapOver.psl output/$@.psl
 	diff -u expected/$@.mapinfo output/$@.mapinfo
+	diff -u expected/$@.mapping.psl output/$@.mapping.psl
 
 # use chain, same results as mrnaMapOver
 mrnaMapOverChain: mkdirs
-	${pslMap} -chainMapFile input/mrnaToMm6.psl input/mm6ToHg17.chain output/$@.psl
+	${pslMap} -chainMapFile -mappingPsls=output/$@.mapping.psl input/mrnaToMm6.psl input/mm6ToHg17.chain output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
+	pslCheck -verbose=0 output/$@.mapping.psl
 	diff -u expected/mrnaMapOver.psl output/$@.psl
+	diff -u expected/$@.mapping.psl output/$@.mapping.psl
 
 # use chain swapped, same results as mrnaMapOver
 mrnaMapOverChainSwap: mkdirs

@@ -11,7 +11,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.16 2007/07/27 05:26:19 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.17 2009/07/10 18:11:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -21,6 +21,7 @@ static struct optionSpec optionSpecs[] = {
     {"swapMap", OPTION_BOOLEAN},
     {"swapIn", OPTION_BOOLEAN},
     {"mapInfo", OPTION_STRING},
+    {"mappingPsls", OPTION_STRING},
     {"simplifyMappingIds", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -33,6 +34,7 @@ static boolean swapMap = FALSE;
 static boolean swapIn = FALSE;
 static boolean simplifyMappingIds = FALSE;
 static char* mapInfoFile = NULL;
+static char* mappingPslFile = NULL;
 
 static char *mapInfoHdr =
     "#srcQName\t" "srcQStart\t" "srcQEnd\t" "srcQSize\t"
@@ -212,7 +214,7 @@ freeMem(oldQName);
 }
 
 static void mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
-                       FILE* outPslFh, FILE *mapInfoFh)
+                       FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
 /* map one pair of query and target PSL */
 {
 struct psl* mappedPsl;
@@ -230,12 +232,14 @@ if (mappedPsl != NULL)
     pslTabOut(mappedPsl, outPslFh);
     if (mapInfoFh != NULL)
         writeMapInfo(mapInfoFh, inPsl, mapAln, mappedPsl);
+    if (mappingPslFh != NULL)
+        pslTabOut(mapAln->psl, mappingPslFh);
     }
 pslFree(&mappedPsl);
 }
 
 static void mapQueryPsl(struct psl* inPsl, struct chromBins *mapAlns,
-                        FILE* outPslFh, FILE *mapInfoFh)
+                        FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
 /* map a query psl to all targets  */
 {
 static struct dyString *idBuf = NULL;
@@ -243,7 +247,7 @@ struct binElement *overMapAlns
     = chromBinsFind(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
 struct binElement *overMapAln;
 for (overMapAln = overMapAlns; overMapAln != NULL; overMapAln = overMapAln->next)
-    mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh);
+    mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh, mappingPslFh);
 slFreeList(&overMapAlns);
 }
 
@@ -253,7 +257,7 @@ static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
 struct chromBins *mapAlns;
 struct psl* inPsl;
 struct lineFile* inPslLf = pslFileOpen(inPslFile);
-FILE *outPslFh, *mapInfoFh = NULL;
+FILE *outPslFh, *mapInfoFh = NULL, *mappingPslFh = NULL;
 
 if (chainMapFile)
     mapAlns = loadMapChains(mapFile);
@@ -266,13 +270,16 @@ if (mapInfoFile != NULL)
     mapInfoFh = mustOpen(mapInfoFile, "w");
     fputs(mapInfoHdr, mapInfoFh);
     }
+if (mappingPslFile != NULL)
+    mappingPslFh = mustOpen(mappingPslFile, "w");
 while ((inPsl = pslNext(inPslLf)) != NULL)
     {
     if (swapIn)
         pslSwap(inPsl, FALSE);
-    mapQueryPsl(inPsl, mapAlns, outPslFh, mapInfoFh);
+    mapQueryPsl(inPsl, mapAlns, outPslFh, mapInfoFh, mappingPslFh);
     pslFree(&inPsl);
     }
+carefulClose(&mappingPslFh);
 carefulClose(&mapInfoFh);
 carefulClose(&outPslFh);
 lineFileClose(&inPslLf);
@@ -292,6 +299,7 @@ swapMap = optionExists("swapMap");
 swapIn = optionExists("swapIn");
 simplifyMappingIds = optionExists("simplifyMappingIds");
 mapInfoFile = optionVal("mapInfo", NULL);
+mappingPslFile = optionVal("mappingPsls", NULL);
 pslMap(argv[1], argv[2], argv[3]);
 
 return 0;
