@@ -10,13 +10,13 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: demog.c,v 1.1 2009/04/16 21:37:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: demog.c,v 1.2 2009/07/10 22:58:40 fanhsu Exp $";
 
 static boolean demogExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
 /* Return TRUE if demogAll table exists and it has an entry with the gene symbol */
 {
-if (sqlTableExists(conn, "gsidSubjInfo3") == TRUE)
+if (sqlTableExists(conn, "gsidSubjInfo") == TRUE)
     {
     return(TRUE);
     }
@@ -37,7 +37,7 @@ char *weight, *riskFactor;
 char *comment;
 
 safef(query, sizeof(query), 
-      "select gender, age, race, geography, riskFactor, weight, comment from gsidSubjInfo3 where subjId='%s'", 
+      "select gender, age, race, geography, riskFactor, weight, comment from gsidSubjInfo where subjId='%s'", 
       subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
