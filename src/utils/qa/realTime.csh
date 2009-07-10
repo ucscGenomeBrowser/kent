@@ -48,7 +48,7 @@ foreach table ($tables)
   echo $table
   echo "============="
 
-  foreach machine ( hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 )
+  foreach machine ( hgwdev hgwbeta hgw1 )
     if ( "hgw1" == $machine ) then
       echo  # space out results
     endif
