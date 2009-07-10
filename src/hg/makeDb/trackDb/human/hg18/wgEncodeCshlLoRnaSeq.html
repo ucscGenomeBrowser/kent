@@ -53,40 +53,31 @@ Only uniquely (one loci) exactly (no mis-matches) aligned reads are reported in
 the processed files.
 
 <OL>
-<LI>
-Collect the read sequences from Illumina non-filtered output files.
+<LI>Collect the read sequences from Illumina non-filtered output files.
 </LI>
-<LI>
-Filter out all reads that contain undefined nucleotides ('N')
+<LI>Filter out all reads that contain undefined nucleotides ('N')
 </LI>
-<LI>
-Perform iterative alignment/C-tail chopping algorithm (below). On each
+<LI>Perform iterative alignment/C-tail chopping algorithm (below). On each
 alignment step below the reads are aligned to the genome with 100% identity. 
 All reads that align to a single locus are withdrawn from the alignment pool and
 only the reads that could not be aligned continue to the next step.
-  <OL>
-  <LI>
-  Align to hg18 genome using Nexalign 1.3.3 (&copy; Timo Lassmann) without
+  <OL type="a">
+  <LI>Align to hg18 genome using Nexalign 1.3.3 (&copy; Timo Lassmann) without
   chopping off any nucleotides
   </LI>
-  <LI>
-  Chop off any C-blocks (until the first non-C) at the end of the reads.
+  <LI>Chop off any C-blocks (until the first non-C) at the end of the reads.
   </LI>
-  <LI>
-  Align to the genome -> remove and save those that align
+  <LI>Align to the genome -> remove and save those that align
   </LI>
-  <LI>
-  Chop of any non-Cs until the next C.
+  <LI>Chop of any non-Cs until the next C.
   </LI>
-  <LI>
-  Chop off C-block until the next non-C.
+  <LI>Chop off C-block until the next non-C.
   </LI>
-  <LI>
-  Align to the genome -> remove and save those that align
+  <LI>Align to the genome -> remove and save those that align
   </LI>
-  <LI>
-  Repeat steps d,e,f until the reads align to the genome, or chopping results in
-  the reads' lengths reduce to below 16 (default), or there are no non-Cs left.
+  <LI>Repeat steps d,e,f until the reads align to the genome, or chopping 
+  results in the reads' lengths reduce to below 16 (default), or there are 
+  no non-Cs left.
   </LI>
   </OL>
 </LI>
