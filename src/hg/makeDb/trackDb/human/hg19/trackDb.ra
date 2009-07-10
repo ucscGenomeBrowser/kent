@@ -390,7 +390,7 @@ visibility hide
 visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
-priority 498
+priority 496
 color 0,0,0
 altColor 255,255,0
 type bed 3
@@ -400,9 +400,9 @@ chainLinearGap medium
 chainMinScore 3000
 settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species 
-sortOrder species=+ view=+ clade=+
+sortOrder view=+ species=+ clade=+
 configurable on
-html hg19ChainNet
+html hg19primateChainNet
 
     track chainPanTro2
     release alpha
@@ -425,6 +425,7 @@ html hg19ChainNet
     otherDb panTro2
 
     track chainGorGor1
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=bGorGor clade=aHom
     shortLabel $o_Organism Chain
@@ -433,6 +434,7 @@ html hg19ChainNet
     otherDb gorGor1
 
     track netGorGor1
+    release alpha
     subTrack primateChainNet off
     subGroups view=net species=bGorGor clade=aHom
     shortLabel $o_Organism Net
@@ -441,6 +443,7 @@ html hg19ChainNet
     otherDb gorGor1
 
     track chainPonAbe2
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=cPonAbe clade=aHom
     shortLabel $o_Organism Chain
@@ -449,6 +452,7 @@ html hg19ChainNet
     otherDb ponAbe2
 
     track netPonAbe2
+    release alpha
     subTrack primateChainNet on 
     subGroups view=net species=cPonAbe clade=aHom
     shortLabel $o_Organism Net
@@ -458,6 +462,7 @@ html hg19ChainNet
     otherDb ponAbe2
 
     track chainRheMac2
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=dRheMac clade=bCerco
     shortLabel $o_Organism Chain
@@ -466,6 +471,7 @@ html hg19ChainNet
     otherDb rheMac2
 
     track netRheMac2
+    release alpha
     subTrack primateChainNet on 
     subGroups view=net species=dRheMac clade=bCerco
     shortLabel $o_Organism Net
@@ -475,6 +481,7 @@ html hg19ChainNet
     otherDb rheMac2
 
     track chainPapHam1
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=ePapHam clade=bCerco
     shortLabel $o_Organism Chain
@@ -483,6 +490,7 @@ html hg19ChainNet
     otherDb papHam1
 
     track netPapHam1
+    release alpha
     subTrack primateChainNet off
     subGroups view=net species=ePapHam clade=bCerco
     shortLabel $o_Organism Net
@@ -491,6 +499,7 @@ html hg19ChainNet
     otherDb papHam1
 
     track chainCalJac1
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=fCalJac clade=cHaplo
     shortLabel $o_Organism Chain
@@ -499,6 +508,7 @@ html hg19ChainNet
     otherDb calJac1
 
     track netCalJac1
+    release alpha
     subTrack primateChainNet off
     subGroups view=net species=fCalJac clade=cHaplo
     shortLabel $o_Organism Net
@@ -507,6 +517,7 @@ html hg19ChainNet
     otherDb calJac1
 
     track chainTarSyr1
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=gTarSyr clade=cHaplo
     shortLabel $o_Organism Chain
@@ -515,6 +526,7 @@ html hg19ChainNet
     otherDb tarSyr1
 
     track netTarSyr1
+    release alpha
     subTrack primateChainNet off
     subGroups view=net species=gTarSyr clade=cHaplo
     shortLabel $o_Organism Net
@@ -523,6 +535,7 @@ html hg19ChainNet
     otherDb tarSyr1
 
     track chainMicMur1
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=iMicMur clade=dStrep
     shortLabel $o_Organism Chain
@@ -531,6 +544,7 @@ html hg19ChainNet
     otherDb micMur1
 
     track netMicMur1
+    release alpha
     subTrack primateChainNet off
     subGroups view=net species=iMicMur clade=dStrep
     shortLabel $o_Organism Net
@@ -539,6 +553,7 @@ html hg19ChainNet
     otherDb micMur1
 
     track chainOtoGar1
+    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=hOtoGar clade=dStrep
     shortLabel $o_Organism Chain
@@ -547,6 +562,7 @@ html hg19ChainNet
     otherDb otoGar1
 
     track netOtoGar1
+    release alpha
     subTrack primateChainNet on
     subGroups view=net species=hOtoGar clade=dStrep
     shortLabel $o_Organism Net
@@ -578,9 +594,9 @@ chainLinearGap medium
 chainMinScore 3000
 settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species
-sortOrder species=+ view=+ clade=+
+sortOrder view=+ species=+ clade=+
 configurable on
-html hg19ChainNet
+html hg19mammalChainNet
 
     track chainEquCab2
     subTrack placentalChainNet off
@@ -964,7 +980,7 @@ visibility hide
 visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
-priority 496
+priority 498
 color 0,0,0
 altColor 255,255,0
 type bed 3
@@ -974,9 +990,9 @@ chainLinearGap medium
 chainMinScore 3000
 settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species 
-sortOrder species=+ view=+ clade=+
+sortOrder view=+ species=+ clade=+
 configurable on
-html hg19ChainNet
+html hg19vertChainNet
 
     track chainMacEug1
     subTrack vertebrateChainNet off
