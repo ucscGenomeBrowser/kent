@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.1 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -6,7 +6,7 @@
 # Lab and general info
 grant             Gingeras
 lab               Cshl
-dataType          RnaSeq
+dataType          LoRnaSeq
 variables         cell, localization, rnaExtract
 assembly          hg18
 dafVersion        0.2.2
