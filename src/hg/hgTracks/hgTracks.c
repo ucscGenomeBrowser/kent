@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1582 2009/07/10 19:48:17 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1583 2009/07/10 20:10:30 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3850,7 +3850,7 @@ else if (cgiVarExists("hgt.prevItem"))
 // Set up imgBox dimensions
 int sideSliceWidth  = 0;   // Just being explicit
 if (withLeftLabels)
-    sideSliceWidth   = leftLabelWidth + 2;
+    sideSliceWidth   = (insideX - gfxBorder*3) + 2;
 theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
 #ifdef IMAGEv2_USE_PORTAL
 // Define a portal with a default expansion size, then set the global dimensions to the full image size
