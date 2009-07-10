@@ -156,6 +156,7 @@ tg->itemDataName = transMapGetItemDataName;
 void transMapRegisterTrackHandlers()
 /* register track handlers for transMap tracks */
 {
+registerTrackHandler("transMap", transMapMethods);
 registerTrackHandler("transMapAlnRefSeq", transMapMethods);
 registerTrackHandler("transMapAlnMRna", transMapMethods);
 registerTrackHandler("transMapAlnSplicedEst", transMapMethods);
