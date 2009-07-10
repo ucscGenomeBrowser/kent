@@ -255,19 +255,6 @@ void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
 void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow);
 /* Fill out partially empty last row. */
 
-boolean webDumpStackEnabled(void);
-/* is browser.dumpStack enabled?  */
-
-void webDumpStackDisallow(void);
-/* prevent any dumping of the stack */
-
-void webDumpStackPushAbortHandler(void);
-/* push the stack dump abort handler on the stack if it's enabled.  This should be pushed
- * after the warn handle that will do the actual reporting */
-
-void webDumpStackPopAbortHandler(void);
-/* pop the stack dump abort handler from the stack if it's enabled */
-
 boolean validateGisaidUser(struct cart *cart);
 /* validate if the web user is an authenticated GISAID user */
 #endif /* WEB_H */

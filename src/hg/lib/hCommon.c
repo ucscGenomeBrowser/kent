@@ -5,8 +5,9 @@
 #include "chromInfo.h"
 #include "portable.h"
 #include "hgConfig.h"
+#include "errabort.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.38 2009/06/25 08:43:07 markd Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.39 2009/07/10 01:40:37 markd Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
@@ -285,5 +286,69 @@ void hTableEnd()
 puts("</TABLE>");
 puts("</TD></TR></TABLE>");
 puts("<!--hTableEnd-->");
+}
+
+static boolean stackDumpDisabled = FALSE;  // prevent accidental recursion or undesired dumps
+
+static void hDumpStackAbortHandler()
+/* abort handle that prints stack dump then invokes the previous abort
+ * handler on the stack. */
+{
+if (!stackDumpDisabled)
+    {
+    stackDumpDisabled = TRUE;
+    popWarnHandler(); // remove us from the stack
+    dumpStack("\nStack dump:");
+    // continue with next abort handler
+    noWarnAbort();
+    }
+}
+
+boolean hDumpStackEnabled(void)
+/* is browser.pstack enabled?  */
+{
+return cfgOptionBooleanDefault("browser.dumpStack", FALSE);
+}
+
+void hDumpStackDisallow(void)
+/* prevent any dumping of the stack */
+{
+stackDumpDisabled = TRUE;
+}
+
+void hDumpStackPushAbortHandler(void)
+/* push the stack dump abort handler on the stack if it's enabled.  This should be pushed
+ * after the warn handle that will do the actual reporting */
+{
+if (hDumpStackEnabled())
+    {
+    errAbortDebugnPushPopErr();
+    pushAbortHandler(hDumpStackAbortHandler);
+    }
+}
+
+void hDumpStackPopAbortHandler(void)
+/* pop the stack dump abort handler from the stack if it's enabled */
+{
+if (hDumpStackEnabled() && !stackDumpDisabled)
+    popAbortHandler();
+}
+
+void hVaUserAbort(char *format, va_list args)
+/* errAbort when a `user' error is detected.  This is an error that comes
+ * from user input. This disables the logging stack dumps. */
+{
+hDumpStackDisallow();
+vaErrAbort(format, args);
+}
+
+void hUserAbort(char *format, ...)
+/* errAbort when a `user' error is detected.  This is an error that comes
+ * from user input. This disables the logging stack dumps. */
+{
+va_list args;
+va_start(args, format);
+hVaUserAbort(format, args);
+va_end(args);
 }
 

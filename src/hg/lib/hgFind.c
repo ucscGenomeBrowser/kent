@@ -11,6 +11,7 @@
 #include "web.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "hui.h"
 #include "psl.h"
 #include "genePred.h"
 #include "genePredReader.h"
@@ -31,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.220 2009/07/09 00:06:02 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.221 2009/07/10 01:40:37 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -42,23 +43,6 @@ static char *estLabels[] = { "Spliced ESTs", "ESTs", "Other ESTs", NULL };
 static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL };
 static char *mrnaLabels[] = { "mRNAs", "Other mRNAs", NULL };
 static struct dyString *hgpMatchNames = NULL;
-
-void hgFindErr(char *format, ...)
-/* generate an find error, disabling logging stack dumps. */
-#if defined(__GNUC__)
-__attribute__((format(printf, 1, 2)))
-#endif
-;
-
-void hgFindErr(char *format, ...)
-/* generate an find error, disabling logging stack dumps. */
-{
-webDumpStackDisallow();
-va_list args;
-va_start(args, format);
-vaErrAbort(format, args);
-va_end(args);
-}
 
 static void hgPosFree(struct hgPos **pEl)
 /* Free up hgPos. */
@@ -968,7 +952,7 @@ for (cb = bandList; cb != NULL; cb = cb->next)
 	}
     }
 if (chrStart == NULL)
-    hgFindErr("Couldn't find chromosome %s in band list", chromosome);
+    hUserAbort("Couldn't find chromosome %s in band list", chromosome);
 
 /* Find last band in chromosome. */
 for (cb = chrStart->next; cb != NULL; cb = cb->next)
@@ -1036,7 +1020,7 @@ for (;;)
 	}
     s = strrchr(choppedBand, '.');
     if (s == NULL)
-	hgFindErr("Couldn't find anything like band '%s'", band);
+	hUserAbort("Couldn't find anything like band '%s'", band);
     else
 	{
 	e = choppedBand + strlen(choppedBand) - 1;
@@ -2525,7 +2509,7 @@ for (i = 0;  i < termCount;  i++)
 	hgPositionsFree(&hgp);
 	warn("Sorry, couldn't locate %s in genome database\n", htmlEncode(terms[i]));
 	if (multiTerm)
-	    hgFindErr("%s not uniquely determined -- "
+	    hUserAbort("%s not uniquely determined -- "
 		     "can't do multi-position search.", terms[i]);
 	*retWinStart = 0;
 	return NULL;
@@ -2534,7 +2518,7 @@ for (i = 0;  i < termCount;  i++)
     if ((hgp->singlePos != NULL) && (!showAlias || !hgp->useAlias))
 	{
 	if (chrom != NULL && !sameString(chrom, hgp->singlePos->chrom))
-	    hgFindErr("Sites occur on different chromosomes: %s, %s.",
+	    hUserAbort("Sites occur on different chromosomes: %s, %s.",
 		     chrom, hgp->singlePos->chrom);
 	chrom = hgp->singlePos->chrom;
 	if (hgp->singlePos->chromStart < start)
@@ -2546,7 +2530,7 @@ for (i = 0;  i < termCount;  i++)
 	{
 	hgPositionsHtml(db, hgp, stdout, useWeb, hgAppName, cart);
 	if (multiTerm && hgp->posCount != 1)
-	    hgFindErr("%s not uniquely determined (%d locations) -- "
+	    hUserAbort("%s not uniquely determined (%d locations) -- "
 		     "can't do multi-position search.",
 		     terms[i], hgp->posCount);
 	*retWinStart = hgp->posCount;
@@ -2600,7 +2584,7 @@ static void noRelative(boolean relativeFlag, int relStart, int relEnd,
 		       char *table)
 {
 if (relativeFlag)
-    hgFindErr("Sorry, range spec (\":%d-%d\") is not supported for %s.",
+    hUserAbort("Sorry, range spec (\":%d-%d\") is not supported for %s.",
 	     relStart+1, relEnd, table);
 
 }
@@ -2931,7 +2915,7 @@ if (isNewChimp(hgp->database))
         {
         *term = hDefaultPos(hgp->database);
         if (endsWith(hgAppName, "hgTables"))
-            hgFindErr(msg);
+            hUserAbort(msg);
         else
             warn(msg);
         return TRUE;

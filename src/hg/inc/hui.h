@@ -1039,4 +1039,5 @@ boolean metadataToggle(struct trackDb *tdb,char *title,boolean embeddedInText,bo
 
 void extraUiLinks(char *db,struct trackDb *tdb);
 /* Show downlaods, schema and metadata links where appropriate */
+
 #endif /* HUI_H */

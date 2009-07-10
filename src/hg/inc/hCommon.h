@@ -92,4 +92,29 @@ void hTableEnd();
 
 boolean validateGisaidUser();
 
+boolean hDumpStackEnabled(void);
+/* is browser.dumpStack enabled?  */
+
+void hDumpStackDisallow(void);
+/* prevent any dumping of the stack */
+
+void hDumpStackPushAbortHandler(void);
+/* push the stack dump abort handler on the stack if it's enabled.  This should be pushed
+ * after the warn handle that will do the actual reporting */
+
+void hDumpStackPopAbortHandler(void);
+/* pop the stack dump abort handler from the stack if it's enabled */
+
+void hVaUserAbort(char *format, va_list args);
+/* errAbort when a `user' error is detected.  This is an error that comes
+ * from user input. This disables the logging stack dumps. */
+
+void hUserAbort(char *format, ...)
+/* errAbort when a `user' error is detected.  This is an error that comes
+ * from user input. This disables the logging stack dumps. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
 #endif /* HCOMMON_H */

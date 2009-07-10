@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.168 2009/06/11 23:49:10 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.169 2009/07/10 01:40:38 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -31,52 +31,6 @@ static char *extraStyle = NULL;
 
 /* global: a cart for use in error handlers. */
 static struct cart *errCart = NULL;
-
-static boolean stackDumpHasBeenDone = FALSE;  // prevent accidental recursion, only allow once
-
-static void webDumpStackAbortHandler()
-/* abort handle that prints stack dump then invokes the previous abort
- * handler on the stack. */
-{
-if (!stackDumpHasBeenDone)
-    {
-    stackDumpHasBeenDone = TRUE;
-    popWarnHandler(); // remove us from the stack
-    dumpStack("Stack dump:");
-    // continue with next abort handler
-    noWarnAbort();
-    }
-}
-
-boolean webDumpStackEnabled(void)
-/* is browser.pstack enabled?  */
-{
-return cfgOptionBooleanDefault("browser.dumpStack", FALSE);
-}
-
-void webDumpStackDisallow(void)
-/* prevent any dumping of the stack */
-{
-stackDumpHasBeenDone = TRUE;
-}
-
-void webDumpStackPushAbortHandler(void)
-/* push the stack dump abort handler on the stack if it's enabled.  This should be pushed
- * after the warn handle that will do the actual reporting */
-{
-if (webDumpStackEnabled())
-    {
-    errAbortDebugnPushPopErr();
-    pushAbortHandler(webDumpStackAbortHandler);
-    }
-}
-
-void webDumpStackPopAbortHandler(void)
-/* pop the stack dump abort handler from the stack if it's enabled */
-{
-if (webDumpStackEnabled() && !stackDumpHasBeenDone)
-    popAbortHandler();
-}
 
 void textVaWarn(char *format, va_list args)
 {
@@ -96,7 +50,7 @@ if (webInTextMode)
     pushWarnHandler(textVaWarn);
 else
     pushWarnHandler(webVaWarn);
-webDumpStackPushAbortHandler();
+hDumpStackPushAbortHandler();
 pushAbortHandler(softAbort);
 }
 
@@ -111,7 +65,7 @@ void webPopErrHandlers(void)
 /* Pop warn and abort handler for errAbort(). */
 {
 popWarnHandler();
-webDumpStackPopAbortHandler();
+hDumpStackPopAbortHandler();
 popAbortHandler();
 }
 
