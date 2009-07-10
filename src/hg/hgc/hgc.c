@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1558 2009/06/26 22:18:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1559 2009/07/10 22:17:04 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14363,7 +14363,8 @@ void printSnpAlleleRows(struct snp125 *snp, int version)
 /* Print the UCSC ref allele (and dbSNP if it differs), as row(s) of a
  * 6-column table. */
 {
-if (sameString(snp->strand,"+"))
+if (sameString(snp->strand,"+") ||
+    strchr(snp->refUCSC, '(')) // don't try to revComp refUCSC if it is "(N bp insertion)" etc.
     {
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
 	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refUCSC);
