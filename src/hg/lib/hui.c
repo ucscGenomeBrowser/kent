@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.221 2009/07/07 01:07:13 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.222 2009/07/10 22:16:49 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4121,10 +4121,10 @@ if(filterBySet != NULL)
 cfgEndBox(boxed);
 }
 
-static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species, char *option, int optionSize)
-/* check the cart to see if species is turned off or on (default on) */
+static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species, char *option, int optionSize, boolean defaultState)
+/* check the cart to see if species is turned off or on (default is defaultState) */
 {
-boolean ret = TRUE;
+boolean ret = defaultState;
 safef(option, optionSize, "%s.%s", tdb->tableName, species);
 
 /* see if this is a simple multiz (not composite track) */
@@ -4141,7 +4141,7 @@ else
 	    {
 	    safef(option, optionSize, "%s.%s.%s",
 		tdb->parent->tableName, viewString,  species);
-	    ret = cartUsualBoolean(cart, option, TRUE);
+	    ret = cartUsualBoolean(cart, option, ret);
 	    }
 	}
     }
@@ -4198,7 +4198,7 @@ for (group = 0; group < *groupCt; group++)
         {
         AllocVar(wmSpecies);
         wmSpecies->name = cloneString(species[i]);
-	wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option);
+	wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, TRUE);
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
         }
@@ -4258,11 +4258,18 @@ cgiContinueHiddenVar("g");
 char prefix[512];
 safef(prefix, sizeof prefix, "%s.", name);
 char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
+struct hash *offHash = NULL;
 if (defaultOffSpecies)
     {
+    offHash = newHash(5);
     DEFAULT_BUTTON( "id", "default_pw","cb_maf_","_maf_");
     int wordCt = chopLine(defaultOffSpecies, words);
     defaultOffSpeciesCnt = wordCt;
+
+    /* build hash of species that should be off */
+    int ii;
+    for(ii=0; ii < wordCt; ii++)
+        hashAdd(offHash, words[ii], NULL);
     }
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
@@ -4390,7 +4397,10 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     else
     	{
     	puts("<TD>");
-        wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option);
+	boolean defaultState = TRUE;
+	if (offHash != NULL)
+	    defaultState = (hashLookup(offHash, wmSpecies->name) == NULL);
+        wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, defaultState );
         cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
