@@ -19,7 +19,7 @@
 #include "gsid.h"
 #include "gsidSubj3.h"
 
-static char const rcsid[] = "$Id: gsidSubj3.c,v 1.1 2009/04/16 21:37:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj3.c,v 1.2 2009/07/10 16:09:39 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -249,7 +249,7 @@ if (sameWord(curSubjId, ""))
     }
 else
     {
-    safef(query, sizeof(query), "select subjId from %s.gsidSubjInfo3 where subjId = '%s'", 
+    safef(query, sizeof(query), "select subjId from %s.gsidSubjInfo where subjId = '%s'", 
     	  database, curSubjId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
