@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.10 2009/06/23 16:40:19 hiram Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.11 2009/07/11 17:30:44 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -27,6 +27,7 @@ errAbort(
   "   -meFirst - Put native sequence first in maf\n"
   "   -txStarts - Add MAF txstart region definitions ('r' lines) using BED name\n"
   "    and output actual reference genome coordinates in MAF.\n"
+  "   -refCoords - output actual reference genome coordinates in MAF.\n"
   );
 }
 
@@ -36,6 +37,7 @@ static struct optionSpec options[] = {
    {"thickOnly", OPTION_BOOLEAN},
    {"meFirst", OPTION_BOOLEAN},
    {"txStarts", OPTION_BOOLEAN},
+   {"refCoords", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -43,6 +45,7 @@ static boolean bed12 = FALSE;
 static boolean thickOnly = FALSE;
 static boolean meFirst = FALSE;
 static boolean txStarts = FALSE;
+static boolean refCoords = FALSE;
 
 static struct mafAli *mafFromBed12(char *database, char *track,
     struct bed *bed, struct slName *orgList)
@@ -160,11 +163,12 @@ static void processBed6(char *database, char *track, FILE *f, struct bed *bed,
 /* generate MAF alignment for a bed6 */
 {
 struct mafAli *maf; 
+char *useName = refCoords ? NULL : bed->name;
 if (txStarts)
     {
     maf = hgMafFrag(database, track, 
                     bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
-                    NULL, orgList);
+                    useName, orgList);
     maf->regDef = mafRegDefNew(mafRegDefTxUpstream,
                                bed->chromEnd-bed->chromStart,
                                bed->name);
@@ -175,7 +179,7 @@ else
     {
     maf = hgMafFrag(database, track, 
                     bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
-                    bed->name, orgList);
+                    useName, orgList);
     if (meFirst)
         moveMeToFirst(maf, bed->name);
     }
@@ -247,6 +251,9 @@ bed12 = optionExists("bed12");
 thickOnly = optionExists("thickOnly");
 meFirst = optionExists("meFirst");
 txStarts = optionExists("txStarts");
+refCoords = optionExists("refCoords") || txStarts;
+if (refCoords && bed12)
+    errAbort("can't specify -txStart or -refCoords with -bed12");
 mafFrags(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
