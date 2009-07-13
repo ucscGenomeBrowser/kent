@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes11.csh,v 1.3 2009/06/24 22:11:38 hiram Exp $"
+#	"$Id: hg19.ucscGenes11.csh,v 1.4 2009/07/13 20:38:13 hiram Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -29,7 +29,8 @@ set yeastDb = sacCer2
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
-set tempDb = tmpUcscGenes$db
+set tempPrefix = "tmpUcscGenes"
+set tempDb = ${tempPrefix}${db}
 set bioCycTempDb = tmpBioCyc$db
 
 # Table for SNPs
@@ -50,7 +51,7 @@ set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
-set yeastFa = $genomes/$yeastDb/bed/blastp/sgdPep.faa
+set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/090218/sgdPep.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
@@ -608,24 +609,37 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
 # We do this initially in a temporary database.
 
-# Create temporary database with a few small tables from main database
-hgsqladmin create $tempDb
-hgsqldump $db chromInfo | hgsql $tempDb
-hgsqldump $db trackDb_$user | hgsql $tempDb
+# Protect databases from overwriting
 
-# Make up knownGenes table, adding uniProt ID. Load into database. Takes 3
-# seconds.
+if ( $tempDb =~ "${tempPrefix}*" ) then
+    if ( 2 == `hgsql -N -e "show databases;" mysql | grep -E -c -e "$tempDb|"'^mysql$'` ) then
+	echo "tempDb: '$tempDb' already exists, it should not"
+	exit 255
+    else
+	echo "creating tempDb: '$tempDb'"
+	# Create temporary database with a few small tables from main database
+	hgsqladmin create $tempDb
+	hgsqldump $db chromInfo | hgsql $tempDb
+	hgsqldump $db trackDb_$user | hgsql $tempDb
+    endif
+else
+    echo "tempDb does not match $tempPrefix"
+    hgsql -N $tempDb -e "show tables;" | grep -E -c "chromInfo|trackDb_$user"
+    if (2 != `hgsql -N $tempDb -e "show tables;" | grep -E -c "chromInfo|trackDb_$user"` ) then
+	echo "do not find tables chromInfo and trackDb_$user in database '$tempDb'"
+	exit 255
+    endif
+    echo "tempDb setting: '$tempDb' should not be an existing db"
+    exit 255
+endif
+
+# Make up knownGenes table, adding uniProt ID. Load into database.
+#	Takes 3 seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
 hgLoadSqlTab $tempDb knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
 hgLoadBed $tempDb knownAlt ucscSplice.bed
@@ -642,7 +656,8 @@ txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev uc
 hgLoadSqlTab $tempDb kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
 
 # add NR_... RefSeq IDs into kgXref table.
-hgsql fanKgTemp2 -e 'update kgXref set refseq=mRNA where mRNA like "NR_%" and refseq=""'
+hgsql $tempDb \
+    -e 'update kgXref set refseq=mRNA where mRNA like "NR_%" and refseq=""'
 
 # Make up and load kgColor table. Takes about a minute.
 txGeneColor $spDb ucscGenes.info ucscGenes.picks ucscGenes.color
@@ -662,14 +677,21 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
+# XXX TODO - no allenBrain yet - 2009-06-26
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
+# XXX TODO - no ensGene yet - 2009-06-26
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
+# XXX TODO - no gnfAtlas2 yet - 2009-06-26
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
+
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
+
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
 
+# XXX TODO - not done 2009-06-26
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
@@ -677,6 +699,7 @@ hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
      
+# XXX TODO - none of these tables exist yet 2009-06-26
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -685,8 +708,10 @@ if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
     hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+endif
 
 
+# XXX TODO - none of these tables exist yet 2009-06-26
 if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
 	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
@@ -696,18 +721,19 @@ if ($db =~ hg*) then
     # All exon array.
     mkdir affyAllExon
     cd affyAllExon
-    hgsql hg18 -N -e "select * from affyExonTissues" | cut -f2-6 > probes.bed
+    hgsql $db -N -e "select * from affyExonTissues" | cut -f2-6 > probes.bed
     overlapSelect -inFmt=genePred -selectFmt=bed -idOutput probes.bed ../ucscGenes.gp ids.txt
-    hgsql hg18 -N -e "select name,expCount,expScores from affyExonTissues" > expData.txt
+    hgsql $db -N -e "select name,expCount,expScores from affyExonTissues" > expData.txt
     affyAllExonGSColumn expData.txt ids.txt column.txt
     hgLoadSqlTab $tempDb affyExonTissuesGs ~/kent/src/hg/lib/expData.sql column.txt
     ln -s ~/kent/src/hg/makeDb/hgRatioMicroarray/affyHumanExon.ra .
-    echo "create table affyExonTissuesGsExps select * from hg18.affyExonTissuesGsExps" | hgsql $tempDb
-    hgMedianMicroarray $tempDb affyExonTissuesGs hg18.affyExonTissuesGsExps \
+    echo "create table affyExonTissuesGsExps select * from $db.affyExonTissuesGsExps" | hgsql $tempDb
+    hgMedianMicroarray $tempDb affyExonTissuesGs $db.affyExonTissuesGsExps \
        affyHumanExon.ra affyExonTissuesGsMedian affyExonTissuesGsMedianExps
     hgExpDistance $tempDb affyExonTissuesGsMedian \
        affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
 endif
+
 if ($db =~ mm*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
     hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
@@ -758,18 +784,28 @@ ${yeastDb}Fa $yeastFa
 buildDir $dir/hgNearBlastp
 scratchDir $scratchDir/jkgHgNearBlastp
 _EOF_
-doHgNearBlastp.pl config.ra |& tee do.log 
+
+doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra |& tee do.log 
+# real    464m36.473s
+# done 2009-06-29
 
 
 # Remove non-syntenic hits for mouse and rat
 # Takes a few minutes
-mkdir /gbdb/$tempDb/liftOver
+mkdir -p /gbdb/$tempDb/liftOver
 ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
 ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 synBlastp.csh $tempDb $ratDb
 synBlastp.csh $tempDb $xdb
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -822,9 +858,10 @@ gzip run.*/all.tab
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
-mkdir -p rnaStruct
+mkdir  rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+# these commands take some significant time
 utrFa $db knownGene utr3 utr3/utr.fa
 utrFa $db knownGene utr5 utr5/utr.fa
 
@@ -834,19 +871,20 @@ faSplit sequence utr5/utr.fa 10000 utr5/split/s
 ls -1 utr3/split > utr3/in.lst
 ls -1 utr5/split > utr5/in.lst
 cd utr3
-cat > gsub <<end
+cat << '_EOF_' > template
 #LOOP
-rnaFoldBig split/\$(path1) fold
+rnaFoldBig split/$(path1) fold
 #ENDLOOP
-end
-gensub2 in.lst single gsub spec
-cp gsub ../utr5
+'_EOF_'
+gensub2 in.lst single template jobList
+cp template ../utr5
 cd ../utr5
-gensub2 in.lst single gsub spec
+gensub2 in.lst single template jobList
 
 # Do cluster runs for UTRs
-ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make spec"
-ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make spec"
+ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make jobList"
+ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
+XXX - running Thu Jul  9 15:15:25 PDT 2009
 
 # Load database
     cd $dir/rnaStruct/utr5
@@ -864,79 +902,100 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make spec"
 
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /san/sanvol1/pfam somehow.
-cd /san/sanvol1/scratch/$db
-mkdir ucscGenes
-cd ucscGenes
+mkdir $genomes/hg19/bed/ucsc.11/pfam
+cd $genomes/hg19/bed/ucsc.11/pfam
 mkdir splitProt
 faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
-mkdir pfam
-cd pfam
-mkdir out
-ls -1 ../splitProt > in.lst
-cat << _EOF_ > doPfam
-#!/bin/tcsh -ef
-/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/pfam/Pfam_fs \$1 > \$2
-_EOF_
-chmod a+x doPfam
-cat << _EOF_ > gsub
+mkdir result
+ls -1 splitProt > prot.list
+cat << '_EOF_' > doPfam
+#!/bin/csh -ef
+/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/Pfam_fs \
+	splitProt/$1 > /scratch/tmp/$2.pf
+mv /scratch/tmp/$2.pf $3
+'_EOF_'
+    # << happy emacs
+chmod +x doPfam
+cat << '_EOF_' > template
 #LOOP
-doPfam ../splitProt/\$(path1) out/\$(root1).pf
+doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 #ENDLOOP
-_EOF_
-gensub2 in.lst single gsub spec
-ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/pfam; para make spec"
+'_EOF_'
+gensub2 prot.list single template jobList
+ssh pk "cd $dir/pfam; para make jobList"
+
+# Completed: 9668 of 9668 jobs
+# CPU time in finished jobs:    5543931s   92398.85m  1539.98h   64.17d  0.176 y
+# IO & Wait Time:              21389629s  356493.81m  5941.56h  247.57d  0.678 y
+# Average job time:                2786s      46.43m     0.77h    0.03d
+# Longest finished job:           14976s     249.60m     4.16h    0.17d
+# Submission to last job:         69651s    1160.85m    19.35h    0.81d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
-cat << _EOF_ > makePfamRa.awk
+cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}
 /^ACC/ {print}
 /^DESC/ {print; printf("\n");}
-_EOF_
-awk -f makePfamRa.awk  /cluster/store12/pfam/Pfam_fs > pfamDesc.ra
+'_EOF_'
+awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam_fs > pfamDesc.ra
 raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
    awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
 
 # Convert output to tab-separated file. 
 cd $dir
-catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab -eValCol stdin ucscPfam.tab
+catDir pfam/result | hmmPfamToTab -eValCol stdin ucscPfam.tab
 
 # Convert output to knownToPfam table
-awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' /san/sanvol1/scratch/$db/ucscGenes/pfam/pfamDesc.tab > sub.foo
-cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.foo knownToPfam.tab
+awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
+	pfamDesc.tab > sub.tab
+XXX - ready for this after the cluster run finishes 2009-07-08
+cut -f 1,4 ucscPfam.tab | subColumn 2 stdin pfam/sub.tab knownToPfam.tab
+rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
+hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
-cd /san/sanvol1/scratch/$db/ucscGenes
-mkdir scop
-cd scop
-mkdir out
-ls -1 ../splitProt > in.lst
-cat << _EOF_ > doScop
-#!/bin/tcsh -ef
-/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/scop/scop.hmm \$1 > \$2
-_EOF_
-chmod a+x doScop
-cat << _EOF_ > gsub
+mkdir /hive/data/genomes/hg19/bed/ucsc.11/scop
+cd /hive/data/genomes/hg19/bed/ucsc.11/scop
+mkdir result
+ls -1 ../pfam/splitProt > prot.list
+cat << '_EOF_' > doScop
+#!/bin/csh -ef
+/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/scop/scop.hmm \
+	../pfam/splitProt/$1 > /scratch/tmp/$2.pf
+mv /scratch/tmp/$2.pf $3
+'_EOF_'
+    # << happy emacs
+chmod +x doScop
+cat << '_EOF_' > template
 #LOOP
-doScop ../splitProt/\$(path1) out/\$(root1).pf
+doScop $(path1) $(root1) {check out line+ result/$(root1).pf}
 #ENDLOOP
-_EOF_
-gensub2 in.lst single gsub spec
-ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/scop; para make spec"
-
+'_EOF_'
+    # << happy emacs
+gensub2 prot.list single template jobList
+ssh swarm "cd $dir/scop; para make spec"
+# Completed: 9668 of 9668 jobs
+# CPU time in finished jobs:    3930187s   65503.11m  1091.72h   45.49d  0.125 y
+# IO & Wait Time:              25343536s  422392.27m  7039.87h  293.33d  0.804 y
+# Average job time:                3028s      50.46m     0.84h    0.04d
+# Longest finished job:           16161s     269.35m     4.49h    0.19d
+# Submission to last job:         46435s     773.92m    12.90h    0.54d
 
 # Convert scop output to tab-separated files
-catDir /san/sanvol1/scratch/$db/ucscGenes/scop/out | \
+catDir /san/sanvol1/scratch/$db/ucscGenes/scop/result | \
 	hmmPfamToTab -eValCol -scoreCol stdin scopPlusScore.tab
-scopCollapse scopPlusScore.tab /cluster/store12/scop/model.tab ucscScop.tab \
+XXX
+scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 	scopDesc.tab knownToSuper.tab
 hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
+hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
+hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
 # Regenerate ccdsKgMap table
 # $genomes/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
 $genomes/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
-
 
 # Map old to new mapping
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
@@ -947,15 +1006,15 @@ hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kg
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
 hgsql $tempDb -N -e \
-    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' > kgSpAlias_0.tmp
          
 hgsql $tempDb -N -e \
     'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
-    >>j.tmp
-cat j.tmp|sort -u  >kgSpAlias.tab
-    rm j.tmp
+    >> kgSpAlias_0.tmp
+cat kgSpAlias_0.tmp|sort -u  > kgSpAlias.tab
+rm kgSpAlias_0.tmp
 
-hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
+hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
