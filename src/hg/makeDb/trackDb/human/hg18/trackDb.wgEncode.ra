@@ -10659,11 +10659,12 @@ priority 0
 type bed 3
 noInherit on
 wgEncode 1
+settingsByView Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol short 
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=short
     type broadPeak
@@ -10674,8 +10675,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort1940
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short19-40 K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short19-40 in K562 cytosol)
+    shortLabel K562 cytosol 19-40
+    longLabel ENCODE CSHL RNA-Seq Transfrags (19-40 in K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=short19-40
     type broadPeak
     configurable on
@@ -10685,8 +10686,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort4060
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short40-60 K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short40-60 in K562 cytosol)
+    shortLabel K562 cytosol 40-60
+    longLabel ENCODE CSHL RNA-Seq Transfrags (40-60 in K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=short40-60
     type broadPeak
     configurable on
@@ -10696,8 +10697,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort60200
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short60-200 K562 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (short60-200 in K562 cytosol)
+    shortLabel K562 cytosol 60-200
+    longLabel ENCODE CSHL RNA-Seq Transfrags (60-200 in K562 cytosol)
     subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=short60-200
     type broadPeak
     configurable on
@@ -10707,7 +10708,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleolus
+    shortLabel K562 nucleolus short
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 nucleolus)
     subGroups view=Transfrags cellType=K562 localization=60-nucleolus rnaExtract=short
     type broadPeak
@@ -10718,7 +10719,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus short
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 nucleus)
     subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=short
     type broadPeak
@@ -10729,7 +10730,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleoplasm
+    shortLabel K562 nucleoplasm short
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 nucleoplasm)
     subGroups view=Transfrags cellType=K562 localization=40-nucleoplasm rnaExtract=short
     type broadPeak
@@ -10740,7 +10741,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 polysome
+    shortLabel K562 polysome short
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 polysome)
     subGroups view=Transfrags cellType=K562 localization=10-polysome rnaExtract=short
     type broadPeak
@@ -10751,8 +10752,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsProstateCellShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna prostate whole cell
-    longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in prostate whole cell)
+    shortLabel prostate whole cell shortDeplRrna
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short depl rRNA in prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=shortDeplRrna
     type broadPeak
     configurable on
@@ -10762,7 +10763,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsProstateCellShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short prostate whole cell
+    shortLabel prostate whole cell short
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in prostate whole cell)
     subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=short
     type broadPeak
@@ -10773,7 +10774,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol short
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=short
     type broadPeak
@@ -10784,8 +10785,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in GM12878 cytosol)
+    shortLabel GM12878 cytosol shortDeplRrna 
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short depl rRNA in GM12878 cytosol)
     subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=shortDeplRrna
     type broadPeak
     configurable on
@@ -10795,8 +10796,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortDeplRrna GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Transfrags (shortDeplRrna in GM12878 nucleus)
+    shortLabel GM12878 nucleus shortDeplRrna 
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short depl rRNA in GM12878 nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=shortDeplRrna
     type broadPeak
     configurable on
@@ -10806,7 +10807,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus short 
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 nucleus)
     subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=short
     type broadPeak
@@ -10817,7 +10818,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqTransfragsK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 chromatin
+    shortLabel K562 chromatin short 
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 chromatin)
     subGroups view=Transfrags cellType=K562 localization=50-chromatin rnaExtract=short
     type broadPeak
@@ -10827,7 +10828,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562ChromatinShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 chromatin
+    shortLabel K562 chromatin short 
     longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 chromatin)
     subGroups view=Alignments cellType=K562 localization=50-chromatin rnaExtract=short
     #type tagAlign
@@ -10843,7 +10844,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol short 
     longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short
     #type tagAlign
@@ -10859,7 +10860,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562CytosolShort1940
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel 19-40 K562 cytosol
+    shortLabel K562 cytosol 19-40
     longLabel ENCODE CSHL RNA-Seq Alignments (19-40 in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short19-40
     #type tagAlign
@@ -10875,7 +10876,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562CytosolShort4060
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel 40-60 K562 cytosol
+    shortLabel K562 cytosol 40-60
     longLabel ENCODE CSHL RNA-Seq Alignments (40-60 in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short40-60
     #type tagAlign
@@ -10891,7 +10892,7 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562CytosolShort60200
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel 60-200 K562 cytosol
+    shortLabel K562 cytosol 60-200
     longLabel ENCODE CSHL RNA-Seq Alignments (60-200 in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=short60-200
     #type tagAlign
@@ -10907,8 +10908,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562NucleolusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleolus
-    longLabel ENCODE CSHL RNA-Seq Alignments (nucleolus in K562 short)
+    shortLabel K562 nucleolus short 
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 nucleolus)
     subGroups view=Alignments cellType=K562 localization=60-nucleolus rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -10923,8 +10924,8 @@ wgEncode 1
     track wgEncodeCshlRnaSeqAlignmentsK562NucleusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
-    longLabel ENCODE CSHL RNA-Seq Alignments (nucleus in K562 short)
+    shortLabel K562 nucleus short
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 nucleus)
     subGroups view=Alignments cellType=K562 localization=30-nucleus rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -10932,14 +10933,15 @@ wgEncode 1
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
+    color 46,0,184
     configurable on
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=218 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsK562NucleusShort fileName=wgEncodeCshlRnaSeqAlignmentsK562NucleusShort.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsK562NucleoplasmShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleoplasm
-    longLabel ENCODE CSHL RNA-Seq Alignments (nucleoplasm in K562 short)
+    shortLabel K562 nucleoplasm short 
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 nucleoplasm)
     subGroups view=Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -10947,14 +10949,15 @@ wgEncode 1
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
+    color 46,0,184
     configurable on
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=219 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsK562NucleoplasmShort fileName=wgEncodeCshlRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsK562PolysomeShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 polysome
-    longLabel ENCODE CSHL RNA-Seq Alignments (polysome in K562 short)
+    shortLabel K562 polysome short
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in K562 polysome)
     subGroups view=Alignments cellType=K562 localization=10-polysome rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -10962,14 +10965,15 @@ wgEncode 1
     baseColorUseSequence nameIsSequence
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
+    color 46,0,184
     configurable on
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short localization=polysome view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=220 dateSubmitted=2009-03-16 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsK562PolysomeShort fileName=wgEncodeCshlRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsProstateCellShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel shortdeplrrna Prostate cell
-    longLabel ENCODE CSHL RNA-Seq Alignments (whole cell in Prostate short depl rRNA)
+    shortLabel Prostate cell shortDeplrRNA
+    longLabel ENCODE CSHL RNA-Seq Alignments (short depl rRNA in Prostate whole cell)
     subGroups view=Alignments cellType=prostate localization=0-cell rnaExtract=shortDeplRrna
     #type tagAlign
     type bigBed 6
@@ -10978,13 +10982,14 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=prostate rnaExtract=shortDeplRrna localization=cell view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=221 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsProstateCellShortdeplrrna fileName=wgEncodeCshlRnaSeqAlignmentsProstateCellShortdeplrrna.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsProstateCellShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short Prostate cell
-    longLabel ENCODE CSHL RNA-Seq Alignments (whole cell in Prostate short)
+    shortLabel Prostate cell short
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in Prostate whole cell)
     subGroups view=Alignments cellType=prostate localization=0-cell rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -10993,13 +10998,14 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 0,102,136
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=prostate rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=221 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsProstateCellShort fileName=wgEncodeCshlRnaSeqAlignmentsProstateCellShort.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsGm12878CytosolShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Alignments (cytosol in GM12878 short)
+    shortLabel GM12878 cytosol short
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in GM12878 cytosol)
     subGroups view=Alignments cellType=GM12878 localization=20-cytosol rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -11008,13 +11014,14 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=222 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsGm12878CytosolShort fileName=wgEncodeCshlRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsGm12878CytosolShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short depl rRNA GM12878 cytosol
-    longLabel ENCODE CSHL RNA-Seq Alignments (cytosol in GM12878 short depl rRNA)
+    shortLabel GM12878 cytosol shortDeplrRNA 
+    longLabel ENCODE CSHL RNA-Seq Alignments (short depl rRNA in GM12878 cytosol)
     subGroups view=Alignments cellType=GM12878 localization=20-cytosol rnaExtract=shortDeplRrna
     #type tagAlign
     type bigBed 6
@@ -11023,13 +11030,14 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=shortDeplRrna localization=cytosol view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=222 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsGm12878CytosolShortdeplrrna fileName=wgEncodeCshlRnaSeqAlignmentsGm12878CytosolShortdeplrrna.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsGm12878NucleusShortdeplrrna
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short depl rRNA GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Alignments (nucleus in GM12878 short depl rRNA)
+    shortLabel GM12878 nucleus shortDeplrRNA 
+    longLabel ENCODE CSHL RNA-Seq Alignments (short depl rRNA in GM12878 nucleus)
     subGroups view=Alignments cellType=GM12878 localization=30-nucleus rnaExtract=shortDeplRrna
     #type tagAlign
     type bigBed 6
@@ -11038,13 +11046,14 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=shortDeplRrna localization=nucleus view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=223 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsGm12878NucleusShortdeplrrna fileName=wgEncodeCshlRnaSeqAlignmentsGm12878NucleusShortdeplrrna.tagAlign.gz
 
     track wgEncodeCshlRnaSeqAlignmentsGm12878NucleusShort
     release alpha
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
-    longLabel ENCODE CSHL RNA-Seq Alignments (nucleus in GM12878 short)
+    shortLabel GM12878 nucleus short
+    longLabel ENCODE CSHL RNA-Seq Alignments (short in GM12878 nucleus)
     subGroups view=Alignments cellType=GM12878 localization=30-nucleus rnaExtract=short
     #type tagAlign
     type bigBed 6
@@ -11053,6 +11062,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=223 dateSubmitted=2009-03-10 dateUnrestricted=2010-01-16 composite=wgEncodeCshlRnaSeq tableName=wgEncodeCshlRnaSeqAlignmentsGm12878NucleusShort fileName=wgEncodeCshlRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
 
 
@@ -11080,8 +11090,8 @@ wgEncode 1
     track wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeCshlLoRnaSeq
-    shortLabel pA+ K562 cytosol
-    longLabel ENCODE CSHL Long RNA-Seq Alignments (cytosol in K562 polyA+)
+    shortLabel K562 cytosol pA+
+    longLabel ENCODE CSHL Long RNA-Seq Alignments (poly A+ in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type tagAlign
     type bigBed 6
@@ -11090,6 +11100,7 @@ wgEncode 1
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
     configurable on
+    color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq parentTable=wgEncodeCshlLoRnaSeqRawSignalK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
 
