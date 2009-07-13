@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.186 2009/07/01 20:33:34 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.187 2009/07/13 22:34:16 kate Exp $
 
 use warnings;
 use strict;
@@ -1629,11 +1629,14 @@ foreach my $ddfLine (@ddfLines) {
         } elsif($hash{'ripAntibody'} && $hash{'ripTgtProtein'} && $hash{'cell'}) {
             $longSuffix = "$hash{'ripTgtProtein'} in $hash{'cell'} cells using $hash{'ripAntibody'}";
             $pushQDescription = $longSuffix;
-            $shortSuffix = "$hash{'ripTgtProtein'} $hash{'cell'} $hash{'ripAntibody'}";
+            $shortSuffix = "$hash{'cell'} $hash{'ripTgtProtein'} $hash{'ripAntibody'}";
         } elsif($hash{'rnaExtract'} && $hash{'localization'} && $hash{'cell'}) {
-	    my $suf = $hash{'mapAlgorithm'} ? "$hash{'mapAlgorithm'}" : "";
-            $shortSuffix = "$hash{'rnaExtract'} $hash{'cell'} $hash{'localization'} $suf";
-            $longSuffix = "$hash{'rnaExtract'} in $hash{'cell'} cell $hash{'localization'} using $suf";
+            $shortSuffix = "$hash{'cell'} $hash{'localization'} $hash{'rnaExtract'}";
+            $longSuffix = "$hash{'rnaExtract'} in $hash{'cell'} $hash{'localization'}";
+            if ($hash{'mapAlgorithm'}) {
+                $shortSuffix = $shortSuffix . $hash{'mapAlgorithm'};
+                $longSuffix = $longSuffix . "using" . $hash{'mapAlgorithm'};
+            }
             $pushQDescription = $longSuffix;
         } elsif($hash{'freezeDate'}) {
             $shortSuffix = $hash{'freezeDate'};
