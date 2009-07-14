@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.61 2009/05/08 23:36:25 rhead Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -420,7 +420,6 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
     FILE *old, *mapped, *unmapped;
     char *line;
     int lineSize;
-    struct lineFile *errFile;
     char *fromDb, *toDb;
     int ct = 0, errCt = 0;
 
@@ -493,11 +492,11 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
                          unmappedTn.forCgi);
         printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
         puts("<P>Failed input regions:\n");
-        fclose(unmapped);
-        errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
+        struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
         puts("<BLOCKQUOTE><PRE>\n");
         while (lineFileNext(errFile, &line, &lineSize))
             puts(line);
+        lineFileClose(&errFile);
         puts("</PRE></BLOCKQUOTE>\n");
         }
     if (sameString(dataFormat, POSITION_FORMAT) && multiple)
@@ -506,6 +505,7 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         puts("Note: multiple checkbox ignored since it is not supported for position format.");
         puts("</PRE></BLOCKQUOTE>\n");
 	}
+    carefulClose(&unmapped);
     }
 webDataFormats();
 webDownloads();
