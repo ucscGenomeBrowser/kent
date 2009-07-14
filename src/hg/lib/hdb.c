@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.405 2009/07/09 04:13:05 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.406 2009/07/14 19:49:29 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -832,7 +832,11 @@ if (startsWith("chr", table) || startsWith("Group", table))
     char *ptr = strrchr(table, '_');
     if (ptr != NULL)
 	{
-	safencpy(chrom, HDB_MAX_CHROM_STRING, table, (ptr-table));
+        int chromLen = ptr - table;
+        if (chromLen >= HDB_MAX_CHROM_STRING)
+            errAbort("invalid chromosome name \"%.*s\", extracted from track name \"%s\"; position track table names may not contain a \"_\" character",
+                     chromLen, table, table);
+	safencpy(chrom, HDB_MAX_CHROM_STRING, table, chromLen);
 	safecpy(trackName, HDB_MAX_TABLE_STRING, ptr+1);
 	}
     }
