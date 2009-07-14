@@ -6,7 +6,7 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.11 2009/05/08 17:36:16 hiram Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.12 2009/07/14 21:57:04 hiram Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -117,11 +117,7 @@ else if (startsWith("scaffold", chrom))
     chrName = chrom;
 else
     chrName = skipChr(chrom);
-if (sameWord(database,"hg19"))
-    dyStringPrintf(dy, 
-	   "http://pre.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
-		    ensOrg, chrName, start, end);
-else if (archive)
+if (archive)
     dyStringPrintf(dy, 
 	   "http://%s.archive.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
 		    archive, ensOrg, chrName, start, end);
