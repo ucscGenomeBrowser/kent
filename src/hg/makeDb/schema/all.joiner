@@ -1750,8 +1750,6 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdLocalization.name minCheck=0.95
     $sacCer.sgdPep.name
     $sacCer.sgdToSwissProt.name minCheck=0.85
-    $sacCer.sgdToSgd.name
-    $sacCer.sgdToSgd.value
     $sacCer.sgdToName.name minCheck=0.86
     $sacCer.esRegGeneToModule.gene minCheck=0.94
     $sacCer.esRegGeneToMotif.gene minCheck=0.97
