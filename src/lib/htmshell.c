@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.58 2009/07/10 18:23:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.59 2009/07/14 22:50:07 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -209,7 +209,8 @@ static void htmlWarnBoxSetup(FILE *f)
 // FF is resizable now, but it took some experimentation.
 #define WARNBOX_LINE1 "<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'>"
 #define WARNBOX_LINE2 "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL><CENTER><img src='../images/ok.jpg' onclick='hideWarnBox();return false;'></CENTER></div></center>"
-#define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display='inline-block'; warnBox.style.width='auto';}}}"
+// Remember what worked nicely on FF3.0: #define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display=''; warnBox.style.width='auto';}}}"
+#define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display=''; warnBox.style.width='65%';}}"
 #define WARNBOX_HIDE  "function hideWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display='none';var warnList=document.getElementById('warnList'); warnList.innerHTML='';}}"
 fprintf(f, "<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
 }
