@@ -8,9 +8,10 @@
 #include "hgConfig.h"
 #include "cheapcgi.h"
 #include "hui.h"
+#include "hCommon.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: botDelay.c,v 1.14 2009/03/31 22:38:57 galt Exp $";
+static char const rcsid[] = "$Id: botDelay.c,v 1.15 2009/07/14 21:11:48 markd Exp $";
 
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
@@ -50,11 +51,11 @@ void botTerminateMessage(char *ip, int millis)
 /* Print out message saying why you are terminated. */
 {
 time_t now = time(NULL);
-errAbort("There is an exceedingly high volume of traffic coming from your "
+hUserAbort("There is an exceedingly high volume of traffic coming from your "
        "site (IP address %s) as of %s (California time).  It looks like "
        "a web robot is launching queries quickly, and not even waiting for "
        "the results of one query to finish before launching another query. "
-       "We cannot service requests from your IP address under these "
+       "/* We cannot service requests from your IP address under */ these "
        "conditions.  (code %d)", ip, asctime(localtime(&now)), millis);
 }
 
