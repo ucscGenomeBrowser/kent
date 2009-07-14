@@ -444,13 +444,25 @@ configPageSetTrackVis(-2);
 boolean dragZoomingConfig(struct cart *cart)
 // Returns TRUE if drag-and-zoom is currently on
 {
-// dragZooming defaults to on, except for AppleWebKit browsers (Chrome and Safari), where drag-and-zoom
-// does not currently work (may want to use "KHTML" as the test string instead of "AppleWebKit").
-// This code is overly conservative, because drag-and-zoom did work with older (pre 4.0) versions of
-// safari. Unfortunately, safari numbering is weird; e.g. version 1.3.2 shows up as 
-// "Safari/312.6" in the web logs, so for now, I'm defaulting drag-and-zoom to off
-// for all versions of Safari.
-
 char *ua = cgiUserAgent();
-return cartUsualBoolean(cart, "dragZooming", ua == NULL || !stringIn("AppleWebKit", ua));
+boolean defaultVal = TRUE;
+
+// dragZooming was broken in some versions of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
+// This was explicitly fixed the WebKit team in version 531 (see http://trac.webkit.org/changeset/45143).
+// The following code is overly conservative, because drag-and-zoom did work with older (pre 4.0) versions of
+// safari. Unfortunately, I don't know in which version of WebKit this broke, so we disable all AppleWebKit
+// based browsers lower than 531.
+
+if(ua != NULL)
+    {
+    char *needle = "AppleWebKit/";
+    char *ptr = strstr(ua, needle);
+    if(ptr != NULL)
+        {
+        int version = 0;
+        sscanf(ptr + strlen(needle), "%d", &version);
+        defaultVal = version >= 531;
+        }
+    }
+return cartUsualBoolean(cart, "dragZooming", defaultVal);
 }
