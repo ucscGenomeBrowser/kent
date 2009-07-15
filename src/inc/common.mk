@@ -27,7 +27,13 @@ ifeq (${USE_BAM},)
 endif
 
 ifeq (${USE_BAM},1)
-    SAMPATH = /hive/data/outside/samtools/samtools
+    ifeq (${SAMPATH},)
+      ifeq (${MACHTYPE}, "x86_64")
+        SAMPATH = /hive/data/outside/samtools/samtools
+      else
+        SAMPATH = /hive/data/outside/samtools/samtools/${MACHTYPE}
+      endif
+    endif
     HG_INC += -I${SAMPATH}
     HG_DEFS+=-DUSE_BAM
 endif
