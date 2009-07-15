@@ -129,6 +129,13 @@ class PipelineController < ApplicationController
 
   def validate
     @project = Project.find(params[:id])
+    allowReloads = ""
+    if (defined? @params['allow_reloads'])
+      allowReloads = @params['allow_reloads']['0'] == "1" ? "-allowReloads" : ""
+    end
+    if (@current_user.role == "admin")
+       allowReloads = "-allowReloads"
+    end
     if @project.run_stat 
       flash[:error] = "Please wait, a background job is still running."
       redirect_to :action => 'show', :id => @project.id
@@ -136,7 +143,7 @@ class PipelineController < ApplicationController
     end
     if (@project.status == "uploaded") or (@project.status == "validate failed")
       new_status @project, "validate requested"
-      unless queue_job "validate_background(#{@project.id})"
+      unless queue_job "validate_background(#{@project.id}, \"#{allowReloads}\")"
         flash[:error] = "System error - queued_jobs save failed."
         return
       end
@@ -364,6 +371,10 @@ class PipelineController < ApplicationController
       end
     end
     autoResume = @params['auto_resume']['0'] == "1" ? " -c" : ""
+    allowReloads = @params['allow_reloads']['0'] == "1" ? "-allowReloads" : "";
+    if (@current_user.role == "admin")
+       allowReloads = "-allowReloads"
+    end
 
     # need to preserve the status for the archive NOW
     if @project.project_archives.last
@@ -376,7 +387,7 @@ class PipelineController < ApplicationController
 
     new_status @project, "upload requested"
     upload_name = @upload.blank? ? "" : @upload.original_filename
-    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{autoResume}\""
+    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{autoResume}\", \"#{allowReloads}\""
     unless queue_job "upload_background(#{param_string})"
       flash[:error] = "System error - queued_jobs save failed."
       return

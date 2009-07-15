@@ -5,10 +5,8 @@
 <p>
  <table id="projects" cellpadding=1 cellspacing=3>
  <tr> 
-<% if current_user.role == "admin" %>
-  <td align="left"><b><%= sort_link('id', 'Submission ID', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
-<% end %>
-<td align="left"><b><%= sort_link('name', 'Name', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
+ <td align="left"><b><%= sort_link('id', 'ID', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
+ <td align="left"><b><%= sort_link('name', 'Name', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
  <td align="left"><b><%= sort_link('Status', nil, {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
  <% if !defined? @user %>
    <td align="left"><b><%= sort_link('pi', 'Investigator', {:submitter => params[:submitter]}) -%></b></td><td>&nbsp;</td>
@@ -18,9 +16,7 @@
 
  <% @projects.each do |c| %>
   <tr>
-  <% if current_user.role == "admin" %>
-    <td align="right"><%= link_to c.id, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
-  <% end %>
+  <td align="right"><%= link_to c.id, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
   <td> 
   <%= 

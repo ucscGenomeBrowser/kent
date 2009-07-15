@@ -33,14 +33,17 @@ module PipelineBackground
     end
   end
 
-  def validate_background(project_id)
+  def validate_background(project_id, validate_option)
 
     project = Project.find(project_id)
     new_status project, "validating"
     projectType = getProjectType(project)
     projectDir = path_to_project_dir(project_id)
- 
-    cmd = "#{projectType['validator']} #{projectType['type_params']} #{projectDir} &> #{projectDir}/validate_error"
+    if (validate_option != nil)
+      cmd = "#{projectType['validator']} #{validate_option} #{projectType['type_params']} #{projectDir} &> #{projectDir}/validate_error"
+    else 
+      cmd = "#{projectType['validator']} #{projectType['type_params']} #{projectDir} &> #{projectDir}/validate_error"
+    end
     timeout = projectType['time_out']
 
     exitCode = run_with_timeout(cmd, timeout)
@@ -141,7 +144,7 @@ module PipelineBackground
   end
  
 
-  def upload_background(project_id, upurl, upftp, upload, local_path, autoResume)
+  def upload_background(project_id, upurl, upftp, upload, local_path, autoResume, allowReloads)
 
     project = Project.find(project_id)
 
@@ -269,7 +272,7 @@ module PipelineBackground
     end
 
     if project.status == "uploaded"
-      validate_background(project_id)
+      validate_background(project_id, allowReloads)
     end
 
   end
