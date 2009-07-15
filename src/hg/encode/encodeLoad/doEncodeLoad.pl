@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.67 2009/07/15 01:42:51 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.68 2009/07/15 02:03:48 mikep Exp $
 
 # Usage:
 #
@@ -249,7 +249,6 @@ sub loadBigBed
         if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
             die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
         }
-        # 'perldoc perldata' says scalar val of list assignment is num elts on RHS of assignment
         if ((() = split(" ", $fileList)) != 1) { 
 	    die "BigBed must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
