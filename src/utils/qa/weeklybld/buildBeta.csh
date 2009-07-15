@@ -55,7 +55,7 @@ sed -i -e "s/-Werror//g" make.alpha.log
 set res = `/bin/egrep -i "error|warn" make.alpha.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "alpha errs found:"
+ echo "alpha errs found after vGetText:"
  echo "$res"
  exit 1
 endif
