@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1583 2009/07/10 20:10:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1584 2009/07/15 20:29:42 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4660,7 +4660,7 @@ if (winStart > seqBaseCount)
 
 winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
-    errAbort("Window out of range on %s", chromName);
+    hUserAbort("Window out of range on %s", chromName);
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "org", organism);
