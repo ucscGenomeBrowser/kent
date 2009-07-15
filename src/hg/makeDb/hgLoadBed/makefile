@@ -22,7 +22,6 @@ cgi:: compile
 	fi
 	rm -f ${CGI_BIN}-${USER}/loader/$A
 	mv $A${EXE} ${CGI_BIN}-${USER}/loader/$A
-	chmod a+r ${SQL_FILES}
 	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${CGI_BIN}-${USER}/loader
 
@@ -32,7 +31,6 @@ alpha:: strip
 	fi
 	rm -f ${CGI_BIN}/loader/$A
 	mv $A${EXE} ${CGI_BIN}/loader/$A
-	chmod a+r ${SQL_FILES}
 	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${CGI_BIN}/loader
 
@@ -42,7 +40,6 @@ beta:: strip
 	fi
 	rm -f ${CGI_BIN}-beta/loader/$A
 	mv $A${EXE} ${CGI_BIN}-beta/loader/$A
-	chmod a+r ${SQL_FILES}
 	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${CGI_BIN}-beta/loader
 
@@ -57,7 +54,6 @@ install::  strip
 	fi
 	rm -f ${DESTDIR}${CGI_BIN}/loader/$A
 	mv $A${EXE} ${DESTDIR}${CGI_BIN}/loader/$A
-	chmod a+r ${SQL_FILES}
 	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${DESTDIR}${CGI_BIN}/loader
 
