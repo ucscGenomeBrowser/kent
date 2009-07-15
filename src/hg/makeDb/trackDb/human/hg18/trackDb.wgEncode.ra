@@ -3395,11 +3395,12 @@ subGroup3 promoter Promoter SV40=SV40 Ggam=G-gamma
 dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
-visibilityViewDefaults SI=dense EB=dense
+visibilityViewDefaults SI=pack EB=pack
 controlledVocabulary encode/cv.ra cellType=cell promoter=promoter
 noInherit on
 settingsByView SI:scoreFilterByRange=on EB:scoreFilterByRange=on
 priority 0
+chromosomes chr7
 type bed 3
 wgEncode 1
 
@@ -3437,7 +3438,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 EB
-    longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (NRE-EBs) (SV40 prom. in K562 cells)
+    longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (SV40 prom. in K562 cells)
     subGroups view=EB cellType=K562 promoter=SV40
     type bed 6
     color 46,0,184
