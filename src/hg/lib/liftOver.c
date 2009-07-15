@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.43 2008/11/10 19:02:03 angie Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.44 2009/07/15 04:14:50 markd Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1159,7 +1159,6 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     end = lineFileNeedNum(lf, words, 2);
     fprintf(mapped, "%s:%d-%d\n", chrom, BEDSTART_TO_POSITION(start), end);
     }
-carefulClose(&mapped);
 lineFileClose(&lf);
 
 lf = lineFileOpen(unmappedBedTn.forCgi, TRUE);
@@ -1177,7 +1176,6 @@ while (lineFileNext(lf, &line, NULL))
                         BEDSTART_TO_POSITION(start), end);
         }
     }
-carefulClose(&unmapped);
 lineFileClose(&lf);
 return ct;
 }
