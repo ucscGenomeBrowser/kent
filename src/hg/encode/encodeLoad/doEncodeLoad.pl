@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.66 2009/06/20 16:05:14 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.67 2009/07/15 01:42:51 mikep Exp $
 
 # Usage:
 #
@@ -249,7 +249,8 @@ sub loadBigBed
         if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
             die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
         }
-	if (scalar(split(" ", $fileList)) != 1) {
+        # 'perldoc perldata' says scalar val of list assignment is num elts on RHS of assignment
+        if ((() = split(" ", $fileList)) != 1) { 
 	    die "BigBed must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
 	# Create bigBed binary file
@@ -470,6 +471,9 @@ for my $key (keys %ra) {
         # NOTE: We are now making the RawSignals but they are put in the subdirectory "raw"
         if(@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
             $target = "$downloadDir/raw/$tablename.$type.gz";
+	    if (! -d "$downloadDir/raw") {
+		mkdir "$downloadDir/raw" or die "Could not create dir [$downloadDir/raw] error: [$!]\n";
+		}
         }
         $target =~ s/ //g;  # removes space in ".bed 6.gz" for example
         unlink($target);
