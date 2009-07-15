@@ -31,7 +31,7 @@ sed -i -e "s/-DJK_WARN//g" make.log
 sed -i -e "s/-Werror//g" make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.log |grep -v "gbExtFile.o gbWarn.o gbMiscDiff.o"`
+set res = `/bin/egrep -i "error|warn" make.log |grep -v "gbExtFile.o gbWarn.o gbMiscDiff.o"|grep -v "mysql -o gbWarn.o -c gbWarn.c"`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "libs errs found on $HOST :  [${0}: `date`]"
