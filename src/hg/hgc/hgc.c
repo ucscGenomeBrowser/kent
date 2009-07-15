@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1559 2009/07/10 22:17:04 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1560 2009/07/15 18:22:37 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13594,7 +13594,7 @@ printf("</PRE>\n");
 printf("\n<PRE><B>dbSNP flanking sequences and observed allele code for %s"
        ":</B>\n", snp->name);
 printf("(Uses ");
-printf("<A HREF=\"http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1\"" );
+printf("<A HREF=\"../goldenPath/help/iupac.html\"" );
 printf("TARGET=_BLANK>IUPAC ambiguity codes</A>");
 printf(")\n");
 if (leftFlankTrimmed)
