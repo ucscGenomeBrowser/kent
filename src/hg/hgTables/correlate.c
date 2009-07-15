@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.77 2009/05/20 20:59:55 mikep Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.78 2009/07/15 00:55:21 angie Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -875,12 +875,11 @@ else if (table->isWig)
 	vector->end = vector->position[(vector->count)-1] + 1;/*non-inclusive*/
     else
 	vector->end = vector->start;
+    if (table->dbTableName != NULL)
+	hFreeConn(&conn);
     }
 else
     correlateReadBed(table, vector, region, conn);
-
-if (table->dbTableName != NULL)
-    hFreeConn(&conn);
 
 endTime = clock1000();
 
