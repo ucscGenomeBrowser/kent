@@ -826,6 +826,9 @@ if (wordCount > 1)
 track->bedSize = fieldCount;
 track->isBigBed = isBigBed;
 
+if (track->isBigBed)
+    track->labelNextItemButtonable = FALSE;
+
 if (fieldCount < 8)
     {
     if (baseColorGetDrawOpt(track) != baseColorDrawOff)

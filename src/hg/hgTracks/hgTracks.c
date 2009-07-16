@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1584 2009/07/15 20:29:42 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1585 2009/07/16 23:00:41 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2834,6 +2834,7 @@ else if (sameString(type, "bigBed"))
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
     tg->bbiFileName = fileName;
+    tg->labelNextItemButtonable = FALSE;
     }
 else if (sameString(type, "bedGraph"))
     {
