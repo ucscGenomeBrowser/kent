@@ -12220,7 +12220,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq parentTable=wgEncodeCshlLoRnaSeqRawSignalK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
 
-# HudsonAlpha Methyl-seq (wrangler: larrym)
+# HudsonAlpha Methyl-seq (wrangler: braney)
 
 track wgEncodeHudsonalphaMethylSeq
 compositeTrack on
@@ -12228,7 +12228,7 @@ shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1 view Views Regions=Regions
-subGroup2 cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
+subGroup2 cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL K562=K562 GM12878=GM12878
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
@@ -12469,6 +12469,50 @@ wgEncode 1
     cell HAL
     color 189,0,157
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HAL view=Regions replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hal fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hal.bed9.gz
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel GM12878 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
+    subGroups view=Regions cellType=GM12878 
+    type bed 9
+    noInherit on
+    cell GM12878
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12878 view=Regions replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878.bed9.gz
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel GM12878 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12878 cells)
+    subGroups view=Regions cellType=GM12878 
+    type bed 9
+    noInherit on
+    cell GM12878
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12878 view=Regions replicate=2 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878.bed9.gz
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1K562
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel K562 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in K562 cells)
+    subGroups view=Regions cellType=K562 
+    type bed 9
+    noInherit on
+    cell K562
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=K562 view=Regions replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1K562 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1K562.bed9.gz
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2K562
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel K562 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in K562 cells)
+    subGroups view=Regions cellType=K562 
+    type bed 9
+    noInherit on
+    cell K562
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=K562 view=Regions replicate=2 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep2K562 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep2K562.bed9.gz
 
 # Wold Lab (Caltech) RNA-Seq (wrangler: mikep)
 
