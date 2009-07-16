@@ -371,8 +371,8 @@ class PipelineController < ApplicationController
       end
     end
     autoResume = @params['auto_resume']['0'] == "1" ? " -c" : ""
-    allowReloads = @params['allow_reloads']['0'] == "1" ? "-allowReloads" : "";
-    if (@current_user.role == "admin")
+    allowReloads = "";
+    if ((defined? @params['allow_reloads']) and (@params['allow_reloads']['0'] == "1")) or (@current_user.role == "admin")
        allowReloads = "-allowReloads"
     end
 
