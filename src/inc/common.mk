@@ -28,7 +28,7 @@ endif
 
 ifeq (${USE_BAM},1)
     ifeq (${SAMPATH},)
-      ifeq (${MACHTYPE}, "x86_64")
+      ifeq (${MACHTYPE},x86_64)
         SAMPATH = /hive/data/outside/samtools/samtools
       else
         SAMPATH = /hive/data/outside/samtools/samtools/${MACHTYPE}
