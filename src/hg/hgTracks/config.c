@@ -447,11 +447,10 @@ boolean dragZoomingConfig(struct cart *cart)
 char *ua = cgiUserAgent();
 boolean defaultVal = TRUE;
 
-// dragZooming was broken in some versions of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
-// This was explicitly fixed the WebKit team in version 531 (see http://trac.webkit.org/changeset/45143).
-// The following code is overly conservative, because drag-and-zoom did work with older (pre 4.0) versions of
-// safari. Unfortunately, I don't know in which version of WebKit this broke, so we disable all AppleWebKit
-// based browsers lower than 531.
+// dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
+// This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
+// The AppleWebKit version provided by the browser in user agent doesn't always include the minor version number, so to
+// be overly conservative we default drag-and-drop to off when AppleWebKit major version == 530
 
 if(ua != NULL)
     {
@@ -461,7 +460,7 @@ if(ua != NULL)
         {
         int version = 0;
         sscanf(ptr + strlen(needle), "%d", &version);
-        defaultVal = version >= 531;
+        defaultVal = version != 530;
         }
     }
 return cartUsualBoolean(cart, "dragZooming", defaultVal);
