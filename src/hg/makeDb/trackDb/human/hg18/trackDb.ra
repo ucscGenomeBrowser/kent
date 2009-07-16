@@ -2038,20 +2038,11 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 
-#alpha -- hide by default because we have 130 now.
 track snp128 override
 visibility hide
 chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
-release alpha
-
-#beta
-track snp128 override
-chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
-chimpDb panTro2
-macaqueDb rheMac2
-release beta
 
 track snp127 override
 visibility hide
