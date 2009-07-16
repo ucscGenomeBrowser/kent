@@ -13037,8 +13037,8 @@ wgEncode 1
     track wgEncodeGisDnaPetAlignmentsGm1287810k
     release alpha
     subTrack wgEncodeGisDnaPet
-    shortLabel GM12878
-    longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+    shortLabel GM12878 10k
+    longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=10k
     #type pairedTagAlign
     type bed 6
@@ -13053,8 +13053,8 @@ wgEncode 1
     track wgEncodeGisDnaPetAlignmentsK5621k
     release alpha
     subTrack wgEncodeGisDnaPet
-    shortLabel K562
-    longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+    shortLabel K562 1k
+    longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
     subGroups view=Alignments cellType=K562 fragSize=1k
     #type pairedTagAlign
     type bed 6
@@ -13069,8 +13069,8 @@ wgEncode 1
     track wgEncodeGisDnaPetAlignmentsK56210k
     release alpha
     subTrack wgEncodeGisDnaPet
-    shortLabel K562
-    longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+    shortLabel K562 10k
+    longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
     subGroups view=Alignments cellType=K562 fragSize=10k
     #type pairedTagAlign
     type bed 6
@@ -13085,8 +13085,8 @@ wgEncode 1
     track wgEncodeGisDnaPetAlignmentsGm128781k
     release alpha
     subTrack wgEncodeGisDnaPet
-    shortLabel GM12878
-    longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+    shortLabel GM12878 1k
+    longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=1k
     #type pairedTagAlign
     type bed 6
@@ -13101,8 +13101,8 @@ wgEncode 1
     track wgEncodeGisDnaPetAlignmentsGm128785k
     release alpha
     subTrack wgEncodeGisDnaPet
-    shortLabel GM12878
-    longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+    shortLabel GM12878 5k
+    longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=5k
     #type pairedTagAlign
     type bed 6
