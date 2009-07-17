@@ -6035,6 +6035,48 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya.wig.gz
 
 
+    track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucl pA-
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- in HepG2 nucleus)
+    subGroups view=FiltTransfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
+
+    track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucl pA-
+    longLabel ENCODE Affy/CSHL Transfrags (PolyA- in HepG2 nucleus)
+    subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
+
+    track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucl pA- Rw
+    longLabel ENCODE Affy/CSHL Raw Signal (PolyA- in HepG2 nucleus)
+    subGroups view=RawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
+    type wig -50466.00 50711.00
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya.wig.gz
+
+    track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucl pA-
+    longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- in HepG2 nucleus)
+    subGroups view=FiltRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
+    type wig -50511.00 56743.00
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya.wig.gz
+
+
+
 # SUNY Albany genechp (wrangler: mikep)
 
 track wgEncodeSunyalbanyRnaGeneChip
