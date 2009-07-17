@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.30 2009/07/10 19:49:58 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.31 2009/07/17 18:19:22 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -280,6 +280,7 @@ this.each(function(){
     var newX        = 0;
     var mouseDownX  = 0;
     var mouseIsDown = false;
+    //var ie=( $.browser.msie == true );
 
     initialize();
 
@@ -288,16 +289,24 @@ this.each(function(){
         pan.css( 'cursor', 'w-resize');//'move');
 
         pan.mousedown(function(e){
-            mouseIsDown = true;
+            if(mouseIsDown == false) {
+                mouseIsDown = true;
 
-            mouseDownX = e.clientX;
-            $(document).bind( 'mouseup',  panMouseUp);  // Will exec only once
-            $(document).bind('mousemove',panner)
-            return false;
+                mouseDownX = e.clientX;
+                //if(ie) {  // Doesn't work (yet?)
+                //    pic.ondrag='panner';
+                //    pic.ondragend='panMouseUp';
+                //} else {
+                    $(document).bind('mousemove',panner);
+                    $(document).bind( 'mouseup', panMouseUp);  // Will exec only once
+                //}
+                return false;
+            }
         });
     }
 
     function panner(e) {
+        //if(!e) e = window.event;
         if ( mouseIsDown ) {
             var relativeX = (e.clientX - mouseDownX);
 
@@ -317,12 +326,17 @@ this.each(function(){
         }
     }
     function panMouseUp(e) {  // Must be a separate function instead of pan.mouseup event.
+        //if(!e) e = window.event;
         if(mouseIsDown) {
-            panner(e);
 
             prevX = newX;
-            $(document).unbind('mousemove',panner);
-            $(document).unbind('mouseup',panMouseUp);
+            //if(ie) {
+            //    pic.ondrag='';
+            //    pic.ondragend='';
+            //} else {
+                $(document).unbind('mousemove',panner);
+                $(document).unbind('mouseup',panMouseUp);
+            //}
             mouseIsDown = false;
             setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
         }
@@ -361,23 +375,24 @@ function blockTheMap(e)
 $(document).ready(function()
 {
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
-    $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
-        if(blockUseMap==true) {
-            //alert("blockUseMap");
-            return false;
-        }
-        var thisForm=$(this).parents('form');
-        if(thisForm == undefined || $(thisForm).length == 0)
-            thisForm=$("FORM");
-        if($(thisForm).length > 1)
-            thisForm=$(thisForm)[0];
-        if(thisForm != undefined && $(thisForm).length == 1) {
-            //alert("posting form:"+$(thisForm).attr('name'));
-            return postTheForm($(thisForm).attr('name'),this.href);
-        }
+    if($("FORM").length > 0) {
+        $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
+            if(blockUseMap==true) {
+                return false;
+            }
+            var thisForm=$(this).parents('form');
+            if(thisForm == undefined || $(thisForm).length == 0)
+                thisForm=$("FORM");
+            if($(thisForm).length > 1)
+                thisForm=$(thisForm)[0];
+            if(thisForm != undefined && $(thisForm).length == 1) {
+                //alert("posting form:"+$(thisForm).attr('name'));
+                return postTheForm($(thisForm).attr('name'),this.href);
+            }
 
-        return true;
-    });
+            return true;
+        });
+    }
     if($('#imgTbl').length == 1) {
         imageV2   = true;
         // Make imgTbl allow draw reorder of imgTrack rows
