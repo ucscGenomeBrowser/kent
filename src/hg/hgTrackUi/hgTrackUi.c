@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.494 2009/06/23 05:52:28 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.495 2009/07/17 06:24:57 sugnet Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -46,27 +46,11 @@ char *chromosome = NULL;	        /* Chromosome. */
 
 void superTrackUi(struct trackDb *superTdb);
 
-void radioButton(char *var, char *val, char *ourVal)
-/* Print one radio button */
-{
-cgiMakeRadioButton(var, ourVal, sameString(ourVal, val));
-printf("%s ", ourVal);
-}
+
 
 /* Even more of a mess. */
 
-void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none)
-/* Put up some filter buttons. */
-{
-printf("<B>Filter:</B> ");
-radioButton(filterTypeVar, filterTypeVal, "red");
-radioButton(filterTypeVar, filterTypeVal, "green");
-radioButton(filterTypeVar, filterTypeVal, "blue");
-radioButton(filterTypeVar, filterTypeVal, "exclude");
-radioButton(filterTypeVar, filterTypeVal, "include");
-if (none)
-    radioButton(filterTypeVar, filterTypeVal, "none");
-}
+
 
 void tfbsConsSitesUi(struct trackDb *tdb)
 {
@@ -1467,15 +1451,6 @@ void ensemblNonCodingUI(struct trackDb *tdb)
 ensemblNonCodingTypeConfig(tdb);
 }
 
-void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
-/* Print out user interface for one type of mrna filter. */
-{
-controlGridStartCell(cg);
-printf("%s:<BR>", text);
-cgiMakeTextVar(var, cartUsualString(cart, var, ""), 19);
-controlGridEndCell(cg);
-}
-
 void mrnaUi(struct trackDb *tdb, boolean isXeno)
 /* Put up UI for an mRNA (or EST) track. */
 {
@@ -1498,37 +1473,13 @@ printf("<BR>\n");
 printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
 cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
-     oneMrnaFilterUi(cg, fil->label, fil->key);
+    oneMrnaFilterUi(cg, fil->label, fil->key, cart);
 endControlGrid(&cg);
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
 }
 
-void bedUi(struct trackDb *tdb)
-/* Put up UI for an mRNA (or EST) track. */
-{
-struct mrnaUiData *mud = newBedUiData(tdb->tableName);
-struct mrnaFilter *fil;
-struct controlGrid *cg = NULL;
-char *filterTypeVar = mud->filterTypeVar;
-char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
-char *logicTypeVar = mud->logicTypeVar;
-char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
 
-/* Define type of filter. */
-filterButtons(filterTypeVar, filterTypeVal, FALSE);
-printf("  <B>Combination Logic:</B> ");
-radioButton(logicTypeVar, logicTypeVal, "and");
-radioButton(logicTypeVar, logicTypeVal, "or");
-printf("<BR>\n");
-
-/* List various fields you can filter on. */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-cg = startControlGrid(4, NULL);
-for (fil = mud->filterList; fil != NULL; fil = fil->next)
-     oneMrnaFilterUi(cg, fil->label, fil->key);
-endControlGrid(&cg);
-}
 
 static void filterByChrom(struct trackDb *tdb)
 {
@@ -2264,7 +2215,9 @@ else if (sameString(track, "all_mrna"))
 else if (sameString(track, "mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "splicesP"))
-    bedUi(tdb);
+    bedUi(tdb, cart, "", FALSE);
+else if(sameString(track,"FantomCageH04V2")) 
+    bedUi(tdb, cart, "", FALSE);
 else if (sameString(track, "all_est"))
         mrnaUi(tdb, FALSE);
 else if (sameString(track, "est"))
@@ -2426,7 +2379,7 @@ if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
 else if (tdbIsComposite(tdb))
     {
-    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
+     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
 extraUiLinks(database,tdb);
 }

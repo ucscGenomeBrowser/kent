@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.66 2009/05/22 10:11:16 mikep Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.67 2009/07/17 06:24:58 sugnet Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -680,7 +680,9 @@ else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so f
     {
     char *words[3];
     chopLine(cloneString( tdb->type), words);
-    if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
+    if (trackDbSetting(tdb, "bedFilter") != NULL) 
+	cType = cfgBedFilt;
+    else if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }
 else if(startsWith("chain",tdb->type))

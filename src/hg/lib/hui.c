@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.222 2009/07/10 22:16:49 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.223 2009/07/17 06:24:57 sugnet Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -38,6 +38,8 @@ static char const rcsid[] = "$Id: hui.c,v 1.222 2009/07/10 22:16:49 braney Exp $
 #define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
+
+
 
 static boolean makeNamedDownloadsLink(struct trackDb *tdb,char *name)
 // Make a downloads link (if appropriate and then returns TRUE)
@@ -3390,6 +3392,65 @@ else
     printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
     }
 
+cfgEndBox(boxed);
+}
+
+
+
+void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none)
+/* Put up some filter buttons. */
+{
+printf("<B>Filter:</B> ");
+radioButton(filterTypeVar, filterTypeVal, "red");
+radioButton(filterTypeVar, filterTypeVal, "green");
+radioButton(filterTypeVar, filterTypeVal, "blue");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+radioButton(filterTypeVar, filterTypeVal, "include");
+if (none)
+    radioButton(filterTypeVar, filterTypeVal, "none");
+}
+
+void radioButton(char *var, char *val, char *ourVal)
+/* Print one radio button */
+{
+cgiMakeRadioButton(var, ourVal, sameString(ourVal, val));
+printf("%s ", ourVal);
+}
+
+void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var, struct cart *cart)
+/* Print out user interface for one type of mrna filter. */
+{
+controlGridStartCell(cg);
+printf("%s:<BR>", text);
+cgiMakeTextVar(var, cartUsualString(cart, var, ""), 19);
+controlGridEndCell(cg);
+}
+
+void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed)
+/* Put up UI for an mRNA (or EST) track. */
+{
+struct mrnaUiData *mud = newBedUiData(tdb->tableName);
+struct mrnaFilter *fil;
+struct controlGrid *cg = NULL;
+char *filterTypeVar = mud->filterTypeVar;
+char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
+char *logicTypeVar = mud->logicTypeVar;
+char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+/* Define type of filter. */
+printf("<table width=400><tr><td align='left'>\n");
+filterButtons(filterTypeVar, filterTypeVal, FALSE);
+printf("</br>");
+printf("<B>Combination Logic:</B> ");
+radioButton(logicTypeVar, logicTypeVal, "and");
+radioButton(logicTypeVar, logicTypeVal, "or");
+printf("</br>");
+printf("<B>Pattern:</B> ");
+/* List various fields you can filter on. */
+cg = startControlGrid(4, NULL);
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    oneMrnaFilterUi(cg, fil->label, fil->key, cart);
+endControlGrid(&cg);
 cfgEndBox(boxed);
 }
 

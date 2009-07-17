@@ -891,6 +891,18 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 #define  GRAY_LEVEL_SCORE_MIN SCORE_MIN
 #define  MIN_GRAY_LEVEL  "minGrayLevel"
 
+void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none);
+/* Put up some filter buttons. */
+
+void radioButton(char *var, char *val, char *ourVal);
+/* Print one radio button */
+
+void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var, struct cart *cart);
+/* Print out user interface for one type of mrna filter. */
+
+void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
+/* Put up UI for an bed track with filters. */
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
