@@ -1,11 +1,13 @@
 /* imageV2 - API for creating the image V2 features. */
 #include "common.h"
 #include "hPrint.h"
+#include "chromInfo.h"
+#include "hdb.h"
 #include "hui.h"
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.5 2009/07/10 19:48:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.6 2009/07/17 18:25:41 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -644,7 +646,20 @@ int positionWidth = (int)((imgBox->portalEnd - imgBox->portalStart) * imageMulti
 if( *chromStart < 0)
     *chromStart = 0;
 *chromEnd = *chromStart + positionWidth;
-// TODO: Bound by chrom length
+struct chromInfo *chrInfo = hGetChromInfo(imgBox->db,imgBox->chrom);
+if(chrInfo == NULL)
+    {
+    *chromStart = imgBox->chromStart;
+    *chromEnd   = imgBox->chromEnd;
+    return FALSE;
+    }
+if (*chromEnd > (int)(chrInfo->size))  // Bound by chrom length
+    {
+    *chromEnd = (int)(chrInfo->size);
+    *chromStart = *chromEnd - positionWidth;
+    if (*chromStart < 0)
+        *chromStart = 0;
+    }
 // TODO: Normalize to power of 10 boundary
 double growthOfImage = (*chromEnd - *chromStart)/(imgBox->portalEnd - imgBox->portalStart);
 *imgWidth = (imgBox->portalWidth * growthOfImage) + imgBox->sideLabelWidth;
@@ -1019,7 +1034,7 @@ if(slice->type==isSide)
 else if(slice->type==isCenter)
     hPrintf(" class='centerLab'");
 else if(slice->type==isData && imgBox->showPortal)
-    hPrintf(" class='panImg'");
+    hPrintf(" class='panImg' ondrag='{return false;}'");
 //hPrintf(" title='[%s] width:%d  height: %d  offsetX: %d  offsetY: %d'",
 //        sliceTypeToString(slice->type),slice->width,slice->height,slice->offsetX,slice->offsetY);
 if(slice->title != NULL)
