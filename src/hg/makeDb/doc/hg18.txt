@@ -28075,7 +28075,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.368 2009/07/17 06:48:58 sugnet Exp $
+# $Id: hg18.txt,v 1.369 2009/07/17 16:08:43 sugnet Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28123,7 +28123,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.368 2009/07/17 06:48:58 sugnet Exp $
+# $Id: hg18.txt,v 1.369 2009/07/17 16:08:43 sugnet Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28366,6 +28366,7 @@ for bz in `ls *.bz2`; do \
   echo "Unzipping $bz"; \
   bunzip2 $bz; \
 done 
+
 # From column headers it looks like the values of interest are:
   # 0 = id 
   # 1 = library_count
@@ -28374,6 +28375,32 @@ done
   # 4 = strand
   # 5 = start
   # 6 = end
+
+# Pull the raw scores into a single file
+cat h*_mapping.tbl.txt | grep -v '^#' | grep -v 'library_count' | grep 'chr' | perl -ne '$l=$_; @w = split /\t/, $l; print "$w[3]\t$w[5]\t$w[6]\t$w[0]\t$w[1]\t$w[4]\n";' > all.wscores.bed
+
+    cat << '_EOF_' > toBed.pl
+#!/usr/bin/perl
+
+$prefix = shift(@ARGV);
+$prefix =~ s/h/H/g;
+while($l = <>) {
+ if(!($l=~ /^\#/) && !($l=~/^id/)) { 
+      chomp($l); 
+      @w = split /\t/, $l; 
+      $score = 100 * $w[1];
+      if($score > 1000) {
+	  $score = 1000;
+      }
+      $name = $prefix; 
+      $size  = $w[6] - $w[5];
+      print "$w[3]\t$w[5]\t$w[6]\t$prefix\t$score\t$w[4]\t$w[5]\t$w[6]\t0\t1\t$size,\t0,\n";
+  }
+}
+'_EOF_'
+    # << happy emacs
+
+chmod 755 toBed.pl
 
 # Make the top level bed track
 for f in `ls *mapping.tbl.txt`; do 
