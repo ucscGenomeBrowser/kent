@@ -1560,6 +1560,61 @@ type bed 8 .
     color 102,0,153
     priority 2
 
+track fantomCageGraphTop
+compositeTrack on
+shortLabel Fantom 4 CAGE
+longLabel Fantom and Riken 4 CAGE
+group rna
+priority 83
+visibility hide
+minLimit 0
+maxLimit 1000
+type bed 3
+autoScale Off
+noInherit on
+subGroup1 view Views SIG=Clusters BED=Reads
+#settingsByView SIG:viewLimits=1.0:20.0,minLimit=0,maxLimit=1000,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:32:16
+settingsByView SIG:viewLimits=0.0:1.0,minLimit=0,maxLimit=1,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:32:16
+visibilityViewDefaults SIG=full BED=squish
+#dragAndDrop subtracks
+allButtonPair on
+
+    track FantomCageForwardPowerLawGraph
+    subTrack fantomCageGraphTop
+    shortLabel Fantom 4 + CAGE
+    longLabel  Forward Fantom/Riken 4 CAGE
+    subGroups view=SIG 	
+    priority 2
+    minLimit 0
+    maxLimit 1000
+    type bedGraph 4
+    configurable on
+    color 43,51,109
+
+    track FantomCageReversePowerLawGraph
+    subTrack fantomCageGraphTop
+    shortLabel Fantom 4 - CAGE 
+    longLabel  Reverse Fantom/Riken 4 CAGE
+    subGroups view=SIG 	
+    priority 3
+    minLimit 0
+    maxLimit 1000
+    type bedGraph 4
+    configurable on
+    color 43,51,109
+
+    track FantomCageH04V2
+    subTrack fantomCageGraphTop
+    shortLabel Fantom CAGE Reads
+    longLabel Fantom/Riken CAGE Reads
+    subGroups view=BED	
+    priority 4
+    configurable on
+    useScore 1
+    bedFilter on
+    type bed 12 .
+
+
 track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
@@ -3971,55 +4026,3 @@ autoScale off
 chromosomes chr22
 
 
-track FantomCageGraphTop
-compositeTrack on
-shortLabel Fantom 4 CAGE
-longLabel Fantom and Riken 4 CAGE
-group genes
-priority 54.25
-visibility hide
-minLimit 0
-maxLimit 1000
-type bed 3
-autoScale Off
-noInherit on
-subGroup1 view Views BED=Reads SIG=Clusters
-settingsByView SIG:viewLimits=1.0:20.0,minLimit=0,maxLimit=1000,autoScale=Off,windowingFunction=mean,maxHeightPixels=128:16:16
-dragAndDrop subtracs
-allButtonPair on
-
-    track FantomCageForwardPowerLawGraph
-    subTrack FantomCageGraphTop
-    shortLabel Fantom 4 + CAGE
-    longLabel  Forward Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
-    priority 2
-    minLimit 0
-    maxLimit 1000
-    type bedGraph 4
-    configurable on
-    color 43,51,109
-
-    track FantomCageReversePowerLawGraph
-    subTrack FantomCageGraphTop
-    shortLabel Fantom 4 - CAGE 
-    longLabel  Reverse Fantom/Riken 4 CAGE
-    subGroups view=SIG 	
-    priority 3
-    minLimit 0
-    maxLimit 1000
-    type bedGraph 4
-    configurable on
-    color 43,51,109
-
-    track FantomCageH04V2
-    subTrack FantomCageGraphTop
-    shortLabel Fantom CAGE Reads
-    longLabel Fantom/Riken CAGE Reads
-    subGroups view=BED	
-    visibility hide
-    priority 4
-    configurable on
-    useScore 1
-    bedFilter on
-    type bed 12 .
