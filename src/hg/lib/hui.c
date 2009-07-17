@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.223 2009/07/17 06:24:57 sugnet Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.224 2009/07/17 15:03:31 sugnet Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2897,7 +2897,9 @@ switch(cType)
                         break;
     case cfgNetAlign:	netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
-    default:            warn("Track type is not known to multi-view composites.");
+    case cfgBedFilt:    bedUi(tdb,cart,title, boxed);
+                 	break;
+    default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
     }
 }
@@ -3445,7 +3447,6 @@ printf("<B>Combination Logic:</B> ");
 radioButton(logicTypeVar, logicTypeVal, "and");
 radioButton(logicTypeVar, logicTypeVal, "or");
 printf("</br>");
-printf("<B>Pattern:</B> ");
 /* List various fields you can filter on. */
 cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
