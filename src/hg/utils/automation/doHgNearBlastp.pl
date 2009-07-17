@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.9 2009/07/09 23:17:51 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.10 2009/07/17 17:34:17 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -298,7 +298,7 @@ $cladeEs[$fish][$worm]  = $cladeEs[$worm][$fish]  = 0.01;
 $cladeEs[$fish][$yeast] = $cladeEs[$yeast][$fish] = 0.01;
 $cladeEs[$fly][$worm]  = $cladeEs[$worm][$fly]  = 0.01;
 $cladeEs[$fly][$yeast] = $cladeEs[$yeast][$fly] = 0.01;
-$cladeEs[$yeast][$yeast] = $cladeEs[$yeast][$yeast] = 0.01;
+$cladeEs[$worm][$yeast] = $cladeEs[$worm][$yeast] = 0.01;
 
 sub calcE {
   # Look up the blastp e parameter (max E-value) by clade distances
