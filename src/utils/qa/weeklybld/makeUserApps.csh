@@ -42,6 +42,10 @@ if ("$HOST" == "$BOX32") then
   mkdir $DESTDIR/$BINDIR
 endif
 
+# configure settings like SSL and BAM in common.mk
+echo "Configuring settings on userApp sandbox $BRANCHNN $HOST [${0}: `date`]"
+$WEEKLYBLD/configureSandbox.csh . $WEEKLYBLD/downloadBuildSettings.mk
+
 cd kent/src 
 make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps
 ./utils/userApps/mkREADME.sh $DESTDIR/$BINDIR FOOTER
