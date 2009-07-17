@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.119 2009/07/06 21:45:29 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.120 2009/07/17 22:55:20 braney Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1199,6 +1199,38 @@ antibodyDescription Mouse polyclonal
 vendorName Novus Biologicals
 vendorId H00010127-A01
 orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
+
+term p300
+type Antibody
+targetDescription EP300(c-20)
+antibodyDescription Rabbit Polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-585
+orderUrl  http://www.scbt.com/product.php?datasheet=585
+
+term Pbx3
+type Antibody
+targetDescription Pbx 3 (D-17)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-891
+orderUrl  http://www.scbt.com/product.php?datasheet=891
+
+term PU.1
+type Antibody
+targetDescription PU.1 (H-135)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-22805
+orderUrl  http://www.scbt.com/product.php?datasheet=22805
+
+term Oct-2
+type Antibody
+targetDescription Oct-2 (C-20)
+antibodyDescription Rabbit Polyclonal IgG
+vendorName Santa Cruz Biotech
+vendorId sc-233
+orderUrl  http://www.scbt.com/product.php?datasheet=233
 
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
