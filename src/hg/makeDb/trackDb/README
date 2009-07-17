@@ -582,7 +582,7 @@ COMPOSITE SUBTRACK SELECTION - 4 ways
 2) Add All [+][-] buttons - To the composte track add the setting below.
    allButtonPair on
    Not compatible with either of the next two methods
-3) Matrix selection of subgroups.  A 2 or 3 "demension" grid of subgroups.
+3) Matrix selection of subgroups.  A 2 or 3 "dimension" grid of subgroups.
    See MATRIX below.
 4) Subgroup buttons.  This happens if you have subgroups but no 'allButtonPair"
    or "dimensions" defined.
@@ -633,13 +633,13 @@ be of the same track type.  Each subtrack of a multi-view should have the
 
     MULTI-VIEW VISIBILITY DEFAULTS
     ------------------------------
-    Since using multi-view represents two levels of drop-downs controlling whether a
-    subtrack will be displayed, and since the "visibility' setting on the composite
+    Because using multi-view represents two levels of drop-downs controlling whether a
+    subtrack will be displayed, and because the "visibility' setting on the composite
     (parent) track controls the default setting (eg 'dense'), it is necessary to
     have an additional setting for the multi-view defaults:
         visibilityViewDefaults HMM=pack WIN=pack+ SIG=full ALN=hide
     By adding a '+' at the end of a default visibility, the view's configuration
-    settings (if any) will be displayed be default.
+    settings (if any) will be displayed by default.
 
     MULTI-VIEW INDIVIDUAL SUBTRACK CONFIGURATION
     --------------------------------------------
@@ -660,7 +660,7 @@ be of the same track type.  Each subtrack of a multi-view should have the
     Since some defaults must be different for individual subtracks, the view's defaults
     must be explicitly set.  To do this use the following setting
         settingsByView Signal:viewLimits=0:2,viewLimitsMax=0:40
-    Here the view "Signal" is a wig wth data range of 0 to 40 and a default view range of
+    Here the view "Signal" is a wig with data range of 0 to 40 and a default view range of
     0 to 2. Currently only two parameters are supported and these are both for wig:
         viewLimits=lower:upper    # default is from the type line limits
         viewLimitsMax=lower:upper # The max range (type wig lower upper)
@@ -678,8 +678,8 @@ upon subGroups:
     subGroup3 factor Factor K04=H3K4me3 K09=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3
     sortOrder cellType=+ factor=+ view=-
 These settings result in an original order by cellType,factor,view, but view is
-in reverse order.  NOTE: the value sorted will be the subGroup Ids, NOT the values.
-In the example, subGroup3 refers to factors with values displayed in the UI like
+in reverse order. [why reverse order??]  NOTE: the value sorted will be the subGroup Ids, NOT the values.
+In the example, subGroup3 refers to factors with values displayed in the UI such as
 "H4K20me3" and "H4K20me3".  An alphabetic sort of these values would place H4K20me3
 before H4K20me3.  However the actual sort will be of the Ids K09 and K20, which will
 result in a more desirable order.  NOTE: At some time, sortOrder may be extended to
@@ -728,13 +728,13 @@ Certain specific terms may carry special meanings in code:
   (see controlledVvocabulary below)
   dateSubmitted,dateUnrestricted used by ENCODE
   fileName is converted into a link to the downloads directory in wgEncode
-  dataVersion is show separately from metadata
+  dataVersion is shown separately from metadata
 
 which is seen below.
 
 CONTROLLED VOCABULARY
 ---------------------
-A special feature of the whole genome ENCODE consortium effort is that there
+A special feature of the whole-genome ENCODE consortium effort is that there
 are standardized cellTypes, antibodies and other known entities that are
 defined in a "controlled vocabulary".  The definitions of the vocabulary will
 be reachable from the hgTrackUi page but this special case must be defined in
