@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.91 2009/07/17 18:23:05 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.92 2009/07/17 18:57:52 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10327,7 +10327,7 @@ if (source == NULL)
     return color;
 source++;
 /* reverse-alphabetical acronym rainbow: */
-if (sameString(source, "HVG"))
+if (sameString(source, "HVG") || sameString(source, "BG"))
     color = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc); /* purple */
 else if (sameString(source, "CMHD"))
     color = hvGfxFindColorIx(hvg, 0x00, 0x00, 0xcc); /* dark blue */
