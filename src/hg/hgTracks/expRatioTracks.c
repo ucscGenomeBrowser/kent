@@ -178,10 +178,8 @@ x = hvGfxAdjXW(hvg, x, width);
 if(curMap != NULL)
     {
     char link[512];
-    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart,
-        winEnd, database, tl.picWidth);
-    // Add map item to currnent map (TODO: pass in map)
+    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&i2=%s", // NOTE: winStart,winEnd removed due to portal
+        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2); // Note: chopped out winStart/winEnd
     mapSetItemAdd(curMap,link,statusLine,x, y, x+width, y+height);
     }
 #else//ifndef IMAGEv2_UI
@@ -1446,9 +1444,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     if(curMap != NULL)
         {
         char link[512];
-        safef(link,sizeof(link),"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore",
-    	    hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
-        // Add map item to currnent map (TODO: pass in map)
+        safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->mapName); // NOTE: winStart,winEnd removed due to portal
         mapSetItemAdd(curMap,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         }
     #else//ifndef IMAGEv2_UI

@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.90 2009/07/07 01:07:13 kate Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.91 2009/07/17 18:23:05 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -524,9 +524,7 @@ if (chrom == NULL)
 if(curMap != NULL)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",
-        hgTracksName(), chrom, start+1, end,ui->string);
-    // Add map item to currnent map (TODO: pass in map)
+    safef(link,sizeof(link),"%s?%s",hgTracksName(), ui->string); // NOTE: position removed due to portal
     mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
     }
 #else//ndef IMAGEv2_UI
@@ -603,10 +601,8 @@ if (x < xEnd)
             }
         else
             {
-            safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
-                chromName, winStart, winEnd,
-                database, tl.picWidth);
+            safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);

@@ -183,10 +183,9 @@ char *encodedTrack = cgiEncode(tg->mapName);
 #ifdef IMAGEv2_UI
 if(curMap != NULL)
     {
-    char link[512];
-    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d", hgcNameAndSettings(),
-        winStart, winEnd, encodedTrack, chromName, winStart, winEnd, database, tl.picWidth);
-    // Add map item to currnent map (TODO: pass in map)
+    char link[512];     // FIXME: winStart/winEnd are not right when using a portal
+    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&db=%s&pix=%d", hgcNameAndSettings(),
+        winStart, winEnd, encodedTrack, database, tl.picWidth);
     mapSetItemAdd(curMap,link,NULL,xOff,yOff,xOff+width,yOff+height);
     }
 #else//ifndef IMAGEv2_UI
