@@ -28075,7 +28075,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.367 2009/07/02 22:21:44 hiram Exp $
+# $Id: hg18.txt,v 1.368 2009/07/17 06:48:58 sugnet Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28123,7 +28123,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.367 2009/07/02 22:21:44 hiram Exp $
+# $Id: hg18.txt,v 1.368 2009/07/17 06:48:58 sugnet Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28349,3 +28349,75 @@ TMPDIR=/scratch/tmp
     #	1622340736 bases of 2428790173 (66.796%) in intersection
 
 ############################################################################
+# Fantom Cage 4 Track (2009-07-16)
+cd /projects/compbiousr/sugnet/projects/cage-20090428
+mkdir data
+cd data
+# Get the Human tags from Riken's download site.
+wget -r -l 3 http://fantom.gsc.riken.jp/4/download/Tables/human/CAGE/mapping/
+
+# Apparently time series with hours at:
+# 4,5,6,8,10,11,15,21,22,27,28,33,34,35,37,40,42,43,45,47,48,49,51,52,53,57,59,61,62,63,64,65,69,73,74,91,92,93,h95 ctrls, i02, i03
+
+# Goto the data directory
+cd /projects/compbiousr/sugnet/projects/cage-20090428/data/fantom.gsc.riken.jp/4/download/Tables/human/CAGE/mapping/
+# Unzip data
+for bz in `ls *.bz2`; do \
+  echo "Unzipping $bz"; \
+  bunzip2 $bz; \
+done 
+# From column headers it looks like the values of interest are:
+  # 0 = id 
+  # 1 = library_count
+  # 2 = edit_string
+  # 3 = chrom
+  # 4 = strand
+  # 5 = start
+  # 6 = end
+
+# Make the top level bed track
+for f in `ls *mapping.tbl.txt`; do 
+  root=`basename $f .txt`;
+  prefix=`basename $f _mapping.tbl.txt`;
+  bed=$root.bed;  
+  echo "Reading from $f into $bed with prefix $prefix";
+  toBed.pl $prefix < $f > $bed;
+done;
+
+# Call program in stats mode to generate summary statistics about how many reads there are in a sliding window around
+# sites with tags
+cageSingleTrack -input=all.wscores.bed  -forward=all.forward.plaw.scores -reverse=all.reverse.plaw.scores -stats-only
+
+# Grab every 100th record to make a bite (byte?) sized chunk for R
+cat all.forward.plaw.scores | perl -e '$c = 0; while($l=<>) { if($c++ % 100 == 0) { print "$l"; } }' > sample.txt
+
+# Some R code to fit a power law model and get coefficient via log/log line fit
+d = read.table('sample.txt');
+# Grab all the data less than 200 counts (81% of data) as that is where the model really fits
+dd = d$V4[d$V4 < 200]
+# Use hist command to find counts at each bucket size
+h = hist(dd, 200, plot=F)
+# Take the logs
+y = log10(h$counts)
+x = log10(h$breaks[1:198])
+# Fit a robust line
+library(MASS)
+r = rlm(y~x)
+# Call:
+# rlm(formula = y ~ x)
+# Converged in 5 iterations
+# 
+# Coefficients:
+#(Intercept)           x
+#   3.987744   -1.196954
+
+# Visually note that the data fits a power law nicely
+plot(log10(h$breaks[1:198]),log10(h$counts), xlab="Log10 Tags In Window", ylab="Log10 Number of Times Occuring", main="Distribution of CAGE Tags in Sliding 35bp Window")
+abline(r)
+
+# Using the coefficient learned above predict the posterior probability of seeing this observation 
+cageSingleTrack -input=all.wscores.bed  -forward=all.forward.plaw.bg2 -reverse=all.reverse.plaw.bg2  -alpha=1.196954 -xmax=198
+
+# Load up the bed graph tracks
+hgLoadBed -bedGraph=4 hg18 FantomCageForwardPowerLawGraph all.forward.plaw.bg2
+hgLoadBed -bedGraph=4 hg18 FantomCageReversePowerLawGraph all.reverse.plaw.bg2
