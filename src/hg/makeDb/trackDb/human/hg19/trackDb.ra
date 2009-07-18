@@ -387,7 +387,7 @@ subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMa
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
-visibilityViewDefaults chain=pack net=dense
+visibilityViewDefaults chain=pack+ net=full+
 group compGeno
 noInherit on
 priority 496
@@ -398,18 +398,18 @@ chainLinearGap medium
 chainMinScore 5000
 settingsByView chain:spectrum=on
 dimensions dimensionX=clade dimensionY=species 
-sortOrder view=+ species=+ clade=+
+sortOrder species=+ view=+ clade=+
 configurable on
 html hg19primateChainNet
 
     track chainPanTro2
     release alpha
-    subTrack primateChainNet off
+    subTrack primateChainNet on
     subGroups view=chain species=aPanTro clade=aHom
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain panTro2
-    visibility dense
+    visibility pack 
     otherDb panTro2
 
     track netPanTro2
@@ -417,7 +417,7 @@ html hg19primateChainNet
     subTrack primateChainNet on 
     subGroups view=net species=aPanTro clade=aHom
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment NeT
     type netAlign panTro2 chainPanTro2
     visibility dense
     otherDb panTro2
@@ -436,7 +436,7 @@ html hg19primateChainNet
     subTrack primateChainNet off
     subGroups view=net species=bGorGor clade=aHom
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign gorGor1 chainGorGor1
     otherDb gorGor1
 
@@ -454,7 +454,7 @@ html hg19primateChainNet
     subTrack primateChainNet on 
     subGroups view=net species=cPonAbe clade=aHom
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign ponAbe2 chainPonAbe2
     visibility dense
     otherDb ponAbe2
@@ -473,7 +473,7 @@ html hg19primateChainNet
     subTrack primateChainNet on 
     subGroups view=net species=dRheMac clade=bCerco
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign rheMac2 chainRheMac2
     visibility dense
     otherDb rheMac2
@@ -492,7 +492,7 @@ html hg19primateChainNet
     subTrack primateChainNet off
     subGroups view=net species=ePapHam clade=bCerco
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign papHam1 chainPapHam1
     otherDb papHam1
 
@@ -510,7 +510,7 @@ html hg19primateChainNet
     subTrack primateChainNet off
     subGroups view=net species=fCalJac clade=cHaplo
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign calJac1 chainCalJac1
     otherDb calJac1
 
@@ -528,7 +528,7 @@ html hg19primateChainNet
     subTrack primateChainNet off
     subGroups view=net species=gTarSyr clade=cHaplo
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign tarSyr1 chainTarSyr1
     otherDb tarSyr1
 
@@ -546,7 +546,7 @@ html hg19primateChainNet
     subTrack primateChainNet off
     subGroups view=net species=iMicMur clade=dStrep
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign micMur1 chainMicMur1
     otherDb micMur1
 
@@ -564,7 +564,7 @@ html hg19primateChainNet
     subTrack primateChainNet on
     subGroups view=net species=hOtoGar clade=dStrep
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign otoGar1 chainOtoGar1
     visibility dense
     otherDb otoGar1
@@ -608,7 +608,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=aEquCab clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign equCab2 chainEquCab2
     otherDb equCab2
 
@@ -624,7 +624,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=bTupBel clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign tupBel1 chainTupBel1
     otherDb tupBel1
 
@@ -640,7 +640,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=cTurTru clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign turTru1 chainTurTru1
     otherDb turTru1
 
@@ -656,7 +656,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=dSpeTri clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign speTri1 chainSpeTri1
     otherDb speTri1
 
@@ -672,7 +672,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=eVicPac clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign vicPac1 chainVicPac1
     otherDb vicPac1
 
@@ -688,7 +688,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=fChoHof clade=cXenar
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign choHof1 chainChoHof1
     otherDb choHof1
 
@@ -704,7 +704,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=gPteVam clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign pteVam1 chainPteVam1
     otherDb pteVam1
 
@@ -720,7 +720,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=hLoxAfr clade=dAfro
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign loxAfr2 chainLoxAfr2
     otherDb loxAfr2
 
@@ -736,7 +736,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=iFelCat clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign felCat3 chainFelCat3
     otherDb felCat3
 
@@ -752,7 +752,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=jCanFam clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign canFam2 chainCanFam2
     otherDb canFam2
 
@@ -768,7 +768,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=kDasNov clade=cXenar
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign dasNov2 chainDasNov2
     otherDb dasNov2
 
@@ -784,7 +784,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=lOryCun clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign oryCun1 chainOryCun1
     otherDb oryCun1
 
@@ -800,7 +800,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=mMyoLuc clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign myoLuc1 chainMyoLuc1
     otherDb myoLuc1
 
@@ -816,7 +816,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=nBosTau clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign bosTau4 chainBosTau4
     otherDb bosTau4
 
@@ -832,7 +832,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=oCavPor clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign cavPor3 chainCavPor3
     otherDb cavPor3
 
@@ -848,7 +848,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=pProCap clade=dAfro
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign proCap1 chainProCap1
     otherDb proCap1
 
@@ -864,7 +864,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=qDipOrd clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign dipOrd1 chainDipOrd1
     otherDb dipOrd1
 
@@ -880,7 +880,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=rOchPri clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign ochPri2 chainOchPri2
     otherDb ochPri2
 
@@ -896,7 +896,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=sEriEur clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign eriEur1 chainEriEur1
     otherDb eriEur1
 
@@ -912,7 +912,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=tEchTel clade=dAfro
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign echTel1 chainEchTel1
     otherDb echTel1
 
@@ -928,7 +928,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=uMm clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign mm9 chainMm9
     otherDb mm9
 
@@ -944,7 +944,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=vRn clade=aEuarch
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign rn4 chainRn4
     otherDb rn4
 
@@ -960,7 +960,7 @@ html hg19mammalChainNet
     subTrack placentalChainNet off
     subGroups view=net species=wSorAra clade=bLaura
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign sorAra1 chainSorAra1
     otherDb sorAra1
 
@@ -1002,7 +1002,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=aMacEug clade=aMammal
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign macEug1 chainMacEug1
     otherDb macEug1
 
@@ -1018,7 +1018,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=bMonDom clade=aMammal
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign monDom5 chainMonDom5
     otherDb monDom5
 
@@ -1034,7 +1034,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=cOrnAna clade=aMammal
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign ornAna1 chainOrnAna1
     otherDb ornAna1
 
@@ -1050,7 +1050,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=dGalGal clade=bDino
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign galGal3 chainGalGal3
     otherDb galGal3
 
@@ -1066,7 +1066,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=eTaeGut clade=bDino
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign taeGut1 chainTaeGut1
     otherDb taeGut1
 
@@ -1082,7 +1082,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=fAnoCar clade=cLepi
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign anoCar1 chainAnoCar1
     otherDb anoCar1
 
@@ -1098,7 +1098,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=gXenTro clade=dAmph
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign xenTro2 chainXenTro2
     otherDb xenTro2
 
@@ -1114,7 +1114,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=hGasAcu clade=eTele
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign gasAcu1 chainGasAcu1
     otherDb gasAcu1
 
@@ -1130,7 +1130,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=iFr clade=eTele
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign fr2 chainFr2
     otherDb fr2
 
@@ -1146,7 +1146,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=jDanRer clade=eTele
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign danRer5 chainDanRer5
     otherDb danRer5
 
@@ -1162,7 +1162,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=kTetNig clade=eTele
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign tetNig1 chainTetNig1
     otherDb tetNig1
 
@@ -1178,7 +1178,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=lOryLat clade=eTele
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign oryLat2 chainOryLat2
     otherDb oryLat2
 
@@ -1194,7 +1194,7 @@ html hg19vertChainNet
     subTrack vertebrateChainNet off
     subGroups view=net species=mPetMar clade=fHyper
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign petMar1 chainPetMar1
     otherDb petMar1
 
@@ -1214,7 +1214,7 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility full
+visibility hide
 visibilityViewDefaults align=pack+ phastcons=hide phyloP=full elements=hide
 settingsByView phyloP:viewLimits=-.3:2,viewLimitsMax=-15.41:7.13
 type bed 4
