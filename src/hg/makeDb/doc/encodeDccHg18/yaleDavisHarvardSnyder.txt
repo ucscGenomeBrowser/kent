@@ -1,7 +1,7 @@
 ### yaleDavisHarvardSnyder.txt wrangler notes for all submissions
 
 select id,name,status from projects where name like "Y%";
-+-----+------------------------------------+-----------------+
+4+-----+------------------------------------+-----------------+
 | id  | name                               | status          |
 +-----+------------------------------------+-----------------+
 |  12 | YHD_HeLa-S3_Pol2                   | released        |
@@ -2196,3 +2196,85 @@ update wgEncodeYaleChIPseqRawSignalRep2K562bTr4 set file = "/gbdb/hg18/wib/wgEnc
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 384 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 385 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 386 displayed
+
+Resubmissions 2009-06-30
+==========================
+# Unfortunately, Mike submitted with the Rel2 version so:
+rename table wgEncodeYaleChIPseqPeaksK562Bdp1   to wgEncodeYaleOldChIPseqPeaksK562Bdp1;
+rename table wgEncodeYaleChIPseqPeaksK562Brf1   to wgEncodeYaleOldChIPseqPeaksK562Brf1;
+rename table wgEncodeYaleChIPseqPeaksK562Rad21  to wgEncodeYaleOldChIPseqPeaksK562Rad21;
+rename table wgEncodeYaleChIPseqPeaksK562Rpc155 to wgEncodeYaleOldChIPseqPeaksK562Rpc155;
+rename table wgEncodeYaleChIPseqPeaksK562Sirt6  to wgEncodeYaleOldChIPseqPeaksK562Sirt6;
+rename table wgEncodeYaleChIPseqPeaksK562Xrcc4  to wgEncodeYaleOldChIPseqPeaksK562Xrcc4;
+
+rename table wgEncodeYaleChIPseqRel2PeaksK562Bdp1   to wgEncodeYaleChIPseqPeaksK562Bdp1;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Brf1   to wgEncodeYaleChIPseqPeaksK562Brf1;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Rad21  to wgEncodeYaleChIPseqPeaksK562Rad21;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Rpc155 to wgEncodeYaleChIPseqPeaksK562Rpc155;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Sirt6  to wgEncodeYaleChIPseqPeaksK562Sirt6;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Xrcc4  to wgEncodeYaleChIPseqPeaksK562Xrcc4;
+
+drop table wgEncodeYaleChIPseqPeaksK562Bdp1  ;
+drop table wgEncodeYaleChIPseqPeaksK562Brf1  ;
+drop table wgEncodeYaleChIPseqPeaksK562Rad21 ;
+drop table wgEncodeYaleChIPseqPeaksK562Rpc155;
+drop table wgEncodeYaleChIPseqPeaksK562Sirt6 ;
+drop table wgEncodeYaleChIPseqPeaksK562Xrcc4 ;
+
+# Oops!!!
+doEncodeLoad.pl x ../405 > load_error 2>&1 &
+
+rename table wgEncodeYaleChIPseqRel2PeaksK562Bdp1_405   to wgEncodeYaleChIPseqPeaksK562Bdp1;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Brf1_405   to wgEncodeYaleChIPseqPeaksK562Brf1;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Rad21_405  to wgEncodeYaleChIPseqPeaksK562Rad21;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Rpc155_405 to wgEncodeYaleChIPseqPeaksK562Rpc155;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Sirt6_405  to wgEncodeYaleChIPseqPeaksK562Sirt6;
+rename table wgEncodeYaleChIPseqRel2PeaksK562Xrcc4_405  to wgEncodeYaleChIPseqPeaksK562Xrcc4;
+
+drop table wgEncodeYaleOldChIPseqPeaksK562Bdp1  ;
+drop table wgEncodeYaleOldChIPseqPeaksK562Brf1  ;
+drop table wgEncodeYaleOldChIPseqPeaksK562Rad21 ;
+drop table wgEncodeYaleOldChIPseqPeaksK562Rpc155;
+drop table wgEncodeYaleOldChIPseqPeaksK562Sirt6 ;
+drop table wgEncodeYaleOldChIPseqPeaksK562Xrcc4 ;
+
+
+mv wgEncodeYaleChIPseqPeaksK562Bdp1.narrowPeak.gz   old
+mv wgEncodeYaleChIPseqPeaksK562Brf1.narrowPeak.gz   old
+mv wgEncodeYaleChIPseqPeaksK562Rad21.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqPeaksK562Rpc155.narrowPeak.gz old
+mv wgEncodeYaleChIPseqPeaksK562Sirt6.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqPeaksK562Xrcc4.narrowPeak.gz  old
+
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562Bdp1.narrowPeak.gz   wgEncodeYaleChIPseqPeaksK562Bdp1.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562Brf1.narrowPeak.gz   wgEncodeYaleChIPseqPeaksK562Brf1.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562Rad21.narrowPeak.gz  wgEncodeYaleChIPseqPeaksK562Rad21.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562Rpc155.narrowPeak.gz wgEncodeYaleChIPseqPeaksK562Rpc155.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562Sirt6.narrowPeak.gz  wgEncodeYaleChIPseqPeaksK562Sirt6.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562Xrcc4.narrowPeak.gz  wgEncodeYaleChIPseqPeaksK562Xrcc4.narrowPeak.gz
+
+# Edited a bunch of metadata to standardize on 'submittedDataVersion=V2' 
+
+mv wgEncodeYaleChIPseqRel2PeaksGm12878Cfos.narrowPeak.gz old	
+mv wgEncodeYaleChIPseqRel2PeaksGm12878Jund.narrowPeak.gz old
+mv wgEncodeYaleChIPseqRel2PeaksGm12878Max.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqRel2PeaksGm12878Pol2.narrowPeak.gz old
+mv wgEncodeYaleChIPseqRel2PeaksHct116Tcf4.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqRel2PeaksHek293Pol2.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqRel2PeaksHelas3Pol2.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqRel2PeaksK562Cfos.narrowPeak.gz    old
+mv wgEncodeYaleChIPseqRel2PeaksK562Cjun.narrowPeak.gz    old
+mv wgEncodeYaleChIPseqRel2PeaksK562Cmyc.narrowPeak.gz    old
+mv wgEncodeYaleChIPseqRel2PeaksK562Jund.narrowPeak.gz    old
+mv wgEncodeYaleChIPseqRel2PeaksK562Max.narrowPeak.gz     old
+mv wgEncodeYaleChIPseqRel2PeaksK562Nfe2.narrowPeak.gz    old
+mv wgEncodeYaleChIPseqRel2PeaksK562Pol2.narrowPeak.gz    old
+mv wgEncodeYaleChIPseqRel2PeaksK562bGata1.narrowPeak.gz  old
+mv wgEncodeYaleChIPseqRel2PeaksK562bZnf263.narrowPeak.gz old
+mv wgEncodeYaleChIPseqRel2PeaksNb4Pol2.narrowPeak.gz	 old
+mv wgEncodeYaleChIPseqRel2SignalK562Input.bedGraph4.gz   old
+
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 390 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 404 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 405 displayed
