@@ -526,7 +526,7 @@ boxedCfg on
     subTrack bdtnpChipper
     subGroups factor=MAD class=dvz view=best1
     shortLabel mad AB 2 FDR 1%
-    longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 1%
     color 0,0,200
     type wig 0.0 40.39
     priority 51
@@ -535,7 +535,7 @@ boxedCfg on
     subTrack bdtnpChipper off
     subGroups factor=MAD class=dvz view=best25
     shortLabel mad AB 2 FDR 25%
-    longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 25%
     color 0,0,200
     type wig 0.0 40.39
     priority 52
@@ -708,7 +708,7 @@ boxedCfg on
     subTrack bdtnpChipper
     subGroups factor=TFIIB class=zzgen view=best1
     shortLabel TFIIB AB 1 FDR 1%
-    longLabel Transcription factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    longLabel Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 1%
     color 200,0,0
     type wig 0.0 40.39
     priority 71
@@ -717,7 +717,7 @@ boxedCfg on
     subTrack bdtnpChipper off
     subGroups factor=TFIIB class=zzgen view=best25
     shortLabel TFIIB AB 1 FDR 25%
-    longLabel Transcription factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    longLabel Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 25%
     color 200,0,0
     type wig 0.0 40.39
     priority 72
