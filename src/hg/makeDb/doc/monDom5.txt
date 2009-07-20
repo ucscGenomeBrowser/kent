@@ -850,3 +850,10 @@ TMPDIR=/scratch/tmp
     #	351787662 bases of 2428790173 (14.484%) in intersection
 
 #########################################################################
+# Set default position to OPN1LW gene 2009-07-20, Brooke
+hgsql -e \
+"update dbDb set defaultPos='chrX:14658820-14669558' where name='monDom5'" \
+hgcentraltest
+
+#########################################################################
+
