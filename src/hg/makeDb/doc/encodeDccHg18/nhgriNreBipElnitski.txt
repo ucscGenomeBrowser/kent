@@ -128,4 +128,19 @@ rm -rf wgEncodeNhgriBiP
 
 /cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation -allowReloads x ../298
 
-
+Redo old NREs in order to remove non-text in names 2009-07-17
+=============================================================
+cd 100
+cp ElnitskiEBK562gamma.bed ElnitskiEBK562gamma_corrected.bed
+cp ElnitskiSilencerK562gamma.bed ElnitskiSilencerK562gamma_corrected.bed
+edit to replace non-UTF8 characters
+rename table wgEncodeNhgriNRESilencersK562Ggamma to wgEncodeNhgriNRESilencersK562Ggamma_old;
+rename table wgEncodeNhgriNREEnhancerBlockersK562Ggamma to wgEncodeNhgriNREEnhancerBlockersK562Ggamma_old;
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -allowReloads x ../100 > validate_error 2>&1 &
+/cluster/data/encode/pipeline/bin/doEncodeLoad.pl x ../100 > load_error 2>&1 &
+rename table wgEncodeNhgriNRESilencersK562Ggamma_100 to wgEncodeNhgriNRESilencersK562Ggamma;
+rename table wgEncodeNhgriNREEnhancerBlockersK562Ggamma_100 to wgEncodeNhgriNREEnhancerBlockersK562Ggamma;
+# in downloads dir, files were loaded to wgEncodeNhgriNRE instead of the proper wgEncodeNhgriNre
+# moved old fils to "old" dir
+# moved new files to proper name and location
+rm -rf wgEncodeNhgriNRE
