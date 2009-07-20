@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.225 2009/07/20 16:41:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.226 2009/07/20 20:57:18 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3104,8 +3104,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("</TD><TD>%s [selected on main page]</TD></TR>\n",
                 subtrack->longLabel);
             }
-        else if (hSameTrackDbType(primaryType, subtrack->type) &&
-                     hTableExists(db, subtrack->tableName))
+        else if (hSameTrackDbType(primaryType, subtrack->type))
+            // && hTableExists(db, subtrack->tableName))  REMOVED because using parentTdbAbandonTablelessChildren before we are here
             {
             puts("<TR><TD>");
             cgiMakeCheckBox(htmlIdentifier, checkedCB && enabledCB);
@@ -3118,7 +3118,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         if(trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
             cType = cfgNone;
         membership_t *membership = subgroupMembershipGet(subtrack);
-        if (hTableExists(db, subtrack->tableName))
+        //if (hTableExists(db, subtrack->tableName))  REMOVED because using parentTdbAbandonTablelessChildren before we are here
             {
             if(sortOrder == NULL && !useDragAndDrop)
                 {
@@ -5325,6 +5325,8 @@ boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
+
+(void)parentTdbAbandonTablelessChildren(db,tdb);
 
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
