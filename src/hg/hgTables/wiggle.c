@@ -23,7 +23,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.74 2009/05/29 22:07:01 mikep Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.75 2009/07/20 23:33:13 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -636,14 +636,10 @@ if (track == NULL)
 
 maxOut = wigMaxOutput();
 
-
 textOpen();
-
 
 if (track != NULL)
     {
-    shortLabel = track->shortLabel;
-    longLabel = track->longLabel;
     if (!sameString(track->tableName, table) && track->subtracks != NULL)
 	{
 	struct trackDb *tdb = NULL;
@@ -651,12 +647,13 @@ if (track != NULL)
 	    {
 	    if (sameString(tdb->tableName, table))
 		{
-		shortLabel = tdb->shortLabel;
-		longLabel = tdb->longLabel;
+		track = tdb;
 		break;
 		}
 	    }
 	}
+    shortLabel = track->shortLabel;
+    longLabel = track->longLabel;
     }
 wigDataHeader(shortLabel, longLabel, NULL, wigOutType);
 
