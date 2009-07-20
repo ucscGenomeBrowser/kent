@@ -6435,7 +6435,7 @@ wgEncode 1
     subGroups view=Peaks factor=POL3 cellType=t1GM12878
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol3 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=318 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Pol3 fileName=wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=GM12878 antibody=Pol3 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=440 dateSubmitted=2009-05-05 dateUnrestricted=2010-02-04 dateReloaded=2009-07-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksGm12878Pol3 fileName=wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalGm12878Pol3
     release alpha
@@ -6547,7 +6547,7 @@ wgEncode 1
     subGroups view=Peaks factor=POL2 cellType=t3HCT116
     type narrowPeak
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HCT-116 antibody=Pol2 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=439 dateSubmitted=2009-05-15 dateResubmitted=2009-07-20 dateUnrestricted=2010-02-15 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHct116Pol2 fileName=wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HCT-116 antibody=Pol2 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=439 dateSubmitted=2009-05-15 dateUnrestricted=2010-02-15 dateReloaded=2009-07-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHct116Pol2 fileName=wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHct116Pol2
     release alpha
