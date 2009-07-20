@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/cvsTools/cvsup instead.
 #
-# $Id: cvsup,v 1.4 2009/07/16 01:09:32 galt Exp $
+# $Id: cvsup,v 1.5 2009/07/20 22:08:16 galt Exp $
 
 use warnings;
 use strict;
@@ -14,8 +14,8 @@ my $cvsdir = join(' ', @ARGV) || '.';
 
 my $abs_path = File::Spec->rel2abs($cvsdir);
 if ($abs_path eq "/hive/groups/encode/dcc/pipeline/hgEncodeSubmit") {
-  print "do not use CVSUP in ENCODE production sandbox because of uncontrolled updating. 
-     Use this instead:\ncvs status |& cvsStatusFilter | grep -v Up-to-date\n";
+  print "do not use CVSUP in ENCODE production sandbox because of uncontrolled updating.\n 
+     Use cvscheck instead\n";
   exit 0;
   }
 
