@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.67 2009/07/17 06:24:58 sugnet Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.68 2009/07/20 20:53:46 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -680,7 +680,7 @@ else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so f
     {
     char *words[3];
     chopLine(cloneString( tdb->type), words);
-    if (trackDbSetting(tdb, "bedFilter") != NULL) 
+    if (trackDbSetting(tdb, "bedFilter") != NULL)
 	cType = cfgBedFilt;
     else if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
@@ -897,5 +897,29 @@ for(;ix<metadata->count;ix++)
     }
 metadataFree(&metadata);
 return setting;
+}
+
+int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb)
+/* abandons tableless children from a container tdb, such as a composite
+   returns count of children that have been abandoned */
+{
+struct trackDb *goodKids = NULL;
+struct trackDb *childTdb;
+int badKids = 0;
+
+while((childTdb = slPopHead(&(parentTdb->subtracks))) != NULL)
+    {
+    if (hTableExists(db, childTdb->tableName))
+        slAddHead(&goodKids,childTdb);
+    else
+        {
+        badKids++;
+        trackDbFree(&childTdb);
+        }
+    }
+if(goodKids != NULL)
+    slReverse(&goodKids);
+parentTdb->subtracks = goodKids;
+return badKids;
 }
 

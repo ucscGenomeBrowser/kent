@@ -249,7 +249,7 @@ typedef enum _eCfgType
     cfgGenePred =5,
     cfgChain =6,
     cfgNetAlign =7,
-    cfgBedFilt  =8 
+    cfgBedFilt  =8
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
@@ -304,6 +304,10 @@ char *metadataSettingFind(struct trackDb *tdb,char *name);
 void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b);
 /* Turn comma-separated string of three numbers into three
  * color components. */
+
+int parentTdbAbandonTablelessChildren(char *db, struct trackDb *parentTdb);
+/* abandons tableless children from a container tdb, such as a composite
+   returns count of children that have been abandoned */
 
 #endif /* TRACKDB_H */
 
