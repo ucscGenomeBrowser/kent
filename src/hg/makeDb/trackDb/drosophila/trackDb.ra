@@ -64,7 +64,7 @@ priority 71
 # controls (per Tim).
 type bed 3
 noInherit on
-settingsByView best1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others25:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off
+settingsByView best1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off best25:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others1:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off others25:viewLimits=1:10,maxHeightPixels=100:15:10,autoScale=off
 visibility full
 visibilityViewDefaults best1=pack best25=hide other1=hide other25=hide
 boxedCfg on
