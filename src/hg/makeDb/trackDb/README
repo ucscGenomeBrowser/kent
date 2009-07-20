@@ -285,6 +285,8 @@ chromosomes  -    comma separated list        - only these chroms have data
 metadata     - space delimited name=val pairs - Purely informational.  Gives additional information
                                               - about a track which will be displayed in hgTrackUi
                                               - and hgc. Especially useful for subtracks (see below)
+boxedCfg     - on                             - puts a box around setting controls, much like
+                                              - multi-view controls have.
 scoreFilter        - integer                  - default score filter value for a track
 scoreFilterLimits  - integer:integer          - min:max range that score can take.
                                               - (default 0:1000.  Single value N implies N:1000)
@@ -471,7 +473,7 @@ Specific, optional settings used only by snp125, snp126, and so on:
       respective species' alignments when generating the OrthoTable.
     o codingAnnotations table1,table2,... - each table describes
       changes in a particular gene set's coding sequence caused by SNPs.
-    o codingAnnoLabel_<tableN> - proper name of geneSet for tableN in 
+    o codingAnnoLabel_<tableN> - proper name of geneSet for tableN in
       codingAnnotations' table list
     o defaultGeneTracks table1,table2,... - hgc shows functional annotations
       of SNPs relative to these genePred tracks by default.
@@ -549,6 +551,7 @@ subtrack setting.
 To include a subtrack of a different type, specify
 the complete settings for the subtrack type, and use the "noInherit on"
 trackDb setting.  NOTE: This is required for "Multi-View" (see below).
+Also see "ClosestToHome" methods below.
 
 For readability, please indent the subtrack entries in trackDb.ra by 4 spaces.
 
@@ -572,7 +575,7 @@ Subgroups for a subtrack are set as so:
 
     subGroups name1=tag1 name2=tag2 ...
 
-with the subgroup "name" accociated with the one "tag" in that subgroup
+with the subgroup "name" associated with the one "tag" in that subgroup
 that the subtrack actually belongs to.  All subtracks should belong to
 one tag in each of all the subgroups.
 
@@ -588,17 +591,39 @@ COMPOSITE SUBTRACK SELECTION - 4 ways
    or "dimensions" defined.
 
 COMPOSITE SUBTRACK CONFIGURATION - 3 ways
--------------------------------------
+-----------------------------------------
 1) All subtracks have the same type.
    trackDb cfg settings can be at composite level (noInherit off - default)
    Optionally use 'boxedCfg" to put a box around setting controls.
 2) Subtrack settings have different types.  "Multi-view" required (see below).
-   "noInherit on" is required.
+   "noInherit on" is most likely required.
    Cfg settings in "settingsByView" or in all related subtracks.
 3) Individual subtracks configurable - used in combination with 1 or 2.
    "configurable on" at composite level makes all subtracks configurable.
    settingsByView {view}:configurable=on,... all subtracks per view are configurable
    "configurable on" in subtrack settings makes that one subtrack configurable.
+
+Composite Track "ClosestToHome" paradigm
+----------------------------------------
+With a composite track with or without multi-view, there are many settings that
+could be at the subtrack, view or composite level.  In order to establish rules
+of which setting should take precedence, the ClosestToHome paradign and API was
+inveneted.  This appies both to trackDb settings and cart settings (which are the
+choices made by a user).  The ClosestToHome paradigm is that subtracks settings
+supercede view level setting which supercede composite level settings.  For
+instance, if the setting is "useScore" (to color items), this could be set at the
+subtrack level for only one subtrack, or at the view level (in settingsByView)
+for all subtracks belonging to that view, or at the composite level so that all
+subtracks are affected.  Thus, putting "noInherit on" at the composite level says
+that all subtracks will have their 'type' specified at the subtrack level.  And
+"configurable on" at the composite level means all subtracks will be individually
+configurable by the user.
+NOTE: The "ClosestToHome" APIs must be specifically called in the code, so not
+all  settings are yet supported.  In some cases (such as visibility), it is
+desirable to have separate functionality depending upon the level (composite
+visibility limits view visibility, rather than being superceded by it).  You
+should always examine the effects of putting a setting at composite, view or
+subtrack level, rather than assume it works as you intend.
 
 Composite Track ADDITIONAL OPTIONS
 ----------------------------------
@@ -630,6 +655,7 @@ where each view (HMM,WIN,SIG,ALN) will be controlled by a separate drop down
 (hide,dense,...) and auxilary controls.  All subtracks for a given view must
 be of the same track type.  Each subtrack of a multi-view should have the
 "noInherit on" setting, and all the proper settings for the subtrack type.
+This can be accomplished using the ClosestToHome paradigm.
 
     MULTI-VIEW VISIBILITY DEFAULTS
     ------------------------------
@@ -834,11 +860,13 @@ browser.  However, if the user then sets this to 'full' then 2 of 4 types
 of subtracks will be displayed as packed, the signal will be displayed as
 full and the alignments subtracks will still be hidden.  Also, the configurable
 settings for "Sites-Windowing" will be displayed by default.  Additionally all
-of the subtracks are individually configurable except alignments.  The wigs have
-many default settings but only the one wig shown has yLine. Notice this example
-defines a controlled vocabulary for both cellTypes and factors with definitions
-found in the encode/cv.ra directory (off apache/cgi-bin/). (Don't be confused
-though, this example mm8 composite track doesn't really have controlled vocabulary.)
+of the subtracks are individually configurable except alignments.  Notice this is
+accomplised using "ClosestToHome" methods for 2 of the views (HMM and WIN), but
+directly for the other 2 (SIG and ALN). The wigs have many default settings but
+only the one wig shown has yLine. Notice this example defines a controlled
+vocabulary for both cellTypes and factors with definitions found in the
+encode/cv.ra directory (off apache/cgi-bin/). (Don't be confused though, this
+example mm8 composite track doesn't really have controlled vocabulary.)
 Finally, metadata settings were added to provide further subtrack details.
 
 ---------------------
