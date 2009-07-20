@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.224 2009/07/17 15:03:31 sugnet Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.225 2009/07/20 16:41:22 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3471,7 +3471,7 @@ if (scoreMinStr != NULL)
     int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
     char *setting = trackDbSettingClosestToHome(tdb, MIN_GRAY_LEVEL);
-    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, compositeLevel, MIN_GRAY_LEVEL, 
+    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, compositeLevel, MIN_GRAY_LEVEL,
                         setting ? atoi(setting) : scoreMinGrayLevel);
     if (minGrayLevel <= 0) minGrayLevel = 1;
     if (minGrayLevel > maxShade) minGrayLevel = maxShade;
@@ -4764,7 +4764,7 @@ if(makeCfgRows)
             {
             printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
             if((firstOpened == -1 && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
-            ||  firstOpened != ix)
+            || (firstOpened != -1 && firstOpened != ix))
                 printf(" style=\"display:none\"");
             printf("><TD width=10>&nbsp;</TD>");
             int ix2=ix;
