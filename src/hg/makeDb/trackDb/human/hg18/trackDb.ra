@@ -2087,6 +2087,7 @@ codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
 
 track snp129 override
+visibility hide
 chimpOrangMacOrthoTable snp129OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
