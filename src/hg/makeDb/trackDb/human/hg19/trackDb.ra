@@ -327,7 +327,7 @@ subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMa
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
 visibility full
-visibilityViewDefaults chain=pack+ net=dense+
+visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
 priority 496
