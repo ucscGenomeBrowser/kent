@@ -2278,3 +2278,89 @@ mv wgEncodeYaleChIPseqRel2SignalK562Input.bedGraph4.gz   old
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 390 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 404 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 405 displayed
+
+Resubmit more peaks 2009-07-20
+==============================
+rename table wgEncodeYaleChIPseqRel2PeaksHelas3Max   to wgEncodeYaleChIPseqPeaksHelas3MaxV2;
+rename table wgEncodeYaleChIPseqRel2PeaksHelas3Cfos  to wgEncodeYaleChIPseqPeaksHelas3CfosV2;
+rename table wgEncodeYaleChIPseqRel2PeaksHelas3Cmyc  to wgEncodeYaleChIPseqPeaksHelas3CmycV2;
+rename table wgEncodeYaleChIPseqRel2PeaksHct116Pol2  to wgEncodeYaleChIPseqPeaksHct116Pol2V2;
+rename table wgEncodeYaleChIPseqRel2PeaksK562bE2f4   to wgEncodeYaleChIPseqPeaksK562bE2f4V2;
+drop table wgEncodeYaleChIPseqRel2PeaksGm12878Pol2;
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksHelas3Max.narrowPeak.gz   wgEncodeYaleChIPseqPeaksHelas3MaxV2.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksHelas3Cfos.narrowPeak.gz  wgEncodeYaleChIPseqPeaksHelas3CfosV2.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksHelas3Cmyc.narrowPeak.gz  wgEncodeYaleChIPseqPeaksHelas3CmycV2.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksHct116Pol2.narrowPeak.gz  wgEncodeYaleChIPseqPeaksHct116Pol2V2.narrowPeak.gz
+mv ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksK562bE2f4.narrowPeak.gz   wgEncodeYaleChIPseqPeaksK562bE2f4V2.narrowPeak.gz
+rm ../wgEncodeYaleChIPseqRel2/wgEncodeYaleChIPseqRel2PeaksGm12878Pol2.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksHelas3Max.narrowPeak.gz old
+mv wgEncodeYaleChIPseqPeaksHelas3Cfos.narrowPeak.gz old
+mv wgEncodeYaleChIPseqPeaksHelas3Cmyc.narrowPeak.gz old
+mv wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz old
+mv wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz old
+# Oops.  None of these are legitamately V2s
+mv wgEncodeYaleChIPseqPeaksHelas3MaxV2.narrowPeak.gz  wgEncodeYaleChIPseqPeaksHelas3Max.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksHelas3CfosV2.narrowPeak.gz wgEncodeYaleChIPseqPeaksHelas3Cfos.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksHelas3CmycV2.narrowPeak.gz wgEncodeYaleChIPseqPeaksHelas3Cmyc.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksHct116Pol2V2.narrowPeak.gz wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz
+mv wgEncodeYaleChIPseqPeaksK562bE2f4V2.narrowPeak.gz  wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
+drop table wgEncodeYaleChIPseqPeaksHelas3Max;
+drop table wgEncodeYaleChIPseqPeaksHelas3Cfos;
+drop table wgEncodeYaleChIPseqPeaksHelas3Cmyc;
+drop table wgEncodeYaleChIPseqPeaksHct116Pol2;
+drop table wgEncodeYaleChIPseqPeaksK562bE2f4;
+rename table wgEncodeYaleChIPseqPeaksHelas3MaxV2  to wgEncodeYaleChIPseqPeaksHelas3Max;
+rename table wgEncodeYaleChIPseqPeaksHelas3CfosV2 to wgEncodeYaleChIPseqPeaksHelas3Cfos;
+rename table wgEncodeYaleChIPseqPeaksHelas3CmycV2 to wgEncodeYaleChIPseqPeaksHelas3Cmyc;
+rename table wgEncodeYaleChIPseqPeaksHct116Pol2V2 to wgEncodeYaleChIPseqPeaksHct116Pol2;
+rename table wgEncodeYaleChIPseqPeaksK562bE2f4V2  to wgEncodeYaleChIPseqPeaksK562bE2f4;
+# Edit trackDb.wgEncode.ra for metadata. make DBS=hg18;ci;make alpha DBS=hg18
+
+Now Mike submits using V2 for GM12878/Pol3
+drop table wgEncodeYaleChIPseqPeaksGm12878Pol3;
+rename table wgEncodeYaleChIPseqPeaksGm12878Pol3V2 to wgEncodeYaleChIPseqPeaksGm12878Pol3;
+mv wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz old
+mv wgEncodeYaleChIPseqPeaksGm12878Pol3V2.narrowPeak.gz wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz
+select avg(pValue),avg(qValue) from wgEncodeYaleChIPseqPeaksHelas3Max;
+select avg(pValue),avg(qValue) from wgEncodeYaleChIPseqPeaksHelas3Cfos;
+select avg(pValue),avg(qValue) from wgEncodeYaleChIPseqPeaksHelas3Cmyc;
+select avg(pValue),avg(qValue) from wgEncodeYaleChIPseqPeaksHct116Pol2;
+select avg(pValue),avg(qValue) from wgEncodeYaleChIPseqPeaksK562bE2f4;
+select avg(pValue),avg(qValue) from wgEncodeYaleChIPseqPeaksGm12878Pol3;
++---------------+-----------------+----------------+
+| dataset       | avg(pValue)     | avg(qValue)    |
++---------------+-----------------+----------------+
+| HeLa-S3/Max   | 12.651372975794 | 11.60438613736 |
+| HeLa-S3/c-Fos | 8.4270724793125 | 7.377674166024 |
+| HeLa-S3/c-Myc | 10.585949614416 | 9.496844283647 |
+| HCT-116/Pol2  | 21.657006559714 | 21.01047205319 |
+| K562b/E2f4    | 18.306799526466 | 17.03902673493 |
+| GM12878/Pol3  | 14.031863132653 | 11.50519011406 |
++---------------+-----------------+----------------+
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 439 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 440 displayed
+
+
+Resubmitted 8 signals but all are validly V2:
+    track wgEncodeYaleChIPseqSignalHelas3LargefragmentV2
+    track wgEncodeYaleChIPseqSignalHelas3MnaseV2
+    track wgEncodeYaleChIPseqSignalHelas3MouseiggV2
+    track wgEncodeYaleChIPseqSignalHelas3NakeddnaV2
+    track wgEncodeYaleChIPseqSignalHepg2Pol2V2
+    track wgEncodeYaleChIPseqSignalHepg2Srebp1aV2
+    track wgEncodeYaleChIPseqSignalHepg2Srebp2V2
+    track wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
+# just move the download files around and rebuild    
+mv wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz old
+mv wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz old
+mv wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz old
+mv wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz old
+mv wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz old
+mv wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz old
+mv wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz old
+mv wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz old
+    
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 441 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 442 displayed
+
