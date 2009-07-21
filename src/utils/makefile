@@ -65,6 +65,7 @@ DIRS = \
 	cvsTools \
 	detab \
 	endsInLf \
+	fastqToFa \
 	faAlign \
 	faCmp \
 	faCount \
@@ -83,6 +84,7 @@ DIRS = \
 	faSize \
 	faSomeRecords \
 	faSplit \
+	faToFastq \
 	faToNib \
 	faToTab \
 	faToTwoBit \
