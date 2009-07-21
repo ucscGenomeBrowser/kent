@@ -2517,7 +2517,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 type=wig view=RawSignal replicate=3 labVersion="Maq 0.7.1, F-Seq 1.81" dataVersion="ENCODE Feb 2009 Freeze" subId=325 dateSubmitted=2009-03-21 dateRegenerated=2009-05-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3 fileName=wgEncodeDukeDNaseSeqRawSignalRep3Helas3.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHelas3
-    release alpha
     subTrack wgEncodeChromatinMap off
     shortLabel HeLa FAIRE Pk
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HeLa-S3 cells)
