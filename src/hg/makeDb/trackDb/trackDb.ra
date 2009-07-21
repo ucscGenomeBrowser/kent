@@ -3667,6 +3667,16 @@ spectrum on
 type chain hg17
 otherDb hg17
 
+track netHg17
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 250.1
+visibility dense
+spectrum on
+type netAlign hg17 chainHg17
+otherDb hg17
+
 track chainHg18
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -3690,16 +3700,6 @@ visibility dense
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
-
-track netHg17
-shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 250.1
-visibility dense
-spectrum on
-type netAlign hg17 chainHg17
-otherDb hg17
 
 track chainRheMac2
 shortLabel $o_Organism Chain
@@ -4703,7 +4703,6 @@ otherDb hg19
 chainMinScore 3000
 chainLinearGap medium
 html chainNet
-release alpha
 
     track chainHg19
     subTrack hg19chainNet

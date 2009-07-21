@@ -293,30 +293,6 @@ priority 10
 visibility hide
 type ctgPos
 
-
-searchTable ctgPos
-searchMethod exact
-shortCircuit 1
-termRegex GL[0-9]+\.[0-9]
-query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
-searchPriority 5
-
-searchName ctgPosNoVersion
-searchTable ctgPos
-searchMethod exact
-shortCircuit 1
-termRegex GL[0-9]+
-dontCheck GL[0-9]+\.[0-9]
-query select chrom,chromStart,chromEnd,contig from %s where contig like '%s._'
-searchPriority 5
-
-searchTable ctgPos2
-searchMethod exact
-shortCircuit 1
-termRegex HSCHR[0-9XYMUN]+(_RANDOM)?_CTG[0-9]+(_[0-9]+|_PAR)?
-query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
-searchPriority 5
-
 track multiz4way
 shortLabel 4-way Multiz
 longLabel 4-Way Multiz Alignment & Conservation
@@ -341,44 +317,8 @@ speciesGroups mammal
 sGroup_mammal rheMac2 mm9 canFam2
 treeImage phylo/hg19_4way.gif
 
-# track chainPanTro2 override
-# matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-# matrixHeader A, C, G, T
-
-# track netPanTro2 override
-# visibility dense
-
-
-track chainPanTro2
-release beta
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 240
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain panTro2
-otherDb panTro2
-matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-matrixHeader A, C, G, T
-
-
-track netPanTro2
-release beta
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 240.1
-visibility dense
-spectrum on
-type netAlign panTro2 chainPanTro2
-otherDb panTro2
-
 
 track primateChainNet
-release alpha
 compositeTrack on
 shortLabel Primates Chain/Net
 longLabel Primate genomes, Chain and Net alignment tracks
@@ -386,8 +326,8 @@ subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMac=Rhesus ePapHam=Baboon fCalJac=Marmoset gTarSyr=Tarsier hOtoGar=Bushbaby iMicMur=Mouse_lemur
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
-visibility hide
-visibilityViewDefaults chain=pack+ net=full+
+visibility full
+visibilityViewDefaults chain=pack+ net=dense+
 group compGeno
 noInherit on
 priority 496
@@ -403,23 +343,19 @@ configurable on
 html hg19primateChainNet
 
     track chainPanTro2
-    release alpha
     subTrack primateChainNet on
     subGroups view=chain species=aPanTro clade=aHom
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain panTro2
-    visibility pack 
     otherDb panTro2
 
     track netPanTro2
-    release alpha
     subTrack primateChainNet on 
     subGroups view=net species=aPanTro clade=aHom
     shortLabel $o_Organism Net
-    longLabel $o_Organism ($o_date/$o_db) Alignment NeT
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign panTro2 chainPanTro2
-    visibility dense
     otherDb panTro2
 
     track chainGorGor1
@@ -441,7 +377,6 @@ html hg19primateChainNet
     otherDb gorGor1
 
     track chainPonAbe2
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=cPonAbe clade=aHom
     shortLabel $o_Organism Chain
@@ -450,17 +385,14 @@ html hg19primateChainNet
     otherDb ponAbe2
 
     track netPonAbe2
-    release alpha
     subTrack primateChainNet on 
     subGroups view=net species=cPonAbe clade=aHom
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign ponAbe2 chainPonAbe2
-    visibility dense
     otherDb ponAbe2
 
     track chainRheMac2
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=dRheMac clade=bCerco
     shortLabel $o_Organism Chain
@@ -469,13 +401,11 @@ html hg19primateChainNet
     otherDb rheMac2
 
     track netRheMac2
-    release alpha
     subTrack primateChainNet on 
     subGroups view=net species=dRheMac clade=bCerco
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign rheMac2 chainRheMac2
-    visibility dense
     otherDb rheMac2
 
     track chainPapHam1
@@ -497,7 +427,6 @@ html hg19primateChainNet
     otherDb papHam1
 
     track chainCalJac1
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=fCalJac clade=cHaplo
     shortLabel $o_Organism Chain
@@ -506,8 +435,7 @@ html hg19primateChainNet
     otherDb calJac1
 
     track netCalJac1
-    release alpha
-    subTrack primateChainNet off
+    subTrack primateChainNet on 
     subGroups view=net species=fCalJac clade=cHaplo
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -566,7 +494,6 @@ html hg19primateChainNet
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign otoGar1 chainOtoGar1
-    visibility dense
     otherDb otoGar1
 
 track placentalChainNet
@@ -1383,4 +1310,27 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
 searchPriority 50
+
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex GL[0-9]+\.[0-9]
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchName ctgPosNoVersion
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex GL[0-9]+
+dontCheck GL[0-9]+\.[0-9]
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s._'
+searchPriority 5
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex HSCHR[0-9XYMUN]+(_RANDOM)?_CTG[0-9]+(_[0-9]+|_PAR)?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
 

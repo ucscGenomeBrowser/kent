@@ -12,5 +12,27 @@ spectrum on
 type chain calJac1
 otherDb calJac1
 
-track humanChainNet override
+track hg19chainNet override
 chainMinScore 5000
+priority 280
+
+# human
+track chainHg18 override
+shortLabel $o_db Chain
+longLabel $o_db ($o_date/$o_db) Chained Alignments
+priority 280.1
+otherDb hg18
+
+track netHg18 override
+shortLabel $o_db Net
+longLabel $o_db ($o_date/$o_db) Alignment Net
+priority 280.2
+otherDb hg18
+
+# chimp
+track chainPanTro2 override
+priority 290
+
+track netPanTro2 override
+priority 290.1
+

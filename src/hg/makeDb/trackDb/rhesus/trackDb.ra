@@ -119,5 +119,6 @@ spectrum on
 type netAlign canFam2 chainCanFam2
 otherDb canFam2
 
-track humanChainNet override
+track hg19chainNet override
 chainMinScore 5000
+priority 259
