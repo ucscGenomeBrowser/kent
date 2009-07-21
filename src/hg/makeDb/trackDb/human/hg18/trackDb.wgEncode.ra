@@ -10470,7 +10470,7 @@ shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
 subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC PANC-1=PANC-1
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC PANC-1=PANC-1 SK-N-SH_RA=SK-N-SH_RA
 subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II zControl=Input USF-1=USF-1 Egr-1=Egr-1 Sin3Ak-20=Sin3Ak-20 Control=Control 
 subGroup4 labVersion LabVersion 1=1 2=2
 dimensions dimensionX=cellType dimensionY=factor
@@ -11275,6 +11275,60 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=RawSignal factor=Control cellType=PANC-1
     type wig 1.00 25110.00
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PANC-1 antibody=Control type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=435 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqPeaksRep2SknshraNrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel SK-N-SH_RA NRSF Pk 2
+    longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (NRSF in SK-N-SH_RA cells)
+    subGroups view=Peaks factor=NRSF cellType=SK-N-SH_RA
+    type broadPeak
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-SH_RA antibody=NRSF view=Peaks replicate=2 softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" subId=438 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2SknshraNrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2SknshraNrsf.broadPeak.gz
+
+    track wgEncodeHudsonalphaChipSeqPeaksRep1SknshraNrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel SK-N-SH_RA NRSF Pk 1
+    longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (NRSF in SK-N-SH_RA cells)
+    subGroups view=Peaks factor=NRSF cellType=SK-N-SH_RA
+    type broadPeak
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-SH_RA antibody=NRSF view=Peaks replicate=1 softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" subId=438 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1SknshraNrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1SknshraNrsf.broadPeak.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel SK-N-SH_RA NRSF Raw 1
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (NRSF in SK-N-SH_RA cells)
+    subGroups view=RawSignal factor=NRSF cellType=SK-N-SH_RA
+    type wig 1.00 10807.00
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-SH_RA antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=438 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel SK-N-SH_RA Control Raw 1
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Control in SK-N-SH_RA cells)
+    subGroups view=RawSignal factor=Control cellType=SK-N-SH_RA
+    type wig 1.00 10286.00
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-SH_RA antibody=Control type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=438 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel SK-N-SH_RA Control Raw 2
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Control in SK-N-SH_RA cells)
+    subGroups view=RawSignal factor=Control cellType=SK-N-SH_RA
+    type wig 1.00 2739.00
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-SH_RA antibody=Control type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=438 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel SK-N-SH_RA NRSF Raw 2
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (NRSF in SK-N-SH_RA cells)
+    subGroups view=RawSignal factor=NRSF cellType=SK-N-SH_RA
+    type wig 1.00 12410.00
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-SH_RA antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=438 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf.wig.gz
 
 
 track wgEncodeHudsonalphaChipSeqProv
