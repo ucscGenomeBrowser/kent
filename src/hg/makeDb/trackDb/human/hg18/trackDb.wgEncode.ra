@@ -6816,17 +6816,16 @@ wgEncode 1
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 treatment=IFNg30 antibody=STAT1 accession=GSE12782 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1 fileName=wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
 
-    track wgEncodeYaleChIPseqSignalHelas3ifngStat1
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
+    #release BOTH  V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa/Ig30 STAT1 Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in HeLa/IFNg30 cells)
     subGroups view=Signal factor=STAT1 cellType=uHeLaIg30
-    type wig 0.00 20910.00
-    spanList 1
+    type bedGraph 4
     color 0,102,136
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 treatment=IFNg30 antibody=STAT1 view=Signal accession=GSE12782 labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Nov 2008 Freeze" subId=13 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngStat1 fileName=wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 treatment=IFNg30 antibody=STAT1 view=Signal accession=GSE12782 labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=442 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2008-10-31 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3ifngStat1V2 fileName=wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
     #release BOTH
@@ -6989,17 +6988,16 @@ wgEncode 1
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Largefragment fileName=wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz
 
-    track wgEncodeYaleChIPseqSignalHelas3Largefragment
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHelas3LargefragmentV2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LgFrag Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Frag Control in HeLa cells)
     subGroups view=Signal factor=yLarge cellType=t2HeLa
-    type wig 0.00 5906.00
-    spanList first
+    type bedGraph 4
     color 0,102,136
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=193 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Largefragment fileName=wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3LargefragmentV2 fileName=wgEncodeYaleChIPseqSignalHelas3LargefragmentV2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Largefragment
     release alpha
@@ -7021,17 +7019,16 @@ wgEncode 1
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Large_Fragment type=wig fragLength=575 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-22 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Largefragment.wig.gz
 
-    track wgEncodeYaleChIPseqSignalHelas3Mnase
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHelas3MnaseV2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (MNase Control in HeLa cells)
     subGroups view=Signal factor=yMNase cellType=t2HeLa
-    type wig 0.00 13908.00
-    spanList first
+    type bedGraph 4
     color 0,102,136
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=194 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mnase fileName=wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=MNase view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3MnaseV2 fileName=wgEncodeYaleChIPseqSignalHelas3MnaseV2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mnase
     release alpha
@@ -7064,17 +7061,16 @@ wgEncode 1
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg fileName=wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
 
-    track wgEncodeYaleChIPseqSignalHelas3Mouseigg
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHelas3MouseiggV2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MusIgG Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (mIgG Control in HeLa cells)
     subGroups view=Signal factor=yMouseIG cellType=t2HeLa
-    type wig 0.00 6717.00
-    spanList first
+    type bedGraph 4
     color 0,102,136
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=195 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Mouseigg fileName=wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3MouseiggV2 fileName=wgEncodeYaleChIPseqSignalHelas3MouseiggV2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Mouseigg
     release alpha
@@ -7096,17 +7092,16 @@ wgEncode 1
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Mouse_IgG type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=329 dateSubmitted=2009-02-25 dateRegenerated=2009-05-08 dateUnrestricted=2010-02-07 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg fileName=wgEncodeYaleChIPseqRel2RawSignalRep2Helas3Mouseigg.wig.gz
 
-    track wgEncodeYaleChIPseqSignalHelas3Nakeddna
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHelas3NakeddnaV2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa DNA Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA, HeLa cells)
     subGroups view=Signal factor=yNaked cellType=t2HeLa
-    type wig 0.00 8487.00
-    spanList first
+    type bedGraph 4
     color 0,102,136
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=196 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Nakeddna fileName=wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Naked_DNA view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3NakeddnaV2 fileName=wgEncodeYaleChIPseqSignalHelas3NakeddnaV2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Helas3Nakeddna
     release alpha
@@ -7149,17 +7144,16 @@ wgEncode 1
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Pol2 fileName=wgEncodeYaleChIPseqPeaksHepg2Pol2.narrowPeak.gz
 
-    track wgEncodeYaleChIPseqSignalHepg2Pol2
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHepg2Pol2V2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 Pol2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
     subGroups view=Signal factor=POL2 cellType=t2HepG2
-    type wig 0.00 2790.00
-    spanList first
+    type bedGraph 4
     color 189,0,157
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=241 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Pol2 fileName=wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Pol2V2 fileName=wgEncodeYaleChIPseqSignalHepg2Pol2V2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Pol2
     release alpha
@@ -7202,17 +7196,16 @@ wgEncode 1
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
 
-    track wgEncodeYaleChIPseqSignalHepg2Srebp1a
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHepg2Srebp1aV2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP1A Sg
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1A in HepG2 cells)
     subGroups view=Signal factor=SREBP1A cellType=t2HepG2
-    type wig 0.00 632.00
-    spanList first
+    type bedGraph 4
     color 189,0,157
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=242 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1a fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP1A view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp1aV2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp1aV2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp1a
     release alpha
@@ -7255,17 +7248,16 @@ wgEncode 1
     color 189,0,157
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Peaks labVersion=PeakSeq1.0 chromStart=+1 dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHepg2Srebp2 fileName=wgEncodeYaleChIPseqPeaksHepg2Srebp2.narrowPeak.gz
 
-    track wgEncodeYaleChIPseqSignalHepg2Srebp2
-    #release BOTH
+    track wgEncodeYaleChIPseqSignalHepg2Srebp2V2
+    #release BOTH V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HepG2 SREBP2 Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP2 in HepG2 cells)
     subGroups view=Signal factor=SREBP2 cellType=t2HepG2
-    type wig 0.00 893.00
-    spanList first
+    type bedGraph 4
     color 189,0,157
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Signal labVersion=PeakSeq1.0 sparseData=true dataVersion="ENCODE Feb 2009 Freeze" subId=243 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HepG2 antibody=SREBP2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=441 submittedDataVersion=V2 dateResubmitted=2009-07-21 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHepg2Srebp2V2 fileName=wgEncodeYaleChIPseqSignalHepg2Srebp2V2.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2RawSignalRep1Hepg2Srebp2
     release alpha
