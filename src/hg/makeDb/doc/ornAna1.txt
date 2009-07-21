@@ -1456,3 +1456,12 @@ skipInvalid yes
     #	132776204 bases of 1842236818 (7.207%) in intersection
 
 ############################################################################
+############################################################################
+# TRANSMAP vertebrate.2009-07-01 build  (2009-07-21 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+
+see doc/builds.txt for specific details.
+############################################################################

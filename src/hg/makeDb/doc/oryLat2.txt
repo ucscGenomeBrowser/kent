@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.12 2009/02/02 21:32:31 braney Exp $"
+#	"$Id: oryLat2.txt,v 1.13 2009/07/21 21:01:45 markd Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.12 2009/02/02 21:32:31 braney Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.13 2009/07/21 21:01:45 markd Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -1858,3 +1858,12 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+############################################################################
+# TRANSMAP vertebrate.2009-07-01 build  (2009-07-21 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+
+see doc/builds.txt for specific details.
+############################################################################

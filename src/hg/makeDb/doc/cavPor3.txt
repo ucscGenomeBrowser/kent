@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.18 2009/01/24 02:35:21 tdreszer Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.19 2009/07/21 21:01:41 markd Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -4303,3 +4303,12 @@ nameTranslation "s/^MT/chrM/;"
 
 ############################################################################
 
+############################################################################
+# TRANSMAP vertebrate.2009-07-01 build  (2009-07-21 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+
+see doc/builds.txt for specific details.
+############################################################################

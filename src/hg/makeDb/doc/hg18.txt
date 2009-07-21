@@ -28075,7 +28075,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.369 2009/07/17 16:08:43 sugnet Exp $
+# $Id: hg18.txt,v 1.370 2009/07/21 21:01:42 markd Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28123,7 +28123,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.369 2009/07/17 16:08:43 sugnet Exp $
+# $Id: hg18.txt,v 1.370 2009/07/21 21:01:42 markd Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28448,3 +28448,12 @@ cageSingleTrack -input=all.wscores.bed  -forward=all.forward.plaw.bg2 -reverse=a
 # Load up the bed graph tracks
 hgLoadBed -bedGraph=4 hg18 FantomCageForwardPowerLawGraph all.forward.plaw.bg2
 hgLoadBed -bedGraph=4 hg18 FantomCageReversePowerLawGraph all.reverse.plaw.bg2
+############################################################################
+# TRANSMAP vertebrate.2009-07-01 build  (2009-07-21 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+
+see doc/builds.txt for specific details.
+############################################################################
