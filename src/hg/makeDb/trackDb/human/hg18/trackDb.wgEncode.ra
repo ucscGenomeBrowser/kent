@@ -11375,6 +11375,60 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 14870.00
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HeLa-S3 antibody=Control type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=433 dateSubmitted=2009-07-19 dateUnrestricted=2010-04-19 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Control.wig.gz
 
+    track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Nrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel PFSK-1 NRSF Pk 1
+    longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (NRSF in PFSK-1 cells)
+    subGroups view=Peaks factor=NRSF cellType=PFSK-1
+    type broadPeak
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=NRSF view=Peaks replicate=1 softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" subId=436 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Nrsf.broadPeak.gz
+
+    track wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Nrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel PFSK-1 NRSF Pk 2
+    longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (NRSF in PFSK-1 cells)
+    subGroups view=Peaks factor=NRSF cellType=PFSK-1
+    type broadPeak
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=NRSF view=Peaks replicate=2 softwareVersion=MACS dataVersion="ENCODE July 2009 Freeze" subId=436 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Nrsf.broadPeak.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel PFSK-1 Control Raw 1
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Control in PFSK-1 cells)
+    subGroups view=RawSignal factor=Control cellType=PFSK-1
+    type wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP1PFSK1CONTROL_MINMAXRANGE
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=Control type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=436 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel PFSK-1 NRSF Raw 1
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (NRSF in PFSK-1 cells)
+    subGroups view=RawSignal factor=NRSF cellType=PFSK-1
+    type wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP1PFSK1NRSF_MINMAXRANGE
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=436 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel PFSK-1 NRSF Raw 2
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (NRSF in PFSK-1 cells)
+    subGroups view=RawSignal factor=NRSF cellType=PFSK-1
+    type wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP2PFSK1NRSF_MINMAXRANGE
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=436 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf.wig.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
+    release alpha
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel PFSK-1 Control Raw 2
+    longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Control in PFSK-1 cells)
+    subGroups view=RawSignal factor=Control cellType=PFSK-1
+    type wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP2PFSK1CONTROL_MINMAXRANGE
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=Control type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=436 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control fileName=wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control.wig.gz
+
 
 track wgEncodeHudsonalphaChipSeqProv
 # testing PROVISIONAL release of subtracks.
