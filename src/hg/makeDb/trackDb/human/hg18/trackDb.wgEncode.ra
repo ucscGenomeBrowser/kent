@@ -11389,7 +11389,7 @@ compositeTrack on
 shortLabel GIS PET Loc
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
 group expression
-subGroup1 view Views Tags=Tags Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
+subGroup1 view Views Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
 subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878 prostate=Prostate HepG2=HepG2
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=long_PolyA+ total=Total
@@ -11397,7 +11397,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Alignments=pack Tags=pack
+visibilityViewDefaults Alignments=pack 
 noInherit on
 priority 0
 type bed 3
@@ -11465,57 +11465,6 @@ wgEncode 1
     color 153,38,0
     colorByStrand 46,0,184 238,85,34
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=210 dateSubmitted=2009-02-16 dateUnrestricted=2009-11-16 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsGm12878NucleusLongpolya fileName=wgEncodeGisPetAlignmentsGm12878NucleusLongpolya.pairedTagAlign.gz
-
-    track wgEncodeGisPetTagsProstateCellLongpolya
-    release alpha
-    subTrack wgEncodeGisPet
-    shortLabel longPolyA prostate whole cell
-    longLabel ENCODE GIS PET Tags (PolyA+ RNA in prostate whole cell)
-    subGroups view=Tags cellType=prostate localization=0-cell rnaExtract=longPolyA
-    #type gappedPeak
-    type bed 12 .
-    configurable on
-    color 0,102,136
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cell view=Tags dataVersion="ENCODE Feb 2009 Freeze" subId=105 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetTagsProstateCellLongpolya fileName=wgEncodeGisPetTagsProstateCellLongpolya.gappedPeak.gz
-
-    track wgEncodeGisPetTagsK562CytosolLongpolya
-    release alpha
-    subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 cytosol
-    longLabel ENCODE GIS PET Tags (PolyA+ RNA in K562 cytosol)
-    subGroups view=Tags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-    #type gappedPeak
-    type bed 12 +
-    configurable on
-    color 46,0,184
-    colorByStrand 46,0,184 238,85,34
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=cytosol view=Tags dataVersion="ENCODE Feb 2009 Freeze" subId=105 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetTagsK562CytosolLongpolya fileName=wgEncodeGisPetTagsK562CytosolLongpolya.gappedPeak.gz
-
-    track wgEncodeGisPetTagsK562NucleusLongpolya
-    release alpha
-    subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 nucleus
-    longLabel ENCODE GIS PET Tags (PolyA+ RNA in K562 nucleus)
-    subGroups view=Tags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
-    #type gappedPeak
-    type bed 12 +
-    configurable on
-    color 46,0,184
-    colorByStrand 46,0,184 238,85,34
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=nucleus view=Tags dataVersion="ENCODE Feb 2009 Freeze" subId=105 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetTagsK562NucleusLongpolya fileName=wgEncodeGisPetTagsK562NucleusLongpolya.gappedPeak.gz
-
-    track wgEncodeGisPetTagsK562PolysomeLongpolya
-    release alpha
-    subTrack wgEncodeGisPet
-    shortLabel longPolyA K562 polysome
-    longLabel ENCODE GIS PET Tags (PolyA+ RNA in K562 polysome)
-    subGroups view=Tags cellType=K562 localization=10-polysome rnaExtract=longPolyA
-    #type gappedPeak
-    type bed 12 +
-    configurable on
-    color 46,0,184
-    colorByStrand 46,0,184 238,85,34
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=polysome view=Tags dataVersion="ENCODE Feb 2009 Freeze" subId=105 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetTagsK562PolysomeLongpolya fileName=wgEncodeGisPetTagsK562PolysomeLongpolya.gappedPeak.gz
 
     track wgEncodeGisPetAlignmentsProstateCellLongpolya
     release alpha
