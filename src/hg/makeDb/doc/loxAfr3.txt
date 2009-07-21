@@ -1,0 +1,143 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how we made the elephant browser database on
+#  Broad Institute loxAfr3 (NCBI project 12569, AAGU03000000)
+
+#	"$Id: loxAfr3.txt,v 1.1 2009/07/21 20:42:58 hiram Exp $";
+
+#############################################################################
+# Download sequence (DONE - 2009-07-15 - Hiram)
+    mkdir -p /hive/data/genomes/loxAfr3/broad
+    /hive/data/genomes/loxAfr3/broad
+    wget --timestamping \
+"ftp://ftp.broadinstitute.org/pub/assemblies/mammals/elephant/loxAfr3/*"
+
+    #	lift quality scores to scaffold coordinates
+    qaToQac assembly.quals.gz assembly.quals.qac
+    qacAgpLift assembly.agp assembly.quals.qac loxAfr3.quals.qac
+
+#############################################################################
+# Elephant loxAfr3 browser initialization (DONE - 2009-07-15 - Hiram)
+    cd /hive/data/genomes/loxAfr3
+    cat << '_EOF_' > loxAft3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db loxAfr3
+clade mammal
+genomeCladePriority 35
+scientificName Loxodonta africana
+commonName Elephant
+assemblyDate Jul. 2009
+assemblyLabel Broad Institute loxAfr3 (NCBI project 12569, AAGU03000000)
+orderKey 340
+mitoAcc NC_000934
+fastaFiles /hive/data/genomes/loxAfr3/broad/assembly.bases.gz
+agpFiles /hive/data/genomes/loxAfr3/broad/assembly.agp
+qualFiles /hive/data/genomes/loxAfr3/broad/loxAfr3.quals.qac
+dbDbSpeciesDir elephant
+taxId 9785
+'_EOF_'
+    # << happy emacs
+    #	run stepwise to verify each step
+    makeGenomeDb.pl -stop=seq loxAfr3.config.ra > seq.log 2>&1
+    makeGenomeDb.pl -continue=agp -stop=agp loxAfr3.config.ra > agp.log 2>&1
+    makeGenomeDb.pl -continue=db -stop=db loxAfr3.config.ra > db.log 2>&1
+    makeGenomeDb.pl -continue=dbDb -stop=dbDb loxAfr3.config.ra > dbDb.log 2>&1
+    makeGenomeDb.pl -continue=trackDb loxAfr3.config.ra > trackDb.log 2>&1
+
+
+#############################################################################
+# loxAfr3 repeatMasker (DONE - 2009-07-15 - Hiram)
+    mkdir /hive/data/genomes/loxAfr3/bed/repeatMasker
+    cd /hive/data/genomes/loxAfr3/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=`pwd` loxAfr3 > do.log 2>&1
+    #	about 6 hours
+    cat faSize.rmsk.txt
+    #	3196760833 bases (78195493 N's 3118565340 real 1633809371 upper
+    #	1484755969 lower) in 2353 sequences in 1 files
+
+#############################################################################
+# loxAfr3 simpleRepeat (DONE - 2009-07-15 - Hiram)
+    mkdir /hive/data/genomes/loxAfr3/bed/simpleRepeat
+    cd /hive/data/genomes/loxAfr3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` loxAfr3 > do.log 2>&1
+    #	real    23m42.536s
+    cat fb.simpleRepeat
+    #	27746420 bases of 3118565340 (0.890%) in intersection
+
+    #	add to RM after done above:
+    twoBitMask bed/repeatMasker/loxAfr3.clean.2bit \
+	-add bed/simpleRepeat/trfMask.bed loxAfr3.2bit
+    twoBitToFa loxAfr3.2bit stdout | faSize stdin > faSize.loxAfr3.2bit.txt
+
+#############################################################################
+# create ooc file and populate /scratch/data (DONE - 2009-07-16 - Hiram)
+    #	repMatch = 1024 * sizeof(loxAfr3)/sizeof(hg19)
+    #	1102 = 1024 * (3118565340/2897310462)
+    time blat loxAfr3.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/loxAfr3.11.ooc \
+	-repMatch=1100
+    #	Wrote 41026 overused 11-mers to jkStuff/loxAfr3.11.ooc
+
+    mkdir /hive/data/staging/data/loxAfr3
+    cp -p loxAfr3.2bit /hive/data/staging/data/loxAfr3
+    cp -p jkStuff/loxAfr3.11.ooc /hive/data/staging/data/loxAfr3
+    cp -p chrom.sizes /hive/data/staging/data/loxAfr3
+
+    #	request push to kluster nodes
+
+##########################################################################
+## GENBANK alignments (DONE - 2007-08-03 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/genbank/etc
+    cvs up
+    # edit genbank.conf and add the following entry just above loxAfr1:
+# loxAfr3 (elephant)
+loxAfr3.serverGenome = /hive/data/genomes/loxAfr3/loxAfr3.2bit
+loxAfr3.clusterGenome = /scratch/data/loxAfr3/loxAfr3.2bit
+loxAfr3.ooc = /scratch/data/loxAfr3/loxAfr3.11.ooc
+loxAfr3.lift = no
+loxAfr3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+loxAfr3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+loxAfr3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+loxAfr3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+loxAfr3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+loxAfr3.refseq.mrna.native.load = yes
+loxAfr3.refseq.mrna.xeno.load = yes
+loxAfr3.genbank.mrna.xeno.load = yes
+loxAfr3.genbank.est.native.load = no
+loxAfr3.downloadDir = loxAfr3
+loxAfr3.perChromTables = no
+
+    # after commiting that edit, install thusly:
+    cd $HOME/kent/src/hg/makeDb/genbank
+    make etc-update
+
+    ssh genbank
+    screen	# use a screen to manage this long lived job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial loxAfr3 &
+    ##	logFile: var/build/logs/2009.07.21-10:14:29.loxAfr3.initalign.log
+    #	real    174m1.258s
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad loxAfr3
+    #	var/dbload/hgwdev/logs/2009.07.21-13:22:25.dbload.log
+    #	real    14m0.774s
+
+    featureBits loxAfr3 xenoMrna
+    #	65367813 bases of 3118565340 (2.096%) in intersection
+    featureBits loxAfr3 xenoRefGene
+    #	50364043 bases of 3118565340 (1.615%) in intersection
+    featureBits loxAfr3 all_mrna
+    #	15550 bases of 3118565340 (0.000%) in intersection
+
+    # enable daily alignment and update of hgwdev (DONE - 2009-07-21 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add mm9 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added loxAfr3 - Loxodonta africana" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+##########################################################################
