@@ -115,9 +115,9 @@ while(TRUE)
 	AllocVar(tmFirstUse);
 	AllocVar(tmLastUse);
 	if (!strptime(row[1], "%Y-%m-%d %H:%M:%S", tmFirstUse))
-	    errAbort("strptime failed for %s", row[1]);
+	    errAbort("strptime failed for firstUse %s", row[1]);
 	if (!strptime(row[2], "%Y-%m-%d %H:%M:%S", tmLastUse))
-	    errAbort("strptime failed for %s", row[2]);
+	    errAbort("strptime failed for lastUse %s", row[2]);
 
 	time_t firstUse, lastUse, now;
         now = time(NULL);
