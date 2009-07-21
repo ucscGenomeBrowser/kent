@@ -28,13 +28,13 @@ end
 
 targetQId = -1
 pipelineInstanceName = ARGV[0]
-if (ARGV.length == 2)
+if (ARGV.length >= 2)
   param1 = ARGV[1]
   if (myIsInteger?(param1))
     targetQId = param1.to_i
 
-    #debug
-    print "working on queueId #{targetQId}\n"  # DEBUG REMOVE debug galt
+    # debug
+    #print "working on queueId #{targetQId}\n"
     STDOUT.flush
 
     job = QueuedJob.find_by_id(targetQId)
@@ -112,7 +112,8 @@ loaders = {}
 
 while true
 
-  #print ".\n"  # DEBUG debug GALT remove this
+  # debug
+  #print ".\n"  
 
   STDOUT.flush
 
@@ -226,8 +227,16 @@ while true
         end
         alljobs[project_id] = true
 
+        # works as long as the convention remains of naming things op_background() 
+        bgr = source.rindex("_background")
+        if bgr
+	  op = source[0,bgr]
+        else
+          op = ""
+        end
+
         pid = fork do
-          exec("./pipeline_runner.rb #{pipelineInstanceName} #{job.id}")
+          exec("./pipeline_runner.rb #{pipelineInstanceName} #{job.id} #{project_id} #{op}")
         end
 
         Process.detach(pid)
