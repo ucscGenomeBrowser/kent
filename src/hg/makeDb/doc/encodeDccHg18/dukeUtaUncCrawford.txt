@@ -1384,4 +1384,44 @@ Pushed Mapability into QA 2009-06-15
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 344 reviewing
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 345 reviewing
 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 277 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 277 reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 31 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 34 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 109 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 112 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 113 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 116 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 117 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 127 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 131 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 228 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 231 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 234 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 235 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 244 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 245 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 258 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 272 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 274 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 275 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 277 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 278 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 280 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 281 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 282 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 283 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 284 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 285 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 286 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 287 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 325 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 326 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 327 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 328 released
+
+Not yet:
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 104 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 336 released
 
