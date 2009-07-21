@@ -20,7 +20,9 @@ module PipelineBackground
 
   def clear_run_stat(project_id)
     project = Project.find(project_id)
-    project.run_stat = nil
+    if  project.run_stat != "waiting"  # helps keep auto-chain-through blocked
+      project.run_stat = nil
+    end
     saver project
   rescue ActiveRecord::RecordNotFound
   end
@@ -51,8 +53,15 @@ module PipelineBackground
     ActiveRecord::Base.verify_active_connections!
 
     if exitCode == 0
-      new_status project, "validated"
-      load_background(project_id)
+      #old way:
+      #new_status project, "validated"
+      #load_background(project_id)
+      new_status project, "load requested"
+      # do not chain through immediatly, instead request the next step.
+      unless queue_job project.id, "load_background(#{project.id})"
+        print "System error - queued_jobs save failed."
+        return
+      end
     else
       new_status project, "validate failed"
       # send email notification
@@ -272,7 +281,14 @@ module PipelineBackground
     end
 
     if project.status == "uploaded"
-      validate_background(project_id, allowReloads)
+      #old way: 
+      #validate_background(project_id, allowReloads)
+      # do not chain through immediatly, instead request the next step.
+      new_status project, "validate requested"
+      unless queue_job project.id, "validate_background(#{project.id}, \"#{allowReloads}\")"
+        print "System error - queued_jobs save failed.\n"
+        return
+      end
     end
 
   end
@@ -678,6 +694,18 @@ private
 
   def getUnloadErrText(project)
     return getErrText(project, "unload_error")
+  end
+
+  def queue_job(project_id, source)
+    # TODO create a function for this
+    job = QueuedJob.new
+    job.project_id = project_id
+    job.queued_at = Time.now.utc
+    job.source_code = source
+    unless job.save
+      return false
+    end
+    return true
   end
 
 end

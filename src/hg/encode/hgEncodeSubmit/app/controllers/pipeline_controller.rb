@@ -79,7 +79,7 @@ class PipelineController < ApplicationController
     if @project.run_stat and @project.run_stat == "waiting"
       job = QueuedJob.find(:first, :conditions => ["project_id = ?", @project.id])
       if job
-        @aheadOfYou = QueuedJob.count_by_sql "select count(*) from queued_jobs where id < #{job.id}"
+        @aheadOfYou = QueuedJob.count_by_sql "select count(*) from queued_jobs where id < #{job.id} and source_code <> 'done'"
       else
         @aheadOfYou = nil
       end
@@ -119,7 +119,7 @@ class PipelineController < ApplicationController
     end
     if @project.status == "validated"
       new_status @project, "load requested"
-      unless queue_job "load_background(#{@project.id})"
+      unless queue_job @project.id, "load_background(#{@project.id})"
         flash[:error] = "System error - queued_jobs save failed."
         return
       end
@@ -143,7 +143,7 @@ class PipelineController < ApplicationController
     end
     if (@project.status == "uploaded") or (@project.status == "validate failed")
       new_status @project, "validate requested"
-      unless queue_job "validate_background(#{@project.id}, \"#{allowReloads}\")"
+      unless queue_job @project.id, "validate_background(#{@project.id}, \"#{allowReloads}\")"
         flash[:error] = "System error - queued_jobs save failed."
         return
       end
@@ -210,12 +210,12 @@ class PipelineController < ApplicationController
     msg = ""
     msg += "Submission unload requested."
     new_status @project, "unload requested"
-    unless queue_job "unload_background(#{@project.id})"
+    unless queue_job @project.id, "unload_background(#{@project.id})"
       flash[:error] = "System error - queued_jobs save failed."
       return
     end
     flash[:notice] = msg
-    redirect_to :action => 'show_user'
+    redirect_to :action => 'show', :id => @project
   end
 
   def delete
@@ -229,7 +229,7 @@ class PipelineController < ApplicationController
     msg = ""
     msg += "Submission delete requested."
     new_status @project, "delete requested"
-    unless queue_job "delete_background(#{@project.id})"
+    unless queue_job @project.id, "delete_background(#{@project.id})"
       flash[:error] = "System error - queued_jobs save failed."
       return
     end
@@ -388,7 +388,7 @@ class PipelineController < ApplicationController
     new_status @project, "upload requested"
     upload_name = @upload.blank? ? "" : @upload.original_filename
     param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{autoResume}\", \"#{allowReloads}\""
-    unless queue_job "upload_background(#{param_string})"
+    unless queue_job @project.id, "upload_background(#{param_string})"
       flash[:error] = "System error - queued_jobs save failed."
       return
     end
@@ -437,7 +437,7 @@ class PipelineController < ApplicationController
     flash[:notice] = msg
 
     new_status @project, "re-expand all requested"
-    unless queue_job "reexpand_all_background(#{@project.id})"
+    unless queue_job @project.id, "reexpand_all_background(#{@project.id})"
       flash[:error] = "System error - queued_jobs save failed."
       return
     end
@@ -453,7 +453,7 @@ class PipelineController < ApplicationController
     end
     if @project.status != "new"
       new_status @project, "re-expand all requested"
-      unless queue_job "reexpand_all_background(#{@project.id})"
+      unless queue_job @project.id, "reexpand_all_background(#{@project.id})"
         flash[:error] = "System error - queued_jobs save failed."
         return
       end
@@ -470,18 +470,6 @@ private
     unless @project.user_id == @current_user.id or @current_user.role == "admin"
       flash[:error] = "That project does not belong to you."
       redirect_to :action => 'list'
-      return false
-    end
-    return true
-  end
-
-  def queue_job(source)
-    # TODO create a function for this
-    job = QueuedJob.new
-    job.project_id = @project.id
-    job.queued_at = Time.now.utc
-    job.source_code = source
-    unless job.save
       return false
     end
     return true
