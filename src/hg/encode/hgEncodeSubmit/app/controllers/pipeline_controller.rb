@@ -67,12 +67,14 @@ class PipelineController < ApplicationController
       when "upload failed"
 	@errText = getUploadErrText(@project)
       when "uploading"
-        projectDir = path_to_project_dir(@project.id)
- 	upText = getUploadErrText.split("\n")
+	upText = getUploadErrText(@project)
         unless upText.blank?
- 	  upText = upText.last.split(" ").first
-          if upText.last(1) == "K"
- 	    @uploadText = upText
+	  upText = upText.split("\n")
+	  if upText.last
+	    upText = upText.last.split(" ").first
+	    if upText.last(1) == "K"
+	      @uploadText = upText
+	    end
           end
         end
     end 

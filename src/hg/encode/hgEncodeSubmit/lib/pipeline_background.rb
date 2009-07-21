@@ -218,8 +218,7 @@ module PipelineBackground
     
     unless upurl.blank?
 
-      # trying for more info, remove -nv option:
-      cmd = "wget -O #{pf} #{autoResume} '#{upurl}' &> #{projectDir}/upload_error" 
+      cmd = "wget -v -O #{pf} #{autoResume} '#{upurl}' &> #{projectDir}/upload_error" 
 
       #yell "\n\nGALT! cmd=[#{cmd}]\n\n"   # DEBUG remove
 
