@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.129 2008/09/11 23:19:30 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.130 2009/07/22 16:45:17 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1822,7 +1822,7 @@ if (status != NULL)
     if (job != NULL)
 	{
         job->lastClockIn = now;
-        if (!sameString(job->machine->name, machine))
+        if (!sameWord(job->machine->name, machine))
             {
             logError("hub: checkIn %s %s %s should be from %s",
                      machine, jobIdString, status, job->machine->name);
