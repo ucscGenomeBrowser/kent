@@ -3404,7 +3404,6 @@ type bed 3
 wgEncode 1
 
     track wgEncodeNhgriNRESilencersK562Ggamma
-    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 gamma Si
     longLabel ENCODE NHGRI Elnitski NRE Silencers (Ggamin prom. in K562 cells)
@@ -3414,7 +3413,6 @@ wgEncode 1
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Ggamma fileName=wgEncodeNhgriNRESilencersK562Ggamma.bed6.gz
 
     track wgEncodeNhgriNREEnhancerBlockersK562Ggamma
-    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 gamma EB
     longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (Ggam prom. in K562 cells)
@@ -3424,7 +3422,6 @@ wgEncode 1
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=G-gamma view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma fileName=wgEncodeNhgriNREEnhancerBlockersK562Ggamma.bed6.gz
 
     track wgEncodeNhgriNRESilencersK562Sv40
-    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 Si
     longLabel ENCODE NHGRI Elnitski NRE Silencers (SV40 prom. in K562 cells)
@@ -3434,7 +3431,6 @@ wgEncode 1
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Silencers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNRESilencersK562Sv40 fileName=wgEncodeNhgriNRESilencersK562Sv40.bed6.gz
 
     track wgEncodeNhgriNREEnhancerBlockersK562Sv40
-    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 EB
     longLabel ENCODE NHGRI Elnitski NRE Enhancer Blockers (SV40 prom. in K562 cells)
