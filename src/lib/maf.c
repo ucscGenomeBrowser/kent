@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.39 2009/07/22 17:21:16 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.40 2009/07/22 18:00:27 markd Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -642,8 +642,8 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         subMc->start = mc->start + countNonDash(mc->text, textStart);
         subMc->size = countNonDash(mc->text+textStart, textSize);
         subMc->text = cloneStringZ(mc->text + textStart, textSize);
-		if (mc->quality != NULL)
-			subMc->quality = cloneStringZ(mc->quality + textStart, textSize);
+        if (mc->quality != NULL)
+            subMc->quality = cloneStringZ(mc->quality + textStart, textSize);
         }
     else
 	{
