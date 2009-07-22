@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.68 2009/07/15 02:03:48 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.69 2009/07/22 22:34:59 larrym Exp $
 
 # Usage:
 #
@@ -550,7 +550,7 @@ $shortLabel = "ENCODE shortLabel" if (!defined($shortLabel));
 $longLabel = "ENCODE longLabel Missing" if (!defined($longLabel));
 
 my $releaseLog = "$longLabel: " . join(", ", keys %labels);
-my $releaseLogUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$daf->{assembly}&g=$compositeTrack";
+my $releaseLogUrl = "../../cgi-bin/hgTrackUi?db=$daf->{assembly}&g=$compositeTrack";
 
 HgAutomate::verbose(2, "pushQ tables: $tables\n");
 HgAutomate::verbose(2, "pushQ files: $files\n");
