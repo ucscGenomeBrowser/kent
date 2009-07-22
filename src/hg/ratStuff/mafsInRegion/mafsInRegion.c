@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.5 2007/09/20 03:24:14 lowec Exp $";
+static char const rcsid[] = "$Id: mafsInRegion.c,v 1.6 2009/07/22 20:23:27 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -100,15 +100,15 @@ while (maf)
     {
     mc = maf->components;
     if (!chrom || differentString(chrom, chromFromSrc(mc->src)))
-        /* new chrom */
-        chrom = cloneString(chromFromSrc(mc->src));
+        chrom = cloneString(chromFromSrc(mc->src));         /* new chrom */
     bed = (struct bed *)hashFindVal(regionHash, chrom);
     if (!bed)
-        /* no regions on this chrom -- skip to next chrom */
         {
-        while ((maf = mafNext(mf)) != NULL && 
-            sameString(chromFromSrc(maf->components->src), chrom));
-        continue;
+        /* no regions on this chrom -- skip to next chrom */
+        do
+            mafAliFree(&maf);
+        while (((maf = mafNext(mf)) != NULL) && sameString(chromFromSrc(maf->components->src), chrom));
+        continue;  // start over with this maf
         }
     verbose(2, "region: %s:%d-%d\n", 
             bed->chrom, bed->chromStart+1, bed->chromEnd);
@@ -123,7 +123,10 @@ while (maf)
     /* skip mafs before region, stopping if chrom changes */
     while (maf && (mc = maf->components) && sameString(chrom, chromFromSrc(mc->src)) &&
         (mc->start + mc->size) <= bed->chromStart)
-                maf = mafNext(mf);
+        {
+        mafAliFree(&maf);
+        maf = mafNext(mf);
+        }
 
     /* extract all mafs and pieces of mafs in region */
     while (maf && (mc = maf->components) && sameString(chrom, chromFromSrc(mc->src)) &&
@@ -140,12 +143,12 @@ while (maf)
             }
         verbose(2, "   %s:%d-%d\n", chrom, mc->start+1, mc->start + mc->size);
         mafWrite(f, maf);
-        //mafAliFree(&maf);
-        if (mafEnd > bed->chromEnd+1)
-            maf = mafSubset(full, mc->src, bed->chromEnd+1, mafEnd);
-        else
-            maf = mafNext(mf);
-        //mafAliFree(&full);
+        struct mafAli *nextMaf = (mafEnd > bed->chromEnd+1)
+            ? mafSubset(full, mc->src, bed->chromEnd+1, mafEnd) : mafNext(mf);
+        if (maf != full)
+            mafAliFree(&maf);
+        mafAliFree(&full);
+        maf = nextMaf;
         }
     /* get next region */
     hashRemove(regionHash, bed->chrom);
