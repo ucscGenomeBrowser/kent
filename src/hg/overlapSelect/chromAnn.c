@@ -279,7 +279,7 @@ return car;
 static void addPslBlocks(struct chromAnn* ca, unsigned opts, struct psl* psl)
 /* add blocks from a psl */
 {
-boolean strand = (opts & chromAnnUseQSide) ? pslQStrand(psl) : pslTStrand(psl);
+boolean blkStrand = (opts & chromAnnUseQSide) ? pslQStrand(psl) : pslTStrand(psl);
 int size = (opts & chromAnnUseQSide) ? psl->qSize : psl->tSize;
 unsigned *blocks = (opts & chromAnnUseQSide) ? psl->qStarts : psl->tStarts;
 boolean blkSizeMult = pslIsProtein(psl) ? 3 : 1;
@@ -288,10 +288,40 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     int start = blocks[iBlk];
     int end = start + (blkSizeMult * psl->blockSizes[iBlk]);
-    if (strand == '-')
+    if (blkStrand == '-')
         reverseIntRange(&start, &end, size);
     chromAnnBlkNew(ca, start, end);
     }
+}
+
+static char getPslTSideStrand(struct psl *psl)
+/* get the strand to use for a PSL when doing target side overlaps */
+{
+if (psl->strand[1] != '\0')
+    {
+    // translated
+    char strand = pslTStrand(psl);
+    if (pslQStrand(psl) == '-')
+        strand = (strand == '-') ? '+' : '-'; // query reverse complemented
+    return strand;
+    }
+else
+    return pslQStrand(psl);  // untranslated
+}
+
+static char getPslQSideStrand(struct psl *psl)
+/* get the strand to use for a PSL when doing query side overlaps */
+{
+if (psl->strand[1] != '\0')
+    {
+    // translated
+    char strand = pslQStrand(psl);
+    if (pslTStrand(psl) == '-')
+        strand = (strand == '-') ? '+' : '-'; // query reverse complemented
+    return strand;
+    }
+else
+    return pslTStrand(psl);  // untranslated
 }
 
 static struct chromAnn* chromAnnPslReaderRead(struct chromAnnReader *car)
@@ -307,10 +337,10 @@ char **rawCols = (car->opts & chromAnnSaveLines) ? rowReaderCloneColumns(rr) : N
 struct psl *psl = pslLoad(rr->row);
 struct chromAnn* ca;
 if (car->opts & chromAnnUseQSide)
-    ca = chromAnnNew(psl->qName, pslQStrand(psl), psl->tName, rawCols,
+    ca = chromAnnNew(psl->qName, getPslQSideStrand(psl), psl->tName, rawCols,
                      strVectorWrite, strVectorFree);
 else
-    ca = chromAnnNew(psl->tName, pslTStrand(psl), psl->qName, rawCols,
+    ca = chromAnnNew(psl->tName, getPslTSideStrand(psl), psl->qName, rawCols,
                      strVectorWrite, strVectorFree);
 
 if (car->opts & chromAnnRange)
@@ -403,11 +433,11 @@ if (chain == NULL)
 
 struct chromAnn* ca;
 if (car->opts & chromAnnUseQSide)
-    ca = chromAnnNew(chain->qName, chain->qStrand, chain->tName,
+    ca = chromAnnNew(chain->qName, '+', chain->tName,
                      ((car->opts & chromAnnSaveLines) ? chain : NULL),
                      chainRecWrite, chainRecFree);
 else
-    ca = chromAnnNew(chain->tName, '+', chain->qName,
+    ca = chromAnnNew(chain->tName, chain->qStrand, chain->qName,
                      ((car->opts & chromAnnSaveLines) ? chain : NULL),
                      chainRecWrite, chainRecFree);
 

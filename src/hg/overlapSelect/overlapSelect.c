@@ -349,7 +349,7 @@ if (statsOutput && outputBoth)
 carefulClose(&outFh);
 carefulClose(&dropFh);
 /* enable for memory analysis */
-#if 1
+#if 0
 selectTableFree();
 #endif
 }

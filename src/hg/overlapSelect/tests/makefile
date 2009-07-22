@@ -28,7 +28,8 @@ test:   pslSelectTests \
 	rangeTests \
 	cds_id_out_gp \
 	wideTest \
-	name2EmptyTest
+	name2EmptyTest \
+	orthoStrandTest
 
 ###
 # selecting PSLs
@@ -744,6 +745,10 @@ name2EmptyTest: mkout
 	genePredCheck -verbose=0 output/$@.gp
 	${DIFF} expected/$@.gp output/$@.gp
 
+# psl strand regression
+orthoStrandTest: mkout
+	${OVERSEL} -strand -aggregate -statsOutputAll input/orthoSel.psl input/orthoIn.gp output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
 
 mkout:
 	@${MKDIR} output
