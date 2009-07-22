@@ -3283,7 +3283,6 @@ settingsByView ALN:viewLimits=0:1,autoscale=off,windowingFunction=mean,maxHeight
 wgEncode 1
 
     track wgEncodeBroadMapabilityAlign36mer
-    release alpha
     subTrack wgEncodeMapability
     shortLabel Broad Align 36
     longLabel Mapability - ENCODE Broad Alignability of 36mers with no more than 2 mismatches
@@ -3293,7 +3292,6 @@ wgEncode 1
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="ENCODE July 2009 Freeze" subId=344 dateSubmitted=2009-06-02 dateUnrestricted=2009-06-02 composite=wgEncodeMapability tableName=wgEncodeBroadMapabilityAlign36mer fileName=wgEncodeBroadMapabilityAlign36mer.wig.gz
 
     track wgEncodeUmassMapabilityUniq15
-    release alpha
     subTrack wgEncodeMapability
     shortLabel Umass Uniq 15
     longLabel Mapability - ENCODE UMass Uniqueness at 15bp
@@ -3303,7 +3301,6 @@ wgEncode 1
     metadata project=wgEncode grant=Dekker lab=UMass dataType=Mapability view=Uniqueness size=15bp dataVersion="ENCODE July 2009 Freeze" subId=345 dateSubmitted=2009-06-04 dateUnrestricted=2009-06-04 composite=wgEncodeMapability tableName=wgEncodeUmassMapabilityUniq15 fileName=wgEncodeUmassMapabilityUniq15.wig.gz
 
     track wgEncodeDukeUniqueness20bp
-    release alpha
     subTrack wgEncodeMapability off
     shortLabel Duke Uniq 20
     longLabel Mapability - ENCODE Duke Uniqueness of 20bp sequences
@@ -3314,7 +3311,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=20bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness20bp fileName=wgEncodeDukeUniqueness20bp.wig.gz
 
     track wgEncodeDukeUniqueness24bp
-    release alpha
     subTrack wgEncodeMapability off
     shortLabel Duke Uniq 24
     longLabel Mapability - ENCODE Duke Uniqueness of 24bp sequences
@@ -3325,7 +3321,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=24bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness24bp fileName=wgEncodeDukeUniqueness24bp.wig.gz
 
     track wgEncodeDukeUniqueness35bp
-    release alpha
     subTrack wgEncodeMapability
     shortLabel Duke Uniq 35
     longLabel Mapability - ENCODE Duke Uniqueness of 35bp sequences
@@ -3336,7 +3331,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Uniqueness size=35bp uniqueness="1=1 occurence,0.5=2,0.33=3,0.25=4,0=5 or more" labVersion="1.0 - 4 or less" dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeUniqueness35bp fileName=wgEncodeDukeUniqueness35bp.wig.gz
 
     track wgEncodeDukeRegionsExcluded
-    release alpha
     subTrack wgEncodeMapability
     shortLabel Excluded Regions
     longLabel Mapability - ENCODE Duke Excluded Regions
@@ -3346,7 +3340,6 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=Duke dataType=Mapability view=Excludable labVersion=satellite_rna_chrM_500.bed.20080925 dataVersion="ENCODE Nov 2008 Freeze" subId=104 dateSubmitted=2008-12-03 dateUnrestricted=2008-12-03 composite=wgEncodeMapability tableName=wgEncodeDukeRegionsExcluded fileName=wgEncodeDukeRegionsExcluded.bed6.gz
 
     track uniqueness
-    release alpha
     subTrack wgEncodeMapability
     shortLabel Rosetta Uniq 35
     longLabel Mapability - Rosetta Uniqueness 35-mer alignment (BWA/MAQ, unique alignment=37)
