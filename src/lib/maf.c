@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.38 2008/10/27 17:52:19 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.39 2009/07/22 17:21:16 markd Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -730,11 +730,12 @@ boolean mafColumnEmpty(struct mafAli *maf, int col)
 assert(col < maf->textSize);
 struct mafComp *comp;
 for (comp = maf->components; comp != NULL; comp = comp->next)
-    {
-    char c = comp->text[col];
-    if (c != '.' && c != '-')
-        return FALSE;
-    }
+    if (comp->text != NULL)
+        {
+        char c = comp->text[col];
+        if (c != '.' && c != '-')
+            return FALSE;
+        }
 return TRUE;
 }
 
@@ -748,23 +749,24 @@ for (readIx=0; readIx < maf->textSize; ++readIx)
     {
     if (!mafColumnEmpty(maf, readIx))
         {
-		for (comp = maf->components; comp != NULL; comp = comp->next) 
-			{
-		    comp->text[writeIx] = comp->text[readIx];
-			if (comp->quality != NULL)
-				comp->quality[writeIx] = comp->quality[readIx];
-			}
-		++writeIx;
-		}
+        for (comp = maf->components; comp != NULL; comp = comp->next) 
+            {
+            if(comp->text != NULL)
+                comp->text[writeIx] = comp->text[readIx];
+            if (comp->quality != NULL)
+                comp->quality[writeIx] = comp->quality[readIx];
+            }
+        ++writeIx;
+        }
     }
-
 /* Zero terminate text, and update textSize. */
 for (comp = maf->components; comp != NULL; comp = comp->next)
-	{
-    comp->text[writeIx] = 0;
-	if (comp->quality != NULL)
-		comp->quality[writeIx] = 0;
-	}
+    {
+    if (comp->text != NULL)
+        comp->text[writeIx] = 0;
+    if (comp->quality != NULL)
+        comp->quality[writeIx] = 0;
+    }
 maf->textSize = writeIx;
 }
 
