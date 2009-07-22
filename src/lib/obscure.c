@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.46 2008/09/18 20:02:45 hiram Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.47 2009/07/22 17:36:22 markd Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -567,9 +567,10 @@ void shuffleArrayOfPointers(void *pointerArray, int arraySize, int shuffleCount)
 void **array = pointerArray, *pt;
 int i, randIx;
 
+/* Randomly permute an array using the method from Cormen, et al */
 for (i=0; i<arraySize; ++i)
     {
-    randIx = rand() % arraySize;
+    randIx = i + (rand() % (arraySize - i));
     pt = array[i];
     array[i] = array[randIx];
     array[randIx] = pt;
