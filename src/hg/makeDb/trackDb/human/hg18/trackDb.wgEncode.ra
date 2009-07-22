@@ -13153,7 +13153,7 @@ dimensions dimensionX=cellType dimensionY=mapAlgorithm
 sortOrder cellType=+ mapAlgorithm=+ readType=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
 dragAndDrop subTracks
-visibilityViewDefaults Alignments=hide RawSignal=hide PairedAligns=hide Splices=hide
+visibilityViewDefaults zAligns=hide yRawSignal=hide Splices=hide
 priority 0
 type bed 3
 noInherit on
@@ -13510,7 +13510,7 @@ subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ 
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide
 priority 0
@@ -13644,7 +13644,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 fragSize Frag_Size 1k=1k 5k=5k 10k=10k
 dimensions dimensionX=cellType dimensionY=fragSize
 sortOrder cellType=+ fragSize=+ view=+
-controlledVocabulary encode/cv.ra cellType fragSize
+controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide
 priority 0
@@ -13748,9 +13748,9 @@ subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ 
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults RawSignal=full+ Alignments=pack
+visibilityViewDefaults yRawSignal=full+ Alignments=pack
 priority 0
 type bed 3
 noInherit on
