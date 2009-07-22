@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.92 2009/07/17 18:57:52 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.93 2009/07/22 00:01:31 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -444,24 +444,74 @@ struct dyString *dy = newDyString(512);
 struct track *tg;
 
 dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+//#define TOGGLE_SUBTRACKS
+#ifdef TOGGLE_SUBTRACKS
+if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
+    {
+    tg = toggleGroup;
+    int vis = tg->visibility;
+    // Find parent track
+    struct track *tgParent = trackList;
+    for (;tgParent != NULL; tgParent = tgParent->next)
+        {
+        if(sameString(tgParent->mapName,tg->tdb->parent->tableName))
+            break;
+        }
+    // should be assertable assert(tgParent!=NULL);
+    char *encodedTableName = cgiEncode(tg->tdb->parent->tableName);
+    char *view = NULL;
+    boolean setView = subgroupFind(tg->tdb,"view",&view);
+    if(tgParent!=NULL && tvCompare(tgParent->visibility,vis) > 0)
+        {
+        setView = FALSE; // Must open parent to see opened child
+        vis = tgParent->visibility;
+        }
+    if (vis == tvDense)
+        {
+        if(!tg->canPack || view != NULL)
+            vis = tvFull;
+        else
+            vis = tvPack;
+        }
+    else if (vis != tvHide)
+        vis = tvDense;
+
+    if(setView)
+        {
+        char *encodeView = cgiEncode(view);
+        dyStringPrintf(dy, "&%s.%s.vis=%s", encodedTableName,encodeView, hStringFromTv(vis));
+        freeMem(encodeView);
+        }
+    else
+        {
+        dyStringPrintf(dy, "&%s=%s", encodedTableName, hStringFromTv(vis));
+        }
+    subgroupFree(&view);
+    freeMem(encodedTableName);
+    }
+else
+#endif//def TOGGLE_SUBTRACKS
+    {
+// This loop makes no sense.  What is it accomplishing?  AVOIDING subtracks?  AND subtracks do not point to their parents!
 for (tg = trackList; tg != NULL; tg = tg->next)
     {
     int vis = tg->visibility;
     if (tg == toggleGroup)
-	{
-	char *encodedMapName = cgiEncode(tg->mapName);
-    if (vis == tvDense)
         {
-        if(!tg->canPack || (tdbIsComposite(tg->tdb) && subgroupingExists(tg->tdb,"view")))
-            vis = tvFull;
-        else
-            vis = tvPack;
-	    }
-	else if (vis == tvFull || vis == tvPack || vis == tvSquish)
-	    vis = tvDense;
-	dyStringPrintf(dy, "&%s=%s", encodedMapName, hStringFromTv(vis));
-	freeMem(encodedMapName);
-	}
+        char *encodedMapName = cgiEncode(tg->mapName);
+        if (vis == tvDense)
+            {
+            if(!tg->canPack || (tdbIsComposite(tg->tdb) && subgroupingExists(tg->tdb,"view")))
+                vis = tvFull;
+            else
+                vis = tvPack;
+            }
+        else if (vis == tvFull || vis == tvPack || vis == tvSquish)
+            vis = tvDense;
+        dyStringPrintf(dy, "&%s=%s", encodedMapName, hStringFromTv(vis));
+        freeMem(encodedMapName);
+        }
+    }
     }
 return dy;
 }
