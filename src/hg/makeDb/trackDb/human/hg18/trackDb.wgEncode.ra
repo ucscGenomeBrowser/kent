@@ -13737,7 +13737,7 @@ wgEncode 1
     track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
     release alpha
     subTrack wgEncodeHelicosRnaSeq off
-    shortLabel K562 cyto polyA+
+    shortLabel K562 cyto pA+ Tag
     longLabel ENCODE Helicos RNA-Seq Tags (PolyA+ RNA in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type tagAlign
@@ -13752,14 +13752,13 @@ wgEncode 1
     track wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeHelicosRnaSeq
-    shortLabel K562 cyto polyA+
+    shortLabel K562 cyto pA+ Sig
     longLabel ENCODE Helicos RNA-Seq Raw Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=yRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig 1.00 65535.00
     dateSubmitted 2009-04-13
     dateUnrestricted 2010-01-13
     dataVersion ENCODE Feb 2009 Freeze
-    priority 26
     noInherit on
     spanList first
     windowingFunction mean
