@@ -5,7 +5,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafSpeciesList.c,v 1.1 2007/03/22 06:55:35 kent Exp $";
+static char const rcsid[] = "$Id: mafSpeciesList.c,v 1.2 2009/07/22 17:28:27 markd Exp $";
 
 boolean ignoreFirst = FALSE;
 
@@ -34,13 +34,20 @@ void mafSpeciesList(char *inFile, char *outFile)
 struct mafFile *mf = mafOpen(inFile);
 struct mafAli *maf;
 struct hash *speciesHash = hashNew(0);
+char *dot;
 while ((maf = mafNext(mf)) != NULL)
     {
     struct mafComp *comp = maf->components;
     if (ignoreFirst)
         comp = comp->next;
     for (; comp != NULL; comp = comp->next)
+        {
+        dot = strchr(comp->src, '.'); /* The species name is found before the first dot */
+        if (dot != NULL)
+            *dot = 0;
         hashStore(speciesHash, comp->src);
+        }
+    mafAliFree(&maf);
     }
 
 /* Get all species, sort, and output. */
