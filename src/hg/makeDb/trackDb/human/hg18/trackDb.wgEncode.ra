@@ -13778,15 +13778,10 @@ wgEncode 1
     longLabel ENCODE Helicos RNA-Seq Raw Signal (PolyA+ RNA in K562 cytosol)
     subGroups view=yRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig 1.00 65535.00
-    dateSubmitted 2009-04-13
-    dateUnrestricted 2010-01-13
-    dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
-    rnaExtract longPolyA
-    localization cytosol
     color 46,0,184
-    cell K562
+    metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
 
