@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.13 2009/07/15 14:05:50 katrina Exp $
+#  $Id: sacCer2.txt,v 1.14 2009/07/22 17:35:50 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -1350,4 +1350,14 @@ done
 	mysql> delete from sgdToName where name= "YLR157W-A";
 	mysql> delete from sgdToName where name= "YLR157W-C";
 	mysql> delete from sgdToName where name= "YNL097C-A";
+
+############################################################################
+# for some unknown reason, indexes missing on chrM_gold and chrM_gap
+#	maybe because they have only one and zero items ?
+#		(DONE - 2009-07-21 - Hiram)
+    hgsql -e "alter table chrM_gold add index chromStart (chromStart);" sacCer2
+    hgsql -e "alter table chrM_gold add index bin (bin);" sacCer2
+    hgsql -e "alter table chrM_gold add index frag (frag(9));" sacCer2
+    hgsql -e "alter table chrM_gap add index chromStart (chromStart);" sacCer2
+    hgsql -e "alter table chrM_gap add index bin (bin);" sacCer2
 ############################################################################
