@@ -4,7 +4,7 @@
 #	Washington University School of Medicine GSC and Sanger Institute
 #	WUSTL version 4.0.1 Jan 2009
 
-#  $Id: caeJap2.txt,v 1.1 2009/07/23 17:46:02 hiram Exp $
+#  $Id: caeJap2.txt,v 1.2 2009/07/23 21:40:01 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2009-07-22 - Hiram)
@@ -26,8 +26,7 @@ use warnings;
 
 my %superSizes;
 
-open (FH, "<faCount.supercontigs.txt") or die "can not read
-faCount.supercontigs
+open (FH, "<faCount.supercontigs.txt") or die "can not read faCount.supercontigs
 .txt";
 while (my $line = <FH>) {
     next if ($line =~ m/^#/);
@@ -57,6 +56,7 @@ my $b = "";
 my $size = 0;
 my $skipSuper = 0;
 
+open (CB, ">Contig.bed") or die "can not write to Contig.bed";
 open (FH, "zcat supercontigs.gz|") or die "can not read supercontigs.gz";
 while (my $line = <FH>) {
     next if ($line =~ m/^\s*$/);
@@ -70,6 +70,14 @@ while (my $line = <FH>) {
             next;
         } else {
             $skipSuper = 0;
+        }
+        my $superEnd = $chromStart + $superSizes{$superName} - 1;
+        if ($chromEnd > 1) {
+            printf CB "chrUn\t%d\t%d\t%s\n", $chromStart-1+1000, $superEnd+1000,
+                $superName;
+        } else {
+            printf CB "chrUn\t%d\t%d\t%s\n", $chromStart-1, $superEnd,
+                $superName;
         }
         if ($chromEnd > 1) {
             $size = 1000;
@@ -106,6 +114,7 @@ while (my $line = <FH>) {
     }
 }
 close (FH);
+close (CB);
 '_EOF_'
     # << happy emacs
     chmod +x superToAgp.pl
@@ -113,6 +122,12 @@ close (FH);
     ./superToAgp.pl > chrUn.agp
     qaToQac contigs.fa.qual.gz contigs.qac
     qacAgpLift chrUn.agp contigs.qac chrUn.qual.qac
+
+    #	and create a ctgPos2 file to show ContigN locations
+    awk '{
+size = $3-$2
+printf "%s\t%d\tchrUn\t%d\t%d\tW\n", $4, size, $2, $3
+}' Contig.bed > ctgPos2.tab
 
 
 ########################################################################
@@ -146,9 +161,20 @@ taxId 281687
 
 ########################################################################
 # Repeat Masker (DONE - 2009-07-23 - Hiram)
+#	repeat masker was run, but it did not mask much, so that table
+#	was removed so that windowmaskerSdust could be the masking track
+#	when fetching DNA from the browser
     mkdir /hive/data/genomes/caeJap2/bed/repeatMasker
     cd /hive/data/genomes/caeJap2/bed/repeatMasker
     doRepeatMasker.pl -buildDir=`pwd` caeJap2 > do.log 2>&1
+    cat faSize.rmsk.txt
+# 170655152 bases (41359841 N's 129295311 real 126749989 upper 2545322 lower)
+#	in 1 sequences in 1 files
+# %1.49 masked total, %1.97 masked real
+
+    ssh hgwdev
+    hgsql -e "drop table chrUn_rmsk;" caeJap2
+    #	this leaves the interrupted repeats track showing on genome-test
 
 ########################################################################
 # Simple Repeats (DONE - 2009-07-23 - Hiram)
@@ -161,3 +187,163 @@ taxId 281687
     mkdir /hive/data/genomes/caeJap2/bed/windowMasker
     cd /hive/data/genomes/caeJap2/bed/windowMasker
     doWindowMasker.pl -buildDir=`pwd` caeJap2 > do.log 2>&1
+
+    #	load this initial data to get ready to clean it
+    ssh hgwdev
+    cd /hive/data/genomes/caeJap2/bed/windowMasker
+    hgLoadBed caeJap2 windowmaskerSdust windowmasker.sdust.bed.gz
+    featureBits -countGaps caeJap2 windowmaskerSdust
+    #	98788858 bases of 170655152 (57.888%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits caeJap2 -not gap -bed=notGap.bed
+    time nice -n +19 featureBits caeJap2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	57429460 bases of 129295754 (44.417%) in intersection
+    #	reload track to get it clean
+    hgLoadBed caeJap2 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 874463 elements of size 4
+    featureBits -countGaps caeJap2 windowmaskerSdust
+    #	57429460 bases of 170655152 (33.652%) in intersection
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../caeJap2.unmasked.2bit stdin \
+	    -type=.bed caeJap2.cleanWMSdust.2bit
+    twoBitToFa caeJap2.cleanWMSdust.2bit stdout | faSize stdin \
+        > caeJap2.cleanWMSdust.faSize.txt
+    cat caeJap2.cleanWMSdust.faSize.txt
+    #	170655152 bases (41359841 N's 129295311 real 71865902 upper
+    #	57429409 lower) in 1 sequences in 1 files
+    #	%33.65 masked total, %44.42 masked real
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2009-07-23 - Hiram)
+    cd /hive/data/genomes/caeJap2
+    twoBitMask -add bed/windowMasker/caeJap2.cleanWMSdust.2bit \
+        bed/simpleRepeat/trfMask.bed caeJap2.2bit
+    twoBitToFa caeJap2.2bit stdout | faSize stdin \
+        > faSize.caeJap2.wmskSdust.TRF.txt
+    cat faSize.caeJap2.wmskSdust.TRF.txt
+    #	170655152 bases (41359841 N's 129295311 real 71749466 upper
+    #	57545845 lower) in 1 sequences in 1 files
+    #	%33.72 masked total, %44.51 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/caeJap2/caeJap2.2bit
+    ln -s `pwd`/caeJap2.2bit /gbdb/caeJap2/caeJap2.2bit
+
+########################################################################
+#	add ctgPos2 track (DONE - 2008-04-03 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/caeJap2/wustl
+    hgLoadSqlTab caeJap2 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2009-07-23 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~5.1% of human judging by gapless caeJap2 vs. hg18 genome 
+    # size from featureBits. So we would use 50, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    cd /hive/data/genomes/caeJap2
+    blat caeJap2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/caeJap2.11.ooc -repMatch=100
+    #	Wrote 14991 overused 11-mers to jkStuff/caeJap2.11.ooc
+
+    cd /hive/data/genomes/caeJap2/jkStuff
+    #	note the full size of chrUn
+    tail ../chrom.sizes
+    #	chrUn   170655152
+
+    #	use that full size in the following awk:
+    awk '{
+printf "%d\t%s\t%d\tchrUn\t170655152\n", $2, $4, $3-$2
+}' ../wustl/Contig.bed > caeJap2.chrUn.lift
+
+#########################################################################
+## Make maskedContigs (DONE - 2009-07-23 - Hiram)
+    mkdir /hive/data/genomes/caeJap2/maskedContigs
+    cd /hive/data/genomes/caeJap2/maskedContigs
+    ln -s ../jkStuff/caeJap2.chrUn.lift ./supers.lift
+    cp -p /hive/data/genomes/caeJap1/maskedContigs/lft2BitToFa.pl .
+    time nice -n +19 ./lft2BitToFa.pl ../caeJap2.2bit supers.lift > supers.fa
+    faToTwoBit supers.fa caeJap2.supers.2bit
+    #	real    4m18.841s
+    #	verify size is not broken from this procedure, should be same number
+    #	of real, upper and lower.  Only the N count and total count changes
+    twoBitToFa caeJap2.supers.2bit stdout | faSize stdin
+    #	163120152 bases (33824841 N's 129295311 real 71749466 upper
+    #	57545845 lower) in 7536 sequences in 1 files
+    #	%35.28 masked total, %44.51 masked real
+    twoBitToFa ../caeJap2.2bit stdout | faSize stdin
+    #	170655152 bases (41359841 N's 129295311 real 71749466 upper
+    #	57545845 lower) in 1 sequences in 1 files
+    #	%33.72 masked total, %44.51 masked real
+
+    twoBitInfo caeJap2.supers.2bit stdout \
+	| sort -k2rn > caeJap2.supers.sizes
+
+    #	copy all of this stuff to the klusters:
+    cd /hive/data/genomes/caeJap2
+    mkdir /hive/data/staging/data/caeJap2
+    cp -p jkStuff/caeJap2.11.ooc jkStuff/caeJap2.chrUn.lift \
+	maskedContigs/caeJap2.supers.2bit maskedContigs/caeJap2.supers.sizes \
+	chrom.sizes caeJap2.2bit /hive/data/staging/data/caeJap2
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2009-07-23 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add caeJap2 just before caeJap1
+
+# caeJap2 (C. remanei)
+caeJap2.serverGenome = /hive/data/genomes/caeJap2/caeJap2.2bit
+caeJap2.clusterGenome = /scratch/data/caeJap2/caeJap2.2bit
+caeJap2.ooc = /scratch/data/caeJap2/caeJap2.11.ooc
+caeJap2.lift = /scratch/data/caeJap2/caeJap2.chrUn.lift
+caeJap2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeJap2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeJap2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeJap2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeJap2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeJap2.refseq.mrna.native.load = yes
+caeJap2.refseq.mrna.xeno.load  = yes
+caeJap2.refseq.mrna.xeno.loadDesc = yes
+caeJap2.genbank.mrna.xeno.load = yes
+caeJap2.genbank.est.native.load = yes
+caeJap2.genbank.est.native.loadDesc = no
+caeJap2.downloadDir = caeJap2
+caeJap2.perChromTables = no
+
+    cvs ci -m "Added caeJap2" etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeJap2 &
+    #	logFile: var/build/logs/2009.07.23-14:13:01.caeJap2.initalign.log
+XXX - running Thu Jul 23 14:14:03 PDT 2009
+    #	real    124m10.365s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap2
+    #	logFile: var/dbload/hgwdev/logs/2008.04.04-10:07:40.dbload.log
+    #	real    16m14.090s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add caeJap2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added caeJap2 - C. japonica" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
