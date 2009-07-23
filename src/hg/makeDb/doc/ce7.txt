@@ -1,0 +1,217 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis elegans
+# Washington University School of Medicine GSC and Sanger Institute WS200
+
+#  $Id: ce7.txt,v 1.1 2009/07/23 20:26:21 hiram Exp $
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2009-07-21 - Hiram)
+    mkdir /hive/data/genomes/ce7
+    cd /hive/data/genomes/ce7
+    mkdir ws200
+    cd ws200
+TOP=/hive/data/genomes/ce7/ws200
+export TOP
+for D in annotation genome_feature_tables/GFF2 \
+        genome_feature_tables/SUPPLEMENTARY_GFF sequences/dna \
+        sequences/protein sequences/rna
+do
+    mkdir -p ${D}
+    cd ${D}
+    wget --timestamping \
+ftp://ftp.sanger.ac.uk/pub2/wormbase/WS200/genomes/c_elegans/${D}/*.*
+    cd ${TOP}
+done
+    #	that took a long time, many many hours.  The transfer speed from
+    #	sanger was very slow
+
+#########################################################################
+# NORMALIZE SEQUENCE NAMES TO BEGIN WITH chr (DONE - 2009-07-22 - Hiram)
+    mkdir /hive/data/genomes/ce7/sanger
+    cd /hive/data/genomes/ce7/sanger
+    # Fix fasta names:
+    cat ../ws200/sequences/dna/CHR*.dna \
+    | sed -e '/^$/ d;  s/^>CHROMOSOME_MtDNA/>chrM/;  s/^>CHROMOSOME_/>chr/;' \
+    | gzip -c > UCSC.fa.gz
+    faSize -detailed UCSC.fa.gz
+# chrI    15072421
+# chrII   15279324
+# chrIII  13783682
+# chrIV   17493784
+# chrM    13794
+# chrV    20924143
+# chrX    17718854
+
+    # Make sure we get the same sizes from this command:
+    cat ../ws200/sequences/dna/CHR*.dna | sed -e '/^$/ d;' \
+	| faSize -detailed stdin
+
+    faCount UCSC.fa.gz
+#seq    len     A       C       G       T       N       cpg
+# chrI    15072421        4835939 2695879 2692150 4848453 0       503521
+# chrII   15279324        4878196 2769216 2762198 4869714 0       492149
+# chrIII  13783682        4444652 2449139 2466321 4423570 0       459669
+# chrIV   17493784        5711040 3034767 3017008 5730969 0       522372
+# chrM    13794   4335    1225    2055    6179    0       110
+# chrV    20924143        6750393 3712058 3701397 6760295 0       638983
+# chrX    17718854        5747199 3119702 3117868 5734085 0       514715
+# total   100286002       32371754  17781986  17758997  323732650  3131519
+
+    # Fix AGP names:
+    sed -e 's/^/chr/' ../ws200/sequences/dna/CHR*.agp > UCSC.agp
+    # And add a fake mitochondrial AGP entry for the sake of downstream
+    # tools (make sure the GenBank sequence is identical to given):
+    echo -e "chrM\t1\t13794\t1\tF\tNC_001328.1\t1\t13794\t+" >> UCSC.agp
+
+#########################################################################
+# run the makeGenomeDb procedure to create the db and unmasked sequence
+#	(DONE - 2009-07-22 - Hiram)
+    cd /hive/data/genomes/ce7
+    cat << '_EOF_' > ce7.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ce7
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Feb 2009
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WS200
+orderKey 825
+mitoAcc none
+fastaFiles /hive/data/genomes/ce7/sanger/UCSC.fa.gz
+agpFiles   /hive/data/genomes/ce7/sanger/UCSC.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+taxId 6239
+'_EOF_'
+    # << emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    nice -n +19 makeGenomeDb.pl ce7.config.ra -stop agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl ce7.config.ra -continue db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m26.382s
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+#########################################################################
+# REPEATMASKER (DONE - 2009-07-22 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce7/bed/repeatMasker
+    cd /hive/data/genomes/ce7/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -bigClusterHub=swarm \
+	-buildDir=`pwd` ce7 > do.log 2>&1 &
+    #	real    35m46.794s
+    cat faSize.rmsk.txt
+# 100286002 bases (0 N's 100286002 real 87035663 upper 13250339 lower)
+#	in 7 sequences in 1 files
+# %13.21 masked total, %13.21 masked real
+
+    #	from the do.log:
+    #   June 4 2009 (open-3-2-8) version of RepeatMasker
+    #	CC   RELEASE 20090604;   
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2009-07-22 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce7/bed/simpleRepeat
+    cd /hive/data/genomes/ce7/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=encodek \
+	-buildDir=`pwd` ce7 > do.log 2>&1 &
+    #	about 18 minutes
+
+#########################################################################
+# MASK SEQUENCE WITH RM+TRF (DONE - 2009-07-22 - Hiram)
+    # Since both doRepeatMasker.pl and doSimpleRepeats.pl have completed,
+    # now it's time to combine the masking into the final ce7.2bit,
+    # following the instructions at the end of doSimpleRepeat's output.
+    cd /hive/data/genomes/ce7
+    twoBitMask ce7.rmsk.2bit -add bed/simpleRepeat/trfMask.bed ce7.2bit
+    # You can safely ignore the warning about extra BED columns
+    twoBitToFa ce7.2bit stdout | faSize stdin
+# 100286002 bases (0 N's 100286002 real 86863809 upper 13422193 lower)
+#	in 7 sequences in 1 files
+# %13.38 masked total, %13.38 masked real
+
+    #	set the symlink on hgwdev to /gbdb/ce7
+    rm -f /gbdb/ce7/ce7.2bit
+    ln -s /hive/data/genomes/ce7/ce7.2bit /gbdb/ce7/ce7.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2009-07-22 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome 
+    # size from featureBits. So we would use 34, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    cd /hive/data/genomes/ce7
+    blat ce7.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/ce7.11.ooc -repMatch=100
+    #	Wrote 8502 overused 11-mers to jkStuff/ce7.11.ooc
+    #	copy all of this stuff to the klusters:
+    mkdir /hive/data/staging/data/ce7
+    cp -p jkStuff/ce7.11.ooc chrom.sizes ce7.2bit /hive/data/staging/data/ce7
+
+#########################################################################
+## BLASTZ caePb2 (DONE - 2009-07-23 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce7/bed/lastzCaePb2.2009-07-23
+    cd /hive/data/genomes/ce7/bed/lastzCaePb2.2009-07-23
+
+    cat << '_EOF_' > DEF
+# ce7 vs caePb2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce7
+SEQ1_DIR=/scratch/data/ce7/ce7.2bit
+SEQ1_LEN=/scratch/data/ce7/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. PB2801 caePb2
+SEQ2_DIR=/scratch/data/caePb2/caePb2.2bit
+SEQ2_LEN=/scratch/data/caePb2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caePb2/caePb2.supercontigs.2bit
+SEQ2_CTGLEN=/scratch/data/caePb2/caePb2.supercontigs.sizes
+SEQ2_LIFT=/scratch/data/caePb2/caePb2.supercontigs.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce7/bed/lastzCaePb2.2009-07-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=pk -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -noLoadChainSplit -smallClusterHub=memk \
+	> do.log 2>&1 &
+    #	about 1h30m
+    #	forgot the -qRepeats=windowmaskerSdust
+    rm axtChain/ce7.caePb2.net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=pk -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -noLoadChainSplit -smallClusterHub=memk \
+	-continue=load > load.log 2>&1 &
+    cat fb.ce7.chainCaePb2Link.txt 
+    #	40793071 bases of 100286002 (40.677%) in intersection
+
+    #	swap, this is also in caePb2.txt
+    mkdir /hive/data/genomes/caePb2/bed/blastz.ce7.swap
+    cd /hive/data/genomes/caePb2/bed/blastz.ce7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	/hive/data/genomes/ce7/bed/lastzCaePb2.2009-07-23/DEF \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    3m22.808s
+    cat fb.caePb2.chainCe7Link.txt
+    #	55084634 bases of 170473138 (32.313%) in intersection
+
+#########################################################################
