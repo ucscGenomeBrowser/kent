@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.187 2009/07/13 22:34:16 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.188 2009/07/23 18:08:57 larrym Exp $
 
 use warnings;
 use strict;
@@ -1842,9 +1842,9 @@ close(FILE_RA);
 close(README);
 doTime("done out files") if $opt_timing;
 
-if($submitDir =~ /(\d+)$/) {
+if($submitPath =~ /(\d+)$/) {
     my $id = $1;
-    if(dirname($submitDir) =~ /_(.*)/) {
+    if(dirname($submitPath) =~ /_(\w+)/) {
         my $instance = $1;
         # XXXX rubyDb logic s/d probably be moved to Encode.pm
         my $rubyDb = HgDb->new(DB => "encpipeline_$instance");
