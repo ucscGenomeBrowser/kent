@@ -12517,7 +12517,7 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 view=Peaks replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2
 
-# HudsonAlpha CNV (wrangler: kate)
+# HudsonAlpha CNV (wrangler: braney)
 
 track wgEncodeHudsonalphaCnv
 compositeTrack on
@@ -12528,71 +12528,40 @@ itemRgb on
 wgEncode 1
 dateSubmitted 2008-12-04
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
-subGroup2 replicate Replicate Rep1=Rep1 Rep2=Rep2
-dimensions dimensionX=cellType dimensionY=replicate
+dimensions dimensionX=cellType 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 type bed 9 +
 
-    track wgEncodeHudsonalphaCnvGM12878Rep1
+    track wgEncodeHudsonalphaCnvGM12878
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel GM12878 CNV 1
-    longLabel ENCODE Copy Number Variation (GM12878 cells, Rep1)
-    subGroups replicate=Rep1 cellType=GM12878
+    shortLabel GM12878 CNV 
+    longLabel ENCODE Copy Number Variation (GM12878 cells)
+    subGroups cellType=GM12878
     cell GM12878
-    color 153,38,0
+#   color 153,38,0
     itemRgb on
     priority 1
 
-    track wgEncodeHudsonalphaCnvGM12878Rep2
+    track wgEncodeHudsonalphaCnvK562
+    shortLabel K562 CNV 
+    longLabel ENCODE Copy Number Variation (K562 cells)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel GM12878 CNV 2
-    longLabel ENCODE Copy Number Variation (GM12878 cells, Rep2)
-    subGroups replicate=Rep2 cellType=GM12878
-    cell GM12878
-    color 153,38,0
-    priority 2
-
-    track wgEncodeHudsonalphaCnvK562Rep1
-    shortLabel K562 CNV 1
-    longLabel ENCODE Copy Number Variation (K562 cells, Rep1)
-    release alpha
-    subTrack wgEncodeHudsonalphaCnv
-    subGroups replicate=Rep1 cellType=K562
+    subGroups cellType=K562
     cell K562
-    color 46,0,184
+#   color 46,0,184
     priority 3
 
-    track wgEncodeHudsonalphaCnvK562Rep2
-    shortLabel K562 CNV 2
-    longLabel ENCODE Copy Number Variation (K562 cells, Rep2)
+    track wgEncodeHudsonalphaCnvHepG2
+    shortLabel HepG2 CNV
+    longLabel ENCODE Copy Number Variation (HepG2 cells)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    subGroups replicate=Rep2 cellType=K562
-    cell K562
-    color 46,0,184
-    priority 4
-
-    track wgEncodeHudsonalphaCnvHepG2Rep1
-    shortLabel HepG2 CNV 1
-    longLabel ENCODE Copy Number Variation (HepG2 cells, Rep1)
-    release alpha
-    subTrack wgEncodeHudsonalphaCnv
-    subGroups replicate=Rep1 cellType=HepG2
+    subGroups cellType=HepG2
     cell HepG2
     priority 5
-
-    track wgEncodeHudsonalphaCnvHepG2Rep2
-    shortLabel HepG2 CNV 2
-    longLabel ENCODE Copy Number Variation (HepG2 cells, Rep2)
-    release alpha
-    subTrack wgEncodeHudsonalphaCnv
-    subGroups replicate=Rep2 cellType=HepG2
-    cell HepG2
-    priority 6
-
 
 # CSHL RNA-Seq (wrangler: mikep)
 
