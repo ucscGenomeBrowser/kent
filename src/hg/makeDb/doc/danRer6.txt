@@ -194,7 +194,7 @@ scientificName Danio rerio
 commonName Zebrafish
 assemblyDate Dec. 2008
 assemblyLabel Wellcome Trust Sanger Institute, Zv8 assembly (CAAK00000000.5)
-orderKey 449
+orderKey 448
 genomeCladePriority 90
 dbDbSpeciesDir zebrafish
 mitoAcc NC_002333.2
