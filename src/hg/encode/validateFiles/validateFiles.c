@@ -8,8 +8,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.19 2009/07/23 22:22:22 mikep Exp $";
-static char *version = "$Revision: 1.19 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.20 2009/07/23 22:47:53 mikep Exp $";
+static char *version = "$Revision: 1.20 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -574,6 +574,7 @@ if (mm > mismatches)
          file, line, mm, g->size, mismatches, strand, seq, g->dna);
     return FALSE;
     }
+freeDnaSeq(&g);
 return TRUE;
 }
 
@@ -637,6 +638,8 @@ else
         return FALSE;
         }
     }
+freeDnaSeq(&g1);
+freeDnaSeq(&g2);
 return TRUE;
 }
 
