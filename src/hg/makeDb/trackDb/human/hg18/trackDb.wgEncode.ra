@@ -11875,7 +11875,7 @@ wgEncode 1
     showDiffBasesMaxZoom 10000.0
     configurable on
     color 153,38,0
-    colorByStrand 46,0,184 238,85,34
+    colorByStrand 153,38,0 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=cytosol accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=211 dateSubmitted=2009-02-17 dateUnrestricted=2009-11-17 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsGm12878CytosolLongpolya fileName=wgEncodeGisPetAlignmentsGm12878CytosolLongpolya.pairedTagAlign.gz
 
     track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
@@ -11893,7 +11893,7 @@ wgEncode 1
     showDiffBasesMaxZoom 10000.0
     configurable on
     color 153,38,0
-    colorByStrand 46,0,184 238,85,34
+    colorByStrand 153,38,0 34,136,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=nucleus accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=210 dateSubmitted=2009-02-16 dateUnrestricted=2009-11-16 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsGm12878NucleusLongpolya fileName=wgEncodeGisPetAlignmentsGm12878NucleusLongpolya.pairedTagAlign.gz
 
     track wgEncodeGisPetAlignmentsProstateCellLongpolya
