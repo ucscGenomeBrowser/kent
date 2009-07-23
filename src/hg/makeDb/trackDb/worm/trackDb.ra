@@ -189,6 +189,45 @@ spectrum on
 type netAlign caeRem2 chainCaeRem2
 otherDb caeRem2
 
+track caePb2ChainNet
+compositeTrack on
+shortLabel C. brenneri Chain/Net
+longLabel C. brenneri (Feb. 2008/caePb2), Chain and Net alignment tracks
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+visibilityViewDefaults chain=pack net=dense
+group compGeno
+noInherit on
+priority 130
+color 0,0,0
+altColor 255,255,0
+type bed 3
+settingsByView chain:spectrum=on
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb caeCb2
+chainMinScore 1000
+chainLinearGap loose
+spectrum on
+html chainNet
+release alpha
+
+    track chainCaePb2
+    subTrack caePb2ChainNet
+    subGroups view=chain
+    shortLabel $o_Organism Chain
+    longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+    type chain caePb2
+
+    track netCaePb2
+    subTrack caePb2ChainNet
+    subGroups view=net
+    shortLabel $o_Organism Net
+    longLabel $o_Organism ($o_date/$o_db) Alignment Net
+    type netAlign caePb2 chainCaePb2
+
 track chainCaePb2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -202,6 +241,7 @@ matrixHeader A, C, G, T
 spectrum on
 type chain caePb2
 otherDb caePb2
+release beta
 
 track netCaePb2
 shortLabel $o_Organism Net
@@ -212,6 +252,7 @@ visibility dense
 spectrum on
 type netAlign caePb2 chainCaePb2
 otherDb caePb2
+release beta
 
 track chainCaePb1
 shortLabel $o_Organism Chain
@@ -247,7 +288,7 @@ visibility hide
 visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
-priority 159
+priority 131
 color 0,0,0
 altColor 255,255,0
 type bed 3
@@ -255,7 +296,7 @@ settingsByView chain:spectrum=on
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
-otherDb galGal3
+otherDb ce7
 chainMinScore 1000
 chainLinearGap loose
 spectrum on
