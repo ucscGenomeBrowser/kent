@@ -5,9 +5,11 @@
 #include "options.h"
 #include "chromInfo.h"
 #include "jksql.h"
+#include "twoBit.h"
+#include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.18 2009/06/22 21:32:44 mikep Exp $";
-static char *version = "$Revision: 1.18 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.19 2009/07/23 22:22:22 mikep Exp $";
+static char *version = "$Revision: 1.19 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -22,6 +24,7 @@ boolean zeroSizeOk;
 boolean chrMSizeOk;
 boolean printOkLines;
 boolean printFailLines;
+boolean mmPerPair;
 int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
@@ -32,6 +35,9 @@ char digits[256];
 char alpha[256];
 char csSeqName[256];
 char bedTypeCols[10];
+struct twoBitFile *genome = NULL;
+int mismatches;
+int mmCheckOneInN;
 
 void usage()
 /* Explain usage and exit. */
@@ -58,7 +64,8 @@ errAbort(
   "         csqual    : Colorspace quality (see link below)\n"
   "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
   "\n"
-  "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names and sizes\n"
+  "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names\n"
+  "                                  and sizes\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
   "                                  with formats such as tagAlign and pairedTagAlign)\n"
@@ -66,6 +73,13 @@ errAbort(
   "                                  stopping (default %d)\n"
   "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
   "                                  otherwise require strictly start < end\n"
+  "   -genome=path/to/hg18.2bit    Validate tagAlign or pairedTagAlign sequences match genome\n"
+  "                                  in .2bit file\n"
+  "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if \n"
+  "                                  validating tagAlign or pairedTagAlign files\n"
+  "   -mmPerPair                   Check either pair dont exceed mismatch count if validating\n"
+  "                                  pairedTagAlign files (default is the total for the pair)\n"
+  "   -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)\n"
   "   -printOkLines                Print lines which pass validation to stdout\n"
   "   -quick[=N]                   Just test the first N lines of each file (default 1000)\n"
   "   -printFailLines              Print lines which fail validation to stdout\n"
@@ -83,6 +97,10 @@ static struct optionSpec options[] = {
    {"chrMSizeOk", OPTION_BOOLEAN},
    {"printOkLines", OPTION_BOOLEAN},
    {"printFailLines", OPTION_BOOLEAN},
+   {"genome", OPTION_STRING},
+   {"mismatches", OPTION_INT},
+   {"mmPerPair", OPTION_BOOLEAN},
+   {"mmCheckOneInN", OPTION_INT},
    {"quick", OPTION_INT},
    {"version", OPTION_BOOLEAN},
    {NULL, 0},
@@ -395,11 +413,12 @@ if (i == 0)
 return TRUE;
 }
 
-boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, char *chrom, unsigned chromSize)
+boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, char *chrom, unsigned chromSize, unsigned *sVal, unsigned *eVal)
 // Return TRUE if start and end are both >= 0,
 // and if zeroSizeOk then start <= end
 //        otherwise  then start < end
 // Also check end <= chromSize (as a special case, ignore chrM end if chrMSizeOk)
+// start and end values are returned in sVal and eVal
 // Othewise print warning and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, chrom, chromSize, row);
@@ -407,6 +426,8 @@ unsigned s, e;
 if (   !checkUnsigned(file, line, row, start, &s, "chromStart")
     || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
     return FALSE;
+*sVal = s;
+*eVal = e;
 if (chromSize > 0)
     {
     if (e > chromSize && !(chrMSizeOk && sameString(chrom, "chrM")))
@@ -524,6 +545,101 @@ if ( n != expected)
 return TRUE;
 }
 
+boolean checkMismatchesSeq(char *file, int line, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq)
+{
+int i, mm = 0;
+struct dnaSeq *g;
+if (!genome)
+    return TRUE; // only check if 2bit file specified
+if (line % mmCheckOneInN != 0)
+    return TRUE; // dont check if this is not one in N
+g = twoBitReadSeqFragLower(genome, chrom, chromStart, chromEnd);
+if (strand == '-')
+    reverseComplement(g->dna, g->size);
+if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
+    {
+    warn("Error [file=%s, line=%d]: sequence length (%d) does not match genomic coords (%d / %d)", 
+         file, line, (int)strlen(seq), chromEnd-chromStart, g->size);
+    return FALSE;
+    }
+for (i=0 ; i < g->size ; ++i)
+    {
+    char c = tolower(seq[i]);
+    if (c == 'n' || c != g->dna[i])
+        ++mm;
+    }
+if (mm > mismatches)
+    {
+    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) relative to '%c' strand\nseq=[%s]\ngen=[%s]\n", 
+         file, line, mm, g->size, mismatches, strand, seq, g->dna);
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean checkMismatchesSeq1Seq2(char *file, int line, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq1, char *seq2)
+{
+int i, mm1, mm2, len1, len2;
+struct dnaSeq *g1, *g2;
+if (!genome)
+    return TRUE; // dont check unless 2bit file specified
+if (line % mmCheckOneInN != 0)
+    return TRUE; // dont check if this is not one in N
+len1 = strlen(seq1);
+len2 = strlen(seq2);
+if (strand == '-')
+    {
+    g1 = twoBitReadSeqFragLower(genome, chrom, chromEnd-len1, chromEnd);
+    g2 = twoBitReadSeqFragLower(genome, chrom, chromStart, chromStart+len2);
+    reverseComplement(g1->dna, g1->size);
+    reverseComplement(g2->dna, g2->size);
+    }
+else
+    {
+    g1 = twoBitReadSeqFragLower(genome, chrom, chromStart, chromStart+len1);
+    g2 = twoBitReadSeqFragLower(genome, chrom, chromEnd-len2, chromEnd);
+    }
+if (g1->size != len1 || g2->size != len2)
+    {
+    warn("Error [file=%s, line=%d]: sequence lengths (%d, %d) do not match genomic ones (%d, %d)", 
+         file, line, len1, len2, g1->size, g2->size);
+    return FALSE;
+    }
+mm1 = 0;
+for (i=0 ; i < g1->size ; ++i)
+    {
+    char c = tolower(seq1[i]);
+    if (c == 'n' || c != g1->dna[i])
+        ++mm1;
+    }
+mm2 = 0;
+for (i=0 ; i < g2->size ; ++i)
+    {
+    char c = tolower(seq2[i]);
+    if (c == 'n' || c != g2->dna[i])
+        ++mm2;
+    }
+if (mmPerPair)
+    {
+    if (mm1 > mismatches || mm2 > mismatches)
+        {
+        warn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) relative to '%c' strand\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
+             file, line, mm1, len1, mm2, len2, mismatches, strand, seq1, seq2, g1->dna, g2->dna);
+        return FALSE;
+        }
+    }
+else
+    {
+    if (mm1+mm2 > mismatches)
+        {
+        warn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) relative to '%c' strand\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
+             file, line, mm1, len1, mm2, len2, mismatches, strand, seq1, seq2, g1->dna, g2->dna);
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
 int validateTagOrPairedTagAlign(struct lineFile *lf, char *file, boolean paired)
 {
 char *row;
@@ -539,21 +655,24 @@ dnaChars[(int)'.'] = 1;
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
+    unsigned start, end;
     ++line;
     if (quick && line > quick)
 	break;
     safecpy(buf, sizeof(buf), row);
     if ( checkColumns(file, line, row, buf, words, TAG_WORDS, (paired ? 8 : 6))
 	&& checkChrom(file, line, row, words[0], &chromSize)
-	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
+         && checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize, &start, &end)
 	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
 	&& checkStrand(file, line, row, words[5])
 	&& (paired ?
 		(checkString(file, line, row, words[3], "name")
 		&& checkSeq(file, line, row, words[6], "seq1")
-		&& checkSeq(file, line, row, words[7], "seq2"))
+		&& checkSeq(file, line, row, words[7], "seq2")
+                 && checkMismatchesSeq1Seq2(file, line, words[0], start, end, *words[5], words[6], words[7]))
 	    :
-		checkSeq(file, line, row, words[3], "sequence")
+            (checkSeq(file, line, row, words[3], "sequence")
+             && checkMismatchesSeq(file, line, words[0], start, end, *words[5], words[3]))
 	    ) )
 	{
 	if (printOkLines)
@@ -602,12 +721,13 @@ verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNextReal(lf, &row))
     {
     ++line;
+    unsigned start, end;
     if (quick && line > quick)
 	break;
     safecpy(buf, sizeof(buf), row);
     if ( checkColumns(file, line, row, buf, words, PEAK_WORDS, bedTypeCols[type])
 	&& checkChrom(file, line, row, words[0], &chromSize)
-	&& checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize)
+         && checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize, &start, &end)
 	&& ( type == BED_GRAPH ?
 	      (checkFloat(file, line, row, words[3], "value")) // canonical bedGraph has float in 4th column
 	   : // otherwise BROAD_, NARROW_, or GAPPED_PEAK
@@ -897,6 +1017,10 @@ zeroSizeOk     = optionExists("zeroSizeOk");
 chrMSizeOk     = optionExists("chrMSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
+genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) : NULL;
+mismatches     = optionInt("mismatches",0);
+mmPerPair      = optionExists("mmPerPair");
+mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
 quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 initArrays();
