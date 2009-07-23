@@ -1,0 +1,163 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis japonica
+#	Washington University School of Medicine GSC and Sanger Institute
+#	WUSTL version 4.0.1 Jan 2009
+
+#  $Id: caeJap2.txt,v 1.1 2009/07/23 17:46:02 hiram Exp $
+
+########################################################################
+#  Download sequence (DONE - 2009-07-22 - Hiram)
+    mkdir -p /hive/data/genomes/caeJap2/wustl
+    cd /hive/data/genomes/caeJap2/wustl
+
+    wget --timestamping \
+ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_japonica/assembly/Caenorhabditis_japonica-4.0.1/ASSEMBLY
+    wget --timestamping \
+ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_japonica/assembly/Caenorhabditis_japonica-4.0.1/README
+    wget --timestamping \
+ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_japonica/assembly/Caenorhabditis_japonica-4.0.1/output/*.*
+
+    cat << '_EOF_' > superToAgp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %superSizes;
+
+open (FH, "<faCount.supercontigs.txt") or die "can not read
+faCount.supercontigs
+.txt";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    next if ($line =~ m/^total/);
+    my ($name, $size, $rest) = split('\s+',$line,3);
+    $superSizes{$name} = $size;
+}
+close (FH);
+
+my %contigSizes;
+open (FH, "<faCount.contigs.txt") or die "can not read faCount.contigs.txt";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    next if ($line =~ m/^total/);
+    my ($name, $size, $rest) = split('\s+',$line,3);
+    $contigSizes{$name} = $size;
+}
+close (FH);
+
+my $superName = "";
+my $contigPart = "";
+my $chromStart = 1;
+my $chromEnd = 1;
+my $id = 1;
+my $a = "";
+my $b = "";
+my $size = 0;
+my $skipSuper = 0;
+
+open (FH, "zcat supercontigs.gz|") or die "can not read supercontigs.gz";
+while (my $line = <FH>) {
+    next if ($line =~ m/^\s*$/);
+    chomp $line;
+    if ($line =~ m/^supercontig /) {
+        ($a, $b) = split('\s+', $line);
+        $superName = $b;
+        $superName =~ s/Superc/C/;
+        if (!exists($superSizes{$superName})) {
+            $skipSuper = 1;
+            next;
+        } else {
+            $skipSuper = 0;
+        }
+        if ($chromEnd > 1) {
+            $size = 1000;
+            $chromEnd = $chromStart + $size - 1;
+            printf "chrUn\t%d\t%d\t%d\tN\t%d\tcontig\tno\n", $chromStart,
+                $chromEnd, $id++, $size;
+            $chromStart = $chromEnd + 1;
+        }
+        next;
+    } elsif ($line =~ m/^contig /) {
+        next if ($skipSuper > 0);
+        ($a, $b) = split('\s+', $line);
+        $contigPart = $b;
+        die "can not find size for $contigPart"
+                if (!exists($contigSizes{$contigPart}));
+        $size = $contigSizes{$contigPart};
+        $chromEnd = $chromStart + $size - 1;
+        printf "chrUn\t%d\t%d\t%d\tW\t%s\t1\t%d\t+\n", $chromStart,
+            $chromEnd, $id++, $contigPart, $size;
+        $chromStart = $chromEnd + 1;
+        next;
+    } elsif ($line =~ m/^gap /) {
+        next if ($skipSuper > 0);
+        my ($g, $gapSize, $gapDev, $star, $x) = split('\s+', $line);
+        $size = $gapSize;
+        $size = 10 if ($size < 0);
+        die "gap size is 0" if ($size == 0);
+        $chromEnd = $chromStart + $size - 1;
+        printf "chrUn\t%d\t%d\t%d\tN\t%d\tfragment\tyes\n", $chromStart,
+            $chromEnd, $id++, $size;
+        $chromStart = $chromEnd + 1;
+    } else {
+        die "do not recognize line: $line";
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x superToAgp.pl
+
+    ./superToAgp.pl > chrUn.agp
+    qaToQac contigs.fa.qual.gz contigs.qac
+    qacAgpLift chrUn.agp contigs.qac chrUn.qual.qac
+
+
+########################################################################
+# initial genome browser build (DONE - 2009-07-23 - Hiram)
+    cd /hive/data/genomes/caeJap2
+    cat << '_EOF_' > caeJap2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeJap2
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis japonica
+commonName C. japonica
+assemblyDate Jan. 2009
+assemblyLabel Washington University School of Medicine GSC C. japonica 4.0.1
+orderKey 881
+mitoAcc none
+fastaFiles /hive/data/genomes/caeJap2/wustl/contigs.fa.gz
+agpFiles /hive/data/genomes/caeJap2/wustl/chrUn.agp
+qualFiles /hive/data/genomes/caeJap2/wustl/chrUn.qual.qac
+dbDbSpeciesDir worm
+taxId 281687
+'_EOF_'
+    # << happy emacs
+
+    #	verify sequence and AGP specs are OK
+    makeGenomeDb.pl -stop=agp caeJap2.config.ra
+    makeGenomeDb.pl -continue=db caeJap2.config.ra > makeGenomeDb.db.log 2>&1
+
+    ln -s `pwd`/caeJap2.unmasked.2bit /gbdb/caeJap2/caeJap2.2bit
+    #	your personal browser should be functioning now
+
+########################################################################
+# Repeat Masker (DONE - 2009-07-23 - Hiram)
+    mkdir /hive/data/genomes/caeJap2/bed/repeatMasker
+    cd /hive/data/genomes/caeJap2/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=`pwd` caeJap2 > do.log 2>&1
+
+########################################################################
+# Simple Repeats (DONE - 2009-07-23 - Hiram)
+    mkdir /hive/data/genomes/caeJap2/bed/simpleRepeat
+    cd /hive/data/genomes/caeJap2/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` caeJap2 > do.log 2>&1
+
+########################################################################
+# Window Masker (DONE - 2009-07-23 - Hiram)
+    mkdir /hive/data/genomes/caeJap2/bed/windowMasker
+    cd /hive/data/genomes/caeJap2/bed/windowMasker
+    doWindowMasker.pl -buildDir=`pwd` caeJap2 > do.log 2>&1
