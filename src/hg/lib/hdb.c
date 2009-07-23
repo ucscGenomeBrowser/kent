@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.406 2009/07/14 19:49:29 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.407 2009/07/23 04:08:32 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -824,6 +824,28 @@ void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING]
  * table names in databases that support split tables, and just parses text.
  * When chromosome/table name conventions change, this will need an update! */
 {
+/*
+ * WARNING: The behavior of the below code to handle split tables is very
+ * fragile.  Other parts of the code rely on truncating the `chromosome' name
+ * parsed out of the table name instead of generating an error.  It goes
+ * something like this:
+ *
+ * Code somewhere wants to check for a split table existing.  If the table is not split,
+ * but contains an underscore, such as 
+ *     encodeUcsdChipHeLaH3H4dmH3K4_p0
+ * results it in calling this function with the default chromosome name pre-pended:
+ *     chr9_encodeUcsdChipHeLaH3H4dmH3K4_p0
+ * this is then split at the last underscore and the chrom name truncated:
+ *    chrom: chr9_encodeUcsdC
+ *    table: p0
+ * from here, it most likely decides that the table doesn't exist an life is
+ * fine.  Attempts to generate an error when the chrom name part of the table
+ * name is truncated causes breakage of various parts of the genome browser.
+ *
+ * The rules as to when a table name can have an underscore in it that is not
+ * part of a split table name are very complex.
+ */
+
 /* It might not be a split table; provide defaults: */
 safecpy(trackName, HDB_MAX_TABLE_STRING, table);
 safecpy(chrom, HDB_MAX_CHROM_STRING, hDefaultChrom(db));
@@ -831,13 +853,11 @@ if (startsWith("chr", table) || startsWith("Group", table))
     {
     char *ptr = strrchr(table, '_');
     if (ptr != NULL)
-	{
-        int chromLen = ptr - table;
-        if (chromLen >= HDB_MAX_CHROM_STRING)
-            errAbort("invalid chromosome name \"%.*s\", extracted from track name \"%s\"; position track table names may not contain a \"_\" character",
-                     chromLen, table, table);
-	safencpy(chrom, HDB_MAX_CHROM_STRING, table, chromLen);
-	safecpy(trackName, HDB_MAX_TABLE_STRING, ptr+1);
+        {
+        int chromLen = min(HDB_MAX_CHROM_STRING-1, (ptr - table));
+        strncpy(chrom, table, chromLen);
+        chrom[chromLen] = '\0';
+        safecpy(trackName, HDB_MAX_TABLE_STRING, ptr+1);
 	}
     }
 }
