@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS200
 
-#  $Id: ce7.txt,v 1.1 2009/07/23 20:26:21 hiram Exp $
+#  $Id: ce7.txt,v 1.2 2009/07/24 20:32:52 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2009-07-21 - Hiram)
@@ -193,7 +193,7 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF -verbose=2 -bigClusterHub=pk -workhorse=hgwdev \
 	-qRepeats=windowmaskerSdust -noLoadChainSplit -smallClusterHub=memk \
 	> do.log 2>&1 &
-    #	about 1h30m
+    #	real   62m19.458s
     #	forgot the -qRepeats=windowmaskerSdust
     rm axtChain/ce7.caePb2.net
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -215,3 +215,153 @@ TMPDIR=/scratch/tmp
     #	55084634 bases of 170473138 (32.313%) in intersection
 
 #########################################################################
+## BLASTZ caeJap2 (DONE - 2009-07-24 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce7/bed/lastzCaeJap2.2009-07-24
+    cd /hive/data/genomes/ce7/bed/lastzCaeJap2.2009-07-24
+
+    cat << '_EOF_' > DEF
+# ce7 vs caeJap2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce7
+SEQ1_DIR=/scratch/data/ce7/ce7.2bit
+SEQ1_LEN=/scratch/data/ce7/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. japonica caeJap2
+SEQ2_DIR=/scratch/data/caeJap2/caeJap2.2bit
+SEQ2_LEN=/scratch/data/caeJap2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caeJap2/caeJap2.supers.2bit
+SEQ2_CTGLEN=/scratch/data/caeJap2/caeJap2.supers.sizes
+SEQ2_LIFT=/scratch/data/caeJap2/caeJap2.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce7/bed/lastzCaeJap2.2009-07-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=pk -noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-workhorse=hgwdev -smallClusterHub=memk > do.log 2>&1 &
+    #	real    87m1.988s
+    cat fb.ce7.chainCaeJap2Link.txt 
+    #	27270064 bases of 100286002 (27.192%) in intersection
+
+    #	swap, this is also in caeJap2.txt
+    mkdir /hive/data/genomes/caeJap2/bed/blastz.ce7.swap
+    cd /hive/data/genomes/caeJap2/bed/blastz.ce7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk -noLoadChainSplit \
+	/hive/data/genomes/ce7/bed/lastzCaeJap2.2009-07-24/DEF \
+	-smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    4m23.124s
+    cat fb.caeJap2.chainCe7Link.txt 
+    #	26441005 bases of 129295754 (20.450%) in intersection
+
+############################################################################
+## BLASTZ cb3 (DONE - 2009-07-24 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce7/bed/lastzCb3.2009-07-24
+    cd /hive/data/genomes/ce7/bed/lastzCb3.2009-07-24
+
+    cat << '_EOF_' > DEF
+# ce7 vs cb3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce7
+SEQ1_DIR=/scratch/data/ce7/ce7.2bit
+SEQ1_LEN=/scratch/data/ce7/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae cb3
+SEQ2_DIR=/hive/data/genomes/cb3/cb3.rmskTrf.2bit
+SEQ2_LEN=/hive/data/genomes/cb3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce7/bed/lastzCb3.2009-07-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=pk -noLoadChainSplit \
+	-smallClusterHub=memk > do.log 2>&1 &
+    #	 real    50m9.701s
+    cat fb.ce7.chainCb3Link.txt 
+    #	42421335 bases of 100286002 (42.300%) in intersection
+
+    #	swap, this is also in cb3.txt
+    mkdir /hive/data/genomes/cb3/bed/blastz.ce7.swap
+    cd /hive/data/genomes/cb3/bed/blastz.ce7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce7/bed/lastzCb3.2009-07-24/DEF \
+	-workhorse=hgwdev -bigClusterHub=pk -noLoadChainSplit \
+	-smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    3m38.745s
+    cat fb.cb3.chainCe7Link.txt 
+    #	43115929 bases of 108433446 (39.763%) in intersection
+
+############################################################################
+## BLASTZ caeRem3 (DONE - 2009-07-24,09 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce7/bed/lastzCaeRem3.2009-07-24
+    cd /hive/data/genomes/ce7/bed/lastzCaeRem3.2009-07-24
+
+    cat << '_EOF_' > DEF
+# ce7 vs caeRem3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce7
+SEQ1_DIR=/scratch/data/ce7/ce7.2bit
+SEQ1_LEN=/scratch/data/ce7/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. remanei caeRem3
+SEQ2_DIR=/scratch/data/caeRem3/caeRem3.2bit
+SEQ2_LEN=/scratch/data/caeRem3/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caeRem3/caeRem3.supercontigs.2bit
+SEQ2_CTGLEN=/scratch/data/caeRem3/caeRem3.supercontigs.sizes
+SEQ2_LIFT=/scratch/data/caeRem3/caeRem3.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce7/bed/lastzCaeRem3.2009-07-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=swarm -noLoadChainSplit \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > do.log 2>&1 &
+    #	real    28m14.168s
+    cat fb.ce7.chainCaeRem3Link.txt 
+    #	41841199 bases of 100286002 (41.722%) in intersection
+
+    #	swap, this is also in caeRem3.txt
+    mkdir /hive/data/genomes/caeRem3/bed/blastz.ce7.swap
+    cd /hive/data/genomes/caeRem3/bed/blastz.ce7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	-workhorse=hgwdev -noLoadChainSplit \
+	/hive/data/genomes/ce7/bed/lastzCaeRem3.2009-07-24/DEF \
+	-bigClusterHub=swarm -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    2m53.936s
+    cat fb.caeRem3.chainCe7Link.txt 
+    #	46320678 bases of 138406388 (33.467%) in intersection
+
+############################################################################
