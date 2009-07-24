@@ -12532,7 +12532,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
 dimensions dimensionX=cellType 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
-visibilityViewDefaults Wiggle=hide Calls=pack
+visibilityViewDefaults Wiggle=hide Calls=dense
 type bed 9 +
 
     track wgEncodeHudsonalphaCnvGM12878W
