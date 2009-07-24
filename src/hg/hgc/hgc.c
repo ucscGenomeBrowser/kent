@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1560 2009/07/15 18:22:37 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1561 2009/07/24 04:20:10 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6311,7 +6311,7 @@ trashDirFile(&bodyTn, "body", "body", ".html");
 
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
-htmStart(body, psl->qName);
+htmStartDirDepth(body, psl->qName, 2);
 if (qType == gftRna || qType == gftDna)
     blockCount = showPartialDnaAlignment(psl, oSeq, body, cdsS, cdsE, FALSE);
 else
@@ -6324,7 +6324,7 @@ chmod(bodyTn.forCgi, 0666);
 index = mustOpen(indexTn.forCgi, "w");
 if (qName == NULL)
     qName = psl->qName;
-htmStart(index, qName);
+htmStartDirDepth(index, qName, 2);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
 fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), psl->tName);
@@ -6361,7 +6361,7 @@ trashDirFile(&bodyTn, "body", "body", ".html");
 
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
-htmStart(body, partPsl->qName);
+htmStartDirDepth(body, partPsl->qName, 2);
 blockCount = showPartialDnaAlignment(wholePsl, oSeq, body, cdsS, cdsE, TRUE);
 htmEnd(body);
 fclose(body);
@@ -6371,7 +6371,7 @@ chmod(bodyTn.forCgi, 0666);
 index = mustOpen(indexTn.forCgi, "w");
 if (qName == NULL)
     qName = partPsl->qName;
-htmStart(index, qName);
+htmStartDirDepth(index, qName, 2);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
 if (partPsl != wholePsl)
@@ -19512,7 +19512,7 @@ genePredFree(&gene);
 
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
-htmStart(body, psl->qName);
+htmStartDirDepth(body, psl->qName, 2);
 
 /* protein psl's have a tEnd that isn't quite right */
 if ((psl->strand[1] == '+') && (qType == gftProt))
@@ -19549,7 +19549,7 @@ chmod(bodyTn.forCgi, 0666);
 index = mustOpen(indexTn.forCgi, "w");
 if (entryName == NULL)
     entryName = psl->qName;
-htmStart(index, entryName);
+htmStartDirDepth(index, entryName, 2);
 fprintf(index, "<H3>Alignment of %s</H3>", entryName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, entryName);
 fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), psl->tName);
