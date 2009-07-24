@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.44 2009/07/15 04:14:50 markd Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.45 2009/07/24 20:22:34 hiram Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -119,7 +119,7 @@ else
     *pEnd = subChain->qSize - subChain->qStart;
     }
 *subChainRet = subChain;
-//chainFree(&freeChain);
+chainFree(&freeChain);
 return ok;
 }
 
