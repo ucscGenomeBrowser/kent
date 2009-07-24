@@ -56,6 +56,10 @@ void htmStart(FILE *f, char *title);
 void htmStartWithHead(FILE *f, char *head, char *title);
 /* Write the start of a stand alone .html file, plus head info */
 
+void htmStartDirDepth(FILE *f, char *title, int dirDepth);
+/* Write the start of a stand alone .html file.  dirDepth is the number of levels 
+ * beneath apache root that caller's HTML will appear to the web client.  
+ * E.g. if writing HTML from cgi-bin, dirDepth is 1; if trash/body/, 2. */
 
 void htmlEnd();
 /* Write the end of a cgi-generated html file */
@@ -79,9 +83,6 @@ void htmlSetBackground(char *imageFile);
 void htmlSetBgColor(int color);
 /* Set background color - needs to be called before htmlStart
  * or htmShell. */
-
-void htmlEchoInput();
-/* Echo the input string to the output. */
 
 void htmlBadVar(char *varName); 
 /* Complain about input variables. */

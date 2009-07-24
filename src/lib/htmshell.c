@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.59 2009/07/14 22:50:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.60 2009/07/24 04:18:45 angie Exp $";
 
 jmp_buf htmlRecover;
 
@@ -201,18 +201,47 @@ return "<!-- HGERROR-END -->\n";
 
 #define WARNBOX_IN_USE
 #ifdef WARNBOX_IN_USE
-static void htmlWarnBoxSetup(FILE *f)
-/* Creates an empty warning box than can be filled with errors and then made visible */
+static void htmlWarnBoxSetup(FILE *f, int dirDepth)
+/* Creates an invisible, empty warning box than can be filled with errors 
+ * and then made visible.  dirDepth is the number of levels beneath apache 
+ * root that caller's HTML will appear to the web client.  E.g. if writing  
+ * HTML from cgi-bin, dirDepth is 1; if trash/body/, 2. */
 {
-// NOTE: Making both IE and FF work is almost impossible.  Currently, in IE, if the message is forced to the top (calling this routine after <BODY> then the box is not
-// resizable (dynamically adjusting to its contents). But if this setup is done later in the page (at first warning), then IE des resize it.  Why?
+char relPath[PATH_LEN];
+relPath[0] = '\0';
+while (dirDepth-- > 0)
+    safecat(relPath, sizeof(relPath), "../");
+// NOTE: Making both IE and FF work is almost impossible.  Currently, in IE, if the message 
+// is forced to the top (calling this routine after <BODY> then the box is not resizable 
+// (dynamically adjusting to its contents). But if this setup is done later in the page 
+// (at first warning), then IE does resize it.  Why?
 // FF is resizable now, but it took some experimentation.
-#define WARNBOX_LINE1 "<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'>"
-#define WARNBOX_LINE2 "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL><CENTER><img src='../images/ok.jpg' onclick='hideWarnBox();return false;'></CENTER></div></center>"
-// Remember what worked nicely on FF3.0: #define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {var app=navigator.appName.substr(0,9); if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display=''; warnBox.style.width='auto';}}}"
-#define WARNBOX_SHOW  "function showWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display=''; warnBox.style.width='65%';}}"
-#define WARNBOX_HIDE  "function hideWarnBox() {var warnBox=document.getElementById('warnBox');if(warnBox!=undefined) {warnBox.style.display='none';var warnList=document.getElementById('warnList'); warnList.innerHTML='';}}"
-fprintf(f, "<script type='text/javascript'>if(document.getElementById('warnBox')==undefined) {document.write(\"%s%s\");\n%s;\n%s;}</script>\n",WARNBOX_LINE1,WARNBOX_LINE2,WARNBOX_SHOW,WARNBOX_HIDE);
+fprintf(f, "<script type='text/javascript'>"
+	"if(document.getElementById('warnBox')==undefined) {"
+	  "document.write(\"<center>"
+	    "<div id='warnBox' style='display:none; background-color:Beige; "
+	      "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
+	      "text-align:left;'>"
+	    "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL>"
+	    "<CENTER><img src='%simages/ok.jpg' onclick='hideWarnBox();return false;'></CENTER>"
+	    "</div></center>\");\n", relPath);
+// Remember what worked nicely on FF3.0: 
+// "function showWarnBox() {"
+//   "var warnBox=document.getElementById('warnBox');"
+//   "if(warnBox!=undefined) {"
+//      "var app=navigator.appName.substr(0,9); "
+//      "if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display=''; "
+//      "warnBox.style.width='auto';}}}"
+fprintf(f,
+	"function showWarnBox() {"
+	  "var warnBox=document.getElementById('warnBox');"
+	  "if(warnBox!=undefined) {warnBox.style.display=''; warnBox.style.width='65%%';}};\n"
+	"function hideWarnBox() {"
+	  "var warnBox=document.getElementById('warnBox');"
+	  "if(warnBox!=undefined) {"
+	     "warnBox.style.display='none'; var warnList=document.getElementById('warnList'); "
+	     "warnList.innerHTML='';}};"
+        "}</script>\n");
 }
 #endif//ifdef WARNBOX_IN_USE
 
@@ -225,7 +254,7 @@ va_copy(argscp, args);
 static boolean noWarningsYet = TRUE;
 if(noWarningsYet)
     {
-    htmlWarnBoxSetup(stdout);
+    htmlWarnBoxSetup(stdout, 1);
     noWarningsYet=FALSE;
     }
 
@@ -371,10 +400,12 @@ printf("\n");
 }
 
 
-void _htmStartWithHead(FILE *f, char *head, char *title)
+void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, int dirDepth)
 /* Write out bits of header that both stand-alone .htmls
  * and CGI returned .htmls need, including optional head info */
 {
+if (printDocType)
+    fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
@@ -389,17 +420,9 @@ if (gotBgColor)
 fputs(">\n",f);
 
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup(f);// Sets up a warning box which can be filled with errors as they occur
+htmlWarnBoxSetup(f, dirDepth);
 #endif//def WARNBOX_IN_USE
 }
-
-void _htmStart(FILE *f, char *title)
-/* Write out bits of header that both stand-alone .htmls
- * and CGI returned .htmls need. */
-{
-_htmStartWithHead(f, "", title);
-}
-
 
 
 void htmlStart(char *title)
@@ -407,22 +430,27 @@ void htmlStart(char *title)
 {
 puts("Content-Type:text/html");
 puts("\n");
-
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
-_htmStart(stdout, title);
+_htmStartWithHead(stdout, "", title, TRUE, 1);
 }
 
 void htmStartWithHead(FILE *f, char *head, char *title)
 /* Write the start of a stand alone .html file, plus head info */
 {
-fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
-_htmStartWithHead(f, head, title);
+_htmStartWithHead(f, head, title, TRUE, 1);
 }
 
 void htmStart(FILE *f, char *title)
 /* Write the start of a stand alone .html file. */
 {
 htmStartWithHead(f, "", title);
+}
+
+void htmStartDirDepth(FILE *f, char *title, int dirDepth)
+/* Write the start of a stand alone .html file.  dirDepth is the number of levels 
+ * beneath apache root that caller's HTML will appear to the web client.  
+ * E.g. if writing HTML from cgi-bin, dirDepth is 1; if trash/body/, 2. */
+{
+_htmStartWithHead(f, "", title, TRUE, dirDepth);
 }
 
 /* Write the end of an html file */
@@ -435,10 +463,6 @@ fputs("\n</BODY>\n</HTML>\n", f);
 void htmlEnd()
 {
 htmEnd(stdout);
-}
-
-void htmlEchoInput()
-{
 }
 
 void htmlBadVar(char *varName)
@@ -532,7 +556,7 @@ else
     printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
 
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
+htmlWarnBoxSetup(stdout, 1);// Sets up a warning box which can be filled with errors as they occur
 #endif//def WARNBOX_IN_USE
 
 /* Call wrapper for error handling. */
