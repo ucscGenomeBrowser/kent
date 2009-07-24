@@ -1,0 +1,17 @@
+    mkdir /hive/groups/encode/dcc/data/HudsonAlphaCNV
+    cd /hive/groups/encode/dcc/data/HudsonAlphaCNV
+
+    wget "http://illumina-mac.stanford.edu/ENCODE_1M_CNV_tracks/GM12878_CNV.bed"
+    wget "http://illumina-mac.stanford.edu/ENCODE_1M_CNV_tracks/HepG2_CNV.bed"
+    wget "http://illumina-mac.stanford.edu/ENCODE_1M_CNV_tracks/K562_CNV.bed"
+
+    for i in *.bed
+    do 
+	f=`basename $i .bed`; 
+	tail -n +2 $i | awk '{print $1,$2,$3,$5}'  > "$f"_W.bed; 
+	tail -n +2 $i | awk '{$5=0; print}'  > "$f"_C.bed; 
+	g=`basename $f _CNV`;  
+	hgLoadBed hg18 wgEncodeHudsonalphaCnv"$g" "$f"_C.bed -allowStartEqualEnd; 
+	hgLoadBed hg18 wgEncodeHudsonalphaCnv"$g"W "$f"_W.bed -bedGraph=4 -allowStartEqualEnd; 
+    done
+
