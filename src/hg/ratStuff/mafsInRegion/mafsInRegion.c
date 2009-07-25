@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.6 2009/07/22 20:23:27 markd Exp $";
+static char const rcsid[] = "$Id: mafsInRegion.c,v 1.7 2009/07/25 08:32:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,15 +19,18 @@ errAbort(
   "    mafsInRegion regions.bed out.maf|outDir in.maf(s)\n"
   "options:\n"
   "    -outDir - output separate files named by bed name field to outDir\n"
+  "    -keepInitialGaps - keep alignment columns at the beginning and of a block that are gapped in all species\n"
   );
 }
 
 static struct optionSpec options[] = {
     {"outDir", OPTION_BOOLEAN},
+    {"keepInitialGaps", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
 boolean outDir = FALSE;
+boolean keepInitialGaps = FALSE;
 char *dir = NULL;
 char *scoring = NULL;
 
@@ -138,7 +141,7 @@ while (maf)
         if (mafStart < bed->chromStart || mafEnd > bed->chromEnd)
             {
             full = maf;
-            maf = mafSubset(full, mc->src, bed->chromStart, bed->chromEnd);
+            maf = mafSubsetE(full, mc->src, bed->chromStart, bed->chromEnd, keepInitialGaps);
             mc = maf->components;
             }
         verbose(2, "   %s:%d-%d\n", chrom, mc->start+1, mc->start + mc->size);
@@ -195,6 +198,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 outDir = optionExists("outDir");
+keepInitialGaps = optionExists("keepInitialGaps");
 if (argc < 4)
     usage();
 mafsInRegion(argv[1], argv[2], argc-3, &argv[3]);
