@@ -25665,6 +25665,10 @@ csh 4d.csh $(root1) {check in line+ $(path1)}  {check out line+ /cluster/data/hg
         --prune=monDom4,ornAna1,taeGut1,petMar1,galGal3,anoCar1,xenTro2,gasAcu1,danRer5,tetNig1,fr2,oryLat2 \
                 tree_4d.44way.nh > tree_4d.44way.placental.nh
 
+    # chrX-only for placental subset (requested by 2X project)
+    set PHASTBIN=/cluster/bin/phast.2008-12-18
+    $PHASTBIN/phyloFit --EM --precision MED --msa-format FASTA --subst-mod REV --tree ../tree-commas.nh --out-root 4d.chrX mfa/chrX.mfa
+
 #############################################################################
 # phastCons 44-way (DONE - 2008-12-23 - 2009-01-02 - Hiram)
 
@@ -26516,6 +26520,11 @@ cat << 'EOF' > doSplit.csh
     # on the 44-way ss files
     $PHASTBIN/modFreqs ../../4d/phyloFit.all.mod $gc > ../../4d/44way.all.mod
 
+    # repeat for chrX only tree
+    cd /cluster/data/hg18/bed/multiz44way/4d
+    $PHASTBIN/modFreqs 4d.chrX.mod $gc > 44way.chrX.mod
+    ln -s `pwd`/44way.chrX.mod /usr/local/apache/golenPath/hg18/phastCons44way
+
 cat > doPhyloP.csh << 'EOF'
     set f = $1
     set out = $2
@@ -26850,6 +26859,59 @@ csh ../doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig} S
 
     ln -s  /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/glire-ls/wig/phyloP44wayGlireLs.wib /gbdb/hg18/multiz44way/phyloP44wayGlireLs.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayGlireLs phyloP44wayGlireLs.wig
+
+#########################################################################
+# Update phyloP44way tables from Adam Siepel, Melissa Hubisz at Cornell
+# This version uses a different neutral tree model for chrX
+# and will replace the original version as default view on the Conservation track
+# ( 2009-06-30  kate)
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/chrX.phyloP
+    cd /hive/data/genomes/hg18/bed/multiz44way/chrX.phyloP
+    mkdir  primates
+    cd primates
+    wget --timestamping ftp:ftp.biotech.cornell.edu/2x/phyloP/44way/primates/\*
+    cd ..
+
+    mkdir placental
+    cd placental
+    wget --timestamping ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phyloP/44way/placental/\*
+    cd ..
+
+    mkdir all
+    cd all
+    wget --timestamping ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phyloP/44way/all/\*
+    cd ..
+
+    zcat all/*.wigFix.gz | wigEncode stdin phyloP44way_v2.wig phyloP44way_v2.wib
+    zcat primates/*.wigFix.gz | wigEncode stdin phyloP44wayPrimates_v2.wig phyloP44wayPrimates_v2.wib
+    zcat placental/*.wigFix.gz | wigEncode stdin phyloP44wayPlacental_v2.wig phyloP44wayPlacental_v2.wib
+
+    ln -s `pwd`/*.wib /gbdb/hg18/multiz44way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18  phyloP44way_v2 phyloP44way_v2.wig
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18  phyloP44wayPrimates_v2 phyloP44wayPrimates_v2.wig
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18  phyloP44wayPlacental_v2 phyloP44wayPlacental_v2.wig
+
+# Lineage specific phyloP
+# These updated tables will appear in the Lineage Cons track
+
+    mkdir glires-ls
+    cd glires-ls
+    wget --timestamping ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phyloP/44way/glires-ls/\*
+    cd ..
+
+    mkdir primates-ls
+    cd primates-ls
+    wget --timestamping ftp://siepellab:siepellab@ftp.biotech.cornell.edu/2x/phyloP/44way/primates-ls/\*
+    cd ..
+
+    zcat glires-ls/*.wigFix.gz | wigEncode stdin phyloP44wayGliresLs_v2.wig phyloP44wayGliresLs_v2.wib
+    zcat primates-ls/*.wigFix.gz | wigEncode stdin phyloP44wayPrimatesLs_v2.wig phyloP44wayPrimatesLs_v2.wib
+
+    ln -s `pwd`/phyloP44wayGliresLs_v2.wib /gbdb/hg18/multiz44way
+    nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayGliresLs_v2 phyloP44wayGliresLs_v2.wig
+
+    ln -s `pwd`/phyloP44wayPrimatesLs_v2.wib /gbdb/hg18/multiz44way
+    nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayPrimatesLs_v2 phyloP44wayPrimatesLs_v2.wig
 
 
 ######################################################################
@@ -27892,6 +27954,42 @@ exit;
 #Loaded 4166007 elements of size 18
 #33.401u 3.275s 1:46.95 34.2%    0+0k 0+0io 0pf+0w
 
+
+#############################################################################
+# GERP Conservation scoring and elements for Ensembl 31-way alignments
+# From Javier Guerroro
+# ENCODE-related data (equested by Margulies, for use by ENCODE analysis group)
+# (2009-03-05 kate)
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+    mkdir -p ensembl31wayGerp/lab
+    cd ensembl31wayGerp/lab
+    wget -r ftp://ftp.ebi.ac.uk/pub/databases/ensembl/encode/31way_msa/
+    cd ..
+    bzcat lab/31way_gerp_elements.bed.bz2 | \
+        tail -n +2 | \
+        sed 's/31way_gerp_elem_365000000/gerp31./' | \
+        hgLoadBed hg18 ensembl31wayGerpElements stdin \
+            -sqlTable=$HOME/kent/src/hg/lib/encode/broadPeak.sql -renameSqlTable
+    # Loaded 1464897 elements of size 9
+
+cat > we.csh << 'EOF'
+    foreach f (lab/*.wig.bz2)
+        echo $f
+        bzcat $f | tail -n +2 | wigEncode stdin temp.wig temp.wib
+    end
+'EOF'
+
+    bzcat lab/*.wig.bz2 | tail -n +2 | \
+        wigEncode stdin ensembl31wayGerpScores.wig ensembl31wayGerpScores.wib
+
+    #   load database
+    mkdir /gbdb/hg18/wib
+    ln -s `pwd`/ensembl31wayGerpScores.wib /gbdb/hg18/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 ensembl31wayGerpScores ensembl31wayGerpScores.wig
+
+
 ############################################################################
 # VEGA GENES UPDATE (BUILD 33) (DONE 2008-03-11 Andy)
     mkdir  /cluster/data/hg18/bed/vega33
@@ -28075,7 +28173,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.370 2009/07/21 21:01:42 markd Exp $
+# $Id: hg18.txt,v 1.371 2009/07/25 02:40:16 kate Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28123,7 +28221,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.370 2009/07/21 21:01:42 markd Exp $
+# $Id: hg18.txt,v 1.371 2009/07/25 02:40:16 kate Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
