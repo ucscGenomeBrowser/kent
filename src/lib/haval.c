@@ -1,4 +1,4 @@
-/*  $Id: haval.c,v 1.1 2009/07/27 17:55:18 kent Exp $ */
+/*  $Id: haval.c,v 1.2 2009/07/27 19:46:58 kent Exp $ */
 
 /*
  *  haval.c:  specifies the routines in the HAVAL (V.1) hashing library.
@@ -75,7 +75,7 @@
  * to keep GNU C from complaining.  Put "config.h" file inline. */
 
 
-static char rcsid[] = "$Id: haval.c,v 1.1 2009/07/27 17:55:18 kent Exp $";
+static char const rcsid[] = "$Id: haval.c,v 1.2 2009/07/27 19:46:58 kent Exp $";
 
 #include <stdio.h>
 #include <string.h>
@@ -100,7 +100,9 @@ static char rcsid[] = "$Id: haval.c,v 1.1 2009/07/27 17:55:18 kent Exp $";
 #define BLOCK_SIZE 5000
 
 /* Little-endian */
+#ifndef LITTLE_ENDIAN
 #define LITTLE_ENDIAN 1
+#endif
 
 /* Package name */
 #define PACKAGE_NAME "HAVAL"
@@ -659,7 +661,6 @@ void haval_hash_block (haval_state *state)
 /* tailor the last output */
 static void haval_tailor (haval_state *state)
 {
-  haval_word temp;
 
 #if FPTLEN == 128
   temp = (state->fingerprint[7] & 0x000000FFL) | 
