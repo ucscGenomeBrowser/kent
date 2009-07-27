@@ -4009,6 +4009,7 @@ priority 4.1
 visibility hide
 type bam
 pairEndsByName .
+stripPrefix chr
 baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .
