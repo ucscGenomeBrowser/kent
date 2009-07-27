@@ -10,12 +10,9 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
-// bam.h is incomplete without _IOLIB set to 1, 2 or 3.  2 is used by Makefile.generic:
-#define _IOLIB 2
-#include "bam.h"
-#include "sam.h"
+#include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.3 2009/07/27 19:31:48 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.4 2009/07/27 21:52:09 angie Exp $";
 
 #define BAM_MAX_ZOOM 200000
 
@@ -191,9 +188,9 @@ return 0;
 }
 
 #define MAX_ITEMS_FOR_MAPBOX 1500
-void dontMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-		    char *itemName, char *mapItemName, int start, int end,
-		    int x, int y, int width, int height)
+static void dontMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+			char *itemName, char *mapItemName, int start, int end,
+			int x, int y, int width, int height)
 /* When there are many many items, drawing hgc links can really slow us down. */
 {
 }
@@ -204,31 +201,16 @@ void bamLoadItemsCore(struct track *tg, boolean isPaired)
 {
 if (winEnd-winStart > BAM_MAX_ZOOM)
     return;
-struct sqlConnection *conn = hAllocConn(database);
-char *bamFileName = bbiNameFromTable(conn, tg->mapName);
-hFreeConn(&conn);
+char *seqNameForBam = chromName;
+char *stripPrefix = trackDbSetting(tg->tdb, "stripPrefix");
+if (stripPrefix && startsWith(stripPrefix, chromName))
+    seqNameForBam = chromName + strlen(stripPrefix);
+char posForBam[512];
+safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd);
 
-// TODO: if bamFile is URL, convert URL to path a la UDC, but under udcFuse mountpoint.
-// new hg.conf setting for udcFuse mountpoint/support.
-
-bam_index_t *idx = bam_index_load(bamFileName);
-samfile_t *fh = samopen(bamFileName, "rb", NULL);
-int chromId, s, e;
-
-// TODO: watch out for presence/absence of initial "chr" in bam -- need trackDb setting
-char *posToParse = position;
-if (startsWith("chr", position))
-    posToParse += 3;
-
-bam_parse_region(fh->header, posToParse, &chromId, &s, &e);
 struct hash *pairHash = isPaired ? hashNew(18) : NULL;
 struct bamTrackData btd = {tg, pairHash};
-int ret = bam_fetch(fh->x.bam, idx, chromId, winStart, winEnd, &btd,
-		    isPaired ? addBamPaired : addBam);
-if (ret != 0)
-    errAbort("bam_fetch(%s, %s=%d:%d-%d failed (%d)", bamFileName, chromName,
-	     chromId, winStart+1, winEnd, ret);
-samclose(fh);
+bamFetch(database, tg->mapName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
 if (isPaired)
     {
     struct hashEl *hel;
