@@ -12,9 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.12 2009/06/29 19:52:25 kent Exp $";
-
-#define maxZoomLevels 10
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.13 2009/07/27 18:09:29 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -48,33 +46,13 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-
-struct bwgBedGraphItem
-/* An bedGraph-type item in a bwgSection. */
-    {
-    struct bwgBedGraphItem *next;	/* Next in list. */
-    bits32 start,end;		/* Range of chromosome covered. */
-    float val;			/* Value. */
-    };
-
-struct chromUsage
-/* Information on how many items per chromosome etc. */
-    {
-    struct chromUsage *next;
-    char *name;	/* chromosome name. */
-    bits32 itemCount;	/* Number of items for this chromosome. */
-    bits32 id;	/* Unique ID for chromosome. */
-    bits32 size;	/* Size of chromosome. */
-    };
-
-
-
-struct chromUsage *readPass1(struct lineFile *lf, struct hash *chromSizesHash, int *retMinDiff)
+static struct bbiChromUsage *readPass1(struct lineFile *lf, 
+	struct hash *chromSizesHash, int *retMinDiff)
 /* Go through chromGraph file and collect chromosomes and statistics. */
 {
 char *row[2];
 struct hash *uniqHash = hashNew(0);
-struct chromUsage *usage = NULL, *usageList = NULL;
+struct bbiChromUsage *usage = NULL, *usageList = NULL;
 int lastStart = -1;
 bits32 id = 0;
 int minDiff = BIGNUM;
@@ -120,54 +98,10 @@ slReverse(&usageList);
 return usageList;
 }
 
-void writeDummyHeader(FILE *f)
-/* Write out all-zero header, just to reserve space for it. */
-{
-repeatCharOut(f, 0, 64);
-}
-
-void writeDummyZooms(FILE *f)
-/* Write out zeroes to reserve space for ten zoom levels. */
-{
-repeatCharOut(f, 0, maxZoomLevels * 24);
-}
-
-void writeChromInfo(struct chromUsage *usageList, int blockSize, FILE *f)
-/* Write out information on chromosomes to file. */
-{
-int chromCount = slCount(usageList);
-struct chromUsage *usage;
-
-/* Allocate and fill in array from list. */
-struct bbiChromInfo *chromInfoArray;
-AllocArray(chromInfoArray, chromCount);
-int i;
-int maxChromNameSize = 0;
-for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
-    {
-    char *chromName = usage->name;
-    int len = strlen(chromName);
-    if (len > maxChromNameSize)
-        maxChromNameSize = len;
-    chromInfoArray[i].name = chromName;
-    chromInfoArray[i].id = usage->id;
-    chromInfoArray[i].size = usage->size;
-    }
-
-/* Write chromosome bPlusTree */
-int chromBlockSize = min(blockSize, chromCount);
-bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount, chromBlockSize,
-    bbiChromInfoKey, maxChromNameSize, bbiChromInfoVal, 
-    sizeof(chromInfoArray[0].id) + sizeof(chromInfoArray[0].size), 
-    f);
-
-freeMem(chromInfoArray);
-}
-
-int countSectionsNeeded(struct chromUsage *usageList, int itemsPerSlot)
+int countSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot)
 /* Count up number of sections needed for data. */
 {
-struct chromUsage *usage;
+struct bbiChromUsage *usage;
 int count = 0;
 for (usage = usageList; usage != NULL; usage = usage->next)
     {
@@ -178,27 +112,6 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 return count;
 }
 
-struct boundsArray
-/* What a section covers and where it is on disk. */
-    {
-    bits64 offset;		/* Offset within file. */
-    struct cirTreeRange range;	/* What is covered. */
-    };
-
-static struct cirTreeRange boundsArrayFetchKey(const void *va, void *context)
-/* Fetch boundsArray key for r-tree */
-{
-const struct boundsArray *a = ((struct boundsArray *)va);
-return a->range;
-}
-
-static bits64 boundsArrayFetchOffset(const void *va, void *context)
-/* Fetch boundsArray file offset for r-tree */
-{
-const struct boundsArray *a = ((struct boundsArray *)va);
-return a->offset;
-}
-
 struct sectionItem
 /* An item in a section of a bedGraph. */
     {
@@ -206,13 +119,13 @@ struct sectionItem
     float val;				/* Single precision value. */
     };
 
-void writeSections(struct chromUsage *usageList, struct lineFile *lf, 
-	int itemsPerSlot, struct boundsArray *bounds, int sectionCount, FILE *f,
+void writeSections(struct bbiChromUsage *usageList, struct lineFile *lf, 
+	int itemsPerSlot, struct bbiBoundsArray *bounds, int sectionCount, FILE *f,
 	int resTryCount, int resScales[], int resSizes[])
 /* Read through lf, chunking it into sections that get written to f.  Save info
  * about sections in bounds. */
 {
-struct chromUsage *usage = usageList;
+struct bbiChromUsage *usage = usageList;
 int itemIx = 0, sectionIx = 0;
 bits32 reserved32 = 0;
 UBYTE reserved8 = 0;
@@ -241,7 +154,7 @@ for (;;)
 
 	/* Save section info for indexing. */
 	assert(sectionIx < sectionCount);
-	struct boundsArray *section = &bounds[sectionIx++];
+	struct bbiBoundsArray *section = &bounds[sectionIx++];
 	section->offset = ftell(f);
 	section->range.chromIx = chromId;
 	section->range.start = sectionStart;
@@ -332,54 +245,7 @@ for (;;)
 assert(sectionIx == sectionCount);
 }
 
-void outputOneSummaryFurtherReduce(struct bbiSummary *sum, struct bbiSummary **pTwiceReducedList, 
-	int doubleReductionSize, struct boundsArray **pBoundsPt, struct boundsArray *boundsEnd, 
-	bits32 chromSize, struct lm *lm, FILE *f)
-/* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
- * it to second level summary. */
-{
-
-/* Get place to store file offset etc and make sure we have not gone off end. */
-struct boundsArray *bounds = *pBoundsPt;
-assert(bounds < boundsEnd);
-*pBoundsPt += 1;
-
-/* Fill in bounds info. */
-bounds->offset = ftell(f);
-bounds->range.chromIx = sum->chromId;
-bounds->range.start = sum->start;
-bounds->range.end = sum->end;
-
-/* Write out summary info. */
-writeOne(f, sum->chromId);
-writeOne(f, sum->start);
-writeOne(f, sum->end);
-writeOne(f, sum->validCount);
-bbiWriteFloat(f, sum->minVal);
-bbiWriteFloat(f, sum->maxVal);
-bbiWriteFloat(f, sum->sumData);
-bbiWriteFloat(f, sum->sumSquares);
-
-/* Fold summary info into pTwiceReducedList. */
-struct bbiSummary *twiceReduced = *pTwiceReducedList;
-if (twiceReduced == NULL || twiceReduced->chromId != sum->chromId || twiceReduced->start + doubleReductionSize < sum->end)
-    {
-    lmAllocVar(lm, twiceReduced);
-    *twiceReduced = *sum;
-    slAddHead(pTwiceReducedList, twiceReduced);
-    }
-else
-    {
-    twiceReduced->end = sum->end;
-    twiceReduced->validCount += sum->validCount;
-    if (sum->minVal < twiceReduced->minVal) twiceReduced->minVal = sum->minVal;
-    if (sum->maxVal < twiceReduced->maxVal) twiceReduced->maxVal = sum->maxVal;
-    twiceReduced->sumData += sum->sumData;
-    twiceReduced->sumSquares += sum->sumSquares;
-    }
-}
-
-struct bbiSummary *writeReducedOnceReturnReducedTwice(struct chromUsage *usageList, 
+struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	struct lineFile *lf, int initialReduction, int initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, 
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
@@ -389,9 +255,9 @@ struct bbiSummary *writeReducedOnceReturnReducedTwice(struct chromUsage *usageLi
 {
 struct bbiSummary *twiceReducedList = NULL;
 bits32 doubleReductionSize = initialReduction * zoomIncrement;
-struct chromUsage *usage = usageList;
+struct bbiChromUsage *usage = usageList;
 struct bbiSummary oneSummary, *sum = NULL;
-struct boundsArray *boundsArray, *boundsPt, *boundsEnd;
+struct bbiBoundsArray *boundsArray, *boundsPt, *boundsEnd;
 boundsPt = AllocArray(boundsArray, initialReductionCount);
 boundsEnd = boundsPt + initialReductionCount;
 
@@ -405,7 +271,7 @@ for (;;)
     /* Output last section and break if at end of file. */
     if (rowSize == 0 && sum != NULL)
 	{
-	outputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
+	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		&boundsPt, boundsEnd, usage->size, lm, f);
 	break;
 	}
@@ -420,7 +286,7 @@ for (;;)
     if (differentString(chrom, usage->name))
         {
 	usage = usage->next;
-	outputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize,
+	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize,
 		&boundsPt, boundsEnd, usage->size, lm, f);
 	sum = NULL;
 	}
@@ -428,7 +294,7 @@ for (;;)
     /* If start past existing block then output it. */
     else if (sum != NULL && sum->end <= start)
 	{
-	outputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
+	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		&boundsPt, boundsEnd, usage->size, lm, f);
 	sum = NULL;
 	}
@@ -458,7 +324,7 @@ for (;;)
 	if (sum->maxVal < val) sum->maxVal = val;
 	sum->sumData += val * overlap;
 	sum->sumSquares += val * overlap;
-	outputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
+	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		&boundsPt, boundsEnd, usage->size, lm, f);
 
 	/* Move summary to next part. */
@@ -483,40 +349,12 @@ for (;;)
 int indexOffset = *retIndexStart = ftell(f);
 assert(boundsPt == boundsEnd);
 cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), initialReductionCount,
-    blockSize, itemsPerSlot, NULL, boundsArrayFetchKey, boundsArrayFetchOffset, 
+    blockSize, itemsPerSlot, NULL, bbiBoundsArrayFetchKey, bbiBoundsArrayFetchOffset, 
     indexOffset, f);
 
 freez(&boundsArray);
 slReverse(&twiceReducedList);
 return twiceReducedList;
-}
-
-struct bbiSummary *simpleReduce(struct bbiSummary *list, int reduction, struct lm *lm)
-/* Do a simple reduction - where among other things the reduction level is an integral
- * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
-{
-struct bbiSummary *newList = NULL, *sum, *newSum = NULL;
-for (sum = list; sum != NULL; sum = sum->next)
-    {
-    if (newSum == NULL || newSum->chromId != sum->chromId || sum->end > newSum->start + reduction)
-        {
-	lmAllocVar(lm, newSum);
-	*newSum = *sum;
-	slAddHead(&newList, newSum);
-	}
-    else
-        {
-	assert(newSum->end < sum->end);	// check sorted input assumption
-	newSum->end = sum->end;
-	newSum->validCount += sum->validCount;
-	if (newSum->minVal > sum->minVal) newSum->minVal = sum->minVal;
-	if (newSum->maxVal < sum->maxVal) newSum->maxVal = sum->maxVal;
-	newSum->sumData += sum->sumData;
-	newSum->sumSquares += sum->sumSquares;
-	}
-    }
-slReverse(&newList);
-return newList;
 }
 
 void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
@@ -527,18 +365,18 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
 int minDiff, i;
-struct chromUsage *usageList = readPass1(lf, chromSizesHash, &minDiff);
+struct bbiChromUsage *usageList = readPass1(lf, chromSizesHash, &minDiff);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 
 /* Write out dummy header, zoom offsets. */
 FILE *f = mustOpen(outName, "wb");
-writeDummyHeader(f);
-writeDummyZooms(f);
+bbiWriteDummyHeader(f);
+bbiWriteDummyZooms(f);
 
 /* Write out chromosome/size database. */
 bits64 chromTreeOffset = ftell(f);
-writeChromInfo(usageList, blockSize, f);
+bbiWriteChromInfo(usageList, blockSize, f);
 
 /* Set up to keep track of possible initial reduction levels. */
 int resTryCount = 10, resTry;
@@ -560,7 +398,7 @@ else
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
 bits32 sectionCount = countSectionsNeeded(usageList, itemsPerSlot);
-struct boundsArray *boundsArray;
+struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, sectionCount);
 lineFileRewind(lf);
 writeSections(usageList, lf, itemsPerSlot, boundsArray, sectionCount, f,
@@ -570,14 +408,14 @@ verboseTime(2, "pass2");
 /* Write out primary data index. */
 bits64 indexOffset = ftell(f);
 cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), sectionCount,
-    blockSize, 1, NULL, boundsArrayFetchKey, boundsArrayFetchOffset, 
+    blockSize, 1, NULL, bbiBoundsArrayFetchKey, bbiBoundsArrayFetchOffset, 
     indexOffset, f);
 verboseTime(2, "index write");
 
 /* Declare arrays and vars that track the zoom levels we actually output. */
-bits32 zoomAmounts[maxZoomLevels];
-bits64 zoomDataOffsets[maxZoomLevels];
-bits64 zoomIndexOffsets[maxZoomLevels];
+bits32 zoomAmounts[bbiMaxZoomLevels];
+bits64 zoomDataOffsets[bbiMaxZoomLevels];
+bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 
 /* Write out first zoomed section while storing in memory next zoom level. */
@@ -616,7 +454,7 @@ if (minDiff > 0)
 
 	int zoomCount = initialReducedCount;
 	int reduction = initialReduction * zoomIncrement;
-	while (zoomLevels < maxZoomLevels)
+	while (zoomLevels < bbiMaxZoomLevels)
 	    {
 	    int rezoomCount = slCount(rezoomedList);
 	    if (rezoomCount >= zoomCount)
@@ -628,15 +466,13 @@ if (minDiff > 0)
 	    zoomAmounts[zoomLevels] = reduction;
 	    ++zoomLevels;
 	    reduction *= zoomIncrement;
-	    rezoomedList = simpleReduce(rezoomedList, reduction, lm);
+	    rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
 	    }
 	lmCleanup(&lm);
 	verboseTime(2, "further reductions");
 	}
 
     }
-
-// zoomLevels = 1;	// ugly
 
 /* Go back and rewrite header. */
 rewind(f);
@@ -667,7 +503,7 @@ for (i=0; i<zoomLevels; ++i)
     writeOne(f, zoomIndexOffsets[i]);
     }
 /* Write rest of summary headers with no data. */
-for (i=zoomLevels; i<maxZoomLevels; ++i)
+for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
     {
     writeOne(f, reserved32);
     writeOne(f, reserved32);
