@@ -13040,7 +13040,6 @@ noInherit on
 wgEncode 1
 
     track wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeCshlLoRnaSeq
     shortLabel K562 cyt pA+
     longLabel ENCODE CSHL Long RNA-Seq Alignments (PolyA+ RNA in K562 cytosol)
@@ -13058,7 +13057,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq tableName=wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeCshlLoRnaSeqPlusRawSigK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeCshlLoRnaSeq
     shortLabel K562 cyt pA+ +
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal (PolyA+ RNA in K562 cytosol)
@@ -13069,7 +13067,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSig dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq tableName=wgEncodeCshlLoRnaSeqPlusRawSignalK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqPlusRawSigK562CytosolLongpolya.wig.gz
 
     track wgEncodeCshlLoRnaSeqMinusRawSigK562CytosolLongpolya
-    release alpha
     subTrack wgEncodeCshlLoRnaSeq
     shortLabel K562 cyt pA+ -
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal (PolyA+ RNA in K562 cytosol)
