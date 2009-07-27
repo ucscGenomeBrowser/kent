@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.19 2008/09/03 19:20:58 markd Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.20 2009/07/27 23:55:39 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -1691,7 +1691,14 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+    if (hIsGsidServer())
+	{
+	hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGsid/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+    	}
+    else
+	{
+	hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+    	}
     }
 
 hPrintf("Explanation of Protein Tracks</A><br>");
