@@ -3,6 +3,8 @@
 #ifndef BBIFILE_H
 #define BBIFILE_H
 
+#include "cirTree.h"
+
 /* bigWig/bigBed file structure:
  *     fixedWidthHeader
  *         magic# 		4 bytes
