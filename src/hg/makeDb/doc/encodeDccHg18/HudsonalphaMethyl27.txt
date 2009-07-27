@@ -1,0 +1,4 @@
+mkdir /hive/groups/encode/dcc/data/HudsonAlphaMethyl27
+cd /hive/groups/encode/dcc/data/HudsonAlphaMethyl27
+
+cp /cluster/home/tingwang/ENCODE/Methyl27/ENCODE_methyl27.txt .
