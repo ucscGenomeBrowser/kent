@@ -908,6 +908,11 @@ char *refGeneMapName(struct track *tg, void *item);
 int linkedFeaturesSeriesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 
+void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
+			      struct hvGfx *hvg, int xOff, int yOff, int width,
+			      MgFont *font, Color color, enum trackVisibility vis);
+/* Draw linked features series items. */
+
 struct linkedFeaturesSeries *lfsFromColoredExonBed(struct bed *bed);
 /* Convert a single BED 14 thing into a special linkedFeaturesSeries */
 /* where each linkedFeatures is a colored block. */

@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.93 2009/07/22 00:01:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.94 2009/07/27 19:31:49 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3000,7 +3000,7 @@ else
                               font, color, vis);
 }
 
-static void linkedFeaturesSeriesDraw(struct track *tg,
+void linkedFeaturesSeriesDraw(struct track *tg,
 	int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
