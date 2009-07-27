@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.12 2009/02/05 20:45:05 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.13 2009/07/27 18:02:01 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -911,7 +911,7 @@ cirTreeFileBulkIndexToOpenFile(sectionArray, sizeof(sectionArray[0]), sectionCou
 freez(&sectionArray);
 
 /* Write out summary sections. */
-verbose(2, "bwgCreate writting %d summaries\n", summaryCount);
+verbose(2, "bwgCreate writing %d summaries\n", summaryCount);
 for (i=0; i<summaryCount; ++i)
     {
     reductionDataOffsets[i] = ftell(f);

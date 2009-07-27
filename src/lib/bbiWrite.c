@@ -4,7 +4,52 @@
 #include "sqlNum.h"
 #include "localmem.h"
 #include "cirTree.h"
+#include "bPlusTree.h"
 #include "bbiFile.h"
+
+void bbiWriteDummyHeader(FILE *f)
+/* Write out all-zero header, just to reserve space for it. */
+{
+repeatCharOut(f, 0, 64);
+}
+
+void bbiWriteDummyZooms(FILE *f)
+/* Write out zeroes to reserve space for ten zoom levels. */
+{
+repeatCharOut(f, 0, bbiMaxZoomLevels * 24);
+}
+
+void bbiWriteChromInfo(struct bbiChromUsage *usageList, int blockSize, FILE *f)
+/* Write out information on chromosomes to file. */
+{
+int chromCount = slCount(usageList);
+struct bbiChromUsage *usage;
+
+/* Allocate and fill in array from list. */
+struct bbiChromInfo *chromInfoArray;
+AllocArray(chromInfoArray, chromCount);
+int i;
+int maxChromNameSize = 0;
+for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
+    {
+    char *chromName = usage->name;
+    int len = strlen(chromName);
+    if (len > maxChromNameSize)
+        maxChromNameSize = len;
+    chromInfoArray[i].name = chromName;
+    chromInfoArray[i].id = usage->id;
+    chromInfoArray[i].size = usage->size;
+    }
+
+/* Write chromosome bPlusTree */
+int chromBlockSize = min(blockSize, chromCount);
+bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount, chromBlockSize,
+    bbiChromInfoKey, maxChromNameSize, bbiChromInfoVal, 
+    sizeof(chromInfoArray[0].id) + sizeof(chromInfoArray[0].size), 
+    f);
+
+freeMem(chromInfoArray);
+}
 
 void bbiWriteFloat(FILE *f, float val)
 /* Write out floating point val to file.  Mostly to convert from double... */
@@ -174,5 +219,95 @@ cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
     indexOffset, f);
 freez(&summaryArray);
 return indexOffset;
+}
+
+struct cirTreeRange bbiBoundsArrayFetchKey(const void *va, void *context)
+/* Fetch bbiBoundsArray key for r-tree */
+{
+const struct bbiBoundsArray *a = ((struct bbiBoundsArray *)va);
+return a->range;
+}
+
+bits64 bbiBoundsArrayFetchOffset(const void *va, void *context)
+/* Fetch bbiBoundsArray file offset for r-tree */
+{
+const struct bbiBoundsArray *a = ((struct bbiBoundsArray *)va);
+return a->offset;
+}
+
+void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
+	struct bbiSummary **pTwiceReducedList, 
+	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
+	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, FILE *f)
+/* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
+ * it to second level summary. */
+{
+/* Get place to store file offset etc and make sure we have not gone off end. */
+struct bbiBoundsArray *bounds = *pBoundsPt;
+assert(bounds < boundsEnd);
+*pBoundsPt += 1;
+
+/* Fill in bounds info. */
+bounds->offset = ftell(f);
+bounds->range.chromIx = sum->chromId;
+bounds->range.start = sum->start;
+bounds->range.end = sum->end;
+
+/* Write out summary info. */
+writeOne(f, sum->chromId);
+writeOne(f, sum->start);
+writeOne(f, sum->end);
+writeOne(f, sum->validCount);
+bbiWriteFloat(f, sum->minVal);
+bbiWriteFloat(f, sum->maxVal);
+bbiWriteFloat(f, sum->sumData);
+bbiWriteFloat(f, sum->sumSquares);
+
+/* Fold summary info into pTwiceReducedList. */
+struct bbiSummary *twiceReduced = *pTwiceReducedList;
+if (twiceReduced == NULL || twiceReduced->chromId != sum->chromId 
+	|| twiceReduced->start + doubleReductionSize < sum->end)
+    {
+    lmAllocVar(lm, twiceReduced);
+    *twiceReduced = *sum;
+    slAddHead(pTwiceReducedList, twiceReduced);
+    }
+else
+    {
+    twiceReduced->end = sum->end;
+    twiceReduced->validCount += sum->validCount;
+    if (sum->minVal < twiceReduced->minVal) twiceReduced->minVal = sum->minVal;
+    if (sum->maxVal < twiceReduced->maxVal) twiceReduced->maxVal = sum->maxVal;
+    twiceReduced->sumData += sum->sumData;
+    twiceReduced->sumSquares += sum->sumSquares;
+    }
+}
+
+struct bbiSummary *bbiSummarySimpleReduce(struct bbiSummary *list, int reduction, struct lm *lm)
+/* Do a simple reduction - where among other things the reduction level is an integral
+ * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
+{
+struct bbiSummary *newList = NULL, *sum, *newSum = NULL;
+for (sum = list; sum != NULL; sum = sum->next)
+    {
+    if (newSum == NULL || newSum->chromId != sum->chromId || sum->end > newSum->start + reduction)
+        {
+	lmAllocVar(lm, newSum);
+	*newSum = *sum;
+	slAddHead(&newList, newSum);
+	}
+    else
+        {
+	assert(newSum->end < sum->end);	// check sorted input assumption
+	newSum->end = sum->end;
+	newSum->validCount += sum->validCount;
+	if (newSum->minVal > sum->minVal) newSum->minVal = sum->minVal;
+	if (newSum->maxVal < sum->maxVal) newSum->maxVal = sum->maxVal;
+	newSum->sumData += sum->sumData;
+	newSum->sumSquares += sum->sumSquares;
+	}
+    }
+slReverse(&newList);
+return newList;
 }
 

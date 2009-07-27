@@ -41,7 +41,6 @@
  *         zoom index        	cirTree index
  */
 
-
 struct bbiZoomLevel
 /* A zoom level in bigWig file. */
     {
@@ -118,6 +117,16 @@ void bbiChromInfoKey(const void *va, char *keyBuf);
 
 void *bbiChromInfoVal(const void *va);
 /* Get val field out of bbiChromInfo. */
+
+struct bbiChromUsage
+/* Information on how many items per chromosome etc.  Used by multipass bbiFile writers. */
+    {
+    struct bbiChromUsage *next;
+    char *name;	/* chromosome name. */
+    bits32 itemCount;	/* Number of items for this chromosome. */
+    bits32 id;	/* Unique ID for chromosome. */
+    bits32 size;	/* Size of chromosome. */
+    };
 
 
 enum bbiSummaryType
@@ -205,6 +214,42 @@ boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 e
  * at that position. */
 
 /****** Write side of things - implemented in bbiWrite.c ********/
+
+struct bbiBoundsArray
+/* Minimum info needed for r-tree indexer - where a section lives on disk and the
+ * range it covers. */
+    {
+    bits64 offset;		/* Offset within file. */
+    struct cirTreeRange range;	/* What is covered. */
+    };
+
+struct cirTreeRange bbiBoundsArrayFetchKey(const void *va, void *context);
+/* Fetch bbiBoundsArray key for r-tree */
+
+bits64 bbiBoundsArrayFetchOffset(const void *va, void *context);
+/* Fetch bbiBoundsArray file offset for r-tree */
+
+void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
+	struct bbiSummary **pTwiceReducedList, 
+	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
+	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, FILE *f);
+/* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
+ * it to second level summary. */
+
+struct bbiSummary *bbiSummarySimpleReduce(struct bbiSummary *list, int reduction, struct lm *lm);
+/* Do a simple reduction - where among other things the reduction level is an integral
+ * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
+
+#define bbiMaxZoomLevels 10	/* Maximum zoom levels produced by writers. */
+
+void bbiWriteDummyHeader(FILE *f);
+/* Write out all-zero header, just to reserve space for it. */
+
+void bbiWriteDummyZooms(FILE *f);
+/* Write out zeroes to reserve space for ten zoom levels. */
+
+void bbiWriteChromInfo(struct bbiChromUsage *usageList, int blockSize, FILE *f);
+/* Write out information on chromosomes to file. */
 
 void bbiWriteFloat(FILE *f, float val);
 /* Write out floating point val to file.  Mostly to convert from double... */
