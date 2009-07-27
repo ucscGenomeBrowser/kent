@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.9 2008/12/09 23:23:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.10 2009/07/27 17:25:46 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -338,23 +338,23 @@ printf("  PDF can be viewed with Adobe Acrobat Reader.<BR><BR>\n");
 
 doTrackForm(psTn.forCgi, psTn2.forCgi);
 
-printf("<A HREF=\"%s\">Click here to download</A> "
+printf("<A HREF=\"%s\" target=_blank>Click here to download</A> "
        "the current protein tracks graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if(pdfFile != NULL) 
     {
-    printf("<BR><A HREF=\"%s\">Click here to download</A> "
+    printf("<BR><A HREF=\"%s\" target=_blank>Click here to download</A> "
 	   "the current protein tracks graphic in PDF", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
 
-printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
+printf("<BR><BR><A HREF=\"%s\" target=_blank>Click here to download</A> "
        "the current protein histograms graphic in PostScript.  ", psTn2.forCgi);
 pdfFile = convertEpsToPdf(psTn2.forCgi);
 if(pdfFile != NULL) 
     {
-    printf("<BR><A HREF=\"%s\">Click here to download</A> "
+    printf("<BR><A HREF=\"%s\" target=_blank>Click here to download</A> "
 	   "the current protein histograms graphic in PDF", pdfFile);
     }
 else
