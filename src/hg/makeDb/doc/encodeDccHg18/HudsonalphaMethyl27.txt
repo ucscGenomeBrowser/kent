@@ -12,6 +12,21 @@
 	hgLoadBed hg18 $f $i
     done
 
+    for i in *.bed
+    do
+	gzip $i
+    done
+
+    mkdir /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaMethyl27
+    for i in *.bed.gz
+    do
+	ln -s `pwd`/$i /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaMethyl27
+    done
+
+
+
+
+
 
 
 
