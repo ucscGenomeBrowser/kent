@@ -4008,6 +4008,7 @@ group x
 priority 4.1
 visibility hide
 type bam
+pairEndsByName .
 baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .
