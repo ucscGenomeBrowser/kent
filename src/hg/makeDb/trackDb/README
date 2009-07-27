@@ -464,6 +464,9 @@ Some settings used by various tracks:
       shouldn't, turn the buttons off until whatever else is fixed.
     o defaultLinkedTables table1,table2,... - in hgTables, when selecting
       output fields, display these all.joiner-linked tables by default.
+    o bedFilter - If the hgTrackUi call is using bedUi to support it and bedFilter
+      is set then the bed names will be filtered based on the settings entered by
+      the user on the hgTrackUi page.	
 
 Specific, optional settings used only by snp125, snp126, and so on:
     o chimpMacaqueOrthoTable table - table contains orthologous
