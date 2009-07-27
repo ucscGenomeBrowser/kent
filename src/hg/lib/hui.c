@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.226 2009/07/20 20:57:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.227 2009/07/27 06:51:56 sugnet Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3436,16 +3436,10 @@ struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
 char *filterTypeVar = mud->filterTypeVar;
 char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
-char *logicTypeVar = mud->logicTypeVar;
-char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 /* Define type of filter. */
 printf("<table width=400><tr><td align='left'>\n");
 filterButtons(filterTypeVar, filterTypeVal, FALSE);
-printf("</br>");
-printf("<B>Combination Logic:</B> ");
-radioButton(logicTypeVar, logicTypeVal, "and");
-radioButton(logicTypeVar, logicTypeVal, "or");
 printf("</br>");
 /* List various fields you can filter on. */
 cg = startControlGrid(4, NULL);
