@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.16 2008/10/17 01:06:31 markd Exp $
+#  $Id: ce6.txt,v 1.17 2009/07/28 21:55:25 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2730,3 +2730,17 @@ rm -f chr.list
 update genbank.conf:
 ce6.upstreamGeneTbl = refGene
 ce6.upstreamMaf = multiz6way /hive/data/genomes/ce6/bed/multiz6way/species.lst
+
+############################################################################
+# CE6->CE7 LIFTOVER (DONE - 2008-06-24 - Hiram)
+    cd /hive/data/genomes/ce6
+    #	test procedure with -debug first
+    doSameSpeciesLiftOver.pl -bigClusterHub=swarm -workhorse=hgwdev \
+	-ooc /hive/data/genomes/ce6/jkStuff/11.ooc ce6 ce7 -debug
+    cd bed/blat.ce7.2009-07-28
+    time nice -n +19 doSameSpeciesLiftOver.pl -bigClusterHub=swarm \
+	-workhorse=hgwdev \
+	-ooc /hive/data/genomes/ce6/jkStuff/11.ooc ce6 ce7 > do.log 2>&1 &
+    #	real    8m7.833s
+
+#########################################################################

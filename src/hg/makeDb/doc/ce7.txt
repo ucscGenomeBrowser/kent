@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS200
 
-#  $Id: ce7.txt,v 1.2 2009/07/24 20:32:52 hiram Exp $
+#  $Id: ce7.txt,v 1.3 2009/07/28 21:55:26 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2009-07-21 - Hiram)
@@ -365,3 +365,174 @@ TMPDIR=/scratch/tmp
     #	46320678 bases of 138406388 (33.467%) in intersection
 
 ############################################################################
+## 5-Way multiple alignment (DONE - 2009-07-28 - Hiram)
+
+    mkdir /cluster/data/ce7/bed/multiz5way
+    cd /cluster/data/ce7/bed/multiz5way
+    #	See notes in ce6.txt for 6-way alignment.  This is the tree from
+    #	there.
+
+    cat << '_EOF_' > 5way.nh
+((C._elegans_ce7:0.003000,
+    (C._brenneri_caePb2:0.013000,
+	(C._remanei_caeRem3:0.003000,C._briggsae_cb3:0.005000):0.004000)
+		:0.002000):0.001000,
+	    C._japonica_caeJap2:0.023000);
+'_EOF_'
+    # << happy emacs
+
+    /cluster/bin/phast/x86_64/all_dists 5way.nh > 5way.distances.txt
+    grep -i ce7 5way.distances.txt | sort -k3,3n
+    #	Use this output for reference, and use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                           chaince7Link   chain   linearGap
+#    distance                       on Ce7      on other   minScore
+#  1 0.0120  - remanei_caeRem3     (% 41.722)  (% 33.467)  1000     loose
+#  2 0.0140  - briggsae_cb3        (% 42.300)  (% 39.763)  1000     loose
+#  3 0.0180  - brenneri_caePb2     (% 40.677)  (% 32.313)  1000     loose
+#  3 0.0270  - japonica_caeJap2    (% 27.192)  (% 20.450)  1000     loose
+
+    cd /cluster/data/ce7/bed/multiz5way
+    #	bash shell syntax here ...
+    export H=/cluster/data/ce7/bed
+    mkdir mafLinks
+    for G in caeRem3 cb3 caePb2 caeJap2
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/lastz.${G}/mafNet ]; then
+	    echo "missing directory lastz.${G}/mafNet"
+	fi
+	ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	these are x86_64 binaries
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+
+    # the autoMultiz cluster run
+    ssh memk
+    cd /hive/data/genomes/ce7/bed/multiz5way/
+
+    # create species list and stripped down tree for autoMZ
+    sed -e \
+'s/[a-z][a-z0-9]*_//ig; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d; s/C._//g' \
+	5way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    mkdir maf run
+    cd run
+
+    #	NOTE: set the db and pairs directories in this script
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = ce7
+set c = $1
+set result = $2
+set run = `pwd`
+set tmp = $run/tmp/$db/multiz.$c
+set nway = /hive/data/genomes/ce7/bed/multiz5way
+set pairs = $nway/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p $nway/tree.nh $nway/species.list $tmp
+pushd $tmp
+foreach s (`sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($nway/penn $path); rehash
+$nway/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp/$db
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/ce7/bed/multiz5way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    awk '{print $1}' /cluster/data/ce7/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para -maxNode=1 push
+    para check ... push ... etc ...
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1515s      25.25m     0.42h    0.02d  0.000 y
+# IO & Wait Time:                   126s       2.10m     0.03h    0.00d  0.000 y
+# Average job time:                 234s       3.91m     0.07h    0.00d
+# Longest finished job:             334s       5.57m     0.09h    0.00d
+# Submission to last job:           349s       5.82m     0.10h    0.00d
+
+    cd /hive/data/genomes/ce7/bed/multiz5way
+    time nice -n +19 catDir maf > multiz5way.maf
+    # a few seconds to produce:
+    #	-rw-rw-r-- 1 321148937 Jul 28 13:00 multiz5way.maf
+
+    #	before getting to the annotation, load this up so we can get
+    #	a first view of the track.  This will be replaced with the annotated
+    #	mafs
+    ssh hgwdev
+    cd /hive/data/genomes/ce7/bed/multiz5way
+    mkdir /gbdb/ce7/multiz5way
+    ln -s /hive/data/genomes/ce7/bed/multiz5way/multiz5way.maf \
+	/gbdb/ce7/multiz5way
+
+    #	this load creates a large file, do that on local disk:
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf ce7 multiz5way
+    #	a few seconds to load:
+    #	Loaded 327160 mafs in 1 files from /gbdb/ce7/multiz5way
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 ce7 multiz5waySummary /gbdb/ce7/multiz5way/multiz5way.maf
+    #	a few seconds to load:
+    #	Created 111894 summary blocks from 849995 components and 327160 mafs
+    #	from /gbdb/ce7/multiz5way/multiz5way.maf
+
+    #	remove the temporary .tab files:
+    rm multiz5*.tab
+
+############################################################################
+# CE7->CE8 LIFTOVER (DONE - 2008-06-24 - Hiram)
+    cd /hive/data/genomes/ce7
+    #	test procedure with -debug first
+    doSameSpeciesLiftOver.pl -bigClusterHub=swarm -workhorse=hgwdev \
+	-ooc /hive/data/genomes/ce7/jkStuff/ce7.11.ooc ce7 ce8 -debug
+    cd bed/blat.ce8.2009-07-28
+    time nice -n +19 doSameSpeciesLiftOver.pl -bigClusterHub=swarm \
+	-workhorse=hgwdev \
+	-ooc /hive/data/genomes/ce7/jkStuff/ce7.11.ooc ce7 ce8 > do.log 2>&1 &
+    #	real    8m10.453s
+
+    #	this takes about 10 minutes
+    tail -f do.log
+    rm -f /cluster/bluearc/ce6/ce6.2bit
+
+#########################################################################

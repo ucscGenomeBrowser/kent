@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS204
 
-#  $Id: ce8.txt,v 1.1 2009/07/24 22:54:44 hiram Exp $
+#  $Id: ce8.txt,v 1.2 2009/07/28 21:55:26 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2009-07-22 - Hiram)
@@ -165,3 +165,360 @@ taxId 6239
     #	request push of that data to kluster nodes /scratch/data/ce8/
 
 #########################################################################
+## LASTZ caePb2 (DONE - 2009-07-28 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce8/bed/lastzCaePb2.2009-07-28
+    cd /hive/data/genomes/ce8/bed/lastzCaePb2.2009-07-28
+
+    cat << '_EOF_' > DEF
+# ce8 vs caePb2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce8
+SEQ1_DIR=/scratch/data/ce8/ce8.2bit
+SEQ1_LEN=/scratch/data/ce8/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. PB2801 caePb2
+SEQ2_DIR=/scratch/data/caePb2/caePb2.2bit
+SEQ2_LEN=/scratch/data/caePb2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caePb2/caePb2.supercontigs.2bit
+SEQ2_CTGLEN=/scratch/data/caePb2/caePb2.supercontigs.sizes
+SEQ2_LIFT=/scratch/data/caePb2/caePb2.supercontigs.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce8/bed/lastzCaePb2.2009-07-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=swarm -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -noLoadChainSplit -smallClusterHub=memk \
+	> do.log 2>&1 &
+    #	about 50 minutes
+    cat fb.ce8.chainCaePb2Link.txt
+    #	40793017 bases of 100286004 (40.677%) in intersection
+
+    #	swap, this is also in caePb2.txt
+    mkdir /hive/data/genomes/caePb2/bed/blastz.ce8.swap
+    cd /hive/data/genomes/caePb2/bed/blastz.ce8.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	/hive/data/genomes/ce8/bed/lastzCaePb2.2009-07-28/DEF \
+	-bigClusterHub=swarm -smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    3m16.709s
+    cat fb.caePb2.chainCe8Link.txt
+    #	55084580 bases of 170473138 (32.313%) in intersection
+
+#########################################################################
+## BLASTZ caeJap2 (DONE - 2009-07-28 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce8/bed/lastzCaeJap2.2009-07-28
+    cd /hive/data/genomes/ce8/bed/lastzCaeJap2.2009-07-28
+
+    cat << '_EOF_' > DEF
+# ce8 vs caeJap2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce8
+SEQ1_DIR=/scratch/data/ce8/ce8.2bit
+SEQ1_LEN=/scratch/data/ce8/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. japonica caeJap2
+SEQ2_DIR=/scratch/data/caeJap2/caeJap2.2bit
+SEQ2_LEN=/scratch/data/caeJap2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caeJap2/caeJap2.supers.2bit
+SEQ2_CTGLEN=/scratch/data/caeJap2/caeJap2.supers.sizes
+SEQ2_LIFT=/scratch/data/caeJap2/caeJap2.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce8/bed/lastzCaeJap2.2009-07-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm -noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-workhorse=hgwdev -smallClusterHub=memk > do.log 2>&1 &
+    #	about 42 minutes
+    cat fb.ce8.chainCaeJap2Link.txt 
+    #	27270052 bases of 100286004 (27.192%) in intersection
+
+    #	swap, this is also in caeJap2.txt
+    mkdir /hive/data/genomes/caeJap2/bed/blastz.ce8.swap
+    cd /hive/data/genomes/caeJap2/bed/blastz.ce8.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust -bigClusterHub=swarm -noLoadChainSplit \
+	/hive/data/genomes/ce8/bed/lastzCaeJap2.2009-07-28/DEF \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    3m44.671s
+    cat fb.caeJap2.chainCe8Link.txt 
+    #	26440993 bases of 129295754 (20.450%) in intersection
+
+############################################################################
+## BLASTZ cb3 (DONE - 2009-07-28 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce8/bed/lastzCb3.2009-07-28
+    cd /hive/data/genomes/ce8/bed/lastzCb3.2009-07-28
+
+    cat << '_EOF_' > DEF
+# ce8 vs cb3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce8
+SEQ1_DIR=/scratch/data/ce8/ce8.2bit
+SEQ1_LEN=/scratch/data/ce8/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae cb3
+SEQ2_DIR=/hive/data/genomes/cb3/cb3.rmskTrf.2bit
+SEQ2_LEN=/hive/data/genomes/cb3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce8/bed/lastzCb3.2009-07-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=swarm -noLoadChainSplit \
+	-smallClusterHub=memk > do.log 2>&1 &
+    #	about 40 minutes
+    cat fb.ce8.chainCb3Link.txt 
+    #	42421395 bases of 100286004 (42.300%) in intersection
+
+    #	swap, this is also in cb3.txt
+    mkdir /hive/data/genomes/cb3/bed/blastz.ce8.swap
+    cd /hive/data/genomes/cb3/bed/blastz.ce8.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce8/bed/lastzCb3.2009-07-28/DEF \
+	-workhorse=hgwdev -bigClusterHub=swarm -noLoadChainSplit \
+	-smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real   3m46.700s
+
+    cat fb.cb3.chainCe8Link.txt 
+    #	43115929 bases of 108433446 (39.763%) in intersection
+
+############################################################################
+## BLASTZ caeRem3 (DONE - 2009-07-28,09 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce8/bed/lastzCaeRem3.2009-07-28
+    cd /hive/data/genomes/ce8/bed/lastzCaeRem3.2009-07-28
+
+    cat << '_EOF_' > DEF
+# ce8 vs caeRem3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce8
+SEQ1_DIR=/scratch/data/ce8/ce8.2bit
+SEQ1_LEN=/scratch/data/ce8/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. remanei caeRem3
+SEQ2_DIR=/scratch/data/caeRem3/caeRem3.2bit
+SEQ2_LEN=/scratch/data/caeRem3/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caeRem3/caeRem3.supercontigs.2bit
+SEQ2_CTGLEN=/scratch/data/caeRem3/caeRem3.supercontigs.sizes
+SEQ2_LIFT=/scratch/data/caeRem3/caeRem3.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce8/bed/lastzCaeRem3.2009-07-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=swarm -noLoadChainSplit \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > do.log 2>&1 &
+XXX - running Tue Jul 28 11:14:53 PDT 2009
+    #	real    28m14.168s
+    cat fb.ce8.chainCaeRem3Link.txt 
+    #	41841184 bases of 100286004 (41.722%) in intersection
+
+    #	swap, this is also in caeRem3.txt
+    mkdir /hive/data/genomes/caeRem3/bed/blastz.ce8.swap
+    cd /hive/data/genomes/caeRem3/bed/blastz.ce8.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	-workhorse=hgwdev -noLoadChainSplit \
+	/hive/data/genomes/ce8/bed/lastzCaeRem3.2009-07-28/DEF \
+	-bigClusterHub=swarm -smallClusterHub=encodek -swap > swap.log 2>&1 &
+    #	real    3m10.033s
+    cat fb.caeRem3.chainCe8Link.txt 
+    #	46320775 bases of 138406388 (33.467%) in intersection
+
+############################################################################
+## 5-Way multiple alignment (DONE - 2009-07-28 - Hiram)
+
+    mkdir /cluster/data/ce8/bed/multiz5way
+    cd /cluster/data/ce8/bed/multiz5way
+    #	See notes in ce6.txt for 6-way alignment.  This is the tree from
+    #	there.
+
+    cat << '_EOF_' > 5way.nh
+((C._elegans_ce8:0.003000,
+    (C._brenneri_caePb2:0.013000,
+	(C._remanei_caeRem3:0.003000,C._briggsae_cb3:0.005000):0.004000)
+		:0.002000):0.001000,
+	    C._japonica_caeJap2:0.023000);
+'_EOF_'
+    # << happy emacs
+
+    /cluster/bin/phast/x86_64/all_dists 5way.nh > 5way.distances.txt
+    grep -i ce8 5way.distances.txt | sort -k3,3n
+    #	Use this output for reference, and use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                           chaince8Link   chain   linearGap
+#    distance                       on Ce8      on other   minScore
+#  1 0.0120  - remanei_caeRem3     (% 41.722)  (% 33.467)  1000     loose
+#  2 0.0140  - briggsae_cb3        (% 42.300)  (% 39.763)  1000     loose
+#  3 0.0180  - brenneri_caePb2     (% 40.677)  (% 32.313)  1000     loose
+#  3 0.0270  - japonica_caeJap2    (% 27.192)  (% 20.450)  1000     loose
+
+    cd /cluster/data/ce8/bed/multiz5way
+    #	bash shell syntax here ...
+    export H=/cluster/data/ce8/bed
+    mkdir mafLinks
+    for G in caeRem3 cb3 caePb2 caeJap2
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/lastz.${G}/mafNet ]; then
+	    echo "missing directory lastz.${G}/mafNet"
+	fi
+	ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	these are x86_64 binaries
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+
+    # the autoMultiz cluster run
+    ssh memk
+    cd /hive/data/genomes/ce8/bed/multiz5way/
+
+    # create species list and stripped down tree for autoMZ
+    sed -e \
+'s/[a-z][a-z0-9]*_//ig; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d; s/C._//g' \
+	5way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    mkdir maf run
+    cd run
+
+    #	NOTE: set the db and pairs directories in this script
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = ce8
+set c = $1
+set result = $2
+set run = `pwd`
+set tmp = $run/tmp/$db/multiz.$c
+set nway = /hive/data/genomes/ce8/bed/multiz5way
+set pairs = $nway/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p $nway/tree.nh $nway/species.list $tmp
+pushd $tmp
+foreach s (`sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($nway/penn $path); rehash
+$nway/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp/$db
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/ce8/bed/multiz5way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    awk '{print $1}' /cluster/data/ce8/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para -maxNode=1 push
+    para check ... push ... etc ...
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1517s      25.28m     0.42h    0.02d  0.000 y
+# IO & Wait Time:                   124s       2.07m     0.03h    0.00d  0.000 y
+# Average job time:                 234s       3.91m     0.07h    0.00d
+# Longest finished job:             334s       5.57m     0.09h    0.00d
+# Submission to last job:           348s       5.80m     0.10h    0.00d
+
+    cd /hive/data/genomes/ce8/bed/multiz5way
+    time nice -n +19 catDir maf > multiz5way.maf
+    # a few seconds to produce:
+    #	-rw-rw-r-- 1 321149265 Jul 28 14:53 multiz5way.maf
+
+    #	before getting to the annotation, load this up so we can get
+    #	a first view of the track.  This will be replaced with the annotated
+    #	mafs
+    ssh hgwdev
+    cd /hive/data/genomes/ce8/bed/multiz5way
+    mkdir /gbdb/ce8/multiz5way
+    ln -s /hive/data/genomes/ce8/bed/multiz5way/multiz5way.maf \
+	/gbdb/ce8/multiz5way
+
+    #	this load creates a large file, do that on local disk:
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf ce8 multiz5way
+    #	a few seconds to load:
+    #	Loaded 327164 mafs in 1 files from /gbdb/ce8/multiz5way
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 ce8 multiz5waySummary /gbdb/ce8/multiz5way/multiz5way.maf
+    #	a few seconds to load:
+    #	Created 111894 summary blocks from 850001 components and 327164 mafs
+    #	from /gbdb/ce8/multiz5way/multiz5way.maf
+
+    #	remove the temporary .tab files:
+    rm multiz5*.tab
+############################################################################
