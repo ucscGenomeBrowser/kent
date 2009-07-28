@@ -686,6 +686,8 @@ identifier agilentHumanProbeId external=agilent fuzzy
     $hg.agilentCgh4x180k.name
     $hg.agilentCgh8x60k.name
     $hg.agilentCnv2x400k.name
+    $hg.agilentCnv2x105k.name
+    $hg.agilentHrd1x1m.name
 
 identifier agilentMouseProbeId external=agilent fuzzy
 "Agilent Mouse CGH/CNV array probe ID"
