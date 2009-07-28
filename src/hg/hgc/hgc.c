@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1562 2009/07/28 08:56:19 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1563 2009/07/28 15:57:39 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3570,6 +3570,10 @@ if (wordCount > 0)
         {
 	doAltGraphXDetails(tdb,item);
 	}
+#ifdef USE_BAM
+    else if (sameString(type, "bam"))
+	doBamDetails(tdb, item);
+#endif // USE_BAM
     }
 if (imagePath)
     {

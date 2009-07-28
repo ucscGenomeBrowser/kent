@@ -3,10 +3,13 @@ include ../../inc/common.mk
 L += -lm ${MYSQLLIBS} 
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+ifeq (${USE_BAM},1)
+    MYLIBS += ${SAMPATH}/libbam.a
+endif
 
 A = hgc
 
-O = $A.o bigBedClick.o cgapSageClick.o encodeClick.o expClick.o mafClick.o \
+O = $A.o bamClick.o bigBedClick.o cgapSageClick.o encodeClick.o expClick.o mafClick.o \
 	hgdpClick.o regMotif.o wiggleClick.o retroClick.o \
 	lowelab.o rnaFoldClick.o transMapClick.o txCdsInfo.o \
 	ccdsClick.o mgcClick.o dbRIP.o wikiTrack.o virusClick.o

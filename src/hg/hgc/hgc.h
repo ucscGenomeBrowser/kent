@@ -335,6 +335,9 @@ void hgdpGeoFreqTable(struct hgdpGeo *geo);
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 
+void doBamDetails(struct trackDb *tdb, char *item);
+/* Show details of an alignment from a BAM file. */
+
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 #endif
