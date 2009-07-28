@@ -123,6 +123,10 @@ char *hBackgroundImage();
 /* Microarray default setting. */
 #define MICROARRAY_CLICK_LIMIT 200
 
+/* itemImagePath trackDb variable names */
+#define ITEM_IMAGE_PATH "itemImagePath"
+#define ITEM_BIG_IMAGE_PATH "itemBigImagePath"
+
 /* SwitchGear TSS default filter. */
 #define SWITCHDBTSS_FILTER 10
 

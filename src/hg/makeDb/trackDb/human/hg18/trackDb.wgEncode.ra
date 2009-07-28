@@ -4408,6 +4408,19 @@ settingsByView Hotspots:pValueFilter=0.0,qValueFilter=0.0 Peaks:pValueFilter=0.0
     type broadPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=WERI-Rb-1 antibody=CTCF fragLength=350 view=Hotspots replicate=2 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=407 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf fileName=wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf.broadPeak.gz
 
+# UW DNAase-seq southerns
+
+track wgEncodeUwSoutherns
+shortLabel UW Southerns
+longLabel ENCODE Univ. Washington Southern Blot Verifications
+group regulation
+visibility hide
+priority 100
+itemImagePath /goldenPath/hg18/encode/images/UwSoutherns/jpg jpg
+itemBigImagePath /goldenPath/hg18/encode/images/UwSoutherns/gel gel
+type bed 4 .
+wgEncode 1
+
 # U. Washington DNAse-seq (wrangler: Mike, then Andy)
 
 track wgEncodeUwDnaseSeq

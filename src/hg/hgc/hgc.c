@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1561 2009/07/24 04:20:10 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1562 2009/07/28 08:56:19 aamp Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3417,6 +3417,11 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doImageItemBed(struct trackDb *tdb, char *item)
+/* Print bed plus an image */
+{
+}
+
 void doChromGraph(struct trackDb *tdb)
 /* Print information for coloredExon type tracks. */
 {
@@ -3432,7 +3437,7 @@ char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-
+char *imagePath = trackDbSettingClosestToHome(tdb, ITEM_IMAGE_PATH);
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -3566,6 +3571,20 @@ if (wordCount > 0)
 	doAltGraphXDetails(tdb,item);
 	}
     }
+if (imagePath)
+    {
+    char *bigImagePath = trackDbSettingClosestToHome(tdb, ITEM_BIG_IMAGE_PATH);
+    char *bothWords[2];
+    int shouldBeTwo = chopLine(imagePath, bothWords);
+    if (shouldBeTwo != 2)
+	errAbort("itemImagePath setting for %s track incorrect. Needs to be \"itemImagePath <path> <suffix>\".", tdb->tableName);
+    printf("<BR><IMG SRC=\"%s/%s.%s\"><BR><BR>\n", bothWords[0], item, bothWords[1]);
+    shouldBeTwo = chopLine(bigImagePath, bothWords);
+    if (shouldBeTwo != 2)
+	errAbort("bigItemImagePath setting for %s track incorrect. Needs to be \"itemImagePath <path> <suffix>\".", tdb->tableName);
+    printf("<A HREF=\"%s/%s.%s\">Download Original Image</A><BR>\n", bothWords[0], item, bothWords[1]);
+    }
+
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
