@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.20 2009/07/27 23:55:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.21 2009/07/28 15:44:16 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -67,7 +67,14 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+    if (hIsGsidServer())
+	{
+	hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGsid/pb%s.shtml\"", tagName);
+	}
+    else
+	{    
+	hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+    	}
     }
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
