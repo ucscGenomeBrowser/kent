@@ -21346,6 +21346,15 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
     zcat 022060_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh4x180k stdin
 
 ############################################################################
+# TWO MORE AGILENT HUMAN ARRAYS (DONE, 2009-07-28 Andy)
+    ssh hgwdev
+    cd /hive/data/hg18/bed/agilentProbes
+    wget --timestamping --user=microarray --password=<get-it-from-agilent> \
+        "ftp://ftp.agilent.com/restricted/UCSC_BED_FILES/*"
+    tail -n +3 022837_D_UCSCTrack_20090331.txt | hgLoadBed hg18 agilentCnv2x105k stdin
+    tail -n +3 023642_D_BED_20090528.bed | hgLoadBed hg18 agilentHdd1x1m stdin
+
+############################################################################
 ############################################################################
 # TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
 
@@ -28173,7 +28182,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.371 2009/07/25 02:40:16 kate Exp $
+# $Id: hg18.txt,v 1.372 2009/07/28 23:38:02 aamp Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28221,7 +28230,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.371 2009/07/25 02:40:16 kate Exp $
+# $Id: hg18.txt,v 1.372 2009/07/28 23:38:02 aamp Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
