@@ -43,6 +43,10 @@
  *         zoom index        	cirTree index
  */
 
+#ifndef CIRTREE_H
+#include "cirTree.h"
+#endif
+
 struct bbiZoomLevel
 /* A zoom level in bigWig file. */
     {
