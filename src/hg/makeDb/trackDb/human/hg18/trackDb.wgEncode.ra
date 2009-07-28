@@ -14008,7 +14008,7 @@ subGroup1 view Views Alignments=Alignments yRawSignal=Raw_Signal
 #sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults yRawSignal=full+ Alignments=pack
+visibilityViewDefaults yRawSignal=full Alignments=pack
 priority 0
 type bed 3
 noInherit on
