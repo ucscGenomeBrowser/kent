@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.32 2009/07/22 18:40:28 hiram Exp $";
+#	"$Id: hg19.txt,v 1.33 2009/07/29 06:49:17 aamp Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-02-04 - Hiram)
@@ -5315,3 +5315,34 @@ by a single Makefile. This is available from:
 see doc/builds.txt for specific details.
 ############################################################################
 testing
+
+
+############################################################################
+# AGILENT PROBES LIFTED FROM HG18 (DONE, 2009-07-28 Andy)
+
+ssh hgwdev
+bash
+mkdir /hive/data/genomes/hg19/bed/agilentProbes
+cd /hive/data/genomes/hg19/bed/agilentProbes
+for table in `echo show tables like \'agilent%\' | hgsql hg18 | tail -n +2 | grep -v Probe`; do
+    echo $table; echo "select * from $table" | hgsql hg18 | \
+        tail -n +2 | cut -f2- > ${table}.hg18.bed; liftOver ${table}.hg18.bed \
+          /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz ${table}.hg19.{bed,unmapped};
+    hgLoadBed hg19 $table ${table}.hg19.bed; 
+    echo done with $table; 
+done
+for unmap in *.unmapped; do
+   table=${unmap%.hg19.unmapped}
+   grep Deleted -A1 $unmap | grep -v Deleted | grep -v "^--" > agilentProbesHg18Unmapped/${table}.deleted.bed
+   grep Split -A1 $unmap | grep -v Split | grep -v "^--" > agilentProbesHg18Unmapped/${table}.split.bed
+   grep Partially -A1 $unmap | grep -v Partially | grep -v "^--" > agilentProbesHg18Unmapped/${table}.partiallyDeleted.bed
+done
+find agilentProbesHg18Unmapped/ -size 0b | xargs rm
+rm *hg18.bed *.unmapped bed.tab
+gzip *.bed
+tar cfz agilentProbesHg18Unmapped.tar.gz agilentProbesHg18Unmapped
+cd /usr/local/apache/htdocs/goldenPath/hg19
+mkdir agilentProbes
+cd agilentProbes/
+ln -s /hive/data/genomes/hg19/bed/agilentProbes/agilentProbesHg18Unmapped beds
+ln -s /hive/data/genomes/hg19/bed/agilentProbes/agilentProbesHg18Unmapped.tar.gz
