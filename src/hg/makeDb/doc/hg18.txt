@@ -28183,7 +28183,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.373 2009/07/29 00:47:06 aamp Exp $
+# $Id: hg18.txt,v 1.374 2009/07/29 04:24:25 markd Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28231,7 +28231,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.373 2009/07/29 00:47:06 aamp Exp $
+# $Id: hg18.txt,v 1.374 2009/07/29 04:24:25 markd Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28564,4 +28564,22 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
+############################################################################
+# rnaBinding RNA Binding Proteins (2009-07-28 markd)
+# contributor: Jeremy Sanford <sanford@biology.ucsc.edu>
+
+    # sfrs1Input BED table: 
+    #   need to drop color, as it's in the wrong column
+    #   skip header
+    tawk 'NR>1{print $1,$2,$3,$4,$5,$6}' Input_sequence_blocks.bed | hgLoadBed hg18 sfrs1Input stdin
+
+    # sfrs1Clip BED table:
+    #   skip header
+    tawk 'NR>1{print $1,$2,$3,$4,$5,$6}' SFRS1_CLIP_sequence_blocks.bed | hgLoadBed hg18 sfrs1Clip stdin
+
+    # SFRS1_consensus_sites.wig
+    tawk 'NR>1' SFRS1_consensus_sites.wig  | wigEncode stdin sfrs1ConsensusSites.wig  sfrs1ConsensusSites.wib
+    # Converted stdin, upper limit 11.63, lower limit -28.64
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 sfrs1ConsensusSites sfrs1ConsensusSites.wig
+    ln -s $(pwd -P)/sfrs1ConsensusSites.wib /gbdb/hg18/wib/
 ############################################################################
