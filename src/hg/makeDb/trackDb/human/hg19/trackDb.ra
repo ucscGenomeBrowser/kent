@@ -32,6 +32,9 @@ maxItems 300
 track refGene override
 visibility pack
 
+track agilentProbes override
+group regulation
+
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
