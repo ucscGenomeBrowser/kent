@@ -5,9 +5,23 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.33 2009/07/29 06:49:17 aamp Exp $";
+#	"$Id: hg19.txt,v 1.34 2009/07/29 18:42:22 rhead Exp $";
 
 #############################################################################
+
+# NOTE FOR NEXT HUMAN ASSEMBLY (2009-07-29 - Brooke): hg19 contains the wrong
+# sequence for chrM. The accession NC_001807 was replaced in GenBank with
+# NC_012920, with the note: "This sequence was removed since the accepted
+# reference sequence for the Homo sapiens mitochondrion is the rCRS/Mitomap
+# sequence, which is now available as the record NC_012920".
+# Also, from http://www.mitomap.org/mitoseq.html:
+# "IMPORTANT:  Do not use NC_001807 as "the rCRS" as it is an African
+# (Yoruban) sequence with over 40 variant nucleotides from the rCRS. As of
+# July 8, 2009 it has been removed from GenBank as a reference sequence but
+# may be found, if needed, as  AF347015, one of 53 African sequence deposited
+# in Genbank by Ingman et al in 2001."
+# Use NC_012920 for the chrM sequence for the next build!
+
 # Download sequence (DONE - 2009-02-04 - Hiram)
     mkdir -p /hive/data/genomes/hg19/download
     cd /hive/data/genomes/hg19/download
