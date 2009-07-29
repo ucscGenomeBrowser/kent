@@ -324,7 +324,7 @@ treeImage phylo/hg19_4way.gif
 track primateChainNet
 compositeTrack on
 shortLabel Primates Chain/Net
-longLabel Primate genomes, Chain and Net alignment tracks
+longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMac=Rhesus ePapHam=Baboon fCalJac=Marmoset gTarSyr=Tarsier hOtoGar=Bushbaby iMicMur=Mouse_lemur
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
@@ -503,7 +503,7 @@ track placentalChainNet
 release alpha
 compositeTrack on
 shortLabel Placental Chain/Net
-longLabel Non-primate Placental genomes, Chain and Net alignment tracks
+longLabel Non-primate Placental Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aMm=Mouse bRn=Rat cDipOrd=Kangaroo_rat dCavPor=Guinea_Pig eSpeTri=Squirrel fOryCun=Rabbit gOchPri=Pika hTupBel=Tree_Shrew iVicPac=Alpaca jTurTru=Dolphin kBosTau=Cow lEquCab=Horse mFelCat=Cat nCanFam=Dog oMyoLuc=Microbat pPteVam=Megabat qEriEur=Hedgehog rSorAra=Shrew sDasNov=Armadillo tChoHof=Sloth uLoxAfr=Elephant vProCap=Rock_hyrax wEchTel=Tenrec 
 subGroup3 clade Clade aEuarch=Euarchontoglires bLaura=Laurasiatheria cXenar=Xenarthra dAfro=Afrotheria
@@ -899,7 +899,7 @@ track vertebrateChainNet
 release alpha
 compositeTrack on
 shortLabel Vertebrate Chain/Net
-longLabel Non-placental Vertebrate genomes, Chain and Net alignment tracks
+longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aMacEug=Wallaby bMonDom=Opossum cOrnAna=Platypus dGalGal=Chicken eTaeGut=Zebra_finch fAnoCar=Lizard gXenTro=X._tropicalis hGasAcu=Stickleback iFr=Fugu jDanRer=Zebrafish kTetNig=Tetraodon lOryLat=Medaka mPetMar=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
