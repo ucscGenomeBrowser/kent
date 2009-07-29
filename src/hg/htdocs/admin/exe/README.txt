@@ -9,6 +9,9 @@ system they were built for.
   - MacOSX directory contains executables for Mac OSX.
 
 Download the version of the application you need that is appropriate for 
-your operating system and run it from your command line.  
+your operating system and run it from your command line. To determine
+your machine type, at the command line type:
+
+uname -a 
 
 Run most of the applications with no arguments to see the usage statement.
