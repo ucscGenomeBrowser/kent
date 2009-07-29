@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.22 2009/06/08 18:38:58 hiram Exp $
+# $Id: makeDownloads.pl,v 1.23 2009/07/29 18:59:18 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -268,12 +268,14 @@ sub compressScaffoldFiles {
   my $agpFile = &mustFindOne("$db.agp", 'scaffolds.agp',
 			     "$hgFakeAgpDir/$db.agp",
 			     "$hgFakeAgpDir/scaffolds.agp");
-  my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out');
+  my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out', "bed/repeatMasker/$db.fa.out");
   my $trfFile = &mustFindOne("$trfRunDirRel/trfMask.bed",
 			     "$trfRunDirRel/scaffolds.bed");
   $bossScript->add(<<_EOF_
 # Make compressed files of .agp, .out, TRF .bed, soft- and hard-masked .fa:
 cd $runDir/bigZips
+
+ln -s $topDir/$db.2bit ./$db.2bit
 
 gzip -c $agpFile > $db.agp.gz
 gzip -c $outFile > $db.fa.out.gz
@@ -631,6 +633,16 @@ For more information on the $organism genome, see the project website:
 
 Files included in this directory:
 
+$db.2bit - contains the complete $organism/$db genome sequence
+    in the 2bit file format.  The utility program, twoBitToFa (available
+    from the kent src tree), can be used to extract .fa file(s) from
+    this file.  A pre-compiled version of the command line tool can be
+    found at:
+        http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
+    See also:
+        http://genome.ucsc.edu/admin/cvs.html
+	http://genome.ucsc.edu/admin/jk-install.html
+
 _EOF_
   ;
   if ($chromBased) {
@@ -950,7 +962,11 @@ _EOF_
 foreach d (bigZips $chromGz database liftOver)
   cd $runDir/\$d
   if (\$d != "database" && \$d != "liftOver") then
-    md5sum *.gz > md5sum.txt
+    if (-s $db.2bit) then
+	md5sum $db.2bit *.gz > md5sum.txt
+    else
+	md5sum *.gz > md5sum.txt
+    endif
   endif
   mv $runDir/README.\$d.txt README.txt
 end
