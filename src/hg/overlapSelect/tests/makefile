@@ -29,7 +29,11 @@ test:   pslSelectTests \
 	cds_id_out_gp \
 	wideTest \
 	name2EmptyTest \
-	orthoStrandTest
+	orthoStrandTest \
+	xenoPslStatsTest \
+	xenoPslStatsStrandTest \
+	xenoPslGpStatsStrandTest \
+	xenoGpPslStatsStrandTest
 
 ###
 # selecting PSLs
@@ -748,6 +752,26 @@ name2EmptyTest: mkout
 # psl strand regression
 orthoStrandTest: mkout
 	${OVERSEL} -strand -aggregate -statsOutputAll input/orthoSel.psl input/orthoIn.gp output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+# handle of translated alignments is not straight foward
+# -+ == - strand
+# +- == - strand
+# -- == + strand
+xenoPslStatsTest: mkout
+	${OVERSEL} -statsOutputAll -excludeSelf input/xenoEst1.psl input/xenoEst1.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+xenoPslStatsStrandTest: mkout
+	${OVERSEL} -strand -statsOutputAll -excludeSelf input/xenoEst1.psl input/xenoEst1.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+xenoPslGpStatsStrandTest: mkout
+	${OVERSEL} -strand -statsOutputAll -excludeSelf input/xenoEst1.psl input/xenoEst1.gp output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+xenoGpPslStatsStrandTest: mkout
+	${OVERSEL} -strand -statsOutputAll -excludeSelf input/xenoEst1.gp input/xenoEst1.psl output/$@.stats
 	${DIFF} expected/$@.stats output/$@.stats
 
 mkout:
