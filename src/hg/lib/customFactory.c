@@ -26,7 +26,7 @@
 #include "encode/encodePeak.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.97 2009/05/18 21:36:41 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.98 2009/07/30 22:21:18 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1944,7 +1944,6 @@ char *line = NULL;
 struct hash *chromHash = newHash(8);
 float prio = 0.0;
 struct sqlConnection *ctConn = NULL;
-char *loadedFromUrl = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
     ctConn = hAllocConn(CUSTOM_TRASH);
@@ -1963,7 +1962,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * if no track line. Find out explicit type setting if any.
      * Also make sure settingsHash is set up. */
     lf = cpp->fileStack;
-    //char *type = NULL;
     if (startsWithWord("track", line))
         {
 	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
@@ -2055,9 +2053,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		}
 	    }
         char *dataUrl = NULL;
-        if (lf->fileName && 
-                (startsWith("http://", lf->fileName) || 
-                 startsWith("ftp://", lf->fileName)))
+        if (lf->fileName && (
+                startsWith("http://" , lf->fileName) || 
+                startsWith("https://", lf->fileName) || 
+                startsWith("ftp://"  , lf->fileName)
+                ))
             dataUrl = cloneString(lf->fileName);
 	oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
 	/* Save a few more settings. */
@@ -2068,8 +2068,23 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		ctAddToSettings(track, "dbTrackType", oneTrack->dbTrackType);
             if (!trackDbSetting(track->tdb, "inputType"))
                 ctAddToSettings(track, "inputType", fac->name);
+            /* dataUrl is unfortunately being used in two ways, 
+             *  bigBed and bigWig should have used their own variable name
+             * try to prevent stomping on dataUrl for bigBed and bigWig */
             if (dataUrl)
-                ctAddToSettings(track, "dataUrl", dataUrl);
+		{
+		boolean updateDataUrl = TRUE;
+		if ( startsWith("bigBed", track->tdb->type) ||
+		     startsWith("bigWig", track->tdb->type) )
+		    {
+		    // we do not want to lose this
+                    // see compensating hack in ctDataUrl()
+		    if (trackDbSetting(track->tdb, "dataUrl"))
+			updateDataUrl = FALSE;
+		    }
+		if (updateDataUrl)
+		    ctAddToSettings(track, "dataUrl", dataUrl);
+		}
             if (!ctGenome(track) && ctDb)
                 ctAddToSettings(track, "db", ctDb);
 	    }
@@ -2090,8 +2105,6 @@ for (track = trackList; track != NULL; track = track->next)
 	 prio += 0.001;
 	 track->tdb->priority = prio;
 	 }
-    if (loadedFromUrl)
-        ctAddToSettings(track, "dataUrl", loadedFromUrl);
     if (initialPos)
         ctAddToSettings(track, "initialPos", initialPos);
     if (track->bedList)
@@ -2325,6 +2338,13 @@ return NULL;
 char *ctDataUrl(struct customTrack *ct)
 /* return URL where data can be reloaded, if any */
 {
+// hack to compensate for miss-use of variable name "dataUrl" in
+//  a different way than the rest of the code.
+//  see customFactoryParseOptionalDb() below.
+if ( startsWith("bigBed", ct->tdb->type) ||
+     startsWith("bigWig", ct->tdb->type) )
+    return NULL;
+
 return trackDbSetting(ct->tdb, "dataUrl");
 }
 
