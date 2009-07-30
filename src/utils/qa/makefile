@@ -24,6 +24,7 @@ install:
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
 	cp -p --remove-destination checkMetaAday.csh       ${SCRIPTS}
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
+	cp -p --remove-destination checkPushedFiles.csh    ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
 	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
