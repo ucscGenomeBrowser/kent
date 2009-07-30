@@ -9,7 +9,7 @@
 # to database.
 #
 #
-# $Id: gbMakeDownload,v 1.20 2009/07/30 01:45:05 markd Exp $
+# $Id: gbMakeDownload,v 1.21 2009/07/30 03:50:51 markd Exp $
 #
 use strict;
 use warnings;
@@ -43,9 +43,6 @@ my $maxBlatTargetDbs = 3;  # number of targetDbs to keep
 my $maxDbs = $#ARGV+2;  # init to more than number specified
 my $maxHours = undef;
 my $startTime = time();
-
-# some internal debugging
-my $debug = 1;
 
 # get file time modification time or undef if it doen't exist
 sub getFileMTime($) {
@@ -390,21 +387,12 @@ sub updateDownloadFiles($$) {
     my $needUpdated = 0;
     if (maybeMakeSeqFaFiles($justCheck, $db)) {
         $needUpdated = 1;
-        if ($debug) {
-            prMsg("made seq fa $db");
-        }
     }
     if (maybeMakeUpstreamFa($justCheck, $db)) {
         $needUpdated = 1;
-        if ($debug) {
-            prMsg("made upstream fa $db");
-        }
     }
     if (maybeMakeUpstreamMafs($justCheck, $db)) {
         $needUpdated = 1;
-        if ($debug) {
-            prMsg("made upstream mafs $db");
-        }
     }
     return $needUpdated;
 }
@@ -413,14 +401,8 @@ sub updateDownloadFiles($$) {
 sub keepGoing($) {
     my($upCnt) = @_;
     if ($upCnt >= $maxDbs) {
-        if ($debug) {
-            prMsg("stop: maxDbs exceeded: $upCnt >= $maxDbs")
-        }
         return 0;
-    } elsif (defined($maxHours) && ((60*60*(time()-$startTime)) >= $maxHours)) {
-        if ($debug) {
-            prMsg("stop: maxHouse exceeded")
-        }
+    } elsif (defined($maxHours) && (((time()-$startTime)/(60*60)) >= $maxHours)) {
         return 0;
     } else {
         return 1;
@@ -469,14 +451,8 @@ prMsg("outdated: " . join(" ", @outdatedDbs));
 my $upCnt = 0;
 foreach my $db (@outdatedDbs) {
     if (keepGoing($upCnt)) {
-        if ($debug) {
-            prMsg("should update $db");
-        }
         if (updateDownloadFiles(0, $db)) {
             $upCnt++;
-            if ($debug) {
-                prMsg("updated $db");
-            }
         }
     }
 }
