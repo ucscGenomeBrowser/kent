@@ -3353,7 +3353,6 @@ wgEncode 1
 # NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 
 track wgEncodeNhgriBip
-release alpha
 shortLabel NHGRI Bi-Pro
 longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide

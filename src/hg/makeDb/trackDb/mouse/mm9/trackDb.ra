@@ -478,7 +478,6 @@ type bed 3
 
 # ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 track wgEncodeNhgriBip
-release alpha
 shortLabel NHGRI BiP
 longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
 visibility hide
