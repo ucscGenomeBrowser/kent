@@ -22,7 +22,7 @@ goldenPathDir=/mirrordata/apache/htdocs/goldenPath
 
 # Checking for an existing lock file, Silently exits if lock file exists
 # and is less than one day old,  error if older.
-gbCheckLock $gbRoot/var/downloadcp/run/downloadcp.lock
+gbCheckLock $gbRoot/var/downloadcp/$(hostname)/run/downloadcp.lock
 
 gbCopyDownload -rsyncPort=$rsyncPort $gbBuildServer $gbDownloadBuildDir $goldenPathDir
 

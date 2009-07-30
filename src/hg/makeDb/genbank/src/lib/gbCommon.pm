@@ -64,8 +64,10 @@ BEGIN {
         }
     } elsif ($sys eq "FreeBSD") {
         $arch = "fbsd_" . $mach;
+    } elsif ($sys eq "SunOS") {
+        $arch = $mach;
     } else {
-        die("can't determine system/arch");
+        die("can't determine system/arch: sys=${sys} mach=${mach}");
     }
     $newPath .= "$rootDir/bin:$rootDir/bin/$arch:$rootDir/bin/i386:/cluster/bin/$arch";
     $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
