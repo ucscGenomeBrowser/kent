@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.25 2009/06/08 18:37:16 hiram Exp $
+# $Id: makePushQSql.pl,v 1.26 2009/07/30 22:34:07 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -156,7 +156,7 @@ sub getInfrastructureEntry {
     if (&HgAutomate::machineHasFile($dbHost, $f)) {
       push @files, $f;
     } else {
-      &HgAutomate::verbose(1, "$dbHost does not have $f\n")
+      &HgAutomate::verbose(1, "WARNING: $dbHost does not have $f\n")
 	unless ($f =~ /${db}To$SameSpecies/ ||
 		($f =~ m@/chromosomes/@ && !&dbIsChromBased()));
     }
@@ -171,7 +171,7 @@ sub getInfrastructureEntry {
       delete $allTables->{$t};
       &HgAutomate::verbose(3, "Deleted $t\n");
     } else {
-      &HgAutomate::verbose(1, "$db does not have $t\n");
+      &HgAutomate::verbose(1, "WARNING: $db does not have $t\n");
     }
   }
   return (\%entry);
@@ -193,12 +193,12 @@ sub getGenbankEntry {
     xenoRefFlat xenoRefSeqAli
     );
   my @genbankRequiredTables = qw(
-    author cds cell description development estOrientInfo gbCdnaInfo
+    author cds cell description development gbCdnaInfo
     gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
     library mrnaClone mrnaOrientInfo organism productName sex source tissue
     );
   my @genbankHelpfulTables = qw(
-    gbMiscDiff gbWarn
+    estOrientInfo gbMiscDiff gbWarn
     );
   my @genbankTablesInDb = ();
   foreach my $t (@genbankTrackTables) {
@@ -214,7 +214,7 @@ sub getGenbankEntry {
 	push @genbankTablesInDb, $t;
 	delete $allTables->{$t};
       } else {
-	die "\n$db does not have required genbank table $t\n\n";
+	die "\nERROR: $db does not have required genbank table $t\n\n";
       }
     }
     foreach my $t (@genbankHelpfulTables) {
@@ -222,7 +222,7 @@ sub getGenbankEntry {
 	push @genbankTablesInDb, $t;
 	delete $allTables->{$t};
       } else {
-	&HgAutomate::verbose(1, "$db does not have $t\n");
+	&HgAutomate::verbose(1, "WARNING: $db does not have $t\n");
       }
     }
   }
@@ -357,7 +357,7 @@ sub getTrackEntries {
 	      if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
 		$entry{'files'} .= $downloads . '\r\n';
 	      } else {
-		&HgAutomate::verbose(0, "$dbHost does not have " .
+		&HgAutomate::verbose(0, "WARNING: $dbHost does not have " .
 				     "chain/net download $downloads !\n");
 	      }
 	    }
@@ -373,7 +373,7 @@ sub getTrackEntries {
 	  if (&HgAutomate::machineHasFile($dbHost, $gif)) {
 	    $entry{'files'} .= $gif . '\r\n';
 	  } else {
-	    &HgAutomate::verbose(0, "$dbHost does not have phyloGif-" .
+	    &HgAutomate::verbose(0, "WARNING: $dbHost does not have phyloGif-" .
 				    "generated $gif for $table.\n");
 	  }
 	}
@@ -398,9 +398,9 @@ sub getTrackEntries {
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
 	    $entry{'files'} = $downloads;
 	  } else {
-	    &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
+	    &HgAutomate::verbose(1, "WARNING: $dbHost does not have $downloads\n");
 	  }
-	  &HgAutomate::verbose(1, "Found net table $table that was not " .
+	  &HgAutomate::verbose(1, "WARNING: Found net table $table that was not " .
 		       "already lumped in with chain entry $chainTrack...?\n");
 	} else {
 	  # This net has already been included in the corresponding Chain
@@ -553,7 +553,7 @@ sub printSwaps($) {
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
 	    $entry{'files'} .= $downloads . '\r\n';
 	  } else {
-	    &HgAutomate::verbose(0, "$dbHost:$oDb does not have " .
+	    &HgAutomate::verbose(0, "WARNING: $dbHost:$oDb does not have " .
 			     "chain/net download $downloads !\n");
 	  }
       }
@@ -602,8 +602,8 @@ sub reportStragglers {
   my @names = sort (keys %{$stragglers});
   if (scalar(@names) > 0) {
     &HgAutomate::verbose(0, "
-Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
-and genbank tables) which tracks to assign these tables to:\n");
+WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+supporting and genbank tables) which tracks to assign these tables to:\n");
     foreach my $t (@names) {
       &HgAutomate::verbose(0, "  $t\n");
     }
