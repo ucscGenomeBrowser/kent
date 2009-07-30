@@ -98,7 +98,7 @@ type bed 5 .
 
 track nucleosomeStringency
 shortLabel NSome Stringency
-longLabel Nucleosome Positioning Stringency from SOLiD core alignments
+longLabel Nucleosome Positioning Stringency from SOLiD Core Alignments
 group map
 priority 125.0
 visibility hide
@@ -128,7 +128,7 @@ origAssembly ce4
 
 track nucleosomeDensity
 shortLabel NSome Coverage
-longLabel Coverage of nucleosome predictions from SOLiD core alignments
+longLabel Coverage of nucleosome predictions from SOLiD Core Alignments
 group map
 priority 123.0
 visibility hide
@@ -186,7 +186,7 @@ origAssembly ce4
 
 track nucleosome
 shortLabel Nucleosome
-longLabel Nucleosome predictions from SOLiD core alignments
+longLabel Nucleosome predictions from SOLiD Core Alignments
 group map
 priority 120.0
 visibility hide

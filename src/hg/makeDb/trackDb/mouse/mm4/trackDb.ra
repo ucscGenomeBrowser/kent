@@ -189,7 +189,7 @@ canPack off
 
 track leptin
 shortLabel Leptin TBA
-longLabel Leptin Region TBA alignments (mouse,rat,human,chimp,baboon,cow,pig,cat,dog)
+longLabel Leptin Region TBA Alignments (mouse,rat,human,chimp,baboon,cow,pig,cat,dog)
 group compGeno
 priority 300
 visibility full

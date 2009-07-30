@@ -2098,7 +2098,7 @@ otherDb tetNig1
 track danRer6ChainNet
 compositeTrack on
 shortLabel Zebrafish Chain/Net
-longLabel Zebrafish (Dec. 2008/danRer6), Chain and Net alignment tracks
+longLabel Zebrafish (Dec. 2008/danRer6), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2434,7 +2434,7 @@ otherDb galGal2
 track galGal3ChainNet
 compositeTrack on
 shortLabel Chicken Chain/Net
-longLabel Chicken (May. 2006/galGal3), Chain and Net alignment tracks
+longLabel Chicken (May. 2006/galGal3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2587,7 +2587,7 @@ release beta
 track ornAna1ChainNet
 compositeTrack on
 shortLabel Platypus Chain/Net
-longLabel Platypus (Mar. 2007/ornAna1), Chain and Net alignment tracks
+longLabel Platypus (Mar. 2007/ornAna1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2675,7 +2675,7 @@ otherDb macEug1
 track monDom5ChainNet
 compositeTrack on
 shortLabel Opossum Chain/Net
-longLabel Opossum (Oct. 2006/monDom5), Chain and Net alignment tracks
+longLabel Opossum (Oct. 2006/monDom5), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -2943,7 +2943,7 @@ otherDb mm6
 track mm9ChainNet
 compositeTrack on
 shortLabel Mouse Chain/Net
-longLabel Mouse (Jul. 2007/mm9), Chain and Net alignment tracks
+longLabel Mouse (Jul. 2007/mm9), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3225,7 +3225,7 @@ otherDb bosTau1
 track equCab2ChainNet
 compositeTrack on
 shortLabel Horse Chain/Net
-longLabel Horse (Sep. 2007/equCab2), Chain and Net alignment tracks
+longLabel Horse (Sep. 2007/equCab2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -3265,7 +3265,7 @@ release alpha
 track canFam2ChainNet
 compositeTrack on
 shortLabel Dog Chain/Net
-longLabel Dog (May 2005/canFam2), Chain and Net alignment tracks
+longLabel Dog (May 2005/canFam2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -4647,7 +4647,7 @@ searchPriority 1.1
 track venterChainNet
 compositeTrack on
 shortLabel Venter Chain/Net
-longLabel J. Craig Venter Chain and Net alignment tracks
+longLabel J. Craig Venter Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 dragAndDrop subTracks
 visibility hide
@@ -4684,7 +4684,7 @@ sortOrder view=+
 track hg19chainNet
 compositeTrack on
 shortLabel Human Chain/Net
-longLabel Human (Feb. 2009/hg19), Chain and Net alignment tracks
+longLabel Human (Feb. 2009/hg19), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -4721,7 +4721,7 @@ html chainNet
 track poodleChainNet
 compositeTrack on
 shortLabel Poodle Chain/Net
-longLabel Poodle Chain and Net alignment tracks
+longLabel Poodle Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 dragAndDrop subTracks
 visibility hide

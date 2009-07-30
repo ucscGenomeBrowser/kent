@@ -61,7 +61,7 @@ visibility dense
 
 track multiz6waySyn
 shortLabel Conservation
-longLabel Human/Chimp/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
+longLabel Human/Chimp/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic Alignments
 group compGeno
 priority 104.1
 visibility pack
@@ -85,7 +85,7 @@ sGroup_mammal hg18 panTro2 mm8 rn4 canFam2
 
 track multiz5waySyn
 shortLabel Conservation
-longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
+longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using Syntenic Alignments
 group compGeno
 priority 104.1
 visibility pack

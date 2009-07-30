@@ -96,7 +96,7 @@ otherDb priPac1
 track caeJap2ChainNet
 compositeTrack on
 shortLabel C. japonica Chain/Net
-longLabel C. japonica (Jan. 2009/caeJap2), Chain and Net alignment tracks
+longLabel C. japonica (Jan. 2009/caeJap2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -159,7 +159,7 @@ track cb3ChainNet
 release alpha
 compositeTrack on
 shortLabel C. briggsae Chain/Net
-longLabel C. briggsae (Jan. 2007/cb3), Chain and Net alignment tracks
+longLabel C. briggsae (Jan. 2007/cb3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -224,7 +224,7 @@ track caeRem3ChainNet
 release alpha
 compositeTrack on
 shortLabel C. remanei Chain/Net
-longLabel C. remanei (May 2007/caeRem3), Chain and Net alignment tracks
+longLabel C. remanei (May 2007/caeRem3), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -313,7 +313,7 @@ track caePb2ChainNet
 release alpha
 compositeTrack on
 shortLabel C. brenneri Chain/Net
-longLabel C. brenneri (Feb. 2008/caePb2), Chain and Net alignment tracks
+longLabel C. brenneri (Feb. 2008/caePb2), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -401,7 +401,7 @@ otherDb caePb1
 track ce7ChainNet
 compositeTrack on
 shortLabel C. elegans Chain/Net
-longLabel C. elegans (Feb. 2009/ce7/WS200), Chain and Net alignment tracks
+longLabel C. elegans (Feb. 2009/ce7/WS200), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide

@@ -232,7 +232,7 @@ type psl .
 
 track jkgRefSeqUnusual
 shortLabel RefSeq Unusual
-longLabel JKG Unusual conditions in RefSeq alignments Take 11
+longLabel JKG Unusual conditions in RefSeq Alignments Take 11
 group jkX
 priority 1.1
 visibility hide
@@ -410,7 +410,7 @@ type psl .
 
 track jkgRefSeqUnusual2
 shortLabel RefSeq Unusual
-longLabel JKG Unusual conditions in RefSeq alignments Take 10
+longLabel JKG Unusual conditions in RefSeq Alignments Take 10
 group jkX2
 priority 1.1
 visibility hide
