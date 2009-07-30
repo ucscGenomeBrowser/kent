@@ -8,8 +8,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.20 2009/07/23 22:47:53 mikep Exp $";
-static char *version = "$Revision: 1.20 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.21 2009/07/30 19:27:29 mikep Exp $";
+static char *version = "$Revision: 1.21 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -570,8 +570,8 @@ for (i=0 ; i < g->size ; ++i)
     }
 if (mm > mismatches)
     {
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) relative to '%c' strand\nseq=[%s]\ngen=[%s]\n", 
-         file, line, mm, g->size, mismatches, strand, seq, g->dna);
+    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n", 
+         file, line, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
     return FALSE;
     }
 freeDnaSeq(&g);
@@ -624,8 +624,8 @@ if (mmPerPair)
     {
     if (mm1 > mismatches || mm2 > mismatches)
         {
-        warn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) relative to '%c' strand\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
-             file, line, mm1, len1, mm2, len2, mismatches, strand, seq1, seq2, g1->dna, g2->dna);
+        warn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
+             file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
     }
@@ -633,8 +633,8 @@ else
     {
     if (mm1+mm2 > mismatches)
         {
-        warn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) relative to '%c' strand\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
-             file, line, mm1, len1, mm2, len2, mismatches, strand, seq1, seq2, g1->dna, g2->dna);
+        warn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
+             file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
     }
