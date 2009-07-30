@@ -25,7 +25,7 @@ We assume that fastq file name has "Alignments" replaced with "RawData"; e.g.:
 Options:
 
 -reverse   If true, tags on reverse strand are reversed before we search for them in fastq (this is apparently
-           not the default behavior).
+           not the default behavior of our data providers).
 
 -num       number of tags to check (default is 10)
 
@@ -59,10 +59,14 @@ for my $file (@ARGV) {
             my $fh = Encode::openUtil($file);
             my $lineNumber = 0;
             while(<$fh>) {
-                my @line = split(/\s+/);
                 $lineNumber++;
-                my $seq = $line[3];
-                my $strand = $line[5];
+                my ($seq, $strand);
+                if(/^\S+\s+\S+\s+\S+\s+(\S+)\s+\S+\s+(\S+)/) {
+                    $seq = $1;
+                    $strand = $2;
+                } else {
+                    die "Linenumber $lineNumber: invalid tagAlign file: $file";
+                }
                 $seq =~ s/\./N/g;
                 if($useReverseLogic && $strand eq '-') {
                     $seq =~ tr/ATGCatgc/TACGtacg/;
@@ -81,6 +85,7 @@ for my $file (@ARGV) {
                 `/bin/touch -r $file $fastq`;
             }
             # XXXX add smart auto-sensing reverse logic
+            # e.g. AGTGCTACTGCGAGCTAAAAAGGATCCAGATAA in wgEncodeChromatinMap/wgEncodeUtaustinChIPseqRawDataGm12878Input.fastq.gz
 
             # For efficiency, we zgrep all $num tags at once; %uniq stuff is to handle
             # edge case where we have less than $num unique tags because the tagAlign is very short.
