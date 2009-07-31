@@ -485,7 +485,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
     subGroups view=Signal factor=H3K09ac cellType=GM12878
-    type wig 0.00 83.25
+    type wig 0.00 8338.25
     spanList first
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=146 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878H3k9ac fileName=wgEncodeBroadChipSeqSignalGm12878H3k9ac.wig.gz
@@ -668,7 +668,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel GM12878 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
     subGroups view=Signal factor=H3K27me3 cellType=GM12878
-    type wig 0.00 603.25
+    type wig 0.00 60338.25
     spanList first
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=144 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalGm12878H3k27me3 fileName=wgEncodeBroadChipSeqSignalGm12878H3k27me3.wig.gz
@@ -931,7 +931,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel HUVEC H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
-    type wig 1.00 71.00
+    type wig 1.00 7138.00 
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=HUVEC antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateRegenerated=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1HuvecH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1HuvecH3k4me2.wig.gz
 
@@ -1020,7 +1020,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel HUVEC H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in HUVEC cells)
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
-    type wig 1.00 13.00
+    type wig 1.00 1338.00
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=HUVEC antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateRegenerated=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2HuvecH3k9ac fileName=wgEncodeBroadChipSeqRel2RawSignalRep2HuvecH3k9ac.wig.gz
 
@@ -1919,7 +1919,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel NHEK H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in NHEK cells)
     subGroups view=Signal factor=H3K09ac cellType=NHEK
-    type wig 0.00 16.00
+    type wig 0.00 3816.00
     spanList first
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9ac fileName=wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
@@ -2174,7 +2174,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel NHEK Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in NHEK cells)
     subGroups view=zRAW factor=Pol2b cellType=NHEK
-    type wig 1.00 19.00
+    type wig 1.00 1938.00
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=NHEK antibody=Pol2(b) type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 dateRegenerated=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b fileName=wgEncodeBroadChipSeqRel2RawSignalRep2KeratinocytePol2b.wig.gz
 
