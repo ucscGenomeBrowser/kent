@@ -503,7 +503,7 @@ track placentalChainNet
 release alpha
 compositeTrack on
 shortLabel Placental Chain/Net
-longLabel Non-primate Placental Genomes, Chain and Net Alignments
+longLabel Non-primate Placental Mammal Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aMm=Mouse bRn=Rat cDipOrd=Kangaroo_rat dCavPor=Guinea_Pig eSpeTri=Squirrel fOryCun=Rabbit gOchPri=Pika hTupBel=Tree_Shrew iVicPac=Alpaca jTurTru=Dolphin kBosTau=Cow lEquCab=Horse mFelCat=Cat nCanFam=Dog oMyoLuc=Microbat pPteVam=Megabat qEriEur=Hedgehog rSorAra=Shrew sDasNov=Armadillo tChoHof=Sloth uLoxAfr=Elephant vProCap=Rock_hyrax wEchTel=Tenrec 
 subGroup3 clade Clade aEuarch=Euarchontoglires bLaura=Laurasiatheria cXenar=Xenarthra dAfro=Afrotheria
@@ -647,7 +647,7 @@ html hg19mammalChainNet
     otherDb loxAfr2
 
     track netLoxAfr2
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on 
     subGroups view=net species=uLoxAfr clade=dAfro
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -679,7 +679,7 @@ html hg19mammalChainNet
     otherDb canFam2
 
     track netCanFam2
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on 
     subGroups view=net species=nCanFam clade=bLaura
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -695,7 +695,7 @@ html hg19mammalChainNet
     otherDb dasNov2
 
     track netDasNov2
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on 
     subGroups view=net species=sDasNov clade=cXenar
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -743,7 +743,7 @@ html hg19mammalChainNet
     otherDb bosTau4
 
     track netBosTau4
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on 
     subGroups view=net species=kBosTau clade=bLaura
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -847,7 +847,7 @@ html hg19mammalChainNet
     otherDb echTel1
 
     track chainMm9
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on 
     subGroups view=chain species=aMm clade=aEuarch
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -855,7 +855,7 @@ html hg19mammalChainNet
     otherDb mm9
 
     track netMm9
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on
     subGroups view=net species=aMm clade=aEuarch
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -871,7 +871,7 @@ html hg19mammalChainNet
     otherDb rn4
 
     track netRn4
-    subTrack placentalChainNet off
+    subTrack placentalChainNet on 
     subGroups view=net species=bRn clade=aEuarch
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
