@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.102 2009/07/21 21:01:44 markd Exp $"
+#	"$Id: mm9.txt,v 1.103 2009/07/31 04:17:56 hartera Exp $"
 #
 
 #######################################################################
@@ -9486,4 +9486,49 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
+############################################################################
+# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-07-30, hartera)
+# Needs updating as the current version is build 31 from May 2008.
+
+   # Download the VEGA genes for mouse from the ftp site
+   # This file is from 03/17/09.
+   wget --timestamping \
+        "ftp://ftp.sanger.ac.uk/pub/vega/mouse/gtf_file.gz"
+   # add chr in front of chromosome names and lift up the randoms
+   #    processing similar to the same processing for Ensembl genes,
+   #    from /cluster/data/mm9/bed/ensGene.49/process/doProcess.csh
+   cp -p /cluster/data/mm9/bed/ensGene.49/process/randoms.mm9.lift .
+   zcat gtf_file.gz \
+        | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/" \
+        | liftUp -type=.gtf stdout randoms.mm9.lift carry stdin \
+        | gzip > allGenes.gtf.gz
+   # Got 189 lifts in randoms.mm9.lift
+
+   gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \
+	| gzip > mm9.allGenes.gp.gz
+   /cluster/home/hartera/kent/src/hg/utils/automation/extractGtf.pl \
+	infoOut.txt > ensGtp.tab
+   genePredCheck -db=mm9 mm9.allGenes.gp.gz
+   # checked: 59381 failed: 0
+   zcat allGenes.gtf.gz | grep -i pseudo > pseudo.gtf
+   zcat allGenes.gtf.gz | grep -v -i pseudo > not.pseudo.gtf
+   
+   # Modify the GTF files so that the gene name goes into the 
+   # name2 field of the genePred. 
+   perl -pi.bak -e 's/gene_id/other_gene_id/' *pseudo.gtf
+   perl -pi.bak -e 's/gene_name/gene_id/' *pseudo.gtf
+   gtfToGenePred -genePredExt pseudo.gtf pseudo.gp
+   gtfToGenePred -genePredExt not.pseudo.gtf not.pseudo.gp
+
+   genePredCheck -db=mm9 pseudo.gp
+    # checked: 4305 failed: 0§
+   genePredCheck -db=mm9 not.pseudo.gp
+    # checked: 55076 failed: 0
+
+   hgLoadGenePred -genePredExt mm9 vegaGene not.pseudo.gp
+   hgLoadGenePred -genePredExt mm9 vegaPseudoGene pseudo.gp
+
+   # clean up
+   rm *.bak
+
 ############################################################################
