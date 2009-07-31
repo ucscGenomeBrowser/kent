@@ -6,6 +6,7 @@ DIFF = diff -u
 # To check memory leaks, enable selectTableFree() in overlapSelect.c and
 # uncomment OVERSEL redefinition below.
 VGRIND = valgrind --tool=memcheck --suppressions=../../../lib/valgrind.suppress --num-callers=100 --leak-check=full --leak-resolution=high --show-reachable=yes 
+#VGRIND = valgrind --tool=memcheck --suppressions=../../../lib/valgrind.suppress --num-callers=100
 #OVERSEL = ${VGRIND} ../overlapSelect
 
 test:   pslSelectTests \
