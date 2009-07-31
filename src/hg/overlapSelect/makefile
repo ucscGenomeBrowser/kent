@@ -32,5 +32,5 @@ test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O $B usage.msg
+	rm -f $O $B usage.msg overlapSelect
 	cd tests && ${MAKE} clean
