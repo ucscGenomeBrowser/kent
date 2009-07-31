@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.17 2009/07/08 23:54:49 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.18 2009/07/31 19:38:53 mikep Exp $
 
 use warnings;
 use strict;
@@ -55,11 +55,13 @@ sub htmlStartPage {
     local *OUT_FILE = shift;
 
     my ($filePath,$fileName,$preamble) = @_;
+    my ($volume,$directories,$file) = File::Spec->splitpath( $filePath, 1 );
+    my @dirs = File::Spec->splitdir( $directories );
 
     print OUT_FILE "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n";
     print OUT_FILE "<HTML>\n";
     print OUT_FILE " <HEAD>\n";
-    print OUT_FILE "  <TITLE>Index of $filePath</TITLE>\n";
+    print OUT_FILE "  <TITLE>Index of $dirs[-1]</TITLE>\n";
     print OUT_FILE " </HEAD>\n";
     print OUT_FILE " <BODY>\n";
     print OUT_FILE "<IMG SRC=\"/icons/back.gif\" ALT=\"[DIR]\"> <A HREF=\"../\">Parent Directory</A><BR>\n\n";
