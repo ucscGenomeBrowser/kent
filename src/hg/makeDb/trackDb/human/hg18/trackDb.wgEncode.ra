@@ -3452,31 +3452,6 @@ settingsByView 1-PlusClusters:maxHeightPixels=100:24:16,viewLimitsMax=.005:25183
 priority 0
 type bed 3
 wgEncode 1
-# extraColumnWorkaround
-release alpha
-
-# This extra definition (sans Prostate for beta/RR) is for extraColumnWorkaround:
-track wgEncodeRikenCage
-compositeTrack on
-shortLabel RIKEN CAGE Loc
-longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
-group expression
-subGroup1 view Views 1-PlusClusters=Plus_Clusters 3-MinusClusters=Minus_Clusters 5-Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
-subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
-dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-dragAndDrop subTracks
-visibilityViewDefaults 1-PlusClusters=full 3-MinusClusters=full 2-PlusRawSignal=hide 4-MinusRawSignal=hide 5-Alignments=hide
-controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
-noInherit on
-settingsByView 1-PlusClusters:maxHeightPixels=100:24:16,viewLimitsMax=.005:25183,viewLimits=0:30,autoScale=off,windowingFunction=mean 2-PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off 3-MinusClusters:maxHeightPixels=100:24:16,viewLimitsMax=.005:25183,viewLimits=0:30,windowingFunction=mean,autoScale=off 4-MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean,autoScale=off
-priority 0
-type bed 3
-wgEncode 1
-# extraColumnWorkaround
-release beta
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
     subTrack wgEncodeRikenCage
@@ -3523,8 +3498,6 @@ release beta
     color 0,102,136
     colorByStrand 0,102,136 221,17,153
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=Alignments labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya fileName=wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
-    # extraColumnWorkaround
-    release alpha
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
     subTrack wgEncodeRikenCage off
@@ -3534,8 +3507,6 @@ release beta
     type bedGraph 4
     color 0,100,140
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=PlusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCagePlusClustersProstateCellLongnonpolya.bedGraph4.gz
-    # extraColumnWorkaround
-    release alpha
 
     track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
     subTrack wgEncodeRikenCage off
@@ -3545,8 +3516,6 @@ release beta
     type bedGraph 4
     color 221,17,153
     metadata project=wgEncode grant=Gingeras lab=Riken dataType=Cage cell=prostate rnaExtract=longNonPolyA localization=cell view=MinusClusters labVersion="Nexalign 1.3.3" dataVersion="ENCODE Nov 2008 Freeze" subId=9 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeRikenCage tableName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya fileName=wgEncodeRikenCageMinusClustersProstateCellLongnonpolya.bedGraph4.gz
-    # extraColumnWorkaround
-    release alpha
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
     subTrack wgEncodeRikenCage
