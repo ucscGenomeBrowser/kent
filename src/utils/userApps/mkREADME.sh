@@ -3,7 +3,7 @@
 #	of binaries found in specified directory
 #
 #========================================================================
-#	$Id: mkREADME.sh,v 1.2 2009/04/06 17:54:40 hiram Exp $
+#	$Id: mkREADME.sh,v 1.3 2009/07/31 21:14:03 ann Exp $
 #========================================================================
 #
 usage() {
@@ -28,15 +28,8 @@ fi
 
 cd "${DESTDIR}"
 
-echo "================================================================
-See also: the file in this directory: bigBedWigs.txt
-	for information on operating the bigWig and bigBed
-	utilities and loading custom tracks
-================================================================
-" > "${RESULT}"
-
 echo "================================================================" \
-	>> "${RESULT}"
+	> "${RESULT}"
 
 find . -mindepth 1 -type f | sed -e "s/^.\///; /mkREADME.sh/d" | sort | \
 while read F
