@@ -28,6 +28,10 @@ endif
 set table=`echo $table | perl -wpe '$_ = ucfirst($_)'`
 
 set split=`getSplit.csh $db chain$table hgwdev`
+if ( $status ) then
+  echo "\n\n $split \n"
+  exit 1
+endif
 
 if ( $split == "unsplit" ) then
   # run the three scripts in order
