@@ -4,6 +4,8 @@
 #include "chromAnn.h"
 #include "genomeRangeTree.h"
 
+static char const rcsid[] = "$Id: chromAnnMap.c,v 1.2 2009/07/31 18:09:23 markd Exp $";
+
 struct chromAnnMap
 /* Object the maps ranges to chromAnn objects */
 {

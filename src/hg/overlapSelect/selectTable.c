@@ -9,6 +9,8 @@
 #include "chromAnnMap.h"
 #include "verbose.h"
 
+static char const rcsid[] = "$Id: selectTable.c,v 1.31 2009/07/31 18:09:24 markd Exp $";
+
 static struct chromAnnMap* selectMap = NULL; // select object map
 
 static void selectMapEnsure()

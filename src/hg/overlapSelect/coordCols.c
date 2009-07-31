@@ -4,6 +4,8 @@
 #include "rowReader.h"
 #include "sqlNum.h"
 
+static char const rcsid[] = "$Id: coordCols.c,v 1.3 2009/07/31 18:09:23 markd Exp $";
+
 static void invalidSpec(char *optName, char* spec)
 /* generate an error, msg can be null */
 {
