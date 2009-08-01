@@ -9,7 +9,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslShow.c,v 1.6 2007/08/02 01:35:03 galt Exp $";
+static char const rcsid[] = "$Id: pslShow.c,v 1.7 2009/08/01 09:13:15 galt Exp $";
 
 static void pslShowAlignmentStranded(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -25,10 +25,10 @@ char *qLetters = cloneString(qSeq->dna);
 int qbafStart, qbafEnd, tbafStart, tbafEnd;
 int qcfmStart, qcfmEnd, tcfmStart, tcfmEnd;
 
-tbafStart = psl->tStart;
-tbafEnd   = psl->tEnd;
-tcfmStart = psl->tStart;
-tcfmEnd   = psl->tEnd;
+tbafStart = tStart;
+tbafEnd   = tEnd;
+tcfmStart = tStart;
+tcfmEnd   = tEnd;
 
 qbafStart = qStart;
 qbafEnd   = qEnd;
@@ -40,14 +40,15 @@ if (tIsRc)
     {
     int temp;
     reverseComplement(tSeq->dna, tSeq->size);
+
+    tbafStart = tEnd;
+    tbafEnd   = tStart;
+    tcfmStart = tEnd;
+    tcfmEnd   = tStart;
+
     temp = psl->tSize - tEnd;
     tEnd = psl->tSize - tStart;
     tStart = temp;
-    
-    tbafStart = psl->tEnd;
-    tbafEnd   = psl->tStart;
-    tcfmStart = psl->tEnd;
-    tcfmEnd   = psl->tStart;
     }
 if (qIsRc)
     {
