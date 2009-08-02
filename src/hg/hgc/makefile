@@ -4,7 +4,7 @@ L += -lm ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 ifeq (${USE_BAM},1)
-    MYLIBS += ${SAMPATH}/libbam.a
+    MYLIBS += ${SAMLIB}
 endif
 
 A = hgc

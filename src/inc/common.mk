@@ -27,14 +27,20 @@ ifeq (${USE_BAM},)
 endif
 
 ifeq (${USE_BAM},1)
-    ifeq (${SAMPATH},)
+    ifeq (${SAMDIR},)
       ifeq (${MACHTYPE},x86_64)
-        SAMPATH = /hive/data/outside/samtools/samtools
+        SAMDIR = /hive/data/outside/samtools/samtools
       else
-        SAMPATH = /hive/data/outside/samtools/samtools/${MACHTYPE}
+        SAMDIR = /hive/data/outside/samtools/samtools/${MACHTYPE}
       endif
     endif
-    HG_INC += -I${SAMPATH}
+    ifeq (${SAMINC},)
+        SAMINC = ${SAMDIR}
+    endif
+    ifeq (${SAMLIB},)
+        SAMLIB = ${SAMDIR}/libbam.a
+    endif
+    HG_INC += -I${SAMINC}
     HG_DEFS+=-DUSE_BAM
 endif
 
