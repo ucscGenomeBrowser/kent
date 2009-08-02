@@ -2,13 +2,21 @@
  * a RepeatMasker .out file or a bed file to mask on. */
 #include "common.h"
 #include "linefile.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "hash.h"
 #include "fa.h"
 #include "bed.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: maskOutFa.c,v 1.9 2006/06/14 16:31:30 angie Exp $";
+static char const rcsid[] = "$Id: maskOutFa.c,v 1.10 2009/08/02 19:47:35 markd Exp $";
+
+static struct optionSpec optionSpecs[] = {
+    {"soft", OPTION_BOOLEAN},
+    {"softAdd", OPTION_BOOLEAN},
+    {"clip", OPTION_BOOLEAN},
+    {"maskFormat", OPTION_STRING},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -25,10 +33,9 @@ errAbort(
   "options:\n"
   "   -soft - puts masked parts in lower case other in upper.\n"
   "   -softAdd - lower cases masked bits, leaves others unchanged\n"
-  "   -clip - clip out of bounds mask records rather than dying.\n");
+  "   -clip - clip out of bounds mask records rather than dying.\n"
+  "   -maskFormat=fmt - \"out\" or \"bed\" for when input does not have required extension.\n");
 }
-
-boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName);
 
 void maskOutFa(char *inFa, char *maskFile, char *outFa)
 /* maskOutFa - Produce a masked .fa file given an unmasked .fa and a RepeatMasker .out file. */
@@ -39,15 +46,34 @@ struct dnaSeq *seqList = NULL, *seq;
 char *line;
 int lineSize;
 boolean ok;
-boolean isOut = endsWith(maskFile, ".out");
-boolean isBed = endsWith(maskFile, ".bed");
+boolean isOut = FALSE;
+boolean isBed = FALSE;
 boolean extraHard = sameWord(maskFile, "hard");
 FILE *f;
 char *words[32];
 int wordCount;
-boolean clip = cgiBoolean("clip");
-boolean soft = cgiBoolean("soft");
-boolean softAdd = cgiBoolean("softAdd");
+char *maskFormat = optionVal("maskFormat", NULL);
+boolean clip = optionExists("clip");
+boolean soft = optionExists("soft");
+boolean softAdd = optionExists("softAdd");
+
+if (maskFormat == NULL)
+    {
+    isOut = endsWith(maskFile, ".out");
+    isBed = endsWith(maskFile, ".bed");
+    }
+else if (sameWord(maskFormat, "bed"))
+    {
+    isOut = FALSE;
+    isBed = TRUE;
+    }
+else if (sameWord(maskFormat, "out"))
+    {
+    isOut = TRUE;
+    isBed = FALSE;
+    }
+else
+	errAbort("Unrecognized -maskFormat: %s", maskFormat);
 
 /* Read DNA and hash sequence names. */
 seqList = faReadAllMixed(inFa);
@@ -81,7 +107,7 @@ if (!extraHard)
 	}
     else
 	{
-	errAbort("Unrecognized file type %s", maskFile);
+	errAbort("Unrecognized file type %s, may need to specify -maskFormat", maskFile);
 	}
 
     /* Read line at a time from mask file and set masked sequence 
@@ -150,7 +176,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
 maskOutFa(argv[1], argv[2], argv[3]);
