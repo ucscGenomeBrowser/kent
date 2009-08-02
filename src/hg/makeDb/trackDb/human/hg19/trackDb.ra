@@ -323,7 +323,7 @@ treeImage phylo/hg19_4way.gif
 
 track primateChainNet
 compositeTrack on
-shortLabel Primates Chain/Net
+shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMac=Rhesus ePapHam=Baboon fCalJac=Marmoset gTarSyr=Tarsier hOtoGar=Bushbaby iMicMur=Mouse_lemur
