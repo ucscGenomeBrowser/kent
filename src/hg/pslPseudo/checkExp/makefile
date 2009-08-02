@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-L += -lm $(MYSQLLIBS)
+L = -l ssl -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 OPTIONS = -minAli=0.98 -nearTop=0.005 -verbose=4

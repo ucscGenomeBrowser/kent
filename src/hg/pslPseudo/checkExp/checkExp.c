@@ -24,7 +24,7 @@
 #include "twoBit.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: checkExp.c,v 1.5 2004/12/06 23:30:36 baertsch Exp $";
+static char const rcsid[] = "$Id: checkExp.c,v 1.6 2009/08/02 21:26:09 baertsch Exp $";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
 struct hash *pseudoHash = NULL, *mrnaHash = NULL, *chainHash = NULL, *faHash = NULL, *tHash = NULL;
@@ -289,7 +289,7 @@ axt->symCount = symCount = strlen(t);
 axt->tSym = cloneString(t);
 if (strlen(q) != symCount)
     warn("Symbol count %d != %d inconsistent at t %s:%d and qName %s\n%s\n%s\n",
-    	symCount, strlen(q), psl->tName, psl->tStart, psl->qName, t, q);
+    	symCount, (int)strlen(q), psl->tName, psl->tStart, psl->qName, t, q);
 axt->qSym = cloneString(q);
 axt->score = axtScoreFilterRepeats(axt, ss);
 verbose(1,"axt score = %d\n",axt->score);
@@ -417,7 +417,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 
 if (strlen(q->string) != strlen(t->string))
     warn("Symbol count(t) %d != %d inconsistent at t %s:%d and qName %s\n%s\n%s\n",
-    	strlen(t->string), strlen(q->string), psl->tName, psl->tStart, psl->qName, t->string, q->string);
+    	(int)strlen(t->string), (int)strlen(q->string), psl->tName, psl->tStart, psl->qName, t->string, q->string);
 if (psl->strand[0] == '-')
     {
     reverseComplement(q->string, q->stringSize);
@@ -649,6 +649,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                 int j = mAxt->tStart - mPsl->tStart;
                 verbose(5, "listLen = %d\n",slCount(&misMatchList));
                 if ((mf = matchFound(&misMatchList, (mPsl->tStart)+i)) != NULL)
+                    {
                     if (toupper(mf->retroBase) == toupper(mAxt->qSym[j+i]))
                         {
                         verbose (3,"match retro[%d] %d %c == %c parent %c %d\n",
@@ -672,6 +673,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                                 mf->retroBase, mf->retroLoc);
                         scoreNeither++;
                         }
+                    }
                 }
             verbose(2,"final score %s parent %d retro %d  neither %d\n",
                     mPsl->qName, scoreParent, scoreRetro, scoreNeither);
