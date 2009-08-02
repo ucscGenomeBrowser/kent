@@ -12,7 +12,7 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.6 2009/06/11 16:01:38 hiram Exp $";
+static char const rcsid[] = "$Id: mafSplitPos.c,v 1.7 2009/08/02 20:54:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,8 +23,8 @@ errAbort(
   "   mafSplitPos database size(Mbp) out.bed\n"
   "options:\n"
   "   -chrom=chrN   Restrict to one chromosome\n"
-  "   -minGap=N     Split only on gaps >N bp\n"
-  "   -minRepeat=N  Split only on repeats >N bp\n"
+  "   -minGap=N     Split only on gaps >N bp, defaults to 100, specify -1 to disable\n"
+  "   -minRepeat=N  Split only on repeats >N bp, defaults to 100, specify -1 to disable\n"
   );
 }
 
@@ -121,13 +121,15 @@ int prevPos = 0;
 
 while (desiredPos < chromSize)
     {
-    splitPos = gapPos = nextGapPos(chrom, desiredPos, conn);
+    splitPos = gapPos = (minGap < 0) ? -1 : nextGapPos(chrom, desiredPos, conn);
     if (splitPos < 0 || splitPos > desiredPos + (desiredPos/10))
         {
         /* next gap is further out than 10% of desired position,
          * so look for the next new repeat */
-        splitPos = nextRepeatPos(chrom, desiredPos, conn);
-        if (splitPos < 0 || splitPos > desiredPos + (desiredPos/10))
+        splitPos = (minRepeat < 0) ? -1 : nextRepeatPos(chrom, desiredPos, conn);
+        if (splitPos < 0)
+            splitPos = gapPos; /* no acceptable repeat position */
+        else if ((gapPos >= 0) && (splitPos > desiredPos))
             splitPos = min(splitPos, gapPos);
         }
     if (splitPos < 0)
@@ -137,7 +139,7 @@ while (desiredPos < chromSize)
     verbose(2, "      %s\t%d\n", splitPos == gapPos ? "gap" : "repeat", 
            (splitPos - prevPos)/1000000);
     prevPos = splitPos;
-    desiredPos += splitSize;
+    desiredPos = splitPos + splitSize;
     }
 }
 
