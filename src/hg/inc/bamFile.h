@@ -33,7 +33,9 @@ return n;
 }
 
 char *bamGetQuerySequence(const bam1_t *bam);
-/* Return the nucleotide sequence encoded in bam. */
+/* Return the nucleotide sequence encoded in bam.  The BAM format 
+ * reverse-complements query sequence when the alignment is on the - strand,
+ * so here we rev-comp it back to restore the original query sequence. */
 
 char *bamGetCigar(const bam1_t *bam);
 /* Return a BAM-enhanced CIGAR string, decoded from the packed encoding in bam. */

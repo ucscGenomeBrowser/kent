@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.2 2009/08/03 22:00:24 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.3 2009/08/03 22:14:39 angie Exp $";
 
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
@@ -50,7 +50,9 @@ samclose(fh);
 }
 
 char *bamGetQuerySequence(const bam1_t *bam)
-/* Return the nucleotide sequence encoded in bam. */
+/* Return the nucleotide sequence encoded in bam.  The BAM format 
+ * reverse-complements query sequence when the alignment is on the - strand,
+ * so here we rev-comp it back to restore the original query sequence. */
 {
 const bam1_core_t *core = &bam->core;
 char *qSeq = needMem(core->l_qseq + 1);
@@ -58,7 +60,7 @@ uint8_t *s = bam1_seq(bam);
 int i;
 for (i = 0; i < core->l_qseq; i++)
     qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
-if ((core->flag & BAM_FREVERSE) == 1)
+if ((core->flag & BAM_FREVERSE))
     reverseComplement(qSeq, core->l_qseq);
 return qSeq;
 }
