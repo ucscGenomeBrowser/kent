@@ -28,11 +28,7 @@ endif
 
 ifeq (${USE_BAM},1)
     ifeq (${SAMDIR},)
-      ifeq (${MACHTYPE},x86_64)
-        SAMDIR = /hive/data/outside/samtools/samtools
-      else
-        SAMDIR = /hive/data/outside/samtools/samtools/${MACHTYPE}
-      endif
+      SAMDIR = /hive/data/outside/samtools/samtools/${MACHTYPE}
     endif
     ifeq (${SAMINC},)
         SAMINC = ${SAMDIR}
