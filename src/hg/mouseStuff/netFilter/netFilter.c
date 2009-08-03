@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.21 2009/03/30 23:25:21 angie Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.22 2009/08/03 20:05:00 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -168,6 +168,8 @@ if (sameString(fill->type, "nonSyn"))
     return FALSE;
 if (fill->qFar > maxFar)
     return FALSE;
+/* For all others, assume syntenic.  This keeps tandem dupes, small inversion,
+ * and translocations. */
 return TRUE;
 }
 
@@ -186,6 +188,8 @@ if (sameString(fill->type, "nonSyn"))
     return FALSE;
 if (fill->qFar > 1000)
     return FALSE;
+/* For all others, assume syntenic.  This keeps tandem dupes, small inversion,
+ * and translocations. */
 return TRUE;
 }
 
