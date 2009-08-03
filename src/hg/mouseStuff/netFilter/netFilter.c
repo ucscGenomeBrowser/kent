@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.22 2009/08/03 20:05:00 markd Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.23 2009/08/03 21:11:44 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +43,13 @@ errAbort(
   "   -type=XXX - restrict to given type, maybe repeated to allow several types\n"
 
   "   -syn        - do filtering based on synteny (tuned for human/mouse).  \n"
+  "   -minTopScore=N - Minimum score for top level alignments. default 300000\n"
+  "   -minSynScore=N - Min syntenic block score (def=200,000). \n"
+  "                      Default covers 27,000 bases including 9,000 \n"
+  "                      aligning--a very stringent requirement. \n"
+  "   -minSynSize=N - Min syntenic block size (def=20,000). -\n"
+  "   -minSynAli=N  - Min syntenic alignment size(def=10,000). -\n"
+  "   -maxFar=N     - Max distance to allow synteny (def=200,000). \n"
   "   -nonsyn     - do inverse filtering based on synteny (tuned for human/mouse).  \n"
   "   -chimpSyn   - do filtering based on synteny (tuned for human/chimp).  \n"
   "   -fill - Only pass fills, not gaps. Only useful with -line.\n"
@@ -77,6 +84,11 @@ struct optionSpec options[] = {
    {"tOverlapStart", OPTION_INT},
    {"tOverlapEnd", OPTION_INT},
    {"syn", OPTION_BOOLEAN},
+   {"minTopScore", OPTION_FLOAT},
+   {"minSynScore", OPTION_FLOAT},
+   {"minSynSize", OPTION_FLOAT},
+   {"minSynAli", OPTION_FLOAT},
+   {"maxFar", OPTION_FLOAT},
    {"chimpSyn", OPTION_BOOLEAN},
    {"nonsyn", OPTION_BOOLEAN},
    {"type", OPTION_STRING|OPTION_MULTI},
@@ -351,6 +363,11 @@ qOverlapEnd = optionInt("qOverlapEnd", BIGNUM);
 tOverlapStart = optionInt("tOverlapStart", -BIGNUM);
 tOverlapEnd = optionInt("tOverlapEnd", BIGNUM);
 doSyn = optionExists("syn");
+minTopScore = optionFloat("minTopScore", minTopScore);
+minSynScore = optionFloat("minSynScore", minSynScore);
+minSynSize = optionFloat("minSynSize", minSynSize);
+minSynAli = optionFloat("minSynAli", minSynAli);
+maxFar = optionFloat("maxFar", maxFar);
 doChimpSyn = optionExists("chimpSyn");
 doNonSyn = optionExists("nonsyn");
 minGap = optionInt("minGap", minGap);
