@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.94 2009/07/27 19:31:49 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.95 2009/08/03 23:11:45 hartera Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9837,7 +9837,7 @@ static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL)
     {
-    sprintf(cat,"%s",(char *)lf->extra);
+    safef(cat, sizeof(cat), "%s", (char *)lf->extra);
     return cat;
     }
 else
@@ -10532,6 +10532,10 @@ type = words[0];
 if (sameWord(type, "bed"))
     {
     complexBedMethods(track, tdb, FALSE, wordCount, words);
+    /* bed.h includes genePred.h so should be able to use these trackDb 
+       settings. */
+    if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
+        track->itemColor = genePredItemClassColor;
     }
 else if (sameWord(type, "bigBed"))
     {
@@ -11062,6 +11066,7 @@ registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
+registerTrackHandler("vegaGeneComposite", vegaMethods);
 registerTrackHandler("vegaGeneZfish", vegaMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
