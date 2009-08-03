@@ -12,7 +12,7 @@
 #include "hgTracks.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.4 2009/07/27 21:52:09 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.5 2009/08/03 22:00:24 angie Exp $";
 
 #define BAM_MAX_ZOOM 200000
 
@@ -23,7 +23,8 @@ struct bamTrackData
     };
 
 struct simpleFeature *sfFromNumericCigar(const bam1_t *bam, int *retLength)
-/* Translate BAM's numeric CIGAR encoding into a list of simpleFeatures  */
+/* Translate BAM's numeric CIGAR encoding into a list of simpleFeatures, 
+ * and tally up length on reference sequence while we're at it. */
 {
 const bam1_core_t *core = &bam->core;
 struct simpleFeature *sf, *sfList = NULL;
@@ -32,10 +33,8 @@ unsigned int *cigar = bam1_cigar(bam);
 int i;
 for (i = 0;  i < core->n_cigar;  i++)
     {
-    // decoding lifted from bam.c bam_format1(), long may it remain stable:
-    int n = cigar[i]>>BAM_CIGAR_SHIFT;
-    int opcode = cigar[i] & BAM_CIGAR_MASK;
-    char op = "MIDNSHP"[opcode];
+    char op;
+    int n = bamUnpackCigarElement(cigar[i], &op);
     switch (op)
 	{
 	case 'M': // match or mismatch (gapless aligned block)
@@ -60,7 +59,7 @@ for (i = 0;  i < core->n_cigar;  i++)
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;
 	default:
-	    errAbort("Unrecognized CIGAR op index %d -- has bam.c bam_format1() changed?", opcode);
+	    errAbort("sfFromNumericCigar: unrecognized CIGAR op %c -- update me", op);
 	}
     }
 if (retLength != NULL)
@@ -72,7 +71,6 @@ struct linkedFeatures *bamToLf(const bam1_t *bam, void *data)
 /* Translate a BAM record into a linkedFeatures item. */
 {
 const bam1_core_t *core = &bam->core;
-uint8_t *s = bam1_seq(bam);
 struct linkedFeatures *lf;
 AllocVar(lf);
 lf->score = core->qual;
@@ -82,13 +80,7 @@ int length;
 lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
-char *qSeq = needMem(core->l_qseq + 1);
-int i;
-for (i = 0; i < core->l_qseq; i++)
-    qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
-if (lf->orientation == -1)
-    reverseComplement(qSeq, core->l_qseq);
-lf->extra = qSeq;
+lf->extra = bamGetQuerySequence(bam);
 return lf;
 }
 

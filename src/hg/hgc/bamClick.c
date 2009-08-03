@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.1 2009/07/28 15:57:40 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.2 2009/08/03 22:00:24 angie Exp $";
 
 #include "bamFile.h"
 
@@ -19,57 +19,16 @@ struct bamTrackData
     struct hash *pairHash;
     };
 
-static int lengthFromNumericCigar(const bam1_t *bam)
-/* Translate BAM's numeric CIGAR encoding into length on reference. */
-{
-const bam1_core_t *core = &bam->core;
-int tLength=0;
-unsigned int *cigar = bam1_cigar(bam);
-int i;
-for (i = 0;  i < core->n_cigar;  i++)
-    {
-//TODO: libify the nasty part here, shared w/hgTracks/bamTrack.c
-    // decoding lifted from bam.c bam_format1(), long may it remain stable:
-    int n = cigar[i]>>BAM_CIGAR_SHIFT;
-    int opcode = cigar[i] & BAM_CIGAR_MASK;
-    char op = "MIDNSHP"[opcode];
-    switch (op)
-	{
-	case 'M': // match or mismatch (gapless aligned block)
-	    tLength += n;
-	    break;
-	case 'I': // inserted in query
-	case 'S': // skipped query bases at beginning or end ("soft clipping")
-	    break;
-	case 'D': // deleted from query
-	case 'N': // long deletion from query (intron as opposed to small del)
-	    tLength += n;
-	    break;
-	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
-	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
-	    break;
-	default:
-	    errAbort("Unrecognized CIGAR op index %d -- has bam.c bam_format1() changed?", opcode);
-	}
-    }
-return tLength;
-}
-
 static void singleBamDetails(const bam1_t *bam)
 /* Print out the properties of this alignment. */
 {
 const bam1_core_t *core = &bam->core;
 char *itemName = bam1_qname(bam);
-int length = lengthFromNumericCigar(bam);
+int length = bamGetTargetLength(bam);
 printPosOnChrom(seqName, core->pos, core->pos+length, (core->flag & BAM_FREVERSE) ? "-" : "+",
 		FALSE, itemName);
-char *qSeq = needMem(core->l_qseq + 1);
-uint8_t *s = bam1_seq(bam);
-int i;
-for (i = 0; i < core->l_qseq; i++)
-    qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
-if ((core->flag & BAM_FREVERSE) == 1)
-    reverseComplement(qSeq, core->l_qseq);
+printf("<B>CIGAR string: </B><tt>%s</tt><BR>\n", bamGetCigar(bam));
+char *qSeq = bamGetQuerySequence(bam);
 printf("<B>Read Sequence: </B><tt>%s</tt><BR>\n", qSeq);
 //TODO: show flags, display alignment properly, maybe display quality scores
 }

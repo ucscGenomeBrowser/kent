@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.1 2009/07/27 21:52:08 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.2 2009/08/03 22:00:24 angie Exp $";
 
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
@@ -47,6 +47,71 @@ ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc)
 if (ret != 0)
     errAbort("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
 samclose(fh);
+}
+
+char *bamGetQuerySequence(const bam1_t *bam)
+/* Return the nucleotide sequence encoded in bam. */
+{
+const bam1_core_t *core = &bam->core;
+char *qSeq = needMem(core->l_qseq + 1);
+uint8_t *s = bam1_seq(bam);
+int i;
+for (i = 0; i < core->l_qseq; i++)
+    qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
+if ((core->flag & BAM_FREVERSE) == 1)
+    reverseComplement(qSeq, core->l_qseq);
+return qSeq;
+}
+
+char *bamGetCigar(const bam1_t *bam)
+/* Return a BAM-enhanced CIGAR string, decoded from the packed encoding in bam. */
+{
+unsigned int *cigarPacked = bam1_cigar(bam);
+const bam1_core_t *core = &bam->core;
+struct dyString *dyCigar = dyStringNew(min(8, core->n_cigar*4));
+int i;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigarPacked[i], &op);
+    dyStringPrintf(dyCigar, "%d", n);
+    dyStringAppendC(dyCigar, op);
+    }
+return dyStringCannibalize(&dyCigar);
+}
+
+int bamGetTargetLength(const bam1_t *bam)
+/* Tally up the alignment's length on the reference sequence from
+ * bam's packed-int CIGAR representation. */
+{
+unsigned int *cigarPacked = bam1_cigar(bam);
+const bam1_core_t *core = &bam->core;
+int tLength=0;
+int i;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigarPacked[i], &op);
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+	    tLength += n;
+	    break;
+	case 'I': // inserted in query
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    tLength += n;
+	    break;
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("bamGetTargetLength: unrecognized CIGAR op %c -- update me", op);
+	}
+    }
+return tLength;
 }
 
 #endif//def USE_BAM
