@@ -110,7 +110,7 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** MAX length of shortLabel should be 16 ***"
 foreach table ( $tables )
  echo "Table: $table"
- cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" | grep shortLabel \
+ cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" | grep -m 1 shortLabel \
   | sed -e 's/shortLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m
 end
 
@@ -120,7 +120,8 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "*** MAX length of longLabel should be 80 ***"
 foreach table ( $tables )
  echo "Table: $table"
- cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" | grep longLabel \
+ cat ~/trackDb/human/hg18/trackDb.wgEncode.ra | grep -A10 "track $table" \
+  | grep -m 1 longLabel \
   | sed -e 's/longLabel //' | sed -e 's/^ *//' | sed -e 's/.$//' | wc -m
 end
 
