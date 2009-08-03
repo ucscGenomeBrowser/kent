@@ -4482,7 +4482,7 @@ wgEncode 1
 
     track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
     subTrack wgEncodeUwDnaseSeq off
-    shortLabel SK-N-SH_RA Hspot 1
+    shortLabel SK-N-SH_RAHspot1
     longLabel ENCODE UW Digital DNaseI Hotspots Replicate 1 (in SK-N-SH_RA cells)
     subGroups view=Hotspots cellType=SK-N-SH_RA
     type broadPeak
@@ -5044,7 +5044,7 @@ wgEncode 1
 
     track wgEncodeUwDnaseSeqHotspotsRep2Sknshra
     subTrack wgEncodeUwDnaseSeq off
-    shortLabel SK-N-SH_RA Hspot 2
+    shortLabel SK-N-SH_RAHspot2
     longLabel ENCODE UW Digital DNaseI Hotspots Replicate 2 (in SK-N-SH_RA cells)
     subGroups view=Hotspots cellType=SK-N-SH_RA
     type broadPeak
