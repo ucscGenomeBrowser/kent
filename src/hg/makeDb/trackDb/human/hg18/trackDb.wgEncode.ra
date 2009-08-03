@@ -12914,7 +12914,7 @@ subGroup1 view Views 1-PlusRawSig=Plus_Raw_Signal 2-MinusRawSig=Minus_Raw_Signal
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults 1-PlusRawSig=full 2-MinusRawSig=full 3-Alignments=pack 
-settingsByView 1-PlusRawSig:maxHeightPixels=100:24:16 2-MinusRawSig:maxHeightPixels=100:24:16
+settingsByView 1-PlusRawSig:maxHeightPixels=100:24:16,viewLimits=1:20,viewLimitsMax=1:65290,autoScale=off,windowingFunction=mean 2-MinusRawSig:maxHeightPixels=100:24:16,viewLimits=1:20,viewLimitsMax=1:65290,autoScale=off,windowingFunction=mean
 priority 0
 type bed 3
 noInherit on
