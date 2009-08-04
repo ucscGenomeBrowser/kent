@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslGenoShow.c,v 1.6 2009/08/04 00:26:20 galt Exp $";
+static char const rcsid[] = "$Id: pslGenoShow.c,v 1.7 2009/08/04 00:40:08 galt Exp $";
 
 static void pslShowAlignmentStranded2(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -268,7 +268,7 @@ fprintf(f, "<PRE><TT>");
 	{
 	int lastQe = psl->qStarts[0] - qStart;
 	int lastTe = psl->tStarts[0] - tStart;
-	int maxSkip = 20;
+	int maxSkip = 8;
 	bafSetPos(&baf, lastQe, lastTe);
 	bafStartLine(&baf);
 	for (i=0; i<psl->blockCount; ++i)
