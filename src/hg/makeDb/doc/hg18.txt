@@ -28183,7 +28183,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.374 2009/07/29 04:24:25 markd Exp $
+# $Id: hg18.txt,v 1.375 2009/08/04 21:41:12 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28231,7 +28231,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.374 2009/07/29 04:24:25 markd Exp $
+# $Id: hg18.txt,v 1.375 2009/08/04 21:41:12 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28582,4 +28582,49 @@ see doc/builds.txt for specific details.
     # Converted stdin, upper limit 11.63, lower limit -28.64
     hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 sfrs1ConsensusSites sfrs1ConsensusSites.wig
     ln -s $(pwd -P)/sfrs1ConsensusSites.wib /gbdb/hg18/wib/
+############################################################################
+# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-07-04, hartera)
+# Needs updating as the current version is build 33.
+# Download the human VEGA Genes posted on ftp site on 2009-03-31
+    mkdir /hive/data/genomes/hg18/bed/vega35
+    cd /hive/data/genomes/hg18/bed/vega35
+    wget --timestamping "ftp://ftp.sanger.ac.uk/pub/vega/human/*" \
+         "ftp://ftp.sanger.ac.uk/pub/vega/human/pep/*.tot.fa.gz"
+    zcat gtf_file.gz | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/" \
+        | grep "^chr" > nonHaps.gtf
+    zcat gtf_file.gz | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/" \
+        | grep -v "^chr" > haps.gtf
+    awk 'BEGIN{OFS="\t";FS="\t";}{ if ($1 == "c6_COX") { if (($4 >= 28688544) && ($5 <= 33420241)) print; } else if ($1 == "c6_QBL") { if (($4 >= 28885510) && ($5 <= 33451440)) print;}}' haps.gtf > keptHaps.gtf
+    liftUp -type=.gtf lifted.gtf /cluster/data/hg18/jkStuff/ensGene.haplotype.lift carry keptHaps.gtf
+    cat nonHaps.gtf lifted.gtf > all.gtf
+    
+    # Do this to create the infoOut.txt file and extract the extra information 
+    gtfToGenePred -infoOut=infoOut.txt -genePredExt all.gtf stdout | gzip > tempAll.gp.gz
+    ~/kent/src/hg/utils/automation/extractGtf.pl infoOut.txt > vegaGtp.tab
+
+    # Change the gene name to have the gene_id label so that this is in the
+    # name2 field of the extended genePred table. This can then be displayed
+    # at the track item label. 
+    perl -pi.bak -e 's/gene_id/other_gene_id/' all.gtf
+    perl -pi.bak -e 's/gene_name/gene_id/' all.gtf
+    gzip all.gtf
+    rm *.gtf tempAll.gp.gz
+    # create genePred files for loading into database
+    gtfToGenePred -genePredExt all.gtf.gz stdout | gzip > all.gp.gz
+    genePredCheck -db=hg18 all.gp.gz 
+    # checked: 81244 failed: 0
+    zcat all.gtf.gz | grep -i pseudo > pseudo.gtf
+    zcat all.gtf.gz | grep -v -i pseudo > not.pseudo.gtf
+    gtfToGenePred -genePredExt pseudo.gtf pseudo.gp
+    gtfToGenePred -genePredExt not.pseudo.gtf not.pseudo.gp
+    genePredCheck -db=hg18 pseudo.gp
+    # checked: 8331 failed: 0
+    genePredCheck -db=hg18 not.pseudo.gp
+    # checked: 72913 failed: 0
+    hgLoadGenePred -genePredExt hg18 vegaGene not.pseudo.gp
+    hgLoadGenePred -genePredExt hg18 vegaPseudoGene pseudo.gp
+    # Added code to src/hg/hgTracks/simpleTracks.c to register a track handler
+    # for vegaGeneComposite that is now used for this data. This used
+    # vegaGeneMethods to display the name2 field (gene) as the item label in
+    # the track.
 ############################################################################
