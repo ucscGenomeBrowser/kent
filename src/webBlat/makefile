@@ -23,5 +23,5 @@ installAlpha: webBlat
 	cp webBlat.cfg /usr/local/apache/cgi-bin
 
 clean:
-	rm -f $O
+	rm -f $O webBlat
 
