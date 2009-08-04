@@ -8,8 +8,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.21 2009/07/30 19:27:29 mikep Exp $";
-static char *version = "$Revision: 1.21 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.22 2009/08/04 22:43:33 braney Exp $";
+static char *version = "$Revision: 1.22 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -565,7 +565,7 @@ if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
 for (i=0 ; i < g->size ; ++i)
     {
     char c = tolower(seq[i]);
-    if (c == 'n' || c != g->dna[i])
+    if (c != 'n' && c != g->dna[i])
         ++mm;
     }
 if (mm > mismatches)
@@ -610,14 +610,14 @@ mm1 = 0;
 for (i=0 ; i < g1->size ; ++i)
     {
     char c = tolower(seq1[i]);
-    if (c == 'n' || c != g1->dna[i])
+    if (c != 'n' && c != g1->dna[i])
         ++mm1;
     }
 mm2 = 0;
 for (i=0 ; i < g2->size ; ++i)
     {
     char c = tolower(seq2[i]);
-    if (c == 'n' || c != g2->dna[i])
+    if (c != 'n' && c != g2->dna[i])
         ++mm2;
     }
 if (mmPerPair)
