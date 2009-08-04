@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslGenoShow.c,v 1.5 2009/08/01 09:13:16 galt Exp $";
+static char const rcsid[] = "$Id: pslGenoShow.c,v 1.6 2009/08/04 00:26:20 galt Exp $";
 
 static void pslShowAlignmentStranded2(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -153,7 +153,7 @@ tolowers(qLetters);
 	    }
 	preStop = end;
 	}
-    cfm = cfmNew(10, 60, TRUE, qIsRc, f, qcfmStart);
+    cfm = cfmNew(10, 50, TRUE, qIsRc, f, qcfmStart);
     for (i=0; i<qSize; ++i)
 	cfmOut(cfm, qLetters[i], seqOutColorLookup[(int)colorFlags[i]]);
     cfmFree(&cfm);
@@ -209,7 +209,7 @@ fprintf(f, "<PRE><TT>");
 	colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
 	}
 
-    cfm = cfmNew(10, 60, TRUE, tIsRc, f, tcfmStart);
+    cfm = cfmNew(10, 50, TRUE, tIsRc, f, tcfmStart);
 	
     for (i=0; i<tSeq->size; ++i)
 	{
@@ -239,7 +239,7 @@ fprintf(f, "<PRE><TT>");
     int i,j;
 
     bafInit(&baf, qSeq->dna, qbafStart, qIsRc,
-	    tSeq->dna, tbafStart, tIsRc, f, 60, isProt);
+	    tSeq->dna, tbafStart, tIsRc, f, 50, isProt);
 		
     if (isProt)
 	{
