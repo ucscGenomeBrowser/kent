@@ -638,21 +638,21 @@ html hg19mammalChainNet
     type netAlign pteVam1 chainPteVam1
     otherDb pteVam1
 
-    track chainLoxAfr2
+    track chainLoxAfr3
     subTrack placentalChainNet off
     subGroups view=chain species=uLoxAfr clade=dAfro
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-    type chain loxAfr2
-    otherDb loxAfr2
+    type chain loxAfr3
+    otherDb loxAfr3
 
-    track netLoxAfr2
+    track netLoxAfr3
     subTrack placentalChainNet on 
     subGroups view=net species=uLoxAfr clade=dAfro
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
-    type netAlign loxAfr2 chainLoxAfr2
-    otherDb loxAfr2
+    type netAlign loxAfr3 chainLoxAfr3
+    otherDb loxAfr3
 
     track chainFelCat3
     subTrack placentalChainNet off
@@ -1167,7 +1167,7 @@ priority 103.29
     speciesCodonDefault hg18
     speciesGroups Primate Placental_Mammal Vertebrate
     sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
-    sGroup_Placental_Mammal equCab2 tupBel1 turTru1 speTri1 vicPac1 choHof1 pteVam1 loxAfr2 felCat3 canFam2 dasNov2 oryCun1 myoLuc1 bosTau4 cavPor3 proCap1 dipOrd1 ochPri2 eriEur1 echTel1 mm9 rn4 sorAra1
+    sGroup_Placental_Mammal equCab2 tupBel1 turTru1 speTri1 vicPac1 choHof1 pteVam1 loxAfr3 felCat3 canFam2 dasNov2 oryCun1 myoLuc1 bosTau4 cavPor3 proCap1 dipOrd1 ochPri2 eriEur1 echTel1 mm9 rn4 sorAra1
     sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 gasAcu1 fr2 danRer5 tetNig1 oryLat2 petMar1
 #    speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
     itemFirstCharCase noChange
