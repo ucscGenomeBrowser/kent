@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.495 2009/07/17 06:24:57 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.496 2009/08/05 06:35:30 sugnet Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2216,7 +2216,8 @@ else if (sameString(track, "mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "splicesP"))
     bedUi(tdb, cart, "", FALSE);
-else if(sameString(track,"FantomCageH04V2")) 
+else if(sameString(track,"FantomCageBedForward") || sameString(track,"FantomCageBedReverse") ||
+	sameString(track,"FantomCageReadForward") || sameString(track,"FantomCageReadReverse"))
     bedUi(tdb, cart, "", FALSE);
 else if (sameString(track, "all_est"))
         mrnaUi(tdb, FALSE);
