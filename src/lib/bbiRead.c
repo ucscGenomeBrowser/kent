@@ -474,7 +474,7 @@ if (intervalList != NULL);
     for (i=0; i<summarySize; ++i)
         {
 	/* Calculate end of this part of summary */
-	baseEnd = start + baseCount*(i+1)/summarySize;
+	baseEnd = start + (bits64)baseCount*(i+1)/summarySize;
 	int end1 = baseEnd;
 	if (end1 == baseStart)
 	    end1 = baseStart+1;
@@ -527,6 +527,11 @@ return result;
 boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	BbiFetchIntervals fetchIntervals,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
+/* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
+ * Be sure to initialize summaryValues to a default value, which will not be touched
+ * for regions without data in file.  (Generally you want the default value to either
+ * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
+ * at that position. */
 {
 struct bbiSummaryElement *elements;
 AllocArray(elements, summarySize);
