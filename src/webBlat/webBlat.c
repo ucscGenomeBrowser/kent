@@ -302,10 +302,10 @@ if (qSeq == NULL)
 parseFileSeq(psl->tName, &tFileName, &tSeqName);
 
 int lineWidth = protQuery ? 60 : 50;
-int extraContext = 2 * lineWidth;  /* one line before and one line after */
+int extraContext = 2 * lineWidth;  /* two lines before ... */
 tStart = psl->tStart - extraContext;
 if (tStart < 0) tStart = 0;
-tEnd = psl->tEnd + extraContext;
+tEnd = psl->tEnd + extraContext;   /* and two lines after */
 if (tEnd > psl->tSize)
     tEnd = psl->tSize;
 tSeq = readSeqFrag(server->seqDir, tFileName, tSeqName, tStart, tEnd);
