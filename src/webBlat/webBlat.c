@@ -300,9 +300,12 @@ if (qSeq == NULL)
 
 /* Parse out file:seq into file and seq, and load needed part of target seq. */
 parseFileSeq(psl->tName, &tFileName, &tSeqName);
-tStart = psl->tStart - 100;
+
+int lineWidth = protQuery ? 60 : 50;
+int extraContext = 2 * lineWidth;  /* one line before and one line after */
+tStart = psl->tStart - extraContext;
 if (tStart < 0) tStart = 0;
-tEnd = psl->tEnd + 100;
+tEnd = psl->tEnd + extraContext;
 if (tEnd > psl->tSize)
     tEnd = psl->tSize;
 tSeq = readSeqFrag(server->seqDir, tFileName, tSeqName, tStart, tEnd);
