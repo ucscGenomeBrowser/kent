@@ -292,3 +292,5 @@
         Fixed minor problem with addJob fails due to sick batch, but findBatch side-effect
         triggers batch back onto curBatches, which makes planner think it is still active.
 
+	Fixed parasol client addJob to errAbort with sick batch message if hub returns jobid 0.
+

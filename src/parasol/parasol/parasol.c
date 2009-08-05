@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.46 2009/07/07 21:08:38 markd Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.47 2009/08/05 23:27:09 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -176,6 +176,8 @@ for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
 jobIdString = hubCommandGetReciept(dy->string);
 dyStringFree(&dy);
+if (sameString(jobIdString, "0"))
+    errAbort("sick batch?: hub returned jobId==%s", jobIdString);
 if (printId)
     {
     printf("your job %s (\"%s", jobIdString, argv[0]);
