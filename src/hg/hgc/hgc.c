@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1563 2009/07/28 15:57:39 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1564 2009/08/05 19:50:17 giardine Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19969,9 +19969,6 @@ for (i=0; i < oregannoAttrSize; i++)
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct oregannoLink link;
-        /* skip ORegAnno links until they are fixed */
-        if (!sameString(oregannoAttributes[i], "SrcLink") )
-            {
         used++;
         if (used == 1)
             {
@@ -19990,7 +19987,6 @@ for (i=0; i < oregannoAttrSize; i++)
         oregannoLinkStaticLoad(row, &link);
         printOregannoLink(&link);
         printf("<BR>\n");
-            }
         }
     freeMem(tab);
     }
