@@ -30,6 +30,24 @@ To build the source tree.
 	the build of the source tree:
 	$ mkdir -p ~/bin/${MACHTYPE}
 
+3a. ALTERNATE PATH: 
+        If you are going to do a full build anyway, skip this and proceed straight to step 3 below.
+        Otherwise, to make a minimal utility build without mysql:
+	There are some utilities that depend only on jkweb.a and not jkhgap.a
+	which means they can be compiled without needing mysql client installed.
+	To make a utility like pslCDnaFilter without installing mysql client:
+        # create jkweb.a
+          cd kent/src/lib
+          make
+        # create stringify utility required by some makefiles
+          cd kent/src/utils/stringify
+          make
+        # create pslCDnaFilter utility program
+          cd kent/src/hg/pslCDnaFilter
+          make
+        Proceed similarly for any other such utilities.
+        You are done and can stop here.
+
 3.  Create the following shell environment variables:
 	MYSQLINC=/usr/include/mysql
 	MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lz"
@@ -136,4 +154,4 @@ make: *** [aliType.o] Error 1
     include the -Wno-unused-variable option in the build.
 
 ====================================================================
-This file last updated: $Date: 2008/08/26 16:20:01 $
+This file last updated: $Date: 2009/08/05 19:40:15 $
