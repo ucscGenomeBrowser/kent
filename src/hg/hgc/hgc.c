@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1564 2009/08/05 19:50:17 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1565 2009/08/05 22:58:07 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7858,11 +7858,14 @@ if (archive != NULL)
 else
     safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
 
+boolean nonCoding = FALSE;
 char query[512];
 safef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 if (gpList && gpList->name2)
     {
+    if (gpList->cdsStart == gpList->cdsEnd)
+	nonCoding = TRUE;
     printf("<B>Ensembl Gene Link: </B>");
     if (sameString(gpList->name2, "noXref"))
        printf("none<BR>\n");
@@ -7976,16 +7979,23 @@ if (hTableExists(database, "superfamily"))
     }
 if (hTableExists(database, "ensGtp") && (proteinID == NULL))
     {
-    /* shortItemName removes version number but sometimes the ensGtp */
-    /* table has a transcript with version number so exact match not used */
-    safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
-    proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
-    if (proteinID != NULL)
+    if (nonCoding)
 	{
-        printf("<B>Ensembl Protein: </B>");
-        printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
-            ensUrl,proteinID);
-        printf("%s</A><BR>\n", proteinID);
+	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
+	}
+    else
+	{
+	/* shortItemName removes version number but sometimes the ensGtp */
+	/* table has a transcript with version number so exact match not used */
+	safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+	proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
+	if (proteinID != NULL)
+	    {
+	    printf("<B>Ensembl Protein: </B>");
+	    printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
+		ensUrl,proteinID);
+	    printf("%s</A><BR>\n", proteinID);
+	    }
 	}
     }
 freeMem(shortItemName);
