@@ -4,7 +4,7 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* Memgfx - stuff to do graphics in memory buffers.
- * Typically will just write these out as .gif files.
+ * Typically will just write these out as .gif or .png files.
  * This stuff is byte-a-pixel for simplicity.
  * It can do 256 colors.
  */
@@ -150,6 +150,18 @@ struct memGfx *mgLoadGif(char *name);
  * This is the same that mgSaveGif creates at
  * least.  This version of gif was always
  * color mapped. */
+
+void mgSavePng(struct memGfx *mg, char *filename, boolean useAlpha);
+/* Save memory bitmap to filename as a PNG.
+ * If useAlpha, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
+
+boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useAlpha);
+/* Save PNG to an already open file.
+ * If useAlpha, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
 
 typedef void (*TextBlit)(int bitWidth, int bitHeight, int bitX, int bitY,
 	unsigned char *bitData, int bitDataRowBytes, 

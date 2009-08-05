@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1585 2009/07/16 23:00:41 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1586 2009/08/05 23:34:30 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1707,8 +1707,13 @@ if (psOutput)
     hvg = hvGfxOpenPostScript(pixWidth, pixHeight, psOutput);
 else
     {
+#ifdef USE_PNG
+    trashDirFile(&gifTn, "hgt", "hgt", ".png");
+    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+#else
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+#endif // USE_PNG
     #ifdef IMAGEv2_UI
     // Adds one single image for all tracks (TODO: build the track by track images)
     theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);

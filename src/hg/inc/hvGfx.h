@@ -22,6 +22,9 @@ struct hvGfx
 struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName);
 /* Open up something that we'll write out as a gif someday. */
 
+struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useAlpha);
+/* Open up something that we'll write out as a PNG someday. */
+
 struct hvGfx *hvGfxOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */
 
