@@ -1,0 +1,42 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# Tetraodon Nigirividis from Genoscope, version v8 (released Mar 2007)
+#    Project website:
+#    http://www.genoscope.cns.fr/externe/Download/Projets/Projet_C/genomique/goldenpath_v2/
+
+##########################################################################
+# Download sequence (DONE - 2009-08-06 - Hiram)
+    mkdir /hive/data/genomes/tetNig2
+    cd /hive/data/genomes/tetNig2
+    mkdir genoscope
+    cd genoscope
+
+D="http://www.genoscope.cns.fr/externe/Download/Projets/Projet_C/genomique/golde
+npath_v2/"
+for F in chr.agp chr.agp.info
+do
+    wget --timestamping "${D}/${F}"
+done
+
+for C in 1 1_random 2 2_random 3 4 5 6 7 8 9 10 11 12 13 14 15 \
+        15_random 16 17 18 19 20 21 21_random Un_random
+do
+    wget --timestamping "${D}/unmasked/chr${C}.fa.bz2"
+done
+
+for F in Tetraodon_mRNAs_v8.2.fa Tetraodon_peptide_v8.2.fa \
+	Tetraodon_peptide_v8.2.fa.compo annotation_tetraodon_v8.2.gff         
+do
+    wget --timestamping "${D}/annotation_v8.2/${F}"
+done
+
+    bunzip *.fa.bz2
+    gzip *.fa
+
+##########################################################################
+# Initial browser (DONE - 2009-08-06 - Hiram)
+    cd /hive/data/genomes/tetNig2
+    cat << '_EOF_' > tetNig2.config.ra
+'_EOF_'
+    # << happy emacs
