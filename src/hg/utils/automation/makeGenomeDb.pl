@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.22 2009/06/08 18:38:57 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.23 2009/08/06 18:22:31 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -722,6 +722,12 @@ hgsql $db -e \\
 _EOF_
       );
     }
+    # may as well finally add the chrM entry to the agp file
+    $bossScript->add(<<_EOF_
+set lastId = `tail -1 $topDir/$db.agp | awk '{print \$4+1}'`
+/bin/echo -e "chrM\t1\t\$mSize\t\$lastId\tF\t$mitoGold\t1\t\$mSize\t+" >> $topDir/$db.agp
+_EOF_
+      );
   }
 
   $bossScript->add(<<_EOF_
