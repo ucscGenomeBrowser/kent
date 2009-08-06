@@ -360,9 +360,9 @@ taxId 7955
     #Wrote 71088 overused 11-mers to 11.ooc
 
     mkdir /hive/data/staging/data/danRer6
-    cp -p danRer6.2bit /hive/data/staging/data/danRer6
-    cp -p 11.ooc /hive/data/staging/data/danRer6
-    cp -p chrom.sizes /hive/data/staging/data/danRer6
+    cp -p danRer6.2bit /hive/data/staging/data/danRer6/
+    cp -p 11.ooc /hive/data/staging/data/danRer6/
+    cp -p chrom.sizes /hive/data/staging/data/danRer6/
 
     # ask admin to sync this directory: /hive/data/staging/data/danRer6/
     #       to the kluster nodes /scratch/data/danRer6/
@@ -622,8 +622,8 @@ chainOne $(path1)
     mkdir /hive/data/genomes/danRer6/bed/gap
     cd /hive/data/genomes/danRer6/bed/gap
     gapToLift danRer6 danRer6.unBridged.lift -bedFile=unBridged.lift.bed
-    cp -p danRer6.unBridged.lift ../../jkStuff
-    cp -p danRer6.unBridged.lift /hive/data/staging/data/danRer6
+    cp -p danRer6.unBridged.lift ../../jkStuff/
+    cp -p danRer6.unBridged.lift /hive/data/staging/data/danRer6/
 
     # ask admin to sync this directory: /hive/data/staging/data/danRer6/
     #       to the kluster nodes /scratch/data/danRer6/
@@ -716,4 +716,102 @@ danRer6.refseq.mrna.xeno.load  = yes
 #     /hive/data/genomes/danRer6/goldenPath/bigZips/README.txt
 #     (The htdocs/goldenPath/danRer6/*/README.txt "files" are just links to those.)
 
+############################################################################
+# Make Self Chain (WORKING - 2008-07-23)
+
+    ssh hgwdev
+
+    mkdir /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30
+    cd /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30
+
+    twoBitInfo ../../danRer6.2bit stdout | grep chr > chromOnly.len
+    
+    cat << '_EOF_' > DEF
+# zebrafish vs self
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+# lastz does not like the O= and E= lines in the matrix file
+#       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
+BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from hg18 vs venter1 lastz on advice from Webb
+BLASTZ_K=10000
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+BASE=/hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30
+
+# TARGET: Zebrafish danRer6
+SEQ1_DIR=/scratch/data/danRer6/danRer6.2bit
+SEQ1_LEN=$BASE/chromOnly.len
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Zebrafish danRer6
+SEQ2_DIR=/scratch/data/danRer6/danRer6.2bit
+SEQ2_LEN=$BASE/chromOnly.len
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    screen # use screen to manage this long-running job
+    cd /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30
+    time nice doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+        -workhorse=hgwdev \
+        -stop=net -smallClusterHub=memk -bigClusterHub=swarm >& do.log &
+    # This took 26 hours to finish.
+
+    time nice doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+        -continue=load -debug -workhorse=hgwdev \
+        -stop=load -smallClusterHub=memk -bigClusterHub=swarm >& load.debug.log &
+
+    # load.debug.log indicates load step would do
+    #  axtChain/loadUp.csh which would do:
+    #   hgLoadChain -tIndex danRer6 chainSelf danRer6.danRer6.all.chain.gz
+
+    # Manually include the -normScore parameter for self-chains.
+    cd /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30/axtChain
+    hgLoadChain -normScore -tIndex danRer6 chainSelf danRer6.danRer6.all.chain.gz
+
+    # FYI For self-chains, we don't need to do the other steps 
+    # that doBlastzChainNet.pl would normally do.
+
+    # add to zebrafish/danRer6/trackDb.ra
+track chainSelf
+shortLabel Self Chain
+longLabel Self Chained Alignments
+group varRep
+chromosomes
+chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25,chrM
+priority 400
+visibility hide
+color 100,50,0
+altColor 255,240,200
+chainColor Normalized Score
+spectrum on
+type chain danRer6
+otherDb danRer6
+
+
+
+#######################################################################
+# Finish danRer6.2bit in downloads (done 2009-07-31)
+#
+#   NOTE this should not need to be done in future
+#   because Hiram added the functionality to makeDownloads.pl
+#
+    ssh hgwdev
+    cd /hive/data/genomes/danRer6/
+    ln -s /hive/data/genomes/danRer6/danRer6.2bit /usr/local/apache/htdocs/goldenPath/danRer6/bigZips/
+    vi README
+    md5sum danRer6.2bit >> /usr/local/apache/htdocs/goldenPath/danRer6/bigZips/md5sum.txt
 
