@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.60 2009/07/24 04:18:45 angie Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.61 2009/08/06 05:52:27 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -222,9 +222,7 @@ fprintf(f, "<script type='text/javascript'>"
 	    "<div id='warnBox' style='display:none; background-color:Beige; "
 	      "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
 	      "text-align:left;'>"
-	    "<CENTER><B style='color:DarkRed;'>Error(s):</CENTER></B><UL id='warnList'></UL>"
-	    "<CENTER><img src='%simages/ok.jpg' onclick='hideWarnBox();return false;'></CENTER>"
-	    "</div></center>\");\n", relPath);
+	    "</div></center>\");\n");
 // Remember what worked nicely on FF3.0: 
 // "function showWarnBox() {"
 //   "var warnBox=document.getElementById('warnBox');"
@@ -235,13 +233,18 @@ fprintf(f, "<script type='text/javascript'>"
 fprintf(f,
 	"function showWarnBox() {"
 	  "var warnBox=document.getElementById('warnBox');"
-	  "if(warnBox!=undefined) {warnBox.style.display=''; warnBox.style.width='65%%';}};\n"
+	  "if(warnBox!=undefined) {"
+	    "warnBox.innerHTML=\""
+	    "<CENTER><B style='color:DarkRed;'>Error(s):</B></CENTER><UL id='warnList'></UL>"
+	    "<CENTER><img src='%simages/ok.jpg' onclick='hideWarnBox();return false;'></CENTER>"
+	    "\";"
+	    "warnBox.style.display=''; warnBox.style.width='65%%';}};\n"
 	"function hideWarnBox() {"
 	  "var warnBox=document.getElementById('warnBox');"
 	  "if(warnBox!=undefined) {"
 	     "warnBox.style.display='none'; var warnList=document.getElementById('warnList'); "
-	     "warnList.innerHTML='';}};"
-        "}</script>\n");
+	     "warnBox.innerHTML='';}};"
+        "}</script>\n", relPath);
 }
 #endif//ifdef WARNBOX_IN_USE
 
@@ -265,7 +268,7 @@ if( strSwapStrs(warning, sizeof(warning),"'","&#39;") == -1) // Sheild single qu
     strSwapChar(warning,'\'','`');  // ran out of memory, replacing them with (`)
 if( strSwapStrs(warning, sizeof(warning),"\n","<BR>") == -1) // new lines also break the code
     strSwapChar(warning,'\n',' ');  // ran out of memory, replacing them with ( )
-printf("<script type='text/javascript'>{var warnList=document.getElementById('warnList'); warnList.innerHTML += '<li>%s</li>'; showWarnBox();}</script>\n",warning);
+printf("<script type='text/javascript'>{showWarnBox();var warnList=document.getElementById('warnList'); warnList.innerHTML += '<li>%s</li>';}</script>\n",warning);
 
 #else//ifndef WARNBOX_IN_USE
 
