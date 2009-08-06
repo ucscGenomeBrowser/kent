@@ -54,7 +54,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	galGal2 galGal3 \
 	taeGut1 \
 	xenTro1 xenTro2 \
-	tetNig1 \
+	tetNig1 tetNig2 \
 	oryLat1 oryLat2 \
 	ornAna1 \
 	fr1 fr2 \
