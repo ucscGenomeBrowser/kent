@@ -38,5 +38,155 @@ done
 # Initial browser (DONE - 2009-08-06 - Hiram)
     cd /hive/data/genomes/tetNig2
     cat << '_EOF_' > tetNig2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db tetNig2
+clade vertebrate
+scientificName Tetraodon nigroviridis
+commonName Tetraodon
+assemblyDate Mar. 2007
+assemblyLabel Genoscope Tetraodon v8.0 (NCBI project 12350, CAAE01000000)
+orderKey 459
+mitoAcc NC_007176
+fastaFiles /hive/data/genomes/tetNig2/genoscope/chr*.fa.gz
+agpFiles /hive/data/genomes/tetNig2/genoscope/chr.agp
+# qualFiles none
+dbDbSpeciesDir tetraodon
+taxId 99883
 '_EOF_'
     # << happy emacs
+
+    time nice -n +19 makeGenomeDb.pl -verbose=2 -workhorse=hgwdev \
+	-noGoldGapSplit -stop=agp tetNig2.config.ra > agp.log 2>&1
+
+    time nice -n +19 makeGenomeDb.pl -verbose=2 -workhorse=hgwdev \
+	-noGoldGapSplit -continue=db -stop=db tetNig2.config.ra > db.log 2>&1
+
+    time nice -n +19 makeGenomeDb.pl -verbose=2 -workhorse=hgwdev \
+	-noGoldGapSplit -continue=dbDb tetNig2.config.ra > dbDb.log 2>&1
+
+    #	add the trackDb files to the source tree and entry to trackDb/makefile
+
+##########################################################################
+# Repeat Masker (DONE - 2009-08-06 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/repeatMasker
+    cd /hive/data/genomes/tetNig2/bed/repeatMasker
+    doRepeatMasker.pl -verbose=2 -workhorse=hgwdev \
+	-noSplit -buildDir=`pwd` tetNig2 > do.log 2>&1
+    cat faSize.rmsk.txt
+# 358618246 bases (56303458 N's 302314788 real 292078336 upper 10236452 lower)
+# in 27 sequences in 1 files
+# %2.85 masked total, %3.39 masked real
+
+    # since this doesn't mask very much, use windowmasker instead
+    hgsql -e "drop table rmsk;" tetNig2
+    #	this leaves the interrupted repeats track showing on genome-test
+
+########################################################################
+# Simple Repeats (DONE - 2009-08-06 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/simpleRepeat
+    cd /hive/data/genomes/tetNig2/bed/simpleRepeat
+    doSimpleRepeat.pl -workhorse=hgwdev \
+	-buildDir=`pwd` tetNig2 > do.log 2>&1 &
+    #	fails on the job for chrM, make an empty result:
+    touch /hive/data/genomes/tetNig2/TrfPart/009/009.lst.bed
+    doSimpleRepeat.pl -workhorse=hgwdev -continue=filter \
+	-buildDir=`pwd` tetNig2 > filter.log 2>&1 &
+    cat fb.simpleRepeat 
+    #	11549259 bases of 332311746 (3.475%) in intersection
+
+########################################################################
+# WindowMasker (DONE - 2009-08-06 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/windowMasker
+    cd /hive/data/genomes/tetNig2/bed/windowMasker
+    doWindowMasker.pl -workhorse=hgwdev -buildDir=`pwd` tetNig2 > do.log 2>&1
+    twoBitToFa tetNig2.wmsk.sdust.2bit stdout | faSize stdin
+    #	358618246 bases (56303458 N's 302314788 real 241249522 upper
+    #	61065266 lower) in 27 sequences in 1 files
+    #	%17.03 masked total, %20.20 masked real
+
+    #	load this initial data to get ready to clean it
+    ssh hgwdev
+    cd /hive/data/genomes/tetNig2/bed/windowMasker
+    hgLoadBed tetNig2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1649525 elements of size 3
+    featureBits -countGaps tetNig2 windowmaskerSdust
+    #	117367586 bases of 358618246 (32.728%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits tetNig2 -not gap -bed=notGap.bed
+    time nice -n +19 featureBits tetNig2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	91061086 bases of 332311746 (27.402%) in intersection
+    #	reload track to get it clean
+    hgLoadBed tetNig2 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1647549 elements of size 4
+    featureBits -countGaps tetNig2 windowmaskerSdust
+    #	91061086 bases of 358618246 (25.392%) in intersection
+
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../tetNig2.unmasked.2bit stdin \
+	    -type=.bed tetNig2.cleanWMSdust.2bit
+    twoBitToFa tetNig2.cleanWMSdust.2bit stdout | faSize stdin \
+        > tetNig2.cleanWMSdust.faSize.txt
+    cat tetNig2.cleanWMSdust.faSize.txt
+    #	358618246 bases (56303458 N's 302314788 real 241249522 upper 61065266
+    #	lower) in 27 sequences in 1 files
+    #	%17.03 masked total, %20.20 masked real
+
+########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2009-08-06 - Hiram)
+    cd /hive/data/genomes/tetNig2
+    twoBitMask -add bed/windowMasker/tetNig2.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed tetNig2.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa tetNig2.2bit stdout | faSize stdin > faSize.tetNig2.txt
+    cat faSize.tetNig2.wmskSdust.TRF.txt
+    #	358618246 bases (56303458 N's 302314788 real 241039472 upper 61275316
+    #	lower) in 27 sequences in 1 files
+    #	%17.09 masked total, %20.27 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/tetNig2/tetNig2.2bit
+    ln -s `pwd`/tetNig2.2bit /gbdb/tetNig2/tetNig2.2bit
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2009-08-06 - Hiram)
+    # Use -repMatch=130 (based on size -- for human we use 1024, and 
+    # Tetraodon size is ~12.7% of human judging by gapless tetNig2 vs.
+    #	hg18 genome size from featureBits.
+    # genome.  Bump that up a bit to be more conservative.
+    #	100*302314788/2897310462 = 10.434324
+
+    cd /hive/data/genomes/tetNig2
+    blat tetNig2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/tetNig2.11.ooc -repMatch=130
+    #	Wrote 8132 overused 11-mers to jkStuff/tetNig2.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    cd /hive/data/genomes/tetNig2
+    mkdir /hive/data/staging/data/tetNig2
+    cp -p jkStuff/tetNig2.11.ooc chrom.sizes tetNig2.2bit \
+	/hive/data/staging/data/tetNig2
+
+#########################################################################
+# Ensembl genes v55 (DONE - 2009-08-06 - Hiram)
+    cd /hive/data/genomes/tetNig2
+    cat << '_EOF_' > tetNig2.ensGene.ra
+# required db variable
+db tetNig2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -verbose=2 -workhorse=hgwdev \
+	-ensVersion=55 -stop=process tetNig2.ensGene.ra > tetNig2.55.log 2>&1
+    doEnsGeneUpdate.pl -verbose=2 -workhorse=hgwdev \
+	-ensVersion=55 -continue=load tetNig2.ensGene.ra >> tetNig2.55.log 2>&1
+
+    featureBits tetNig2 ensGene
+    # 31637658 bases of 332311746 (9.520%) in intersection
+#########################################################################
