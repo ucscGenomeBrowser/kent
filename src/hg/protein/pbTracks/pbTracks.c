@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.57 2009/07/10 01:42:22 markd Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.58 2009/08/06 19:13:55 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -188,7 +188,7 @@ hPrintf("</font><br><br>");
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
     {
-    errAbort("%s is not a current valid entry in UniProtKB\n", proteinID);
+    hUserAbort("%s is not a current valid entry in UniProtKB\n", proteinID);
     }
 protSeqLen = strlen(protSeq);
 
@@ -425,12 +425,12 @@ if (spFindAcc(spConn, proteinID) == NULL)
     answer = sqlGetField(protDbName, "spXref3", "biodatabaseID", cond_str);
     if (sameWord(answer, "3"))
         {
-        errAbort("The corresponding protein %s is no longer available from UniProtKB.", 
+        hUserAbort("The corresponding protein %s is no longer available from UniProtKB.", 
 		 proteinID);
         }
     else
         {
-        errAbort("%s seems not to be a valid protein ID.", proteinID);
+        hUserAbort("%s seems not to be a valid protein ID.", proteinID);
         }
     } 
 else
@@ -441,7 +441,7 @@ else
     printf("<BR><BR>Please try ");
     hPrintf("<A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">  %s</A> instead.\n",
 	     spFindAcc(spConn, proteinID), spFindAcc(spConn, proteinID));fflush(stdout);
-    errAbort(" ");
+    hUserAbort(" ");
     }
   }
 if (kgVersion == KG_III)

@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.45 2009/07/10 01:42:22 markd Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.46 2009/08/06 19:12:38 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -220,7 +220,7 @@ hPrintf("<br>");
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
     {
-    errAbort("%s is not a current valid entry in UniProtKB\n", proteinID);
+    hUserAbort("%s is not a current valid entry in UniProtKB\n", proteinID);
     }
 protSeqLen = strlen(protSeq);
 
@@ -512,7 +512,7 @@ else
 	    answer = uniProtFindPrimAcc(queryID);
 	    if (answer == NULL)
 		{
-	        errAbort(
+	        hUserAbort(
 		"'%s' does not seem to be a valid UniProtKB protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
 		    	, queryID);
 	    	}
@@ -584,7 +584,7 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
+	hUserAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
 	, proteinID);
 	}
     else
