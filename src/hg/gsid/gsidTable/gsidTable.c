@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.41 2008/09/17 16:13:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.42 2009/08/06 17:24:49 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -365,8 +365,10 @@ cartSaveSession(cart);
 printf("<font size=5><B>Table View</B></font>");
 mainControlPanel();
 if (subjList != NULL)
+    {
+printf("Use the \"configure\" button above to access additional data fields, including infection date details, sequencing and ART date information, <BR>and immunogenicity data.");
     bigTable(conn, colList,subjList);
-
+    }
 printf("<br>* Estimated Study Day of Infection (ESDI), ");
 printf("click <a href=\"http://www.gsid.org/downloads/methods_and_conventions.pdf\" target=_blank> here </a>");
 printf(" for further explanation.\n");
@@ -925,6 +927,20 @@ else
     }
 }
 
+char NDString[10] = {"yyN/D"};
+char *stringCellValx(struct column *col, struct subjInfo *si,
+        struct sqlConnection *conn)
+/* Return clone of geneId */
+{
+return(NDString);
+/*
+if (col->query)
+    return queryCellVal(col,si,conn);
+else
+    return cloneString(si->fields[col->colNo]);
+*/
+}
+
 char *stringCellVal(struct column *col, struct subjInfo *si,
         struct sqlConnection *conn)
 /* Return clone of geneId */
@@ -949,6 +965,55 @@ boolean special;
 special = FALSE;
 char *s = col->cellVal(col, si, conn);
 hPrintf("<TD align=right>");
+/* special processing for missing data */
+if (sameWord(col->name, "SDayLastPTest"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	hPrintf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "SDayLastTrTest"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	hPrintf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "SDayLastTrTest"))
+    {
+    if (sameWord(s, "-2"))
+	{
+	hPrintf("N/D");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "LastTrVisit"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	hPrintf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "LastTrVisit"))
+    {
+    if (sameWord(s, "-2"))
+	{
+	hPrintf("N/D");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "LastTrMnNeutral"))
+    {
+    if (sameWord(s, "-3"))
+    	{
+    	hPrintf("&nbsp");
+	special = TRUE;
+	}
+    }
 if (sameWord(col->name, "cd4Count"))
     {
     if (sameWord(s, "-1") || sameWord(s, "0"))
@@ -1013,7 +1078,51 @@ char buf[256];
 if (sameString(s,"."))  // known bad data value
     safef(buf,sizeof(buf),"%s", s);
 else
-    safef(buf,sizeof(buf),"%.1f",sqlDouble(s));
+    {
+    if (sameWord(col->name, "LastPVisit") ||sameWord(col->name, "LastPCD4Blk"))
+    	{
+    	if (sameWord(s, "-1"))
+	   {
+    	   safef(buf,sizeof(buf),"N/A");
+	   }
+    	else if (sameWord(s, "-2"))
+	   {
+    	   safef(buf,sizeof(buf),"N/D");
+	   }
+    	else if (sameWord(s, "-3"))
+	   {
+    	   safef(buf,sizeof(buf),"&nbsp");
+	   }
+	else
+	    {
+    	    safef(buf,sizeof(buf),"%.1f",sqlDouble(s));
+	    }
+	}
+    else
+    if (sameWord(col->name, "LastTrCD4Blk") || sameWord(col->name, "LastTrAntiGP120"))
+    	{
+    	if (sameWord(s, "-3"))
+	   {
+    	   safef(buf,sizeof(buf),"&nbsp");
+	   }
+    	else if (sameWord(s, "-2"))
+	   {
+    	   safef(buf,sizeof(buf),"N/D");
+	   }
+    	else if (sameWord(s, "-1"))
+	   {
+    	   safef(buf,sizeof(buf),"N/A");
+	   }
+	else
+	    {
+    	    safef(buf,sizeof(buf),"%.3f",sqlDouble(s));
+	    }
+	}
+    else
+	{
+    	safef(buf,sizeof(buf),"%.1f",sqlDouble(s));
+	}
+    }
 freeMem(s);
 hPrintf("<TD align=right>");
 hPrintf("%s", buf);
@@ -1503,7 +1612,6 @@ if (ord == NULL)  /* no columns are visible, go to back to configure page */
     doConfigure(conn, colList); 
     return;
     };  
-
 
 if (cartVarExists(cart, getTextVarName))
     {
