@@ -12,7 +12,7 @@
 #    http://www.sanger.ac.uk/Projects/D_rerio/
 #    http://www.sanger.ac.uk/Projects/D_rerio/Zv8_assembly_information.shtml
 
-# TODO this comment is copied over and may need removal
+# TODO this comment is copied over from old makedoc and may need removal
 #  NOTE:  this doc may have genePred loads that fail to include
 #  the bin column.  Please correct that for the next build by adding
 #  a bin column when you make any of these tables:
@@ -801,7 +801,17 @@ spectrum on
 type chain danRer6
 otherDb danRer6
 
-
+    # Finish chainSelf downloads
+    cd /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30/axtChain
+    md5sum danRer6.danRer6.all.chain.gz >> ../md5sum.txt
+    cd ..
+    cp /usr/local/apache/htdocs/goldenPath/hg19/vsSelf/README.txt .
+    vi README.txt
+    mkdir /usr/local/apache/htdocs/goldenPath/danRer6/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/danRer6/vsSelf
+    ln -s /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30/axtChain/danRer6.danRer6.all.chain.gz .
+    ln -s /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30/README.txt .
+    ln -s /hive/data/genomes/danRer6/bed/lastzSelf.2009-07-30/md5sum.txt .
 
 #######################################################################
 # Finish danRer6.2bit in downloads (done 2009-07-31)
@@ -814,4 +824,6 @@ otherDb danRer6
     ln -s /hive/data/genomes/danRer6/danRer6.2bit /usr/local/apache/htdocs/goldenPath/danRer6/bigZips/
     vi README
     md5sum danRer6.2bit >> /usr/local/apache/htdocs/goldenPath/danRer6/bigZips/md5sum.txt
+
+
 
