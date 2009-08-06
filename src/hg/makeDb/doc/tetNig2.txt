@@ -189,4 +189,25 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
     featureBits tetNig2 ensGene
     # 31637658 bases of 332311746 (9.520%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-08-06 - Hiram)
+Thu Aug  6 15:58:09 PDT 2009
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("tetNig2", "blat15", "17794", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("tetNig2", "blat15", "17795", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+# Set default position same as tetNig1 after blating tetNig1 to here
+#		(DONE - 2009-08-06 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr10:2797091-2804214" where name="tetNig2";' \
+        hgcentraltest
+
 #########################################################################
