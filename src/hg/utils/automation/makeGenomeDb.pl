@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.23 2009/08/06 18:22:31 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.24 2009/08/07 21:13:12 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -1008,24 +1008,12 @@ sub makeLocalTrackDbRa {
   my $fh = &HgAutomate::mustOpen(">$topDir/html/trackDb.ra");
   print $fh <<_EOF_
 # Local declaration so that local gold.html is picked up.
-track gold
-shortLabel Assembly
-longLabel Assembly from Fragments
-group map
-priority 10
-visibility hide
-color 150,100,30
-altColor 230,170,40
-type bed 3 +
+track gold override
+html gold
 
 # Local declaration so that local gap.html is picked up.
-track gap
-shortLabel Gap
-longLabel Gap Locations
-priority 11
-group map
-visibility dense
-type bed 3 +
+track gap override
+html gap
 
 _EOF_
   ;
