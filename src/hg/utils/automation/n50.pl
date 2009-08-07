@@ -2,7 +2,7 @@
 # n50.pl - calculate N50 values for a two column file
 
 
-# $Id: n50.pl,v 1.1 2009/08/07 17:50:43 hiram Exp $
+# $Id: n50.pl,v 1.2 2009/08/07 18:16:48 hiram Exp $
 
 use strict;
 use warnings;
@@ -50,7 +50,7 @@ while (my $sizeFile = shift) {
     }
     my $n50Size = $totalSize / 2;
 
-    printf STDERR "#\tcontig count: %d, total size: %d, N50 size: %d\n",
+    printf STDERR "#\tcontig count: %d, total size: %d, one half size: %d\n",
 	    $sizeCount, $totalSize, $n50Size;
 
     my $prevContig = "";
