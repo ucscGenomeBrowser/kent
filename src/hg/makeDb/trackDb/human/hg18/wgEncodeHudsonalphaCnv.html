@@ -2,14 +2,21 @@
 
 This track shows copy number variation
 variation (CNV) in the ENCODE Tier 1 and Tier 2 human cell lines 
-K562, GM12878, and HepG2 as determined by Illumina's Human 1M-Duo 
+GM12878, HepG2, and K562 as determined by Illumina's Human 1M-Duo 
 Infinium HD BeadChip assay and CNV analysis by circular binary segmentation (CBS).
-CNV segments are colored by type:  red (amplification), blue (heterozygous deletion),
-and green (homozygous deletion).
 <P>
-Two biological replicates are reported for each cell line.
-Because biological replicates give very similar results, 
-the replicates may later be averaged the to provide a single genotyping
+CNV segments are colored by type: 
+<ul>
+<li><font color="#e600e6">magenta</font> = amplified  </li>
+<li><font color="#00cd00">green</font> = homozygous deletion</li>
+<li><font color="#0000CD">blue</font> = heterozygouns deletion  </li>
+<li><font color="#000000">black</font> = normal</li>
+</ul>
+</p>
+<P>
+Two biological replicates were generated for each cell line.
+Because biological replicates gave very similar results, 
+the replicates were averaged to provide a single genotyping
 dataset in order to apply these data to other ENCODE experiments.  
 Possible uses of this data are for correction of copy number in 
 peak-calling for interactome,
@@ -41,14 +48,29 @@ Log ratios of ~-0.2 to -1.5 can be considered heterozygous deletions,
 
 The coordinates for the genotypes and copy number calls are from Human Genome Build 36.
 
-<H2>Credits></H2>
-Rebekka Sprouse (rsprouse@hudsonalpha.org),
-Richard Myers (rmyers@hudsonalpha.org),
-Devin Absher (dabsher@hudsonalpha.org), and
-HudsonAlpha Institute.
+<H2>Credits</H2>
+Rebekka Sprouse, Richard Myers, Devin Absher from HudsonAlpha Institute.
+<P>
+Contact:
+<A HREF="mailto:&#116;&#114;&#101;d&#100;y&#64;&#104;&#117;&#100;&#115;&#111;n&#97;lp&#104;&#97;.
+&#111;&#114;&#103;">
+&#116;&#114;&#101;d&#100;y&#64;&#104;&#117;&#100;&#115;&#111;n&#97;lp&#104;&#97;.
+&#111;&#114;&#103;</A>
+<!-- above address is treddy at hudsonalpha.org -->
 
 <H2>References</H2>
 
 Olshen, A. et al. (2004).  
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15475419" TARGET=_BLANK>
 Circular binary segmentation for the analysis of array-based DNA copy number data.
+</a>
 Biostatistics (Oxford, England) vol. 5 (4) pp. 557-572.
+<h2> Data Release Policy </h2>
+
+<p>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<a href="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>
+
