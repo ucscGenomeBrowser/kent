@@ -12419,7 +12419,7 @@ type bed 9 +
 
     track wgEncodeHudsonalphaCnvGM12878W
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel  GM12878 CNV Wig
+    shortLabel  GM12878 Signal
     longLabel ENCODE Copy Number Variation Signal (GM12878 cells)
     subGroups cellType=GM12878 view=Signal
     type bedGraph 4
@@ -12430,53 +12430,52 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvGM12878
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel GM12878 CNV 
+    shortLabel GM12878 Regions 
     longLabel ENCODE Copy Number Variation Regions (GM12878 cells)
     subGroups cellType=GM12878 view=Regions
     cell GM12878
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 view=Regions replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvGM12878W fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 view=Regions replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvGM12878 fileName=wgEncodeHudsonalphaCnvGM12878.bed.gz
     priority 2
-
 
     track wgEncodeHudsonalphaCnvHepG2W
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel  HepG2 CNV Wig
+    shortLabel  HepG2 Signal
     longLabel ENCODE Copy Number Variation Signal (HepG2 cells)
     subGroups cellType=HepG2 view=Signal
     cell HepG2
     type bedGraph 4
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 view=Signal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvHepG2W fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 view=Signal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvHepG2W fileName=wgEncodeHudsonalphaCnvHepG2W.bed.gz
     priority 3
 
     track wgEncodeHudsonalphaCnvHepG2
-    shortLabel HepG2 CNV
+    shortLabel HepG2 Regions
     longLabel ENCODE Copy Number Variation Regions (HepG2 cells)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
     subGroups cellType=HepG2 view=Regions
     cell HepG2
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 view=Regions replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvHepG2W fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 view=Regions replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvHepG2 fileName=wgEncodeHudsonalphaCnvHepG2.bed.gz
     priority 4
     
     track wgEncodeHudsonalphaCnvK562W
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel  K562 CNV Wig
+    shortLabel  K562 Signal
     longLabel ENCODE Copy Number Variation Signal (K562 cells)
     subGroups cellType=K562 view=Signal
     cell K562
     type bedGraph 4
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 view=Signal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvK562W fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 view=Signal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvK562W fileName=wgEncodeHudsonalphaCnvK562W.bed.gz
     priority 5
 
     track wgEncodeHudsonalphaCnvK562
-    shortLabel K562 CNV 
+    shortLabel K562 Regions
     longLabel ENCODE Copy Number Variation Regions (K562 cells)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
     subGroups cellType=K562 view=Regions
     cell K562
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 view=Regions replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvK562W fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 view=Regions replicate=1 dataVersion="ENCODE Nov 2008 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvK562 fileName=wgEncodeHudsonalphaCnvK562.bed.gz
     priority 6
 
 # CSHL RNA-Seq (wrangler: mikep)
