@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.54 2009/03/24 20:48:34 mikep Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.55 2009/08/09 07:29:28 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -97,6 +97,9 @@ errAbort(
   "                     from bedRegionIn\n"
   "   -enrichment       Calculates coverage and enrichment assuming first table\n"
   "                     is reference gene track and second track something else\n"
+  "                     Enrichment is the amount of table1 that covers table2 vs. the\n"
+  "                     amount of table1 that covers the genome. It's how much denser\n"
+  "                     table1 is in table2 than it is genome-wide.\n"
   "   '-where=some sql pattern'  Restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
