@@ -15,3 +15,14 @@
 	hgLoadBed hg18 wgEncodeHudsonalphaCnv"$g"W "$f"_W.bed -bedGraph=4 -allowStartEqualEnd; 
     done
 
+    dd=/hive/groups/encode/dcc/pipeline/downloads/wgEncodeHudsonalphaCnv
+    mkdir $dd
+
+    for i in GM12878 HepG2 K562
+    do
+	echo $i
+	cat "$i"_CNV_W.bed | gzip -c > $dd/wgEncodeHudsonalphaCnv"$i"W.bed.gz
+	cat "$i"_CNV_C.bed | gzip -c > $dd/wgEncodeHudsonalphaCnv"$i".bed.gz
+    done
+
+    ln -s $dd  /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC
