@@ -2,7 +2,7 @@
 
 # Copy files to javascript directory; make versioned soft-links as appropriate (and delete obsolete ones too).
 
-# $Id: cpJsFiles.pl,v 1.1 2009/08/10 20:42:16 larrym Exp $
+# $Id: cpJsFiles.pl,v 1.2 2009/08/10 21:14:20 larrym Exp $
 
 use strict;
 
@@ -20,10 +20,10 @@ cpJsFiles.pl [-exclude=...] -destDir=... files
 END
 }
 
-my ($exclude, $destDir);
+my ($exclude, $destDir, $debug);
 my %exclude;
 
-GetOptions("exclude=s" => \$exclude, "destDir=s" => \$destDir);
+GetOptions("exclude=s" => \$exclude, "destDir=s" => \$destDir, "debug" => \$debug);
 
 if($exclude) {
     %exclude = map { $_ => 1} split(/\s*,\s*/, $exclude);
@@ -54,7 +54,11 @@ for my $file (@ARGV)
             $update = 1;
         }
         if($update) {
-            !system("cp -p $file $destDir") || die "Couldn't cp $file: err: $!";
+            if(system("cp -p $file $destDir")) {
+                # cp -p doesn't work if user doesn't own destDir, so fall-back to rm/cp
+                !system("rm $destDir/$file") || die "Couldn't unlink $destDir/$file: err: $!";
+                !system("cp $file $destDir") || die "Couldn't cp $file: err: $!";
+            }
         }
 
         if($file =~ /(.+)\.js$/) {
@@ -66,7 +70,7 @@ for my $file (@ARGV)
             for my $f (@destFiles) {
                 if($f =~ /$prefix-(\d+)\.js/) {
                     if($f ne $softLink) {
-                        print STDERR "Deleting old soft-link $f\n";
+                        print STDERR "Deleting old soft-link $f\n" if($debug);
                         unlink("$destDir/$f") || die "Couldn't unlink '$destDir/$softLink'; err: $!";
                     }
                 }
@@ -74,7 +78,7 @@ for my $file (@ARGV)
             
             # create new symlink
             if(!(-l "$destDir/$softLink")) {
-                print STDERR "$destDir/$softLink\n";
+                print STDERR "ln -s $destDir/$softLink\n" if($debug);
                 !system("ln -s $destDir/$file $destDir/$softLink") || die "Couldn't ln -s $file; err: $!";
             }
         }
