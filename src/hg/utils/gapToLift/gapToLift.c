@@ -20,7 +20,8 @@ errAbort(
   "options:\n"
   "   -chr=chrN - work only on given chrom\n"
   "   -insane - do *not* perform coordinate sanity checks on gaps\n"
-  "   -bedFile=fileName.bed - output segments to fileName.bed"
+  "   -bedFile=fileName.bed - output segments to fileName.bed\n"
+  "   -verbose=N - N > 1 see more information about procedure"
   );
 }
 
@@ -185,6 +186,9 @@ int end = 0;
 char *prevChr = NULL;
 int liftCount = 0;
 int chrSize = 0;
+static struct hash *chrDone = NULL;
+
+chrDone = newHash(0);
 
 if (isNotEmpty(bedFileName))
     {
@@ -219,6 +223,7 @@ for (gap = gapList; gap; gap = gap->next)
 	    }
 	liftCount = 0;
 	chrSize = hashIntVal(cInfoHash, gap->chrom);
+	hashAddInt(chrDone, gap->chrom, 1);
 	if (gap->chromStart > 0)
 	    {	/* starting first segment at position 0 */
 	    start = 0;
@@ -242,6 +247,18 @@ for (gap = gapList; gap; gap = gap->next)
 /* potentially a last one */
 if (end < chrSize)
     liftCount = liftOutLine(out, prevChr, start, chrSize, liftCount, chrSize);
+/* check that all chroms have been used */
+struct hashCookie cookie = hashFirst(cInfoHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (NULL == hashLookup(chrDone, hel->name))
+	{
+	chrSize = hashIntVal(cInfoHash, hel->name);
+	verbose(2, "#\tno gaps on chrom: %s, size: %d\n", hel->name, chrSize);
+	liftCount = liftOutLine(out, hel->name, 0, chrSize, 0, chrSize);
+	}
+    }
 carefulClose(&out);
 sqlDisconnect(&conn);
 }
