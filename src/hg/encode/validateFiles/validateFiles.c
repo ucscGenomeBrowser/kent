@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.24 2009/08/10 18:57:18 braney Exp $";
-static char *version = "$Revision: 1.24 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.25 2009/08/10 21:05:29 braney Exp $";
+static char *version = "$Revision: 1.25 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -587,7 +587,7 @@ else
 	int size =  twoBitSeqSize(genome, chrom);
 	cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
 	strcpy(cacheChrom, chrom);
-	printf("read in %s size %d\n",cacheChrom, size);
+	verbose(2, "read in chrom %s size %d\n",cacheChrom, size);
 	}
     int len = chromEnd - chromStart;
     if (len > sizeof(bigArr))
