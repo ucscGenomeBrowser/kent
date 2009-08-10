@@ -3145,3 +3145,18 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# SWAP BLASTZ FOR DOG (canFam2) (DONE, 2009-08-08, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+# See canFam2.txt for creation of zebrafish chain and net tracks and downloads
+# on the dog genome assembly.
+    mkdir /hive/data/genomes/danRer5/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/danRer5/bed/blastz.canFam2.swap
+    
+    time nice doBlastzChainNet.pl -chainMinScore=5000 -chainLinearGap=loose \
+	-swap /hive/data/genomes/canFam2/bed/blastz.danRer5.2009-08-07/DEF \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=loose \
+	>& doBlastz.swap.log &
+    cat fb.danRer5.chainCanFam2Link.txt 
+    # 32053647 bases of 1435609608 (2.233%) in intersection
+   
