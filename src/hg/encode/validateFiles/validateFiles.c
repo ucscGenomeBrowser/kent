@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.23 2009/08/10 17:22:49 braney Exp $";
-static char *version = "$Revision: 1.23 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.24 2009/08/10 18:57:18 braney Exp $";
+static char *version = "$Revision: 1.24 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -110,6 +110,17 @@ static struct optionSpec options[] = {
    {"version", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean checkMismatch(int ch1, int ch2)
+// checkMismatch -- if the sequence has an N, we call this a mismatch
+//   by default unless nMatch is set, in which case we don't call
+//   it a mismatch
+{
+if (ch1 != 'n')
+    return ch1 != ch2;
+
+return !nMatch;
+}
 
 void initArrays()
 // Set up array of chars
@@ -600,7 +611,7 @@ if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
 for (i=0 ; i < g->size ; ++i)
     {
     char c = tolower(seq[i]);
-    if (!((nMatch && c == 'n') || c == g->dna[i]))
+    if (checkMismatch(c,  g->dna[i]))
         ++mm;
     }
 if (mm > mismatches)
@@ -646,14 +657,14 @@ mm1 = 0;
 for (i=0 ; i < g1->size ; ++i)
     {
     char c = tolower(seq1[i]);
-    if (!((nMatch && c == 'n') || c == g1->dna[i]))
+    if (checkMismatch(c,  g1->dna[i]))
         ++mm1;
     }
 mm2 = 0;
 for (i=0 ; i < g2->size ; ++i)
     {
     char c = tolower(seq2[i]);
-    if (!((nMatch && c == 'n') || c == g2->dna[i]))
+    if (checkMismatch(c,  g2->dna[i]))
         ++mm2;
     }
 if (mmPerPair)
