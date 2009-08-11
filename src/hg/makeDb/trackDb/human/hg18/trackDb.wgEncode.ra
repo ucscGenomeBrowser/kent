@@ -13282,7 +13282,7 @@ shortLabel Caltech RNA-seq
 longLabel ENCODE Caltech RNA-seq
 group expression
 #subGroup1 view Views Splices=Splice_Sites Aligns=Alignments_Unpaired Paired=Alignments_Paired RawSignal=Raw_Signal
-subGroup1 view Views Splices=Splice_Sites yRawSignal=Raw_Signal zAligns=Alignments
+subGroup1 view Views RawSignal=Raw_Signal Splices=Splice_Sites zAligns=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 localization Localization 0-cell=Cell
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
@@ -13293,7 +13293,8 @@ dimensions dimensionX=cellType dimensionY=mapAlgorithm
 sortOrder cellType=+ mapAlgorithm=+ readType=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
 dragAndDrop subTracks
-visibilityViewDefaults zAligns=hide yRawSignal=hide Splices=hide
+visibilityViewDefaults RawSignal=full Splices=squish zAligns=hide 
+settingsByView RawSignal:maxHeightPixels=100:24:16,windowingFunction=mean 
 priority 0
 type bed 3
 noInherit on
@@ -13306,167 +13307,149 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 BB 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 2 (PolyA+ in GM12878 whole cell using BB1)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 BB 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 2 (PolyA+ in K562 whole cell using BB1)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 BB 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (PolyA+ in GM12878 whole cell using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 blat34 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (PolyA+ in GM12878 whole cell using blat34)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 BB 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (PolyA+ in K562 whole cell using BB1)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 blat34 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (PolyA+ in K562 whole cell using blat34)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 BB Rw 2
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ in GM12878 whole cell using BB1)
-    subGroups view=yRawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 1497.62
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75.wig.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 BB Rw 2
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ in K562 whole cell using BB1)
-    subGroups view=yRawSignal cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 1625.83
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75.wig.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 bow098 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 1 (PolyA+ in K562 whole cell using bow098)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 bow098 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 2 (PolyA+ in K562 whole cell using bow098)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 bow098 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (PolyA+ in K562 whole cell using bow098)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 bow098 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (PolyA+ in K562 whole cell using bow098)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
-    shortLabel K562 erg3b Rw 1
+    subTrack wgEncodeCaltechRnaSeq off
+    shortLabel K562 erg3b Rw 1 
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ in K562 whole cell using erng3b)
-    subGroups view=yRawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 5020.76
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32.wig.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 erg3b Rw 2
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ in K562 whole cell using erng3b)
-    subGroups view=yRawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 2584.96
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32.wig.gz
 
@@ -13477,7 +13460,6 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 1 (PolyA+ in K562 whole cell using BB1)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75.bed12.gz
 
@@ -13488,18 +13470,16 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (PolyA+ in K562 whole cell using BB1)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel K562 blat34 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (PolyA+ in K562 whole cell using blat34)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75.bed12.gz
 
@@ -13508,84 +13488,74 @@ wgEncode 1
     subTrack wgEncodeCaltechRnaSeq
     shortLabel K562 BB Rw 1
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ in K562 whole cell using BB1)
-    subGroups view=yRawSignal cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 2716.04
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 46,0,184
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75.wig.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 bow098 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 1 (PolyA+ in GM12878 whole cell using bow098)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 bow098 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 2 (PolyA+ in GM12878 whole cell using bow098)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 bow098 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (PolyA+ in GM12878 whole cell using bow098)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 bow098 2
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (PolyA+ in GM12878 whole cell using bow098)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 erg3b Rw 1
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ in GM12878 whole cell using erng3b)
-    subGroups view=yRawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 1163.85
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32.wig.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 erg3b Rw 2
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (PolyA+ in GM12878 whole cell using erng3b)
-    subGroups view=yRawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 841.06
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32.wig.gz
 
@@ -13596,7 +13566,6 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 1 (PolyA+ in GM12878 whole cell using BB1)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 
@@ -13607,18 +13576,16 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (PolyA+ in GM12878 whole cell using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75
     release alpha
-    subTrack wgEncodeCaltechRnaSeq
+    subTrack wgEncodeCaltechRnaSeq off
     shortLabel GM128 blat34 1
     longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (PolyA+ in GM12878 whole cell using blat34)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    configurable on
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
 
@@ -13627,12 +13594,10 @@ wgEncode 1
     subTrack wgEncodeCaltechRnaSeq
     shortLabel GM128 BB Rw 1
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ in GM12878 whole cell using BB1)
-    subGroups view=yRawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
+    subGroups view=RawSignal cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type wig 0.00 2446.53
     configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     color 153,38,0
     metadata project=wgEncode grant=Wold lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75.wig.gz
 
