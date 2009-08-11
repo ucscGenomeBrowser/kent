@@ -95,6 +95,55 @@ taxId 99883
     #	11549259 bases of 332311746 (3.475%) in intersection
 
 ########################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2009-08-07 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../tetNig2.2bit > findMotif.txt 2>&1
+    #	real    0m7.967s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits tetNig2 -not gap -bed=notGap.bed
+    featureBits tetNig2 allGaps.bed notGap.bed -bed=net.gaps.bed
+    #	what is the last index in the existing gap table:
+    hgsql -N -e "select ix from gap;" tetNig2 | sort -n | tail -1
+    #	34284
+    cat << '_EOF_' > mkGap.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" tetNig2 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.gap
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad tetNig2 otherGap other.gap
+    #	Loaded 17051
+    #	adding this many:
+    wc -l bed.tab
+    #	17051
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" tetNig2
+    #	17140
+    hgsql tetNig2 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" tetNig2
+    #	34191
+    # == 17140 + 17051
+
+########################################################################
 # WindowMasker (DONE - 2009-08-06 - Hiram)
     mkdir /hive/data/genomes/tetNig2/bed/windowMasker
     cd /hive/data/genomes/tetNig2/bed/windowMasker
@@ -114,14 +163,15 @@ taxId 99883
 
     #	eliminate the gaps from the masking
     featureBits tetNig2 -not gap -bed=notGap.bed
+    #	302314788 bases of 302314788 (100.000%) in intersection
     time nice -n +19 featureBits tetNig2 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	91061086 bases of 332311746 (27.402%) in intersection
+    #	61065266 bases of 302314788 (20.199%) in intersection
     #	reload track to get it clean
     hgLoadBed tetNig2 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 1647549 elements of size 4
+    #	Loaded 1644977 elements of size 4
     featureBits -countGaps tetNig2 windowmaskerSdust
-    #	91061086 bases of 358618246 (25.392%) in intersection
+    #	61065266 bases of 358618246 (17.028%) in intersection
 
     #	mask the sequence with this clean mask
     zcat cleanWMask.bed.gz \
@@ -141,7 +191,7 @@ taxId 99883
 	bed/simpleRepeat/trfMask.bed tetNig2.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa tetNig2.2bit stdout | faSize stdin > faSize.tetNig2.txt
-    cat faSize.tetNig2.wmskSdust.TRF.txt
+    cat faSize.tetNig2.txt
     #	358618246 bases (56303458 N's 302314788 real 241039472 upper 61275316
     #	lower) in 27 sequences in 1 files
     #	%17.09 masked total, %20.27 masked real
@@ -165,10 +215,12 @@ taxId 99883
     #	Wrote 8132 overused 11-mers to jkStuff/tetNig2.11.ooc
 
     #	copy all of this stuff to the klusters:
+    cd /hive/data/genomes/tetNig2/jkStuff
+    gapToLift tetNig2 nonBridged.lift -bedFile=nonBridged.bed
     cd /hive/data/genomes/tetNig2
     mkdir /hive/data/staging/data/tetNig2
-    cp -p jkStuff/tetNig2.11.ooc chrom.sizes tetNig2.2bit \
-	/hive/data/staging/data/tetNig2
+    cp -p jkStuff/tetNig2.11.ooc jkStuff/nonBridged.lift \
+	chrom.sizes tetNig2.2bit /hive/data/staging/data/tetNig2
 
 #########################################################################
 # Ensembl genes v55 (DONE - 2009-08-06 - Hiram)
@@ -377,3 +429,126 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+#########################################################################
+# Creating contigs 2bit file (DONE - 2009-08-10 - Hiram)
+    cd /hive/data/genomes/tetNig2/jkStuff
+    gapToLift tetNig2 nonBridged.lift -bedFile=nonBridged.bed
+    #	there aren't any gaps in chrM and it doesn't show up in
+    #	the result !  Add chrM to this lift file:
+    echo -e "0\tchrM.00\t16462\tchrM\t16462" >> nonBridged.lift
+    echo -e "chrM\t0\t16462\tchrM.00" >> nonBridged.bed
+
+    #	take a look at the nonBridged.bed as a custom track
+    mkdir /hive/data/genomes/tetNig2/contigs
+    cd /hive/data/genomes/tetNig2/contigs
+    ln -s ../jkStuff/nonBridged.lift .
+    ~/kent/src/hg/utils/lft2BitToFa.pl ../tetNig2.2bit nonBridged.lift \
+	| gzip -c > tetNig2.contigs.fa.gz
+    #	make sure nothing was destroyed:
+    faCount *.fa.gz > faCount.contigs.txt 2>&1
+    twoBitToFa ../tetNig2.2bit stdout | faCount stdin > faCount.2bit.txt 2>&1
+    tail -1 faCount.contigs.txt
+# total   333797246       81050307        70114488        70126181
+# 81023812	31482458        9799877
+    tail -1 faCount.2bit.txt
+# total   358618246       81050307        70114488        70126181
+# 81023812	56303458        9799877
+    #	only the total size and N count are different
+
+    faSize tetNig2.contigs.fa.gz
+    #	333797246 bases (31482458 N's 302314788 real 241039472 upper 61275316
+    #	lower) in 14352 sequences in 1 files
+    #	%18.36 masked total, %20.27 masked real
+    twoBitToFa ../tetNig2.2bit stdout | faSize stdin
+    #	358618246 bases (56303458 N's 302314788 real 241039472 upper 61275316
+    #	 lower) in 27 sequences in 1 files
+    #	%17.09 masked total, %20.27 masked real
+
+    faToTwoBit tetNig2.contigs.fa.gz tetNig2.contigs.2bit
+    twoBitInfo tetNig2.contigs.2bit stdout | sort -k2nr > tetNig2.contigs.sizes
+
+    cp -p tetNig2.contigs.2bit tetNig2.contigs.sizes  \
+	/hive/data/staging/data/tetNig2
+    cp -p nonBridged.lift /hive/data/staging/data/tetNig2/tetNig2.contigs.lift
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2009-08-11 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add tetNig2 just before tetNig1
+
+# tetNig2 (Tetraodon)
+tetNig2.serverGenome = /hive/data/genomes/tetNig2/tetNig2.2bit
+tetNig2.clusterGenome = /scratch/data/tetNig2/tetNig2.2bit
+tetNig2.ooc = /scratch/data/tetNig2/tetNig2.11.ooc
+tetNig2.lift = /scratch/data/tetNig2/tetNig2.contigs.lift
+tetNig2.align.unplacedChroms = chr*_random
+tetNig2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+tetNig2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}  
+tetNig2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+tetNig2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+tetNig2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+tetNig2.downloadDir = tetNig2
+tetNig2.genbank.mrna.xeno.loadDesc = yes
+tetNig2.refseq.mrna.native.load = no
+
+    cvs ci -m "Added tetNig2" etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial tetNig2 &
+    #	logFile: var/build/logs/2009.08.10-16:42:06.tetNig2.initalign.log
+    #	real    578m42.777s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad tetNig2
+    #	logFile: var/dbload/hgwdev/logs/2009.08.11-09:22:29.dbload.log
+    #	real    31m29.282s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add tetNig2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added tetNig2 - Tetraodon Nigirividis" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+# lastz swap Human hg19 (DONE - 2009-08-11 - Hiram)
+    #	result of human alignment  (date stamp on directory is incorrect)
+    cd /hive/data/genomes/hg19/bed/lastzTetNig2.2009-10-10
+    cat fb.hg19.chainTetNig2Link.txt 
+    #	49611132 bases of 2897316137 (1.712%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzTetNig2.2009-10-10/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    13m21.591s
+    #	forgot the qRepeats for tetNig2
+    rm axtChain/tetNig2.hg19.net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzTetNig2.2009-10-10/DEF \
+	-continue=load -qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > load.log 2>&1 &
+    #	real    4m7.559s
+    cat fb.tetNig2.chainHg19Link.txt 
+    #	42910930 bases of 302314788 (14.194%) in intersection
+
+##############################################################################
