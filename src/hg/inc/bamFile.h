@@ -27,7 +27,7 @@ if (opcode >= strlen(BAM_DOT_C_OPCODE_STRING))
     errAbort("bamUnpackCigarElement: unrecognized opcode %d. "
 	     "(I only recognize 0..%lu [" BAM_DOT_C_OPCODE_STRING "])  "
 	     "Perhaps samtools bam.c's bam_format1 encoding changed?  If so, update me.",
-	     opcode, strlen(BAM_DOT_C_OPCODE_STRING)-1);
+	     opcode, (unsigned long)(strlen(BAM_DOT_C_OPCODE_STRING)-1));
 *retOp = BAM_DOT_C_OPCODE_STRING[opcode];
 return n;
 }
