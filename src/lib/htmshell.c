@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.61 2009/08/06 05:52:27 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.62 2009/08/11 23:00:47 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -242,7 +242,7 @@ fprintf(f,
 	"function hideWarnBox() {"
 	  "var warnBox=document.getElementById('warnBox');"
 	  "if(warnBox!=undefined) {"
-	     "warnBox.style.display='none'; var warnList=document.getElementById('warnList'); "
+	     "warnBox.style.display='none';"
 	     "warnBox.innerHTML='';}};"
         "}</script>\n", relPath);
 }
