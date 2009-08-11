@@ -12402,7 +12402,7 @@ wgEncode 1
 track wgEncodeHudsonalphaCnv
 compositeTrack on
 shortLabel Common Cell CNV
-longLabel ENCODE Cell Type Copy Number Variation, by llumina 1M and CBS
+longLabel ENCODE Common Cell Type Copy Number Variation, by llumina 1M and CBS
 group varRep
 itemRgb on
 noInherit on
