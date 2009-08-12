@@ -26,7 +26,7 @@
 #include "encode/encodePeak.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.98 2009/07/30 22:21:18 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.99 2009/08/12 21:20:26 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1495,9 +1495,9 @@ static struct customTrack *bigWigLoader(struct customFactory *fac,
 {
 /* Not much to this.  A bigWig has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
-char *dataUrl = hashFindVal(settings, "dataUrl");
-if (dataUrl == NULL)
-    errAbort("Missing dataUrl setting from track of type=bigWig");
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+if (bigDataUrl == NULL)
+    errAbort("Missing bigDataUrl setting from track of type=bigWig");
 return track;
 }
 
@@ -1527,9 +1527,9 @@ static struct customTrack *bigBedLoader(struct customFactory *fac,
 {
 /* Not much to this.  A bigBed has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
-char *dataUrl = hashFindVal(settings, "dataUrl");
-if (dataUrl == NULL)
-    errAbort("Missing dataUrl setting from track of type=bigBed");
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+if (bigDataUrl == NULL)
+    errAbort("Missing bigDataUrl setting from track of type=bigBed");
 return track;
 }
 
@@ -2068,23 +2068,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		ctAddToSettings(track, "dbTrackType", oneTrack->dbTrackType);
             if (!trackDbSetting(track->tdb, "inputType"))
                 ctAddToSettings(track, "inputType", fac->name);
-            /* dataUrl is unfortunately being used in two ways, 
-             *  bigBed and bigWig should have used their own variable name
-             * try to prevent stomping on dataUrl for bigBed and bigWig */
             if (dataUrl)
-		{
-		boolean updateDataUrl = TRUE;
-		if ( startsWith("bigBed", track->tdb->type) ||
-		     startsWith("bigWig", track->tdb->type) )
-		    {
-		    // we do not want to lose this
-                    // see compensating hack in ctDataUrl()
-		    if (trackDbSetting(track->tdb, "dataUrl"))
-			updateDataUrl = FALSE;
-		    }
-		if (updateDataUrl)
-		    ctAddToSettings(track, "dataUrl", dataUrl);
-		}
+		ctAddToSettings(track, "dataUrl", dataUrl);
             if (!ctGenome(track) && ctDb)
                 ctAddToSettings(track, "db", ctDb);
 	    }
@@ -2189,7 +2174,7 @@ return isLive;
 static void touchUdcSettings(struct trackDb *tdb)
 /* Touch existing local udcCache bitmap and sparse files.  */
 {
-char *url = trackDbSetting(tdb, "dataUrl");
+char *url = trackDbSetting(tdb, "bigDataUrl");
 if (url)
     {
     struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
@@ -2198,7 +2183,7 @@ if (url)
 	if (fileExists(el->name))
 	    {
 	    readAndIgnore(el->name);
-	    verbose(4, "setting dataUrl: %s\n", el->name);
+	    verbose(4, "setting bigDataUrl: %s\n", el->name);
 	    }
 	}
     slFreeList(&list);
@@ -2274,7 +2259,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     isLive = (isLive && testFileSettings(track->tdb, fileName));
 
     
-    /* Handle dataUrl udc settings */
+    /* Handle bigDataUrl udc settings */
     touchUdcSettings(track->tdb);
 
     if (track->dbDataLoad)
@@ -2338,13 +2323,6 @@ return NULL;
 char *ctDataUrl(struct customTrack *ct)
 /* return URL where data can be reloaded, if any */
 {
-// hack to compensate for miss-use of variable name "dataUrl" in
-//  a different way than the rest of the code.
-//  see customFactoryParseOptionalDb() below.
-if ( startsWith("bigBed", ct->tdb->type) ||
-     startsWith("bigWig", ct->tdb->type) )
-    return NULL;
-
 return trackDbSetting(ct->tdb, "dataUrl");
 }
 

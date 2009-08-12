@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1586 2009/08/05 23:34:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1587 2009/08/12 21:20:25 galt Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2819,13 +2819,13 @@ else if (sameString(type, "wig"))
 else if (sameString(type, "bigWig"))
     {
     tg = trackFromTrackDb(tdb);
-    tg->bbiFileName = trackDbSetting(tdb, "dataUrl");
+    tg->bbiFileName = trackDbSetting(tdb, "bigDataUrl");
     tg->labelNextItemButtonable = FALSE;
     }
 else if (sameString(type, "bigBed"))
     {
     /* Figure out file name from settings. */
-    char *fileName = trackDbSetting(tdb, "dataUrl");
+    char *fileName = trackDbSetting(tdb, "bigDataUrl");
 
     /* Briefly open file to find field counts, and from that revise the
      * tdb->type to be more complete. */

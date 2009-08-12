@@ -11,7 +11,7 @@
 #include "customTrack.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.31 2009/02/10 05:13:19 kent Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.32 2009/08/12 21:20:26 galt Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -253,5 +253,5 @@ bigWigClick(tdb, fileName);
 void bigWigCustomClick(struct trackDb *tdb)
 /* Display details for BigWig custom tracks. */
 {
-bigWigClick(tdb, trackDbSetting(tdb, "dataUrl"));
+bigWigClick(tdb, trackDbSetting(tdb, "bigDataUrl"));
 }

@@ -39,7 +39,7 @@ steps for creating a bigWig track are:
 5) Move the output bigWig file to a http, https, or ftp site.
 6) Create a custom track with just the track line.
 	This will look something like:
-       track type=bigWig name="My Big Wig" description="A Graph of Cool Data from My Lab" dataUrl=http://myorg.edu/mylab/myBigWig.bw
+       track type=bigWig name="My Big Wig" description="A Graph of Cool Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigWig.bw
 
    (track lines are single lines, no line breaks are allowed)
 
@@ -75,7 +75,7 @@ are:
 5) Move the output bigBed file to a http, https, or ftp site.
 6) Create a custom track with just the track line.
 	This will look something like:
-       track type=bigBed name="My Big Bed" description="Cool Genome Annotations from My Lab" dataUrl=http://myorg.edu/mylab/myBigBed.bb
+       track type=bigBed name="My Big Bed" description="Cool Genome Annotations from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigBed.bb
 
    (track lines are single lines, no line breaks are allowed)
 
@@ -88,5 +88,5 @@ case you should include a .as (AutoSQL) format file describing the fields.
 See http://www.linuxjournal.com/article/5949 for information on AutoSQL 
 
 ========================================================================
-	$Id: bigBedWigs.txt,v 1.3 2009/04/02 23:38:25 hiram Exp $
+	$Id: bigBedWigs.txt,v 1.4 2009/08/12 21:20:26 galt Exp $
 ========================================================================

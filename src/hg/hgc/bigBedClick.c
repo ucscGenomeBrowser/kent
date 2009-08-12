@@ -9,7 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.6 2009/06/22 21:02:36 kent Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.7 2009/08/12 21:20:26 galt Exp $";
 
 
 static void bigBedClick(char *fileName, struct trackDb *tdb, 
@@ -101,7 +101,7 @@ bigBedClick(fileName, tdb, item, start, bedSize);
 void bigBedCustomClick(struct trackDb *tdb)
 /* Display details for BigWig custom tracks. */
 {
-char *fileName = trackDbSetting(tdb, "dataUrl");
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
 char *item = cartOptionalString(cart, "i");
 int start = cartInt(cart, "o");
 bigBedClick(fileName, tdb, item, start, 0);
