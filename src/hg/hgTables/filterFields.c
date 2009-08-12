@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.78 2009/06/30 22:47:09 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.79 2009/08/12 18:50:08 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -706,8 +706,7 @@ cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
     cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-double val = cartUsualDouble(cart, name, 0);
-cgiMakeDoubleVarNoLimits(name,val,label,140);
+cgiMakeTextVar(name, cartUsualString(cart, name, "0"), 20);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s</TD></TR>\n", logOp);
@@ -724,8 +723,7 @@ cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
     cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-double val = cartUsualDouble(cart, name, 0);
-cgiMakeDoubleVarWithLimits(name,val,label,140,min,max);
+cgiMakeTextVar(name, cartUsualString(cart, name, "0"), 20);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s</TD></TR>\n", logOp);
@@ -742,8 +740,7 @@ cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
     cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-int val = cartUsualInt(cart, name, 0);
-cgiMakeIntVarNoLimits(name,val,label,140);
+cgiMakeTextVar(name, cartUsualString(cart, name, "0"), 20);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s</TD></TR>\n", logOp);
