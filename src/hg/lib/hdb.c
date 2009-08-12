@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.407 2009/07/23 04:08:32 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.408 2009/08/12 19:43:47 larrym Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -283,8 +283,9 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 boolean res = FALSE;
-safef(query, sizeof(query), "select name from dbDb where name = '%s'",
-      database);
+char *escaped = sqlEscapeString(database);
+safef(query, sizeof(query), "select name from dbDb where name = '%s'", escaped);
+freez(&escaped);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL) && sqlDatabaseExists(database);
 hDisconnectCentral(&conn);
 hashAddInt(dbsChecked, database, res);
