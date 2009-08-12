@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.13 2009/04/25 00:45:14 markd Exp $
+# 	$Id: makefile,v 1.14 2009/08/12 07:48:05 markd Exp $
 
 include ../../inc/common.mk
 
@@ -54,7 +54,11 @@ DIRS = \
 	positionalTblCheck \
 	safePush \
 	toDev64 \
-	twoBitMask
+	twoBitMask \
+	gff3ToGenePred
+
+TEST_DIRS = \
+	gff3ToGenePred
 
 BAD_DIRS= \
 	ccCpLock \

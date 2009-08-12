@@ -91,8 +91,7 @@ struct gff3Ann
                                * ID can be used to group exons into transcripts,
                                * transcripts into genes, an so forth.  A feature
                                * may have multiple parents.  Parent can *only* be
-                               * used to indicate a partof relationship. Value is
-                               * a null terminated array. */
+                               * used to indicate a partof relationship. */
     struct gff3AnnRef *parents; /* Parent objects for parentIds */
                                       
 
@@ -190,6 +189,29 @@ struct gff3File
     int errCnt;             /* error count */
 };
 
+
+/* standard attribute names */
+extern char *gff3AttrID;
+extern char *gff3AttrName;
+extern char *gff3AttrAlias;
+extern char *gff3AttrParent;
+extern char *gff3AttrTarget;
+extern char *gff3AttrGap;
+extern char *gff3AttrDerivesFrom;
+extern char *gff3AttrNote;
+extern char *gff3AttrDbxref;
+extern char *gff3AttrOntologyTerm;
+
+/* commonly used features names */
+extern char *gff3FeatGene;
+extern char *gff3FeatMRna;
+extern char *gff3FeatExon;
+extern char *gff3FeatCDS;
+extern char *gff3FeatThreePrimeUTR;
+extern char *gff3FeatFivePrimeUTR;
+extern char *gff3FeatStartCodon;
+extern char *gff3FeatStopCodon;
+
 struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh);
 /* Parse a GFF3 file into a gff3File object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
@@ -207,5 +229,33 @@ struct gff3AttrVals *gff3AnnFindAttr(struct gff3Ann *g3a, char *attr);
 
 void gff3FileWrite(struct gff3File *g3f, char *fileName);
 /* write contents of an GFF3File object to a file */
+
+INLINE struct gff3AnnRef *gff3AnnRefNew(struct gff3Ann *g3a)
+/* Allocate a gff3AnnRef object from the heap.  Not used by the parsing code, as 
+ * all data is contained in localMem objects */
+{
+struct gff3AnnRef *ref;
+AllocVar(ref);
+ref->ann = g3a;
+return ref;
+}
+
+int gff3AnnRefLocCmp(const void *va, const void *vb);
+/* sort compare function for location of two gff3AnnRef objects */
+
+INLINE int gff3PhaseToFrame(int phase)
+/* convert a phase to a frame */
+{
+switch (phase)
+    {
+    case 0:
+        return 0;
+    case 1:
+        return 2;
+    case 2:
+        return 1;
+    }
+return -1;
+}
 
 #endif
