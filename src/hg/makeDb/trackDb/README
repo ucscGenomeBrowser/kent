@@ -243,13 +243,21 @@ The format of the type fields:
                             # If present labeled horizontal lines will be drawn
 			    # at the given values in full mode.
 
-17. type bigBed
-   Need description here
+17. type bigBed <fieldCount> <extraInfo>
+    This uses a binary indexed file rather than a database table.  It is, other than
+    substituting "bigBed" for "bed" in the type line, the same as the "type bed"
+    explained above.
 
+18. type bigWig [lower] [upper]
+    This uses a binary indexed file rather than a database table.  It is, other than
+    substituting "bigWig" for "wig" in the type line, the same as the "type wig"
+    explained above.
+     
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
 a make update.
+
 
 OTHER FIELDS
 
@@ -786,7 +794,7 @@ term "estro-134/Pro-93a" in the controlled vocabulary file.  A more complete def
 of what that term means, including a protocol, may be provided when the controlled
 vocab term is looked up and presented to the user.
 
-EXAMPLE of Composite Track with ADITIONAL OPTIONS
+EXAMPLE of Composite Track with ADDITIONAL OPTIONS
 -------------------------------------------------
 track broadChromatinChIPSeq
 compositeTrack on
