@@ -1,6 +1,6 @@
 <H2>Description</H2>
 <P>
-This track displays copy number variants, insertions/deletions,
+This track displays copy number variants (CNVs), insertions/deletions (InDels),
 inversions and inversion breakpoints annotated by the 
 <A HREF="http://projects.tcag.ca/variation/" 
 TARGET=_BLANK>Database of Genomic Variants</A> (DGV), which
@@ -12,12 +12,10 @@ genomic alterations that involve segments of DNA that are larger than
 
 <H2>Display Conventions</H2>
 <P>
-Types of structural variation are indicated by color: 
-copy number variants are orange, insertions/deletions are dark green and 
-inversions/inversion breakpoints are red.  
-Where DGV has clustered overlapping items of the same type into 
-a larger locus, the locus region is indicated by thin bars on one or 
-both sides of the actual variant which is indicated by a thick bar.
+Color is used to indicate the type of variation.  
+Inversions and inversion breakpoints are purple.  
+Other variants are red for gain, blue for loss, and green if 
+both gain and loss are observed. 
 </P>
 
 <H2>Methods</H2>
@@ -31,7 +29,7 @@ PubMed abstract for the study from which the variants were collected.
 For data sets where the variation calls are reported at a 
 sample-by-sample level, DGV merges calls with similar boundaries 
 across the sample
-set. Only variants of the same type (i.e. CNVs, inversions, in/dels)
+set. Only variants of the same type (i.e. CNVs, Indels, inversions)
 are merged, and gains and losses are merged separately.  In addition,
 if several different platforms/approaches are used within the same
 study, these datasets are merged separately. Sample level calls that
