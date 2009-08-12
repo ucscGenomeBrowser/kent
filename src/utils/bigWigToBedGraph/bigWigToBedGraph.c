@@ -4,10 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
-#include "localmem.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.3 2009/02/02 06:05:52 kent Exp $";
+static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.4 2009/08/12 21:44:24 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
