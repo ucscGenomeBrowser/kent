@@ -312,7 +312,7 @@ slReverse(&outList);
 return outList;
 }
 
-static void bigBedFileCreateReadInfile(
+static void bigBedFileCreateReadInFile(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
@@ -588,7 +588,7 @@ double averageSize = 0;
 struct asObject *as = NULL;
 struct hash *chromHash = NULL;
 struct ppBed *pbList = NULL;
-bigBedFileCreateReadInfile(inName, chromSizes, blockSize, itemsPerSlot, definedFieldCount, 
+bigBedFileCreateReadInFile(inName, chromSizes, blockSize, itemsPerSlot, definedFieldCount, 
 	asFileName, clip, outName, &pbList, &count, &averageSize, &chromHash, &fieldCount, &as, 
 	&fullSize);
 bigBedFileCreateDetailed(pbList, count, averageSize, inName, chromHash, blockSize, itemsPerSlot, 

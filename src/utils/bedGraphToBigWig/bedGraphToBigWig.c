@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.13 2009/07/27 18:09:29 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.14 2009/08/12 21:35:45 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -45,72 +45,6 @@ static struct optionSpec options[] = {
    {"clip", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-static struct bbiChromUsage *readPass1(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff)
-/* Go through chromGraph file and collect chromosomes and statistics. */
-{
-char *row[2];
-struct hash *uniqHash = hashNew(0);
-struct bbiChromUsage *usage = NULL, *usageList = NULL;
-int lastStart = -1;
-bits32 id = 0;
-int minDiff = BIGNUM;
-for (;;)
-    {
-    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
-    if (rowSize == 0)
-        break;
-    lineFileExpectWords(lf, 2, rowSize);
-    char *chrom = row[0];
-    int start = lineFileNeedNum(lf, row, 1);
-    if (usage == NULL || differentString(usage->name, chrom))
-        {
-	if (hashLookup(uniqHash, chrom))
-	    {
-	    errAbort("%s is not sorted.  Please use \"sort -k1 -k2n\" or bedSort and try again.",
-	    	lf->fileName);
-	    }
-	hashAdd(uniqHash, chrom, NULL);
-	AllocVar(usage);
-	usage->name = cloneString(chrom);
-	usage->id = id++;
-	usage->size = hashIntVal(chromSizesHash, chrom);
-	slAddHead(&usageList, usage);
-	lastStart = -1;
-	}
-    usage->itemCount += 1;
-    if (lastStart >= 0)
-        {
-	int diff = start - lastStart;
-	if (diff < minDiff)
-	    {
-	    if (diff < 0)
-		errAbort("%s is not sorted.  Please use \"sort -k1 -k2n\" or bedSort and try again.",
-		    lf->fileName);
-	    minDiff = diff;
-	    }
-	}
-    lastStart = start;
-    }
-slReverse(&usageList);
-*retMinDiff = minDiff;
-return usageList;
-}
-
-int countSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot)
-/* Count up number of sections needed for data. */
-{
-struct bbiChromUsage *usage;
-int count = 0;
-for (usage = usageList; usage != NULL; usage = usage->next)
-    {
-    int countOne = (usage->itemCount + itemsPerSlot - 1)/itemsPerSlot;
-    count += countOne;
-    verbose(2, "%s %d, %d blocks of %d\n", usage->name, usage->itemCount, countOne, itemsPerSlot);
-    }
-return count;
-}
 
 struct sectionItem
 /* An item in a section of a bedGraph. */
@@ -365,7 +299,8 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
 int minDiff, i;
-struct bbiChromUsage *usageList = readPass1(lf, chromSizesHash, &minDiff);
+double aveSize;
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSize);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 
@@ -397,7 +332,7 @@ else
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
-bits32 sectionCount = countSectionsNeeded(usageList, itemsPerSlot);
+bits32 sectionCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
 struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, sectionCount);
 lineFileRewind(lf);
