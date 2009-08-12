@@ -5,10 +5,10 @@
 #include "options.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.6 2009/05/13 01:13:57 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.7 2009/08/12 21:43:22 kent Exp $";
 
 int blockSize = 1024;
-int itemsPerSlot = 64;
+int itemsPerSlot = 256;
 int bedFields = 0;
 char *as = NULL;
 
