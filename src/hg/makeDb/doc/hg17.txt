@@ -24336,41 +24336,46 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V7 (DATABASE OF GENOMIC VARIANTS) (DONE 3/11/09 angie)
+# DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 8/12/09 angie)
+# DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
 # DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 8/11/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg17/bed/dgv.v7
-    cd /hive/data/genomes/hg17/bed/dgv.v7
+    mkdir /hive/data/genomes/hg17/bed/dgv.v8
+    cd /hive/data/genomes/hg17/bed/dgv.v8
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg17.v7.mar.2009.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg17.v8.aug.2009.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg17.v7.mar.2009.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg17.v8.aug.2009.txt
+    # Save previous version for comparison:
+    hgsql hg17 -e 'rename table dgv to dgvV7'
     # shuffle fields into bed8+ (input has one start coord==0, but min 
     # nonzero size of 99 not 100 implies most coords are 1-based):
-    foreach f (*.v7.*.txt)
+    foreach f (*.v8.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
          undef, undef, undef, $ref, $pmid, $method, \
-         undef, undef, undef, undef, $sample) = split("\t"); \
+         $gain, $loss, undef, undef, $sample) = split("\t"); \
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = "255,128,0"; \
-        $rgb = "200,0,0" if ($varType =~ /^Inv/); \
-        $rgb = "0,100,0" if ($varType eq "InDel"); \
+        $rgb = ($varType =~ /^Inv/) ? "100,0,100" : "0,200,0"; \
+        if ($gain ne "" || $loss ne "") { \
+          $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
+          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
+          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+        } \
         $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
-                  $start, $end, $rgb, $landmark, $varType, \
+                  $start, $start, $rgb, $landmark, $varType, \
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    hgsql hg17 -e 'rename table dgv to dgvV6'
     hgLoadBed hg17 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 17473 elements of size 15
+#Loaded 23424 elements of size 15
 
 
 ############################################################################
