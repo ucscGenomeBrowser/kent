@@ -39,7 +39,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	mm6 mm7 mm8 mm9 \
 	rn3 rn4 rn5 \
 	speTri1 cavPor3 \
-	oryCun1 \
+	oryCun1 oryCun2 \
 	bosTau2 bosTau3 bosTau4 \
 	equCab1 \
 	equCab2 \
