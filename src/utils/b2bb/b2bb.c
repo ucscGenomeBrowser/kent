@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: b2bb.c,v 1.2 2009/08/12 21:43:40 kent Exp $";
+static char const rcsid[] = "$Id: b2bb.c,v 1.3 2009/08/12 23:38:50 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -66,8 +66,6 @@ int itemIx = 0, sectionIx = 0;
 bits64 blockOffset = 0;
 int startPos = 0, endPos = 0;
 bits32 chromId = 0;
-bits32 reserved32 = 0;
-UBYTE reserved8 = 0;
 
 /* Will keep track of some things that help us determine how much to reduce. */
 bits32 resEnds[resTryCount];
@@ -376,7 +374,6 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 
 /* Load up as object if defined in file. */
 struct asObject *as = NULL;
-boolean sorted;
 if (asFileName != NULL)
     {
     /* Parse it and do sanity check. */
@@ -413,7 +410,6 @@ if (asFileName != NULL)
     carefulClose(&asFile);
     verbose(2, "%s has %d columns\n", asFileName, colCount);
     }
-bits64 pastAsOffset = ftell(f);
 
 /* Write out chromosome/size database. */
 bits64 chromTreeOffset = ftell(f);
