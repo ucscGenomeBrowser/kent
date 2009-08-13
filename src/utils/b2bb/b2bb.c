@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: b2bb.c,v 1.3 2009/08/12 23:38:50 kent Exp $";
+static char const rcsid[] = "$Id: b2bb.c,v 1.4 2009/08/13 04:48:33 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -369,7 +369,7 @@ void bbFileCreate(
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
 /* Set up timing measures. */
-verboseTime(2, NULL);
+verboseTime(1, NULL);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 
 /* Load up as object if defined in file. */
@@ -384,13 +384,13 @@ if (asFileName != NULL)
 
 /* Load in chromosome sizes. */
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
-verbose(1, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, chromSizes);
+verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, chromSizes);
 
 /* Do first pass, mostly just scanning file and counting hits per chromosome. */
 int minDiff = 0;
 double aveSpan = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan);
-verboseTime(2, "pass1");
+verboseTime(1, "pass1 - making usageList");
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
 
 /* Open output file and write dummy header. */
@@ -439,14 +439,15 @@ lineFileRewind(lf);
 bits16 fieldCount=0;
 writeBlocks(usageList, lf, as, definedFieldCount, itemsPerSlot, boundsArray, blockCount, f,
 	resTryCount, resScales, resSizes, &fieldCount, &definedFieldCount);
-verboseTime(2, "pass2");
+verboseTime(1, "pass2 - checking and writing primary data");
 
 /* Write out primary data index. */
 bits64 indexOffset = ftell(f);
 cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), blockCount,
     blockSize, 1, NULL, bbiBoundsArrayFetchKey, bbiBoundsArrayFetchOffset, 
     indexOffset, f);
-verboseTime(2, "index write");
+freez(&boundsArray);
+verboseTime(1, "index write");
 
 /* Declare arrays and vars that track the zoom levels we actually output. */
 bits32 zoomAmounts[bbiMaxZoomLevels];
@@ -485,7 +486,7 @@ if (aveSpan > 0)
 		fieldCount, lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
-	verboseTime(2, "writeReducedOnceReturnReducedTwice");
+	verboseTime(1, "pass3 - writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
 	zoomLevels = 1;
 
@@ -505,10 +506,8 @@ if (aveSpan > 0)
 	    reduction *= zoomIncrement;
 	    rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
 	    }
-#ifdef SOON
-#endif /* SOON */
 	lmCleanup(&lm);
-	verboseTime(2, "further reductions");
+	verboseTime(1, "further reductions");
 	}
     }
 /* Go back and rewrite header. */
