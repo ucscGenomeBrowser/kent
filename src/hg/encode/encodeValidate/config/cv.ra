@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.121 2009/07/21 21:22:01 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.122 2009/08/13 17:20:48 kate Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1162,13 +1162,14 @@ vendorName Antibody made by Farnham lab
 vendorId
 orderUrl
 
-term TAF-II
+term TAF1
 type Antibody
-targetDescription General transcription factor; TBP-associated factor p250kDa
+targetDescription TAF1 RNA polymerase II, TATA box binding protein (TBP)-associated factor, 250kDa. Also designated TAF250.
 antibodyDescription Mouse monoclonal (p250)
 vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
+geneId 6872 
 
 term TCF4
 type Antibody
