@@ -1,21 +1,16 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.32 2009/08/13 06:47:10 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.33 2009/08/13 06:49:59 larrym Exp $
 
 var debug = false;
 var originalPosition;
 var originalSize;
 var clickClipHeight;
 var startDragZoom = null;
-var mapHtml;
-var mapItems;
+//var mapHtml;
 var newWinWidth;
-var img;
-var imgTitle;
 var imageV2 = false;
 var imgBoxPortal = false;
 var blockUseMap = false;
-var autoHideSetting = true;
-var selectedMapItem;        // index of currently choosen map item (via context menu).
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -155,7 +150,7 @@ function selectEnd(img, selection)
     var slop = 10;
     var now = new Date();
     var doIt = false;
-    if(autoHideSetting && (selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
+    if((selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
@@ -175,7 +170,7 @@ function selectEnd(img, selection)
     }
 //    mapHtml = null;
     startDragZoom = null;
-    setTimeout('blockUseMap=false; loadContextMenu(img);',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+    setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
     return true;
 }
 
@@ -187,20 +182,7 @@ $(window).load(function () {
 	if((dragSelectionEle != null) && (dragSelectionEle.value == '1') && (rulerEle != null)) {
         var imgHeight = 0;
         var imgWidth  = 0;
-        img = $('#img_data_ruler');
-        mapItems = new Array();
-        var i = 0;
-        $('#map').children().each(function() {
-                                      mapItems[i++] = {
-                                          coords : this.coords,
-                                          href : this.href,
-                                          title : this.title,
-                                          id : this.id
-                                      };
-                                  });
-        mapHtml = $('#map').html();
-        $('#map').empty();
-                        
+        var img = $('#img_data_ruler');
         if(img==undefined || img.length == 0) {  // Revert to old imageV1
             img = $('#trackMap');
             imgHeight = jQuery(img).height();
@@ -210,26 +192,13 @@ $(window).load(function () {
             imgHeight = $('#imgTbl').height();
             imgWidth  =  $('#td_data_ruler').width();
         }
-        img.mousemove(
-                function (e) {
-                    mapEvent(e);
-                }
-            );
-        img.mousedown(
-                function (e) {
-                    mapMouseDown(e);
-                }
-            );
-        imgTitle = img.attr("title");
-        loadContextMenu(img);
-        // http://www.trendskitchens.co.nz/jquery/contextmenu/
         clickClipHeight = parseInt(rulerEle.value);
                 newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
 
         img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
-            autoHide: autoHideSetting, movable: false,
+            autoHide: true, movable: false,
             clickClipHeight: clickClipHeight});
     }
 });
@@ -407,7 +376,7 @@ $(document).ready(function()
 {
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     if($("FORM").length > 0) {
-        $('a,area').not("[href*='#']").filter("[target='foo']").click(function(i) {
+        $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
             if(blockUseMap==true) {
                 return false;
             }
@@ -453,205 +422,3 @@ $(document).ready(function()
         }
     }
 });
-
-function rulerModeToggle (ele)
-{
-    autoHideSetting = !ele.checked;
-    var obj = jQuery(img).data('imgAreaSelect');
-    obj.setOptions({autoHide : autoHideSetting});
-}
-
-function findMapItem(e)
-{
-    var x = e.pageX - e.target.offsetLeft;
-    var y = e.pageY - e.target.offsetTop;
-    var retval = -1;
-    for(var i=0;i<mapItems.length;i++)
-    {
-        var coords = mapItems[i].coords.split(",");
-        if(x >= coords[0] && x <= coords[2] && y >= coords[1] && y <= coords[3]) {
-            retval = i;
-        }
-    }
-    return retval;
-}
-
-function mapEvent(e)
-{
-    var now = new Date();
-    var i = findMapItem(e);
-    if(i >= 0)
-    {
-        e.target.title = mapItems[i].title;
-    } else {
-        // XXXX this doesn't work.
-        // $('#myMenu').html("<ul id='myMenu' class='contextMenu'><li class='edit'><a href='#img'>Get Image</a></li></ul>");
-        e.target.title = imgTitle;
-    }
-    lastSet = now;
-}
-
-function mapMouseDown(e)
-{
-    // XXXX The rightclick logic works (but I don't know why).
-    var rightclick = e.which ? (e.which == 3) : (e.button == 2);
-    if(rightclick)
-    {
-        return false;
-    } else {
-        var i = findMapItem(e);
-        if(i >= 0)
-        {
-            window.location = mapItems[i].href;
-        }
-        return true;
-    }
-}
-
-function contextMenuHit(ele, cmd)
-{
-    $("select[name=" + mapItems[selectedMapItem].id + "]").each(function(t) {
-        $(this).val(cmd);
-    });
-    document.TrackForm.submit();
-}
-
-function loadContextMenu(img)
-{
-        img.contextMenu("myMenu", {
-                            menuStyle: {
-                                width: '100%'
-                            },
-                            bindings: {
-                                'hide': function(t) {
-                                    contextMenuHit(t, 'hide');
-                                },
-                                'dense': function(t) {
-                                    contextMenuHit(t, 'dense');
-                                },
-                                'pack': function(t) {
-                                    contextMenuHit(t, 'pack');
-                                },
-                                'squish': function(t) {
-                                    contextMenuHit(t, 'squish');
-                                },
-                                'full': function(t) {
-                                    contextMenuHit(t, 'full');
-                                },
-                                'dragZoomMode': function(t) {
-                                    autoHideSetting = true;
-                                    var obj = jQuery(img).data('imgAreaSelect');
-                                    obj.setOptions({autoHide : true, movable: false});
-                                },
-                                'hilightMode': function(t) {
-                                    autoHideSetting = false;
-                                    var obj = jQuery(img).data('imgAreaSelect');
-                                    obj.setOptions({autoHide : false, movable: true});
-                                },
-                                'getImg': function(t) {
-                                    window.open(img.attr('src'));
-                                },
-                                'selectWholeGene': function(t) {
-                                    // bring whole gene into view
-                                    var href = mapItems[selectedMapItem].href;
-                                    var chrom, chromStart, chromEnd;
-                                    var a = /hgg_chrom=(\w+)&/(href);
-                                    chrom = a[1];
-                                    a = /hgg_start=(\d+)&/(href);
-                                    chromStart = a[1];
-                                    a = /hgg_end=(\d+)&/(href);
-                                    chromEnd = a[1];
-                                    setPosition(chrom + ":" + chromStart + "-" + chromEnd, null);
-                                    document.TrackHeaderForm.submit();
-                                },
-                                'hgTrackUi': function(t) {
-                                    // data: ?
-                                    $.ajax({
-                                               type: "GET",
-                                               url: "../cgi-bin/hgTrackUi?ajax=1&g=" + mapItems[selectedMapItem].id + "&hgsid=" + getHgsid(),
-                                               dataType: "html",
-                                               trueSuccess: handleTrackUi,
-                                               success: catchErrorOrDispatch,
-                                               cache: true
-                                           });
-                                }
-                            },
-                            onContextMenu: function(e) {
-                                var i = findMapItem(e);
-                                var html = "<div id='myMenu' class='contextMenu'><ul>";
-                                if(i >= 0)
-                                {
-                                    selectedMapItem = i;
-                                    var href = mapItems[i].href;
-                                    var isGene = /hgGene/(href);
-                                    
-                                    var select = $("select[name=" + mapItems[selectedMapItem].id + "]");
-                                    var cur = select.val();
-                                    if(cur) {
-                                        select.children().each(function(index, o) {
-                                            var title = $(this).val();
-                                            html += "<li id='" + title + "'>" + title;
-                                            if(title == cur) {
-                                                html += " <img src='../images/Green_check.png' height='20' width='20' />";
-                                            }
-                                            html += "</li>";
-                                            });
-                                            if(isGene) {
-                                                html += "<li id='selectWholeGene'>Show whole gene</li>";
-                                            } else {
-                                                html += "<li id='hgTrackUi'>" + mapItems[i].title + "</li>";
-                                            }
-                                    } else {
-                                        return false;
-                                    }
-                                } else {
-                                    html += "<li id='dragZoomMode'>drag-and-zoom mode";
-                                    if(autoHideSetting) {
-                                        html += " <img src='../images/Green_check.png' height='20' width='20' />";
-                                    }
-                                    html += "</li>";
-                                    html += "<li id='hilightMode'>hilight mode";
-                                    if(!autoHideSetting) {
-                                        html += " <img src='../images/Green_check.png' height='20' width='20' />";
-                                    }
-                                    html += "</li>";
-                                    html += "<li id='getImg'>Download image</li>";
-                                }
-                                html += "</ul></div>";
-                                $('#myMenu').html(html);
-                                return true;
-                            }
-                        });
-}
-
-function catchErrorOrDispatch(obj,status)
-{
-    if(obj.err)
-    {
-        $("#warningText").text(obj.err);
-        $("#warning").show();
-    }
-    else
-        this.trueSuccess(obj,status);
-}
-
-function handleTrackUi(response, status)
-{
-    // $('#hgTrackUiDialog').html("<p>Hello world</p><INPUT TYPE=HIDDEN NAME='boolshad.knownGene.label.kgId' VALUE='0'>TEST");
-    $('#hgTrackUiDialog').html(response);
-    $('#hgTrackUiDialog').dialog({
-                               bgiframe: true,
-                               height: 450,
-                               width: 600,
-                               modal: true,
-                               closeOnEscape: true,
-                               autoOpen: false,
-                               title: "Track Settings",
-                               close: function(){
-                                   // clear out html after close to prevent problems caused by duplicate html elements
-                                   $('#hgTrackUiDialog').html("");
-                               }
-                           });
-
-    $('#hgTrackUiDialog').dialog('open');
-}
