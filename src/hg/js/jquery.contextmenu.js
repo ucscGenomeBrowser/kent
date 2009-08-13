@@ -201,7 +201,7 @@
 		show: function(t,e) {
 			var cmenu=this, x=e.pageX, y=e.pageY;
 			cmenu.target = t; // Preserve the object that triggered this context menu so menu item click methods can see it
-			if (cmenu.beforeShow()!==false) {
+			if (cmenu.beforeShow(e)!==false) {
 				// If the menu content is a function, call it to populate the menu each time it is displayed
 				if (cmenu.menuFunction) {
 					if (cmenu.menu) { $(cmenu.menu).remove(); }
