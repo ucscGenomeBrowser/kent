@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: b2bb.c,v 1.4 2009/08/13 04:48:33 kent Exp $";
+static char const rcsid[] = "$Id: b2bb.c,v 1.5 2009/08/13 21:51:56 braney Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -66,6 +66,7 @@ int itemIx = 0, sectionIx = 0;
 bits64 blockOffset = 0;
 int startPos = 0, endPos = 0;
 bits32 chromId = 0;
+boolean allocedAs = FALSE;
 
 /* Will keep track of some things that help us determine how much to reduce. */
 bits32 resEnds[resTryCount];
@@ -89,12 +90,10 @@ for (;;)
 		fieldCount = chopByWhite(line, NULL, 0);
 		if (definedFieldCount == 0)
 		    definedFieldCount = fieldCount;
-		if (as == NULL)
-		    {
-		    char *asText = bedAsDef(definedFieldCount, fieldCount);
-		    as = asParseText(asText);
-		    freeMem(asText);
-		    }
+		char *asText = bedAsDef(definedFieldCount, fieldCount);
+		as = asParseText(asText);
+		allocedAs = TRUE;
+		freeMem(asText);
 		}
 	    else
 		{
@@ -227,6 +226,8 @@ for (;;)
     }
 assert(sectionIx == sectionCount);
 freez(&row);
+if (allocedAs)
+    asObjectFreeList(&as);
 }
 
 struct rbTree *rangeTreeForBedChrom(struct lineFile *lf, char *chrom)
@@ -555,6 +556,9 @@ for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
 /* Clean up. */
 lineFileClose(&lf);
 carefulClose(&f);
+freeHash(&chromSizesHash);
+bbiChromUsageFreeList(&usageList);
+asObjectFreeList(&as);
 }
 
 void b2bb(char *inName, char *chromSizes, char *outName)
@@ -575,5 +579,6 @@ as = optionVal("as", as);
 if (argc != 4)
     usage();
 b2bb(argv[1], argv[2], argv[3]);
+optionFree();
 return 0;
 }
