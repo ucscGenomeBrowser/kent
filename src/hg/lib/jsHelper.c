@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.28 2009/07/08 19:48:54 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.29 2009/08/13 07:32:29 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -370,32 +370,15 @@ if(hashLookup(includedFiles, fileName) == NULL)
                 }
             mtime = fileModTime(dyStringContents(realFileName));
 
-            // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
-            // which fixes bugs and odd behavior that occurs when the browser caches modified js files
+            // We add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
+            // which fixes bugs and odd behavior that occurs when the browser caches modified js files.
+            // The versioned files are soft-links created by the js directory makefile
 
             dyStringPrintf(fileNameWithVersion, "%s-%ld.js", baseName, mtime);
             dyStringPrintf(fullNameWithVersion, "%s/%s", dyStringContents(fullDirName), dyStringContents(fileNameWithVersion));
             if(!fileExists(dyStringContents(fullNameWithVersion)))
                 {
-                // Make a new, versioned symlinks and delete any older versioned symlinks.
-                struct dyString *pattern = dyStringNew(0);
-                struct slName *files, *file;
-                dyStringPrintf(pattern, "%s-[0-9]+\\.js", baseName);
-                files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
-                for (file = files; file != NULL; file = file->next)
-                    {
-                    struct dyString *tmp = dyStringNew(0);
-                    dyStringPrintf(tmp, "%s/%s", dyStringContents(fullDirName), file->name);
-                    unlink(dyStringContents(tmp));
-                    dyStringFree(&tmp);
-                    }
-                slFreeList(&files);
-                dyStringFree(&pattern);
-                if(symlink(dyStringContents(realFileName), dyStringContents(fullNameWithVersion)))
-                    {
-                    errAbort("jsIncludeFile: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'\n", 
-                             errno, strerror(errno), dyStringContents(fullDirName), getUser());
-                    }
+                errAbort("jsIncludeFile: versioned javascript file: %s doesn't exist.\n", dyStringContents(fullNameWithVersion));
                 }
             dyStringFree(&fullNameWithVersion);
             dyStringFree(&fullDirName);
