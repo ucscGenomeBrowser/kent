@@ -84,5 +84,8 @@ void optionHashSome(int *pArgc, char *argv[], boolean justFirst);
 struct hash *optionParseIntoHash(int *pArgc, char *argv[], boolean justFirst);
 /* Read options in argc/argv into a hash of your own choosing. */
 
+void optionFree();
+/* free the option hash */
+
 #endif /* OPTIONS_H */
 

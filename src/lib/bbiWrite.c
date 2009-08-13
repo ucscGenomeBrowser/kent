@@ -65,6 +65,8 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 while (lineFileRow(lf, row))
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
+
+lineFileClose(&lf);
 return hash;
 }
 
@@ -80,6 +82,30 @@ void *bbiChromInfoVal(const void *va)
 {
 const struct bbiChromInfo *a = ((struct bbiChromInfo *)va);
 return (void*)(&a->id);
+}
+
+void bbiChromUsageFree(struct bbiChromUsage **pUsage)
+/* free a single bbiChromUsage structure */
+{
+struct bbiChromUsage *usage = *pUsage;
+if (usage != NULL)
+    {
+    freeMem(usage->name);
+    freez(pUsage);
+    }
+}
+
+void bbiChromUsageFreeList(struct bbiChromUsage **pList)
+/* free a list of bbiChromUsage structures */
+{
+struct bbiChromUsage *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bbiChromUsageFree(&el);
+    }
+*pList = NULL;
 }
 
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
@@ -136,6 +162,7 @@ for (;;)
 slReverse(&usageList);
 *retMinDiff = minDiff;
 *retAveSize = (double)totalBases/bedCount;
+freeHash(&uniqHash);
 return usageList;
 }
 

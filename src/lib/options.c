@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.25 2009/02/12 01:13:52 galt Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.26 2009/08/13 21:48:17 braney Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -262,6 +262,12 @@ void optionHash(int *pArgc, char *argv[])
  * string for value.  For '-option' types the value is 'on'. */
 {
 optionHashSome(pArgc, argv, FALSE);
+}
+
+void optionFree()
+/* free the option hash */
+{
+freeHash(&options);
 }
 
 void optionInit(int *pArgc, char *argv[], struct optionSpec *optionSpecs)

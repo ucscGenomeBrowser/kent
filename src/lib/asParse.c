@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.8 2009/04/17 23:22:37 kent Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.9 2009/08/13 21:48:17 braney Exp $";
 
 /* n.b. switched double/float from %f to %g to partially address losing
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
@@ -290,6 +290,60 @@ tokenizerFree(&tkz);
 return objList;
 }
 
+
+void asColumnFree(struct asColumn **pAs)
+/* free a single asColumn */
+{
+struct asColumn *as = *pAs;
+if (as != NULL)
+    {
+    freeMem(as->name);
+    freeMem(as->comment);
+    freez(pAs);
+    }
+}
+
+
+void asColumnFreeList(struct asColumn **pList)
+/* free a list of asColumn */
+{
+struct asColumn *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    asColumnFree(&el);
+    }
+*pList = NULL;
+}
+
+void asObjectFree(struct asObject **pAs)
+/* free a single asObject */
+{
+struct asObject *as = *pAs;
+if (as != NULL)
+    {
+    freeMem(as->name);
+    freeMem(as->comment);
+    asColumnFreeList(&as->columnList);
+    freez(pAs);
+    }
+}
+
+
+void asObjectFreeList(struct asObject **pList)
+/* free a list of asObject */
+{
+struct asObject *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    asObjectFree(&el);
+    }
+*pList = NULL;
+}
+
 struct asObject *asParseFile(char *fileName)
 /* Parse autoSql .as file. */
 {
@@ -303,6 +357,7 @@ struct asObject *asParseText(char *text)
 char *dupe = cloneString(text);
 struct lineFile *lf = lineFileOnString("text", TRUE, dupe);
 struct asObject *objList = asParseLineFile(lf);
+freez(&dupe);
 return objList;
 }
 

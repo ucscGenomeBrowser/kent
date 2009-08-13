@@ -81,4 +81,16 @@ struct asObject *asParseFile(char *fileName);
 struct asObject *asParseText(char *text);
 /* Parse autoSql from text (as opposed to file). */
 
+void asObjectFree(struct asObject **as);
+/* free a single asObject */
+
+void asObjectFreeList(struct asObject **as);
+/* free a list of asObject */
+
+void asColumnFree(struct asColumn **as);
+/* free a single asColumn */
+
+void asColumnFreeList(struct asColumn **as);
+/* free a list of asColumn */
+
 #endif /* ASPARSE_H */

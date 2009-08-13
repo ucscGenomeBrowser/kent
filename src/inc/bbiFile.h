@@ -266,9 +266,15 @@ struct hash *bbiChromSizesFromFile(char *fileName);
 bits64 bbiTotalSummarySize(struct bbiSummary *list);
 /* Return size on disk of all summaries. */
 
+void bbiChromUsageFree(struct bbiChromUsage **pUsage);
+/* free a single bbiChromUsage structure */
+
+void bbiChromUsageFreeList(struct bbiChromUsage **pList);
+/* free a list of bbiChromUsage structures */
+
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
 	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize);
-/* Go through bed file and collect chromosomes and statistics. */
+/* Go through bed file and collect chromosomes and statistics. Free with bbiChromUsageFreeList */
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);
 /* Count up number of sections needed for data. */
