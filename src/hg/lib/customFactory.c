@@ -26,7 +26,7 @@
 #include "encode/encodePeak.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.99 2009/08/12 21:20:26 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.100 2009/08/13 19:57:52 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -2171,9 +2171,31 @@ hashElFreeList(&fileSettings);
 return isLive;
 }
 
+// TODO: remove touchOldUdcSettings very soon 
+//  after the rollout of the next code, i.e. on 2009-08-24.
+static void touchOldUdcSettings(struct trackDb *tdb)
+/* Touch existing local udcCache bitmap and sparse files.  */
+{
+char *url = trackDbSetting(tdb, "dataUrl");
+if (url)
+    {
+    struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
+    for (el = list; el; el = el->next)
+	{
+	if (fileExists(el->name))
+	    {
+	    readAndIgnore(el->name);
+	    verbose(4, "setting dataUrl: %s\n", el->name);
+	    }
+	}
+    slFreeList(&list);
+    }
+}
+
 static void touchUdcSettings(struct trackDb *tdb)
 /* Touch existing local udcCache bitmap and sparse files.  */
 {
+touchOldUdcSettings(tdb);  // remove this line after 2009-08-24, see above.
 char *url = trackDbSetting(tdb, "bigDataUrl");
 if (url)
     {
