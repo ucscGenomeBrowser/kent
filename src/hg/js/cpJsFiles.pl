@@ -2,7 +2,7 @@
 
 # Copy files to javascript directory; make versioned soft-links as appropriate (and delete obsolete ones too).
 
-# $Id: cpJsFiles.pl,v 1.2 2009/08/10 21:14:20 larrym Exp $
+# $Id: cpJsFiles.pl,v 1.3 2009/08/13 16:25:31 markd Exp $
 
 use strict;
 
@@ -47,22 +47,27 @@ for my $file (@ARGV)
         
         # update destination file as appropriate
         my $update = 0;
-        if(-e "$destDir/$file") {
-            my @destStat = stat("$destDir/$file") or die "Couldn't stat '$destDir/$file'; err: $!";
-            $update = $destStat[9] < $mtime;
+        my $destFile = "$destDir/$file";
+        if(-e $destFile) {
+            my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
+            $update = ($destStat[9] < $mtime);
         } else {
             $update = 1;
         }
         if($update) {
-            if(system("cp -p $file $destDir")) {
-                # cp -p doesn't work if user doesn't own destDir, so fall-back to rm/cp
-                !system("rm $destDir/$file") || die "Couldn't unlink $destDir/$file: err: $!";
-                !system("cp $file $destDir") || die "Couldn't cp $file: err: $!";
+            if (-e $destFile) {
+                unlink($destFile) || die "Couldn't unlink $destFile'; err: $!";
             }
+            !system("cp -p $file $destFile") || die "Couldn't cp $file to $destFile: err: $!";
         }
 
         if($file =~ /(.+)\.js$/) {
             my $prefix = $1;
+            # make sure time is right, in case file; file might have been newer,
+            # speculation that cp -p silently failed if user doesn't own destDir
+            @stat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
+            $mtime = $stat[9];
+
             my $softLink = $file;
             $softLink =~ s/\.js$/-$mtime.js/;
 
@@ -75,7 +80,6 @@ for my $file (@ARGV)
                     }
                 }
             }
-            
             # create new symlink
             if(!(-l "$destDir/$softLink")) {
                 print STDERR "ln -s $destDir/$softLink\n" if($debug);
