@@ -61,15 +61,7 @@ function setCartVar(name, value)
         loc = loc.substring(0, loc.lastIndexOf("/"));
     }
     loc = loc + "/cartDump";
-    var hgsid;
-    var list = document.getElementsByName("hgsid");
-    if(list.length) {
-        var ele = list[0];
-        hgsid = ele.value;
-    }
-    if(!hgsid) {
-        hgsid = getURLParam(window.location.href, "hgsid");
-    }
+    var hgsid = getHgsid();
     loc = loc + "?submit=1&noDisplay=1&cartDump.varName=" + escape(name) + "&cartDump.newValue=" + escape(value) + "&hgsid=" + hgsid;
     loadXMLDoc(loc);
 }
@@ -78,6 +70,7 @@ function submitMain()
 {
     $('form[name="mainForm"]').submit();
 }
+
 function setCartVarAndRefresh(name,val)
 {
     setCartVar(name,val);
@@ -87,4 +80,3 @@ function setCartVarAndRefresh(name,val)
 
     return false;
 }
-
