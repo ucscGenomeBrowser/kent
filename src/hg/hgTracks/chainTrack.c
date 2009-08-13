@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.33 2009/03/18 18:27:00 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.34 2009/08/13 04:15:52 markd Exp $";
 
 
 struct cartOptions
@@ -300,7 +300,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	float normScore = sqlFloat((row+rowOffset)[11]);
 	lf->grayIx = (int) ((float)maxShade * (normScore/100.0));
-	if (lf->grayIx > (maxShade+1)) lf->grayIx = maxShade+1;
+	if (lf->grayIx > (maxShade+1))
+            lf->grayIx = maxShade+1;
+        else if (lf->grayIx == 0)
+            lf->grayIx = 1;
 	lf->score = normScore;
 	}
     else
