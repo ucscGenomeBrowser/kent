@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.42 2009/08/06 17:24:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.43 2009/08/13 13:58:15 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -366,7 +366,10 @@ printf("<font size=5><B>Table View</B></font>");
 mainControlPanel();
 if (subjList != NULL)
     {
-printf("Use the \"configure\" button above to access additional data fields, including infection date details, sequencing and ART date information, <BR>and immunogenicity data.");
+    printf("Use the \"configure\" button above to access additional data fields,");
+    printf(" including infection date details, sequencing and ART date information,");
+    printf(" <BR>and immunogenicity data.");
+    
     bigTable(conn, colList,subjList);
     }
 printf("<br>* Estimated Study Day of Infection (ESDI), ");
@@ -925,20 +928,6 @@ else
     {
     return answer;
     }
-}
-
-char NDString[10] = {"yyN/D"};
-char *stringCellValx(struct column *col, struct subjInfo *si,
-        struct sqlConnection *conn)
-/* Return clone of geneId */
-{
-return(NDString);
-/*
-if (col->query)
-    return queryCellVal(col,si,conn);
-else
-    return cloneString(si->fields[col->colNo]);
-*/
 }
 
 char *stringCellVal(struct column *col, struct subjInfo *si,
