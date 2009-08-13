@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.10 2009/05/13 00:04:56 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.11 2009/08/13 23:15:57 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -110,10 +110,10 @@ sub nfsNoodge {
   # wait a second, try again.  
   # Scott's blastz-run included a similar trick.  
   my ($file) = @_;
-  my $ret = system("/bin/sh", "-c", "ls -d $file > /dev/null");
+  my $ret = system("/bin/sh", "-c", "/bin/ls -d $file > /dev/null");
   if ($ret != 0) {
     sleep 1;
-    $ret = system("/bin/sh", "-c", "ls -d $file > /dev/null");
+    $ret = system("/bin/sh", "-c", "/bin/ls -d $file > /dev/null");
     sleep 1 if ($ret != 0);
   }
 }
