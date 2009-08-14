@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1587 2009/08/12 21:20:25 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1588 2009/08/14 07:18:53 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3694,7 +3694,7 @@ void doNextPrevItem(boolean goNext, char *trackName)
 /* position (i.e. winStart, winEnd, etc.) based on what track it was */
 {
 struct track *track = trackFindByName(trackList, trackName);
-if (track->labelNextPrevItem != NULL)
+if ((track != NULL) && (track->labelNextPrevItem != NULL))
     track->labelNextPrevItem(track, goNext);
 }
 
