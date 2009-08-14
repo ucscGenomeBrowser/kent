@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.43 2009/08/13 13:58:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.44 2009/08/14 18:36:45 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -922,7 +922,7 @@ safef(query, sizeof(query), col->query, si->fields[0]);
 answer = sqlQuickString(conn, query);
 if (answer == NULL) 
     {
-    return(cloneString("-1"));
+    return(cloneString("N/A"));
     }
 else 
     {
@@ -955,48 +955,24 @@ special = FALSE;
 char *s = col->cellVal(col, si, conn);
 hPrintf("<TD align=right>");
 /* special processing for missing data */
-if (sameWord(col->name, "SDayLastPTest"))
+if (sameWord(col->name, "SDayLastPTest") 	||
+    sameWord(col->name, "SDayLastTrTest") 	||
+    sameWord(col->name, "LastTrVisit")		||
+    sameWord(col->name, "LastPMNNeutral")	||
+    sameWord(col->name, "art_Daei")		||
+    sameWord(col->name, "LastTrMnNeutral")	
+   )
     {
     if (sameWord(s, "-1"))
 	{
 	hPrintf("N/A");
 	special = TRUE;
 	}
-    }
-if (sameWord(col->name, "SDayLastTrTest"))
-    {
-    if (sameWord(s, "-1"))
-	{
-	hPrintf("N/A");
-	special = TRUE;
-	}
-    }
-if (sameWord(col->name, "SDayLastTrTest"))
-    {
     if (sameWord(s, "-2"))
 	{
 	hPrintf("N/D");
 	special = TRUE;
 	}
-    }
-if (sameWord(col->name, "LastTrVisit"))
-    {
-    if (sameWord(s, "-1"))
-	{
-	hPrintf("N/A");
-	special = TRUE;
-	}
-    }
-if (sameWord(col->name, "LastTrVisit"))
-    {
-    if (sameWord(s, "-2"))
-	{
-	hPrintf("N/D");
-	special = TRUE;
-	}
-    }
-if (sameWord(col->name, "LastTrMnNeutral"))
-    {
     if (sameWord(s, "-3"))
     	{
     	hPrintf("&nbsp");
@@ -1068,8 +1044,10 @@ if (sameString(s,"."))  // known bad data value
     safef(buf,sizeof(buf),"%s", s);
 else
     {
-    if (sameWord(col->name, "LastPVisit") ||sameWord(col->name, "LastPCD4Blk"))
-    	{
+    if (sameWord(col->name, "LastPVisit") 	||
+	sameWord(col->name, "LastPAntiGP120")	||
+	sameWord(col->name, "LastPCD4Blk"))
+	{
     	if (sameWord(s, "-1"))
 	   {
     	   safef(buf,sizeof(buf),"N/A");
@@ -1117,7 +1095,6 @@ hPrintf("<TD align=right>");
 hPrintf("%s", buf);
 hPrintf("</TD>");
 }
-
 
 /* TODO:
     assuming we want to keep this approach,
@@ -1325,7 +1302,6 @@ else
 freez(&dupe);
 }
 
-
 static struct hash *hashColumns(struct column *colList)
 /* Return a hash of columns keyed by name. */
 {
@@ -1340,9 +1316,6 @@ for (col = colList; col != NULL; col = col->next)
 return hash;
 }
 
-
-
-
 static char *rootDir = "gsidTableData";
 
 struct hash *readRa(char *rootName)
@@ -1350,7 +1323,6 @@ struct hash *readRa(char *rootName)
 {
 return hgReadRa(genome, database, rootDir, rootName, NULL);
 }
-
 
 int columnCmpPriority(const void *va, const void *vb)
 /* Compare to sort columns based on priority. */
@@ -1381,7 +1353,6 @@ for (col = colList; col != NULL; col = col->next)
     }
 }
 
-
 void refineFilterOn(struct column *colList)
 /* Consult cart to see if filtering is on/off. */
 {
@@ -1398,8 +1369,6 @@ for (col = colList; col != NULL; col = col->next)
         col->filterOn = TRUE; //sameString(val, "1");
     }
 }
-
-
 
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
@@ -1422,7 +1391,6 @@ for (raHash = raList; raHash != NULL; raHash = raHash->next)
 	slAddHead(&colList, col);
         }
     }
-
 
 /* Put columns in hash */
 columnHash = hashColumns(colList);
@@ -1586,9 +1554,6 @@ if (si != NULL)
 return subjList;
 }
 
-
-
-
 void displayData(struct sqlConnection *conn, struct column *colList)
 /* Display data in neighborhood of gene. */
 {
@@ -1631,7 +1596,6 @@ else
     doMainDisplay(conn, colList, subjList);
     }
 }
-
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
