@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.228 2009/08/14 20:52:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.229 2009/08/14 21:15:49 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5335,25 +5335,28 @@ if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
 
-if(subgroupingExists(tdb,"view"))
-    {
-    hCompositeDisplayViewDropDowns(db, cart,tdb);
-    if(subgroupCount(tdb) <= 1)
-        viewsOnly = TRUE;
-    }
-if(!viewsOnly)
-    {
-    if(trackDbSettingOn(tdb, "allButtonPair"))
-        hCompositeUiAllButtons(db, cart, tdb, formName);
-    else if (!hasSubgroups || !isMatrix || primarySubtrack)
-        hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
-    else
-        hCompositeUiByMatrix(db, cart, tdb, formName);
-    }
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
-if (displayAll)
+
+if(displayAll)
+    {
+    if(subgroupingExists(tdb,"view"))
+        {
+        hCompositeDisplayViewDropDowns(db, cart,tdb);
+        if(subgroupCount(tdb) <= 1)
+            viewsOnly = TRUE;
+        }
+    if(!viewsOnly)
+        {
+        if(trackDbSettingOn(tdb, "allButtonPair"))
+            hCompositeUiAllButtons(db, cart, tdb, formName);
+        else if (!hasSubgroups || !isMatrix || primarySubtrack)
+            hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
+        else
+            hCompositeUiByMatrix(db, cart, tdb, formName);
+        }
     compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
+    }
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 
