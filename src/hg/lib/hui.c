@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.229 2009/08/14 21:15:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.230 2009/08/14 21:37:36 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5335,10 +5335,7 @@ if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
 
-cartSaveSession(cart);
-cgiContinueHiddenVar("g");
-
-if(displayAll)
+if(primarySubtrack == NULL)
     {
     if(subgroupingExists(tdb,"view"))
         {
@@ -5355,8 +5352,13 @@ if(displayAll)
         else
             hCompositeUiByMatrix(db, cart, tdb, formName);
         }
-    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     }
+
+cartSaveSession(cart);
+cgiContinueHiddenVar("g");
+
+if(displayAll)
+    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 
