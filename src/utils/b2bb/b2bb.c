@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: b2bb.c,v 1.5 2009/08/13 21:51:56 braney Exp $";
+static char const rcsid[] = "$Id: b2bb.c,v 1.6 2009/08/14 21:18:04 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -203,8 +203,8 @@ for (;;)
 	char *s = row[lastField];
 	int len = strlen(s);
 	mustWrite(f, s, len);
-	fputc(0, f);
 	}
+    fputc(0, f);
 
     itemIx += 1;
 
