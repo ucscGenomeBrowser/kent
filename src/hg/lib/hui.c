@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.227 2009/07/27 06:51:56 sugnet Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.228 2009/08/14 20:52:04 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5111,7 +5111,7 @@ if(dimensionZ)
         {
         if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
             {
-            if(cntZ > 0 && (cntZ % sizeOfX) == 0)
+            if(cntZ > 0 && (cntZ % cntX) == 0)
                 printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
             printf("<TH align=left nowrap>");
             safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
@@ -5126,8 +5126,8 @@ if(dimensionZ)
             cntZ++;
             }
         }
-    if((cntZ % sizeOfX) > 0)
-        printf("<TH colspan=%d>&nbsp;</TH>",sizeOfX);
+    if((cntZ % cntX) > 0)
+        printf("<TH colspan=%d>&nbsp;</TH>",cntX);
     }
 puts("</TD></TR></TABLE>");
 
