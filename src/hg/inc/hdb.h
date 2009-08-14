@@ -344,6 +344,12 @@ char *hGenBankGetDesc(char *db, char *acc, boolean native);
  * species name. Acc may optionally include the version.  NULL is returned if
  * a description isn't available.  Free string when done. */
 
+struct bed *hGetCtBedRange(char *db, char *browserDb, char *table, char *chrom, int chromStart,
+			   int chromEnd, char *sqlConstraints);
+/* Return a bed list of all items (that match sqlConstraints, if nonNULL)
+ * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
+ * WARNING: this does not use the bin column and maybe slower than you would like. */
+
 struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
