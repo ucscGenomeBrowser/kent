@@ -419,7 +419,7 @@ static bits32 bbiIntervalSlice(struct bbiFile *bbi, bits32 baseStart, bits32 bas
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
-bits32 validCount = 0;
+double validCount = 0;
 
 if (intervalList != NULL)
     {
@@ -446,13 +446,13 @@ if (intervalList != NULL)
 		minVal = interval->val;
 	    }
 	}
-    el->validCount = validCount;
+    el->validCount = round(validCount);
     el->minVal = minVal;
     el->maxVal = maxVal;
     el->sumData = sumData;
     el->sumSquares = sumSquares;
     }
-return validCount;
+return round(validCount);
 }
 
 
@@ -540,6 +540,7 @@ boolean ret = bbiSummaryArrayExtended(bbi, chrom, start, end,
 if (ret)
     {
     int i;
+    double covFactor = (double)summarySize/(end - start);
     for (i=0; i<summarySize; ++i)
         {
 	struct bbiSummaryElement *el = &elements[i];
@@ -558,7 +559,7 @@ if (ret)
 		    val = el->minVal;
 		    break;
 		case bbiSumCoverage:
-		    val = (double)el->validCount/(end-start);
+		    val = covFactor*el->validCount;
 		    break;
 		default:
 		    internalErr();
