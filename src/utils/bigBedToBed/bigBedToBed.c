@@ -6,7 +6,7 @@
 #include "localmem.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedToBed.c,v 1.5 2009/03/16 05:07:54 kent Exp $";
+static char const rcsid[] = "$Id: bigBedToBed.c,v 1.6 2009/08/14 20:52:35 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
@@ -65,7 +65,12 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     	start, end, itemsLeft, lm);
     for (interval = intervalList; interval != NULL; interval = interval->next)
 	{
-	fprintf(f, "%s\t%u\t%u\t%s\n", chromName, interval->start, interval->end, interval->rest);
+	fprintf(f, "%s\t%u\t%u", chromName, interval->start, interval->end);
+	char *rest = interval->rest;
+	if (rest != NULL)
+	    fprintf(f, "\t%s\n", rest);
+	else
+	    fprintf(f, "\n");
 	}
     lmCleanup(&lm);
     }
