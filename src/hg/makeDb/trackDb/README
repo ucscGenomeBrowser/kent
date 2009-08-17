@@ -268,6 +268,7 @@ Attribute    -    Possible values             - controls
 visibility   -    hide dense squish pack full - default visibility
 onlyVisibility -  dense squish pack full      - only this visibility and hide
                                               - are possible for this track
+maxWindowToDraw - a (large) positive number   - if winEnd-winStart is larger, don't draw items
 group        - any "name" from the grp table  - used to specify which group
                e.g.: map, genes, rna, x       - of track controls to place
                regulation, compGeno, varRep   - this track into
