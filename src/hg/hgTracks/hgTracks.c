@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1588 2009/08/14 07:18:53 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1589 2009/08/17 21:27:43 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3787,6 +3787,54 @@ if (measureTiming)
     }
 }
 
+static int getMaxWindowToDraw(struct trackDb *tdb)
+/* If trackDb setting maxWindowToDraw exists and is a sensible size, return it, else 0. */
+{
+if (tdb == NULL)
+    return 0;
+char *maxWinToDraw = trackDbSetting(tdb, "maxWindowToDraw");
+if (isNotEmpty(maxWinToDraw))
+    {
+    unsigned maxWTD = sqlUnsigned(maxWinToDraw);
+    if (maxWTD > 1)
+	return maxWTD;
+    }
+return 0;
+}
+
+static void drawMaxWindowWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+				 int xOff, int yOff, int width, MgFont *font, Color color, 
+				 enum trackVisibility vis)
+/* This is a stub drawItems handler to be swapped in for the usual drawItems when the window
+ * size is larger than the threshold specified by trackDb setting maxWindowToDraw. */
+{
+// draw no-data-yellow single-height box
+int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
+char commafied[256];
+sprintLongWithCommas(commafied, maxWinToDraw);
+char message[512];
+safef(message, sizeof(message), "zoom in to <= %s bases to view items", commafied);
+Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
+}
+
+static boolean maxWindowSizeExceeded(struct track *tg)
+/* If (winEnd - winStart) > trackDb setting maxWindowToDraw, force track to a dense line
+ * that will ask the user to zoom in closer to see track items and return TRUE so caller
+ * can skip loading items. */
+{
+int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
+if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
+    {
+    tg->drawItems = drawMaxWindowWarning;
+    tg->limitedVis = tvDense;
+    tg->limitedVisSet = TRUE;
+    return TRUE;
+    }
+return FALSE;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -3885,7 +3933,8 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	if (measureTiming)
 	    lastTime = clock1000();
-	track->loadItems(track);
+	if (! maxWindowSizeExceeded(track))
+	    track->loadItems(track);
 
 	if (measureTiming)
 	    {
@@ -3964,10 +4013,10 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
     hWrites("move ");
     hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
-    hButtonWithMsg("hgt.left2", " <<", "move 45% to the left");
+    hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
     hButtonWithMsg("hgt.left1", " < ", "move 10% to the left");
     hButtonWithMsg("hgt.right1", " > ", "move 10% to the right");
-    hButtonWithMsg("hgt.right2", ">> ", "move 45% to the right");
+    hButtonWithMsg("hgt.right2", ">> ", "move 47.5% to the right");
     hButtonWithMsg("hgt.right3", ">>>", "move 95% to the right");
     hWrites(" zoom in ");
     /* use button maker that determines padding, so we can share constants */
