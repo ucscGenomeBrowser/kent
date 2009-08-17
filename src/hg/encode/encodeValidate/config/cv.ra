@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.122 2009/08/13 17:20:48 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.123 2009/08/17 21:07:50 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -521,7 +521,7 @@ karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 tier 3
-protocol Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
+protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
 term HRCEpiC
 type Cell Line
@@ -601,6 +601,19 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 tier 3
 protocol NB4_protocol.pdf
+
+term NHLF
+type Cell Line
+description Normal Human Lung Fibroblasts
+vendorName Lonza
+vendorId CC-2512
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_75_65_8_11&uiarea=2&carea=DCEA1D607089ACF18C7C001A4B525E10&cpgnum=1)/.do
+lineage
+karyotype
+termId BTO:0000161 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161&termName=lung%20fibroblast%20cell%20line
+tier 3
+protocol NHLF_Bernstein_protocol.pdf
 
 term NT2-D1
 type Cell Line
@@ -1169,7 +1182,7 @@ antibodyDescription Mouse monoclonal (p250)
 vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
-geneId 6872 
+geneId 6872
 
 term TCF4
 type Antibody
