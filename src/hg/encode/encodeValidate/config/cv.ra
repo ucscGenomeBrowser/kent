@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.123 2009/08/17 21:07:50 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.124 2009/08/17 23:56:56 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -174,6 +174,8 @@ description Human neuroblastoma
 vendorName ATCC
 vendorId CRL-2268
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2268&Template=cellBiology
+termId BTO:0000932 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
 tier 3
 
 term BG02ES
@@ -209,7 +211,7 @@ karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
-protocol Stam_15_protocols.pdf
+protocol BJ-tert_Stam_protocols.pdf
 
 term Caco-2
 type Cell Line
@@ -549,6 +551,17 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol HRE_Stam_protocol.pdf
 
+term HTB-11
+type Cell Line
+description Human neuroblastoma
+vendorName ATCC
+vendorId HTB-11
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
+karyotype hyperdiploid female with a modal chromosome number of 47
+termId BTO:0000932 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
+tier 3
+
 term Jurkat
 type Cell Line
 description T lymphoblastoid cell line derived from an acute T cell leukemia
@@ -560,7 +573,7 @@ karyotype cancer
 termId BTO:0001948
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 tier 3
-protocol Jurkat_protocol.pdf
+protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
 term LNCaP
 type Cell Line
@@ -592,15 +605,15 @@ protocol Crawford:MCF-7_Crawford_protocol.pdf Stam:Stam_15_protocols.pdf
 term NB4
 type Cell Line
 description acute promyelocytic leukemia cell line
-vendorName National Cell Culture Center
-vendorId
-orderUrl http://www.nccc.com/
+vendorName DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen); National Cell Culture Center
+vendorId ACC-207
+orderUrl http://www.nccc.com/ http://www.dsmz.de/
 lineage
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 tier 3
-protocol NB4_protocol.pdf
+protocol Snyder:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
 
 term NHLF
 type Cell Line
@@ -665,7 +678,7 @@ karyotype cancer, male
 termId BTO:0000304
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
 tier 3
-protocol PANC-1_Stam_protocol.pdf
+protocol Myers:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
 
 term PFSK-1
 type Cell Line
@@ -790,6 +803,9 @@ description human glioblastoma; astrocytoma
 vendorName ATCC
 vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
+karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
+termId BTO:0002036
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036&termName=U-87%20cell
 tier 3
 
 term WERI-Rb-1
