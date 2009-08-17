@@ -1520,6 +1520,7 @@ visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
+maxWindowToDraw 10000000
 type bed 6 +
 
 track snp129
@@ -1531,6 +1532,7 @@ visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
+maxWindowToDraw 10000000
 type bed 6 +
 
 track snp128
@@ -1541,6 +1543,7 @@ priority 100.096
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+maxWindowToDraw 10000000
 type bed 6 +
 
 track snp127
@@ -1551,6 +1554,7 @@ priority 100.097
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+maxWindowToDraw 10000000
 type bed 6 +
 
 track snp126
@@ -1561,6 +1565,7 @@ priority 100.098
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+maxWindowToDraw 10000000
 type bed 6 +
 
 track snp125
@@ -1571,6 +1576,7 @@ priority 100.099
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+maxWindowToDraw 10000000
 type bed 6 +
 
 track snp
