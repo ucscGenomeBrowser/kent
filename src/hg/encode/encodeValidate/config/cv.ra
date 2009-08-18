@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.125 2009/08/18 00:08:45 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.126 2009/08/18 17:51:15 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -607,11 +607,11 @@ protocol Crawford:MCF-7_Crawford_protocol.pdf Stam:Stam_15_protocols.pdf
 term NB4
 type Cell Line
 description acute promyelocytic leukemia cell line
-vendorName DSMZ
-#Stam:DSMZ DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen)
-#Snyder:National Cell Culture Center
-vendorId ACC-207
-orderUrl http://www.nccc.com/ http://www.dsmz.de/
+vendorName Refer to protocol documents for differing sources
+#Stam:DSMZ DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/
+#Snyder:National Cell Culture Center http://www.nccc.com/
+vendorId
+orderUrl
 lineage
 karyotype cancer
 termId BTO:0002489
@@ -684,6 +684,17 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 3
 protocol Myers:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
 
+term PanIslets
+type Cell Line
+description human pancreatic islets
+vendorName Refer to protocol documents for differing sources
+vendorId
+orderUrl
+termId BTO:0000991 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
+tier 3
+protocol Crawford:PanIslets_Crawford_protocol.pdf Lieb:PanIslets_Lieb_protocol.pdf
+
 term PFSK-1
 type Cell Line
 description neuroectodermal cell line derived from a human cerebral brain tumor
@@ -696,6 +707,18 @@ termId BTO:0000690 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
 tier 3
 protocol PFSK-1_protocol.pdf
+
+term pHTE
+type Cell Line
+description Primary Human Tracheal Epithelial Cells
+vendorName Dr. Cal Cotton at Case Western Reserve University
+vendorId
+orderUrl
+lineage primary
+termId BTO:0001120 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120&termName=epithelial%20cell%20line
+tier 3
+protocol pHTE_Crawford_protocol.pdf
 
 term progeria
 type Cell Line
