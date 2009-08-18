@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1589 2009/08/17 21:27:43 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1590 2009/08/18 20:31:01 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1411,6 +1411,9 @@ y += tHeight;
 return y;
 }
 
+// defined below:
+static int getMaxWindowToDraw(struct trackDb *tdb);
+
 int doTrackMap(struct track *track, struct hvGfx *hvg, int y, int fontHeight,
 	       int trackPastTabX, int trackPastTabWidth)
 /* Write out the map for this track. Return the new offset. */
@@ -1458,7 +1461,9 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
-        mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+	int maxWinToDraw = getMaxWindowToDraw(track->tdb);
+	if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
+	    mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
         y += mapHeight;
         break;
     case tvHide:
