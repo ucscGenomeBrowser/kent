@@ -22360,7 +22360,8 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 
 
 ############################################################################
-# dbSNP BUILD 130 (DONE 5/22/09 angie)
+# dbSNP BUILD 130 (UPDATED 8/18/09 angie)
+# Originally done 5/22/09.
     # Set up build directory
     mkdir -p /hive/data/outside/dbSNP/130/{human,shared}
 
@@ -22681,6 +22682,33 @@ EOF
 #      4 RefAlleleMismatch
 
 #TODO: go through those above and send some bug reports to dbSNP.
+
+    # 8/18/09: dbSNP announced a correction to some functional class 
+    # annotations (- strand mRNA -> swapped near-gene-3 and near-gene-5).
+    cd /hive/data/outside/dbSNP/130/human
+    # This is a list of affected rs IDs, genes, old funcs and new funcs:
+    wget ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database/organism_data/b130_update/b130_SNPContigLocusId_36_3_functionClass_13_15_fix.txt
+    wc -l b130_SNPContigLocusId_36_3_functionClass_13_15_fix.txt
+#163147 b130_SNPContigLocusId_36_3_functionClass_13_15_fix.txt
+    # The first 19 lines are the header.
+
+    # Use the info in that file to make a series of sql update commands:
+    tail -n +20 b130_SNPContigLocusId_36_3_functionClass_13_15_fix.txt \
+    | perl -we '$fns[6]="intron"; $fns[13]="near-gene-3"; $fns[15]="near-gene-5"; \
+      $fns[41]="nonsense"; $fns[42]="missense"; \
+      $fns[53]="untranslated-3"; $fns[55]="untranslated-5"; \
+      while (<>) { \
+      ($rs,undef,undef,$old,undef,$new) = split(","); \
+      $oldF = $fns[$old];  $newF = $fns[$new]; die if (!(defined $oldF && defined $newF)); \
+      print "UPDATE snp130 set func=(REPLACE(func,\"$oldF\",\"$newF\")) where name=\"rs$rs\";\n"; \
+      }' \
+      > snp130.func_13_15_fix.sql
+    wc -l snp130.func_13_15_fix.sql
+#163128 snp130.func_13_15_fix.sql
+    hgsql hg18 < snp130.func_13_15_fix.sql
+    # The number of rows changed has to be smaller because some of those replacements
+    # are for annotations relative to a different assembly; we have func=unknown for
+    # those.  E.g. rs437678.
 
 
 #######################################################################
@@ -28188,7 +28216,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.376 2009/08/12 18:00:02 angie Exp $
+# $Id: hg18.txt,v 1.377 2009/08/18 22:47:49 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28236,7 +28264,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.376 2009/08/12 18:00:02 angie Exp $
+# $Id: hg18.txt,v 1.377 2009/08/18 22:47:49 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
