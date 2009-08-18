@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.23 2009/08/18 22:31:32 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.24 2009/08/18 23:24:05 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -789,6 +789,7 @@ for (l = lociList ; l != NULL; l=l->next)
     if (maxScore == score)
         {
         maxHits ++;
+        nextBestScore = score;
         verbose(3,"%s score %d == maxScore %d next %d \n",
                 name, score, maxScore, nextBestScore);
         }
@@ -1330,6 +1331,7 @@ if (seqCount == 1)
         pslRc(psl);
     pslTabOut(psl, outFile);
     outputCount++;
+    filterCount++;
     return;
     }
 /* one loci for each place the mrna alignments to the genome */
@@ -1446,7 +1448,7 @@ doOneMrna(lastName, subList);
 alignFreeList(&subList);
 //pslFreeList(&pslList);
 verbose(1,"Wrote %d alignments out of %d \n", outputCount, aliCount);
-verbose(1,"Filtered %d out of %d mRNAs \n", filterCount, mrnaCount);
+verbose(1,"Kept %d out of %d mRNAs \n", filterCount, mrnaCount);
 if (computeSS)
     {
     fprintf(outFile, "%8d %8d %8d %8d  %8d %8d %8d %8d  %8d %8d %8d %8d  %8d %8d %8d %8d \n",
