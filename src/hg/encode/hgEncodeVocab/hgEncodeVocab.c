@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.22 2009/05/21 01:05:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.23 2009/08/18 17:56:52 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -42,7 +42,7 @@ const struct hash *a = *((struct hash **)va);
 const struct hash *b = *((struct hash **)vb);
 char *termA = hashMustFindVal((struct hash *)a, "term");
 char *termB = hashMustFindVal((struct hash *)b, "term");
-return (strcmp(termA, termB));
+return (strcasecmp(termA, termB));
 }
 
 void doTypeHeader(char *type)
