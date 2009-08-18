@@ -1,9 +1,10 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.29 2009/06/02 19:12:17 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.30 2009/08/18 23:22:51 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
 var viewDDtoSubCBhide = false;
+var compositeName = "";
 //var viewDDtoMatCB = true; //true;
 //var matCBwithViewDD = true;
 //var subCBtoMatCB = true;
@@ -37,20 +38,8 @@ function matSelectViewForSubTracks(obj,view)
         //enableViewCfgLink(true,view);   // Would need to reeanble view cfg when visible
 
         // Make main display dropdown show full if currently hide
-        var trackName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
-        var compositeDD = $("select[name='"+trackName+"']");
-        if($(compositeDD).attr('selectedIndex') < ($(compositeDD).children('option').length - 1)) { // Composite vis display not already full
-            var list = $(".viewDd");
-            var maxVis = obj.selectedIndex;
-            $(list).each(function (i) {
-                if( maxVis < this.selectedIndex)
-                    maxVis = this.selectedIndex;
-            });
-                 if($(compositeDD).children('option').length - 1 < maxVis)
-                    $(compositeDD).attr('selectedIndex') = $(compositeDD).options.length - 1;
-            else if($(compositeDD).attr('selectedIndex') < maxVis)
-                    $(compositeDD).attr('selectedIndex',maxVis);
-        }
+        compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
+        exposeComposite(compositeName);
         // if matrix used then: essentially reclick all 'checked' matrix checkboxes
         if(viewDDtoSubCB) {
             var CBs = $("input.matrixCB").filter(":checked");
@@ -87,6 +76,16 @@ function matSelectViewForSubTracks(obj,view)
         //    matChkBoxesNormalized();
         //    //$("input.matrixCB").not(":checked").each( function (i) { matChkBoxNormalize(this); } );
         matEnableSubtrackCheckBoxes(true,view);
+    }
+}
+
+function exposeComposite(compositeName)
+{
+    // Make main display dropdown show full if currently hide
+    var compositeDD = $("select[name='"+compositeName+"']");
+    if($(compositeDD).attr('selectedIndex') < 1) { // Composite vis display is HIDE
+        var maxVis = ($(compositeDD).children('option').length - 1);
+        $(compositeDD).attr('selectedIndex',maxVis);
     }
 }
 
