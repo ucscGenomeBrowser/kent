@@ -1,40 +1,9 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.13 2009/04/25 00:45:14 markd Exp $
+# 	$Id: makefile,v 1.15 2009/08/12 08:21:38 markd Exp $
 
 include ../../inc/common.mk
 
-all:    
-	@for D in $(USE_DIRS) x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE) ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
-
-scripts:
-	@for F in ${SCRIPT_FILES}; do \
-	    chmod +x $$F; \
-	    rm -f ${SCRIPTS}/$${F}; \
-	    echo cp -p $$F ${SCRIPTS}; \
-	    cp -p $$F ${SCRIPTS}; \
-	 done
-	cd automation && ${MAKE} scripts
-
-alpha: scripts all
-
-test:
-	@echo "nothing for tests yet"
-
-clean:
-	@for D in $(USE_DIRS) x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE) clean ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
-	touch non-empty-rm.o
-	- find . -name \*.o -print | xargs rm
 
 SCRIPT_FILES = \
 	dumpDb.pl \
@@ -54,14 +23,34 @@ DIRS = \
 	positionalTblCheck \
 	safePush \
 	toDev64 \
-	twoBitMask
+	twoBitMask \
+	gff3ToGenePred \
+	automation
 
-BAD_DIRS= \
-	ccCpLock \
-	geneStarts \
-	jimgrep \
-	jkShell \
-	dnsInfo \
-	wigAsciiToBinary \
-	cCp
+TEST_DIRS = \
+	gff3ToGenePred
+
+
+all:: utils
+
+utils: $(USE_DIRS:%=%.utils)
+%.utils:
+	(cd $* && $(MAKE))
+
+scripts: $(SCRIPT_FILES:%=%.scripts)
+%.scripts:
+	chmod +x $*
+	rm -f ${SCRIPTS}/$*
+	cp -p $* ${SCRIPTS}/$*
+
+alpha: scripts all
+
+test::	${TEST_DIRS:%=%.test}
+%.test:
+	(cd $* && ${MAKE} test)
+
+clean:: $(USE_DIRS:%=%.clean)
+	- find . -name '*.o' -exec rm {} \;
+%.clean:
+	(cd $* && ${MAKE} clean)
 

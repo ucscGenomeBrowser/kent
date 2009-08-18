@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.95 2009/08/03 23:11:45 hartera Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.96 2009/08/14 07:18:53 aamp Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -1736,7 +1736,7 @@ if (end > start)
 	    if (isCustomTrack(tg->mapName))
 		{
 		struct customTrack *ct = tg->customPt;
-		items = hGetBedRange(CUSTOM_TRASH, ct->dbTableName, chromName, start, end, NULL);
+		items = hGetCtBedRange(CUSTOM_TRASH, database, ct->dbTableName, chromName, start, end, NULL);
 		}
 	    else
 		items = hGetBedRange(database, tg->mapName, chromName, start, end, NULL);
@@ -10631,6 +10631,12 @@ else if (sameWord(type, "bed5FloatScore") ||
 else if (sameWord(type, "bed6FloatScore"))
     {
     track->bedSize = 4;
+    bedMethods(track);
+    track->loadItems = loadSimpleBed;
+    }
+else if (sameWord(type, "encodeFiveC"))
+    {
+    track->bedSize = 3;
     bedMethods(track);
     track->loadItems = loadSimpleBed;
     }

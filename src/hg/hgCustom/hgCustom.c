@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.129 2009/06/24 23:14:39 hiram Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.130 2009/08/05 18:44:46 rhead Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -100,6 +100,8 @@ if (hIsGsidServer())
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
+  " URLs for data in the bigBed and bigWig formats must be embedded in a track\n"
+  " line in the box below.\n"
   );
   }
 else
@@ -120,6 +122,8 @@ else
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
+  " URLs for data in the bigBed and bigWig formats must be embedded in a track\n"
+  " line in the box below.\n"
   " Publicly available custom tracks are listed\n"
   " <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"
   " Examples are\n"

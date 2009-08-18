@@ -20,7 +20,7 @@
 #include "bigWig.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigWig.c,v 1.5 2009/05/20 20:59:55 mikep Exp $";
+static char const rcsid[] = "$Id: bigWig.c,v 1.6 2009/08/12 21:20:25 galt Exp $";
 
 boolean isBigWig(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
@@ -37,7 +37,7 @@ if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
     if (ct != NULL)
-        fileName = cloneString(trackDbSetting(ct->tdb, "dataUrl"));
+        fileName = cloneString(trackDbSetting(ct->tdb, "bigDataUrl"));
     }
 else
     {

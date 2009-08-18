@@ -419,7 +419,7 @@ static bits32 bbiIntervalSlice(struct bbiFile *bbi, bits32 baseStart, bits32 bas
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
-bits32 validCount = 0;
+double validCount = 0;
 
 if (intervalList != NULL)
     {
@@ -446,13 +446,13 @@ if (intervalList != NULL)
 		minVal = interval->val;
 	    }
 	}
-    el->validCount = validCount;
+    el->validCount = round(validCount);
     el->minVal = minVal;
     el->maxVal = maxVal;
     el->sumData = sumData;
     el->sumSquares = sumSquares;
     }
-return validCount;
+return round(validCount);
 }
 
 
@@ -474,7 +474,7 @@ if (intervalList != NULL);
     for (i=0; i<summarySize; ++i)
         {
 	/* Calculate end of this part of summary */
-	baseEnd = start + baseCount*(i+1)/summarySize;
+	baseEnd = start + (bits64)baseCount*(i+1)/summarySize;
 	int end1 = baseEnd;
 	if (end1 == baseStart)
 	    end1 = baseStart+1;
@@ -527,6 +527,11 @@ return result;
 boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	BbiFetchIntervals fetchIntervals,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
+/* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
+ * Be sure to initialize summaryValues to a default value, which will not be touched
+ * for regions without data in file.  (Generally you want the default value to either
+ * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
+ * at that position. */
 {
 struct bbiSummaryElement *elements;
 AllocArray(elements, summarySize);
@@ -535,6 +540,7 @@ boolean ret = bbiSummaryArrayExtended(bbi, chrom, start, end,
 if (ret)
     {
     int i;
+    double covFactor = (double)summarySize/(end - start);
     for (i=0; i<summarySize; ++i)
         {
 	struct bbiSummaryElement *el = &elements[i];
@@ -553,7 +559,7 @@ if (ret)
 		    val = el->minVal;
 		    break;
 		case bbiSumCoverage:
-		    val = (double)el->validCount/(end-start);
+		    val = covFactor*el->validCount;
 		    break;
 		default:
 		    internalErr();

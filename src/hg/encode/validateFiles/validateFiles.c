@@ -1,4 +1,3 @@
-/* validateFiles - validate format of different track input files. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.21 2009/07/30 19:27:29 mikep Exp $";
-static char *version = "$Revision: 1.21 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.25 2009/08/10 21:05:29 braney Exp $";
+static char *version = "$Revision: 1.25 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -25,6 +24,8 @@ boolean chrMSizeOk;
 boolean printOkLines;
 boolean printFailLines;
 boolean mmPerPair;
+boolean nMatch;
+boolean isSort;
 int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
@@ -83,6 +84,8 @@ errAbort(
   "   -printOkLines                Print lines which pass validation to stdout\n"
   "   -quick[=N]                   Just test the first N lines of each file (default 1000)\n"
   "   -printFailLines              Print lines which fail validation to stdout\n"
+  "   -isSort                      input is sorted by chrom\n"
+  "   -nMatch                      N's do not count as a mismatch\n"
   "   -version                     Print version\n"
   , MAX_ERRORS);
 }
@@ -102,9 +105,22 @@ static struct optionSpec options[] = {
    {"mmPerPair", OPTION_BOOLEAN},
    {"mmCheckOneInN", OPTION_INT},
    {"quick", OPTION_INT},
+   {"nMatch", OPTION_BOOLEAN},
+   {"isSort", OPTION_BOOLEAN},
    {"version", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean checkMismatch(int ch1, int ch2)
+// checkMismatch -- if the sequence has an N, we call this a mismatch
+//   by default unless nMatch is set, in which case we don't call
+//   it a mismatch
+{
+if (ch1 != 'n')
+    return ch1 != ch2;
+
+return !nMatch;
+}
 
 void initArrays()
 // Set up array of chars
@@ -549,23 +565,53 @@ boolean checkMismatchesSeq(char *file, int line, char *chrom, unsigned chromStar
 {
 int i, mm = 0;
 struct dnaSeq *g;
+static struct dnaSeq *cacheSeq = NULL;
+static char cacheChrom[1024];
+static char bigArr[100 * 1024];
+struct dnaSeq ourSeq;
+
 if (!genome)
     return TRUE; // only check if 2bit file specified
 if (line % mmCheckOneInN != 0)
     return TRUE; // dont check if this is not one in N
-g = twoBitReadSeqFragLower(genome, chrom, chromStart, chromEnd);
+if (!isSort)
+    {
+    g = twoBitReadSeqFragLower(genome, chrom, chromStart, chromEnd);
+    }
+else
+    {
+    AllocVar(g);
+    if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
+	{
+	freeDnaSeq(&cacheSeq);
+	int size =  twoBitSeqSize(genome, chrom);
+	cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
+	strcpy(cacheChrom, chrom);
+	verbose(2, "read in chrom %s size %d\n",cacheChrom, size);
+	}
+    int len = chromEnd - chromStart;
+    if (len > sizeof(bigArr))
+	errAbort("static array not big enough for sequence len %d on line %d\n",
+	    len, line);
+    g = &ourSeq;
+    g->dna = bigArr;
+    g->size = len;
+    memcpy(g->dna, &cacheSeq->dna[chromStart], len);
+    }
+
 if (strand == '-')
     reverseComplement(g->dna, g->size);
+
 if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
     {
-    warn("Error [file=%s, line=%d]: sequence length (%d) does not match genomic coords (%d / %d)", 
-         file, line, (int)strlen(seq), chromEnd-chromStart, g->size);
+    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d)", 
+         file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size);
     return FALSE;
     }
 for (i=0 ; i < g->size ; ++i)
     {
     char c = tolower(seq[i]);
-    if (c == 'n' || c != g->dna[i])
+    if (checkMismatch(c,  g->dna[i]))
         ++mm;
     }
 if (mm > mismatches)
@@ -574,7 +620,8 @@ if (mm > mismatches)
          file, line, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
     return FALSE;
     }
-freeDnaSeq(&g);
+if (!isSort)
+    freeDnaSeq(&g);
 return TRUE;
 }
 
@@ -610,14 +657,14 @@ mm1 = 0;
 for (i=0 ; i < g1->size ; ++i)
     {
     char c = tolower(seq1[i]);
-    if (c == 'n' || c != g1->dna[i])
+    if (checkMismatch(c,  g1->dna[i]))
         ++mm1;
     }
 mm2 = 0;
 for (i=0 ; i < g2->size ; ++i)
     {
     char c = tolower(seq2[i]);
-    if (c == 'n' || c != g2->dna[i])
+    if (checkMismatch(c,  g2->dna[i]))
         ++mm2;
     }
 if (mmPerPair)
@@ -1023,6 +1070,8 @@ printFailLines = optionExists("printFailLines");
 genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) : NULL;
 mismatches     = optionInt("mismatches",0);
 mmPerPair      = optionExists("mmPerPair");
+nMatch         = optionExists("nMatch");
+isSort         = optionExists("isSort");
 mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
 quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");

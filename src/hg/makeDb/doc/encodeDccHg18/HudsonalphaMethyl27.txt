@@ -4,7 +4,8 @@
     cp /cluster/home/tingwang/ENCODE/Methyl27/ENCODE_methyl27.txt .
     cp /cluster/home/tingwang/ENCODE/script/methyl27_1.pl .
 
-    ./methyl27_1 ENCODE_methyl27.txt
+# 2009-08-04 braney, changed red to orange for methylated calls
+    ./methyl27_1.pl ENCODE_methyl27.txt
     
     for i in *.bed
     do
@@ -20,6 +21,8 @@
     mkdir /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaMethyl27
     for i in *.bed.gz
     do
+	rm -f /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaMethyl27/$i
+
 	ln -s `pwd`/$i /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaMethyl27
     done
 

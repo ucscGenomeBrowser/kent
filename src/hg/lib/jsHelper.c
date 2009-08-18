@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.28 2009/07/08 19:48:54 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.30 2009/08/15 20:04:03 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -370,14 +370,20 @@ if(hashLookup(includedFiles, fileName) == NULL)
                 }
             mtime = fileModTime(dyStringContents(realFileName));
 
-            // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
-            // which fixes bugs and odd behavior that occurs when the browser caches modified js files
+            // We add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
+            // which fixes bugs and odd behavior that occurs when the browser caches modified js files.
+            // We initially tried the simpler solution of appending the mtime as a query parameter (e.g. "?v=123456789"),
+            // but that reportedly caused problems in some versions of Firefox.
 
             dyStringPrintf(fileNameWithVersion, "%s-%ld.js", baseName, mtime);
             dyStringPrintf(fullNameWithVersion, "%s/%s", dyStringContents(fullDirName), dyStringContents(fileNameWithVersion));
             if(!fileExists(dyStringContents(fullNameWithVersion)))
                 {
-                // Make a new, versioned symlinks and delete any older versioned symlinks.
+                // The versioned copy should be created by the install process; however, mirrors may fail
+                // to preserve mtime's when copying over the javascript files, in which cased the
+                // versioned softlinks won't match the real file; in that case, we try to create
+                // the versioned links on the fly (which requires write access to the javascript directory).
+
                 struct dyString *pattern = dyStringNew(0);
                 struct slName *files, *file;
                 dyStringPrintf(pattern, "%s-[0-9]+\\.js", baseName);
@@ -393,8 +399,9 @@ if(hashLookup(includedFiles, fileName) == NULL)
                 dyStringFree(&pattern);
                 if(symlink(dyStringContents(realFileName), dyStringContents(fullNameWithVersion)))
                     {
-                    errAbort("jsIncludeFile: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'\n", 
-                             errno, strerror(errno), dyStringContents(fullDirName), getUser());
+                    int err = errno;
+                    errAbort("jsIncludeFile: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n", 
+                             err, strerror(err), dyStringContents(fullDirName), getUser());
                     }
                 }
             dyStringFree(&fullNameWithVersion);

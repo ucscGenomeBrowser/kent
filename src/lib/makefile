@@ -24,7 +24,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     mgTinyFont.o mime.o \
     net.o nib.o nibTwo.o nt4.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o \
-    pairHmm.o phyloTree.o pipeline.o portimpl.o psGfx.o psPoly.o pscmGfx.o \
+    pairHmm.o phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
     ra.o rbTree.o rangeTree.o repMask.o rle.o rnautil.o rudp.o \
@@ -33,7 +33,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
-    udc.o vGfx.o vGif.o verbose.o \
+    udc.o vGfx.o vGif.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o
 

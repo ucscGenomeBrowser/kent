@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.36 2008/02/20 00:42:30 markd Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.37 2009/08/13 03:08:30 markd Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -593,7 +593,7 @@ AllocArray(em, vertexCount);
 AllocArray(seen, vertexCount);
 for (i=0; i<vertexCount; ++i)
     {
-    em[i] = AllocArray(em[i], vertexCount);
+    AllocArray(em[i], vertexCount);
     }
 for (i=0; i<ag->edgeCount; ++i)
     em[ag->edgeStarts[i]][ag->edgeEnds[i]] = TRUE;
@@ -1049,8 +1049,8 @@ bed->chromStart = bed->thickStart = vPos[starts[fpEdge]];
 bed->chromEnd = bed->thickEnd = vPos[ends[tpEdge]];
 bed->name = cloneString(ag->name);
 bed->blockCount = numBlocks;
-bed->blockSizes = AllocArray(bed->blockSizes, numBlocks);
-bed->chromStarts = AllocArray(bed->chromStarts, numBlocks);
+AllocArray(bed->blockSizes, numBlocks);
+AllocArray(bed->chromStarts, numBlocks);
 bed->blockSizes[0] = vPos[ends[fpEdge]] - vPos[starts[fpEdge]];
 bed->blockSizes[1] = vPos[ends[cassEdge]] - vPos[starts[cassEdge]];
 bed->blockSizes[2] = vPos[ends[tpEdge]] - vPos[starts[tpEdge]];
@@ -1060,8 +1060,8 @@ bed->chromStarts[2] = vPos[starts[tpEdge]] -bed->chromStart;
 bed->score = getEvidenceCount(ag,fpEdge)+ getEvidenceCount(ag, tpEdge);
 
 bed->expCount = numBlocks;
-bed->expIds = AllocArray(bed->expIds, numBlocks);
-bed->expScores = AllocArray(bed->expScores, numBlocks);
+AllocArray(bed->expIds, numBlocks);
+AllocArray(bed->expScores, numBlocks);
 bed->expIds[0] = fpEdge;
 bed->expIds[1] = cassEdge;
 bed->expIds[2] = tpEdge;

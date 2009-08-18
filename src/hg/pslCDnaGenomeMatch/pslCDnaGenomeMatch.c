@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.21 2007/02/13 20:08:35 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.22 2009/08/15 17:59:49 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -246,12 +246,12 @@ int size = end - start;
 assert(size >= 0);
 if (strand == '-')
     {
-    verbose(6,"before start %d end %d size %d\n",
-            start, end, nib-size);
+    verbose(6,"before start %d end %d size %d %s\n",
+            start, end, nib->size, seqName);
     reverseIntRange(&start, &end, nib->size);
-    verbose(6,"after start %d end %d size %d\n",
-            start, end, nib-size);
-    assert(start > 0);
+    verbose(6,"after start %d end %d size %d %s\n",
+            start, end, nib->size, seqName);
+    assert(start >= 0);
     seq = nibInfoLoadSeq(nib, start, size);
 //    seq = nibTwoCacheSeqPart(ntc, seqName, 
 //	start, size, &retFullSeqSize);
@@ -439,8 +439,8 @@ struct misMatch *mm;
 for (mm = *misMatchList ; mm != NULL ; mm = mm->next)
     for (i = 0 ; i < mm->snpCount; i++)
         {
-        verbose(4,"       [%d] print mmlist snp %s %s %s:%d %c mrnaLoc %d t %c loci %d\n",
-            mm->loci, mm->snps[i], mm->name, mm->chrom, mm->chromStart, 
+        verbose(4,"       [%d] print mmlist snp %s %s %s:%d %c mrnaLoc %d t %c loci %u\n",
+            i, mm->snps[i], mm->name, mm->chrom, mm->chromStart, 
             mm->strand, mm->mrnaLoc,  mm->genomeBase, mm->loci);
         }
     }
@@ -450,9 +450,11 @@ int i;
 
 for (i = 0 ; i < mm->misMatchCount; i++)
     {
-    verbose(4,"       [%d] print snp %s %s %s:%d %s mrnaLoc %d t %c loci %d\n",
-        mm->loci, mm->snps[i], mm->name, mm->chroms[i], mm->tStarts[i],  
-        mm->strands[i], mm->mrnaLoc,  mm->bases[i], mm->loci[i]);
+    char *sp = mm->snps[i];
+    unsigned int loci = mm->loci[i];
+    verbose(4,"       [%d] print snp %s %s %s:%u %s mrnaLoc %d t %c loci %u\n",
+        i, sp, mm->name, mm->chroms[i], mm->tStarts[i],  
+        mm->strands, mm->mrnaLoc,  mm->bases[i], loci);
     }
 }
 
@@ -998,7 +1000,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
-    verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, strlen(tSeq->dna));
+    verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, (int)strlen(tSeq->dna));
     verbose(6,"qSeq %s\n",qSeq->dna);
     assert(psl->strand[0] == '+');
 
@@ -1223,7 +1225,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     verbose(5,"  buildMisMatches for blk %s t %s:%d-%d q %d-%d %s strand %c\n",
             psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
-    verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, strlen(tSeq->dna));
+    verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, (int)strlen(tSeq->dna));
     verbose(6,"qSeq %s\n",qSeq->dna);
     assert(psl->strand[0] == '+');
 

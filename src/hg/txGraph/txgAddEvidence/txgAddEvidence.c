@@ -245,7 +245,7 @@ if (bestEdge != NULL)
     if (sourceIx < 0)
 	{
 	sourceIx = txg->sourceCount;
-	txg->sources = ExpandArray(txg->sources, sourceIx, txg->sourceCount+1);
+	ExpandArray(txg->sources, sourceIx, txg->sourceCount+1);
 	struct txSource *source = &txg->sources[sourceIx];
 	source->type = cloneString(sourceType);
 	source->accession = cloneString(accession);

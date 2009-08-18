@@ -12,3 +12,11 @@ validateFiles: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
+test: 	validateFiles
+	rm -rf output
+	mkdir output
+	-validateFiles -type=tagAlign -genome=/cluster/data/hg18/hg18.2bit  tests/test1.txt > output/test1.out  2>&1 
+	cmp output/test1.out tests/test1.right.txt
+	-validateFiles -nMatch -type=tagAlign -genome=/cluster/data/hg18/hg18.2bit  tests/test2.txt > output/test2.out  2>&1 
+	cmp output/test2.out tests/test2.right.txt

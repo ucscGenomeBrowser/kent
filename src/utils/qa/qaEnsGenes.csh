@@ -238,7 +238,7 @@ echo 'hgsql -Ne "SELECT * FROM trackVersion WHERE version = ensGeneUpdateVersion
 echo "\n\n----------------------"
 echo "the dateReference column in the hgFixed.trackVersion table"
 echo "should say 'current' for your database (or all):"
-hgsql -Ne "SELECT db, dateReference FROM trackVersion WHERE version = $ver AND name = 'ensGene'" hgFixed
+hgsql -Ne "SELECT db, dateReference FROM trackVersion WHERE version = $ver AND name = 'ensGene' ORDER BY db" hgFixed
 
 # check that the corresponding upstream MAF files have been updated
 echo "\n\n----------------------"

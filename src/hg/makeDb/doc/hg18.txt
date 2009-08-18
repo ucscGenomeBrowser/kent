@@ -21254,42 +21254,47 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V7 (DATABASE OF GENOMIC VARIANTS) (DONE 3/11/09 angie)
+# DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 8/12/09 angie)
+# DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
 # DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg18/bed/dgv.v7
-    cd /hive/data/genomes/hg18/bed/dgv.v7
+    mkdir /hive/data/genomes/hg18/bed/dgv.v8
+    cd /hive/data/genomes/hg18/bed/dgv.v8
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v7.mar.2009.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v8.aug.2009.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v7.mar.2009.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v8.aug.2009.txt
+    # Save previous version for comparison:
+    hgsql hg18 -e 'rename table dgv to dgvV7'
     # shuffle fields into bed8+
-    foreach f (*.v7.*.txt)
+    foreach f (*.v8.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
          undef, undef, undef, $ref, $pmid, $method, \
-         undef, undef, undef, undef, $sample) = split("\t"); \
+         $gain, $loss, undef, undef, $sample) = split("\t"); \
         $id =~ s/^Variation_//; \
-        $start--;  \
+        $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = "255,128,0"; \
-        $rgb = "200,0,0" if ($varType =~ /^Inv/); \
-        $rgb = "0,100,0" if ($varType eq "InDel"); \
+        $rgb = ($varType =~ /^Inv/) ? "100,0,100" : "0,200,0"; \
+        if ($gain ne "" || $loss ne "") { \
+          $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
+          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
+          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+        } \
         $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
-                  $start, $end, $rgb, $landmark, $varType, \
+                  $start, $start, $rgb, $landmark, $varType, \
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    hgsql hg18 -e 'rename table dgv to dgvV6'
     hgLoadBed hg18 dgv *.bed \
-      -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 38406 elements of size 15
+      -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
+#Loaded 49988 elements of size 15
       hgsql hg18 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#31
+#35
 
 
 ############################################################################
@@ -28183,7 +28188,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.375 2009/08/04 21:41:12 hartera Exp $
+# $Id: hg18.txt,v 1.376 2009/08/12 18:00:02 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28231,7 +28236,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.375 2009/08/04 21:41:12 hartera Exp $
+# $Id: hg18.txt,v 1.376 2009/08/12 18:00:02 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 

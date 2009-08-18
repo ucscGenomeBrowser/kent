@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.18 2009/07/14 22:26:08 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.19 2009/08/06 18:22:56 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -48,6 +48,7 @@ $verToDate[49] = "mar2008";
 $verToDate[50] = "jul2008";
 $verToDate[51] = "nov2008";
 $verToDate[52] = "dec2008";
+$verToDate[54] = "may2009";
 $verToDate[55] = "jul2009";
 
 #	older versions for archive purposes, there are different
@@ -879,6 +880,22 @@ my %ensGeneFtpMySqlFileNames_52 = (
 );
 
 # key is UCSC db name, result is FTP file name under the gtf directory
+my %ensGeneGtfFileNames_54 = (
+'hg18' => 'homo_sapiens/Homo_sapiens.NCBI36.54.gtf.gz',
+);
+
+# key is UCSC db name, result is FTP file name under the fasta directory
+my %ensGeneFtpPeptideFileNames_54 = (
+'hg18' => 'homo_sapiens/pep/Homo_sapiens.NCBI36.54.pep.all.fa.gz',
+);
+
+#	directory name under release-50/mysql/ to find 'seq_region' and
+#	'assembly' table copies for GeneScaffold coordinate conversions
+my %ensGeneFtpMySqlFileNames_54 = (
+'hg18' => 'homo_sapiens_core_54_36p',
+);
+
+# key is UCSC db name, result is FTP file name under the gtf directory
 my %ensGeneGtfFileNames_55 = (
 'aedAeg0' => 'aedes_aegypti/Aedes_aegypti.AaegL1.55.gtf.gz',
 'anoCar1' => 'anolis_carolinensis/Anolis_carolinensis.AnoCar1.0.55.gtf.gz',
@@ -1041,9 +1058,10 @@ my %ensGeneFtpMySqlFileNames_55 = (
 'xenTro2' => 'xenopus_tropicalis_core_55_41n',
 );
 
-my @versionList = qw( 55 52 51 50 49 48 47 46 35 );
+my @versionList = qw( 55 54 52 51 50 49 48 47 46 35 );
 
 my @ensGtfReference;
+$ensGtfReference[54] = \%ensGeneGtfFileNames_54;
 $ensGtfReference[55] = \%ensGeneGtfFileNames_55;
 $ensGtfReference[52] = \%ensGeneGtfFileNames_52;
 $ensGtfReference[51] = \%ensGeneGtfFileNames_51;
@@ -1054,6 +1072,7 @@ $ensGtfReference[47] = \%ensGeneGtfFileNames_47;
 $ensGtfReference[46] = \%ensGeneGtfFileNames_46;
 $ensGtfReference[35] = \%ensGeneGtfFileNames_35;
 my @ensPepReference;
+$ensPepReference[54] = \%ensGeneFtpPeptideFileNames_54;
 $ensPepReference[55] = \%ensGeneFtpPeptideFileNames_55;
 $ensPepReference[52] = \%ensGeneFtpPeptideFileNames_52;
 $ensPepReference[51] = \%ensGeneFtpPeptideFileNames_51;
@@ -1064,6 +1083,7 @@ $ensPepReference[47] = \%ensGeneFtpPeptideFileNames_47;
 $ensPepReference[46] = \%ensGeneFtpPeptideFileNames_46;
 $ensPepReference[35] = \%ensGeneFtpPeptideFileNames_35;
 my @ensMySqlReference;
+$ensMySqlReference[54] = \%ensGeneFtpMySqlFileNames_54;
 $ensMySqlReference[55] = \%ensGeneFtpMySqlFileNames_55;
 $ensMySqlReference[52] = \%ensGeneFtpMySqlFileNames_52;
 $ensMySqlReference[51] = \%ensGeneFtpMySqlFileNames_51;

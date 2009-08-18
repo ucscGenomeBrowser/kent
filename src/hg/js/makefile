@@ -27,4 +27,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	rsync -t -r --relative --exclude='makefile' ${EXCL} ${JS_FILES} ${DEST}/
+	./cpJsFiles.pl -exclude='makefile' -destDir=${DEST} ${JS_FILES}

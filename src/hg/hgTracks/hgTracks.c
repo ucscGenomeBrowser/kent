@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1585 2009/07/16 23:00:41 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1589 2009/08/17 21:27:43 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1707,8 +1707,13 @@ if (psOutput)
     hvg = hvGfxOpenPostScript(pixWidth, pixHeight, psOutput);
 else
     {
+#ifdef USE_PNG
+    trashDirFile(&gifTn, "hgt", "hgt", ".png");
+    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+#else
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+#endif // USE_PNG
     #ifdef IMAGEv2_UI
     // Adds one single image for all tracks (TODO: build the track by track images)
     theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
@@ -2814,13 +2819,13 @@ else if (sameString(type, "wig"))
 else if (sameString(type, "bigWig"))
     {
     tg = trackFromTrackDb(tdb);
-    tg->bbiFileName = trackDbSetting(tdb, "dataUrl");
+    tg->bbiFileName = trackDbSetting(tdb, "bigDataUrl");
     tg->labelNextItemButtonable = FALSE;
     }
 else if (sameString(type, "bigBed"))
     {
     /* Figure out file name from settings. */
-    char *fileName = trackDbSetting(tdb, "dataUrl");
+    char *fileName = trackDbSetting(tdb, "bigDataUrl");
 
     /* Briefly open file to find field counts, and from that revise the
      * tdb->type to be more complete. */
@@ -3689,7 +3694,7 @@ void doNextPrevItem(boolean goNext, char *trackName)
 /* position (i.e. winStart, winEnd, etc.) based on what track it was */
 {
 struct track *track = trackFindByName(trackList, trackName);
-if (track->labelNextPrevItem != NULL)
+if ((track != NULL) && (track->labelNextPrevItem != NULL))
     track->labelNextPrevItem(track, goNext);
 }
 
@@ -3780,6 +3785,54 @@ if (measureTiming)
     {
     uglyTime("Pruned redundant vis from cart");
     }
+}
+
+static int getMaxWindowToDraw(struct trackDb *tdb)
+/* If trackDb setting maxWindowToDraw exists and is a sensible size, return it, else 0. */
+{
+if (tdb == NULL)
+    return 0;
+char *maxWinToDraw = trackDbSetting(tdb, "maxWindowToDraw");
+if (isNotEmpty(maxWinToDraw))
+    {
+    unsigned maxWTD = sqlUnsigned(maxWinToDraw);
+    if (maxWTD > 1)
+	return maxWTD;
+    }
+return 0;
+}
+
+static void drawMaxWindowWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+				 int xOff, int yOff, int width, MgFont *font, Color color, 
+				 enum trackVisibility vis)
+/* This is a stub drawItems handler to be swapped in for the usual drawItems when the window
+ * size is larger than the threshold specified by trackDb setting maxWindowToDraw. */
+{
+// draw no-data-yellow single-height box
+int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
+char commafied[256];
+sprintLongWithCommas(commafied, maxWinToDraw);
+char message[512];
+safef(message, sizeof(message), "zoom in to <= %s bases to view items", commafied);
+Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
+}
+
+static boolean maxWindowSizeExceeded(struct track *tg)
+/* If (winEnd - winStart) > trackDb setting maxWindowToDraw, force track to a dense line
+ * that will ask the user to zoom in closer to see track items and return TRUE so caller
+ * can skip loading items. */
+{
+int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
+if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
+    {
+    tg->drawItems = drawMaxWindowWarning;
+    tg->limitedVis = tvDense;
+    tg->limitedVisSet = TRUE;
+    return TRUE;
+    }
+return FALSE;
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -3880,7 +3933,8 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	if (measureTiming)
 	    lastTime = clock1000();
-	track->loadItems(track);
+	if (! maxWindowSizeExceeded(track))
+	    track->loadItems(track);
 
 	if (measureTiming)
 	    {
@@ -3959,10 +4013,10 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
     hWrites("move ");
     hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
-    hButtonWithMsg("hgt.left2", " <<", "move 45% to the left");
+    hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
     hButtonWithMsg("hgt.left1", " < ", "move 10% to the left");
     hButtonWithMsg("hgt.right1", " > ", "move 10% to the right");
-    hButtonWithMsg("hgt.right2", ">> ", "move 45% to the right");
+    hButtonWithMsg("hgt.right2", ">> ", "move 47.5% to the right");
     hButtonWithMsg("hgt.right3", ">>>", "move 95% to the right");
     hWrites(" zoom in ");
     /* use button maker that determines padding, so we can share constants */

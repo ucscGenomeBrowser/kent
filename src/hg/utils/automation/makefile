@@ -2,6 +2,8 @@
 
 include ../../../inc/common.mk
 
+all: scripts
+
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
@@ -11,6 +13,8 @@ scripts:
 	 done
 
 alpha: scripts
+
+clean:
 
 SCRIPT_FILES = \
 	blastz-make-joblist \

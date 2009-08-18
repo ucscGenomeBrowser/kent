@@ -32,6 +32,16 @@ char *gff3AttrNote = "Note";
 char *gff3AttrDbxref = "Dbxref";
 char *gff3AttrOntologyTerm = "Ontology_term";
 
+/* commonly used features names */
+char *gff3FeatGene = "gene";
+char *gff3FeatMRna = "mRNA";
+char *gff3FeatExon = "exon";
+char *gff3FeatCDS = "CDS";
+char *gff3FeatThreePrimeUTR = "three_prime_UTR";
+char *gff3FeatFivePrimeUTR = "five_prime_UTR";
+char *gff3FeatStartCodon = "start_codon";
+char *gff3FeatStopCodon = "stop_codon";
+
 static void gff3FileErr(struct gff3File *g3f, char *format, ...)
 #if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
@@ -911,4 +921,27 @@ for (g3a = g3f->anns; g3a != NULL; g3a = g3a->next)
     writeAnn(g3a, fh);
 writeFastas(g3f, fh);
 carefulClose(&fh);
+}
+
+int gff3AnnRefLocCmp(const void *va, const void *vb)
+/* sort compare function for two gff3AnnRef objects */
+{
+const struct gff3Ann *a = (*((struct gff3AnnRef **)va))->ann;
+const struct gff3Ann *b = (*((struct gff3AnnRef **)vb))->ann;
+int diff = strcmp(a->seqid, b->seqid);
+if ((diff == 0) && (a->strand != b->strand))
+    {
+    // allow for various types of strand fields. above tests handles both null
+    if (a->strand == NULL)
+        diff = 1;
+    else if (b->strand == NULL)
+        diff = -1;
+    else
+        diff = strcmp(a->strand, b->strand);
+    }
+if (diff == 0)
+    diff = a->start - b->start;
+if (diff == 0)
+    diff = a->end - b->end;
+return diff;
 }

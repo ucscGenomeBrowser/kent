@@ -13,8 +13,9 @@
 #include "chainLink.h"
 #include "chainDb.h"
 #include "chainCart.h"
+#include "hgColors.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.33 2009/03/18 18:27:00 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.35 2009/08/13 06:27:00 markd Exp $";
 
 
 struct cartOptions
@@ -299,8 +300,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (chainCart->chainColor == chainColorScoreColors)
 	{
 	float normScore = sqlFloat((row+rowOffset)[11]);
-	lf->grayIx = (int) ((float)maxShade * (normScore/100.0));
-	if (lf->grayIx > (maxShade+1)) lf->grayIx = maxShade+1;
+        lf->grayIx = hGrayInRange(normScore, 0, 100, maxShade+1);
 	lf->score = normScore;
 	}
     else

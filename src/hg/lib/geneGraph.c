@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.24 2007/02/13 19:42:54 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.25 2009/08/13 03:08:30 markd Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -239,7 +239,7 @@ ag->vertexCount = usedVertexCount;
 ag->vTypes = AllocArray(vTypes, usedVertexCount);
 ag->vPositions = AllocArray(vPositions, usedVertexCount);
 ag->mrnaRefCount = gg->mrnaRefCount;
-ag->mrnaRefs = AllocArray(ag->mrnaRefs, gg->mrnaRefCount);
+AllocArray(ag->mrnaRefs, gg->mrnaRefCount);
 for(i=0; i < gg->mrnaRefCount; i++)
     {
     ag->mrnaRefs[i] = cloneString(gg->mrnaRefs[i]);
@@ -403,7 +403,7 @@ void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct hash *tissLibHash,
 {
 int i;
 int mrnaCount = gg->mrnaRefCount;
-gg->mrnaTissues = AllocArray(gg->mrnaTissues, mrnaCount);
+AllocArray(gg->mrnaTissues, mrnaCount);
 gg->mrnaLibs = needMem(sizeof(int)*mrnaCount);
 //gg->mrnaLibs = AllocArray(gg->mrnaLibs, mrnaCount);
 for(i=0; i< mrnaCount; ++i)
@@ -607,7 +607,7 @@ for (i=0; i<totalVertexCount; ++i)
 	    /* Store the mrna evidence. */
 	    AllocVar(e);
 	    e->evCount = slCount(gg->evidence[i][j]);
-	    e->mrnaIds = AllocArray(e->mrnaIds, e->evCount);
+	    AllocArray(e->mrnaIds, e->evCount);
 	    for(ev = gg->evidence[i][j]; ev != NULL; ev = ev->next)
 		{
 		assert(count < e->evCount);

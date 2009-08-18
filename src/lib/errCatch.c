@@ -19,7 +19,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: errCatch.c,v 1.2 2006/08/10 01:02:47 kent Exp $";
+static char const rcsid[] = "$Id: errCatch.c,v 1.3 2009/08/12 18:13:19 markd Exp $";
 
 
 struct errCatch *errCatchNew()
@@ -90,7 +90,7 @@ if (errCatch != NULL)
     if (errCatch->gotError)
 	{
 	ok = FALSE;
-	warn(errCatch->message->string);
+	warn("%s", errCatch->message->string);
 	}
     errCatchFree(pErrCatch);
     }

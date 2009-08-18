@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.21 2009/05/06 00:25:44 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.22 2009/08/13 06:46:23 larrym Exp $
 
 var debug = false;
 
@@ -399,3 +399,17 @@ function metadataShowHide(tableName)
     return false;
 }
 
+function getHgsid()
+{
+// return current session id
+    var hgsid;
+    var list = document.getElementsByName("hgsid");
+    if(list.length) {
+        var ele = list[0];
+        hgsid = ele.value;
+    }
+    if(!hgsid) {
+        hgsid = getURLParam(window.location.href, "hgsid");
+    }
+    return hgsid;
+}

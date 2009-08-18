@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.130 2009/07/22 16:45:17 markd Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.131 2009/08/05 23:19:39 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1372,6 +1372,7 @@ struct batch *batch = findBatch(user, results, FALSE);
 if (forQueue && (batch->continuousCrashCount >= sickBatchThreshold))
     {
     warn("not adding job [%s] for %s, sick batch %s", cmd, userName, batch->name);
+    unactivateBatchIfEmpty(batch);  /* handle side-effect of findBatch call above */
     return NULL;
     }
 

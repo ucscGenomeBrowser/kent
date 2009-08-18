@@ -2910,3 +2910,47 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# BLASTZ FOR ZEBRAFISH (danRer5) (DONE, 2009-08-07, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+   mkdir /hive/data/genomes/canFam2/bed/blastz.danRer5.2009-08-07
+   cd /hive/data/genomes/canFam2/bed
+   ln -s blastz.danRer5.2009-08-07 blastz.danRer5
+   cd /hive/data/genomes/canFam2/bed/blastz.danRer5.2009-08-07
+ 
+   cat << '_EOF_' > DEF
+# dog (canFam2) vs zebrafish (danRer5)
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+
+# TARGET: Dog canFam2
+SEQ1_DIR=/scratch/data/canFam2/canFam2.2bit
+SEQ1_LEN=/hive/data/genomes/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - zebrafish (danRer5)
+SEQ2_DIR=/scratch/data/danRer5/danRer5.2bit
+SEQ2_LEN=/hive/data/genomes/danRer5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam2/bed/blastz.danRer5.2009-08-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+   # << happy emacs
+   chmod +x DEF
+time nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=loose \
+        >& doBlastz.log &
+# 0.806u 0.488s 3:58:52.14 0.0%   0+0k 0+0io 0pf+0w
+
+cat fb.canFam2.chainDanRer5Link.txt 
+# 29234486 bases of 2384996543 (1.226%) in intersection
+
+# DO BLASTZ SWAP TO CREATE CANFAM2 CHAINS, NETS, AXNET, MAFNET AND
+# ALIGNMENT DOWNLOADS ON DANRER5 - documented in danRer5.txt

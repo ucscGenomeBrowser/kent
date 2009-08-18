@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.407 2009/07/23 04:08:32 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.409 2009/08/14 07:16:16 aamp Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -283,8 +283,9 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 boolean res = FALSE;
-safef(query, sizeof(query), "select name from dbDb where name = '%s'",
-      database);
+char *escaped = sqlEscapeString(database);
+safef(query, sizeof(query), "select name from dbDb where name = '%s'", escaped);
+freez(&escaped);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL) && sqlDatabaseExists(database);
 hDisconnectCentral(&conn);
 hashAddInt(dbsChecked, database, res);
@@ -1653,8 +1654,8 @@ hFreeConn(&conn);
 return desc;
 }
 
-struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
-			 int chromEnd, char *sqlConstraints)
+struct bed *hGetCtBedRange(char *db, char *browserDb, char *table, char *chrom, int chromStart,
+			   int chromEnd, char *sqlConstraints)
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL)
  * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like. */
@@ -1677,7 +1678,10 @@ int i;
 boolean gotWhere = FALSE;
 
 /* Caller can give us either a full table name or root table name. */
-hParseTableName(db, table, rootName, parsedChrom);
+if (browserDb)
+    hParseTableName(browserDb, table, rootName, parsedChrom);
+else
+    hParseTableName(db, table, rootName, parsedChrom);
 hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
     errAbort("Could not find table info for table %s (%s)",
@@ -1890,6 +1894,15 @@ dyStringFree(&query);
 slReverse(&bedList);
 hFreeConn(&conn);
 return(bedList);
+}
+
+struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
+			   int chromEnd, char *sqlConstraints)
+/* Return a bed list of all items (that match sqlConstraints, if nonNULL)
+ * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
+ * WARNING: this does not use the bin column and maybe slower than you would like. */
+{
+return hGetCtBedRange(db, NULL, table, chrom, chromStart, chromEnd, sqlConstraints);
 }
 
 int hGetBedRangeCount(char *db, char *table, char *chrom, int chromStart,

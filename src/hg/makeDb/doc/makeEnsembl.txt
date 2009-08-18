@@ -6,6 +6,45 @@
 #
 
 ############################################################################
+# ensembl 54 update (DONE - 2009-08-05 - Hiram)
+    # hg18 needs to get to its last version
+############################################################################
+#  hg18 - Human - Ensembl Genes version 54  (DONE - 2009-08-05 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/hg18
+    cat << '_EOF_' > hg18.ensGene.ra
+# required db variable
+db hg18
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/hg18/jkStuff/ensGene.haplotype.lift
+liftUp /hive/data/genomes/hg18/jkStuff/liftContigs.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=54 hg18.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/ensGene.54
+    featureBits hg18 ensGene
+    # 70647021 bases of 2881515245 (2.452%) in intersection
+
+############################################################################
+# To finish off the update to 55 and 54, run the following:
+     hgsql -e \
+'update trackVersion set dateReference="dec2008" where version="52";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="may2009" where version="54";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where version="55";' hgFixed
+
+############################################################################
+
+############################################################################
 # ensembl 55 updates (WORKING - 2009-07-14 - Hiram)
     # see also: more notes about how this is done in the "ensembl 50 updates"
     #	section below  (and in /hive/users/hiram/ensGene/)

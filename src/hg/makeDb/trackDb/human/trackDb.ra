@@ -974,7 +974,7 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v7
+dataVersion v8
 
 track kiddEichlerDisc
 compositeTrack on
@@ -2067,6 +2067,7 @@ type bed 6 +
 mafTrack mzPt1Mm3Rn3Gg2_pHMM
 
 track wgRnaOld
+release alpha
 shortLabel sno/miRNA Old
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase (Old Track)
 group genes

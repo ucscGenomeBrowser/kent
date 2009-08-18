@@ -94,6 +94,12 @@ struct vGfx *vgOpenGif(int width, int height, char *fileName);
 /* Open up something that we'll write out as a gif 
  * someday. */
 
+struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useAlpha);
+/* Open up something that will write out a PNG file upon vgClose.  
+ * If useAlpha, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
+
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */
 

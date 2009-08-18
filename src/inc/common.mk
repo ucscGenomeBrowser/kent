@@ -9,23 +9,30 @@ HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MA
 #global external libraries 
 L=
 
-#default to not using ssl
+# libssl: disabled by default
 ifeq (${USE_SSL},)
     USE_SSL=0
 endif
-
 ifeq (${USE_SSL},1)
     L+=-lssl
     HG_DEFS+=-DUSE_SSL
 endif
 
+# libpng: disabled by default
+ifeq (${USE_PNG},)
+    USE_PNG=0
+endif
+ifeq (${USE_PNG},1)
+    L+=-lpng
+    HG_DEFS+=-DUSE_PNG
+endif
+
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
-#default to not using bam
+# libbam: disabled by default
 ifeq (${USE_BAM},)
     USE_BAM=0
 endif
-
 ifeq (${USE_BAM},1)
     ifeq (${SAMDIR},)
       SAMDIR = /hive/data/outside/samtools/samtools/${MACHTYPE}

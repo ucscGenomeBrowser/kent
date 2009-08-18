@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/refreshSledgeHammer.pl instead.
 
-# $Id: refreshSledgeHammer.pl,v 1.3 2009/05/18 21:47:18 galt Exp $
+# $Id: refreshSledgeHammer.pl,v 1.4 2009/08/12 21:20:26 galt Exp $
 
 # Use the awesome power of Perl to force the access time of a file to be
 # updated when read (the NFS cache can prevent that and must be bypassed)
@@ -21,7 +21,10 @@ use strict;
 
 while (<>) {
   my $fileName;
-  if (/^(Found live custom track: |setting \w+File: |setting dataUrl: |\/)(\S+)/) {
+
+  # note after transition to bigDataUrl name has completed, 
+  # the dataUrl clause below can be removed  - Galt 2009-08-12 
+  if (/^(Found live custom track: |setting \w+File: |setting dataUrl: |setting bigDataUrl: |\/)(\S+)/) {
     $fileName = $2;
     $fileName = $1 . $fileName if ($1 eq "/");
     $fileName =~ s@^\.\./@/usr/local/apache/@;

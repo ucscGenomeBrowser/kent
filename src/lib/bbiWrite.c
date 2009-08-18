@@ -65,6 +65,8 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 while (lineFileRow(lf, row))
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
+
+lineFileClose(&lf);
 return hash;
 }
 
@@ -81,6 +83,103 @@ void *bbiChromInfoVal(const void *va)
 const struct bbiChromInfo *a = ((struct bbiChromInfo *)va);
 return (void*)(&a->id);
 }
+
+void bbiChromUsageFree(struct bbiChromUsage **pUsage)
+/* free a single bbiChromUsage structure */
+{
+struct bbiChromUsage *usage = *pUsage;
+if (usage != NULL)
+    {
+    freeMem(usage->name);
+    freez(pUsage);
+    }
+}
+
+void bbiChromUsageFreeList(struct bbiChromUsage **pList)
+/* free a list of bbiChromUsage structures */
+{
+struct bbiChromUsage *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bbiChromUsageFree(&el);
+    }
+*pList = NULL;
+}
+
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
+	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize)
+/* Go through bed file and collect chromosomes and statistics. */
+{
+char *row[3];
+struct hash *uniqHash = hashNew(0);
+struct bbiChromUsage *usage = NULL, *usageList = NULL;
+int lastStart = -1;
+bits32 id = 0;
+bits64 totalBases = 0, bedCount = 0;
+int minDiff = BIGNUM;
+for (;;)
+    {
+    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
+    if (rowSize == 0)
+        break;
+    lineFileExpectWords(lf, 3, rowSize);
+    char *chrom = row[0];
+    int start = lineFileNeedNum(lf, row, 1);
+    int end = lineFileNeedNum(lf, row, 2);
+    ++bedCount;
+    totalBases += (end - start);
+    if (usage == NULL || differentString(usage->name, chrom))
+        {
+	if (hashLookup(uniqHash, chrom))
+	    {
+	    errAbort("%s is not sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" or bedSort and try again.",
+	    	lf->fileName, lf->lineIx);
+	    }
+	hashAdd(uniqHash, chrom, NULL);
+	AllocVar(usage);
+	usage->name = cloneString(chrom);
+	usage->id = id++;
+	usage->size = hashIntVal(chromSizesHash, chrom);
+	slAddHead(&usageList, usage);
+	lastStart = -1;
+	}
+    usage->itemCount += 1;
+    if (lastStart >= 0)
+        {
+	int diff = start - lastStart;
+	if (diff < minDiff)
+	    {
+	    if (diff < 0)
+		errAbort("%s is not sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" or bedSort and try again.",
+		    lf->fileName, lf->lineIx);
+	    minDiff = diff;
+	    }
+	}
+    lastStart = start;
+    }
+slReverse(&usageList);
+*retMinDiff = minDiff;
+*retAveSize = (double)totalBases/bedCount;
+freeHash(&uniqHash);
+return usageList;
+}
+
+int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot)
+/* Count up number of sections needed for data. */
+{
+struct bbiChromUsage *usage;
+int count = 0;
+for (usage = usageList; usage != NULL; usage = usage->next)
+    {
+    int countOne = (usage->itemCount + itemsPerSlot - 1)/itemsPerSlot;
+    count += countOne;
+    verbose(2, "%s %d, %d blocks of %d\n", usage->name, usage->itemCount, countOne, itemsPerSlot);
+    }
+return count;
+}
+
 
 void bbiAddToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
 	bits32 validCount, double minVal, double maxVal, double sumData, double sumSquares,  
