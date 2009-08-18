@@ -26,7 +26,7 @@
 #include "encode/encodePeak.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.100 2009/08/13 19:57:52 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.101 2009/08/18 22:31:14 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1681,15 +1681,17 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
         {
 	char *newUrl = NULL;
 	int newSd = 0;
-        netSkipHttpHeaderLinesHandlingRedirect(sd, val, &newSd, &newUrl); /* redirect can modify the url */
-	if (newUrl)
+        if (netSkipHttpHeaderLinesHandlingRedirect(sd, val, &newSd, &newUrl)) /* redirect can modify the url */
 	    {
-    	    freeMem(newUrl);
-	    sd = newSd;
+	    if (newUrl)
+		{
+		freeMem(newUrl);
+		sd = newSd;
+		}
+	    ds = netSlurpFile(sd);
+	    close(sd);
+	    track->tdb->html = dyStringCannibalize(&ds);
 	    }
-        ds = netSlurpFile(sd);
-        close(sd);
-        track->tdb->html = dyStringCannibalize(&ds);
         }
     }
 tdb->url = hashFindVal(hash, "url");
