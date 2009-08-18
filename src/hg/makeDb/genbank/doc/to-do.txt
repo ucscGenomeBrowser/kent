@@ -1174,3 +1174,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
    BC013184
    BC012106
 
+- include all synthetic clones targeting an organism (requests for partial
+  MGCs BC172206-BC172209).
