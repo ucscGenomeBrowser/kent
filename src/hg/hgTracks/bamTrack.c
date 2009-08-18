@@ -12,9 +12,7 @@
 #include "hgTracks.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.5 2009/08/03 22:00:24 angie Exp $";
-
-#define BAM_MAX_ZOOM 200000
+static char const rcsid[] = "$Id: bamTrack.c,v 1.6 2009/08/18 23:41:23 angie Exp $";
 
 struct bamTrackData
     {
@@ -191,8 +189,6 @@ void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
 {
-if (winEnd-winStart > BAM_MAX_ZOOM)
-    return;
 char *seqNameForBam = chromName;
 char *stripPrefix = trackDbSetting(tg->tdb, "stripPrefix");
 if (stripPrefix && startsWith(stripPrefix, chromName))
@@ -238,26 +234,6 @@ void bamPairedLoadItems(struct track *tg)
 bamLoadItemsCore(tg, TRUE);
 }
 
-void bamDrawItems(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-		  int xOff, int yOff, int width, MgFont *font, Color color,
-		  enum trackVisibility vis)
-/* Draw BAM alignments unless zoomed out too far. */
-{
-if (winEnd-winStart > BAM_MAX_ZOOM)
-    return;
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
-}
-
-void bamPairedDrawItems(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-			int xOff, int yOff, int width, MgFont *font, Color color,
-			enum trackVisibility vis)
-/* Draw paired-end BAM alignments unless zoomed out too far. */
-{
-if (winEnd-winStart > BAM_MAX_ZOOM)
-    return;
-linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
-}
-
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
@@ -270,13 +246,11 @@ if (isPaired)
     {
     linkedFeaturesSeriesMethods(track);
     track->loadItems = bamPairedLoadItems;
-    track->drawItems = bamPairedDrawItems;
     }
 else
     {
     linkedFeaturesMethods(track);
     track->loadItems = bamLoadItems;
-    track->drawItems = bamDrawItems;
     }
 track->labelNextItemButtonable = track->nextItemButtonable = FALSE;
 track->labelNextPrevItem = NULL;
