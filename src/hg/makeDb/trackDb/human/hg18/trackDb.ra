@@ -4027,6 +4027,7 @@ baseColorDefault diffBases
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
 chromosomes chr22
+maxWindowToDraw 200000
 
 track NA12878Slx
 shortLabel NA12878 depth
