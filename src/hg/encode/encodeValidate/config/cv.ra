@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.124 2009/08/17 23:56:56 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.125 2009/08/18 00:08:45 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -177,6 +177,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
 tier 3
+protocol BE2-C_Myers_protocol.pdf
 
 term BG02ES
 type Cell Line
@@ -211,7 +212,7 @@ karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
-protocol BJ-tert_Stam_protocols.pdf
+protocol BJ-tert_Stam_protocol.pdf
 
 term Caco-2
 type Cell Line
@@ -561,6 +562,7 @@ karyotype hyperdiploid female with a modal chromosome number of 47
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
 tier 3
+protocol HTB-11_Myers_protocol.pdf
 
 term Jurkat
 type Cell Line
@@ -605,7 +607,9 @@ protocol Crawford:MCF-7_Crawford_protocol.pdf Stam:Stam_15_protocols.pdf
 term NB4
 type Cell Line
 description acute promyelocytic leukemia cell line
-vendorName DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen); National Cell Culture Center
+vendorName DSMZ
+#Stam:DSMZ DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen)
+#Snyder:National Cell Culture Center
 vendorId ACC-207
 orderUrl http://www.nccc.com/ http://www.dsmz.de/
 lineage
@@ -807,6 +811,7 @@ karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cell
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036&termName=U-87%20cell
 tier 3
+protocol U-87_Myers_protocol.pdf
 
 term WERI-Rb-1
 type Cell Line
