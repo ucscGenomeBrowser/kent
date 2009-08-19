@@ -659,6 +659,10 @@ name broadOVexp_affyGroups
 type groupings
 all broadOVexp_affyAll
 
+name broadOVexp_affy_vs_normGroups
+type groupings
+all broadOVexp_affyAll
+
 name broadOVexp_affyAll
 type all
 description All Arrays
