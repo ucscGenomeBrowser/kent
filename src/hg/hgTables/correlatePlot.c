@@ -16,7 +16,7 @@
 #include "histogram.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.15 2007/03/06 22:39:17 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.16 2009/08/19 23:00:17 angie Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -40,7 +40,7 @@ if ((width > 0) && (height > 0))
     mgHoriz = mgNew(height, width);
     mgTextCentered(mgHoriz, 0, 0, height, width, colorIx, font, string);
      */
-    vgHoriz = vgOpenGif(height, width, "/dev/null");
+    vgHoriz = vgOpenGif(height, width, "/dev/null", FALSE);
     vgTextCentered(vgHoriz, 0, 0, height, width, colorIx, font, string);
     /*	now, blit from the horizontal to the vertical, rotate -90 (CCW) */
     for (i = 0; i < height; ++i)	/* xSrc -> yDest */
@@ -83,7 +83,7 @@ if ((yClip > 0) && (xClip > 0))
     int i, j;
     int xx, yy;
     int dot;
-    vgHoriz = vgOpenGif(xClip, yClip, "/dev/null");
+    vgHoriz = vgOpenGif(xClip, yClip, "/dev/null", FALSE);
     vgText(vgHoriz, 0, 0, colorIx, font, string);
     for (i = 0; i < xClip; ++i)
 	{
@@ -415,7 +415,7 @@ totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
 trashDirFile(&gifFileName, "hgtData", "hgtaScatter", ".gif");
 
-vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
+vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi, FALSE);
 
 /*	x,y, w,h, drawing area only	*/
 vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
@@ -613,7 +613,7 @@ totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
 trashDirFile(&gifFileName, "hgtData", "hgtaResidual", ".gif");
 
-vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
+vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi, FALSE);
 
 /*	x,y, w,h, drawing area only	*/
 vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
@@ -756,7 +756,7 @@ bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
-vg = vgOpenGif(totalWidth, totalHeight, histoFileName->forCgi);
+vg = vgOpenGif(totalWidth, totalHeight, histoFileName->forCgi, FALSE);
 /*	x,y, w,h, drawing area only	*/
 vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
 

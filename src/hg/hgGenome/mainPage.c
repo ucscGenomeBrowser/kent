@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.26 2009/04/06 05:33:50 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.27 2009/08/19 23:00:16 angie Exp $";
 
 
 static char *allColors[] = {
@@ -304,7 +304,7 @@ else
 
     /* Create gif file and make reference to it in html. */
     trashDirFile(&gifTn, "hgg", "ideo", ".gif");
-    hvg = hvGfxOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
+    hvg = hvGfxOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi, FALSE);
 
     hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
 		gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);

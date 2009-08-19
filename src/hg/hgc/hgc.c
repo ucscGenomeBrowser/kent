@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1565 2009/08/05 22:58:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1566 2009/08/19 23:00:17 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17342,7 +17342,7 @@ lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
 trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
