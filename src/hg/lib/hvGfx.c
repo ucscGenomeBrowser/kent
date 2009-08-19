@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.4 2009/08/05 23:34:31 angie Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.5 2009/08/19 22:28:37 angie Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
@@ -21,17 +21,17 @@ hvg->clipMaxY = vg->height;
 return hvg;
 }
 
-struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName)
+struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName, boolean useTransparency)
 /* Open up something that we'll write out as a gif someday. */
 {
-return hvGfxAlloc(vgOpenGif(width, height, fileName));
+return hvGfxAlloc(vgOpenGif(width, height, fileName, useTransparency));
 }
 
 #ifdef USE_PNG
-struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useAlpha)
+struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency)
 /* Open up something that we'll write out as a PNG someday. */
 {
-return hvGfxAlloc(vgOpenPng(width, height, fileName, useAlpha));
+return hvGfxAlloc(vgOpenPng(width, height, fileName, useTransparency));
 }
 #endif//def USE_PNG
 

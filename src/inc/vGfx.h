@@ -90,13 +90,15 @@ struct vGfx
     /* How wide is a string? */
     };
 
-struct vGfx *vgOpenGif(int width, int height, char *fileName);
-/* Open up something that we'll write out as a gif 
- * someday. */
+struct vGfx *vgOpenGif(int width, int height, char *fileName, boolean useTransparency);
+/* Open up something that will write out a GIF file upon vgClose.
+ * If useTransparency, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
 
-struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useAlpha);
+struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that will write out a PNG file upon vgClose.  
- * If useAlpha, then the first color in memgfx's colormap/palette is
+ * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
 

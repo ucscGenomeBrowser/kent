@@ -19,11 +19,18 @@ struct hvGfx
     int clipMaxY;
 };
 
-struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName);
-/* Open up something that we'll write out as a gif someday. */
+struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName, boolean useTransparency);
+/* Open up something that we'll write out as a GIF someday.
+ * If useTransparency, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
 
-struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useAlpha);
-/* Open up something that we'll write out as a PNG someday. */
+
+struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency);
+/* Open up something that we'll write out as a PNG someday.
+ * If useTransparency, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
 
 struct hvGfx *hvGfxOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */

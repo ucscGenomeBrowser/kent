@@ -137,11 +137,17 @@ void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color);
 void mgLineH(struct memGfx *mg, int y, int x1, int x2, Color color);
 /* Draw horizizontal line width pixels long starting at x/y in color */
 
-void mgSaveGif(struct memGfx *mg, char *name);
-/* Save memory bitmap as a gif. */
+void mgSaveGif(struct memGfx *mg, char *name, boolean useTransparency);
+/* Save memory bitmap as a gif.
+ * If useTransparency, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
 
-boolean mgSaveToGif(FILE *gif_file, struct memGfx *screen);
-/* Save GIF to an already open file. */
+boolean mgSaveToGif(FILE *gif_file, struct memGfx *screen, boolean useTransparency);
+/* Save GIF to an already open file.
+ * If useTransparency, then the first color in memgfx's colormap/palette is
+ * assumed to be the image background color, and pixels of that color
+ * are made transparent. */
 
 struct memGfx *mgLoadGif(char *name);
 /* Create memory image based on gif file. 
@@ -151,15 +157,15 @@ struct memGfx *mgLoadGif(char *name);
  * least.  This version of gif was always
  * color mapped. */
 
-void mgSavePng(struct memGfx *mg, char *filename, boolean useAlpha);
+void mgSavePng(struct memGfx *mg, char *filename, boolean useTransparency);
 /* Save memory bitmap to filename as a PNG.
- * If useAlpha, then the first color in memgfx's colormap/palette is
+ * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
 
-boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useAlpha);
+boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useTransparency);
 /* Save PNG to an already open file.
- * If useAlpha, then the first color in memgfx's colormap/palette is
+ * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
 

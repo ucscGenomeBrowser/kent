@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1590 2009/08/18 20:31:01 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1591 2009/08/19 22:28:37 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -565,7 +565,7 @@ if(doIdeo)
     else
         {
         trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".gif");
-        hvg = hvGfxOpenGif(ideoWidth, ideoHeight, ideoTn->forCgi);
+        hvg = hvGfxOpenGif(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
         }
     hvg->rc = revCmplDisp;
     initColors(hvg);
@@ -1717,7 +1717,7 @@ else
     hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
 #else
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
-    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
 #endif // USE_PNG
     #ifdef IMAGEv2_UI
     // Adds one single image for all tracks (TODO: build the track by track images)
