@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.130 2009/08/05 18:44:46 rhead Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.131 2009/08/19 18:58:13 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1074,8 +1074,19 @@ else
             cartRemove(cart, hgCtDataFileName);
             }
         }
-    ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
-					    &replacedCts, NULL, &err);
+    boolean ctParseError = FALSE;
+    struct errCatch *catch = errCatchNew();
+    if (errCatchStart(catch))
+	ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
+					       &replacedCts, NULL, &err);
+    errCatchEnd(catch);
+    if (catch->gotError)
+	{
+	addWarning(dsWarn, err);
+	addWarning(dsWarn, catch->message->string);
+	ctParseError = TRUE;
+	}
+    errCatchFree(&catch);
 
     /* exclude special setting used by table browser to indicate
      * db assembly for error-handling purposes only */
@@ -1147,6 +1158,8 @@ else
     warn = dyStringCannibalize(&dsWarn);
     if (!initialDb || ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
+    else if (ctParseError)
+	doAddCustom(warn);
     else
         doAddCustom(NULL);
     }
