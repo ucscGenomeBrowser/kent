@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.23 2009/08/18 17:56:52 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.24 2009/08/19 14:33:10 kate Exp $";
 
 static char *cv_file()
 {
@@ -174,6 +174,7 @@ else if (sameString(type,"localization"))
     }
 else if (sameString(type,"Cell Line"))
     {
+    printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
     if (cgiOptionalInt("tier",0))
         {
         if (hashFindVal(ra,"tier") == NULL)
