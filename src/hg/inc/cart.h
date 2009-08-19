@@ -86,7 +86,7 @@ boolean cartVarExists(struct cart *cart, char *var);
 INLINE boolean cartVarExistsDb(struct cart *cart, char *db, char *var)
 /* Return TRUE if variable_$db is in cart. */
 {
-    return cartVarExists(cart, _cartVarDbName(db, var));
+return cartVarExists(cart, _cartVarDbName(db, var));
 }
 
 char *cartString(struct cart *cart, char *var);
@@ -95,7 +95,7 @@ char *cartString(struct cart *cart, char *var);
 INLINE char *cartStringDb(struct cart *cart, char *db, char *var)
 /* Return string valued cart var_$db. */
 {
-    return cartString(cart, _cartVarDbName(db, var));
+return cartString(cart, _cartVarDbName(db, var));
 }
 
 char *cartOptionalString(struct cart *cart, char *var);
@@ -104,7 +104,7 @@ char *cartOptionalString(struct cart *cart, char *var);
 INLINE char *cartOptionalStringDb(struct cart *cart, char *db, char *var)
 /* Return string valued cart variable_$db or NULL if it doesn't exist. */
 {
-    return cartOptionalString(cart, _cartVarDbName(db, var));
+return cartOptionalString(cart, _cartVarDbName(db, var));
 }
 
 char *cartNonemptyString(struct cart *cart, char *name);
@@ -115,7 +115,7 @@ INLINE char *cartNonemptyStringDb(struct cart *cart, char *db, char *name)
 /* Return string value associated with name_$db.  Return NULL
  * if value doesn't exist or if it is pure white space. */
 {
-    return cartNonemptyString(cart, _cartVarDbName(db, name));
+return cartNonemptyString(cart, _cartVarDbName(db, name));
 }
 
 char *cartUsualString(struct cart *cart, char *var, char *usual);
@@ -124,7 +124,7 @@ char *cartUsualString(struct cart *cart, char *var, char *usual);
 INLINE char *cartUsualStringDb(struct cart *cart, char *db, char *var, char *usual)
 /* Return var_$db value if it exists or usual if not. */
 {
-    return cartUsualString(cart, _cartVarDbName(db, var), usual);
+return cartUsualString(cart, _cartVarDbName(db, var), usual);
 }
 
 char *cartCgiUsualString(struct cart *cart, char *var, char *usual);
@@ -144,7 +144,7 @@ void cartSetString(struct cart *cart, char *var, char *val);
 INLINE void cartSetStringDb(struct cart *cart, char *db, char *var, char *val)
 /* Set string valued cart var_$db. */
 {
-    return cartSetString(cart, _cartVarDbName(db, var), val);
+cartSetString(cart, _cartVarDbName(db, var), val);
 }
 
 int cartInt(struct cart *cart, char *var);
@@ -153,7 +153,7 @@ int cartInt(struct cart *cart, char *var);
 INLINE int cartIntDb(struct cart *cart, char *db, char *var)
 /* Return int valued variable_$db. */
 {
-    return cartInt(cart, _cartVarDbName(db, var));
+return cartInt(cart, _cartVarDbName(db, var));
 }
 
 
@@ -166,7 +166,7 @@ int cartUsualInt(struct cart *cart, char *var, int usual);
 INLINE int cartUsualIntDb(struct cart *cart, char *db, char *var, int usual)
 /* Return variable_$db value if it exists or usual if not. */
 {
-    return cartUsualInt(cart, _cartVarDbName(db, var), usual);
+return cartUsualInt(cart, _cartVarDbName(db, var), usual);
 }
 
 int cartUsualIntClipped(struct cart *cart, char *var, int usual,
@@ -182,7 +182,7 @@ void cartSetInt(struct cart *cart, char *var, int val);
 INLINE void cartSetIntDb(struct cart *cart, char *db, char *var, int val)
 /* Set integer value for var_$db. */
 {
-    return cartSetInt(cart, _cartVarDbName(db, var), val);
+cartSetInt(cart, _cartVarDbName(db, var), val);
 }
 
 double cartDouble(struct cart *cart, char *var);
@@ -191,7 +191,7 @@ double cartDouble(struct cart *cart, char *var);
 INLINE double cartDoubleDb(struct cart *cart, char *db, char *var)
 /* Return double valued var_$db. */
 {
-    return cartDouble(cart, _cartVarDbName(db, var));
+return cartDouble(cart, _cartVarDbName(db, var));
 }
 
 double cartUsualDouble(struct cart *cart, char *var, double usual);
@@ -200,7 +200,7 @@ double cartUsualDouble(struct cart *cart, char *var, double usual);
 INLINE double cartUsualDoubleDb(struct cart *cart, char *db, char *var, double usual)
 /* Return var_$db value if it exists or usual if not. */
 {
-    return cartUsualDouble(cart, _cartVarDbName(db, var), usual);
+return cartUsualDouble(cart, _cartVarDbName(db, var), usual);
 }
 
 double cartCgiUsualDouble(struct cart *cart, char *var, double usual);
@@ -212,7 +212,7 @@ void cartSetDouble(struct cart *cart, char *var, double val);
 INLINE void cartSetDoubleDb(struct cart *cart, char *db, char *var, double val)
 /* Set double value for var_$db. */
 {
-    return cartSetDouble(cart, _cartVarDbName(db, var), val);
+cartSetDouble(cart, _cartVarDbName(db, var), val);
 }
 
 boolean cartBoolean(struct cart *cart, char *var);
@@ -221,7 +221,7 @@ boolean cartBoolean(struct cart *cart, char *var);
 INLINE boolean cartBooleanDb(struct cart *cart, char *db, char *var)
 /* Retrieve cart boolean for var_$db. */
 {
-    return cartBoolean(cart, _cartVarDbName(db, var));
+return cartBoolean(cart, _cartVarDbName(db, var));
 }
 
 boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual);
@@ -230,7 +230,7 @@ boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual);
 INLINE boolean cartUsualBooleanDb(struct cart *cart, char *db, char *var, boolean usual)
 /* Return var_$db value if it exists or usual if not.  */
 {
-    return cartUsualBoolean(cart, _cartVarDbName(db, var), usual);
+return cartUsualBoolean(cart, _cartVarDbName(db, var), usual);
 }
 
 boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual);
@@ -242,7 +242,7 @@ void cartSetBoolean(struct cart *cart, char *var, boolean val);
 INLINE void cartSetBooleanDb(struct cart *cart, char *db, char *var, boolean val)
 /* Set boolean value for $var_db. */
 {
-    return cartSetBoolean(cart, _cartVarDbName(db, var), val);
+cartSetBoolean(cart, _cartVarDbName(db, var), val);
 }
 
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize);
