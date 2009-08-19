@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.70 2009/03/10 00:31:04 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.71 2009/08/19 03:44:27 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -1094,9 +1094,10 @@ while (TRUE)
 	    warn("code 30x redirects: exceeded limit of 5 redirects, %s", newUrl);
 	    success = FALSE;
 	    }
-	else if (!startsWith("http://",newUrl))
+	else if (!startsWith("http://",newUrl) 
+              && !startsWith("https://",newUrl))
 	    {
-	    warn("redirected to non-http: %s", newUrl);
+	    warn("redirected to non-http(s): %s", newUrl);
 	    success = FALSE;
 	    }
 	else 
