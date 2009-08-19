@@ -42,7 +42,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.23 2008/10/14 17:35:16 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.24 2009/08/19 03:21:23 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -453,24 +453,21 @@ else if (isOrestesEntry)
     kvtAdd(kvt, "wrn", "orestes");
 }
 
-static boolean isOrfeomeClone()
-/* determine if this is an ORFeome clone from the keyword field */
+static void hackSynClone()
+/* Make edits to synthetic clone entries that appear to be mRNAs to have a mol type of
+ * mRNA (normally marked as DNA)  */
 {
-return (gbKeywordsField->val != NULL) && containsStringNoCase(gbKeywordsField->val->string, "orfeome");
-}
-
-static void hackOrfeomeClone()
-/* Make edits to ORFEome syntenthic clone entries are added as molType of DNA, 
- * change these to mRNA */
-{
-struct keyVal *kv = kvtGet(kvt, "mol");
-if (kv != NULL)
-    kv->val = "mRNA";
+if (kvtGet(kvt, "gen") != NULL)
+    {
+    struct keyVal *kv = kvtGet(kvt, "mol");
+    if (kv != NULL)
+        kv->val = "mRNA";
+    }
 }
 
 static char *findSyntheticTarget()
-/* for a synthetic sequence, attempt to find the targete organism.  This was
- * added to support the ORFeome clones.  In general, there is no simple way to
+/* for a synthetic sequence, attempt to find the targeted organism.  This was
+ * added to support the MGC/ORFeome clones.  In general, there is no defined way to
  * determine an organism that a synthenic clone targets. */
 {
 struct keyVal *kv;
@@ -654,9 +651,11 @@ parseMiscDiffs();
 parseWarnings();
 
 if (startsWith("synthetic construct", gbOrganismField->val->string))
+    {
     synOrg = findSyntheticTarget();
-if (isOrfeomeClone())
-    hackOrfeomeClone();
+    if (synOrg != NULL)
+        hackSynClone();
+    }
 
 if (keepGbEntry(isEst))
     {
