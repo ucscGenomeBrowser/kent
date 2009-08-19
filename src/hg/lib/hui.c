@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.231 2009/08/19 19:32:44 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.232 2009/08/19 23:19:12 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2662,7 +2662,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             freeMem(name);
             }
         }
-    if(filterBy->valueAndLabel)
+    else if(filterBy->valueAndLabel)
         {
         for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
             printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name,slValue->name+strlen(slValue->name)+1);
