@@ -2,6 +2,7 @@
  * creating various types of custom tracks. */
 
 #include "common.h"
+#include "errCatch.h"
 #include "hash.h"
 #include "linefile.h"
 #include "portable.h"
@@ -26,7 +27,7 @@
 #include "encode/encodePeak.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.101 2009/08/18 22:31:14 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.102 2009/08/19 06:02:57 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1675,26 +1676,38 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
 
 if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
     {
-    struct dyString *ds = NULL;
-    int sd = netUrlOpen(val);
-    if (sd >= 0)
-        {
-	char *newUrl = NULL;
-	int newSd = 0;
-        if (netSkipHttpHeaderLinesHandlingRedirect(sd, val, &newSd, &newUrl)) /* redirect can modify the url */
+    /* adding error trapping because various net.c functions can errAbort */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	struct dyString *ds = NULL;
+	int sd = netUrlOpen(val);
+	if (sd >= 0)
 	    {
-	    if (newUrl)
+	    char *newUrl = NULL;
+	    int newSd = 0;
+	    if (netSkipHttpHeaderLinesHandlingRedirect(sd, val, &newSd, &newUrl)) 
+		/* redirect can modify the url */
 		{
-		freeMem(newUrl);
-		sd = newSd;
+		if (newUrl)
+		    {
+		    freeMem(newUrl);
+		    sd = newSd;
+		    }
+		ds = netSlurpFile(sd);
+		close(sd);
+		track->tdb->html = dyStringCannibalize(&ds);
 		}
-	    ds = netSlurpFile(sd);
-	    close(sd);
-	    track->tdb->html = dyStringCannibalize(&ds);
 	    }
-        }
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	warn(errCatch->message->string);
+    errCatchFree(&errCatch);
     }
+
 tdb->url = hashFindVal(hash, "url");
+
 if ((val = hashFindVal(hash, "visibility")) != NULL)
     {
     if (isdigit(val[0]))
