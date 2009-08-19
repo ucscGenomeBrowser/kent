@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.230 2009/08/14 21:37:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.231 2009/08/19 19:32:44 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4813,11 +4813,13 @@ for(ix=1;ix<count && !found;ix++)
             char * cvTerm = metadataSettingFind(childTdb, cvSetting);
             if(cvTerm != NULL)
                 {
-                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(cvTerm)+2*strlen(label) + 2;
+		char *encodedTerm = cgiEncode(cvTerm);
+                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 2;
                 char *link=needMem(sz);
-                safef(link,sz,VOCAB_LINK,words[0],cvTerm,label,label);
+                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,label,label);
                 freeMem(words[0]);
                 freeMem(cvTerm);
+                freeMem(encodedTerm);
                 return link;
                 }
             }
