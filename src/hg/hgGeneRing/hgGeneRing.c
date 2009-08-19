@@ -17,7 +17,7 @@
 #include "bdgpGeneInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.7 2008/09/03 19:18:53 markd Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.8 2009/08/19 23:25:19 angie Exp $";
 
 char *errMsg = NULL;
 
@@ -773,7 +773,7 @@ printf("</MAP>\n");
 
 
 
-mgSaveGif(mg, filename.forCgi);
+mgSaveGif(mg, filename.forCgi, FALSE);
  
 width=height=SCREEN_SIZE;
 printf("<CENTER><TABLE BORDER=0 CELLPADDING=0>");

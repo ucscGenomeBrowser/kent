@@ -87,6 +87,6 @@ if (mute)
 else
     mg = makeCountPic(count, mgMediumFont());
 fprintf(stdout, "Content-type: image/gif\n\n");
-mgSaveToGif(stdout, mg);
+mgSaveToGif(stdout, mg, FALSE);
 return 0;
 }

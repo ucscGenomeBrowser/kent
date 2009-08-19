@@ -1456,7 +1456,7 @@ chmod(mapTn.forCgi, 0666);
 
 /* Save out picture and tell html file about it. */
 makeTempName(&gifTn, "trk", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+mgSaveGif(mg, gifTn.forCgi, FALSE);
 printf("<INPUT TYPE=HIDDEN NAME=map VALUE=\"%s\">\n", mapTn.forCgi);
 printf(
     "<P><INPUT TYPE=IMAGE SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME = \"mouse\" ALIGN=BOTTOM><BR>\n",

@@ -84,7 +84,7 @@ for (i=0; i<10; ++i)
         complexGaussean(i, 7.0, 3.0));
     }
 makeTempName(&gifTn, "trk", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+mgSaveGif(mg, gifTn.forCgi, FALSE);
 printf(
     "<P><IMAGE SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME = \"mouse\" ALIGN=BOTTOM><BR>\n",
     gifTn.forHtml, pixWidth, pixHeight);

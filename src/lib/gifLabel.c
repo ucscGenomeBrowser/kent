@@ -5,7 +5,7 @@
 #include "portable.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.9 2008/09/18 00:38:20 galt Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.10 2009/08/19 23:12:44 angie Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -84,7 +84,7 @@ if (!sameGifContents(rotated, existing))
     {
     struct tempName tn;
     makeTempName(&tn, "gifLabelVertTemp", ".gif");
-    mgSaveGif(rotated, tn.forCgi); 
+    mgSaveGif(rotated, tn.forCgi, FALSE); 
     rename(tn.forCgi, fileName);
     }
 mgFree(&straight);

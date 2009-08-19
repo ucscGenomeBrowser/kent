@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: cgiPicture.c,v 1.3 2008/09/03 19:21:23 markd Exp $";
+static char const rcsid[] = "$Id: cgiPicture.c,v 1.4 2009/08/19 23:20:55 angie Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -87,7 +87,7 @@ printf("<BR>");
 /* Create and draw image to temp file and write out URL of temp file. */
 struct tempName tn;
 makeTempName(&tn, "image", ".gif");
-struct vGfx *vg = vgOpenGif(500, 500, tn.forCgi);
+struct vGfx *vg = vgOpenGif(500, 500, tn.forCgi, FALSE);
 drawImage(vg);
 vgClose(&vg);
 printf("<IMG SRC=\"%s\">", tn.forCgi);

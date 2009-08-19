@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.10 2009/07/27 17:25:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.11 2009/08/19 23:20:55 angie Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -227,7 +227,7 @@ if (psOutput2)
 else
     {
     trashDirFile(&gifTn2, "pbt", "pbt", ".gif");
-    vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi);
+    vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi, FALSE);
     }
 
 g_vg = vg2;

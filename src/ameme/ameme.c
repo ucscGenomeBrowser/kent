@@ -2457,7 +2457,7 @@ if (gifName == NULL)
     makeTempName(&gifTn, "imp", ".gif");
     gifName = gifTn.forCgi;
     }
-mgSaveGif(mg, gifName);
+mgSaveGif(mg, gifName, FALSE);
 chmod(gifName, 0666);
 mgFree(&mg);
 fprintf(htmlOut, "<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",

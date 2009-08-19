@@ -67,7 +67,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.21 2009/06/24 03:26:11 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.22 2009/08/19 23:26:39 angie Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -723,7 +723,7 @@ if (onWeb)
     printf("Content-type: image/gif\r\n");
     printf("\r\n");
     }
-if (!mgSaveToGif(stdout, mg))
+if (!mgSaveToGif(stdout, mg, FALSE))
     {
     errAbort("Couldn't save gif to stdout");
     }

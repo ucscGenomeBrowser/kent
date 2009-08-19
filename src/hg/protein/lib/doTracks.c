@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.21 2009/07/28 15:44:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.22 2009/08/19 23:14:10 angie Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -1598,7 +1598,7 @@ if (psOutput)
 else
     {
     trashDirFile(&gifTn, "pbt", "pbt", ".gif");
-    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
     }
 
 /* Put up horizontal scroll controls. */

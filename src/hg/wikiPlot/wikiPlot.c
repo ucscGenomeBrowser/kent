@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: wikiPlot.c,v 1.7 2003/05/06 07:22:36 kate Exp $";
+static char const rcsid[] = "$Id: wikiPlot.c,v 1.8 2009/08/19 23:25:19 angie Exp $";
 
 /* Variables that can be overridden by CGI. */
 char *contigDir = "/projects/hg3/gs.7/oo.29/19/ctg18433";
@@ -346,7 +346,7 @@ printf("</MAP>\n");
 
 /* Save image in temp dir. */
 makeTempName(&gifTn, "wikPic", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+mgSaveGif(mg, gifTn.forCgi, FALSE);
 printf(
     "<P><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
     gifTn.forHtml, pix, pix, mapName);

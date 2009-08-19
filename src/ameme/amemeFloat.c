@@ -1875,7 +1875,7 @@ printf("<H3>Graphical Summary of Profile Hits</H3>\n");
 printf("Colors represent different profiles. Darker colors represent\n"
        "stronger matches to profile.\n");
 makeTempName(&gifTn, "imp", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+mgSaveGif(mg, gifTn.forCgi, FALSE);
 mgFree(&mg);
 printf("<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",
     gifTn.forCgi, pixWidth, pixHeight);
