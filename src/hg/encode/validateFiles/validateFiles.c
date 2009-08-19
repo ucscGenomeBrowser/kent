@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.25 2009/08/10 21:05:29 braney Exp $";
-static char *version = "$Revision: 1.25 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.26 2009/08/19 17:58:00 braney Exp $";
+static char *version = "$Revision: 1.26 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -38,6 +38,7 @@ char csSeqName[256];
 char bedTypeCols[10];
 struct twoBitFile *genome = NULL;
 int mismatches;
+int matchFirst=0;
 int mmCheckOneInN;
 
 void usage()
@@ -78,6 +79,7 @@ errAbort(
   "                                  in .2bit file\n"
   "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if \n"
   "                                  validating tagAlign or pairedTagAlign files\n"
+  "   -matchFirst=n                only check the first N bases of the sequence\n"
   "   -mmPerPair                   Check either pair dont exceed mismatch count if validating\n"
   "                                  pairedTagAlign files (default is the total for the pair)\n"
   "   -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)\n"
@@ -102,6 +104,7 @@ static struct optionSpec options[] = {
    {"printFailLines", OPTION_BOOLEAN},
    {"genome", OPTION_STRING},
    {"mismatches", OPTION_INT},
+   {"matchFirst", OPTION_INT},
    {"mmPerPair", OPTION_BOOLEAN},
    {"mmCheckOneInN", OPTION_INT},
    {"quick", OPTION_INT},
@@ -567,7 +570,7 @@ int i, mm = 0;
 struct dnaSeq *g;
 static struct dnaSeq *cacheSeq = NULL;
 static char cacheChrom[1024];
-static char bigArr[100 * 1024];
+static char bigArr[100 * 1024]; // 100K limit on tagAlign seqLen
 struct dnaSeq ourSeq;
 
 if (!genome)
@@ -580,7 +583,7 @@ if (!isSort)
     }
 else
     {
-    AllocVar(g);
+    // read the whole chrom
     if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
 	{
 	freeDnaSeq(&cacheSeq);
@@ -604,11 +607,17 @@ if (strand == '-')
 
 if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
     {
-    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d)", 
-         file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size);
+    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d)", 
+         file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
+	 chrom, chromStart, chromEnd);
     return FALSE;
     }
-for (i=0 ; i < g->size ; ++i)
+
+int length = g->size;
+if (matchFirst && (matchFirst < length))
+    length = matchFirst;
+
+for (i=0 ; i < length; ++i)
     {
     char c = tolower(seq[i]);
     if (checkMismatch(c,  g->dna[i]))
@@ -1069,6 +1078,7 @@ printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
 genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) : NULL;
 mismatches     = optionInt("mismatches",0);
+matchFirst     = optionInt("matchFirst",0);
 mmPerPair      = optionExists("mmPerPair");
 nMatch         = optionExists("nMatch");
 isSort         = optionExists("isSort");
