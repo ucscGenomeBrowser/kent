@@ -3075,6 +3075,7 @@ priority 300
     group regulation
     priority 300
     visibility hide
+    spanList 1
     type wig -10 10
 
     track uwNucOccDennis
@@ -3084,6 +3085,7 @@ priority 300
     group regulation
     priority 300
     visibility hide
+    spanList 1
     type wig -10 10
 
     track uwNucOccMec
@@ -3093,6 +3095,7 @@ priority 300
     group regulation
     priority 300
     visibility hide
+    spanList 1
     type wig -10 10
 
 track zhaoLabNucleosome
