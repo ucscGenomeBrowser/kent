@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.409 2009/08/14 07:16:16 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.410 2009/08/20 18:11:36 larrym Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3293,18 +3293,8 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-static boolean hasTrackDbAlready(struct trackDb *tdb, struct trackDb *list)
-/* Return true if the given list already has the given track (check names) */
-{
-struct trackDb *check;
-for (check = list; check != NULL; check = check->next)
-    if (sameString(check->tableName,tdb->tableName))
-	return TRUE;
-return FALSE;
-}
-
 static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
-                              struct trackDb **tdbList)
+                              struct trackDb **tdbList, struct hash *loaded)
 /* Load a trackDb table, including handling profiles:tbl. Returns
  * TRUE if table exists */
 {
@@ -3316,8 +3306,9 @@ if ((exists = sqlTableExists(conn, tbl)))
     struct trackDb *oneTable = trackDbLoadWhere(conn, tbl, where), *oneRow;
     while ((oneRow = slPopHead(&oneTable)) != NULL)
         {
-        if (!hasTrackDbAlready(oneRow, *tdbList))
+        if (!hashLookup(loaded, oneRow->tableName))
             {
+            hashAddInt(loaded, oneRow->tableName, 1);
             slAddHead(tdbList, oneRow);
             // record for use in check available tracks
             char *profileName = getTrackProfileName(oneRow);
@@ -3338,15 +3329,18 @@ static struct trackDb *loadTrackDb(char *db, char *where)
 struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
 boolean foundOne = FALSE;
+// A cleaner implementation of loaded hash would be something like slListContainer with support for an exists method
+struct hash *loaded = hashNew(0);
 for (one = tableList; one != NULL; one = one->next)
     {
-    if (loadOneTrackDb(db, where, one->name, &tdbList))
+    if (loadOneTrackDb(db, where, one->name, &tdbList, loaded))
         foundOne = TRUE;
     }
 if (!foundOne)
     errAbort("can not find any trackDb tables for %s, check db.trackDb specification in hg.conf",
              db);
 slNameFreeList(&tableList);
+hashFree(&loaded);
 
 /* fill in supertrack fields, if any in settings */
 trackDbSuperSettings(tdbList);
