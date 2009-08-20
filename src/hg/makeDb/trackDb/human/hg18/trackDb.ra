@@ -2123,7 +2123,6 @@ chimpDb panTro2
 macaqueDb rheMac2
 
 track snpArray
-maxWindowToDraw 500000
 compositeTrack on
 shortLabel SNP Arrays
 longLabel SNP Genotyping Arrays
