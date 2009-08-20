@@ -40,7 +40,7 @@
  * scanned for.
  */
 
-static char const rcsid[] = "$Id: fuzzyFind.c,v 1.17 2006/05/09 01:05:55 markd Exp $";
+static char const rcsid[] = "$Id: fuzzyFind.c,v 1.18 2009/08/20 22:31:46 kent Exp $";
 
 #include "common.h"
 #include "dnautil.h"
@@ -1025,6 +1025,7 @@ proto.hStart = ali->hStart;
 proto.hEnd = ali->hEnd;
 proto.nStart = ali->nStart;
 proto.nEnd = ali->nEnd;
+proto.score = 0;
 lastDif = ali->hStart - ali->nStart;
 
 /* Go through rest of list and put others that are close to
