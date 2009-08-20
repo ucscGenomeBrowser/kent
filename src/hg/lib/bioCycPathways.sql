@@ -71,7 +71,8 @@ gene_name65 varchar(255),
 gene_name66 varchar(255),
 gene_name67 varchar(255),
 gene_name68 varchar(255),
-
+gene_name69 varchar(255),
+gene_name70 varchar(255),
 
 gene_id1 varchar(255),
 gene_id2 varchar(255),
@@ -141,6 +142,9 @@ gene_id65 varchar(255),
 gene_id66 varchar(255),
 gene_id67 varchar(255),
 gene_id68 varchar(255),
+gene_id69 varchar(255),
+gene_id70 varchar(255),
+
 KEY (UNIQUE_ID),
 KEY (NAME)
 );
