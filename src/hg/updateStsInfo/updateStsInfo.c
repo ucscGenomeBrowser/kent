@@ -792,7 +792,10 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 	  if (s->fa != NULL)
 	    {
 	      /* gb = sqlStringArrayToString(si->genbank, si->gbCount); */
+		if (s->faAcc && differentWord(s->faAcc,"(null)"))
 	      safef(name, ArraySize(name), "%s %s %s", s->fa->name, si->name, s->faAcc);
+		else
+	      safef(name, ArraySize(name), "%s %s %s", s->fa->name, si->name, s->si->name);
 	      faWriteNext(off, name, s->fa->dna, s->fa->size);
 	    }
 	}
