@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1591 2009/08/19 22:28:37 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1592 2009/08/20 18:40:23 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3832,7 +3832,18 @@ static boolean maxWindowSizeExceeded(struct track *tg)
 int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
 if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     {
-    tg->drawItems = drawMaxWindowWarning;
+    if (tdbIsComposite(tg->tdb))
+	{
+	struct track *subtrack;
+	for (subtrack = tg->subtracks;  subtrack != NULL;  subtrack = subtrack->next)
+	    {
+	    subtrack->drawItems = drawMaxWindowWarning;
+	    subtrack->limitedVis = tvDense;
+	    subtrack->limitedVisSet = TRUE;
+	    }
+	}
+    else
+	tg->drawItems = drawMaxWindowWarning;
     tg->limitedVis = tvDense;
     tg->limitedVisSet = TRUE;
     return TRUE;
