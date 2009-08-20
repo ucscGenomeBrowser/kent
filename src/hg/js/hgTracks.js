@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.33 2009/08/13 06:49:59 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.34 2009/08/20 19:29:21 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -376,7 +376,7 @@ $(document).ready(function()
 {
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
     if($("FORM").length > 0) {
-        $('a,area').not("[href*='#']").filter("[target='']").click(function(i) {
+        $('a,area').not("[href*='#']").not("[target]").click(function(i) {
             if(blockUseMap==true) {
                 return false;
             }
