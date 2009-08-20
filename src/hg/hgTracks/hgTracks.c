@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1592 2009/08/20 18:40:23 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1593 2009/08/20 20:34:57 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3797,7 +3797,7 @@ static int getMaxWindowToDraw(struct trackDb *tdb)
 {
 if (tdb == NULL)
     return 0;
-char *maxWinToDraw = trackDbSetting(tdb, "maxWindowToDraw");
+char *maxWinToDraw = trackDbSettingClosestToHome(tdb, "maxWindowToDraw");
 if (isNotEmpty(maxWinToDraw))
     {
     unsigned maxWTD = sqlUnsigned(maxWinToDraw);
