@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.130 2009/04/29 22:27:06 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.131 2009/08/20 18:15:41 larrym Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -537,16 +537,37 @@ return databases;
 struct slName *sqlListTables(struct sqlConnection *conn)
 /* Return list of tables in database associated with conn. */
 {
-struct sqlResult *sr = sqlGetResult(conn, "show tables");
+struct sqlResult *sr;
 char **row;
 struct slName *list = NULL, *el;
-while ((row = sqlNextRow(sr)) != NULL)
+
+if (sqlTableExists(conn, "tableList"))
     {
-    el = slNameNew(row[0]);
-    slAddHead(&list, el);
+    // mysql does not cache "show tables", so use a cached run of show tables in the tableList table (if it exists).
+    // Table is loaded thus:
+    //
+    //   hgsql hg18 -e 'show tables' > tables.txt
+    //   CREATE TABLE tableList (name varchar(255) NOT NULL, INDEX(name));
+    //   load data local infile 'tables.txt' into table tableList;
+
+    sr = sqlGetResult(conn, "select * from tableList order by name desc");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        el = slNameNew(row[0]);
+        slAddHead(&list, el);
+        }
+    }
+else
+    {
+    sr = sqlGetResult(conn, "show tables");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        el = slNameNew(row[0]);
+        slAddHead(&list, el);
+        }
+    slReverse(&list);
     }
 sqlFreeResult(&sr);
-slReverse(&list);
 return list;
 }
 
