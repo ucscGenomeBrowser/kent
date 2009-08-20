@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.50 2009/01/14 18:59:14 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.51 2009/08/20 23:34:49 braney Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -373,8 +373,9 @@ if (sameWord("NONE",tdbDefault))
 	    }
 	}
     }
-/*	If something found, let's parse it	*/
-else if (sameWord("first",tdbDefault))
+/* if we still don't have a spanList, or we got "first" for spanList,
+ * make up spanList by choosing the first span we find in the table */
+if (sameWord("NONE",tdbDefault) || sameWord("first",tdbDefault))
     {
     char query[1024];
     snprintf(query, sizeof(query), "SELECT span FROM %s limit 1", tdb->tableName );
@@ -386,6 +387,7 @@ else if (sameWord("first",tdbDefault))
     }
 else 
     {
+    /*	If something found, let's parse it	*/
     int i;
     char *words[MAX_SPAN_COUNT];
     int wc;
