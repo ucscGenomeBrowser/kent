@@ -7,12 +7,12 @@
 
 #include "common.h"
 #include "memgfx.h"
-#ifdef SETJMP_H
-//.crap!;
-#endif
+#ifdef _SETJMP_H
+//.!$ simulate syntax error like the distro /usr/include/pngconf.h does when setjmp.h has already been included.  currently common.h includes it.
+#endif//def _SETJMP_H
 #include "png.h"
 
-static char const rcsid[] = "$Id: pngwrite.c,v 1.1 2009/08/05 23:34:31 angie Exp $";
+static char const rcsid[] = "$Id: pngwrite.c,v 1.2 2009/08/20 21:34:44 angie Exp $";
 
 static void pngAbort(png_structp png, png_const_charp errorMessage)
 /* type png_error wrapper around errAbort */
@@ -26,15 +26,15 @@ static void pngWarn(png_structp png, png_const_charp warningMessage)
 warn((char *)warningMessage);
 }
 
-boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useAlpha)
+boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useTransparency)
 /* Save PNG to an already open file.
- * If useAlpha, then the first color in memgfx's colormap/palette is
+ * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
 /* Reference: http://libpng.org/pub/png/libpng-1.2.5-manual.html */
 {
 if (!png_file || !mg)
-    errAbort("mgSaveToPng: caller screwed up: png_file=[%lld], mg=[%lld]",
+    errAbort("mgSaveToPng: called with a NULL: png_file=[%lld], mg=[%lld]",
 	     (long long int)png_file, (long long int)mg);
 png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING,
 					  NULL, // don't need pointer to data for err/warn handlers
@@ -71,7 +71,7 @@ png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
 png_set_PLTE(png, info,
 	     (png_color *)(mg->colorMap), // png_color is same as struct rgbColor!
 	     mg->colorsUsed);
-if (useAlpha)
+if (useTransparency)
     {
     // First palette color is assumed to be background/transparent, so
     // that's the only one we need in the parallel array opacities[].
@@ -95,14 +95,14 @@ png_destroy_write_struct(&png, &info);
 return TRUE;
 }
 
-void mgSavePng(struct memGfx *mg, char *filename, boolean useAlpha)
+void mgSavePng(struct memGfx *mg, char *filename, boolean useTransparency)
 /* Save memory bitmap to filename as a PNG.
- * If useAlpha, then the first color in memgfx's colormap/palette is
+ * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
 {
 FILE *pngFile = mustOpen(filename, "wb");
-if (!mgSaveToPng(pngFile, mg, useAlpha))
+if (!mgSaveToPng(pngFile, mg, useTransparency))
     {
     remove(filename);
     errAbort("Couldn't save %s", filename);
