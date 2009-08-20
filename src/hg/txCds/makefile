@@ -12,6 +12,7 @@ all:
 DIRS = \
     txCdsBadBed \
     txCdsCluster \
+    txCdsEvFromBed \
     txCdsEvFromBorf \
     txCdsEvFromProtein \
     txCdsEvFromRna \
