@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.22 2009/08/13 06:46:23 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.23 2009/08/20 17:07:48 tdreszer Exp $
 
 var debug = false;
 
@@ -385,17 +385,14 @@ function metadataShowHide(tableName)
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_meta");
     if($(divit).css('display') == 'none')
-        $("#div_"+tableName+"_cfg").hide();
+        $("#div_"+tableName+"_cfg").hide();  // Hide any configuration when opening metadata
     var htm = $(divit).html();
     // Seems to be faster if this undisplayed junk is commented out.
     if(htm.substring(0,4) == "<!--") {
         htm = htm.substring(4,htm.length-7);
         $(divit).html(htm);
-    } else {
-        $(divit).html("<!--"+htm+"-->");
     }
-
-    $(divit).toggle();
+    $(divit).toggle();  // jQuery hide/show
     return false;
 }
 
