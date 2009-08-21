@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.24 2007/12/17 22:59:31 galt Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.25 2009/08/21 18:41:34 angie Exp $";
 
 static void ffShNeedle(FILE *f, DNA *needle, int needleSize,
 		       int needleNumOffset, char *colorFlags,
@@ -79,6 +79,84 @@ fprintf(f, "</TT></PRE>\n");
 htmHorizontalLine(f);
 }
 
+void ffShowSideBySide(FILE *f, struct ffAli *leftAli, DNA *needle, int needleNumOffset,
+		      DNA *haystack, int hayNumOffset, int haySize, int hayOffStart, int hayOffEnd,
+		      int blockMaxGap, boolean rcHaystack, boolean initialNewline)
+/* Print HTML side-by-side alignment of needle and haystack (no title or labels) to f.
+ * {hay,needle}NumOffset are the coords at which the DNA sequence begins.
+ * hayOff{Start,End} are the range of coords *relative to hayNumOffset* to which the 
+ * alignment display will be clipped -- pass in {0,haySize} for no clipping. */
+{
+fprintf(f, "<PRE><TT>%s", initialNewline ? "\n" : "");
+struct ffAli *ali, *lastAli = NULL;
+struct baf baf;
+/* NOTE: if rcHaystack, hayNumOffset changes here into the end, not start! */
+if (rcHaystack) 
+    hayNumOffset += haySize;
+bafInit(&baf, needle, needleNumOffset, FALSE, 
+    	haystack, hayNumOffset, rcHaystack, f, 50, FALSE);
+for (ali=leftAli; ali!=NULL; ali = ali->right)
+    {
+    int i;
+    boolean doBreak = TRUE;
+    if ((ali->hEnd - haystack) <= hayOffStart ||
+	(ali->hStart - haystack) >= hayOffEnd)
+	continue;
+
+    /* Decide whether to put in a line break and/or blank characters */
+    if (lastAli != NULL)
+	{
+	int nSkip = ali->nStart - lastAli->nEnd;
+	int hSkip = ali->hStart - lastAli->hEnd;
+	if (nSkip > 0 && nSkip <= blockMaxGap && hSkip == 0)
+	    {
+	    for (i=0; i<nSkip; ++i)
+		bafOut(&baf, lastAli->nEnd[i],'.');
+	    doBreak = FALSE; 
+	    }
+	else if (hSkip > 0 && hSkip <= blockMaxGap && nSkip == 0)
+	    {
+	    for (i=0; i<hSkip; ++i)
+		bafOut(&baf, '.', lastAli->hEnd[i]);
+	    doBreak = FALSE;
+	    }
+	else if (hSkip == nSkip && hSkip <= blockMaxGap)
+	    {
+	    for (i=0; i<hSkip; ++i)
+		bafOut(&baf, lastAli->nEnd[i], lastAli->hEnd[i]);
+	    doBreak = FALSE;
+	    }
+	}
+    else
+	{
+	doBreak = FALSE;
+	}
+    if (doBreak)
+	bafFlushLine(&baf);
+    int offset = max(0, (hayOffStart - (ali->hStart - haystack)));
+    int nStart = offset + ali->nStart - needle;
+    int hStart = offset + ali->hStart - haystack;
+    bafSetPos(&baf, nStart, hStart);
+    if (doBreak || lastAli == NULL)
+	bafStartLine(&baf);
+    int aliLen = ali->nEnd - ali->nStart;
+    for (i=0; i<aliLen; ++i)
+	{
+	int hayOff = i + (ali->hStart - haystack);
+	if (hayOff < hayOffStart)
+	    continue;
+	if (hayOff >= hayOffEnd)
+	    break;
+	bafOut(&baf, ali->nStart[i], ali->hStart[i]);
+	}
+    lastAli = ali;
+    }
+if (leftAli != NULL)
+    bafFlushLineNoHr(&baf);
+fprintf(f, "</TT></PRE>\n");
+}
+
+
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
@@ -98,8 +176,6 @@ struct ffAli *ali;
 struct ffAli *lastAli;
 struct ffAli *leftAli = aliList;
 struct ffAli *rightAli = aliList;
-int charsInLine;
-struct baf baf;
 int maxSize = (needleSize > haySize ? needleSize : haySize);
 char *colorFlags = needMem(maxSize);
 int anchorCount = 0;
@@ -208,10 +284,6 @@ htmHorizontalLine(f);
 
 fprintf(f, "<H4><A NAME=cDNA></A>cDNA %s%s</H4>\n", needleName, (rcNeedle ? " (reverse complemented)" : ""));
 
-/* NOTE: if rcHaystack, hayNumOffset changes here into the end, not start! */
-if (rcHaystack) 
-    hayNumOffset += haySize;
-
 if (rcNeedle)
     reverseComplement(needle, needleSize);
 
@@ -290,72 +362,9 @@ if (showHaystack)
 if (showSideBySide)
     {
     fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
-    fprintf(f, "<PRE><TT>\n");
-    lastAli = NULL;
-    charsInLine = 0;
-    bafInit(&baf, needle, needleNumOffset, FALSE, 
-    	haystack, hayNumOffset, rcHaystack, f, 50, FALSE);
-    for (ali=leftAli; ali!=NULL; ali = ali->right)
-	{
-	boolean doBreak = TRUE;
-	int aliLen;
-	int i;
-
-	if ((ali->hEnd - haystack) <= hayOffStart ||
-	    (ali->hStart - haystack) >= hayOffEnd)
-	    continue;
-
-	/* Decide whether to put in a line break and/or blank characters */
-	if (lastAli != NULL)
-	    {
-	    int nSkip = ali->nStart - lastAli->nEnd;
-	    int hSkip = ali->hStart - lastAli->hEnd;
-	    if (nSkip > 0 && nSkip <= blockMaxGap && hSkip == 0)
-		{
-		for (i=0; i<nSkip; ++i)
-		    bafOut(&baf, lastAli->nEnd[i],'.');
-		doBreak = FALSE; 
-		}
-	    else if (hSkip > 0 && hSkip <= blockMaxGap && nSkip == 0)
-		{
-		for (i=0; i<hSkip; ++i)
-		    bafOut(&baf, '.', lastAli->hEnd[i]);
-		doBreak = FALSE;
-		}
-	    else if (hSkip == nSkip && hSkip <= blockMaxGap)
-		{
-		for (i=0; i<hSkip; ++i)
-		    bafOut(&baf, lastAli->nEnd[i], lastAli->hEnd[i]);
-		doBreak = FALSE;
-		}
-	    }
-	else
-	    {
-	    doBreak = FALSE;
-	    }
-	if (doBreak)
-	    bafFlushLine(&baf);
-	int offset = max(0, (hayOffStart - (ali->hStart - haystack)));
-	int nStart = offset + ali->nStart - needle;
-	int hStart = offset + ali->hStart - haystack;
-	bafSetPos(&baf, nStart, hStart);
-	if (doBreak || lastAli == NULL)
-	    bafStartLine(&baf);
-	aliLen = ali->nEnd - ali->nStart;
-	for (i=0; i<aliLen; ++i)
-	    {
-	    int hayOff = i + (ali->hStart - haystack);
-	    if (hayOff < hayOffStart)
-		continue;
-	    if (hayOff >= hayOffEnd)
-		break;
-	    bafOut(&baf, ali->nStart[i], ali->hStart[i]);
-	    }
-	lastAli = ali;
-	}
-    if (leftAli != NULL)
-	bafFlushLine(&baf);
-    fprintf(f, "</TT></PRE>\n");
+    ffShowSideBySide(f, leftAli, needle, needleNumOffset, haystack, hayNumOffset, haySize,
+		     hayOffStart, hayOffEnd, blockMaxGap, rcHaystack, TRUE);
+    fprintf(f, "<HR ALIGN=\"CENTER\">");
     fprintf(f, "<EM>*Aligned Blocks with gaps &lt;= %d bases are merged for "
 	    "this display when only one sequence has a gap, or when gaps in "
 	    "both sequences are of the same size.</EM>\n", blockMaxGap);

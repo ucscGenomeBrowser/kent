@@ -220,6 +220,14 @@ boolean ffFindAndScore(DNA *needle, int needleSize, DNA *haystack, int haySize,
 
 /************* lib/fuzzyShow - display alignments. ****************/
 
+void ffShowSideBySide(FILE *f, struct ffAli *leftAli, DNA *needle, int needleNumOffset,
+		      DNA *haystack, int hayNumOffset, int haySize, int hayOffStart, int hayOffEnd,
+		      int blockMaxGap, boolean rcHaystack, boolean initialNewline);
+/* Print HTML side-by-side alignment of needle and haystack (no title or labels) to f.
+ * {hay,needle}NumOffset are the coords at which the DNA sequence begins.
+ * hayOff{Start,End} are the range of coords *relative to hayNumOffset* to which the 
+ * alignment display will be clipped -- pass in {0,haySize} for no clipping. */
+
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
