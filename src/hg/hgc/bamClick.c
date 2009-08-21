@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.4 2009/08/21 18:43:50 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.5 2009/08/21 22:54:39 angie Exp $";
 
 #include "bamFile.h"
 
@@ -40,7 +40,43 @@ printf("<BR><B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
        seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
 ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
 		 FALSE);
+printf("<B>Tags:</B><BR>\n");
+
+// ugly: lifted from bam.c bam_format1:
+uint8_t *s = bam1_aux(bam);
+while (s < bam->data + bam->data_len)
+    {
+    uint8_t type, key[2];
+    key[0] = s[0]; key[1] = s[1];
+    s += 2; type = *s; ++s;
+    printf("\t%c%c:", key[0], key[1]);
+    if (type == 'A') { printf("A:%c", *s); ++s; }
+    else if (type == 'C') { printf("i:%u", *s); ++s; }
+    else if (type == 'c') { printf("i:%d", *s); ++s; }
+    else if (type == 'S') { printf("i:%u", *(uint16_t*)s); s += 2; }
+    else if (type == 's') { printf("i:%d", *(int16_t*)s); s += 2; }
+    else if (type == 'I') { printf("i:%u", *(uint32_t*)s); s += 4; }
+    else if (type == 'i') { printf("i:%d", *(int32_t*)s); s += 4; }
+    else if (type == 'f') { printf("f:%g", *(float*)s); s += 4; }
+    else if (type == 'd') { printf("d:%lg", *(double*)s); s += 8; }
+    else if (type == 'Z' || type == 'H')
+	{
+	printf("%c:", (char)type); 
+	while (*s) putc(*s++, stdout);
+	++s;
+	}
+    }
 //TODO: show flags properly, show tags, maybe display quality scores
+}
+
+static void bamPairDetails(const bam1_t *leftBam, const bam1_t *rightBam)
+/* Print out details for paired-end reads. */
+{
+printf("<TABLE><TR><TD><H4>Left end read</H4>\n");
+singleBamDetails(leftBam);
+printf("</TD><TD><H4>Right end read</H4>\n");
+singleBamDetails(rightBam);
+printf("</TD></TR></TABLE>\n");
 }
 
 static int oneBam(const bam1_t *bam, void *data)
@@ -59,9 +95,14 @@ if (sameString(bam1_qname(bam), btd->itemName))
 	}
     else
 	{
-// TODO: paired: if this is first of pair, stash; if second, print details
-uglyf("<B>Note: </B>just showing half of a pair.<BR>\n");
-singleBamDetails(bam); // just for now.
+	bam1_t *firstBam = (bam1_t *)hashFindVal(btd->pairHash, btd->itemName);
+	if (firstBam == NULL)
+	    hashAdd(btd->pairHash, btd->itemName, bamClone(bam));
+	else
+	    {
+	    bamPairDetails(firstBam, bam);
+	    hashRemove(btd->pairHash, btd->itemName);
+	    }
 	}
     }
 return 0;
@@ -73,7 +114,6 @@ void doBamDetails(struct trackDb *tdb, char *item)
 int start = cartInt(cart, "o");
 // make data structure and callback for pairing if necessary and printing out info
 // when we find our alignment.  If it has a stub, better search for the stub...
-//show position, sequence, quality, flags
 
 // TODO: libify
 char varName[1024];
@@ -99,6 +139,8 @@ if (isPaired)
     while ((hel = hashNext(&cookie)) != NULL)
 	{
 	// uh-oh -- we need to search for the mate.
+	uglyf("<B>Note: paired end not shown (zoom out or bug Angie to fix code):</B><BR>\n");
+	singleBamDetails((bam1_t *)hel->val);
 	}
     }
 }
