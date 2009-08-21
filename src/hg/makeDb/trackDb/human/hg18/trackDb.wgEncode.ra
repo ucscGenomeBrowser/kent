@@ -12423,7 +12423,7 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 visibilityViewDefaults Regions=dense Signal=hide 
 settingsByView Signal:maxHeightPixels=100:32:16
-type bed 9 +
+type bed 3
 
     track wgEncodeHudsonalphaCnvSignalGM12878
     subTrack wgEncodeHudsonalphaCnv
