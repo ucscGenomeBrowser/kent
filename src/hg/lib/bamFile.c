@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.4 2009/08/21 05:22:01 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.5 2009/08/21 22:52:35 angie Exp $";
 
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
@@ -124,11 +124,14 @@ const bam1_core_t *core = &bam->core;
 boolean isRc = ((core->flag & BAM_FREVERSE) != 0);
 DNA *needle = (DNA *)bamGetQuerySequence(bam);
 if (isRc)
-    reverseComplement(needle, strlen(needle));
+    reverseComplement(target->dna, target->size);
 DNA *haystack = target->dna;
 unsigned int *cigarPacked = bam1_cigar(bam);
-int tStart, qStart, i;
-for (tStart = targetOffset, qStart = 0, i = 0;  i < core->n_cigar;  i++)
+int tStart = targetOffset, qStart = 0, i;
+// If isRc, need to go through the CIGAR ops backwards, but sequence offsets still count up.
+int iStart = isRc ? (core->n_cigar - 1) : 0;
+int iIncr = isRc ? -1 : 1;
+for (i = iStart;  isRc ? (i >= 0) : (i < core->n_cigar);  i += iIncr)
     {
     char op;
     int size = bamUnpackCigarElement(cigarPacked[i], &op);
@@ -163,6 +166,15 @@ for (tStart = targetOffset, qStart = 0, i = 0;  i < core->n_cigar;  i++)
 ffList = ffMakeRightLinks(ffList);
 ffCountGoodEnds(ffList);
 return ffList;
+}
+
+bam1_t *bamClone(const bam1_t *bam)
+/* Return a newly allocated copy of bam. */
+{
+// Using typecasts to get around compiler complaints about bam being const:
+bam1_t *newBam = cloneMem((void *)bam, sizeof(*bam));
+newBam->data = cloneMem((void *)bam->data, bam->data_len*sizeof(bam->data[0]));
+return newBam;
 }
 
 #endif//def USE_BAM

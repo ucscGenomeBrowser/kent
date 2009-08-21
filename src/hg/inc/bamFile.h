@@ -47,4 +47,7 @@ int bamGetTargetLength(const bam1_t *bam);
 struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset);
 /* Convert from bam to ffAli format. */
 
+bam1_t *bamClone(const bam1_t *bam);
+/* Return a newly allocated copy of bam. */
+
 #endif//ndef BAMFILE_H
