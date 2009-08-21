@@ -83,6 +83,9 @@ void bafWriteLine(struct baf *baf);
 void bafOut(struct baf *baf, char n, char h);
 /* Write a pair of character to block alignment. */
 
+void bafFlushLineNoHr(struct baf *baf);
+/* Write out alignment line if it has any characters in it (no <HR>). */
+
 void bafFlushLine(struct baf *baf);
-/* Write out alignment line if it has any characters in it. */
+/* Write out alignment line if it has any characters in it, and an <HR>. */
 
