@@ -4,6 +4,28 @@ This track shows copy number variation (CNV) in the ENCODE Tier 1 and Tier 2
 human cell lines GM12878, HepG2, and K562 as determined by Illumina's Human 
 1M-Duo Infinium HD BeadChip assay and CNV analysis by circular binary segmentation (CBS).
 <P>
+Two biological replicates were generated for each cell line.
+Because biological replicates gave very similar results, 
+the replicates were averaged to provide a single genotyping
+dataset in order to apply these data to other ENCODE experiments.  
+Possible uses of this data are for correction of copy number in 
+peak-calling for interactome,
+transcriptome, DNase hypersensitivity, and methylome determinations.
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display 
+individually on the browser. Instructions for configuring multi-view tracks are
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.</P>
+
+<P>To show only selected subtracks, uncheck the boxes next to the tracks that
+you wish to hide.</P>
+
+<P>This track contains the following views:
+
+
+<P>
 CNV segments are colored by type: 
 <ul>
 <li><font color="#e600e6">magenta</font> = amplified  </li>
@@ -12,14 +34,6 @@ CNV segments are colored by type:
 <li><font color="#000000">black</font> = normal</li>
 </ul>
 </p>
-<P>
-Two biological replicates were generated for each cell line.
-Because biological replicates gave very similar results, 
-the replicates were averaged to provide a single genotyping
-dataset in order to apply these data to other ENCODE experiments.  
-Possible uses of this data are for correction of copy number in 
-peak-calling for interactome,
-transcriptome, DNase hypersensitivity, and methylome determinations.
 
 <H2>Methods</H2>
 
