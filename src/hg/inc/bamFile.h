@@ -44,4 +44,7 @@ int bamGetTargetLength(const bam1_t *bam);
 /* Tally up the alignment's length on the reference sequence from
  * bam's packed-int CIGAR representation. */
 
+struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset);
+/* Convert from bam to ffAli format. */
+
 #endif//ndef BAMFILE_H

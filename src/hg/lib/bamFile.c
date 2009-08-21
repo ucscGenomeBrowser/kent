@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.3 2009/08/03 22:14:39 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.4 2009/08/21 05:22:01 angie Exp $";
 
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
@@ -114,6 +114,55 @@ for (i = 0;  i < core->n_cigar;  i++)
 	}
     }
 return tLength;
+}
+
+struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset)
+/* Convert from bam to ffAli format.  (Adapted from psl.c's pslToFfAli.) */
+{
+struct ffAli *ffList = NULL, *ff;
+const bam1_core_t *core = &bam->core;
+boolean isRc = ((core->flag & BAM_FREVERSE) != 0);
+DNA *needle = (DNA *)bamGetQuerySequence(bam);
+if (isRc)
+    reverseComplement(needle, strlen(needle));
+DNA *haystack = target->dna;
+unsigned int *cigarPacked = bam1_cigar(bam);
+int tStart, qStart, i;
+for (tStart = targetOffset, qStart = 0, i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int size = bamUnpackCigarElement(cigarPacked[i], &op);
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+	    AllocVar(ff);
+	    ff->left = ffList;
+	    ffList = ff;
+	    ff->nStart = needle + qStart;
+	    ff->nEnd = ff->nStart + size;
+	    ff->hStart = haystack + tStart - targetOffset;
+	    ff->hEnd = ff->hStart + size;
+	    tStart += size;
+	    qStart += size;
+	    break;
+	case 'I': // inserted in query
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	    qStart += size;
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    tStart += size;
+	    break;
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("bamToFfAli: unrecognized CIGAR op %c -- update me", op);
+	}
+    }
+ffList = ffMakeRightLinks(ffList);
+ffCountGoodEnds(ffList);
+return ffList;
 }
 
 #endif//def USE_BAM
