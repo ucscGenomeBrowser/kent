@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.15 2009/07/21 21:01:45 markd Exp $"
+#	"$Id: panTro2.txt,v 1.16 2009/08/21 06:25:21 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -2658,6 +2658,31 @@ cat > loadMaf.csh << 'EOF'
 
     # generate .gif of tree
     phyloGif
+
+----------------------------------------------------------------------------
+2009-08-20 markd with guidance from braney
+    ###
+    # mafs not correctly displayed due to incorrectly using  -sizes=sizes
+    # with mafAddIRows
+    ###
+
+    # annotate mafs
+    ssh kolossus
+    cd /cluster/data/panTro2/bed/multiz8way/anno
+    rm -f maf/*.maf run/*.maf
+    cd run
+    # edit jobs.csh to remove -sizes=sizes
+
+    csh jobs.csh >& jobs.log &
+
+>>>>>>>>>>>>>>>>>
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/multiz8way/anno/maf
+    mkdir -p /gbdb/panTro2/multiz8way/anno/maf
+    csh loadMaf.csh  >& loadMaf.log &
+
 
 #############################################################################
 # PHASTCONS CONSERVATION (2006-07-18 kate)
