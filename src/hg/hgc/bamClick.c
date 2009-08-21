@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.3 2009/08/21 05:27:29 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.4 2009/08/21 18:43:50 angie Exp $";
 
 #include "bamFile.h"
 
@@ -24,22 +24,22 @@ static void singleBamDetails(const bam1_t *bam)
 {
 const bam1_core_t *core = &bam->core;
 char *itemName = bam1_qname(bam);
-int length = bamGetTargetLength(bam);
-int tStart = core->pos, tEnd = tStart+length;
+int tLength = bamGetTargetLength(bam);
+int tStart = core->pos, tEnd = tStart+tLength;
 boolean isRc = ((core->flag & BAM_FREVERSE) != 0);
 printPosOnChrom(seqName, tStart, tEnd, (isRc ? "-" : "+"), FALSE, itemName);
 printf("<B>Flags: </B><tt>0x%02x</tt><BR>\n", core->flag);
 printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
 printf("<B>CIGAR string: </B><tt>%s</tt><BR>\n", bamGetCigar(bam));
-puts("<BR>");
 char nibName[HDB_MAX_PATH_STRING];
 hNibForChrom(database, seqName, nibName);
 struct dnaSeq *genoSeq = hFetchSeq(nibName, seqName, tStart, tEnd);
 struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart);
 char *qSeq = ffa->nStart;
-ffShAliPart(stdout, ffa,
-	    itemName, qSeq, strlen(qSeq), 0, genoSeq->name, genoSeq->dna, genoSeq->size, tStart,
-	    8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE, 0, 0, tStart, tEnd);
+printf("<BR><B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
+       seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
+ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
+		 FALSE);
 //TODO: show flags properly, show tags, maybe display quality scores
 }
 
