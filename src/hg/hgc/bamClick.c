@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.5 2009/08/21 22:54:39 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.6 2009/08/22 02:18:35 angie Exp $";
 
 #include "bamFile.h"
 
@@ -66,12 +66,13 @@ while (s < bam->data + bam->data_len)
 	++s;
 	}
     }
-//TODO: show flags properly, show tags, maybe display quality scores
+//TODO: show flags properly, maybe display sequence quality scores
 }
 
 static void bamPairDetails(const bam1_t *leftBam, const bam1_t *rightBam)
 /* Print out details for paired-end reads. */
 {
+//TODO: tell them which one they clicked (match itemStart w/core->pos)
 printf("<TABLE><TR><TD><H4>Left end read</H4>\n");
 singleBamDetails(leftBam);
 printf("</TD><TD><H4>Right end read</H4>\n");
@@ -112,16 +113,12 @@ void doBamDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a BAM file. */
 {
 int start = cartInt(cart, "o");
-// make data structure and callback for pairing if necessary and printing out info
-// when we find our alignment.  If it has a stub, better search for the stub...
+// TODO: libify tdb settings table_pairEndsByName, stripPrefix and pairSearchRange
 
-// TODO: libify
 char varName[1024];
 safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->tableName);
 boolean isPaired = cartUsualBoolean(cart, varName,
 				    (trackDbSetting(tdb, "pairEndsByName") != NULL));
-
-// TODO: libify
 char *seqNameForBam = seqName;
 char *stripPrefix = trackDbSetting(tdb, "stripPrefix");
 if (stripPrefix && startsWith(stripPrefix, seqName))
@@ -132,15 +129,31 @@ safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd)
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
 bamFetch(database, tdb->tableName, posForBam, oneBam, &btd);
-if (isPaired)
+if (isPaired && hashNumEntries(pairHash) > 0)
     {
+    char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "1000");
+    int pairSearchRange = atoi(setting);
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(pairHash);
     while ((hel = hashNext(&cookie)) != NULL)
 	{
-	// uh-oh -- we need to search for the mate.
-	uglyf("<B>Note: paired end not shown (zoom out or bug Angie to fix code):</B><BR>\n");
-	singleBamDetails((bam1_t *)hel->val);
+	struct hash *newPairHash = hashNew(0);
+	btd.itemName = hel->name;
+	btd.pairHash = newPairHash;
+	safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam,
+	      winStart-pairSearchRange, winEnd+pairSearchRange);
+	bamFetch(database, tdb->tableName, posForBam, oneBam, &btd);
+	if (hashNumEntries(newPairHash) > 0)
+	    {
+	    struct hashCookie cookie2 = hashFirst(pairHash);
+	    while ((hel = hashNext(&cookie2)) != NULL)
+		{
+		printf("<B>Note: </B>unable to find paired end "
+		       "for this %s within +-%d of viewing window<BR>\n",
+		       hel->name, pairSearchRange);
+		singleBamDetails((bam1_t *)hel->val);
+		}
+	    }
 	}
     }
 }
