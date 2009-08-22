@@ -1173,3 +1173,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
    BC125044
    BC013184
    BC012106
+
+- very messy loci: chr22:20,715,572-21,595,082
