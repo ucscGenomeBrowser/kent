@@ -28216,7 +28216,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.377 2009/08/18 22:47:49 angie Exp $
+# $Id: hg18.txt,v 1.378 2009/08/23 04:14:05 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28264,7 +28264,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.377 2009/08/18 22:47:49 angie Exp $
+# $Id: hg18.txt,v 1.378 2009/08/23 04:14:05 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28616,9 +28616,18 @@ see doc/builds.txt for specific details.
     hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 sfrs1ConsensusSites sfrs1ConsensusSites.wig
     ln -s $(pwd -P)/sfrs1ConsensusSites.wib /gbdb/hg18/wib/
 ############################################################################
-# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-07-04, hartera)
+# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-08-04, hartera)
 # Needs updating as the current version is build 33.
 # Download the human VEGA Genes posted on ftp site on 2009-03-31
+# 2009-08-03 (hartera) - Added code to register track handler for
+# vegaGeneComposite.
+# 2009-08-15 - 2009-08-16 (hartera) - Added code to allow use of radio buttons
+# on the configuratio page for the track item labels. Modified code so it 
+# can be shared with Ensembl to create the links to Vega transcript, gene
+# and protein reports on the details pages. 
+# 2009-08-22 - Finished code for adding Vega report URLs to the details pages.
+# Loaded the vegaGtp table.
+
     mkdir /hive/data/genomes/hg18/bed/vega35
     cd /hive/data/genomes/hg18/bed/vega35
     wget --timestamping "ftp://ftp.sanger.ac.uk/pub/vega/human/*" \
@@ -28660,4 +28669,35 @@ see doc/builds.txt for specific details.
     # for vegaGeneComposite that is now used for this data. This used
     # vegaGeneMethods to display the name2 field (gene) as the item label in
     # the track.
+    # 2009-08-16 (hartera)
+    # ensGtp table definition is in ~/kent/src/hg/lib/ensGtp.sql
+    # There is an index on the protein field so it can not be NULL. 
+    # If there is no protein, the gene name is given.
+    # Added code to hgTracks.c and hgTrackUi.c to allow the use of 
+    # radio buttons on the track configuratioin page to select the
+    # gene name, accession or both to be displayed in the track.
+    # The gene name is displayed by default.
+    # Added code to hgc.c so that Ensembl and Vega can share code to 
+    # create links on the details pages to the Vega reports for transcript, 
+    # gene and protein through these IDs. Created new function
+    # printEnsemblOrVegaCustomUrl(). 
+
+    # 2009-08-22 (hartera)
+    # Create a vegaGtp table using the vegaGtp.tab file above. Use ensGtp.sql
+    # to create the table. vegaGtp associates geneId/transcriptId/proteinId 
+    # for the links to Vega reports from the details page. If there is no
+    # protein ID because the transcript is noncoding, the gene name is used
+    # instead. This field can not be NULL in the table as there is an index
+    # on it.     
+    cd /hive/data/genomes/hg18/bed/vega35
+    cp ~/kent/src/hg/lib/ensGtp.sql .
+    # One of the gene names is long for a noncoding gene so it does not fit 
+    # in the protein ID field so change the protein field in ensGtp.sql 
+    # to allow 40 chars instead of 20 and re-load the table.
+    hgsql -e 'drop table vegaGtp;' hg18
+    hgLoadSqlTab hg18 vegaGtp ensGtp.sql vegaGtp.tab
+    # Loaded succesfully
+    # Added code to hgc.c to use printEnsemblOrVegaCustomUrl() in 
+    # doVegaGene() to add the links to Vega reports on the details pages.
+
 ############################################################################

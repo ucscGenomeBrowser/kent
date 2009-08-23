@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.105 2009/08/20 22:51:18 angie Exp $"
+#	"$Id: mm9.txt,v 1.106 2009/08/23 04:14:30 hartera Exp $"
 #
 
 #######################################################################
@@ -9494,6 +9494,12 @@ see doc/builds.txt for specific details.
 # Needs updating as the current version is build 31 from May 2008.
 # 2009-08-03 (hartera) - Added code to register track handler for
 # vegaGeneComposite.
+# 2009-08-15 - 2009-08-16 (hartera) - Added code to allow use of radio buttons
+# on the configuratio page for the track item labels. Modified code so it 
+# can be shared with Ensembl to create the links to Vega transcript, gene
+# and protein reports on the details pages. 
+# 2009-08-22 - Finished code for adding Vega report URLs to the details pages.
+# Loaded the vegaGtp table.
 
    # Download the VEGA genes for mouse from the ftp site
    # This file is from 03/17/09.
@@ -9542,4 +9548,34 @@ see doc/builds.txt for specific details.
    # vegaGeneMethods to display the name2 field (gene) as the item label in
    # the track.
 
+   # 2009-08-15 - 2009-08-16 (hartera)
+   # Information extracted the attributes in the GTF file as ensGtp so 
+   # change name to vegaGtp.
+   mv ensGtp.tab vegaGtp.tab
+   # ensGtp table definition is in ~/kent/src/hg/lib/ensGtp.sql
+   # There is an index on the protein field so it can not be NULL. 
+   # If there is no protein, the gene name is given.
+   # Added code to hgTracks.c and hgTrackUi.c to allow the use of 
+   # radio buttons on the track configuratioin page to select the
+   # gene name, accession or both to be displayed in the track.
+   # The gene name is displayed by default.
+   # Added code to hgc.c so that Ensembl and Vega can share code to 
+   # create links on the details pages to the Vega reports for transcript, 
+   # gene and protein through these IDs. Created new function
+   # printEnsemblOrVegaCustomUrl(). 
+
+   # 2009-08-22 (hartera)
+   # Loaded the vegaGtp table. Use ensGtp.sql to create the table.
+   # vegaGtp associates geneId/transcriptId/proteinId 
+   # for the links to Vega reports from the details page.
+   cd /hive/data/genomes/mm9/bed/vega35
+   cp ~/kent/src/hg/lib/ensGtp.sql .
+   # 11 of the gene names for noncoding transcripts are too long for the 
+   # protein ID field so change this field in ensGtp.sql to allow 40 chars 
+   # instead of 20 and re-load the table.
+   hgsql -e 'drop table vegaGtp;' mm9
+   hgLoadSqlTab mm9 vegaGtp ensGtp.sql vegaGtp.tab
+   # Loaded succesfully
+   # Added code to hgc.c to use printEnsemblOrVegaCustomUrl() in 
+   # doVegaGene() to add the links to Vega reports on the details pages.
 ############################################################################
