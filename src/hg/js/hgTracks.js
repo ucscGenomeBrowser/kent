@@ -1,16 +1,23 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.34 2009/08/20 19:29:21 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.35 2009/08/23 21:35:34 larrym Exp $
 
 var debug = false;
 var originalPosition;
 var originalSize;
 var clickClipHeight;
 var startDragZoom = null;
-//var mapHtml;
 var newWinWidth;
 var imageV2 = false;
 var imgBoxPortal = false;
 var blockUseMap = false;
+var mapHtml;
+var mapItems;
+var trackImg;               // jQuery element for the track image
+var trackImgTbl;            // jQuery element used for image table under imageV2
+var imgAreaSelect;          // jQuery element used for imgAreaSelect
+var originalImgTitle;
+var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
+var selectedMapItem;        // index of currently choosen map item (via context menu).
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -58,6 +65,13 @@ function selectStart(img, selection)
     // ^^^^^^^^ Should be obsolete since maps items are ignored when startDragZoom is set
 }
 
+function setPositionByCoordinates(chrom, start, end)
+{
+    var newPosition = chrom + ":" + commify(start) + "-" + commify(end);
+    setPosition(newPosition, commify(end - start + 1));
+    return newPosition;
+}
+
 function setPosition(position, size)
 {
 // Set value of position and size (in hiddens and input elements).
@@ -84,8 +98,11 @@ function updatePosition(img, selection, singleClick)
     var chromName = document.getElementById("hgt.chromName").value;
     var winStart = parseInt(document.getElementById("hgt.winStart").value);
     var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
+    if(typeof imgBoxPortalStart != "undefined" && imgBoxPortalStart) {
+        winStart = imgBoxPortalStart;
+        winEnd = imgBoxPortalEnd;
+    }
     var imgWidth = jQuery(img).width() - insideX;
-
     var width = winEnd - winStart;
     var newPos = null;
     var newSize = null;
@@ -107,7 +124,7 @@ function updatePosition(img, selection, singleClick)
             // hgTracks gracefully handles overflow past the end of the chrom, so don't worry about that.
             newEnd = (winStart + 1) + (startDelta + Math.floor(newWinWidth / 2));
         }
-	newPos = chromName + ":" + newStart + "-" + newEnd;
+	newPos = chromName + ":" + commify(newStart) + "-" + commify(newEnd);
 	newSize = newEnd - newStart + 1;
     } else {
         var endDelta;
@@ -124,7 +141,7 @@ function updatePosition(img, selection, singleClick)
         if(newEnd > winEnd) {
             newEnd = winEnd;
         }
-        newPos = chromName + ":" + newStart + "-" + newEnd;
+        newPos = chromName + ":" + commify(newStart) + "-" + commify(newEnd);
         newSize = newEnd - newStart + 1;
     }
 
@@ -150,7 +167,7 @@ function selectEnd(img, selection)
     var slop = 10;
     var now = new Date();
     var doIt = false;
-    if((selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
+    if(autoHideSetting && (selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
@@ -175,33 +192,79 @@ function selectEnd(img, selection)
 }
 
 $(window).load(function () {
-        // jQuery load function with stuff to support drag selection in track img
-	var rulerEle = document.getElementById("hgt.rulerClickHeight");
-	var dragSelectionEle = document.getElementById("hgt.dragSelection");
-	// disable if ruler is not visible.
-	if((dragSelectionEle != null) && (dragSelectionEle.value == '1') && (rulerEle != null)) {
+    // jQuery load function with stuff to support drag selection in track img
+    loadImgAreaSelect(true);
+
+    // Don't load contextMenu if jquery.contextmenu.js hasn't been loaded
+    if(trackImg && jQuery.fn.contextMenu) {
+        originalImgTitle = trackImg.attr("title");
+        if(imageV2) {
+            loadContextMenu(trackImgTbl);
+            $(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
+            $(".trDraggable,.nodrop").each( function(t) { 
+                                                $(this).mousemove(
+                                                    function (e) {
+                                                        mapEvent(e);
+                                                    }
+                                                );
+                                                $(this).mousedown(
+                                                    function (e) {
+                                                        mapMouseDown(e);
+                                                    }
+                                                );
+                                            });
+        } else {
+            loadContextMenu(trackImg);
+            trackImg.mousemove(
+                function (e) {
+                    mapEvent(e);
+                }
+            );
+            trackImg.mousedown(
+                function (e) {
+                    mapMouseDown(e);
+                }
+            );
+        }
+    }
+    });
+
+function loadImgAreaSelect(firstTime)
+{
+    var rulerEle = document.getElementById("hgt.rulerClickHeight");
+    var dragSelectionEle = document.getElementById("hgt.dragSelection");
+
+    // disable if ruler is not visible.
+    if((dragSelectionEle != null) && (dragSelectionEle.value == '1') && (rulerEle != null)) {
         var imgHeight = 0;
-        var imgWidth  = 0;
-        var img = $('#img_data_ruler');
-        if(img==undefined || img.length == 0) {  // Revert to old imageV1
-            img = $('#trackMap');
-            imgHeight = jQuery(img).height();
-            imgWidth  = jQuery(img).width();
+        trackImg = $('#img_data_ruler');
+
+        if(trackImg == undefined || trackImg.length == 0) {  // Revert to old imageV1
+            trackImg = $('#trackMap');
+            imgHeight = jQuery(trackImg).height();
         } else {
             imageV2   = true;
-            imgHeight = $('#imgTbl').height();
-            imgWidth  =  $('#td_data_ruler').width();
+            trackImgTbl = $('#imgTbl');
+            imgHeight = trackImg.height();
+        }
+            
+        if(imageV2) {
+            $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
+        } else {
+            parseMap($('#map'), true);
+            mapHtml = $('#map').html();
+            $('#map').empty();
         }
         clickClipHeight = parseInt(rulerEle.value);
-                newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
+        newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
 
-        img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
+        imgAreaSelect = jQuery((trackImgTbl || trackImg).imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,
             onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
-            autoHide: true, movable: false,
-            clickClipHeight: clickClipHeight});
+            autoHide: autoHideSetting, movable: false,
+            clickClipHeight: clickClipHeight}));
     }
-});
+}
 
 function toggleTrackGroupVisibility(button, prefix)
 {
@@ -356,6 +419,8 @@ this.each(function(){
             newPortalStart = newPortalEnd - portalWidthBases;
         }
         if(newPortalStart > 0) {
+            // XXXX ? imgBoxPortalStart = newPortalStart;
+            // XXXX ? imgBoxPortalEnd = newPortalEnd;
             var newPos = document.getElementById("hgt.chromName").value + ":" + commify(newPortalStart) + "-" + commify(newPortalEnd);
             setPosition(newPos, (newPortalEnd - newPortalStart + 1));
         }
@@ -422,3 +487,378 @@ $(document).ready(function()
         }
     }
 });
+
+function rulerModeToggle (ele)
+{
+    autoHideSetting = !ele.checked;
+    var obj = imgAreaSelect.data('imgAreaSelect');
+    obj.setOptions({autoHide : autoHideSetting});
+}
+
+function findMapItem(e)
+{
+// Find mapItem for given event
+    var x,y;
+    if(imageV2) {
+        // It IS appropriate to use coordinates relative to the img WHEN we have a hit in the right-hand side, but NOT
+        // when we have a hit in the left hand elements (which do not have relative coordinates).
+        // XXXX still trying to figure this out.
+        var pos = $(e.target).position();
+        if(e.target.tagName == "IMG") {
+            // alert("img: x: " + x + ", y:" + y);
+            // alert("pageX: " + e.pageX + "; offsetLeft: " + pos.left);
+            x = e.pageX - pos.left;
+            y = e.pageY - pos.top;
+            // alert("x: " + x + "; y: " + y);
+        } else {
+            x = e.pageX - trackImg.attr("offsetLeft");
+            y = e.pageY - trackImg.attr("offsetTop");
+        }
+        // console.log(trackImg.attr("offsetLeft"), trackImg.attr("offsetTop"));
+        // console.log("findMapItem:", x, y);
+        // console.dir(mapItems);
+    } else {
+        x = e.pageX - e.target.offsetLeft;
+        y = e.pageY - e.target.offsetTop;
+    }
+    var retval = -1;
+    for(var i=0;i<mapItems.length;i++)
+    {
+        if(mapItems[i].obj && e.target === mapItems[i].obj) {
+            // console.log("Found match by objects comparison");
+            retval = i;
+            break;
+        } else {
+            // XXXX !imageV2???
+            if(mapItems[i].r.contains(x, y)) {
+                retval = i;
+                break;
+            }
+        }
+    }
+    // console.log("findMapItem:", e.clientX, e.clientY, x, y, pos.left, pos.top, retval, mapItems.length, e.target.tagName);
+    // console.log(e.clientX, pos);
+    return retval;
+}
+
+function mapEvent(e)
+{
+    var i = findMapItem(e);
+    if(i >= 0)
+    {
+        e.target.title = mapItems[i].title;
+    } else {
+        // XXXX this doesn't work.
+        // $('#myMenu').html("<ul id='myMenu' class='contextMenu'><li class='edit'><a href='#img'>Get Image</a></li></ul>");
+        e.target.title = originalImgTitle;
+    }
+}
+
+function mapMouseDown(e)
+{
+    // XXXX Is rightclick logic necessary?
+    var rightclick = e.which ? (e.which == 3) : (e.button == 2);
+    if(rightclick)
+    {
+        return false;
+    } else {
+        var i = findMapItem(e);
+        if(i >= 0)
+        {
+            // XXXX Why does href get changed to "about://" on IE?
+            window.location = mapItems[i].href;
+        }
+        return true;
+    }
+}
+
+function contextMenuHit(menuItemClicked, menuObject, cmd)
+{
+    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
+}
+
+function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
+{
+// dispatcher for context menu hits
+    if(menuObject.shown) {
+        // XXXX This doesn't work; i.e. I still occassionally get a menu that doesn't get hidden.
+        // console.log("Spinning: menu is still shown");
+        setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 50);
+    }
+    if(cmd == 'selectWholeGene') {
+            // bring whole gene into view
+            var href = mapItems[selectedMapItem].href;
+            var chrom, chromStart, chromEnd;
+            var a = /hgg_chrom=(\w+)&/.exec(href);
+            if(a) {
+                chrom = a[1];
+                a = /hgg_start=(\d+)/.exec(href);
+                // XXXX does chromStart have to be incremented by 1?
+                chromStart = a[1];
+                a = /hgg_end=(\d+)/.exec(href);
+                chromEnd = a[1];
+            } else {
+                // a = /hgc.*\W+c=(\w+)/.exec(href);
+                a = /hgc.*\W+c=(\w+)/.exec(href);
+                chrom = a[1];
+                a = /o=(\d+)/.exec(href);
+                chromStart = parseInt(a[1]) + 1;
+                a = /t=(\d+)/.exec(href);
+                chromEnd = parseInt(a[1]);
+            }
+            var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
+            if(imageV2) {
+                // XXXX I don't know how to collapse down to just this portion of the display (is that possible?)
+                document.TrackHeaderForm.submit();
+            } else {
+                jQuery('body').css('cursor', 'wait');
+                $.ajax({
+                           type: "GET",
+                           url: "../cgi-bin/hgTracks",
+                           data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
+                           dataType: "html",
+                           trueSuccess: handleUpdateTrackMap,
+                           success: catchErrorOrDispatch,
+                           cache: false
+                       });
+                }
+    } else if (cmd == 'hgTrackUi') {
+        // data: ?
+        jQuery('body').css('cursor', 'wait');
+        $.ajax({
+                   type: "POST",
+                   url: "../cgi-bin/hgTrackUi?ajax=1&g=" + mapItems[selectedMapItem].id + "&hgsid=" + getHgsid(),
+                   dataType: "html",
+                   trueSuccess: handleTrackUi,
+                   success: catchErrorOrDispatch,
+                   cache: true
+               });
+    } else if (cmd == 'dragZoomMode') {
+        autoHideSetting = true;
+        var obj = imgAreaSelect.data('imgAreaSelect');
+        obj.setOptions({autoHide : true, movable: false});
+    } else if (cmd == 'hilightMode') {
+        autoHideSetting = false;
+        var obj = imgAreaSelect.data('imgAreaSelect');
+        obj.setOptions({autoHide : false, movable: true});
+    } else if (cmd == 'viewImg') {
+        window.open(trackImg.attr('src'));
+    } else if (cmd == 'openLink') {
+        window.open(mapItems[selectedMapItem].href);
+    } else {
+        $("select[name=" + mapItems[selectedMapItem].id + "]").each(function(t) {
+            $(this).val(cmd);
+                });
+        if(imageV2 && cmd == 'hide')
+        {
+            $('#tr_' + mapItems[selectedMapItem].id).remove();
+        } else {
+            if(imageV2) {
+	        document.TrackForm.submit();
+            } else {
+                jQuery('body').css('cursor', 'wait');
+                $.ajax({
+                           type: "GET",
+                           url: "../cgi-bin/hgTracks",
+                           data: "hgt.trackImgOnly=1&" + mapItems[selectedMapItem].id + "=" + cmd + "&hgsid=" + getHgsid(),
+                           dataType: "html",
+                           trueSuccess: handleUpdateTrackMap,
+                           success: catchErrorOrDispatch,
+                           cache: false
+                       });
+            }
+        }
+    }
+}
+
+function loadContextMenu(img)
+{
+    var menu = img.contextMenu(
+        function() {
+            var menu = [];
+            var selectedImg = " <img src='../images/Green_check.png' height='10' width='10' />";
+            var done = false;
+            if(selectedMapItem >= 0)
+            {
+                var href = mapItems[selectedMapItem].href;
+                var isGene = href.match("hgGene");
+                var isHgc = href.match("hgc");
+                // XXXX what if select is not available (b/c trackControlsOnMain is off)?
+                // Move functionality to a hidden variable?
+                var select = $("select[name=" + mapItems[selectedMapItem].id + "]");
+                var cur = select.val();
+                if(cur) {
+                    select.children().each(function(index, o) {
+                                               var title = $(this).val();
+                                               var str = title;
+                                               if(title == cur) {
+                                                   str += selectedImg;
+                                               }
+                                               var o = new Object();
+                                               o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
+                                               menu.push(o);
+                                           });
+                    menu.push($.contextMenu.separator);
+                    var o = new Object();
+                    if(isGene || isHgc) {
+                        var title = mapItems[selectedMapItem].title || "feature";
+                        o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                        o["Open Link in New Window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
+                    } else {
+                        o[mapItems[selectedMapItem].title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi"); return true; }};
+                    }
+                    menu.push(o);
+                    done = true;
+                }
+            }
+            if(!done) {
+                var str = "drag-and-zoom mode";
+                var o = new Object();
+                if(autoHideSetting) {
+                    str += selectedImg;
+                    // menu[str].className = 'context-menu-checked-item';
+                }
+                o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "dragZoomMode"); return true; }};
+                menu.push(o);
+                o = new Object();
+                str = "hilight mode";
+                if(!autoHideSetting) {
+                    str += selectedImg;
+                }
+                o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hilightMode"); return true; }};
+                menu.push(o);
+                menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
+            }
+            return menu;
+        },
+        {
+            beforeShow: function(e) {
+                // console.log(mapItems[selectedMapItem]);
+                selectedMapItem = findMapItem(e);
+            },
+            hideCallback: function() {
+                // this doesn't work
+                alert("hideCallback");
+            }
+        });
+    return;
+}
+
+function parseMap(map, reset)
+{
+// Parse the jQuery map object into returned mapItems array (map needn't be the element attached to current document).
+        if(reset || !mapItems) {
+            mapItems = new Array();
+        }
+        var i = mapItems.length;
+        map.children().each(function() {
+                                      mapItems[i++] = {
+                                          r : new Rectangle(this.coords),
+                                          href : this.href,
+                                          title : this.title,
+                                          id : this.id,
+                                          obj : this
+                                      };
+                                  });
+    return mapItems;
+}
+
+function showWarning(str)
+{
+    $("#warningText").text(str);
+    $("#warning").show();
+}
+
+function catchErrorOrDispatch(obj,status)
+{
+    if(obj.err)
+    {
+        showWarning(obj.err);
+        jQuery('body').css('cursor', '');
+    }
+    else
+        this.trueSuccess(obj,status);
+}
+
+function handleTrackUi(response, status)
+{
+// Take html from hgTrackUi and put it up as a modal dialog.
+    $('#hgTrackUiDialog').html(response);
+    $('#hgTrackUiDialog').dialog({
+                               ajaxOptions: {
+                                   // This doesn't work
+                                   cache: true
+                               },
+                               resizable: true,
+                               bgiframe: true,
+                               height: 450,
+                               width: 600,
+                               modal: true,
+                               closeOnEscape: true,
+                               autoOpen: false,
+                               title: "Track Settings",
+                               close: function(){
+                                   // clear out html after close to prevent problems caused by duplicate html elements
+                                   $('#hgTrackUiDialog').html("");
+                               }
+                           });
+    jQuery('body').css('cursor', '');
+    $('#hgTrackUiDialog').dialog('open');
+}
+
+function handleUpdateTrackMap(response, status)
+{
+// Handle ajax response with an updated trackMap image (gif or png) and map.
+//    var a= /(<IMG SRC\s*=\s*([^"]+)"[^>]+id='trackMap'\s*>/.exec(response);
+// <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+
+    // Parse out new ideoGram url (if available)
+    var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
+    if(a && a[1]) {
+        b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+        if(b[1]) {
+            $('#chrom').attr('src', b[1]);
+        }
+    }
+    a= /<IMG([^>]+SRC[^>]+id='trackMap[^>]*)>/.exec(response);
+    // Deal with a is null
+    if(a[1]) {
+            var b = /WIDTH\s*=\s*['"]?(\d+)['"]?/.exec(a[1]);
+            var width = b[1];
+            b = /HEIGHT\s*=\s*['"]?(\d+)['"]?/.exec(a[1]);
+            var height = b[1];
+            b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+            var src = b[1];
+            $('#trackMap').attr('src', src);
+            var obj = imgAreaSelect.data('imgAreaSelect');
+            if(width) {
+                trackImg.attr('width', width);
+            }
+            if(height) {
+                trackImg.attr('height', height);
+
+                // obj.setOptions({minHeight : height, maxHeight: height});
+                // obj.getOptions().minHeight = height;
+		// obj.getOptions().maxHeight = height;
+                // XXX doesn't work obj.options.maxHeight = height;
+                // This doesn't work: obj.windowResize();
+                // This works, but causes weird error IF we also change minHeight and maxHeight.
+                // jQuery(window).triggerHandler("resize");
+
+               // After much debugging, I found the best way to have imgAreaSelect continue to work
+               // was to reload it:
+               loadImgAreaSelect(false);
+           }
+    } else {
+        showWarning("Couldn't parse out new image");
+    }
+    // now pull out and parse the map.
+    a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
+    if(a[1]) {
+        var $map = $('<map>' + a[1] + '</map>');
+        parseMap($map, true);
+    } else {
+        showWarning("Couldn't parse out map");
+    }
+    jQuery('body').css('cursor', '');
+}
