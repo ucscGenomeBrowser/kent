@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.23 2009/08/20 17:07:48 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.24 2009/08/23 20:38:06 larrym Exp $
 
 var debug = false;
 
@@ -409,4 +409,32 @@ function getHgsid()
         hgsid = getURLParam(window.location.href, "hgsid");
     }
     return hgsid;
+}
+
+function Rectangle()
+{
+// Rectangle object constructor:
+// calling syntax:
+// 
+// new Rectangle(startX, endX, startY, endY)
+// new Rectangle(coords) <-- coordinate string from an area item
+    if(arguments.length == 4) {
+        this.startX = arguments[0];
+        this.endX = arguments[1];
+        this.startY = arguments[2];
+        this.endY = arguments[3];
+    } else {
+        var coords = arguments[0].split(",");
+        this.startX = coords[0];
+        this.endX = coords[2];
+        this.startY = coords[1];
+        this.endY = coords[3];
+    }
+}
+
+Rectangle.prototype.contains = function(x, y)
+{
+// returns true if given points are in the rectangle
+    var retval = x >= this.startX && x <= this.endX && y >= this.startY && y <= this.endY;
+    return retval;
 }
