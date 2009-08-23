@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.44 2008/12/19 09:11:46 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.45 2009/08/23 16:18:36 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-
@@ -56,6 +56,15 @@ dasHead(code);
 if (code != DAS_OK)
     exit(-1);
 printf("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+}
+
+static char dasStrand(char strand)
+/* convert a strand to a valid DAS strand (+,-,0) */
+{
+if ((strand == '+') || (strand == '-'))
+    return strand;
+else
+    return '0';
 }
 
 void blockHog(char *hogHost, char *hogAddr)
@@ -677,8 +686,6 @@ for (i=0; i<gp->exonCount; ++i)
     {
     int start = gp->exonStarts[i];
     int end =  gp->exonEnds[i];
-    char strand = gp->strand[0];
-    if (strand == 0) strand = '?';
     printf(
     "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", gp->name, gp->chrom, gp->txStart, i, gp->name);
     dasPrintType(td, tt);
@@ -689,7 +696,7 @@ for (i=0; i<gp->exonCount; ++i)
     printf(" <START>%d</START>\n", start+1);
     printf(" <END>%d</END>\n", end);
     printf(" <SCORE>-</SCORE>\n");
-    printf(" <ORIENTATION>%c</ORIENTATION>\n", strand);
+    printf(" <ORIENTATION>%c</ORIENTATION>\n", dasStrand(gp->strand[0]));
     printf(" <PHASE>-</PHASE>\n");
     printf(" <GROUP id=\"%s.%s.%d\">\n", gp->name, gp->chrom, gp->txStart);
     printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
@@ -754,7 +761,7 @@ for (i=0; i<psl->blockCount; ++i)
     printf(" <START>%d</START>\n", start+1);
     printf(" <END>%d</END>\n", end);
     printf(" <SCORE>%d</SCORE>\n", score);
-    printf(" <ORIENTATION>%c</ORIENTATION>\n", psl->strand[0]);
+    printf(" <ORIENTATION>%c</ORIENTATION>\n", dasStrand(psl->strand[0]));
     printf(" <PHASE>-</PHASE>\n");
     printf(" <GROUP id=\"%s.%s.%d\">\n", psl->qName, psl->tName, psl->tStart);
     printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
@@ -792,7 +799,7 @@ else
 printf(" <START>%d</START>\n", start+1);
 printf(" <END>%d</END>\n", end);
 printf(" <SCORE>%s</SCORE>\n", score);
-printf(" <ORIENTATION>%s</ORIENTATION>\n", strand);
+printf(" <ORIENTATION>%c</ORIENTATION>\n", dasStrand(strand[0]));
 printf(" <PHASE>-</PHASE>\n");
 printf(" <GROUP id=\"%s.%s.%d\">\n", name, chrom, start);
 printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
