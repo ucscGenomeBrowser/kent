@@ -10,7 +10,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.4 2007/03/17 18:12:41 kent Exp $";
+static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.5 2009/08/23 19:51:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -60,10 +60,12 @@ ZeroVar(&seq);
 while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     char *row[4];
-    int rowSize = chopString(seq.name, "-|", row, ArraySize(row));
+    char *name = seq.name;
+    if (startsWith("sp|", name))	// Skip over sp| introduced Aug 2009
+        name += 3;
+    int rowSize = chopString(name, "-|", row, ArraySize(row));
     if (rowSize != 3)
-        errAbort("Expecting name to be in format accession-N|DISP_ID, got %s\n", seq.name);
-    chopString(seq.name, "-|", row, ArraySize(row));
+        errAbort("Expecting name to be in format accession-N|DISP_ID, got %s\n", name);
     char *acc = row[0];
     char *version = row[1];
     char *displayId = row[2];
