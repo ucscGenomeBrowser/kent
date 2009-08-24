@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.52 2009/08/21 21:19:36 braney Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.53 2009/08/24 20:34:32 braney Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -160,9 +160,7 @@ static struct cart *prevCart = (struct cart *) NULL;
 static struct trackDb *prevTdb = (struct trackDb *) NULL;
 static boolean prevTdbSpanList = FALSE;
 static int prevMin = -1;
-struct sqlResult *sr;
 char query[256];
-char **row;
 int minSpan = BIGNUM;
 int maxSpan = 0;
 int spanCount = 0;
@@ -232,28 +230,10 @@ if (tdbSpanList)
     }
 else
     {
-    /*	This is a time expensive query,
-     *	~3 to 6 seconds on large chroms full of data	*/
     safef(query, ArraySize(query),
-	"SELECT span from %s where chrom = '%s' group by span", table, chrom);
-
-    sr = sqlMustGetResult(conn,query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{   
-	char spanName[128];
-	unsigned span = sqlUnsigned(row[0]);
-
-	safef(spanName, ArraySize(spanName), "%u", span);
-	el = hashLookup(spans, spanName);
-	if ( el == NULL)
-	    {
-	    if (span > maxSpan) maxSpan = span;
-	    if (span < minSpan) minSpan = span;
-	    ++spanCount;
-	    hashAddInt(spans, spanName, span);
-	    }
-	}
-    sqlFreeResult(&sr);
+	"SELECT span from %s where chrom = '%s' limit 1", table, chrom);
+    char *tmpSpan = sqlQuickString(conn, query);
+    minSpan = sqlUnsigned(tmpSpan);
     }
 
 freeHash(&spans);
