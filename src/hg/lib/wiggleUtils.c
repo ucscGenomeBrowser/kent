@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.53 2009/08/24 20:34:32 braney Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.54 2009/08/24 20:39:53 braney Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -230,6 +230,7 @@ if (tdbSpanList)
     }
 else
     {
+    /* just use first span if trackDb doesn't have spanList */
     safef(query, ArraySize(query),
 	"SELECT span from %s where chrom = '%s' limit 1", table, chrom);
     char *tmpSpan = sqlQuickString(conn, query);
