@@ -6,7 +6,16 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.5 2009/08/21 22:52:35 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.6 2009/08/24 23:47:56 angie Exp $";
+
+static boolean ignoreStrand = FALSE;
+
+void bamIgnoreStrand()
+/* Change the behavior of this lib to disregard item strand. 
+ * If called, this should be called before any other bam functions. */
+{
+ignoreStrand = TRUE;
+}
 
 static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
@@ -49,6 +58,14 @@ if (ret != 0)
 samclose(fh);
 }
 
+boolean bamIsRc(const bam1_t *bam)
+/* Return TRUE if alignment is on - strand.  If bamIgnoreStrand has been called,
+ * then this always returns FALSE. */
+{
+const bam1_core_t *core = &bam->core;
+return (core->flag & BAM_FREVERSE) && !ignoreStrand;
+}
+
 char *bamGetQuerySequence(const bam1_t *bam)
 /* Return the nucleotide sequence encoded in bam.  The BAM format 
  * reverse-complements query sequence when the alignment is on the - strand,
@@ -60,7 +77,7 @@ uint8_t *s = bam1_seq(bam);
 int i;
 for (i = 0; i < core->l_qseq; i++)
     qSeq[i] = bam_nt16_rev_table[bam1_seqi(s, i)];
-if ((core->flag & BAM_FREVERSE))
+if (bamIsRc(bam))
     reverseComplement(qSeq, core->l_qseq);
 return qSeq;
 }
@@ -80,6 +97,47 @@ for (i = 0;  i < core->n_cigar;  i++)
     dyStringAppendC(dyCigar, op);
     }
 return dyStringCannibalize(&dyCigar);
+}
+
+void bamShowCigarEnglish(const bam1_t *bam)
+/* Print out cigar in English e.g. "20 (mis)Match, 1 Deletion, 3 (mis)Match" */
+{
+unsigned int *cigarPacked = bam1_cigar(bam);
+const bam1_core_t *core = &bam->core;
+int i;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigarPacked[i], &op);
+    if (i > 0)
+	printf(", ");
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+	    printf("%d (mis)Match", n);
+	    break;
+	case 'I': // inserted in query
+	    printf("%d Insertion", n);
+	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	    printf("%d Skipped", n);
+	    break;
+	case 'D': // deleted from query
+	    printf("%d Deletion", n);
+	    break;
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    printf("%d deletioN", n);
+	    break;
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	    printf("%d Hard clipped query", n);
+	    break;
+	case 'P': // P="silent deletion from padded reference sequence"
+	    printf("%d Padded / silent deletion", n);
+	    break;
+	default:
+	    errAbort("bamShowCigarEnglish: unrecognized CIGAR op %c -- update me", op);
+	}
+    }
 }
 
 int bamGetTargetLength(const bam1_t *bam)
@@ -121,7 +179,7 @@ struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOff
 {
 struct ffAli *ffList = NULL, *ff;
 const bam1_core_t *core = &bam->core;
-boolean isRc = ((core->flag & BAM_FREVERSE) != 0);
+boolean isRc = bamIsRc(bam);
 DNA *needle = (DNA *)bamGetQuerySequence(bam);
 if (isRc)
     reverseComplement(target->dna, target->size);
@@ -175,6 +233,35 @@ bam1_t *bamClone(const bam1_t *bam)
 bam1_t *newBam = cloneMem((void *)bam, sizeof(*bam));
 newBam->data = cloneMem((void *)bam->data, bam->data_len*sizeof(bam->data[0]));
 return newBam;
+}
+
+void bamShowTags(const bam1_t *bam)
+/* Print out tags in HTML: bold key, no type indicator for brevity. */
+{
+// adapted from part of bam.c bam_format1:
+uint8_t *s = bam1_aux(bam);
+while (s < bam->data + bam->data_len)
+    {
+    uint8_t type, key[2];
+    key[0] = s[0]; key[1] = s[1];
+    s += 2; type = *s; ++s;
+    printf(" <B>%c%c</B>:", key[0], key[1]);
+    if (type == 'A') { printf("%c", *s); ++s; }
+    else if (type == 'C') { printf("%u", *s); ++s; }
+    else if (type == 'c') { printf("%d", *s); ++s; }
+    else if (type == 'S') { printf("%u", *(uint16_t*)s); s += 2; }
+    else if (type == 's') { printf("%d", *(int16_t*)s); s += 2; }
+    else if (type == 'I') { printf("%u", *(uint32_t*)s); s += 4; }
+    else if (type == 'i') { printf("%d", *(int32_t*)s); s += 4; }
+    else if (type == 'f') { printf("%g", *(float*)s); s += 4; }
+    else if (type == 'd') { printf("%lg", *(double*)s); s += 8; }
+    else if (type == 'Z' || type == 'H')
+	{
+	while (*s) putc(*s++, stdout);
+	++s;
+	}
+    }
+putc('\n', stdout);
 }
 
 #endif//def USE_BAM

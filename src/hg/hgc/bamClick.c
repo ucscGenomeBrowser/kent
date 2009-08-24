@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.6 2009/08/22 02:18:35 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.7 2009/08/24 23:47:56 angie Exp $";
 
 #include "bamFile.h"
 
@@ -26,53 +26,60 @@ const bam1_core_t *core = &bam->core;
 char *itemName = bam1_qname(bam);
 int tLength = bamGetTargetLength(bam);
 int tStart = core->pos, tEnd = tStart+tLength;
-boolean isRc = ((core->flag & BAM_FREVERSE) != 0);
-printPosOnChrom(seqName, tStart, tEnd, (isRc ? "-" : "+"), FALSE, itemName);
+boolean isRc = bamIsRc(bam);
+printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
 printf("<B>Flags: </B><tt>0x%02x</tt><BR>\n", core->flag);
 printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
-printf("<B>CIGAR string: </B><tt>%s</tt><BR>\n", bamGetCigar(bam));
+printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
+bamShowCigarEnglish(bam);
+printf(")<BR>\n");
+printf("<B>Tags:</B>");
+bamShowTags(bam);
+puts("<BR><BR>");
 char nibName[HDB_MAX_PATH_STRING];
 hNibForChrom(database, seqName, nibName);
 struct dnaSeq *genoSeq = hFetchSeq(nibName, seqName, tStart, tEnd);
 struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart);
 char *qSeq = ffa->nStart;
-printf("<BR><B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
+printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
        seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
 ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
 		 FALSE);
-printf("<B>Tags:</B><BR>\n");
-
-// ugly: lifted from bam.c bam_format1:
-uint8_t *s = bam1_aux(bam);
-while (s < bam->data + bam->data_len)
-    {
-    uint8_t type, key[2];
-    key[0] = s[0]; key[1] = s[1];
-    s += 2; type = *s; ++s;
-    printf("\t%c%c:", key[0], key[1]);
-    if (type == 'A') { printf("A:%c", *s); ++s; }
-    else if (type == 'C') { printf("i:%u", *s); ++s; }
-    else if (type == 'c') { printf("i:%d", *s); ++s; }
-    else if (type == 'S') { printf("i:%u", *(uint16_t*)s); s += 2; }
-    else if (type == 's') { printf("i:%d", *(int16_t*)s); s += 2; }
-    else if (type == 'I') { printf("i:%u", *(uint32_t*)s); s += 4; }
-    else if (type == 'i') { printf("i:%d", *(int32_t*)s); s += 4; }
-    else if (type == 'f') { printf("f:%g", *(float*)s); s += 4; }
-    else if (type == 'd') { printf("d:%lg", *(double*)s); s += 8; }
-    else if (type == 'Z' || type == 'H')
-	{
-	printf("%c:", (char)type); 
-	while (*s) putc(*s++, stdout);
-	++s;
-	}
-    }
 //TODO: show flags properly, maybe display sequence quality scores
+}
+
+static void showOverlap(const bam1_t *leftBam, const bam1_t *rightBam)
+/* If the two reads overlap, show how. */
+{
+const bam1_core_t *leftCore = &(leftBam->core), *rightCore = &(rightBam->core);
+int leftStart = leftCore->pos, rightStart = rightCore->pos;
+int leftLen = bamGetTargetLength(leftBam), rightLen = bamGetTargetLength(rightBam);
+char *leftSeq = bamGetQuerySequence(leftBam), *rightSeq = bamGetQuerySequence(rightBam);
+if (bamIsRc(leftBam))
+    reverseComplement(leftSeq, strlen(leftSeq));
+if (bamIsRc(rightBam))
+    reverseComplement(rightSeq, strlen(rightSeq));
+if ((rightStart > leftStart && leftStart + leftLen > rightStart) ||
+    (leftStart > rightStart && rightStart+rightLen > leftStart))
+    {
+    printf("<B>Note: End read alignments overlap:</B><BR>\n<PRE><TT>");
+    int i = leftStart - rightStart;
+    while (i-- > 0)
+	putc(' ', stdout);
+    puts(leftSeq);
+    i = rightStart - leftStart;
+    while (i-- > 0)
+	putc(' ', stdout);
+    puts(rightSeq);
+    puts("</TT></PRE>");
+    }
 }
 
 static void bamPairDetails(const bam1_t *leftBam, const bam1_t *rightBam)
 /* Print out details for paired-end reads. */
 {
 //TODO: tell them which one they clicked (match itemStart w/core->pos)
+showOverlap(leftBam, rightBam);
 printf("<TABLE><TR><TD><H4>Left end read</H4>\n");
 singleBamDetails(leftBam);
 printf("</TD><TD><H4>Right end read</H4>\n");
@@ -126,6 +133,7 @@ if (stripPrefix && startsWith(stripPrefix, seqName))
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd);
 
+bamIgnoreStrand();
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
 bamFetch(database, tdb->tableName, posForBam, oneBam, &btd);
