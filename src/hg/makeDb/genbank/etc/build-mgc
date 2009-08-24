@@ -14,9 +14,6 @@ gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
-# allow 250mb core dumps
-ulimit -c 256000
-
 # download and process
 nice mgcDownloadStep
 
