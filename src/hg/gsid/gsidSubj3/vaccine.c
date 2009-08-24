@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: vaccine.c,v 1.2 2009/07/10 23:37:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: vaccine.c,v 1.3 2009/08/24 18:02:46 fanhsu Exp $";
 
 static boolean vaccineExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -118,11 +118,7 @@ printf("</TD>");
     
 printf("<TD>");
 vxprintf("<B>DAEI for ART Start:</B> %s", art_daei);
-/*if (sameWord(art_daei, "-1"))
-    printf("N/A");
-else
-    vxprintf("%s", art_daei);
-*/printf("</TD>");
+printf("</TD>");
 printf("</TR>");
 
 /* removed the following item per GSID user feedback */
@@ -138,8 +134,13 @@ printf("<B>Injections:</B> &nbsp;%s%s", injections, GSBLANKS);
 printf("</TD>");
     
 printf("<TD>");
-vxprintf("<B>Study Day of Last Serology-Negative HIV Test: </B> %s\n", 
-	lastSeroNegDay);
+
+if (sameWord(lastSeroNegDay, "-1"))
+    printf("<B>Study Day of Last Serology-Negative HIV Test: </B> %s\n", 
+	   "N/A");
+else
+    vxprintf("<B>Study Day of Last Serology-Negative HIV Test: </B> %s\n", 
+	     lastSeroNegDay);
 printf("</TD>");
 printf("</TR>");
 
