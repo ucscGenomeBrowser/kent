@@ -12419,8 +12419,8 @@ subGroup1 view Views Regions=Regions Signal=Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 
 dimensions dimensionX=cellType 
 sortOrder cellType=+
-minLimit -6.5407
-maxLimit 1.3637
+minLimit -7
+maxLimit 2
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 visibilityViewDefaults Regions=dense Signal=hide 
