@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.143 2008/12/15 23:17:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.144 2009/08/24 23:07:54 hiram Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1113,11 +1113,13 @@ if (!sameString(where->string,"src in ()"))
 sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
                         whereClause, &rowOffset);
 
+boolean hasFieldLeftStatus = hHasField(database, summary, "leftStatus");
+
 /* Loop through result creating a hash of lists of maf summary blocks.
  * The hash is keyed by species. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (hHasField(database, summary, "leftStatus"))
+    if (hasFieldLeftStatus)
         ms = mafSummaryLoad(row + rowOffset);
     else
         /* previous table schema didn't have status fields */
