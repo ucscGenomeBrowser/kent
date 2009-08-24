@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.35 2009/08/23 21:35:34 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.36 2009/08/24 16:55:02 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -197,6 +197,15 @@ $(window).load(function () {
 
     // Don't load contextMenu if jquery.contextmenu.js hasn't been loaded
     if(trackImg && jQuery.fn.contextMenu) {
+        if(imageV2) {
+            $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
+        } else {
+            // XXXX still under debate whether we have to remove the map
+            parseMap($('#map'), true);
+            mapHtml = $('#map').html();
+            $('#map').empty();
+        }
+
         originalImgTitle = trackImg.attr("title");
         if(imageV2) {
             loadContextMenu(trackImgTbl);
@@ -248,13 +257,6 @@ function loadImgAreaSelect(firstTime)
             imgHeight = trackImg.height();
         }
             
-        if(imageV2) {
-            $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
-        } else {
-            parseMap($('#map'), true);
-            mapHtml = $('#map').html();
-            $('#map').empty();
-        }
         clickClipHeight = parseInt(rulerEle.value);
         newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
 
