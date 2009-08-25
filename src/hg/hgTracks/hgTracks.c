@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1593 2009/08/20 20:34:57 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1594 2009/08/25 05:58:18 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3813,7 +3813,6 @@ static void drawMaxWindowWarning(struct track *tg, int seqStart, int seqEnd, str
 /* This is a stub drawItems handler to be swapped in for the usual drawItems when the window
  * size is larger than the threshold specified by trackDb setting maxWindowToDraw. */
 {
-// draw no-data-yellow single-height box
 int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
 char commafied[256];
 sprintLongWithCommas(commafied, maxWinToDraw);
@@ -3824,31 +3823,41 @@ hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
 hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
 }
 
-static boolean maxWindowSizeExceeded(struct track *tg)
+static void dontLoadItems(struct track *tg)
+/* No-op loadItems when we aren't going to try. */
+{
+}
+
+static void checkMaxWindowToDraw(struct track *tg)
 /* If (winEnd - winStart) > trackDb setting maxWindowToDraw, force track to a dense line
  * that will ask the user to zoom in closer to see track items and return TRUE so caller
  * can skip loading items. */
 {
 int maxWinToDraw = getMaxWindowToDraw(tg->tdb);
-if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
+if (tdbIsComposite(tg->tdb))
     {
-    if (tdbIsComposite(tg->tdb))
+    struct track *subtrack;
+    for (subtrack = tg->subtracks;  subtrack != NULL;  subtrack = subtrack->next)
 	{
-	struct track *subtrack;
-	for (subtrack = tg->subtracks;  subtrack != NULL;  subtrack = subtrack->next)
+	if (!isSubtrackVisible(subtrack))
+	    continue;
+	maxWinToDraw = getMaxWindowToDraw(subtrack->tdb);
+	if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
 	    {
+	    subtrack->loadItems = dontLoadItems;
 	    subtrack->drawItems = drawMaxWindowWarning;
 	    subtrack->limitedVis = tvDense;
 	    subtrack->limitedVisSet = TRUE;
 	    }
 	}
-    else
-	tg->drawItems = drawMaxWindowWarning;
+    }
+else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
+    {
+    tg->loadItems = dontLoadItems;
+    tg->drawItems = drawMaxWindowWarning;
     tg->limitedVis = tvDense;
     tg->limitedVisSet = TRUE;
-    return TRUE;
     }
-return FALSE;
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -3949,8 +3958,8 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	if (measureTiming)
 	    lastTime = clock1000();
-	if (! maxWindowSizeExceeded(track))
-	    track->loadItems(track);
+	checkMaxWindowToDraw(track);
+	track->loadItems(track);
 
 	if (measureTiming)
 	    {
