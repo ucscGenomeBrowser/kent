@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.116 2009/07/10 01:42:21 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.117 2009/08/25 22:49:39 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -483,11 +483,11 @@ if (alias != NULL && sqlTableExists(conn, alias))
      safef(query, sizeof(query), "select kgID from %s where alias = '%s'", alias, name);
      char *id = sqlQuickString(conn, query);
      if (id == NULL)
-         errAbort("Couldn't find %s in %s.%s or %s.%s", name, database, mainTable, database, alias);
+         hUserAbort("Couldn't find %s in %s.%s or %s.%s", name, database, mainTable, database, alias);
      return id;
      }
 else
-     errAbort("Couldn't find %s in %s.%s", name, database, mainTable);
+     hUserAbort("Couldn't find %s in %s.%s", name, database, mainTable);
 return NULL;
 }
 
@@ -537,7 +537,7 @@ if (newChrom != NULL
 	curGeneEnd = atoi(row[2]);
 	}
     else
-        errAbort("Couldn't find %s in %s.%s", curGeneId, database, table);
+        hUserAbort("Couldn't find %s in %s.%s", curGeneId, database, table);
     sqlFreeResult(&sr);
     }
 }
