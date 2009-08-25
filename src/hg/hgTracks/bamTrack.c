@@ -12,7 +12,7 @@
 #include "hgTracks.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.6 2009/08/18 23:41:23 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.7 2009/08/25 06:04:05 angie Exp $";
 
 struct bamTrackData
     {
@@ -119,10 +119,9 @@ struct linkedFeaturesSeries *lfs;
 AllocVar(lfs);
 lfs->name = cloneString(lf->name);
 lfs->grayIx = lf->grayIx;
-if (!lf->next || lf->next->orientation == -lf->orientation)
-    lfs->orientation = lf->orientation;
 if (lf->next != NULL)
     slSort(&lf, linkedFeaturesCmpStart);
+lfs->orientation = 0;
 lfs->start = lf->start;
 lfs->end = lf->next ? lf->next->end : lf->end;
 lfs->features = lf;
