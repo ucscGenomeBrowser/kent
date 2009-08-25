@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.96 2009/08/14 07:18:53 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.97 2009/08/25 21:28:40 braney Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10670,8 +10670,10 @@ struct track *subtrack;
 long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (isSubtrackVisible(subtrack))
+    if (isSubtrackVisible(subtrack) && 
+	( limitedVisFromComposite(subtrack) != tvHide))
 	{
+
 	lastTime = clock1000();
 	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
 	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->mapName, track->mapName);
