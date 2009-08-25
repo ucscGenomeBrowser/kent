@@ -1466,6 +1466,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chrX,chrY,chr10,ch
 color 100,50,0
 altColor 255,240,200
 chainColor Normalized Score
+chainNormScoreAvailable yes
 spectrum on
 matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -1492,6 +1493,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chrX,chrY,chr10,ch
 color 100,50,0
 altColor 255,240,200
 chainColor Normalized Score
+chainNormScoreAvailable yes
 spectrum on
 matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -4043,7 +4045,6 @@ defaultViewLimits 1:50
 maxHeightPixels 128:32:16
 autoScale off
 chromosomes chr22
-
 
 track fantom4CageGraphTop
 compositeTrack on
