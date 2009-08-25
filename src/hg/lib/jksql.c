@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.131 2009/08/20 18:15:41 larrym Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.132 2009/08/25 00:10:44 larrym Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -540,17 +540,19 @@ struct slName *sqlListTables(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 struct slName *list = NULL, *el;
+char *tableList = cfgOption("showTableCache");
 
-if (sqlTableExists(conn, "tableList"))
+if (tableList != NULL && sqlTableExists(conn, tableList))
     {
     // mysql does not cache "show tables", so use a cached run of show tables in the tableList table (if it exists).
-    // Table is loaded thus:
+    // Table should be loaded thus:
     //
     //   hgsql hg18 -e 'show tables' > tables.txt
     //   CREATE TABLE tableList (name varchar(255) NOT NULL, INDEX(name));
     //   load data local infile 'tables.txt' into table tableList;
-
-    sr = sqlGetResult(conn, "select * from tableList order by name desc");
+    char query[256];
+    safef(query, sizeof(query), "select * from %s order by name desc", tableList);
+    sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
         el = slNameNew(row[0]);
