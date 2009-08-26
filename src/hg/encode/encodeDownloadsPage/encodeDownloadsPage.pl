@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.18 2009/07/31 19:38:53 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.19 2009/08/26 00:37:21 braney Exp $
 
 use warnings;
 use strict;
@@ -480,15 +480,16 @@ for my $line (@fileList) {
     my $details = join("; ", @tmp);
 
     # If releaseDate is in the past then don't bother showing it.
-    if(length($releaseDate) > 0) {
-        my ($YYYY,$MM,$DD) = split('-',$releaseDate);
-        my $then = timegm(0,0,0,$DD,$MM-1,$YYYY);
-        my $now = time();
-        my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($now);
-        if($then -$now < 0) {
-            $releaseDate = "";
-        }
-    }
+# QA wants dates all the time
+#    if(length($releaseDate) > 0) {
+#        my ($YYYY,$MM,$DD) = split('-',$releaseDate);
+#        my $then = timegm(0,0,0,$DD,$MM-1,$YYYY);
+#        my $now = time();
+#        my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($now);
+#        if($then -$now < 0) {
+#            $releaseDate = "";
+#        }
+#    }
 
     #htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$details);
     push @rows, sortableHtmlRow(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$details);
