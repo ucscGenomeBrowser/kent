@@ -12988,7 +12988,7 @@ longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HFL11W=HFL11W HFL24W=HFL24W K562=K562
 subGroup2 replicate Replicate 1=1 2=2
-dimensions dimensionX=cellType dimensionY=replicate
+dimensions dimensionX=replicate dimensionY=cellType 
 sortOrder cellType=+ replicate=+ 
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense
@@ -13070,9 +13070,8 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP+ cells)
     subGroups cellType=H9ES-AFPP replicate=1
     type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP+ replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=204 dateSubmitted=2009-02-23 dateUnrestricted=2009-11-23 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
     color 0,128,0
-#    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP+ replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP+ replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
     release alpha
@@ -13081,7 +13080,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP- cells)
     subGroups cellType=H9ES-AFP- replicate=1
     type bed 9
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP- replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=204 dateSubmitted=2009-02-23 dateUnrestricted=2009-11-23 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg.bed9.gz
     color 0,128,0
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=H9ES-AFP- replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg.bed9.gz
 
@@ -13095,7 +13093,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell H9ES-EB
     color 0,128,0
@@ -13111,7 +13108,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell H9ES-CM
     color 0,128,0
@@ -13127,7 +13123,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell H9ES-EBD
     color 0,128,0
@@ -13143,7 +13138,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell BG02ES
     color 0,128,0
@@ -13159,7 +13153,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell BG02ES-EBD
     color 0,128,0
@@ -13175,7 +13168,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell BG02ES-EBD
     color 0,128,0
@@ -13191,7 +13183,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell HFL11W
     color 189,0,157
@@ -13207,7 +13198,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell HFL24W
     color 189,0,157
@@ -13223,24 +13213,10 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    #noInherit on
     itemRgb on
     cell HAL
     color 189,0,157
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=HAL replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=204 dateSubmitted=2009-02-10 dateUnrestricted=2009-11-10 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hal fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Hal.bed9.gz
-
-    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878Hpa
-    release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq 
-    shortLabel GM12878 1
-    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
-    subGroups cellType=GM12878 replicate=1
-    type bed 9
-    #noInherit on
-    itemRgb on
-    color 153,38,0
-    cell GM12878
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=MethylSeq cell=GM12878 replicate=1 softwareVersion=myerslab dataVersion="ENCODE July 2009 Freeze" subId=387 dateSubmitted=2009-07-15 dateUnrestricted=2010-04-15 composite=wgEncodeHudsonalphaMethylSeq tableName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878 fileName=wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878.bed9.gz
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
     release alpha
@@ -13249,7 +13225,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
     subGroups cellType=GM12878 replicate=1
     type bed 9
-    #noInherit on
     itemRgb on
     color 153,38,0
     cell GM12878
@@ -13262,7 +13237,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12878 cells)
     subGroups cellType=GM12878 replicate=2
     type bed 9
-    #noInherit on
     itemRgb on
     color 153,38,0
     cell GM12878
@@ -13275,7 +13249,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in K562 cells)
     subGroups cellType=K562 replicate=1
     type bed 9
-    #noInherit on
     cell K562
     itemRgb on
     color 46,0,184
@@ -13288,7 +13261,6 @@ wgEncode 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in K562 cells)
     subGroups cellType=K562 replicate=2
     type bed 9
-    #noInherit on
     cell K562
     itemRgb on
     color 46,0,184
