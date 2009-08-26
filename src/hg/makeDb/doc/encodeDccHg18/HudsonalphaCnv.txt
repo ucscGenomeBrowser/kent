@@ -8,8 +8,8 @@
     for i in *.bed
     do 
 	f=`basename $i .bed`; 
-	tail -n +2 $i | awk '{print $1,$2,$3,$5}'  > "$f"_W.bed; 
-	tail -n +2 $i | awk '{$5=0; print}'  > "$f"_C.bed; 
+	tail -n +2 $i | awk '{print $1,$2,$3,$5}' | sort -k 14,14 -k 16,16n -k 17,17n > "$f"_W.bed; 
+	tail -n +2 $i | awk '{$5=0; print}'| sort -k 14,14 -k 16,16n -k 17,17n > "$f"_C.bed; 
 	g=`basename $f _CNV`;  
 	hgLoadBed hg18 wgEncodeHudsonalphaCnvRegions"$g" "$f"_C.bed -allowStartEqualEnd; 
 	hgLoadBed hg18 wgEncodeHudsonalphaCnvSignal"$g" "$f"_W.bed -bedGraph=4 -allowStartEqualEnd; 
@@ -26,4 +26,10 @@
 	cat "$i"_CNV_C.bed | gzip -c > $dd/wgEncodeHudsonalphaCnvRegions"$i".bed.gz
     done
 
+    rm /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv
+
     ln -s $dd  /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC
+    cd /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaCnv
+
+    ~/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl index.html
+
