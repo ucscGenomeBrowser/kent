@@ -7,8 +7,9 @@
 #include "fa.h"
 #include "twoBit.h"
 #include "bPlusTree.h"
+#include "basicBed.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.12 2009/01/09 10:14:33 kent Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.13 2009/08/26 03:09:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +27,7 @@ errAbort(
   "                    where coordinates are half-open zero-based, i.e. [start,end)\n"
   "   -noMask - convert sequence to all upper case\n"
   "   -bpt=index.bpt - use bpt index instead of built in one\n"
+  "   -bed=input.bed - grab sequences specified by input.bed. Will exclude introns\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
@@ -43,6 +45,7 @@ int clEnd = 0;		/* End from command line. */
 char *clSeqList = NULL; /* file containing list of seq names */
 bool noMask = FALSE;  /* convert seq to upper case */
 char *clBpt = NULL;	/* External index file. */
+char *clBed = NULL;	/* Bed file that specifies bounds of sequences. */
 
 static struct optionSpec options[] = {
    {"seq", OPTION_STRING},
@@ -51,6 +54,7 @@ static struct optionSpec options[] = {
    {"end", OPTION_INT},
    {"noMask", OPTION_BOOLEAN},
    {"bpt", OPTION_STRING},
+   {"bed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -82,6 +86,52 @@ for (s = tbss; s != NULL; s = s->next)
     outputOne(tbf, s->name, outFile, s->start, s->end);
 }
 
+struct dnaSeq *twoBitAndBedToSeq(struct twoBitFile *tbf, struct bed *bed)
+/* Get sequence defined by bed.  Exclude introns. */
+{
+struct dnaSeq *seq;
+if (bed->blockCount <= 1)
+    {
+    seq = twoBitReadSeqFrag(tbf, bed->chrom, bed->chromStart, bed->chromEnd);
+    freeMem(seq->name);
+    seq->name = cloneString(bed->name);
+    }
+else
+    {
+    int totalBlockSize = bedTotalBlockSize(bed);
+    AllocVar(seq);
+    seq->name = cloneString(bed->name);
+    seq->dna = needMem(totalBlockSize+1);
+    seq->size = totalBlockSize;
+    int i;
+    int seqOffset = 0;
+    for (i=0; i<bed->blockCount; ++i)
+        {
+	int exonSize = bed->blockSizes[i];
+	int exonStart = bed->chromStart + bed->chromStarts[i];
+	struct dnaSeq *exon = twoBitReadSeqFrag(tbf, bed->chrom, exonStart, exonStart+exonSize);
+	memcpy(seq->dna + seqOffset, exon->dna, exonSize);
+	seqOffset += exonSize;
+	dnaSeqFree(&exon);
+	}
+    }
+if (bed->strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
+return seq;
+}
+
+static void processSeqsFromBed(struct twoBitFile *tbf, char *bedFileName, FILE *outFile)
+/* Get sequences defined by beds.  Exclude introns. */
+{
+struct bed *bed, *bedList = bedLoadAll(bedFileName);
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    struct dnaSeq *seq = twoBitAndBedToSeq(tbf, bed);
+    faWriteNext(outFile, seq->name, seq->dna, seq->size);
+    dnaSeqFree(&seq);
+    }
+}
+
 void twoBitToFa(char *inName, char *outName)
 /* twoBitToFa - Convert all or part of twoBit file to fasta. */
 {
@@ -106,10 +156,17 @@ if (tbs->seqs != NULL && clBpt != NULL)
     tbf = twoBitOpenExternalBptIndex(tbs->fileName, clBpt);
 else
     tbf = twoBitOpen(tbs->fileName);
-if (tbs->seqs == NULL)
-    processAllSeqs(tbf, outFile);
+if (clBed != NULL)
+    {
+    processSeqsFromBed(tbf, clBed, outFile);
+    }
 else
-    processSeqSpecs(tbf, tbs->seqs, outFile);
+    {
+    if (tbs->seqs == NULL)
+	processAllSeqs(tbf, outFile);
+    else
+	processSeqSpecs(tbf, tbs->seqs, outFile);
+    }
 twoBitSpecFree(&tbs);
 carefulClose(&outFile);
 twoBitClose(&tbf);
@@ -126,6 +183,14 @@ clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
 clSeqList = optionVal("seqList", clSeqList);
 clBpt = optionVal("bpt", clBpt);
+clBed = optionVal("bed", clBed);
+if (clBed != NULL)
+    {
+    if (clSeqList != NULL)
+	errAbort("Can only have seqList or bed options, not both.");
+    if (clSeq != NULL)
+        errAbort("Can only have seq or bed options, not both.");
+    }
 if ((clStart > clEnd) && (clSeq == NULL))
     errAbort("must specify -seq with -start and -end");
 if ((clSeq != NULL) && (clSeqList != NULL))
