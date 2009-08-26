@@ -9,11 +9,12 @@
 #include "bits.h"
 #include "basicBed.h"
 
-static char const rcsid[] = "$Id: bbTest.c,v 1.1 2009/08/18 15:02:59 braney Exp $";
+static char const rcsid[] = "$Id: bbTest.c,v 1.2 2009/08/26 18:41:29 braney Exp $";
 
 int numTests = 1000;
 char *testChrom = NULL;
 int seed = 0;
+boolean bed12 = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,7 @@ errAbort(
   "   file.bed     bed3 file\n"
   "   file.bb      bigBed file\n"
   "options:\n"
+  "   -bed12       read a bed12 instead of bed3\n"
   "   -seed=N      use N for seed (default time())\n"
   "   -numTests=N  do N samples (default %d) \n"
   "   -chrom=chr1  test on just chr1 (default: all chroms in chrom.sizes\n"
@@ -35,6 +37,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"bed12", OPTION_BOOLEAN},
    {"numTests", OPTION_INT},
    {"seed", OPTION_INT},
    {"chrom", OPTION_STRING},
@@ -47,10 +50,11 @@ struct bedHead
 struct bed *list;
 };
 
-struct hash *readBeds(char *fileName)
+
+struct hash *readBed(char *fileName, int nFields)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[3];
+char *words[20];
 int wordsRead;
 struct bedHead *head;
 struct hash *headHash = newHash(10);
@@ -59,10 +63,11 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     {
     struct bed *bed;
 
-    AllocVar(bed);
-    bed->chrom = cloneString(words[0]);
-    bed->chromStart = atoi(words[1]);
-    bed->chromEnd = atoi(words[2]);
+    if (wordsRead < nFields)
+	errAbort("bed file %s has %d fields on line %d which is less than %d\n",
+	    wordsRead, lf->lineIx, nFields);
+
+    bed = bedLoadN(words, wordsRead);
 
     if ((head = hashFindVal(headHash, words[0])) == NULL)
 	{
@@ -70,7 +75,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	hashAdd(headHash, words[0], head);
 	}
 
-    slAddHead(&head->list, bed);
+    slAddTail(&head->list, bed);
     }
 
 lineFileClose(&lf);
@@ -133,6 +138,29 @@ if (positiveRangeIntersection(s1, e1, s2, e2))
     }
 }
 
+
+void doSetBedBits(Bits *bits, struct bed *bed, int start, int end)
+{
+for(; bed; bed = bed->next)
+    {
+    if (bed->blockCount > 1)
+	{
+	int *starts = bed->chromStarts;
+	int *lastStart = &starts[bed->blockCount];
+	int *size = bed->blockSizes;
+	int count = 0;
+
+	for(; starts < lastStart; starts++, size++)
+	    {
+	    setIntersection(bits, bed->chromStart + *starts, 
+		bed->chromStart + *starts + *size, start, end);
+	    }
+	}
+    else
+	setIntersection(bits, bed->chromStart, bed->chromEnd, start, end);
+    }
+}
+
 void setBigBedBits(char *fileName, Bits *bits, char *chrom, int start, int end)
 {
 struct lm *lm = lmInit(0);
@@ -143,7 +171,19 @@ struct bigBedInterval *bbInt = bbiList;
 for(; bbInt; bbInt = bbInt->next)
     {
     //verbose(2, "bigBed set %d %d\n", bbInt->start, bbInt->end);
-    setIntersection(bits, bbInt->start, bbInt->end, start, end);
+    if (bbInt->rest == NULL)
+	setIntersection(bits, bbInt->start, bbInt->end, start, end);
+    else
+	{
+	char *bedRow[32];
+	char startBuf[16], endBuf[16];
+	int fieldCount = 12;
+
+	bigBedIntervalToRow(bbInt, chrom, startBuf, endBuf, 
+	    bedRow, ArraySize(bedRow));
+	struct bed *bed = bedLoadN(bedRow, fieldCount);
+	doSetBedBits(bits, bed, start, end);
+	}
     }
 
 bbiFileClose(&bbi);
@@ -158,8 +198,7 @@ if (head == NULL)
 
 struct bed *bed = head->list;
 
-for(; bed; bed = bed->next)
-    setIntersection(bits, bed->chromStart, bed->chromEnd, start, end);
+doSetBedBits(bits, bed, start, end);
 }
 
 void compareBits(Bits *bbBits, Bits *bedBits, int size)
@@ -182,7 +221,7 @@ if ((off = bitFindSet(bbBits, 0, size)) != size)
 }
 
 
-void bbTest(char *sizesName, char *bed3Name, char *bbName)
+void bbTest(char *sizesName, char *bedName, char *bbName)
 /* bbTest - a program to test bigBed is compatible with normal bed. */
 {
 struct hash *chromSizesHash = bbiChromSizesFromFile(sizesName);
@@ -191,7 +230,7 @@ int ii;
 int start, end;
 char *chrom;
 int size;
-struct hash *bedHash = readBeds(bed3Name);
+struct hash *bedHash = readBed(bedName, bed12 ? 12 : 3);
 int maxSize = 10;
 
 Bits *bbBits = bitAlloc(maxSize);
@@ -228,7 +267,9 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 seed = optionInt("seed", time(NULL));
+srand(seed);
 printf("seed is %d\n", seed);
+bed12 = optionExists("bed12");
 numTests = optionInt("numTests", numTests);
 testChrom = optionVal("chrom", testChrom);
 bbTest(argv[1], argv[2], argv[3]);
