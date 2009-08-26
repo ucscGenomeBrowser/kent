@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.496 2009/08/05 06:35:30 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.497 2009/08/26 18:27:10 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2398,7 +2398,7 @@ char setting[128];
 // NOTE: Currently only composite multi-view tracks because
 // reset relies upon all cart vars following naming convention:
 //   {tableName}.{varName}...  ( One exception supported: {tableName}_sel ).
-if(tdbIsComposite(tdb) && subgroupingExists(tdb,"view"))
+if(tdbIsComposite(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->tableName,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
@@ -2453,7 +2453,7 @@ printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
 
 #ifdef SUPPORT_RESET_TO_DEFAULTS
-if(tdbIsComposite(tdb) && subgroupingExists(tdb,"view"))
+if(tdbIsComposite(tdb))
     printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
 #endif//def SUPPORT_RESET_TO_DEFAULTS
 
