@@ -21,6 +21,8 @@ struct apacheAccessLog
     char *num1;		/* Some number, I'm not sure what it is. */
     char *referrer;	/* Referring URL, may be NULL. */
     char *program;	/* Requesting program,  often Mozilla 4.0 */
+    time_t tick;	/* Unix tick (seconds since 1970) - derived from timeStamp. */
+    int runTime;	/* Overall time (optional) in seconds */
     };
 
 
