@@ -77,20 +77,34 @@ static void gtfGroupToGenePred(struct gffFile *gtf, struct gffGroup *group, FILE
 /* convert one gtf group to a genePred */
 {
 unsigned optFields = (clGenePredExt ? genePredAllFlds : 0);
-struct genePred *gp;
 struct errCatch *errCatch = errCatchNew();
 
 if (errCatchStart(errCatch))
     {
-    gp = genePredFromGroupedGtf(gtf, group, group->name, optFields, clGxfOptions);
-    genePredTabOut(gp, gpFh);
-    genePredFree(&gp);
+    struct genePred *gp = genePredFromGroupedGtf(gtf, group, group->name, optFields, clGxfOptions);
+    if (gp == NULL)
+        {
+        if (clAllErrors)
+            fprintf(stderr,"no exons defined for %s\n", group->name);
+        else
+            errAbort("no exons defined for %s", group->name);
+        badGroupCount++;
+        }
+    else
+        {
+        genePredTabOut(gp, gpFh);
+        genePredFree(&gp);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
+    // drop trailing newline in caught message
+    int l = strlen(errCatch->message->string);
+    if ((l > 0) && (errCatch->message->string[l-1] == '\n'))
+        errCatch->message->string[l-1] = '\0';
     if (clAllErrors)
-        warn("%s", errCatch->message->string);
+        fprintf(stderr, "%s\n", errCatch->message->string);
     else
         errAbort("%s", errCatch->message->string);
     badGroupCount++;
