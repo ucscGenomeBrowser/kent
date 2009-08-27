@@ -62,8 +62,7 @@ foreach table ( $tables )
       | awk '{print $13, $14}'`
   endif
   set timestamp=`echo $date | sed -r "s/(:..):(..)/\1\.\2/" | sed "s/[- :]//g"`
-  echo "# touch -m -t $timestamp /var/lib/mysql/$db/$table.*"
-# touch -m -t 200701231439.34 /var/lib/mysql/hg19/netMm9.*
+  echo "touch -m -t $timestamp /var/lib/mysql/$db/$table.*"
 end
 echo
 
