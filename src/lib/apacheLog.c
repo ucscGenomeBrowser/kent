@@ -5,7 +5,7 @@
 #include "obscure.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: apacheLog.c,v 1.2 2009/08/27 03:54:39 kent Exp $";
+static char const rcsid[] = "$Id: apacheLog.c,v 1.3 2009/08/27 20:52:01 kent Exp $";
 
 void apacheAccessLogFree(struct apacheAccessLog **pLl)
 /* Free up apacheAccessLog. */
@@ -74,6 +74,8 @@ if (buf == NULL)
     shortLine(&ll, line, fileName, lineIx);
     return NULL;
     }
+
+/* Parse out bracket enclosed timeStamp and time zone. */
 s = strchr(buf, '[');
 if (s == NULL)
     {
@@ -95,6 +97,12 @@ if (!isdigit(ll->timeStamp[0]))
     return NULL;
     }
 ll->timeZone = nextWord(&s);
+
+/* Convert time stamp to Unix tick. */
+struct tm tm;
+if (strptime(ll->timeStamp, "%d/%b/%Y:%T", &tm) != NULL)
+    ll->tick = mktime(&tm);
+
 buf = e+2;
 if (buf[0] != '"')
     {
