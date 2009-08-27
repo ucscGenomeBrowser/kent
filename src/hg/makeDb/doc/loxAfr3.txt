@@ -3,7 +3,7 @@
 # This file describes how we made the elephant browser database on
 #  Broad Institute loxAfr3 (NCBI project 12569, AAGU03000000)
 
-#	"$Id: loxAfr3.txt,v 1.3 2009/07/23 15:14:50 braney Exp $";
+#	"$Id: loxAfr3.txt,v 1.4 2009/08/27 18:05:07 hiram Exp $";
 
 #############################################################################
 # Download sequence (DONE - 2009-07-15 - Hiram)
@@ -302,3 +302,23 @@ chainOne $(path1)
 # blastHg18KG 1.362%, xenoRefGene 1.615%, both 0.695%, cover 51.03%, enrich 31.60x
     rm -rf blastOut
 #end tblastn
+
+#########################################################################
+# lastz swap from Mouse Mm9 (DONE - 2009-08-27 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/mm9/bed/lastzLoxAfr3.2009-08-12
+    cat fb.mm9.chainLoxAfr3Link.txt
+    #	684326090 bases of 2620346127 (26.116%) in intersection
+
+    mkdir /hive/data/genomes/loxAfr3/bed/blastz.mm9.swap
+    cd /hive/data/genomes/loxAfr3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzLoxAfr3.2009-08-12/DEF \
+	-swap -noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet > swap.log 2>&1 &
+    #	real    123m9.342s
+    cat fb.loxAfr3.chainMm9Link.txt 
+    #	673856452 bases of 3118565340 (21.608%) in intersection
+
+#########################################################################
