@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.20 2008/09/08 18:20:37 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.21 2009/08/27 23:09:51 markd Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -23,7 +23,7 @@ static char const rcsid[] = "$Id: hgConfig.c,v 1.20 2008/09/08 18:20:37 markd Ex
 static void parseConfigFile(char *filename, int depth);
 
 /* the hash holding the config options */
-static struct hash* cfgOptionsHash = 0;
+static struct hash* cfgOptionsHash = NULL;
 
 static boolean isBrowserCgi()
 /* test if this is a browser CGI */
@@ -119,6 +119,15 @@ else
 parseConfigFile(incfile, depth+1);
 }
 
+static void parseConfigDelete(struct lineFile *lf, char *line)
+/* parse and process a delete directive */
+{
+char *p = line, *var;
+(void)nextWord(&p);  // skip "delete"
+while ((var = nextWord(&p)) != NULL)
+    hashRemove(cfgOptionsHash, var);
+}
+
 static void parseConfigLine(struct lineFile *lf, int depth, char *line)
 /* parse one non-comment, non-blank line of the config file.
  * If keyword=value, put in global hash, otherwise process
@@ -128,6 +137,8 @@ static void parseConfigLine(struct lineFile *lf, int depth, char *line)
 char *name = trimSpaces(line);
 if (startsWithWord("include", line))
     parseConfigInclude(lf, depth, line);
+else if (startsWithWord("delete", line))
+    parseConfigDelete(lf, line);
 else
     {
     char *value = strchr(name, '=');
