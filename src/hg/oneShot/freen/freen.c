@@ -4,12 +4,9 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "hash.h"
-#include "bed.h"
-#include "asParse.h"
-#include "jksql.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.87 2009/03/16 01:01:20 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.88 2009/08/27 18:07:35 kent Exp $";
 
 void usage()
 {
@@ -18,14 +15,15 @@ errAbort("freen - test some hairbrained thing.\n"
 }
 
 
-void freen(char *s)
+void freen(char *input)
 /* Test some hair-brained thing. */
 {
-int count = atoi(s);
-char *asDef = bedAsDef(count);
-printf("%s",  bedAsDef(count));
-struct asObject *as = asParseText(asDef);
-printf("%d rows\n", slCount(as->columnList));
+struct tm tm;
+char *res = strptime(input, "%d/%b/%Y:%T", &tm);
+time_t tick = mktime(&tm);
+printf("res = %s\n", res);
+printf("%ld ticks\n", (long)tick);
+printf("%s\n", asctime(&tm));
 }
 
 int main(int argc, char *argv[])
