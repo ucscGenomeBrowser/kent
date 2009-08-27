@@ -1034,7 +1034,7 @@ html hg19vertChainNet
 
     track chainGasAcu1
     subTrack vertebrateChainNet off
-    subGroups view=chain species=hGasAcu clade=eTele
+    subGroups view=chain species=jGasAcu clade=eTele
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain gasAcu1
@@ -1042,7 +1042,7 @@ html hg19vertChainNet
 
     track netGasAcu1
     subTrack vertebrateChainNet off
-    subGroups view=net species=hGasAcu clade=eTele
+    subGroups view=net species=jGasAcu clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign gasAcu1 chainGasAcu1
@@ -1050,7 +1050,7 @@ html hg19vertChainNet
 
     track chainFr2
     subTrack vertebrateChainNet off
-    subGroups view=chain species=iFr clade=eTele
+    subGroups view=chain species=hFr clade=eTele
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain fr2
@@ -1058,7 +1058,7 @@ html hg19vertChainNet
 
     track netFr2
     subTrack vertebrateChainNet off
-    subGroups view=net species=iFr clade=eTele
+    subGroups view=net species=hFr clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign fr2 chainFr2
@@ -1066,7 +1066,7 @@ html hg19vertChainNet
 
     track chainDanRer5
     subTrack vertebrateChainNet off
-    subGroups view=chain species=jDanRer clade=eTele
+    subGroups view=chain species=lDanRer clade=eTele
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain danRer5
@@ -1074,7 +1074,7 @@ html hg19vertChainNet
 
     track netDanRer5
     subTrack vertebrateChainNet off
-    subGroups view=net species=jDanRer clade=eTele
+    subGroups view=net species=lDanRer clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign danRer5 chainDanRer5
@@ -1082,7 +1082,7 @@ html hg19vertChainNet
 
     track chainTetNig1
     subTrack vertebrateChainNet off
-    subGroups view=chain species=kTetNig clade=eTele
+    subGroups view=chain species=iTetNig clade=eTele
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain tetNig1
@@ -1090,7 +1090,7 @@ html hg19vertChainNet
 
     track netTetNig1
     subTrack vertebrateChainNet off
-    subGroups view=net species=kTetNig clade=eTele
+    subGroups view=net species=iTetNig clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign tetNig1 chainTetNig1
@@ -1098,7 +1098,7 @@ html hg19vertChainNet
 
     track chainOryLat2
     subTrack vertebrateChainNet off
-    subGroups view=chain species=lOryLat clade=eTele
+    subGroups view=chain species=kOryLat clade=eTele
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain oryLat2
@@ -1106,7 +1106,7 @@ html hg19vertChainNet
 
     track netOryLat2
     subTrack vertebrateChainNet off
-    subGroups view=net species=lOryLat clade=eTele
+    subGroups view=net species=kOryLat clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign oryLat2 chainOryLat2
