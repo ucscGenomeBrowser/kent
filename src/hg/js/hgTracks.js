@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.37 2009/08/27 00:13:08 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.38 2009/08/27 00:15:30 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -319,18 +319,6 @@ function imgTblSetOrder(table)
         }
     });
 }
-
-//function pxToInt(val)
-//{
-//// Returns integer bvalue from Npx string
-//    //if(val.typeOf == "string") {
-//        if(val.substring(val.length-2) == "px")
-//            return parseInt(val.substring(0,val.length-3));
-//        else
-//            return parseInt(val);
-//    //}
-//    //return val;
-//}
 
 /////////////////////////////////////////////////////
 jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
