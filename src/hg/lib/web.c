@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.169 2009/07/10 01:40:38 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.170 2009/08/27 13:50:27 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -407,6 +407,8 @@ else
 	    puts("       <A HREF=\"../goldenPath/help/hgGenomeHelp.html\"");
     	else if (endsWith(scriptName, "hgSession"))
 	    puts("       <A HREF=\"../goldenPath/help/hgSessionHelp.html\"");
+    	else if (endsWith(scriptName, "pbGateway"))
+	    puts("       <A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\"");
     	else if (endsWith(scriptName, "hgVisiGene"))
 	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#VisiGeneHelp\"");
     	else
