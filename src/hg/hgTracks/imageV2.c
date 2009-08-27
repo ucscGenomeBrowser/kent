@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.7 2009/08/27 00:10:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.8 2009/08/27 16:38:51 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -431,7 +431,6 @@ imgTrack->chromEnd   = chromEnd;
 imgTrack->plusStrand = plusStrand;
 imgTrack->showCenterLabel = showCenterLabel;
 imgTrack->vis             = vis;
-#ifdef IMAGEv2_DRAG_REORDER
 static int lastOrder = 900; // keep track of the order these images get added
 if(order == IMG_FIXEDPOS)
     {
@@ -443,7 +442,11 @@ if(order == IMG_FIXEDPOS)
     }
 else
     {
+#ifdef IMAGEv2_DRAG_REORDER
     imgTrack->reorderable = TRUE;
+#else//ifndef IMAGEv2_DRAG_REORDER
+    imgTrack->reorderable = FALSE;
+#endif//ndef IMAGEv2_DRAG_REORDER
     if(order == IMG_ANYORDER)
         {
         if(imgTrack->order <= 0)
@@ -452,10 +455,6 @@ else
     else if(imgTrack->order != order)
         imgTrack->order = order;
     }
-#else//ifndef IMAGEv2_DRAG_REORDER
-    imgTrack->reorderable = FALSE;
-    imgTrack->order = 1;
-#endif//ndef IMAGEv2_DRAG_REORDER
 return imgTrack;
 }
 
@@ -827,6 +826,7 @@ return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromSt
 void imgBoxTracksNormalizeOrder(struct imgBox *imgBox)
 /* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
 {
+#ifdef IMAGEv2_DRAG_REORDER
 slSort(&(imgBox->imgTracks), imgTrackOrderCmp);
 struct imgTrack *imgTrack = NULL;
 int lastOrder = 0;
@@ -835,6 +835,9 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
     if(imgTrack->reorderable)
         imgTrack->order = ++lastOrder;
     }
+#else//ifndef IMAGEv2_DRAG_REORDER
+slReverse(&(imgBox->imgTracks));
+#endif//ndef IMAGEv2_DRAG_REORDER
 }
 
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose)
@@ -1056,9 +1059,7 @@ if(!imgBoxIsComplete(imgBox,TRUE))
     return;
 char name[128];
 
-#ifdef IMAGEv2_DRAG_REORDER
 imgBoxTracksNormalizeOrder(imgBox);
-#endif//def IMAGEv2_DRAG_REORDER
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
 //commonCssStyles();
