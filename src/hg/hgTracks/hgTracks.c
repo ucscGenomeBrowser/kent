@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1594 2009/08/25 05:58:18 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1595 2009/08/27 00:10:15 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -289,11 +289,10 @@ char *encodedName = cgiEncode(name);
 if(curMap != NULL)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%u&c=%s&g=%s",
-        hgTrackUiName(), cartSessionVarName(),cartSessionId(cart), chromName, encodedName);
+    safef(link,sizeof(link),"%s?%s=%u&g=%s",
+        hgTrackUiName(), cartSessionVarName(),cartSessionId(cart), encodedName);
     char title[128];
     safef(title,sizeof(title),"%s controls", shortLabel);
-    // Add map item to currnent map (TODO: pass in map)
     mapSetItemAdd(curMap,link,title,x, y, x+width, y+height);
     }
 #else//ifndef IMAGEv2_UI
@@ -320,7 +319,6 @@ if(curMap != NULL)
     char link[512];
     safef(link,sizeof(link),"%s?complement_%s=%d&%s",
         hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
-    // Add map item to currnent map (TODO: pass in map)
     mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
     }
 #else//ifndef IMAGEv2_UI
@@ -1583,27 +1581,37 @@ int sideSliceOffsetX = 0;
 int dataSliceOffsetX = 0;
 int sliceHeight  = 0;
 int sliceOffsetY = 0;
-if (withLeftLabels)
-    {
-    sideSliceWidth   = leftLabelWidth + 2;
-    sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
-    }
-dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
-char *rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
+char *rulerTtl = NULL;
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started prior to this in doTrackForm()
 //theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,pixWidth);
-#ifdef IMAGEv2_USE_PORTAL
-// If a portal was established, then set the global dimensions to the entire image size
-if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
+if(theImgBox)
     {
-    pixWidth = tl.picWidth;
-    winBaseCount = winEnd - winStart;
-    insideWidth = tl.picWidth-gfxBorder-insideX;
     if (withLeftLabels)
+        {
+        sideSliceWidth   = leftLabelWidth + 2;
         sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
+        }
+    dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
+
+    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
+    hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
+    hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
+    hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
+    hPrintf("<input type='hidden' name='r' value='%d'>\n", winEnd);
+    hPrintf("<input type='hidden' name='pix' value='%d'>\n", tl.picWidth);
+    #ifdef IMAGEv2_USE_PORTAL
+    // If a portal was established, then set the global dimensions to the entire image size
+    if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
+        {
+        pixWidth = tl.picWidth;
+        winBaseCount = winEnd - winStart;
+        insideWidth = tl.picWidth-gfxBorder-insideX;
+        if (withLeftLabels)
+            sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
+        }
+    #endif//def IMAGEv2_USE_PORTAL
+    dataSliceWidth   = tl.picWidth - sideSliceWidth;
     }
-#endif//def IMAGEv2_USE_PORTAL
-dataSliceWidth   = tl.picWidth - sideSliceWidth;
 #endif//def IMAGEv2_UI
 
 if (rulerMode != tvFull)
@@ -1720,9 +1728,12 @@ else
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
 #endif // USE_PNG
     #ifdef IMAGEv2_UI
-    // Adds one single image for all tracks (TODO: build the track by track images)
-    theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
-    //curMap = imgMapStart(theOneImg,"theOne",NULL); // TODO: Not using image map in favor of slice maps, so get rid of hPrintf(<MAP... below
+    if(theImgBox)
+        {
+        // Adds one single image for all tracks (TODO: build the track by track images)
+        theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
+        //curMap = imgMapStart(theOneImg,"theOne",NULL); // TODO: Not using image map in favor of slice maps, so get rid of hPrintf(<MAP... below
+        }
     #endif//def IMAGEv2_UI
     }
 hvg->rc = revCmplDisp;
@@ -1748,6 +1759,7 @@ if (withLeftLabels && psOutput == NULL)
         if (rulerCds)
             height += rulerTranslationHeight;
         #ifdef IMAGEv2_UI
+        if(theImgBox)
             {
             // Mini-buttons (side label slice) for ruler
             sliceHeight      = height + 1;
@@ -1784,12 +1796,15 @@ if (withLeftLabels && psOutput == NULL)
             if (track->hasUi)
                 {
                 #ifdef IMAGEv2_UI
-                // Mini-buttons (side label slice) for tracks
-                sliceHeight      = h;
-                sliceOffsetY     = yStart;
-                curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                if(theImgBox)
+                    {
+                    // Mini-buttons (side label slice) for tracks
+                    sliceHeight      = h;
+                    sliceOffsetY     = yStart;
+                    curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
+                    curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+                    curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+                    }
                 #endif//def IMAGEv2_UI
                 mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h,
 			      track->mapName, track->shortLabel);
@@ -1811,6 +1826,7 @@ if (withLeftLabels)
     if (rulerMode != tvHide)
         {
         #ifdef IMAGEv2_UI
+        if(theImgBox)
             {
             // side label slice for ruler
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
@@ -1878,6 +1894,7 @@ if (withLeftLabels)
         if (track->limitedVis == tvHide)
             continue;
         #ifdef IMAGEv2_UI
+         if(theImgBox)
             {
             // side label slice for tracks
             // FIXME: Notice I am treating all subtracks as indivisible from their composite
@@ -1917,6 +1934,7 @@ else
 if (withGuidelines)
     {
     #ifdef IMAGEv2_UI
+    //if(theImgBox)
         // TODO: We should be making transparent data images and a separate background img for guidelines.
         // This will allow the guidelines to dragscroll while the center labels are static.
         // NOTE: The background image could easily be a reusable file, based upon zoom level and width.  Height could propbaby easily be stretched.
@@ -1940,6 +1958,7 @@ if (withGuidelines)
 if (rulerMode != tvHide)
     {
     #ifdef IMAGEv2_UI
+    if(theImgBox)
         {
         // data slice for ruler
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
@@ -2168,6 +2187,7 @@ if (withCenterLabels)
             continue;
         #ifdef IMAGEv2_UI
         //if (isWithCenterLabels(track))  // NOTE: Since track may not have centerlabel but subtrack may (How?), then must always make this slice!
+        if(theImgBox)
             {
             // center label slice of tracks
             // FIXME: Notice I am treating all subtracks as indivisible from their composite
@@ -2185,6 +2205,7 @@ if (withCenterLabels)
             if (isWithCenterLabels(track))
                 y = doCenterLabels(track, track, hvg, font, y) - track->height; /* subtrack heights tallied below: */
             #ifdef IMAGEv2_UI
+            if(theImgBox)
                 {
                 // Special case: data slice of tracks
                 // FIXME: This special case allows the subtrack center label map items to be put into the data slice
@@ -2223,6 +2244,7 @@ if (withCenterLabels)
         if (track->limitedVis == tvHide)
                 continue;
         #ifdef IMAGEv2_UI
+        if(theImgBox)
             {
             // data slice of tracks
             // FIXME: Notice I am treating all subtracks as indivisible from their composite
@@ -2268,6 +2290,7 @@ if (withLeftLabels)
 	if (track->limitedVis == tvHide)
             continue;
     #ifdef IMAGEv2_UI
+    if(theImgBox)
         {
         // side label slice of tracks
         // FIXME: Notice I am treating all subtracks as indivisible from their composite
@@ -2312,7 +2335,20 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (track->limitedVis != tvHide)
+        {
+        #ifdef IMAGEv2_UI
+        if(theImgBox)
+            {
+            // Seems there are some left over side labels which need to be added here!
+            sliceHeight      = trackPlusLabelHeight(track, fontHeight);
+            sliceOffsetY     = y;
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            }
+        #endif//def IMAGEv2_UI
         y = doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
+        }
     }
 
 /* Finish map. */
@@ -2331,23 +2367,28 @@ if(newWinWidth)
 /* Save out picture and tell html file about it. */
 hvGfxClose(&hvg);
 #ifdef IMAGEv2_UI
-imageBoxDraw(theImgBox);
-#ifdef IMAGEv2_USE_PORTAL
-// If a portal was established, then set the global dimensions back to the portal size
-if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+if(theImgBox)
     {
-    pixWidth = tl.picWidth;
-    winBaseCount = winEnd - winStart;
-    insideWidth = tl.picWidth-gfxBorder-insideX;
+    imageBoxDraw(theImgBox);
+    #ifdef IMAGEv2_USE_PORTAL
+    // If a portal was established, then set the global dimensions back to the portal size
+    if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+        {
+        pixWidth = tl.picWidth;
+        winBaseCount = winEnd - winStart;
+        insideWidth = tl.picWidth-gfxBorder-insideX;
+        }
+    #endif//def IMAGEv2_USE_PORTAL
+    imgBoxFree(&theImgBox);
     }
-#endif//def IMAGEv2_USE_PORTAL
-imgBoxFree(&theImgBox);
-#else//ifndef IMAGEv2_UI
-char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
-hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
-    gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
-hPrintf("><BR>\n");
-#endif//ndef IMAGEv2_UI
+else
+#endif//def IMAGEv2_UI
+    {
+    char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
+    hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
+        gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
+    hPrintf("><BR>\n");
+    }
 }
 
 static void printEnsemblAnchor(char *database, char* archive,
@@ -3808,7 +3849,7 @@ return 0;
 }
 
 static void drawMaxWindowWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-				 int xOff, int yOff, int width, MgFont *font, Color color, 
+				 int xOff, int yOff, int width, MgFont *font, Color color,
 				 enum trackVisibility vis)
 /* This is a stub drawItems handler to be swapped in for the usual drawItems when the window
  * size is larger than the threshold specified by trackDb setting maxWindowToDraw. */
@@ -3925,21 +3966,24 @@ else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
 #ifdef IMAGEv2_UI
-// Start an imagebox (global for now to avoid huge rewrite of hgTracks)
-// Set up imgBox dimensions
-int sideSliceWidth  = 0;   // Just being explicit
-if (withLeftLabels)
-    sideSliceWidth   = (insideX - gfxBorder*3) + 2;
-theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
-#ifdef IMAGEv2_USE_PORTAL
-// Define a portal with a default expansion size, then set the global dimensions to the full image size
-if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
+if(!psOutput)
     {
-    winBaseCount = winEnd - winStart;
-    insideWidth = tl.picWidth-gfxBorder-insideX;
+    // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
+    // Set up imgBox dimensions
+    int sideSliceWidth  = 0;   // Just being explicit
+    if (withLeftLabels)
+        sideSliceWidth   = (insideX - gfxBorder*3) + 2;
+    theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
+    #ifdef IMAGEv2_USE_PORTAL
+    // Define a portal with a default expansion size, then set the global dimensions to the full image size
+    if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
+        {
+        winBaseCount = winEnd - winStart;
+        insideWidth = tl.picWidth-gfxBorder-insideX;
+        }
+    #endif//def IMAGEv2_USE_PORTAL
     }
-#endif//def IMAGEv2_USE_PORTAL
-#endif//def IMAGEv2_UI
+    #endif//def IMAGEv2_UI
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -3992,11 +4036,14 @@ for (group = groupList; group != NULL; group = group->next)
 
 #ifdef IMAGEv2_UI
 #ifdef IMAGEv2_USE_PORTAL
-// If a portal was established, then set the global dimensions back to the portal size
-if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+if(theImgBox)
     {
-    winBaseCount = winEnd - winStart;
-    insideWidth = tl.picWidth-gfxBorder-insideX;
+    // If a portal was established, then set the global dimensions back to the portal size
+    if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+        {
+        winBaseCount = winEnd - winStart;
+        insideWidth = tl.picWidth-gfxBorder-insideX;
+        }
     }
 #endif//def IMAGEv2_USE_PORTAL
 #endif//def IMAGEv2_UI

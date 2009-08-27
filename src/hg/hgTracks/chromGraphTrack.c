@@ -181,20 +181,22 @@ xOff = hvGfxAdjXW(hvg, xOff, width);
 
 char *encodedTrack = cgiEncode(tg->mapName);
 #ifdef IMAGEv2_UI
-if(curMap != NULL)
+if(theImgBox && curMap)
     {
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
-    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&db=%s&pix=%d", hgcNameAndSettings(),
-        winStart, winEnd, encodedTrack, database, tl.picWidth);
+    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
+        winStart, winEnd, encodedTrack);
     mapSetItemAdd(curMap,link,NULL,xOff,yOff,xOff+width,yOff+height);
     }
-#else//ifndef IMAGEv2_UI
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
-	yOff+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n",
-	    hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd,
-	    database, tl.picWidth);
-#endif//ndef IMAGEv2_UI
+else
+#endif//def IMAGEv2_UI
+    {
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
+        yOff+height);
+    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n",
+            hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd,
+            database, tl.picWidth);
+    }
 }
 
 static void cgDrawItems(struct track *tg, int seqStart, int seqEnd,

@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.6 2009/07/17 18:25:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.7 2009/08/27 00:10:16 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -414,7 +414,6 @@ return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,
 struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
 /* Updates an already existing image track */
 {
-static int lastOrder = 900; // keep track of the order these images get added
 if(tdb != NULL && tdb != imgTrack->tdb)
     imgTrack->tdb    = tdb;
 if(name != NULL && differentStringNullOk(imgTrack->name,name))
@@ -432,6 +431,8 @@ imgTrack->chromEnd   = chromEnd;
 imgTrack->plusStrand = plusStrand;
 imgTrack->showCenterLabel = showCenterLabel;
 imgTrack->vis             = vis;
+#ifdef IMAGEv2_DRAG_REORDER
+static int lastOrder = 900; // keep track of the order these images get added
 if(order == IMG_FIXEDPOS)
     {
     imgTrack->reorderable = FALSE;
@@ -451,6 +452,10 @@ else
     else if(imgTrack->order != order)
         imgTrack->order = order;
     }
+#else//ifndef IMAGEv2_DRAG_REORDER
+    imgTrack->reorderable = FALSE;
+    imgTrack->order = 1;
+#endif//ndef IMAGEv2_DRAG_REORDER
 return imgTrack;
 }
 
@@ -1051,18 +1056,20 @@ if(!imgBoxIsComplete(imgBox,TRUE))
     return;
 char name[128];
 
-// TODO: Add in sorting
-//if(differentStringNullOk(imgBox->imgTracks->name,RULER_TRACK_NAME))
-//    slReverse(&(imgBox->imgTracks));
+#ifdef IMAGEv2_DRAG_REORDER
 imgBoxTracksNormalizeOrder(imgBox);
+#endif//def IMAGEv2_DRAG_REORDER
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
 //commonCssStyles();
+#ifdef IMAGEv2_DRAG_REORDER
 jsIncludeFile("jquery.tablednd.js", NULL);
-// TODO: jsIncludeFile("dragScroll.js", NULL);
+#endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
+#ifdef IMAGEv2_DRAG_REORDER
 hPrintf(".trDrag {opacity:0.4; padding:1px; background-color:red;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
 hPrintf(".dragHandle {cursor: s-resize;}\n");
+#endif//def IMAGEv2_DRAG_REORDER
 hPrintf("div.dragZoom {cursor: text;}\n");
 hPrintf("</style>\n");
 
@@ -1085,7 +1092,10 @@ if(imgBox->showPortal)
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0");
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
-hPrintf(" class='tableWithDragAndDrop' style='border:1px solid blue;border-collapse:separate'");
+#ifdef IMAGEv2_DRAG_REORDER
+hPrintf(" class='tableWithDragAndDrop'");
+#endif//def IMAGEv2_DRAG_REORDER
+hPrintf(" style='border:1px solid blue;border-collapse:separate'");
 hPrintf(">\n");
 
 struct imgTrack *imgTrack = imgBox->imgTracks;
@@ -1097,7 +1107,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     // leftLabel
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
-        safef(name,sizeof(name),"left_%s",trackName);
+        safef(name,sizeof(name),"side_%s",trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
         sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);
@@ -1115,13 +1125,13 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
     // data image
     safef(name, sizeof(name), "data_%s", trackName);
-    sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isData), name,imgTrack->reorderable);
+    sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isData), name,(imgTrack->order>0));
     hPrintf(" </TD>");
 
     // rightLabel
     if(imgBox->showSideLabel && !imgTrack->plusStrand)
         {
-        safef(name, sizeof(name), "right_%s", trackName);
+        safef(name, sizeof(name), "side_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n", name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
         sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);

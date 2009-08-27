@@ -175,20 +175,22 @@ char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
 x = hvGfxAdjXW(hvg, x, width);
 #ifdef IMAGEv2_UI
-if(curMap != NULL)
+if(theImgBox && curMap)
     {
     char link[512];
     safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&i2=%s", // NOTE: winStart,winEnd removed due to portal
-        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2); // Note: chopped out winStart/winEnd
+        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2);
     mapSetItemAdd(curMap,link,statusLine,x, y, x+width, y+height);
     }
-#else//ifndef IMAGEv2_UI
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
-       hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd,
-       database, tl.picWidth);
-hPrintf("TITLE=\"%s\">\n", statusLine);
-#endif//ndef IMAGEv2_UI
+else
+#endif//def IMAGEv2_UI
+    {
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
+        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd,
+        database, tl.picWidth);
+    hPrintf("TITLE=\"%s\">\n", statusLine);
+    }
 freeMem(encodedItem1);
 freeMem(encodedItem2);
 }
@@ -1441,18 +1443,20 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     {
     int xOffRc = hvGfxAdjXW(hvg, xOff, insideWidth);
     #ifdef IMAGEv2_UI
-    if(curMap != NULL)
+    if(theImgBox && curMap)
         {
         char link[512];
         safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->mapName); // NOTE: winStart,winEnd removed due to portal
         mapSetItemAdd(curMap,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         }
-    #else//ifndef IMAGEv2_UI
-    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOffRc, y, xOffRc+insideWidth, y+totalHeight);
-    hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",
-	    hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
-    hPrintf("TITLE=\"zoomInMore\">\n");
-    #endif//ndef IMAGEv2_UI
+    else
+    #endif//def IMAGEv2_UI
+        {
+        hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOffRc, y, xOffRc+insideWidth, y+totalHeight);
+        hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",
+            hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
+        hPrintf("TITLE=\"zoomInMore\">\n");
+        }
      }
 else
     {

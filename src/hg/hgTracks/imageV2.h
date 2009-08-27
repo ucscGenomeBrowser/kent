@@ -3,7 +3,8 @@
 // UNCOMMENT IMAGEv2_UI to have the new image with dragReorder
 // also UNCOMMENT IMAGEv2_UI_PORTAL to allow dragScroll
 //#define IMAGEv2_UI
-//#define IMAGEv2_USE_PORTAL
+#define IMAGEv2_USE_PORTAL
+#define IMAGEv2_DRAG_REORDER
 
 // CURRENT PROBLEMS:
 // o subrtacks should be dragReorderable!!!  Make them individual imgTracks
@@ -39,7 +40,7 @@ extern struct mapSet   *curMap;      // Make this global for now to avoid huge r
 //          Thus, if we are sending a 3X sized image, the "slice" spans the entire 3X.
 //          Frequently a subset of an image, but possibly the whole image.
 //          Even if the image is of a single track, it might still be cut into data image, sideLabel and centerLabel slices.
-// "sliceMap": The portion of a map that belongs to a slice.  The pixel coordinates are always image relative, not sice relative.
+// "sliceMap": The portion of a map that belongs to a slice.  The pixel coordinates are always image relative, not slice relative.
 // "portal" or "imgPortal": The html/js concept of the portion of a slice that is visible in the browser.
 //          Thus, if we are sending a 3X sized data image slice, the "portal" seen in the browser spans only 1X.
 //          Frequently a subset of a slice, but possibly the whole image slice.

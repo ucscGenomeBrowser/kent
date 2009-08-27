@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.97 2009/08/25 21:28:40 braney Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.98 2009/08/27 00:10:16 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -571,21 +571,26 @@ if (chrom == NULL)
     end = winEnd;
     }
 #ifdef IMAGEv2_UI
-if(curMap != NULL)
+if(theImgBox && curMap)
     {
+    // FIXME: The problem with leftLabel toggle appears to be a single map area meant to cover the whole leftLabel and data!
+    // eg: COORDS="11,395,800,405" in non IMAGEv2 image covers everything left of button through to right edge of image
+    // Solution?  Either drop the toggle on side button, or make separate map areas.
     char link[512];
     safef(link,sizeof(link),"%s?%s",hgTracksName(), ui->string); // NOTE: position removed due to portal
     mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
     }
-#else//ndef IMAGEv2_UI
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s?position=%s:%d-%d",
-	hgTracksName(), chrom, start+1, end);
-hPrintf("&%s\"", ui->string);
-if (message != NULL)
-    mapStatusMessage("%s", message);
-hPrintf(">\n");
-#endif//ndef IMAGEv2_UI
+else
+#endif//def IMAGEv2_UI
+    {
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+    hPrintf("HREF=\"%s?position=%s:%d-%d",
+        hgTracksName(), chrom, start+1, end);
+    hPrintf("&%s\"", ui->string);
+    if (message != NULL)
+        mapStatusMessage("%s", message);
+    hPrintf(">\n");
+    }
 freeDyString(&ui);
 }
 
@@ -640,12 +645,12 @@ if (x < xEnd)
     char *encodedTrack = cgiEncode(track);
 
     #ifdef IMAGEv2_UI
-    if(curMap != NULL)
+    if(theImgBox && curMap)
         {
         char link[512];
         if (directUrl)
             {
-        	safef(link,sizeof(link),directUrl, item, chromName, start, end, encodedTrack, database);
+            safef(link,sizeof(link),directUrl, item, chromName, start, end, encodedTrack, database);
             if (withHgsid)
                 safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", cartSidUrlString(cart));
             }
@@ -659,29 +664,31 @@ if (x < xEnd)
         // Add map item to currnent map (TODO: pass in map)
         mapSetItemAdd(curMap,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
         }
-    #else//ifndef IMAGEv2_UI
-    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
-    if (directUrl)
-	{
-	hPrintf("HREF=\"");
-	hPrintf(directUrl, item, chromName, start, end, encodedTrack, database);
-	if (withHgsid)
-	     hPrintf("&%s", cartSidUrlString(cart));
-	}
     else
-	{
-	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-	    hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
-	    chromName, winStart, winEnd,
-	    database, tl.picWidth);
-	}
-    if (extra != NULL)
-        hPrintf("&%s", extra);
-    hPrintf("\" ");
-    if (statusLine != NULL)
-	   mapStatusMessage("%s", statusLine);
-    hPrintf(">\n");
-    #endif//ndef IMAGEv2_UI
+    #endif//def IMAGEv2_UI
+        {
+        hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
+        if (directUrl)
+            {
+            hPrintf("HREF=\"");
+            hPrintf(directUrl, item, chromName, start, end, encodedTrack, database);
+            if (withHgsid)
+                hPrintf("&%s", cartSidUrlString(cart));
+            }
+        else
+            {
+            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
+                chromName, winStart, winEnd,
+                database, tl.picWidth);
+            }
+        if (extra != NULL)
+            hPrintf("&%s", extra);
+        hPrintf("\" ");
+        if (statusLine != NULL)
+        mapStatusMessage("%s", statusLine);
+        hPrintf(">\n");
+        }
     freeMem(encodedItem);
     freeMem(encodedTrack);
     }
@@ -10532,7 +10539,7 @@ type = words[0];
 if (sameWord(type, "bed"))
     {
     complexBedMethods(track, tdb, FALSE, wordCount, words);
-    /* bed.h includes genePred.h so should be able to use these trackDb 
+    /* bed.h includes genePred.h so should be able to use these trackDb
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
@@ -10670,7 +10677,7 @@ struct track *subtrack;
 long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (isSubtrackVisible(subtrack) && 
+    if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
 

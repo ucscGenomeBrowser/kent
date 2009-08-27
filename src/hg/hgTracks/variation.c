@@ -4,7 +4,7 @@
 #include "variation.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.142 2009/06/26 20:16:56 tdreszer Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.143 2009/08/27 00:10:16 tdreszer Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1230,11 +1230,11 @@ void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt,
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 #ifdef IMAGEv2_UI
-if(curMap != NULL)
+if(theImgBox && curMap)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%u&c=%s&g=%s&i=%s", hgTrackUiName(),
-	   cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
+    safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s", hgTrackUiName(),
+    cartSessionVarName(), cartSessionId(cart), trackName, name);
     char title[128];
     safef(title,sizeof(title),"%s controls", shortLabel);
     // Add map item to currnent map (TODO: pass in map)
@@ -1249,18 +1249,20 @@ if(curMap != NULL)
     // FIXME: What am I going to do about poly cords???
     warn("Track named %s has called for a POLY map titled '%s controls', but imageV2 doesn't yet support this. No map item made.",trackName,shortLabel);
     }
-#else//ifndef IMAGEv2_UI
-hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ",
-	hvGfxAdjX(hvg, xl), yl,
-        hvGfxAdjX(hvg, xt), yt,
-        hvGfxAdjX(hvg, xr), yr,
-        hvGfxAdjX(hvg, xb), yb);
-/* move this to hgTracks when finished */
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
-	cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
-mapStatusMessage("%s controls", shortLabel);
-hPrintf(">\n");
-#endif//ndef IMAGEv2_UI
+else
+#endif//def IMAGEv2_UI
+    {
+    hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ",
+        hvGfxAdjX(hvg, xl), yl,
+            hvGfxAdjX(hvg, xt), yt,
+            hvGfxAdjX(hvg, xr), yr,
+            hvGfxAdjX(hvg, xb), yb);
+    /* move this to hgTracks when finished */
+    hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+        cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
+    mapStatusMessage("%s controls", shortLabel);
+    hPrintf(">\n");
+    }
 }
 
 void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
@@ -1269,24 +1271,26 @@ void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
 xOff = hvGfxAdjXW(hvg, xOff, insideWidth);
 char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
 #ifdef IMAGEv2_UI
-if(curMap != NULL)
+if(theImgBox && curMap)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%u&c=%s&g=%s&i=%s",hgTrackUiName(),
-	   cartSessionVarName(), cartSessionId(cart), chromName, track, track);
+    safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s",hgTrackUiName(),
+    cartSessionVarName(), cartSessionId(cart), track, track);
     char title[128];
     safef(title,sizeof(title),"%s controls", tg->mapName);
     // Add map item to currnent map (TODO: pass in map)
     mapSetItemAdd(curMap,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
     }
-#else//ifndef IMAGEv2_UI
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
-	xOff, yOff, xOff+insideWidth, yOff+tg->height);
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
-	cartSessionVarName(), cartSessionId(cart), chromName, track, track);
-mapStatusMessage("%s controls", tg->mapName);
-hPrintf(">\n");
-#endif//ndef IMAGEv2_UI
+else
+#endif//def IMAGEv2_UI
+    {
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
+        xOff, yOff, xOff+insideWidth, yOff+tg->height);
+    hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+        cartSessionVarName(), cartSessionId(cart), chromName, track, track);
+    mapStatusMessage("%s controls", tg->mapName);
+    hPrintf(">\n");
+    }
 }
 
 int ldTotalHeight(struct track *tg, enum trackVisibility vis)
