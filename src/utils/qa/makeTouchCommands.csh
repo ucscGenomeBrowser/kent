@@ -21,11 +21,11 @@ set files=""
 
 if ( $#argv != 3 ) then
   echo
-  echo "Gets the date from a table and converts to a touch command."
+  echo "  gets the date from a table and converts to a touch command."
   echo
-  echo "  usage:  machine database table(list) "
+  echo "    usage:  machine database table(list) "
   echo
-  echo "   will accept single or list of tables."  
+  echo "     will accept single or list of tables."  
   echo
   exit
 else
