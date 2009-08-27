@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.36 2009/08/24 16:55:02 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.37 2009/08/27 00:13:08 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -198,10 +198,10 @@ $(window).load(function () {
     // Don't load contextMenu if jquery.contextmenu.js hasn't been loaded
     if(trackImg && jQuery.fn.contextMenu) {
         if(imageV2) {
-            $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
+            $("map[name!=ideoMap]").each( function(t) { parseMap($(this,false));});
         } else {
             // XXXX still under debate whether we have to remove the map
-            parseMap($('#map'), true);
+            parseMap($('#map'),true);
             mapHtml = $('#map').html();
             $('#map').empty();
         }
@@ -210,7 +210,7 @@ $(window).load(function () {
         if(imageV2) {
             loadContextMenu(trackImgTbl);
             $(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
-            $(".trDraggable,.nodrop").each( function(t) { 
+            $(".trDraggable,.nodrop").each( function(t) {
                                                 $(this).mousemove(
                                                     function (e) {
                                                         mapEvent(e);
@@ -256,7 +256,7 @@ function loadImgAreaSelect(firstTime)
             trackImgTbl = $('#imgTbl');
             imgHeight = trackImg.height();
         }
-            
+
         clickClipHeight = parseInt(rulerEle.value);
         newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
 
@@ -320,6 +320,18 @@ function imgTblSetOrder(table)
     });
 }
 
+//function pxToInt(val)
+//{
+//// Returns integer bvalue from Npx string
+//    //if(val.typeOf == "string") {
+//        if(val.substring(val.length-2) == "px")
+//            return parseInt(val.substring(0,val.length-3));
+//        else
+//            return parseInt(val);
+//    //}
+//    //return val;
+//}
+
 /////////////////////////////////////////////////////
 jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
 this.each(function(){
@@ -345,6 +357,7 @@ this.each(function(){
     var newX        = 0;
     var mouseDownX  = 0;
     var mouseIsDown = false;
+    var portalWidth = $(pan).width();
     //var ie=( $.browser.msie == true );
 
     initialize();
@@ -352,6 +365,8 @@ this.each(function(){
     function initialize(){
 
         pan.css( 'cursor', 'w-resize');//'move');
+
+        panAdjustHeight(prevX);
 
         pan.mousedown(function(e){
             if(mouseIsDown == false) {
@@ -375,17 +390,24 @@ this.each(function(){
         if ( mouseIsDown ) {
             var relativeX = (e.clientX - mouseDownX);
 
+            // Would be good to:
+            // 1) Slow scroll near edge
+            // 2) Allow scrolling past edge
+            // 3) ajax to new image when scrolled off edge
             if(relativeX != 0) {
                 blockUseMap = true;
                 // Remeber that offsetX (prevX) is negative
                 if ( (prevX + relativeX) >= leftLimit ) { // scrolled all the way to the left
                     newX = leftLimit;
-                } else if ( (prevX + relativeX) < (imgBoxPortalWidth - imgBoxWidth + leftLimit) ) { // scrolled all the way to the left
+                    // get new image?
+                } else if ( (prevX + relativeX) < (imgBoxPortalWidth - imgBoxWidth + leftLimit) ) { // scrolled all the way to the right
                     newX = (imgBoxPortalWidth - imgBoxWidth + leftLimit);
+                    // get new image?
                 } else
                     newX = prevX + relativeX;
 
                 $(".panImg").css( {'left': newX.toString() + "px" });
+                // Now is the time to get left-right, then march through data images to trim horizontal
                 panUpdatePosition(newX);
             }
         }
@@ -394,16 +416,19 @@ this.each(function(){
         //if(!e) e = window.event;
         if(mouseIsDown) {
 
-            prevX = newX;
-            //if(ie) {
-            //    pic.ondrag='';
-            //    pic.ondragend='';
-            //} else {
-                $(document).unbind('mousemove',panner);
-                $(document).unbind('mouseup',panMouseUp);
+            if(prevX != newX)
+                panAdjustHeight(newX);
+            //if(prevX != newX) {
+                prevX = newX;
+                //if(ie) {
+                //    pic.ondrag=''; pic.ondragend='';
+                //} else {
+                    $(document).unbind('mousemove',panner);
+                    $(document).unbind('mouseup',panMouseUp);
+                //}
+                mouseIsDown = false;
+                setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
             //}
-            mouseIsDown = false;
-            setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
         }
     }
     function panUpdatePosition(newOffsetX)
@@ -428,6 +453,70 @@ this.each(function(){
         }
         return true;
     }
+    function mapTopAndBottom(mapName,left,right)
+    {
+    // Find the top and bottom px given left and right boundaries
+        var span = { top: -10, bottom: -10 };
+        var items = $("map[name='"+mapName+"']").children();
+        if($(items).length>0) {
+            $(items).each(function(t) {
+                var loc = this.coords.split(",");
+                var aleft   = parseInt(loc[0]);
+                var aright  = parseInt(loc[2]);
+                if(aleft < right && aright >= left) {
+                    var atop    = parseInt(loc[1]);
+                    var abottom = parseInt(loc[3]);
+                    if( span.top    < 0 ) {
+                        span.top    = atop;
+                        span.bottom = abottom;
+                    } else if(span.top > atop) {
+                            span.top = atop;
+                    } else if(span.bottom < abottom) {
+                            span.bottom = abottom;
+                    }
+                }
+            });
+        }
+        return span;
+    }
+    function panAdjustHeight(newOffsetX) {
+        // Adjust the height of the track data images so that bed items scrolled off screen
+        // do not waste vertical real estate
+        var left = newOffsetX * -1;
+        var right = left + portalWidth;
+        $(".panImg").each(function(t) {
+            var mapid  = "map_" + this.id.substring(4);
+            var hDiv   = $(this).parent();
+            var top    = parseInt($(this).css("top")) * -1;
+            var bottom = top + $(hDiv).height();
+
+            var span = mapTopAndBottom(mapid,left,right);
+            if(span.top > 0) {
+                var topdif = Math.abs(span.top - top);
+                var botdif = Math.abs(span.bottom - bottom);
+                if(topdif > 2 || botdif > 2) {
+                    $(hDiv).height( span.bottom - span.top );
+                    top = span.top * -1;
+                    $(this).css( {'top': top.toString() + "px" });
+
+                    // Need to adjust side label height as well!
+                    var imgId = this.id.split("_");
+                    var titlePx = 0;
+                    var center = $("#img_center_"+imgId[2]);
+                    if(center.length > 0)
+                        titlePx = $(center).parent().height();
+                    var side = $("#img_side_"+imgId[2]);
+                    if( side.length > 0) {
+                        $(side).parent().height( span.bottom - span.top + titlePx);
+                        top += titlePx;
+                        $(side).css( {'top': top.toString() + "px" });
+                    }
+
+                }
+            }
+        });
+    }
+
 });
 
 };
