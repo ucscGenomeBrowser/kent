@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.39 2009/02/28 00:36:42 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.40 2009/08/27 00:10:52 galt Exp $";
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
@@ -300,7 +300,7 @@ if ((chromSize > 0) && (seqEnd > chromSize))
     }
 if (seqEnd <= seqStart)
     {
-    printf("# Null range for %s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
+    printf("# Null range for %s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d) (may indicate a query-side insert)\n",
 	   db, 
 	   name,
 	   chrom, seqStart+1, seqEnd,
