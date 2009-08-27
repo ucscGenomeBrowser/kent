@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.13 2009/07/27 18:02:01 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.14 2009/08/27 03:54:39 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -313,7 +313,13 @@ while (lineFileNextReal(lf, &line))
 	}
     chopLine(line, words);
     lmAllocVar(lmLocal, item);
-    item->start = lineFileNeedNum(lf, words, 0) - 1;
+    int start = lineFileNeedNum(lf, words, 0);
+    if (start == 0)
+	{
+	errAbort("line %d of %s: zero chromosome coordinate not allowed",
+	    lf->lineIx, lf->fileName);
+	}
+    item->start = start - 1;
     item->val = lineFileNeedDouble(lf, words, 1);
     if (item->start + span > chromSize)
         {
@@ -415,7 +421,9 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
     else if (sameString(var, "step"))
 	step = parseUnsignedVal(lf, var, val);
     else if (sameString(var, "start"))
+	{
         start = parseUnsignedVal(lf, var, val);
+	}
     else
 	errAbort("Unknown setting %s=%s line %d of %s", var, val, lf->lineIx, lf->fileName);
     }

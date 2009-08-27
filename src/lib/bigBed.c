@@ -23,6 +23,7 @@ struct bbiFile *bigBedFileOpen(char *fileName)
 return bbiFileOpen(fileName, bigBedSig, "big bed");
 }
 
+#ifdef OLD
 static int ppBedCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start,end. */
 {
@@ -38,7 +39,9 @@ if (dif == 0)
     }
 return dif;
 }
+#endif /* OLD */
 
+#ifdef OLD
 static struct cirTreeRange ppBedFetchKey(const void *va, void *context)
 /* Fetch ppBed key for r-tree */
 {
@@ -49,14 +52,18 @@ res.start = a->start;
 res.end = a->end;
 return res;
 }
+#endif /* OLD */
 
+#ifdef OLD
 static bits64 ppBedFetchOffset(const void *va, void *context)
 /* Fetch ppBed file offset for r-tree */
 {
 const struct ppBed *a = *((struct ppBed **)va);
 return a->fileOffset;
 }
+#endif /* OLD */
 
+#ifdef OLD
 static struct ppBed *ppBedLoadOne(char **row, int fieldCount, struct lineFile *lf, 
 	struct hash *chromHash, boolean clip, struct lm *lm, struct asObject *as, bits64 *diskSize)
 /* Return a ppBed record from a line of bed file in lf.
@@ -148,7 +155,9 @@ else
     }
 return pb;
 }
+#endif /* OLD */
 
+#ifdef OLD
 static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct lm *lm, 
 	struct asObject *as, int definedFieldCount, boolean clip,
 	bits64 *retDiskSize, bits16 *retFieldCount, boolean *isSorted, 
@@ -218,6 +227,7 @@ freeMem(row);
 *retFieldCount = fieldCount;
 return pbList;
 }
+#endif /* OLD */
 
 // Not used now, compiler gives a 'unused code' warning if its left in
 // static double ppBedAverageSize(struct ppBed *pbList)
@@ -234,6 +244,7 @@ return pbList;
 // return total/count;
 // }
 
+#ifdef OLD
 static void makeChromInfo(struct ppBed *pbList, struct hash *chromSizeHash,
 	int *retChromCount, struct bbiChromInfo **retChromArray,
 	int *retMaxChromNameSize)
@@ -278,7 +289,9 @@ slFreeList(&uniqList);
 *retChromArray = chromArray;
 *retMaxChromNameSize = maxChromNameSize;
 }
+#endif /* OLD */
 
+#ifdef OLD
 static struct bbiSummary *summaryOnDepth(struct ppBed *pbList, struct bbiChromInfo *chromInfoArray, 
 	int reduction)
 /* Produce a summary based on depth of coverage. */
@@ -311,7 +324,9 @@ for (chromStart = pbList; chromStart != NULL; chromStart = chromEnd)
 slReverse(&outList);
 return outList;
 }
+#endif /* OLD */
 
+#ifdef OLD
 static void bigBedFileCreateReadInFile(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
@@ -354,7 +369,9 @@ if (!sorted)
 *pChromHash = chromHash;
 *pAs = as;
 }
+#endif /* OLD */
 
+#ifdef OLD
 void bigBedFileCreateDetailed(
 	struct ppBed *pbList, 	  /* Input bed data. Must be sorted. */
 	bits64 pbCount,           /* size of input pbList */
@@ -568,7 +585,9 @@ for (i=0; i<summaryCount; ++i)
 carefulClose(&f);
 freez(&chromInfoArray);
 }
+#endif /* OLD */
 
+#ifdef OLD
 void bigBedFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
@@ -594,6 +613,7 @@ bigBedFileCreateReadInFile(inName, chromSizes, blockSize, itemsPerSlot, definedF
 bigBedFileCreateDetailed(pbList, count, averageSize, inName, chromHash, blockSize, itemsPerSlot, 
     definedFieldCount, fieldCount, asFileName, as, fullSize, outName);
 }
+#endif /* OLD */
 
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
 	bits32 start, bits32 end, int maxItems, struct lm *lm)
