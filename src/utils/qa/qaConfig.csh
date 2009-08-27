@@ -6,5 +6,5 @@
 # useful stuff.
 
 # variable containing the host of the mysql server for hgwbeta
-set sqlbeta = hgsqlbeta
+set sqlbeta = mysqlbeta
 set sqlrr   = genome-centdb
