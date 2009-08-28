@@ -182,17 +182,29 @@ void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
  * Options are the SQL_TAB_* bit set. SQL_TAB_FILE_ON_SERVER is ignored if
  * sqlIsRemote() returns true. */
 
+struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigned int *errorNo, char **error);
+/* Returns NULL if it had an error.  
+ * Otherwise returns a structure that you can do sqlRow() on.  
+ * If there was an error, *errorNo will be set to the mysql error number, 
+ * and *error will be set to the mysql error string, which MUST NOT be freed. */
+
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
-/* Query database.
- * Returns NULL if result was empty.  Otherwise returns a structure
- * that you can do sqlRow() on. */
+/* (Returns NULL if result was empty. : 
+ *     old info, only applies with mysql_store_result not mysql_use_result)  
+ * Otherwise returns a structure that you can do sqlRow() on. */
 
 char *sqlEscapeTabFileString2(char *to, const char *from);
 /* Escape a string for including in a tab seperated file. Output string
  * must be 2*strlen(from)+1 */
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
-/* Query database. If result empty squawk and die. */
+/* Query database. 
+ * old comment: If result empty squawk and die.
+ *    This only applied back when sqlGetResult was using mysql_store_result.
+ * These days, with mysql_use_result, we cannot know ahead of time
+ * if there are results, we can only know by actually trying to fetch a row.
+ * At then how would we put it back?  So in fact right now sqlMustGetResult
+ * is no different than sqlGetResult.  */
 
 void sqlFreeResult(struct sqlResult **pRes);
 /* Free up a result. */
