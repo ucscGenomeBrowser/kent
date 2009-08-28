@@ -886,7 +886,10 @@ information.</P>
 The bigWig format is for display of dense, continuous data that will be
 displayed in the Genome Browser as a graph.  BigWig files are
 created initially from <A HREF="#format6">wiggle</A> (wig) type  
-files, using the program <TT>wigToBigWig</TT>.  The resulting bigWig files are 
+files, using the program <TT>wigToBigWig</TT>.  Alternatively, bigWig
+files can be created from <A HREF="../goldenPath/help/bedgraph.html">bedGraph</A> 
+files, using the program <TT>bedGraphToBigWig</TT>.  
+In either case, the resulting bigWig files are 
 in an indexed binary format.  The main advantage of the bigWig files 
 is that only the portions of the files needed to display a particular 
 region are transferred to UCSC, so for large data sets bigWig is 
