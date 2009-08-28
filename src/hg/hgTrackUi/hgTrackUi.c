@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.497 2009/08/26 18:27:10 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.498 2009/08/28 17:09:18 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1430,6 +1430,17 @@ geneIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
+void vegaGeneUI(struct trackDb *tdb)
+/* Put up Vega Gene track-specific controls */
+{
+geneIdConfig(tdb); 
+printf("<BR>\n");
+
+/* Put up noncoding option and codon coloring stuff. */
+hideNoncodingOpt(tdb);
+baseColorDrawOptDropDown(cart, tdb);
+}
+
 void ensemblNonCodingTypeConfig(struct trackDb *tdb)
 {
 int i = 0;
@@ -2210,6 +2221,8 @@ else if (sameString(track, "pseudoGeneLink") || startsWith("retroMrnaInfo", trac
         retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
         ensemblNonCodingUI(tdb);
+else if (sameString(track, "vegaGeneComposite"))
+        vegaGeneUI(tdb);
 else if (sameString(track, "all_mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "mrna"))
