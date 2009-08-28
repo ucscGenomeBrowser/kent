@@ -38,7 +38,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.498 2009/08/28 17:09:18 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.499 2009/08/28 17:47:07 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1436,8 +1436,7 @@ void vegaGeneUI(struct trackDb *tdb)
 geneIdConfig(tdb); 
 printf("<BR>\n");
 
-/* Put up noncoding option and codon coloring stuff. */
-hideNoncodingOpt(tdb);
+/* Put up codon coloring stuff. */
 baseColorDrawOptDropDown(cart, tdb);
 }
 
