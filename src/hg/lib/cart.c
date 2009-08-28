@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.111 2009/07/10 01:40:37 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.112 2009/08/28 00:54:54 galt Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -95,13 +95,13 @@ boolean cartTablesOk(struct sqlConnection *conn)
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 {
-if (!sqlTableOk(conn, "userDb"))
+if (!sqlTableExists(conn, "userDb"))
     {
     fprintf(stderr, "ASH: cartTablesOk failed on %s.userDb!  pid=%ld\n",
 	    sqlGetDatabase(conn), (long)getpid());
     return FALSE;
     }
-if (!sqlTableOk(conn, "sessionDb"))
+if (!sqlTableExists(conn, "sessionDb"))
     {
     fprintf(stderr, "ASH: cartTablesOk failed on %s.sessionDb!  pid=%ld\n",
 	    sqlGetDatabase(conn), (long)getpid());
