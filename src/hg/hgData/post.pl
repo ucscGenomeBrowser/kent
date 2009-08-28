@@ -7,11 +7,14 @@ use Compress::Zlib;
 use HTTP::Request::Common;
 use LWP;
 
-die "$0 - post a compressed-on-the-fly file\nusage: \n\n$0 POST|PUT hostname filename " unless scalar(@ARGV)==3 or scalar(@ARGV)==4;
+die "$0 - post a compressed-on-the-fly file\nusage: \n\n$0 POST|PUT hostname filename repNumber [ContentType]" 
+    unless scalar(@ARGV)==4 or scalar(@ARGV)==5;
 my $METHOD = $ARGV[0];
 my $HOST = $ARGV[1];
 my $FILE = $ARGV[2];
-my $CONTENTTYPE = defined($ARGV[3]) ? $ARGV[3] : "form-data";
+my $Rep = $ARGV[3];
+my $CONTENTTYPE = defined($ARGV[4]) ? $ARGV[4] : "form-data";
+
 
 $HTTP::Request::Common::DYNAMIC_FILE_UPLOAD = 1;
 # curl  -v --data-binary @test.bed http://mikep/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=trash/testing.bed
@@ -22,7 +25,7 @@ select STDOUT; $| = 1;
 # &rnaExtract=longNonPolyA
 
 #my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/track/data/hg18/wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongnonpolya",
-my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18?filename=trash/testing.bed",
+my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/project/wgEncode/tracks/hg18/wgEncodeHelicosRnaSeqAlignmentsTestcellNucleus2Longpolya$Rep?type=tagAlign&pi=Gingeras&lab=Helicos&datatype=RnaSeq&variables=testCell,nucleus2,longPolyA&view=Alignments&rep=$Rep&sourceFile=$FILE",
     [
 #  'verbose' => 2,
  'a_file' => [ $FILE ]
@@ -30,7 +33,7 @@ my $request = $METHOD eq "POST" ? (POST "http://$HOST/g/project/data/wgEncode/Gi
     'Content_Type' => $CONTENTTYPE,
     'Content_Encoding' => 'gzip')
  : 
-  (PUT "http://$HOST/g/project/data/wgEncode/Gingeras/Helicos/RnaSeq/Alignments/K562,cytosol,longNonPolyA/hg18",
+  (PUT "http://$HOST/g/project/wgEncode/tracks/wgEncodeGingerasHelicosRnaSeqAlignmentsK562CytosolLongNonPolyA$Rep/hg18?filename=testing.bed",
     [
 #  'verbose' => 2,
  'a_file' => [ $FILE ]
