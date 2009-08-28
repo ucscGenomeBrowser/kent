@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1567 2009/08/28 17:30:56 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1568 2009/08/28 17:40:45 hartera Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2307,6 +2307,11 @@ if (!foundPep)
 	    {
 	    printf("No protein prediction for Ensembl gene");
 	    }
+        else if ((sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene")))
+	    {
+	    printf("No protein prediction for Vega gene");
+	    }
+             
 	else if (!genbankIsRefSeqNonCodingMRnaAcc(geneName))
 	    {
 	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
