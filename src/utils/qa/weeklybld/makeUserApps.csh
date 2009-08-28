@@ -38,9 +38,9 @@ set BINDIR=linux.$MACHTYPE
 set DESTDIR=/usr/local/apache/htdocs/admin/exe/
 if ("$HOST" == "$BOX32") then
   set DESTDIR=/tmp/
-  rm -rf $DESTDIR/$BINDIR
-  mkdir $DESTDIR/$BINDIR
 endif
+rm -rf $DESTDIR/$BINDIR
+mkdir $DESTDIR/$BINDIR
 
 # configure settings like SSL and BAM in common.mk
 echo "Configuring settings on userApp sandbox $BRANCHNN $HOST [${0}: `date`]"
