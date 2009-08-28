@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.132 2009/08/25 00:10:44 larrym Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.133 2009/08/28 00:56:22 galt Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -818,8 +818,15 @@ typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
 
 static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc, 
 	char *query, ResGetter *getter, boolean abort)
-/* Returns NULL if result was empty.  Otherwise returns a structure
- * that you can do sqlRow() on. */
+/* Returns NULL if result was empty and getter==mysql_use_result.  
+ * Otherwise returns a structure that you can do sqlRow() on.
+ * Watch out for subtle differences between mysql_store_result and mysql_use_result.
+ * We seem to be only using mysql_use_result these days,
+ * but mysql_store_result has left a big footprint in the code/comments.
+ * In particular, mysql_store_result can return NULL indicating an empty resultset.
+ * But mysql_use_result cannot do that. Instead NULL return means error
+ * and the user must call next_row to see if there's anything in the resultset.
+ */
 {
 assert(!sc->isFree);
 MYSQL *conn = sc->conn;
@@ -990,10 +997,9 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table)
 char query[256];
 struct sqlResult *sr;
 
-safef(query, sizeof(query), "describe %s", table);
+safef(query, sizeof(query), "SELECT 1 FROM %s LIMIT 0", table);
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
     return FALSE;
-sqlNextRow(sr);	/* Just discard. */
 sqlFreeResult(&sr);
 return TRUE;
 }
@@ -1072,39 +1078,50 @@ else if (retOk != NULL)
 return row;
 }
 
-boolean sqlTableOk(struct sqlConnection *sc, char *table)
-/* Return TRUE if a table not only exists, but also is not corrupted. */
+
+
+struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigned int *errorNo, char **error)
+/* Returns NULL if it had an error.  
+ * Otherwise returns a structure that you can do sqlRow() on.  
+ * If there was an error, *errorNo will be set to the mysql error number, 
+ * and *error will be set to the mysql error string, which MUST NOT be freed. */
 {
-char query[256];
-struct sqlResult *sr;
-boolean ret = TRUE;
-safef(query, sizeof(query), "select * from %s limit 1,1", table);
-if ((sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE)) == NULL)
+struct sqlResult *sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE);
+if (sr)
     {
-    fprintf(stderr, "ASH: Got nothing from select on %s.%s.  pid=%ld\n",
-	    scConnDb(sc), table, (long)getpid());
-    /* An error here is OK if and only if the table exists and is empty: */
-    return (sqlTableSizeIfExists(sc, table) == 0);
+    MYSQL *conn = sc->conn;
+    if (errorNo)
+    	*errorNo=mysql_errno(conn);
+    if (error)
+    	*error=(char *)mysql_error(conn);
     }
 else
-    /* Discard row, but see if we get an error while reading it. */
-    sqlMaybeNextRow(sr, &ret);
-sqlFreeResult(&sr);
-if (ret == FALSE)
-    fprintf(stderr, "ASH: Error reading result of select on %s.%s!  pid=%ld\n",
-	    scConnDb(sc), table, (long)getpid());
-return ret;
+    {
+    if (errorNo)
+    	*errorNo=0;
+    if (error)
+    	*error=NULL;
+    }
+return sr;
 }
 
+
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
-/* Returns NULL if result was empty.  Otherwise returns a structure
- * that you can do sqlRow() on. */
+/* (Returns NULL if result was empty. : 
+ *     old info, only applies with mysql_store_result not mysql_use_result)  
+ * Otherwise returns a structure that you can do sqlRow() on. */
 {
 return sqlUseOrStore(sc,query,mysql_use_result, TRUE);
 }
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query)
-/* Query database. If result empty squawk and die. */
+/* Query database. 
+ * old comment: If result empty squawk and die.
+ *    This only applied back when sqlGetResult was using mysql_store_result.
+ * These days, with mysql_use_result, we cannot know ahead of time
+ * if there are results, we can only know by actually trying to fetch a row.
+ * At then how would we put it back?  So in fact right now sqlMustGetResult
+ * is no different than sqlGetResult.  */
 {
 struct sqlResult *res = sqlGetResult(sc,query);
 if (res == NULL)
