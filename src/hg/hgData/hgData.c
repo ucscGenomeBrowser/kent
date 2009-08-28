@@ -25,7 +25,7 @@
 #define AS_FILE_PATH "/cluster/bin/sqlCreate/"
 #define CV_CONFIG_FILE "/cluster/data/encode/pipeline/config/cv.ra"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.34 2009/08/28 21:45:50 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.35 2009/08/28 21:46:49 mikep Exp $";
 
 struct hash *hAsFile = NULL;
 struct hash *hCvRa = NULL;
@@ -193,7 +193,7 @@ while ((ok = lineFileNext(lf, &line, &lineSize)) && (len = strlen(line)) > 0)
     lineFileExpectWords(lf, fieldCount, wordCount);
     bits64 diskSize = 0;
     ++count;
-    struct ppBed *pb = ppBedLoadOne(row, fieldCount, lf, chromHash, lm, as, &diskSize);
+    struct ppBed *pb = ppBedLoadOne(row, fieldCount, lf, chromHash, FALSE, lm, as, &diskSize);
     if (pb->start > pb->end)
 	errAbort("Start > end (%d > %d) at line #%ld\n", 
 	    pb->start, pb->end, count); 
