@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.68 2009/07/20 20:53:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.69 2009/08/28 00:11:49 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -676,13 +676,13 @@ else if(sameWord("narrowPeak",tdb->type)
     cType = cfgPeak;
 else if(sameWord("genePred",tdb->type))
         cType = cfgGenePred;
-else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so far
+else if(startsWith("bed ", tdb->type) || startsWith("bigBed ", tdb->type)) // TODO: Only these are configurable so far
     {
     char *words[3];
     chopLine(cloneString( tdb->type), words);
     if (trackDbSetting(tdb, "bedFilter") != NULL)
-	cType = cfgBedFilt;
-    else if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
+	   cType = cfgBedFilt;
+    else if (atoi(words[1]) >= 5 && trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }
 else if(startsWith("chain",tdb->type))
