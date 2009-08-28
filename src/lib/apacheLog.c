@@ -5,7 +5,7 @@
 #include "obscure.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: apacheLog.c,v 1.3 2009/08/27 20:52:01 kent Exp $";
+static char const rcsid[] = "$Id: apacheLog.c,v 1.4 2009/08/28 00:56:01 kent Exp $";
 
 void apacheAccessLogFree(struct apacheAccessLog **pLl)
 /* Free up apacheAccessLog. */
@@ -164,15 +164,19 @@ ll->program = buf;
 /* Parse out elapsed time if it's there. */
 ll->runTime = -1;		/* Marker for unset. */
 char *runTime = nextWord(&e);
-char *seconds = nextWord(&e);
-if (seconds != NULL && sameString(seconds, "seconds"))
+char *label = nextWord(&e);
+if (label != NULL)
     {
     if (!isdigit(runTime[0]))
         {
 	badFormat(&ll, line, fileName, lineIx, "non-numerical seconds");
 	return NULL;
 	}
-    ll->runTime = atoi(runTime);
+    int x = atoi(runTime);
+    if (sameString(label, "seconds"))
+        ll->runTime = x*1000;
+    else if (sameString(label, "microseconds"))
+        ll->runTime = x/1000;
     }
 
 return ll;
