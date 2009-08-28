@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1566 2009/08/19 23:00:17 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1567 2009/08/28 17:30:56 hartera Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8001,6 +8001,110 @@ if (hTableExists(database, "ensGtp") && (proteinID == NULL))
 freeMem(shortItemName);
 }
 
+void printEnsemblOrVegaCustomUrl(struct trackDb *tdb, char *itemName, boolean encode, char *archive)
+/* Print Ensembl Gene URL. */
+{
+boolean isEnsembl = FALSE;
+boolean isVega = FALSE;
+boolean hasEnsGtp = FALSE;
+boolean hasVegaGtp = FALSE;
+char *shortItemName;
+char *genomeStrEnsembl = "";
+struct sqlConnection *conn = hAllocConn(database);
+char cond_str[256], cond_str2[256];
+char *geneID = NULL;
+char *proteinID = NULL;
+char *chp;
+char dbUrl[256];
+char geneType[256];
+char gtpTable[256];
+
+if (startsWith("ens", tdb->tableName))
+   {
+   isEnsembl = TRUE;
+   safef(geneType, sizeof(geneType), "Ensembl");
+   safef(gtpTable, sizeof(gtpTable), "ensGtp");
+   if (hTableExists(database, gtpTable))
+      hasEnsGtp = TRUE;
+   }
+else if (startsWith("vega", tdb->tableName))
+   {
+   isVega = TRUE;
+   safef(geneType, sizeof(geneType), "Vega");
+   safef(gtpTable, sizeof(gtpTable), "vegaGtp");
+   if (hTableExists(database, gtpTable))
+      hasVegaGtp = TRUE;
+   }
+/* shortItemName is the name without the "." + version */
+shortItemName = cloneString(itemName);
+/* ensembl gene names are different from their usual naming scheme on ce6 */
+if (!startsWith("ce6", database))
+    {
+    chp = strstr(shortItemName, ".");
+    if (chp != NULL)
+	*chp = '\0';
+    }
+genomeStrEnsembl = ensOrgNameFromScientificName(scientificName);
+if (genomeStrEnsembl == NULL)
+    {
+    warn("Organism %s not found!", organism); fflush(stdout);
+    return;
+    }
+
+/* print URL that links to Ensembl or Vega transcript details */
+if (isEnsembl) 
+    {
+    if (archive != NULL)
+       safef(dbUrl, sizeof(dbUrl), "http://%s.archive.ensembl.org/%s",
+            archive, genomeStrEnsembl);
+    else
+       safef(dbUrl, sizeof(dbUrl), "http://www.ensembl.org/%s", 
+            genomeStrEnsembl);
+    }
+else if (isVega)
+    safef(dbUrl, sizeof(dbUrl), "http://vega.sanger.ac.uk/%s",
+	 genomeStrEnsembl);   
+
+boolean nonCoding = FALSE;
+char query[512];
+safef(query, sizeof(query), "name = \"%s\"", itemName);
+struct genePred *gpList = genePredReaderLoadQuery(conn, tdb->tableName, query);
+if (gpList && (gpList->cdsStart == gpList->cdsEnd))
+    nonCoding = TRUE;
+genePredFreeList(&gpList);
+/* get gene and protein IDs */
+if ((isEnsembl && hasEnsGtp) || (isVega && hasVegaGtp)) 
+    {
+    /* shortItemName removes version number but sometimes the ensGtp */
+    /* table has a transcript with version number so exact match not used */
+    safef(cond_str, sizeof(cond_str), "transcript like '%s%%'", shortItemName);
+    geneID=sqlGetField(database, gtpTable,"gene",cond_str);
+    safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+    proteinID=sqlGetField(database, gtpTable,"protein",cond_str2);
+    } 
+  
+/* Print gene, transcript and protein links */
+if (geneID != NULL) 
+    {
+    printf("<B>%s Gene: </B>", geneType);
+    printf("<A HREF=\"%s/geneview?gene=%s\" "
+	    "target=_blank>%s</A><BR>", dbUrl, geneID, geneID);
+    }
+printf("<B>%s Transcript: </B>", geneType);
+printf("<A HREF=\"%s/transview?transcript=%s\" "
+           "target=_blank>%s</A><BR>", dbUrl, shortItemName, itemName);
+if (proteinID != NULL) 
+    {
+    printf("<B>%s Protein: </B>", geneType);
+    if (nonCoding)
+        printf("none (non-coding)<BR>\n");
+    else
+        printf("<A HREF=\"%s/protview?peptide=%s\" "
+	      "target=_blank>%s</A><BR>", dbUrl, proteinID, proteinID);
+    }
+freeMem(shortItemName);
+}
+
 void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Ensembl Gene track info or Ensembl NonCoding track info. */
 {
@@ -10238,12 +10342,13 @@ geneShowCommon(name, tdb, "vegaPep");
 printTrackHtml(tdb);
 }
 
-void doVegaGene(struct trackDb *tdb, char *geneName)
+void doVegaGene(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Handle click on Vega gene track. */
 {
 struct vegaInfo *vi = NULL;
-
-genericHeader(tdb, geneName);
+if (itemForUrl == NULL)
+    itemForUrl = item;
+genericHeader(tdb, item);
 if (hTableExists(database, "vegaInfo"))
     {
     char query[256];
@@ -10252,7 +10357,7 @@ if (hTableExists(database, "vegaInfo"))
     char **row;
 
     safef(query, sizeof(query),
-	  "select * from vegaInfo where transcriptId = '%s'", geneName);
+	  "select * from vegaInfo where transcriptId = '%s'", item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -10262,8 +10367,10 @@ if (hTableExists(database, "vegaInfo"))
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
+/* No archive for Vega */
+char *archive = NULL;
+printEnsemblOrVegaCustomUrl(tdb, itemForUrl, item == itemForUrl, archive);
 
-printCustomUrl(tdb, geneName, TRUE);
 if (vi != NULL)
     {
     printf("<B>VEGA Gene Type:</B> %s<BR>\n", vi->method);
@@ -10271,12 +10378,11 @@ if (vi != NULL)
     if (differentString(vi->geneDesc, "NULL"))
         printf("<B>VEGA Gene Description:</B> %s<BR>\n", vi->geneDesc);
     printf("<B>VEGA Gene Id:</B> %s<BR>\n", vi->geneId);
-    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", geneName);
+    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", item);
     }
-geneShowCommon(geneName, tdb, "vegaPep");
+geneShowCommon(item, tdb, "vegaPep");
 printTrackHtml(tdb);
 }
-
 
 void doBDGPGene(struct trackDb *tdb, char *geneName)
 /* Show Berkeley Drosophila Genome Project gene info. */
@@ -15442,7 +15548,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     wgRna = wgRnaLoad(row);
 
-    /* disply appropriate RNA type and URL */
+    /* display appropriate RNA type and URL */
     if (sameWord(wgRna->type, "HAcaBox"))
     	{
 	printCustomUrl(tdb, item, TRUE);
@@ -21634,9 +21740,9 @@ else if (sameWord(track, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
     }
-else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists(database, "vegaInfo"))
+else if (sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene") )
     {
-    doVegaGene(tdb, item);
+    doVegaGene(tdb, item, NULL);
     }
 else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists(database, "vegaInfoZfish"))
     {
