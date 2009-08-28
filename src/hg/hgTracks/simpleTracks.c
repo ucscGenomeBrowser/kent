@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.98 2009/08/27 00:10:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.99 2009/08/28 17:11:09 hartera Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -5438,7 +5438,6 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
-
 void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
@@ -9854,7 +9853,7 @@ else
 void vegaMethods(struct track *tg)
 /* Special handling for vegaGene/vegaPseudoGene items. */
 {
-tg->loadItems = loadGenePredWithName2;
+tg->loadItems = loadGenePredWithConfiguredName;
 tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
