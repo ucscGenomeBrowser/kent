@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.133 2009/08/28 00:56:22 galt Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.134 2009/08/28 23:33:19 larrym Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -63,6 +63,7 @@ struct sqlResult
     MYSQL_RES *result;			/* Result. */
     struct dlNode *node;		/* Pointer to list node we're on. */
     struct sqlConnection *conn;		/* Pointer to connection. */
+    long fetchTime;                     /* cummulative time taken by row fetches for this result */
     };
 
 static struct dlList *sqlOpenConnections;
@@ -444,6 +445,8 @@ void sqlFreeResult(struct sqlResult **pRes)
 struct sqlResult *res = *pRes;
 if (res != NULL)
     {
+    if (monitorFlags & JKSQL_TRACE)
+        monitorPrint(res->conn, "SQL_FETCH", "%0.3fs", ((double) res->fetchTime)/1000.0);
     if (res->result != NULL)
         {
         monitorEnter();
@@ -864,6 +867,7 @@ else
         res->conn = sc;
         res->result = resSet;
         res->node = dlAddValTail(sc->resultList, res);
+        res->fetchTime = 0L;
         }
     }
 deltaTime = monitorLeave();
@@ -1064,7 +1068,7 @@ if (sr != NULL)
     {
     monitorEnter();
     row = mysql_fetch_row(sr->result);
-    monitorLeave();
+    sr->fetchTime += monitorLeave();
     if (mysql_errno(sr->conn->conn) != 0)
 	{
 	if (retOk != NULL)
