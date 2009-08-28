@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.188 2009/07/23 18:08:57 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.189 2009/08/28 21:49:23 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -660,7 +660,8 @@ sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -chromDb=hg18 -type=tagAlign $file"]);
+    my $paramList = validationSettings("validateFiles","tagAlign");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -chromDb=hg18 -type=tagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -674,7 +675,8 @@ sub validatePairedTagAlign
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -chromDb=hg18 -type=pairedTagAlign $file"]);
+    my $paramList = validationSettings("validateFiles","pairedTagAlign");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList $quickOpt -chromDb=hg18 -type=pairedTagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -703,7 +705,8 @@ sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -chromDb=hg18 -type=broadPeak $file"]);
+    my $paramList = validationSettings("validateFiles","broadPeak");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -chromDb=hg18 -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -747,7 +750,8 @@ sub validateFastQ
     # - fastq defined by Sanger has a 'PHRED' quality score
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=fastq $file"]);
+    my $paramList = validationSettings("validateFiles","fastq");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -775,7 +779,8 @@ sub validateCsfasta
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsfasta") if $opt_timing;
     HgAutomate::verbose(2, "validateCsfasta($path,$file,$type)\n");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=csfasta $file"]);
+    my $paramList = validationSettings("validateFiles","csfasta");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=csfasta $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateCsfasta : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -800,7 +805,8 @@ sub validateCsqual
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsqual") if $opt_timing;
     HgAutomate::verbose(2, "validateCsqual($path,$file,$type)\n");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=csqual $file"]);
+    my $paramList = validationSettings("validateFiles","csqual");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=csqual $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateCsqual : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -822,7 +828,8 @@ sub validateFasta
     my ($path, $file, $type) = @_;
     doTime("beginning validateFasta") if $opt_timing;
     HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt -type=fasta $file"]);
+    my $paramList = validationSettings("validateFiles","fasta");
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fasta $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFasta : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -1081,6 +1088,39 @@ sub printCompositeTdbSettings {
     print OUT_FILE "wgEncode 1\n\n";
 }
 
+sub validationSettings {
+    # parse validationSettings: "validationSettings allowReloads;validateFiles.tagAlign:mmCheckOnInN=100,mismatches=3"
+    my ($type, $fileType) = @_;
+
+    my @set = split('\;', $daf->{validationSettings});
+    if($type eq "validateFiles") {
+        for my $setting (@set) {
+            if($setting =~ /^validateFiles\./) {
+                my @pair = split('\:',$setting,2);
+                my @subTypes = split('\.',$pair[0],2);
+                if($fileType eq $subTypes[1]) {
+                    my $paramList = "";
+                    my @params = split('\,',$pair[1]);
+                    for my $param (@params) {
+                        $paramList .= " -" . $param;
+                    }
+                    HgAutomate::verbose(2, "validationSettings $type $fileType params: $paramList\n");
+                    return $paramList;
+                }
+            }
+        }
+        return "";
+    } else {
+        for my $setting (@set) {
+            if($setting eq $type) {
+                HgAutomate::verbose(2, "validationSettings $type found\n");
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 ############################################################################
 # Main
 
@@ -1239,6 +1279,21 @@ for my $view (keys %{$daf->{TRACKS}}) {
 if($hasReplicates) {
     $fields->{replicate}{required} = 1;
 }
+
+# DAF may contain option to allow Reloads
+if(validationSettings("allowReloads")) {
+    $opt_allowReloads = 1;
+}
+if(validationSettings("skipAutoCreation")) {
+    $opt_skipAutoCreation = 1;
+}
+if(validationSettings("skipValidateFiles")) {
+    $opt_skipValidateFiles = 1;
+}
+if(validationSettings("skipOutput")) {
+    $opt_skipAutoCreation = $opt_skipOutput = $opt_skipValidateFiles = 1;
+}
+
 
 # Open dataset descriptor file (DDF)
 my @glob = glob "*.DDF";
