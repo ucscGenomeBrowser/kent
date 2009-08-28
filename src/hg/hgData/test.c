@@ -11,8 +11,19 @@
 
 #define CHUNK 128*1024
 #define MAX_TRACK_NAME 64
+#define SEND_CRC 1
 
-static int const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
+static unsigned char const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
+
+static void putLong(unsigned char *string, unsigned long x)
+/* Outputs the bottom 4 bytes of a long in LSB order to string
+ */
+{
+    string[0] = (unsigned char)(x & 0xff);
+    string[1] = (unsigned char)((x & 0xff00) >> 8);
+    string[2] = (unsigned char)((x & 0xff0000) >> 16);
+    string[3] = (unsigned char)((x & 0xff000000) >> 24);
+}
 
 void usage()
 /* Explain usage and exit. */
@@ -156,10 +167,10 @@ int divisor = (soFar >= 1024*1024 ? 1024*1024 : (soFar >= 1024 ? 1024 : 1));
 elapsed = max(elapsed,1);
 char *units = (divisor == 1 ? "bytes" : (divisor == 1024 ? "Kbytes" : (divisor == 1024*1024 ? "Mbytes" : "")));
 if (total)
-    printf("%9ld %s/s %12ld %s %3ld%% (%d secs, %ld remaining)          \r", soFar/divisor/elapsed, units, 
+    printf("%9ld %s/s %'12ld %s %3ld%% (%d secs, %ld s remaining)          \r", soFar/divisor/elapsed, units, 
 	soFar/divisor, units, soFar*100/total, elapsed, (total-soFar)*elapsed/soFar);
 else
-    printf("%9ld %s/s %12ld %s (%d secs)          \r", soFar/divisor/elapsed, units, 
+    printf("%9ld %s/s %'12ld %s (%d secs)          \r", soFar/divisor/elapsed, units, 
 	soFar/divisor, units, elapsed);
 }
 
@@ -175,81 +186,138 @@ else
    Data is sent in 'chunked' format as we dont want to have to compress
    it all in advance.
  */
-// void netWriteDeflatedFileChunked(int sd, char *inFile)
-// {
-// int ret, flush;
-// unsigned have;
-// ssize_t sent;
-// z_stream strm;
-// unsigned char in[CHUNK];
-// unsigned char out[CHUNK];
-// int chunkSizeLen;
-// int i;
-// char chunkSize[1024];
-// /* allocate deflate state */
-// strm.zalloc = Z_NULL;
-// strm.zfree = Z_NULL;
-// strm.opaque = Z_NULL;
-// ret = deflateInit(&strm, Z_DEFAULT_COMPRESSION);
-// if (ret != Z_OK)
-//     errAbort("Could not initialze deflator (err=%d)\n", ret);
-// /* compress until end of file */
-// do 
-//     {
-//     strm.avail_in = fread(in, 1, CHUNK, inFile);
-//     if (ferror(inFile)) 
-// 	{
-// 	(void)deflateEnd(&strm);
-// 	errnoAbort("Could not read %d bytes from input\n", CHUNK);
-// 	}
-//     flush = feof(inFile) ? Z_FINISH : Z_NO_FLUSH;
-//     strm.next_in = in;
-//     /* run deflate() on input until output buffer not full, finish
-// 	compression if all of source has been read in */
-//     do 
-// 	{
-// 	strm.avail_out = CHUNK;
-// 	strm.next_out = out;
-// 	ret = deflate(&strm, flush);    /* no bad return value */
-// 	assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
-// 	have = CHUNK - strm.avail_out;
-// 	//if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
-// 	chunkSizeLen = safef(chunkSize, sizeof(chunkSize), "%x\r\n", have);
-// 	fprintf(stderr,"> chunk=[%d/%x]\n> ", have, have);
-// 	for (i=0; i<have ; ++i)
-// 	    fprintf(stderr,"%c_%2x ", isprint(out[i]) ? out[i] : '_', out[i]);
-// 	fprintf(stderr,"\n");
-// 	if ( (sent = write(sd, chunkSize, chunkSizeLen)) != chunkSizeLen) 
-// 	    {
-// 	    if (sent == -1)
-// 		errnoAbort("Error while writing %d bytes of chunk header\n", chunkSizeLen);
-// 	    else
-// 		errAbort("Could not write %d bytes of chunk header (wrote=%d)\n", chunkSizeLen, (int)sent);
-// 	    }
-// 	if ( (sent = write(sd, out, have)) != have) 
-// 	    {
-// 	    (void)deflateEnd(&strm);
-// 	    if (sent == -1)
-// 		errnoAbort("Error while writing %d bytes\n", have);
-// 	    else
-// 		errAbort("Could not write %d bytes (wrote=%d)\n", have, (int)sent);
-// 	    }
-// 	} while (strm.avail_out == 0);
-//     assert(strm.avail_in == 0);     /* all input will be used */
-//     /* done when last data in file processed */
-//     } while (flush != Z_FINISH);
-// assert(ret == Z_STREAM_END);        /* stream will be complete */
-// // Write zero byte for end of chunked encoding
-// if ( (sent = write(sd, "0\r\n", 3)) != 3) 
-//     {
-//     if (sent == -1)
-// 	errnoAbort("Error while writing %d bytes of chunk footer\n", 3);
-//     else
-// 	errAbort("Could not write %d bytes of chunk footer (wrote=%d)\n", 3, (int)sent);
-//     }
-// /* clean up and return */
-// (void)deflateEnd(&strm);
-// }
+void netWriteDeflatedFileChunked(int sd, char *inFile, long inFileSize, void (*progress)(int elapsed, long soFar, long total))
+{
+ssize_t sent;
+int chunkHdrLen;
+int i;
+unsigned char chunkHdr[1024];
+unsigned long crc = crc32(0L, Z_NULL, 0);
+FILE *f = mustOpen(inFile, "rb");
+
+int ret, flush;
+unsigned have;
+z_stream strm;
+unsigned char in[CHUNK+3];
+unsigned char out[CHUNK+3];
+/* allocate deflate state */
+strm.zalloc = Z_NULL;
+strm.zfree = Z_NULL;
+strm.opaque = Z_NULL;
+
+// defaults from Apache mod_deflate.c
+ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -15, 9, Z_DEFAULT_STRATEGY);
+if (ret != Z_OK)
+    errAbort("Could not initialize deflator (err=%d)\n", ret);
+
+// write the header + chunksize
+safef((char *)chunkHdr, sizeof(chunkHdr), "%x\r\n%c%c%c%c%c%c%c%c%c%c\r\n", 10, gz_magic[0], gz_magic[1],
+	    Z_DEFLATED, 0 /*flags*/, 0,0,0,0 /*time*/, 0 /*xflags*/, 
+	    0x03 /* default OS_CODE to 'UNIX' */);
+mustWriteFd(sd, chunkHdr, 15);
+unsigned char *buf = chunkHdr+3;
+MJP(2);verbose(2,"Chunksz=%d HEADER=[ID=%x.%x (GZIP is 1f8b)][CM=%x (8=deflate)][FLAGS=%x (0=no extra hdrs)][Mtime=%x.%x.%x.%x][XFL=%x][OS=%x (3=Unix)]\n", chunkHdr[0], buf[0], buf[1], buf[2],buf[3],buf[4],buf[5],buf[6],buf[7],buf[8],buf[9]);
+
+/* compress until end of file */
+do 
+    {
+    strm.avail_in = fread(in, 1, CHUNK, f);
+    if (ferror(f)) 
+	{
+	(void)deflateEnd(&strm);
+	errnoAbort("Could not read %d bytes from input\n", CHUNK);
+	}
+    flush = feof(f) ? Z_FINISH : Z_NO_FLUSH;
+    strm.next_in = in;
+    MJP(2);verbose(2,"flush=%s\n", flush == Z_FINISH ? "Z_FINISH" : "Z_NO_FLUSH");
+    // update crc on input 
+    crc = crc32(crc, in, strm.avail_in);
+    /* run deflate() on input until output buffer not full, finish
+	compression if all of source has been read in */
+    unsigned char *buf;
+    buf = in;
+    MJP(2);verbose(2,"in  (%3d/%3x)=[%c.%c.%c.%c.%c.%c.%c.%c.%c.%c]\n", strm.avail_in, strm.avail_in, buf[0], buf[1], buf[2],buf[3],buf[4],buf[5],buf[6],buf[7],buf[8],buf[9]);
+    do 
+	{
+	strm.avail_out = CHUNK;
+	strm.next_out = out;
+	ret = deflate(&strm, flush);    /* no bad return value */
+	assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
+	have = CHUNK - strm.avail_out;
+
+	buf = out;
+	MJP(2);verbose(2,"out (%3d/%3x)=[%x.%x.%x.%x.%x.%x.%x.%x.%x.%x]\n", have, have, buf[0], buf[1], buf[2],buf[3],buf[4],buf[5],buf[6],buf[7],buf[8],buf[9]);
+	//if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
+	chunkHdrLen = safef((char *)chunkHdr, sizeof(chunkHdr), "%x\r\n", have);
+	fprintf(stderr,"> chunk=[%d/%x]\n> ", have, have);
+	for (i=0; i<have ; ++i)
+	    fprintf(stderr,"%c_%02x ", isprint(out[i]) ? out[i] : '_', out[i]);
+	fprintf(stderr,"\n");
+	if ( (sent = write(sd, chunkHdr, chunkHdrLen)) != chunkHdrLen) 
+	    {
+	    if (sent == -1)
+		errnoAbort("Error while writing %d bytes of chunk header\n", chunkHdrLen);
+	    else
+		errAbort("Could not write %d bytes of chunk header (wrote=%d)\n", chunkHdrLen, (int)sent);
+	    }
+// 	out[have] = '\r';
+// 	out[have+1] = '\n';
+
+	if ( (sent = write(sd, out, have)) != have) 
+	    {
+	    (void)deflateEnd(&strm);
+	    if (sent == -1)
+		errnoAbort("Error while writing %d bytes\n", have);
+	    else
+		errAbort("Could not write %d bytes (wrote=%d)\n", have, (int)sent);
+	    }
+
+	if ( (sent = write(sd, "\r\n", 2)) != 2)
+	    {
+	    if (sent == -1)
+		errnoAbort("Error while writing CRLF \n");
+	    else
+		errAbort("Could not write 2 CRLF bytes (wrote=%d)\n", (int)sent);
+	    }
+
+	} while (strm.avail_out == 0);
+    assert(strm.avail_in == 0);     /* all input will be used */
+    /* done when last data in file processed */
+    } while (flush != Z_FINISH);
+assert(ret == Z_STREAM_END);        /* stream will be complete */
+// Write CRC and ISIZE
+safef((char *)chunkHdr, sizeof(chunkHdr), "8\r\n");
+putLong((unsigned char *)chunkHdr+3,   crc);
+putLong((unsigned char *)chunkHdr+3+4, strm.total_in);
+safef((char *)chunkHdr+3+4+4, sizeof(chunkHdr)-(3+4+4), "\r\n0\r\n\r\n");
+buf = chunkHdr+3;
+MJP(2);verbose(2,"end (%3d/%3x) crc=[%x.%x.%x.%x] isize=[%x.%x.%x.%x] (%ld)\n", 8, 8, buf[0], buf[1], buf[2],buf[3],buf[4],buf[5],buf[6],buf[7],strm.total_in);
+if (inFileSize != -1 && inFileSize != strm.total_in)
+    errAbort("Input file size (%ld) does not match zlib input (%ld)\n", inFileSize, strm.total_in);
+// Write zero byte for end of chunked encoding
+if ( SEND_CRC )
+    {
+    if ( (sent = write(sd, chunkHdr, 3+4+4+7)) != 3+4+4+7)
+	{
+	if (sent == -1)
+	    errnoAbort("Error while writing %d bytes of chunk footer\n", 3+4+4+7);
+	else
+	    errAbort("Could not write %d bytes of chunk footer (wrote=%d)\n", 3+4+4+7, (int)sent);
+	}
+    }
+else
+    {
+    if ( (sent = write(sd, "0\r\n\r\n", 5)) != 5)
+	{
+	if (sent == -1)
+	    errnoAbort("Error while writing %d bytes of chunk footer\n", 3+4+4+7);
+	else
+	    errAbort("Could not write %d bytes of chunk footer (wrote=%d)\n", 3+4+4+7, (int)sent);
+	}
+    }
+/* clean up and return */
+(void)deflateEnd(&strm);
+}
 
 
 void netWriteGzFileChunked(int sd, char *inFile, long inFileSize, void (*progress)(int elapsed, long soFar, long total))
@@ -631,7 +699,7 @@ if (isGz)
     MJP(2);verbose(2,"done netConnect(%s,%s) -> [%d]\n",npu->host, npu->port, sd );
     lf = lineFileAttach(npu->file, FALSE, sd);
     MJP(2);verbose(2,"send headers (gzip)\n");
-    netHttpSendHeaders(sd, method, TRUE, 0, npu, FALSE, "Content-Type: text/plain\r\n");
+    netHttpSendHeaders(sd, method, TRUE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
     check100Continue(lf);
     printf("Sending %ldkb file %s\n", inputSize/1024, inputfile);
     lineFileClose(&lf);
@@ -672,8 +740,8 @@ else
 	sd = netMustConnect(npu->host, atoi(npu->port));
 	lf = lineFileAttach(npu->file, FALSE, sd);
 	MJP(2);verbose(2,"netWriteDeflatedFileChunked(%s)\n", inputfile);
-	netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, "Content-Type: text/plain\r\n");
-	//netWriteDeflatedFileChunked(sd, inputfile, inputSize, progressMeter);
+	netHttpSendHeaders(sd, method, FALSE, -1, npu, FALSE, "Content-Encoding: gzip\r\nContent-Type: text/plain\r\n");
+	netWriteDeflatedFileChunked(sd, inputfile, inputSize, progressMeter);
 	}
     }
 // get the headers
