@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
-static char const rcsid[] = "$Id: mgcClick.c,v 1.30 2009/01/29 02:01:41 markd Exp $";
+static char const rcsid[] = "$Id: mgcClick.c,v 1.31 2009/08/28 03:49:25 markd Exp $";
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
@@ -203,8 +203,10 @@ safef(query, sizeof(query),
       "(development = development.id) and (geneName = geneName.id) and"
       "(productName = productName.id) and (mrnaClone = mrnaClone.id) and"
       "(cds = cds.id) and (keyword = keyword.id)", ci->acc);
-struct sqlResult *sr = sqlMustGetResult(conn, query);
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("can't find %s in gbCdnaInfo", ci->acc);
 int i = 0;
 ci->desc = cloneString(row[i++]);
 ci->organism = cloneString(row[i++]);
