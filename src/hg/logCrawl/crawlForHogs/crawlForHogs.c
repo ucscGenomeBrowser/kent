@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: crawlForHogs.c,v 1.1 2009/08/28 00:58:08 kent Exp $";
+static char const rcsid[] = "$Id: crawlForHogs.c,v 1.2 2009/08/29 02:33:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -119,20 +119,18 @@ for (i=0; i<troughCount; ++i)
     }
 
 boolean isFirst = TRUE;
-time_t t0 = 0;
 while (lineFileNext(lf, &line, NULL))
     {
     struct apacheAccessLog *a = apacheAccessLogParse(line, lf->fileName, lf->lineIx);
     if (isFirst)
         {
 	isFirst = FALSE;
-	t0 = a->tick;
 	}
     for (i=0; i<troughCount; ++i)
         if ((troughs[i].identify)(a))
 	    {
 	    FILE *f = troughs[i].f;
-	    fprintf(f, "%ld\t%d\n", (long)(a->tick - t0 + 1), a->runTime);
+	    fprintf(f, "%s\n", line);
 	    }
     apacheAccessLogFree(&a);
     }
