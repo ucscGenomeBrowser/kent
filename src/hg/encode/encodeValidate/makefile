@@ -32,7 +32,7 @@ scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
 ${SCRIPTS}/%: %
 	@mkdir -p $(dir $@)
 	chmod +x $<
-	perl -c $<
+	perl -c $< 2>&1
 	cp -p $< $@.tmp
 	mv -f $@.tmp $@
 
