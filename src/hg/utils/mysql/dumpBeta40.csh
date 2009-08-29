@@ -1,6 +1,6 @@
 #!/bin/csh -fe
 
-# 	$Id: dumpBeta40.csh,v 1.1 2009/08/21 18:08:53 hiram Exp $
+# 	$Id: dumpBeta40.csh,v 1.2 2009/08/29 00:30:01 galt Exp $
 
 if ( $#argv != 2  ) then
     echo "usage: dumpBeta40.csh <db> <tableName>"
@@ -12,7 +12,7 @@ unsetenv HGDB_HOST
 unsetenv HGDB_USER
 unsetenv HGDB_PASSWORD
 unsetenv HGDB_CONF
-set SQL_SRC_HOST = hgsqlbeta
+set SQL_SRC_HOST = mysqlbeta
 set DB = $1
 set TBL = $2
 set HGSQL = "hgsql -h${SQL_SRC_HOST}"
