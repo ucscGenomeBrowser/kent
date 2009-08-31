@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.10 2009/05/22 20:24:58 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.11 2009/08/31 23:38:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1003,8 +1003,11 @@ if (snpSize > MAX_SNPSIZE)
 if (chrStart == chrEnd)
     /* copy whatever convention dbSNP uses for insertion */
     return refNCBI;
-else if (strlen(refNCBI) == snpSize)
+else
     {
+    if (strlen(refNCBI) != snpSize)
+	writeError("rs%d is %d bases long but refNCBI is different length: %s",
+		   rsId, snpSize, refNCBI);
     strncpy(refUCSC, chrSeq->dna + chrStart, snpSize);
     refUCSC[snpSize] = '\0';
     if (! sameString(refNCBI, refUCSC))
@@ -1020,9 +1023,6 @@ else if (strlen(refNCBI) == snpSize)
 	!sameString(refNCBI, refUCSC))  /* Don't flag if seq = revcomp seq */
 	writeException(RefAlleleRevComp);
     }
-else
-    lineFileAbort(lf, "What should refUCSC be for rs%d? "
-		  "(refNCBI=%s, snpSize=%d", rsId, refNCBI, snpSize);
 return refUCSC;
 }
 
@@ -1425,9 +1425,6 @@ if (!sameString(locType, "rangeInsertion") &&
 	classStringsUsed[stringArrayIx("insertion", classStrings,
 				       ArraySize(classStrings))] = TRUE;
 	}
-    if (sameString(locType, "between") && !sameString(class, "insertion"))
-	lineFileAbort(lf, "locType \"between\" should be identified "
-		      "as an insertion here.");
     }
 }
 
