@@ -12407,6 +12407,43 @@ wgEncode 1
     accession SAT2G_version_2.0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=454 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalNhekCytosolLongpolya fileName=wgEncodeGisPetMinusRawSignalNhekCytosolLongpolya.wig.gz
 
+    track wgEncodeGisPetAlignmentsNhekNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK nucleus longPolyA
+    longLabel ENCODE GIS PET Alignments (longPolyA in NHEK nucleus)
+    subGroups view=Alignments cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+#    type pairedTagAlign
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    accession SAT2G_version_2.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=nucleus accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Fall 2009 Freeze" subId=455 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsNhekNucleusLongpolya fileName=wgEncodeGisPetAlignmentsNhekNucleusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetPlusRawSignalNhekNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK nucleus longPolyA PlusRaw
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in NHEK nucleus)
+    subGroups view=PlusRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type wig WGENCODEGISPETPLUSRAWSIGNALNHEKNUCLEUSLONGPOLYA_MINMAXRANGE
+    accession SAT2G_version_2.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA type=wig localization=nucleus accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=455 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalNhekNucleusLongpolya fileName=wgEncodeGisPetPlusRawSignalNhekNucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSignalNhekNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK nucleus longPolyA MinusRaw
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in NHEK nucleus)
+    subGroups view=MinusRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type wig WGENCODEGISPETMINUSRAWSIGNALNHEKNUCLEUSLONGPOLYA_MINMAXRANGE
+    accession SAT2G_version_2.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA type=wig localization=nucleus accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=455 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalNhekNucleusLongpolya fileName=wgEncodeGisPetMinusRawSignalNhekNucleusLongpolya.wig.gz
+
 
 # HudsonAlpha Methyl27 (wrangler: braney)
 
