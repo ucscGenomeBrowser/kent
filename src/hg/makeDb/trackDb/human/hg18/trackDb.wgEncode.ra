@@ -12479,7 +12479,7 @@ wgEncode 1
     itemRgb on
     cell HepG2
 #    color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r1.bed.gz
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
     release alpha
@@ -12493,7 +12493,7 @@ wgEncode 1
     itemRgb on
     cell HepG2
 #    color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r2.bed.gz
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
     release alpha
@@ -12507,7 +12507,7 @@ wgEncode 1
     itemRgb on
     cell GM12878
 #    color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r1.bed.gz
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
     release alpha
@@ -12521,7 +12521,7 @@ wgEncode 1
     itemRgb on
     cell GM12878
 #    color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r2.bed.gz
 
     track wgEncodeHudsonalphaMethyl27K562r1
     release alpha
@@ -12535,7 +12535,7 @@ wgEncode 1
     itemRgb on
     cell K562
 #    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r1.bed.gz
 
     track wgEncodeHudsonalphaMethyl27K562r2
     release alpha
@@ -12549,7 +12549,7 @@ wgEncode 1
     itemRgb on
     cell K562
 #    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r2.bed.gz
 
 # HudsonAlpha CNV (wrangler: braney)
 
@@ -13740,7 +13740,7 @@ wgEncode 1
     shortLabel GM128 cyt pA+
     longLabel ENCODE GIS RNA-Seq Tags (PolyA+ RNA in GM12878 cytosol)
     subGroups view=Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence nameIsSequence
     baseColorTickColor lighterShade
