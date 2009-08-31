@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.126 2009/08/18 17:51:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.127 2009/08/31 23:21:00 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -867,6 +867,26 @@ type Gene Type
 description pseudogene
 
 # Antibodies
+term AP-2alpha
+type Antibody
+antibodyDescription Rabbit polyclonal - AP-2? (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2? of human origin.
+targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.  AP-2? is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
+vendorName Santa Cruz Biotech
+vendorId sc-8975
+orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
+lab Farnham
+targetLink GeneCard GC06M010503|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A&search=TFAP2A_id=GC06M010503
+
+term AP-2gamma
+type Antibody
+antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping within an internal region of AP-2Y of human origin.
+targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
+vendorName Santa Cruz Biotech
+vendorId sc-8977
+orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
+lab Farnham
+targetLink GeneCard GC20P054637|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C&search=TFAP2C_id=GC20P054637
+
 term BDP1
 type Antibody
 antibodyDescription Rabbit polyclonal - Antiserum 2663 was raised by immunizing rabbits with synthetic peptide CSDRYRIYKAQKLRE (human Bdp1 residues 139?153) coupled to KLH.
@@ -874,6 +894,8 @@ targetDescription 'B double-prime 1', subunit of RNA polymerase III transcriptio
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 2663
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+targetLink GeneCard GC05P070787|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P070787
 
 term BRF1
 type Antibody
@@ -882,6 +904,8 @@ targetDescription 'B-related factor 1', subunit of RNA polymerase III transcript
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 128
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+targetLink GeneCard GC14M104746|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
 
 term c-Fos
 type Antibody
@@ -890,6 +914,8 @@ targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1
 vendorName Santa Cruz Biotech
 vendorId sc-7202
 orderUrl http://www.scbt.com/product.php?datasheet=7202
+lab Snyder
+targetLink GeneCard GC14P074815|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14P074815
 
 term c-Myc
 type Antibody
@@ -898,6 +924,9 @@ targetDescription transcription factor; c-Myc-encoded proteins function in cell 
 vendorName Santa Cruz Biotech
 vendorId sc-764
 orderUrl http://www.scbt.com/product.php?datasheet=764
+lab Iyer, Snyder
+lots H0107
+targetLink GeneCard GC08P128817|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08P128817
 
 term c-Jun
 type Antibody
@@ -906,6 +935,8 @@ targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1
 vendorName Santa Cruz Biotech
 vendorId sc-1694
 orderUrl http://www.scbt.com/product.php?datasheet=1694
+lab Snyder
+targetLink GeneCard GC01M058958|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
 
 term CTCF
 type Antibody
@@ -914,6 +945,10 @@ targetDescription CTCF zinc finger transcription factor. A sequence specific DNA
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
+orderUrl http://www.millipore.com/catalogue/item/07-729
+lab Bernstein, Iyer
+lots 1350637, DAM1472197
+targetLink GeneCard GC16P066153|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
 
 term CtBP1
 type Antibody
@@ -922,6 +957,8 @@ targetDescription C-terminal binding protein 1
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303
 vendorName BD Biosciences
 vendorId 612042
+lab Farnham
+targetLink GeneCard GC04M001195|http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1&search=ctbp1=GC04M001195
 
 term CtBP2
 type Antibody
@@ -930,6 +967,18 @@ targetDescription C-terminal binding protein 2
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326
 vendorName BD Biosciences
 vendorId 612044
+lab Farnham
+targetLink GeneCard GC10M126666|http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
+
+term E2F1
+type Antibody
+targetDescription The E2F1 protein is a member of the E2F family of transcription factors.  The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses.  The E2F proteins contain several evolutionary conserved domains found in most members of the family.  These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain.
+antibodyDescription mouse monoclonal - The E2F1 monoclonal antibody is a mixture of clones KH20 and KH95.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.
+vendorName Millipore
+vendorId 05-379
+orderUrl http://www.millipore.com/catalogue/item/05-379
+lab Farnham
+targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
 
 term E2F4
 type Antibody
@@ -938,6 +987,8 @@ antibodyDescription rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-866
 orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
+lab Farnham
+targetLink GeneCard GC16P065783|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P065783
 
 term E2F6
 type Antibody
@@ -946,6 +997,8 @@ antibodyDescription rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-22823
 orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
+lab Farnham
+targetLink GeneCard GC02M011536|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M011536
 
 term Egr-1
 type Antibody
@@ -954,6 +1007,8 @@ targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factor
 vendorName Santa Cruz Biotech
 vendorId sc-110
 orderUrl http://www.scbt.com/product.php?datasheet=110
+lab Farnham
+targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
 
 term FOXP2
 type Antibody
@@ -962,6 +1017,8 @@ antibodyDescription rabbit polyclonal
 vendorName Abcam
 vendorId ab16046
 orderUrl http://www.abcam.com/index.html?datasheet=16046
+lab Myers
+targetLink GeneCard GC07P113482|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC07P113482
 
 term GABP
 type Antibody
@@ -970,6 +1027,9 @@ antibodyDescription Mouse monoclonal, GABPa(G-1), IgG1
 vendorName Santa Cruz Biotech
 vendorId sc-28312
 orderUrl http://www.scbt.com/product.php?datasheet=28312
+targetLink
+lab Myers / Wold
+lots F1804
 
 term GATA-1
 type Antibody
@@ -978,6 +1038,18 @@ antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId
 orderUrl
+targetLink GeneCard GC0XP048529|http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=GC0XP048529
+lab Farnham
+
+term GATA-2
+type Antibody
+targetDescription GATA binding protein 2
+antibodyDescription Rabbit polyclonal
+vendorName Donated by Dr. E.H. Bresnick, UW Madison
+vendorId
+orderUrl
+targetLink GeneCard GC03M129680|http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
+lab Farnham
 
 term GR
 type Antibody
@@ -986,6 +1058,9 @@ antibodyDescription Rabbit Polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-1004
 orderUrl http://www.scbt.com/product.php?datasheet=1004
+lab Myers
+lots A2508, E1908
+targetLink GeneCard GC04M149219|http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
 
 term H3K4me1
 type Antibody
@@ -994,6 +1069,9 @@ targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and
 orderUrl http://www.abcam.com/index.html?datasheet=8895
 vendorName Abcam
 vendorId ab8895
+lab Bernstein
+lots 383111
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K4me2
 type Antibody
@@ -1002,6 +1080,9 @@ targetDescription Histone H3 (di methyl K4). Marks promoters and enhancers. Most
 orderUrl http://www.abcam.com/index.html?datasheet=7766
 vendorName Abcam
 vendorId ab7766
+lab Bernstein
+lots 56293
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K4me3
 type Antibody
@@ -1010,6 +1091,9 @@ targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or
 orderUrl http://www.abcam.com/index.html?datasheet=8580
 vendorName Abcam
 vendorId ab8580
+lab Bernstein
+lots 498616,331024
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K9ac
 type Antibody
@@ -1018,6 +1102,9 @@ targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with trans
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 vendorName Abcam
 vendorId ab4441
+lab Bernstein
+lots 455103
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K9me1
 type Antibody
@@ -1026,6 +1113,9 @@ targetDescription Histone H3 (mono-methyl K9). Is associated with active and acc
 orderUrl http://www.abcam.com/index.html?datasheet=8896
 vendorName Abcam
 vendorId ab8896
+lab Bernstein
+lots 104560
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K9me3
 type Antibody
@@ -1034,6 +1124,8 @@ targetDescription Histone H3 (tri methyl K9). Is associated with repressive hete
 vendorName Abcam
 vendorId ab8898
 orderUrl http://www.abcam.com/index.html?datasheet=8898
+lab Farnham
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K27ac
 type Antibody
@@ -1042,6 +1134,9 @@ targetDescription Histone H3 (acetyl K27). As with H3K9ac, associated with trans
 orderUrl http://www.abcam.com/index.html?datasheet=4729
 vendorName Abcam
 vendorId ab4729
+lab Bernstein
+lots 31456
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K27me3
 type Antibody
@@ -1050,6 +1145,9 @@ targetDescription Histone H3 (tri-methyl K27). Marks promoters that are silenced
 orderUrl http://www.millipore.com/catalogue/item/07-449
 vendorName Millipore
 vendorId 07-449
+lab Bernstein
+lots DAM1387952
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K36me3
 type Antibody
@@ -1058,6 +1156,9 @@ targetDescription Histone H3 (tri-methyl K36). Marks regions of RNAPII elongatio
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 vendorName Abcam
 vendorId ab9050
+lab Bernstein
+lots 136353
+targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H4K20me1
 type Antibody
@@ -1066,6 +1167,9 @@ targetDescription Histone H4 (mono-methyl K20). Is associated with active and ac
 orderUrl http://www.abcam.com/index.html?datasheet=9051
 vendorName Abcam
 vendorId ab9051
+lab Bernstein
+lots 104513
+targetLink GeneCard GC01P148070|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P148070
 
 term JunD
 type Antibody
@@ -1074,6 +1178,8 @@ targetDescription TBD
 vendorName Santa Cruz Biotech
 vendorId sc-74
 orderUrl http://www.scbt.com/product.php?datasheet=74
+lab Snyder
+targetLink GeneCard GC19M018254|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M018254
 
 term KAP1
 type Antibody
@@ -1082,6 +1188,8 @@ targetDescription KRAB Associated Protein 1, helps regulate transcriptional repr
 vendorName Abcam
 vendorId ab10483
 orderUrl http://www.abcam.com/index.html?datasheet=10483
+lab Farnham
+targetLink GeneCard GC19P063747|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
 
 term Max
 type Antibody
@@ -1090,6 +1198,8 @@ targetDescription MYC associated factor X
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/product.php?datasheet=197
+lab Snyder
+targetLink GeneCard GC14M064542|http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
 
 term NF-E2
 type Antibody
@@ -1098,6 +1208,9 @@ targetDescription Nuclear factor, erythroid-derived 2
 vendorName Santa Cruz Biotech
 vendorId sc-291
 orderUrl http://www.scbt.com/product.php?datasheet=291
+lab Snyder
+lots D1703
+targetLink GeneCard GC12M052972|http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
 
 term NRSF
 type Antibody
@@ -1106,6 +1219,8 @@ targetDescription Neuron-restrictive silencer transcription factor
 vendorName David Anderson, Caltech (Made by Protein Expression Center: pec@caltech.edu)
 vendorId
 orderUrl
+lab Myers / Wold
+lots 20070905JV
 
 term Pol2
 type Antibody
@@ -1114,6 +1229,8 @@ antibodyDescription mouse monoclonal, clone 8WG16
 vendorName Covance
 vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
+lab Snyder, Iyer
+lots 14861301, 14922701
 
 term Pol2(b)
 type Antibody
@@ -1122,6 +1239,8 @@ targetDescription RNA polymerase II. Is responsible for RNA transcription. It is
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
+lab Bernstein
+lots 147337002
 
 term Pol3
 type Antibody
@@ -1130,6 +1249,7 @@ antibodyDescription mouse monoclonal IgG1
 vendorName Santa Cruz Biotech
 vendorId sc-21754
 orderUrl http://www.scbt.com/product.php?datasheet=21754
+lab Snyder
 
 term Rad21
 type Antibody
@@ -1138,6 +1258,8 @@ antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=992
 vendorName Abcam
 vendorId ab992
+lab Snyder
+targetLink GeneCard GC08M117927|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08M117927
 
 term RPC155
 type Antibody
@@ -1146,6 +1268,8 @@ targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 1900
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+targetLink GeneCard GC10M079405|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10M079405
 
 term SETDB1
 type Antibody
@@ -1154,6 +1278,8 @@ targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved
 vendorName Proteintech Group
 vendorId  11231-1-AP
 orderUrl http://www.ptglab.com/data/image/pdf/E__web_pdf_11231-1-AP.pdf
+lab Farnham
+targetLink GeneCard GC01P149165|http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1&search=setdb1
 
 term Sin3Ak-20
 type Antibody
@@ -1162,6 +1288,7 @@ targetDescription Co-repressor interacting with HDAC1, N-coR, SMRT, and MeCP2
 vendorName Santa Cruz Biotech
 vendorId sc-994
 orderUrl http://www.scbt.com/product.php?datasheet=994
+lab Myers
 
 term SIRT6
 type Antibody
@@ -1170,6 +1297,8 @@ targetDescription A synthetic peptide made to an internal region of the human SI
 vendorName Abcam
 vendorId ab48192
 orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
+lab Struhl
+targetLink GeneCard GC19M004125|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M004125
 
 term SREBP1A
 type Antibody
@@ -1178,6 +1307,7 @@ antibodyDescription Rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-8984
 orderUrl http://www.scbt.com/product.php?datasheet=8984
+lab Snyder
 
 term SREBP2
 type Antibody
@@ -1186,6 +1316,7 @@ antibodyDescription Rabbit polyclonal
 vendorName 	 Cayman Chemical
 vendorId 10007663
 orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
+lab Snyder
 
 term SRF
 type Antibody
@@ -1194,6 +1325,9 @@ antibodyDescription Rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-335
 orderUrl http://www.scbt.com/product.php?datasheet=335
+lab Myers / Wold
+lots F3006 L2005 H2604
+targetLink GeneCard GC06P043247|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC06P043247
 
 term STAT1
 type Antibody
@@ -1202,6 +1336,9 @@ antibodyDescription rabbit polyclonal to STAT1 (alpha) p-91 (C-24)
 vendorName Santa Cruz Biotech
 vendorId sc-345
 orderUrl http://www.scbt.com/product.php?datasheet=345
+lab Snyder
+lots G2406 and K2106
+targetLink GeneCard GC02M191542|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M191542
 
 term STAT2
 type Antibody
@@ -1210,6 +1347,8 @@ antibodyDescription Rabbit polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-476x
 orderUrl http://www.scbt.com/product.php?datasheet=476
+lab Snyder
+targetLink GeneCard GC12M055021|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M055021
 
 term SUZ12
 type Antibody
@@ -1218,6 +1357,8 @@ antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
 vendorId
 orderUrl
+lab Farnham
+targetLink GeneCard GC17P027289|http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12&search=suz12
 
 term TAF1
 type Antibody
@@ -1227,6 +1368,18 @@ vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
 geneId 6872
+lab Myers / Wold
+lots K0905 F2706
+
+#term TAF-II
+#type Antibody
+#antibodyDescription Mouse monoclonal (p250)
+#targetDescription General transcription factor; TBP-associated factor p250kDa; other names: TAF250
+#vendorName Santa Cruz Biotech
+#vendorId sc-735
+#orderUrl http://www.scbt.com/product.php?datasheet=735
+#lab Myers / Wold
+#lots K0905 F2706
 
 term TCF4
 type Antibody
@@ -1235,12 +1388,16 @@ antibodyDescription Rabbit monoclonal
 vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
+lab Farnham
+targetLink GeneCard GC18M051045|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC18M051045
 
 term TR4
 type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 vendorName Donated by Dr. J.D.Engel, University of Michigan
+lab Farnham
+targetLink GeneCard GC03P014964|http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 
 term USF-1
 type Antibody
@@ -1249,6 +1406,8 @@ targetDescription The ubiquitously expressed cellular upstream stimulatory facto
 vendorName Santa Cruz Biotech
 vendorId sc-229
 orderUrl http://www.scbt.com/product.php?datasheet=229
+lab Myers
+targetLink GeneCard GC01M159275|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M159275
 
 term XRCC4
 type Antibody
@@ -1257,6 +1416,8 @@ antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=1451
 vendorName Abcam
 vendorId ab1451
+lab Snyder
+targetLink GeneCard GC05P082409|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P082409
 
 term YY1
 type Antibody
@@ -1265,6 +1426,8 @@ targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel cla
 vendorName Santa Cruz Biotech
 vendorId sc-1703X
 orderUrl http://www.scbt.com/product.php?datasheet=1703
+lab Farnham
+targetLink GeneCard GC14P099774|http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
 
 term ZNF263
 type Antibody
@@ -1273,6 +1436,8 @@ antibodyDescription Mouse polyclonal
 vendorName Novus Biologicals
 vendorId H00010127-A01
 orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
+lab Snyder
+targetLink GeneCard GC16P003273|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P003273
 
 term p300
 type Antibody
@@ -1281,6 +1446,7 @@ antibodyDescription Rabbit Polyclonal
 vendorName Santa Cruz Biotech
 vendorId sc-585
 orderUrl  http://www.scbt.com/product.php?datasheet=585
+lab Myers
 
 term Pbx3
 type Antibody
@@ -1289,6 +1455,7 @@ antibodyDescription Rabbit Polyclonal IgG
 vendorName Santa Cruz Biotech
 vendorId sc-891
 orderUrl  http://www.scbt.com/product.php?datasheet=891
+lab Myers
 
 term PU.1
 type Antibody
@@ -1297,6 +1464,7 @@ antibodyDescription Rabbit Polyclonal IgG
 vendorName Santa Cruz Biotech
 vendorId sc-22805
 orderUrl  http://www.scbt.com/product.php?datasheet=22805
+lab Myers
 
 term Oct-2
 type Antibody
@@ -1305,6 +1473,7 @@ antibodyDescription Rabbit Polyclonal IgG
 vendorName Santa Cruz Biotech
 vendorId sc-233
 orderUrl  http://www.scbt.com/product.php?datasheet=233
+lab Myers
 
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
