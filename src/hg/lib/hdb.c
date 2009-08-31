@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.410 2009/08/20 18:11:36 larrym Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.411 2009/08/31 19:10:49 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1354,7 +1354,7 @@ static boolean querySeqInfo(struct sqlConnection *conn, char *acc, char *seqTbl,
 /* lookup information in the seq or gbSeq table */
 {
 boolean gotIt = FALSE;
-if (sqlTableExists(conn, seqTbl))
+if (hTableExists(sqlGetDatabase(conn), seqTbl))
     {
     char query[256];
     safef(query, sizeof(query),
@@ -1500,15 +1500,15 @@ struct sqlConnection *conn = hAllocConn(db);
 boolean haveSeq = FALSE;
 
 /* Check compatTable if we have it, otherwise check seq and gbSeq */
-if ((compatTable != NULL) && sqlTableExists(conn, compatTable))
+if ((compatTable != NULL) && hTableExists(db, compatTable))
     {
     haveSeq = checkIfInTable(conn, acc, "name", compatTable);
     }
 else
     {
-    if (sqlTableExists(conn, "gbSeq"))
+    if (hTableExists(db, "gbSeq"))
         haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq");
-    if ((!haveSeq) && sqlTableExists(conn, "seq"))
+    if ((!haveSeq) && hTableExists(db, "seq"))
         haveSeq = checkIfInTable(conn, acc, "acc", "seq");
     }
 
@@ -1550,7 +1550,7 @@ struct dnaSeq *seq = NULL;
 
 /* If we have the compat table, get the sequence from there, otherwise from
  * seq or gbSeq. */
-if ((compatTable != NULL) && sqlTableExists(conn, compatTable))
+if ((compatTable != NULL) && hTableExists(sqlGetDatabase(conn), compatTable))
     {
     seq = loadSeqFromTable(conn, acc, compatTable);
     }
@@ -1596,7 +1596,7 @@ aaSeq *seq = NULL;
 
 /* If we have the compat table, get the sequence from there, otherwise from
  * gbSeq. */
-if ((compatTable != NULL) && sqlTableExists(conn, compatTable))
+if ((compatTable != NULL) && hTableExists(sqlGetDatabase(conn), compatTable))
     {
     seq = loadSeqFromTable(conn, acc, compatTable);
     }
