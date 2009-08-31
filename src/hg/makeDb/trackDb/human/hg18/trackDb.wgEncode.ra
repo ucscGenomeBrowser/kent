@@ -5057,7 +5057,7 @@ wgEncode 1
     type broadPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE July 2009 Freeze" subId=402 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2Sknshra fileName=wgEncodeUwDnaseSeqHotspotsRep2Sknshra.broadPeak.gz
 
-# Affymetrix RNA-chip (wrangler: mikep)
+# Affymetrix RNA-chip (wrangler: braney)
 
 track wgEncodeAffyRnaChip
 compositeTrack on
@@ -6061,6 +6061,42 @@ wgEncode 1
     type wig -52210.00 51521.00
     color 189,0,157
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya.wig.gz
+
+    track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucleolus total
+    longLabel ENCODE Affy/CSHL Filtered Transfrags (total in HepG2 nucleolus)
+    subGroups view=FiltTransfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Fall 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal.broadPeak.gz
+
+    track wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucleolus total
+    longLabel ENCODE Affy/CSHL Transfrags (total in HepG2 nucleolus)
+    subGroups view=Transfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Fall 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal.broadPeak.gz
+
+    track wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucleolus total Raw
+    longLabel ENCODE Affy/CSHL (total in HepG2 nucleolus)
+    subGroups view=RawSignal cellType=HepG2 localization=60-nucleolus rnaExtract=total
+    type wig -57857.00 57814.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal.wig.gz
+
+    track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel HepG2 nucleolus total
+    longLabel ENCODE Affy/CSHL (total in HepG2 nucleolus)
+    subGroups view=FiltRawSignal cellType=HepG2 localization=60-nucleolus rnaExtract=total
+    type wig -57857.00 57814.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 
 
 # SUNY Albany genechp (wrangler: mikep)
@@ -11951,7 +11987,7 @@ searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 
-# GIS PET (wrangler: mikep)
+# GIS PET (wrangler: braney)
 
 track wgEncodeGisPet
 compositeTrack on
@@ -11959,7 +11995,7 @@ shortLabel GIS PET Loc
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
 group expression
 subGroup1 view Views Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
-subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878 prostate=Prostate HepG2=HepG2
+subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878 prostate=Prostate HepG2=HepG2 NHEK=NHEK
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=long_PolyA+ total=Total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
@@ -12297,6 +12333,43 @@ wgEncode 1
     color 189,0,157
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE July 2009 Freeze" subId=413 dateSubmitted=2009-07-03 dateUnrestricted=2010-04-03 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalHepg2NucleusLongpolya fileName=wgEncodeGisPetMinusRawSignalHepg2NucleusLongpolya.wig.gz
 
+    track wgEncodeGisPetAlignmentsNhekCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK cytosol pA+
+    longLabel ENCODE GIS PET Alignments (longPolyA in NHEK cytosol)
+    subGroups view=Alignments cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
+#    type pairedTagAlign
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    accession SAT2G_version_2.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=cytosol accession=SAT2G_version_2.0 view=Alignments dataVersion="ENCODE Fall 2009 Freeze" subId=454 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsNhekCytosolLongpolya fileName=wgEncodeGisPetAlignmentsNhekCytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetPlusRawSignalNhekCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK cytosol longPolyA PlusRaw
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in NHEK cytosol)
+    subGroups view=PlusRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
+    type wig WGENCODEGISPETPLUSRAWSIGNALNHEKCYTOSOLLONGPOLYA_MINMAXRANGE
+    accession SAT2G_version_2.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=PlusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=454 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSignalNhekCytosolLongpolya fileName=wgEncodeGisPetPlusRawSignalNhekCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSignalNhekCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK cytosol longPolyA MinusRaw
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in NHEK cytosol)
+    subGroups view=MinusRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
+    type wig WGENCODEGISPETMINUSRAWSIGNALNHEKCYTOSOLLONGPOLYA_MINMAXRANGE
+    accession SAT2G_version_2.0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA type=wig localization=cytosol accession=SAT2G_version_2.0 view=MinusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=454 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSignalNhekCytosolLongpolya fileName=wgEncodeGisPetMinusRawSignalNhekCytosolLongpolya.wig.gz
+
 
 # HudsonAlpha Methyl27 (wrangler: braney)
 
@@ -12331,7 +12404,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell HepG2
-    color 189,0,157
+#    color 189,0,157
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
@@ -12345,7 +12418,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell HepG2
-    color 189,0,157
+#    color 189,0,157
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
@@ -12359,7 +12432,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell GM12878
-    color 153,38,0
+#    color 153,38,0
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
@@ -12373,7 +12446,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell GM12878
-    color 153,38,0
+#    color 153,38,0
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2
 
     track wgEncodeHudsonalphaMethyl27K562r1
@@ -12387,7 +12460,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell K562
-    color 46,0,184
+#    color 46,0,184
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1
 
     track wgEncodeHudsonalphaMethyl27K562r2
@@ -12401,7 +12474,7 @@ wgEncode 1
     dateSubmitted 2008-12-03
     itemRgb on
     cell K562
-    color 46,0,184
+#    color 46,0,184
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2
 
 # HudsonAlpha CNV (wrangler: braney)
