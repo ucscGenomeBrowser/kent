@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.411 2009/08/31 19:10:49 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.412 2009/08/31 20:00:36 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -235,7 +235,7 @@ struct hashEl *hel;
 
 while ((hel = hashNext(&cook)) != NULL)
     {
-    if (sqlTableExists(conn, hel->name))
+    if (hTableExists(sqlGetDatabase(conn), hel->name))
 	{
 	struct slName *name = newSlName(hel->name);
 	slAddHead(&list, name);
@@ -455,7 +455,7 @@ hel = hashStore(hash, db);
 if (hel->val == NULL)
     {
     struct sqlConnection *conn = hAllocConn(db);
-    if (sqlTableExists(conn, "chromInfo"))
+    if (hTableExists(db, "chromInfo"))
 	hel->val = sqlQuickString(conn, "select chrom from chromInfo limit 1");
     hFreeConn(&conn);
     }
@@ -775,7 +775,20 @@ if (hashLookup(tableListProfChecked, key) == NULL)
 boolean hTableExists(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
+// prevent recursive calls; this way function that might be called by both this function and 
+// other places can use hTableExists.
+static boolean building = FALSE;
+if (building)
+    {
+    struct sqlConnection *conn = hAllocConn(db);    
+    boolean exists = sqlTableExists(conn, table);
+    hFreeConn(&conn);
+    return exists;
+    }
+building = TRUE;
 struct hash *hash = tableListGetDbHash(db);
+building = FALSE;
+
 struct slName *tableNames = NULL, *tbl = NULL;
 char trackName[HDB_MAX_TABLE_STRING];
 char chrom[HDB_MAX_CHROM_STRING];
@@ -2265,6 +2278,7 @@ return ret;
 static boolean hGotCladeConn(struct sqlConnection *conn)
 /* Return TRUE if central db contains clade info tables. */
 {
+char *db = sqlGetDatabase(conn);
 return (sqlTableExists(conn, "clade") && sqlTableExists(conn, "genomeClade"));
 }
 
@@ -3301,7 +3315,7 @@ static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
 char *tbl;
 boolean exists;
 struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
-if ((exists = sqlTableExists(conn, tbl)))
+if ((exists = hTableExists(db, tbl)))
     {
     struct trackDb *oneTable = trackDbLoadWhere(conn, tbl, where), *oneRow;
     while ((oneRow = slPopHead(&oneTable)) != NULL)
@@ -3652,7 +3666,7 @@ struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
 struct slName *tdb, *tdbs = hTrackDbList();
 for (tdb = tdbs; tdb != NULL; tdb = tdb->next)
     {
-    if (sqlTableExists(conn, tdb->name))
+    if (hTableExists(sqlGetDatabase(conn), tdb->name))
         {
         slFreeList(&tdbs);
         return loadTrackDbForTrack(conn, trackName);
@@ -4335,7 +4349,7 @@ slReverse(&tables);
 for (table = tables; table != NULL; table = table->next)
     {
     struct grp *oneTable = NULL;
-    if (sqlTableExists(conn, table->name))
+    if (hTableExists(sqlGetDatabase(conn), table->name))
 	{
 	safef(query, sizeof(query), "select * from %s", table->name);
 	oneTable = grpLoadByQuery(conn, query);
