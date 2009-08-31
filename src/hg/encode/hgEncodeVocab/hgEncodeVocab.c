@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.24 2009/08/19 14:33:10 kate Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.25 2009/08/31 23:38:53 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -49,7 +49,7 @@ void doTypeHeader(char *type)
 {
 if (sameString(type,"Antibody"))
     {
-    puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH>");
+    puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Lots</TH><TH>Target Link</TH>");
     }
 else if (sameString(type,"ripAntibody"))
     {
@@ -113,6 +113,31 @@ if (sameString(type,"Antibody"))
     if (u)
         printf("</A>");
     puts("</TD>");
+
+    s = hashFindVal(ra, "lab");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
+    s = hashFindVal(ra, "lots");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
+    s = hashFindVal(ra, "targetLink");
+    if(s)
+        {
+        printf("  <TD>");
+        u = strchr(s, '|');
+        if (u)
+            {
+            *u++ = 0;
+            printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+            }
+        printf(s);
+        if (u)
+            printf("</A>");
+        puts("</TD>\n");
+        }
+    else
+        printf("  <TD>&nbsp;</TD>\n");
+
 
     puts("</TR>");
     }
