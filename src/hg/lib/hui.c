@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.232 2009/08/19 23:19:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.233 2009/08/31 18:19:44 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5028,14 +5028,19 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 //puts("<B>Select subtracks by characterization:</B><BR>");
 printf("<B>Select subtracks by ");
 if(dimensionX && !dimensionY)
-    safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionX->title);
+    safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->title);
 else if(!dimensionX && dimensionY)
-    safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionY->title);
+    safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->title);
 else if(dimensionX && dimensionY && !dimensionZ)
-    safef(javascript, sizeof(javascript), "%s and %s:</B><BR>",dimensionX->title,dimensionY->title);
+    safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->title,dimensionY->title);
 else //if(dimensionX && dimensionY && dimensionZ)
-    safef(javascript, sizeof(javascript), "%s, %s and %s:</B><BR>",dimensionX->title,dimensionY->title,dimensionZ->title);
+    safef(javascript, sizeof(javascript), "%s, %s and %s:</B>",dimensionX->title,dimensionY->title,dimensionZ->title);
 puts(strLower(javascript));
+
+if(!subgroupingExists(parentTdb,"view"))
+    puts("(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on views' TARGET=_BLANK>help</A>)\n");
+
+puts("<BR>\n");
 
 printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
