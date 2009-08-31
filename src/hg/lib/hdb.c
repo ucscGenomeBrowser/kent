@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.412 2009/08/31 20:00:36 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.413 2009/08/31 21:47:45 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2278,7 +2278,6 @@ return ret;
 static boolean hGotCladeConn(struct sqlConnection *conn)
 /* Return TRUE if central db contains clade info tables. */
 {
-char *db = sqlGetDatabase(conn);
 return (sqlTableExists(conn, "clade") && sqlTableExists(conn, "genomeClade"));
 }
 
