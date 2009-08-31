@@ -6098,6 +6098,43 @@ wgEncode 1
     type wig -57857.00 57814.00
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 
+    track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel GM12878 nucleolus total
+    longLabel ENCODE Affy Filtered Transfrags (total in GM12878 nucleolus)
+    subGroups view=FiltTransfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Fall 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
+
+    track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel GM12878 nucleolus total
+    longLabel ENCODE Affy Transfrags (total in GM12878 nucleolus)
+    subGroups view=Transfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total
+    type broadPeak
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Fall 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
+
+    track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel GM12878 nucleolus total
+    longLabel ENCODE Filtered Signal (total in GM12878 nucleolus)
+    subGroups view=FiltRawSignal cellType=GM12878 localization=60-nucleolus rnaExtract=total
+    type wig -47390.50 56660.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
+
+    track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
+    release alpha
+    subTrack wgEncodeAffyRnaChip off
+    shortLabel GM12878 nucleolus total Raw
+    longLabel ENCODE Raw Signal (total in GM12878 nucleolus)
+    subGroups view=RawSignal cellType=GM12878 localization=60-nucleolus rnaExtract=total
+    type wig -57050.00 56660.00
+    metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal.wig.gz
+
+
 
 # SUNY Albany genechp (wrangler: mikep)
 
