@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1568 2009/08/28 17:40:45 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1569 2009/08/31 18:31:53 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15065,6 +15065,8 @@ struct slName *tbl, *tableList = slNameListFromString(tables, ',');
 struct dyString *query = dyStringNew(0);
 for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
     {
+    if (!sqlTableExists(conn, tbl->name))
+	continue;
     char setting[512];
     safef(setting, sizeof(setting), "codingAnnoLabel_%s", tbl->name);
     char *label = trackDbSettingOrDefault(tdb, setting, tbl->name);
