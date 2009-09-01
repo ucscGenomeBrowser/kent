@@ -2041,7 +2041,7 @@ identifier snpExceptions129
 identifier snpName130
 "dbSNP version 130 rs* identifiers"
     $gbd.snp130.name dupeOk
-    $gbd.snp130Exceptions.name
+    $gbd.snp130Exceptions.name minCheck=.999
     $gbd.snp130Seq.acc minCheck=.98
     $gbd.snp130CodingDbSnp.name minCheck=.99
     $hg.snp130OrthoPt2Pa2Rm2.name
