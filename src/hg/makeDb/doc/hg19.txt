@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.35 2009/08/11 17:16:53 hiram Exp $";
+#	"$Id: hg19.txt,v 1.36 2009/09/01 04:27:30 angie Exp $";
 
 #############################################################################
 
@@ -5490,5 +5490,307 @@ TMPDIR=/scratch/tmp
     #	real    4m7.559s
     cat fb.tetNig2.chainHg19Link.txt 
     #	42910930 bases of 302314788 (14.194%) in intersection
+
+
+##############################################################################
+# dbSNP BUILD 130 - PROVISIONAL REMAPPING TO BUILD 37 (DONE 8/28/09 angie)
+    # /hive/data/outside/dbSNP/130/ was already set up during the hg18 run --
+    # just add hg19 coord files and go from there.
+    cd /hive/data/outside/dbSNP/130/human/data
+    alias wg wget --timestamping
+    set ftpSnpDb = ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/misc/exchange
+    # These are provisional files in an ad-hoc format.
+    wg $ftpSnpDb/README.txt
+    wg $ftpSnpDb/Remap_36_3_37_1.info
+    wg $ftpSnpDb/Remap_36_3_37_1.txt.gz
+    mv README.txt Remap_36_3_37_1_README
+    zcat Remap_36_3_37_1.txt.gz | wc -l
+#18823990
+
+    # Use the remapping to transform ../ucscNcbiSnp.bed into one for hg19.
+    # Useful columns, 1-based: 1=ID, 3=oldChr, 4=oldStart, 5=oldEnd,
+    # 10=newChr, 11=newStart, 12=newEnd, 13=newLocType, 14=newWeight, 16=newStrand
+    # For mappings to chr*_random, oldStart and oldEnd are empty -- skip.
+    # Sort both hg18 snp file and remap file by {rsID,chr,start} to keep them in sync.
+    mkdir /hive/data/outside/dbSNP/130/human/hg19
+    cd /hive/data/outside/dbSNP/130/human/hg19
+    sort -k4n,4n -k1,1 -k2n,2n ../ucscNcbiSnp.bed > /data/tmp/hg18.ucscNcbiSnp.idSorted.bed
+    zcat ../data/Remap_36_3_37_1.txt.gz \
+    | sort -t "	" -k1n,1n -k3,3 -k4n,4n \
+      > /data/tmp/Remap_36_3_37_1.txt
+    perl -we \
+      'use strict; \
+       sub nextMap { \
+         my ($rsId, undef, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd, \
+             $nLocType, $nWt, $nRef, $nStr);\
+         do { \
+           ($rsId, undef, $oChr, $oStart, $oEnd, undef,undef,undef,undef, \
+               $nChr, $nStart, $nEnd, $nLocType, $nWt, $nRef, $nStr) = split("\t", <>); \
+           if (defined $nStr) { \
+             chomp $nStr; $nStr =~ tr/+-/01/; $oChr = "chr$oChr";  $nChr = "chr$nChr"; \
+           } \
+           $oStart--;  $oEnd--;  $nStart--;  $nEnd--;  # Yep. 0-based closed vs 1-based closed \
+         } while (defined $nStr && ($oEnd < 0 || $nChr eq "chrUn")); \
+         return ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd, \
+                 $nLocType, $nWt, $nRef, $nStr); \
+       } # nextMap \
+       my ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd, $nLocType, $nWt, $nRef, $nStr) = \
+         &nextMap(); \
+       my ($rCount, $oCount, $tCount) = 0; \
+       open(my $oldF, "/data/tmp/hg18.ucscNcbiSnp.idSorted.bed") || die; \
+       while (my ($chr, $s, $e, $id, $str, $rn,$obs,$mt,$cn,$vn,$ah,$ahse,$fc,$lt,$wt) = \
+              split("\t", <$oldF>)) { \
+         my $thisRCount = 0; \
+         while (defined $oChr && $chr eq $oChr && $s == $oStart && $e == $oEnd && $id == $rsId) { \
+           print join("\t", $nChr,$nStart,$nEnd,$id,$nStr,$nRef,$obs,$mt,$cn,$vn,$ah,$ahse,$fc, \
+                            $nLocType,$nWt,$nStart) \
+                      . "\n"; \
+           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd, $nLocType, $nWt, $nRef, $nStr) = \
+             &nextMap(); \
+           $thisRCount++; \
+         } \
+         if (defined $rsId && $id > $rsId) {warn "Slipped a cog"; last;} \
+         $tCount += $thisRCount; \
+         $rCount++ if ($thisRCount > 0); \
+         $oCount++; \
+       } \
+       close($oldF);  print STDERR "Replaced $rCount of $oCount inputs ($tCount outputs).\n";' \
+      /data/tmp/Remap_36_3_37_1.txt \
+    | sort -k1,1 -k2n,2n -k4,4 \
+    > /data/tmp/hg19.ucscNcbiSnp.bed
+#Replaced 18693260 of 19189750 inputs (18697579 outputs).
+#504.562u 27.037s 8:59.57 98.5%  0+0k 0+0io 0pf+0w
+    wc -l /data/tmp/hg19.ucscNcbiSnp.bed
+#  18697579 /data/tmp/hg19.ucscNcbiSnp.bed
+
+    # Drum roll please... translate NCBI's encoding into UCSC's, and
+    # perform a bunch of checks.  This is where developer involvement
+    # is most likely as NCBI extends the encodings used in dbSNP.
+    cd /hive/data/outside/dbSNP/130/human/hg19
+    snpNcbiToUcsc /data/tmp/hg19.ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit \
+      -1000GenomesRsIds=../data/1000GenomesRsIds.txt snp130
+#spaces stripped from observed:
+#chr12   6093134 6093134 rs41402545
+#Line 8049395 of /data/tmp/hg19.ucscNcbiSnp.bed: Encountered something that doesn't fit observedMixedFormat: GCAACTTCA
+#count of snps with weight  0 = 0
+#count of snps with weight  1 = 17042465
+#count of snps with weight  2 = 345274
+#count of snps with weight  3 = 1017906
+#count of snps with weight 10 = 291934
+#Skipped 1496 snp mappings due to errors -- see snp130Errors.bed
+#146.837u 9.867s 4:21.63 59.8%   0+0k 0+0io 0pf+0w
+    # Comparable to hg18.snp130, with some losses due to coord translation, loss of _randoms,
+    # and 1496 errors (new locType or refNCBI inconsistent with new size).
+    expr 18697579 - 291934 - 1496
+#18404149
+
+    # Move hg19.ucscNcbiSnp.bed from fast tmp to slow (today) hive:
+    gzip /data/tmp/hg19.ucscNcbiSnp.bed
+    mv /data/tmp/hg19.ucscNcbiSnp.bed.gz hg19.ucscNcbiSnp.bed.gz
+
+    # Will try not reuse hg18.snp130's giant 18G fasta file, not duplicate.
+
+    # Load up main track tables.
+    cd /hive/data/outside/dbSNP/130/human/hg19
+    hgLoadBed -tab -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp130 -sqlTable=snp130.sql snp130.bed
+#Loaded 18404149 elements of size 17
+#115.086u 21.663s 2:32:09.98 1.4%        0+0k 0+0io 1pf+0w
+#that is freakishly long -- lots happening today w/db move, hive recovery,...
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp130Exceptions -sqlTable=$HOME/kent/src/hg/lib/snp125Exceptions.sql -renameSqlTable \
+      snp130Exceptions.bed
+#Loaded 1982828 elements of size 5
+#10.500u 0.851s 1:13.42 15.4%    0+0k 0+0io 0pf+0w
+    hgLoadSqlTab hg19 snp130ExceptionDesc ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      snp130ExceptionDesc.tab
+    # Load up sequences *from hg18 file*:
+    hgLoadSqlTab hg19 snp130Seq ~/kent/src/hg/lib/snpSeq.sql ../snp130Seq.tab
+
+    # Put in a link where one would expect to find the track build dir...
+    ln -s /hive/data/outside/dbSNP/130/human/hg19 /hive/data/genomes/hg19/bed/snp130
+
+    # Look at the breakdown of exception categories:
+    cd /hive/data/outside/dbSNP/130/human/hg19
+    cut -f 5 snp130Exceptions.bed | sort | uniq -c | sort -nr
+#1350217 MultipleAlignments
+# 495981 ObservedMismatch
+#  37603 ObservedTooLong
+#  26855 SingleClassTriAllelic
+#  24443 FlankMismatchGenomeShorter
+#  17927 SingleClassLongerSpan
+#  13685 SingleClassZeroSpan
+#   6238 FlankMismatchGenomeLonger
+#   3016 DuplicateObserved
+#   2851 SingleClassQuadAllelic
+#   1777 MixedObserved
+#   1264 NamedDeletionZeroSpan
+#    508 FlankMismatchGenomeEqual
+#    329 NamedInsertionNonzeroSpan
+#    121 ObservedContainsIupac
+#     11 RefAlleleMismatch
+#      2 ObservedWrongFormat
+
+#TODO: go through those above (esp snp130Errors.bed) and send some bug reports to dbSNP.
+
+
+##############################################################################
+# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP130 (DONE 8/31/09 angie)
+    mkdir /hive/data/genomes/hg19/bed/snp130Ortho
+    cd /hive/data/genomes/hg19/bed/snp130Ortho
+
+    # Following Heather's lead in snp126orthos, filter SNPs to to keep
+    # only those with class=single, length=1, chrom!~random;
+    # Exclude those with exceptions MultipleAlignments,
+    # SingleClassTriAllelic or SingleClassQuadAllelic.
+    # Unlike snp masking, we do not filter for weight -- don't know why.
+    awk '$5 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+      /hive/data/outside/dbSNP/130/human/hg19/snp130Exceptions.bed \
+    | sort -u \
+      > snp130ExcludeIds.txt
+    awk '$3-$2 == 1 && $1 !~ /_random/ && $11 == "single" {print;}' \
+      /hive/data/outside/dbSNP/130/human/hg19/snp130.bed \
+    | grep -vFwf snp130ExcludeIds.txt \
+      > snp130Simple.bed
+#203.193u 9.197s 2:57.40 119.7%  0+0k 0+0io 0pf+0w
+    wc -l snp130Simple.bed
+#12278514 snp130Simple.bed
+
+    # Glom all human info that we need for the final table onto the
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      snp130Simple.bed > snp130ForLiftOver.bed
+    # Map coords to chimp using liftOver.
+    # I don't know why chimp took so much longer than macaque... the
+    # chimp .over has fewer chains and fewer bytes than the macaque .over.
+    mkdir run.liftOChimp
+    cd run.liftOChimp
+    mkdir split out
+    splitFile ../snp130ForLiftOver.bed 25000 split/chunk
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg19/bed/liftOver/hg19ToPanTro2.over.chain.gz \
+        \{check out exists out/panTro2.$f:t.bed\} out/hg19.$f:t.unmapped \
+        >> jobList
+    end
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/snp130Ortho/run.liftOChimp
+    para make jobList
+#Completed: 492 of 492 jobs
+#CPU time in finished jobs:      51793s     863.22m    14.39h    0.60d  0.002 y
+#IO & Wait Time:                  3825s      63.75m     1.06h    0.04d  0.000 y
+#Average job time:                 113s       1.88m     0.03h    0.00d
+#Longest finished job:             286s       4.77m     0.08h    0.00d
+#Submission to last job:           300s       5.00m     0.08h    0.00d
+
+    # Map coords to orangutan using liftOver.
+    mkdir ../run.liftOPon
+    cd ../run.liftOPon
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg19/bed/liftOver/hg19ToPonAbe2.over.chain.gz \
+        \{check out exists out/ponAbe2.$f:t.bed\} out/hg19.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 492 of 492 jobs
+#CPU time in finished jobs:     125656s    2094.26m    34.90h    1.45d  0.004 y
+#IO & Wait Time:                  5413s      90.22m     1.50h    0.06d  0.000 y
+#Average job time:                 266s       4.44m     0.07h    0.00d
+#Longest finished job:             646s      10.77m     0.18h    0.01d
+#Submission to last job:           649s      10.82m     0.18h    0.01d
+
+    # Map coords to macaque using liftOver.
+    mkdir ../run.liftOMac
+    cd ../run.liftOMac
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg19/bed/liftOver/hg19ToRheMac2.over.chain.gz \
+        \{check out exists out/rheMac2.$f:t.bed\} out/hg19.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 492 of 492 jobs
+#CPU time in finished jobs:     161612s    2693.54m    44.89h    1.87d  0.005 y
+#IO & Wait Time:                  6218s     103.63m     1.73h    0.07d  0.000 y
+#Average job time:                 341s       5.69m     0.09h    0.00d
+#Longest finished job:             727s      12.12m     0.20h    0.01d
+#Submission to last job:           739s      12.32m     0.21h    0.01d
+
+    cd /hive/data/genomes/hg19/bed/snp130Ortho
+    # Concatenate the chimp results, sorting by chimp pos in order to
+    # efficiently access 2bit sequence in getOrthoSeq.  The output of
+    # that is then sorted by the glommed human info field, so that we
+    # can use join to combine chimp and macaque results in the next step.
+    # Ditto for macaque and orangutan.  Each command pipe takes ~5 minutes:
+    sort -k1,1 -k2n,2n run.liftOChimp/out/panTro2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/panTro2/panTro2.2bit \
+    | sort > panTro2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOPon/out/ponAbe2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/ponAbe2/ponAbe2.2bit \
+    | sort > ponAbe2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
+    | sort > rheMac2.orthoGlom.txt
+    wc -l panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac2.orthoGlom.txt
+#  11428526 panTro2.orthoGlom.txt
+#  10861969 ponAbe2.orthoGlom.txt
+#   9694237 rheMac2.orthoGlom.txt
+
+    # Use the glommed name field as a key to join up chimp and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom fields from each file, which are in the same order
+    # as the chimp and macaque columns of snp130OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt \
+    | awk '{if ($1 != "?") { print $1, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; } \
+            else           { print $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; }}' \
+      > tmp.txt
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      tmp.txt rheMac2.orthoGlom.txt \
+    | perl -wpe 'chomp; \
+        ($glom12, $glom3, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) = split; \
+        $glomKey = ($glom12 ne "?") ? $glom12 : $glom3; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Start =~ s/^\?$/0/;  $o2Start =~ s/^\?$/0/;  $o3Start =~ s/^\?$/0/; \
+        $o1End   =~ s/^\?$/0/;  $o2End   =~ s/^\?$/0/;  $o3End   =~ s/^\?$/0/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+                         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) . "\n"; \
+        s/^.*$//;' \
+    | sort -k1,1 -k2n,2n > snp130OrthoPt2Pa2Rm2.bed
+#304.434u 27.118s 4:31.30 122.2% 0+0k 0+0io 0pf+0w
+    wc -l snp130OrthoPt2Pa2Rm2.bed
+#11876029 snp130OrthoPt2Pa2Rm2.bed
+
+    cd /hive/data/genomes/hg19/bed/snp130Ortho
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
+      hg19 snp130OrthoPt2Pa2Rm2 snp130OrthoPt2Pa2Rm2.bed
+#Loaded 11876029 elements of size 22
+#75.442u 8.828s 9:50.27 14.2%    0+0k 0+0io 0pf+0w
+
+    # Cleanup fileserver:
+    cd /hive/data/genomes/hg19/bed/snp130Ortho
+    gzip snp130Simple.bed snp130ExcludeIds.txt snp130ForLiftOver.bed &
+    rm -r run*/split tmp.txt *.orthoGlom.txt
+
 
 ##############################################################################
