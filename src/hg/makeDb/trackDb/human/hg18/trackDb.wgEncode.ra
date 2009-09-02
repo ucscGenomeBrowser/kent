@@ -13890,6 +13890,32 @@ wgEncode 1
     type wig 1.00 23454.00
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1_ES rnaExtract=longPolyA type=wig localization=cytosol view=MinusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=459 dateSubmitted=2009-08-31 dateUnrestricted=2010-05-31 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalH1esCytosolLongpolya fileName=wgEncodeGisRnaSeqMinusRawSignalH1esCytosolLongpolya.wig.gz
 
+    track wgEncodeGisRnaSeqAlignmentsK562Cytosol
+    release alpha
+    subTrack wgEncodeGisRnaSeq off
+    shortLabel K562
+    longLabel ENCODE GIS RNA-Seq Tags (in K562 cells)
+    subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type bed 6
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 localization=cytosol view=Alignments dataVersion="ENCODE Fall 2009 Freeze" subId=456 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsK562Cytosol fileName=wgEncodeGisRnaSeqAlignmentsK562Cytosol.tagAlign.gz
+
+    track wgEncodeGisRnaSeqPlusRawSignalK562Cytosol
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel K562 PlusRaw
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal (in K562 cells)
+    subGroups view=PlusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type wig 1.00 13556.00
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 type=wig localization=cytosol view=PlusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=456 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalK562Cytosol fileName=wgEncodeGisRnaSeqPlusRawSignalK562Cytosol.wig.gz
+
+    track wgEncodeGisRnaSeqMinusRawSignalK562Cytosol
+    release alpha
+    subTrack wgEncodeGisRnaSeq
+    shortLabel K562 MinusRaw
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal (in K562 cells)
+    subGroups view=MinusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type wig 1.00 10333.00
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 type=wig localization=cytosol view=MinusRawSignal dataVersion="ENCODE Fall 2009 Freeze" subId=456 dateSubmitted=2009-08-28 dateUnrestricted=2010-05-28 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalK562Cytosol fileName=wgEncodeGisRnaSeqMinusRawSignalK562Cytosol.wig.gz
 
 # GIS DNA Pet (wrangler: mikep)
 
