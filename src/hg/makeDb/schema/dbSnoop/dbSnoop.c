@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.13 2009/02/10 22:21:09 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.14 2009/09/02 18:42:26 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -178,7 +178,7 @@ ti->status = status;
 slAddTail(pTiList, ti);
 
 /* List fields. */
-safef(query, sizeof(query), "describe %s", ti->name);
+safef(query, sizeof(query), "describe `%s`", ti->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -344,7 +344,7 @@ if (unsplit)
 /* Build up information on indexes in this table by processing
  * mysql show indexes command results.  This command returns 
  * a separate row for each field in each index.  We'll group these. */
-safef(query, sizeof(query), "show indexes from %s", tableName);
+safef(query, sizeof(query), "show indexes from `%s`", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
