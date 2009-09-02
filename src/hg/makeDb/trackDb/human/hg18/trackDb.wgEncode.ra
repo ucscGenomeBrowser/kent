@@ -13167,7 +13167,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethylSeq off
     shortLabel HCT-116 2
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in HCT-116 cells)
-    subGroups cellType=HCT-116 replicate=1
+    subGroups cellType=HCT-116 replicate=2
     type bed 9
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
