@@ -21,7 +21,7 @@ set files=""
 
 if ( $#argv != 3 ) then
   echo
-  echo "  gets the date from a table and converts to a touch command."
+  echo "  gets the Update_time from a table and converts to a touch command."
   echo
   echo "    usage:  machine database table(list) "
   echo
