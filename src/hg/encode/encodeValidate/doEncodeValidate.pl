@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.190 2009/09/03 17:46:51 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.191 2009/09/03 18:24:34 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1469,13 +1469,6 @@ if(!@errors) {
         && !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
         && !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
         && ($daf->{dataType} ne 'MethylSeq')) {
-            # hack for case where they have removed RawSignal view in the DAF
-            # - if no (Plus|Minus|)RawSignal is defined, assume RawSignal is required
-            if(!defined($daf->{TRACKS}{RawSignal}{order})
-            && !defined($daf->{TRACKS}{PlusRawSignal}{order})
-            && !defined($daf->{TRACKS}{MinusRawSignal}{order}) ) {
-                $daf->{TRACKS}{RawSignal}{order} = ++$maxOrder;
-            }
             # Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
             my @newViews = ();
             push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};
