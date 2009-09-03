@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.107 2009/08/27 18:05:07 hiram Exp $"
+#	"$Id: mm9.txt,v 1.108 2009/09/03 15:39:32 hartera Exp $"
 #
 
 #######################################################################
@@ -9500,6 +9500,8 @@ see doc/builds.txt for specific details.
 # and protein reports on the details pages. 
 # 2009-08-22 - Finished code for adding Vega report URLs to the details pages.
 # Loaded the vegaGtp table.
+# 2009-09-01 and 2009-09-03 (hartera). Loaded a vegaPep table for the protein
+# sequence link on the details pages.
 
    # Download the VEGA genes for mouse from the ftp site
    # This file is from 03/17/09.
@@ -9578,6 +9580,27 @@ see doc/builds.txt for specific details.
    # Loaded succesfully
    # Added code to hgc.c to use printEnsemblOrVegaCustomUrl() in 
    # doVegaGene() to add the links to Vega reports on the details pages.
+   # Code was added so that there is no protein sequence link on the details
+   # page if it there is none available e.g. noncoding.
+   # 2009-09-01 (hartera)
+   # Coding genes are displaying the message that there is no protein
+   # prediction available. Need to add a vegaPep table.
+   cd /hive/data/genomes/mm9/bed/vega35
+   # Download the protein FASTA file for Vega35
+   wget --timestamping "ftp://ftp.sanger.ac.uk/pub/vega/mouse/pep/*.tot.fa.gz"
+   # from the Ensembl process:
+   zcat Mus_musculus.VEGA.mar.pep.tot.fa.gz  \
+       | sed -e 's/^>.* Transcript:/>/;' | gzip > vegaPep.txt.gz
+   zcat vegaPep.txt.gz \
+       | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+       | sed -e '/^$/d; s/*$//' | sort > vegaPep.mm9.fa.tab
+   # Load table (2009-09-03, hartera)
+   hgPepPred mm9 tab vegaPep vegaPep.mm9.fa.tab
+   # Add vegaPep to the trackDb.ra entry for the vegaGeneComposite track 
+   # in the type line for src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra.
+   # Check that the vegaPep table looks ok and then check protein-coding and 
+   # noncoding transcript details pages for protein links.
+
 ############################################################################
 # Blastz Elephant loxAfr3 (DONE - 2009-08-12 - Hiram)
     mkdir /hive/data/genomes/mm9/bed/lastzLoxAfr3.2009-08-12

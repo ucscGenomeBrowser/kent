@@ -28216,7 +28216,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.378 2009/08/23 04:14:05 hartera Exp $
+# $Id: hg18.txt,v 1.379 2009/09/03 15:39:14 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28264,7 +28264,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.378 2009/08/23 04:14:05 hartera Exp $
+# $Id: hg18.txt,v 1.379 2009/09/03 15:39:14 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28627,6 +28627,8 @@ see doc/builds.txt for specific details.
 # and protein reports on the details pages. 
 # 2009-08-22 - Finished code for adding Vega report URLs to the details pages.
 # Loaded the vegaGtp table.
+# 2009-09-01 - 2009-09-02 (hartera). Loaded a vegaPep table for the protein
+# sequence link on the details pages.
 
     mkdir /hive/data/genomes/hg18/bed/vega35
     cd /hive/data/genomes/hg18/bed/vega35
@@ -28699,5 +28701,22 @@ see doc/builds.txt for specific details.
     # Loaded succesfully
     # Added code to hgc.c to use printEnsemblOrVegaCustomUrl() in 
     # doVegaGene() to add the links to Vega reports on the details pages.
-
+    # Code was added so that there is no protein sequence link on the details
+    # page if it there is none available e.g. noncoding.
+    # 2009-09-01 - 2009-09-02 (hartera)
+    # Coding genes are displaying the message that there is no protein
+    # prediction available. Need to add a vegaPep table.
+    cd /hive/data/genomes/hg18/bed/vega35
+    # from the Ensembl process:
+    zcat Homo_sapiens.VEGA.mar.pep.tot.fa.gz  \
+        | sed -e 's/^>.* Transcript:/>/;' | gzip > vegaPep.txt.gz
+    zcat vegaPep.txt.gz \
+         | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+         | sed -e '/^$/d; s/*$//' | sort > vegaPep.hg18.fa.tab
+    # Load table
+    hgPepPred hg18 tab vegaPep vegaPep.hg18.fa.tab
+    # Add vegaPep to the trackDb.ra entry for the vegaGeneComposite track 
+    # in the type line for src/hg/makeDb/trackDb/human/hg18/trackDb.ra.
+    # Check that the vegaPep table looks ok and then check protein-coding and 
+    # noncoding transcript details pages for protein links.
 ############################################################################
