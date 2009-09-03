@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.189 2009/08/28 21:49:23 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.190 2009/09/03 17:46:51 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -72,6 +72,7 @@ our $maxBedRows=80_000_000; # number of rows to allow in a bed-type file
 our %tableNamesUsed;
 our ($grants, $fields, $daf);
 our $SORT_BUF = " -S 5G ";
+our $assembly = "hg18";
 
 sub usage {
     print STDERR <<END;
@@ -660,8 +661,8 @@ sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $paramList = validationSettings("validateFiles","tagAlign");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -chromDb=hg18 -type=tagAlign $file"]);
+    my $paramList = validationSettings("validateFiles","tagAlign",$assembly);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=tagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateTagAlign : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -705,8 +706,8 @@ sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $paramList = validationSettings("validateFiles","broadPeak");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -chromDb=hg18 -type=broadPeak $file"]);
+    my $paramList = validationSettings("validateFiles","broadPeak",$assembly);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -1090,26 +1091,45 @@ sub printCompositeTdbSettings {
 
 sub validationSettings {
     # parse validationSettings: "validationSettings allowReloads;validateFiles.tagAlign:mmCheckOnInN=100,mismatches=3"
-    my ($type, $fileType) = @_;
+    my ($type, $fileType, $genome ) = @_;
+    my $chrom=1;
+    my $align=1;
 
     my @set = split('\;', $daf->{validationSettings});
     if($type eq "validateFiles") {
+        my $paramList = "";
         for my $setting (@set) {
             if($setting =~ /^validateFiles\./) {
                 my @pair = split('\:',$setting,2);
                 my @subTypes = split('\.',$pair[0],2);
                 if($fileType eq $subTypes[1]) {
-                    my $paramList = "";
                     my @params = split('\,',$pair[1]);
                     for my $param (@params) {
-                        $paramList .= " -" . $param;
+                        if ($param eq "ignoreAlignment") {
+                            $align = 0;
+                        } elsif ($param eq "ignoreChromLen") {
+                            $chrom = 0;
+                        } else {
+                            $paramList .= " -" . $param;
+                        }
                     }
-                    HgAutomate::verbose(2, "validationSettings $type $fileType params: $paramList\n");
-                    return $paramList;
+                    last;
+                    #return $paramList;
                 }
             }
         }
-        return "";
+        if($genome) {
+            if($align) {
+                $paramList .= " -genome=/cluster/data/$genome/$genome.2bit";
+            }
+            if($chrom) {
+                $paramList .= " -chromDb=$genome";
+            }
+        }
+        if ($paramList ne "") {
+            HgAutomate::verbose(2, "validationSettings $type $fileType params:$paramList\n");
+        }
+        return $paramList;
     } else {
         for my $setting (@set) {
             if($setting eq $type) {
@@ -1245,6 +1265,7 @@ if($opt_validateDaf) {
 }
 
 $daf = Encode::getDaf($submitDir, $grants, $fields);
+$assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
