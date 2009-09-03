@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.191 2009/09/03 18:24:34 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.192 2009/09/03 22:20:55 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1095,46 +1095,48 @@ sub validationSettings {
     my $chrom=1;
     my $align=1;
 
-    my @set = split('\;', $daf->{validationSettings});
-    if($type eq "validateFiles") {
-        my $paramList = "";
-        for my $setting (@set) {
-            if($setting =~ /^validateFiles\./) {
-                my @pair = split('\:',$setting,2);
-                my @subTypes = split('\.',$pair[0],2);
-                if($fileType eq $subTypes[1]) {
-                    my @params = split('\,',$pair[1]);
-                    for my $param (@params) {
-                        if ($param eq "ignoreAlignment") {
-                            $align = 0;
-                        } elsif ($param eq "ignoreChromLen") {
-                            $chrom = 0;
-                        } else {
-                            $paramList .= " -" . $param;
+    if($daf->{validationSettings}) {
+        my @set = split('\;', $daf->{validationSettings});
+        if($type eq "validateFiles") {
+            my $paramList = "";
+            for my $setting (@set) {
+                if($setting =~ /^validateFiles\./) {
+                    my @pair = split('\:',$setting,2);
+                    my @subTypes = split('\.',$pair[0],2);
+                    if($fileType eq $subTypes[1]) {
+                        my @params = split('\,',$pair[1]);
+                        for my $param (@params) {
+                            if ($param eq "ignoreAlignment") {
+                                $align = 0;
+                            } elsif ($param eq "ignoreChromLen") {
+                                $chrom = 0;
+                            } else {
+                                $paramList .= " -" . $param;
+                            }
                         }
+                        last;
+                        #return $paramList;
                     }
-                    last;
-                    #return $paramList;
                 }
             }
-        }
-        if($genome) {
-            if($align) {
-                $paramList .= " -genome=/cluster/data/$genome/$genome.2bit";
+            if($genome) {
+                if($align) {
+                    $paramList .= " -genome=/cluster/data/$genome/$genome.2bit";
+                }
+                if($chrom) {
+                    $paramList .= " -chromDb=$genome";
+                }
             }
-            if($chrom) {
-                $paramList .= " -chromDb=$genome";
+            if ($paramList ne "") {
+                HgAutomate::verbose(2, "validationSettings $type $fileType params:$paramList\n");
             }
-        }
-        if ($paramList ne "") {
-            HgAutomate::verbose(2, "validationSettings $type $fileType params:$paramList\n");
-        }
-        return $paramList;
-    } else {
-        for my $setting (@set) {
-            if($setting eq $type) {
-                HgAutomate::verbose(2, "validationSettings $type found\n");
-                return 1;
+            return $paramList;
+        } else {
+            for my $setting (@set) {
+                if($setting eq $type) {
+                    HgAutomate::verbose(2, "validationSettings $type found\n");
+                    return 1;
+                }
             }
         }
     }
