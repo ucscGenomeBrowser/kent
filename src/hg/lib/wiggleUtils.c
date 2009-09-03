@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.54 2009/08/24 20:39:53 braney Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.55 2009/09/03 23:12:10 braney Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -234,7 +234,10 @@ else
     safef(query, ArraySize(query),
 	"SELECT span from %s where chrom = '%s' limit 1", table, chrom);
     char *tmpSpan = sqlQuickString(conn, query);
-    minSpan = sqlUnsigned(tmpSpan);
+    // if there's no data on this chrom just return 1 arbitrarily
+    minSpan = 1;  
+    if (tmpSpan != NULL)
+	minSpan = sqlUnsigned(tmpSpan);
     }
 
 freeHash(&spans);
