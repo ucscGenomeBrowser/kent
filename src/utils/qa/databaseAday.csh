@@ -112,7 +112,7 @@ if ( $choice == "init" ) then
   echo "DO-OVER" >> $outPath/databaseAdayList 
 
   # give the file the correct permissions
-  chmod 774 $outfile/databaseAdayList
+  chmod 774 $outPath/databaseAdayList
   exit 0
 endif
 
