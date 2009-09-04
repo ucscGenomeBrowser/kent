@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.8 2009/08/27 16:38:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.9 2009/09/04 18:25:50 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -638,7 +638,7 @@ boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,i
    returns TRUE if successfully defined as having a portal */
 {
 if( (int)imageMultiple == 0)
-    imageMultiple = 3;
+    imageMultiple = IMAGEv2_DRAG_SCROLL_SZ;
 
 imgBox->portalStart = imgBox->chromStart;
 imgBox->portalEnd   = imgBox->chromEnd;
@@ -646,7 +646,7 @@ imgBox->portalWidth = imgBox->width - imgBox->sideLabelWidth;
 imgBox->showPortal  = FALSE; // Guilty until proven innocent
 
 int positionWidth = (int)((imgBox->portalEnd - imgBox->portalStart) * imageMultiple);
-*chromStart = imgBox->chromStart - (int)(positionWidth/imageMultiple);
+*chromStart = imgBox->portalStart - (int)(((imageMultiple - 1)/2) * (imgBox->portalEnd - imgBox->portalStart));
 if( *chromStart < 0)
     *chromStart = 0;
 *chromEnd = *chromStart + positionWidth;
@@ -665,18 +665,25 @@ if (*chromEnd > (int)(chrInfo->size))  // Bound by chrom length
         *chromStart = 0;
     }
 // TODO: Normalize to power of 10 boundary
+// Normalize portal ends
+int diff = *chromStart - imgBox->portalStart;
+if(diff < 10 && diff > -10)
+    *chromStart = imgBox->portalStart;
+diff = *chromEnd - imgBox->portalEnd;
+if(diff < 10 && diff > -10)
+    *chromEnd = imgBox->portalEnd;
+
 double growthOfImage = (*chromEnd - *chromStart)/(imgBox->portalEnd - imgBox->portalStart);
 *imgWidth = (imgBox->portalWidth * growthOfImage) + imgBox->sideLabelWidth;
 
-if(imgBox->portalStart <  *chromStart || imgBox->portalStart >= *chromEnd
-|| imgBox->portalEnd   <= *chromStart || imgBox->portalEnd   >  *chromEnd
-|| imgBox->portalWidth >= *imgWidth)
-    {
-    *imgWidth   = imgBox->width;  // Undo damage
-    *chromStart = imgBox->chromStart;
-    *chromEnd   = imgBox->chromEnd;
-    return FALSE;
-    }
+//if(imgBox->portalStart < *chromStart || imgBox->portalEnd > *chromEnd
+//|| imgBox->portalWidth > *imgWidth)
+//    {
+//    *imgWidth   = imgBox->width;  // Undo damage
+//    *chromStart = imgBox->chromStart;
+//    *chromEnd   = imgBox->chromEnd;
+//    return FALSE;
+//    }
 imgBox->width      = *imgWidth;
 imgBox->chromStart = *chromStart;
 imgBox->chromEnd   = *chromEnd;
@@ -1014,6 +1021,7 @@ if(imgBox->showPortal && imgBox->basesPerPixel > 0
     }
 
 hPrintf(" <div style='width:%dpx; height:%dpx; overflow:hidden;'",width,slice->height);
+#ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal && slice->type==isData)
     {
     if(scrollHandle)
@@ -1021,14 +1029,10 @@ if(imgBox->showPortal && slice->type==isData)
     else
         hPrintf(" class='panDiv'");
     }
+#endif //def IMAGEv2_DRAG_SCROLL
 hPrintf(">\n");
 
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
-//#define NO_MAP_SCROLLER
-#ifdef NO_MAP_SCROLLER
-if(imgBox->showPortal && scrollHandle)
-    map = NULL;
-#endif//def NO_MAP_SCROLLER
 if(map)
     imageMapDraw(map,name);
 
@@ -1041,8 +1045,10 @@ if(slice->type==isSide)
     hPrintf(" class='sideLab'");
 else if(slice->type==isCenter)
     hPrintf(" class='centerLab'");
+#ifdef IMAGEv2_DRAG_SCROLL
 else if(slice->type==isData && imgBox->showPortal)
     hPrintf(" class='panImg' ondrag='{return false;}'");
+#endif //def IMAGEv2_DRAG_SCROLL
 //hPrintf(" title='[%s] width:%d  height: %d  offsetX: %d  offsetY: %d'",
 //        sliceTypeToString(slice->type),slice->width,slice->height,slice->offsetX,slice->offsetY);
 if(slice->title != NULL)
@@ -1074,6 +1080,7 @@ hPrintf(".dragHandle {cursor: s-resize;}\n");
 hPrintf("div.dragZoom {cursor: text;}\n");
 hPrintf("</style>\n");
 
+#ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
     {
     hPrintf("<script type='text/javascript'>var imgBoxPortal=true;");
@@ -1084,12 +1091,8 @@ if(imgBox->showPortal)
     hPrintf("var imgBoxLeftLabel=%d;var imgBoxPortalOffsetX=%d;var imgBoxBasesPerPixel=%lf;</script>\n",
             (imgBox->plusStrand?imgBox->sideLabelWidth:0),
             (int)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel),imgBox->basesPerPixel);
-    //warn("image(%d-%d,%d)\nportal(%d-%d,%d)\nleftLimit:%d offsetX:%d basesPerPixel:%g",
-    //        imgBox->chromStart, imgBox->chromEnd,(imgBox->width - imgBox->sideLabelWidth),
-    //        imgBox->portalStart, imgBox->portalEnd, imgBox->portalWidth,
-    //        (imgBox->plusStrand?imgBox->sideLabelWidth:0),
-    //        (int)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel),imgBox->basesPerPixel);
     }
+#endif//def IMAGEv2_DRAG_SCROLL
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0");
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);

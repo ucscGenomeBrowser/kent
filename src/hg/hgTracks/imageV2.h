@@ -1,17 +1,22 @@
 /* imageV2 - API for creating the image V2 features. */
 
-// UNCOMMENT IMAGEv2_UI to have the new image with dragReorder
-// also UNCOMMENT IMAGEv2_UI_PORTAL to allow dragScroll
+// UNCOMMENT IMAGEv2_UI to have the new imgBox (aka imgTbl)
+// also UNCOMMENT IMAGEv2_DRAG_REORDER to allow dragReorder
+//  and/or UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
+//  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
+//        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
 //#define IMAGEv2_UI
-#define IMAGEv2_USE_PORTAL
-#define IMAGEv2_DRAG_REORDER
+//#define IMAGEv2_DRAG_REORDER
+//#define IMAGEv2_DRAG_SCROLL
+//#define IMAGEv2_DRAG_SCROLL_SZ 3
 
 // CURRENT PROBLEMS:
+// o some map items span both sideLabel and data!!
 // o subrtacks should be dragReorderable!!!  Make them individual imgTracks
 // o centerlabel next feature '>>' arrows are scrolled off screen: fix when centerlabels are small and don't scroll
 // o subtrack center labels currently scroll with portal: fixed with subtracks being individual imgTracks
 // o image should be clear and background image should contain stripes
-// o Ambitious?  Dynamic height for data/label based on image map currently in portal: problem if map does not cover.
+// o Dynamic height for data/label based on image map currently in portal: DONE for packed, but full map items span all of data slice!
 
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
