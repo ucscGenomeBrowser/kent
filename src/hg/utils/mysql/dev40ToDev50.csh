@@ -1,13 +1,13 @@
 #!/bin/csh -fe
 
-# 	$Id: dev40ToDev50.csh,v 1.1 2009/09/04 17:15:23 hiram Exp $
+# 	$Id: dev40ToDev50.csh,v 1.2 2009/09/04 17:17:16 hiram Exp $
 
 if ( $#argv < 2 || $#argv > 3 ) then
     echo "usage: dev40ToDev50.csh [option] <db> <tableName>"
     echo "option:"
     echo "-replace - in the case where <tableName> already exists"
     echo "           to cause a drop and reload of the table."
-    echo "e.g.: dev40ToDev50.csh -replace hg19 trackDb"
+    echo "e.g.: dev40ToDev50.csh -replace hg18 grp"
     exit 255
 endif
 
