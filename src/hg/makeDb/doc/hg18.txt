@@ -28216,7 +28216,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.379 2009/09/03 15:39:14 hartera Exp $
+# $Id: hg18.txt,v 1.380 2009/09/04 16:51:03 hartera Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28264,7 +28264,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.379 2009/09/03 15:39:14 hartera Exp $
+# $Id: hg18.txt,v 1.380 2009/09/04 16:51:03 hartera Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28616,7 +28616,7 @@ see doc/builds.txt for specific details.
     hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 sfrs1ConsensusSites sfrs1ConsensusSites.wig
     ln -s $(pwd -P)/sfrs1ConsensusSites.wib /gbdb/hg18/wib/
 ############################################################################
-# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-08-04, hartera)
+# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-08-04 - 2009-09-04, hartera)
 # Needs updating as the current version is build 33.
 # Download the human VEGA Genes posted on ftp site on 2009-03-31
 # 2009-08-03 (hartera) - Added code to register track handler for
@@ -28629,6 +28629,8 @@ see doc/builds.txt for specific details.
 # Loaded the vegaGtp table.
 # 2009-09-01 - 2009-09-02 (hartera). Loaded a vegaPep table for the protein
 # sequence link on the details pages.
+# 2009-08-04 Re-load all tables as some reverted to the older version during
+# mySQL 5 upgrade.
 
     mkdir /hive/data/genomes/hg18/bed/vega35
     cd /hive/data/genomes/hg18/bed/vega35
@@ -28719,4 +28721,17 @@ see doc/builds.txt for specific details.
     # in the type line for src/hg/makeDb/trackDb/human/hg18/trackDb.ra.
     # Check that the vegaPep table looks ok and then check protein-coding and 
     # noncoding transcript details pages for protein links.
+    # 2009-09-04, hartera
+    # Re-load tables after upgrade to mySQL 5 as they had reverted back to 
+    # tables with the previous Vega dataset.
+    
+    cd /hive/data/genomes/hg18/bed/vega35
+    hgsql -e 'drop table vegaGene;' hg18
+    hgsql -e 'drop table vegaPseudoGene;' hg18
+    hgLoadGenePred -genePredExt hg18 vegaGene not.pseudo.gp
+    hgLoadGenePred -genePredExt hg18 vegaPseudoGene pseudo.gp
+    hgsql -e 'drop table vegaGtp;' hg18
+    hgLoadSqlTab hg18 vegaGtp ensGtp.sql vegaGtp.tab
+    hgsql -e 'drop table vegaPep;' hg18
+    hgPepPred hg18 tab vegaPep vegaPep.hg18.fa.tab
 ############################################################################
