@@ -1,6 +1,6 @@
 #!/bin/csh -fe
 
-# 	$Id: dumpDev40.csh,v 1.2 2009/09/04 17:41:55 hiram Exp $
+# 	$Id: dumpDev40.csh,v 1.3 2009/09/04 17:48:18 hiram Exp $
 
 if ( $#argv != 2  ) then
     echo "usage: dumpDev40.csh <db> <tableName>"
@@ -27,7 +27,7 @@ set HGSQL = "hgsql -P 3366 -h${SQL_SRC_HOST}"
 setenv HGDB_HOST ${SQL_SRC_HOST}
 setenv HGDB_USER hguser
 setenv HGDB_PASSWORD hguserstuff
-setenv HGDB_CONF $HOME/.hg.dev40.conf
+setenv HGDB_CONF /cluster/home/hiram/.hg.dev40.conf
 
 # Verify we are talking to the correct host during hgsql commands
 set TEST_HOST = `${HGSQL} -N -e "show variables;" mysql | egrep "host|pid" | grep -v "^pid_file" | sed -e "s#hostname\t##; s#pid_file\t/var/lib/mysql/##; s# pid_file /data.*##; s#.pid##; s#pid_file\t/var/mysql/5.0/data/##" | sort -u`
