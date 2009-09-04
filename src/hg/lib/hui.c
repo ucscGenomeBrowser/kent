@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.234 2009/09/04 18:05:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.235 2009/09/04 23:42:37 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1392,6 +1392,20 @@ void wiggleGraphDropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions),
 	curVal);
+}
+
+static char *wiggleAlwaysZeroOptions[] = {
+    "ON",
+    "OFF"
+    };
+
+enum wiggleAlwaysZeroEnum wiggleAlwaysZeroToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleAlwaysZeroOptions);
+if (x < 0)
+   errAbort("hui::wiggleAlwaysZeroToEnum() - Unknown option %s", string);
+return x;
 }
 
 /****** Options for the wiggle track horizontal grid lines *******/
@@ -3307,6 +3321,7 @@ double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
 int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
+char *alwaysZero = NULL;    /* Always include 0 in range */
 char *lineBar;  /*  Line or Bar graph */
 char *autoScale;    /*  Auto scaling on or off */
 char *windowingFunction;    /*  Maximum, Mean, or Minimum */
@@ -3325,6 +3340,7 @@ wordCount = chopLine(typeLine,words);
 wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 freeMem(typeLine);
 
+(void) wigFetchAlwaysZeroWithCart(cart,tdb,name, &alwaysZero);
 (void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
 (void) wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
 (void) wigFetchGraphTypeWithCart(cart,tdb,name, &lineBar);
@@ -3365,6 +3381,9 @@ puts("</TD></TR>");
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 snprintf(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 wiggleScaleDropDown(option, autoScale);
+snprintf(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
+printf("Always include zero:&nbsp");
+wiggleGridDropDown(option, alwaysZero);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
