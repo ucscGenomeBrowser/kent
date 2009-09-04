@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.233 2009/08/31 18:19:44 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.234 2009/09/04 18:05:31 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4139,8 +4139,9 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if(sameString("wgEncodeSangerGencode", name)
-|| (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
+else if(sameString("wgEncodeGencode", name)
+     || sameString("wgEncodeSangerGencode", name)
+     || (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
     {
     printf("<B>Label:</B> ");
     safef(varName, sizeof(varName), "%s.label", name);
