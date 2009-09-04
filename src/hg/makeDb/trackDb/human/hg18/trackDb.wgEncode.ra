@@ -11960,7 +11960,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     release alpha
     subTrack wgEncodeGencode
     shortLabel Gencode Manual
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
+    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (July 2009)
     #accession 2008-10-01
     type genePred
     priority 1
@@ -11972,7 +11972,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     release alpha
     subTrack wgEncodeGencode
     shortLabel Gencode Auto
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
+    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (July 2009)
     #accession 2008-10-01
     type genePred
     priority 2
@@ -11984,11 +11984,45 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     release alpha
     subTrack wgEncodeGencode off
     shortLabel Gencode PolyA
-    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
+    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (July 2009)
     #accession 2008-10-01
     type genePred
     priority 3
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
+
+# NOTE: search specs should eventually replace the Rel2 version!  But is there a "release alpha" for these?
+searchName wgEncodeGencodeManualV3
+searchTable wgEncodeGencodeManualV3
+searchMethod exact
+searchType genePred
+termRegex (ENST[0-9]+|OTTHUMT[0-9]+)
+#termRegex ENST[0-9]+
+#termRegex OTTHUMT[0-9]+
+searchPriority 2.2
+
+searchName wgEncodeGencodeAutoV3
+searchTable wgEncodeGencodeAutoV3
+searchMethod exact
+searchType genePred
+termRegex ENST[0-9]+
+searchPriority 2.3
+
+searchName wgEncodeGencodeManualV3Gene
+searchTable wgEncodeGencodeManualV3
+searchMethod exact
+searchType genePred
+#termRegex [a-z][a-z0-9][0-9]+
+searchPriority 2.4
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeAutoV3Gene
+searchTable wgEncodeGencodeAutoV3
+searchMethod exact
+searchType genePred
+#termRegex [a-z][a-z0-9][0-9]+
+searchPriority 2.5
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
 
 track wgEncodeSangerGencode
 release beta
@@ -12063,6 +12097,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 3
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
 
+# NOTE: Rel2 search specs should be replaced by the V3 version!  But is there a "release beta" for these?
 searchName wgEncodeGencodeManual
 searchTable wgEncodeGencodeManualRel2
 searchMethod exact
