@@ -6225,6 +6225,51 @@ wgEncode 1
     metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 
 
+# Yale ChIP-seq and RNA-seq (wrangler: tdreszer)
+track wgEncodeYaleRNAseq
+release alpha
+compositeTrack on
+shortLabel Yale PolyA
+longLabel ENCODE Poly-A Tail Expression by RNA-seq from Yale/UC-Davis/Harvard
+group expression
+priority 0
+type bed 3
+useScore 1
+origAssembly hg18
+subGroup1 view Views Signal=Signal zRAW=Raw_Signal
+subGroup2 cellType Cell_Line t1K562=K562_<i>Tier1</i>
+#dimensions dimensionX=cellType
+allButtonPair on
+#sortOrder cellType=+ view=+
+dragAndDrop subTracks
+visibilityViewDefaults Signal=full zRAW=hide
+controlledVocabulary encode/cv.ra cellType=cell
+noInherit on
+settingsByView Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+dataVersion ENCODE Feb 2009 Freeze
+wgEncode 1
+
+    track wgEncodeYaleRnaSeqPolyaSignalK562
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel K562 RNAseq Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
+    subGroups view=Signal cellType=t1K562
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
+
+    track wgEncodeYaleRnaSeqPolyaRawSignalK562
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel K562 RNAseq Raw
+    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Raw Signal (in K562 cells)
+    subGroups view=zRAW cellType=t1K562
+    type wig 1.00 65508.00
+    spanList first
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=331 dateSubmitted=2009-03-17 dateRegenerated=2009-05-08 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
+
 # Yale ChIP-seq (wrangler: tdreszer)
 track wgEncodeYaleChIPseq
 release alpha
@@ -8425,26 +8470,26 @@ wgEncode 1
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=K562 antibody=c-Myc treatment=IFNg6h type=wig fragLength=200 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=365 dateSubmitted=2009-06-09 dateUnrestricted=2010-03-09 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2K562Ifng6hCmyc fileName=wgEncodeYaleChIPseqRawSignalRep2K562Ifng6hCmyc.wig.gz
 
-    track wgEncodeYaleRnaSeqPolyaSignalK562
-    release alpha
-    subTrack wgEncodeYaleChIPseq
-    shortLabel K562 RNAseq Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
-    subGroups view=Signal factor=yRNAseq cellType=t1K562
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaRawSignalK562
-    release alpha
-    subTrack wgEncodeYaleChIPseq
-    shortLabel K562 RNAseq Raw
-    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Raw Signal (in K562 cells)
-    subGroups view=zRAW factor=yRNAseq cellType=t1K562
-    type wig 1.00 65508.00
-    spanList first
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=331 dateSubmitted=2009-03-17 dateRegenerated=2009-05-08 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
+#    track wgEncodeYaleRnaSeqPolyaSignalK562
+#    release alpha
+#    subTrack wgEncodeYaleChIPseq
+#    shortLabel K562 RNAseq Sig
+#    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
+#    subGroups view=Signal factor=yRNAseq cellType=t1K562
+#    type bedGraph 4
+#    color 46,0,184
+#    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
+#
+#    track wgEncodeYaleRnaSeqPolyaRawSignalK562
+#    release alpha
+#    subTrack wgEncodeYaleChIPseq
+#    shortLabel K562 RNAseq Raw
+#    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Raw Signal (in K562 cells)
+#    subGroups view=zRAW factor=yRNAseq cellType=t1K562
+#    type wig 1.00 65508.00
+#    spanList first
+#    color 46,0,184
+#    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 type=wig view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=331 dateSubmitted=2009-03-17 dateRegenerated=2009-05-08 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRnaSeqPolya tableName=wgEncodeYaleRnaSeqPolyaRawSignalK562 fileName=wgEncodeYaleRnaSeqPolyaRawSignalK562.wig.gz
 
     track wgEncodeYaleChIPseqSignalRep1K562InputV2
     release alpha
