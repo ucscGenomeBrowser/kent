@@ -42,10 +42,12 @@ if ( $#argv == 2 ) then
   set outPath=$argv[2]
 endif
 
-if ( $choice != "today" && $choice != "yesterday" && $choice != "init" \
-     && $choice != "next") then
+# check values of choice
+echo $choice | egrep -wq "today|yesterday|init|next"
+if ( $status ) then
   echo
-  echo " you must call this script using either 'today', 'yesterday', 'init' or 'next'"
+  echo " you must call this script using either 'today', 'yesterday', \
+    'init' or 'next'"
   echo
   exit 1
 endif
@@ -110,7 +112,7 @@ if ( $choice == "init" ) then
   echo "DO-OVER" >> $outPath/databaseAdayList 
 
   # give the file the correct permissions
-  chmod 774 databaseAdayList
+  chmod 774 $outfile/databaseAdayList
   exit 0
 endif
 
