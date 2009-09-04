@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.99 2009/08/28 17:11:09 hartera Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.100 2009/09/04 18:02:33 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -11223,6 +11223,7 @@ registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
+registerTrackHandler("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandler("wgEncodeSangerGencode", gencodeGeneMethods);
 registerTrackHandler("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandler("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
