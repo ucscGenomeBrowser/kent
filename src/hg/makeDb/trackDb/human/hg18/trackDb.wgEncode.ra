@@ -931,7 +931,7 @@ dataVersion ENCODE Feb 2009 Freeze
     shortLabel HUVEC H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
-    type wig 1.00 7138.00 
+    type wig 1.00 7138.00
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeqRel2 cell=HUVEC antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=332 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 dateRegenerated=2009-05-15 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRel2RawSignalRep1HuvecH3k4me2 fileName=wgEncodeBroadChipSeqRel2RawSignalRep1HuvecH3k4me2.wig.gz
 
@@ -3836,7 +3836,7 @@ group expression
 subGroup1 cellType Cell_Line GM06990=GM06990 SKMC=SKMC K562=K562 HepG2=HepG2 HeLaS3=HeLa-S3 Th1=Th1 SKNSHRA=SK-N-SH_RA Caco2=Caco-2 HRE=HRE HRCEpiC=HRCEpiC
 subGroup2 replicate Replicate 1=1 2=2
 dimensions dimensionX=cellType dimensionY=replicate
-sortOrder cellType=+ replicate=+ 
+sortOrder cellType=+ replicate=+
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibility dense
@@ -11915,7 +11915,83 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 
 #  GENCODE genes (wrangler: tdreszer)
 
+track wgEncodeGencode
+release alpha
+compositeTrack on
+shortLabel Gencode Genes
+longLabel ENCODE Gencode Gene Annotations
+group genes
+visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
+dragAndDrop subTracks
+priority 34
+#visibility pack
+color 12,12,120
+type genePred
+hgGene on
+hgsid on
+baseColorUseCds given
+baseColorDefault genomicCodons
+wgEncode 1
+cdsDrawDefault genomic\ codons
+itemClassTbl wgEncodeGencodeClassesV3
+geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_non_coding Ensembl_processed_pseudogene Ensembl_unprocessed_pseudogene Ensembl_pseudogene Ensembl_RNA
+gClass_Validated_coding 0,0,255
+gClass_Validated_processed 51,153,255
+gClass_Validated_processed_pseudogene 85,34,170
+gClass_Validated_unprocessed_pseudogene 102,17,255
+gClass_Validated_pseudogene 153,102,255
+gClass_Havana_coding 153,51,0
+gClass_Havana_non_coding 254,154,46
+gClass_Havana_nonsense 223,116,1
+gClass_Havana_polyA 0,0,0
+gClass_Havana_processed_pseudogene 153,0,102
+gClass_Havana_unprocessed_pseudogene 180,4,174
+gClass_Havana_pseudogene 255,51,255
+gClass_Havana_TEC 102,102,102
+gClass_Ensembl_coding 223,1,1
+gClass_Ensembl_non_coding 254,46,46
+gClass_Ensembl_processed_pseudogene 127,70,44
+gClass_Ensembl_unprocessed_pseudogene 195,98,65
+gClass_Ensembl_pseudogene 196,116,81
+gClass_Ensembl_RNA 194,70,65
+filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_non_coding,Havana_nonsense,Havana_polyA,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Ensembl_coding,Ensembl_non_coding,Ensembl_processed_pseudogene,Ensembl_unprocessed_pseudogene,Ensembl_pseudogene,Ensembl_RNA transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,IG_C_gene,IG_D_gene,IG_J_gene,IG_pseudogene,IG_V_gene,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,TR_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+
+    track wgEncodeGencodeManualV3
+    release alpha
+    subTrack wgEncodeGencode
+    shortLabel Gencode Manual
+    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
+    #accession 2008-10-01
+    type genePred
+    priority 1
+    url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
+    urlLabel Vega Transcript:
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
+
+    track wgEncodeGencodeAutoV3
+    release alpha
+    subTrack wgEncodeGencode
+    shortLabel Gencode Auto
+    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
+    #accession 2008-10-01
+    type genePred
+    priority 2
+    #url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$ ### can't do this because tRNAs do not have Ensembl ids
+    #urlLabel Ensembl Transcript:
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
+
+    track wgEncodeGencodePolyaV3
+    release alpha
+    subTrack wgEncodeGencode off
+    shortLabel Gencode PolyA
+    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
+    #accession 2008-10-01
+    type genePred
+    priority 3
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
+
 track wgEncodeSangerGencode
+release beta
 compositeTrack on
 shortLabel Gencode Genes
 longLabel ENCODE Gencode Gene Annotations
@@ -11937,30 +12013,24 @@ itemClassTbl wgEncodeGencodeClassesRel2
 geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_RNA Ensembl_pseudogene
 gClass_Validated_coding 0,0,255
 gClass_Validated_processed 51,153,255
-#gClass_Validated_coding 174,180,4        #  Dark Yellow
-#gClass_Validated_processed 255,255,0     # Light Yellow
-#gClass_Validated_coding 128,255,00       #  Dark Green:#04B404  4,180,4
-#gClass_Validated_processed 255,255,0     # Light Green:#80FF00  128,255,00
 gClass_Validated_processed_pseudogene 85,34,170
 gClass_Validated_unprocessed_pseudogene 102,17,255
 gClass_Validated_pseudogene 153,102,255
 gClass_Havana_coding 153,51,0
-gClass_Havana_nonsense 223,116,1
 gClass_Havana_non_coding 254,154,46
-#gClass_Havana_non_coding 247,190,129 # Light Orange
+gClass_Havana_nonsense 223,116,1
+gClass_Havana_polyA 0,0,0
 gClass_Havana_processed_pseudogene 153,0,102
 gClass_Havana_unprocessed_pseudogene 180,4,174
 gClass_Havana_pseudogene 255,51,255
-#gClass_Havana_pseudogene 247,129,243 # Light Pink
 gClass_Havana_TEC 102,102,102
-gClass_Havana_polyA 0,0,0
 gClass_Ensembl_coding 223,1,1
-gClass_Ensembl_RNA 254,46,46
 gClass_Ensembl_pseudogene 153,0,102
+gClass_Ensembl_RNA 254,46,46
 filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_nonsense,Havana_non_coding,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Havana_polyA,Ensembl_coding,Ensembl_RNA,Ensembl_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,C_segment,IG_gene,IG_pseudogene,J_segment,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,non_coding,nonsense_mediated_decay,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,V_segment,unitary_pseudogene,unprocessed_pseudogene
 
     track wgEncodeGencodeManualRel2
-    #release alpha
+    release beta
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Feb 2009)
@@ -11972,7 +12042,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
 
     track wgEncodeGencodeAutoRel2
-    #release alpha
+    release beta
     subTrack wgEncodeSangerGencode
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Feb 2009)
@@ -11984,7 +12054,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
 
     track wgEncodeGencodePolyaRel2
-    #release alpha
+    release beta
     subTrack wgEncodeSangerGencode off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Feb 2009)
@@ -12039,7 +12109,7 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults Alignments=pack 
+visibilityViewDefaults Alignments=pack
 noInherit on
 priority 0
 type bed 3
@@ -12456,7 +12526,7 @@ group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
 subGroup2 replicate Replicate 1=1 2=2
 dimensions dimensionX=cellType dimensionY=replicate
-sortOrder cellType=+ replicate=+ 
+sortOrder cellType=+ replicate=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType=cell
@@ -12563,16 +12633,16 @@ noInherit on
 wgEncode 1
 dateSubmitted 2008-12-04
 subGroup1 view Views Regions=Regions Signal=Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 
-dimensions dimensionX=cellType 
+subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562
+dimensions dimensionX=cellType
 sortOrder cellType=+
 minLimit -7
 maxLimit 2
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
-visibilityViewDefaults Regions=dense Signal=hide 
+visibilityViewDefaults Regions=dense Signal=hide
 settingsByView Signal:maxHeightPixels=100:32:16
-noScoreFilter .
+noScoreFilter on
 type bed 9
 
     track wgEncodeHudsonalphaCnvSignalGM12878
@@ -12589,7 +12659,7 @@ type bed 9
     track wgEncodeHudsonalphaCnvRegionsGM12878
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel GM12878 Regions 
+    shortLabel GM12878 Regions
     longLabel ENCODE Copy Number Variation Regions (GM12878 cells)
     subGroups cellType=GM12878 view=Regions
     cell GM12878
@@ -12617,7 +12687,7 @@ type bed 9
     cell HepG2
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsHepG2 fileName=wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz
     priority 4
-    
+
     track wgEncodeHudsonalphaCnvSignalK562
     subTrack wgEncodeHudsonalphaCnv
     shortLabel  K562 Signal
@@ -13073,7 +13143,7 @@ compositeTrack on
 shortLabel CSHL Long RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
 group expression
-subGroup1 view Views 1-PlusRawSig=Plus_Raw_Signal 2-MinusRawSig=Minus_Raw_Signal 3-Alignments=Alignments 
+subGroup1 view Views 1-PlusRawSig=Plus_Raw_Signal 2-MinusRawSig=Minus_Raw_Signal 3-Alignments=Alignments
 #subGroup2 cellType Cell_Line K562=K562
 #subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 #subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
@@ -13081,7 +13151,7 @@ subGroup1 view Views 1-PlusRawSig=Plus_Raw_Signal 2-MinusRawSig=Minus_Raw_Signal
 #sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults 1-PlusRawSig=full 2-MinusRawSig=full 3-Alignments=pack 
+visibilityViewDefaults 1-PlusRawSig=full 2-MinusRawSig=full 3-Alignments=pack
 settingsByView 1-PlusRawSig:maxHeightPixels=100:24:16,viewLimits=1:20,viewLimitsMax=1:65290,autoScale=off,windowingFunction=mean 2-MinusRawSig:maxHeightPixels=100:24:16,viewLimits=1:20,viewLimitsMax=1:65290,autoScale=off,windowingFunction=mean
 priority 0
 type bed 3
@@ -13092,7 +13162,7 @@ wgEncode 1
     subTrack wgEncodeCshlLoRnaSeq
     shortLabel K562 cyt pA+
     longLabel ENCODE CSHL Long RNA-Seq Alignments (PolyA+ RNA in K562 cytosol)
-    subGroups view=3-Alignments 
+    subGroups view=3-Alignments
     #subGroups view=3-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type tagAlign
     type bigBed 6
@@ -13109,7 +13179,7 @@ wgEncode 1
     subTrack wgEncodeCshlLoRnaSeq
     shortLabel K562 cyt pA+ +
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal (PolyA+ RNA in K562 cytosol)
-    subGroups view=1-PlusRawSig 
+    subGroups view=1-PlusRawSig
     #subGroups view=1-PlusRawSig cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig 1.00 65219.00
     color 46,0,184
@@ -13119,7 +13189,7 @@ wgEncode 1
     subTrack wgEncodeCshlLoRnaSeq
     shortLabel K562 cyt pA+ -
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal (PolyA+ RNA in K562 cytosol)
-    subGroups view=2-MinusRawSig 
+    subGroups view=2-MinusRawSig
     #subGroups view=2-MinusRawSig cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig 1.00 65290.00
     color 238,85,34
@@ -13135,8 +13205,8 @@ longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HFL11W=HFL11W HFL24W=HFL24W K562=K562
 subGroup2 replicate Replicate 1=1 2=2
-dimensions dimensionX=replicate dimensionY=cellType 
-sortOrder cellType=+ replicate=+ 
+dimensions dimensionX=replicate dimensionY=cellType
+sortOrder cellType=+ replicate=+
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense
 controlledVocabulary encode/cv.ra cellType=cell
@@ -13180,7 +13250,7 @@ wgEncode 1
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
     release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq 
+    subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES 1
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES cells)
     subGroups cellType=H9ES replicate=1
@@ -13352,7 +13422,7 @@ wgEncode 1
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
     release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq 
+    subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel HAL 1
     longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HAL cells)
     subGroups cellType=HAL replicate=1
@@ -13367,7 +13437,7 @@ wgEncode 1
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
     release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq 
+    subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel GM12878 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
     subGroups cellType=GM12878 replicate=1
@@ -13391,7 +13461,7 @@ wgEncode 1
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1K562
     release alpha
-    subTrack wgEncodeHudsonalphaMethylSeq 
+    subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel K562 1
     longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in K562 cells)
     subGroups cellType=K562 replicate=1
@@ -13432,8 +13502,8 @@ dimensions dimensionX=cellType dimensionY=mapAlgorithm
 sortOrder cellType=+ mapAlgorithm=+ readType=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
 dragAndDrop subTracks
-visibilityViewDefaults RawSignal=full Splices=squish zAligns=hide 
-settingsByView RawSignal:maxHeightPixels=100:24:16,windowingFunction=mean 
+visibilityViewDefaults RawSignal=full Splices=squish zAligns=hide
+settingsByView RawSignal:maxHeightPixels=100:24:16,windowingFunction=mean
 priority 0
 type bed 3
 noInherit on
@@ -13558,7 +13628,7 @@ wgEncode 1
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
-    shortLabel K562 erg3b Rw 1 
+    shortLabel K562 erg3b Rw 1
     longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (PolyA+ in K562 using erng3b)
     subGroups view=RawSignal cellType=K562 localization=0-cell mapAlgorithm=erng3b readType=1x32 rnaExtract=longPolyA
     type wig 0.00 5020.76
@@ -13723,7 +13793,7 @@ group expression
 subGroup1 view Views Alignments=Alignments SplitAlign=Split_Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 H1_ES=H1_ES
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
-subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ 
+subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
@@ -14030,7 +14100,7 @@ group expression
 subGroup1 view Views Alignments=Alignments yRawSignal=Raw_Signal
 #subGroup2 cellType Cell_Line K562=K562
 #subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
-#subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ 
+#subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
 #dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 #sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
@@ -14039,13 +14109,14 @@ visibilityViewDefaults yRawSignal=full Alignments=pack
 priority 0
 type bed 3
 noInherit on
+settingsByView Alignments:scoreFilterByRange=on
 wgEncode 1
 
     track wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya
     subTrack wgEncodeHelicosRnaSeq off
     shortLabel K562cyto pA+ Tag
     longLabel ENCODE Helicos RNA-Seq Tags (PolyA+ RNA in K562 cytosol)
-    subGroups view=Alignments 
+    subGroups view=Alignments
     #subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type tagAlign
     type bigBed 6
@@ -14061,7 +14132,7 @@ wgEncode 1
     subTrack wgEncodeHelicosRnaSeq
     shortLabel K562cyto pA+ Sig
     longLabel ENCODE Helicos RNA-Seq Raw Signal (PolyA+ RNA in K562 cytosol)
-    subGroups view=yRawSignal 
+    subGroups view=yRawSignal
     #subGroups view=yRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type wig 1.00 65535.00
     noInherit on
