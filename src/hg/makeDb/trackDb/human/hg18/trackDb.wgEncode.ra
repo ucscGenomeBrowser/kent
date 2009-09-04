@@ -11961,34 +11961,31 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     subTrack wgEncodeGencode
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (July 2009)
-    #accession 2008-10-01
     type genePred
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3 dateSubmitted=2009-09-03 dateUnrestricted=2010-06-03 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
     release alpha
     subTrack wgEncodeGencode
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (July 2009)
-    #accession 2008-10-01
     type genePred
     priority 2
     #url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$ ### can't do this because tRNAs do not have Ensembl ids
     #urlLabel Ensembl Transcript:
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3 dateSubmitted=2009-09-03 dateUnrestricted=2010-06-03 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencodePolyaV3
     release alpha
     subTrack wgEncodeGencode off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (July 2009)
-    #accession 2008-10-01
     type genePred
     priority 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3 dateSubmitted=2009-09-03 dateUnrestricted=2010-06-03 composite=wgEncodeGencode parentTable=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeTrnasV3.gtf.gz
 
 # NOTE: search specs should eventually replace the Rel2 version!  But is there a "release alpha" for these?
 searchName wgEncodeGencodeManualV3
@@ -12073,7 +12070,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode freezeDate="GENCODE January 2009 Freeze" level=1-2 annotation=Manual dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-28 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeManualRel2 fileName=wgEncodeGencodeManualRel2.gtf.gz
 
     track wgEncodeGencodeAutoRel2
     release beta
@@ -12085,7 +12082,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 2
     #url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$ ### can't do this because tRNAs do not have Ensembl ids
     #urlLabel Ensembl Transcript:
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode freezeDate="GENCODE January 2009 Freeze" level=3 annotation=Automatic dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-28 composite=wgEncodeSangerGencode tableName=wgEncodeGencodeAutoRel2 fileName=wgEncodeGencodeAutoRel2.gtf.gz
 
     track wgEncodeGencodePolyaRel2
     release beta
@@ -12095,7 +12092,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     #accession 2008-10-01
     type genePred
     priority 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic_polyA level=3 freezeDate=2009-02-16 dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-02-28 dateUnrestricted=2009-11-27 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode freezeDate="GENCODE January 2009 Freeze" level=3 annotation=Automatic_polyA dataVersion="ENCODE Feb 2009 Freeze" subId=265 dateSubmitted=2009-03-05 dateUnrestricted=2009-12-05 composite=wgEncodeSangerGencode tableName=wgEncodeGencodePolyaRel2 fileName=wgEncodeGencodePolyaRel2.gtf.gz
 
 # NOTE: Rel2 search specs should be replaced by the V3 version!  But is there a "release beta" for these?
 searchName wgEncodeGencodeManual
