@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.30 2009/08/18 23:22:51 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.31 2009/09/05 01:20:14 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -245,21 +245,20 @@ function matSubtrackCbClick(subCb)
 function compositeCfgUpdateSubtrackCfgs(inp)
 {
 // Updates all subtrack configuration values when the composite cfg is changed
-    var count=0;
     var suffix = inp.name.substring(inp.name.indexOf("."));
-    var list = inputArrayThatMatches(inp.type,"name","",suffix);
-    for (var ix=0;ix<list.length;ix++) {
-        list[ix].value = inp.value;
-        count++;
+    //if(suffix.length==0)
+    //    suffix = inp.name.substring(inp.name.indexOf("_"));
+    if(suffix.length==0) {
+        //alert("Unable to parse '"+inp.name+"'");
+        return true;
     }
-    if(list.length==0) {
-        var list = document.getElementsByTagName('select');
-        for (var ix=0;ix<list.length;ix++) {
-            if(list[ix].name.lastIndexOf(suffix) == list[ix].name.length - suffix.length ) {
-                list[ix].selectedIndex = inp.selectedIndex;
-                count++;
-            }
-        }
+    var list = $("input[name$='"+suffix+"']");
+    if($(list).length>0)
+        $(list).val(inp.value);
+    else {
+        list = $("select[name$='"+suffix+"']");
+        if($(list).length>0)
+            $(list).attr('selectedIndex',inp.selectedIndex);
     }
     return true;
 }
