@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.4 2006/09/14 21:08:24 braney Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.5 2009/09/07 23:40:22 markd Exp $";
 
 struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret)
 /* Create a dnaMotif out of a comma separated string. 
@@ -386,8 +386,13 @@ static int widthFudgeFactor = 2, heightFudgeFactor = 2;
 *retHeight = ceil(height) + heightFudgeFactor;
 }
 
-void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, char *fileName)
-/* Write logo corresponding to motif to postScript file. */
+void dnaMotifToLogoPs2(struct dnaMotif *motif, double widthPerBase, double height, 
+                       double minHeight, char *fileName)
+/* Write logo corresponding to motif to postScript file, with extended options. minHeight
+ * is the minimum height that is excluded from information content scaling.  This allows
+ * something to show up in columns with very little information content.  Setting this
+ * to be the same as height creates an frequency-based logo.
+ */
 {
 FILE *f = mustOpen(fileName, "w");
 int i;
@@ -407,11 +412,21 @@ fprintf(f, "%s", "% Start of code for this specific logo\n");
 for (i=0; i<motif->columnCount; ++i)
     {
     double infoScale = dnaMotifBitsOfInfo(motif, i)/2.0;
-    psOneColumn(motif, i, xStart, 0, widthPerBase, infoScale * height, f);
+    // only scale part beyond minHeight
+    double useHeight = minHeight + (infoScale * (height - minHeight));
+    if (useHeight > height)
+        useHeight = height;
+    psOneColumn(motif, i, xStart, 0, widthPerBase, useHeight, f);
     xStart += widthPerBase;
     }
 fprintf(f, "showpage\n");
 carefulClose(&f);
+}
+
+void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, char *fileName)
+/* Write logo corresponding to motif to postScript file. */
+{
+dnaMotifToLogoPs2(motif, widthPerBase, height, 0.0, fileName);
 }
 
 void dnaMotifToLogoPng(

@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: motifLogo.c,v 1.6 2005/01/27 21:01:45 baertsch Exp $";
+static char const rcsid[] = "$Id: motifLogo.c,v 1.7 2009/09/07 23:40:22 markd Exp $";
 
 char *tempDir = ".";
 char *gsExe = "gs";
@@ -29,8 +29,26 @@ errAbort(
   "   cProb - probabilities for C\n"
   "   gProb - probabilities for G\n"
   "   tProb - probabilities for T\n"
+  "\n"
+  "Options\n"
+  "   -minHeight=n  the minimum height that is excluded from information\n"
+  "    content scaling.  This allows something to show up in columns with very\n"
+  "    little information content. maximum value is 120\n"
+  "   -freq - create a letter frequency-based logo, ignoring information content.\n"
   );
 }
+static struct optionSpec options[] = {
+   {"minHeight", OPTION_INT},
+   {"freq", OPTION_BOOLEAN},
+   {NULL, 0}
+};
+static int optMinHeight = 0;
+static boolean optFreq = FALSE;
+
+// size to allow for letters
+static int widthPerBase = 40;
+static int height = 120;
+
 
 void motifLogo(char *motifFile, char *outFile)
 /* motifLogo - Make a sequence logo out of a motif.. */
@@ -41,16 +59,30 @@ if (motif == NULL)
 if (motif->next != NULL)
     warn("%s contains multiple motifs, only using first", motifFile);
 dnaMotifMakeProbabalistic(motif);
-dnaMotifToLogoPs(motif, 40, 120, outFile);
-// dnaMotifToLogoPng(motif, 40, 120, gsExe, tempDir, outFile);
+dnaMotifToLogoPs2(motif, widthPerBase, height, optMinHeight, outFile);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+optFreq = optionExists("freq");
+if (optFreq)
+    {
+    if (optionExists("minHeight"))
+        errAbort("can't specify both -minHeight and -freq");
+    optMinHeight = height; // no information content scaling
+    }
+else
+    {
+    optMinHeight = optionInt("minHeight", optMinHeight);
+    if ((optMinHeight < 0) || (optMinHeight > height))
+        errAbort("-minHeight must be in the range 0..%d", height);
+    }
+
+
 motifLogo(argv[1], argv[2]);
 return 0;
 }
