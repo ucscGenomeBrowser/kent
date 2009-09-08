@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.235 2009/09/04 23:42:37 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.236 2009/09/08 21:09:23 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2688,7 +2688,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         }
     }
     // The following is needed to make msie scroll to selected option.
-    printf("<script type='text/javascript'>onload=function(){ $( 'select[name^=%s.filterBy.]' ).children('option[selected]').each( function(i) { this.selected=true; }); }</script>\n",tdb->tableName);
+    printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->tableName);
 puts("</TR></TABLE>");
 
 return;
@@ -2956,6 +2956,13 @@ if (date != NULL)
 return date;
 }
 
+static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
+/* Link composite or view level controls to all associateled lower level controls */
+{
+if(tdbIsComposite(tdb))
+    printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
@@ -2968,6 +2975,7 @@ char *words[5];
 char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
+boolean dependentCfgsNeedBinding = FALSE;
 
 // Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
 char **lastDivide = NULL;
@@ -3202,13 +3210,20 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 
             if(cType != cfgNone)
                 {
-                ix = stringArrayIx("view", membership->subgroups, membership->count);
+                dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
+                if(membership)
+                    ix = stringArrayIx("view", membership->subgroups, membership->count);
+                else
+                    ix = -1;
 #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
 #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
                 safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->tableName);
                 boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
                 MAKE_CFG_SUBTRACK_DIV(subtrack->tableName,htmlIdentifier,open);
-                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
+                if(ix >= 0)
+                    safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
+                else
+                    safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->tableName);
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
@@ -3233,6 +3248,8 @@ puts("<P>");
 //    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
+if(dependentCfgsNeedBinding)
+    cfgLinkToDependentCfgs(parentTdb,parentTdb->tableName);
 for(di=dimX;di<dimMax;di++)
     subgroupMembersFree(&dimensions[di]);
 dyStringFree(&dyHtml)
@@ -3292,13 +3309,6 @@ else if (title)
 else
     printf("<p>");
 return boxed;
-}
-
-static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
-/* Link composite or view level controls to all associateled lower level controls */
-{
-if(tdbIsComposite(tdb))
-    printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
 }
 
 static void cfgEndBox(boolean boxed)
@@ -5389,9 +5399,7 @@ if(displayAll)
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 
-cfgLinkToDependentCfgs(tdb,tdb->tableName);
-
-if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
+if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
         if (slCount(tdb->subtracks) > 5)
         {
