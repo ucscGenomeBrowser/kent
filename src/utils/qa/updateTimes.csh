@@ -59,7 +59,7 @@ foreach table ($tables)
     continue
   endif
 
-  set second=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
+  set second=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
     | awk '{print $14, $15}'`
   if ( $status ) then
     echo "."
