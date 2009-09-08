@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1569 2009/08/31 18:31:53 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1570 2009/09/08 23:24:44 hartera Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2303,15 +2303,10 @@ if (!foundPep)
 	{
 	puts("<LI>\n");
 	/* put out correct message to describe translated mRNA */
-        if (sameString(geneTable, "ensGene"))
+        if ((sameString(geneTable, "ensGene")) || (sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene")))
 	    {
-	    printf("No protein prediction for Ensembl gene");
+	    printf("Non-protein coding gene or gene fragment, no protein prediction available.");
 	    }
-        else if ((sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene")))
-	    {
-	    printf("No protein prediction for Vega gene");
-	    }
-             
 	else if (!genbankIsRefSeqNonCodingMRnaAcc(geneName))
 	    {
 	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
