@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
+#include "udc.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.10 2009/06/09 17:42:33 markd Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.11 2009/09/08 19:50:24 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -26,11 +27,13 @@ errAbort(
   "         min - minimum value in region\n"
   "         max - maximum value in region\n"
   "         coverage - %% of region that is covered\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -72,6 +75,7 @@ optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
 summaryType = optionVal("type", summaryType);
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 bigWigSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
 return 0;
 }

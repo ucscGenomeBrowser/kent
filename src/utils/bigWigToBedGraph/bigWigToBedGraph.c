@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "udc.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.4 2009/08/12 21:44:24 kent Exp $";
+static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.5 2009/09/08 19:50:25 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
@@ -23,6 +24,7 @@ errAbort(
   "   -chrom=chr1 - if set restrict output to given chromosome\n"
   "   -start=N - if set, restrict output to only that over start\n"
   "   -end=N - if set, restict output to only that under end\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
 
@@ -30,6 +32,7 @@ static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"start", OPTION_INT},
    {"end", OPTION_INT},
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -68,6 +71,7 @@ optionInit(&argc, argv, options);
 clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 3)
     usage();
 bigWigToBedGraph(argv[1], argv[2]);
