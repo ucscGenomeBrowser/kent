@@ -304,7 +304,7 @@ url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
     priority 1
-    color 0,100,180
+    color 0,50,225
 
     track vegaPseudoGene
     subTrack vegaGeneComposite
