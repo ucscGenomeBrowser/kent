@@ -15,6 +15,7 @@
 #include "retroClick.h"
 #include "retroMrnaInfo.h"
 #include "genbank.h"
+#include "hui.h"
 /* combine blocks separated by gaps less than this number */
 #define MAXBLOCKGAP 50
 
@@ -208,11 +209,20 @@ printf("<THEAD>\n");
 printf("<TR><TH>Orthology (net) Break<TH>Coverage %%</TR>\n");
 printf("</THEAD><TBODY>\n");
 if (sameString(organism,"Human"))
-    printf("<TR><TH>Mouse <TD>%d</TR>\n",  pg->overlapMouse);
+    printf("<TR><TH>Mouse ");
 else
-    printf("<TR><TH>Human <TD>%d</TR>\n", pg->overlapMouse);
-printf("<TR><TH>Dog<TD>%d</TR>\n", pg->overlapDog);
-printf("<TR><TH>Rhesus<TD>%d</TR>\n", pg->overlapRhesus);
+    printf("<TR><TH>Dog ");
+printf("<TD>%d</TR>\n", pg->overlapMouse);
+if (sameString(organism,"Human"))
+    printf("<TR><TH>Dog ");
+else
+    printf("<TR><TH>Rat ");
+printf("<TD>%d</TR>\n", pg->overlapDog);
+if (sameString(organism,"Human"))
+    printf("<TR><TH>Rhesus ");
+else
+    printf("<TR><TH>Human ");
+printf("<TD>%d</TR>\n", pg->overlapRhesus);
 printf("</TBODY></TABLE>\n");
 }
 
@@ -496,7 +506,7 @@ printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",
         sqlQuickNum(conn, "select max(score) from ucscRetroInfo") );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
 printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
-printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d\n", pg->intronCount);
+printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d + %d\n", pg->intronCount, pg->oldIntronCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
 psl = getAlignments(conn, alignTbl, mi->pg->name);
@@ -760,6 +770,7 @@ void retroShowCdnaAli(char *mappedId)
 /* Show alignment for accession, mostly ripped off from htcCdnaAli */
 {
 char *track = cartString(cart, "aliTrack");
+struct trackDb *tdb = hashMustFindVal(trackHash, track);
 char *table = cartString(cart, "table");
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -767,7 +778,12 @@ struct sqlConnection *defDbConn = NULL;
 struct mappingInfo *mi = mappingInfoNew(conn, table, mappedId);
 struct genbankCds cds = getCds(conn, mi);
 struct psl *psl;
-struct dnaSeq *rnaSeq;
+struct dnaSeq *rnaSeq = NULL;
+char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+char *specCopy = cloneString(spec);
+char *words[3];
+int nwords = chopByWhite(specCopy, words, ArraySize(words));
+
 char acc[512];
 
 /* Print start of HTML. */
@@ -782,16 +798,20 @@ if (startsWith("August",mi->geneSet))
     safef(acc, sizeof(acc), "aug-%s.T1",mi->seqId);
 else
     safef(acc, sizeof(acc), "%s.%d",mi->seqId, mi->gbCurVer);
-rnaSeq = hDnaSeqGet(database, acc, "retroSeq", "retroExtFile");
+// value is: extFile seqTbl extFileTbl
+if ((nwords != (int)ArraySize(words)) || !sameString(words[0], "extFile"))
+    errAbort("invalid %s track setting: %s ", BASE_COLOR_USE_SEQUENCE, spec);
+char *seqTable = words[1];
+char *extTable = words[2];
+rnaSeq = hDnaSeqGet(database, acc, seqTable, extTable);
 if (rnaSeq == NULL)
     {
     rnaSeq = hDnaSeqGet(database, acc, "seq", "extFile");
     if (rnaSeq == NULL)
-        errAbort("can't get mRNA sequence from %s prefix %s for %s from retroSeq", 
-            database, mi->geneSet, acc);
+        errAbort("can't get mRNA sequence from %s prefix %s for %s from %s", 
+            database, mi->geneSet, acc, track);
     }
 sqlDisconnect(&defDbConn);
-
 showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cds.start, cds.end);
 pslFree(&psl);
 dnaSeqFree(&rnaSeq);
