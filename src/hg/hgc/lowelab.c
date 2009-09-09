@@ -88,9 +88,8 @@
 #include "rnaHybridization.h"
 #include "cddInfo.h"
 #include "alignInfo.h"
-#include "allpredictions.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.33 2009/09/08 18:11:19 holmes Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.34 2009/09/09 15:41:22 holmes Exp $";
 
 extern char *uniprotFormat;
 
@@ -2915,56 +2914,6 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
 
   hFreeConn(&conn);
 }
-void doAllPredictions(struct trackDb *tdb, char *itemName)
-{
-  char *track = tdb->tableName;
-  char query[512];
-  struct sqlConnection *conn = hAllocConn(database);
-  struct sqlResult *sr;
-  char *dupe, *words[16];
-  char **row;
-  int wordCount;
-  int rowOffset;
-  struct allpredictions *infoload;
-  int bedSize = 0;
-  int start = cartInt(cart, "o");
-  int end = cartInt(cart, "t");
-
-    dupe = cloneString(tdb->type);
-    wordCount = chopLine(dupe, words);
-    if (wordCount > 1)
-        bedSize = atoi(words[1]);
-    if (bedSize < 3) bedSize = 3;
-
-
-  genericHeader(tdb,itemName);
-  dupe = cloneString(tdb->type);
-  wordCount = chopLine(dupe, words);
-
-  rowOffset = hOffsetPastBin(database,seqName, track);
-
-  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
-  sr = sqlGetResult(conn, query);
-  while ((row = sqlNextRow(sr)) != NULL)
-    {
-        infoload = allpredictionsLoad(row+rowOffset);
-    printf("<B>Name:</B> %s<BR>\n", infoload->name);
-
-          printf("<B>Position:</B> "
-                 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-                 hgTracksPathAndSettings(), database, infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
-          printf("%s:%d-%d</A><BR>\n", infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
-          printf("<B>Strand:</B> %s<BR>\n", infoload->strand);
-          printf("<B>Genomic size: </B> %d nt<BR>\n", (infoload->chromEnd - infoload->chromStart));
-          printf("<B>Predictor: </B> %s <BR>\n", (infoload->source));
-          if (infoload->next != NULL)
-            printf("<hr>\n");
-    }
-  sqlFreeResult(&sr);
-  hFreeConn(&conn);
-  allpredictionsFree(&infoload);
-  printTrackHtml(tdb);
-}
 void doCddInfo(struct trackDb *tdb, char *itemName)
 {
   char *track = tdb->tableName;
@@ -3164,10 +3113,6 @@ else if (sameWord(track,"cddInfo"))
 else if (sameWord(track,"alignInfo"))
   {
     doAlignInfo(tdb, item);
-  }
-else if (sameWord(track,"allpredictions"))
-  {
-    doAllPredictions(tdb, item);
   }
 else
     return FALSE;
