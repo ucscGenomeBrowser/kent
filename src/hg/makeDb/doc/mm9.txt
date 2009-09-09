@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.110 2009/09/09 18:13:55 hartera Exp $"
+#	"$Id: mm9.txt,v 1.111 2009/09/09 18:51:40 fanhsu Exp $"
 #
 
 #######################################################################
@@ -9718,3 +9718,36 @@ TMPDIR=/scratch/tmp
     #	673856452 bases of 3118565340 (21.608%) in intersection
 
 #########################################################################
+## NIA Mouse Gene Index - (DONE, Fan, 9/9/09)
+    ssh hgwdev 
+    mkdir -p /cluster/data/mm9/bed/NIAGene090903
+    cd /cluster/data/mm9/bed
+    ln -s NIAGene090903 NIAGene
+    cd NIAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex/mm9/download/T-fasta.ff.gz
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex/mm9/download/T-psl.txt.gz
+    gzip -d *.gz
+    
+    cut -f 1-21 T-psl.txt >NIAGene.tab
+    hgLoadPsl mm9 NIAGene.tab
+
+    mkdir /gbdb/mm9/NIAGene
+    ln -s /cluster/data/mm9/bed/NIAGene/T-fasta.fa /gbdb/mm9/NIAGene/T-fasta.fa
+    
+    hgLoadSeq mm9 /gbdb/mm9/NIAGene/T-fasta.fa
+
+#Creating seq.tab file
+#Adding /gbdb/mm9/NIAGene/T-fasta.fa
+#257758 sequences
+#Updating seq table
+#Warning: load of seq did not go as planned: 257758 record(s), 0 row(s) skipped, 257758 warning(s) loading ./seq.tab
+#Advisory lock has been released
+#All done
+
+# not sure what the warnings are about, but the track seems working.
+
+# Create/edit/check in NIAGene.html and trackDb.ra under
+    
+        kent/src/hg/makeDb/trackDb/mouse/mm9
+
+#####################################################################
