@@ -20,18 +20,14 @@ if ( $err ) then
 endif
 
 echo "removing old jksrc zip and symlink [${0}: `date`]"
-ssh -n qateam@hgdownload1 "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
-ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
-ssh -n qateam@hgdownload1 "rm /mirrordata/apache/htdocs/admin/jksrc.v*.zip"
-ssh -n qateam@hgdownload2 "rm /mirrordata/apache/htdocs/admin/jksrc.v*.zip"
+ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
+ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/jksrc.v*.zip"
 echo "scp-ing jksrc.v${BRANCHNN}.zip to hgdownload(s) [${0}: `date`]"
-scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload1:/mirrordata/apache/htdocs/admin/
-scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload2:/mirrordata/apache/htdocs/admin/
+scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload:/mirrordata/apache/htdocs/admin/
 echo "updating jksrc.zip symlink [${0}: `date`]"
-ssh -n qateam@hgdownload1 "cd /mirrordata/apache/htdocs/admin/;ln -s jksrc.v${BRANCHNN}.zip jksrc.zip"
-ssh -n qateam@hgdownload2 "cd /mirrordata/apache/htdocs/admin/;ln -s jksrc.v${BRANCHNN}.zip jksrc.zip"
+ssh -n qateam@hgdownload "cd /mirrordata/apache/htdocs/admin/;ln -s jksrc.v${BRANCHNN}.zip jksrc.zip"
 
-# hgdocs/js/*.gs files are not apparently needed on hgdownload as there is no directory there
+# hgdocs/js/*.js files are not apparently needed on hgdownload as there is no directory there
 #echo "scp-ing js/*.js files to hgdownload [${0}: `date`]"
 #scp -p $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/js/*.js qateam@hgdownload:/mirrordata/apache/htdocs/js
 echo "Done. [${0}: `date`]"
