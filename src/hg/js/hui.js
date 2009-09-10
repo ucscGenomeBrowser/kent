@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.32 2009/09/08 21:11:48 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.33 2009/09/10 04:43:10 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -252,11 +252,8 @@ function compositeCfgUpdateSubtrackCfgs(inp)
         alert("Unable to parse '"+inp.name+"'");
         return true;
     }
-    var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
-    if($(list).length>0)
-        $(list).val(inp.value);
-    else {
-        list = $("select[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
+    if(inp.type.indexOf("select") == 0) {
+        var list = $("select[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
         if($(list).length>0) {
             if(inp.multiple != true)
                 $(list).attr('selectedIndex',inp.selectedIndex);
@@ -269,7 +266,18 @@ function compositeCfgUpdateSubtrackCfgs(inp)
                     $(this).attr('size',$(inp).attr('size'));
                 });
             }
-        } else {
+        }
+    }
+    else if(inp.type.indexOf("checkbox") == 0) {
+        var list = $("checkbox[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
+        if($(list).length>0)
+            $(list).attr("checked",$(inp).attr("checked"));
+    }
+    else {  // Various types of inputs
+        var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
+        if($(list).length>0)
+            $(list).val(inp.value);
+        else {
             alert("Unsupported type of multi-level cfg setting type='"+inp.type+"'");
             return false;
         }
