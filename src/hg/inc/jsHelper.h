@@ -15,6 +15,7 @@
 #define JSHELPER_H
 
 #include "cart.h"
+#include <regex.h>
 
 #define JS_CLEAR_ALL_BUTTON_LABEL    "Clear all"
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
@@ -119,6 +120,11 @@ void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPref
 char *jsStripJavascript(char *str);
 /* Strip out anything that looks like javascript in html string.
    This function is designed to cleanup user input (e.g. to avoid XSS attacks).
+   Returned string should be free'ed after use. */
+
+char *stripRegEx(char *str, char *regEx, int flags);
+/* Strip out text matching regEx from str.
+   flags is passed through to regcomp as the cflags argument.
    Returned string should be free'ed after use. */
 
 #endif /* JSHELPER_H */
