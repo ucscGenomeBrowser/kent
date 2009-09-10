@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.192 2009/09/03 22:20:55 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.193 2009/09/10 23:16:15 braney Exp $
 
 use warnings;
 use strict;
@@ -676,7 +676,7 @@ sub validatePairedTagAlign
 {
     my ($path, $file, $type) = @_;
     # validate chroms, chromSize, etc. Assume hg18 like elsewhere
-    my $paramList = validationSettings("validateFiles","pairedTagAlign");
+    my $paramList = validationSettings("validateFiles","pairedTagAlign",$assembly);
     my $safe = SafePipe->new(CMDS => ["validateFiles $paramList $quickOpt -chromDb=hg18 -type=pairedTagAlign $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
