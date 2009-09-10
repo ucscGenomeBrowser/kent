@@ -8,3 +8,4 @@
 # variable containing the host of the mysql server for hgwbeta
 set sqlbeta = mysqlbeta
 set sqlrr   = genome-centdb
+set GENBANK="/cluster/data/genbank/etc/genbank.tbls"

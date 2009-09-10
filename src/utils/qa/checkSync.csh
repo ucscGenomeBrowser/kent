@@ -75,8 +75,8 @@ if ( $#argv == 4 ) then
 endif
 
 # get tablenames for stripping out genbank
-cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
-  > genbank.local
+rm -f genbank.local
+cat $GENBANK | sed -e 's/^^//; s/.$//' > genbank.local
 echo gbLoaded >> genbank.local
 
 # 
