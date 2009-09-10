@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.30 2008/10/25 00:28:49 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.31 2009/09/10 04:59:35 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -537,9 +537,9 @@ unsigned numNew  = statusTbl->numSeqChg + statusTbl->numMetaChg
     + statusTbl->numExtChg + +statusTbl->numRebuildDerived + statusTbl->numNoChg + statusTbl->numNew;
 if (numNew < numOld)
     {
-    /* FIXME: the at least 5 feels like a hack */
+    /* FIXME: the at least 50 feels like a hack */
     shrinkage = 1.0 - ((float)numNew/(float)numOld);
-    if ((maxShrinkage > 0) && ((numOld-numNew) < 5))
+    if ((maxShrinkage > 0) && ((numOld-numNew) < 50))
         shrinkage = 0;  /* allow for small partations */
     if (shrinkage > maxShrinkage)
         {
