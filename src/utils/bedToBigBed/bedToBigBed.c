@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.8 2009/08/18 21:39:13 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.9 2009/09/10 01:49:22 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -37,8 +37,6 @@ errAbort(
   "                  assumes all fields in bed are defined.\n"
   "   -as=fields.as - If have non-standard fields, it's great to put a definition of\n"
   "                   each field in a row in AutoSql format here.\n"
-  "   -clip - If set just issue warning messages rather than dying if bed\n"
-  "                  file contains items off end of chromosome."
   , blockSize, itemsPerSlot
   );
 }
@@ -48,7 +46,6 @@ static struct optionSpec options[] = {
    {"itemsPerSlot", OPTION_INT},
    {"bedFields", OPTION_INT},
    {"as", OPTION_STRING},
-   {"clip", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -365,7 +362,6 @@ void bbFileCreate(
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
-	boolean clip,     /* If set silently clip out of bound coordinates. */
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
@@ -565,7 +561,7 @@ void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
 bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, as, 
-	optionExists("clip"), outName);
+	outName);
 }
 
 int main(int argc, char *argv[])

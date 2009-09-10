@@ -12,11 +12,10 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.14 2009/08/12 21:35:45 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.15 2009/09/10 01:49:38 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
-boolean clipDontDie = FALSE;
 
 
 void usage()
@@ -33,8 +32,6 @@ errAbort(
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
-  "   -clip - If set just issue warning messages rather than dying if wig\n"
-  "                  file contains items off end of chromosome."
   , blockSize, itemsPerSlot
   );
 }
@@ -42,7 +39,6 @@ errAbort(
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
-   {"clip", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -250,7 +246,7 @@ for (;;)
      * loop handles all but the final affected summary in that case. */
     while (end > sum->end)
         {
-	verbose(2, "Splitting\n");
+	verbose(3, "Splitting start %d, end %d, sum->start %d, sum->end %d\n", start, end, sum->start, sum->end);
 	/* Fold in bits that overlap with existing summary and output. */
 	bits32 overlap = rangeIntersection(start, end, sum->start, sum->end);
 	sum->validCount += overlap;
@@ -456,7 +452,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-clipDontDie = optionExists("clip");
 if (argc != 4)
     usage();
 bedGraphToBigWig(argv[1], argv[2], argv[3]);
