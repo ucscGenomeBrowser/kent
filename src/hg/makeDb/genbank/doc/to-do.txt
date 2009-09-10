@@ -1175,3 +1175,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
    BC012106
 
 - very messy loci: chr22:20,715,572-21,595,082
+
+- pslCDNAFilter can implement pslCDnaGenomeMatch type logic using pslx output of blat,
+  then discard sequences.
