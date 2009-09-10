@@ -32,8 +32,9 @@ if ( $#argv < 2 || $#argv > 4 ) then
   echo "  gets size of table from TABLE STATUS dumps"
   echo
   echo "    usage:  database tablelist [machine1] [machine2]"
+  echo ""
   echo "           tablelist may be single table"
-  echo "           defaults to hgwbeta"
+  echo "           default to hgwbeta.  machines accept hgwdev, hgwbeta, rr "
   echo "           uses overnight STATUS dumps.  not real time"
   echo '             accepts "%" wildcard'
   echo
@@ -51,15 +52,21 @@ endif
 # set machine names and check validity
 if ( $#argv > 2 ) then
   set machine1="$argv[3]"
-  checkMachineName.csh $machine1
+  echo $machine1 | egrep -q "hgwdev|hgwbeta|rr"
   if ( $status ) then
+    echo
+    echo "$machine1 is not a valid argument"
+    echo
     exit 1
   endif
 endif
 if ( $#argv == 4 ) then
   set machine2="$argv[4]"
-  checkMachineName.csh $machine2
+  echo $machine2 | egrep -q "hgwdev|hgwbeta|rr"
   if ( $status ) then
+    echo
+    echo "$machine2 is not a valid argument"
+    echo
     exit 1
   endif
 endif
@@ -87,7 +94,7 @@ if ( ! $status ) then
       set frags=`echo $wildcard | awk -F% '{print NF}'`
       if ( $frags > 2 ) then
         echo
-        echo "  sorry, internal wildcard is supported only if there are no others."
+        echo "  sorry, only one internal wildcard is supported."
         echo
         exit 1
       endif
@@ -131,7 +138,6 @@ if ( ! $status ) then
     set tableString=""
   end
 endif
-
 
 # make headers for output table
 # get width of first column from longest tablename

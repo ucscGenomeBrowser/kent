@@ -15,17 +15,19 @@ set table=""
 set field=""
 set dumpfile=""
 
-if ( $#argv != 3 ) then
+if ( $#argv < 3 || $#argv > 4 ) then
   echo
   echo "  gets the status of any table from the RR database."
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo
-  echo "    usage: database table field "
+  echo "    usage: database table field [hgwdev | hgwbeta | rr]"
   echo "    fields available: Name, Engine, Version, Row_format, Rows, "
   echo "        Avg_row_length, Data_length, Max_data_length, Index_length, "
   echo "        Data_free, Auto_increment, Create_time, Update_time, "
   echo "        Check_time, Create_options, Comment"
+  echo
+  echo "           defaults to rr. optionally accepts dev or beta"
   echo
   exit
 else
@@ -34,7 +36,18 @@ else
   set field=$argv[3]
 endif
 
-set dumpfile=`getRRdumpfile.csh $db`
+if ( $#argv == 4 ) then
+  set machine=$argv[4]
+  echo $machine | egrep -q "hgwdev|hgwbeta|rr"
+  if ( $status ) then
+    echo
+    echo " fourth parameter must be hgwdev, hgwbeta or rr"
+    echo
+    exit 1
+  endif
+endif
+
+set dumpfile=`getRRdumpfile.csh $db $machine`
 if ( $status ) then
   echo
   echo "  database $db -- not found in status dumps"

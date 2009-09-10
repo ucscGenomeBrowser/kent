@@ -16,17 +16,34 @@ set dirname=""
 set machpath=""
 set dumpfile=""
 
-if ( $#argv != 1 ) then
+if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  gets the filename of the TABLE STATUS dump from RR"
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo
-  echo "    usage: database"
+  echo "    usage: database [hgwdev | hgwbeta | rr | hgnfs1]"
+  echo
+  echo "      defaults to rr.  optionally gives results for dev or beta"
   echo
   exit
 else
   set database=$argv[1]
+endif
+
+if ( $#argv == 2 ) then
+  set machine=$argv[2]
+  echo $machine | egrep -q "hgwdev|hgwbeta|rr|hgnfs1" 
+  if ( $status ) then
+    echo
+    echo "  $machine not a valid machine" 
+    echo
+    exit 1
+  endif
+endif
+
+if ( "rr" == $machine ) then
+  set machine="hgnfs1"
 endif
 
 # set path to directory of dated dumps for the proper machine
