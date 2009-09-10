@@ -25,29 +25,51 @@
                     TARGET=_blank>genome-announce</A> mailing list.</P>
 
                     <!-- start news -->
+                    <FONT FACE="courier" SIZE="3"><B>9 September 2009 - Changes to the bigBed/bigWig data formats </B></FONT><BR>
+<P>If you have been taking advantage of the new bigBed format (for very large data
+sets), you'll be happy to hear that we have considerably slimmed down the memory
+footprint of the program that converts BED files into bigBed files: bedToBigBed.
+Because it now uses a multi-pass approach, it now takes only 1/4 the amount of
+RAM as the size of the uncompressed BED input file (instead of the 5x RAM it
+needed previously!). Read more 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/bigBed.html">here</A>.
+Pick up the new bedToBigBed executable 
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">here</A>.</P>
+
+<P>In conjunction with this change, there is also a change to the way you must
+specify your bigBed or bigWig Custom Track.  When you specify the location of
+your local bigBed/bigWig file (on your web-accessible http, https, or ftp
+server), use this designation: bigDataUrl (instead of the old designation: dataUrl).</P>
+
+e.g.
+<TT>track type=bigBed name="My Big Bed" description="Some Data from My Lab"
+<B>bigDataUrl</B>=http://myorg.edu/mylab/myBigBed.bb</TT>
+
+<P>Additionally, we would like to announce a companion program to the
+previously-announced wigToBigWig program: bedGraphToBigWig. This program
+converts bedGraph files into bigWig files.  The bedGraph format allows display
+of sparse or varying-size data. Read more 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/bigWig.html">here</A>.
+You can download the new bedGraphToBigWig utility 
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/">here</A>.</P>
+
+<P>The main advantage of the bigBed and bigWig formats is that only the portions of
+the files needed to display a particular region are transferred to UCSC, so for
+large data sets, displaying bigBed/bigWig data is considerably faster than
+regular BED/wig data. The bigBed/bigWig file remains on your web accessible
+server (http, https, or ftp), not on the UCSC server.  Consequently, creating
+your Custom Track is very fast. Only the portion that is needed for the
+chromosomal position you are currently viewing is locally cached at UCSC as a
+"sparse file".</P>
+
+		    <HR>
                     <FONT FACE="courier" SIZE="3"><B>10 August 2009 - Updated Yeast Genome Browser Released </B></FONT><BR>
 		    We have added the June 2008 release of the yeast genome 
 		    (<em>Saccharomyces cerevisiae</em>) based on sequence from
 		    the <A HREF="http://www.yeastgenome.org/"
 		    TARGET=_blank>Saccharomyces Genome Database</A> (SGD).
-		    The sequence, open reading frame (ORF), and gene annotations
-		    were downloaded from the site
-		    <A HREF="ftp://genome-ftp.stanford.edu/pub/yeast/data_download" 
-		    TARGET=_blank>ftp://genome-ftp.stanford.edu/pub/yeast/data_download</A>.
-		    <P></P>
-		    The S288C strain was used in this sequencing project. Reference 
-		    information for each chromosome may be found in the SGD
-		    <A HREF="http://www.yeastgenome.org/chromosomes.shtml"
-		    TARGET=_blank>Systematic Sequencing Table</A>. 
-		    Bulk downloads of the sequence and annotation data are
-		    available via the Genome Browser
-		    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/sacCer2/">FTP server</A>
-		    or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#yeast">Downloads</A>
-		    page. 
-		    </P><P>
-		    See the <A HREF="../goldenPath/credits.html#yeast_credits">Credits</A>
-		    page for details on contributions to this release.
-		    </P><P>
+		    <A HREF="goldenPath/newsarch.html#081009">Read more</A>.</P>
+		    </P>
 
 		    <HR>
 		    <FONT FACE="courier" SIZE="3"><B>22 July 2009 - Updated Opossum Genome Browser Released </B></FONT><BR>
