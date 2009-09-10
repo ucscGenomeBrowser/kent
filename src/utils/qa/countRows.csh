@@ -10,6 +10,9 @@ source `which qaConfig.csh`
 set db=""
 set tablelist=""
 set tables=""
+set dev=""
+set beta=""
+set rr=""
 
 if ($#argv != 2) then
   echo
@@ -17,6 +20,8 @@ if ($#argv != 2) then
   echo
   echo "    usage:  database tablelist"
   echo "      tablelist can be just name of single table"
+  echo
+  echo "    RR results not in real time, but from dumps"
   echo
   exit
 else
@@ -37,10 +42,13 @@ endif
 foreach table ( $tables )
   set dev=`hgsql -N -e "SELECT COUNT(*) FROM $table" $db` 
   set beta=`hgsql -h $sqlbeta -N -e "SELECT COUNT(*) FROM $table" $db`
+  set rr=` getRRtableStatus.csh $db $table Rows`
   echo $table
   echo "============="
   echo "."$dev 
   echo "."$beta 
+  echo
+  echo "."$rr
   echo
 end
 
