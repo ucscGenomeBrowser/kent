@@ -5,7 +5,7 @@
 #include "obscure.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: apacheLog.c,v 1.4 2009/08/28 00:56:01 kent Exp $";
+static char const rcsid[] = "$Id: apacheLog.c,v 1.5 2009/09/10 01:50:01 kent Exp $";
 
 void apacheAccessLogFree(struct apacheAccessLog **pLl)
 /* Free up apacheAccessLog. */
@@ -57,6 +57,19 @@ badFormat(pLl, line, fileName, lineIx,
 	"bad time stamp");
 }
 
+time_t apacheAccessLogTimeToTick(char *timeStamp)
+/* Convert something like 27/Aug/2009:09:25:32 to Unix timestamp (seconds since 1970).
+ * On error returns zero. */
+
+{
+struct tm tm;
+ZeroVar(&tm);
+if (strptime(timeStamp, "%d/%b/%Y:%T", &tm) != NULL)
+    return mktime(&tm);
+else
+    return 0;
+}
+
 struct apacheAccessLog *apacheAccessLogParse(char *line, 
 	char *fileName, int lineIx)
 /* Return a apacheAccessLog from line.  Return NULL if there's a parsing 
@@ -99,9 +112,8 @@ if (!isdigit(ll->timeStamp[0]))
 ll->timeZone = nextWord(&s);
 
 /* Convert time stamp to Unix tick. */
-struct tm tm;
-if (strptime(ll->timeStamp, "%d/%b/%Y:%T", &tm) != NULL)
-    ll->tick = mktime(&tm);
+ll->tick = apacheAccessLogTimeToTick(ll->timeStamp);
+
 
 buf = e+2;
 if (buf[0] != '"')
@@ -180,5 +192,18 @@ if (label != NULL)
     }
 
 return ll;
+}
+
+int apacheAccessLogCmpTick(const void *va, const void *vb)
+/* Compare items to sort by tick (which tracks timestamp) */
+{
+const struct apacheAccessLog *a = *((struct apacheAccessLog **)va);
+const struct apacheAccessLog *b = *((struct apacheAccessLog **)vb);
+if (a->tick < b->tick)
+    return -1;
+else if (a->tick == b->tick)
+    return 0;
+else
+    return 1;
 }
 
