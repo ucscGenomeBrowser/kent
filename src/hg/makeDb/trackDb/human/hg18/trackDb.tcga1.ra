@@ -23,7 +23,7 @@ type expRatio
 logicalDb localDb
 expScale 1.0
 expStep 0.1
-groupings harvardOVCGHGroups
+groupings harvardOVCGH_SegGroups
 priority 1.1
 
 track mskccOVCGH
