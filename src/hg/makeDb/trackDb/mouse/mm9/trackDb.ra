@@ -56,6 +56,12 @@ spectrum on
 type psl .
 url http://lgsun.grc.nia.nih.gov/geneindex/mm9/bin/giT.cgi?genename=$$
 
+searchName NIAGene
+searchTable NIAGene
+searchMethod fuzzy
+searchType psl
+searchPriority 50
+
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
 longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***
@@ -298,6 +304,20 @@ type altGraphX
 url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&species=M.+musculus&tromer=$$
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
+
+track REST
+shortLabel REST
+longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding sites in mouse stem cells
+group regulation
+priority 92
+visibility hide
+type bed 4 .
+
+searchName REST
+searchTable REST
+searchMethod fuzzy
+searchType bed
+searchPriority 50
 
 track vegaGeneComposite
 compositeTrack on
