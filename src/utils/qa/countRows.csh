@@ -24,9 +24,6 @@ else
   set tablelist=$argv[2]     # file of tablenames or single table name
 endif
 
-echo "database $db"
-echo "tablelist $tablelist"
-
 echo
 if ( -e $tablelist ) then
   echo "running countRows for tables:"
