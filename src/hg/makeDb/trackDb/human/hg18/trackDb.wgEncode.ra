@@ -12717,7 +12717,6 @@ type bed 12
 wgEncode 1
 
     track wgEncodeHudsonalphaMethyl27HepG2r1
-    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel HepG2 1
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 1
@@ -12731,7 +12730,6 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r1.bed.gz
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
-    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel HepG2 2
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 2
@@ -12745,7 +12743,6 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r2.bed.gz
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
-    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel GM12878 1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
@@ -12759,7 +12756,6 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r1.bed.gz
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
-    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel GM12878 2
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
@@ -12773,7 +12769,6 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r2.bed.gz
 
     track wgEncodeHudsonalphaMethyl27K562r1
-    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel K562 1
     longLabel ENCODE HudsonAlpha Methyl27 K562 replicate 1
@@ -12787,7 +12782,6 @@ wgEncode 1
     metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r1.bed.gz
 
     track wgEncodeHudsonalphaMethyl27K562r2
-    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel K562 2
     longLabel ENCODE HudsonAlpha Methyl27 K562 replicate 2
