@@ -3847,7 +3847,6 @@ type broadPeak
 wgEncode 1
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Caco2
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel Caco-2 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in Caco-2 cells)
@@ -3856,7 +3855,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=Caco-2 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Caco2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Caco2.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Gm06990
-    release alpha
     subTrack wgEncodeUwAffyExonArray
     shortLabel GM06990 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in GM06990 cells)
@@ -3865,7 +3863,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=GM06990 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Gm06990 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Gm06990.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Gm06990
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel GM06990 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in GM06990 cells)
@@ -3874,7 +3871,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=GM06990 replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Gm06990 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Gm06990.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Helas3
-    release alpha
     subTrack wgEncodeUwAffyExonArray
     shortLabel HeLa-S3 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -3884,7 +3880,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HeLa-S3 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Helas3 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Helas3.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2
-    release alpha
     subTrack wgEncodeUwAffyExonArray
     shortLabel HepG2 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in HepG2 cells)
@@ -3894,7 +3889,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HepG2 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Hepg2.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Hepg2
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel HepG2 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in HepG2 cells)
@@ -3904,7 +3898,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HepG2 replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Hepg2 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Hepg2.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1K562
-    release alpha
     subTrack wgEncodeUwAffyExonArray
     shortLabel K562 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in K562 cells)
@@ -3914,7 +3907,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=K562 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1K562 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1K562.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Skmc
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel SKMC 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in SKMC cells)
@@ -3923,7 +3915,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SKMC replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Skmc fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Skmc.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Sknshra
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel SK-N-SH_RA 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in SK-N-SH_RA cells)
@@ -3932,7 +3923,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SK-N-SH_RA replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Sknshra fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Sknshra.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel SK-N-SH_RA 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SK-N-SH_RA cells)
@@ -3941,7 +3931,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=SK-N-SH_RA replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Th1
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel Th1 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in Th1 cells)
@@ -3950,7 +3939,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=Th1 replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=314 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-02 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Th1 fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Th1.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Helas3
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel HeLa-S3 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -3960,7 +3948,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HeLa-S3 replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=403 dateSubmitted=2009-06-29 dateUnrestricted=2010-03-29 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Helas3 fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Hrcepic
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel HRCEpiC 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in HRCEpiC cells)
@@ -3969,7 +3956,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HRCEpiC replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=403 dateSubmitted=2009-06-29 dateUnrestricted=2010-03-29 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Hrcepic fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Hrcepic.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Hrcepic
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel HRCEpiC 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in HRCEpiC cells)
@@ -3978,7 +3964,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HRCEpiC replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=403 dateSubmitted=2009-06-29 dateUnrestricted=2010-03-29 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Hrcepic fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Hrcepic.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Hre
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel HRE 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in HRE cells)
@@ -3987,7 +3972,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HRE replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=403 dateSubmitted=2009-06-29 dateUnrestricted=2010-03-29 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep2Hre fileName=wgEncodeUwAffyExonArraySimpleSignalRep2Hre.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep1Hre
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel HRE 1
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 1 (in HRE cells)
@@ -3996,7 +3980,6 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=AffyExonArray cell=HRE replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=403 dateSubmitted=2009-06-29 dateUnrestricted=2010-03-29 composite=wgEncodeUwAffyExonArray tableName=wgEncodeUwAffyExonArraySimpleSignalRep1Hre fileName=wgEncodeUwAffyExonArraySimpleSignalRep1Hre.broadPeak.gz
 
     track wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra
-    release alpha
     subTrack wgEncodeUwAffyExonArray off
     shortLabel SK-N-SH_RA 2
     longLabel ENCODE UW Affy All Exon Array Signal Replicate 2 (in SK-N-SH_RA cells)
