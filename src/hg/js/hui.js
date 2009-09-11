@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.33 2009/09/10 04:43:10 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.34 2009/09/11 20:30:10 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -273,14 +273,19 @@ function compositeCfgUpdateSubtrackCfgs(inp)
         if($(list).length>0)
             $(list).attr("checked",$(inp).attr("checked"));
     }
+    else if(inp.type.indexOf("radio") == 0) {
+        var list = $("radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
+        if($(list).length>0)
+            $(list).val(inp.value);
+    }
     else {  // Various types of inputs
         var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
         if($(list).length>0)
             $(list).val(inp.value);
-        else {
-            alert("Unsupported type of multi-level cfg setting type='"+inp.type+"'");
-            return false;
-        }
+        //else {
+        //    alert("Unsupported type of multi-level cfg setting type='"+inp.type+"'");
+        //    return false;
+        //}
     }
     return true;
 }
