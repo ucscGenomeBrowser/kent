@@ -1,5 +1,8 @@
 ^gbCdnaInfo$
 ^author$
+^ccdsGene$
+^ccdsInfo$
+^ccdsKgMap$
 ^cds$
 ^cell$
 ^description$
