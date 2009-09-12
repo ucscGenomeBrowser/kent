@@ -674,6 +674,10 @@ name broadGBMexp_affyGroups
 type groupings
 all broadGBMexp_affyAll
 
+name broadGBMexp_affy_vs_normGroups
+type groupings
+all broadGBMexp_affyAll
+
 name broadGBMexp_affyAll
 type all
 description All Arrays
