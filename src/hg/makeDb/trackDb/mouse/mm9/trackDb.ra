@@ -56,12 +56,6 @@ spectrum on
 type psl .
 url http://lgsun.grc.nia.nih.gov/geneindex/mm9/bin/giT.cgi?genename=$$
 
-searchName NIAGene
-searchTable NIAGene
-searchMethod fuzzy
-searchType psl
-searchPriority 50
-
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
 longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***
@@ -313,12 +307,6 @@ priority 92
 visibility hide
 type bed 4 .
 
-searchName REST
-searchTable REST
-searchMethod fuzzy
-searchType bed
-searchPriority 50
-
 track vegaGeneComposite
 compositeTrack on
 shortLabel Vega Genes
@@ -524,3 +512,15 @@ noScoreFilter on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
 metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
+
+searchName NIAGene
+searchTable NIAGene
+searchMethod fuzzy
+searchType psl
+searchPriority 50
+
+searchName REST
+searchTable REST
+searchMethod fuzzy
+searchType bed
+searchPriority 50
