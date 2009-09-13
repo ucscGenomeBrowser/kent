@@ -513,6 +513,14 @@ compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMa
 wgEncode 1
 metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
 
+track chainHg18 override
+shortLabel $o_db Chain
+longLabel $o_db ($o_date) Chained Alignments
+
+track netHg18 override
+shortLabel $o_db Net
+longLabel $o_db ($o_date) Alignment Net
+
 searchName NIAGene
 searchTable NIAGene
 searchMethod fuzzy
