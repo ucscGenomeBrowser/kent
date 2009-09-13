@@ -1,9 +1,10 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.38 2009/08/27 00:15:30 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.39 2009/09/13 21:05:49 larrym Exp $
 
 var debug = false;
 var originalPosition;
 var originalSize;
+var originalCursor;
 var clickClipHeight;
 var startDragZoom = null;
 var newWinWidth;
@@ -18,6 +19,7 @@ var imgAreaSelect;          // jQuery element used for imgAreaSelect
 var originalImgTitle;
 var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
 var selectedMapItem;        // index of currently choosen map item (via context menu).
+var browser;                // browser ("msie", "safari" etc.)
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -40,6 +42,7 @@ function initVars(img)
         // remember initial position and size so we can restore it if user cancels
         originalPosition = $('#positionHidden').val();
         originalSize = $('#size').text();
+        originalCursor = jQuery('body').css('cursor');
     }
 }
 
@@ -88,6 +91,17 @@ function setPosition(position, size)
     if(size) {
         $('#size').text(size);
     }
+}
+
+function checkPosition(img, selection)
+{
+// return true if user's selection is still w/n the img (including some slop).
+    var imgWidth = jQuery(img).width();
+    var imgHeight = jQuery(img).height();
+    var imgOfs = jQuery(img).offset();
+    var slop = 10;
+    return (selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
+        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop));
 }
 
 function updatePosition(img, selection, singleClick)
@@ -155,20 +169,22 @@ function selectChange(img, selection)
 {
     initVars();
     updatePosition(img, selection, false);
+    if(checkPosition(img, selection)) {
+        jQuery('body').css('cursor', originalCursor);
+    } else {
+        jQuery('body').css('cursor', 'not-allowed');
+    }
     return true;
 }
 
 function selectEnd(img, selection)
 {
-    var imgWidth = jQuery(img).width();
-    var imgHeight = jQuery(img).height();
-    var imgOfs = jQuery(img).offset();
-    // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
-    var slop = 10;
     var now = new Date();
     var doIt = false;
-    if(autoHideSetting && (selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
-       && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
+    if(originalCursor != null)
+        jQuery('body').css('cursor', originalCursor);
+    // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
+    if(autoHideSetting && checkPosition(img, selection)) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
        doIt = startDragZoom != null || selection.y1 <= clickClipHeight;
@@ -176,6 +192,7 @@ function selectEnd(img, selection)
     if(doIt) {
         // startDragZoom is null if mouse has never been moved
 	if(updatePosition(img, selection, (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100)) {
+            jQuery('body').css('cursor', 'wait');
 	    document.TrackHeaderForm.submit();
 	}
     } else {
@@ -192,6 +209,11 @@ function selectEnd(img, selection)
 }
 
 $(window).load(function () {
+    jQuery.each(jQuery.browser, function(i, val) {
+        if(val) {
+            browser = i;
+        }
+        });
     // jQuery load function with stuff to support drag selection in track img
     loadImgAreaSelect(true);
 
@@ -210,18 +232,6 @@ $(window).load(function () {
         if(imageV2) {
             loadContextMenu(trackImgTbl);
             $(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
-            $(".trDraggable,.nodrop").each( function(t) {
-                                                $(this).mousemove(
-                                                    function (e) {
-                                                        mapEvent(e);
-                                                    }
-                                                );
-                                                $(this).mousedown(
-                                                    function (e) {
-                                                        mapMouseDown(e);
-                                                    }
-                                                );
-                                            });
         } else {
             loadContextMenu(trackImg);
             trackImg.mousemove(
@@ -255,6 +265,8 @@ function loadImgAreaSelect(firstTime)
             imageV2   = true;
             trackImgTbl = $('#imgTbl');
             imgHeight = trackImg.height();
+            // XXXX Tim, I think we should get height from trackImgTbl, b/c it automatically adjusts as we add/delete items.
+            imgHeight = trackImgTbl.height();
         }
 
         clickClipHeight = parseInt(rulerEle.value);
@@ -273,7 +285,7 @@ function toggleTrackGroupVisibility(button, prefix)
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
     var retval = true;
-    var hidden = $("input[name='hgtgroup_"+prefix+"_close']")
+    var hidden = $("input[name='hgtgroup_"+prefix+"_close']");
     var newVal=1; // we're going - => +
     if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
         var oldSrc = $(button).attr("src");
@@ -292,6 +304,7 @@ function toggleTrackGroupVisibility(button, prefix)
         }
         $(button).attr("src",newSrc);
         $(hidden).val(newVal);
+        // setCartVar("hgtgroup_" + prefix + "_close", newVal);
         retval = false;
     }
     return retval;
@@ -604,17 +617,20 @@ function findMapItem(e)
     for(var i=0;i<mapItems.length;i++)
     {
         if(mapItems[i].obj && e.target === mapItems[i].obj) {
+            // This never occurs under IE
             // console.log("Found match by objects comparison");
             retval = i;
             break;
-        } else {
-            // XXXX !imageV2???
+        } else if (!imageV2 || browser == "msie") {
+            // 
+            // We start falling through to here under safari under imageV2 once something has been modified
             if(mapItems[i].r.contains(x, y)) {
                 retval = i;
                 break;
             }
         }
     }
+    // showWarning(x + " " + y + " " + retval + " " + $(e.target).attr('src'));
     // console.log("findMapItem:", e.clientX, e.clientY, x, y, pos.left, pos.top, retval, mapItems.length, e.target.tagName);
     // console.log(e.clientX, pos);
     return retval;
@@ -653,54 +669,69 @@ function mapMouseDown(e)
 
 function contextMenuHit(menuItemClicked, menuObject, cmd)
 {
-    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
+    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
 }
 
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
     if(menuObject.shown) {
-        // XXXX This doesn't work; i.e. I still occassionally get a menu that doesn't get hidden.
-        // console.log("Spinning: menu is still shown");
-        setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 50);
+        // showWarning("Spinning: menu is still shown");
+        setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
+        return;
     }
     if(cmd == 'selectWholeGene') {
             // bring whole gene into view
             var href = mapItems[selectedMapItem].href;
-            var chrom, chromStart, chromEnd;
+            var chromStart, chromEnd;
             var a = /hgg_chrom=(\w+)&/.exec(href);
+            // Many links leave out the chrom (b/c it's in the server side cart as "c")
+            var chrom = document.getElementById("hgt.chromName").value;
             if(a) {
-                chrom = a[1];
+                if(a && a[1])
+                    chrom = a[1];
                 a = /hgg_start=(\d+)/.exec(href);
-                // XXXX does chromStart have to be incremented by 1?
-                chromStart = a[1];
+                if(a && a[1])
+                    // XXXX does chromStart have to be incremented by 1?
+                    chromStart = a[1];
                 a = /hgg_end=(\d+)/.exec(href);
-                chromEnd = a[1];
+                if(a && a[1])
+                    chromEnd = a[1];
             } else {
                 // a = /hgc.*\W+c=(\w+)/.exec(href);
                 a = /hgc.*\W+c=(\w+)/.exec(href);
-                chrom = a[1];
+                if(a && a[1])
+                    chrom = a[1];
                 a = /o=(\d+)/.exec(href);
-                chromStart = parseInt(a[1]) + 1;
+                if(a && a[1])
+                    chromStart = parseInt(a[1]) + 1;
                 a = /t=(\d+)/.exec(href);
-                chromEnd = parseInt(a[1]);
+                if(a && a[1])
+                    chromEnd = parseInt(a[1]);
             }
-            var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
-            if(imageV2) {
-                // XXXX I don't know how to collapse down to just this portion of the display (is that possible?)
-                document.TrackHeaderForm.submit();
+            if(chrom == null || chromStart == null || chromEnd == null) {
+                showWarning("couldn't parse out genomic coordinates");
             } else {
-                jQuery('body').css('cursor', 'wait');
-                $.ajax({
-                           type: "GET",
-                           url: "../cgi-bin/hgTracks",
-                           data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
-                           dataType: "html",
-                           trueSuccess: handleUpdateTrackMap,
-                           success: catchErrorOrDispatch,
-                           cache: false
-                       });
+                var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
+                if(browser == "safari" || imageV2) {
+                    // See comments below on safari.
+                    // We need to parse out more stuff to support imageV2 via ajax, but it's probably possible.
+                    jQuery('body').css('cursor', 'wait');
+                    document.TrackHeaderForm.submit();
+                } else {
+                    jQuery('body').css('cursor', '');
+                    $.ajax({
+                               type: "GET",
+                               url: "../cgi-bin/hgTracks",
+                               data: "hgt.trackImgOnly=1&hgt.ideogramToo=1&position=" + newPosition + "&hgsid=" + getHgsid(),
+                               dataType: "html",
+                               trueSuccess: handleUpdateTrackMap,
+                               success: catchErrorOrDispatch,
+                               cmd: cmd,
+                               cache: false
+                           });
                 }
+            }
     } else if (cmd == 'hgTrackUi') {
         // data: ?
         jQuery('body').css('cursor', 'wait');
@@ -723,29 +754,46 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'viewImg') {
         window.open(trackImg.attr('src'));
     } else if (cmd == 'openLink') {
+        // XXXX This is blocked by Safari's popup blocker (without any warning message).
         window.open(mapItems[selectedMapItem].href);
     } else {
-        $("select[name=" + mapItems[selectedMapItem].id + "]").each(function(t) {
+        var id = mapItems[selectedMapItem].id;
+        var rec = trackDbJson[id];
+        if(rec && rec.parentTrack) {
+            // currently we fall back to the parentTrack
+            id = rec.parentTrack;
+        }
+        $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
                 });
         if(imageV2 && cmd == 'hide')
         {
-            $('#tr_' + mapItems[selectedMapItem].id).remove();
+            // Tell remote cart what happened (to keep them in sync with us).
+            setCartVar(id, cmd);
+            $('#tr_' + id).remove();
+            loadImgAreaSelect(false);
+        } else if (browser == "safari") {
+            // Safari has the following bug: if we update the local map dynamically, the changes don't get registered (even
+            // though if you look in the DOM the changes are there); so we have to do a full form submission when the
+            // user changes visibility settings.
+            jQuery('body').css('cursor', 'wait');
+            document.TrackForm.submit();
         } else {
+            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();
             if(imageV2) {
-	        document.TrackForm.submit();
-            } else {
-                jQuery('body').css('cursor', 'wait');
-                $.ajax({
-                           type: "GET",
-                           url: "../cgi-bin/hgTracks",
-                           data: "hgt.trackImgOnly=1&" + mapItems[selectedMapItem].id + "=" + cmd + "&hgsid=" + getHgsid(),
-                           dataType: "html",
-                           trueSuccess: handleUpdateTrackMap,
-                           success: catchErrorOrDispatch,
-                           cache: false
-                       });
+	        data += "&hgt.trackNameFilter=" + id;
             }
+            jQuery('body').css('cursor', 'wait');
+            $.ajax({
+                       type: "GET",
+                       url: "../cgi-bin/hgTracks",
+                       data: data,
+                       dataType: "html",
+                       trueSuccess: handleUpdateTrackMap,
+                       success: catchErrorOrDispatch,
+                       cmd: cmd,
+                       cache: false
+                   });
         }
     }
 }
@@ -762,9 +810,16 @@ function loadContextMenu(img)
                 var href = mapItems[selectedMapItem].href;
                 var isGene = href.match("hgGene");
                 var isHgc = href.match("hgc");
+                var rec = trackDbJson[id];
+                var id = mapItems[selectedMapItem].id;
+                var rec = trackDbJson[id];
+                if(rec && rec.parentTrack) {
+                    // currently we fall back to the parentTrack
+                    id = rec.parentTrack;
+                }
                 // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                 // Move functionality to a hidden variable?
-                var select = $("select[name=" + mapItems[selectedMapItem].id + "]");
+                var select = $("select[name=" + id + "]");
                 var cur = select.val();
                 if(cur) {
                     select.children().each(function(index, o) {
@@ -788,6 +843,26 @@ function loadContextMenu(img)
                     }
                     menu.push(o);
                     done = true;
+                } else {
+                    // XXXX currently dead code
+                    if(rec) {
+                        // XXXX check current state from a hidden variable.
+                        var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");
+                        var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
+                        for (i in visibilityStrs) {
+                            // XXXX use maxVisibility and change hgTracks so it can hide subtracks
+                            var o = new Object();
+                            var str = visibilityStrs[i];
+                            if(rec.canPack || (str != "pack" && str != "squish")) {
+                                if(str == visibilityStrsOrder[rec.visibility]) {
+                                    str += selectedImg;
+                                }
+                                o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, visibilityStrs[i]); return true; }};
+                                menu.push(o);
+                            }
+                        }
+                        done = true;
+                    }
                 }
             }
             if(!done) {
@@ -814,6 +889,7 @@ function loadContextMenu(img)
             beforeShow: function(e) {
                 // console.log(mapItems[selectedMapItem]);
                 selectedMapItem = findMapItem(e);
+                // XXXX? blockUseMap = true;
             },
             hideCallback: function() {
                 // this doesn't work
@@ -823,14 +899,15 @@ function loadContextMenu(img)
     return;
 }
 
-function parseMap(map, reset)
+function parseMap(ele, reset)
 {
-// Parse the jQuery map object into returned mapItems array (map needn't be the element attached to current document).
+// Parse the jQuery <map> object into returned mapItems array (ele needn't be the element attached to current document).
         if(reset || !mapItems) {
             mapItems = new Array();
         }
-        var i = mapItems.length;
-        map.children().each(function() {
+        if(ele) {
+                var i = mapItems.length;
+                ele.children().each(function() {
                                       mapItems[i++] = {
                                           r : new Rectangle(this.coords),
                                           href : this.href,
@@ -839,6 +916,7 @@ function parseMap(map, reset)
                                           obj : this
                                       };
                                   });
+    }
     return mapItems;
 }
 
@@ -888,9 +966,11 @@ function handleTrackUi(response, status)
 function handleUpdateTrackMap(response, status)
 {
 // Handle ajax response with an updated trackMap image (gif or png) and map.
+//
+// this.cmd can be used to figure out which menu item triggered this.
+//
 //    var a= /(<IMG SRC\s*=\s*([^"]+)"[^>]+id='trackMap'\s*>/.exec(response);
 // <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
-
     // Parse out new ideoGram url (if available)
     var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
     if(a && a[1]) {
@@ -899,45 +979,84 @@ function handleUpdateTrackMap(response, status)
             $('#chrom').attr('src', b[1]);
         }
     }
-    a= /<IMG([^>]+SRC[^>]+id='trackMap[^>]*)>/.exec(response);
-    // Deal with a is null
-    if(a[1]) {
-            var b = /WIDTH\s*=\s*['"]?(\d+)['"]?/.exec(a[1]);
-            var width = b[1];
-            b = /HEIGHT\s*=\s*['"]?(\d+)['"]?/.exec(a[1]);
-            var height = b[1];
-            b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-            var src = b[1];
-            $('#trackMap').attr('src', src);
-            var obj = imgAreaSelect.data('imgAreaSelect');
-            if(width) {
-                trackImg.attr('width', width);
-            }
-            if(height) {
-                trackImg.attr('height', height);
-
-                // obj.setOptions({minHeight : height, maxHeight: height});
-                // obj.getOptions().minHeight = height;
-		// obj.getOptions().maxHeight = height;
-                // XXX doesn't work obj.options.maxHeight = height;
-                // This doesn't work: obj.windowResize();
-                // This works, but causes weird error IF we also change minHeight and maxHeight.
-                // jQuery(window).triggerHandler("resize");
-
-               // After much debugging, I found the best way to have imgAreaSelect continue to work
-               // was to reload it:
+    if(imageV2 && this.cmd && this.cmd != 'selectWholeGene') {
+          // Extract <TR id='tr_ID' class='trDraggable'>...</TR> and update appropriate row in imgTbl;
+          // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
+          var id = mapItems[selectedMapItem].id;
+          var rec = trackDbJson[id];
+          if(rec && rec.parentTrack) {
+              // currently we fall back to the parentTrack
+              id = rec.parentTrack;
+          }
+          var str = "<TR id='tr_" + id + "' class='trDraggable'>([\\s\\S]+?)</TR>";
+          var reg = new RegExp(str);
+          a = reg.exec(response);
+          if(a && a[1]) {
+//               $('#tr_' + id).html();
+//               $('#tr_' + id).empty();
+               $('#tr_' + id).html(a[1]);
+               // XXXX move following to a shared method
+               parseMap(null, true);
+               $("map[name!=ideoMap]").each( function(t) { parseMap($(this, false));});
                loadImgAreaSelect(false);
-           }
+               // Do NOT reload context menu (otherwise we get the "context menu sticks" problem).
+               // loadContextMenu($('#tr_' + id));
+          } else {
+               showWarning("Couldn't parse out new image");
+          }
     } else {
-        showWarning("Couldn't parse out new image");
-    }
-    // now pull out and parse the map.
-    a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
-    if(a[1]) {
-        var $map = $('<map>' + a[1] + '</map>');
-        parseMap($map, true);
-    } else {
-        showWarning("Couldn't parse out map");
+        if(imageV2) {
+            a= /<TABLE id=\'imgTbl\'[^>]*>([\S\s]+?)<\/TABLE>/.exec(response);
+            if(a[1]) {
+                // This doesn't work (much weirdness ensues).
+                $('#imgTbl').html(a[1]);
+            } else {
+                showWarning("Couldn't parse out new image");
+            }
+        } else {
+            a= /<IMG([^>]+SRC[^>]+id='trackMap[^>]*)>/.exec(response);
+            // Deal with a is null
+            if(a[1]) {
+                    var b = /WIDTH\s*=\s*['"]?(\d+)['"]?/.exec(a[1]);
+                    var width = b[1];
+                    b = /HEIGHT\s*=\s*['"]?(\d+)['"]?/.exec(a[1]);
+                    var height = b[1];
+                    b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+                    var src = b[1];
+                    $('#trackMap').attr('src', src);
+                    var obj = imgAreaSelect.data('imgAreaSelect');
+                    if(width) {
+                        trackImg.attr('width', width);
+                    }
+                    if(height) {
+                        trackImg.attr('height', height);
+        
+                        // obj.setOptions({minHeight : height, maxHeight: height});
+                        // obj.getOptions().minHeight = height;
+        		// obj.getOptions().maxHeight = height;
+                        // XXX doesn't work obj.options.maxHeight = height;
+                        // This doesn't work: obj.windowResize();
+                        // This works, but causes weird error IF we also change minHeight and maxHeight.
+                        // jQuery(window).triggerHandler("resize");
+        
+                       // After much debugging, I found the best way to have imgAreaSelect continue to work
+                       // was to reload it:
+                       loadImgAreaSelect(false);
+                       // XXX this doesn't work (i.e. does't make the re-sized row draggable).
+                       jQuery.tableDnD.updateTables();
+                   }
+            } else {
+                showWarning("Couldn't parse out new image");
+            }
+        }
+        // now pull out and parse the map.
+        a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
+        if(a[1]) {
+            var $map = $('<map>' + a[1] + '</map>');
+            parseMap($map, true);
+        } else {
+            showWarning("Couldn't parse out map");
+        }
     }
     jQuery('body').css('cursor', '');
 }
