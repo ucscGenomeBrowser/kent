@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.100 2009/09/04 18:02:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.101 2009/09/14 15:30:12 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -573,12 +573,14 @@ if (chrom == NULL)
 #ifdef IMAGEv2_UI
 if(theImgBox && curMap)
     {
-    // FIXME: The problem with leftLabel toggle appears to be a single map area meant to cover the whole leftLabel and data!
-    // eg: COORDS="11,395,800,405" in non IMAGEv2 image covers everything left of button through to right edge of image
-    // Solution?  Either drop the toggle on side button, or make separate map areas.
     char link[512];
     safef(link,sizeof(link),"%s?%s",hgTracksName(), ui->string); // NOTE: position removed due to portal
-    mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
+    //#ifdef IMAGEv2_SHORT_MAPITEMS
+    //    if(x < insideX && x+width > insideX)
+    //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
+    //#endif//def IMAGEv2_SHORT_MAPITEMS
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
+    //mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
     }
 else
 #endif//def IMAGEv2_UI
@@ -662,7 +664,12 @@ if (x < xEnd)
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
         // Add map item to currnent map (TODO: pass in map)
-        mapSetItemAdd(curMap,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
+        #ifdef IMAGEv2_SHORT_MAPITEMS
+            if(x < insideX && xEnd > insideX)
+                warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, xEnd, yEnd, link);
+        #endif//def IMAGEv2_SHORT_MAPITEMS
+        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
+        //mapSetItemAdd(curMap,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
         }
     else
     #endif//def IMAGEv2_UI
@@ -2711,8 +2718,8 @@ mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName,
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVisibility vis, struct slList *item,
-			      int x2, int textX, int y, int heightPer,
-			      boolean snapLeft, Color color)
+                    int x2, int textX, int y, int heightPer,
+                    boolean snapLeft, Color color)
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
@@ -2727,51 +2734,51 @@ if (s < winStart)
     {
     lButton = TRUE;
     hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y,
-		     heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
+            heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
     }
 if (e > winEnd)
     {
     rButton = TRUE;
     hvGfxNextItemButton(hvg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer,
-		     y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
+            y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
     }
 /* If we're in pack, there's some crazy logic. */
 if (vis == tvPack)
     {
     int w = x2-textX;
     if (lButton)
-	{
-	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, textX, y, insideX-textX, heightPer);
-	tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
-	if (rButton)
-	    {
-	    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-			s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
-	    tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
-	    }
-	else
-	    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-			s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
-	}
+        {
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, insideX-textX, heightPer);
+        tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+        if (rButton)
+            {
+            tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
+            tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+            }
+        else
+            tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
+        }
     else if (snapLeft && rButton)
-	/* This is a special case where there's a next-item button, NO */
-	/* prev-item button, AND the gene name is drawn left of the browser window. */
-	{
-	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, textX, y, x2 - buttonW - textX, heightPer);
-	tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
-	}
+        /* This is a special case where there's a next-item button, NO */
+        /* prev-item button, AND the gene name is drawn left of the browser window. */
+        {
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, x2 - buttonW - textX, heightPer);
+        tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+        }
     else if (rButton)
-	{
-	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, textX, y, w - buttonW, heightPer);
-	tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
-	}
+        {
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, w - buttonW, heightPer);
+        tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+        }
     else
-	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, textX, y, w, heightPer);
-    }
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, w, heightPer);
+        }
 /* Full mode is a little easier to deal with. */
 else if (vis == tvFull)
     {
@@ -2779,27 +2786,34 @@ else if (vis == tvFull)
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+        s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
     /* Make the button mapboxes. */
     if (lButton)
-	tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+        tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
     if (rButton)
-	tg->nextPrevItem(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+        tg->nextPrevItem(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
     /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
     if (lButton && rButton)
-	{
-	geneMapBoxX += buttonW;
-	geneMapBoxW -= 2 * buttonW;
-	}
+        {
+        geneMapBoxX += buttonW;
+        geneMapBoxW -= 2 * buttonW;
+        }
     else if (lButton)
-	{
-	geneMapBoxX += buttonW;
-	geneMapBoxW -= buttonW;
-	}
+        {
+        geneMapBoxX += buttonW;
+        geneMapBoxW -= buttonW;
+        }
     else if (rButton)
-	geneMapBoxW -= buttonW;
+        geneMapBoxW -= buttonW;
+#ifdef IMAGEv2_SHORT_MAPITEMS
+    if(x2 > 0)
+        {
+        geneMapBoxX = textX;
+        geneMapBoxW = x2-geneMapBoxX;
+        }
+#endif//def IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
+        s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
     }
 }
 
@@ -2981,8 +2995,21 @@ for (item = tg->items; item != NULL; item = item->next)
         /* The doMapItems will make the mapboxes normally but make */
         /* them here if we're drawing nextItem buttons. */
         if (nextItemCompatible(tg))
+#ifdef IMAGEv2_SHORT_MAPITEMS
+            {
+            // Convert start/end coordinates to pix
+            int s = tg->itemStart(tg, item);
+            int e = tg->itemEnd(tg, item);
+            int sClp = (s < winStart) ? winStart : s;
+            int eClp = (e > winEnd)   ? winEnd   : e;
+            int x1 = round((sClp - winStart)*scale) + xOff;
+            int x2 = round((eClp - winStart)*scale) + xOff;
+            genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, FALSE,color);
+            }
+#else//ifndef IMAGEv2_SHORT_MAPITEMS
             genericDrawNextItemStuff(tg, hvg, vis, item, -1, -1, y, tg->heightPer, FALSE,
                                      color);
+#endif//ndef IMAGEv2_SHORT_MAPITEMS
         y += tg->lineHeight;
         }
     }
