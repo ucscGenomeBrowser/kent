@@ -4031,7 +4031,7 @@ baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
-chromosomes chr22
+chromosomes chr21,chr22
 maxWindowToDraw 200000
 
 track NA12878Slx
