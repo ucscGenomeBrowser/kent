@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.134 2009/08/28 23:33:19 larrym Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.135 2009/09/14 20:33:13 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -265,6 +265,19 @@ if (sp == NULL)
         errAbort("can't find profile %s for database %s in hg.conf", profileName, database);
     }
 return sp;
+}
+
+struct slName* sqlProfileGetNames()
+/* Get a list of all profile names. slFreeList result when done */
+{
+if (profiles == NULL)
+    sqlProfileLoad();
+struct slName *names = NULL;
+struct hashCookie cookie = hashFirst(profiles);
+struct hashEl* hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slAddHead(&names, slNameNew(hel->name));
+return names;
 }
 
 static void replaceStr(char **str, char *val)

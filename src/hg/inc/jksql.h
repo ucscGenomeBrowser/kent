@@ -81,6 +81,9 @@ void sqlProfileAddDb(char *profileName, char *db);
  * this profile, it is ignored.  If it is associated with a different profile,
  * it is an error. */
 
+struct slName* sqlProfileGetNames();
+/* Get a list of all profile names. slFreeList result when done */
+
 struct hash *sqlHashOfDatabases(void);
 /* Get hash table with names of all databases that are online. */
 
