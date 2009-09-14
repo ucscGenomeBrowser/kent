@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1596 2009/09/04 18:24:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1597 2009/09/14 15:28:25 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1572,7 +1572,7 @@ leftLabelWidth = insideX - gfxBorder*3;
 
 #ifdef IMAGEv2_UI
 struct image    *theOneImg   = NULL; // No need to be global, only the map needs to be global
-struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
+//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 // Set up imgBox dimensions
 int sideSliceWidth  = 0;   // Just being explicit
