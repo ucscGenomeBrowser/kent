@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.7 2009/08/24 23:47:56 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.8 2009/09/14 23:44:25 angie Exp $";
 
 #include "bamFile.h"
 
@@ -136,7 +136,8 @@ safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd)
 bamIgnoreStrand();
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
-bamFetch(database, tdb->tableName, posForBam, oneBam, &btd);
+char *fileName = bamFileNameFromTable(database, tdb->tableName, seqNameForBam);
+bamFetch(fileName, posForBam, oneBam, &btd);
 if (isPaired && hashNumEntries(pairHash) > 0)
     {
     char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "1000");
@@ -150,7 +151,7 @@ if (isPaired && hashNumEntries(pairHash) > 0)
 	btd.pairHash = newPairHash;
 	safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam,
 	      winStart-pairSearchRange, winEnd+pairSearchRange);
-	bamFetch(database, tdb->tableName, posForBam, oneBam, &btd);
+	bamFetch(fileName, posForBam, oneBam, &btd);
 	if (hashNumEntries(newPairHash) > 0)
 	    {
 	    struct hashCookie cookie2 = hashFirst(pairHash);

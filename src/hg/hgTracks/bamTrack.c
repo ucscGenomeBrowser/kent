@@ -12,7 +12,7 @@
 #include "hgTracks.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.8 2009/09/08 21:39:38 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.9 2009/09/14 23:44:25 angie Exp $";
 
 struct bamTrackData
     {
@@ -222,7 +222,8 @@ char cartVarName[512];
 safef(cartVarName, sizeof(cartVarName), "%s_minAliQual", tg->tdb->tableName);
 int minAliQual = cartUsualInt(cart, cartVarName, 0);
 struct bamTrackData btd = {tg, pairHash, minAliQual};
-bamFetch(database, tg->mapName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
+char *fileName = bamFileNameFromTable(database, tg->mapName, seqNameForBam);
+bamFetch(fileName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
 if (isPaired)
     {
     struct hashEl *hel;

@@ -12,11 +12,16 @@ void bamIgnoreStrand();
 /* Change the behavior of this lib to disregard item strand. 
  * If called, this should be called before any other bam functions. */
 
-void bamFetch(char *db, char *table, char *position, bam_fetch_f callbackFunc, void *callbackData);
-/* Open the .bam file given in db.table, fetch items in the seq:start-end position range,
+char *bamFileNameFromTable(char *db, char *table, char *bamSeqName);
+/* Return file name from table.  If table has a seqName column, then grab the 
+ * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
+ * bam file might have '1' not 'chr1'). */
+
+void bamFetch(char *bamFileName, char *position, bam_fetch_f callbackFunc, void *callbackData);
+/* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData. 
- * Note: if sequences in .bam file don't begin with "chr" but db's do, skip the "chr"
- * at the beginning of the position. */
+ * Note: if sequences in .bam file don't begin with "chr" but cart position does, pass in 
+ * cart position + strlen("chr") to match the .bam file sequence names. */
 
 boolean bamIsRc(const bam1_t *bam);
 /* Return TRUE if alignment is on - strand.  If bamIgnoreStrand has been called,
