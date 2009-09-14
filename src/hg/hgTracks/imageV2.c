@@ -7,11 +7,11 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.9 2009/09/04 18:25:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.10 2009/09/14 15:22:35 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
-//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
+struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 //struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 //struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
@@ -287,7 +287,7 @@ return slice->map;
 }
 
 struct mapSet *sliceGetMap(struct imgSlice *slice,boolean sliceSpecific)
-/* Gets the map associate with a slice which male be sliceSpecific or it map belong to the slices' image.
+/* Gets the map associate with a slice which may be sliceSpecific or it map belong to the slices' image.
    Map items can then be added to the map returned with mapSetItemAdd() */
 {
 if(!sliceSpecific && slice->map == NULL && slice->parentImg != NULL)
@@ -511,6 +511,45 @@ struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,type);
 if(slice == NULL)
     return NULL;
 return sliceGetMap(slice,FALSE); // Map could belong to image or could be slice specific
+}
+
+int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
+/* Will add a map item it an imgTrack's appropriate slice's map
+   Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
+   returns count of map items added, which could be 0, 1 or more than one if item spans slices */
+{
+struct imgSlice *slice;
+char *imgFile = NULL;               // name of file that hold the image
+
+int count = 0;
+for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
+    {
+    if(imgFile == NULL)
+        imgFile = slice->parentImg->file;
+    else if(differentString(imgFile,slice->parentImg->file))
+        {
+        char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+        warn("imgTrackAddMapItem(%s) called, but not all slice images are the same for this track.",name);
+        }
+    if(topLeftX     < (slice->offsetX + slice->width)
+    && bottomRightX >= slice->offsetX
+    && topLeftY     < (slice->offsetY + slice->height)
+    && bottomRightY >= slice->offsetY ) // some overlap
+        {
+        struct mapSet *map = sliceGetMap(slice,FALSE);
+        if(map!=NULL)
+            {
+            mapSetItemAdd(map,link,title,max(topLeftX,slice->offsetX),max(topLeftY,slice->offsetY),min(bottomRightX,slice->offsetX + slice->width),min(bottomRightY,slice->offsetY + slice->height));
+            count++;
+            }
+        }
+    }
+//if(count>=2)
+//    {
+//    char * name = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb != NULL ? imgTrack->tdb->tableName : imgFile);
+//    warn("imgTrackAddMapItem(%s) called for map items stretching across %d slice(s).",name,count);
+//    }
+return count;
 }
 
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose)

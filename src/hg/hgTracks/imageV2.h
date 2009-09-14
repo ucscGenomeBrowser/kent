@@ -10,6 +10,10 @@
 //#define IMAGEv2_DRAG_SCROLL
 //#define IMAGEv2_DRAG_SCROLL_SZ 3
 
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+    //#define IMAGEv2_SHORT_MAPITEMS
+#endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+
 // CURRENT PROBLEMS:
 // o some map items span both sideLabel and data!!
 // o subrtacks should be dragReorderable!!!  Make them individual imgTracks
@@ -23,7 +27,7 @@
 
 extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge rewrite
 //extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
-//extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
+extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
 //extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
 extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
@@ -173,7 +177,7 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
     struct trackDb *tdb;	  // trackDb entry (should this be struct track* entry?)
-    char *name;	              // It is possible to have an imgTrack without a tdb, but then it mist have a name
+    char *name;	              // It is possible to have an imgTrack without a tdb, but then it must have a name
     char *db;                 // Image for db (species) (assert imgTrack matches imgBox)
     char *chrom;              // Image for chrom (assert imgTrack matches imgBox)
     int  chromStart;          // Image start (absolute, not portal position)
@@ -205,6 +209,10 @@ struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceTy
 /* Updates the slice or adds it */
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type);
 /* Gets the map assocated with a specific slice belonging to the imgTrack */
+int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+/* Will add a map item it an imgTrack's appropriate slice's map
+   Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
+   returns count of map items added, which could be 0, 1 or more than one if item spans slices */
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose);
 /* Tests the completeness and consistency of this imgTrack (not including slices) */
 void imgTrackFree(struct imgTrack **pImgTrack);
