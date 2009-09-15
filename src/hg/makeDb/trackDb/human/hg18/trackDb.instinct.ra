@@ -1,3 +1,14 @@
+track kotliarov2006
+shortLabel glioma CGH
+longLabel glioma CGH
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings kotliarov2006Groups
 
 #track maserGBM
 #shortLabel CGH profiles
@@ -10,18 +21,6 @@
 #expScale 1.0
 #expStep 0.2
 #groupings maserGBMGroups
-
-#track CGHprofiles
-#shortLabel CGH profiles
-#longLabel CGH profiles
-#group x
-#priority 45
-#visibility hide
-#type expRatio
-#logicalDb localDb
-#expScale 1.0
-#expStep 0.2
-#groupings CGHprofilesGroups
 
 track COSMICsummary
 shortLabel COSMIC Data
@@ -133,7 +132,11 @@ expScale 5.0
 expStep 0.2
 groupings ISPYproteomicsGroups
 
+<<<<<<< trackDb.instinct.ra
+>>>>>>> 1.38
+=======
 ######################
+>>>>>>> 1.40
 track ucsfNeveExp
 shortLabel Breast Cell Line Expression (Neve. et.al)
 longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
@@ -416,6 +419,9 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings parsons2008cghGroups
+<<<<<<< trackDb.instinct.ra
+>>>>>>> 1.38
+=======
 
 track mullighan2008_500K
 shortLabel CGH (Mullighan et al. 2008)
@@ -428,6 +434,9 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings mullighan2008_500KGroups
+<<<<<<< trackDb.instinct.ra
+>>>>>>> 1.39
+=======
 
 track mullighan2008_SNP6
 shortLabel CGH (Mullighan et al. 2008)
@@ -464,3 +473,4 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings balagurunathan2008Groups
+>>>>>>> 1.40
