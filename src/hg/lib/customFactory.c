@@ -26,8 +26,10 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 #include "udc.h"
+#include "bigWig.h"
+#include "bigBed.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.102 2009/08/19 06:02:57 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.103 2009/09/15 22:02:00 kent Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1499,6 +1501,8 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigWig");
+struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);	// Just for error checking
+bbiFileClose(&bbi);
 return track;
 }
 
@@ -1531,6 +1535,8 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigBed");
+struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);	// Just for error checking
+bbiFileClose(&bbi);
 return track;
 }
 
