@@ -31,7 +31,7 @@ BEGIN {
                            haveMysqlDb haveMysqlTbl listMysqlTbls
                            getRelDownloadDir
                            getSeqDownloadDir getMafDownloadDir
-                           getBlatTargetDbDir checkOnBuildServer
+                           getBlatTargetDbDir checkOnBuildServer dropTable
                            unlinkFiles getRSyncPortOpt);
     
     # make stdout/stderr always line buffered
@@ -1027,6 +1027,12 @@ sub getRSyncPortOpt($) {
         return "--rsh=ssh";
     }
     return "--port=$rsyncPort";
+}
+
+# drop a table
+sub dropTable($$) {
+    my($db, $tbl) = @_;
+    runMysql("-Ne 'DROP TABLE IF EXISTS $db.$tbl'");
 }
 
 
