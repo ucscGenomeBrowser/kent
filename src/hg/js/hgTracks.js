@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.39 2009/09/13 21:05:49 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.40 2009/09/15 00:21:53 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -334,6 +334,277 @@ function imgTblSetOrder(table)
 }
 
 /////////////////////////////////////////////////////
+jQuery.fn.chromIdeo = function(){
+this.each(function(){
+    // Plan:
+    // mouseDown: determine where in map: convert to img location: pxDown
+    // mouseMove: flag drag
+    // mouseUp: if no drag, then create href centered on bpDown loc with current span
+    //          if drag, then create href from bpDown to bpUp
+    //          if ctrlKey then expand selection to containing cytoBand(s)
+    var pxTop    = -1;  // Top of cytobands
+    var pxBottom = -1;  // Bottom of cytobands
+    var pxLeft   = -1;  // Beginning location of first cytoBand
+    var pxRight  = -1;  // End location of last cytoband
+    var pxImg = { top: -1, height: -1, left: -1, width: -1 };  // Image dimensions
+    var chrDef = { name: "", beg: -1, end: -1 };   // Dimenaions of chrom in bases
+    var pxDown = 0;     // pix X location of mouseDown
+    var chrImg = $(this);
+    var mouseIsDown   = false;
+    var mouseHasMoved = false;
+    var hilite = jQuery('<div></div>');
+
+    initialize();
+
+    function initialize(){
+
+        findDimensions();
+
+        if(pxTop == -1)
+            alert("chromIdeo(): failed to register "+this.id);
+        else {
+            hiliteSetup();
+
+            $('.cytoBand').mousedown( function(e) {
+                updateImgOffsets();
+                pxDown = e.clientX - pxImg.left;
+                var pxY = e.clientY - pxImg.top;
+                if(mouseIsDown == false
+                && pxDown >= pxLeft
+                && pxDown <= pxRight
+                && pxY >= pxTop
+                && pxY <= pxBottom) {
+                    mouseIsDown = true;
+                    mouseHasMoved = false;
+
+                    $(document).bind('mousemove',chromMove);
+                    $(document).bind( 'mouseup', chromUp);
+                    hiliteShow(pxDown,pxDown);
+                    return false;
+                }
+                //else alert("out fo range pxY:"+pxY+" = (e.clientY:"+e.clientY+" - pxImg.top:"+pxImg.top+")   body.scrollTop():"+$("body").scrollTop()+" range:"+pxTop+"-"+pxBottom);
+            });
+        }
+    }
+
+    function chromMove(e) {
+        if ( mouseIsDown ) {
+            var pxX = e.clientX - pxImg.left;
+            //if(pxX >= -10 && pxX <= pxImg.width) {
+                var relativeX = (pxX - pxDown);
+                if(mouseHasMoved || (mouseHasMoved == false && Math.abs(relativeX) > 2)) {
+                    mouseHasMoved = true;
+                    if(pxX >= pxLeft && pxX <= pxRight)
+                        hiliteShow(pxDown,pxX);
+                    else if(pxX < pxLeft)
+                        hiliteShow(pxDown,pxLeft);
+                    else
+                        hiliteShow(pxDown,pxRight);
+                }
+            //}
+        }
+    }
+    function chromUp(e) {  // Must be a separate function instead of pan.mouseup event.
+        chromMove(e); // Just in case
+        if(mouseIsDown) {
+            updateImgOffsets();
+            var pxUp = e.clientX - pxImg.left;
+            var pxY  = e.clientY - pxImg.top;
+            //alert("chromIdeo("+chrDef.name+") selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+pxLeft+"-"+pxRight+" chrom range (bp):"+chrDef.name+":"+chrDef.beg+"-"+chrDef.end);
+            if(e.ctrlKey) {
+                var band = findCytoBand(pxDown,pxUp);
+                if(band.left > -1 && band.right > -1) {
+                    pxDown = band.left;
+                    pxUp   = band.right;
+                    mouseHasMoved = true;
+                    hiliteShow(pxDown,pxUp);
+                }
+            }
+            if(pxY >= 0 && pxY <= pxImg.height) {  // within vertical range or else cancel
+                var selRange = { beg: -1, end: -1, width: -1 };
+                var dontAsk = true;
+
+                if(mouseHasMoved) {
+                    // bounded by chrom dimensions: but must remain within image!
+                    if( pxUp < pxLeft && pxUp >= -20 )
+                        pxUp = pxLeft;
+                    if( pxUp > pxRight && pxUp <= pxRight + 30)
+                        pxUp = pxRight;
+
+                    if( pxLeft <= pxUp && pxUp <= pxRight ) {// Within horizontal (chrom) range
+
+                        var offset = (pxDown - pxLeft)/(pxRight - pxLeft);
+                        selRange.beg = Math.round(offset * (chrDef.end - chrDef.beg));
+                        offset = (pxUp - pxLeft)/(pxRight - pxLeft);
+                        selRange.end = Math.round(offset * (chrDef.end - chrDef.beg));
+
+                        if(Math.abs(selRange.end - selRange.beg) < 20)
+                            mouseHasMoved = false; // Drag so small: treat as simple click
+                        else
+                            dontAsk = false;
+                    }
+                    //else alert("chromIdeo("+chrDef.name+") NOT WITHIN HORIZONTAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+pxLeft+"-"+pxRight);
+                }
+                if(mouseHasMoved == false) { // Not else because small drag turns this off
+
+                    hiliteShow(pxUp,pxUp);
+                    var curBeg = parseInt($("#hgt\\.winStart").val());  // Note the escaped '.'
+                    var curEnd = parseInt($("#hgt\\.winEnd").val());
+                    var curWidth = curEnd - curBeg;
+                    var offset = (pxUp - pxLeft)/(pxRight - pxLeft);
+                    selRange.beg = Math.round(offset * (chrDef.end - chrDef.beg)) - Math.round(curWidth/2); // Notice that beg is based upon up position
+                    selRange.end  = selRange.beg + curWidth;
+                }
+                if(selRange.end > -1) {
+                    // prompt, then submit for new position
+                    selRange = rangeNormaizeToChrom(selRange,chrDef);
+                    if(mouseHasMoved == false) { // Update highlight by converting bp back to pix
+                        var offset = selRange.beg/chrDef.end;
+                        pxDown = Math.round(offset * (pxRight - pxLeft)) + pxLeft;
+                        offset = selRange.end/chrDef.end;
+                        pxUp = Math.round(offset * (pxRight - pxLeft)) + pxLeft;
+                        hiliteShow(pxDown,pxUp);
+                    }
+                    if(dontAsk || confirm("Jump to new position:\n\n"+chrDef.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width))) {
+                        setPositionByCoordinates(chrDef.name, selRange.beg, selRange.end)
+                        document.TrackHeaderForm.submit();
+                    }
+                }
+            }
+            //else alert("chromIdeo("+chrDef.name+") NOT WITHIN VERTICAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+pxLeft+"-"+pxRight+"\n cytoTop-Bottom:"+pxTop +"-"+pxBottom);
+            hiliteCancel();
+            $(document).unbind('mousemove',chromMove);
+            $(document).unbind('mouseup',chromUp);
+            setTimeout('blockUseMap=false;',50);
+        }
+        mouseIsDown = false;
+        mouseHasMoved = false;
+    }
+
+    function findDimensions()
+    {
+        $('.cytoBand').each(function(t) {
+            var loc = this.coords.split(",");
+            if(loc.length == 4) {
+                if( pxTop == -1) {
+                    pxLeft   = parseInt(loc[0]);
+                    pxRight  = parseInt(loc[2]);
+                    pxTop    = parseInt(loc[1]);
+                    pxBottom = parseInt(loc[3]);
+                } else {
+                    if( pxLeft  > parseInt(loc[0]))
+                        pxLeft  = parseInt(loc[0]);
+                    if( pxRight < parseInt(loc[2]))
+                        pxRight = parseInt(loc[2]);
+                }
+
+                var range = this.title.substr(this.title.lastIndexOf(':')+1)
+                var pos = range.split('-');
+                if(pos.length == 2) {
+                    if( chrDef.name.length == 0) {
+                        chrDef.beg = parseInt(pos[0]);
+                        chrDef.end = parseInt(pos[1]);
+                        chrDef.name = this.title.substring(this.title.lastIndexOf(' ')+1,this.title.lastIndexOf(':'))
+                    } else {
+                        if( chrDef.beg > parseInt(pos[0]))
+                            chrDef.beg = parseInt(pos[0]);
+                        if( chrDef.end < parseInt(pos[1]))
+                            chrDef.end = parseInt(pos[1]);
+                    }
+                }
+            $(this).css( 'cursor', 'text');
+            $(this).attr("href","");
+            }
+        });
+    }
+
+    function findCytoBand(pxDown,pxUp) {
+        var cyto = { left: -1, right: -1 };
+        $('.cytoBand').each(function(t) {
+            var loc = this.coords.split(",");
+            if(loc.length == 4) {
+                if(cyto.left == -1 || cyto.left > parseInt(loc[0])) {
+                    if((parseInt(loc[0]) <= pxDown && pxDown < parseInt(loc[2]))
+                    || (parseInt(loc[0]) <= pxUp   && pxUp   < parseInt(loc[2])))
+                        cyto.left  = parseInt(loc[0]);
+                }
+                if(cyto.right == -1 || cyto.right < parseInt(loc[2])) {
+                    if((parseInt(loc[0]) <= pxDown && pxDown < parseInt(loc[2]))
+                    || (parseInt(loc[0]) <= pxUp   && pxUp   < parseInt(loc[2])))
+                        cyto.right  = parseInt(loc[2]);
+                }
+            }
+        });
+        return cyto;
+    }
+    function rangeNormaizeToChrom(selection,chrom)
+    {
+        if(selection.end < selection.beg) {
+            var tmp = selection.end;
+            selection.end = selection.beg;
+            selection.beg = tmp;
+        }
+        selection.width = (selection.end - selection.beg);
+        selection.beg += 1;
+        if( selection.beg < chrom.beg) {
+            selection.beg = chrom.beg;
+            selection.end = chrom.beg + selection.width;
+        }
+        if( selection.end > chrom.end) {
+            selection.end = chrom.end;
+            selection.beg = chrom.end - selection.width;
+            if( selection.beg < chrom.beg) { // spans whole chrom
+                selection.width = (selection.end - chrom.beg);
+                selection.beg = chrom.beg + 1;
+            }
+        }
+        return selection;
+    }
+
+    function hiliteShow(down,cur)
+    {
+        var topY = pxImg.top;
+        var high = pxImg.height;
+        var begX = -1;
+        var wide = -1;
+        if(cur < down) {
+            begX = cur + pxImg.left;
+            wide = (down - cur);
+        } else {
+            begX = down + pxImg.left;
+            wide = (cur - down);
+        }
+        $(hilite).css({ left: begX + 'px', width: wide + 'px', top: topY + 'px', height: high + 'px', display:'' });
+        $(hilite).show();
+    }
+    function hiliteCancel(left,width,top,height)
+    {
+        $(hilite).hide();
+        $(hilite).css({ left: '0px', width: '0px', top: '0px', height: '0px' });
+    }
+
+    function hiliteSetup()
+    {
+        $(hilite).css({ backgroundColor: 'green', opacity: 0.4, borderStyle: 'solid', borderWidth: '1px', bordercolor: '#0000FF' });
+        $p = $(chrImg);
+
+        $(hilite).css({ display: 'none', position: 'absolute', overflow: 'hidden', zIndex: 1 });
+        jQuery($(chrImg).parents('body')).append($(hilite));
+        return hilite;
+    }
+
+    function updateImgOffsets()
+    {
+        var offs = $(chrImg).offset();
+        pxImg.top  = Math.round(offs.top  - $("body").scrollTop() );
+        pxImg.left = Math.round(offs.left - $("body").scrollLeft() );
+        pxImg.height = parseInt($(chrImg).css("height"));
+        pxImg.width  = parseInt($(chrImg).css("height"));
+        return pxImg;
+    }
+});
+}
+/////////////////////////////////////////////////////
 jQuery.fn.panImages = function(imgOffset,imgBoxLeftOffset){
 this.each(function(){
 
@@ -578,6 +849,12 @@ $(document).ready(function()
             alert('Using imageV2, but old map is not empty!');
         }
     }
+    if($('img#chrom').length == 1) {
+        if($('.cytoBand').length > 1) {
+            $('img#chrom').chromIdeo();
+        }
+    }
+
 });
 
 function rulerModeToggle (ele)
@@ -622,7 +899,7 @@ function findMapItem(e)
             retval = i;
             break;
         } else if (!imageV2 || browser == "msie") {
-            // 
+            //
             // We start falling through to here under safari under imageV2 once something has been modified
             if(mapItems[i].r.contains(x, y)) {
                 retval = i;
@@ -1030,7 +1307,7 @@ function handleUpdateTrackMap(response, status)
                     }
                     if(height) {
                         trackImg.attr('height', height);
-        
+
                         // obj.setOptions({minHeight : height, maxHeight: height});
                         // obj.getOptions().minHeight = height;
         		// obj.getOptions().maxHeight = height;
@@ -1038,7 +1315,7 @@ function handleUpdateTrackMap(response, status)
                         // This doesn't work: obj.windowResize();
                         // This works, but causes weird error IF we also change minHeight and maxHeight.
                         // jQuery(window).triggerHandler("resize");
-        
+
                        // After much debugging, I found the best way to have imgAreaSelect continue to work
                        // was to reload it:
                        loadImgAreaSelect(false);
