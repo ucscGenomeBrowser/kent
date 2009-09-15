@@ -27,6 +27,7 @@ if ( "$HOST" == "hgwbeta" ) then
     setenv BUILDDIR /data/tmp/releaseBuild
 endif
 if ( "$HOST" == "hgwdev" ) then
+    setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
     setenv JAVABUILD /scratch/javaBuild
     setenv JAVA_HOME /usr/java/default
     setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/home/heather/transfer/jtidy.jar:/usr/share/java/rhino.jar:/cluster/home/heather/archive/mysql-connector-java-3.0.16-ga-bin.jar
