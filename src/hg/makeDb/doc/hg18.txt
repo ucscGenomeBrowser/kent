@@ -28216,7 +28216,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.381 2009/09/09 18:13:50 hartera Exp $
+# $Id: hg18.txt,v 1.382 2009/09/15 06:59:00 markd Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28264,7 +28264,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.381 2009/09/09 18:13:50 hartera Exp $
+# $Id: hg18.txt,v 1.382 2009/09/15 06:59:00 markd Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28779,4 +28779,16 @@ see doc/builds.txt for specific details.
     hgsql -e 'drop table vegaPep;' hg18
     hgPepPred hg18 tab vegaPep vegaPepOnlyInGtp.hg18.fa.tab    
 
-############################################################################
+#############################################################################
+# lsSnpPdb: import of LS-SNP/PDB data for SNP 130 (2009-02-02 markd)
+    # down load from JHU
+    ssh genbank
+    sudo su - genbank
+    cd /cluster/data/genbank
+    ./bin/lsSnpPdbDownloadStep hg18
+    # load into hgwdev database
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/lsSnpPdbDbLoadStep hg18
+    # once this has been QAed, will auto-update from genbank scripts
+#############################################################################
