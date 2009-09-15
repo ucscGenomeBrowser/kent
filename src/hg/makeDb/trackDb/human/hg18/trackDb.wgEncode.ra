@@ -3701,7 +3701,7 @@ dimensions dimensionX=cellType dimensionY=replicate
 sortOrder cellType=+ replicate=+
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
-visibility dense
+visibility hide
 canPack On
 #visibilityViewDefaults  SimpleSignal=pack
 priority 0
