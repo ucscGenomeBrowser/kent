@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.41 2009/09/16 00:40:57 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.42 2009/09/16 17:34:00 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -334,7 +334,7 @@ function imgTblSetOrder(table)
 }
 
 /////////////////////////////////////////////////////
-jQuery.fn.chromIdeo = function(){
+jQuery.fn.chromDrag = function(){
 this.each(function(){
     // Plan:
     // mouseDown: determine where in map: convert to img location: pxDown
@@ -361,7 +361,8 @@ this.each(function(){
         else {
             hiliteSetup();
 
-            $('.cytoBand').mousedown( function(e) {
+            $('.cytoBand').mousedown( function(e)
+            {   // mousedown on chrom portion of image only (map items)
                 updateImgOffsets();
                 pxDown = e.clientX - img.scrolledLeft;
                 var pxY = e.clientY - img.scrolledTop;
@@ -375,12 +376,12 @@ this.each(function(){
                     hiliteShow(pxDown,pxDown);
                     return false;
                 }
-                //else alert("out fo range pxY:"+pxY+" = (e.clientY:"+e.clientY+" - img.scrolledTop:"+img.scrolledTop+")   body.scrollTop():"+$("body").scrollTop()+" range:"+chr.top+"-"+chr.bottom);
             });
         }
     }
 
-    function chromMove(e) {
+    function chromMove(e)
+    {   // If mouse was down, determine if dragged, then show hilite
         if ( mouseIsDown ) {
             var pxX = e.clientX - img.scrolledLeft;
             var relativeX = (pxX - pxDown);
@@ -395,7 +396,10 @@ this.each(function(){
             }
         }
     }
-    function chromUp(e) {  // Must be a separate function instead of pan.mouseup event.
+    function chromUp(e)
+    {   // If mouse was down, handle final selection
+        $(document).unbind('mousemove',chromMove);
+        $(document).unbind('mouseup',chromUp);
         chromMove(e); // Just in case
         if(mouseIsDown) {
             updateImgOffsets();
@@ -420,19 +424,14 @@ this.each(function(){
                     }
                 }
                 else if(mouseHasMoved) {
-                    // bounded by chrom dimensions: but must remain within image!
-                    if( isWithin(-20,pxUp,chr.left) )
+                    if( isWithin(-20,pxUp,chr.left) ) // bounded by chrom dimensions: but must remain within image!
                         pxUp = chr.left;
                     if( isWithin(chr.right,pxUp,chr.right + 30) )
                         pxUp = chr.right;
 
                     if( isWithin(chr.left,pxUp,chr.right) ) {
 
-                        //var offset = (pxDown - chr.left)/chr.width;
-                        //selRange.beg = Math.round(offset * chr.size);
                         selRange.beg = convertToBases(pxDown);
-                        //offset = (pxUp - chr.left)/chr.width;
-                        //selRange.end = Math.round(offset * chr.size);
                         selRange.end = convertToBases(pxUp);
 
                         if(Math.abs(selRange.end - selRange.beg) < 20)
@@ -448,33 +447,27 @@ this.each(function(){
                     var curBeg = parseInt($("#hgt\\.winStart").val());  // Note the escaped '.'
                     var curEnd = parseInt($("#hgt\\.winEnd").val());
                     var curWidth = curEnd - curBeg;
-                    //var offset = (pxUp - chr.left)/chr.width;
-                    //selRange.beg = Math.round(offset * chr.size) - Math.round(curWidth/2); // Notice that beg is based upon up position
                     selRange.beg = convertToBases(pxUp) - Math.round(curWidth/2); // Notice that beg is based upon up position
                     selRange.end  = selRange.beg + curWidth;
                 }
                 if(selRange.end > -1) {
                     // prompt, then submit for new position
-                    selRange = rangeNormaizeToChrom(selRange,chr);
+                    selRange = rangeNormalizeToChrom(selRange,chr);
                     if(mouseHasMoved == false) { // Update highlight by converting bp back to pix
-                        //var offset = selRange.beg/chr.size;
-                        //pxDown = Math.round(offset * chr.width) + chr.left;
                         pxDown = convertFromBases(selRange.beg)
-                        //offset = selRange.end/chr.size;
-                        //pxUp = Math.round(offset * chr.width) + chr.left;
                         pxUp = convertFromBases(selRange.end)
                         hiliteShow(pxDown,pxUp);
                     }
-                    if(dontAsk || confirm("Jump to new position:\n\n"+chr.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width) + (chr.reverse?" reversed":"") )) {
+                    if(dontAsk || confirm("Jump to new position:\n\n"+chr.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width)) ) {
                         setPositionByCoordinates(chr.name, selRange.beg, selRange.end)
+                        $('.cytoBand').mousedown( function(e) { return false; }); // Stop the presses :0)
                         document.TrackHeaderForm.submit();
+                        return true; // Make sure the setTimeout below is not called.
                     }
                 }
             }
             //else alert("chromIdeo("+chr.name+") NOT WITHIN VERTICAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+"\n cytoTop-Bottom:"+chr.top +"-"+chr.bottom);
             hiliteCancel();
-            $(document).unbind('mousemove',chromMove);
-            $(document).unbind('mouseup',chromUp);
             setTimeout('blockUseMap=false;',50);
         }
         mouseIsDown = false;
@@ -482,18 +475,18 @@ this.each(function(){
     }
 
     function isWithin(beg,here,end)
-    {
+    {   // Simple utility
         return ( beg <= here && here < end );
     }
     function convertToBases(pxX)
-    {
+    {   // Simple utility to convert pix to bases
         var offset = (pxX - chr.left)/chr.width;
         if(chr.reverse)
             offset = 1 - offset;
         return Math.round(offset * chr.size);
     }
     function convertFromBases(bases)
-    {
+    {   // Simple utility to convert bases to pix
         var offset = bases/chr.size;
         if(chr.reverse)
             offset = 1 - offset;
@@ -501,7 +494,7 @@ this.each(function(){
     }
 
     function findDimensions()
-    {
+    {   // Called at init: determine the dimensions of chrom from 'cytoband' map items
         var lastX = -1;
         $('.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
@@ -549,9 +542,10 @@ this.each(function(){
         chr.width = (chr.right - chr.left);
     }
 
-    function findCytoBand(pxDown,pxUp) {
+    function findCytoBand(pxDown,pxUp)
+    {   // Called when mouseup and ctrl: Find the bounding cytoband dimensions, both in pix and bases
         var cyto = { left: -1, right: -1, beg: -1, end: -1 };
-        $('.cytoBand').each(function(t) {
+        $('.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
                 var myLeft  = parseInt(loc[0]);
@@ -562,7 +556,7 @@ this.each(function(){
                         var range = this.title.substr(this.title.lastIndexOf(':')+1)
                         var pos = range.split('-');
                         if(pos.length == 2) {
-                            cyto.beg  = parseInt(pos[0]);
+                            cyto.beg  = (chr.reverse ? parseInt(pos[1]) : parseInt(pos[0]));
                         }
                     }
                 }
@@ -572,7 +566,7 @@ this.each(function(){
                         var range = this.title.substr(this.title.lastIndexOf(':')+1)
                         var pos = range.split('-');
                         if(pos.length == 2) {
-                            cyto.end  = parseInt(pos[1]);
+                            cyto.end  = (chr.reverse ? parseInt(pos[0]) : parseInt(pos[1]));
                         }
                     }
                 }
@@ -580,8 +574,8 @@ this.each(function(){
         });
         return cyto;
     }
-    function rangeNormaizeToChrom(selection,chrom)
-    {
+    function rangeNormalizeToChrom(selection,chrom)
+    {   // Called before presenting or using base range: make sure chrom selection is within chrom range
         if(selection.end < selection.beg) {
             var tmp = selection.end;
             selection.end = selection.beg;
@@ -605,7 +599,7 @@ this.each(function(){
     }
 
     function hiliteShow(down,cur)
-    {
+    {   // Called on mousemove, mouseup: set drag hilite dimensions
         var topY = img.top;
         var high = img.height;
         var begX = -1;
@@ -621,13 +615,13 @@ this.each(function(){
         $(hilite).show();
     }
     function hiliteCancel(left,width,top,height)
-    {
+    {   // Called on mouseup: Make green drag hilite disappear when no longer wanted
         $(hilite).hide();
         $(hilite).css({ left: '0px', width: '0px', top: '0px', height: '0px' });
     }
 
     function hiliteSetup()
-    {
+    {   // Called on init: setup of drag region hilite (but don't show yet)
         $(hilite).css({ backgroundColor: 'green', opacity: 0.4, borderStyle: 'solid', borderWidth: '1px', bordercolor: '#0000FF' });
         $p = $(chrImg);
 
@@ -637,7 +631,7 @@ this.each(function(){
     }
 
     function updateImgOffsets()
-    {
+    {   // Called on mousedown: Gets the current offsets
         var offs = $(chrImg).offset();
         img.top  = Math.round(offs.top );
         img.left = Math.round(offs.left);
@@ -901,7 +895,7 @@ $(document).ready(function()
     }
     if($('img#chrom').length == 1) {
         if($('.cytoBand').length > 1) {
-            $('img#chrom').chromIdeo();
+            $('img#chrom').chromDrag();
         }
     }
 
