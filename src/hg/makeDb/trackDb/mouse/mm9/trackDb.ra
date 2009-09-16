@@ -305,6 +305,8 @@ longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding site
 group regulation
 priority 92
 visibility hide
+color 0,0,200
+altColor 255,0,0
 type bed 4 .
 
 track vegaGeneComposite
