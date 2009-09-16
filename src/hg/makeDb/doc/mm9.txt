@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.111 2009/09/09 18:51:40 fanhsu Exp $"
+#	"$Id: mm9.txt,v 1.112 2009/09/16 16:11:58 fanhsu Exp $"
 #
 
 #######################################################################
@@ -9750,4 +9750,20 @@ TMPDIR=/scratch/tmp
     
         kent/src/hg/makeDb/trackDb/mouse/mm9
 
+#####################################################################
+# BUILD REST TRACK (DONE 9/16/09, Fan)
+
+    mkdir /hive/data/genomes/mm9/bed/REST
+    cd /hive/data/genomes/mm9/bed/REST
+
+# Receive bed data file, REST_ChIP_PET_mm9.bed, 
+# from Rory JOHNSON [johnsonrb@gis.a-star.edu.sg].
+
+    hgLoadBed mm9 REST REST_ChIP_PET_mm9.bed
+
+# Discovered mm9's extFile and history tables were out of sync.
+# Bob and Hirm fixed the problem.  Reload and it was successful.
+
+# Created REST.html based on Rory's original doc and later updates.
+# Added track definition and search term into trackDb/mouse/mm9/trackDb.ra
 #####################################################################
