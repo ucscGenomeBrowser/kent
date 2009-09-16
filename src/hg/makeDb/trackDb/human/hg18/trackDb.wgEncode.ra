@@ -4216,6 +4216,122 @@ itemBigImagePath /goldenPath/hg18/encode/images/UwSoutherns/gel gel
 type bed 4 .
 wgEncode 1
 
+# 5C super track 
+      track encodeUw5cSuper
+      superTrack on
+      shortLabel UW 5C
+      longLabel U. of Washington 5C data
+      group x
+      priority 0 
+
+track encodeUw5cGM06990dS9013
+superTrack encodeUw5cSuper dense
+shortLabel UW 5C GM06990
+longLabel UW 5C GM06990 (DS9013)
+compositeTrack on
+group x
+priority 0
+visibility hide
+type encodeFiveC
+
+    track encodeUw5cGM06990dS9013DhsLoci
+    subTrack encodeUw5cGM06990dS9013
+    shortLabel GM06990 DHS 1
+    longLabel UW 5C GM06990 (DS9013) DHS sites
+    color 200,100,0
+    interTable encodeUw5cGM06990dS9013DhsInter
+    interTableKind TSS
+    priority 1
+
+    track encodeUw5cGM06990dS9013TssLoci
+    subTrack encodeUw5cGM06990dS9013
+    shortLabel GM06990 TSS 1
+    longLabel UW 5C GM06990 (DS9013) TSS sites
+    interTable encodeUw5cGM06990dS9013TssInter
+    interTableKind DHS
+    priority 2
+
+track encodeUw5cGM06990dS9254
+superTrack encodeUw5cSuper dense
+shortLabel UW 5C GM06990
+longLabel UW 5C GM06990 (DS9254)
+compositeTrack on
+group x
+priority 0
+visibility hide
+type encodeFiveC
+
+    track encodeUw5cGM06990dS9254DhsLoci
+    subTrack encodeUw5cGM06990dS9254
+    shortLabel GM06990 DHS 2
+    longLabel UW 5C GM06990 (DS9254) DHS sites
+    color 200,100,0
+    interTable encodeUw5cGM06990dS9254DhsInter
+    interTableKind TSS
+    priority 1
+
+    track encodeUw5cGM06990dS9254TssLoci
+    subTrack encodeUw5cGM06990dS9254
+    shortLabel GM06990 TSS 2
+    longLabel UW 5C GM06990 (DS9254) TSS sites
+    interTable encodeUw5cGM06990dS9254TssInter
+    interTableKind DHS
+    priority 2
+
+track encodeUw5cK562dS9014
+superTrack encodeUw5cSuper dense
+shortLabel UW 5C K562
+longLabel UW 5C K562 (DS9014)
+compositeTrack on
+group x
+priority 0
+visibility hide
+type encodeFiveC
+
+    track encodeUw5cK562dS9014DhsLoci
+    subTrack encodeUw5cK562dS9014
+    shortLabel K562 DHS 1
+    longLabel UW 5C K562 (DS9014) DHS sites
+    color 200,100,0
+    interTable encodeUw5cK562dS9014DhsInter
+    interTableKind TSS
+    priority 1
+
+    track encodeUw5cK562dS9014TssLoci
+    subTrack encodeUw5cK562dS9014
+    shortLabel K562 TSS 1
+    longLabel UW 5C K562 (DS9014) TSS sites
+    interTable encodeUw5cK562dS9014TssInter
+    interTableKind DHS
+    priority 2
+    
+track encodeUw5cK562dS9255
+superTrack encodeUw5cSuper dense
+shortLabel UW 5C K562
+longLabel UW 5C K562 (DS9255)
+compositeTrack on
+group x
+priority 0
+visibility hide
+type encodeFiveC
+
+    track encodeUw5cK562dS9255DhsLoci
+    subTrack encodeUw5cK562dS9255
+    shortLabel K562 DHS 2
+    longLabel UW 5C K562 (DS9255) DHS sites
+    color 200,100,0
+    interTable encodeUw5cK562dS9255DhsInter
+    interTableKind TSS
+    priority 1
+
+    track encodeUw5cK562dS9255TssLoci
+    subTrack encodeUw5cK562dS9255
+    shortLabel K562 TSS 2
+    longLabel UW 5C K562 (DS9255) TSS sites
+    interTable encodeUw5cK562dS9255TssInter
+    interTableKind DHS
+    priority 2
+
 # U. Washington DNAse-seq (wrangler: Mike, then Andy)
 
 track wgEncodeUwDnaseSeq
@@ -4223,7 +4339,7 @@ compositeTrack on
 shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
-subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks RawSignal=Raw_Signal
+subGroup1 view Views Peaks=Peaks Hotspots=Hot_Spots RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line BJtert=BJ-tert Caco2=Caco-2 GM06990=GM06990 GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2 HL60=HL-60 HUVEC=HUVEC SK-N-SH_RA=SK-N-SH(+RA) SKMC=SKMC Th1=Th1 Th2=Th2 HRE=HRE HRCEpiC=HRCEpiC
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
