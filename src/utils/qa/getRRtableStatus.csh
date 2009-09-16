@@ -17,7 +17,7 @@ set dumpfile=""
 
 if ( $#argv < 3 || $#argv > 4 ) then
   echo
-  echo "  gets the status of any table from the RR database."
+  echo "  gets the status for any field of a table from a database."
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo
@@ -27,7 +27,7 @@ if ( $#argv < 3 || $#argv > 4 ) then
   echo "        Data_free, Auto_increment, Create_time, Update_time, "
   echo "        Check_time, Create_options, Comment"
   echo
-  echo "           defaults to rr. optionally accepts dev or beta"
+  echo "    defaults to rr"
   echo
   exit
 else
