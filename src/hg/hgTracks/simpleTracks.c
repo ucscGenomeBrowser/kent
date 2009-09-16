@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.102 2009/09/14 17:18:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.103 2009/09/16 17:40:45 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10291,11 +10291,11 @@ struct bed *el = item;
 
 if (strstr(el->name, "ESC_only"))
     {
-    return hvGfxFindColorIx(hvg, 255, 0, 0);
+    return tg->ixAltColor;
     }
 else
     {
-    return hvGfxFindColorIx(hvg, 0, 0, 200);
+    return tg->ixColor;
     }
 }
 
