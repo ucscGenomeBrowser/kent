@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.40 2009/09/15 00:21:53 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.41 2009/09/16 00:40:57 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -342,12 +342,8 @@ this.each(function(){
     // mouseUp: if no drag, then create href centered on bpDown loc with current span
     //          if drag, then create href from bpDown to bpUp
     //          if ctrlKey then expand selection to containing cytoBand(s)
-    var pxTop    = -1;  // Top of cytobands
-    var pxBottom = -1;  // Bottom of cytobands
-    var pxLeft   = -1;  // Beginning location of first cytoBand
-    var pxRight  = -1;  // End location of last cytoband
-    var pxImg = { top: -1, height: -1, left: -1, width: -1 };  // Image dimensions
-    var chrDef = { name: "", beg: -1, end: -1 };   // Dimenaions of chrom in bases
+    var img = { top: -1, scrolledTop: -1, height: -1, left: -1, scrolledLeft: -1, width: -1 };  // Image dimensions all in pix
+    var chr = { name: "", reverse: false, beg: -1, end: -1, size: -1, top: -1, bottom: -1, left: -1, right: -1, width: -1 };   // chrom Dimenaions beg,end,size in bases, rest in pix
     var pxDown = 0;     // pix X location of mouseDown
     var chrImg = $(this);
     var mouseIsDown   = false;
@@ -360,20 +356,17 @@ this.each(function(){
 
         findDimensions();
 
-        if(pxTop == -1)
+        if(chr.top == -1)
             alert("chromIdeo(): failed to register "+this.id);
         else {
             hiliteSetup();
 
             $('.cytoBand').mousedown( function(e) {
                 updateImgOffsets();
-                pxDown = e.clientX - pxImg.left;
-                var pxY = e.clientY - pxImg.top;
+                pxDown = e.clientX - img.scrolledLeft;
+                var pxY = e.clientY - img.scrolledTop;
                 if(mouseIsDown == false
-                && pxDown >= pxLeft
-                && pxDown <= pxRight
-                && pxY >= pxTop
-                && pxY <= pxBottom) {
+                && isWithin(chr.left,pxDown,chr.right) && isWithin(chr.top,pxY,chr.bottom)) {
                     mouseIsDown = true;
                     mouseHasMoved = false;
 
@@ -382,68 +375,72 @@ this.each(function(){
                     hiliteShow(pxDown,pxDown);
                     return false;
                 }
-                //else alert("out fo range pxY:"+pxY+" = (e.clientY:"+e.clientY+" - pxImg.top:"+pxImg.top+")   body.scrollTop():"+$("body").scrollTop()+" range:"+pxTop+"-"+pxBottom);
+                //else alert("out fo range pxY:"+pxY+" = (e.clientY:"+e.clientY+" - img.scrolledTop:"+img.scrolledTop+")   body.scrollTop():"+$("body").scrollTop()+" range:"+chr.top+"-"+chr.bottom);
             });
         }
     }
 
     function chromMove(e) {
         if ( mouseIsDown ) {
-            var pxX = e.clientX - pxImg.left;
-            //if(pxX >= -10 && pxX <= pxImg.width) {
-                var relativeX = (pxX - pxDown);
-                if(mouseHasMoved || (mouseHasMoved == false && Math.abs(relativeX) > 2)) {
-                    mouseHasMoved = true;
-                    if(pxX >= pxLeft && pxX <= pxRight)
-                        hiliteShow(pxDown,pxX);
-                    else if(pxX < pxLeft)
-                        hiliteShow(pxDown,pxLeft);
-                    else
-                        hiliteShow(pxDown,pxRight);
-                }
-            //}
+            var pxX = e.clientX - img.scrolledLeft;
+            var relativeX = (pxX - pxDown);
+            if(mouseHasMoved || (mouseHasMoved == false && Math.abs(relativeX) > 2)) {
+                mouseHasMoved = true;
+                if(isWithin(chr.left,pxX,chr.right))
+                    hiliteShow(pxDown,pxX);
+                else if(pxX < chr.left)
+                    hiliteShow(pxDown,chr.left);
+                else
+                    hiliteShow(pxDown,chr.right);
+            }
         }
     }
     function chromUp(e) {  // Must be a separate function instead of pan.mouseup event.
         chromMove(e); // Just in case
         if(mouseIsDown) {
             updateImgOffsets();
-            var pxUp = e.clientX - pxImg.left;
-            var pxY  = e.clientY - pxImg.top;
-            //alert("chromIdeo("+chrDef.name+") selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+pxLeft+"-"+pxRight+" chrom range (bp):"+chrDef.name+":"+chrDef.beg+"-"+chrDef.end);
-            if(e.ctrlKey) {
-                var band = findCytoBand(pxDown,pxUp);
-                if(band.left > -1 && band.right > -1) {
-                    pxDown = band.left;
-                    pxUp   = band.right;
-                    mouseHasMoved = true;
-                    hiliteShow(pxDown,pxUp);
-                }
-            }
-            if(pxY >= 0 && pxY <= pxImg.height) {  // within vertical range or else cancel
+            var bands;
+            var pxUp = e.clientX - img.scrolledLeft;
+            var pxY  = e.clientY - img.scrolledTop;
+            //alert("chromIdeo("+chr.name+") selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+" chrom range (bp):"+chr.name+":"+chr.beg+"-"+chr.end);
+            if(isWithin(0,pxY,img.height)) {  // within vertical range or else cancel
                 var selRange = { beg: -1, end: -1, width: -1 };
                 var dontAsk = true;
 
-                if(mouseHasMoved) {
+                if(e.ctrlKey) {
+                    bands = findCytoBand(pxDown,pxUp);
+                    if(bands.end > -1) {
+                        pxDown = bands.left;
+                        pxUp   = bands.right;
+                        mouseHasMoved = true;
+                        dontAsk = false;
+                        selRange.beg = bands.beg;
+                        selRange.end = bands.end;
+                        hiliteShow(pxDown,pxUp);
+                    }
+                }
+                else if(mouseHasMoved) {
                     // bounded by chrom dimensions: but must remain within image!
-                    if( pxUp < pxLeft && pxUp >= -20 )
-                        pxUp = pxLeft;
-                    if( pxUp > pxRight && pxUp <= pxRight + 30)
-                        pxUp = pxRight;
+                    if( isWithin(-20,pxUp,chr.left) )
+                        pxUp = chr.left;
+                    if( isWithin(chr.right,pxUp,chr.right + 30) )
+                        pxUp = chr.right;
 
-                    if( pxLeft <= pxUp && pxUp <= pxRight ) {// Within horizontal (chrom) range
+                    if( isWithin(chr.left,pxUp,chr.right) ) {
 
-                        var offset = (pxDown - pxLeft)/(pxRight - pxLeft);
-                        selRange.beg = Math.round(offset * (chrDef.end - chrDef.beg));
-                        offset = (pxUp - pxLeft)/(pxRight - pxLeft);
-                        selRange.end = Math.round(offset * (chrDef.end - chrDef.beg));
+                        //var offset = (pxDown - chr.left)/chr.width;
+                        //selRange.beg = Math.round(offset * chr.size);
+                        selRange.beg = convertToBases(pxDown);
+                        //offset = (pxUp - chr.left)/chr.width;
+                        //selRange.end = Math.round(offset * chr.size);
+                        selRange.end = convertToBases(pxUp);
 
                         if(Math.abs(selRange.end - selRange.beg) < 20)
                             mouseHasMoved = false; // Drag so small: treat as simple click
                         else
                             dontAsk = false;
                     }
-                    //else alert("chromIdeo("+chrDef.name+") NOT WITHIN HORIZONTAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+pxLeft+"-"+pxRight);
+                    //else alert("chromIdeo("+chr.name+") NOT WITHIN HORIZONTAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right);
                 }
                 if(mouseHasMoved == false) { // Not else because small drag turns this off
 
@@ -451,27 +448,30 @@ this.each(function(){
                     var curBeg = parseInt($("#hgt\\.winStart").val());  // Note the escaped '.'
                     var curEnd = parseInt($("#hgt\\.winEnd").val());
                     var curWidth = curEnd - curBeg;
-                    var offset = (pxUp - pxLeft)/(pxRight - pxLeft);
-                    selRange.beg = Math.round(offset * (chrDef.end - chrDef.beg)) - Math.round(curWidth/2); // Notice that beg is based upon up position
+                    //var offset = (pxUp - chr.left)/chr.width;
+                    //selRange.beg = Math.round(offset * chr.size) - Math.round(curWidth/2); // Notice that beg is based upon up position
+                    selRange.beg = convertToBases(pxUp) - Math.round(curWidth/2); // Notice that beg is based upon up position
                     selRange.end  = selRange.beg + curWidth;
                 }
                 if(selRange.end > -1) {
                     // prompt, then submit for new position
-                    selRange = rangeNormaizeToChrom(selRange,chrDef);
+                    selRange = rangeNormaizeToChrom(selRange,chr);
                     if(mouseHasMoved == false) { // Update highlight by converting bp back to pix
-                        var offset = selRange.beg/chrDef.end;
-                        pxDown = Math.round(offset * (pxRight - pxLeft)) + pxLeft;
-                        offset = selRange.end/chrDef.end;
-                        pxUp = Math.round(offset * (pxRight - pxLeft)) + pxLeft;
+                        //var offset = selRange.beg/chr.size;
+                        //pxDown = Math.round(offset * chr.width) + chr.left;
+                        pxDown = convertFromBases(selRange.beg)
+                        //offset = selRange.end/chr.size;
+                        //pxUp = Math.round(offset * chr.width) + chr.left;
+                        pxUp = convertFromBases(selRange.end)
                         hiliteShow(pxDown,pxUp);
                     }
-                    if(dontAsk || confirm("Jump to new position:\n\n"+chrDef.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width))) {
-                        setPositionByCoordinates(chrDef.name, selRange.beg, selRange.end)
+                    if(dontAsk || confirm("Jump to new position:\n\n"+chr.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width) + (chr.reverse?" reversed":"") )) {
+                        setPositionByCoordinates(chr.name, selRange.beg, selRange.end)
                         document.TrackHeaderForm.submit();
                     }
                 }
             }
-            //else alert("chromIdeo("+chrDef.name+") NOT WITHIN VERTICAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+pxLeft+"-"+pxRight+"\n cytoTop-Bottom:"+pxTop +"-"+pxBottom);
+            //else alert("chromIdeo("+chr.name+") NOT WITHIN VERTICAL RANGE\n selected range (pix):"+pxDown+"-"+pxUp+" chrom range (pix):"+chr.left+"-"+chr.right+"\n cytoTop-Bottom:"+chr.top +"-"+chr.bottom);
             hiliteCancel();
             $(document).unbind('mousemove',chromMove);
             $(document).unbind('mouseup',chromUp);
@@ -481,57 +481,100 @@ this.each(function(){
         mouseHasMoved = false;
     }
 
+    function isWithin(beg,here,end)
+    {
+        return ( beg <= here && here < end );
+    }
+    function convertToBases(pxX)
+    {
+        var offset = (pxX - chr.left)/chr.width;
+        if(chr.reverse)
+            offset = 1 - offset;
+        return Math.round(offset * chr.size);
+    }
+    function convertFromBases(bases)
+    {
+        var offset = bases/chr.size;
+        if(chr.reverse)
+            offset = 1 - offset;
+        return Math.round(offset * chr.width) + chr.left;
+    }
+
     function findDimensions()
     {
-        $('.cytoBand').each(function(t) {
+        var lastX = -1;
+        $('.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
-                if( pxTop == -1) {
-                    pxLeft   = parseInt(loc[0]);
-                    pxRight  = parseInt(loc[2]);
-                    pxTop    = parseInt(loc[1]);
-                    pxBottom = parseInt(loc[3]);
+                var myLeft  = parseInt(loc[0]);
+                var myRight = parseInt(loc[2]);
+                if( chr.top == -1) {
+                    chr.left   = myLeft;
+                    chr.right  = myRight;
+                    chr.top    = parseInt(loc[1]);
+                    chr.bottom = parseInt(loc[3]);
                 } else {
-                    if( pxLeft  > parseInt(loc[0]))
-                        pxLeft  = parseInt(loc[0]);
-                    if( pxRight < parseInt(loc[2]))
-                        pxRight = parseInt(loc[2]);
+                    if( chr.left  > myLeft)
+                        chr.left  = myLeft;
+                    if( chr.right < parseInt(loc[2]))
+                        chr.right = parseInt(loc[2]);
                 }
 
                 var range = this.title.substr(this.title.lastIndexOf(':')+1)
                 var pos = range.split('-');
                 if(pos.length == 2) {
-                    if( chrDef.name.length == 0) {
-                        chrDef.beg = parseInt(pos[0]);
-                        chrDef.end = parseInt(pos[1]);
-                        chrDef.name = this.title.substring(this.title.lastIndexOf(' ')+1,this.title.lastIndexOf(':'))
+                    if( chr.name.length == 0) {
+                        chr.beg = parseInt(pos[0]);
+                        //chr.end = parseInt(pos[1]);
+                        chr.name = this.title.substring(this.title.lastIndexOf(' ')+1,this.title.lastIndexOf(':'))
                     } else {
-                        if( chrDef.beg > parseInt(pos[0]))
-                            chrDef.beg = parseInt(pos[0]);
-                        if( chrDef.end < parseInt(pos[1]))
-                            chrDef.end = parseInt(pos[1]);
+                        if( chr.beg > parseInt(pos[0]))
+                            chr.beg = parseInt(pos[0]);
                     }
+                    if( chr.end < parseInt(pos[1])) {
+                        chr.end = parseInt(pos[1]);
+                        if(lastX == -1)
+                            lastX = myRight;
+                        else if(lastX > myRight)
+                            chr.reverse = true;  // end is advancing, but X is not, so reverse
+                    } else if(lastX != -1 && lastX < myRight)
+                        chr.reverse = true;      // end is not advancing, but X is, so reverse
+
                 }
             $(this).css( 'cursor', 'text');
             $(this).attr("href","");
             }
         });
+        chr.size  = (chr.end   - chr.beg );
+        chr.width = (chr.right - chr.left);
     }
 
     function findCytoBand(pxDown,pxUp) {
-        var cyto = { left: -1, right: -1 };
+        var cyto = { left: -1, right: -1, beg: -1, end: -1 };
         $('.cytoBand').each(function(t) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
-                if(cyto.left == -1 || cyto.left > parseInt(loc[0])) {
-                    if((parseInt(loc[0]) <= pxDown && pxDown < parseInt(loc[2]))
-                    || (parseInt(loc[0]) <= pxUp   && pxUp   < parseInt(loc[2])))
-                        cyto.left  = parseInt(loc[0]);
+                var myLeft  = parseInt(loc[0]);
+                var myRight = parseInt(loc[2]);
+                if(cyto.left == -1 || cyto.left > myLeft) {
+                    if( isWithin(myLeft,pxDown,myRight) || isWithin(myLeft,pxUp,myRight) ) {
+                        cyto.left  = myLeft;
+                        var range = this.title.substr(this.title.lastIndexOf(':')+1)
+                        var pos = range.split('-');
+                        if(pos.length == 2) {
+                            cyto.beg  = parseInt(pos[0]);
+                        }
+                    }
                 }
-                if(cyto.right == -1 || cyto.right < parseInt(loc[2])) {
-                    if((parseInt(loc[0]) <= pxDown && pxDown < parseInt(loc[2]))
-                    || (parseInt(loc[0]) <= pxUp   && pxUp   < parseInt(loc[2])))
-                        cyto.right  = parseInt(loc[2]);
+                if(cyto.right == -1 || cyto.right < myRight) {
+                    if( isWithin(myLeft,pxDown,myRight) || isWithin(myLeft,pxUp,myRight) ) {
+                        cyto.right = myRight;
+                        var range = this.title.substr(this.title.lastIndexOf(':')+1)
+                        var pos = range.split('-');
+                        if(pos.length == 2) {
+                            cyto.end  = parseInt(pos[1]);
+                        }
+                    }
                 }
             }
         });
@@ -563,15 +606,15 @@ this.each(function(){
 
     function hiliteShow(down,cur)
     {
-        var topY = pxImg.top;
-        var high = pxImg.height;
+        var topY = img.top;
+        var high = img.height;
         var begX = -1;
         var wide = -1;
         if(cur < down) {
-            begX = cur + pxImg.left;
+            begX = cur + img.left;
             wide = (down - cur);
         } else {
-            begX = down + pxImg.left;
+            begX = down + img.left;
             wide = (cur - down);
         }
         $(hilite).css({ left: begX + 'px', width: wide + 'px', top: topY + 'px', height: high + 'px', display:'' });
@@ -596,11 +639,18 @@ this.each(function(){
     function updateImgOffsets()
     {
         var offs = $(chrImg).offset();
-        pxImg.top  = Math.round(offs.top  - $("body").scrollTop() );
-        pxImg.left = Math.round(offs.left - $("body").scrollLeft() );
-        pxImg.height = parseInt($(chrImg).css("height"));
-        pxImg.width  = parseInt($(chrImg).css("height"));
-        return pxImg;
+        img.top  = Math.round(offs.top );
+        img.left = Math.round(offs.left);
+        img.scrolledTop  = img.top  - $("body").scrollTop();
+        img.scrolledLeft = img.left - $("body").scrollLeft();
+        if($.browser.msie) {
+            img.height = $(chrImg).outerHeight();
+            img.width  = $(chrImg).outerWidth();
+        } else {
+            img.height = $(chrImg).height();
+            img.width  = $(chrImg).width();
+        }
+        return img;
     }
 });
 }
