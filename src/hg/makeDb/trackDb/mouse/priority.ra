@@ -216,12 +216,6 @@ track netOryCun1
 priority 282.1
 
 # guinea pig
-track chainCavPor3
-priority 283.0
-
-track netCavPor3
-priority 283.1
-
 track chainCavPor2
 priority 283.2
 
@@ -229,12 +223,6 @@ track netCavPor2
 priority 283.3
 
 # rat
-track chainRn4
-priority 286.0
-
-track netRn4
-priority 286.1
-
 track chainRn3
 priority 286.2
 

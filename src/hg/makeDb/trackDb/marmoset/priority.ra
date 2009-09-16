@@ -5,13 +5,6 @@ priority 287.1
 track netRheMac2
 priority 287.2
 
-# human
-track chainHg18
-priority 235.1
-
-track netHg18
-priority 235.2
-
 # mouse
 track chainMm9
 priority 232.1

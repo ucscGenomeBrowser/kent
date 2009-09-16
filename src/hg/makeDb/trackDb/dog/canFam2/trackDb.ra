@@ -143,3 +143,45 @@ metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_G
 track nscanGene override
 visibility dense
 informant Dog N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
+
+track chainHg18 override
+shortLabel $o_db Chain
+longLabel $o_db ($o_date) Chained Alignments
+priority 255.1
+
+
+track netHg18 override
+shortLabel $o_db Net
+longLabel $o_db ($o_date) Alignment Net
+priority 255.2
+
+track chainCalJac1 override
+priority 245.1
+
+track netCalJac1 override
+priority 245.2
+
+track chainPanTro2 override
+priority 250.1
+
+track netPanTro2 override
+priority 250.2
+
+track chainBosTau4 override
+priority 10004.1
+
+track netBosTau4 override
+priority 10004.2
+
+track chainEquCab1 override
+priority 10006.1
+
+track netEquCab1 override
+priority 10006.2
+
+track chainFelCat3 override
+priority 10008.1
+
+track netFelCat3 override
+priority 10008.2
+

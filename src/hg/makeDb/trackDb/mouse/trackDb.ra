@@ -900,7 +900,7 @@ track chainRn4
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 280
+priority 286.1
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -914,7 +914,7 @@ track netRn4
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 280.1
+priority 286.2
 visibility hide
 spectrum on
 type netAlign rn4 chainRn4
@@ -1019,6 +1019,12 @@ visibility hide
 spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
+
+track chainCavPor3 override
+priority 283.0
+
+track netCavPor3 override
+priority 283.1
 
 searchTable cytoBand
 searchMethod exact

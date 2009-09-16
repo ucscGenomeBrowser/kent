@@ -375,7 +375,6 @@ html hg19primateChainNet
     otherDb panTro2
 
     track chainGorGor1
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=bGorGor clade=aHom
     shortLabel $o_Organism Chain
@@ -384,7 +383,6 @@ html hg19primateChainNet
     otherDb gorGor1
 
     track netGorGor1
-    release alpha
     subTrack primateChainNet off
     subGroups view=net species=bGorGor clade=aHom
     shortLabel $o_Organism Net
@@ -425,7 +423,6 @@ html hg19primateChainNet
     otherDb rheMac2
 
     track chainPapHam1
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=ePapHam clade=bCerco
     shortLabel $o_Organism Chain
@@ -434,7 +431,6 @@ html hg19primateChainNet
     otherDb papHam1
 
     track netPapHam1
-    release alpha
     subTrack primateChainNet off
     subGroups view=net species=ePapHam clade=bCerco
     shortLabel $o_Organism Net
@@ -459,7 +455,6 @@ html hg19primateChainNet
     otherDb calJac1
 
     track chainTarSyr1
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=gTarSyr clade=cHaplo
     shortLabel $o_Organism Chain
@@ -468,7 +463,6 @@ html hg19primateChainNet
     otherDb tarSyr1
 
     track netTarSyr1
-    release alpha
     subTrack primateChainNet off
     subGroups view=net species=gTarSyr clade=cHaplo
     shortLabel $o_Organism Net
@@ -477,7 +471,6 @@ html hg19primateChainNet
     otherDb tarSyr1
 
     track chainMicMur1
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=iMicMur clade=dStrep
     shortLabel $o_Organism Chain
@@ -486,7 +479,6 @@ html hg19primateChainNet
     otherDb micMur1
 
     track netMicMur1
-    release alpha
     subTrack primateChainNet off
     subGroups view=net species=iMicMur clade=dStrep
     shortLabel $o_Organism Net
@@ -495,7 +487,6 @@ html hg19primateChainNet
     otherDb micMur1
 
     track chainOtoGar1
-    release alpha
     subTrack primateChainNet off
     subGroups view=chain species=hOtoGar clade=dStrep
     shortLabel $o_Organism Chain
@@ -504,7 +495,6 @@ html hg19primateChainNet
     otherDb otoGar1
 
     track netOtoGar1
-    release alpha
     subTrack primateChainNet on
     subGroups view=net species=hOtoGar clade=dStrep
     shortLabel $o_Organism Net

@@ -4702,7 +4702,7 @@ sortOrder view=+
     type netAlign venter1 chainVenter1
     otherDb venter1
 
-track hg19chainNet
+track chainNetHg19
 compositeTrack on
 shortLabel Human Chain/Net
 longLabel Human (Feb. 2009/hg19), Chain and Net Alignments
@@ -4726,14 +4726,14 @@ chainLinearGap medium
 html chainNet
 
     track chainHg19
-    subTrack hg19chainNet
+    subTrack chainNetHg19
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain hg19
 
     track netHg19
-    subTrack hg19chainNet
+    subTrack chainNetHg19
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment net

@@ -5,13 +5,6 @@ priority 120
 track blatFr1
 priority 120.1 
 
-# marmoset
-track chainCalJac1
-priority 200
-
-track netCalJac1
-priority 200.1
-
 # rhesus
 track chainRheMac2
 priority 208
@@ -20,24 +13,11 @@ track netRheMac2
 priority 208.1
 
 # human
-track chainHg18
-priority 210
-
-track netHg18
-priority 210.1
-
 track chainHg17
 priority 210.2
 
 track netHg17
 priority 210.3
-
-# chimp
-track chainPanTro2
-priority 220
-
-track netPanTro2
-priority 220.1
 
 # rat
 track chainRn4
@@ -76,13 +56,6 @@ priority 240.6
 
 track netMm6
 priority 240.7
-
-# cow
-track chainBosTau4
-priority 250
-
-track netBosTau4
-priority 250.1
 
 track chainBosTau2
 priority 250.2

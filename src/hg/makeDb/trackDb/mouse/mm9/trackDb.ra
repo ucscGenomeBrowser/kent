@@ -523,6 +523,18 @@ track netHg18 override
 shortLabel $o_db Net
 longLabel $o_db ($o_date) Alignment Net
 
+track chainCavPor3 override
+priority 10004.1
+
+track netCavPor3 override
+priority 10004.2
+
+track chainRn4 override
+priority 10006.1
+
+track netRn4 override
+priority 10006.2
+
 searchName NIAGene
 searchTable NIAGene
 searchMethod fuzzy
