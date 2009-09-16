@@ -16,7 +16,7 @@ set rr=""
 
 if ($#argv != 2) then
   echo
-  echo "  gets the rowcount for a list of tables from dev and beta."
+  echo "  gets the rowcount for a list of tables from dev, beta and RR."
   echo
   echo "    usage:  database tablelist"
   echo "      tablelist can be just name of single table"
@@ -33,7 +33,7 @@ echo
 if ( -e $tablelist ) then
   echo "running countRows for tables:"
   set tables=`cat $tablelist`
-  echo "tables $tables"
+  echo "$tables"
   echo
 else
   set tables=$tablelist
