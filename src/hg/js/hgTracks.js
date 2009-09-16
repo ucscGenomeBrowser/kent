@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.42 2009/09/16 17:34:00 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.43 2009/09/16 19:52:52 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -426,10 +426,10 @@ this.each(function(){
                 else if(mouseHasMoved) {
                     if( isWithin(-20,pxUp,chr.left) ) // bounded by chrom dimensions: but must remain within image!
                         pxUp = chr.left;
-                    if( isWithin(chr.right,pxUp,chr.right + 30) )
+                    if( isWithin(chr.right,pxUp,img.width + 20) )
                         pxUp = chr.right;
 
-                    if( isWithin(chr.left,pxUp,chr.right) ) {
+                    if( isWithin(chr.left,pxUp,chr.right+1) ) {
 
                         selRange.beg = convertToBases(pxDown);
                         selRange.end = convertToBases(pxUp);
