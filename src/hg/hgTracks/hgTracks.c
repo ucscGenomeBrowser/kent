@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1597 2009/09/14 15:28:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1598 2009/09/17 21:31:46 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3338,7 +3338,13 @@ else if (ensVersionString[0])
 /* Print NCBI MapView anchor */
 if (sameString(database, "hg18"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=36\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
+if (sameString(database, "hg19"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=37\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
