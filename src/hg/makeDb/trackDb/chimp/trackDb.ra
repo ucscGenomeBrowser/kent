@@ -142,19 +142,6 @@ spectrum on
 type chain calJac1
 otherDb calJac1
 
-# in priority.ra
-# 
-# track chainRn4
-# priority 240
-# 
-# track netRn4
-# priority 240.1
-# 
-# track chainMm8
-# priority 245
-# 
-# track netMm8
-# priority 245.1 
-
-track hg19ChainNet override
+track chainNetHg19 override
 chainMinScore 5000
+

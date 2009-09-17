@@ -2106,7 +2106,6 @@ html chainNet
 
     track chainTetNig2
     subTrack chainNetTetNig2
-chainNetTetNig2
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
