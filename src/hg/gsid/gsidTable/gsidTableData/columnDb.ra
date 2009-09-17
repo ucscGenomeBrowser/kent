@@ -183,7 +183,7 @@ shortLabel ESDI Basis
 longLabel Basis for ESDI
 priority 13
 visibility on
-type integer
+type string
 query select ESDBasis from hgFixed.testDates where subjId='%s';
 
 #(not in main table gsidSubjInfo)
