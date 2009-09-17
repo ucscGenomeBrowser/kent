@@ -2080,7 +2080,7 @@ spectrum on
 type netAlign fr2 chainFr2
 otherDb fr2
 
-track tetNig2ChainNet
+track chainNetTetNig2
 compositeTrack on
 shortLabel Tetraodon Chain/Net
 longLabel Tetraodon (Mar. 2007/tetNig2), Chain and Net Alignments
@@ -2105,14 +2105,15 @@ spectrum on
 html chainNet
 
     track chainTetNig2
-    subTrack tetNig2ChainNet
+    subTrack chainNetTetNig2
+chainNetTetNig2
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain tetNig2
 
     track netTetNig2
-    subTrack tetNig2ChainNet
+    subTrack chainNetTetNig2
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -2140,7 +2141,7 @@ spectrum on
 type netAlign tetNig1 chainTetNig1
 otherDb tetNig1
 
-track danRer6ChainNet
+track chainNetDanRer6
 compositeTrack on
 shortLabel Zebrafish Chain/Net
 longLabel Zebrafish (Dec. 2008/danRer6), Chain and Net Alignments
@@ -2165,14 +2166,14 @@ spectrum on
 html chainNet
 
     track chainDanRer6
-    subTrack danRer6ChainNet
+    subTrack chainNetDanRer6
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain danRer6
 
     track netDanRer6
-    subTrack danRer6ChainNet
+    subTrack chainNetDanRer6
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -2476,7 +2477,7 @@ type netAlign galGal2 chainGalGal2
 otherDb galGal2
 
 # release alpha until individual galGal3 tracks are obsolete
-track galGal3ChainNet
+track chainNetGalGal3
 compositeTrack on
 shortLabel Chicken Chain/Net
 longLabel Chicken (May. 2006/galGal3), Chain and Net Alignments
@@ -2502,14 +2503,14 @@ html chainNet
 release alpha
 
     track chainGalGal3
-    subTrack galGal3ChainNet
+    subTrack chainNetGalGal3
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain galGal3
 
     track netGalGal3
-    subTrack galGal3ChainNet
+    subTrack chainNetGalGal3
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -2629,7 +2630,7 @@ otherDb taeGut1
 release beta
 
 # release alpha until ornAna1 individual chain/net tracks phased out
-track ornAna1ChainNet
+track chainNetOrnAna1
 compositeTrack on
 shortLabel Platypus Chain/Net
 longLabel Platypus (Mar. 2007/ornAna1), Chain and Net Alignments
@@ -2655,14 +2656,14 @@ html chainNet
 release alpha
 
     track chainOrnAna1
-    subTrack ornAna1ChainNet
+    subTrack chainNetOrnAna1
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain ornAna1
 
     track netOrnAna1
-    subTrack ornAna1ChainNet
+    subTrack chainNetOrnAna1
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -2717,7 +2718,7 @@ type netAlign macEug1 chainMacEug1
 otherDb macEug1
 
 # release alpha until monDom5 individual chain/net tracks phased out
-track monDom5ChainNet
+track chainNetMonDom5
 compositeTrack on
 shortLabel Opossum Chain/Net
 longLabel Opossum (Oct. 2006/monDom5), Chain and Net Alignments
@@ -2743,14 +2744,14 @@ html chainNet
 release alpha
 
     track chainMonDom5
-    subTrack monDom5ChainNet
+    subTrack chainNetMonDom5
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain monDom5
 
     track netMonDom5
-    subTrack monDom5ChainNet
+    subTrack chainNetMonDom5
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -2961,7 +2962,7 @@ type netAlign mm6 chainMm6
 otherDb mm6
 
 # release alpha until mm9 individual chain/net tracks phased out
-track mm9ChainNet
+track chainNetMm9
 compositeTrack on
 shortLabel Mouse Chain/Net
 longLabel Mouse (Jul. 2007/mm9), Chain and Net Alignments
@@ -2987,14 +2988,14 @@ html chainNet
 release alpha
 
     track chainMm9
-    subTrack mm9ChainNet
+    subTrack chainNetMm9
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain mm9
 
     track netMm9
-    subTrack mm9ChainNet
+    subTrack chainNetMm9
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -3243,7 +3244,7 @@ type netAlign bosTau1 chainBosTau1
 otherDb bosTau1
 
 # release alpha until equCab1 phased out
-track equCab2ChainNet
+track chainNetEquCab2
 compositeTrack on
 shortLabel Horse Chain/Net
 longLabel Horse (Sep. 2007/equCab2), Chain and Net Alignments
@@ -3269,21 +3270,21 @@ html chainNet
 release alpha
 
     track chainEquCab2
-    subTrack equCab2ChainNet
+    subTrack chainNetEquCab2
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain equCab2
 
     track netEquCab2
-    subTrack equCab2ChainNet
+    subTrack chainNetEquCab2
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign equCab2 chainEquCab2
 
 # release alpha until canFam2 individual tracks phased out
-track canFam2ChainNet
+track chainNetCanFam2
 compositeTrack on
 shortLabel Dog Chain/Net
 longLabel Dog (May 2005/canFam2), Chain and Net Alignments
@@ -3309,14 +3310,14 @@ html chainNet
 release alpha
 
     track chainCanFam2
-    subTrack canFam2ChainNet
+    subTrack chainNetCanFam2
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
     type chain canFam2
 
     track netCanFam2
-    subTrack canFam2ChainNet
+    subTrack chainNetCanFam2
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -4665,7 +4666,7 @@ searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
 
-track venterChainNet
+track chainNetVenter
 compositeTrack on
 shortLabel Venter Chain/Net
 longLabel J. Craig Venter Chain and Net Alignments
@@ -4683,7 +4684,7 @@ settingsByView chain:spectrum=on
 sortOrder view=+
 
     track chainVenter1
-    subTrack venterChainNet off
+    subTrack chainNetVenter off
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -4695,7 +4696,7 @@ sortOrder view=+
     otherDb venter1
 
     track netVenter1
-    subTrack venterChainNet off
+    subTrack chainNetVenter off
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -4739,7 +4740,7 @@ html chainNet
     longLabel $o_Organism ($o_date/$o_db) Alignment net
     type netAlign hg19 chainHg19
 
-track poodleChainNet
+track chainNetPoodle
 compositeTrack on
 shortLabel Poodle Chain/Net
 longLabel Poodle Chain and Net Alignments
@@ -4757,7 +4758,7 @@ settingsByView chain:spectrum=on
 sortOrder view=+
 
     track chainCanFamPoodle1
-    subTrack poodleChainNet off
+    subTrack chainNetPoodle off
     subGroups view=chain
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -4769,7 +4770,7 @@ sortOrder view=+
     otherDb canFamPoodle1
 
     track netCanFamPoodle1
-    subTrack poodleChainNet off
+    subTrack chainNetPoodle off
     subGroups view=net
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
