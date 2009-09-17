@@ -195,6 +195,15 @@ As with all UCSC Genome Browser programs, simply type the program name
 at the command line with no parameters to see the usage statement.
 </P>
 
+<H3>Troubleshooting</H3>
+<P>If you get an error when you run the <TT>bedToBigBed</TT> program,
+it may be because your input BED file has data off the end of a chromosome.
+In this case, use the <TT>clipBed</TT> program 
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">here</A> before the
+<TT>bedToBigBed</TT> program.  It will remove the row(s) in your input BED
+file that are off the end of a chromosome.
+</P>
+
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	</TD></TR></TABLE>
