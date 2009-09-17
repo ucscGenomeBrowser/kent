@@ -75,6 +75,14 @@ double dnaMotifBitsOfInfo(struct dnaMotif *motif, int pos);
 void dnaMotifPrintProb(struct dnaMotif *motif, FILE *f);
 /* Print DNA motif probabilities. */
 
+void dnaMotifToLogoPs2(struct dnaMotif *motif, double widthPerBase, double height, 
+                       double minHeight, char *fileName);
+/* Write logo corresponding to motif to postScript file, with extended options. minHeight
+ * is the minimum height that is excluded from information content scaling.  This allows
+ * something to show up in columns with very little information content.  Setting this
+ * to be the same as height creates an frequency-based logo.
+ */
+
 void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, 
 	char *fileName);
 /* Write logo corresponding to motif to postScript file. */

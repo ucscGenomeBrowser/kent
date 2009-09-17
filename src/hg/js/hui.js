@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.30 2009/08/18 23:22:51 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.34 2009/09/11 20:30:10 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -245,21 +245,47 @@ function matSubtrackCbClick(subCb)
 function compositeCfgUpdateSubtrackCfgs(inp)
 {
 // Updates all subtrack configuration values when the composite cfg is changed
-    var count=0;
-    var suffix = inp.name.substring(inp.name.indexOf("."));
-    var list = inputArrayThatMatches(inp.type,"name","",suffix);
-    for (var ix=0;ix<list.length;ix++) {
-        list[ix].value = inp.value;
-        count++;
+    var suffix = inp.name.substring(inp.name.indexOf("."));  // Includes '.'
+    //if(suffix.length==0)
+    //    suffix = inp.name.substring(inp.name.indexOf("_"));
+    if(suffix.length==0) {
+        alert("Unable to parse '"+inp.name+"'");
+        return true;
     }
-    if(list.length==0) {
-        var list = document.getElementsByTagName('select');
-        for (var ix=0;ix<list.length;ix++) {
-            if(list[ix].name.lastIndexOf(suffix) == list[ix].name.length - suffix.length ) {
-                list[ix].selectedIndex = inp.selectedIndex;
-                count++;
+    if(inp.type.indexOf("select") == 0) {
+        var list = $("select[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
+        if($(list).length>0) {
+            if(inp.multiple != true)
+                $(list).attr('selectedIndex',inp.selectedIndex);
+            else {
+                $(list).each(function() {  // for all dependent (subtrack) multi-selects
+                    sel = this;
+                    $(this).children('option').each(function() {  // for all options of dependent mult-selects
+                        $(this).attr('selected',$(inp).children('option:eq('+this.index+')').attr('selected')); // set selected state to independent (parent) selected state
+                    });
+                    $(this).attr('size',$(inp).attr('size'));
+                });
             }
         }
+    }
+    else if(inp.type.indexOf("checkbox") == 0) {
+        var list = $("checkbox[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
+        if($(list).length>0)
+            $(list).attr("checked",$(inp).attr("checked"));
+    }
+    else if(inp.type.indexOf("radio") == 0) {
+        var list = $("radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
+        if($(list).length>0)
+            $(list).val(inp.value);
+    }
+    else {  // Various types of inputs
+        var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
+        if($(list).length>0)
+            $(list).val(inp.value);
+        //else {
+        //    alert("Unsupported type of multi-level cfg setting type='"+inp.type+"'");
+        //    return false;
+        //}
     }
     return true;
 }
@@ -268,10 +294,10 @@ function compositeCfgRegisterOnchangeAction(prefix)
 {
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
-    var list = $("input[name^='"+prefix+"']").not("[name$='.vis']");
+    var list = $("input[name^='"+prefix+".']").not("[name$='.vis']");
     $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 
-    var list = $("select[name^='"+prefix+"']").not("[name$='.vis']");
+    var list = $("select[name^='"+prefix+".']").not("[name$='.vis']");
     $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
@@ -832,13 +858,13 @@ function multiSelectLoad(div,sizeWhenOpen)
 
 function multiSelectBlur(obj)
 {
-    if(obj.value == undefined || obj.value == "") {
-        obj.value = "All";
-        obj.selectedIndex = 0;
+    if($(obj).val() == undefined || $(obj).val() == "") {
+        $(obj).val("All");
+        $(obj).attr('selectedIndex',0);
     }
     //if(obj.value == "All") // Close if selected index is 1
-    if(obj.selectedIndex == 0) // Close if selected index is 1
-        obj.size=1;
+    if($(obj).attr('selectedIndex') == 0) // Close if selected index is 1
+        $(obj).attr('size',1);
     /*else if($.browser.msie == false && $(obj).children('option[selected]').length==1) {
         var ix;
         for(ix=0;ix<obj.options.length;ix++) {
@@ -855,10 +881,10 @@ function multiSelectBlur(obj)
 
 function multiSelectClick(obj,sizeWhenOpen)
 {
-    if(obj.size == 1)
-        obj.size=sizeWhenOpen;
-    else if(obj.selectedIndex == 0)
-        obj.size=1;
+    if($(obj).attr('size') == 1)
+        $(obj).attr('size',sizeWhenOpen);
+    else if($(obj).attr('selectedIndex') == 0)
+        $(obj).attr('size',1);
 }
 
 // The following js depends upon the jQuery library

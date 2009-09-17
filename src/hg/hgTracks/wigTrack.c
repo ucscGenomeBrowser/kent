@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.91 2009/06/11 19:52:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.92 2009/09/04 23:45:28 braney Exp $";
 
 #define SMALLBUF 128
 
@@ -670,7 +670,7 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     double *overallUpperLimit, double *overallLowerLimit,
     double *graphUpperLimit, double *graphLowerLimit,
     double *overallRange, double *epsilon, int lineHeight,
-    double maxY, double minY)
+    double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero)
 /*	if autoScaling, scan preDraw array and determine limits */
 {
 double graphRange;
@@ -692,6 +692,13 @@ if (autoScale == wiggleScaleAuto)
 	    if (preDraw[i].smooth < *overallLowerLimit)
 		*overallLowerLimit = preDraw[i].smooth;
 	    }
+	}
+    if (alwaysZero == 0)
+	{
+	if ( *overallUpperLimit < 0)
+	    *overallUpperLimit = 0.0;
+	else if ( *overallLowerLimit > 0)
+	    *overallLowerLimit = 0.0;
 	}
     *overallRange = *overallUpperLimit - *overallLowerLimit;
     if (*overallRange == 0.0)
@@ -1051,7 +1058,7 @@ graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
     &overallUpperLimit, &overallLowerLimit,
     &graphUpperLimit, &graphLowerLimit,
     &overallRange, &epsilon, tg->lineHeight,
-    wigCart->maxY, wigCart->minY);
+    wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
 
 
 colorArray = allocColorArray(preDraw, width, preDrawZero,
@@ -1417,6 +1424,7 @@ wigFetchMinMaxPixelsWithCart(cart,tdb,tdb->tableName, &minHeight, &maxHeight, &d
 wigFetchYLineMarkValueWithCart(cart,tdb,tdb->tableName, &yLineMark);
 wigCart->yLineMark = yLineMark;
 wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->alwaysZero = wigFetchAlwaysZeroWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;

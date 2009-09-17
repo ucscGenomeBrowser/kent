@@ -186,7 +186,12 @@ if(theImgBox && curMap)
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
     safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
         winStart, winEnd, encodedTrack);
-    mapSetItemAdd(curMap,link,NULL,xOff,yOff,xOff+width,yOff+height);
+    #ifdef IMAGEv2_SHORT_MAPITEMS
+        if(xOff < insideX && xOff+width > insideX)
+            warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",encodedTrack,xOff, yOff, xOff+width, yOff+height, link);
+    #endif//def IMAGEv2_SHORT_MAPITEMS
+    imgTrackAddMapItem(curImgTrack,link,NULL,xOff,yOff,xOff+width,yOff+height);
+    //mapSetItemAdd(curMap,link,NULL,xOff,yOff,xOff+width,yOff+height);
     }
 else
 #endif//def IMAGEv2_UI

@@ -145,6 +145,8 @@ for (;;)
 	slAddHead(&usageList, usage);
 	lastStart = -1;
 	}
+    if (end > usage->size)
+        errAbort("End coordinate %d bigger than %s size of %d line %d of %s", end, usage->name, usage->size, lf->lineIx, lf->fileName);
     usage->itemCount += 1;
     if (lastStart >= 0)
         {

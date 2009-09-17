@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.63 2009/08/18 21:22:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.64 2009/09/02 22:55:39 tdreszer Exp $";
 
 jmp_buf htmlRecover;
 
@@ -201,7 +201,7 @@ return "<!-- HGERROR-END -->\n";
 
 #define WARNBOX_IN_USE
 #ifdef WARNBOX_IN_USE
-static void htmlWarnBoxSetup(FILE *f, int dirDepth)
+static void htmlWarnBoxSetup(FILE *f)
 /* Creates an invisible, empty warning box than can be filled with errors
  * and then made visible.  dirDepth is the number of levels beneath apache
  * root that caller's HTML will appear to the web client.  E.g. if writing
@@ -213,10 +213,6 @@ if(htmlWarnBoxSetUpAlready)
     return;
 htmlWarnBoxSetUpAlready=TRUE;
 
-char relPath[PATH_LEN];
-relPath[0] = '\0';
-while (dirDepth-- > 0)
-    safecat(relPath, sizeof(relPath), "../");
 // NOTE: Making both IE and FF work is almost impossible.  Currently, in IE, if the message
 // is forced to the top (calling this routine after <BODY> then the box is not resizable
 // (dynamically adjusting to its contents). But if this setup is done later in the page
@@ -227,20 +223,20 @@ while (dirDepth-- > 0)
 //      "if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display=''; warnBox.style.width='auto';}"
 fprintf(f, "<script type='text/javascript'>\n");
 fprintf(f, "document.write(\"<center>"
-	    "<div id='warnBox' style='display:none; background-color:Beige; "
-	      "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
-	      "text-align:left;'>"
-	    "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL>"
-	    "<CENTER><img id='warnOK' src='%simages/ok.jpg' onclick='hideWarnBox();return false;'></CENTER>"
-	    "</div></center>\");\n", relPath);
+            "<div id='warnBox' style='display:none; background-color:Beige; "
+              "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
+              "text-align:left;'>"
+            "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL>"
+            "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'>&nbsp;OK&nbsp;</button></CENTER>"
+            "</div></center>\");\n");
 fprintf(f,"function showWarnBox() {"
-	        "var warnBox=document.getElementById('warnBox');"
-	        "warnBox.style.display=''; warnBox.style.width='65%%';"
-	        "document.getElementById('warnHead').innerHTML='Error(s):';"
+            "var warnBox=document.getElementById('warnBox');"
+            "warnBox.style.display=''; warnBox.style.width='65%%';"
+            "document.getElementById('warnHead').innerHTML='Error(s):';"
           "}\n");
 fprintf(f,"function hideWarnBox() {"
-	        "var warnBox=document.getElementById('warnBox');"
-	        "warnBox.style.display='none';warnBox.innerHTML='';"
+            "var warnBox=document.getElementById('warnBox');"
+            "warnBox.style.display='none';warnBox.innerHTML='';"
             "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);"
             "if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }"
           "}\n"); // Note that the OK button goes to prev page when this page is interrupted by the error.
@@ -254,7 +250,7 @@ void htmlVaWarn(char *format, va_list args)
 va_list argscp;
 va_copy(argscp, args);
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup(stdout,1); // sets up the warnBox if it hasn't already been done.
+htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[512];
 vsnprintf(warning,sizeof(warning),format, args);
 // NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
@@ -418,7 +414,7 @@ if (gotBgColor)
 fputs(">\n",f);
 
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup(f, dirDepth);
+htmlWarnBoxSetup(f);
 #endif//def WARNBOX_IN_USE
 }
 
@@ -554,7 +550,7 @@ else
     printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
 
 #ifdef WARNBOX_IN_USE
-htmlWarnBoxSetup(stdout, 1);// Sets up a warning box which can be filled with errors as they occur
+htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
 #endif//def WARNBOX_IN_USE
 
 /* Call wrapper for error handling. */

@@ -1,24 +1,33 @@
 /* imageV2 - API for creating the image V2 features. */
 
-// UNCOMMENT IMAGEv2_UI to have the new image with dragReorder
-// also UNCOMMENT IMAGEv2_UI_PORTAL to allow dragScroll
+// UNCOMMENT IMAGEv2_UI to have the new imgBox (aka imgTbl)
+// also UNCOMMENT IMAGEv2_DRAG_REORDER to allow dragReorder
+//  and/or UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
+//  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
+//        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
 //#define IMAGEv2_UI
-#define IMAGEv2_USE_PORTAL
-#define IMAGEv2_DRAG_REORDER
+//#define IMAGEv2_DRAG_REORDER
+//#define IMAGEv2_DRAG_SCROLL
+//#define IMAGEv2_DRAG_SCROLL_SZ 3
+
+#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+    //#define IMAGEv2_SHORT_MAPITEMS
+#endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 
 // CURRENT PROBLEMS:
+// o some map items span both sideLabel and data!!
 // o subrtacks should be dragReorderable!!!  Make them individual imgTracks
 // o centerlabel next feature '>>' arrows are scrolled off screen: fix when centerlabels are small and don't scroll
 // o subtrack center labels currently scroll with portal: fixed with subtracks being individual imgTracks
 // o image should be clear and background image should contain stripes
-// o Ambitious?  Dynamic height for data/label based on image map currently in portal: problem if map does not cover.
+// o Dynamic height for data/label based on image map currently in portal: DONE for packed, but full map items span all of data slice!
 
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
 
 extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge rewrite
 //extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
-//extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
+extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
 //extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
 extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
@@ -168,7 +177,7 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
     struct trackDb *tdb;	  // trackDb entry (should this be struct track* entry?)
-    char *name;	              // It is possible to have an imgTrack without a tdb, but then it mist have a name
+    char *name;	              // It is possible to have an imgTrack without a tdb, but then it must have a name
     char *db;                 // Image for db (species) (assert imgTrack matches imgBox)
     char *chrom;              // Image for chrom (assert imgTrack matches imgBox)
     int  chromStart;          // Image start (absolute, not portal position)
@@ -200,6 +209,10 @@ struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceTy
 /* Updates the slice or adds it */
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type);
 /* Gets the map assocated with a specific slice belonging to the imgTrack */
+int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+/* Will add a map item it an imgTrack's appropriate slice's map
+   Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
+   returns count of map items added, which could be 0, 1 or more than one if item spans slices */
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose);
 /* Tests the completeness and consistency of this imgTrack (not including slices) */
 void imgTrackFree(struct imgTrack **pImgTrack);

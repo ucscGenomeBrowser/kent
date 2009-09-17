@@ -1,8 +1,8 @@
-setenv BRANCHNN 214
-setenv TODAY 2009-09-02     # v214 final
-setenv LASTWEEK 2009-08-18     # v213 final
-setenv REVIEWDAY 2009-08-25    # preview of v214
-setenv LASTREVIEWDAY 2009-08-10  # preview of v213
+setenv BRANCHNN 215
+setenv TODAY 2009-09-15     # v215 final
+setenv LASTWEEK 2009-09-02     # v214 final
+setenv REVIEWDAY 2009-09-09    # preview of v215
+setenv LASTREVIEWDAY 2009-08-25  # preview of v214
 
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 titan
@@ -27,6 +27,7 @@ if ( "$HOST" == "hgwbeta" ) then
     setenv BUILDDIR /data/tmp/releaseBuild
 endif
 if ( "$HOST" == "hgwdev" ) then
+    setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
     setenv JAVABUILD /scratch/javaBuild
     setenv JAVA_HOME /usr/java/default
     setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/home/heather/transfer/jtidy.jar:/usr/share/java/rhino.jar:/cluster/home/heather/archive/mysql-connector-java-3.0.16-ga-bin.jar

@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1569 2009/08/31 18:31:53 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1571 2009/09/09 17:02:01 markd Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2303,15 +2303,10 @@ if (!foundPep)
 	{
 	puts("<LI>\n");
 	/* put out correct message to describe translated mRNA */
-        if (sameString(geneTable, "ensGene"))
+        if ((sameString(geneTable, "ensGene")) || (sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene")))
 	    {
-	    printf("No protein prediction for Ensembl gene");
+	    printf("Non-protein coding gene or gene fragment, no protein prediction available.");
 	    }
-        else if ((sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene")))
-	    {
-	    printf("No protein prediction for Vega gene");
-	    }
-             
 	else if (!genbankIsRefSeqNonCodingMRnaAcc(geneName))
 	    {
 	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
@@ -2463,7 +2458,10 @@ struct psl* pslList = getAlignments(conn, tdb->tableName, item);
 if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
-    printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
+    if (sameString("protein", subType))
+        printAlignments(pslList, start, "htcProteinAli", tdb->tableName, item);
+    else
+        printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
     }
 else
     {
@@ -5309,7 +5307,7 @@ if (pslList == NULL)
     }
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
-if (sameString(tdb->tableName, "mrnaBlastz"))
+if (startsWith("mrnaBlastz",tdb->tableName))
     slSort(&pslList, pslCmpScoreDesc);
 
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
@@ -6362,6 +6360,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -6621,10 +6620,17 @@ else
 
     if (startsWith("ucscRetroAli", track) || startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
 	{
-        char *suffix = strstr(acc, ".");
-        if (suffix != NULL)
-            *suffix = '\0';
-        rnaSeq = hDnaSeqGet(database, acc, "retroSeq", "retroExtFile");
+        struct trackDb *tdb = hashMustFindVal(trackHash, track);
+        rnaSeq = NULL;
+        char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+        char *specCopy = cloneString(spec);
+
+        // value is: extFile seqTbl extFileTbl
+        char *words[3];
+        int nwords = chopByWhite(specCopy, words, ArraySize(words));
+        if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
+            errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
+        rnaSeq = hDnaSeqGet(database, acc, words[1], words[2]);
 	}
     else if (sameString("HInvGeneMrna", track))
 	{

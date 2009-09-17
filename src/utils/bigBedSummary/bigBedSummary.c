@@ -6,8 +6,9 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 #include "asParse.h"
+#include "udc.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.6 2009/06/09 17:41:28 markd Exp $";
+static char const rcsid[] = "$Id: bigBedSummary.c,v 1.7 2009/09/08 19:50:24 kent Exp $";
 
 char *summaryType = "coverage";
 
@@ -29,12 +30,14 @@ errAbort(
   "   -fields - print out information on fields in file.\n"
   "      If fields option is used, the chrom, start, end, dataPoints\n"
   "      parameters may be omitted\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
    {"fields", OPTION_BOOLEAN},
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -96,6 +99,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (optionExists("fields"))
     {
     if (argc < 2)

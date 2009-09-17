@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1595 2009/08/27 00:10:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1597 2009/09/14 15:28:25 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1572,7 +1572,7 @@ leftLabelWidth = insideX - gfxBorder*3;
 
 #ifdef IMAGEv2_UI
 struct image    *theOneImg   = NULL; // No need to be global, only the map needs to be global
-struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
+//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 // Set up imgBox dimensions
 int sideSliceWidth  = 0;   // Just being explicit
@@ -1599,7 +1599,7 @@ if(theImgBox)
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
     hPrintf("<input type='hidden' name='r' value='%d'>\n", winEnd);
     hPrintf("<input type='hidden' name='pix' value='%d'>\n", tl.picWidth);
-    #ifdef IMAGEv2_USE_PORTAL
+    #ifdef IMAGEv2_DRAG_SCROLL
     // If a portal was established, then set the global dimensions to the entire image size
     if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
         {
@@ -1609,7 +1609,7 @@ if(theImgBox)
         if (withLeftLabels)
             sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
         }
-    #endif//def IMAGEv2_USE_PORTAL
+    #endif//def IMAGEv2_DRAG_SCROLL
     dataSliceWidth   = tl.picWidth - sideSliceWidth;
     }
 #endif//def IMAGEv2_UI
@@ -2370,7 +2370,7 @@ hvGfxClose(&hvg);
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
-    #ifdef IMAGEv2_USE_PORTAL
+    #ifdef IMAGEv2_DRAG_SCROLL
     // If a portal was established, then set the global dimensions back to the portal size
     if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
         {
@@ -2378,7 +2378,7 @@ if(theImgBox)
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_USE_PORTAL
+    #endif//def IMAGEv2_DRAG_SCROLL
     imgBoxFree(&theImgBox);
     }
 else
@@ -3974,16 +3974,16 @@ if(!psOutput)
     if (withLeftLabels)
         sideSliceWidth   = (insideX - gfxBorder*3) + 2;
     theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
-    #ifdef IMAGEv2_USE_PORTAL
+    #ifdef IMAGEv2_DRAG_SCROLL
     // Define a portal with a default expansion size, then set the global dimensions to the full image size
     if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
         {
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_USE_PORTAL
+    #endif//def IMAGEv2_DRAG_SCROLL
     }
-    #endif//def IMAGEv2_UI
+#endif//def IMAGEv2_UI
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -4035,7 +4035,7 @@ for (group = groupList; group != NULL; group = group->next)
     }
 
 #ifdef IMAGEv2_UI
-#ifdef IMAGEv2_USE_PORTAL
+#ifdef IMAGEv2_DRAG_SCROLL
 if(theImgBox)
     {
     // If a portal was established, then set the global dimensions back to the portal size
@@ -4045,7 +4045,7 @@ if(theImgBox)
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
     }
-#endif//def IMAGEv2_USE_PORTAL
+#endif//def IMAGEv2_DRAG_SCROLL
 #endif//def IMAGEv2_UI
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");

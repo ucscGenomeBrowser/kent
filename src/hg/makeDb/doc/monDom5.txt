@@ -865,4 +865,118 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
-############################################################################
+
+###########################################################################
+# ALIGNMENTS/CHAINS/NETS (DONE Dec 2008, Andy)
+# 
+# To be honest I didn't really concentrate on getting the whole enchilada of 
+# make-notes into record, because the whole process is so robotic.  
+# 
+# I'll start with the DEF files.  These have varying parameters based on 
+# the query species.  So here's the various DEF parameters:
+#
+     DB    H    Y     L    K   T   M   A_R*      Q  1CHUNK 1LAP 2CHUNK 2LAP 2LIMIT
+bosTau4    - 3400  6000 2200   -   -     -  HoxD55      1M  10K    20M    0    100
+canFam2 2000 3400 10000 2200   -  50     0  HoxD55      1M  10K    30M    0      -
+danRer5 2000 3400  6000 2200   -   -     -  HoxD55      5M  10K    10M    0      -
+galGal3 2000 3400 10000 2200   -   -     -  HoxD55      5M  10K    20M    0      -
+   hg18 2000 3400 10000 2200   -  50     0  HoxD55      5M  10K    10M    0      -
+macEug1    - 3400     -    -   2  10     -       -     10M 320K   500K    0    100
+   mm9     - 3400  6000 2200   -   -     -  HoxD55      5M  10K    20M    0      -
+ornAna1 2000 3400  6000 2200   -  50     -  HoxD55      5M  10K    20M    0    300
+panTro2 2000 3400 10000 2200   -  50     0  HoxD55      1M  10K    30M    0      -
+ponAbe2 2000 3400 10000 2200   -  50     0  HoxD55      1M  10K    30M    0      -
+rheMac2 2000 3400 10000 2200   -  50     0  HoxD55      1M  10K    30M    0      -
+    rn4    - 3400  6000 2200   -   -     -  HoxD55      2M  10K    10M    0      -
+    rn5    - 3400  6000 2200   -   -     -       -      5M  10K    20M    0      -
+xenTro2 2000 3400  8000 2200   -  50     -  HoxD55      5M  10K    20M    0    100
+
+* BLASTZ_ABRIDGE_REPEATS
+
+# In most of those cases I was looking to the DEF variables in the monDom4 version
+# of the alignment.  In the case of macEug1, the variable settings were given by
+# Webb Miller.
+# 
+# After all the DEF files are created, it's time to run doBlastzChainNet.pl
+# In the case of monDom5, they all have the profile of this:
+
+cd /hive/data/genomes/monDom5/bed
+mkdir blastz.otherDb
+cd blastz.otherDb
+screen -S otherDb_monDom5
+doBlastzChainNet.pl -bigClusterHub swarm -stop cat DEF >& doUntilCat.log
+#[detach screen, come back when it's done]
+
+# The reason I'd stop after the cat step is that I was having better results 
+# using swarm for chaining instead of memk.  At the time, memk only had a dozen
+# nodes, and usually only 8 would be online.  Because of the large chromosomes,
+# the chaining step would be bottlenecked by the hippo jobs on the big chroms.
+# It was going much more quickly when the cluster could accommodate more
+# concurrent jobs. On memk the jobs were allocated 8GB of RAM and they normally
+# only get 2GB on swarm, so in case that mattered, I did this
+
+#[re-attach screen]
+doBlastzChainNet.pl -bigClusterHub swarm -smallClusterHub swarm -minChainScore 3000 DEF >& doAfterCat.log
+#[detach screen]
+ssh swarm
+cd /hive/data/genomes/monDom5/bed/blastz.otherDb/axtChain/run
+para check
+# check to see the jobs have started, once they have:
+para stop; para resetCounts; para -ram=8g -cpu=4 create jobList; para push
+# check to see things are all fine, and log out of swarm
+
+# after that all should have completed fine. Stopping the cluster run manually
+# while the doBlastzChainNet.pl script is running doesn't typically confuse it.
+# I suppose it's possible that the script while check on the run in the small
+# period while it's stopped, but it didn't happen to me.
+#
+# In retrospect I think the memk trick is possibly avoidable now that there are
+# more memk nodes.  However the oppossum is a particularly difficult species to
+# chain, so I'm just mentioning it anyway.  Later when doing alignments on hg19,
+# memk was up to the task just fine.
+# 
+# Also of note is the inconsistency of DEF parameter settings.  When monDom6
+# happens, someone will probably look here to see what was done with monDom5.
+# If I have any advice it's to take an approach like the one with hg19 and
+# use consistent parameters as much as possible and set them according to
+# different tiers of evolutionary distance.  
+
+
+####################################################################
+# RELOAD CHAINS/NETS AS NON-SPLIT (2009-06-09, Andy)
+
+for d in blastz.*; do 
+   if [ $d != "blastz.bosTau4" ]; then 
+      db=${d#blastz.};
+      Db=`echo $db | sed 's/^./\u&/'`; 
+      echo Loading $db chains into monDom5...;
+      time nice -n +19 hgLoadChain -tIndex monDom5 chain$Db \
+         blastz.$db/axtChain/monDom5.$db.all.chain.gz;
+    fi; 
+done >& unsplit/chainReloads.log
+# problem with macEug1 
+
+cd blastz.macEug1/axtChain/
+time nice -n +19 hgLoadChain -tIndex monDom5 chainMacEug1 monDom5.macEug1.all.chain.gz
+#Loading 19668859 chains into monDom5.chainMacEug1
+#Can't start query:
+#load data local infile 'link.tab' into table chainMacEug1Link
+#
+#mySQL error 1114: The table 'chainMacEug1Link' is full
+#real    146m54.273s
+#
+wc -l link.tab
+#200440062 link.tab
+#19668859 chain.tab
+randomLines link.tab 10000000 stdout | awk '{print length($0)}' | sort | uniq -c
+randomLines chain.tab 1000000 stdout | awk '{print length($0)}' | sort | uniq -c
+# 92 chain, 42 link
+sed "s/hgLoadChain.*/hgsqldump monDom5 chainRn4Link --no-data --skip-comments\n\
+ | sed \'s\/Rn4\/MacEug1\/; s\/TYPE=MyISAM\/ENGINE=MyISAM max_rows=201000000\n\
+ avg_row_length=42 pack_keys=1 CHARSET=latin1\/\' | hgsql monDom5 \n\
+/" loadUp.csh > manualLoadUp.csh
+
+hgsqldump monDom5 chainRn4 --no-data --skip-comments | sed \'s\/Rn4\/MacEug1\/; s\/TYPE=MyISAM\/ENGINE=MyISAM max_rows=20000000 avg_row_length=92 pack_keys=1 CHARSET=latin1\/\' | hgsql monDom5 \n\
+hgsql monDom5 -e \"load data local infile \'chain.tab\' into table chainMacEug1\"\n\
+hgsql monDom5 -e \"load data local infile \'link.tab\' into table chainMacEug1Link\"\n\
+hgsql monDom5 -e \"INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,0,\'aamp\',\'Loaded 19668859 chains into macEug1 chain table manually\', NOW(), NULL)\"\

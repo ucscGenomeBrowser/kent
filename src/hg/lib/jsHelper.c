@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.30 2009/08/15 20:04:03 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.31 2009/09/10 04:19:26 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -450,8 +450,8 @@ void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPref
 cgiMakeOnClickSubmitButton(jsCheckAllOnClickHandler(idPrefix, state), name, value);
 }
 
-static char *stripRegEx(char *str, char *regEx, int flags)
-/* Utility function to strip out text matching regEx from str.
+char *stripRegEx(char *str, char *regEx, int flags)
+/* Strip out text matching regEx from str.
    flags is passed through to regcomp as the cflags argument.
    Returned string should be free'ed after use. */
 {

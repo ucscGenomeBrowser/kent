@@ -31,7 +31,7 @@ proc cnvDateTime {dateStr} {
 proc buildReports {fromTag toTag fromTagDate toTagDate branchVersion} {
     set pid [fork]
     if {$pid == 0} {
-        execl $::CVS_REPORTS [list -verbose -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
+        execl $::CVS_REPORTS [list -verbose -no-update -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
     } else {
         set status [wait $pid]
         if {[lrange $status 1 2] != "EXIT 0"} {
@@ -40,12 +40,13 @@ proc buildReports {fromTag toTag fromTagDate toTagDate branchVersion} {
     }
 }
 
-if {$argc != 6} {
-    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport branchVersion"
-    puts stderr "   fromTag and toTag are in the form: vNN_branch "
+if {$argc != 7} {
+    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport branchVersion sandBox"
+    puts stderr "   fromTag and toTag are in the form: branch or review "
     puts stderr "   fromTagDate and toTagDate are in the form: 2004-06-07 "
     puts stderr "   whichReport is either 'branch' or 'Review' (no quotes)"
     puts stderr "   branchVersion is v${BRANCHNN} e.g. v144"
+    puts stderr "   sandBox is the location of the checked out source"
     exit 1
 }
 
@@ -56,14 +57,17 @@ set fromTagDate [lindex $argv 2]
 set   toTagDate [lindex $argv 3]
 set  whichReport [lindex $argv 4]
 set  branchVersion [lindex $argv 5]
+set  sandBox [lindex $argv 6]
+
 umask 0002
 
 if {($whichReport != "branch") && ($whichReport != "review")} {
-    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport branchVersion"
-    puts stderr "   fromTag and toTag are in the form: vNN_branch "
+    puts stderr "whichReport should be brance or review: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport branchVersion sandBox"
+    puts stderr "   fromTag and toTag are in the form: branch or review "
     puts stderr "   fromTagDate and toTagDate are in the form: 2004-06-07 "
     puts stderr "   whichReport is either 'branch' or 'review' (no quotes)"
     puts stderr "   branchVersion is v${BRANCHNN} e.g. v144"
+    puts stderr "   sandBox is the location of the checked out source"
     exit 1
 }
 
@@ -72,7 +76,9 @@ set CVS_REPORTS_BASE /hive/groups/qa/cvs-reports-latest/
 set CVS_REPORTS_DIR $CVS_REPORTS_BASE/$whichReport
 
 # this is the cvs sandbox used (now shared by branch and review versions of cvs-reports)
-set CVS_WORK_DIR $CVS_REPORTS_BASE/kent
+# old set CVS_WORK_DIR $CVS_REPORTS_BASE/kent
+# new method using -no-update assumes sandbox is already up to date
+set CVS_WORK_DIR $sandBox
 
 # this is the program name
 set CVS_REPORTS ./cvs-reports-d

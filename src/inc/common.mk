@@ -105,5 +105,28 @@ endif
 # location of stringify program
 STRINGIFY = ${BINDIR}/stringify
 
+#Lowelab defines
+#The lowelab specific code will be included in compilation if the following conditions are satistied
+LOWELAB_WIKI_DEF=
+LOWELAB_DEF=
+ifdef LOWELAB
+    LOWELAB_WIKI=1
+    LOWELAB_DEF=-DLOWELAB
+endif
+ifdef LOWELAB_WIKI
+    LOWELAB_WIKI_DEF=-DLOWELAB_WIKI
+endif
+LOWELAB_DEFS=${LOWELAB_DEF} ${LOWELAB_WIKI_DEF}
+
+ifdef LOWELAB
+    ifeq (${CGI_BIN},/usr/local/apache/cgi-bin)
+        CGI_BIN=/www/cgi-bin
+    endif
+    ifeq (${DOCUMENTROOT},/usr/local/apache/htdocs)
+        DOCUMENTROOT=/www/browser-docs
+    endif
+endif
+
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+

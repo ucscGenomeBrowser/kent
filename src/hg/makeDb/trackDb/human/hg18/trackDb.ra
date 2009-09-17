@@ -2970,7 +2970,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
     priority 1
-    color 0,100,180
+    color 0,50,225
 
     track vegaPseudoGene
     subTrack vegaGeneComposite
@@ -4031,7 +4031,7 @@ baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
-chromosomes chr22
+chromosomes chr21,chr22
 maxWindowToDraw 200000
 
 track NA12878Slx

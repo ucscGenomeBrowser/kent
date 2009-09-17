@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.6 2009/08/24 23:47:56 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.7 2009/09/14 23:44:25 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -17,30 +17,40 @@ void bamIgnoreStrand()
 ignoreStrand = TRUE;
 }
 
-static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
-/* Return file name from little table. */
-/* This should be libified somewhere sensible -- copied from hgTracks/bedTrack.c. */
+char *bamFileNameFromTable(char *db, char *table, char *bamSeqName)
+/* Return file name from table.  If table has a seqName column, then grab the 
+ * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
+ * bam file might have '1' not 'chr1'). */
 {
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", table);
+struct sqlConnection *conn = hAllocConn(db);
+boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
+if (checkSeqName && bamSeqName == NULL)
+    errAbort("bamFileNameFromTable: table %s has seqName column, but NULL seqName passed in",
+	     table);
+char query[512];
+if (checkSeqName)
+    safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	  table, bamSeqName);
+else
+    safef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 if (fileName == NULL)
-    errAbort("Missing fileName in %s table", table);
+    {
+    if (checkSeqName)
+	errAbort("Missing fileName for seqName '%s' in %s table", bamSeqName, table);
+    else
+	errAbort("Missing fileName in %s table", table);
+    }
+hFreeConn(&conn);
 return fileName;
 }
 
-void bamFetch(char *db, char *table, char *position, bam_fetch_f callbackFunc, void *callbackData)
-/* Open the .bam file given in db.table, fetch items in the seq:start-end position range,
+void bamFetch(char *bamFileName, char *position, bam_fetch_f callbackFunc, void *callbackData)
+/* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData. 
  * Note: if sequences in .bam file don't begin with "chr" but cart position does, pass in 
  * cart position + strlen("chr") to match the .bam file sequence names. */
 {
-// TODO: if bamFile is URL, convert URL to path a la UDC, but under udcFuse mountpoint.
-// new hg.conf setting for udcFuse mountpoint/support.
-struct sqlConnection *conn = hAllocConn(db);
-char *bamFileName = bbiNameFromTable(conn, table);
-hFreeConn(&conn);
-
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh == NULL)
     errAbort("samopen(%s, \"rb\") returned NULL", bamFileName);
@@ -52,6 +62,8 @@ if (ret != 0)
 //?? Could this happen if there is no data on some _random?  can avoid with tdb chromosomes...
 
 bam_index_t *idx = bam_index_load(bamFileName);
+if (idx == NULL)
+    errAbort("bam_index_load(%s) failed.", bamFileName);
 ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
 if (ret != 0)
     errAbort("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);

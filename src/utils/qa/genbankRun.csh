@@ -54,5 +54,6 @@ endif
 echo "This shows the last time the genbank $tableName table was updated"
 echo "for $db on hgwbeta (listed first) and on hgw1 (listed second):"
 
-updateTimes.csh $db $tableName hgwbeta $machine | grep '[0-9,4]'
+updateTimes.csh $db $tableName | grep '.' | tail -2
+
 

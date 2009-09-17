@@ -10,22 +10,24 @@ source `which qaConfig.csh`
 ################################
 
 set db=""
-set machine="hgw1"
+set machine="hgnfs1"
 set table=""
 set field=""
 set dumpfile=""
 
-if ( $#argv < 3 | $#argv > 4 ) then
+if ( $#argv < 3 || $#argv > 4 ) then
   echo
-  echo "  gets the status of any table from an RR database."
+  echo "  gets the status of any table from the RR database."
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo
-  echo "    usage: database table field [RRmachine] (defaults to hgw1)"
-  echo "    fields available: Name, Type, Row_format, Rows, Avg_row_length, "
-  echo "        Data_length, Max_data_length, Index_length, Data_free, "
-  echo "        Auto_increment, Create_time, Update_time, Check_time, "
-  echo "        Create_options, Comment"
+  echo "    usage: database table field [hgwdev | hgwbeta | rr]"
+  echo "    fields available: Name, Engine, Version, Row_format, Rows, "
+  echo "        Avg_row_length, Data_length, Max_data_length, Index_length, "
+  echo "        Data_free, Auto_increment, Create_time, Update_time, "
+  echo "        Check_time, Create_options, Comment"
+  echo
+  echo "           defaults to rr. optionally accepts dev or beta"
   echo
   exit
 else
@@ -36,12 +38,13 @@ endif
 
 if ( $#argv == 4 ) then
   set machine=$argv[4]
-endif
-
-checkMachineName.csh $machine
-if ( $status ) then
-  echo
-  exit 1
+  echo $machine | egrep -q "hgwdev|hgwbeta|rr"
+  if ( $status ) then
+    echo
+    echo " fourth parameter must be hgwdev, hgwbeta or rr"
+    echo
+    exit 1
+  endif
 endif
 
 set dumpfile=`getRRdumpfile.csh $db $machine`
@@ -91,7 +94,6 @@ if ( $debug == "true" ) then
   echo "machine  = $machine"
   echo
   echo "machpath = $machpath"
-  echo "fullpath = $fullpath"
   echo "dumpfile = $dumpfile"
   echo "fieldval = $fieldval"
   echo

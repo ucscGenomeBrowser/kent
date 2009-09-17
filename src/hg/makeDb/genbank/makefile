@@ -17,7 +17,7 @@ clean: ${SUBDIRS:%=%.subclean}
 install-server: all
 	${MAKE} install PREFIX=/cluster/data/genbank
 
-install-rr: ${GB_BINARCH}/hgsql all
+install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad all
 	${MAKE} install PREFIX=/genbank
 
 etc-update:
@@ -45,6 +45,11 @@ check-prefix:
 # need a copy of hgsql for rr
 hgsqlSrcDir = ../../hgsql
 ${GB_BINARCH}/hgsql: ${hgsqlSrcDir}/hgsql.c
+	${CC} ${CFLAGS} -o $@ $< $(LIBS)
+
+# need a copy of hgLsSnpPdbLoad for rr
+hgLsSnpPdbLoadSrcDir = ../outside/hgLsSnpPdbLoad
+${GB_BINARCH}/hgLsSnpPdbLoad: ${hgLsSnpPdbLoadSrcDir}/hgLsSnpPdbLoad.c
 	${CC} ${CFLAGS} -o $@ $< $(LIBS)
 
 # build emacs tags for all files

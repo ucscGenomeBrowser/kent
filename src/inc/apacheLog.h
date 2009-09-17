@@ -25,7 +25,6 @@ struct apacheAccessLog
     int runTime;	/* Overall time (optional) in milliseconds */
     };
 
-
 struct apacheAccessLog *apacheAccessLogParse(char *line, 
 	char *fileName, int lineIx);
 /* Return a apacheAccessLog from line.  Return NULL if there's a parsing 
@@ -33,5 +32,12 @@ struct apacheAccessLog *apacheAccessLogParse(char *line,
 
 void apacheAccessLogFree(struct apacheAccessLog **pLl);
 /* Free up apacheAccessLog. */
+
+time_t apacheAccessLogTimeToTick(char *timeStamp);
+/* Convert something like 27/Aug/2009:09:25:32 to Unix timestamp (seconds since 1970).
+ * On error returns zero. */
+
+int apacheAccessLogCmpTick(const void *va, const void *vb);
+/* Compare items to sort by tick (which tracks timestamp) */
 
 #endif /* APACHELOG_H */

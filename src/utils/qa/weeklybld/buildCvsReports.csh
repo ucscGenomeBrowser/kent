@@ -40,9 +40,6 @@ endif
 echo
 echo "now building CVS reports on $HOST. [${0}: `date`]"
 
-@ LASTNN=$BRANCHNN - 1
-set fromTag=v${LASTNN}_branch
-set toTag=v${BRANCHNN}_branch
 set branchTag="branch"
 set reviewTag="review"
 
@@ -50,13 +47,8 @@ if ( "$BRANCHNN" == "" ) then
  echo "BRANCHNN undefined."
  exit 1
 endif
-if ( "$LASTNN" == "" ) then
- echo "LASTNN undefined."
- exit 1
-endif
 
 echo "BRANCHNN=$BRANCHNN"
-echo "LASTNN=$LASTNN"
 echo "TODAY=$TODAY"
 echo "LASTWEEK=$LASTWEEK"
 echo "REVIEWDAY=$REVIEWDAY"
@@ -85,7 +77,6 @@ if ( "$mode" == "review") then
     # Make the history directories and change the 'latest' link
     @ NEXTNN=$BRANCHNN + 1
     set CVS_REPORT_HIST=cvs-reports-history/v${NEXTNN}
-    set CVS_REPORT_OLD_HIST=cvs-reports-history/v${BRANCHNN}
     if ( ! -d $CVS_REPORT_HIST ) then
         mkdir $CVS_REPORT_HIST
         if ( $status ) then
@@ -94,10 +85,7 @@ if ( "$mode" == "review") then
         endif
         mkdir $CVS_REPORT_HIST/branch
         mkdir $CVS_REPORT_HIST/review
-        mkdir $CVS_REPORT_HIST/kent
-        echo "Moving previous cvs for update by cvs-reports-d [from $CVS_REPORT_OLD_HIST/kent/* -> $CVS_REPORT_HIST/kent/] on $HOST [${0}: `date`]"
-	mv $CVS_REPORT_OLD_HIST/kent/* $CVS_REPORT_HIST/kent/
-	echo "Created  dirs $CVS_REPORT_HIST/{branch,review,kent} on $HOST [${0}: `date`]"
+	echo "Created  dirs $CVS_REPORT_HIST/{branch,review} on $HOST [${0}: `date`]"
     endif
 else
     # For branches, history is BRANCHNN
@@ -120,15 +108,29 @@ echo "Using history dir $PWD/$CVS_REPORT_HIST/ and symlink cvs-reports-latest on
 # it will shove itself off into the background anyway!
 cd $WEEKLYBLD
 
-# You can't check the status code of a command after an if statement, it must be directly after the command
+
+# its faster especially on local disk to
+# just delete the sandbox and re-check it out with tag
+if ( -d $CVS_REPORTS_WORKDIR/kent ) then
+    rm -fr $CVS_REPORTS_WORKDIR/kent
+endif
+pushd $CVS_REPORTS_WORKDIR
+cvs -Q co -r $mode kent
+set err=$status
+popd
+if ( $err ) then
+    echo "error doing cvs -Q co -r $mode kent in $CVS_REPORTS_WORKDIR"
+    exit 1
+endif
+
 if ( "$mode" == "review") then
-    ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN}
+    ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} $CVS_REPORTS_WORKDIR/kent
     if ( $status ) then
         echo "Error: [mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1
     endif
 else    
-    ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN}
+    ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} $CVS_REPORTS_WORKDIR/kent
     if ( $status ) then
         echo "Error: [mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1

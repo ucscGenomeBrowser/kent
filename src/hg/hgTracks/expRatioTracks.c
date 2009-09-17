@@ -180,7 +180,12 @@ if(theImgBox && curMap)
     char link[512];
     safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&i2=%s", // NOTE: winStart,winEnd removed due to portal
         hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2);
-    mapSetItemAdd(curMap,link,statusLine,x, y, x+width, y+height);
+    #ifdef IMAGEv2_SHORT_MAPITEMS
+        if(x < insideX && x+width > insideX)
+            warn("mapBoxHcTwoItems(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, x+width, y+height, link);
+    #endif//def IMAGEv2_SHORT_MAPITEMS
+    imgTrackAddMapItem(curImgTrack,link,statusLine,x, y, x+width, y+height);
+     //mapSetItemAdd(curMap,link,statusLine,x, y, x+width, y+height);
     }
 else
 #endif//def IMAGEv2_UI
@@ -1447,7 +1452,12 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
         {
         char link[512];
         safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->mapName); // NOTE: winStart,winEnd removed due to portal
-        mapSetItemAdd(curMap,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
+        #ifdef IMAGEv2_SHORT_MAPITEMS
+            if(xOffRc < insideX && xOffRc+insideWidth > insideX)
+                warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->mapName,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
+        #endif//def IMAGEv2_SHORT_MAPITEMS
+        imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
+        //mapSetItemAdd(curMap,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         }
     else
     #endif//def IMAGEv2_UI

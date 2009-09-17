@@ -48,7 +48,7 @@ return ((struct cytoBand *)item)->chromEnd + winStart;
 }
 
 static void cytoBandDrawAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y, double scale, 
+	struct hvGfx *hvg, int xOff, int y, double scale,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw cytoBand items. */
 {
@@ -67,7 +67,7 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 
-hCytoBandDrawAt(band, hvg, x1, y, w, heightPer, hCytoBandDbIsDmel(database), font, 
+hCytoBandDrawAt(band, hvg, x1, y, w, heightPer, hCytoBandDbIsDmel(database), font,
 	mgFontPixelHeight(font), tg->ixColor, tg->ixAltColor,
 	shadesOfGray, maxShade);
 
@@ -75,7 +75,7 @@ if(tg->mapsSelf)
     tg->mapItem(tg, hvg, band, band->name, band->name, band->chromStart, band->chromEnd,
 		x1, y, w, heightPer);
 else
-    mapBoxHc(hvg, band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
+    mapBoxHc(hvg, band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName,
 	     band->name, band->name);
 }
 
@@ -90,7 +90,7 @@ static void loadCytoBandsIdeo(struct track *tg)
 /* Load up cytoBandIdeo from database table to track items. */
 {
 char query[256];
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
       "select * from cytoBandIdeo where chrom like '%s'", chromName);
 if(hTableExists(database, "cytoBandIdeo"))
     bedLoadItemByQuery(tg, "cytoBandIdeo", query, (ItemLoader)cytoBandLoad);
@@ -107,14 +107,14 @@ static void freeCytoBands(struct track *tg)
 cytoBandFreeList((struct cytoBand**)&tg->items);
 }
 
-void cytoBandIdeoDraw(struct track *tg, 
+void cytoBandIdeoDraw(struct track *tg,
 		      int seqStart, int seqEnd,
-		      struct hvGfx *hvg, int xOff, int yOff, int width, 
+		      struct hvGfx *hvg, int xOff, int yOff, int width,
 		      MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the entire chromosome with a little red box around our
    current position. */
 {
-double scale = 0; 
+double scale = 0;
 int xBorder = 4;
 int lineHeight = 0;
 int heightPer = 0;
@@ -132,7 +132,7 @@ heightPer = tg->heightPer;
 yOff = yOff;
 
 /* Time to draw the bands. */
-hvGfxSetClip(hvg, xOff, yOff, insideWidth, tg->height); 
+hvGfxSetClip(hvg, xOff, yOff, insideWidth, tg->height);
 genericDrawItems(tg, 0, chromSize, hvg, xOff+xBorder, yOff+5, width-(2*xBorder), font, color, tvDense);
 
 x1 = round((winStart)*scale) + xOff + xBorder -1;
@@ -158,7 +158,7 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     if(sameString(cb->gieStain, "acen"))
 	{
 	int cenLeft, cenRight, cenTop, cenBottom;
-	
+
 	/* Get the coordinates of the edges of the centromere. */
 	cenLeft = round((cb->chromStart)*scale) + xOff + xBorder;
 	cenRight = round((cb->next->chromEnd)*scale) + xOff + xBorder;
@@ -166,7 +166,7 @@ for(cb = cbList; cb != NULL; cb = cb->next)
 	cenBottom = yOff + yBorder - 3;
 
 	/* Draw centromere itself. */
-	hCytoBandDrawCentromere(hvg, cenLeft, cenTop, cenRight - cenLeft, 
+	hCytoBandDrawCentromere(hvg, cenLeft, cenTop, cenRight - cenLeft,
 	     cenBottom-cenTop+1, MG_WHITE, hCytoBandCentromereColor(hvg));
 	break;
 	}
@@ -186,13 +186,26 @@ tg->heightPer += 11;
 tg->lineHeight += 11;
 }
 
-void cytoBandIdeoMapItem(struct track *tg, struct hvGfx *hvg, void *item, 
-			    char *itemName, char *mapItemName, int start, int end, 
+void cytoBandIdeoMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+			    char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 /* Print out a box to jump to band in browser window .*/
 {
 struct cytoBand *cb = item;
+#define IDEO_CLICK_SAME_SIZE
+#ifdef IDEO_CLICK_SAME_SIZE
+x = hvGfxAdjXW(hvg, x, width);
+
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+    hPrintf("onclick='return false;' ");
+    hPrintf("HREF=\"#\" class='cytoBand'");
+    //hPrintf("HREF=\"%s?position=%s:%d-%d\"",hgTracksName(), cb->chrom, cb->chromStart+1, cb->chromEnd);
+    if (cb->name != NULL)
+        mapStatusMessage("%s %s:%d-%d", cb->name,cb->chrom, cb->chromStart, cb->chromEnd);
+    hPrintf(">\n");
+#else//ifndef IDEO_CLICK_SAME_SIZE
 mapBoxJumpTo(hvg, x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
+#endif//ndef IDEO_CLICK_SAME_SIZE
 }
 
 int cytoBandIdeoTotalHeight(struct track *tg, enum trackVisibility vis)

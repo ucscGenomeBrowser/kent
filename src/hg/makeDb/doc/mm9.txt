@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.107 2009/08/27 18:05:07 hiram Exp $"
+#	"$Id: mm9.txt,v 1.111 2009/09/09 18:51:40 fanhsu Exp $"
 #
 
 #######################################################################
@@ -9490,7 +9490,7 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
-# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-07-30, hartera)
+# VEGA GENES UPDATE TO BUILD 35 (DONE, 2009-07-30 - 2009-09-09, hartera)
 # Needs updating as the current version is build 31 from May 2008.
 # 2009-08-03 (hartera) - Added code to register track handler for
 # vegaGeneComposite.
@@ -9500,7 +9500,17 @@ see doc/builds.txt for specific details.
 # and protein reports on the details pages. 
 # 2009-08-22 - Finished code for adding Vega report URLs to the details pages.
 # Loaded the vegaGtp table.
+# 2009-09-01 and 2009-09-03 (hartera). Loaded a vegaPep table for the protein
+# sequence link on the details pages.
+# 2009-09-04 Re-load all tables as some reverted to the older version during
+# mySQL 5 upgrade.
+# 2009-09-08 - 2009-09-09 Code change to change message on details page when 
+# no protein is available and change to trackDb to make vegaGene items a 
+# darker blue colour. Reloaded vegaPep after removing proteins whose
+# transcripts are not in vegaGtp to make all.joiner happy.
 
+   mkdir -p /hive/data/genomes/mm9/bed/vega35
+   cd /hive/data/genomes/mm9/bed/vega35
    # Download the VEGA genes for mouse from the ftp site
    # This file is from 03/17/09.
    wget --timestamping \
@@ -9578,6 +9588,80 @@ see doc/builds.txt for specific details.
    # Loaded succesfully
    # Added code to hgc.c to use printEnsemblOrVegaCustomUrl() in 
    # doVegaGene() to add the links to Vega reports on the details pages.
+   # Code was added so that there is no protein sequence link on the details
+   # page if it there is none available e.g. noncoding.
+   # 2009-09-01 (hartera)
+   # Coding genes are displaying the message that there is no protein
+   # prediction available. Need to add a vegaPep table.
+   cd /hive/data/genomes/mm9/bed/vega35
+   # Download the protein FASTA file for Vega35
+   wget --timestamping "ftp://ftp.sanger.ac.uk/pub/vega/mouse/pep/*.tot.fa.gz"
+   # from the Ensembl process:
+   zcat Mus_musculus.VEGA.mar.pep.tot.fa.gz  \
+       | sed -e 's/^>.* Transcript:/>/;' | gzip > vegaPep.txt.gz
+   zcat vegaPep.txt.gz \
+       | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+       | sed -e '/^$/d; s/*$//' | sort > vegaPep.mm9.fa.tab
+   # Load table (2009-09-03, hartera)
+   hgPepPred mm9 tab vegaPep vegaPep.mm9.fa.tab
+   # Add vegaPep to the trackDb.ra entry for the vegaGeneComposite track 
+   # in the type line for src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra.
+   # Check that the vegaPep table looks ok and then check protein-coding and 
+   # noncoding transcript details pages for protein links.
+   
+   # 2009-09-04, hartera
+   # Re-load tables after upgrade to mySQL 5 as they had reverted back to 
+   # tables with the previous Vega dataset.
+
+   cd /hive/data/genomes/mm9/bed/vega35
+   hgsql -e 'drop table vegaGene;' mm9
+   hgsql -e 'drop table vegaPseudoGene;' mm9
+   hgLoadGenePred -genePredExt mm9 vegaGene not.pseudo.gp
+   hgLoadGenePred -genePredExt mm9 vegaPseudoGene pseudo.gp
+   hgsql -e 'drop table vegaGtp;' mm9
+   hgLoadSqlTab mm9 vegaGtp ensGtp.sql vegaGtp.tab
+   hgsql -e 'drop table vegaPep;' mm9
+   hgPepPred mm9 tab vegaPep vegaPep.mm9.fa.tab
+   # 2009-09-08 (hartera). Changed message in code for details page when no
+   # protein sequence is available to be more explanatory. "Non-protein
+   # coding gene or gene fragment, no protein prediction available." Changed
+   # the colouring for the vegaGene subtrack to be darker blue so there is 
+   # more of a contrast between vegaGene and vegaPseudoGene subtracks.
+
+   # 2009-09-09 (hartera) - re-loaded vegaPep table with only those proteins
+   # that have a transcript ID in vegaGtp. 
+   # all.joiner is complaining as there are about 1,000 extra proteins in 
+   # vegaPep that do not have transcripts in vegaGtp. Decided to remove these
+   # and e-mailed the HAVANA group to ask about the discrepancy. 
+   cd /hive/data/genomes/mm9/bed/vega35
+   awk '{print $2}' vegaGtp.tab | sort | uniq > vegaGtp.tx.ids
+   awk '{print $1}' vegaPep.mm9.fa.tab | sort | uniq > vegaPep.tx.ids
+   wc -l *.tx.ids
+   # 59381 vegaGtp.tx.ids
+   # 30956 vegaPep.tx.ids
+   
+   # Number of transcripts that have a protein ID:
+   hgsql -Ne 'select transcript from vegaGtp where protein like "OTTMUSP%";' \
+        mm9 | sort | uniq > vegaGtpWithProt.tx.ids
+   wc -l vegaGtpWithProt.tx.ids        
+   # 29902 vegaGtpWithProt.tx.ids
+ 
+   # find those that are common to both. 
+   comm -12 vegaGtp.tx.ids vegaPep.tx.ids > pepandGtp.tx.ids
+   wc -l pepandGtp.tx.ids 
+   # 29902 pepandGtp.tx.ids
+   comm -12 pepandGtp.tx.ids vegaGtpWithProt.tx.ids | wc -l 
+   # 29902
+   # Therefore all the vegaGtp transcripts with a protein ID are in the
+   # protein FASTA file.
+   hgsql -Ne 'select * from vegaPep as p, vegaGtp as g where g.protein \
+         like "OTTMUSP%" and p.name = g.transcript;' mm9 \
+         > vegaPepOnlyInGtp.mm9.fa.tab
+   wc -l vegaPepOnlyInGtp.mm9.fa.tab 
+   # 29902 vegaPepOnlyInGtp.mm9.fa.tab  
+   hgsql -e 'drop table vegaPep;' mm9
+   hgPepPred mm9 tab vegaPep vegaPepOnlyInGtp.mm9.fa.tab
+    
 ############################################################################
 # Blastz Elephant loxAfr3 (DONE - 2009-08-12 - Hiram)
     mkdir /hive/data/genomes/mm9/bed/lastzLoxAfr3.2009-08-12
@@ -9634,3 +9718,36 @@ TMPDIR=/scratch/tmp
     #	673856452 bases of 3118565340 (21.608%) in intersection
 
 #########################################################################
+## NIA Mouse Gene Index - (DONE, Fan, 9/9/09)
+    ssh hgwdev 
+    mkdir -p /cluster/data/mm9/bed/NIAGene090903
+    cd /cluster/data/mm9/bed
+    ln -s NIAGene090903 NIAGene
+    cd NIAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex/mm9/download/T-fasta.ff.gz
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex/mm9/download/T-psl.txt.gz
+    gzip -d *.gz
+    
+    cut -f 1-21 T-psl.txt >NIAGene.tab
+    hgLoadPsl mm9 NIAGene.tab
+
+    mkdir /gbdb/mm9/NIAGene
+    ln -s /cluster/data/mm9/bed/NIAGene/T-fasta.fa /gbdb/mm9/NIAGene/T-fasta.fa
+    
+    hgLoadSeq mm9 /gbdb/mm9/NIAGene/T-fasta.fa
+
+#Creating seq.tab file
+#Adding /gbdb/mm9/NIAGene/T-fasta.fa
+#257758 sequences
+#Updating seq table
+#Warning: load of seq did not go as planned: 257758 record(s), 0 row(s) skipped, 257758 warning(s) loading ./seq.tab
+#Advisory lock has been released
+#All done
+
+# not sure what the warnings are about, but the track seems working.
+
+# Create/edit/check in NIAGene.html and trackDb.ra under
+    
+        kent/src/hg/makeDb/trackDb/mouse/mm9
+
+#####################################################################

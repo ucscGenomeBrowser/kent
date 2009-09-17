@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: crawlForHogs.c,v 1.2 2009/08/29 02:33:43 kent Exp $";
+static char const rcsid[] = "$Id: crawlForHogs.c,v 1.3 2009/09/08 23:41:06 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,6 +46,13 @@ boolean err500Identify(struct apacheAccessLog *a)
 return a->status == 500;
 }
 
+boolean msnbot500Identify(struct apacheAccessLog *a)
+/* Return true if err500 and msnbot */
+{
+return msnbotIdentify(a) && err500Identify(a);
+}
+
+
 boolean hgTracksIdentify(struct apacheAccessLog *a)
 /* Return true if hgTracks. */
 {
@@ -70,6 +77,20 @@ boolean hgcIdentify(struct apacheAccessLog *a)
 return startsWith("/cgi-bin/hgc", a->url);
 }
 
+boolean hgNearIdentify(struct apacheAccessLog *a)
+/* Return true if hgNear. */
+{
+return startsWith("/cgi-bin/hgNear", a->url);
+}
+
+
+boolean hgGeneIdentify(struct apacheAccessLog *a)
+/* Return true if hgGene. */
+{
+return startsWith("/cgi-bin/hgGene", a->url);
+}
+
+
 boolean ip1Identify(struct apacheAccessLog *a)
 /* Return true if ip1. */
 {
@@ -93,8 +114,11 @@ struct trough troughs[] =
    {
     { msnbotIdentify, "msnbot", "color=0,200,0"},
     { err500Identify, "err500", "color=222,0,0"},
+    { msnbot500Identify, "msnbot500", "color=250,100,0"},
     { hgTracksIdentify, "hgTracks", "color=0,0,200"},
     { hgTablesIdentify, "hgTables", "color=0,0,200"},
+    { hgNearIdentify, "hgNear", "color=0,0,200"},
+    { hgGeneIdentify, "hgGene", "color=0,0,200"},
     { hgBlatIdentify, "hgBlat", "color=0,0,200"}, 
     { hgcIdentify, "hgc", "color=0,0,200"},
     { ip1Identify, "ip1", "color=150,150,0"},
@@ -118,21 +142,19 @@ for (i=0; i<troughCount; ++i)
     troughs[i].f = mustOpen(path, "w");
     }
 
-boolean isFirst = TRUE;
 while (lineFileNext(lf, &line, NULL))
     {
     struct apacheAccessLog *a = apacheAccessLogParse(line, lf->fileName, lf->lineIx);
-    if (isFirst)
-        {
-	isFirst = FALSE;
+    if (a != NULL)
+	{
+	for (i=0; i<troughCount; ++i)
+	    if ((troughs[i].identify)(a))
+		{
+		FILE *f = troughs[i].f;
+		fprintf(f, "%s\n", line);
+		}
+	apacheAccessLogFree(&a);
 	}
-    for (i=0; i<troughCount; ++i)
-        if ((troughs[i].identify)(a))
-	    {
-	    FILE *f = troughs[i].f;
-	    fprintf(f, "%s\n", line);
-	    }
-    apacheAccessLogFree(&a);
     }
 
 for (i=0; i<troughCount; ++i)

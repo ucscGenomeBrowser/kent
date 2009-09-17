@@ -35,10 +35,14 @@
 #include "dgv.h"
 #include "transMapStuff.h"
 
+#ifdef USE_BAM
+#include "bamFile.h"
+#endif
+
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.499 2009/08/28 17:47:07 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.500 2009/09/02 23:22:21 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2137,6 +2141,28 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
+#ifdef USE_BAM
+void bamUi(struct trackDb *tdb)
+/* BAM: short-read-oriented alignment file format. */
+{
+char cartVarName[512];
+puts("<BR>");
+if (trackDbSetting(tdb, "pairEndsByName") != NULL)
+    {
+    printf("<B>Attempt to join paired end reads by name:</B>\n");
+    safef(cartVarName, sizeof(cartVarName), "%s_pairEndsByName", tdb->tableName);
+    cartMakeCheckBox(cart, cartVarName, TRUE);
+    puts("<BR>");
+    }
+printf("<B>Minimum alignment quality:</B>\n");
+safef(cartVarName, sizeof(cartVarName), "%s_minAliQual", tdb->tableName);
+cartMakeIntVar(cart, cartVarName, 0, 4);
+puts("<BR>");
+baseColorDrawOptDropDown(cart, tdb);
+//TODO: include / exclude flags
+}
+#endif//def USE_BAM
+
 
 void superTrackUi(struct trackDb *superTdb)
 /* List tracks in this collection, with visibility controls and UI links */
@@ -2328,6 +2354,10 @@ else if (sameString(track, "switchDbTss"))
     switchDbScoreUi(tdb);
 else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track[4])))
     dgvUi(tdb);
+#ifdef USE_BAM
+else if (sameString(tdb->type, "bam"))
+    bamUi(tdb);
+#endif
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */

@@ -16,6 +16,7 @@ struct wigCartOptions
     enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
     enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
     enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
+    enum wiggleAlwaysZeroEnum alwaysZero;	/*  OFF/ON	*/
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
     int maxHeight;	/*	maximum pixels height from trackDb	*/
@@ -75,7 +76,7 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     double *overallUpperLimit, double *overallLowerLimit,
     double *graphUpperLimit, double *graphLowerLimit,
     double *overallRange, double *epsilon, int lineHeight,
-    double maxY, double minY);
+    double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero);
 /*	if autoScaling, scan preDraw array and determine limits */
 
 Color * allocColorArray(struct preDrawElement *preDraw, int width,

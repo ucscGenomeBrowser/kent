@@ -83,6 +83,9 @@ if ( $debug == "true" ) then
   exit
 endif
 
+# add donnak to list
+set contacts="$contacts donnak"
+
 # cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
 cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
 rm Bfile

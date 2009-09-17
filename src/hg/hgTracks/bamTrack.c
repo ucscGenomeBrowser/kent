@@ -12,12 +12,13 @@
 #include "hgTracks.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.7 2009/08/25 06:04:05 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.9 2009/09/14 23:44:25 angie Exp $";
 
 struct bamTrackData
     {
     struct track *tg;
     struct hash *pairHash;
+    int minAliQual;
     };
 
 struct simpleFeature *sfFromNumericCigar(const bam1_t *bam, int *retLength)
@@ -79,18 +80,32 @@ lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
 lf->extra = bamGetQuerySequence(bam);
+lf->grayIx = maxShade;
 return lf;
+}
+
+boolean passesFilters(const bam1_t *bam, struct bamTrackData *btd)
+/* Return TRUE if bam passes hgTrackUi-set filters. */
+{
+if (bam == NULL)
+    return FALSE;
+const bam1_core_t *core = &bam->core;
+// Always reject unmapped items -- nowhere to draw them.
+if (core->flag & BAM_FUNMAP)
+    return FALSE;
+if (core->qual < btd->minAliQual)
+    return FALSE;
+return TRUE;
 }
 
 int addBam(const bam1_t *bam, void *data)
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
  * into a linkedFeatures item, and add it to tg->items. */
 {
-const bam1_core_t *core = &bam->core;
-if (core->flag & BAM_FUNMAP)
+struct bamTrackData *btd = (struct bamTrackData *)data;
+if (!passesFilters(bam, btd))
     return 0;
 struct linkedFeatures *lf = bamToLf(bam, data);
-struct bamTrackData *btd = (struct bamTrackData *)data;
 struct track *tg = btd->tg;
 slAddHead(&(tg->items), lf);
 return 0;
@@ -109,6 +124,7 @@ AllocVar(sf);
 sf->start = sf->end = lf->start = lf->end = lf->tallStart = lf->tallEnd = startEnd;
 lf->components = sf;
 lf->extra = cloneString("");
+lf->grayIx = maxShade;
 return lf;
 }
 
@@ -134,10 +150,10 @@ int addBamPaired(const bam1_t *bam, void *data)
  * or add it to tg->items. */
 {
 const bam1_core_t *core = &bam->core;
-if (core->flag & BAM_FUNMAP)
+struct bamTrackData *btd = (struct bamTrackData *)data;
+if (! passesFilters(bam, btd))
     return 0;
 struct linkedFeatures *lf = bamToLf(bam, data);
-struct bamTrackData *btd = (struct bamTrackData *)data;
 struct track *tg = btd->tg;
 if (! (core->flag & BAM_FPAIRED))
     {
@@ -148,22 +164,28 @@ else
     struct linkedFeatures *lfMate = (struct linkedFeatures *)hashFindVal(btd->pairHash, lf->name);
     if (lfMate == NULL)
 	{
-	if (core->flag & BAM_FPROPER_PAIR && core->mpos < 0)
+	if (core->flag & BAM_FPROPER_PAIR)
 	    {
-	    // If we know that this is properly paired, but don't know where its mate
-	    // is, make a bogus item off the edge of the window so that if we don't
+	    // If we know that this is properly paired, but don't have the mate,
+	    // make a bogus item off the edge of the window so that if we don't
 	    // encounter its mate later, we can at least draw an arrow off the
 	    // edge of the window.
-	    int offscreen = (lf->orientation > 0) ? winEnd + 10 : winStart - 10;
-	    if (offscreen < 0) offscreen = 0;
-	    struct linkedFeatures *stub = lfStub(offscreen, -lf->orientation);
+	    struct linkedFeatures *stub;
+	    if (core->mpos < 0)
+		{
+		int offscreen = (lf->orientation > 0) ? winEnd + 10 : winStart - 10;
+		if (offscreen < 0) offscreen = 0;
+		stub = lfStub(offscreen, -lf->orientation);
+		}
+	    else
+		{
+		stub = lfStub(core->mpos, -lf->orientation);
+		}
 	    lf->next = stub;
 	    }
-	else if (! (core->flag & BAM_FPROPER_PAIR))
-	    {
-	    // TODO: find a way to make this a lighter shade.
-	    // doesn't work: lf->grayIx += 2;
-	    }
+	else
+	    // not properly paired: make it a lighter shade.
+	    lf->grayIx -= 2;
 	hashAdd(btd->pairHash, lf->name, lf);
 	}
     else
@@ -196,8 +218,12 @@ char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd);
 
 struct hash *pairHash = isPaired ? hashNew(18) : NULL;
-struct bamTrackData btd = {tg, pairHash};
-bamFetch(database, tg->mapName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
+char cartVarName[512];
+safef(cartVarName, sizeof(cartVarName), "%s_minAliQual", tg->tdb->tableName);
+int minAliQual = cartUsualInt(cart, cartVarName, 0);
+struct bamTrackData btd = {tg, pairHash, minAliQual};
+char *fileName = bamFileNameFromTable(database, tg->mapName, seqNameForBam);
+bamFetch(fileName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
 if (isPaired)
     {
     struct hashEl *hel;
@@ -254,6 +280,7 @@ else
 track->labelNextItemButtonable = track->nextItemButtonable = FALSE;
 track->labelNextPrevItem = NULL;
 track->nextPrevItem = NULL;
+track->colorShades = shadesOfGray;
 }
 
 #endif /* USE_BAM */

@@ -44,6 +44,18 @@ url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail:
 release beta
 
+track NIAGene
+shortLabel NIA Gene Index
+longLabel NIA Mouse Gene Index
+group genes
+priority 54
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+url http://lgsun.grc.nia.nih.gov/geneindex/mm9/bin/giT.cgi?genename=$$
+
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
 longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***
@@ -287,6 +299,14 @@ url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&specie
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
 
+track REST
+shortLabel REST
+longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding sites in mouse stem cells
+group regulation
+priority 92
+visibility hide
+type bed 4 .
+
 track vegaGeneComposite
 compositeTrack on
 shortLabel Vega Genes
@@ -295,7 +315,7 @@ group genes
 priority 37.1
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chrX,chrY
-type genePred
+type genePred vegaPep
 urlLabel Vega Transcript:
 url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
 
@@ -304,7 +324,7 @@ url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
     shortLabel Vega Protein Genes
     longLabel Vega Protein Coding Annotations
     priority 1
-    color 0,100,180
+    color 0,50,225
 
     track vegaPseudoGene
     subTrack vegaGeneComposite
@@ -492,3 +512,23 @@ noScoreFilter on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
 metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
+
+track chainHg18 override
+shortLabel $o_db Chain
+longLabel $o_db ($o_date) Chained Alignments
+
+track netHg18 override
+shortLabel $o_db Net
+longLabel $o_db ($o_date) Alignment Net
+
+searchName NIAGene
+searchTable NIAGene
+searchMethod fuzzy
+searchType psl
+searchPriority 50
+
+searchName REST
+searchTable REST
+searchMethod fuzzy
+searchType bed
+searchPriority 50

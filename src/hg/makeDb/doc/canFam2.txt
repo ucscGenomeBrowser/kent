@@ -2954,3 +2954,22 @@ cat fb.canFam2.chainDanRer5Link.txt
 
 # DO BLASTZ SWAP TO CREATE CANFAM2 CHAINS, NETS, AXNET, MAFNET AND
 # ALIGNMENT DOWNLOADS ON DANRER5 - documented in danRer5.txt
+
+##########################################################
+# monDom5 chains/nets (2009-03-02 Andy)
+
+ssh hgwdev
+cd /hive/data/genomes/monDom5/bed/blastz.canFam2
+doBlastzChainNet.pl -swap DEF
+## (should have also put in a -noLoadChainSplit... see below)
+
+##########################################################
+# monDom5 chain table unsplit (2009-09-08 Andy)
+
+ssh hgwdev
+cd /hive/data/genomes/canFam2/bed/blastz.monDom5.swap/axtChain
+hgLoadChain -tIndex canFam2 chainMonDom5 canFam2.monDom5.all.chain.gz 
+netFilter -minGap=10 canFam2.monDom5.net.gz | hgLoadNet -verbose=0 canFam2 netMonDom5 stdin
+echo "show tables like 'chr%chainMonDom5%'" | hgsql canFam2 | tail -n +2 \
+  | while read -a line; do echo drop table $line | hgsql canFam2; done
+

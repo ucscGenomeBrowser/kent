@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.36 2009/09/01 04:27:30 angie Exp $";
+#	"$Id: hg19.txt,v 1.37 2009/09/02 21:47:28 angie Exp $";
 
 #############################################################################
 
@@ -5791,6 +5791,60 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/hg19/bed/snp130Ortho
     gzip snp130Simple.bed snp130ExcludeIds.txt snp130ForLiftOver.bed &
     rm -r run*/split tmp.txt *.orthoGlom.txt
+
+
+##############################################################################
+# DBSNP CODING ANNOTATIONS (DONE 9/1/09 angie)
+
+    # Repeat the coord-remapping performed for snp130 on the hg18 coding anno table.
+    cd /hive/data/outside/dbSNP/130/human/hg19
+    sed -re 's/\trs([0-9]+)\t/\t\1\t/' ../snp130CodingDbSnp.bed \
+    | sort -k4n,4n -k1,1 -k2n,2n > /data/tmp/hg18.snp130Coding.idSorted.bed
+    # reuse /data/tmp/Remap_36_3_37_1.txt mapping file created for snp130 above:
+    perl -we \
+      'use strict; \
+       sub nextMap { \
+         my ($rsId, undef, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd); \
+         do { \
+           ($rsId, undef, $oChr, $oStart, $oEnd, undef,undef,undef,undef, \
+               $nChr, $nStart, $nEnd) = split("\t", <>); \
+           if (defined $nEnd) { \
+             $oChr = "chr$oChr";  $nChr = "chr$nChr"; \
+           } \
+           $oStart--;  $oEnd--;  $nStart--;  $nEnd--;  # Yep. 0-based closed vs 1-based closed \
+         } while (defined $rsId && ($oEnd < 0 || $nChr eq "chrUn")); \
+         return ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd); \
+       } # nextMap \
+       my ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = &nextMap(); \
+       my ($rCount, $oCount, $tCount) = 0; \
+       open(my $oldF, "/data/tmp/hg18.snp130Coding.idSorted.bed") || die; \
+       while (my ($chr, $s, $e, $id, $tx, $frm, $alCount, $funcs, $als, $codons, $peps) = \
+              split("\t", <$oldF>)) { \
+         my $thisRCount = 0; \
+         while (defined $rsId && $rsId < $id) { \
+           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = &nextMap(); \
+         } \
+         while (defined $oChr && $chr eq $oChr && $s == $oStart && $e == $oEnd && $id == $rsId) { \
+           print join("\t", $nChr, $nStart, $nEnd, "rs$id", $tx, $frm, \
+                            $alCount, $funcs, $als, $codons, $peps); \
+           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = &nextMap(); \
+           $thisRCount++; \
+         } \
+         $tCount += $thisRCount; \
+         $rCount++ if ($thisRCount > 0); \
+         $oCount++; \
+       } \
+       close($oldF);  print STDERR "Replaced $rCount of $oCount inputs ($tCount outputs).\n";' \
+      /data/tmp/Remap_36_3_37_1.txt \
+    | sort -k1,1 -k2n,2n -k4,4 \
+    > /data/tmp/hg19.snp130Coding.bed
+#Replaced 197921 of 279815 inputs (198493 outputs).
+#160.824u 1.949s 2:43.01 99.8%   0+0k 0+0io 0pf+0w
+    hgLoadBed hg19 snp130CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+      /data/tmp/hg19.snp130Coding.bed
+#Loaded 198493 elements of size 11
+    mv /data/tmp/hg19.snp130Coding.bed hg19.snp130CodingDbSnp.bed
 
 
 ##############################################################################

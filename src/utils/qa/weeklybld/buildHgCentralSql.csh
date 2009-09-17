@@ -8,11 +8,17 @@ endif
 
 hgsqldump --all -d -c -h genome-centdb hgcentral \
 sessionDb userDb | sed -e "s/genome-centdb/localhost/" > \
-/tmp/hgcentral.sql
+/tmp/hgcentraltemp.sql
 
 hgsqldump --all -c -h genome-centdb hgcentral \
 defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb | \
-sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentral.sql
+sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
+
+# get rid of some mysql5 trash in the output we don't want.
+grep -v "Dump completed on" /tmp/hgcentraltemp.sql | \
+sed -e "s/AUTO_INCREMENT=[0-9]* //" \
+ > /tmp/hgcentral.sql
+
 echo
 echo "*** Diffing old new ***"
 diff /usr/local/apache/htdocs/admin/hgcentral.sql /tmp/hgcentral.sql
@@ -20,6 +26,7 @@ if ( ! $status ) then
 	echo
 	echo "No differences."
 	echo
+	exit 0
 endif 
 
 if ( "$1" != "real" ) then
@@ -41,13 +48,19 @@ if ( $status ) then
 	exit 1
 endif
 
+# push to hgdownload
+ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
+scp -p /usr/local/apache/htdocs/admin/hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
 
-echo
-echo "Push request:"
-echo "Please push from dev --> hgdownload "
-echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
-echo
-echo "reason: (describe here)"
+
+# OLD WAY NOT NEEDED
+#echo
+#echo "Push request:"
+#echo "Please push from dev --> hgdownload "
+#echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
+#echo
+#echo "reason: (describe here)"
+
 echo
 echo "NOTE:  If this is an update of hgcentral that is not part of a new"
 echo "build, also ask for the relevant tables to be pushed to hgdownload"

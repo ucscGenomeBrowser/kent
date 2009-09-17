@@ -6,7 +6,7 @@
 #include "hash.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.88 2009/08/27 18:07:35 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.89 2009/09/14 18:13:15 kent Exp $";
 
 void usage()
 {
@@ -19,6 +19,7 @@ void freen(char *input)
 /* Test some hair-brained thing. */
 {
 struct tm tm;
+ZeroVar(&tm);
 char *res = strptime(input, "%d/%b/%Y:%T", &tm);
 time_t tick = mktime(&tm);
 printf("res = %s\n", res);

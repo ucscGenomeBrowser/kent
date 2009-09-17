@@ -4,10 +4,11 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "udc.h"
 #include "bigWig.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.1 2009/06/29 17:50:50 kent Exp $";
+static char const rcsid[] = "$Id: bigWigInfo.c,v 1.2 2009/09/08 19:50:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +18,12 @@ errAbort(
   "usage:\n"
   "   bigWigInfo file.bw\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -45,6 +47,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 2)
     usage();
 bigWigInfo(argv[1]);

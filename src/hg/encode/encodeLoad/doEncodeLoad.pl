@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.69 2009/07/22 22:34:59 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.70 2009/09/03 22:51:06 braney Exp $
 
 # Usage:
 #
@@ -262,7 +262,7 @@ sub loadBigBed
             print "$fileList created as bigBed ${tableName}.bb\n";
         }
 	# symlink bigBed binary file into gbdb bbi directory
-        @cmds = ( "ln -sf ${tableName}.bb /gbdb/${assembly}/bbi/");
+        @cmds = ( "ln -sf ${submitPath}/${tableName}.bb /gbdb/${assembly}/bbi/");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {

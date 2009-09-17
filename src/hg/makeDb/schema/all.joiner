@@ -635,12 +635,14 @@ identifier vegaGeneIdHuman external=VegaGene
     hg18.vegaGtp.transcript
     hg18.vegaGene.name
     hg18.vegaPseudoGene.name
+    hg18.vegaPep.name
 
 identifier vegaGeneIdMouse external=VegaGene 
 "Link together various VEGA mouse curated gene annotation"
     mm9.vegaGtp.transcript
     mm9.vegaGene.name
     mm9.vegaPseudoGene.name
+    mm9.vegaPep.name
 
 identifier vegaName
 "Link together various VEGA human curated gene annotation"

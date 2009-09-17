@@ -8,7 +8,7 @@
 #
 # -verbose - print details
 #
-# $Id: ccdsImportStep,v 1.1 2008/07/01 06:40:45 markd Exp $
+# $Id: ccdsImportStep,v 1.2 2009/09/15 06:52:29 markd Exp $
 #
 use strict;
 use warnings;
@@ -30,7 +30,7 @@ sub getDumpFileName() {
     @dumpFiles = sort @dumpFiles;
 
     if ($#dumpFiles < 0) {
-        die("can't find CCDS dump file, available files: " . join(" ", @dumpFiles));
+        die("can't find CCDS dump files in $downloadDir");
     }
     return $dumpFiles[$#dumpFiles];
 }

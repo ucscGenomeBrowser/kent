@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "udc.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedToBed.c,v 1.6 2009/08/14 20:52:35 kent Exp $";
+static char const rcsid[] = "$Id: bigBedToBed.c,v 1.7 2009/09/08 19:50:24 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
@@ -25,6 +26,7 @@ errAbort(
   "   -start=N - if set, restrict output to only that over start\n"
   "   -end=N - if set, restict output to only that under end\n"
   "   -maxItems=N - if set, restrict output to first N items\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
 
@@ -33,6 +35,7 @@ static struct optionSpec options[] = {
    {"start", OPTION_INT},
    {"end", OPTION_INT},
    {"maxItems", OPTION_INT},
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -87,6 +90,7 @@ clChrom = optionVal("chrom", clChrom);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
 maxItems = optionInt("maxItems", maxItems);
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 3)
     usage();
 bigBedToBed(argv[1], argv[2]);

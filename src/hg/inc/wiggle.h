@@ -190,6 +190,12 @@ extern void wigFetchMinMaxPixelsWithCart(struct cart *cart, struct trackDb *tdb,
         wigFetchMinMaxPixelsWithCart(cart,(tdb),(tdb)->tableName,(Min),(Max),(Default))
 /* return pixels heights allowable from trackDb or cart */
 
+extern enum wiggleGridOptEnum wigFetchAlwaysZeroWithCart(struct cart *cart,
+    struct trackDb *tdb, char *name,char **optString);
+#define wigFetchAlwaysZero(tdb,optString) \
+        wigFetchAlwaysZeroWithCart(cart,(tdb),(tdb)->tableName,(optString))
+/* return alwaysZero setting    */
+
 extern enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *cart,
     struct trackDb *tdb, char *name,char **optString);
 #define wigFetchHorizontalGrid(tdb,optString) \
@@ -247,6 +253,7 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 #define HEIGHTPER "heightPer"
 #define HORIZGRID "horizGrid"
 #define GRIDDEFAULT "gridDefault"
+#define ALWAYSZERO "alwaysZero"
 #define AUTOSCALE "autoScale"
 #define AUTOSCALEDEFAULT "autoScaleDefault"
 #define LINEBAR "lineBar"

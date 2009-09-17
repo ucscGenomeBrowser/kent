@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.233 2009/08/31 18:19:44 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.236 2009/09/08 21:09:23 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1394,6 +1394,20 @@ cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions),
 	curVal);
 }
 
+static char *wiggleAlwaysZeroOptions[] = {
+    "ON",
+    "OFF"
+    };
+
+enum wiggleAlwaysZeroEnum wiggleAlwaysZeroToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleAlwaysZeroOptions);
+if (x < 0)
+   errAbort("hui::wiggleAlwaysZeroToEnum() - Unknown option %s", string);
+return x;
+}
+
 /****** Options for the wiggle track horizontal grid lines *******/
 
 static char *wiggleGridOptions[] = {
@@ -2674,7 +2688,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         }
     }
     // The following is needed to make msie scroll to selected option.
-    printf("<script type='text/javascript'>onload=function(){ $( 'select[name^=%s.filterBy.]' ).children('option[selected]').each( function(i) { this.selected=true; }); }</script>\n",tdb->tableName);
+    printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->tableName);
 puts("</TR></TABLE>");
 
 return;
@@ -2942,6 +2956,13 @@ if (date != NULL)
 return date;
 }
 
+static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
+/* Link composite or view level controls to all associateled lower level controls */
+{
+if(tdbIsComposite(tdb))
+    printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
@@ -2954,6 +2975,7 @@ char *words[5];
 char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
+boolean dependentCfgsNeedBinding = FALSE;
 
 // Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
 char **lastDivide = NULL;
@@ -3188,13 +3210,20 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 
             if(cType != cfgNone)
                 {
-                ix = stringArrayIx("view", membership->subgroups, membership->count);
+                dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
+                if(membership)
+                    ix = stringArrayIx("view", membership->subgroups, membership->count);
+                else
+                    ix = -1;
 #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
 #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
                 safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->tableName);
                 boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
                 MAKE_CFG_SUBTRACK_DIV(subtrack->tableName,htmlIdentifier,open);
-                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
+                if(ix >= 0)
+                    safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
+                else
+                    safef(htmlIdentifier,sizeof(htmlIdentifier),"%s",subtrack->tableName);
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
@@ -3219,6 +3248,8 @@ puts("<P>");
 //    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
+if(dependentCfgsNeedBinding)
+    cfgLinkToDependentCfgs(parentTdb,parentTdb->tableName);
 for(di=dimX;di<dimMax;di++)
     subgroupMembersFree(&dimensions[di]);
 dyStringFree(&dyHtml)
@@ -3280,13 +3311,6 @@ else
 return boxed;
 }
 
-static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
-/* Link composite or view level controls to all associateled lower level controls */
-{
-if(tdbIsComposite(tdb))
-    printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
-}
-
 static void cfgEndBox(boolean boxed)
 /* Handle end of box and title for individual track type settings */
 {
@@ -3307,6 +3331,7 @@ double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
 int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
+char *alwaysZero = NULL;    /* Always include 0 in range */
 char *lineBar;  /*  Line or Bar graph */
 char *autoScale;    /*  Auto scaling on or off */
 char *windowingFunction;    /*  Maximum, Mean, or Minimum */
@@ -3325,6 +3350,7 @@ wordCount = chopLine(typeLine,words);
 wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 freeMem(typeLine);
 
+(void) wigFetchAlwaysZeroWithCart(cart,tdb,name, &alwaysZero);
 (void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
 (void) wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
 (void) wigFetchGraphTypeWithCart(cart,tdb,name, &lineBar);
@@ -3365,6 +3391,9 @@ puts("</TD></TR>");
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 snprintf(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 wiggleScaleDropDown(option, autoScale);
+snprintf(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
+printf("Always include zero:&nbsp");
+wiggleGridDropDown(option, alwaysZero);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
@@ -4139,8 +4168,9 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if(sameString("wgEncodeSangerGencode", name)
-|| (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
+else if(sameString("wgEncodeGencode", name)
+     || sameString("wgEncodeSangerGencode", name)
+     || (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
     {
     printf("<B>Label:</B> ");
     safef(varName, sizeof(varName), "%s.label", name);
@@ -5369,9 +5399,7 @@ if(displayAll)
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 
-cfgLinkToDependentCfgs(tdb,tdb->tableName);
-
-if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
+if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
         if (slCount(tdb->subtracks) > 5)
         {

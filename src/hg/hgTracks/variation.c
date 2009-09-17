@@ -4,7 +4,7 @@
 #include "variation.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.143 2009/08/27 00:10:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.144 2009/09/14 15:25:46 tdreszer Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1279,7 +1279,12 @@ if(theImgBox && curMap)
     char title[128];
     safef(title,sizeof(title),"%s controls", tg->mapName);
     // Add map item to currnent map (TODO: pass in map)
-    mapSetItemAdd(curMap,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
+    #ifdef IMAGEv2_SHORT_MAPITEMS
+        if(xOff < insideX && xOff+insideWidth > insideX)
+            warn("mapTrackBackground(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->mapName,xOff, yOff, xOff+insideWidth, yOff+tg->height, link);
+    #endif//def IMAGEv2_SHORT_MAPITEMS
+    imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
+    //mapSetItemAdd(curMap,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
     }
 else
 #endif//def IMAGEv2_UI

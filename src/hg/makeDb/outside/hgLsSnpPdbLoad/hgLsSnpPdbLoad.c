@@ -3,8 +3,10 @@
 #include "options.h"
 #include "jksql.h"
 #include "lsSnpPdb.h"
+#include "linefile.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.3 2009/02/20 22:49:31 markd Exp $";
+static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.4 2009/09/15 06:50:30 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -91,10 +93,32 @@ char *lsSnpProf = parseLsSnpDb(&lsSnpDb);
 buildLsSnpPdb(lsSnpProf, lsSnpDb, tabOut);
 }
 
-static void loadLsSnpPdb(char *db, char *table, char *tabFile)
+/* get a temporary copy of the tab input file, possibly decompressing it */
+static void getTmpTabFile(char *inFile, char *tmpFileName, int tmpFileNameSize)
+{
+char *tmpDir = getenv("TMPDIR");
+if (tmpDir == NULL)
+    tmpDir = "/var/tmp";
+safef(tmpFileName, tmpFileNameSize, "%s/lsSnpPdb.%s.%d.tab", tmpDir, getHost(), getpid());
+struct lineFile *inLf = lineFileOpen(inFile, TRUE);
+FILE *outFh = mustOpen(tmpFileName, "w");
+char *line;
+while (lineFileNext(inLf, &line, NULL))
+    {
+    fputs(line, outFh);
+    fputc('\n', outFh);
+    }
+carefulClose(&outFh);
+lineFileClose(&inLf);
+}
+
+static void loadLsSnpPdb(char *db, char *table, char *inFile)
 /* load lsSnpPdb table.  A temporary table is created and then
  * an atomic rename is done once it is loaded. */
 {
+char tmpTabFile[PATH_LEN];
+getTmpTabFile(inFile, tmpTabFile, sizeof(tmpTabFile));
+
 char newTbl[256], oldTbl[256], query[1024];
 safef(newTbl, sizeof(newTbl), "%s_new", table);
 safef(oldTbl, sizeof(oldTbl), "%s_old", table);
@@ -108,7 +132,7 @@ sqlDropTable(conn, oldTbl);
 // load into tmp table
 safef(query, sizeof(query), createSql, newTbl);
 sqlUpdate(conn, query);
-sqlLoadTabFile(conn, tabFile, newTbl, 0);
+sqlLoadTabFile(conn, tmpTabFile, newTbl, 0);
 
 // rename into place
 if (sqlTableExists(conn, table))
@@ -121,6 +145,7 @@ sqlUpdate(conn, query);
 
 sqlDropTable(conn, oldTbl);
 sqlDisconnect(&conn);
+unlink(tmpTabFile);  // ignore failures
 }
 
 int main(int argc, char *argv[])

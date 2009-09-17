@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: accessLogWigs.c,v 1.1 2009/08/29 02:33:12 kent Exp $";
+static char const rcsid[] = "$Id: accessLogWigs.c,v 1.2 2009/09/09 19:11:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -116,11 +116,8 @@ for (el = list; el != NULL; el = el->next)
 	   fprintf(f, "%ld\t%d\n", curTick - startTick + 1, sameTickCount);
        sameTickCount = 0;
        time_t i;
-       int limit = 100000;
        for (i=curTick+1; i<el->tick; ++i)
 	   {
-	   if (--limit <= 0) uglyAbort("Over limit");
-	   // uglyf("i %ld, startTick %ld\n", i, startTick);
 	   fprintf(f, "%ld\t%d\n", i - startTick + 1, 0);
 	   }
        curTick = el->tick;
