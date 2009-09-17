@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.46 2009/09/17 18:34:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.47 2009/09/17 20:50:31 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -238,6 +238,37 @@ for (si = subjList; si != NULL; si = si->next)
             else
 		{
 		special = FALSE;
+	        
+		if (sameWord(col->type, "integer"))
+		/* special processing for missing data */
+		if (sameWord(col->name, "SDayLastPTest") 	||
+    		    sameWord(col->name, "SDayLastTrTest") 	||
+    		    sameWord(col->name, "LastTrVisit")		||
+    		    sameWord(col->name, "LastPMNNeutral")	||
+    		    sameWord(col->name, "artDaei")		||
+    		    sameWord(col->name, "seqDay")		||
+    		    sameWord(col->name, "firstRNAPosDay")	||
+    		    sameWord(col->name, "lastSeroNegDay")	||
+    		    sameWord(col->name, "LastTrMnNeutral")	
+   		   )
+    		    {
+    		    if (sameWord(val, "-1"))
+			{
+			hPrintf("N/A");
+			special = TRUE;
+			}
+    		    if (sameWord(val, "-2"))
+			{
+			hPrintf("N/D");
+			special = TRUE;
+			}
+    		    if (sameWord(val, "-3"))
+    			{
+    			hPrintf("&nbsp");
+			special = TRUE;
+			}
+    		    }
+
 		if (sameWord(col->name, "cd4Count"))
     		    {
     		    if (sameWord(val, "-1") || sameWord(val, "0"))
