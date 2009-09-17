@@ -1,5 +1,5 @@
 table wgRna
-"Extended Browser extensible data (BED) for human sno/miRNA track"
+"snoRNA and miRNA annotations"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
@@ -9,5 +9,5 @@ table wgRna
     char[1] strand;    "+ or -"
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
-    enum('miRNA','HAcaBox','scaRna','CDBox') type;   "Type of RNA"
+    enum('miRNA','scaRna','HAcaBox','CDBox') type;   "Type of RNA"
     )
