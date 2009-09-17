@@ -13,6 +13,7 @@ expScale 1.0
 expStep 0.1
 groupings harvardOVCGHGroups
 priority 1.0
+maxItems 2000
 
 track harvardOVCGH_Seg
 shortLabel Harvard CGH Segmented (old)
@@ -25,6 +26,7 @@ expScale 1.0
 expStep 0.1
 groupings harvardOVCGH_SegGroups
 priority 1.1
+maxItems 2000
 
 track mskccOVCGH
 shortLabel MSKCC CGH 244A
@@ -37,6 +39,7 @@ expScale 1.0
 expStep 0.1
 groupings mskccOVCGHGroups
 priority 1.2
+maxItems 2000
 
 track mskccOV1x1M
 shortLabel MSKCC CGH 1x1M
@@ -49,7 +52,7 @@ logicalDb localDb
 visibility hide
 priority 1.3
 groupings mskccOV1x1MGroups
-
+maxItems 2000
 
 ### Ovarian Data - Expression
 
@@ -64,6 +67,7 @@ expScale 4.0
 expStep 0.2
 groupings broadOVexp_affyGroups
 priority 2.1
+maxItems 2000
 
 track broadOVexp_affy_vs_norm
 shortLabel Broad Affy U133A Tumor vs. Normal
@@ -75,6 +79,7 @@ expStep 0.1
 visibility hide
 priority 2.2
 groupings broadOVexp_affy_vs_normGroups
+maxItems 2000
 
 track uncOVG4502
 shortLabel UNC Agilent G4502A 
@@ -86,6 +91,7 @@ expStep 0.1
 visibility hide
 groupings uncOVG4502Groups
 priority 2.3
+maxItems 2000
 
 track lblHuEx1OV
 shortLabel LBL Exon Array 1.0 (old)
@@ -98,6 +104,7 @@ expScale 3.0
 expStep 0.2
 groupings lblHuEx1OVGroups
 priority 2.4
+maxItems 2000
 
 track rnaSeqOV
 shortLabel Harvard RNASeq DGE
@@ -110,6 +117,7 @@ expStep 0.1
 visibility hide
 priority 2.5
 groupings rnaSeqOVGroups
+maxItems 2000
 
 track uncOVHmiRNA
 shortLabel UNC miRNA array
@@ -122,7 +130,7 @@ expStep 0.1
 visibility hide
 priority 2.6
 groupings uncOVHmiRNAGroups
-
+maxItems 2000
 
 ### Ovarian Data - Methylation
 
@@ -137,6 +145,7 @@ expStep 0.1
 visibility hide
 priority 3.0
 groupings jhuMethylOVGroups
+maxItems 2000
 
 track jhuUscIllMethylLarrym
 shortLabel JHU-USC Methylation vs. Normal (old)
@@ -149,6 +158,7 @@ expStep 0.1
 visibility hide
 priority 3.1
 groupings jhuUscIllMethylLarrymGroups
+maxItems 2000
 
 ### Ovarian Data - Mutation
 
@@ -163,6 +173,7 @@ expScale 1.0
 expStep 0.1
 groupings broadOVABI_GermlineNSGroups
 priority 4.1
+maxItems 2000
 
 track broadOVABI_GermlineS
 shortLabel Broad ABI Germ. Silent
@@ -175,6 +186,7 @@ expScale 1.0
 expStep 0.1
 groupings broadOVABI_GermlineSGroups
 priority 4.2
+maxItems 2000
 
 track broadOVABI_SomaticNS
 shortLabel Broad ABI Som. Non-Silent
@@ -187,6 +199,7 @@ expScale 1.0
 expStep 0.1
 groupings broadOVABI_SomaticNSGroups
 priority 4.3
+maxItems 2000
 
 track broadOVABI_SomaticS
 shortLabel Broad ABI Som. Silent
@@ -199,6 +212,7 @@ expScale 1.0
 expStep 0.1
 groupings broadOVABI_SomaticSGroups
 priority 4.4
+maxItems 2000
 
 track hgscOVABI_GermlineNS
 shortLabel Baylor ABI Germ. Non-Silent
@@ -211,6 +225,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscOVABI_GermlineNSGroups
 priority 4.5
+maxItems 2000
 
 track hgscOVABI_GermlineS
 shortLabel Baylor ABI Germ. Silent
@@ -223,6 +238,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscOVABI_GermlineSGroups
 priority 4.6
+maxItems 2000
 
 track hgscOVABI_SomaticNS
 shortLabel Baylor ABI Som. Non-Silent
@@ -235,6 +251,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscOVABI_SomaticNSGroups
 priority 4.7
+maxItems 2000
 
 track hgscOVABI_SomaticS
 shortLabel Baylor ABI Som. Silent
@@ -247,7 +264,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscOVABI_SomaticSGroups
 priority 4.8
-
+maxItems 2000
 
 ##### GBM Data 
 
@@ -263,6 +280,7 @@ expScale 3.0
 expStep 0.2
 groupings broadSNP6Groups
 priority 5.1
+maxItems 2000
 
 track stanfordHap550SnpSeg
 shortLabel GBM Stanford CNV SNP Seg.
@@ -275,6 +293,7 @@ expScale 3.0
 expStep 0.2
 groupings stanfordHap550SnpSegGroups
 priority 5.2
+maxItems 2000
 
 track stanfordHap550SnpLogR
 shortLabel GBM Stanford SNP LogR
@@ -287,6 +306,7 @@ expScale 3.0
 expStep 0.2
 groupings stanfordHap550SnpLogRGroups
 priority 5.3
+maxItems 2000
 
 track lblHuEx1
 shortLabel GBM LBL Exon Array 1.0
@@ -299,7 +319,7 @@ expScale 3.0
 expStep 0.2
 groupings lblHuEx1Groups
 priority 6.1
-
+maxItems 2000
 
 track broadABI_GermlineNS
 shortLabel Broad ABI Germ. Non-Silent
@@ -312,6 +332,7 @@ expScale 1.0
 expStep 0.1
 groupings broadABI_GermlineNSGroups
 priority 8.1
+maxItems 2000
 
 track broadABI_GermlineS
 shortLabel Broad ABI Germ. Silent
@@ -324,6 +345,7 @@ expScale 1.0
 expStep 0.1
 groupings broadABI_GermlineSGroups
 priority 8.2
+maxItems 2000
 
 track broadABI_SomaticNS
 shortLabel Broad ABI Som. Non-Silent
@@ -336,6 +358,7 @@ expScale 1.0
 expStep 0.1
 groupings broadABI_SomaticNSGroups
 priority 8.3
+maxItems 2000
 
 track broadABI_SomaticS
 shortLabel Broad ABI Som. Silent
@@ -348,6 +371,7 @@ expScale 1.0
 expStep 0.1
 groupings broadABI_SomaticSGroups
 priority 8.4
+maxItems 2000
 
 track hgscABI_GermlineNS
 shortLabel Baylor ABI Germ. Non-Silent
@@ -360,6 +384,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscABI_GermlineNSGroups
 priority 8.5
+maxItems 2000
 
 track hgscABI_GermlineS
 shortLabel Baylor ABI Germ. Silent
@@ -372,6 +397,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscABI_GermlineSGroups
 priority 8.6
+maxItems 2000
 
 track hgscABI_SomaticNS
 shortLabel Baylor ABI Som. Non-Silent
@@ -384,6 +410,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscABI_SomaticNSGroups
 priority 8.7
+maxItems 2000
 
 track hgscABI_SomaticS
 shortLabel Baylor ABI Som. Silent
@@ -396,6 +423,7 @@ expScale 1.0
 expStep 0.1
 groupings hgscABI_SomaticSGroups
 priority 8.8
+maxItems 2000
 
 track wustlABI_GermlineNS
 shortLabel WUSTL ABI Germ. Non-Silent
@@ -408,6 +436,7 @@ expScale 1.0
 expStep 0.1
 groupings wustlABI_SomaticNSGroups
 priority 8.9
+maxItems 2000
 
 track wustlABI_GermlineS
 shortLabel WUSTL ABI Germ. Silent
@@ -420,6 +449,7 @@ expScale 1.0
 expStep 0.1
 groupings wustlABI_GermlineSGroups
 priority 8.91
+maxItems 2000
 
 track wustlABI_SomaticNS
 shortLabel WUSTL ABI Som. Non-Silent
@@ -432,6 +462,7 @@ expScale 1.0
 expStep 0.1
 groupings wustlABI_SomaticNSGroups
 priority 8.92
+maxItems 2000
 
 track wustlABI_SomaticS
 shortLabel WUSTL ABI Som. Silent
@@ -444,3 +475,4 @@ expScale 1.0
 expStep 0.1
 groupings wustlABI_SomaticSGroups
 priority 8.93
+maxItems 2000
