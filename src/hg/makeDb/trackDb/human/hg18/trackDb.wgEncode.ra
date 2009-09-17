@@ -5320,7 +5320,7 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878_<i>Tier1</i> t1K562=K562_<i>Tier1</i> t2HeLa=HeLa-S3_<i>Tier2</i> t2HepG2=HepG2_<i>Tier2</i> t3HCT116=HCT-116_<i>Tier3</i> t3HEK293b=HEK293(b)_<i>Tier3</i> t3NB4=NB4_<i>Tier3</i> t3NT2D1=NT2-D1_(NTera2)_<i>Tier3</i> uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Antibody BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 JUND=JunD MAX=Max NFE2=NF-E2 POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF4=TCF4 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
+subGroup3 factor Antibody BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 JUND=JunD MAX=Max NFE2=NF-E2 POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -5465,22 +5465,22 @@ wgEncode 1
     track wgEncodeYaleChIPseqPeaksHct116Tcf4V2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HCT-116 TCF4 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
-    subGroups view=Peaks factor=TCF4 cellType=t3HCT116
+    shortLabel HCT-116 TCF7L2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF7L2 in HCT-116 cells)
+    subGroups view=Peaks factor=TCF7L2 cellType=t3HCT116
     type narrowPeak
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HCT-116 antibody=TCF4 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=404 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-06-30 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHct116Tcf4V2 fileName=wgEncodeYaleChIPseqPeaksHct116Tcf4V2.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HCT-116 antibody=TCF7L2 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=404 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-06-30 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHct116Tcf4V2 fileName=wgEncodeYaleChIPseqPeaksHct116Tcf4V2.narrowPeak.gz
 
     track wgEncodeYaleChIPseqRel2SignalHct116Tcf4
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HCT116 TCF4 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF4 in HCT-116 cells)
-    subGroups view=Signal factor=TCF4 cellType=t3HCT116
+    shortLabel HCT116 TCF7L2 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF7L2 in HCT-116 cells)
+    subGroups view=Signal factor=TCF7L2 cellType=t3HCT116
     type bedGraph 4
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HCT-116 antibody=TCF4 view=Signal labVersion="Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=324 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HCT-116 antibody=TCF7L2 view=Signal labVersion="Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE July 2009 Freeze" subId=324 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-05-02 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4 fileName=wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz
 
     track wgEncodeYaleChIPseqRel2SignalHct116Input
     release alpha
@@ -6646,7 +6646,7 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLaIF=HeLa-S3_IFNg HepG2=HepG2 K562=K562 NB4=NB4
-subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NFe2=NF-E2 Pol2=Pol2 Pol3=Pol3 Rad21=Rad21 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 SUZ12=SUZ12 TCF4=TCF4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 cFos=c-Fos cJun=c-Jun cMyc=c-Myc yRNAseq=RNA-seq_PolyA zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
+subGroup3 factor Antibody GATA1=GATA-1 JunD=JunD Max=Max NFe2=NF-E2 Pol2=Pol2 Pol3=Pol3 Rad21=Rad21 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 cFos=c-Fos cJun=c-Jun cMyc=c-Myc yRNAseq=RNA-seq_PolyA zCTRL=Input_Control zLarge=Fragment_Control zMNase=MNase_Control zMouseIG=Mouse_IgG_Control zNaked=Naked_DNA_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
@@ -6869,45 +6869,45 @@ wgEncode 1
     track wgEncodeYaleChIPseqPeaksHct116Tcf4
     release beta
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HCT116 TCF4 Pk
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF4 in HCT-116 cells)
-    subGroups view=Peaks factor=TCF4 cellType=HCT116
+    shortLabel HCT116 TCF7L2 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF7L2 in HCT-116 cells)
+    subGroups view=Peaks factor=TCF7L2 cellType=HCT116
     type narrowPeak
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHct116Tcf4 fileName=wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF7L2 view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHct116Tcf4 fileName=wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz
 
     track wgEncodeYaleChIPseqSignalHct116Tcf4
     release beta
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HCT116 TCF4 Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF4 in HCT-116 cells)
-    subGroups view=Signal factor=TCF4 cellType=HCT116
+    shortLabel HCT116 TCF7L2 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF7L2 in HCT-116 cells)
+    subGroups view=Signal factor=TCF7L2 cellType=HCT116
     type wig 0.00 4900.00
     spanList first
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHct116Tcf4 fileName=wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF7L2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHct116Tcf4 fileName=wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4
     release beta
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HCT116 TCF4 1
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TCF4 in HCT-116 cells)
-    subGroups view=zRAW factor=TCF4 cellType=HCT116
+    shortLabel HCT116 TCF7L2 1
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 1 (TCF7L2 in HCT-116 cells)
+    subGroups view=zRAW factor=TCF7L2 cellType=HCT116
     type wig 1.00 5626.00
     spanList first
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4 fileName=wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF7L2 type=wig fragLength=700 view=RawSignal replicate=1 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4 fileName=wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4.wig.gz
 
     track wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4
     release beta
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HCT116 TCF4 2
-    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TCF4 in HCT-116 cells)
-    subGroups view=zRAW factor=TCF4 cellType=HCT116
+    shortLabel HCT116 TCF7L2 2
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Raw Signal Rep 2 (TCF7L2 in HCT-116 cells)
+    subGroups view=zRAW factor=TCF7L2 cellType=HCT116
     type wig 1.00 2567.00
     spanList first
     color 0,55,219
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF4 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4 fileName=wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4.wig.gz
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HCT-116 antibody=TCF7L2 type=wig fragLength=700 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=225 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4 fileName=wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4.wig.gz
 
     track wgEncodeYaleChIPseqSignalHct116Input
     release beta
@@ -10894,8 +10894,8 @@ compositeTrack on
 shortLabel CSHL NewLong
 longLabel ENCODE Cshl Gingeras LongRnaSeq
 group expression
-subGroup1 view Views PairAlignments=PairAlignments Alignments=Alignments 
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 
+subGroup1 view Views PairAlignments=PairAlignments Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 strand Stranded no=no yes=yes
 dimensions dimensionX=cellType dimensionY=strand
 sortOrder cellType=+ strand=+ view=+
