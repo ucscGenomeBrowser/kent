@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.44 2009/08/14 18:36:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.45 2009/09/17 17:09:24 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -234,7 +234,7 @@ for (si = subjList; si != NULL; si = si->next)
             else
                 hPrintf("\t");
             if (val == NULL)
-                hPrintf("n/a");
+                hPrintf("N/A");
             else
 		{
 		special = FALSE;
@@ -539,7 +539,7 @@ return TRUE;
 static char *noVal(struct column *col, struct subjInfo *si, struct sqlConnection *conn)
 /* Return not-available value. */
 {
-return cloneString("n/a");
+return cloneString("N/A");
 }
 
 static int oneColumn(struct column *col)
@@ -617,7 +617,7 @@ boolean isSubjID = sameString(col->name,"subjId");
 hPrintf("<TD>");
 if (s == NULL)
     {
-    hPrintf("n/a");
+    hPrintf("N/A");
     }
 else
     {
@@ -920,9 +920,9 @@ char query[256];
 char *answer;
 safef(query, sizeof(query), col->query, si->fields[0]);
 answer = sqlQuickString(conn, query);
-if (answer == NULL) 
+if ((answer == NULL) && sameWord(col->type, "integer"))
     {
-    return(cloneString("N/A"));
+    return(cloneString("-1"));
     }
 else 
     {
@@ -959,7 +959,10 @@ if (sameWord(col->name, "SDayLastPTest") 	||
     sameWord(col->name, "SDayLastTrTest") 	||
     sameWord(col->name, "LastTrVisit")		||
     sameWord(col->name, "LastPMNNeutral")	||
-    sameWord(col->name, "art_Daei")		||
+    sameWord(col->name, "artDaei")		||
+    sameWord(col->name, "seqDay")		||
+    sameWord(col->name, "firstRNAPosDay")	||
+    sameWord(col->name, "lastSeroNegDay")	||
     sameWord(col->name, "LastTrMnNeutral")	
    )
     {
