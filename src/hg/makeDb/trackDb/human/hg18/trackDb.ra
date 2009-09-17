@@ -808,7 +808,7 @@ type netAlign monDom1 chainMonDom1
 otherDb monDom1
 
 track chainMonDom4
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 190.14
@@ -822,7 +822,7 @@ type chain monDom4
 otherDb monDom4
 
 track netMonDom4
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 190.15
