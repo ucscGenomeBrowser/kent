@@ -10890,18 +10890,19 @@ wgEncode 1
 
 track wgEncodeCshlLongRnaSeq
 compositeTrack on
-shortLabel Cshl LongRnaSeq
+shortLabel CSHL NewLong
 longLabel ENCODE Cshl Gingeras LongRnaSeq
-group regulation
-subGroup1 view Views PairAlignments=PairAlignments PairAlignments=PairAlignments PairAlignments=PairAlignments PairAlignments=PairAlignments Alignments=Alignments Alignments=Alignments Alignments=Alignments Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 GM12878=GM12878 K562=K562 K562=K562
-subGroup3 strand Strand no=no yes=yes yes=yes no=no
+group expression
+subGroup1 view Views PairAlignments=PairAlignments Alignments=Alignments 
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 
+subGroup3 strand Stranded no=no yes=yes
 dimensions dimensionX=cellType dimensionY=strand
 sortOrder cellType=+ strand=+ view=+
 controlledVocabulary encode/cv.ra cellType strand
 dragAndDrop subTracks
-visibilityViewDefaults  PairAlignments=hide PairAlignments=hide PairAlignments=hide PairAlignments=hide Alignments=hide Alignments=hide Alignments=hide Alignments=hide
+visibilityViewDefaults  PairAlignments=hide Alignments=hide Alignments=hide
 priority 0
+noInherit on
 type bed 3
 wgEncode 1
 
@@ -10911,7 +10912,7 @@ wgEncode 1
     shortLabel GM12878 1
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 1 (in GM12878 cells)
     subGroups view=PairAlignments cellType=GM12878 strand=no
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no view=PairAlignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1Gm12878No fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1Gm12878No.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878No
@@ -10920,7 +10921,7 @@ wgEncode 1
     shortLabel GM12878 1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 strand=no
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no view=Alignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878No fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878No.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep1Gm12878Yes
@@ -10929,7 +10930,7 @@ wgEncode 1
     shortLabel GM12878 1
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 1 (in GM12878 cells)
     subGroups view=PairAlignments cellType=GM12878 strand=yes
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes view=PairAlignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1Gm12878Yes fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1Gm12878Yes.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878Yes
@@ -10938,7 +10939,7 @@ wgEncode 1
     shortLabel GM12878 1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 strand=yes
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes view=Alignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878Yes fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878Yes.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep2Gm12878No
@@ -10947,7 +10948,7 @@ wgEncode 1
     shortLabel GM12878 2
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 2 (in GM12878 cells)
     subGroups view=PairAlignments cellType=GM12878 strand=no
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no view=PairAlignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2Gm12878No fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2Gm12878No.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878No
@@ -10956,7 +10957,7 @@ wgEncode 1
     shortLabel GM12878 2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 strand=no
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no view=Alignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878No fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878No.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep2Gm12878Yes
@@ -10965,7 +10966,7 @@ wgEncode 1
     shortLabel GM12878 2
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 2 (in GM12878 cells)
     subGroups view=PairAlignments cellType=GM12878 strand=yes
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes view=PairAlignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2Gm12878Yes fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2Gm12878Yes.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878Yes
@@ -10974,7 +10975,7 @@ wgEncode 1
     shortLabel GM12878 2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 strand=yes
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes view=Alignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878Yes fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878Yes.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep1K562No
@@ -10983,7 +10984,7 @@ wgEncode 1
     shortLabel K562 1
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 1 (in K562 cells)
     subGroups view=PairAlignments cellType=K562 strand=no
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no view=PairAlignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1K562No fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1K562No.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562No
@@ -10992,7 +10993,7 @@ wgEncode 1
     shortLabel K562 1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (in K562 cells)
     subGroups view=Alignments cellType=K562 strand=no
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no view=Alignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562No fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562No.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep1K562Yes
@@ -11001,7 +11002,7 @@ wgEncode 1
     shortLabel K562 1
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 1 (in K562 cells)
     subGroups view=PairAlignments cellType=K562 strand=yes
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes view=PairAlignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1K562Yes fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep1K562Yes.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562Yes
@@ -11010,7 +11011,7 @@ wgEncode 1
     shortLabel K562 1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (in K562 cells)
     subGroups view=Alignments cellType=K562 strand=yes
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes view=Alignments replicate=1 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562Yes fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562Yes.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep2K562No
@@ -11019,7 +11020,7 @@ wgEncode 1
     shortLabel K562 2
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 2 (in K562 cells)
     subGroups view=PairAlignments cellType=K562 strand=no
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no view=PairAlignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2K562No fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2K562No.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep2K562No
@@ -11028,7 +11029,7 @@ wgEncode 1
     shortLabel K562 2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (in K562 cells)
     subGroups view=Alignments cellType=K562 strand=no
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no view=Alignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562No fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562No.tagAlign.gz
 
     track wgEncodeCshlLongRnaSeqPairAlignmentsRep2K562Yes
@@ -11037,7 +11038,7 @@ wgEncode 1
     shortLabel K562 2
     longLabel ENCODE CSHL Long RNA-Seq Paired Tags Replicate 2 (in K562 cells)
     subGroups view=PairAlignments cellType=K562 strand=yes
-    type pairedTagAlign
+    type bed 6 +
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes view=PairAlignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2K562Yes fileName=wgEncodeCshlLongRnaSeqPairAlignmentsRep2K562Yes.pairedTagAlign.gz
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep2K562Yes
@@ -11046,7 +11047,7 @@ wgEncode 1
     shortLabel K562 2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (in K562 cells)
     subGroups view=Alignments cellType=K562 strand=yes
-    type bed 6
+    type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes view=Alignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562Yes fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562Yes.tagAlign.gz
 
 
