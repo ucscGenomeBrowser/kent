@@ -2740,7 +2740,6 @@ chainMinScore 3000
 chainLinearGap medium
 spectrum on
 html chainNet
-release alpha
 
     track chainMonDom5
     subTrack chainNetMonDom5
