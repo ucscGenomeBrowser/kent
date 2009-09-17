@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1598 2009/09/17 21:31:46 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1599 2009/09/17 21:43:24 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3275,6 +3275,12 @@ if (sameWord(database,"hg19"))
 	{
 	hPuts("<TD ALIGN=CENTER>");
 	printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+	hPrintf("%s</A></TD>", "Ensembl");
+	}
+else if (sameWord(database,"hg18"))
+	{
+	hPuts("<TD ALIGN=CENTER>");
+	printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
 	hPrintf("%s</A></TD>", "Ensembl");
 	}
 else if (ensVersionString[0])
