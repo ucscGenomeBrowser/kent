@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.45 2009/07/24 20:22:34 hiram Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.46 2009/09/17 21:16:20 hiram Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -92,11 +92,13 @@ return total;
 }
 
 static boolean mapThroughChain(struct chain *chain, double minRatio, 
-                            int *pStart, int *pEnd, struct chain **subChainRet)
+	int *pStart, int *pEnd, struct chain **retSubChain,
+	struct chain **retChainToFree)
 /* Map interval from start to end from target to query side of chain.
  * Return FALSE if not possible, otherwise update *pStart, *pEnd. */
 {
-struct chain *subChain, *freeChain;
+struct chain *subChain = NULL;
+struct chain *freeChain = NULL;
 int s = *pStart, e = *pEnd;
 int oldSize = e - s;
 int newCover = 0;
@@ -104,7 +106,11 @@ int ok = TRUE;
 
 chainSubsetOnT(chain, s, e, &subChain, &freeChain);
 if (subChain == NULL)
+    {
+    *retSubChain = NULL;
+    *retChainToFree = NULL;
     return FALSE;
+    }
 newCover = chainAliSize(subChain);
 if (newCover < oldSize * minRatio)
     ok = FALSE;
@@ -118,8 +124,8 @@ else
     *pStart = subChain->qSize - subChain->qEnd;
     *pEnd = subChain->qSize - subChain->qStart;
     }
-*subChainRet = subChain;
-chainFree(&freeChain);
+*retSubChain = subChain;
+*retChainToFree = freeChain;
 return ok;
 }
 
@@ -198,10 +204,14 @@ else if (chainsHit->next != NULL && !multiple)
 slSort(&chainsHit, chainCmpTarget);
 
 tStart = s;
-for (chain = chainsHit; chain != NULL; chain = chain->next)
+struct chain *next = chainsHit->next;
+for (chain = chainsHit; chain != NULL; chain = next)
     {
     struct chain *subChain = NULL;
+    struct chain *toFree = NULL;
+    struct chain *toFree2 = NULL;
     int start=s, end=e;
+    next = chain->next;
     verbose(3,"hit chain %s:%d %s:%d-%d %c (%d)\n",
         chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
         chain->qStrand, chain->id);
@@ -223,13 +233,17 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
                 chain->qStart, chain->qEnd, chain->qStrand, chain->id);
             }
         }
-    if (!mapThroughChain(chain, minRatio, &start, &end, &subChain))
+    if (!mapThroughChain(chain, minRatio, &start, &end, &subChain, &toFree))
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
 	strand = otherStrand(strand);
     if (useThick)
-	if (!mapThroughChain(chain, minRatio, &thickStart, &thickEnd, &subChain))
+	{
+	if (!mapThroughChain(chain, minRatio, &thickStart, &thickEnd,
+		&subChain, &toFree2))
 	    thickStart = thickEnd = start;
+	chainFree(&toFree2);
+	}
     verbose(3, "mapped %s:%d-%d\n", chain->qName, start, end);
     verbose(4, "Mapped! Target:\t%s\t%d\t%d\t%c\tQuery:\t%s\t%d\t%d\t%c\n",
 	    chain->tName, subChain->tStart, subChain->tEnd, strand, 
@@ -267,6 +281,7 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
         slAddHead(&unmappedBedList, bed);
         }
     tStart = subChain->tEnd;
+    chainFree(&toFree);
     }
 slReverse(&bedList);
 *bedRet = bedList;
@@ -1376,7 +1391,7 @@ static char *remapBlockedBed(struct hash *chainHash, struct bed *bed)
 /* Remap blocks in bed, and also chromStart/chromEnd.  
  * Return NULL on success, an error string on failure. */
 {
-struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
+struct chain *chainList = NULL,  *chain, *subChain;
 int bedSize = sumBedBlocks(bed);
 struct binElement *binList, *el;
 struct liftRange *rangeList, *badRanges = NULL, *range;
