@@ -132,11 +132,7 @@ expScale 5.0
 expStep 0.2
 groupings ISPYproteomicsGroups
 
-<<<<<<< trackDb.instinct.ra
->>>>>>> 1.38
-=======
-######################
->>>>>>> 1.40
+
 track ucsfNeveExp
 shortLabel Breast Cell Line Expression (Neve. et.al)
 longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
@@ -419,9 +415,6 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings parsons2008cghGroups
-<<<<<<< trackDb.instinct.ra
->>>>>>> 1.38
-=======
 
 track mullighan2008_500K
 shortLabel CGH (Mullighan et al. 2008)
@@ -434,9 +427,6 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings mullighan2008_500KGroups
-<<<<<<< trackDb.instinct.ra
->>>>>>> 1.39
-=======
 
 track mullighan2008_SNP6
 shortLabel CGH (Mullighan et al. 2008)
