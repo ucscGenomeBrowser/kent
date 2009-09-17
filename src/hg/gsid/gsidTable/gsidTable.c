@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.45 2009/09/17 17:09:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.46 2009/09/17 18:34:57 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -923,6 +923,10 @@ answer = sqlQuickString(conn, query);
 if ((answer == NULL) && sameWord(col->type, "integer"))
     {
     return(cloneString("-1"));
+    }
+else if ((answer == NULL) && sameWord(col->type, "string"))
+    {
+    return(cloneString("N/A"));
     }
 else 
     {
