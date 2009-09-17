@@ -5300,7 +5300,8 @@ wgEncode 1
     subTrack wgEncodeYaleRNAseq
     shortLabel K562 RNAseq Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
-    subGroups view=Signal cellType=t1K562
+    #subGroups view=Signal cellType=t1K562
+    subGroups cellType=t1K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
