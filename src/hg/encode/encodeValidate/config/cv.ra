@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.127 2009/08/31 23:21:00 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.128 2009/09/17 21:33:54 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1381,15 +1381,15 @@ lots K0905 F2706
 #lab Myers / Wold
 #lots K0905 F2706
 
-term TCF4
+term TCF7L2
 type Antibody
-targetDescription TCF4 is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
 antibodyDescription Rabbit monoclonal
 vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
-targetLink GeneCard GC18M051045|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC18M051045
+targetLink GeneCard GC10P114700|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10P114700
 
 term TR4
 type Antibody
