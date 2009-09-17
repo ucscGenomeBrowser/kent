@@ -277,13 +277,11 @@ informant Chimp N-SCAN uses mouse (mm8) as the informant and iterative pseudogen
 
 track chainHg18 override
 shortLabel $o_db Chain
-longLabel $o_db ($o_date/$o_db) Alignment Chain
 priority 290.1
 otherDb hg18
 
 track netHg18 override
 shortLabel $o_db Net
-longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 290.2
 otherDb hg18
 
