@@ -305,6 +305,12 @@ spectrum on
 type psl xeno danRer1
 otherDb danRer1
 
+track chainNetOryLat2 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 240
+
 track chainOryLat1
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -328,6 +334,12 @@ visibility hide
 spectrum on
 type netAlign oryLat1 chainOryLat1
 otherDb oryLat1
+
+track chainNetHg19 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 150
 
 track chainHg18
 shortLabel $o_Organism Chain
@@ -400,6 +412,12 @@ visibility hide
 spectrum on
 type netAlign gasAcu1 chainGasAcu1
 otherDb gasAcu1
+
+track chainNetTetNig2 override
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 250
 
 track chainTetNig1
 shortLabel $o_Organism Chain

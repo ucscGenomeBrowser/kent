@@ -714,3 +714,13 @@ searchType bed
 searchMethod prefix
 searchPriority 3.51
 
+track chainNetHg19 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 99
+
+track chainNetTetNig2 override
+chainMinScore 2000
+chainLinearGap medium
+priority 130

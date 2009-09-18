@@ -143,6 +143,7 @@ type netAlign fr1 chainFr1
 otherDb fr1
 
 track chainFr2
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -157,6 +158,7 @@ type chain fr2
 otherDb fr2
 
 track netFr2
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
@@ -200,7 +202,40 @@ spectrum on
 type netAlign mm5 chainMm5
 otherDb mm5
 
+track chainNetHg19 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 124.4
+
+track chainNetMm9 override
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+priority 128.1
+
+track chainNetFr2 override
+chainMinScore 2000
+chainLinearGap medium
+priority 140
+
+track chainNetDanRer6 override
+chainMinScore 2000
+chainLinearGap medium
+priority 159.3
+
+track chainNetGasAcu1 override
+chainMinScore 2000
+chainLinearGap medium
+priority 165.51
+
+track chainNetOryLat2 override
+chainMinScore 3000
+chainLinearGap medium
+priority 227
+
 track chainMm9
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -215,6 +250,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
