@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.23 2009/07/21 21:01:42 markd Exp $"
+#       "$Id: fr2.txt,v 1.24 2009/09/18 22:15:32 hiram Exp $"
 #
 
 ##########################################################################
@@ -1093,6 +1093,13 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
     #	real    0m20.580s
 
 #########################################################################
+# Adding automatic generation of upstream files (DONE - 2009-08-13 - Hiram)
+    # edit src/hg/makeDb/genbank/genbank.conf to add:
+
+fr2.upstreamGeneTbl = ensGene
+fr2.upstreamMaf = multiz5way /hive/data/genomes/fr2/bed/multiz5way/species.lst
+
+#########################################################################
 # MULTIZ5WAY DOWNLOADABLES (DONE - 2007-02-05 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/fr2/bed/multiz5way/mafDownloads
@@ -1722,3 +1729,23 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# LASTZ/CHAIN/NET fr2 (DONE - 2009-09-15,18 - Hiram)
+    # original alignment to tetNig2:
+    cd /hive/data/genomes/tetNig2/bed/lastzFr2.2009-09-15
+    cat fb.tetNig2.chainFr2Link.txt 
+    #	243965150 bases of 302314788 (80.699%) in intersection
+
+    #	and the swap to here, fr2:
+    mkdir /hive/data/genomes/fr2/bed/blastz.tetNig2.swap
+    cd /hive/data/genomes/fr2/bed/blastz.tetNig2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/tetNig2/bed/lastzFr2.2009-09-15/DEF \
+	-swap -tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> swap.log 2>&1 &
+    #	real    21m56.576s
+    cat fb.fr2.chainTetNig2Link.txt 
+    #	248984008 bases of 393312790 (63.304%) in intersection
+
+#########################################################################

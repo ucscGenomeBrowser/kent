@@ -103,7 +103,7 @@ taxId 99883
     #	real    0m7.967s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits tetNig2 -not gap -bed=notGap.bed
-    featureBits tetNig2 allGaps.bed notGap.bed -bed=net.gaps.bed
+    featureBits tetNig2 allGaps.bed notGap.bed -bed=new.gaps.bed
     #	what is the last index in the existing gap table:
     hgsql -N -e "select ix from gap;" tetNig2 | sort -n | tail -1
     #	34284
@@ -552,3 +552,198 @@ tetNig2.refseq.mrna.native.load = no
     #	42910930 bases of 302314788 (14.194%) in intersection
 
 ##############################################################################
+# BLASTZ/CHAIN/NET oryLat2 swap (DONE - 2009-09-15 - Hiram)
+    #	original
+    cd /hive/data/genomes/oryLat2/bed/blastzTetNig2.2009-09-14
+    cat fb.oryLat2.chainTetNig2Link.txt
+    #	162783854 bases of 700386597 (23.242%) in intersection
+
+    #	And, for the swap:
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.oryLat2.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/hive/data/genomes/oryLat2/bed/blastzTetNig2.2009-09-14/DEF \
+	-swap -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -verbose=2 -smallClusterHub=pk -bigClusterHub=pk \
+	> swap.log 2>&1 &
+    #	real    49m49.335s
+    cat fb.tetNig2.chainOryLat2Link.txt
+    #	136115939 bases of 302314788 (45.025%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET gasAcu1 swap (DONE - 2009-09-15 - Hiram)
+    #	original
+    cd /hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10
+    featureBits gasAcu1 chainTetNig2Link >&fb.gasAcu1.chainTetNig2Link.txt
+    cat fb.gasAcu1.chainTetNig2Link.txt
+    #	134497679 bases of 446627861 (30.114%) in intersection
+
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.gasAcu1.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.gasAcu1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10/DEF \
+	-swap -qRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    33m6.310s
+    cat fb.tetNig2.chainGasAcu1Link.txt 
+    #	123285586 bases of 302314788 (40.781%) in intersection
+
+#########################################################################
+# LASTZ/CHAIN/NET danRer6 (DONE - 2009-09-15,18 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/lastzDanRer6.2009-09-15
+    cd /hive/data/genomes/tetNig2/bed/lastzDanRer6.2009-09-15
+    cat << '_EOF_' > DEF
+# Tetraodon vs. Zebrafish
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Tetraodon TetNig2 - single chunk big enough to run single largest item
+SEQ1_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ1_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ1_CTGDIR=/scratch/data/tetNig2/tetNig2.contigs.2bit
+SEQ1_CTGLEN=/scratch/data/tetNig2/tetNig2.contigs.sizes
+SEQ1_LIFT=/scratch/data/tetNig2/tetNig2.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Zebrafish danRer6, chunk large enough to run largest piece
+SEQ2_DIR=/scratch/data/danRer6/danRer6.2bit
+SEQ2_LEN=/scratch/data/danRer6/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/danRer6/contigs/danRer6.contigs.2bit
+SEQ2_CTGLEN=/hive/data/genomes/danRer6/contigs/danRer6.contigs.sizes
+SEQ2_LIFT=/hive/data/genomes/danRer6/contigs/danRer6.contigs.lift
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/tetNig2/bed/lastzDanRer6.2009-09-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    754m56.563s
+    cat fb.tetNig2.chainDanRer6Link.txt 
+    #	70626082 bases of 302314788 (23.362%) in intersection
+
+    #	and the swap to danRer6:
+    mkdir /hive/data/genomes/danRer6/bed/blastz.tetNig2.swap
+    cd /hive/data/genomes/danRer6/bed/blastz.tetNig2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/tetNig2/bed/lastzDanRer6.2009-09-15/DEF \
+	-swap -tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    26m40.310s
+    cat fb.danRer6.chainTetNig2Link.txt 
+    #	93349443 bases of 1506896106 (6.195%) in intersection
+
+#########################################################################
+# LASTZ/CHAIN/NET fr2 (DONE - 2009-09-15,18 - Hiram)
+    mkdir /hive/data/genomes/tetNig2/bed/lastzFr2.2009-09-15
+    cd /hive/data/genomes/tetNig2/bed/lastzFr2.2009-09-15
+    cat << '_EOF_' > DEF
+# Tetraodon vs. Zebrafish
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Tetraodon TetNig2 - single chunk big enough to run single largest item
+SEQ1_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ1_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ1_CTGDIR=/scratch/data/tetNig2/tetNig2.contigs.2bit
+SEQ1_CTGLEN=/scratch/data/tetNig2/tetNig2.contigs.sizes
+SEQ1_LIFT=/scratch/data/tetNig2/tetNig2.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Zebrafish fr2, chunk large enough to run largest piece
+SEQ2_DIR=/scratch/data/fr2/fr2.2bit
+SEQ2_LEN=/scratch/data/fr2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/fr2/noUn/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/fr2/noUn/fr2.scaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/fr2/jkStuff/liftAll.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/tetNig2/bed/lastzFr2.2009-09-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> do.log 2>&1 &
+    #	real    1226m51.875s
+
+    #	broken down during lastz due to pk problems, finished the lastz
+    #	cluster run manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> cat.log 2>&1 &
+    #	real    63m23.911s
+    cat fb.tetNig2.chainFr2Link.txt 
+    #	243965150 bases of 302314788 (80.699%) in intersection
+
+    #	and the swap to fr2:
+    mkdir /hive/data/genomes/fr2/bed/blastz.tetNig2.swap
+    cd /hive/data/genomes/fr2/bed/blastz.tetNig2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/tetNig2/bed/lastzFr2.2009-09-15/DEF \
+	-swap -tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+	> swap.log 2>&1 &
+    #	real    21m56.576s
+    cat fb.fr2.chainTetNig2Link.txt 
+    #	248984008 bases of 393312790 (63.304%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET mm9/Mouse swap (DONE - 2009-09-15 - Hiram)
+    #	the original alignment to the mouse sequence
+    cd /hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15
+    cat fb.mm9.chainTetNig2Link.txt 
+    #	45642112 bases of 2620346127 (1.742%) in intersection
+
+    #	running the swap to here, tetNig2:
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    10m34.797s
+    cat fb.tetNig2.chainMm9Link.txt 
+    #	41176381 bases of 302314788 (13.620%) in intersection
+
+#########################################################################

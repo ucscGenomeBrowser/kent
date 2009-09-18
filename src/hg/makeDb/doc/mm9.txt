@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.112 2009/09/16 16:11:58 fanhsu Exp $"
+#	"$Id: mm9.txt,v 1.113 2009/09/18 22:15:32 hiram Exp $"
 #
 
 #######################################################################
@@ -9751,6 +9751,66 @@ TMPDIR=/scratch/tmp
         kent/src/hg/makeDb/trackDb/mouse/mm9
 
 #####################################################################
+# LASTZ Tetraodon TetNig2 (DONE - 2009-09-15 - Hiram)
+    mkdir /hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15
+    cd /hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15
+
+    cat << '_EOF_' > DEF
+# mouse vs tetraodon
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Tetraodon TetNig2 - single chunk big enough to single largest item
+SEQ2_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ2_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/tetNig2/tetNig2.contigs.2bit
+SEQ2_CTGLEN=/scratch/data/tetNig2/tetNig2.contigs.sizes
+SEQ2_LIFT=/scratch/data/tetNig2/tetNig2.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	about 124 minutes
+    cat fb.mm9.chainTetNig2Link.txt 
+    #	45642112 bases of 2620346127 (1.742%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.mm9.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzTetNig2.2009-09-15/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    10m34.797s
+    cat fb.tetNig2.chainMm9Link.txt 
+    #	41176381 bases of 302314788 (13.620%) in intersection
+
+##############################################################################
 # BUILD REST TRACK (DONE 9/16/09, Fan)
 
     mkdir /hive/data/genomes/mm9/bed/REST

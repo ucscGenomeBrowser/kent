@@ -825,5 +825,24 @@ otherDb danRer6
     vi README
     md5sum danRer6.2bit >> /usr/local/apache/htdocs/goldenPath/danRer6/bigZips/md5sum.txt
 
+#######################################################################
+# LASTZ/CHAIN/NET swap tetNig2 (DONE - 2009-09-15,18 - Hiram)
+    # original alignment to tetNig2
+    cd /hive/data/genomes/tetNig2/bed/lastzDanRer6.2009-09-15
+    cat fb.tetNig2.chainDanRer6Link.txt 
+    #	70626082 bases of 302314788 (23.362%) in intersection
 
+    #	and the swap to here, danRer6:
+    mkdir /hive/data/genomes/danRer6/bed/blastz.tetNig2.swap
+    cd /hive/data/genomes/danRer6/bed/blastz.tetNig2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/tetNig2/bed/lastzDanRer6.2009-09-15/DEF \
+	-swap -tRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    26m40.310s
+    cat fb.danRer6.chainTetNig2Link.txt 
+    #	93349443 bases of 1506896106 (6.195%) in intersection
 
+#######################################################################
