@@ -532,8 +532,8 @@ void wiggleGraphDropDown(char *var, char *curVal);
 
 /*	Wiggle track always include zero */
 enum wiggleAlwaysZeroEnum {
-   wiggleAlwaysZeroOn = 0,
-   wiggleAlwaysZeroOff = 1,
+   wiggleAlwaysZeroOff = 0,
+   wiggleAlwaysZeroOn = 1,
 };
 
 enum wiggleAlwaysZeroEnum wiggleAlwaysZeroToEnum(char *string);

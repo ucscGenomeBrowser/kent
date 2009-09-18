@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.236 2009/09/08 21:09:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.237 2009/09/18 20:05:09 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1395,8 +1395,8 @@ cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions),
 }
 
 static char *wiggleAlwaysZeroOptions[] = {
-    "ON",
-    "OFF"
+    "OFF",
+    "ON"
     };
 
 enum wiggleAlwaysZeroEnum wiggleAlwaysZeroToEnum(char *string)
@@ -1407,6 +1407,14 @@ if (x < 0)
    errAbort("hui::wiggleAlwaysZeroToEnum() - Unknown option %s", string);
 return x;
 }
+
+void wiggleAlwaysZeroDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleAlwaysZeroOptions, 
+    ArraySize(wiggleAlwaysZeroOptions), curVal);
+}
+
 
 /****** Options for the wiggle track horizontal grid lines *******/
 
@@ -3393,7 +3401,7 @@ snprintf(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 wiggleScaleDropDown(option, autoScale);
 snprintf(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
-wiggleGridDropDown(option, alwaysZero);
+wiggleAlwaysZeroDropDown(option, alwaysZero);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");

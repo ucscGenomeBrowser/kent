@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.92 2009/09/04 23:45:28 braney Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.93 2009/09/18 20:05:16 braney Exp $";
 
 #define SMALLBUF 128
 
@@ -693,7 +693,7 @@ if (autoScale == wiggleScaleAuto)
 		*overallLowerLimit = preDraw[i].smooth;
 	    }
 	}
-    if (alwaysZero == 0)
+    if (alwaysZero == wiggleAlwaysZeroOn)
 	{
 	if ( *overallUpperLimit < 0)
 	    *overallUpperLimit = 0.0;

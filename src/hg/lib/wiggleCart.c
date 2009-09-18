@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.21 2009/09/04 23:42:38 braney Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.22 2009/09/18 20:05:10 braney Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -468,9 +468,13 @@ enum wiggleGridOptEnum wigFetchAlwaysZeroWithCart(struct cart *theCart,
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *alwaysZero;
-enum wiggleAlwaysZeroEnum ret = 1;
+enum wiggleAlwaysZeroEnum ret = wiggleAlwaysZeroOff;
+char * tdbDefault = trackDbSettingClosestToHome(tdb, ALWAYSZERO);
 
 alwaysZero = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, ALWAYSZERO));
+
+if ((alwaysZero == NULL) && (tdbDefault != NULL))
+    alwaysZero = cloneString(tdbDefault);
 
 if (optString && alwaysZero)
     *optString = cloneString(alwaysZero);
