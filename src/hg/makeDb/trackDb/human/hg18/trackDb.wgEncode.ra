@@ -10894,8 +10894,8 @@ compositeTrack on
 shortLabel CSHL NewLong
 longLabel ENCODE Cshl Gingeras LongRnaSeq
 group expression
-subGroup1 view Views PairAlignments=PairAlignments Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup1 view Views PairAlignments=PairAlignments Alignments=Alignments MinusRawSignal=MinusRawSignal PlusRawSignal=PlusRawSignal
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 
 subGroup3 strand Stranded no=no yes=yes
 dimensions dimensionX=cellType dimensionY=strand
 sortOrder cellType=+ strand=+ view=+
@@ -11050,6 +11050,151 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 strand=yes
     type bigBed 6
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes view=Alignments replicate=2 dataVersion="ENCODE Fall 2009 Freeze" subId=503 dateSubmitted=2009-09-16 dateUnrestricted=2010-06-16 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562Yes fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562Yes.tagAlign.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep1K562Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 PlusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (in K562 cells)
+    subGroups view=PlusRawSignal cellType=K562 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes type=wig view=PlusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1K562Yes fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1K562Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep1K562Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 MinusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (in K562 cells)
+    subGroups view=MinusRawSignal cellType=K562 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes type=wig view=MinusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1K562Yes fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1K562Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep1K562No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 PlusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (in K562 cells)
+    subGroups view=PlusRawSignal cellType=K562 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no type=wig view=PlusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1K562No fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1K562No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep1K562No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 MinusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (in K562 cells)
+    subGroups view=MinusRawSignal cellType=K562 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no type=wig view=MinusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1K562No fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1K562No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep2K562No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 PlusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (in K562 cells)
+    subGroups view=PlusRawSignal cellType=K562 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no type=wig view=PlusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2K562No fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2K562No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep2K562No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 MinusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (in K562 cells)
+    subGroups view=MinusRawSignal cellType=K562 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=no type=wig view=MinusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2K562No fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2K562No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep2Gm12878Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 PlusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (in GM12878 cells)
+    subGroups view=PlusRawSignal cellType=GM12878 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes type=wig view=PlusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2Gm12878Yes fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2Gm12878Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep2Gm12878Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 MinusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (in GM12878 cells)
+    subGroups view=MinusRawSignal cellType=GM12878 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes type=wig view=MinusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2Gm12878Yes fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2Gm12878Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep1Gm12878No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 PlusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (in GM12878 cells)
+    subGroups view=PlusRawSignal cellType=GM12878 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no type=wig view=PlusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1Gm12878No fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1Gm12878No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep1Gm12878No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 MinusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (in GM12878 cells)
+    subGroups view=MinusRawSignal cellType=GM12878 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no type=wig view=MinusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1Gm12878No fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1Gm12878No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep2K562Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 PlusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (in K562 cells)
+    subGroups view=PlusRawSignal cellType=K562 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes type=wig view=PlusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2K562Yes fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2K562Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep2K562Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel K562 MinusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (in K562 cells)
+    subGroups view=MinusRawSignal cellType=K562 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 strand=yes type=wig view=MinusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2K562Yes fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2K562Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep2Gm12878No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 PlusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (in GM12878 cells)
+    subGroups view=PlusRawSignal cellType=GM12878 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no type=wig view=PlusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2Gm12878No fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep2Gm12878No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep2Gm12878No
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 MinusRaw 2
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (in GM12878 cells)
+    subGroups view=MinusRawSignal cellType=GM12878 strand=no
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=no type=wig view=MinusRawSignal replicate=2 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2Gm12878No fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep2Gm12878No.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqPlusRawSignalRep1Gm12878Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 PlusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (in GM12878 cells)
+    subGroups view=PlusRawSignal cellType=GM12878 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes type=wig view=PlusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1Gm12878Yes fileName=wgEncodeCshlLongRnaSeqPlusRawSignalRep1Gm12878Yes.bedGraph.gz
+
+    track wgEncodeCshlLongRnaSeqMinusRawSignalRep1Gm12878Yes
+    release alpha
+    subTrack wgEncodeCshlLongRnaSeq
+    shortLabel GM12878 MinusRaw 1
+    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (in GM12878 cells)
+    subGroups view=MinusRawSignal cellType=GM12878 strand=yes
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 strand=yes type=wig view=MinusRawSignal replicate=1 dataVersion="ENCODE Fall 2009 Freeze" dateSubmitted=2009-09-17 dateUnrestricted=2010-06-17 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1Gm12878Yes fileName=wgEncodeCshlLongRnaSeqMinusRawSignalRep1Gm12878Yes.bedGraph.gz
+
 
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
