@@ -435,3 +435,10 @@ track humanChainNet override
 chainMinScore 5000
 chainLinearGap loose
 priority 255
+
+track chainCalJac1 override
+priority 230
+
+track netCalJac1 override
+priority 230.1
+
