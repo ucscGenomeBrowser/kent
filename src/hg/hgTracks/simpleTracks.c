@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.103 2009/09/16 17:40:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.104 2009/09/18 20:53:09 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10284,7 +10284,7 @@ tg->itemNameColor = omimGeneColor;
 tg->itemName      = omimGeneName;
 }
 
-Color RESTColor(struct track *tg, void *item, struct hvGfx *hvg)
+Color restColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* set the color for REST track items */
 {
 struct bed *el = item;
@@ -10299,10 +10299,10 @@ else
     }
 }
 
-void RESTMethods (struct track *tg)
+void restMethods (struct track *tg)
 {
-tg->itemColor 	  = RESTColor;
-tg->itemNameColor = RESTColor;
+tg->itemColor 	  = restColor;
+tg->itemNameColor = restColor;
 }
 
 void omiciaMethods (struct track *tg)
@@ -11303,7 +11303,7 @@ registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("hapmapSnpsPhaseII", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
-registerTrackHandler("REST", RESTMethods);
+registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
 }
 
