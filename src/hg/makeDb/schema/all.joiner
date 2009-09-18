@@ -3008,6 +3008,9 @@ tablesIgnored hg19
     chain_chr17_ctg5_hap1Link
     chain_haplotypes
 
+tablesIgnored mm9
+    rest
+
 tablesIgnored $calJac
     gold
 
