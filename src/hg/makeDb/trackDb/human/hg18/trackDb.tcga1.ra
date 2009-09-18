@@ -112,7 +112,7 @@ longLabel Harvard RNASeq Ovarian Digital Gene Expression
 group tcgaOvarian
 type expRatio
 logicalDb localDb
-expScale 1.0
+expScale 0.05
 expStep 0.1
 visibility hide
 priority 2.5
@@ -140,7 +140,7 @@ longLabel JHU-USC Ovarian Methylation Median Normalized
 group tcgaOvarian
 logicalDb localDb
 type expRatio
-expScale 1
+expScale 0.2
 expStep 0.1
 visibility hide
 priority 3.0
@@ -153,7 +153,7 @@ longLabel JHU-USC Ovarian Methylation Deviation from Normal Ovarian
 group tcgaOvarian
 logicalDb localDb
 type expRatio
-expScale 1
+expScale 0.2
 expStep 0.1
 visibility hide
 priority 3.1
