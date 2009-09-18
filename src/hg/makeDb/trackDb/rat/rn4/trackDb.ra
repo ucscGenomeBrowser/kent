@@ -228,12 +228,6 @@ priority 250.0
 track netRheMac2 override
 priority 250.1
 
-track chainHg18 override
-priority 260.0
-
-track netHg18 override
-priority 260.1
-
 track chainCavPor3 override
 priority 10004.0
 
@@ -249,11 +243,11 @@ priority 10006.1
 
 track chainHg18 override
 shortLabel $o_db Chain
-longLabel $o_db ($o_date) Chained Alignments
+priority 260.1
 
 track netHg18 override
 shortLabel $o_db Net
-longLabel $o_db ($o_date) Alignment Net
+priority 260.2
 
 
 searchTable gold

@@ -517,11 +517,9 @@ metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_G
 
 track chainHg18 override
 shortLabel $o_db Chain
-longLabel $o_db ($o_date) Chained Alignments
 
 track netHg18 override
 shortLabel $o_db Net
-longLabel $o_db ($o_date) Alignment Net
 
 track chainCavPor3 override
 priority 10004.1
