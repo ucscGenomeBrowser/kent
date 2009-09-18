@@ -72,11 +72,9 @@ informant Cat N-SCAN uses human (hg18) as the informant and iterative pseudogene
 
 track chainHg18 override
 shortLabel $o_db Chain
-longLabel $o_db ($o_date) Chained Alignments
 
 track netHg18 override
 shortLabel $o_db Net
-longLabel $o_db ($o_date) Alignment Net
 
 track chainMm8 override
 priority 10004.1
