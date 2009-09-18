@@ -299,7 +299,7 @@ url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&specie
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
 
-track REST
+track rest
 shortLabel REST
 longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding sites
 group regulation
