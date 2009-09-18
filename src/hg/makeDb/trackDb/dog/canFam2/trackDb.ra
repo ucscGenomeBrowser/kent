@@ -146,13 +146,10 @@ informant Dog N-SCAN uses human (hg17) as the informant and iterative pseudogene
 
 track chainHg18 override
 shortLabel $o_db Chain
-longLabel $o_db ($o_date) Chained Alignments
 priority 255.1
-
 
 track netHg18 override
 shortLabel $o_db Net
-longLabel $o_db ($o_date) Alignment Net
 priority 255.2
 
 track chainCalJac1 override
