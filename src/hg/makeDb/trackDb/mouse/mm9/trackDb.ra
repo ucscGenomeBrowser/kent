@@ -301,7 +301,7 @@ idInUrlSql select name from sibTxGraph where id=%s
 
 track REST
 shortLabel REST
-longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding sites in mouse stem cells
+longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding sites
 group regulation
 priority 92
 visibility hide
