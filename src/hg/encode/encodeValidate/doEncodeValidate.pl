@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.193 2009/09/10 23:16:15 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.194 2009/09/19 07:44:15 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1139,6 +1139,9 @@ sub validationSettings {
                 }
             }
         }
+    }
+    if( scalar(@_) > 1 ) {
+	return "";
     }
     return 0;
 }
