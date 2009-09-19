@@ -30,12 +30,6 @@ spectrum on
 type netAlign danRer4 chainDanRer4
 otherDb danRer4
 
-track chainHg17 override
-priority 300.3
-
-track netHg17 override
-priority 300.4
-
 track chainHg18
 release alpha
 shortLabel $o_Organism Chain
@@ -145,3 +139,8 @@ otherDb calJac1
 track chainNetHg19 override
 chainMinScore 5000
 
+track chainHg17 override
+priority 300.3
+
+track netHg17 override
+priority 300.4
