@@ -85,3 +85,11 @@ type bed 5 .
 track nscanGene override
 visibility pack
 informant Opossum N-SCAN uses human (hg19) as the informant.
+
+track chainHg18 override
+shortLabel $o_db
+otherOrg hg18
+
+track netHg18 override
+shortLabel $o_db
+otherOrg hg18
