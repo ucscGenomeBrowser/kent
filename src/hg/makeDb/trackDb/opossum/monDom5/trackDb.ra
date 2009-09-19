@@ -80,8 +80,8 @@ priority 105
 visibility hide
 exonArrows off
 showTopScorers 200
+type bed 5 .
 
 track nscanGene override
 visibility pack
 informant Opossum N-SCAN uses human (hg19) as the informant.
-type bed 5 .
