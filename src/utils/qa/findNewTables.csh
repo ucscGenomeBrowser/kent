@@ -11,7 +11,7 @@ source `which qaConfig.csh`
 ###############################################
 
 set dbs=""
-set yesterDate=""
+set yesterdate=""
 
 if ($#argv == 0 || $#argv > 1) then
   # no command line args
@@ -32,15 +32,16 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-set yesterDate=`date +%Y-%m-%d --date='1 day ago'`
+# set yesterdate=2009-03-11
+set yesterdate=`date +%Y-%m-%d --date='1 day ago'`
 
 echo
-echo $yesterDate "new or updated tables"
+echo $yesterdate "new or updated tables"
 echo
 
 foreach db ( $dbs )
   echo $db
-  getTableStatus.csh  $db hgwdev | awk '{print $1, $11}' | grep $yesterDate \
+  getTableStatus.csh  $db hgwdev | awk -F"\t" '{print $1, $13}' | grep $yesterdate \
     | awk '{print $1}' | egrep -v "trackDb|hgFindSpec|tableDescriptions"
   echo
 end
