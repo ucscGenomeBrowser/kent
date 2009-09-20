@@ -89,7 +89,7 @@
 #include "cddInfo.h"
 #include "alignInfo.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.34 2009/09/09 15:41:22 holmes Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.35 2009/09/20 23:46:23 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2495,7 +2495,8 @@ void doBlastX(struct trackDb *tdb, char *targetName)
     cartWebStart(cart, database, "%s", "BlastX Alignment Hits");
 
     blastxTrack = getBlastpTrackRecord(conn, tdb, targetName);
-    if (!differentWord(blastxTrack->chrom, "assembly"))
+/*    if (!differentWord(blastxTrack->chrom, "assembly"))*/
+    if (hTableExists(database, "scaffolds"))
         strcpy(queryTable, "scaffolds");
     else
         strcpy(queryTable, "igenics");
