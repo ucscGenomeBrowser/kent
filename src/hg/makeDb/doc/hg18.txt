@@ -28216,7 +28216,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.382 2009/09/15 06:59:00 markd Exp $
+# $Id: hg18.txt,v 1.383 2009/09/20 17:16:44 markd Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28264,7 +28264,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.382 2009/09/15 06:59:00 markd Exp $
+# $Id: hg18.txt,v 1.383 2009/09/20 17:16:44 markd Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28792,3 +28792,12 @@ see doc/builds.txt for specific details.
     ./bin/lsSnpPdbDbLoadStep hg18
     # once this has been QAed, will auto-update from genbank scripts
 #############################################################################
+############################################################################
+# TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+
+see doc/builds.txt for specific details.
+############################################################################

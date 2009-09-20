@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.37 2009/09/02 21:47:28 angie Exp $";
+#	"$Id: hg19.txt,v 1.38 2009/09/20 17:16:44 markd Exp $";
 
 #############################################################################
 
@@ -5848,3 +5848,12 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
+############################################################################
+# TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+
+see doc/builds.txt for specific details.
+############################################################################

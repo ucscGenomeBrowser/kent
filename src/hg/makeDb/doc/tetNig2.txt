@@ -747,3 +747,12 @@ TMPDIR=/scratch/tmp
     #	41176381 bases of 302314788 (13.620%) in intersection
 
 #########################################################################
+############################################################################
+# TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+
+see doc/builds.txt for specific details.
+############################################################################

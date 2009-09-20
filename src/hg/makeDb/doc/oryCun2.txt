@@ -165,3 +165,12 @@ for (my $i = 0; $i < $scafCount; ++$i) {
     hgLoadSqlTab oryCun2 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
 ########################################################################
+############################################################################
+# TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+
+see doc/builds.txt for specific details.
+############################################################################

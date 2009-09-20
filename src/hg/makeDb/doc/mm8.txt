@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.74 2009/01/30 00:09:27 aamp Exp $"
+#	"$Id: mm8.txt,v 1.75 2009/09/20 17:16:45 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -9636,3 +9636,12 @@ mm8.upstreamMaf = multiz17way /hive/data/genomes/mm8/bed/multiz17way/species.lst
 
 
 #############################################################################
+############################################################################
+# TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+
+see doc/builds.txt for specific details.
+############################################################################
