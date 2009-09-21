@@ -41,8 +41,8 @@ echo
 
 foreach db ( $dbs )
   echo $db
-  getTableStatus.csh  $db hgwdev | awk -F"\t" '{print $1, $12}' | grep $yesterdate \
-    | awk '{print $1}' | egrep -v "trackDb|hgFindSpec|tableDescriptions"
+  getTableStatus.csh  $db hgwdev | awk -F"\t" '{print $1, $13}' | grep $yesterdate \
+    | awk '{print $1}' | egrep -v "trackDb|hgFindSpec|tableDescriptions|$GENBANK"
   echo
 end
 
