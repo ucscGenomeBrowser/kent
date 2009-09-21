@@ -1,6 +1,6 @@
-# Data Agreement File for DNASE-seq project $Revision: 1.6 $
+# Data Agreement File for DNASE-seq project $Revision: 1.7 $
 
-# This file specifies the data agreement between your lab and 
+# This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
 # Lab and general info
@@ -9,23 +9,26 @@ lab               Uw
 dataType          DnaseSeq
 variables         cell
 assembly          hg18
-dafVersion        0.2.2
+dafVersion        1.1
+dataVersion       1
+validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=2
+
 
 # Track/view definition
 view             Hotspots
-longLabelPrefix  UW DNase-Seq Hotspots
+longLabelPrefix  UW DNase-seq Hotspots
 type             broadPeak
 required         yes
 hasReplicates    yes
 
 view             Peaks
-longLabelPrefix  UW DNase-Seq Peaks
+longLabelPrefix  UW DNase-seq Peaks
 type             narrowPeak
 required         yes
-hasReplicates    no
+hasReplicates    yes
 
 view             Signal
-longLabelPrefix  UW DNase-Seq Pooled Signal
+longLabelPrefix  UW DNase-seq Pooled Signal
 type             wig
 required         no
 hasReplicates    no
@@ -37,7 +40,7 @@ required         no
 hasReplicates    yes
 
 view             Alignments
-longLabelPrefix  UW DNase-Seq Sites
+longLabelPrefix  UW DNase-seq Sites
 type             tagAlign
 required         yes
 hasReplicates    yes
