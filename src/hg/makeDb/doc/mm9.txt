@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.114 2009/09/20 17:16:45 markd Exp $"
+#	"$Id: mm9.txt,v 1.115 2009/09/21 03:59:58 fanhsu Exp $"
 #
 
 #######################################################################
@@ -9826,7 +9826,11 @@ TMPDIR=/scratch/tmp
 
 # Created REST.html based on Rory's original doc and later updates.
 # Added track definition and search term into trackDb/mouse/mm9/trackDb.ra
-#####################################################################
+
+# Fix the 0 base problem. (Fan 9/20/09, per Rory's email)
+
+    hgsql mm9 -e 'update rest set chromStart = chromStart -1'
+
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
