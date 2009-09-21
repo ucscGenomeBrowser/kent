@@ -4,7 +4,7 @@
 #	Washington University School of Medicine GSC and Sanger Institute
 #	WUSTL version 4.0.1 Jan 2009
 
-#  $Id: caeJap2.txt,v 1.2 2009/07/23 21:40:01 hiram Exp $
+#  $Id: caeJap2.txt,v 1.3 2009/09/21 20:26:39 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2009-07-22 - Hiram)
@@ -328,14 +328,13 @@ caeJap2.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caeJap2 &
     #	logFile: var/build/logs/2009.07.23-14:13:01.caeJap2.initalign.log
-XXX - running Thu Jul 23 14:14:03 PDT 2009
-    #	real    124m10.365s
+    #	real    137m55.074s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap2
-    #	logFile: var/dbload/hgwdev/logs/2008.04.04-10:07:40.dbload.log
+    #	logFile:  var/dbload/hgwdev/logs/2009.08.10-16:42:51.dbload.log
     #	real    16m14.090s
 
     # enable daily alignment and update of hgwdev
@@ -346,4 +345,6 @@ XXX - running Thu Jul 23 14:14:03 PDT 2009
         etc/hgwdev.dbs
     cvs ci -m "Added caeJap2 - C. japonica" etc/align.dbs etc/hgwdev.dbs
     make etc-update
+    #	done - 2009-09-21 - Hiram
 
+#########################################################################
