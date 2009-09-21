@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1571 2009/09/09 17:02:01 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1572 2009/09/21 23:50:42 braney Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4111,7 +4111,6 @@ boolean hasBin;
 char *buffer, *str;
 int i, j;
 char *ptr;
-int totalSize = 0;
 
 start = cartInt(cart, "o");
 hFindSplitTable(database, seqName, table, fullTable, &hasBin);
@@ -4138,10 +4137,8 @@ if (psl->strand[1] == '-')
     start = psl->tSize - end;
     reverseComplement(tSeq->dna, tSeq->size);
     }
-for (i=0; i<psl->blockCount; ++i)
-    totalSize += psl->blockSizes[i];
 
-str = buffer = needMem(totalSize + 1);
+str = buffer = needMem(psl->qSize + 1);
 
 qStart = 0;
 for (i=0; i<psl->blockCount; ++i)
