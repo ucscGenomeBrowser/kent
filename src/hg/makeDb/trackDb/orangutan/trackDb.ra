@@ -18,4 +18,11 @@ priority 290
 track netPanTro2 override
 priority 290.1
 
+track chainMonDom4 override
+shortLabel $o_db Chain
+otherDb monDom4
+
+track netMonDom4 override
+shortLabel $o_db Chain
+otherDb monDom4
 

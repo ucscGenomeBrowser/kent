@@ -78,13 +78,11 @@ priority 310
 
 track chainHg18 override
 shortLabel $o_db Chain
-longLabel $o_db ($o_date/$o_db) Chained Alignments
 priority 300.1
 otherDb hg18
 
 track netHg18 override
 shortLabel $o_db Net
-longLabel $o_db ($o_date/$o_db) Alignment Net
 priority 300.2
 otherDb hg18
 
