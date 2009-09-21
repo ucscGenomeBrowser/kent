@@ -2850,7 +2850,6 @@ spectrum on
 type netAlign macEug1 chainMacEug1
 otherDb macEug1
 
-# release alpha until monDom5 individual chain/net tracks phased out
 track chainNetMonDom5
 compositeTrack on
 shortLabel Opossum Chain/Net
