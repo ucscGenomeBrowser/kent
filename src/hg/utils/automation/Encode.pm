@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.44 2009/08/10 18:44:09 kate Exp $
+# $Id: Encode.pm,v 1.45 2009/09/21 18:19:01 tdreszer Exp $
 
 package Encode;
 
@@ -25,8 +25,8 @@ our $unloadFile = "unload.ra";
 our $trackFile = "trackDb.ra";
 our $fileDbFile = "fileDb.ra";
 our $pushQFile = "pushQ.sql";
-our $dafVersion = "1.0";
-our $dafPrevVersion = "0.2.2";
+our $dafVersion = "1.1";
+#our $dafPrevVersion = "0.2.2";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
@@ -297,7 +297,8 @@ sub parseDaf
     my @tmp = grep(!/^TRACKS$/, keys %daf);
     my @errors = validateFieldList(\@tmp, $fields, 'dafHeader');
 
-    if($daf{dafVersion} ne $dafVersion && $daf{dafVersion} ne $dafPrevVersion) {
+    #if($daf{dafVersion} ne $dafVersion && $daf{dafVersion} ne $dafPrevVersion) {
+    if($daf{dafVersion} ne $dafVersion) {
         push(@errors, "dafVersion '$daf{dafVersion}' does not match current version: $dafVersion");
     }
     if(!keys(%{$daf{TRACKS}})) {
