@@ -1,3 +1,27 @@
+track TARGETcnv
+shortLabel Leukemia CGH
+longLabel Leukemia CGH
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings TARGETcnvGroups
+
+track TARGETexp
+shortLabel Leukemia Expression
+longLabel Leukemia Expression
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings TARGETexpGroups
+
 track kotliarov2006
 shortLabel glioma CGH
 longLabel glioma CGH
@@ -463,4 +487,3 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings balagurunathan2008Groups
->>>>>>> 1.40
