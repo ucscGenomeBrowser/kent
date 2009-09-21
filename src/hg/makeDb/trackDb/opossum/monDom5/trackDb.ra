@@ -80,6 +80,7 @@ priority 105
 visibility hide
 exonArrows off
 showTopScorers 200
+html phastConsElements
 type bed 5 .
 
 track nscanGene override
