@@ -55,8 +55,9 @@ cd ../..
 if ("$HOST" == "hgwbeta") then
   #clear out the old and copy in the new
   foreach f ( ${DESTDIR}/${BINDIR}/* )
-    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f"
-    scp -p ${DESTDIR}/${BINDIR}/$f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
+    echo $f
+    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
   end
 endif
 
