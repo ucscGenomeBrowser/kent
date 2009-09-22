@@ -53,7 +53,11 @@ cd ../..
 
 # copy everything if 64 bit
 if ("$HOST" == "hgwbeta") then
-  scp -p ${DESTDIR}/${BINDIR}/* qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
+  #clear out the old and copy in the new
+  foreach f ( ${DESTDIR}/${BINDIR}/* )
+    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f"
+    scp -p ${DESTDIR}/${BINDIR}/$f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
+  end
 endif
 
 # copy liftOver if 32 bit
