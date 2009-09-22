@@ -15,9 +15,11 @@ defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targe
 sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
 
 # get rid of some mysql5 trash in the output we don't want.
+# also need to break data values at rows so the diff and cvs 
+# which are line-oriented work better.
 grep -v "Dump completed on" /tmp/hgcentraltemp.sql | \
 sed -e "s/AUTO_INCREMENT=[0-9]* //" \
- > /tmp/hgcentral.sql
+ | sed -e 's/),(/),\n(/g'  > /tmp/hgcentral.sql
 
 echo
 echo "*** Diffing old new ***"
