@@ -94,3 +94,9 @@ otherOrg hg18
 track netHg18 override
 shortLabel $o_db
 otherOrg hg18
+
+track chainPanTro2 override
+priority 280.1
+
+track netPanTro2 override
+priority 280.2
