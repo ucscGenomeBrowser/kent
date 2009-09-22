@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.104 2009/09/18 20:53:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.105 2009/09/22 21:49:43 braney Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2291,7 +2291,7 @@ else if (tg->colorShades)
 				|| (tg->subType == lfSubChain)
                                 || startsWith("mrnaBla", tg->mapName);
     *retColor =  tg->colorShades[lf->grayIx+isXeno];
-    *retBarbColor =  tg->colorShades[(lf->grayIx>>1)];
+    *retBarbColor =  tg->colorShades[lf->grayIx];
     }
 else
     {
