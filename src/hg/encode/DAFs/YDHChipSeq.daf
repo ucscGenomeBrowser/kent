@@ -1,4 +1,4 @@
-# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
+# Data Agreement File for Yale ChipSeq project  $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -23,7 +23,7 @@
 
  view             Signal
  longLabelPrefix  TFBS, Yale/UCD/Harvard ChIP-seq Signal
- type             wig
+ type             bedGraph 4
  hasReplicates    no
  required         yes
 
