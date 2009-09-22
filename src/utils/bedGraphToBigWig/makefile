@@ -1,14 +1,14 @@
 include ../../inc/common.mk
 
-L += -lm ${SOCKETLIB}
+L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ${MYLIBDIR}/jkweb.a
 
 O = bedGraphToBigWig.o
 
 bedGraphToBigWig: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/bedGraphToBigWig $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/bedGraphToBigWig${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/bedGraphToBigWig $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/bedGraphToBigWig${EXE}
 
 clean:
 	rm -f $O

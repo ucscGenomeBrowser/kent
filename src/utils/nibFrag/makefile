@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ${MYLIBDIR}/jkweb.a
 
 A = nibFrag
 O = nibFrag.o

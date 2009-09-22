@@ -1,8 +1,8 @@
 include ../../inc/common.mk
 
-L += -lm ${SOCKETLIB}
+L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ${MYLIBDIR}/jkweb.a
 
 A = twoBitToFa
 O = twoBitToFa.o
