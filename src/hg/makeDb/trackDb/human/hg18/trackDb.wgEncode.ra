@@ -11975,7 +11975,7 @@ track wgEncodeGisDnaPet
 compositeTrack on
 shortLabel GIS gDNA PET
 longLabel ENCODE GIS gDNA PET
-group regulation
+group varRep
 subGroup1 view Views Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 fragSize Frag_Size 1k=1k 5k=5k 10k=10k
