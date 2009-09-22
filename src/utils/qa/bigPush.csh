@@ -29,7 +29,7 @@ if ($2 == "") then
   echo " (will hang on long tables due to pasword prompt)."
   echo " reports total size of push."
   echo
-  echo "   usage:  database, tablelist"
+  echo "   usage:  database tablelist"
   echo
   exit
 else
