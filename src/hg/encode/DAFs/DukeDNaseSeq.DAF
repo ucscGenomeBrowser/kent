@@ -1,4 +1,4 @@
-# Data Agreement File for Duke DNase-Seq project  $Revision: 1.2 $
+# Data Agreement File for Duke DNase-Seq project  $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -21,7 +21,13 @@
  required         yes
 
  view             Signal
- longLabelPrefix  Open Chromatin, Duke DNase-seq Signal
+ longLabelPrefix  Open Chromatin, Duke DNase-seq F-Seq Density Signal
+ type             wig
+ hasReplicates    no
+ required         yes
+
+ view             Base_Overlap_Signal
+ longLabelPrefix  Open Chromatin, Duke DNase-seq Base Overlap Signal
  type             wig
  hasReplicates    no
  required         yes

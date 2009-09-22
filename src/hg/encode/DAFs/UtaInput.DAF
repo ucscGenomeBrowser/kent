@@ -1,4 +1,4 @@
-# Data Agreement File for UT-Austin (Duke) Input  project  $Revision: 1.3 $
+# Data Agreement File for UT-Austin (Duke) Input  project  $Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -15,7 +15,7 @@
 
  # Track/view definition
  view             Signal
- longLabelPrefix  Open Chromatin, UT Input Signal
+ longLabelPrefix  Open Chromatin, UT Input F-Seq Density Signal
  type             wig
  hasReplicates    no
  required         no
