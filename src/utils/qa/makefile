@@ -64,6 +64,7 @@ install:
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
+	cp -p --remove-destination getChainLines.csh       ${SCRIPTS}
 	cp -p --remove-destination getChromFieldName.csh   ${SCRIPTS}
 	cp -p --remove-destination getChromlist.csh        ${SCRIPTS}
 	cp -p --remove-destination getConservation.csh     ${SCRIPTS}
