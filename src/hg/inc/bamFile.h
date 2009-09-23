@@ -56,6 +56,9 @@ char *bamGetCigar(const bam1_t *bam);
 void bamShowCigarEnglish(const bam1_t *bam);
 /* Print out cigar in English e.g. "20 (mis)Match, 1 Deletion, 3 (mis)Match" */
 
+void bamShowFlagsEnglish(const bam1_t *bam);
+/* Print out flags in English, e.g. "Mate is on '-' strand; Properly paired". */
+
 int bamGetTargetLength(const bam1_t *bam);
 /* Tally up the alignment's length on the reference sequence from
  * bam's packed-int CIGAR representation. */

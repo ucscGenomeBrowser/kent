@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.7 2009/09/14 23:44:25 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.8 2009/09/23 23:50:30 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -150,6 +150,41 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    errAbort("bamShowCigarEnglish: unrecognized CIGAR op %c -- update me", op);
 	}
     }
+}
+
+static void descFlag(unsigned flag, unsigned bitMask, char *desc, boolean makeRed,
+	      boolean *retFirst)
+/* Describe a flag bit (or multi-bit mask) if it is set in flag. */
+{
+if ((flag & bitMask) == bitMask) // *all* bits in bitMask are set in flag
+    {
+    if (!*retFirst)
+	printf(" | ");
+    printf("<span%s>(<TT>0x%02x</TT>) %s</span>",
+	   (makeRed ? " style='color: red'" : ""), bitMask, desc);
+    *retFirst = FALSE;
+    }
+}
+
+void bamShowFlagsEnglish(const bam1_t *bam)
+/* Print out flags in English, e.g. "Mate is on '-' strand; Properly paired". */
+{
+const bam1_core_t *core = &bam->core;
+unsigned flag = core->flag;
+boolean first = TRUE;
+descFlag(flag, BAM_FDUP, "Optical or PCR duplicate", TRUE, &first);
+descFlag(flag, BAM_FQCFAIL, "QC failure", TRUE, &first);
+descFlag(flag, BAM_FSECONDARY, "Not primary alignment", TRUE, &first);
+descFlag(flag, BAM_FREAD2, "Read 2 of pair", FALSE, &first);
+descFlag(flag, BAM_FREAD1, "Read 1 of pair", FALSE, &first);
+descFlag(flag, BAM_FMREVERSE, "Mate is on '-' strand", FALSE, &first);
+descFlag(flag, BAM_FREVERSE, "Read is on '-' strand", FALSE, &first);
+descFlag(flag, BAM_FMUNMAP, "Mate is unmapped", TRUE, &first);
+if (flag & BAM_FUNMAP)
+    errAbort("Read is unmapped (what is it doing here?!?)");
+descFlag(flag, (BAM_FPROPER_PAIR | BAM_FPAIRED), "Properly paired", FALSE, &first);
+if ((flag & BAM_FPAIRED) && !(flag & BAM_FPROPER_PAIR))
+    descFlag(flag, BAM_FPAIRED, "Not properly paired", TRUE, &first);
 }
 
 int bamGetTargetLength(const bam1_t *bam)

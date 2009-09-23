@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.8 2009/09/14 23:44:25 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.9 2009/09/23 23:50:30 angie Exp $";
 
 #include "bamFile.h"
 
@@ -28,13 +28,15 @@ int tLength = bamGetTargetLength(bam);
 int tStart = core->pos, tEnd = tStart+tLength;
 boolean isRc = bamIsRc(bam);
 printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
-printf("<B>Flags: </B><tt>0x%02x</tt><BR>\n", core->flag);
 printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
 printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
 bamShowCigarEnglish(bam);
 printf(")<BR>\n");
 printf("<B>Tags:</B>");
 bamShowTags(bam);
+puts("<BR>");
+printf("<B>Flags: </B><tt>0x%02x:</tt><BR>\n &nbsp;&nbsp;", core->flag);
+bamShowFlagsEnglish(bam);
 puts("<BR><BR>");
 char nibName[HDB_MAX_PATH_STRING];
 hNibForChrom(database, seqName, nibName);
@@ -78,7 +80,6 @@ if ((rightStart > leftStart && leftStart + leftLen > rightStart) ||
 static void bamPairDetails(const bam1_t *leftBam, const bam1_t *rightBam)
 /* Print out details for paired-end reads. */
 {
-//TODO: tell them which one they clicked (match itemStart w/core->pos)
 showOverlap(leftBam, rightBam);
 printf("<TABLE><TR><TD><H4>Left end read</H4>\n");
 singleBamDetails(leftBam);
@@ -157,10 +158,13 @@ if (isPaired && hashNumEntries(pairHash) > 0)
 	    struct hashCookie cookie2 = hashFirst(pairHash);
 	    while ((hel = hashNext(&cookie2)) != NULL)
 		{
-		printf("<B>Note: </B>unable to find paired end "
-		       "for this %s within +-%d of viewing window<BR>\n",
-		       hel->name, pairSearchRange);
-		singleBamDetails((bam1_t *)hel->val);
+		bam1_t *bam = hel->val;
+		const bam1_core_t *core = &bam->core;
+		if (core->flag & BAM_FPROPER_PAIR)
+		    printf("<B>Note: </B>unable to find paired end "
+			   "for %s within +-%d of viewing window<BR>\n",
+			   hel->name, pairSearchRange);
+		singleBamDetails(bam);
 		}
 	    }
 	}
