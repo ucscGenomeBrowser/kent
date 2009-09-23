@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.9 2009/09/10 01:49:22 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.10 2009/09/23 17:10:15 hiram Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -472,7 +472,7 @@ if (aveSpan > 0)
 	}
     verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
     	initialReduction, initialReducedCount);
-    verbose(2, "dataSize %lld, reducedSize %lld, resScales[0] = %d\n", dataSize, (bits64)initialReducedCount*sizeof(struct bbiSummaryOnDisk), resScales[0]);
+    verbose(2, "dataSize %lld, reducedSize %lld, resScales[0] = %d\n", dataSize, (bits64)initialReducedCount*(bits64)sizeof(struct bbiSummaryOnDisk), resScales[0]);
 
     if (initialReduction > 0)
         {
