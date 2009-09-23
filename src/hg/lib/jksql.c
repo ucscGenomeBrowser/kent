@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.135 2009/09/14 20:33:13 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.136 2009/09/23 18:42:21 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1227,7 +1227,8 @@ if ((options & SQL_TAB_FILE_ON_SERVER) && !sqlIsRemote(conn))
     strcpy(tabPath, "");
     if (path[0] != '/')
         {
-        getcwd(tabPath, sizeof(tabPath));
+        if (getcwd(tabPath, sizeof(tabPath)) == NULL)
+	    errAbort("sqlLoadTableFile: getcwd failed");
         strcat(tabPath, "/");
         }
     strcat(tabPath, path);

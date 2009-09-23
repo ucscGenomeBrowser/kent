@@ -32,7 +32,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.221 2009/07/10 01:40:37 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.222 2009/09/23 18:42:20 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2915,9 +2915,9 @@ if (isNewChimp(hgp->database))
         {
         *term = hDefaultPos(hgp->database);
         if (endsWith(hgAppName, "hgTables"))
-            hUserAbort(msg);
+            hUserAbort("%s", msg);
         else
-            warn(msg);
+            warn("%s", msg);
         return TRUE;
         }
     }

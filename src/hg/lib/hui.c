@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.237 2009/09/18 20:05:09 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.238 2009/09/23 18:42:20 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2553,7 +2553,7 @@ if(slNameInList(filterBy->slChoices,"All"))
     return NULL;
 
 struct dyString *dyClause = newDyString(256);
-dyStringPrintf(dyClause, filterBy->column);
+dyStringAppend(dyClause, filterBy->column);
 if(count == 1)
     dyStringPrintf(dyClause, " = ");
 else
@@ -2567,7 +2567,7 @@ for(slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
         dyStringPrintf(dyClause, ",");
     notFirst = TRUE;
     if(filterBy->useIndex)
-        dyStringPrintf(dyClause, slChoice->name);
+        dyStringAppend(dyClause, slChoice->name);
     else
         dyStringPrintf(dyClause, "\"%s\"",slChoice->name);
     }
@@ -2607,7 +2607,7 @@ for(;filterBy != NULL; filterBy = filterBy->next)
         {
         if(*and)
             dyStringPrintf(extraWhere, " AND ");
-        dyStringPrintf(extraWhere, clause);
+        dyStringAppend(extraWhere, clause);
         freeMem(clause);
         *and = TRUE;
         }
@@ -2630,7 +2630,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         {
         if(notFirst)
             dyStringPrintf(dyClause, " AND ");
-        dyStringPrintf(dyClause, clause);
+        dyStringAppend(dyClause, clause);
         freeMem(clause);
         notFirst = TRUE;
         }
@@ -5123,7 +5123,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     alreadySet = cartUsualBoolean(cart, objName, FALSE);
                     puts("<TD>");
                     struct dyString *dyJS = newDyString(100);
-                    dyStringPrintf(dyJS, javascript);
+                    dyStringAppend(dyJS, javascript);
                     dyStringPrintf(dyJS, " class=\"matrixCB");
                     if(dimensionX)
                         dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
@@ -5163,7 +5163,7 @@ if(dimensionZ)
             safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
             alreadySet = cartUsualBoolean(cart, objName, FALSE);
             struct dyString *dyJS = newDyString(100);
-            dyStringPrintf(dyJS, javascript);
+            dyStringAppend(dyJS, javascript);
             dyStringPrintf(dyJS, " class=\"matrixCB dimZ %s\"",dimensionZ->names[ixZ]);
             cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
             printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));

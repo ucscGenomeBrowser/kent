@@ -68,7 +68,7 @@ long offset;
 if (!snofFindOffset(snof, geneName, &offset))
     return NULL;
 fseek(f, offset, SEEK_SET);
-fgets(lineBuf, sizeof(lineBuf), f);
+mustGetLine(f, lineBuf, sizeof(lineBuf));
 wordCount = chopString(lineBuf, whiteSpaceChopper, words, ArraySize(words));
 assert(strcmp(words[0], geneName) == 0);
 for (i=1; i<wordCount; ++i)

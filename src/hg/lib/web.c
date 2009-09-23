@@ -18,7 +18,7 @@
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 
-static char const rcsid[] = "$Id: web.c,v 1.170 2009/08/27 13:50:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.171 2009/09/23 18:42:21 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -474,7 +474,7 @@ void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
 {
 char textOutBuf[512];
 
-safef(textOutBuf, sizeof(textOutBuf), format);
+safecpy(textOutBuf, sizeof(textOutBuf), format);
 webStartWrapperDetailedInternal(theCart, db, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }

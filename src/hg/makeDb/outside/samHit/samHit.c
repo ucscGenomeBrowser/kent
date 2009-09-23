@@ -100,11 +100,11 @@ for (i=0; i<8; i++) previousWord[i] = strdup("n/a");
 inf   = mustOpen(infileName, "r");
 
 /* skip initial 2 header lines in .rdb format file */
-fgets(line, 1000, inf);
-fgets(line, 1000, inf);
+mustGetLine(inf, line, sizeof(line));
+mustGetLine(inf, line, sizeof(line));
 
 /* read and process all lines one by one */
-while (fgets(line, 1000, inf) != NULL)
+while (fgets(line, sizeof(line), inf) != NULL)
     {
     *(line + strlen(line) - 1) = '\0';
     processOneLine(line);

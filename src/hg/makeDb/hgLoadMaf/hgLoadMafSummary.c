@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.19 2008/12/01 21:11:27 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.20 2009/09/23 18:42:22 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -106,13 +106,11 @@ struct mafComp *mafMaster(struct mafAli *maf, struct mafFile *mf,
                                         char *fileName)
 /* Get master component from maf. Error abort if no master component */
 {
-char msg[256];
 struct mafComp *mcMaster = mafMayFindCompPrefix(maf, database, ".");
 if (mcMaster == NULL) 
     {
-    safef(msg, sizeof(msg), "Couldn't find %s. sequence line %d of %s\n", 
+    errAbort("Couldn't find %s. sequence line %d of %s\n",
                     database, mf->lf->lineIx, fileName);
-    errAbort(msg);
     }
 return mcMaster;
 }

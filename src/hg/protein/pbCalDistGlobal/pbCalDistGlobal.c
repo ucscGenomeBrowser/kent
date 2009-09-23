@@ -267,7 +267,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     if ((icnt % 10000) == 0)
         {
 	printf("%d done.\n", icnt);fflush(stdout);
-	system("date");
+	mustSystem("date");
 	}
     }
 sqlFreeResult(&sr2);

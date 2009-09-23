@@ -10,7 +10,7 @@
 #include <limits.h>
 
 
-static char const rcsid[] = "$Id: hgCountAlign.c,v 1.6 2006/04/17 14:16:08 angie Exp $";
+static char const rcsid[] = "$Id: hgCountAlign.c,v 1.7 2009/09/23 18:42:21 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -133,7 +133,7 @@ of the form 'chrom start stop value ...' so the start must be the second field.*
     char s[maxChar];
     unsigned newStart;
     assert( in );
-    fgets( s, maxChar, in);
+    mustGetLine(in, s, maxChar);
     if( feof(in) ) return 0; 		                //signal EOF with new winStart == 0.
     else if( s[strlen(s)-1] != '\n' )               //otherwise make sure we have the entire file line.
     {

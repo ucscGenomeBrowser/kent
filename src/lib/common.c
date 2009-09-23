@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.131 2009/06/26 19:57:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.132 2009/09/23 18:42:27 angie Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1779,7 +1779,7 @@ if (size != 0 && fwrite(buf, size, 1, file) != 1)
 
 
 void mustRead(FILE *file, void *buf, size_t size)
-/* Read from a file or squawk and die. */
+/* Read size bytes from a file or squawk and die. */
 {
 if (size != 0 && fread(buf, size, 1, file) != 1)
     {
@@ -1877,6 +1877,25 @@ for (i=0; i<8; ++i)
 return x;
 }
 
+void mustGetLine(FILE *file, char *buf, int charCount)
+/* Read at most charCount-1 bytes from file, but stop after newline if one is
+ * encountered.  The string in buf is '\0'-terminated.  (See man 3 fgets.)
+ * Die if there is an error. */
+{
+char *success = fgets(buf, charCount, file);
+if (success == NULL && charCount > 0)
+    buf[0] = '\0';
+if (ferror(file))
+    errAbort("mustGetLine: fgets failed: %s", strerror(ferror(file)));
+}
+
+void mustWriteFd(int fd, void *buf, size_t size)
+/* Write size bytes to file descriptor fd or die.  (See man 2 write.) */
+{
+ssize_t result = write(fd, buf, size);
+if (result < size)
+    errAbort("mustWriteFd: write failed: %s", strerror(errno));
+}
 
 char *addSuffix(char *head, char *suffix)
 /* Return a needMem'd string containing "headsuffix". Should be free'd
@@ -1960,7 +1979,7 @@ char *firstWordInFile(char *fileName, char *wordBuf, int wordBufSize)
 /* Read the first word in file into wordBuf. */
 {
 FILE *f = mustOpen(fileName, "r");
-fgets(wordBuf, wordBufSize, f);
+mustGetLine(f, wordBuf, wordBufSize);
 fclose(f);
 return trimSpaces(wordBuf);
 }
@@ -2001,6 +2020,17 @@ for (oldEl = inList; oldEl != NULL; oldEl = nextOld)
     }
 slReverse(&newList);
 return newList;
+}
+
+void mustSystem(char *cmd)
+/* Execute cmd using "sh -c" or die.  (See man 3 system.) */
+{
+if (cmd == NULL) // don't allow (system() supports testing for shell this way)
+    errAbort("mustSystem: called with NULL command.");
+int status = system(cmd);
+if (status != 0)
+    errAbort("mustSystem: system(%s) failed (exit status %d): %s",
+	     cmd, WEXITSTATUS(status), strerror(errno));
 }
 
 int roundingScale(int a, int p, int q)

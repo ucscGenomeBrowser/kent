@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.47 2009/07/22 17:36:22 markd Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.48 2009/09/23 18:42:28 angie Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -21,7 +21,7 @@ long val = 0;
 FILE *f = fopen(fileName, "r+b");
 if (f != NULL)
     {
-    fread(&val, sizeof(val), 1, f);
+    mustReadOne(f, val);
     rewind(f);
     }
 else
@@ -232,7 +232,7 @@ for (;;)
     {
     readSize = read(s, buf, bufSize);
     if (readSize > 0)
-        write(d, buf, readSize);
+        mustWriteFd(d, buf, readSize);
     if (readSize <= 0)
         break;
     }

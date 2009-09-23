@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.26 2008/09/14 08:08:28 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.27 2009/09/23 18:42:22 angie Exp $";
 
 /* Command line options */
 
@@ -189,7 +189,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	    mc = findComponent(maf, refDb);
 	    if (mc == NULL) 
 		{
-		char msg[256];
+		char msg[2048];
 		safef(msg, sizeof(msg),
 				"Couldn't find %s. sequence line %d of %s\n", 
 				    refDb, mf->lf->lineIx, fileName);
@@ -197,12 +197,12 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 		    {
 		    warnCount++;
 		    if (warnVerboseOption)
-			verbose(1, msg);
+			verbose(1, "%s", msg);
 		    mafAliFree(&maf);
 		    continue;
 		    }
 		else 
-		    errAbort(msg);
+		    errAbort("%s", msg);
 		}
 
 	    ZeroVar(&mr);
@@ -252,17 +252,14 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 		mr.score = (mr.score-minScore)/(maxScore-minScore);
 	    if (mr.score <= 0.0) 
 		{
-		char msg[256];
-		safef(msg, sizeof(msg),
-			"Score too small (raw %.1f scaled %.1f #species %d),"
-			       " line %d of %s\n", 
-			    maf->score, mr.score, slCount(maf->components),
-				    mf->lf->lineIx, fileName);
 		if (warnOption || warnVerboseOption) 
 		    {
 		    warnCount++;
 		    if (warnVerboseOption)
-			verbose(1, msg);
+			verbose(1, "Score too small (raw %.1f scaled %.1f #species %d),"
+				" line %d of %s\n", 
+				maf->score, mr.score, slCount(maf->components),
+				mf->lf->lineIx, fileName);
 		    }
 		mr.score = 0.001;
 		}
@@ -285,7 +282,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	{
 	if (!isCustom)
 	    hgPurgeExtFile(extId,  conn);
-	errAbort(errMsg);
+	errAbort("%s", errMsg);
 	}
 
     if (warnCount)

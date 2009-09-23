@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1572 2009/09/21 23:50:42 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1573 2009/09/23 18:42:19 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3464,7 +3464,7 @@ genericHeader(tdb, headerItem);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (plus != NULL)
     {
-    printf(plus);
+    fputs(plus, stdout);
     }
 
 if (wordCount > 0)
@@ -5287,7 +5287,7 @@ else
     }
 
 /* Print non-sequence info. */
-cartWebStart(cart, database, acc);
+cartWebStart(cart, database, "%s", acc);
 
 printRnaSpecs(tdb, acc, pslList);
 
@@ -5405,7 +5405,7 @@ void doZfishRHmap(struct trackDb *tdb, char *itemName)
 /* Put up Radiation Hybrid map information for Zebrafish */
 {
 char *dupe, *type, *words[16];
-char title[256], query[256];
+char query[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 struct rhMapZfishInfo *rhInfo = NULL;
@@ -5419,8 +5419,6 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
 genericHeader(tdb, itemName);
-/* Print non-sequence info */
-cartWebStart(cart, database, title);
 
 /* Print out RH map information if available */
 
@@ -5841,7 +5839,7 @@ char *secondAcc, *secondAccVer;
 char *tmpString;
 int first;
 
-cartWebStart(cart, database, fragName);
+cartWebStart(cart, database, "%s", fragName);
 hFindSplitTable(database, seqName, track, splitTable, &hasBin);
 sprintf(query, "select * from %s where frag = '%s' and chromStart = %d",
 	splitTable, fragName, start);
@@ -6110,7 +6108,7 @@ char **row;
 struct clonePos *clone;
 int fragCount;
 
-cartWebStart(cart, database, cloneName);
+cartWebStart(cart, database, "%s", cloneName);
 sprintf(query, "select * from %s where name = '%s'", track, cloneName);
 selectOneRow(conn, track, query, &sr, &row);
 clone = clonePosLoad(row);
@@ -7979,8 +7977,7 @@ if (hTableExists(database, "superfamily"))
 	    printf("<B>Superfamily Link: </B>");
             safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>",
 	    	      tdbSf->url, genomeStr, proteinID);
-            printf("%s", supfamURL);
-            printf("%s</A><BR>\n", proteinID);
+            printf("%s%s</A><BR>\n", supfamURL, proteinID);
 	    }
         }
 #endif
@@ -8307,8 +8304,7 @@ if (url != NULL && url[0] != 0)
     printf("<B>Superfamily Link: </B>");
     sprintf(supfamURL, "<A HREF=\"%s%s;seqid=%s\" target=_blank>",
 	    url, genomeStr, itemName);
-    printf("%s", supfamURL);
-    printf("%s</A><BR><BR>\n", itemName);
+    printf("%s%s</A><BR><BR>\n", supfamURL, itemName);
     }
 }
 
@@ -8389,8 +8385,7 @@ struct lineFile *lf;
 char *line;
 int lineSize;
 
-safef(query, sizeof(query), "%s (%s)", tdb->longLabel, avName);
-cartWebStart(cart, database, query);
+cartWebStart(cart, database, "%s (%s)", tdb->longLabel, avName);
 
 safef(query, sizeof(query), "select * from omimAv where name = '%s'", avName);
 sr = sqlGetResult(conn, query);
@@ -9158,7 +9153,7 @@ int start = cartInt(cart, "o");
 if (strchr(rnaName, '\''))
     sqlRnaName = replaceChars(rnaName, "'", "''");
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 
 safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
@@ -10135,7 +10130,7 @@ slSort(&pslList, pslCmpScoreDesc);
 /* print header */
 genericHeader(tdb, acc);
 /* Print non-sequence info. */
-cartWebStart(cart, database, acc);
+cartWebStart(cart, database, "%s", acc);
 
 
 safef(where, sizeof(where), "name = '%s'", acc);
@@ -11013,7 +11008,7 @@ char table[64];
 /* Print heading info including link to NCBI. */
 if (tiNum != NULL)
     ++tiNum;
-cartWebStart(cart, database, itemName);
+cartWebStart(cart, database, "%s", itemName);
 printf("<H1>Information on Mouse %s %s</H1>",
        (tiNum == NULL ? "Contig" : "Read"), itemName);
 
@@ -11157,7 +11152,7 @@ char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -11196,7 +11191,7 @@ char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
@@ -11241,7 +11236,7 @@ char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -11275,7 +11270,7 @@ char anotherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -11624,7 +11619,7 @@ if (wordCount == 3)
             }
     }
 freeMem(typeLine);
-cartWebStart(cart, database, itemName);
+cartWebStart(cart, database, "%s", itemName);
 printPosOnChrom(chrom,start,end,NULL,FALSE,NULL);
 printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
@@ -11667,7 +11662,7 @@ struct psl *pslList = NULL, *psl = NULL;
 boolean hasBin = TRUE;
 char *table = "refFullAli"; /* Table with the pertinent PSL data */
 
-cartWebStart(cart, database, itemName);
+cartWebStart(cart, database, "%s", itemName);
 printf("<H1>Information on DBTSS Sequence %s</H1>", itemName);
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
@@ -11835,7 +11830,7 @@ if (strchr(marker, '\''))
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* Find the instance of the object in the bed table */
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -12156,7 +12151,7 @@ int pslStart;
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* Find the instance of the object in the bed table */
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -12288,7 +12283,7 @@ int pslStart;
 
 sprintf(title, "STS Marker %s\n", marker);
 /* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\" TARGET=_BLANK>%s</A>\n", marker, marker); */
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* Find the instance of the object in the bed table */
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -12465,7 +12460,7 @@ boolean hasBin = FALSE;
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* Find the instance of the object in the bed table */
 safef(query, sizeof(query), "name = '%s'", marker);
@@ -12625,7 +12620,7 @@ struct fishClones *fc;
 int i;
 
 /* Print out non-sequence info */
-cartWebStart(cart, database, clone);
+cartWebStart(cart, database, "%s", clone);
 
 
 /* Find the instance of the object in the bed table */
@@ -16189,7 +16184,7 @@ if (sameString("earlyRepBad", track))
     }
 
 /* Print out non-sequence info */
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* Find the instance of the object in the bed table */
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -16414,7 +16409,7 @@ struct sqlResult *sr;
 char **row;
 int celeraVersion = 0;
 int i = 0;
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 
 if (sameString(database, "hg15"))
     celeraVersion = 3;
@@ -16490,13 +16485,13 @@ if (wordCount < 2 || wordCount > 3)
 if (wordCount == 3)
     {
     *retID = sqlUnsigned(words[0]);
-    safef(retChrom, 64, words[1]);
+    safecpy(retChrom, 64, words[1]);
     *retPos = sqlUnsigned(words[2]);
     }
 else
     {
     *retID = -1;
-    safef(retChrom, 64, words[0]);
+    safecpy(retChrom, 64, words[0]);
     *retPos = sqlUnsigned(words[1]);
     }
 }
@@ -16505,7 +16500,7 @@ else
 void doGenomicSuperDups(struct trackDb *tdb, char *dupName)
 /* Handle click on genomic dup track. */
 {
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 
 if (cgiVarExists("o"))
     {
@@ -16605,7 +16600,7 @@ struct sqlResult *sr = NULL;
 char **row;
 
 /* Print out non-sequence info */
-cartWebStart(cart, database, tissue);
+cartWebStart(cart, database, "%s", tissue);
 
 /* Print general range info */
 printf("<H2>UCSF Comparative Genomic Hybridizations - %s</H2>\n", tissue);
@@ -16659,7 +16654,7 @@ struct mcnBreakpoints *mcnRecord;
 
 /* Print out non-sequence info */
 sprintf(title, "MCN Breakpoints - %s",name);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* Print general range info */
 /*printf("<H2>MCN Breakpoints - %s</H2>\n", name);
@@ -18601,7 +18596,7 @@ char fullTable[64];
 boolean hasBin = FALSE;
 char query[1024];
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 genericHeader(tdb, item);
 hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query),
@@ -18631,7 +18626,7 @@ char fullTable[64];
 boolean hasBin = FALSE;
 char query[1024];
 
-cartWebStart(cart, database, tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 genericHeader(tdb, item);
 hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query),
@@ -19992,7 +19987,7 @@ if (linktype != NULL)
     char url[256];
     char *accFlag = hashFindVal(thisLink, "acc");
     if (accFlag == NULL)
-        safef(url, sizeof(url), linktype);
+        safecpy(url, sizeof(url), linktype);
     else
         {
         char *accNum = hashFindVal(thisLink, "accNum");
@@ -20888,7 +20883,7 @@ char *chr, *name;
 unsigned int chromStart, chromEnd;
 boolean blastzAln;
 
-cartWebStart(cart, database, itemName);
+cartWebStart(cart, database, "%s", itemName);
 sprintf(query, "select * from %s where name = '%s'", track, itemName);
 selectOneRow(conn, track, query, &sr, &row);
 chr = cloneString(row[0]);
@@ -22504,7 +22499,7 @@ else if (tdb != NULL)
     }
 else
     {
-    cartWebStart(cart, database, track);
+    cartWebStart(cart, database, "%s", track);
     printf("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
 if (didCartHtmlStart)

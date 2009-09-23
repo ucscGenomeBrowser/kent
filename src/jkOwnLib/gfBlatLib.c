@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.27 2008/12/09 08:06:20 galt Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.28 2009/09/23 18:42:27 angie Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -111,11 +111,12 @@ static void startSeqQuery(int conn, bioSeq *seq, char *type)
 {
 char buf[256];
 sprintf(buf, "%s%s %d", gfSignature(), type, seq->size);
-write(conn, buf, strlen(buf));
-read(conn, buf, 1);
+mustWriteFd(conn, buf, strlen(buf));
+if (read(conn, buf, 1) < 0)
+    errAbort("startSeqQuery: read failed: %s", strerror(errno));
 if (buf[0] != 'Y')
     errAbort("Expecting 'Y' from server, got %c", buf[0]);
-write(conn, seq->dna, seq->size);
+mustWriteFd(conn, seq->dna, seq->size);
 }
 
 static void gfServerWarn(bioSeq *seq, char *warning)

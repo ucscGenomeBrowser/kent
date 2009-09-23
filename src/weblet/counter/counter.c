@@ -42,7 +42,7 @@ ipSize = strlen(ip) + 1;
 
 if (f != NULL)
     {
-    fread(&val, sizeof(val), 1, f);
+    mustReadOne(f, val);
     rewind(f);
     }
 else

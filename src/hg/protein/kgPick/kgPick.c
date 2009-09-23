@@ -71,9 +71,9 @@ while (row != NULL)
     fprintf(outf, "%s\t%s\t%s\n", displayId, alignID, cdsId);
     
     /* remember what have been printed */
-    safef(printedCds, sizeof(printedCds), cdsId);
-    safef(printedMrna, sizeof(printedCds), row[0]);
-    safef(printedProt, sizeof(printedProt), displayId);
+    safecpy(printedCds, sizeof(printedCds), cdsId);
+    safecpy(printedMrna, sizeof(printedCds), row[0]);
+    safecpy(printedProt, sizeof(printedProt), displayId);
     row = sqlNextRow(sr);
     }
 sqlFreeResult(&sr);

@@ -130,7 +130,7 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        hPrintf(wrapWhiteFont("Group Order: "));
+        hPrintf("%s", wrapWhiteFont("Group Order: "));
         }
     hPrintf("</TH>\n");
     if (withPriorityOverride)

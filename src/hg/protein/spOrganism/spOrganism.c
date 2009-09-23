@@ -77,7 +77,7 @@ while (fgets(line, 1000, inf) != NULL)
 	    ox = chp;	
 	    if (*ox == '\n') 
 		{
-		fgets(line, 1000, inf);
+		mustGetLine(inf, line, sizeof(line));
 		chp = strstr(line, "OX   ");
 		if (chp == NULL)
 		    {

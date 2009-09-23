@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.37 2009/07/09 19:35:23 mikep Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.38 2009/09/23 18:42:28 angie Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -901,7 +901,7 @@ int sd;
 cookieOutput(dyHeader, cookies);
 dyStringAppend(dyHeader, "\r\n");
 sd = netOpenHttpExt(url, "GET", FALSE);
-write(sd, dyHeader->string, dyHeader->stringSize);
+mustWriteFd(sd, dyHeader->string, dyHeader->stringSize);
 dyText = netSlurpFile(sd);
 close(sd);
 dyStringFree(&dyHeader);
@@ -945,7 +945,7 @@ if (errCatchStart(errCatch))
     page = htmlPageForwarded(url, cookies);
 errCatchEnd(errCatch);
 if (errCatch->gotError)
-    warn(errCatch->message->string);
+    warn("%s", errCatch->message->string);
 errCatchFree(&errCatch);
 return page;
 }
@@ -1378,7 +1378,7 @@ if (sameWord(form->method, "GET"))
     verbose(3, "GET %s\n", dyUrl->string);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringAppend(dyHeader, "\r\n");
-    write(sd, dyHeader->string, dyHeader->stringSize);
+    mustWriteFd(sd, dyHeader->string, dyHeader->stringSize);
     }
 else if (sameWord(form->method, "POST"))
     {
@@ -1388,8 +1388,8 @@ else if (sameWord(form->method, "POST"))
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
     dyStringAppend(dyHeader, "\r\n");
-    write(sd, dyHeader->string, dyHeader->stringSize);
-    write(sd, cgiVars, contentLength);
+    mustWriteFd(sd, dyHeader->string, dyHeader->stringSize);
+    mustWriteFd(sd, cgiVars, contentLength);
     }
 dyText = netSlurpFile(sd);
 close(sd);

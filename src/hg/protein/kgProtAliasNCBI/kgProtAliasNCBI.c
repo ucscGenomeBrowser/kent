@@ -103,8 +103,8 @@ fclose(o2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 
-system("cat jj.dat|sort|uniq  >kgProtAliasNCBI.tab");
-system("rm jj.dat");
+mustSystem("cat jj.dat|sort|uniq  >kgProtAliasNCBI.tab");
+mustSystem("rm jj.dat");
     
 return(0);
 }

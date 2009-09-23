@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.27 2009/02/24 01:50:38 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.28 2009/09/23 18:42:29 angie Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -409,8 +409,8 @@ else
     bits32 *nStarts, *nSizes;
     AllocArray(nStarts, blkCount);
     AllocArray(nSizes, blkCount);
-    fread(nStarts, sizeof(nStarts[0]), blkCount, f);
-    fread(nSizes, sizeof(nSizes[0]), blkCount, f);
+    mustRead(f, nStarts, sizeof(nStarts[0]) * blkCount);
+    mustRead(f, nSizes, sizeof(nSizes[0]) * blkCount);
     if (isSwapped)
 	{
 	int i;
@@ -1009,8 +1009,8 @@ if (nBlockCount > 0)
 
     AllocArray(nStarts, nBlockCount);
     AllocArray(nSizes, nBlockCount);
-    fread(nStarts, sizeof(nStarts[0]), nBlockCount, tbf->f);
-    fread(nSizes, sizeof(nSizes[0]), nBlockCount, tbf->f);
+    mustRead(tbf->f, nStarts, sizeof(nStarts[0]) * nBlockCount);
+    mustRead(tbf->f, nSizes, sizeof(nSizes[0]) * nBlockCount);
     if (tbf->isSwapped)
 	{
 	for (i=0; i<nBlockCount; ++i)
@@ -1051,8 +1051,8 @@ if (nBlockCount > 0)
 
     AllocArray(nStarts, nBlockCount);
     AllocArray(nSizes, nBlockCount);
-    fread(nStarts, sizeof(nStarts[0]), nBlockCount, tbf->f);
-    fread(nSizes, sizeof(nSizes[0]), nBlockCount, tbf->f);
+    mustRead(tbf->f, nStarts, sizeof(nStarts[0]) * nBlockCount);
+    mustRead(tbf->f, nSizes, sizeof(nSizes[0]) * nBlockCount);
     if (tbf->isSwapped)
 	{
 	for (i=0; i<nBlockCount; ++i)

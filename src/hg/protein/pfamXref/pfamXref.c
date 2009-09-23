@@ -59,7 +59,7 @@ while (!done)
     {
     /* get to the beginning of a Pfam record */
     idFound = 0;
-    while (fgets(line, 1000, inf) != NULL)
+    while (fgets(line, sizeof(line), inf) != NULL)
     	{
     	chp = strstr(line, "GF ID");
     	if (chp != NULL)
@@ -76,7 +76,7 @@ while (!done)
     
     /* Get Pfam AC */
 
-    fgets(line, 1000, inf);
+    mustGetLine(inf, line, sizeof(line));
     chp = strstr(line, "GF AC   ");
     chp = chp + 8;
     *(chp + strlen(chp) - 1) = '\0'; // remove LF
@@ -85,7 +85,7 @@ while (!done)
     pfamAC = strdup(chp);
     
     /* Get Pfam description.  Please note, Pfam-B does not have this field.*/
-    fgets(line, 1000, inf);
+    mustGetLine(inf, line, sizeof(line));
     chp = strstr(line, "GF DE   ");
     chp = chp + 8;
     *(chp + strlen(chp) - 1) = '\0'; // remove LF
@@ -99,7 +99,7 @@ while (!done)
     gsFound = 0;
     while (!gsDone)
 	{
-	fgets(line, 1000, inf);
+	mustGetLine(inf, line, sizeof(line));
     	chp = strstr(line, "#=GS ");
     	if (chp != NULL)
 	    {
@@ -151,8 +151,8 @@ carefulClose(&o1);
 carefulClose(&o2);
 
 sprintf(cond_str, "cat jj.dat | sort | uniq >%s",outputFileName2);
-system(cond_str);
-system("rm jj.dat");
+mustSystem(cond_str);
+mustSystem("rm jj.dat");
 
 return(0);
 }

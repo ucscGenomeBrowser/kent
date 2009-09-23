@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.51 2009/06/15 18:15:53 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.52 2009/09/23 18:42:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -714,7 +714,7 @@ if (isNotEmpty(ss))
     char *words[2];
     int wordCount;
     boolean exists = FALSE;
-    safef(buf, sizeof(buf), ss);
+    safecpy(buf, sizeof(buf), ss);
     wordCount = chopLine(buf, words);
     if (wordCount < 2)
 	exists = FALSE;

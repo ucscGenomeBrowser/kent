@@ -93,10 +93,10 @@ fclose(o2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 
-system("cat j.dat|sort|uniq >keggPathway.tab");
-system("cat jj.dat|sort|uniq >keggMapDesc.tab");
-system("rm j.dat");
-system("rm jj.dat");
+mustSystem("cat j.dat|sort|uniq >keggPathway.tab");
+mustSystem("cat jj.dat|sort|uniq >keggMapDesc.tab");
+mustSystem("rm j.dat");
+mustSystem("rm jj.dat");
 return(0);
 }
 

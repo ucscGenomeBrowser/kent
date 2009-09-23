@@ -136,13 +136,13 @@ fclose(o2);
 /* geneAlias.tab has 3 columns, the 2nd is HUGO.symbol 
    and 3rd contains aliases and withdraws */
 
-system("cat  j.dat|sort|uniq  >geneAlias.tab");
+mustSystem("cat  j.dat|sort|uniq  >geneAlias.tab");
 
 /*  kgAliasM.tab has 2 columns, all entries from HUGO.symbol, HUGO.aliass, 
     and HUGO.withdraws are listed in the 2nd column. */
-system("cat jj.dat|sort|uniq  >kgAliasM.tab");
-system("rm j.dat");
-system("rm jj.dat");
+mustSystem("cat jj.dat|sort|uniq  >kgAliasM.tab");
+mustSystem("rm j.dat");
+mustSystem("rm jj.dat");
     
 return(0);
 }

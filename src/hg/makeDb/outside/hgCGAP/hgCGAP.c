@@ -336,7 +336,7 @@ int do1Record()
 
     strcpy(id, line+2);
     
-    while (fgets(line, 1000, inf) != NULL)
+    while (fgets(line, sizeof(line), inf) != NULL)
 	{
 	*(line + strlen(line) - 1 ) = '\0';
     	chp = strstr(line, ":");
@@ -407,7 +407,8 @@ if (argc==2)
 		exit(8);
 		}
 
-    	fgets(line, 1000, inf);
+    	if (fgets(line, sizeof(line), inf) == NULL)
+	    fprintf(stderr, "first fgets failed\n");
         *(line + strlen(line) - 1) = '\0';
 	
         while (!done)

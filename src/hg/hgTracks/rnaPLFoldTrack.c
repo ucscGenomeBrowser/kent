@@ -394,7 +394,7 @@ void rnaPLFoldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 char  label[16];
 int   yVisOffset  = 0 + tl.fontHeight; // ( vis == tvDense ? 0 : tg->heightPer + height/2 );
 
-safef(label, sizeof(label), tg->shortLabel);
+safecpy(label, sizeof(label), tg->shortLabel);
 hvGfxUnclip(hvg);
 hvGfxSetClip(hvg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
 hvGfxTextRight(hvg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);

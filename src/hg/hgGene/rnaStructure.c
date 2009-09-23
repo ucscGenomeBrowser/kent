@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.10 2009/02/13 02:38:28 markd Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.11 2009/09/23 18:42:16 angie Exp $";
 
 static void rnaTrashDirsInit(char **tables, int count)
 /*	create trash directories if necessary */
@@ -200,7 +200,7 @@ else if (sameString(how, "picture"))
          {
 	 char command[512];
 	 safef(command, sizeof(command), "ps2pdf %s %s" , psFile, pdfName);
-	 system(command);
+	 mustSystem(command);
 	 }
     hPrintf("Click <A HREF=\"%s\">here for PDF version</A><BR>", pdfName);
     if (!fileExists(pngName))
@@ -209,7 +209,7 @@ else if (sameString(how, "picture"))
 	 safef(command, sizeof(command),
 	 	"gs -sDEVICE=png16m -sOutputFile=%s -dBATCH -dNOPAUSE -q %s"
 		, pngName, psFile);
-	 system(command);
+	 mustSystem(command);
 	 }
     hPrintf("<IMG SRC=\"%s\">", pngName);
     }

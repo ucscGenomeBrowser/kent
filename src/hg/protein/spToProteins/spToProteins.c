@@ -141,10 +141,10 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 sqlDisconnect(&conn3);
 
-system("cat temp_spXref2.dat | sort |uniq > spXref2.tab");
-system("rm temp_spXref2.dat");
-system("cat temp_spOrganism.dat | sort |uniq > spOrganism.tab");
-system("rm temp_spOrganism.dat");
+mustSystem("cat temp_spXref2.dat | sort |uniq > spXref2.tab");
+mustSystem("rm temp_spXref2.dat");
+mustSystem("cat temp_spOrganism.dat | sort |uniq > spOrganism.tab");
+mustSystem("rm temp_spOrganism.dat");
 return(0);
 }
 

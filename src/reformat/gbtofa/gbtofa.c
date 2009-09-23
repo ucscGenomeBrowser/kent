@@ -116,7 +116,7 @@ LOOP_START:
         }
     if (gotKohara)
         {
-        fgets(definitionLine, sizeof(definitionLine), in);
+        mustGetLine(in, definitionLine, sizeof(definitionLine));
         definitionWordCount = chopLine(definitionLine, definitionWords);
         if (definitionWordCount >= 3 && sameString(definitionWords[0], "clone")  && 
             definitionWords[1][0] == 'y' && definitionWords[1][1] == 'k' && 

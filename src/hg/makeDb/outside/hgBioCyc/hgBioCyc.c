@@ -87,8 +87,8 @@ again:
     }
 
 fclose(o1);
-system("cat j.dat|sort|uniq >bioCycPathway.tab");
-system("rm j.dat");
+mustSystem("cat j.dat|sort|uniq >bioCycPathway.tab");
+mustSystem("rm j.dat");
 return 0;
 }
 

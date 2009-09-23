@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.105 2009/09/22 21:49:43 braney Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.106 2009/09/23 18:42:19 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -6179,7 +6179,7 @@ hvGfxSetClip(hvg, xOff, yOff, width*2 , 52);
 for(ii=0; ii < 52; ii++)
     {
     int jj;
-    fread(buf, 1, width, f);
+    mustRead(f, buf, width);
 
     for(jj=0; jj < width + 2; jj++)
 	{
@@ -10518,7 +10518,7 @@ fseek(f, offset, 0);
 p = mem = needMem(count * 2);
 
 /* read in probability data from file */
-fread(mem, sizeof(unsigned short), count, f);
+mustRead(f, mem, sizeof(unsigned short) * count);
 fclose(f);
 
 /* translate 5 bits for A,C,and G into real numbers for all bases */

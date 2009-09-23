@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.26 2009/08/19 17:58:00 braney Exp $";
-static char *version = "$Revision: 1.26 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.27 2009/09/23 18:42:16 angie Exp $";
+static char *version = "$Revision: 1.27 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -521,10 +521,11 @@ boolean checkFloat(char *file, int line, char *row, char *val, char *name)
 // taken from sqlNum.c
 {
 char* end;
-strtod(val, &end);
+double discardMe = strtod(val, &end);
 if ((end == val) || (*end != '\0'))
     {
     warn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", file, line, name, val, row);
+    discardMe = 0.0;
     return FALSE;
     }
 return TRUE;
@@ -1065,7 +1066,7 @@ optionInit(&argc, argv, options);
 ++argv;
 --argc;
 if (optionExists("version"))
-    errAbort(version);
+    errAbort("%s", version);
 if (argc==0)
     usage();
 type = optionVal("type", "");

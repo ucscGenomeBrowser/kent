@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1599 2009/09/17 21:43:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1600 2009/09/23 18:42:17 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4131,7 +4131,7 @@ if (!hideControls)
         hPrintf("\n%s", trackGroupsHidden1->string);
 	hPrintf("</CENTER></FORM>\n");
 	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
-        hPrintf(trackGroupsHidden2->string);
+        hPrintf("%s", trackGroupsHidden2->string);
         freeDyString(&trackGroupsHidden1);
         freeDyString(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
@@ -4904,10 +4904,10 @@ else
     safef(msg2, sizeof(msg2), "%d rows displayed", limit);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf(msg1);
+    puts(msg1);
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf(msg2);
+    puts(msg2);
     cgiTableFieldEnd();
     sqlFreeResult(&sr);
     safef(query, sizeof(query), "select count(*),sum(size) from chromInfo");
@@ -4921,10 +4921,10 @@ else
 	safef(msg2, sizeof(msg2), "total size:");
 	cgiSimpleTableRowStart();
 	cgiSimpleTableFieldStart();
-	printf(msg1);
+	puts(msg1);
 	cgiTableFieldEnd();
 	cgiSimpleTableFieldStart();
-	printf(msg2);
+	puts(msg2);
 	cgiTableFieldEnd();
 	cgiTableRowEnd();
 	cgiSimpleTableRowStart();

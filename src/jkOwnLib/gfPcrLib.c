@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.10 2008/04/18 23:29:28 angie Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.11 2009/09/23 18:42:27 angie Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -426,7 +426,7 @@ struct gfRange *rangeList = NULL, *range;
 
 /* Query server and put results into rangeList. */
 safef(buf, sizeof(buf), "%spcr %s %s %d", gfSignature(), fPrimer, rPrimer, maxSize);
-write(conn, buf, strlen(buf));
+mustWriteFd(conn, buf, strlen(buf));
 for (;;)
     {
     if (netGetString(conn, buf) == NULL)
@@ -434,7 +434,7 @@ for (;;)
     if (sameString(buf, "end"))
 	break;
     else if (startsWith("Error:", buf))
-	errAbort(buf);
+	errAbort("%s", buf);
     else
 	{
 	char *s = buf;

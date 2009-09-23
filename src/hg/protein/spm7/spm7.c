@@ -278,10 +278,10 @@ hFreeConn(&conn3);
 fclose(o3);
 fclose(o7);
     
-system("cat j.dat|sort|uniq  >knownGene.tab");
-system("cat jj.dat|sort|uniq >duplicate.tab");
-system("rm j.dat");
-system("rm jj.dat");
+mustSystem("cat j.dat|sort|uniq  >knownGene.tab");
+mustSystem("cat jj.dat|sort|uniq >duplicate.tab");
+mustSystem("rm j.dat");
+mustSystem("rm jj.dat");
 return(0);
 }
 

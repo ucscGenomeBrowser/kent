@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSplit.c,v 1.9 2007/07/11 21:47:50 angie Exp $";
+static char const rcsid[] = "$Id: chainSplit.c,v 1.10 2009/09/23 18:42:23 angie Exp $";
 
 boolean splitOnQ = FALSE;
 int lump = 0;
@@ -86,7 +86,7 @@ for (inIx = 0; inIx < inCount; ++inIx)
                 fclose(meta);
             metaOpen = FALSE;
 	    safef(cmd,sizeof(cmd), "cat %s | sort -u > %s", tpath, path);
-            system(cmd);
+            mustSystem(cmd);
 	    f = mustOpen(path, "a");
 	    hashAdd(hash, name, f);
 	    }

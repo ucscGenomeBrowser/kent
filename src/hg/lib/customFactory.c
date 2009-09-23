@@ -29,7 +29,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.103 2009/09/15 22:02:00 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.104 2009/09/23 18:42:20 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1708,7 +1708,7 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)
-	warn(errCatch->message->string);
+	warn("%s", errCatch->message->string);
     errCatchFree(&errCatch);
     }
 
@@ -2161,7 +2161,7 @@ static void readAndIgnore(char *fileName)
 {
 char buf[256];
 FILE *f = mustOpen(fileName, "r");
-fgets(buf, sizeof(buf), f);
+mustGetLine(f, buf, sizeof(buf));
 fclose(f);
 }
 

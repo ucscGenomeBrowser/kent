@@ -925,10 +925,18 @@ void mustWrite(FILE *file, void *buf, size_t size);
 /* Write out one variable to file. */
 
 void mustRead(FILE *file, void *buf, size_t size);
-/* Read from a file or squawk and die. */
+/* Read size bytes from a file or squawk and die. */
 
 #define mustReadOne(file, var) mustRead((file), &(var), sizeof(var))
 /* Read one variable from file or die. */
+
+void mustGetLine(FILE *file, char *buf, int charCount);
+/* Read at most charCount-1 bytes from file, but stop after newline if one is
+ * encountered.  The string in buf is '\0'-terminated.  (See man 3 fgets.)
+ * Die if there is an error. */
+
+void mustWriteFd(int fd, void *buf, size_t size);
+/* Write size bytes to file descriptor fd or die.  (See man 2 write.) */
 
 #define readOne(file, var) (fread(&(var), sizeof(var), 1, (file)) == 1)
 /* Read one variable from file. Returns FALSE if can't do it. */
@@ -985,6 +993,9 @@ int fileOffsetSizeCmp(const void *va, const void *vb);
 struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList);
 /* Returns a new list which is inList transformed to have adjacent blocks
  * merged.  Best to use this with a sorted list. */
+
+void mustSystem(char *cmd);
+/* Execute cmd using "sh -c" or die.  (See man 3 system.) */
 
 int roundingScale(int a, int p, int q);
 /* returns rounded a*p/q */

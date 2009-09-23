@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     hFreeConn(&conn);
     hFreeConn(&conn2);
     hFreeConn(&conn3);
-    system("cat j.dat|sort|uniq  >kgXref.tab");
-    system("rm j.dat");
+    mustSystem("cat j.dat|sort|uniq  >kgXref.tab");
+    mustSystem("rm j.dat");
     return(0);
     }

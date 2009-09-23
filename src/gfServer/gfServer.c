@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.54 2007/03/31 19:38:13 markd Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.55 2009/09/23 18:42:16 angie Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"canStop", OPTION_BOOLEAN},
@@ -738,7 +738,7 @@ int sd = 0;
 
 sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%squit", gfSignature());
-write(sd, buf, strlen(buf));
+mustWriteFd(sd, buf, strlen(buf));
 close(sd);
 printf("sent stop message to server\n");
 }
@@ -753,7 +753,7 @@ int ret = 0;
 /* Put together command. */
 sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%sstatus", gfSignature());
-write(sd, buf, strlen(buf));
+mustWriteFd(sd, buf, strlen(buf));
 
 for (;;)
     {
@@ -784,12 +784,13 @@ int matchCount = 0;
 /* Put together query command. */
 sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%s%s %d", gfSignature(), type, seq->size);
-write(sd, buf, strlen(buf));
+mustWriteFd(sd, buf, strlen(buf));
 
-read(sd, buf, 1);
+if (read(sd, buf, 1) < 0)
+    errAbort("queryServer: read failed: %s", strerror(errno));
 if (buf[0] != 'Y')
     errAbort("Expecting 'Y' from server, got %c", buf[0]);
-write(sd, seq->dna, seq->size);
+mustWriteFd(sd, seq->dna, seq->size);
 
 if (complex)
     {
@@ -808,7 +809,7 @@ for (;;)
 	}
     else if (startsWith("Error:", buf))
        {
-       errAbort(buf);
+       errAbort("%s", buf);
        break;
        }
     else
@@ -837,7 +838,7 @@ int sd = 0;
 /* Put together query command and send. */
 sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%spcr %s %s %d", gfSignature(), fPrimer, rPrimer, maxSize);
-write(sd, buf, strlen(buf));
+mustWriteFd(sd, buf, strlen(buf));
 
 /* Fetch and display results. */
 for (;;)
@@ -848,7 +849,7 @@ for (;;)
 	break;
     else if (startsWith("Error:", buf))
 	{
-	errAbort(buf);
+	errAbort("%s", buf);
 	break;
 	}
     else
@@ -871,7 +872,7 @@ int i;
 /* Put together command. */
 sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%sfiles", gfSignature());
-write(sd, buf, strlen(buf));
+mustWriteFd(sd, buf, strlen(buf));
 
 /* Get count of files, and then each file name. */
 if (netGetString(sd, buf) != NULL)

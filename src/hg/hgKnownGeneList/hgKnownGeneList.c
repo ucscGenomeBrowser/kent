@@ -104,7 +104,7 @@ hDisconnectCentral(&connCentral);
 
 /* create first top level subdirectory */
 safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
-system(command);
+mustSystem(command);
 
 conn = hAllocConn(database);
 conn2= hAllocConn(database);
@@ -174,7 +174,7 @@ while (kgIdCnt < totalKgId)
 	    
 	    /* use mkdir -p to make sure the subdirectory exists */
 	    safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
-	    system(command);
+	    mustSystem(command);
 	    safef(fileName, sizeof(fileName), 
 	    	  "knownGeneList/%s/%d/kgList%d.html", database, topLevel, pageNum);
   	    outf = fopen(fileName, "w");
@@ -310,7 +310,7 @@ if (outf != NULL)
 
 /* generate the last index page */
 safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
-system(command);
+mustSystem(command);
 safef(fileName, sizeof(fileName), 
       "knownGeneList/%s/%d/kgIndex%d.html", database, topLevel, topLevel);
 outf2 = fopen(fileName, "w");

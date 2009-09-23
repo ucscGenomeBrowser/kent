@@ -115,8 +115,8 @@ int main(int argc, char *argv[])
     hFreeConn(&conn);
     hFreeConn(&conn2);
 
-    system("cat j.dat|sort|uniq  >kgProtAlias.tab");
-    system("rm j.dat");
+    mustSystem("cat j.dat|sort|uniq  >kgProtAlias.tab");
+    mustSystem("rm j.dat");
     
     return(0);
     }

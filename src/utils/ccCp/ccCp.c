@@ -8,7 +8,7 @@
 #include "options.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: ccCp.c,v 1.6 2005/03/04 19:54:46 galt Exp $";
+static char const rcsid[] = "$Id: ccCp.c,v 1.7 2009/09/23 18:42:29 angie Exp $";
 
 int crossSwitchMax = 40;		/* Max copies between switches at once. */
 
@@ -124,7 +124,8 @@ char dir[512];
 
 if (firstChar == '/' || firstChar == '~')
     return cloneString(relName);
-getcwd(dir, sizeof(dir));
+if (getcwd(dir, sizeof(dir)) == NULL)
+    errAbort("fullPathName: getcwd failed!");
 sprintf(fullPath, "%s/%s", dir, relName);
 return cloneString(fullPath);
 }

@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.23 2008/11/25 22:40:50 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.24 2009/09/23 18:42:17 angie Exp $";
 
 static char *hgGeneUrl()
 {
@@ -386,7 +386,7 @@ safef(title,ArraySize(title), "UCSC gene annotations: %s", curGeneName);
  */
 if(!wikiTrackEnabled(database, &userName))
     {
-    cartWebStart(cart, database, title);
+    cartWebStart(cart, database, "%s", title);
     errAbort("hgGene.doWikiTrack: called when wiki track is not enabled ?");
     }
 				/* FALSE == do not print message */
@@ -411,7 +411,7 @@ if (item)
     return;
     }
 
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 
 /* safety check, both of these lists should be non-zero */
 int locusLocationCount = slCount(clusterList);

@@ -10,7 +10,7 @@
 #include "bits.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: gsBig.c,v 1.15 2006/04/11 16:26:27 angie Exp $";
+static char const rcsid[] = "$Id: gsBig.c,v 1.16 2009/09/23 18:42:16 angie Exp $";
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
@@ -682,7 +682,7 @@ else
 		    dyStringPrintf(dy, " -subopt");
 		dyStringPrintf(dy, " > %s", tempGs);
 		verbose(3, "%s\n", dy->string);
-		system(dy->string);
+		mustSystem(dy->string);
 		seg = parseSegment(tempGs, offset, offset+sizeOne, NULL);
 		slAddHead(&segList, seg);
 		}

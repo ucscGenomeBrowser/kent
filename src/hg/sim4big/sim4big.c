@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: sim4big.c,v 1.5 2006/08/21 15:45:23 angie Exp $";
+static char const rcsid[] = "$Id: sim4big.c,v 1.6 2009/09/23 18:42:26 angie Exp $";
 
 char *exePath = "sim4";	/*  executable name. */
 char *tempDir = NULL;	/* Temporary dir. */
@@ -37,7 +37,8 @@ if (dir == NULL)
     sprintf(result, "%sXXXXXX%s", root, suffix);
 else
     sprintf(result, "%s/%sXXXXXX%s", dir, root, suffix);
-mkstemp(result);
+if (mkstemp(result) < 0)
+    errAbort("tempFile: mkstemp failed: %s", strerror(errno));
 }
 
 void sim4BadLine(struct lineFile *lf)
@@ -302,7 +303,7 @@ while (faMixedSpeedReadNext(gLf, &gSeq.dna, &gSeq.size, &gSeq.name))
 	dotOut();
 	toUpperN(mSeq.dna, mSeq.size);
 	faWrite(mTempName, mSeq.name, mSeq.dna, mSeq.size);
-	system(command->string);
+	mustSystem(command->string);
 	if (pslOut)
 	    parseIntoPsl(sTempName, mSeq.name, mSeq.size, gSeqName, gSeq.size, f);
 	else

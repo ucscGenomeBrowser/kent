@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.26 2009/08/13 21:48:17 braney Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.27 2009/09/23 18:42:28 angie Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -49,6 +49,7 @@ if (optionSpec == NULL)
 if (optionSpec == NULL)
     errAbort("-%s is not a valid option", name);
 
+long long discardMe = 0;
 switch (optionSpec->flags & OPTION_TYPE_MASK) {
 case OPTION_BOOLEAN:
     if (val != NULL)
@@ -61,7 +62,7 @@ case OPTION_STRING:
 case OPTION_INT:
     if (val == NULL)
         errAbort("int option -%s must have a value", name);
-    strtol(val, &valEnd, 10);
+    discardMe = strtol(val, &valEnd, 10);
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid integer: \"%s\"",
                  name, val);
@@ -69,7 +70,7 @@ case OPTION_INT:
 case OPTION_LONG_LONG:
     if (val == NULL)
         errAbort("int option -%s must have a value", name);
-    strtoll(val, &valEnd, 10);
+    discardMe = strtoll(val, &valEnd, 10);
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid long long: \"%s\"",
                  name, val);
@@ -77,7 +78,7 @@ case OPTION_LONG_LONG:
 case OPTION_FLOAT:
     if (val == NULL)
         errAbort("float option -%s must have a value", name);
-    strtod(val, &valEnd);
+    discardMe = (long long)strtod(val, &valEnd);
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid float: \"%s\"",
                  name, val);
@@ -85,7 +86,7 @@ case OPTION_FLOAT:
 case OPTION_DOUBLE:
     if (val == NULL)
         errAbort("double option -%s must have a value", name);
-    strtod(val, &valEnd);
+    discardMe = (long long)strtod(val, &valEnd);
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid double: \"%s\"",
                  name, val);

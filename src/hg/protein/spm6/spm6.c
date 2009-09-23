@@ -281,10 +281,10 @@ fclose(o3);
 fclose(o4);
 fclose(o5);
     
-system("cat j.dat|sort|uniq >knownGene0.tab");
-system("rm j.dat");
-system("cat jj.dat|sort -r |uniq >sorted.lis");
-system("rm jj.dat");
+mustSystem("cat j.dat|sort|uniq >knownGene0.tab");
+mustSystem("rm j.dat");
+mustSystem("cat jj.dat|sort -r |uniq >sorted.lis");
+mustSystem("rm jj.dat");
 return(0);
 }
 

@@ -47,7 +47,7 @@ void readStringz(FILE *f, char *s, int sLen)
 /* Read in a zero terminated string from file into a
  * character array of given size. */
 {
-fgets(s, sLen, f);
+mustGetLine(f, s, sLen);
 }
 
 void printList(struct user *userList, int topCount)

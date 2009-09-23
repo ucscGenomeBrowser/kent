@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.7 2009/05/04 17:44:39 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.8 2009/09/23 18:42:20 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -224,6 +224,13 @@ if (rmdir(dirName) != 0)
     errAbort("rmdir failed for dir %s: %d", dirName, errno);
 }
 
+static void mustChdir(char *dir)
+/* Change directory to dir or die trying. */
+{
+if (chdir(dir) != 0)
+    errAbort("chdir(%s) failed: %s", dir, strerror(errno));
+}
+
 static void generateImgFiles(struct hgdpGeo *geo, char finalEpsFile[PATH_LEN],
 			     char finalPdfFile[PATH_LEN], char finalPngFile[PATH_LEN])
 /* Using the frequencies given in geo and the population latitude and longitude
@@ -238,7 +245,7 @@ if (getcwd(cwd, sizeof(cwd)) == NULL)
 struct tempName dirTn;
 trashDirFile(&dirTn, "hgc", "hgdpGeo", "");
 makeDirs(dirTn.forCgi);
-chdir(dirTn.forCgi);
+mustChdir(dirTn.forCgi);
 char *realHome = getenv("HOME");
 setenv("HOME", ".", TRUE);
 
@@ -308,7 +315,7 @@ if (realHome == NULL)
     unsetenv("HOME");
 else
     setenv("HOME", realHome, TRUE);
-chdir(cwd);
+mustChdir(cwd);
 
 // Move the result files into place:
 char tmpPath[PATH_LEN];

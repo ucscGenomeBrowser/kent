@@ -12,7 +12,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.37 2007/02/20 18:50:21 kent Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.38 2009/09/23 18:42:28 angie Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -275,7 +275,8 @@ if (maxSize < 0)
     errAbort("can't open %s", fileName);
 s = needHugeMem(maxSize+1);
 fd = open(fileName, O_RDONLY);
-read(fd, s, maxSize);
+if (read(fd, s, maxSize) < 0)
+    errAbort("faReadSeq: read failed: %s", strerror(errno));
 close(fd);
 s[maxSize] = 0;
 return faSeqFromMemText(s, isDna);

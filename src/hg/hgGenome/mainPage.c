@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.27 2009/08/19 23:00:16 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.28 2009/09/23 18:42:17 angie Exp $";
 
 
 static char *allColors[] = {
@@ -482,7 +482,7 @@ if (ggList != NULL)
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)
-	 warn(errCatch->message->string);
+	warn("%s", errCatch->message->string);
     errCatchFree(&errCatch); 
     }
 else

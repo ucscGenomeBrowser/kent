@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.71 2009/08/19 03:44:27 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.72 2009/09/23 18:42:28 angie Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -411,7 +411,7 @@ for (;;)
 void sendFtpCommandOnly(int sd, char *cmd)
 /* send command to ftp server */
 {   
-write(sd, cmd, strlen(cmd));
+mustWriteFd(sd, cmd, strlen(cmd));
 }
 
 
@@ -753,7 +753,9 @@ fflush(stderr);
 
 int pipefd[2];
 
-pipe(pipefd);  /* make a pipe (fds go in pipefd[0] and pipefd[1])  */
+/* make a pipe (fds go in pipefd[0] and pipefd[1])  */
+if (pipe(pipefd) != 0)
+    errAbort("netGetOpenFtp: failed to create pipe: %s", strerror(errno));
 
 int pid = fork();
 
@@ -860,7 +862,7 @@ if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
 	, (long long) npu.byteRangeStart
 	, (long long) npu.byteRangeEnd);
     }
-write(sd, dy->string, dy->stringSize);
+mustWriteFd(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
@@ -876,7 +878,7 @@ int netOpenHttpExt(char *url, char *method, boolean end)
 {
 int sd =  netHttpConnect(url, method, "HTTP/1.0", "genome.ucsc.edu/net.c");
 if (end)
-    write(sd, "\r\n", 2);
+    mustWriteFd(sd, "\r\n", 2);
 return sd;
 }
 
@@ -1426,7 +1428,7 @@ if (keepAlive)
 else
     dyStringAppend(dy, "Connection: close\r\n");
 dyStringAppend(dy, "\r\n");
-write(lf->fd, dy->string, dy->stringSize);
+mustWriteFd(lf->fd, dy->string, dy->stringSize);
 /* Clean up. */
 dyStringFree(&dy);
 } /* netHttpGet */

@@ -67,7 +67,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.22 2009/08/19 23:26:39 angie Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.23 2009/09/23 18:42:23 angie Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -627,7 +627,7 @@ if (errMsg)
 	}
     else
 	{
-    	warn(errMsg);
+    	warn("%s", errMsg);
 	}
     freez(&errMsg);    
     freez(&phyloData);
@@ -664,7 +664,7 @@ if (phyloTree)
 	    }
 	else
 	    {
-	    warn(layoutErrMsg);
+	    warn("%s", layoutErrMsg);
 	    }
 	freez(&phyloData);
 	mgFree(&mg);

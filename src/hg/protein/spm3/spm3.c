@@ -107,10 +107,10 @@ hFreeConn(&conn3);
 fclose(o2);
 fclose(o3);
     
-system("cat j.dat |sort|uniq >proteinMrna.tab");
-system("cat jj.dat|sort|uniq >protein.lis");
-system("rm j.dat");
-system("rm jj.dat");
+mustSystem("cat j.dat |sort|uniq >proteinMrna.tab");
+mustSystem("cat jj.dat|sort|uniq >protein.lis");
+mustSystem("rm j.dat");
+mustSystem("rm jj.dat");
 return(0);
 }
 

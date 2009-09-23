@@ -17,7 +17,7 @@
 #include "sig.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: wormdna.c,v 1.10 2005/04/10 14:41:26 markd Exp $";
+static char const rcsid[] = "$Id: wormdna.c,v 1.11 2009/09/23 18:42:29 angie Exp $";
 
 static char *jkwebDir = NULL;
 
@@ -269,7 +269,7 @@ wormCdnaCache();
 if (!snofFindOffset(cdnaSnof, name, &offset))
     return FALSE;
 fseek(cdnaFa, offset, SEEK_SET);
-fgets(commentBuf, sizeof(commentBuf), cdnaFa);
+mustGetLine(cdnaFa, commentBuf, sizeof(commentBuf));
 if (commentBuf[0] != '>')
     errAbort("Expecting line starting with > in cDNA fa file.\nGot %s", commentBuf);
 comment = cloneString(commentBuf);
@@ -971,7 +971,7 @@ for (;snIx < maxIx; ++snIx)
         {
         int s, e;
         fseek(f, offset, SEEK_SET);
-        fgets(lineBuf, sizeof(lineBuf), f);
+        mustGetLine(f, lineBuf, sizeof(lineBuf));
         wordCount = chopLine(lineBuf, words);
         assert(wordCount == 3);
         wormParseChromRange(words[0], retChrom, &s, &e);
@@ -1042,7 +1042,7 @@ else    /* Lets say it's a cosmid. */
     if (!snofFindOffset(c2cSnof, name, &offset) )
         return FALSE;
     fseek(c2cFile, offset, SEEK_SET);
-    fgets(lineBuf, sizeof(lineBuf), c2cFile);
+    mustGetLine(c2cFile, lineBuf, sizeof(lineBuf));
     wordCount = chopLine(lineBuf, words);
     assert(wordCount == 3);
     assert(strcmp(words[2], name) == 0);

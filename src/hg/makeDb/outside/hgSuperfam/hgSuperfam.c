@@ -145,10 +145,10 @@ hFreeConn(&connSf);
 fclose(o3);
 fclose(o4);
 
-system("cat j.dat |sort|uniq  > superfamily.tab");
-system("cat jj.dat|sort|uniq  > sfDescription.tab");
-system("rm j.dat");
-system("rm jj.dat");
+mustSystem("cat j.dat |sort|uniq  > superfamily.tab");
+mustSystem("cat jj.dat|sort|uniq  > sfDescription.tab");
+mustSystem("rm j.dat");
+mustSystem("rm jj.dat");
    
 return(0);
 }

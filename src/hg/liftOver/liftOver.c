@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.27 2008/09/25 18:12:36 angie Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.28 2009/09/23 18:42:21 angie Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -172,7 +172,7 @@ if ((hasBin || tabSep) && !bedPlus)
     usage();
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
-    errAbort(liftOverErrHelp());
+    errAbort("%s", liftOverErrHelp());
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 

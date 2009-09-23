@@ -10,7 +10,7 @@
 #include "snof.h"
 #include "snofmake.h"
 
-static char const rcsid[] = "$Id: snof.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: snof.c,v 1.5 2009/09/23 18:42:29 angie Exp $";
 
 void snofClose(struct snof **pSnof)
 /* Close down the index file. */
@@ -279,7 +279,8 @@ char *snofNameAtIx(struct snof *snof, int ix)
  */
 {
 fseek(snof->file, snof->headSize + ix*snof->itemSize, SEEK_SET);
-fread(snof->mid, snof->itemSize, 1, snof->file);
+if (fread(snof->mid, snof->itemSize, 1, snof->file) != 1 && ferror(snof->file))
+    errAbort("snofNameAtIx: fread failed: %s", strerror(ferror(snof->file)));
 return snof->mid;
 }
 

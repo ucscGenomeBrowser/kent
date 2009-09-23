@@ -115,10 +115,10 @@ hFreeConn(&conn2);
 fclose(o1);
 fclose(o2);
     
-system("cat j.dat |sort|uniq > knownGenePep.tab");
-system("cat jj.dat|sort|uniq > knownGeneMrna.tab");
-system("rm j.dat");
-system("rm jj.dat");
+mustSystem("cat j.dat |sort|uniq > knownGenePep.tab");
+mustSystem("cat jj.dat|sort|uniq > knownGeneMrna.tab");
+mustSystem("rm j.dat");
+mustSystem("rm jj.dat");
 
 return(0);
 }

@@ -63,8 +63,8 @@ carefulClose(&o2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 
-system("cat jj.dat|sort|uniq  >kgAliasKgXref.tab");
-system("rm jj.dat");
+mustSystem("cat jj.dat|sort|uniq  >kgAliasKgXref.tab");
+mustSystem("rm jj.dat");
     
 return(0);
 }

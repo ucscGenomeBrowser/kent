@@ -113,7 +113,7 @@ sqlFreeResult(&sr2);
 hFreeConn(&conn2);
 fclose(o2);
     
-system("cat j.dat |sort -u >hgncXref.tab");
+mustSystem("cat j.dat |sort -u >hgncXref.tab");
 return(0);
 }
 

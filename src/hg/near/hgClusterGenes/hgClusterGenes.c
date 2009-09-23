@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.12 2008/09/03 19:20:41 markd Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.13 2009/09/23 18:42:23 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -329,7 +329,7 @@ if (!noProt)
     if (sangerLinks)
 	safef(query, sizeof(query), "select orfName,protName from sangerLinks");
     else if (isNotEmpty(protAccQuery))
-	safef(query, sizeof(query), protAccQuery);
+	safecpy(query, sizeof(query), protAccQuery);
     else
 	safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
     sr = sqlGetResult(conn, query);

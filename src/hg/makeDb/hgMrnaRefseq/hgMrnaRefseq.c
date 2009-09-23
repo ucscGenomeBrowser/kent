@@ -91,9 +91,9 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 sqlFreeResult(&sr2);
 
-system("cat j.dat|sort|uniq >mrnaRefseq.tab");
+mustSystem("cat j.dat|sort|uniq >mrnaRefseq.tab");
 printf("mrnaRefseq.tab created.\n");
-system("rm j.dat");
+mustSystem("rm j.dat");
 return(0);
 }
 

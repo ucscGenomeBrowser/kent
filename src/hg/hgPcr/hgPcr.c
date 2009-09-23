@@ -25,7 +25,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.28 2008/12/03 18:57:11 kuhn Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.29 2009/09/23 18:42:17 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -546,7 +546,7 @@ if (errCatchStart(errCatch))
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
-     warn(errCatch->message->string);
+    warn("%s", errCatch->message->string);
 errCatchFree(&errCatch); 
 if (flipReverse)
     reverseComplement(rPrimer, strlen(rPrimer));

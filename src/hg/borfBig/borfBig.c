@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: borfBig.c,v 1.5 2006/03/27 18:44:07 angie Exp $";
+static char const rcsid[] = "$Id: borfBig.c,v 1.6 2009/09/23 18:42:16 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -104,7 +104,7 @@ while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     faWrite(tmpFa, seq.name, seq.dna, seq.size);
     dyStringClear(cmd);
     dyStringPrintf(cmd, "%s %s > %s", exe, tmpFa, tmpOrf);
-    system(cmd->string);
+    mustSystem(cmd->string);
     convertBorfOutput(tmpOrf, f);
     printf(".");
     fflush(stdout);
