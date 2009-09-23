@@ -362,17 +362,18 @@ else
 endif
 
 # -------------------------------------------------
-# find the correct paramaters for the matrix variable:
+# find the correct paramaters for the trackDb variables:
 
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo  "Find the correct parameters for the matrix variable"
+echo  "Find the correct parameters for the 3 trackDb variables"
 echo  "which appears in the chain-OtherOrg download file."
 echo  "Compare this to the chain description page."
 echo
 
 getMatrixLines.csh $db $otherDb
+getChainLines.csh $db $otherDb
 
 
 # -------------------------------------------------
