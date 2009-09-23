@@ -90,13 +90,82 @@ informant Opossum N-SCAN uses human (hg19) as the informant.
 track chainHg18 override
 shortLabel $o_db
 otherOrg hg18
+priority 135
 
 track netHg18 override
 shortLabel $o_db
 otherOrg hg18
+priority 135.1
+
+track chainNetCanFam2 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 1000
+chainLinearGap loose
+priority 210
+
+track chainDanRer5 override
+priority 109
+
+track netDanRer5 override
+priority 109.1
+
+track chainXenTro2 override
+priority 110
+
+track netXenTro2 override
+priority 110.1
+
+track chainNetGalGal3 override
+priority 120
+
+track chainNetHg19 override
+priority 130
 
 track chainPanTro2 override
-priority 280.1
+priority 140
 
 track netPanTro2 override
-priority 280.2
+priority 140.1
+
+track chainPonAbe2 override
+priority 150
+
+track netPonAbe2 override
+priority 150.1
+
+track chainRheMac2 override
+priority 160
+
+track netRheMac2 override
+priority 160.1
+
+track chainRn4 override
+priority 170
+
+track netRn4 override
+priority 170.1
+
+track chainMm9 override
+priority 180
+
+track netMm9 override
+priority 180.1
+
+track chainBosTau4 override
+priority 190
+
+track netBosTau4 override
+priority 190.1
+
+track chainNetEquCab2 override
+priority 200
+
+track chainNetOrnAna1 override
+priority 220
+
+track chainMacEug1 override
+priority 230
+
+track netMacEug1 override
+priority 230.1
