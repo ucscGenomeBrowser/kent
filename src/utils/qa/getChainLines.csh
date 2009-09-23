@@ -62,11 +62,11 @@ if ( "$fullLine" != "" ) then
   # extract the chainMinScore value
   set minScore=`echo $fullLine | sed -e "s/Chain minimum score: //" \
   | awk '{print $1}' | sed -e "s/,//"`
-  echo '$chainMinScore '$minScore
+  echo "chainMinScore $minScore"
   
   # extract the chainLinearGap method
   set linearGap=`echo $fullLine | awk '{print $9}' | sed "s/://" \
   | sed "s/(//" | sed "s/)//"`
-  echo '$chainLinearGap '$linearGap
+  echo "chainLinearGap $linearGap"
 
 exit
