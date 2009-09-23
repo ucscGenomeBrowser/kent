@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.47 2009/09/17 20:50:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.48 2009/09/23 17:04:09 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -620,6 +620,14 @@ hPrintf("<TH ALIGN=LEFT VALIGN=BOTTOM><B><PRE>");
  * the data columns below.  Wrapping in the data columns
  * makes the expression display less effective so we try
  * to minimize it.  -jk */
+if (sameWord(col->name, "dnaSeqs") || sameWord(col->name, "aaSeqs"))
+    {
+    printf("%s", col->shortLabel);
+    hPrintf("</PRE></B></TH>");
+    return;
+    }
+
+
 if (colWidth == 0)
     {
     colSortLink(col);
