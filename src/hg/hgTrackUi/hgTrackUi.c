@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.500 2009/09/02 23:22:21 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.501 2009/09/24 23:05:08 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1634,11 +1634,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 void chainColorUi(struct trackDb *tdb)
 /* UI for the chain tracks */
 {
-if (chainDbNormScoreAvailable(database, chromosome, tdb->tableName, NULL))
+boolean normScoreAvailable = FALSE;
+char * normScoreTest =
+     trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
+if (differentWord(normScoreTest, "no"))
+        normScoreAvailable = TRUE;
+
+if (normScoreAvailable)
     chainCfgUi(database, cart, tdb, tdb->tableName, NULL, FALSE, chromosome);
 else
     crossSpeciesUi(tdb);
-
 }
 
 void chromGraphUi(struct trackDb *tdb)
@@ -2437,6 +2442,7 @@ jsIncludeFile("utils.js",NULL);
 #ifdef SUPPORT_RESET_TO_DEFAULTS
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];
+
 // NOTE: Currently only composite multi-view tracks because
 // reset relies upon all cart vars following naming convention:
 //   {tableName}.{varName}...  ( One exception supported: {tableName}_sel ).
