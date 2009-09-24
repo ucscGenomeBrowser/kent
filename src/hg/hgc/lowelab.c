@@ -89,8 +89,9 @@
 #include "cddInfo.h"
 #include "alignInfo.h"
 #include "loweutils.h"
+#include "cddDesc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.36 2009/09/24 16:44:25 holmes Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.37 2009/09/24 21:16:35 holmes Exp $";
 
 extern char *uniprotFormat;
 
@@ -2851,8 +2852,8 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
     if (wordCount > 1)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
-    /*
-    sprintf(query, "select * from centraldb.cddDesc where accession = '%s'", itemName);
+
+    sprintf(query, "select * from mgCommonDb.cddDesc where accession = '%s'", itemName);
     //sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
     struct sqlResult *srCddDesc = sqlGetResult(conn, query);
 
@@ -2865,7 +2866,7 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
         slAddTail(&description, element);
     }
     sqlFreeResult(&srCddDesc);
-*/
+
   genericHeader(tdb,itemName);
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
@@ -2882,7 +2883,7 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
            infoload->name, infoload->NCBInum);
     printf(" Link to NCBI Site</A> <BR>\n");
     printf("<B>E-value:</B> %0.0e<BR>\n", infoload->evalue);
-    //printf("<B>Description:</B> %s<BR>\n", description->name);
+    printf("<B>Description:</B> %s<BR>\n", description->name);
     printf("<B>Protein Identity:</B> %u%%<BR>\n", infoload->percentident);
     printf("<B>Percent Length:</B> %u%%<BR>\n", infoload->percentlength);
           printf("<B>Position:</B> "
