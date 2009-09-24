@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.38 2009/09/20 17:16:44 markd Exp $";
+#	"$Id: hg19.txt,v 1.39 2009/09/24 20:57:52 hiram Exp $";
 
 #############################################################################
 
@@ -3583,6 +3583,15 @@ TMPDIR=/scratch/tmp
     time doRecipBest.pl -buildDir=`pwd` hg19 anoCar1 > rbest.log 2>&1
     #	real    45m58.001s
 
+    #	running syntenic Net 2009-08-27 - Hiram
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=syntenicNet -syntenicNet \
+	-qRepeats=windowmaskerSdust > syntenicNet.log 2>&1 &
+    #	real    6m13.304s
+
     #	running the swap - DONE - 2009-06-02
     mkdir /hive/data/genomes/anoCar1/bed/blastz.hg19.swap
     cd /hive/data/genomes/anoCar1/bed/blastz.hg19.swap
@@ -4434,7 +4443,7 @@ calJac1:0.066389):0.056911,tarSyr1:0.135169):0.011307,
 tupBel1:0.183583):0.004688,(((((mm9:0.083220,rn4:0.090564):0.196605,
 dipOrd1:0.209532):0.022555,cavPor3:0.223415):0.009828,
 speTri1:0.146894):0.025042,
-(oryCun1:0.116009,ochPri2:0.198295):0.100037):0.015355):0.020666,
+(oryCun2:0.116009,ochPri2:0.198295):0.100037):0.015355):0.020666,
 (((vicPac1:0.105252,(turTru1:0.064182,bosTau4:0.121911):0.025111):0.039691,
 ((equCab2:0.107726,(felCat3:0.097971,canFam2:0.100888):0.049486):0.006252,
 (myoLuc1:0.141155,pteVam1:0.111787):0.033187):0.004179):0.011699,
@@ -4445,7 +4454,7 @@ macEug1:0.3):0.1,
 monDom5:0.325899):0.072430,ornAna1:0.453916):0.109903,
 ((galGal3:0.166386,taeGut1:0.170717):0.199763,
 anoCar1:0.509545):0.108130):0.166150,xenTro2:0.852482):0.300396,
-(((tetNig1:0.224774,fr2:0.205294):0.191836,
+(((tetNig2:0.224774,fr2:0.205294):0.191836,
 (gasAcu1:0.313967,oryLat2:0.478451):0.058404):0.322824,
 danRer6:0.731166):0.155214):0.511293,petMar1:0.511293);
 '_EOF_'
@@ -4534,7 +4543,7 @@ close (FH);
 # 18  0.3740 - Cat felCat3      (% 35.713) (% 61.104)
 # 19  0.3769 - Dog canFam2      (% 52.879) (% 62.055)
 # 20  0.3809 - Armadillo dasNov2        (% 33.543) (N/A)
-# 21  0.3941 - Rabbit oryCun1   (% 33.676) (N/A)
+# 21  0.3941 - Rabbit oryCun2   (% 44.317) (58.405)
 # 22  0.3946 - Microbat myoLuc1 (% 33.174) (N/A)
 # 23  0.4028 - Cow bosTau4      (% 46.506) (% 50.297)
 # 24  0.4363 - Guinea Pig cavPor3       (% 43.680) (N/A)
@@ -4556,7 +4565,7 @@ close (FH);
 # 40  1.9387 - Stickleback gasAcu1      (% 1.916) (% 11.175)
 # 41  1.9634 - Fugu fr2 (% 1.702) (% 10.929)
 # 42  1.9746 - Zebrafish danRer6        (% 3.051) (% 6.399)
-# 43  1.9829 - Tetraodon tetNig1        (% 2.003) (% 14.443)
+# 43  1.9829 - Tetraodon tetNig2        (% 1.712) (% 14.194)
 # 44  2.1031 - Medaka oryLat2   (% 1.849) (% 6.705)
 # 45  2.1108 - Lamprey petMar1  (% 1.082) (% 3.200)
 
@@ -4652,14 +4661,14 @@ done > species.list
     cut -f 1 ../../../chrom.sizes > chr.list
 
     gensub2 species.list chr.list template jobList
-    para create jobList
+    para -ram=8g create jobList
     para try ... check ... push ... etc...
 # Completed: 4185 of 4185 jobs
-# CPU time in finished jobs:      27549s     459.15m     7.65h    0.32d  0.001 y
-# IO & Wait Time:                 15763s     262.71m     4.38h    0.18d  0.000 y
-# Average job time:                  10s       0.17m     0.00h    0.00d
-# Longest finished job:             158s       2.63m     0.04h    0.00d
-# Submission to last job:          1647s      27.45m     0.46h    0.02d
+# CPU time in finished jobs:      25547s     425.78m     7.10h    0.30d  0.001 y
+# IO & Wait Time:                268664s    4477.73m    74.63h    3.11d  0.009 y
+# Average job time:                  70s       1.17m     0.02h    0.00d
+# Longest finished job:            1234s      20.57m     0.34h    0.01d
+# Submission to last job:          3048s      50.80m     0.85h    0.04d
 
     # the autoMultiz cluster run
     ssh swarm
@@ -4681,12 +4690,12 @@ set db = hg19
 set c = $1
 set result = $2
 set run = `/bin/pwd`
-set tmp = $run/tmp/$db/multiz.$c
+set tmp = /scratch/tmp/$db/multiz.$c
 set pairs = /hive/data/genomes/hg19/bed/multiz46way/mafSplit
 /bin/rm -fr $tmp
 /bin/mkdir -p $tmp
 /bin/cp -p ../../tree.nh ../../species.list $tmp
-pushd $tmp
+pushd $tmp > /dev/null
 foreach s (`/bin/sed -e "s/ $db//" species.list`)
     set in = $pairs/$s/$c.maf
     set out = $db.$s.sing.maf
@@ -4702,13 +4711,13 @@ foreach s (`/bin/sed -e "s/ $db//" species.list`)
     endif
 end
 set path = ($run/penn $path); rehash
-$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
-popd
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
 /bin/rm -f $result
 /bin/cp -p $tmp/$c.maf $result
 /bin/rm -fr $tmp
-/bin/rmdir --ignore-fail-on-non-empty $run/tmp/$db
-/bin/rmdir --ignore-fail-on-non-empty $run/tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
 '_EOF_'
 # << happy emacs
     chmod +x autoMultiz.csh
@@ -4730,11 +4739,11 @@ popd
     para -ram=8g try
     para -ram=8g push
 # Completed: 504 of 504 jobs
-# CPU time in finished jobs:    1313981s   21899.69m   364.99h   15.21d  0.042 y
-# IO & Wait Time:                675855s   11264.24m   187.74h    7.82d  0.021 y
-# Average job time:                3948s      65.80m     1.10h    0.05d
-# Longest finished job:           19767s     329.45m     5.49h    0.23d
-# Submission to last job:        128616s    2143.60m    35.73h    1.49d
+# CPU time in finished jobs:    1342039s   22367.32m   372.79h   15.53d  0.043 y
+# IO & Wait Time:                 63835s    1063.91m    17.73h    0.74d  0.002 y
+# Average job time:                2789s      46.49m     0.77h    0.03d
+# Longest finished job:           12625s     210.42m     3.51h    0.15d
+# Submission to last job:         15300s     255.00m     4.25h    0.18d
 
     # put the split maf results back together into a single maf file
     #	eliminate duplicate comments
@@ -4766,24 +4775,24 @@ tail -q -n 1 maf/hg19_${C}.*.maf | sort -u >> ../maf/${C}.maf
 
     cat << '_EOF_' >> template
 #LOOP
-runOne $(root1) {check out exists+ ../maf/$(root1).maf.gz}
+runOne $(root1) {check out exists+ ../maf/$(root1).maf}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
     cut -f1 ../../../chrom.sizes > chr.list
-    ssh memk
+    ssh encodek
     cd /hive/data/genomes/hg19/bed/multiz46way/splitRun
     gensub2 chr.list single template jobList
     para create jobList
     para try ... check ... push ... etc ...
 # Completed: 92 of 93 jobs
 # Crashed: 1 jobs
-# CPU time in finished jobs:       1027s      17.12m     0.29h    0.01d  0.000 y
-# IO & Wait Time:                 20761s     346.01m     5.77h    0.24d  0.001 y
-# Average job time:                 237s       3.95m     0.07h    0.00d
-# Longest finished job:            1629s      27.15m     0.45h    0.02d
-# Submission to last job:          1640s      27.33m     0.46h    0.02d
+# CPU time in finished jobs:        412s       6.86m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                 21187s     353.12m     5.89h    0.25d  0.001 y
+# Average job time:                 235s       3.91m     0.07h    0.00d
+# Longest finished job:            1529s      25.48m     0.42h    0.02d
+# Submission to last job:          1542s      25.70m     0.43h    0.02d
 
     #	one of the results is completely empty, the grep for results failed
     #	this file ../maf/chrUn_gl000226.maf only has header comments, no result
@@ -4799,20 +4808,19 @@ runOne $(root1) {check out exists+ ../maf/$(root1).maf.gz}
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/hg19/multiz46way/maf hg19 multiz46way
-    #	real    44m9.177s
-    #	Loaded 33540773 mafs in 93 files from /gbdb/hg19/multiz46way/maf
+    #	Loaded 33558634 mafs in 93 files from /gbdb/hg19/multiz46way/maf
+    #	real    512m8.053s
 
-    #	real    81m26.382s
-    #	Loaded 74158519 mafs in 93 files from /gbdb/hg19/multiz46way/maf
     # load summary table
     time nice -n +19 cat /gbdb/hg19/multiz46way/maf/*.maf \
 	| $HOME/bin/$MACHTYPE/hgLoadMafSummary hg19 -minSize=30000 -verbose=2 \
 		-mergeGap=1500 -maxSize=200000  multiz46waySummary stdin
-    #	real    65m2.993s
+    #	real    92m30.700s
 # flushSummaryBlocks: output 45 blocks
-# Created 8869916 summary blocks from 642016936 components
-#	and 33540773 mafs from stdin
-# blocks too small to be used: 27359
+# Created 8766427 summary blocks from 645238409 components and
+#	33558634 mafs from stdin
+# blocks too small to be used: 29456
+# Loading into hg19 table multiz46waySummary...
 
     # Gap Annotation
     # prepare bed files with gap info
@@ -4868,9 +4876,16 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg19/hg19.2bit $outMaf
     chmod +x anno.csh
 
     gensub2 chr.list single template jobList
-    para create jobList
+    para -ram=30g create jobList
     #	specify lots of ram to get one job per node
     para -ram=30g push
+    #	
+# Completed: 93 of 93 jobs
+# CPU time in finished jobs:      10371s     172.85m     2.88h    0.12d  0.000 y
+# IO & Wait Time:                  3365s      56.09m     0.93h    0.04d  0.000 y
+# Average job time:                 148s       2.46m     0.04h    0.00d
+# Longest finished job:            1153s      19.22m     0.32h    0.01d
+# Submission to last job:          7402s     123.37m     2.06h    0.09d
 
     ssh hgwdev
     rm -fr /gbdb/hg19/multiz46way/maf
@@ -4883,18 +4898,9 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg19/hg19.2bit $outMaf
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/hg19/multiz46way/maf hg19 multiz46way
-    #	with final set of quality annotated files:
-    #	Loaded 33320838 mafs in 49 files from /gbdb/hg19/multiz46way/maf
-    #	real    91m46.889s
-    #	running on Irow annotated mafs Fri Nov 28 00:28:09 PST 2008
-    #	Loaded 33320675 mafs in 49 files from /gbdb/hg19/multiz46way/maf
-    #	real    236m15.279s
-    #	running on bare bones mafs Thu Nov 27 19:29:44 PST 2008
-    #	Loaded 33273351 mafs in 49 files from /gbdb/hg19/multiz46way/maf
-    #	real    198m55.761s - while swarm busy with rebalancing
-    # from before the fixed multiz:
-    #	Loaded 35154852 mafs in 49 files from /gbdb/hg19/multiz46way/maf
-    #	real    71m5.594s
+    #	real    113m11.709s
+    #	Loaded 33612571 mafs in 93 files from /gbdb/hg19/multiz46way/maf
+XXX - done to here
 
     time nice -n +19 cat /gbdb/hg19/multiz46way/maf/*.maf \
 	| hgLoadMafSummary hg19 -minSize=30000 -mergeGap=1500 \
@@ -5240,6 +5246,277 @@ XXX - ready to go here - 2009-07-06
         --prune=`cat notPlacentals.list` \
                 tree_4d.46way.nh > tree_4d.46way.placental.nh
 
+#############################################################################
+# phastCons 46-way (WORKING - 2009-09-21 - Hiram)
+
+    # split 46way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh memk
+    mkdir -p /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split
+    mkdir /hive/data/genomes/hg19/bed/multiz46way/cons/ss
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/hg19/bed/multiz46way/maf/$c.maf
+set WINDOWS = /hive/data/genomes/hg19/bed/multiz46way/cons/ss/$c
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+twoBitToFa -seq=$c /hive/data/genomes/hg19/hg19.2bit hg19.$c.fa
+/cluster/bin/phast/$MACHTYPE/msa_split $MAF -i MAF \
+    -M hg19.$c.fa -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+rm -f hg19.$c.fa
+popd > /dev/null
+date >> $c.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../maf | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=32g create jobList
+    para try ... check ... etc
+    #	this takes a really long time.  memk was down to 2 usable
+    #	machines - got it finished manually on a combination of hgwdevnew CPUs
+    #	and other machines
+
+    # Estimate phastCons parameters
+    #	experimented with this as a parasol job on hgwdevnew to try a number
+    #	of SS files.  With a command of:
+
+/cluster/bin/phast/x86_64/phyloFit -i SS ${SS} \
+--tree "(((((((((((((((((hg19,panTro2),gorGor1),ponAbe2),rheMac2),calJac1),tarSyr1),(micMur1,otoGar1)),tupBel1),(((((mm9,rn4),dipOrd1),cavPor3),speTri1),(oryCun1,ochPri2))),(((vicPac1,(turTru1,bosTau4)),((equCab2,(felCat3,canFam2)),(myoLuc1,pteVam1))),(eriEur1,sorAra1))),(((loxAfr2,proCap1),echTel1),(dasNov2,choHof1))),monDom4),ornAna1),((galGal3,taeGut1),anoCar1)),xenTro2),(((tetNig1,fr2),(gasAcu1,oryLat2)),danRer5)),petMar1)" \
+--out-root=$OUT/starting_tree
+
+    #	running over the input files ../ss/*/*.ss results to
+#.../genomes/hg19/bed/multiz46way/cons/startingTree/result/*/starting-tree.mod
+
+    # add up the C and G:
+    find ./result -type f | xargs ls -rt | while read F
+do
+    D=`dirname $F`
+    echo -n `basename $D`" - "
+    grep BACKGROUND ${F} | awk '{printf "%0.3f\n", $3 + $4;}'
+done
+    #	counting number of species seen in the maf file:
+    find ./result -type f | xargs ls -rt | while read F
+do
+    D=`dirname $F`
+    echo -n `basename $D`" - "
+    grep TREE $F | sed -e \
+"s/TREE: //; s/(//g; s/)//g; s/[0-9].[0-9][0-9][0-9][0-9][0-9][0-9]//g; s/://g"  | tr ',' '\n' | wc -l
+done
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh swarm
+    mkdir -p /hive/data/genomes/hg19/bed/multiz46way/cons/run.cons
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all euarchontogliers placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast/x86_64
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/hg19/bed/multiz46way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/ss/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+else
+  ln -s $ssSrc/ss/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > ss.list
+
+    # run for all species
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons
+    mkdir -p all
+    cd all
+    #	Using Kate's .mod tree
+    cp -p ../../4d/46way.all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+XXX - running Tue Jan 13 22:19:21 PST 2009
+# Completed: 322 of 322 jobs
+# CPU time in finished jobs:      47406s     790.10m    13.17h    0.55d  0.002 y
+# IO & Wait Time:                 29902s     498.37m     8.31h    0.35d  0.001 y
+# Average job time:                 240s       4.00m     0.07h    0.00d
+# Longest finished job:             354s       5.90m     0.10h    0.00d
+# Submission to last job:           536s       8.93m     0.15h    0.01d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
+    time nice -n +19 hgLoadBed hg19 phastConsElements46way mostConserved.bed
+    #	Loaded 4878296 elements of size 5
+    #	real     2m3.414s
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits hg19 -enrichment refGene:cds phastConsElements46way
+    #	refGene:cds 1.144%, mostConserved.bed 4.973%,
+    #	both 0.854%, cover 74.62%, enrich 15.01x
+
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    #	refGene:cds 1.144%, phastConsElements46way 4.706%,
+    #	both 0.824%, cover 72.07%, enrich 15.31x
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits hg19 -enrichment knownGene:cds phastConsElements46way
+    #	knownGene:cds 1.205%, mostConserved.bed 4.973%,
+    #	both 0.874%, cover 72.55%, enrich 14.59x
+
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    #	knownGene:cds 1.205%, phastConsElements46way 4.706%,
+    #	both 0.844%, cover 70.05%, enrich 14.88x
+
+    featureBits hg19 -enrichment refGene:cds phastConsElements28way
+    #	refGene:cds 1.144%, phastConsElements28way 4.920%,
+    #	both 0.858%, cover 74.96%, enrich 15.24x
+    featureBits hg19 -enrichment knownGene:cds phastConsElements28way
+    #	knownGene:cds 1.205%, phastConsElements28way 4.920%,
+    #	both 0.878%, cover 72.88%, enrich 14.81x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p downloads
+
+for D in pp/chr*
+do
+    C=${D/pp\/}
+    out=downloads/${C}.phastCons46way.wigFix.gz
+    echo "${D} > ${C}.phastCons46way.wigFix.gz"
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | \
+	gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    30m7.228s
+
+    #	encode those files into wiggle data
+    zcat downloads/*.wigFix.gz \
+	| wigEncode stdin phastCons46way.wig phastCons46way.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    22m54.291s
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
+    ln -s `pwd`/phastCons46way.wib /gbdb/hg19/multiz46way/phastCons46way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phastCons46way phastCons46way.wig
+    #	real    1m13.681s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg19 phastCons46way > histogram.data 2>&1
+    #	real    8m6.841s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg18 Histogram phastCons46way track"
+set xlabel " phastCons46way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+
 #########################################################################
 # LASTZ Zebrafish DanRer6 (DONE - 2009-07-08,10 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzDanRer6.2009-07-08
@@ -5356,7 +5633,6 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> synNet.log 2>&1 &
     #	real    32m40.554s
-XXX - running Mon Aug  3 13:36:26 PDT 2009
 
     time doRecipBest.pl -buildDir=`pwd` hg19 loxAfr3 > rbest.log 2>&1
     #	real    184m3.435s
@@ -5794,6 +6070,129 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
+<<<<<<< hg19.txt
+# LASTZ Rabbit OryCun2 (DONE - 2009-08-12 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12
+    cd /hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12
+
+    cat << '_EOF_' > DEF
+# Human vs. Rabbit
+BLASTZ_M=50
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rabbit at chunk 20,000,000 all but 36 contigs can fit in a single job
+SEQ2_DIR=/scratch/data/oryCun2/oryCun2.2bit
+SEQ2_LEN=/scratch/data/oryCun2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/oryCun2/oryCun2.contigs.2bit
+SEQ2_CTGLEN=/scratch/data/oryCun2/oryCun2.contigs.sizes
+SEQ2_LIFT=/hive/data/genomes/oryCun2/contigs/oryCun2.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    516m41.981s
+    cat fb.hg19.chainOryCun2Link.txt 
+    #	1283994337 bases of 2897316137 (44.317%) in intersection
+    #	should have run syntenicNet in that first run
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=syntenicNet -syntenicNet > syntenicNet.log 2>&1 &
+    #	about 1 hour
+
+    mkdir /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
+    
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap -syntenicNet > swap.log 2>&1 &
+    #	real    176m35.932s
+    cat fb.oryCun2.chainHg19Link.txt 
+    #	1260477501 bases of 2604023284 (48.405%) in intersection
+
+##############################################################################
+# running syntenicNet on CavPor3 lastz (DONE - 2009-08-27 - Hiram)
+    cd /hive/data/genomes/hg19/bed/lastzCavPor3.2009-06-04
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=syntenicNet -syntenicNet > syntenicNet.log 2>&1 &
+    #	about 44 minutes
+
+##############################################################################
+# loading the lastz tables on cavPor3 - (DONE - 2009-08-28 - Hiram)
+    # the chain.tab and link.tab files are left over from the failed load
+    cd  /hive/data/genomes/cavPor3/bed/blastz.hg19.swap/axtChain
+
+    #	find out their sizes, average and total:
+    awk '{print length($0)}' chain.tab | ave stdin
+Q1 92.000000 median 93.000000 Q3 96.000000
+average 93.651267
+min 64.000000 max 109.000000
+count 27186468
+total 2546047186.000000
+    awk '{print length($0)}' link.tab | ave stdin
+Q1 45.000000 median 47.000000 Q3 48.000000
+average 46.731871
+min 22.000000 max 52.000000
+count 240602108
+total 11243786622.000000
+
+    cat << '_EOF_' > chainHg19Link.sql
+CREATE TABLE chainHg19Link (
+  bin smallint(5) unsigned NOT NULL default 0,
+  tName varchar(255) NOT NULL default '',
+  tStart int(10) unsigned NOT NULL default 0,
+  tEnd int(10) unsigned NOT NULL default 0,
+  qStart int(10) unsigned NOT NULL default 0,
+  chainId int(10) unsigned NOT NULL default 0,
+  KEY tName (tName(13),bin),
+  KEY chainId (chainId)
+) ENGINE=MyISAM max_rows=241000000 avg_row_length=50 pack_keys=1 CHARSET=latin1;
+'_EOF_'
+    # << happy emacs
+    hgsql cavPor3 < chainHg19Link.sql
+
+    time hgsql -e \
+      'load data local infile "link.tab" into table chainHg19Link;' cavPor3
+    #	real    405m15.956s
+
+    cd  /hive/data/genomes/cavPor3/bed/blastz.hg19.swap/axtChain
+
+    #	and the net tracks were not loaded:
+    time netClass -verbose=0 -noAr noClass.net cavPor3 hg19 cavPor3.hg19.net
+    #	real    40m25.078s
+
+    netFilter -minGap=10 cavPor3.hg19.net \
+	| hgLoadNet -verbose=0 cavPor3 netHg19 stdin
+    # real    33m24.972s (plus the featureBits below)
+
+    featureBits cavPor3 chainHg19Link > fb.cavPor3.chainHg19Link.txt 2>&1
+    cat fb.cavPor3.chainHg19Link.txt
+    #	1279572660 bases of 2663369733 (48.043%) in intersection
+
+##############################################################################
 # DBSNP CODING ANNOTATIONS (DONE 9/1/09 angie)
 
     # Repeat the coord-remapping performed for snp130 on the hg18 coding anno table.
@@ -5846,8 +6245,6 @@ TMPDIR=/scratch/tmp
 #Loaded 198493 elements of size 11
     mv /data/tmp/hg19.snp130Coding.bed hg19.snp130CodingDbSnp.bed
 
-
-##############################################################################
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
