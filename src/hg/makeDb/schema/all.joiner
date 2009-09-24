@@ -567,6 +567,13 @@ identifier wgEncodeGencodeClassesRel2
     hg18.wgEncodeGencodeManualRel2.name unique
     hg18.wgEncodeGencodePolyaRel2.name unique
 
+identifier wgEncodeGencodeClassesV3
+"Link together Gencode gene model (Known) and class for July 2009 Data Version"
+    hg18.wgEncodeGencodeClassesV3.name
+    hg18.wgEncodeGencodeAutoV3.name unique
+    hg18.wgEncodeGencodeManualV3.name unique
+    hg18.wgEncodeGencodePolyaV3.name unique
+
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg,$mm.acembly.name
@@ -630,14 +637,14 @@ identifier augustusAbinitioName dependency
    $gbd.augustusAbinitio.name
    $gbd.augustusAbinitioPep.name chopBefore=. full unique
 
-identifier vegaGeneIdHuman external=VegaGene 
+identifier vegaGeneIdHuman external=VegaGene
 "Link together various VEGA human curated gene annotation"
     hg18.vegaGtp.transcript
     hg18.vegaGene.name
     hg18.vegaPseudoGene.name
     hg18.vegaPep.name
 
-identifier vegaGeneIdMouse external=VegaGene 
+identifier vegaGeneIdMouse external=VegaGene
 "Link together various VEGA mouse curated gene annotation"
     mm9.vegaGtp.transcript
     mm9.vegaGene.name
@@ -1249,8 +1256,6 @@ identifier refSeqId typeOf=mrnaAccession
     hg17.dupSpMrna.mrnaID minCheck=0.40
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.37
-#    hg18.wgEncodeGencodeManualRel2.name
-#    hg18.wgEncodeGencodeAutoRel2.name
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
