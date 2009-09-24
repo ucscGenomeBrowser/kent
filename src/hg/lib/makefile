@@ -89,7 +89,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
-    alignInfo.o cddInfo.o loweutils.o
+    alignInfo.o cddInfo.o loweutils.o cddDesc.o
 
 
 ifeq (${GBROWSE}, 1)
