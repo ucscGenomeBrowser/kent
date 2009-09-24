@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.128 2009/09/17 21:33:54 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.129 2009/09/24 20:03:40 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -128,7 +128,7 @@ color 179,0,134
 tier 2
 protocol Keratinocyte_protocol.pdf
 
-term H1_ES
+term H1-hESC
 type Cell Line
 description Human Embryonic Stem Cells
 vendorName Cellular Dynamics
