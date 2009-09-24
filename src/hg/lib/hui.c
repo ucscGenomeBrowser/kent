@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.238 2009/09/23 18:42:20 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.239 2009/09/24 23:00:47 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3822,31 +3822,10 @@ enum chainColorEnum chainColor =
 
 /* check if we have normalized scores available */
 boolean normScoreAvailable = FALSE;
-
-if (! compositeLevel)
-    {
-    if (chromosome)
-	{
-	if (chainDbNormScoreAvailable(db, chromosome, tdb->tableName, NULL))
-	    normScoreAvailable = TRUE;
-	}
-    else
-	{
-	// This will not work if tableName is a split table, we don't know
-	//	the chromosome at this point here
-	struct sqlConnection *conn = hAllocConn(db);
-	int tblIx = sqlFieldIndex(conn, tdb->tableName, "normScore");
-	normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
-	hFreeConn(&conn);
-	}
-    }
-else
-    {
-    char * colorOptionType =
+char * normScoreTest =
      trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
-    if (differentWord(colorOptionType, "no"))
-	normScoreAvailable = TRUE;
-    }
+if (differentWord(normScoreTest, "no"))
+        normScoreAvailable = TRUE;
 
 char optString[256];
 if (normScoreAvailable)
