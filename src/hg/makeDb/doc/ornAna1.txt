@@ -646,6 +646,11 @@ cat  << 'EOF' > spec
     rm *.tab
     ln -s multiz6way.2007-04-24 /cluster/data/ornAna1/bed/multiz6way
 
+#########################################################################
+# Adding automatic generation of upstream files (DONE - 2009-08-13 - Hiram)
+    # edit src/hg/makeDb/genbank/genbank.conf to add:
+ornAna1.upstreamGeneTbl = ensGene
+ornAna1.upstreamMaf = multiz6way /hive/data/genomes/ornAna1/bed/multiz6way.2007-04-24/species.lst
 
 #########################################################################
 # MULTIZ6WAY DOWNLOADABLES (DONE 4/26/2007 angie)
