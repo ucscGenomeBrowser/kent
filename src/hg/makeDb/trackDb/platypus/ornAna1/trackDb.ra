@@ -116,3 +116,12 @@ spectrum on
 type netAlign bosTau4 chainBosTau4
 otherDb bosTau4
 
+track chainMonDom4 override
+shortLabel $o_db Net
+priority 260.1
+otherDb monDom4
+
+track netMonDom4 override
+shortLabel $o_db Net
+priority 260.2
+otherDb monDom4
