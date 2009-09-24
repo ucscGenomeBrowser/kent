@@ -190,13 +190,16 @@ if (isLeaf)
     }
 else
     {
-    /* Loop through remainder. */
+    bits64 fileOffsets[childCount];
+    /* Loop through to get file offsets of children. */
     for (i=0; i<childCount; ++i)
 	{
 	udcMustRead(bpt->udc, keyBuf, bpt->keySize);
-	bits64 fileOffset = udcReadBits64(bpt->udc, isSwapped);
-	rTraverse(bpt, fileOffset, context, callback);
+	fileOffsets[i] = udcReadBits64(bpt->udc, isSwapped);
 	}
+    /* Loop through recursing on child offsets. */
+    for (i=0; i<childCount; ++i)
+	rTraverse(bpt, fileOffsets[i], context, callback);
     }
 }
 
