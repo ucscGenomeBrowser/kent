@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.10 2009/09/14 15:22:35 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.11 2009/09/24 22:15:27 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -677,7 +677,11 @@ boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,i
    returns TRUE if successfully defined as having a portal */
 {
 if( (int)imageMultiple == 0)
+#ifdef IMAGEv2_DRAG_SCROLL_SZ
     imageMultiple = IMAGEv2_DRAG_SCROLL_SZ;
+#else//ifndef IMAGEv2_DRAG_SCROLL_SZ
+    imageMultiple = 1;
+#endif//ndef IMAGEv2_DRAG_SCROLL_SZ
 
 imgBox->portalStart = imgBox->chromStart;
 imgBox->portalEnd   = imgBox->chromEnd;
