@@ -15,7 +15,7 @@
 #include "chainCart.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.36 2009/08/25 22:55:51 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.37 2009/09/24 23:15:47 hiram Exp $";
 
 
 struct cartOptions
@@ -374,15 +374,11 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 /* Fill in custom parts of alignment chains. */
 {
 
-boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
 
 AllocVar(chainCart);
 
-char * colorOptionType =
-     trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
-if (differentWord(colorOptionType, "no"))
-	normScoreAvailable = TRUE;
+boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
 /*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);

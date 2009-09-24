@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1574 2009/09/24 23:05:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1575 2009/09/24 23:15:42 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2795,11 +2795,7 @@ else if (hDbIsActive(otherDb))
 	   subSetScore);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 
-boolean normScoreAvailable = FALSE;
-char * normScoreTest =
-     trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
-if (differentWord(normScoreTest, "no"))
-        normScoreAvailable = TRUE;
+boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
 if (normScoreAvailable)
     {

@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.239 2009/09/24 23:00:47 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.240 2009/09/24 23:15:44 hiram Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3821,11 +3821,7 @@ enum chainColorEnum chainColor =
 	chainFetchColorOption(cart, tdb, compositeLevel);
 
 /* check if we have normalized scores available */
-boolean normScoreAvailable = FALSE;
-char * normScoreTest =
-     trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
-if (differentWord(normScoreTest, "no"))
-        normScoreAvailable = TRUE;
+boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
 char optString[256];
 if (normScoreAvailable)
@@ -5508,3 +5504,14 @@ if(tdbIsCompositeChild(tdb)
 return FALSE;
 }
 
+boolean chainDbNormScoreAvailable(struct trackDb *tdb)
+/*	check if normScore column is specified in trackDb as available */
+{
+boolean normScoreAvailable = FALSE;
+char * normScoreTest =
+     trackDbSettingClosestToHomeOrDefault(tdb, "chainNormScoreAvailable", "no");
+if (differentWord(normScoreTest, "no"))
+        normScoreAvailable = TRUE;
+
+return normScoreAvailable;
+}

@@ -15,7 +15,7 @@
 #include "chainDb.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chainDb.c,v 1.12 2008/09/03 19:19:19 markd Exp $";
+static char const rcsid[] = "$Id: chainDb.c,v 1.13 2009/09/24 23:15:44 hiram Exp $";
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
@@ -161,27 +161,4 @@ while ((row = sqlNextRow(sr)) != NULL)
 slReverse(&chain->blockList);
 sqlFreeResult(&sr);
 dyStringFree(&query);
-}
-
-boolean chainDbNormScoreAvailable(char *db, char *chromName, char *mapName,
-	char **foundTable)
-/*	check if normScore column is available in this table	*/
-{
-boolean normScoreAvailable = FALSE;
-char tableName[HDB_MAX_TABLE_STRING];
-boolean hasBin;
-
-/*      find out if the optional normScore column exists */
-if (hFindSplitTable(db, chromName, mapName, tableName, &hasBin))
-    {
-    struct sqlConnection *conn = hAllocConn(db);
-    int tblIx = sqlFieldIndex(conn, tableName, "normScore");
-    normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
-    hFreeConn(&conn);
-    }   
-
-if (normScoreAvailable && foundTable)
-	*foundTable = cloneString(tableName);
-
-return normScoreAvailable;
 }
