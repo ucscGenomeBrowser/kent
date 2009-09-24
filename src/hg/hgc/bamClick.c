@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.9 2009/09/23 23:50:30 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.10 2009/09/24 04:33:50 angie Exp $";
 
 #include "bamFile.h"
 
@@ -47,7 +47,16 @@ printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
        seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
 ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
 		 FALSE);
-//TODO: show flags properly, maybe display sequence quality scores
+printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
+UBYTE *quals = bamGetQueryQuals(bam);
+int i;
+for (i = 0;  i < core->l_qseq;  i++)
+    {
+    if (i > 0 && (i % 24) == 0)
+	printf("</TR>\n<TR>");
+    printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+    }
+printf("</TR></TABLE></TT>\n");
 }
 
 static void showOverlap(const bam1_t *leftBam, const bam1_t *rightBam)

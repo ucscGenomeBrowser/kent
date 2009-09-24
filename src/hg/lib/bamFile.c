@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.8 2009/09/23 23:50:30 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.9 2009/09/24 04:33:50 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -92,6 +92,23 @@ for (i = 0; i < core->l_qseq; i++)
 if (bamIsRc(bam))
     reverseComplement(qSeq, core->l_qseq);
 return qSeq;
+}
+
+UBYTE *bamGetQueryQuals(const bam1_t *bam)
+/* Return the base quality scores encoded in bam as an array of ubytes. */
+{
+const bam1_core_t *core = &bam->core;
+int qLen = core->l_qseq;
+UBYTE *arr = needMem(qLen);
+boolean isRc = bamIsRc(bam);
+UBYTE *qualStr = bam1_qual(bam);
+int i;
+for (i = 0;  i < qLen;  i++)
+    {
+    int offset = isRc ? (qLen - 1 - i) : i;
+    arr[offset] = (qualStr[0] == 255) ? 255 : qualStr[i];
+    }
+return arr;
 }
 
 char *bamGetCigar(const bam1_t *bam)

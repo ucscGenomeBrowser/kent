@@ -50,6 +50,9 @@ char *bamGetQuerySequence(const bam1_t *bam);
  * reverse-complements query sequence when the alignment is on the - strand,
  * so here we rev-comp it back to restore the original query sequence. */
 
+UBYTE *bamGetQueryQuals(const bam1_t *bam);
+/* Return the base quality scores encoded in bam as an array of ubytes. */
+
 char *bamGetCigar(const bam1_t *bam);
 /* Return a BAM-enhanced CIGAR string, decoded from the packed encoding in bam. */
 
