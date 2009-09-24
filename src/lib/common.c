@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.132 2009/09/23 18:42:27 angie Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.133 2009/09/24 22:20:59 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1537,6 +1537,24 @@ for (;;)
 	*out++ = c;
     }
 *out++ = 0;
+}
+
+/* Remove non-alphanumeric chars from string */
+void eraseNonAlphaNum(char *s)
+{
+char *in, *out;
+char c;
+
+in = out = s;
+for (;;)
+    {
+    c = *in++;
+    if (c == 0)
+        break;
+    if (isalnum(c))
+        *out++ = c;
+    }
+*out = 0;
 }
 
 char *trimSpaces(char *s)

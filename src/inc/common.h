@@ -813,6 +813,9 @@ void eraseTrailingSpaces(char *s);
 void eraseWhiteSpace(char *s);
 /* Remove white space from a string */
 
+void eraseNonAlphaNum(char *s);
+/* Remove non-alphanumeric chars from string */
+
 char *trimSpaces(char *s);
 /* Remove leading and trailing white space. */
 
