@@ -1,3 +1,5 @@
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.539 2009/09/24 18:06:02 tdreszer Exp $
+
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
 
@@ -6038,7 +6040,7 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878_<i>Tier1</i> t1K562=K562_<i>Tier1</i> t2HeLa=HeLa-S3_<i>Tier2</i> t2HepG2=HepG2_<i>Tier2</i> t3HCT116=HCT-116_<i>Tier3</i> t3HEK293b=HEK293(b)_<i>Tier3</i> t3NB4=NB4_<i>Tier3</i> t3NT2D1=NT2-D1_(NTera2)_<i>Tier3</i> uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Antibody BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 JUND=JunD MAX=Max NFE2=NF-E2 POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
+subGroup3 factor Antibody AP2alp=AP-2alpha AP2gam=AP-2gamma BDP1=BDP1 BRF1=BRF1 CFOS=c-Fos CJUN=c-Jun CMYC=c-Myc E2F4=E2F4 E2F6=E2F6 GATA1=GATA-1 GATA2=GATA-2 JUND=JunD MAX=Max NFE2=NF-E2 POL2=Pol2 POL3=Pol3 RAD21=Rad21 RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1A=SREBP1A SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 yRNAseq=RNA-seq_PolyA yLarge=Fragment_Control yMNase=MNase_Control yMouseIG=Mouse_IgG_Control yNaked=Naked_DNA_Control zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_Control
 #subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -6240,6 +6242,46 @@ wgEncode 1
     cell HEK293(b)
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=279 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-03-20 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHek293Input fileName=wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz
 
+    track wgEncodeYaleChIPseqPeaksHelas3Ap2alpha
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa AP-2a Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (AP-2alpha in HeLa-S3 cells)
+    subGroups view=Peaks factor=AP2alp cellType=t2HeLa
+    type narrowPeak
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=AP-2alpha view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=536 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-23 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Ap2alpha fileName=wgEncodeYaleChIPseqPeaksHelas3Ap2alpha.narrowPeak.gz
+
+    track wgEncodeYaleChIPseqSignalHelas3Ap2alpha
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa AP-2a Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (AP-2alpha in HeLa-S3 cells)
+    subGroups view=Signal factor=AP2alp cellType=t2HeLa
+    type bedGraph 4
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=AP-2alpha view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=536 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-23 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Ap2alpha fileName=wgEncodeYaleChIPseqSignalHelas3Ap2alpha.bedGraph4.gz
+
+    track wgEncodeYaleChIPseqPeaksHelas3Ap2gamma
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa AP-2g Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (AP-2gamma in HeLa-S3 cells)
+    subGroups view=Peaks factor=AP2gam cellType=t2HeLa
+    type narrowPeak
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=AP-2gamma view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=537 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-23 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Ap2gamma fileName=wgEncodeYaleChIPseqPeaksHelas3Ap2gamma.narrowPeak.gz
+
+    track wgEncodeYaleChIPseqSignalHelas3Ap2gamma
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa AP-2g Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (AP-2gamma in HeLa-S3 cells)
+    subGroups view=Signal factor=AP2gam cellType=t2HeLa
+    type bedGraph 4
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=AP-2gamma view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=537 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-23 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Ap2gamma fileName=wgEncodeYaleChIPseqSignalHelas3Ap2gamma.bedGraph4.gz
+
     track wgEncodeYaleChIPseqPeaksHelas3Max
     release alpha
     subTrack wgEncodeYaleChIPseq off
@@ -6279,6 +6321,26 @@ wgEncode 1
     type bedGraph 4
     color 0,102,136
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HeLa-S3 antibody=Pol2 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=324 submittedDataVersion=V2 dateSubmitted=2008-10-31 dateResubmitted=2009-05-02 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2 fileName=wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz
+
+    track wgEncodeYaleChIPseqPeaksHelas3Tr4
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa TR4 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in HeLa-S3 cells)
+    subGroups view=Peaks factor=TR4 cellType=t2HeLa
+    type narrowPeak
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=TR4 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=538 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3Tr4 fileName=wgEncodeYaleChIPseqPeaksHelas3Tr4.narrowPeak.gz
+
+    track wgEncodeYaleChIPseqSignalHelas3Tr4
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa TR4 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in HeLa-S3 cells)
+    subGroups view=Signal factor=TR4 cellType=t2HeLa
+    type bedGraph 4
+    color 133,0,173
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=TR4 view=Signal labVersion="Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=538 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Tr4 fileName=wgEncodeYaleChIPseqSignalHelas3Tr4.bedGraph4.gz
 
     track wgEncodeYaleChIPseqPeaksHelas3ifngStat1
     #release BOTH
