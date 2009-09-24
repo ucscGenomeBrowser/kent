@@ -88,8 +88,9 @@
 #include "rnaHybridization.h"
 #include "cddInfo.h"
 #include "alignInfo.h"
+#include "loweutils.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.35 2009/09/20 23:46:23 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.36 2009/09/24 16:44:25 holmes Exp $";
 
 extern char *uniprotFormat;
 
@@ -1787,37 +1788,6 @@ void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
     printTrackHtml(tdb);
 }
 
-int parseDelimitedString(char *inString, char delimiter, char *outString[], int outSize)
-{
-    int arrayCount = 0;
-    int charCount = 0;
-    int start = 0;
-    char *out = NULL;
-
-    for (charCount = 0; charCount < strlen(inString); charCount++)
-    {
-        if (inString[charCount] == delimiter)
-        {
-            if (arrayCount < outSize)
-            {
-                out = malloc(sizeof(char) * (charCount - start + 1));
-                memcpy(out, inString + start, sizeof(char) * (charCount - start));
-                out[charCount - start] = '\0';
-                outString[arrayCount++] = out;
-                start = charCount + 1;
-            }
-        }
-    }
-    if (arrayCount < outSize)
-    {
-        out = malloc(sizeof(char) * (charCount - start + 1));
-        memcpy(out, inString + start, sizeof(char) * (charCount - start));
-        out[charCount - start] = '\0';
-        outString[arrayCount++] = out;
-    }
-
-    return arrayCount;
-}
 
 struct bed * getBlastpTrackRecord(struct sqlConnection *conn, struct trackDb *tdb, char *targetName)
 /* Get blastp track record clicked by user*/
@@ -1855,34 +1825,6 @@ struct bed * getBlastpTrackRecord(struct sqlConnection *conn, struct trackDb *td
     return blastpTrack;
 }
 
-struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char* dbName, char *geneName)
-/* Get refseq protein annotation by given gene name in a given database */
-{
-    char query[512];
-    struct sqlResult *sr = NULL;
-    char **row;
-    struct minGeneInfo* ginfo = NULL;
-    char gbProtCodeXra[50];
-
-    if (strcmp(database, dbName) == 0)
-        strcpy(gbProtCodeXra, "gbProtCodeXra");
-    else
-    {
-        strcpy(gbProtCodeXra, dbName);
-        strcat(gbProtCodeXra, ".gbProtCodeXra");
-    }
-    if (hTableExists(dbName, "gbProtCodeXra"))
-    {
-        sprintf(query, "select * from %s where name = '%s'", gbProtCodeXra, geneName);
-    sr = sqlGetResult(conn, query);
-        if ((row = sqlNextRow(sr)) != NULL)
-    ginfo = minGeneInfoLoad(row);
-    }
-
-    if (sr != NULL)
-       sqlFreeResult(&sr);
-    return ginfo;
-}
 
 void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, char *queryName, unsigned int *querySeqLength)
 /* Get and print blastp query gene info */
@@ -1974,32 +1916,6 @@ void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, cha
     sqlFreeResult(&srRefSeq);
     free(targetGeneName[0]);
     free(targetGeneName[1]);
-}
-
-void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char *clade)
-/* Get genome and clade for a given database name */
-{
-    char query[512];
-    struct sqlResult *srDb;
-    char **rowDb;
-    char *centraldb = cfgOption("central.db");
-
-    sprintf(query, "select count(*) from %s.genomeClade a, %s.dbDb b, %s.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
-            centraldb, centraldb, centraldb, dbName);
-    srDb = sqlGetResult(conn, query);
-    if ((rowDb = sqlNextRow(srDb)) != NULL)
-    {
-        sqlFreeResult(&srDb);
-        sprintf(query, "select a.genome, c.label from %s.genomeClade a, %s.dbDb b, %s.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
-                centraldb, centraldb, centraldb, dbName);
-        srDb = sqlGetResult(conn, query);
-        if ((rowDb = sqlNextRow(srDb)) != NULL)
-        {
-            strcpy(genome, rowDb[0]);
-            strcpy(clade, rowDb[1]);
-        }
-    }
-    sqlFreeResult(&srDb);
 }
 
 struct slName* getAllClades(struct sqlConnection *conn)
@@ -2935,8 +2851,21 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
     if (wordCount > 1)
         bedSize = atoi(words[1]);
     if (bedSize < 3) bedSize = 3;
+    /*
+    sprintf(query, "select * from centraldb.cddDesc where accession = '%s'", itemName);
+    //sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
+    struct sqlResult *srCddDesc = sqlGetResult(conn, query);
 
 
+    struct cddDesc *description = NULL;
+    while ((row = sqlNextRow(srCddDesc)) != NULL)
+    {
+        struct cddDesc *element;
+        element = cddDescLoad(row);
+        slAddTail(&description, element);
+    }
+    sqlFreeResult(&srCddDesc);
+*/
   genericHeader(tdb,itemName);
   dupe = cloneString(tdb->type);
   wordCount = chopLine(dupe, words);
@@ -2953,6 +2882,7 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
            infoload->name, infoload->NCBInum);
     printf(" Link to NCBI Site</A> <BR>\n");
     printf("<B>E-value:</B> %0.0e<BR>\n", infoload->evalue);
+    //printf("<B>Description:</B> %s<BR>\n", description->name);
     printf("<B>Protein Identity:</B> %u%%<BR>\n", infoload->percentident);
     printf("<B>Percent Length:</B> %u%%<BR>\n", infoload->percentlength);
           printf("<B>Position:</B> "
