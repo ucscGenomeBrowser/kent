@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.131 2009/08/19 18:58:13 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.132 2009/09/24 17:07:44 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -68,7 +68,6 @@ struct hash *oldVars = NULL;
 char *excludeVars[] = {"Submit", "submit", "SubmitFile", NULL};
 char *database = NULL;
 char *organism = NULL;
-char *clade = NULL;
 struct customTrack *ctList = NULL;
 
 void makeClearButton(char *field)
@@ -398,7 +397,7 @@ else
     printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
     cartSaveSession(cart);
     if (gotClade)
-        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"%s\">\n", clade);
+        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"\">\n");
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
