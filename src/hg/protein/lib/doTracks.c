@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.22 2009/08/19 23:14:10 angie Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.23 2009/09/24 16:07:58 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -147,7 +147,7 @@ for (index=0; index < len; index++)
 	}
 
     /* skip non-standard AA alphabets */
-    if (ia == -1) break;
+    if (ia == -1) continue;
 
     calxy(index, *yOffp, &xx, &yy);
 
