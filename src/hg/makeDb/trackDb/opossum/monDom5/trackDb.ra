@@ -90,19 +90,19 @@ informant Opossum N-SCAN uses human (hg19) as the informant.
 track chainHg18 override
 shortLabel $o_db
 otherOrg hg18
-priority 135
+priority 225
 
 track netHg18 override
 shortLabel $o_db
 otherOrg hg18
-priority 135.1
+priority 225.1
 
 track chainNetCanFam2 override
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 chainMinScore 1000
 chainLinearGap loose
-priority 210
+priority 140
 
 track chainDanRer5 override
 priority 109
@@ -120,49 +120,49 @@ track chainNetGalGal3 override
 priority 120
 
 track chainNetHg19 override
-priority 130
+priority 220
 
 track chainPanTro2 override
-priority 140
+priority 210
 
 track netPanTro2 override
-priority 140.1
+priority 210.1
 
 track chainPonAbe2 override
-priority 150
-
-track netPonAbe2 override
-priority 150.1
-
-track chainRheMac2 override
-priority 160
-
-track netRheMac2 override
-priority 160.1
-
-track chainRn4 override
-priority 170
-
-track netRn4 override
-priority 170.1
-
-track chainMm9 override
-priority 180
-
-track netMm9 override
-priority 180.1
-
-track chainBosTau4 override
-priority 190
-
-track netBosTau4 override
-priority 190.1
-
-track chainNetEquCab2 override
 priority 200
 
+track netPonAbe2 override
+priority 200.1
+
+track chainRheMac2 override
+priority 190
+
+track netRheMac2 override
+priority 190.1
+
+track chainRn4 override
+priority 180
+
+track netRn4 override
+priority 180.1
+
+track chainMm9 override
+priority 170
+
+track netMm9 override
+priority 170.1
+
+track chainBosTau4 override
+priority 160
+
+track netBosTau4 override
+priority 160.1
+
+track chainNetEquCab2 override
+priority 150
+
 track chainNetOrnAna1 override
-priority 220
+priority 130
 
 track chainMacEug1 override
 priority 230
