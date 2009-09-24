@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.106 2009/09/23 18:42:19 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.107 2009/09/24 22:14:37 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -574,7 +574,7 @@ if (chrom == NULL)
 if(theImgBox && curMap)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s",hgTracksName(), ui->string); // NOTE: position removed due to portal
+    safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",hgTracksName(), chrom, start+1, end, ui->string); // NOTE: position may need removing due to portal
     //#ifdef IMAGEv2_SHORT_MAPITEMS
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
