@@ -1505,6 +1505,12 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     #	real    0m4.525
 
 #########################################################################
+# Adding automatic generation of upstream files (DONE - 2009-08-13 - Hiram)
+    # edit src/hg/makeDb/genbank/genbank.conf to add:
+gasAcu1.upstreamGeneTbl = ensGene
+gasAcu1.upstreamMaf = multiz8way /hive/data/genomes/gasAcu1/bed/multiz8way/species.lst
+
+#########################################################################
 # MULTIZ8WAY DOWNLOADABLES (DONE - 2007-01-05 - Hiram)
 ##  re-done with new chrUn.maf 2007-01-13 - Hiram
 ##  re-done with fr2 in place of fr1 - 2007-02-03 - Hiram
@@ -2686,6 +2692,94 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# BLASTZ/CHAIN/NET TetNig2 (DONE - 2009-08-10,09-15 - Hiram)
+    #	create contigs only sequence to align properly to gasAcu1 contigs
+    mkdir /hive/data/genomes/gasAcu1/nonBridged
+    cd /hive/data/genomes/gasAcu1/nonBridged
+    gapToLift -verbose=2 gasAcu1 gasAcu1.contigs.lift \
+	-bedFile=gasAcu1.contigs.bed
+#       chrom count: 23
+# WARNING: gap at end of chromosome not telomere at
+#		chrUn:62549211-62550211, type: clone
+#       found 16945 gaps
+#       bed output requested to gasAcu1.contigs.bed
+#       no gaps on chrom: chrM, size: 15742
+    ~/kent/src/hg/utils/lft2BitToFa.pl ../gasAcu1.2bit gasAcu1.contigs.lift \
+	| gzip -c > gasAcu1.contigs.fa.gz
+    #	make sure nothing was destroyed:
+    faCount *.fa.gz > faCount.contigs.txt 2>&1
+    twoBitToFa ../gasAcu1.2bit stdout | faCount stdin > faCount.2bit.txt 2>&1
+    tail -1 faCount.contigs.txt
+# total   461441448       123670916       99610982        99564587
+#	123781376       14813587        14615136
+    tail -1 faCount.2bit.txt
+# total   463354448       123670916       99610982        99564587
+#	123781376       16726587        14615136
+
+    #	only the total size and N count are different
+    faToTwoBit gasAcu1.contigs.fa.gz gasAcu1.contigs.2bit
+    twoBitInfo gasAcu1.contigs.2bit stdout | sort -k2nr > gasAcu1.contigs.sizes
+    cp -p gasAcu1.contigs.2bit gasAcu1.contigs.sizes gasAcu1.contigs.lift \
+	/hive/data/staging/data/gasAcu1
+
+
+    mkdir /hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10
+    cd /hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10
+
+    cat << '_EOF_' > DEF
+# Stickleback vs. Tetraodon
+
+# TARGET: Stickleback gasAcu1, chunk large enough to run largest piece
+SEQ1_DIR=/scratch/data/gasAcu1/gasAcu1.2bit
+SEQ1_LEN=/scratch/data/gasAcu1/chrom.sizes
+SEQ1_CTGDIR=/scratch/data/gasAcu1/gasAcu1.contigs.2bit
+SEQ1_CTGLEN=/scratch/data/gasAcu1/gasAcu1.contigs.sizes
+SEQ1_LIFT=/scratch/data/gasAcu1/gasAcu1.contigs.lift
+SEQ1_CHUNK=22000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Tetraodon TetNig2 - single chunk big enough to run single largest item
+SEQ2_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ2_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/tetNig2/tetNig2.contigs.2bit
+SEQ2_CTGLEN=/scratch/data/tetNig2/tetNig2.contigs.sizes
+SEQ2_LIFT=/scratch/data/tetNig2/tetNig2.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	about 72 minutes
+    #	forgot to indicate type of repeats, continuing the load:
+    cd /hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10/axtChain
+    netClass -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -verbose=0 -noAr noClass.net gasAcu1 tetNig2 gasAcu1.tetNig2.net
+    netFilter -minGap=10 gasAcu1.tetNig2.net \
+	| hgLoadNet -verbose=0 gasAcu1 netTetNig2 stdin
+    cd ..
+    featureBits gasAcu1 chainTetNig2Link >&fb.gasAcu1.chainTetNig2Link.txt
+    cat fb.gasAcu1.chainTetNig2Link.txt
+    #	134497679 bases of 446627861 (30.114%) in intersection
+
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.gasAcu1.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.gasAcu1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gasAcu1/bed/lastzTetNig2.2009-08-10/DEF \
+	-swap -qRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
