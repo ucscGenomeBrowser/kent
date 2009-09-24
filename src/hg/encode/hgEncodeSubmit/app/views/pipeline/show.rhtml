@@ -22,13 +22,18 @@ end
 
 <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 
-<tr><td>Submission: </td><td><%= @project.name -%></td><td>&nbsp;&nbsp;&nbsp;</td>
-<td>Created: </td><td><%= @project.created_at.strftime("%b %d %H:%M"); -%></td>
+<tr>
+<td>Submission: </td><td><%= @project.name -%></td><td>&nbsp;&nbsp;&nbsp;</td>
+<td>Created: </td><td><%= @project.created_at.strftime("%Y-%m-%d %H:%M"); -%></td>
+  <td>&nbsp;&nbsp;</td>
+  <td><%= distance_of_time_in_words_to_now(@project.created_at)+" ago" -%></td>
 </tr>
 
 <tr><td>Status: </td><td><%= @project.status -%></td>
 <td>&nbsp;</td>
-<td>Updated: </td><td><%= @project.updated_at.strftime("%b %d %H:%M"); -%></td>
+<td>Updated: </td><td><%= @project.updated_at.strftime("%Y-%m-%d %H:%M"); -%></td>
+  <td>&nbsp;&nbsp;</td>
+  <td><%= distance_of_time_in_words_to_now(@project.updated_at)+" ago" -%></td>
 <tr><td>&nbsp;</td>
 </tr>
 
@@ -151,7 +156,7 @@ end
   <tr style="margin: 10;">
   <td><b>Archive</b></td><td><%= a.file_name -%></td>
   <td align="right"><%= a.file_size -%></td>
-  <td><%= a.file_date.strftime("%b %d %H:%M") -%></td>
+  <td><%= a.file_date.strftime("%Y-%m-%d %H:%M") -%></td>
 
   <% if advancedView %>
     <td><%= 
@@ -178,7 +183,7 @@ end
       <td>&nbsp;</td>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= f.file_name -%></td>
       <td align=right><%= f.file_size -%></td>
-      <td><%= f.file_date.strftime("%b %d %H:%M") -%></td>
+      <td><%= f.file_date.strftime("%Y-%m-%d %H:%M") -%></td>
     </tr>
   <% end %>
 
