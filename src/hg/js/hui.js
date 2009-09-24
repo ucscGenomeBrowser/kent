@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.34 2009/09/11 20:30:10 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.35 2009/09/24 00:26:23 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -751,47 +751,44 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
 function matChkBoxNormalize(matCb)
 {
     var classes =  $( matCb ).attr("class");
+    var dimZ = (classes.indexOf("dimZ") > 0);
     classes = classes.replace("dimZ ","");
     classes = classes.replace("matrixCB "," ");
     classes = classes.replace(/ /g,".");
     var CBs = $("input.subtrackCB").filter(classes); // All subtrack CBs that match matrix CB
-    // Problem: dimZ creates implied class membership. However, this is a close enough approximation
+    if(arguments.length > 1) { // dimZ NOT classes
+        CBs = $( CBs ).not(arguments[1]); // Removes the dimZ associated classes that are not checked
+    }
     if(CBs.length > 0) {
         var CBsChecked = CBs.filter(":checked");
         if(CBsChecked.length == CBs.length)
             matCb.checked=true;
         else if(CBsChecked.length == 0)
             matCb.checked=false;
+        else if(dimZ)
+            matCb.checked=true; // Some are checked and this is dimZ.  This is a best guess
     }
 }
-// Obsolete because viewDDtoMatCB=false and subCBtoMatCB=false
-//function matChkBoxNormalizeMatching(subCb)
-//{
-//// check/unchecks a matrix checkbox based upon subtrack checkboxes
-//// the matrix cb is the one that matches the subtrack cb provided
-//    var classes =  $( subCb ).attr("class").split(" ");
-//    var CBs = $("input.matrixCB");
-//    for (var ix=1;ix<classes.length - 1;ix++) {// 1st one should be "subtrackCB"; one should be view
-//        if(ix < 3)
-//            CBs = CBs.filter("."+classes[ix]);  // If there is a non-view 3rd class then it is the Z dimension
-//    }
-//    // There should be only one!
-//    for (var ix=0;ix<CBs.length;ix++) {
-//        matChkBoxNormalize(CBs[ix]);
-//    }
-//    if(classes.length > 4) { // Must have a Z dimension
-//        CBs = $("input.matrixCB").filter("."+classes[3]);
-//        // There should be only one!
-//        for (var ix=0;ix<CBs.length;ix++) {
-//            matChkBoxNormalize(CBs[ix]);
-//        }
-//    }
-//}
 
 function matChkBoxesNormalized()
 {
 // check/unchecks matrix checkboxes based upon subtrack checkboxes
-    $("input.matrixCB").each( function (i) { matChkBoxNormalize(this); } );
+    var matCBs = $("input.matrixCB");
+    var dimZCBs = $("input.matrixCB[name$='_dimZ_cb']");
+    if( $(dimZCBs).length > 0) {
+        // Should do dimZ first, then go back and do non-dimZ with extra restrictions!
+        var classes = "";
+        $(dimZCBs).each( function (i) {
+            matChkBoxNormalize(this);
+            if( $(this).is(':checked') == false ) {
+                var class =  $( this ).attr("class").replace("matrixCB dimZ ",".")
+                classes += class;
+            }
+        } );
+        $("input.matrixCB").not("[name$='_dimZ_cb']").each( function (i) { matChkBoxNormalize(this,classes); } );
+    } else {
+        $("input.matrixCB").each( function (i) { matChkBoxNormalize(this); } );
+    }
 
     // For each viewDD not selected, disable associated subtracks
     $('select.viewDd').not("[selectedIndex]").each( function (i) {
