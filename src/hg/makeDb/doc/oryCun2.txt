@@ -51,13 +51,9 @@ taxId 9986
     doRepeatMasker.pl -verbose=2 -workhorse=hgwdev \
 	-noSplit -buildDir=`pwd` oryCun2 > do.log 2>&1 &
     cat faSize.rmsk.txt
-# 358618246 bases (56303458 N's 302314788 real 292078336 upper 10236452 lower)
-# in 27 sequences in 1 files
-# %2.85 masked total, %3.39 masked real
-
-    # since this doesn't mask very much, use windowmasker instead
-    hgsql -e "drop table rmsk;" oryCun2
-    #	this leaves the interrupted repeats track showing on genome-test
+# 2737490501 bases (133467217 N's 2604023284 real 1466215749 upper
+#	1137807535 lower) in 3242 sequences in 1 files
+# %41.56 masked total, %43.69 masked real
 
 ########################################################################
 # Simple Repeats (DONE - 2009-08-11 - Hiram)
@@ -165,6 +161,82 @@ for (my $i = 0; $i < $scafCount; ++$i) {
     hgLoadSqlTab oryCun2 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
 ########################################################################
+# Checking *all* gaps - are they all mentioned in the AGP file ?
+#	(DONE - 2009-08-12 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../oryCun2.2bit > findMotif.txt 2>&1
+    #	real    0m7.967s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits oryCun2 -not gap -bed=notGap.bed
+    featureBits oryCun2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	0 bases of 2604023284 (0.000%) in intersection
+    # all N's in the sequence are marked as gap, do not need to add anything
+    #	to the gap table (see also: tetNig2.txt for procedure)
+
+########################################################################
+# Add simple repeats to RM masked sequence (DONE - 2009-08-12 - Hiram)
+    cd /hive/data/genomes/oryCun2
+    twoBitMask oryCun2.rmsk.2bit -add bed/simpleRepeat/trfMask.bed oryCun2.2bit
+    rm /gbdb/oryCun2/oryCun2.2bit
+    ln -s `pwd`/oryCun2.2bit /gbdb/oryCun2/oryCun2.2bit
+    twoBitToFa  oryCun2.2bit stdout \
+	| faSize stdin > oryCun2.2bit.faSize.txt 2>&1
+    #	2737490501 bases (133467217 N's 2604023284 real 1465050403 upper
+    #	1138972881 lower) in 3242 sequences in 1 files
+    #	%41.61 masked total, %43.74 masked real
+
+########################################################################
+# create ooc file and kluster data files (DONE - 2009-08-12 - Hiram)
+    # calculate rabbit/human size ratio to determine repMatch count
+	   oryCun2 real / hg19 real
+920 = 1024 * 2604023284 / 2897310462
+    blat oryCun2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/oryCun2.11.ooc -repMatch=920
+    #	Wrote 32543 overused 11-mers to jkStuff/oryCun2.11.ooc
+
+    #	create non-bridged contigs lift and sequence
+    mkdir /hive/data/genomes/oryCun2/contigs
+    cd /hive/data/genomes/oryCun2/contigs
+    gapToLift -verbose=2 oryCun2 oryCun2.contigs.lift \
+	-bedFile=oryCun2.contigs.bed
+    ~/kent/src/hg/utils/lft2BitToFa.pl ../oryCun2.2bit oryCun2.contigs.lift \
+	| gzip -c > oryCun2.contigs.fa.gz
+    #	verify nothing lost
+    faSize *.fa.gz > contigs.faSize.txt 2>&1
+    #	2671429501 bases (67406217 N's 2604023284 real 1465050403 upper
+    #	1138972881 lower) in 3319 sequences in 1 files
+    #	%42.64 masked total, %43.74 masked real
+    # only total and N count different, no sequence lost
+    faToTwoBit oryCun2.contigs.fa.gz oryCun2.contigs.2bit
+    twoBitInfo oryCun2.contigs.2bit stdout | sort -k2rn > oryCun2.contigs.sizes
+
+    cd /hive/data/genomes/oryCun2
+    mkdir /hive/data/staging/oryCun2
+    cp -p jkStuff/oryCun2.11.ooc oryCun2.2bit \
+	chrom.sizes contigs/oryCun2.contigs.2bit \
+	contigs/oryCun2.contigs.sizes /hive/data/staging/oryCun2
+
+########################################################################
+# lastz swap from Human Hg19 (DONE - 2009-08-27 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12
+    cat fb.hg19.chainOryCun2Link.txt 
+    #	1283994337 bases of 2897316137 (44.317%) in intersection
+
+    mkdir /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/oryCun2/bed/blastz.hg19.swap
+    
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzOryCun2.2009-08-12/DEF \
+	-noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap -syntenicNet > swap.log 2>&1 &
+    #	real    176m35.932s
+    cat fb.oryCun2.chainHg19Link.txt 
+    #	1260477501 bases of 2604023284 (48.405%) in intersection
+
+##############################################################################
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
