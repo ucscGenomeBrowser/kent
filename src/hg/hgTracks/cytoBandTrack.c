@@ -192,20 +192,18 @@ void cytoBandIdeoMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* Print out a box to jump to band in browser window .*/
 {
 struct cytoBand *cb = item;
-#define IDEO_CLICK_SAME_SIZE
-#ifdef IDEO_CLICK_SAME_SIZE
+//#define CHROM_MAP_OF_OLD
+#ifndef CHROM_MAP_OF_OLD
 x = hvGfxAdjXW(hvg, x, width);
 
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
     hPrintf("onclick='return false;' ");
     hPrintf("HREF=\"#\" class='cytoBand'");
-    //hPrintf("HREF=\"%s?position=%s:%d-%d\"",hgTracksName(), cb->chrom, cb->chromStart+1, cb->chromEnd);
-    if (cb->name != NULL)
-        mapStatusMessage("%s %s:%d-%d", cb->name,cb->chrom, cb->chromStart, cb->chromEnd);
+    mapStatusMessage("%s %s:%d-%d", (cb->name==NULL?"":cb->name),cb->chrom, cb->chromStart+1, cb->chromEnd);
     hPrintf(">\n");
-#else//ifndef IDEO_CLICK_SAME_SIZE
+#else//ifdef CHROM_MAP_OF_OLD
 mapBoxJumpTo(hvg, x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
-#endif//ndef IDEO_CLICK_SAME_SIZE
+#endif//def CHROM_MAP_OF_OLD
 }
 
 int cytoBandIdeoTotalHeight(struct track *tg, enum trackVisibility vis)
