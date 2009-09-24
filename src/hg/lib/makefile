@@ -6,7 +6,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     altGraphX.o ancientRref.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o bamFile.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed12Source.o \
-    bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
+    bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
     cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
     ccdsInfo.o ccdsGeneMap.o celeraCoverage.o \
@@ -28,6 +28,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/encodeHapMapAlleleFreq.o encode/encodeIndels.o encode/encodePeak.o \
     encode/encodeRegionInfo.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
     encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o \
+    encode/pairedTagAlign.o encode/tagAlign.o  \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
