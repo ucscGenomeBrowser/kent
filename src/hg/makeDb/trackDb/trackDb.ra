@@ -2802,7 +2802,9 @@ release alpha
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
     type netAlign ornAna1 chainOrnAna1
 
+# release beta until ornAna1 individual chain/net tracks phased out
 track chainOrnAna1
+release beta
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -2816,7 +2818,9 @@ matrixHeader A, C, G, T
 type chain ornAna1
 otherDb ornAna1
 
+# release beta until ornAna1 individual chain/net tracks phased out
 track netOrnAna1
+release beta
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
