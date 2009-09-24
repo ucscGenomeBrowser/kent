@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS204
 
-#  $Id: ce8.txt,v 1.2 2009/07/28 21:55:26 hiram Exp $
+#  $Id: ce8.txt,v 1.3 2009/09/24 20:54:24 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2009-07-22 - Hiram)
@@ -370,8 +370,8 @@ XXX - running Tue Jul 28 11:14:53 PDT 2009
 ############################################################################
 ## 5-Way multiple alignment (DONE - 2009-07-28 - Hiram)
 
-    mkdir /cluster/data/ce8/bed/multiz5way
-    cd /cluster/data/ce8/bed/multiz5way
+    mkdir /hive/data/genomes/ce8/bed/multiz5way
+    cd /hive/data/genomes/ce8/bed/multiz5way
     #	See notes in ce6.txt for 6-way alignment.  This is the tree from
     #	there.
 
@@ -400,9 +400,9 @@ XXX - running Tue Jul 28 11:14:53 PDT 2009
 #  3 0.0180  - brenneri_caePb2     (% 40.677)  (% 32.313)  1000     loose
 #  3 0.0270  - japonica_caeJap2    (% 27.192)  (% 20.450)  1000     loose
 
-    cd /cluster/data/ce8/bed/multiz5way
+    cd /hive/data/genomes/ce8/bed/multiz5way
     #	bash shell syntax here ...
-    export H=/cluster/data/ce8/bed
+    export H=/hive/data/genomes/ce8/bed
     mkdir mafLinks
     for G in caeRem3 cb3 caePb2 caeJap2
     do
@@ -481,7 +481,7 @@ popd
 '_EOF_'
 # << happy emacs
 
-    awk '{print $1}' /cluster/data/ce8/chrom.sizes > chrom.lst
+    awk '{print $1}' /hive/data/genomes/ce8/chrom.sizes > chrom.lst
     gensub2 chrom.lst single template jobList
     para create jobList
     para -maxNode=1 push
@@ -522,3 +522,70 @@ popd
     #	remove the temporary .tab files:
     rm multiz5*.tab
 ############################################################################
+# reset default position, same as ce4 on the ZC101 / unc-52 locus
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646344-14667746"
+	where name="ce8";' hgcentraltest
+
+############################################################################
+## SANGER GENE TRACK (WORKING - 2009-07-29 - Hiram)
+##	There is a tremendous amount of extraneous notations in the gff
+##	files.  Filter them down to a manageable set, change the chrom
+##	names, eliminate duplicates, select only what will work in
+##	ldHgGene
+    mkdir /hive/data/genomes/ce8/bed/sangerGene
+    cd /hive/data/genomes/ce8/bed/sangerGene
+for C in I II III IV V X
+do
+    echo -n "${C} "
+    cat ../../ws204/genome_feature_tables/GFF2/CHROMOSOME_${C}.gff | \
+    sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+        s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+        s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+        s/CHROMOSOME_M/chrM/g;" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+        -e 's/CDS "//' -e 's/"//' \
+                > chr${C}.gff
+done
+C=M
+echo -n "${C} "
+cat ../../ws204/genome_feature_tables/GFF2/CHROMOSOME_MtDNA.gff | \
+sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+    s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+    s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+    s/CHROMOSOME_M/chrM/g; s/chrMtDNA/chrM/g;" \
+    -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+    -e 's/CDS "//' -e 's/"//' \
+            > chr${C}.gff
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> filtered.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"curated|Coding_transcript")) {
+	if (match($3,"intron|coding_exon|exon|cds|three_prime_UTR|five_prime_UTR")) {
+	    gsub("coding_exon","CDS",$3)
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            gsub("three_prime_UTR","3utr",$3)
+            gsub("five_prime_UTR","5utr",$3)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > filtered.chr${C}.gff
+done
+
+    ssh hgwdev
+    cd /hive/data/genomes/ce8/bed/sangerGene
+    nice -n +19 ldHgGene ce8 sangerGene filtered.*.gff
+    nice -n +19 ldHgGene -out=filteredGenePred.tab ce8 sangerGene filtered.*.gff
+    #	Read 55287 transcripts in 1027094 lines in 7 files
+    #	55287 groups 7 seqs 3 sources 5 feature types
+    #	31064 gene predictions
+
+###############################################################################
