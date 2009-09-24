@@ -69,6 +69,7 @@ irows on
 autoScaleDefault Off
 summary multiz9waySummary
 speciesGroups vertebrate
+speciesCodonDefault monDom5
 sGroup_vertebrate macEug1 hg18 mm9 canFam2 ornAna1 galGal3 xenTro2 danRer5
 treeImage phylo/monDom5_9way.gif
 
