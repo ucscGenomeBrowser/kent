@@ -11,7 +11,7 @@ struct subjInfo
     char **fields;       /* array of field values from gsidSubjInfo. fields[0] is always subjId */
     char *sortString;    /* value to use if sorting as a string */
     int sortInteger;     /* value to use if sorting as an integer */
-    int sortDouble;      /* value to use if sorting as an double */
+    double sortDouble;   /* value to use if sorting as an double */
     };
 
 
