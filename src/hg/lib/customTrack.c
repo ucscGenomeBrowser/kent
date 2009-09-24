@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.176 2009/04/10 19:54:40 tdreszer Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.177 2009/09/24 22:25:17 tdreszer Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -197,11 +197,10 @@ char *customTrackTableFromLabel(char *label)
 char buf[256];
 char *tmp;
 tmp = cloneString(label);
-eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
-stripChar(tmp,'.');	/*	periods confuse hgTables	*/
-stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
-stripChar(tmp,'-');	/*	since that's the Invalid table */
-safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText */
+bits32 uniquifier = hashString(tmp);
+eraseNonAlphaNum(tmp);
+safef(buf, sizeof(buf), "%s%s_%d", CT_PREFIX, tmp, (uniquifier % 9997));
+// Name is not perfectly uniq but 4 chars of uniquifier should cut down on collisions
 freeMem(tmp);
 return cloneString(buf);
 }
