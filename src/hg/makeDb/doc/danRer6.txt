@@ -846,3 +846,23 @@ otherDb danRer6
     #	93349443 bases of 1506896106 (6.195%) in intersection
 
 #######################################################################
+# LASTZ/CHAIN/NET swap oryLat2 (DONE - 2009-09-24 - Hiram)
+    #	the first lastz
+    cd /hive/data/genomes/oryLat2/bed/lastzDanRer6.2009-08-13
+    cat fb.oryLat2.chainDanRer6Link.txt
+    #	123547945 bases of 700386597 (17.640%) in intersection
+
+    #	and this swap
+    mkdir /hive/data/genomes/danRer6/bed/blastz.oryLat2.swap
+    cd /hive/data/genomes/danRer6/bed/blastz.oryLat2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/oryLat2/bed/lastzDanRer6.2009-08-13/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-noLoadChainSplit -tRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    53m31.962s
+    cat fb.danRer6.chainOryLat2Link.txt 
+    #	147597031 bases of 1506896106 (9.795%) in intersection
+
+#######################################################################

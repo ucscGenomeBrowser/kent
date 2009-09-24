@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.15 2009/09/24 21:10:38 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.16 2009/09/24 22:06:19 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.15 2009/09/24 21:10:38 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.16 2009/09/24 22:06:19 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -1936,7 +1936,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -tRepeats=windowmaskerSdust \
 	-smallClusterHub=encodek -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
-XXX - running Thu Sep 24 14:09:49 PDT 2009
+    #	real    53m31.962s
+    cat fb.danRer6.chainOryLat2Link.txt 
+    #	147597031 bases of 1506896106 (9.795%) in intersection
 
 ############################################################################
 # BLASTZ/CHAIN/NET tetNig2 (DONE - 2008-08-26,27 - Hiram)
