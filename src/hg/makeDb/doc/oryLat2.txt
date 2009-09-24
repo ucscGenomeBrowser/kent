@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.14 2009/09/20 17:16:46 markd Exp $"
+#	"$Id: oryLat2.txt,v 1.15 2009/09/24 21:10:38 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.14 2009/09/20 17:16:46 markd Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.15 2009/09/24 21:10:38 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -1573,6 +1573,13 @@ end
     md5sum ensGene.up* >> md5sum.txt
 
 #########################################################################
+# Adding automatic generation of upstream files (DONE - 2009-08-13 - Hiram)
+    # edit src/hg/makeDb/genbank/genbank.conf to add:
+
+oryLat2.upstreamGeneTbl = ensGene
+oryLat2.upstreamMaf = multiz5way /hive/data/genomes/oryLat2/bed/multiz5way/species.list
+
+#########################################################################
 # MULTIZ5WAY DOWNLOADABLES (DONE - 2008-09-08 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/oryLat2/bed/multiz5way/mafDownloads
@@ -1866,7 +1873,136 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
+
 ############################################################################
+# lastz Zebrafish danRer6 (DONE - 2009-08-13 - Hiram)
+    mkdir /hive/data/genomes/oryLat2/bed/lastzDanRer6.2009-08-13
+    cd /hive/data/genomes/oryLat2/bed/lastzDanRer6.2009-08-13
+    cat << '_EOF_' > DEF
+# Medaka vs. Zebrafish
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# Query - zebrafish (danRer6)
+SEQ2_DIR=/scratch/data/danRer6/danRer6.2bit
+SEQ2_LEN=/scratch/data/danRer6/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/danRer6/contigs/danRer6.contigs.2bit
+SEQ2_CTGLEN=/hive/data/genomes/danRer6/contigs/danRer6.contigs.sizes
+SEQ2_LIFT=/hive/data/genomes/danRer6/contigs/danRer6.contigs.lift
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oryLat2/bed/lastzDanRer6.2009-08-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-noLoadChainSplit -tRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    232m4.673s
+    #	kluster difficulties, after finishing lastz manually:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-noLoadChainSplit -tRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm \
+	-continue=cat > cat.log 2>&1 &
+    #	about 1 hour
+    cat fb.oryLat2.chainDanRer6Link.txt
+    #	123547945 bases of 700386597 (17.640%) in intersection
+
+    mkdir /hive/data/genomes/danRer6/bed/blastz.oryLat2.swap
+    cd /hive/data/genomes/danRer6/bed/blastz.oryLat2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/oryLat2/bed/lastzDanRer6.2009-08-13/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-noLoadChainSplit -tRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+XXX - running Thu Sep 24 14:09:49 PDT 2009
+
+############################################################################
+# BLASTZ/CHAIN/NET tetNig2 (DONE - 2008-08-26,27 - Hiram)
+    screen # use screen to control this job
+    mkdir /hive/data/genomes/oryLat2/bed/blastzTetNig2.2009-09-14
+    cd /hive/data/genomes/oryLat2/bed/blastzTetNig2.2009-09-14
+    cat << '_EOF_' > DEF
+# Medaka vs. Tetraodon
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=200
+
+# QUERY: Tetraodon TetNig2 - single chunk big enough to single largest item
+SEQ2_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ2_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/tetNig2/tetNig2.contigs.2bit
+SEQ2_CTGLEN=/scratch/data/tetNig2/tetNig2.contigs.sizes
+SEQ2_LIFT=/scratch/data/tetNig2/tetNig2.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oryLat2/bed/blastzTetNig2.2009-09-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-workhorse=hgwdev \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > do.log 2>&1 &
+    #	real    159m0.619s - failed batch run
+    #	recovered and continuing:
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-continue=cat -workhorse=hgwdev \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > cat.log 2>&1 &
+
+    cat fb.oryLat2.chainTetNig2Link.txt
+    #	162783854 bases of 700386597 (23.242%) in intersection
+
+    #	And, for the swap:
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.oryLat2.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/hive/data/genomes/oryLat2/bed/blastzTetNig2.2009-09-14/DEF \
+	-swap -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	about 2h18m
+    cat fb.tetNig2.chainOryLat2Link.txt 
+    #	136115939 bases of 302314788 (45.025%) in intersection
+
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
