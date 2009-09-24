@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS200
 
-#  $Id: ce7.txt,v 1.3 2009/07/28 21:55:26 hiram Exp $
+#  $Id: ce7.txt,v 1.4 2009/09/24 20:54:50 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2009-07-21 - Hiram)
@@ -536,3 +536,9 @@ popd
     rm -f /cluster/bluearc/ce6/ce6.2bit
 
 #########################################################################
+# reset default position, same as ce4 on the ZC101 / unc-52 locus
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646344-14667746"
+	where name="ce7";' hgcentraltest
+
+############################################################################
