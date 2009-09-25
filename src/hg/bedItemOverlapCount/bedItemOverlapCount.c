@@ -12,11 +12,11 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.15 2009/09/25 23:08:41 braney Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.16 2009/09/25 23:17:20 braney Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
-typedef unsigned long unitSize;
+typedef unsigned int unitSize;
 
 #define MAXCOUNT (unitSize)~0
 #define MAXMESSAGE "Overflow of overlap counts. Max is %lu.  Recompile with bigger unitSize or use -max option"
