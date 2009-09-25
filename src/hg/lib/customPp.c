@@ -12,7 +12,7 @@
 #include "net.h"
 #include "customPp.h"
 
-static char const rcsid[] = "$Id: customPp.c,v 1.7 2006/11/15 19:25:33 kate Exp $";
+static char const rcsid[] = "$Id: customPp.c,v 1.8 2009/09/25 00:20:20 galt Exp $";
 
 struct customPp *customDocPpNew(struct lineFile *lf)
 /* Return customPp that will ignore browser lines, for doc files */
@@ -62,7 +62,7 @@ if (reused)
     }
 
 /* Get next line from file on top of stack.  If at EOF
- * go to next file in stack.  If get a http:// or ftp:// line
+ * go to next file in stack.  If get a http:// or https:// or ftp:// line
  * open file this references and push it onto stack. Meanwhile
  * squirrel away 'browser' lines. */
 struct lineFile *lf;
@@ -71,7 +71,7 @@ while ((lf = cpp->fileStack) != NULL)
     char *line;
     if (lineFileNext(lf, &line, NULL))
         {
-	if (startsWith("http://", line) || startsWith("ftp://", line))
+	if (startsWith("http://", line) || startsWith("https://", line) || startsWith("ftp://", line))
 	    {
 	    lf = netLineFileOpen(line);
 	    slAddHead(&cpp->fileStack, lf);
