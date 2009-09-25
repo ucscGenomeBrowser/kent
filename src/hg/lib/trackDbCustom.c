@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.70 2009/09/02 22:38:05 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.71 2009/09/25 16:57:31 hiram Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -910,7 +910,7 @@ int badKids = 0;
 
 while((childTdb = slPopHead(&(parentTdb->subtracks))) != NULL)
     {
-    if (hTableExists(db, childTdb->tableName))
+    if (hTableOrSplitExists(db, childTdb->tableName))
         slAddHead(&goodKids,childTdb);
     else
         {
