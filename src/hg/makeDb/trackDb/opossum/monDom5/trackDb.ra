@@ -89,12 +89,16 @@ visibility pack
 informant Opossum N-SCAN uses human (hg19) as the informant.
 
 track chainHg18 override
-shortLabel $o_db
+chainMinScore 3000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+shortLabel $o_db Chain
 otherOrg hg18
 priority 225
 
 track netHg18 override
-shortLabel $o_db
+shortLabel $o_db Net
 otherOrg hg18
 priority 225.1
 
@@ -116,70 +120,118 @@ track netDanRer5 override
 priority 109.2
 
 track chainXenTro2 override
+chainMinScore 3000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 110
 
 track netXenTro2 override
 priority 110.1
 
 track chainNetGalGal3 override
+chainMinScore 3000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 120
 
 track chainGalGal3 override
+chainMinScore 3000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 120.1
 
 track netGalGal3 override
 priority 120.2
 
 track chainNetHg19 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 5000
+chainLinearGap loose
 priority 220
 
 track chainPanTro2 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 3000
+chainLinearGap loose
 priority 210
 
 track netPanTro2 override
 priority 210.1
 
 track chainPonAbe2 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 3000
+chainLinearGap loose
 priority 200
 
 track netPonAbe2 override
 priority 200.1
 
 track chainRheMac2 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 1000
+chainLinearGap loose
 priority 190
 
 track netRheMac2 override
 priority 190.1
 
 track chainRn4 override
+matrixHeader A, C, G, T
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
 priority 180
 
 track netRn4 override
 priority 180.1
 
 track chainMm9 override
-chainMinScore 3000
-chainLinearGap loose
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 3000
+chainLinearGap loose
 priority 170
 
 track netMm9 override
 priority 170.1
 
 track chainBosTau4 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 3000
+chainLinearGap loose
 priority 160
 
 track netBosTau4 override
 priority 160.1
 
 track chainNetEquCab2 override
+chainMinScore 5000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 150
 
 track chainNetOrnAna1 override
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 3000
+chainLinearGap loose
 priority 130
 
 track chainMacEug1 override
+chainMinScore 1000
+chainLinearGap loose
+matrixHeader A, C, G, T
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 priority 230
 
 track netMacEug1 override
