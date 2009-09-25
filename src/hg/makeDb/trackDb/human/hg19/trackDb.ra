@@ -896,9 +896,7 @@ html hg19mammalChainNet
     type netAlign sorAra1 chainSorAra1
     otherDb sorAra1
 
-
 track vertebrateChainNet
-release alpha
 compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
@@ -947,7 +945,7 @@ html hg19vertChainNet
     otherDb monDom5
 
     track netMonDom5
-    subTrack vertebrateChainNet off
+    subTrack vertebrateChainNet on
     subGroups view=net species=bMonDom clade=aMammal
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -971,7 +969,7 @@ html hg19vertChainNet
     otherDb ornAna1
 
     track chainGalGal3
-    subTrack vertebrateChainNet off
+    subTrack vertebrateChainNet on 
     subGroups view=chain species=dGalGal clade=bDino
     shortLabel $o_Organism Chain
     longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -979,7 +977,7 @@ html hg19vertChainNet
     otherDb galGal3
 
     track netGalGal3
-    subTrack vertebrateChainNet off
+    subTrack vertebrateChainNet on 
     subGroups view=net species=dGalGal clade=bDino
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -1027,7 +1025,7 @@ html hg19vertChainNet
     otherDb xenTro2
 
     track netXenTro2
-    subTrack vertebrateChainNet off
+    subTrack vertebrateChainNet on 
     subGroups view=net species=gXenTro clade=dAmph
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
@@ -1075,7 +1073,7 @@ html hg19vertChainNet
     otherDb danRer5
 
     track netDanRer5
-    subTrack vertebrateChainNet off
+    subTrack vertebrateChainNet on 
     subGroups view=net species=lDanRer clade=eTele
     shortLabel $o_Organism Net
     longLabel $o_Organism ($o_date/$o_db) Alignment Net
