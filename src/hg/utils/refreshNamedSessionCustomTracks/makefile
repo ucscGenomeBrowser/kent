@@ -14,7 +14,8 @@ refreshNamedSessionCustomTracks: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/refreshNamedSessionCustomTracks $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/refreshNamedSessionCustomTracks${EXE}
 
-SCRIPT_FILES = refreshSledgeHammer.pl makeExclusionList.pl
+SCRIPT_FILES = refreshSledgeHammer.pl makeExclusionList.pl \
+               refreshSessionCtFiles.csh refreshSessionCtFilesInner.csh
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \

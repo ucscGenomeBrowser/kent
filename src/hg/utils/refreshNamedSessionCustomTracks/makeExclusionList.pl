@@ -3,19 +3,19 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/makeExclusionList.pl instead.
 
-# $Id: makeExclusionList.pl,v 1.7 2009/08/12 21:20:26 galt Exp $
+# $Id: makeExclusionList.pl,v 1.8 2009/09/25 00:34:31 angie Exp $
 
 # Scan the -verbose=4 output of refreshNamedSessionCustomTracks for
 # names of existing files that need to be ignored by the script that
-# cleans trash.  Write filenames out to an exclusion file.  Pass stdin
-# to stdout for further processing.
+# cleans trash.  Write filenames out to an exclusion file (first arg).
+# Pass stdin to stdout for further processing.
 
 use warnings;
 use strict;
 
 my $apacheRoot = "/usr/local/apache";
 my $outRoot = "/export";
-my $doNotRmFile = "$apacheRoot/trash/ctDoNotRmNext.txt";
+my $doNotRmFile = shift @ARGV;
 open(OUT, ">$doNotRmFile") || die "Couldn't open >$doNotRmFile: $!";
 
 # note after transition to bigDataUrl name has completed, 
