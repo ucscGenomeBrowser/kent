@@ -173,6 +173,12 @@ shortLabel $o_db Net
 otherDb hg18
 priority 99.2
 
+track chainNetHg19 override
+priority 99.3
+
+track chainNetMonDom5 override
+priority 105 
+
 # track chainOryLat1 
 # priority 110
 #
