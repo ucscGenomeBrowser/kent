@@ -26,6 +26,7 @@ DIRS = \
 	pbCalDistGlobal \
 	pbCalPi \
 	pbCalResStd \
+	pbCalResStdGlobal \
 	pbHgnc \
 	pfamXref \
 	rmKGPepMrna \
