@@ -47,6 +47,16 @@ outputFileName2  = cloneString(argv[4]);
 
 o1 = mustOpen(outputFileName, "w");
 o2 = mustOpen("jj.dat", "w");
+
+/* Build up hash for quick access to displayIds. */
+struct hash *displayIdHash = hashNew(20);
+struct sqlConnection *conn = sqlConnect(proteinDB);
+struct sqlResult *sr = sqlGetResult(conn, "select accession,displayID from spXref3");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(displayIdHash, row[0], cloneString(row[1]));
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
     
 if ((inf = mustOpen(proteinFileName, "r")) == NULL)
     {		
@@ -114,8 +124,7 @@ while (!done)
     		swissAC = chp;
 
 		// get display ID from AC		
-		sprintf(cond_str, "accession = '%s'", swissAC);
-    		answer = sqlGetField(proteinDB, "spXref3", "displayID", cond_str);
+		answer = hashFindVal(displayIdHash, swissAC);
 		if (answer != NULL)
 		    {
 		    swissDisplayID = answer;
