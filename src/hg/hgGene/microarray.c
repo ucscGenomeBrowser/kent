@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.15 2009/01/31 07:45:33 aamp Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.16 2009/09/25 18:26:16 aamp Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -98,10 +98,13 @@ char *exp = nextWord(&parameters);
 char *probe = NULL;
 if (exp == NULL)
     errAbort("short expRatio type line");
-if (!sqlTableExists(conn, lookup) 
+if ((!sameWord(lookup, "null") && !sqlTableExists(conn, lookup))
 	|| !sqlTableExists(conn, data) || !sqlTableExists(conn, exp))
     return NULL;
-probe = expProbe(conn, lookup, geneId);
+if (sameWord(lookup, "null"))
+    probe = geneId;
+else 
+    probe = expProbe(conn, lookup, geneId);
 return checkProbeData(conn, data, probe);
 }
 
