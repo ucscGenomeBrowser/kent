@@ -1,13 +1,13 @@
 /* pbCalResStdGlobal- Calculate the avg frequency and standard deviation of each AA residue for the proteins for all proteins */
 
-#define MAXN 10000000
-#define MAXRES 23
-
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
 #include "spDb.h"
 #include "math.h"
+
+#define MAXN 20000000
+#define MAXRES 23
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ errAbort(
 }
 
 double measure[MAXN];
-double freq[MAXN][MAXRES];
+double (*freq)[MAXRES];	// Dynamically allocated to be same as fres[MAXN][MAXRES];
 double avg[MAXRES];
 double sumJ[MAXRES];
 double sigma[MAXRES];
@@ -116,6 +116,7 @@ int icnt, jcnt;
 int sortedCnt;
 
 if (argc != 2) usage();
+freq = needLargeZeroedMem(sizeof(double)*MAXN*MAXRES);
 
 strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
@@ -137,7 +138,7 @@ for (j=0; j<MAXRES; j++)
 icnt = 0;
 jcnt = 0;
 
-conn2 = hAllocConn();
+conn2 = hAllocConn(spDbName);
 
 safef(query2, sizeof(query2), "select acc, val from %s.protein;", spDbName);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -174,7 +175,7 @@ while (row2 != NULL)
 	    }
 	if (!aaResFound)
 	    {
-	    fprintf(stderr, "%c %d not a valid AA residue.\n", *chp, *chp);
+	    verbose(2, "%c %d not a valid AA residue.\n", *chp, *chp);
 	    }
 	chp++;
 	}
