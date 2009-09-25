@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/refreshSessionCtFilesInner.csh instead.
 
-# $Id: refreshSessionCtFilesInner.csh,v 1.1 2009/09/25 00:34:31 angie Exp $
+# $Id: refreshSessionCtFilesInner.csh,v 1.2 2009/09/25 17:48:07 angie Exp $
 
 setenv HGDB_CONF /cluster/home/qateam/.hg.conf.hgcentral
 
@@ -20,6 +20,7 @@ mkdir -p $logDir/$today
 if (-e $tmpLog || -e $tmpOut) then
   echo "ERROR: $tmpLog and/or $tmpOut already exists!  Is another instance running?"
   echo "       Or does the file simply need to be cleaned up since yesterday?  Aborting."
+  uptime
   exit 1
 endif
 
@@ -27,12 +28,14 @@ set strayLogs = `find $logDir -maxdepth 1 -name tmp\*.log`
 if ($strayLogs != "") then
   echo "WARNING: stray log files (is a previous instance still running?)"
   echo $strayLogs
+  uptime
 endif
 
 set strayOut = `find $tmpOut:h -maxdepth 1 -name ctDoNoRmNext\*`
 if ($strayOut != "") then
   echo "WARNING: stray temporary output files (is a previous instance still running?)"
   echo $strayOut
+  uptime
 endif
 
 ps -eafl > $logDir/before.log
