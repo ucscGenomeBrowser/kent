@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.72 2009/09/23 18:42:28 angie Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.73 2009/09/25 00:21:40 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -770,6 +770,12 @@ if (pid == 0)
 
     close(pipefd[0]);  /* close unused half of pipe */
 
+    /* close other file descriptors */
+    int fd=0;
+    for (fd = STDERR_FILENO+1; fd < 64; fd++)
+      if (fd != pipefd[1] && fd != sdata && fd != sd)
+  	close(fd);
+
     char buf[32768];
     int rd = 0;
     long long dataPos = 0; 
@@ -790,7 +796,7 @@ if (pid == 0)
 	}
     if (rd == -1)
 	errnoAbort("error reading ftp socket");
-    close(pipefd[1]);  /* being safe */
+    close(pipefd[1]);  /* we are done with it */
     close(sd);
     close(sdata);
 

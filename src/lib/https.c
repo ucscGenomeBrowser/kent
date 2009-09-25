@@ -34,6 +34,12 @@ if (pid == 0)
 
     close(sv[0]);  /* close unused half of pipe */
 
+    /* close other file descriptors */
+    int fd=0;
+    for (fd = STDERR_FILENO+1; fd < 64; fd++)
+      if (fd != sv[1])
+  	close(fd);
+
     char hostnameProto[256];
 
     BIO *sbio;
@@ -150,7 +156,7 @@ if (pid == 0)
 	}
 
     BIO_free_all(sbio);
-    close(sv[1]);  /* being safe */
+    close(sv[1]);  /* we are done with it */
 
     exit(0);
 
