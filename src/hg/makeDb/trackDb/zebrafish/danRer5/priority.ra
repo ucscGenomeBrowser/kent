@@ -1,12 +1,6 @@
 track ensGene
 priority 32.8
 
-track chainHg18
-priority 99
-
-track netHg18
-priority 99.1
-
 track chainOryLat2
 priority 110
 

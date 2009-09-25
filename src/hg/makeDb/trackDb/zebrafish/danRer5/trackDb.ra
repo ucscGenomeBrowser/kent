@@ -163,14 +163,16 @@ spectrum on
 type netAlign mm9 chainMm9
 otherDb mm9
 
-# in priority.ra:
-#
-# track chainHg18
-# priority 99
-#
-# track netHg18
-# priority 99.1
-#
+track chainHg18 override
+shortLabel $o_db Chain
+otherDb hg18
+priority 99.1
+
+track netHg18 override
+shortLabel $o_db Net
+otherDb hg18
+priority 99.2
+
 # track chainOryLat1 
 # priority 110
 #
