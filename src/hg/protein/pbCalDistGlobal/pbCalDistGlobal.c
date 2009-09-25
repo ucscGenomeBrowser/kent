@@ -235,7 +235,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
 	    }
 	if (!aaResFound)
 	    {
-	    warn("%c %d not a valid AA residue in %s:\n%s\n", *chp, *chp, accession, aaSeq);
+	    verbose(2, "%c %d not a valid AA residue in %s:\n%s\n", *chp, *chp, accession, aaSeq);
 	    }
 	chp++;
 	}
@@ -266,8 +266,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     
     if ((icnt % 10000) == 0)
         {
-	printf("%d done.\n", icnt);fflush(stdout);
-	mustSystem("date");
+	printf("%d done.\n", icnt);
 	}
     }
 sqlFreeResult(&sr2);
