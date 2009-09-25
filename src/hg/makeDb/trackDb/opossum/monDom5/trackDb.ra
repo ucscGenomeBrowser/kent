@@ -120,6 +120,12 @@ priority 110.1
 track chainNetGalGal3 override
 priority 120
 
+track chainGalGal3 override
+priority 120.1
+
+track netGalGal3 override
+priority 120.2
+
 track chainNetHg19 override
 priority 220
 
