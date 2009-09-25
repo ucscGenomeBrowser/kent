@@ -8,8 +8,7 @@ void usage()
 errAbort(
   "pbCalPi - Calculate pI values from a list of protein IDs \n"
   "usage:\n"
-  "   pbCalPi listFile spDb outFile\n"
-  "      listFile is the input  file name of list of protein accession numbers\n"
+  "   pbCalPi spDb outFile\n"
   "      spDb     is the swissprot database name\n"
   "      outFile  is the output file name of tab delineated file of protein accession number and pI value\n"
   "example: pbCalPi prot.lis sp040115 pepPi.tab\n");
@@ -20,7 +19,7 @@ float myExp10(float x)
 return(powf(10.0, x));
 }
 
-float calPi(char *sequence)
+double calPi(char *sequence)
 /* the calPi() is based on the parameters and algorithm obtained */
 /* from SWISS-PROT.  The calculation results should be identical to that */
 /* from the Web page: http://us.expasy.org/tools/pi_tool.html */
@@ -28,8 +27,8 @@ float calPi(char *sequence)
 int   i, sequenceLength;
 int   comp[ALPHABET_LEN];
 int   nTermResidue, cTermResidue;
-float charge, phMin, phMid = 0.0, phMax;
-float carg, cter, nter, ctyr, chis, clys, casp, cglu, ccys;
+double charge, phMin, phMid = 0.0, phMax;
+double carg, cter, nter, ctyr, chis, clys, casp, cglu, ccys;
 int    R, H, K, D, E, C, Y;
 
 R = (int)('R' - 'A');
@@ -91,40 +90,20 @@ return(phMid);
 
 int main(int argc, char *argv[])
 {
-char *infName, *spDb, *outfName;
-float pI;
-char *acc;
-char *seq;
-char cond_str[255];
-struct lineFile *inf;
-FILE *outf1;
-char *row[1];
-
-if (argc != 4)
-   {
+if (argc != 3)
    usage();
-   }
 
-infName   = argv[1];
-spDb      = argv[2];
-outfName  = argv[3];
+char *spDb      = argv[1];
+char *outfName  = argv[2];
+FILE *f = mustOpen(outfName, "w");
 
-inf = lineFileOpen(infName, TRUE); /* input file */
-outf1 = mustOpen(outfName, "w");
-
-while (lineFileRow(inf, row))
+struct sqlConnection *conn = sqlConnect(spDb);
+struct sqlResult *sr = sqlGetResult(conn, "select acc,val from protein");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    acc = row[0];
-
-    safef(cond_str, sizeof(cond_str), "acc='%s'", acc);
-    seq  = sqlGetField(spDb, "protein", "val", cond_str);
-
-    if (seq != NULL)
-	{
-    	pI = calPi(seq);
-    	fprintf(outf1, "%s\t%.2f\n", acc, pI);
-    	}
+    fprintf(f, "%s\t%.2f\n", row[0], calPi(row[1]));
     }
-fclose(outf1);
+carefulClose(&f);
 return(0);
 }
