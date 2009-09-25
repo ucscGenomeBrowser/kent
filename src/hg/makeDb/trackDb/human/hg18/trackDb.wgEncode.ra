@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.541 2009/09/25 17:25:11 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.542 2009/09/25 19:12:40 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2780,6 +2780,7 @@ group expression
 subGroup1 cellType Cell_Line BJtert=BJ-tert Caco2=Caco-2 GM06990=GM06990 GM12878=GM12878 HeLaS3=HeLa-S3 HepG2=HepG2 HMEC=HMEC HRE=HRE HRCEpiC=HRCEpiC HUVEC=HUVEC Jurkat=Jurkat K562=K562 MCF7=MCF-7 NB4=NB4 NHEK=NHEK PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 subGroup2 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
+boxedCfg on
 sortOrder cellType=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
@@ -6041,13 +6042,11 @@ longLabel ENCODE Poly-A Tail Expression by RNA-seq from Yale/UC-Davis/Harvard
 group expression
 priority 0
 origAssembly hg18
-#subGroup1 view Views Signal=Signal zRAW=Raw_Signal
-subGroup1 cellType Cell_Line t1K562=K562_<i>Tier1</i>
+subGroup1 cellType Cell_Line t1GM12878=GM12878_<i>Tier1</i> t1K562=K562_<i>Tier1</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
 dimensions dimensionX=cellType
-#allButtonPair on
 boxedCfg on
-#sortOrder cellType=+ view=+
-#dragAndDrop subTracks
+sortOrder cellType=+
+dragAndDrop subTracks
 #visibilityViewDefaults Signal=full zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell
 #noInherit on
@@ -6061,16 +6060,65 @@ maxHeightPixels 100:32:16
 dataVersion ENCODE Feb 2009 Freeze
 wgEncode 1
 
+    track wgEncodeYaleRnaSeqPolyaSignalGm12878
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel GM12878 PolyA Sig
+    longLabel ENCODE Yale/UCD/Harvard RNA-Seq PolyA Signal (in GM12878 cells)
+    subGroups cellType=t1GM12878
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=GM12878 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=539 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalGm12878 fileName=wgEncodeYaleRnaSeqPolyaSignalGm12878.bedGraph4.gz
+
     track wgEncodeYaleRnaSeqPolyaSignalK562
     release alpha
     subTrack wgEncodeYaleRNAseq
-    shortLabel K562 RNAseq Sig
-    longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
-    #subGroups view=Signal cellType=t1K562
+    shortLabel K562 PolyA Sig
+    longLabel ENCODE Yale/UCD/Harvard RNA-Seq PolyA Signal (in K562 cells)
     subGroups cellType=t1K562
     type bedGraph 4
     color 46,0,184
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
+
+    track wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel K562 PolyA Sig
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa30m cells)
+    subGroups cellType=uK562Ia30
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=540 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m.bedGraph4.gz
+
+    track wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel K562 PolyA Sig
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa6h cells)
+    subGroups cellType=uK562Ia6
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=541 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h.bedGraph4.gz
+
+    track wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel K562 PolyA Sig
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg30m cells)
+    subGroups cellType=uK562Ig30
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=542 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m.bedGraph4.gz
+
+    track wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
+    release alpha
+    subTrack wgEncodeYaleRNAseq
+    shortLabel K562 PolyA Sig
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg6h cells)
+    subGroups cellType=uK562Ig6
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=543 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h.bedGraph4.gz
 
 
 # Yale ChIP-seq (wrangler: tdreszer)
@@ -7409,7 +7457,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
-    subGroups view=Signal factor=zaCTRL cellType=t3NB4
+    subGroups view=Signal factor=zCTRL cellType=t3NB4
     color 46,0,184
     type bedGraph 4
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=NB4 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=279 submittedDataVersion=V2 dateSubmitted=2008-10-31 dateResubmitted=2009-03-20 dateUnrestricted=2009-07-31 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalNb4Input fileName=wgEncodeYaleChIPseqRel2SignalNb4Input.bedGraph4.gz
@@ -7455,7 +7503,7 @@ wgEncode 1
     subTrack wgEncodeYaleChIPseq off
     shortLabel NT2D1 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NT2-D1 cells)
-    subGroups view=Signal factor=zCTRL cellType=t3NT2D1
+    subGroups view=Signal factor=zaCTRL cellType=t3NT2D1
     type bedGraph 4
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=NT2-D1 antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=346 dateSubmitted=2009-06-08 dateUnrestricted=2010-03-08 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalNt2d1Input fileName=wgEncodeYaleChIPseqSignalNt2d1Input.bedGraph4.gz
 
