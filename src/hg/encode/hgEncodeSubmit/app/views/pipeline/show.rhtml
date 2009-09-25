@@ -90,11 +90,9 @@ end
     <%= ' ] ' -%> </td>
   <% end %>
 
-  <% if @project.status == "new" or advancedView %>
-    <td><%= ' [ ' -%> 
-    <%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
-    <%= ' ] ' -%> </td>
-  <% end %>
+  <td><%= ' [ ' -%> 
+  <%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
+  <%= ' ] ' -%> </td>
 
   <% if advancedView and @project_status != "new" %>
     <td><%= ' [ ' -%> 
