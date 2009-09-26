@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.1 2009/09/16 00:39:48 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.2 2009/09/26 03:33:52 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -56,8 +56,8 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/090218/sgdPep.faa
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # hg18.txt
-set bioCycPathways = $genomes/hg19/bed/ucsc.12/bioCyc/pathways.col
-set bioCycGenes = $genomes/hg19/bed/ucsc.12/bioCyc/genes.col
+set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
 
 # Tracks
 set multiz = multiz4way
@@ -966,8 +966,6 @@ hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
 mkdir /hive/data/genomes/hg19/bed/ucsc.12/scop
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 cd /hive/data/genomes/hg19/bed/ucsc.12/scop
 mkdir result
@@ -988,22 +986,18 @@ doScop $(path1) $(root1) {check out line+ result/$(root1).pf}
     # << happy emacs
 gensub2 prot.list single template jobList
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 ssh $cpuFarm "cd $dir/scop; para make jobList"
 # Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3930187s   65503.11m  1091.72h   45.49d  0.125 y
-# IO & Wait Time:              25343536s  422392.27m  7039.87h  293.33d  0.804 y
-# Average job time:                3028s      50.46m     0.84h    0.04d
-# Longest finished job:           16161s     269.35m     4.49h    0.19d
-# Submission to last job:         46435s     773.92m    12.90h    0.54d
-
+# CPU time in finished jobs:    3984764s   66412.73m  1106.88h   46.12d  0.126 y
+# IO & Wait Time:              18210135s  303502.25m  5058.37h  210.77d  0.577 y
+# Average job time:                2296s      38.26m     0.64h    0.03d
+# Longest finished job:           11765s     196.08m     3.27h    0.14d
+# Submission to last job:         33834s     563.90m     9.40h    0.39d
 
 # Convert scop output to tab-separated files
-catDir /san/sanvol1/scratch/$db/ucscGenes/scop/result | \
+cd $dir
+catDir scop/result | \
 	hmmPfamToTab -eValCol -scoreCol stdin scopPlusScore.tab
-XXX
 scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 	scopDesc.tab knownToSuper.tab
 hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
@@ -1011,10 +1005,10 @@ hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
 # Regenerate ccdsKgMap table
-# $genomes/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
-$genomes/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
+~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
 # Map old to new mapping
+# XXX TODO - haven't figured out how to do this when old genes were on old assembly
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
 genePredToBed knownGeneOld.gp >knownGeneOld.bed
 txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.bed
@@ -1033,14 +1027,15 @@ rm kgSpAlias_0.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
+
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
 # These are instructions for building tables 
 # needed for the Proteome Browser. 
  
 # DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  
-# This build is based on proteins DBs dated 070202.
+# ARE REBUILT.  Also make sure have proteins database rebuilt to correspond with swissProt
+# This build is based on proteins DBs dated 090821
 
 # Create the working directory
 
@@ -1066,7 +1061,7 @@ pbCalPi protAcc.lis $spDb pepPi.tab
 hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
 
 # Calculate and load pep distributions
-
+cd $dir/pb
 pbCalDist $spDb $pbDb $taxon $tempDb 
 hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
 hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
@@ -1139,7 +1134,6 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 			    
 
-
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
@@ -1174,8 +1168,11 @@ rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 # Build known genes list for google
- make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
+# make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
 
     cd $genomes/$db/bed
     rm -rf knownGeneList/$db
@@ -1190,5 +1187,8 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     rm -rf /usr/local/apache/htdocs/knownGeneList/$db
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 #
