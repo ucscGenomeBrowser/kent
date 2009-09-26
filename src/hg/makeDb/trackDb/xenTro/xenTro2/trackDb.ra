@@ -210,3 +210,14 @@ spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
 
+track chainHg18 override
+shortLabel $o_db Chain
+priority 125.1
+
+track netHg18 override
+shortLabel $o_db Net  
+priority 125.2
+
+track chainNetHg19 override
+priority 125.3
+
