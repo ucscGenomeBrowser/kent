@@ -8,11 +8,3 @@ priority 114
 
 track netMm9
 priority 114.1
-
-# human 
-track chainHg18
-priority 120
- 
-track netHg18
-priority 120.1
-

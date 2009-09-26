@@ -128,3 +128,10 @@ otherDb rn4
 track humanChainNet override
 chainMinScore 5000
 chainLinearGap loose
+
+track chainHg18 override
+priority 120.1
+ 
+track netHg18 override
+priority 120.2
+
