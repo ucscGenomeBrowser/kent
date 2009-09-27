@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.16 2009/09/25 18:26:16 aamp Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.17 2009/09/27 04:45:41 kent Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -102,7 +102,7 @@ if ((!sameWord(lookup, "null") && !sqlTableExists(conn, lookup))
 	|| !sqlTableExists(conn, data) || !sqlTableExists(conn, exp))
     return NULL;
 if (sameWord(lookup, "null"))
-    probe = geneId;
+    probe = cloneString(geneId);
 else 
     probe = expProbe(conn, lookup, geneId);
 return checkProbeData(conn, data, probe);
@@ -376,6 +376,7 @@ hPrintf("Expression ratio colors: ");
 hgExpColorDropDown(cart, hggExpRatioColors);
 cgiMakeButton("submit", "Submit");
 hPrintf("<BR>");
+
 for (col = colList; col != NULL; col = col->next)
     expColumnPrint(col, conn, geneId, useBlue);
 
