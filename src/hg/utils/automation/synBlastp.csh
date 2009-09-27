@@ -1,5 +1,5 @@
 #!/bin/tcsh
-# $Id: synBlastp.csh,v 1.4 2009/09/26 21:22:51 kent Exp $
+# $Id: synBlastp.csh,v 1.5 2009/09/27 03:32:29 galt Exp $
 ##########################################################################
 #
 #  synBlastp.csh - Help filter out unwanted paralogs from xxBlastTab 
@@ -129,8 +129,7 @@ set sql = "select count(distinct query) from ${xxBlastTab}"; echo "old number of
 set sql = "select count(distinct target) from ${xxBlastTab}"; echo "old number of unique target values"; hgsql $db -BN -e "$sql"
 
 # drop rows that do not have a match in the psl-mapped otherDb table.
-set yyBlastTab = ${otherDb}.temp${otherDb}kgTo${db}kg
-hgsql $db -BN -e "delete ${xxBlastTab} from ${xxBlastTab} left join ${yyBlastTab} on (${xxBlastTab}.query = ${yyBlastTab}.value and ${xxBlastTab}.target = ${yyBlastTab}.name) where ${yyBlastTab}.value is NULL"
+hgsql $db -BN -e "delete a from ${xxBlastTab} a left join ${otherDb}.temp${otherDb}kgTo${db}kg b on (a.query = b.value and a.target = b.name) where b.value is NULL"
 
 set sql = "select count(distinct query) from ${xxBlastTab}"; echo "new number of unique query values:"; hgsql $db -BN -e "$sql"
 set sql = "select count(distinct target) from ${xxBlastTab}"; echo "new number of unique target values"; hgsql $db -BN -e "$sql"
