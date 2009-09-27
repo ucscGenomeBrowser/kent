@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.2 2009/09/26 03:33:52 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.3 2009/09/27 04:54:50 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -16,6 +16,8 @@ set scratchDir = /hive/scratch
 set db = hg19
 set xdb = mm9
 set Xdb = Mm9
+set xBlastTab = mmBlastTab
+set rnBlastTab = rnBlastTab
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp090821
@@ -802,6 +804,15 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 # real    464m36.473s
 # done 2009-06-29
 
+# Load self
+cd $di4/hgNearBlastp/run.$tempDb.$tempDb
+loadPairwise.csh
+
+# Load mouse and rat
+cd $dir/hgNearBlastp/run.$tempDb.$xdb
+hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
+cd $dir/hgNearBlastp/run.$tempDb.$ratDb
+hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
 
 # Remove non-syntenic hits for mouse and rat
 # Takes a few minutes
@@ -811,8 +822,12 @@ ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
 ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
 
-synBlastp.csh $tempDb $ratDb
+cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
+synBlastp.csh $tempDb $ratDb
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -856,6 +871,10 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Clean up
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
@@ -1168,9 +1187,6 @@ rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Build known genes list for google
 # make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
 
@@ -1187,8 +1203,5 @@ endif # BRACKET
     rm -rf /usr/local/apache/htdocs/knownGeneList/$db
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 #
