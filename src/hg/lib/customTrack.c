@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.177 2009/09/24 22:25:17 tdreszer Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.178 2009/09/28 18:19:31 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -760,7 +760,7 @@ if (customTracksExist(cart, &ctFileName))
     if (errCatch->gotError)
         {
         remove(ctFileName);
-        warn("Internal error (%s): removing custom tracks",
+        warn("Custom track error (%s): removing custom tracks",
                         errCatch->message->string);
         }
     errCatchFree(&errCatch);
