@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.544 2009/09/26 00:07:12 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.545 2009/09/28 22:20:52 rhead Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5783,7 +5783,6 @@ wgEncode 1
 
 
     track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- in HepG2 nucleus)
@@ -5793,7 +5792,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA-
     longLabel ENCODE Affy/CSHL Transfrags (PolyA- in HepG2 nucleus)
@@ -5803,7 +5801,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA- Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA- in HepG2 nucleus)
@@ -5813,7 +5810,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA-
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- in HepG2 nucleus)
@@ -5823,7 +5819,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ in HepG2 nucleus)
@@ -5833,7 +5828,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA+
     longLabel ENCODE Affy/CSHL Transfrags (PolyA+ in HepG2 nucleus)
@@ -5843,7 +5837,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA+ Rw
     longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ in HepG2 nucleus)
@@ -5853,7 +5846,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nucl pA+
     longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ in HepG2 nucleus)
@@ -5863,7 +5855,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nlos tot
     color 189,0,157
@@ -5873,7 +5864,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nlos tot
     color 189,0,157
@@ -5883,7 +5873,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nlos tot
     color 189,0,157
@@ -5893,7 +5882,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel HepG2 nlos tot
     color 189,0,157
@@ -5903,7 +5891,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel GM12878 nlos tot
     color 153,38,0
@@ -5913,7 +5900,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel GM12878 nlos tot
     color 153,38,0
@@ -5923,7 +5909,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel GM128 nlos tot R
     color 153,38,0
@@ -5933,7 +5918,6 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
-    release alpha
     subTrack wgEncodeAffyRnaChip off
     shortLabel GM12878 nlos tot
     color 153,38,0
