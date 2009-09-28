@@ -137,10 +137,8 @@ using blastz, followed by chaining and netting.  The pairwise alignments
 were then multiply aligned using multiz, following the ordering of the
 species tree diagrammed above.
 The resulting multiple alignments were then assigned conservation scores by
-phastCons,
-using a tree model with branch lengths in the conserved and 
-non-conserved tree models were produced by the phastCons tuning steps using 
-phyloFit and phyloBoot. 
+phastCons. To run phastCons, tuning steps were run using phyloFit and phyloBoot
+to create the conserved and non-conserved tree models.
 The tuning steps were run on multiple alignments containing all nine sequences, and
 for each chromosome separately.  The resulting per-chromosome trees were then 
 averaged to create the conserved and non-conserved tree models.
