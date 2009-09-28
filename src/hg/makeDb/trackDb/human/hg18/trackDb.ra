@@ -578,37 +578,46 @@ type bed 4 +
     priority 6
     color 0,128,128
 
-    track pgNA12878
-    subTrack pgSnpHgwdev
-    shortLabel CEU daught '2878
-    longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
+    track pgSjk
+    subTrack pgSnp
+    shortLabel SJK
+    longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
     group varRep
     priority 7
-    color 128,64,0
+    color 0,128,128
 
-    track pgNA12891
-    subTrack pgSnpHgwdev
-    shortLabel CEU father '2891
-    longLabel CEU Trio Father NA12891 (1000 Genomes Project)
+    track pgNA12878
+    subTrack pgSnp
+    shortLabel CEU daught '2878
+    longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
     group varRep
     priority 8
     color 128,64,0
 
-    track pgNA12892
-    subTrack pgSnpHgwdev
-    shortLabel CEU mother '2892
-    longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
+    track pgNA12891
+    subTrack pgSnp
+    shortLabel CEU father '2891
+    longLabel CEU Trio Father NA12891 (1000 Genomes Project)
     group varRep
     priority 9
     color 128,64,0
 
-    track pgNA19240
-    subTrack pgSnpHgwdev
-    shortLabel YRI daught '9240
-    longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
+    track pgNA12892
+    subTrack pgSnp
+    shortLabel CEU mother '2892
+    longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
     group varRep
     priority 10
     color 128,64,0
+
+    track pgNA19240
+    subTrack pgSnp
+    shortLabel YRI daught '9240
+    longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
+    group varRep
+    priority 11
+    color 128,64,0
+
 
 
 track pgPop
