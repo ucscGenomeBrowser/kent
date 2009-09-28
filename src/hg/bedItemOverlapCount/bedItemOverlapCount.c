@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.16 2009/09/25 23:17:20 braney Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.17 2009/09/28 18:52:20 braney Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
@@ -31,6 +31,9 @@ char *chromSizes = NULL;  /* read chrom sizes from file instead of database . */
 boolean doMax;   /* if overlap count will overflow, just keep max */
 boolean doZero;  /* add blocks with 0 counts */
 boolean doBed12;  /* expect bed12 and process block by block */
+boolean doOutBounds;  /* output min/max to stderr */
+unitSize overMin = ~1;
+unitSize overMax = 0;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -41,6 +44,7 @@ static struct optionSpec optionSpecs[] = {
     {"max", OPTION_BOOLEAN},
     {"zero", OPTION_BOOLEAN},
     {"bed12", OPTION_BOOLEAN},
+    {"outBounds", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -56,10 +60,11 @@ errAbort(
   " sort bedFile.bed | bedItemOverlapCount [options] <database> stdin \\\n"
   "         | wigEncode stdin data.wig data.wib\n"
   "options:\n"
-  "   -zero  add blocks with zero count, normally these are ommitted\n"
-  "   -bed12 expect bed12 and count based on blocks\n"
-  "          normally only first three fields are used.\n"
-  "   -max   if counts per base overflows set to max (%lu) instead of exiting\n"
+  "   -zero      add blocks with zero count, normally these are ommitted\n"
+  "   -bed12     expect bed12 and count based on blocks\n"
+  "              normally only first three fields are used.\n"
+  "   -max       if counts per base overflows set to max (%lu) instead of exiting\n"
+  "   -outBounds ouput min/max to stderr\n"
   "   -chromSize=sizefile\tRead chrom sizes from file instead of database\n"
   "             sizefile contains two white space separated fields per line:\n"
   "		chrom name and size\n"
@@ -130,6 +135,13 @@ unitSize *ptr;
 
 for(ptr=counts; ptr < lastCount - 1; ptr++)
     {
+    if (doOutBounds)
+	{
+	if (ptr[1] < overMin)
+	    overMin = ptr[1];
+	if (ptr[1] > overMax)
+	    overMax = ptr[1];
+	}
     if (ptr[0] != ptr[1])
 	{
 	if (doZero || (ptr[0] != 0))
@@ -142,6 +154,7 @@ for(ptr=counts; ptr < lastCount - 1; ptr++)
 if (doZero || (ptr[0] != 0))
     printf("%s\t%lu\t%lu\t%lu\n", 
 	chrom, start - counts, ptr - counts + 1, (unsigned long)ptr[0]);
+
 }
 
 static void bedItemOverlapCount(char *database, int fileCount, char *fileList[])
@@ -267,10 +280,13 @@ for (i=0; i<fileCount; ++i)
 if (outputToDo)
     outputCounts(counts, prevChrom, chromSize);
 
+if (doOutBounds)
+    fprintf(stderr, "min %lu max %lu\n", (unsigned long)overMin, (unsigned long)overMax);
+
 verbose(2,"#\tchrom %s done, size %d\n", prevChrom, chromSize);
 freeMem(counts);
 freez(&prevChrom);
-hashFreeWithVals(&chromHash, freez);
+// hashFreeWithVals(&chromHash, freez);
 freeHash(&seenHash);
 }
 
@@ -288,6 +304,7 @@ chromSizes = optionVal("chromSize", NULL);
 doMax = optionExists("max");
 doBed12 = optionExists("bed12");
 doZero = optionExists("zero");
+doOutBounds = optionExists("outBounds");
 verbose(2, "#\tworking on database: %s\n", argv[1]);
 bedItemOverlapCount(argv[1], argc-2, argv+2);
 optionFree();
