@@ -27473,14 +27473,103 @@ exit;
     zcat $relDir/YRI.child.dec.intersect.calls.gz | trio2pg.pl 7 > NA19240.pgSnp
     #gff for indels does not give nts, can't put in pgSnp format
 
-    hgLoadBed hg18 pgNA12878 NA12878.pgSnp \
+    # 9/25/09: use samtools pileup to add base counts back in to those files.
+    cat > addCounts.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+my $sample = shift @ARGV;
+my $bamTemplate = shift @ARGV;
+if (! (defined $sample && defined $bamTemplate)) {
+  die "Usage: $0 sampleId bamTemplate [pgSnpFile]\n";
+}
+
+my $prevChr;
+my ($bamFile, $PLUP);
+while (<>) {
+  my ($chr, $s, $e, $alleles, $aCount, $baseCounts, $quals) = split("\t");
+  # New chrom?  open pipe from samtools pileup:
+  if (!defined $prevChr || $prevChr ne $chr) {
+    close ($PLUP) if (defined $PLUP);
+    (my $c = $chr) =~ s/^chr//;
+    ($bamFile = $bamTemplate) =~ s/__S__/$sample/g;  $bamFile =~ s/__C__/$c/;
+    if (-e $bamFile) {
+      my $pileupPipe = "samtools pileup $bamFile |";
+      warn "Opening '$pileupPipe'\n";
+      open($PLUP, $pileupPipe) || die "Can't open pipe '$pileupPipe': $!\n";
+    }
+    else {
+      warn "bamFile '$bamFile' does not exist";
+      $PLUP = undef;
+    }
+  }
+  # Fast-forward to pileup line corresponding to this pgSnp line:
+  if (defined $PLUP) {
+    my ($pc, $ps, undef, $depth, $bases);
+    do {
+      ($pc, $ps, undef, $depth, $bases) = split("\t", <$PLUP>);
+      if (defined $pc) {
+        die "Unexpected chrom '$pc' (!~ '$chr') in $bamFile" if ("chr$pc" ne $chr);
+        $ps--;
+      } else {
+        $ps = $s+1;
+        close($PLUP);
+        $PLUP = undef;
+      }
+    } while ($ps < $s);
+    if (defined $pc && $ps == $s) {
+      $bases =~ s/\^.//g;  $bases =~ s/\$//g;  # ignore begin/end-of-read markers
+      while ($bases =~ /[-+](\d+)\w+/) {       # ignore indels
+        my $count = $1;
+        $bases =~ s/[-+]$count\w{$count}//;
+      }
+      die "length of $bases (" . length($bases) . ") != $depth" if (length($bases) != $depth);
+      $bases =~ tr/acgtn/ACGTN/;
+      my @origBaseCounts = split(',', $baseCounts);
+      $baseCounts = "";
+      foreach my $al (split("/", $alleles)) {
+        my $alCt = ($bases =~ s/$al//g) + shift @origBaseCounts;
+        $baseCounts .= ',' if ($baseCounts ne "");
+        $baseCounts .= $alCt;
+      }
+      #warn "Leftover bases: $bases ($alleles)" if (length($bases) > 10);
+      # Sometimes the allele is given as homozygous but there are many other
+      # copies of some other base detected...?   And sometimes lots of "*"
+      # characters, not described on http://samtools.sourceforge.net/pileup.shtml
+    } # end if we found the pileup line for this pgSnp line
+  } # end if there is a $bamFile for this template and chrom.
+  print join("\t", $chr, $s, $e, $alleles, $aCount, $baseCounts, $quals);
+  $prevChr = $chr;
+}
+'_EOF_'
+    # << emacs
+    chmod a+x addCounts.pl
+    foreach f (NA*.pgSNP)
+      set s = $f:r
+      cat $f \
+      | ./addCounts.pl $s \
+         /hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/__S__/alignment/__S__.chrom__C__.SLX.maq.SRP000032.2009_07.bam \
+      | ./addCounts.pl $s \
+         /hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/__S__/alignment/__S__.chrom__C__.SOLID.corona.SRP000032.2009_08.bam \
+      | ./addCounts.pl $s \
+         /hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/__S__/alignment/__S__.chrom__C__.454.ssaha.SRP000032.2009_07.bam \
+        > $f.counts
+    end
+    # NA12878 and NA19240 have all 3 platforms;  just SLX.maq for NA12891, NA12892
+
+    hgLoadBed hg18 pgNA12878 NA12878.pgSnp.counts \
       -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
-    hgLoadBed hg18 pgNA12891 NA12891.pgSnp \
+#Loaded 3049749 elements of size 7
+    hgLoadBed hg18 pgNA12891 NA12891.pgSnp.counts \
       -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
-    hgLoadBed hg18 pgNA12892 NA12892.pgSnp \
+#Loaded 2968312 elements of size 7
+    hgLoadBed hg18 pgNA12892 NA12892.pgSnp.counts \
       -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
-    hgLoadBed hg18 pgNA19240 NA19240.pgSnp \
+#Loaded 2972120 elements of size 7
+    hgLoadBed hg18 pgNA19240 NA19240.pgSnp.counts \
       -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+#Loaded 3586490 elements of size 7
 
 
 #############################################################################
@@ -27528,6 +27617,20 @@ exit;
     # 3/11/09: fetching this file because I think it's the original data (angie)
     wget -O "yhsnp_add.gff" \
       'http://yh.genomics.org.cn/do.downServlet?file=data/snps/yhsnp_add.gff'
+
+
+#############################################################################
+# GENOME VARIANTS - KOREF (DONE 9/17/09 angie)
+    # Korean individual (Seong-Jin Kim) from Genome Research paper
+    cd /hive/data/genomes/hg18/bed/pgSnp/
+    # Download Belinda's file from PSU, use same table name (pgSjk) as on
+    # http://main.genome-browser.bx.psu.edu/ :
+    wget http://www.bx.psu.edu/~giardine/tests/tmp/koref.sub.pgSnp
+    hgLoadBed hg18 pgSjk koref.sub.pgSnp \
+      -sqlTable=$HOME/kent/src/hg/lib/pgSnp.sql -renameSqlTable -tab
+#Loaded 3439107 elements of size 7
+    # Downloading because I think it's the original data:
+    wget ftp://ftp.kobic.kr/pub/KOBIC-KoreanGenome/genetic_variations/KOREF-solexa-snp-X30_Q40d4D100.gff
 
 
 #############################################################################
@@ -28216,7 +28319,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.383 2009/09/20 17:16:44 markd Exp $
+# $Id: hg18.txt,v 1.384 2009/09/28 22:07:49 angie Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28264,7 +28367,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.383 2009/09/20 17:16:44 markd Exp $
+# $Id: hg18.txt,v 1.384 2009/09/28 22:07:49 angie Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
