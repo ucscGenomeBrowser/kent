@@ -209,7 +209,7 @@ name SDayLastPTest
 shortLabel Last Peak Test Day
 longLabel Study Day of Last Peak Test
 priority 32
-visibility on
+visibility off
 type integer
 query select SDayLastPTest from hgFixed.immuno where subjId='%s';
 
@@ -218,7 +218,7 @@ name LastPVisit
 shortLabel Last Peak Visit (Month)
 longLabel Last Peak Visit (Month)
 priority 33
-visibility on
+visibility off
 type double
 query select LastPVisit from hgFixed.immuno where subjId='%s';
 
@@ -227,7 +227,7 @@ name LastPCD4Blk
 shortLabel Last Peak CD4 Block
 longLabel Last Peak CD4 Blocking
 priority 34
-visibility on
+visibility off
 type double
 query select format(LastPCD4Blk,3) from hgFixed.immuno where subjId='%s';
 
@@ -236,7 +236,7 @@ name LastPMNNeutral
 shortLabel Last Peak MN Neutral.
 longLabel Last Peak MN Neutralization
 priority 35
-visibility on
+visibility off
 type integer
 query select LastPMNNeutral from hgFixed.immuno where subjId='%s';
 
@@ -245,7 +245,7 @@ name LastPAntiGP120
 shortLabel Last Peak anti-gp120
 longLabel Last Peak anti-gp120
 priority 36
-visibility on
+visibility off
 type double
 query select format(LastPAntiGP120,3) from hgFixed.immuno where subjId='%s';
 
@@ -254,7 +254,7 @@ name SDayLastTrTest
 shortLabel Last Trough Test Day
 longLabel Study Day of Last Trough Test
 priority 37
-visibility on
+visibility off
 type integer
 query select SDayLastTrTest from hgFixed.immuno where subjId='%s';
 
@@ -263,7 +263,7 @@ name LastTrVisit
 shortLabel Last Trough Visit (Month)
 longLabel Last Trough Visit (Month)
 priority 38
-visibility on
+visibility off
 type double
 query select LastTrVisit from hgFixed.immuno where subjId='%s';
 
@@ -272,7 +272,7 @@ name LastTrCD4Blk
 shortLabel Last Trough CD4 Blocking 
 longLabel Last Trough CD4 Blocking
 priority 39
-visibility on
+visibility off
 type double
 query select format(LastTrCD4Blk, 3) from hgFixed.immuno where subjId='%s';
 
@@ -281,7 +281,7 @@ name LastTrMnNeutral
 shortLabel Last Trough MN Neutral.
 longLabel Last Trough MN Neutralization
 priority 40
-visibility on
+visibility off
 type integer
 query select LastTrMnNeutral from hgFixed.immuno where subjId='%s';
 
@@ -290,6 +290,6 @@ name LastTrAntiGP120
 shortLabel Last Trough anti-gp120
 longLabel Last Trough anti-gp120
 priority 41
-visibility on
+visibility off
 type double
 query select format(LastTrAntiGP120,3) from hgFixed.immuno where subjId='%s';
