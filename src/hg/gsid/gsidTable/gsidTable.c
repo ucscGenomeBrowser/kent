@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.48 2009/09/23 17:04:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.49 2009/09/28 23:25:24 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -243,7 +243,6 @@ for (si = subjList; si != NULL; si = si->next)
 		/* special processing for missing data */
 		if (sameWord(col->name, "SDayLastPTest") 	||
     		    sameWord(col->name, "SDayLastTrTest") 	||
-    		    sameWord(col->name, "LastTrVisit")		||
     		    sameWord(col->name, "LastPMNNeutral")	||
     		    sameWord(col->name, "artDaei")		||
     		    sameWord(col->name, "seqDay")		||
@@ -704,10 +703,10 @@ int sortCmpDouble(const void *va, const void *vb)
 {
 const struct subjInfo *a = *((struct subjInfo **)va);
 const struct subjInfo *b = *((struct subjInfo **)vb);
-return a->sortDouble - b->sortDouble;
+if (a->sortDouble < b->sortDouble)  return 1;
+if (a->sortDouble == b->sortDouble) return 0;
+return -1;
 }
-
-
 
 static char *keyFileName(struct column *col)
 /* Return key file name for this column.  Return
@@ -1000,7 +999,6 @@ hPrintf("<TD align=right>");
 /* special processing for missing data */
 if (sameWord(col->name, "SDayLastPTest") 	||
     sameWord(col->name, "SDayLastTrTest") 	||
-    sameWord(col->name, "LastTrVisit")		||
     sameWord(col->name, "LastPMNNeutral")	||
     sameWord(col->name, "artDaei")		||
     sameWord(col->name, "seqDay")		||
@@ -1091,8 +1089,7 @@ if (sameString(s,"."))  // known bad data value
 else
     {
     if (sameWord(col->name, "LastPVisit") 	||
-	sameWord(col->name, "LastPAntiGP120")	||
-	sameWord(col->name, "LastPCD4Blk"))
+	sameWord(col->name, "LastTrVisit"))
 	{
     	if (sameWord(s, "-1"))
 	   {
@@ -1102,7 +1099,7 @@ else
 	   {
     	   safef(buf,sizeof(buf),"N/D");
 	   }
-    	else if (sameWord(s, "-3"))
+    	else if (sameWord(s, "-3.000")||sameWord(s, "-3.0")||sameWord(s, "-3"))
 	   {
     	   safef(buf,sizeof(buf),"&nbsp");
 	   }
@@ -1112,9 +1109,12 @@ else
 	    }
 	}
     else
-    if (sameWord(col->name, "LastTrCD4Blk") || sameWord(col->name, "LastTrAntiGP120"))
+    if (sameWord(col->name, "LastTrCD4Blk")   ||
+        sameWord(col->name, "LastPCD4Blk")    ||
+        sameWord(col->name, "LastPAntiGP120") ||	
+        sameWord(col->name, "LastTrAntiGP120"))
     	{
-    	if (sameWord(s, "-3"))
+    	if (sameWord(s, "-3.000"))
 	   {
     	   safef(buf,sizeof(buf),"&nbsp");
 	   }
