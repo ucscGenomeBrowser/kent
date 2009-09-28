@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1575 2009/09/24 23:15:42 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1576 2009/09/28 21:51:10 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15002,11 +15002,15 @@ if (geneTracks == NULL)
     }
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *gt;
-printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");
-printf("<TABLE BORDERWIDTH=0>\n");
+boolean first = TRUE;
 for (gt = geneTracks;  gt != NULL;  gt = gt->next)
-    if (sqlTableExists(conn, gt->name))
+    if (!sameString(gt->name, "persistentShadow") && sqlTableExists(conn, gt->name))
 	{
+	if (first)
+	    {
+	    printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");
+	    printf("<TABLE BORDERWIDTH=0>\n");
+	    }
 	struct genePred *geneList = getGPsWithFrames(conn, gt->name, snp->chrom,
 						     snp->chromStart, snp->chromEnd);
 	struct genePred *gene;
@@ -15020,8 +15024,10 @@ for (gt = geneTracks;  gt != NULL;  gt = gt->next)
 	    printSnp125FunctionInGene(snp, gt->name, shortLabel, gene);
 	if (geneList == NULL)
 	    printSnp125NearGenes(conn, snp, gt->name, shortLabel);
+	first = FALSE;
 	}
-printf("</TABLE>\n");
+if (! first)
+    printf("</TABLE>\n");
 hFreeConn(&conn);
 }
 

@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.502 2009/09/24 23:15:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.503 2009/09/28 21:51:10 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -195,6 +195,7 @@ if (genePredTables != NULL)
 	labels[i] = gTdb->shortLabel;
 	}
     cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
+    cgiMakeHiddenVar(cartVar, "persistentShadow");
     }
 hFreeConn(&conn);
 }
