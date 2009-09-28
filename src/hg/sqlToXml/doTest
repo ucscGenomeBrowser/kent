@@ -1,6 +1,6 @@
 #!/bin/csh -ef
 
-foreach T (uniProt visiGeneXml)
+foreach T (visiGeneXml)
     echo processing "$T"
     sqlToXml $T test/$T/in.od test/$T/out.xml -maxList=3 -verbose=0
     echo diff test/$T/expected.xml test/$T/out.xml
