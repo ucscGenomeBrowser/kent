@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.129 2009/09/24 20:03:40 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.130 2009/09/28 19:36:29 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -500,6 +500,19 @@ lineage Consented fetal liver samples were isolated from legally aborted fetuses
 color 189,0,157
 protocol HFL11W_and_HFL24W_Myers_protocols.pdf
 
+term HGF
+type Cell Line
+description Human gingaval fibroblast
+vendorName ScienCell
+vendorId 2620
+orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
+lineage
+karyotype normal
+termId BTO:0000519 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519&termName=gingiva
+tier 3
+protocol HGF_Stam_protocol.pdf
+
 term HL-60
 type Cell Line
 description Human promyelocytic leukemia cells
@@ -507,9 +520,9 @@ vendorName ATCC
 vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
 lineage
-karyotype cancer, female
 termId BTO:0000738
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738&termName=HL-60%20cell
+karyotype cancer, female
 tier 3
 protocol HL-60_Stam_protocol.pdf
 
@@ -1171,6 +1184,15 @@ lab Bernstein
 lots 104513
 targetLink GeneCard GC01P148070|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P148070
 
+term HA
+type Antibody
+antibodyDescription mouse monoclonal - HA.11 clone 16B12 is a mouse monoclonal antibody raised against the twelve amino acids peptide CYPYDVPDYASL. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
+targetDescription The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors.
+orderUrl https://store.crpinc.com/datasheet.aspx?catalogno=MMS-101P
+vendorName Covance
+vendorId MMS-101P
+lab Farnham
+
 term JunD
 type Antibody
 antibodyDescription rabbit polyclonal IgG
@@ -1229,7 +1251,7 @@ antibodyDescription mouse monoclonal, clone 8WG16
 vendorName Covance
 vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
-lab Snyder, Iyer
+lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 
 term Pol2(b)
@@ -1436,7 +1458,7 @@ antibodyDescription Mouse polyclonal
 vendorName Novus Biologicals
 vendorId H00010127-A01
 orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
-lab Snyder
+lab Farnham
 targetLink GeneCard GC16P003273|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P003273
 
 term p300
