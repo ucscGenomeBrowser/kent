@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.130 2009/09/28 19:36:29 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.131 2009/09/29 23:15:29 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1223,6 +1223,16 @@ orderUrl http://www.scbt.com/product.php?datasheet=197
 lab Snyder
 targetLink GeneCard GC14M064542|http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
 
+term NFKB
+type Antibody
+targetDescription Epitope mapping at the C-terminus of NF-kappa-B p65 of human origin, recommended for detection of NFkB p65 of m, r and h origin by WB, IP, IF and ELISA
+antibodyDescription Rabbit polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-372
+orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
+lab Snyder
+targetLink GeneCard GC04P103641|http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1&search=NF-kappa-B
+
 term NF-E2
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope mapping at the C-terminus of NF-E2 of mouse origin and recommended for detection of protein of rat, mouse and human origin.
@@ -1809,4 +1819,9 @@ type restrictionEnzyme
 term hpa
 description HPA Restriction Enzyme
 type restrictionEnzyme
+
+term TNFa
+description human recombinant TNF-alpha from  eBioscience (product number 14-8329-62)
+type treatment
+
 
