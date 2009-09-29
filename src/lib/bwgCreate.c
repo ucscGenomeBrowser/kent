@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.16 2009/09/24 20:07:38 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.17 2009/09/29 23:19:08 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -994,9 +994,8 @@ for (section = sectionList; section != NULL; section = nextSection)
 	    {
 	    if (section->end > nextSection->start)
 	        {
-		errAbort("data format error: sections overlap %s:%d-%d and %s:%d-%d", 
-		     section->chrom, section->start+1, section->end,
-		     nextSection->chrom, nextSection->start+1, nextSection->end);
+		errAbort("There's more than one value for %s base %d (in coordinates that start with 1).\n",
+		    section->chrom, nextSection->start+1);
 		}
 	    }
 	}
