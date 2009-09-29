@@ -925,3 +925,41 @@ do3 pla
 do3 vac
 
 ##########################################################################
+# BUILD IMMUNO TABLE FOR IMMUOGENICITY DATA.  (DONE 9/29/09, Fan)
+
+cd ~/kent/src/hg/lib
+
+hgsql hgFixed -e 'drop table immunoRaw'
+hgsql hgFixed < immunoRaw.sql
+
+cd /cluster/hive/groups/gsid/medical/hiv/hivmnV3
+
+# copy over raw data file.
+cp -p /cluster/hive/groups/gsid/medical/hiv/immunogenicityData/orig/Antibody_Inf_LPLT_31Jul_forFH.txt jRaw.txt
+
+# replace empty file with "-3", "N/A" with "-1", and "N/D" with "-2"
+cat jRaw.txt|\
+sed -e 's/\t\t/\t-3\t/g'|\
+sed -e 's/\t\t/\t-3\t/g'|\
+sed -e 's/\t\t/\t-3\t/g'|\
+sed -e 's/\t\t/\t-3\t/g'|\
+sed -e 's/\t\t/\t-3\t/g'|\
+sed -e 's/N\/A/-1/g'|\
+sed -e 's/N\/D/-2/g' >jRaw2.txt
+
+# load data into immunoRaw table
+hgsql hgFixed -e 'load data local infile "jRaw2.txt" into table immunoRaw ignore 1 lines'
+
+hgsql hgFixed -e 'update immunoRaw set LastTrAntiGP120="-3" where LastTrAntiGP120=""'
+
+hgsql hgFixed -e 'select * from immunoRaw' >immuno.tab
+
+# load data into immuno table
+hgsql hgFixed -e 'drop table immuno'
+hgsql hgFixed < immuno.sql
+hgsql hgFixed -e 'load data local infile "immuno.tab" into table immuno'
+
+# replace NULL with -1 for SDayLastPTest.
+
+hgsql hgFixed -e 'update immuno set SDayLastPTest = NULL where SDayLastPTest = -1'
+#######################################################################################
