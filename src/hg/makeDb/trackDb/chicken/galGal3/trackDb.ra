@@ -82,9 +82,14 @@ shortLabel $o_db Net
 
 track chainHg18 override
 shortLabel $o_db Chain
+priority 250.1
 
 track netHg18 override
 shortLabel $o_db Net 
+priority 250.2
+
+track chainNetHg19 override
+priority 250.3
 
 searchTable nscanGene
 searchType genePred
