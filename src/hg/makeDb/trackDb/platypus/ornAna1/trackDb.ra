@@ -117,7 +117,7 @@ type netAlign bosTau4 chainBosTau4
 otherDb bosTau4
 
 track chainMonDom4 override
-shortLabel $o_db Net
+shortLabel $o_db Chain
 priority 260.1
 otherDb monDom4
 
