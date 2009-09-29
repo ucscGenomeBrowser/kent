@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.17 2009/09/28 18:52:20 braney Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.18 2009/09/29 18:15:31 galt Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
@@ -146,14 +146,14 @@ for(ptr=counts; ptr < lastCount - 1; ptr++)
 	{
 	if (doZero || (ptr[0] != 0))
 	    printf("%s\t%lu\t%lu\t%lu\n", 
-		chrom, start - counts, ptr - counts + 1, (unsigned long)ptr[0]);
+                chrom, (unsigned long)(start - counts), (unsigned long)(ptr - counts + 1), (unsigned long)ptr[0]);
 	start = ptr + 1;
 	}
     }
 
 if (doZero || (ptr[0] != 0))
     printf("%s\t%lu\t%lu\t%lu\n", 
-	chrom, start - counts, ptr - counts + 1, (unsigned long)ptr[0]);
+	chrom, (unsigned long)(start - counts), (unsigned long)(ptr - counts + 1), (unsigned long)ptr[0]);
 
 }
 
