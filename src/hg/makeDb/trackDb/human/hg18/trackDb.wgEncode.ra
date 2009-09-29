@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.545 2009/09/28 22:20:52 rhead Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.546 2009/09/29 21:45:39 ann Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6127,7 +6127,7 @@ visibilityViewDefaults Peaks=pack+ Signal=full
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 settingsByView Peaks:signalFilter=0,signalFilterLimits=0:18241,pValueFilter=0,pValueFilterLimits=0:300,qValueFilter=0,qValueFilterLimits=0:300 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16
-dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
+dataVersion through the ENCODE Sep 2009 Freeze
 wgEncode 1
 
     track wgEncodeYaleChIPseqPeaksGm12878JundV2
