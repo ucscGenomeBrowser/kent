@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.546 2009/09/29 21:45:39 ann Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.547 2009/09/29 22:10:16 ann Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6317,6 +6317,7 @@ wgEncode 1
     longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
     subGroups view=Signal factor=zCTRL cellType=t3HEK293b
     type bedGraph 4
+    color 133,0,173
     cell HEK293(b)
     metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=HEK293(b) antibody=Input view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE July 2009 Freeze" subId=279 submittedDataVersion=V2 dateSubmitted=2009-02-25 dateResubmitted=2009-03-20 dateUnrestricted=2009-11-25 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqRel2SignalHek293Input fileName=wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz
 
