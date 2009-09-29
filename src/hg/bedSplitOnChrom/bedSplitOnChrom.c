@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.2 2009/09/29 00:17:04 braney Exp $";
+static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.3 2009/09/29 00:54:16 braney Exp $";
 
 int maxChromCount = 256;
 boolean nfCheck;    /* check for number of fields consistency */
@@ -43,6 +43,10 @@ makeDir(outDir);
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 char *row[100];
 int numFields = lineFileChopNext(lf, row, ArraySize(row));
+char lastChrom[2048];
+
+lastChrom[0] = 0;
+
 if (numFields == 0)
     return;	/* Empty file, nothing to do. */
 if (numFields >= ArraySize(row))
@@ -55,6 +59,7 @@ if (numFields < 3 || !isdigit(row[1][0]) || !isdigit(row[2][0]))
 char path[PATH_LEN];
 struct hash *fileHash = hashNew(8);
 char buffer[4096];
+FILE *f = NULL;
 
 for (;;)
     {
@@ -73,7 +78,13 @@ for (;;)
 
 	chrom = buffer;
 	}
-    FILE *f = hashFindVal(fileHash, chrom);
+
+    if (differentString(chrom, lastChrom))
+	{
+	f = hashFindVal(fileHash, chrom);
+	strcpy(lastChrom, chrom);
+	}
+
     if (f == NULL)
         {
 	if (fileHash->elCount >= maxChromCount)
@@ -97,8 +108,8 @@ for (;;)
         errnoAbort("Couldn't write to %s.", path);
 	}
 
-    /* Fetch next line, breaking loop if it's there, and insuring that it has the
-     * usual number of fields. */
+    /* Fetch next line, breaking loop if it's not there, 
+     * and maybe insuring that it has the usual number of fields. */
     int fieldsInLine = lineFileChopNext(lf, row, ArraySize(row));
     if (fieldsInLine == 0)
         break;
