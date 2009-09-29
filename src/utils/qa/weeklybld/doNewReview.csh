@@ -70,7 +70,7 @@ endif
 @ NEXTNN = ( $BRANCHNN + 1 )
 
 echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
-echo "Ready for pairings, day 2, CVS reports completed for v${NEXTNN} preview http://hgwdev.cse.ucsc.edu/cvs-reports/ (history at http://hgwdev.cse.ucsc.edu/cvs-reports-history/)." | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." $USER donnak kate kuhn
+echo "Ready for pairings, day 2, CVS reports completed for v${NEXTNN} preview http://hgwdev.cse.ucsc.edu/cvs-reports/ (history at http://hgwdev.cse.ucsc.edu/cvs-reports-history/)." | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." $USER donnak kuhn
 
 
 #---------------------
