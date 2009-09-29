@@ -81,7 +81,7 @@ track netMonDom4 override
 shortLabel $o_db Net 
 
 track chainHg18 override
-shortLabel $o_db Net 
+shortLabel $o_db Chain
 
 track netHg18 override
 shortLabel $o_db Net 
