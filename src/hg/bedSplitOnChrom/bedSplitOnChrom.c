@@ -6,9 +6,11 @@
 #include "portable.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.1 2008/04/28 10:16:00 kent Exp $";
+static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.2 2009/09/29 00:17:04 braney Exp $";
 
 int maxChromCount = 256;
+boolean nfCheck;    /* check for number of fields consistency */
+boolean doStrand;   /* append strand to file name */
 
 void usage()
 /* Explain usage and exit. */
@@ -18,11 +20,15 @@ errAbort(
   "usage:\n"
   "   bedSplitOnChrom inFile.bed outDir\n"
   "options:\n"
-  "   maxChromCount=N Maximum number of different chromosomes, default %d\n"
+  "   -strand   append strand to file name\n"
+  "   -noCheck  do not check to see if number of fields is same in every record\n"
+  "   -maxChromCount=N Maximum number of different chromosomes, default %d\n"
   , maxChromCount);
 }
 
 static struct optionSpec options[] = {
+   {"strand", OPTION_BOOLEAN},
+   {"noCheck", OPTION_BOOLEAN},
    {"maxChromCount", OPTION_INT},
    {NULL, 0},
 };
@@ -48,10 +54,25 @@ if (numFields < 3 || !isdigit(row[1][0]) || !isdigit(row[2][0]))
 /* Output as needed, creating a hash of open files. */
 char path[PATH_LEN];
 struct hash *fileHash = hashNew(8);
+char buffer[4096];
+
 for (;;)
     {
     /* Look up file in hash, creating a new file if need be. */
     char *chrom = row[0];
+
+    if (doStrand)
+	{
+	char *ptr = buffer;
+
+	for(;*chrom; chrom++, ptr++)
+	    *ptr = *chrom;
+
+	*ptr++ = row[5][0];
+	*ptr++ = 0;
+
+	chrom = buffer;
+	}
     FILE *f = hashFindVal(fileHash, chrom);
     if (f == NULL)
         {
@@ -81,7 +102,7 @@ for (;;)
     int fieldsInLine = lineFileChopNext(lf, row, ArraySize(row));
     if (fieldsInLine == 0)
         break;
-    if (fieldsInLine != numFields)
+    if (nfCheck && (fieldsInLine != numFields))
 	errAbort("First line in %s had %d fields, but line %d has %d fields.",
 		lf->fileName, numFields, lf->lineIx, fieldsInLine);
     }
@@ -102,6 +123,8 @@ optionInit(&argc, argv, options);
 maxChromCount = optionInt("maxChromCount", maxChromCount);
 if (argc != 3)
     usage();
+nfCheck = !optionExists("noCheck");
+doStrand = optionExists("strand");
 bedSplitOnChrom(argv[1], argv[2]);
 return 0;
 }
