@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.32 2009/09/30 20:29:18 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.33 2009/09/30 22:11:03 tdreszer Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -564,27 +564,10 @@ while (lineFileNext(lf, &line, NULL))
     if (validLines == 1)
 	{
 	chromStart = Offset;
-	verbose(2, "initial chromStart: %llu\n", chromStart);
-	if ((Offset > 0) && prevChromName && sameWord(prevChromName,chromName)
-		&& (Offset <= previousOffset))
-	    {
-	    if (noOverlap)
-		errAbort("chrom positions not in numerical order "
-		    "or\n\toverlapping data at line %lu.\n\t"
-		    "previous position: %llu >= %llu <-current",
-			lineCount, BASE_1(previousOffset), BASE_1(Offset));
-	    else
-		warn("WARNING: chrom positions not in numerical order "
-		    "or\n\toverlapping data at line %lu.\n\t"
-		    "previous position: %llu >= %llu <-current",
-			lineCount, BASE_1(previousOffset), BASE_1(Offset));
-	    }
+	verbose(2, "first offset: %llu\n", chromStart);
 	}
     else if ((validLines > 1) && (Offset <= previousOffset))
-	errAbort("chrom positions not in numerical order "
-	    "or\n\toverlapping data at line %lu.\n\t"
-		"previous position: %llu >= %llu <-current",
-		    lineCount, BASE_1(previousOffset), BASE_1(Offset));
+	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current (offset)", lineCount, BASE_1(previousOffset), BASE_1(Offset));
 
     /* if we are working on a zoom level and the data is not exactly
      * spaced according to the span, then we need to put each value
