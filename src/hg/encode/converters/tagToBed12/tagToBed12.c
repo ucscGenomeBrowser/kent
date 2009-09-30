@@ -6,7 +6,7 @@
 #include "bed12wSeq.h"
 #include "tagAlign.h"
 
-static char const rcsid[] = "$Id: tagToBed12.c,v 1.1 2009/09/24 21:27:50 braney Exp $";
+static char const rcsid[] = "$Id: tagToBed12.c,v 1.2 2009/09/30 03:26:42 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,7 +56,7 @@ while (lineFileRow(lf, row))
     bed.score = pt->score;
     bed.strand[0] = pt->strand;
     bed.seq1 = pt->sequence;
-    bed.seq2 = "";
+    bed.seq2 = "X";
     bed.reserved = 0;
 
     blockSizes[0] = strlen(pt->sequence);
