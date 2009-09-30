@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.39 2009/09/24 20:57:52 hiram Exp $";
+#	"$Id: hg19.txt,v 1.40 2009/09/30 19:30:56 kent Exp $";
 
 #############################################################################
 
@@ -6253,4 +6253,34 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
-############################################################################
+
+##########################################################################
+# BUILD ALLEN BRAIN TRACK (DONE 09/30/09 kent)
+
+# Make the working directory
+    ssh hgwdev
+    cd /cluster/data/hg19/bed
+    mkdir allenBrain
+    cd allenBrain
+
+# Remap the probe alignments from mm7 to hg18
+
+    zcat /gbdb/mm9/liftOver/mm9ToHg19.over.chain.gz \
+        |  pslMap -chainMapFile -swapMap \
+	       /cluster/data/mm9/bed/allenBrain/allenBrainAli.psl stdin stdout \
+	  |  sort -k 14,14 -k 16,16n > unscored.psl
+
+    pslRecalcMatch unscored.psl /cluster/data/hg19/hg19.2bit \
+        /cluster/data/mm9/bed/allenBrain/allenBrainProbes.fa allenBrainAli.psl
+
+# Load the database
+   hgsql hg19 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgsql hg19 -e 'load data local infile "/cluster/data/mm9/bed/allenBrain/allenBrainUrl.tab" into table allenBrainUrl;'
+   hgLoadPsl hg19 allenBrainAli.psl
+   mkdir /gbdb/hg19/allenBrain
+   ln -s /cluster/data/mm9/bed/allenBrain/allenBrainProbes.fa /gbdb/hg19/allenBrain/allenBrainProbes.fa
+   hgLoadSeq hg19 /gbdb/hg19/allenBrain/allenBrainProbes.fa
+
+# Make mapping between known genes and allenBrain
+   hgMapToGene hg19 allenBrainAli -type=psl knownGene knownToAllenBrain
+
