@@ -6,11 +6,12 @@
 #include "portable.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.3 2009/09/29 00:54:16 braney Exp $";
+static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.4 2009/09/30 03:26:06 braney Exp $";
 
 int maxChromCount = 256;
 boolean nfCheck;    /* check for number of fields consistency */
 boolean doStrand;   /* append strand to file name */
+boolean doAppend;   /* append to rather than create files */
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +21,7 @@ errAbort(
   "usage:\n"
   "   bedSplitOnChrom inFile.bed outDir\n"
   "options:\n"
+  "   -append   append to rather than create files\n"
   "   -strand   append strand to file name\n"
   "   -noCheck  do not check to see if number of fields is same in every record\n"
   "   -maxChromCount=N Maximum number of different chromosomes, default %d\n"
@@ -27,6 +29,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"append", OPTION_BOOLEAN},
    {"strand", OPTION_BOOLEAN},
    {"noCheck", OPTION_BOOLEAN},
    {"maxChromCount", OPTION_INT},
@@ -83,6 +86,7 @@ for (;;)
 	{
 	f = hashFindVal(fileHash, chrom);
 	strcpy(lastChrom, chrom);
+	verbose(2, "new chrom %s f %p\n", lastChrom,f);
 	}
 
     if (f == NULL)
@@ -92,7 +96,8 @@ for (;;)
 	             "Use maxChromCount option if need be.",
 		     chrom, fileHash->elCount+1);
 	safef(path, sizeof(path), "%s/%s.bed", outDir, chrom);
-	f = mustOpen(path, "w");
+	f = mustOpen(path, doAppend ? "a" : "w");
+	verbose(2, "opened %s f %p\n",path, f);
 	hashAdd(fileHash, chrom, f);
 	}
 
@@ -136,6 +141,7 @@ if (argc != 3)
     usage();
 nfCheck = !optionExists("noCheck");
 doStrand = optionExists("strand");
+doAppend = optionExists("append");
 bedSplitOnChrom(argv[1], argv[2]);
 return 0;
 }
