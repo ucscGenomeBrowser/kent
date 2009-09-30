@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.31 2009/09/30 17:13:26 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.32 2009/09/30 20:29:18 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -565,8 +565,8 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	chromStart = Offset;
 	verbose(2, "initial chromStart: %llu\n", chromStart);
-	if (prevChromName && sameWord(prevChromName,chromName) &&
-		(Offset <= previousOffset))
+	if ((Offset > 0) && prevChromName && sameWord(prevChromName,chromName)
+		&& (Offset <= previousOffset))
 	    {
 	    if (noOverlap)
 		errAbort("chrom positions not in numerical order "
