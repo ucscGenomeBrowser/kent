@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1576 2009/09/28 21:51:10 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1577 2009/09/30 23:17:14 hiram Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2707,7 +2707,6 @@ int chainWinSize;
 double subSetScore = 0.0;
 int qs, qe;
 boolean nullSubset = FALSE;
-char *foundTable = (char *)NULL;
 
 if (! sameWord(otherDb, "seq"))
     {
@@ -2799,17 +2798,19 @@ boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
 if (normScoreAvailable)
     {
+    boolean hasBin;
+    char tableName[HDB_MAX_TABLE_STRING];
+    hFindSplitTable(database, chain->tName, track, tableName, &hasBin);
     char query[256];
     struct sqlResult *sr;
     char **row;
     safef(query, ArraySize(query),
-	 "select normScore from %s where id = '%s'", foundTable, item);
+	 "select normScore from %s where id = '%s'", tableName, item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	printf("<B>Normalized Score:</B> %1.0f (bases matched: %d)<BR>\n",
 	    atof(row[0]), (int) (chain->score/atof(row[0])));
     sqlFreeResult(&sr);
-    freeMem(foundTable);
     }
 
 printf("<BR>\n");
