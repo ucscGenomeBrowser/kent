@@ -22,7 +22,7 @@ errAbort(
 }
 
 double measure[MAXN];
-double (*freq)[MAXRES];	// Dynamically allocated to be same as fres[MAXN][MAXRES];
+double (*freq)[MAXRES];	// Dynamically allocated to be same as freq[MAXN][MAXRES];
 double avg[MAXRES];
 double sumJ[MAXRES];
 double sigma[MAXRES];
