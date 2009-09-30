@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.27 2009/09/23 18:42:16 angie Exp $";
-static char *version = "$Revision: 1.27 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.28 2009/09/30 21:40:00 braney Exp $";
+static char *version = "$Revision: 1.28 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -798,7 +798,7 @@ while (lineFileNextReal(lf, &row))
 		  && checkFloat(file, line, row, words[6 + gappedOffset], "signalValue")
 		  && checkFloat(file, line, row, words[7 + gappedOffset], "pValue")
 		  && checkFloat(file, line, row, words[8 + gappedOffset], "qValue")
-		  && ((type != NARROW_PEAK) || (checkPeak(file, line, row, words[4], words[1], words[2])))
+		  && ((type != NARROW_PEAK) || (checkPeak(file, line, row, words[9], words[1], words[2])))
 	      )
 	    )
 	)
@@ -1041,6 +1041,7 @@ verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
 if (errs > 0)
     errAbort("Aborting ... found %d errors in total\n", errs);
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
+
 }
 
 int testFunc(char *f)
