@@ -29,12 +29,6 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
-track refGene override
-visibility pack
-
-track agilentProbes override
-group regulation
-
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
@@ -272,18 +266,6 @@ speciesDefaultOff panTro2
 itemFirstCharCase noChange
 treeImage phylo/hg19_MHC.gif
 priority 399
-
-track snp130 override
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
-chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp130CodingDbSnp,
-codingAnnoLabel_snp130CodingDbSnp dbSNP
-# Use hg18 file so we don't have to duplicate the 18G:
-snpSeqFile /gbdb/hg18/snp/snp130.fa
 
 track chainSelf
 shortLabel Self Chain
@@ -1305,6 +1287,25 @@ priority 103.29
     color 40,120,40
     altColor 120,40,40
     priority 13
+
+
+track refGene override
+visibility pack
+
+track agilentProbes override
+group regulation
+
+track snp130 override
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 130 - Provisional Mapping to GRCh37)
+chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp130CodingDbSnp,
+codingAnnoLabel_snp130CodingDbSnp dbSNP
+# Use hg18 file so we don't have to duplicate the 18G:
+snpSeqFile /gbdb/hg18/snp/snp130.fa
 
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
