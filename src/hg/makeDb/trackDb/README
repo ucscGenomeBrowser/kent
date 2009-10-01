@@ -316,6 +316,12 @@ may have the following variables, which will be substituted:
      $matrix - content of the matrix and optional matrixHeader trackDb setting
                which will be converted to an HTML table. If there is no matrix
                setting, an empty string is substituted.
+     $chainMinScore -  value that gets substituted into this statement on the
+               chain or chainNet html page: 'Chains scoring below a minimum
+               score of "$chainMinScore" were discarded'.
+     $chainLinearGap - value for the -linearGap matrix used with axtChain
+               (e.g. loose, medium). Gets substituted into the chain or 
+               chainNet html page.  
      $downloadsServer - the value of the hg.conf downloads.server variable, or
                          hgdownload.cse.ucsc.edu if not set.
 In addition, if there is an $otherDb field set in the .ra file, these
