@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.4 2009/10/01 00:08:39 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.5 2009/10/01 08:43:50 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -699,9 +699,6 @@ hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refTo
 # Create knownToAllenBrain.  
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
 
-# XXX TODO - no gnfAtlas2 yet - 2009-06-26
-hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
-
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
@@ -710,14 +707,15 @@ cd $dir
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
      
-# XXX TODO - none of these tables exist yet 2009-06-26
+# Create knownToGnfAtlas2
+hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
-    hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
-    hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-    hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
-    hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
+    hgMapToGene $db -tempDb=$tempDb affyU133 knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds
+    # XXX TODO - these last two tables don't exist yet
+    hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
 
