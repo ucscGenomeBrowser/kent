@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.548 2009/09/30 03:19:42 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.549 2009/10/01 01:43:08 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -11799,6 +11799,7 @@ wgEncode 1
     track wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878
     release alpha
     subTrack wgEncodeCshlLongRnaSeq
+    colorByStrand 46,0,184 238,85,34
     shortLabel Gm12878 1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (in Gm12878 cells)
     subGroups view=Alignments cellType=GM12878 replicate=1
@@ -11835,6 +11836,7 @@ wgEncode 1
     track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878
     release alpha
     subTrack wgEncodeCshlLongRnaSeq
+    colorByStrand 46,0,184 238,85,34
     shortLabel Gm12878 2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (in Gm12878 cells)
     subGroups view=Alignments cellType=GM12878 replicate=2
@@ -11871,6 +11873,7 @@ wgEncode 1
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562
     release alpha
     subTrack wgEncodeCshlLongRnaSeq
+    colorByStrand 46,0,184 238,85,34
     shortLabel K562 1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (in K562 cells)
     subGroups view=Alignments cellType=K562 replicate=1
@@ -11907,6 +11910,7 @@ wgEncode 1
     track wgEncodeCshlLongRnaSeqAlignmentsRep2K562
     release alpha
     subTrack wgEncodeCshlLongRnaSeq
+    colorByStrand 46,0,184 238,85,34
     shortLabel K562 2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (in K562 cells)
     subGroups view=Alignments cellType=K562 replicate=2
