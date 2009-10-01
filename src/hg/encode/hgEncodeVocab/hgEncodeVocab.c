@@ -21,7 +21,7 @@
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.26 2009/09/23 18:42:16 angie Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.27 2009/10/01 03:58:18 angie Exp $";
 
 static char *cv_file()
 {
@@ -130,7 +130,7 @@ if (sameString(type,"Antibody"))
             *u++ = 0;
             printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
             }
-        fputs(s, stdout);
+        puts(s);
         if (u)
             printf("</A>");
         puts("</TD>\n");
