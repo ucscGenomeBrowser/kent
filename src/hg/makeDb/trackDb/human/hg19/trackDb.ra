@@ -1310,6 +1310,13 @@ snpSeqFile /gbdb/hg18/snp/snp130.fa
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
 
+track chainNetVenter override
+priority 450
+
+track chainNetPoodle override
+priority 451
+
+
 searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
