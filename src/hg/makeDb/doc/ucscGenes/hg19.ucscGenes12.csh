@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.3 2009/09/27 04:54:50 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.4 2009/10/01 00:08:39 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -692,17 +692,16 @@ hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 cd $dir
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
-hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
+hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
-# XXX TODO - no allenBrain yet - 2009-06-26
-# Create a bunch of knownToXxx tables.  Takes about 3 minutes:
+# Create knownToAllenBrain.  
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
-# XXX TODO - no ensGene yet - 2009-06-26
 
+# XXX TODO - no gnfAtlas2 yet - 2009-06-26
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
-# XXX TODO - not done 2009-06-26
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
@@ -759,7 +758,7 @@ if ($db =~ mm*) then
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
 
-# XXX TODO - need allenBrain tables first.
+# Update links to visiGene and visiGene text inde.
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 
@@ -826,9 +825,6 @@ cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
 synBlastp.csh $tempDb $ratDb
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
 
@@ -871,9 +867,6 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Clean up
@@ -925,8 +918,7 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
-
-# Make pfam run.  Actual cluster run is about 6 hours.
+# Make pfam run.  Actual cluster run is about 2 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
@@ -952,20 +944,24 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 ssh $cpuFarm "cd $dir/pfam; para make jobList"
 
-# Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    5543931s   92398.85m  1539.98h   64.17d  0.176 y
-# IO & Wait Time:              21389629s  356493.81m  5941.56h  247.57d  0.678 y
-# Average job time:                2786s      46.43m     0.77h    0.03d
-# Longest finished job:           14976s     249.60m     4.16h    0.17d
-# Submission to last job:         69651s    1160.85m    19.35h    0.81d
+#Completed: 9668 of 9668 jobs
+#CPU time in finished jobs:    3662259s   61037.65m  1017.29h   42.39d  0.116 y
+#IO & Wait Time:               1975338s   32922.30m   548.71h   22.86d  0.063 y
+#Average job time:                 583s       9.72m     0.16h    0.01d
+#Longest finished job:            2813s      46.88m     0.78h    0.03d
+#Submission to last job:          6603s     110.05m     1.83h    0.08d
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
+cd $dir
 cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}
 /^ACC/ {print}
 /^DESC/ {print; printf("\n");}
 '_EOF_'
-awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam_fs > pfamDesc.ra
+awk -f makePfamRa.awk  /hive/data/outside/pfam/current/Pfam_fs > pfamDesc.ra
 raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
    awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
 
@@ -975,12 +971,14 @@ catDir pfam/result | hmmPfamToTab -eValCol stdin ucscPfam.tab
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfamDesc.tab > sub.tab
-XXX - ready for this after the cluster run finishes 2009-07-08
+	pfamDesc.tab > pfam/sub.tab
 cut -f 1,4 ucscPfam.tab | subColumn 2 stdin pfam/sub.tab knownToPfam.tab
-rm -f sub.tab
+rm -f pfam/sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1024,10 +1022,12 @@ hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
 # Regenerate ccdsKgMap table
+cd $dir
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
 # Map old to new mapping
 # XXX TODO - haven't figured out how to do this when old genes were on old assembly
+cd $dir
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
 genePredToBed knownGeneOld.gp >knownGeneOld.bed
 txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.bed
