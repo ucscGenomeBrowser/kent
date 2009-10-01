@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.40 2009/09/30 19:30:56 kent Exp $";
+#	"$Id: hg19.txt,v 1.41 2009/10/01 10:01:27 kent Exp $";
 
 #############################################################################
 
@@ -6263,7 +6263,7 @@ see doc/builds.txt for specific details.
     mkdir allenBrain
     cd allenBrain
 
-# Remap the probe alignments from mm7 to hg18
+# Remap the probe alignments from mm7 to hg19
 
     zcat /gbdb/mm9/liftOver/mm9ToHg19.over.chain.gz \
         |  pslMap -chainMapFile -swapMap \
@@ -6283,4 +6283,105 @@ see doc/builds.txt for specific details.
 
 # Make mapping between known genes and allenBrain
    hgMapToGene hg19 allenBrainAli -type=psl knownGene knownToAllenBrain
+
+############################################################################
+# AFFY U133AB (Done - 2009-09-31 - Jim)
+    # Align probes 
+    ssh swarm
+    cd /cluster/data/hg19/bed
+    mkdir -p affyProbes/affyU133/run
+    cd affyProbes/affyU133/run
+    mkdir psl
+    ls -1 /scratch/data/hg19/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/affyProbes/HG-U133AB_all.fa > mrna.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg19/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:      21246s     354.09m     5.90h    0.25d  0.001 y
+#IO & Wait Time:                   349s       5.82m     0.10h    0.00d  0.000 y
+#Average job time:                 232s       3.87m     0.06h    0.00d
+#Longest finished job:            1650s      27.50m     0.46h    0.02d
+#Submission to last job:          1685s      28.08m     0.47h    0.02d
+
+
+    # Do sort, best in genome filter.
+    # to create affyU133.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyU133.psl /dev/null
+    rm -r raw.psl psl
+
+    # Load probes and alignments into database.
+    ssh hgwdev
+    cd /cluster/data/hg19/bed/affyProbes/affyU133
+    hgLoadPsl hg19 affyU133.psl
+    hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
+
+##########################################################################
+# GNF ATLAS 2 (In progress - 2009-09-31 - Jim)
+    # Align probes from GNF1H chip.
+    ssh swarm
+    cd /cluster/data/hg19/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    mkdir psl
+    ls -1 /scratch/data/hg19/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/gnf/human/atlas2/gnf1h.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg19/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:       3299s      54.98m     0.92h    0.04d  0.000 y
+#IO & Wait Time:                   330s       5.50m     0.09h    0.00d  0.000 y
+#Average job time:                  39s       0.65m     0.01h    0.00d
+#Longest finished job:             370s       6.17m     0.10h    0.00d
+#Submission to last job:           477s       7.95m     0.13h    0.01d
+
+
+    # Do sort, best in genome filter
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyGnf1h.psl /dev/null
+    rm -r raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/geneAtlas2
+    hgLoadPsl hg19 affyGnf1h.psl
+    hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/gnf1h.fa
+
+    grep -v U133B ../affyProbes/affyU133/affyU133.psl \
+	| sed -e "s/exemplar://; s/consensus://; s/U133A://" \
+	| sed -e "s/;//" > affyU133A.psl
+
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfHumanAtlas2MedianRatio \
+    	affyU133A.psl  affyGnf1h.psl
+
+    # Loaded 44696 rows of expression data from hgFixed.gnfHumanAtlas2MedianRatio
+    # Mapped 33186,  multiply-mapped 3171, missed 48, unmapped 11510
+
+    hgLoadBed hg19 gnfAtlas2 gnfAtlas2.bed
+    # Loaded 36357 elements of size 15
+
 
