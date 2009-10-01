@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.552 2009/10/01 23:30:34 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.553 2009/10/01 23:51:16 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5890,7 +5890,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
-    subTrack wgEncodeAffyRnaChip off
+    subTrack wgEncodeAffyRnaChip on
     shortLabel GM12 nlos tot FT
     color 153,38,0
     longLabel ENCODE Affy/CSHL Filtered Transfrags (total in GM12878 nucleolus)
@@ -5899,7 +5899,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
-    subTrack wgEncodeAffyRnaChip off
+    subTrack wgEncodeAffyRnaChip on
     shortLabel GM12 nlos tot RT
     color 153,38,0
     longLabel ENCODE Affy/CSHL Transfrags (total in GM12878 nucleolus)
@@ -5908,7 +5908,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
-    subTrack wgEncodeAffyRnaChip off
+    subTrack wgEncodeAffyRnaChip on
     shortLabel GM12 nlos tot FS
     color 153,38,0
     longLabel ENCODE Affy/CSHL Filtered Signal (total in GM12878 nucleolus)
@@ -5917,7 +5917,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
-    subTrack wgEncodeAffyRnaChip off
+    subTrack wgEncodeAffyRnaChip on
     shortLabel GM12 nlos tot RS
     color 153,38,0
     longLabel ENCODE Affy/CSHL Raw Signal (total in GM12878 nucleolus)
