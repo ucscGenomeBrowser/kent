@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.14 2008/09/03 19:19:44 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.15 2009/10/01 07:50:03 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -172,7 +172,8 @@ if (!test)
         opts |= SQL_TAB_REPLACE;
     verbose(1, "Updating %s table\n", seqTbl);
     hgLoadTabFileOpts(conn, ".", seqTbl, opts, &seqTab);
-    hgEndUpdate(&conn, "Add sequences");
+    hgEndUpdate(&conn, "Add sequences from %d files starting with %s", 
+    	fileCount, fileNames[0]);
     verbose(1, "All done\n");
     }
 }
