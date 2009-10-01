@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.551 2009/10/01 23:24:59 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.552 2009/10/01 23:30:34 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5503,7 +5503,7 @@ wgEncode 1
 
     track wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 npls tot FT
+    shortLabel K562 nplm tot FT
     longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleoplasm)
     subGroups view=FiltTransfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type broadPeak
@@ -5513,7 +5513,7 @@ wgEncode 1
 
     track wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
     subTrack wgEncodeAffyRnaChip
-    shortLabel K562 npls tot FS
+    shortLabel K562 nplm tot FS
     longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 nucleoplasm)
     subGroups view=FiltRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
     type wig -54090.00 55745.00
