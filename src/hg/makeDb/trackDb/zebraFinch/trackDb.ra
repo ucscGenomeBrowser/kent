@@ -31,6 +31,15 @@ type chain galGal3
 otherDb galGal3
 release beta
 
+track chainHg18 override
+shortLabel $o_db Chain
+otherDb hg18
+
+track netHg18 override
+shortLabel $o_db Net
+otherDb hg18
+
+
 track humanChainNet override
 chainMinScore 5000
 chainLinearGap loose
