@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.41 2009/10/01 10:01:27 kent Exp $";
+#	"$Id: hg19.txt,v 1.42 2009/10/01 18:39:47 kuhn Exp $";
 
 #############################################################################
 
@@ -6285,7 +6285,7 @@ see doc/builds.txt for specific details.
    hgMapToGene hg19 allenBrainAli -type=psl knownGene knownToAllenBrain
 
 ############################################################################
-# AFFY U133AB (Done - 2009-09-31 - Jim)
+# AFFY U133AB (Done - 2009-09-30 - Jim)
     # Align probes 
     ssh swarm
     cd /cluster/data/hg19/bed
@@ -6329,7 +6329,7 @@ see doc/builds.txt for specific details.
     hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
 ##########################################################################
-# GNF ATLAS 2 (In progress - 2009-09-31 - Jim)
+# GNF ATLAS 2 (In progress - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
     ssh swarm
     cd /cluster/data/hg19/bed
@@ -6384,4 +6384,27 @@ see doc/builds.txt for specific details.
     hgLoadBed hg19 gnfAtlas2 gnfAtlas2.bed
     # Loaded 36357 elements of size 15
 
+##########################################################################
+# make new grp table to match hg18 (DONE  2009-10-01 kuhn)
+# to split regulation from expression 
+# phenDis group is also missing in hg19
+# and add one more column: defaultIsClosed
 
+# get the hg18.grp table into hg19 
+
+# copy the hg18.grp table into hg19.grpNew and edit 
+   hgsql hg19
+   CREATE TABLE grpNew SELECT * FROM hg18.grp;
+   # 24 rows in set (0.00 sec)
+   
+   DELETE FROM grpNew WHERE name LIKE "encode%";
+   DELETE FROM grpNew WHERE name LIKE "remc%"; 
+   DELETE FROM grpNew WHERE name LIKE "tcga%";
+   DELETE FROM grpNew WHERE name LIKE "cancer%"; 
+   DELETE FROM grpNew WHERE name LIKE "jk%";
+   # 10 rows in set (0.00 sec)
+   
+# move the new table into place quickly
+   DROP TABLE grp;
+   RENAME TABLE grpNew TO grp;
+ 
