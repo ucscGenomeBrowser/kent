@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.18 2009/09/29 18:15:31 galt Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.19 2009/10/01 04:50:06 braney Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
@@ -20,7 +20,7 @@ typedef unsigned int unitSize;
 
 #define MAXCOUNT (unitSize)~0
 #define MAXMESSAGE "Overflow of overlap counts. Max is %lu.  Recompile with bigger unitSize or use -max option"
-#define INCWOVERFLOW(x) if(counts[x] == MAXCOUNT) {if(!doMax) errAbort(MAXMESSAGE,(unsigned long)MAXCOUNT);} else counts[x]++
+#define INCWOVERFLOW(countArray,x) if(countArray[x] == MAXCOUNT) {if(!doMax) errAbort(MAXMESSAGE,(unsigned long)MAXCOUNT);} else countArray[x]++
 
 /* Command line switches. */
 static struct hash *chromHash = NULL;
@@ -108,7 +108,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
     if (el->size > max) max = el->size;
-    verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)el->size);
+    verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
     hashAdd(ret, el->chrom, (void *)(& el->size));
     }
 sqlFreeResult(&sr);
@@ -129,32 +129,40 @@ return *(unsigned *)el->val;
 
 static void outputCounts(unitSize *counts, char *chrom, unsigned size)
 {
-unitSize *start = counts;
-unitSize *lastCount = &counts[size];
-unitSize *ptr;
+if (size == 0)
+    errAbort("got 0 for size of chrom %s\n", chrom);
 
-for(ptr=counts; ptr < lastCount - 1; ptr++)
+if (doOutBounds)
+    {
+    if (counts[0] < overMin)
+	overMin = counts[0];
+    if (counts[0] > overMax)
+	overMax = counts[0];
+    }
+
+int ii;
+int prevValue = counts[0];
+int startPoint = 0;
+for(ii=1; ii < size; ii++)
     {
     if (doOutBounds)
 	{
-	if (ptr[1] < overMin)
-	    overMin = ptr[1];
-	if (ptr[1] > overMax)
-	    overMax = ptr[1];
+	if (counts[ii] < overMin)
+	    overMin = counts[ii];
+	if (counts[ii] > overMax)
+	    overMax = counts[ii];
 	}
-    if (ptr[0] != ptr[1])
+    if (counts[ii] != prevValue)
 	{
-	if (doZero || (ptr[0] != 0))
-	    printf("%s\t%lu\t%lu\t%lu\n", 
-                chrom, (unsigned long)(start - counts), (unsigned long)(ptr - counts + 1), (unsigned long)ptr[0]);
-	start = ptr + 1;
+	if (doZero || (prevValue != 0))
+	    printf("%s\t%u\t%u\t%u\n", chrom, startPoint, ii, prevValue);
+	startPoint = ii;
+	prevValue = counts[ii];
 	}
     }
 
-if (doZero || (ptr[0] != 0))
-    printf("%s\t%lu\t%lu\t%lu\n", 
-	chrom, (unsigned long)(start - counts), (unsigned long)(ptr - counts + 1), (unsigned long)ptr[0]);
-
+if (doZero || (prevValue != 0))
+    printf("%s\t%u\t%u\t%u\n", chrom, startPoint, ii, prevValue);
 }
 
 static void bedItemOverlapCount(char *database, int fileCount, char *fileList[])
@@ -247,9 +255,9 @@ for (i=0; i<fileCount; ++i)
 		}
 
 	    for (i = bed->chromStart; i < chromSize; ++i)
-		INCWOVERFLOW(i);
+		INCWOVERFLOW(counts,i);
 	    for (i = 0; i < (bed->chromEnd - chromSize); ++i)
-		INCWOVERFLOW(i);
+		INCWOVERFLOW(counts,i);
 	    }
 	else if (doBed12)
 	    {
@@ -261,13 +269,13 @@ for (i=0; i<fileCount; ++i)
 		{
 		unsigned int end = *starts + *sizes + bed->chromStart;
 		for (i = *starts + bed->chromStart; i < end; ++i)
-		    INCWOVERFLOW(i);
+		    INCWOVERFLOW(counts,i);
 		}
 	    }
 	else
 	    {
 	    for (i = bed->chromStart; i < bed->chromEnd; ++i)
-		INCWOVERFLOW(i);
+		INCWOVERFLOW(counts, i);
 	    }
 	outputToDo = TRUE;
 	bedFree(&bed); // plug the memory leak
