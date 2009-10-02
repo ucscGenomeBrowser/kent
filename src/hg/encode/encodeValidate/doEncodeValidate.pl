@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.194 2009/09/19 07:44:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.195 2009/10/02 22:39:46 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -534,8 +534,8 @@ sub validateBed {
         my $prefix = "Failed bed validation, file '$file'; line $lineNumber:";
         if(/^(track|browser)/) {
             ;
-        } elsif($fieldCount < 5) {
-            die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required\n";
+        } elsif($fieldCount < 3) {
+            die "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
         } elsif (!$chromInfo{$fields[0]}) {
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
@@ -544,9 +544,9 @@ sub validateBed {
             die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
         } elsif ($fields[2] < $fields[1]) {
             die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
-        } elsif ($fields[4] !~ /^\d+$/ && $fields[4] !~ /^\d+\.\d+$/) {
+        } elsif ($fieldCount < 3 && $fields[4] !~ /^\d+$/ && $fields[4] !~ /^\d+\.\d+$/) {
             die "$prefix field 5 value ($fields[4]) is invalid; value must be a positive number\n";
-        } elsif ($fields[4] < 0 || $fields[4] > 1000) {
+        } elsif ($fieldCount < 3 && $fields[4] < 0 || $fields[4] > 1000) {
             die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
         } elsif ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             die "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
