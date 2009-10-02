@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.132 2009/10/02 22:35:42 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.133 2009/10/02 22:48:36 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1234,7 +1234,7 @@ lab Snyder
 lots D1703
 targetLink GeneCard GC12M052972|http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
 
-term NFkB
+term NFKB
 type Antibody
 targetDescription Epitope mapping at the C-terminus of NF-kappa-B p65 of human origin, recommended for detection of NFkB p65 of m, r and h origin by WB, IP, IF and ELISA
 antibodyDescription Rabbit polyclonal
