@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.559 2009/10/02 18:00:11 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.560 2009/10/02 22:06:08 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -215,7 +215,7 @@ shortLabel Broad Histone
 longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HUVEC=HUVEC K562=K562 NHEK=NHEK HMEC=HMEC HepG2=HepG2 H1-hESC=H1-hESC NHLF=NHLF
+subGroup2 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
 subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 H3K9ac=H3K9ac Pol2b=Pol2(b) zCTRL=Input_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -229,6 +229,7 @@ noInherit on
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 dataVersion ENCODE Feb 2009 Freeze
 
+# submission 148
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF
@@ -270,6 +271,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=CTCF type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=148 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf.wig.gz
 
+# submission 142
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me1
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1
@@ -311,6 +313,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K4me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=142 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1 fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1.wig.gz
 
+# submission 141
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2
@@ -352,6 +355,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K4me2 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=141 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2 fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2.wig.gz
 
+# submission 140
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me3
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3
@@ -393,6 +397,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K4me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=140 dateSubmitted=2009-01-04 dateUnrestricted=2009-10-04 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3 fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3.wig.gz
 
+# submission 146
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac
@@ -434,6 +439,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K9ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=146 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac.wig.gz
 
+# submission 147
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1
@@ -475,6 +481,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H4K20me1 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=147 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1 fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1.wig.gz
 
+# submission 145
     track wgEncodeBroadChipSeqPeaksGm12878H3k27ac
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac
@@ -516,6 +523,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K27ac type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=145 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac.wig.gz
 
+# submission 144
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3
@@ -557,6 +565,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K27me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=144 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3 fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3.wig.gz
 
+# submission 143
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3
@@ -598,6 +607,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K36me3 type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=143 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3 fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3.wig.gz
 
+# submission 149
     track wgEncodeBroadChipSeqSignalGm12878Control
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 Control
@@ -630,6 +640,451 @@ dataVersion ENCODE Feb 2009 Freeze
     color 153,38,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=Input type=wig fragLength=300 view=RawSignal replicate=2 dataVersion="ENCODE Feb 2009 Freeze" subId=149 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Control fileName=wgEncodeBroadChipSeqRawSignalRep2Gm12878Control.wig.gz
 
+# submission 585
+    track wgEncodeBroadChipSeqSignalH1hescCtcf
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC CTCF Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in H1-hESC cells)
+    subGroups view=Signal factor=CTCF cellType=H1
+    type wig 0.00 25664.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=585 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescCtcf fileName=wgEncodeBroadChipSeqSignalH1hescCtcf.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksH1hescCtcf
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC CTCF Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in H1-hESC cells)
+    subGroups view=Peaks factor=CTCF cellType=H1
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=585 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescCtcf fileName=wgEncodeBroadChipSeqPeaksH1hescCtcf.broadPeak.gz
+
+# submission 571
+    track wgEncodeBroadChipSeqSignalH1hescH3k4me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H3K4me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in H1-hESC cells)
+    subGroups view=Signal factor=H3K04me1 cellType=H1
+    type wig 0.00 12286.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K04me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=571 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH3k4me1 fileName=wgEncodeBroadChipSeqSignalH1hescH3k4me1.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksH1hescH3k4me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H3K4me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in H1-hESC cells)
+    subGroups view=Peaks factor=H3K04me1 cellType=H1
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K04me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=571 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH3k4me1 fileName=wgEncodeBroadChipSeqPeaksH1hescH3k4me1.broadPeak.gz
+
+# submission 566
+    track wgEncodeBroadChipSeqSignalH1hescH3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H3K4me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in H1-hESC cells)
+    subGroups view=Signal factor=H3K04me3 cellType=H1
+    type wig 0.00 12434.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=566 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH3k4me3 fileName=wgEncodeBroadChipSeqSignalH1hescH3k4me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksH1hescH3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H3K4me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in H1-hESC cells)
+    subGroups view=Peaks factor=H3K04me3 cellType=H1
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=566 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH3k4me3 fileName=wgEncodeBroadChipSeqPeaksH1hescH3k4me3.broadPeak.gz
+
+# submission 564
+    track wgEncodeBroadChipSeqSignalH1hescH3k27me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H3K27me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in H1-hESC cells)
+    subGroups view=Signal factor=H3K27me3 cellType=H1
+    type wig 0.00 13363.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K27me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=564 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH3k27me3 fileName=wgEncodeBroadChipSeqSignalH1hescH3k27me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksH1hescH3k27me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H3K27me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in H1-hESC cells)
+    subGroups view=Peaks factor=H3K27me3 cellType=H1
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K27me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=564 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH3k27me3 fileName=wgEncodeBroadChipSeqPeaksH1hescH3k27me3.broadPeak.gz
+
+# submission 619
+    track wgEncodeBroadChipSeqSignalH1hescH4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H4K20me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in H1-hESC cells)
+    subGroups view=Signal factor=H4K20me1 cellType=H1
+    type wig 0.00 26060.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=619 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH4k20me1 fileName=wgEncodeBroadChipSeqSignalH1hescH4k20me1.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksH1hescH4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC H4K20me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in H1-hESC cells)
+    subGroups view=Peaks factor=H4K20me1 cellType=H1
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=619 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH4k20me1 fileName=wgEncodeBroadChipSeqPeaksH1hescH4k20me1.broadPeak.gz
+
+# submission 616
+    track wgEncodeBroadChipSeqSignalH1hescControl
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel H1-hESC Control Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in H1-hESC cells)
+    subGroups view=Signal factor=zCTRL cellType=H1
+    type wig 0.00 11630.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=616 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescControl fileName=wgEncodeBroadChipSeqSignalH1hescControl.wig.gz
+
+# submission 563
+    track wgEncodeBroadChipSeqSignalHepg2Ctcf
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 CTCF Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HepG2 cells)
+    subGroups view=Signal factor=CTCF cellType=HEPG2
+    type wig 0.00 11113.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Ctcf fileName=wgEncodeBroadChipSeqSignalHepg2Ctcf.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2Ctcf
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 CTCF Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HepG2 cells)
+    subGroups view=Peaks factor=CTCF cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2Ctcf fileName=wgEncodeBroadChipSeqPeaksHepg2Ctcf.broadPeak.gz
+
+# submission 572
+    track wgEncodeBroadChipSeqSignalHepg2H3k4me2
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K4me2 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HepG2 cells)
+    subGroups view=Signal factor=H3K04me2 cellType=HEPG2
+    type wig 0.00 5510.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me2 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me2.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2H3k4me2
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K4me2 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HepG2 cells)
+    subGroups view=Peaks factor=H3K04me2 cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2.broadPeak.gz
+
+# submission 581
+    track wgEncodeBroadChipSeqSignalHepg2H3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K4me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HepG2 cells)
+    subGroups view=Signal factor=H3K04me3 cellType=HEPG2
+    type wig 0.00 4927.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2H3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K4me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HepG2 cells)
+    subGroups view=Peaks factor=H3K04me3 cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3.broadPeak.gz
+
+# submission 561
+    track wgEncodeBroadChipSeqSignalHepg2H3k9ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K9ac Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HepG2 cells)
+    subGroups view=Signal factor=H3K09ac cellType=HEPG2
+    type wig 0.00 11352.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k9ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k9ac.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2H3k9ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K9ac Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HepG2 cells)
+    subGroups view=Peaks factor=H3K09ac cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac.broadPeak.gz
+
+# submission 576
+    track wgEncodeBroadChipSeqSignalHepg2H3k27ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K27ac Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HepG2 cells)
+    subGroups view=Signal factor=H3K27ac cellType=HEPG2
+    type wig 0.00 2133.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k27ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k27ac.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2H3k27ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K27ac Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HepG2 cells)
+    subGroups view=Peaks factor=H3K27ac cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac.broadPeak.gz
+
+# submission 567
+    track wgEncodeBroadChipSeqSignalHepg2H3k36me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K36me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HepG2 cells)
+    subGroups view=Signal factor=H3K36me3 cellType=HEPG2
+    type wig 0.00 6447.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k36me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k36me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2H3k36me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H3K36me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HepG2 cells)
+    subGroups view=Peaks factor=H3K36me3 cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3.broadPeak.gz
+
+# submission 586
+    track wgEncodeBroadChipSeqSignalHepg2H4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H4K20me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HepG2 cells)
+    subGroups view=Signal factor=H4K20me1 cellType=HEPG2
+    type wig 0.00 14061.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H4k20me1 fileName=wgEncodeBroadChipSeqSignalHepg2H4k20me1.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHepg2H4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 H4K20me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HepG2 cells)
+    subGroups view=Peaks factor=H4K20me1 cellType=HEPG2
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1 fileName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1.broadPeak.gz
+
+# submission 559
+    track wgEncodeBroadChipSeqSignalHepg2Control
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HepG2 Control Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in HepG2 cells)
+    subGroups view=Signal factor=zCTRL cellType=HEPG2
+    type wig 0.00 10365.00
+    color 189,0,157
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=559 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Control fileName=wgEncodeBroadChipSeqSignalHepg2Control.wig.gz
+
+# submission 554
+    track wgEncodeBroadChipSeqSignalHmecCtcf
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC CTCF Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HMEC cells)
+    subGroups view=Signal factor=CTCF cellType=HMEC
+    type wig 0.00 14531.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=554 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-27 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecCtcf fileName=wgEncodeBroadChipSeqSignalHmecCtcf.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecCtcf
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC CTCF Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HMEC cells)
+    subGroups view=Peaks factor=CTCF cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=554 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-27 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecCtcf fileName=wgEncodeBroadChipSeqPeaksHmecCtcf.broadPeak.gz
+
+# submission 574
+    track wgEncodeBroadChipSeqSignalHmecH3k4me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K4me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in HMEC cells)
+    subGroups view=Signal factor=H3K04me1 cellType=HMEC
+    type wig 0.00 13574.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K04me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=574 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k4me1 fileName=wgEncodeBroadChipSeqSignalHmecH3k4me1.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k4me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K4me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in HMEC cells)
+    subGroups view=Peaks factor=H3K04me1 cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K04me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=574 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k4me1 fileName=wgEncodeBroadChipSeqPeaksHmecH3k4me1.broadPeak.gz
+
+# submission 573
+    track wgEncodeBroadChipSeqSignalHmecH3k4me2
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K4me2 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HMEC cells)
+    subGroups view=Signal factor=H3K04me2 cellType=HMEC
+    type wig 0.00 10886.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=573 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k4me2 fileName=wgEncodeBroadChipSeqSignalHmecH3k4me2.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k4me2
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K4me2 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HMEC cells)
+    subGroups view=Peaks factor=H3K04me2 cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=573 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k4me2 fileName=wgEncodeBroadChipSeqPeaksHmecH3k4me2.broadPeak.gz
+
+# submission 565
+    track wgEncodeBroadChipSeqSignalHmecH3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K4me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HMEC cells)
+    subGroups view=Signal factor=H3K04me3 cellType=HMEC
+    type wig 0.00 15838.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=565 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k4me3 fileName=wgEncodeBroadChipSeqSignalHmecH3k4me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K4me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HMEC cells)
+    subGroups view=Peaks factor=H3K04me3 cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=565 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k4me3 fileName=wgEncodeBroadChipSeqPeaksHmecH3k4me3.broadPeak.gz
+
+# submission 569
+    track wgEncodeBroadChipSeqSignalHmecH3k9ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K9ac Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HMEC cells)
+    subGroups view=Signal factor=H3K09ac cellType=HMEC
+    type wig 0.00 8649.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=569 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k9ac fileName=wgEncodeBroadChipSeqSignalHmecH3k9ac.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k9ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K9ac Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HMEC cells)
+    subGroups view=Peaks factor=H3K09ac cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=569 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k9ac fileName=wgEncodeBroadChipSeqPeaksHmecH3k9ac.broadPeak.gz
+
+# submission 570
+    track wgEncodeBroadChipSeqSignalHmecH3k27ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K27ac Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HMEC cells)
+    subGroups view=Signal factor=H3K27ac cellType=HMEC
+    type wig 0.00 8107.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=570 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k27ac fileName=wgEncodeBroadChipSeqSignalHmecH3k27ac.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k27ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K27ac Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HMEC cells)
+    subGroups view=Peaks factor=H3K27ac cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=570 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k27ac fileName=wgEncodeBroadChipSeqPeaksHmecH3k27ac.broadPeak.gz
+
+# submission 562
+    track wgEncodeBroadChipSeqSignalHmecH3k27me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K27me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in HMEC cells)
+    subGroups view=Signal factor=H3K27me3 cellType=HMEC
+    type wig 0.00 11452.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=562 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k27me3 fileName=wgEncodeBroadChipSeqSignalHmecH3k27me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k27me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K27me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in HMEC cells)
+    subGroups view=Peaks factor=H3K27me3 cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=562 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k27me3 fileName=wgEncodeBroadChipSeqPeaksHmecH3k27me3.broadPeak.gz
+
+# submission 568
+    track wgEncodeBroadChipSeqSignalHmecH3k36me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K36me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HMEC cells)
+    subGroups view=Signal factor=H3K36me3 cellType=HMEC
+    type wig 0.00 12398.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=568 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k36me3 fileName=wgEncodeBroadChipSeqSignalHmecH3k36me3.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH3k36me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H3K36me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HMEC cells)
+    subGroups view=Peaks factor=H3K36me3 cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=568 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k36me3 fileName=wgEncodeBroadChipSeqPeaksHmecH3k36me3.broadPeak.gz
+
+# submission 580
+    track wgEncodeBroadChipSeqSignalHmecH4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H4K20me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HMEC cells)
+    subGroups view=Signal factor=H4K20me1 cellType=HMEC
+    type wig 0.00 20299.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=580 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH4k20me1 fileName=wgEncodeBroadChipSeqSignalHmecH4k20me1.wig.gz
+
+    track wgEncodeBroadChipSeqPeaksHmecH4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC H4K20me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HMEC cells)
+    subGroups view=Peaks factor=H4K20me1 cellType=HMEC
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=580 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH4k20me1 fileName=wgEncodeBroadChipSeqPeaksHmecH4k20me1.broadPeak.gz
+
+# submission 558
+    track wgEncodeBroadChipSeqSignalHmecControl
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel HMEC Control Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in HMEC cells)
+    subGroups view=Signal factor=zCTRL cellType=HMEC
+    type wig 0.00 14364.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=558 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecControl fileName=wgEncodeBroadChipSeqSignalHmecControl.wig.gz
+
+# submission 171
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC CTCF
@@ -649,6 +1104,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=CTCF view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=171 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecCtcf fileName=wgEncodeBroadChipSeqSignalHuvecCtcf.wig.gz
 
+# submission 164
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me1
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me1
@@ -668,6 +1124,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K4me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=164 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k4me1 fileName=wgEncodeBroadChipSeqSignalHuvecH3k4me1.wig.gz
 
+# submission 163
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me2
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me2
@@ -687,6 +1144,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K4me2 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=163 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k4me2 fileName=wgEncodeBroadChipSeqSignalHuvecH3k4me2.wig.gz
 
+# submission 162
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me3
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K4me3
@@ -707,6 +1165,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K4me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=162 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k4me3 fileName=wgEncodeBroadChipSeqSignalHuvecH3k4me3.wig.gz
 
+# submission 167
     track wgEncodeBroadChipSeqPeaksHuvecH3k9ac
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9ac
@@ -726,6 +1185,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=167 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k9ac fileName=wgEncodeBroadChipSeqSignalHuvecH3k9ac.wig.gz
 
+# submission 169
     track wgEncodeBroadChipSeqPeaksHuvecH3k9me1
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K9me1
@@ -746,6 +1206,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K9me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=169 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k9me1 fileName=wgEncodeBroadChipSeqSignalHuvecH3k9me1.wig.gz
 
+# submission 168
     track wgEncodeBroadChipSeqPeaksHuvecH3k27ac
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27ac
@@ -765,6 +1226,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K27ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=168 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k27ac fileName=wgEncodeBroadChipSeqSignalHuvecH3k27ac.wig.gz
 
+# submission 165
     track wgEncodeBroadChipSeqPeaksHuvecH3k27me3
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K27me3
@@ -784,6 +1246,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=165 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k27me3 fileName=wgEncodeBroadChipSeqSignalHuvecH3k27me3.wig.gz
 
+# submission 166
     track wgEncodeBroadChipSeqPeaksHuvecH3k36me3
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H3K36me3
@@ -803,6 +1266,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H3K36me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=166 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH3k36me3 fileName=wgEncodeBroadChipSeqSignalHuvecH3k36me3.wig.gz
 
+# submission 170
     track wgEncodeBroadChipSeqPeaksHuvecH4k20me1
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC H4K20me1
@@ -822,6 +1286,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=H4K20me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=170 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecH4k20me1 fileName=wgEncodeBroadChipSeqSignalHuvecH4k20me1.wig.gz
 
+# submission 172
     track wgEncodeBroadChipSeqPeaksHuvecPol2b
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Pol2(b)
@@ -841,6 +1306,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Pol2(b) view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=172 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecPol2b fileName=wgEncodeBroadChipSeqSignalHuvecPol2b.wig.gz
 
+# submission 173
     track wgEncodeBroadChipSeqSignalHuvecControl
     subTrack wgEncodeBroadChipSeq off
     shortLabel HUVEC Control
@@ -851,6 +1317,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 224,75,0
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HUVEC antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=173 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHuvecControl fileName=wgEncodeBroadChipSeqSignalHuvecControl.wig.gz
 
+# submission 157
     track wgEncodeBroadChipSeqPeaksK562Ctcf
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF
@@ -870,6 +1337,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=CTCF view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=157 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562Ctcf fileName=wgEncodeBroadChipSeqSignalK562Ctcf.wig.gz
 
+# submission 152
     track wgEncodeBroadChipSeqPeaksK562H3k4me1
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1
@@ -890,6 +1358,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K4me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=152 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k4me1 fileName=wgEncodeBroadChipSeqSignalK562H3k4me1.wig.gz
 
+# submission 151
     track wgEncodeBroadChipSeqPeaksK562H3k4me2
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2
@@ -909,6 +1378,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K4me2 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=151 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k4me2 fileName=wgEncodeBroadChipSeqSignalK562H3k4me2.wig.gz
 
+# submission 150
     track wgEncodeBroadChipSeqPeaksK562H3k4me3
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3
@@ -928,6 +1398,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K4me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=150 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k4me3 fileName=wgEncodeBroadChipSeqSignalK562H3k4me3.wig.gz
 
+# submission 155
     track wgEncodeBroadChipSeqPeaksK562H3k9ac
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac
@@ -947,6 +1418,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=155 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k9ac fileName=wgEncodeBroadChipSeqSignalK562H3k9ac.wig.gz
 
+# submission 158
     track wgEncodeBroadChipSeqPeaksK562H3k9me1
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1
@@ -966,6 +1438,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K9me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=158 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k9me1 fileName=wgEncodeBroadChipSeqSignalK562H3k9me1.wig.gz
 
+# submission 156
     track wgEncodeBroadChipSeqPeaksK562H3k27ac
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac
@@ -985,6 +1458,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K27ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=156 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k27ac fileName=wgEncodeBroadChipSeqSignalK562H3k27ac.wig.gz
 
+# submission 153
     track wgEncodeBroadChipSeqPeaksK562H3k27me3
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3
@@ -1004,6 +1478,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=153 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k27me3 fileName=wgEncodeBroadChipSeqSignalK562H3k27me3.wig.gz
 
+# submission 154
     track wgEncodeBroadChipSeqPeaksK562H3k36me3
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3
@@ -1023,6 +1498,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K36me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=154 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H3k36me3 fileName=wgEncodeBroadChipSeqSignalK562H3k36me3.wig.gz
 
+# submission 159
     track wgEncodeBroadChipSeqPeaksK562H4k20me1
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1
@@ -1042,6 +1518,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H4K20me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=159 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562H4k20me1 fileName=wgEncodeBroadChipSeqSignalK562H4k20me1.wig.gz
 
+# submission 160
     track wgEncodeBroadChipSeqPeaksK562Pol2b
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b)
@@ -1061,6 +1538,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Pol2(b) view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=160 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562Pol2b fileName=wgEncodeBroadChipSeqSignalK562Pol2b.wig.gz
 
+# submission 161
     track wgEncodeBroadChipSeqSignalK562Control
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Control
@@ -1071,6 +1549,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 46,0,184
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=161 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalK562Control fileName=wgEncodeBroadChipSeqSignalK562Control.wig.gz
 
+# submission 183
     track wgEncodeBroadChipSeqPeaksNhekCtcf
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK CTCF
@@ -1090,6 +1569,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=CTCF view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=183 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekCtcf fileName=wgEncodeBroadChipSeqSignalNhekCtcf.wig.gz
 
+# submission 176
     track wgEncodeBroadChipSeqPeaksNhekH3k4me1
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K4me1
@@ -1109,6 +1589,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=176 dateSubmitted=2009-01-06 dateUnrestricted=2009-10-06 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me1 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me1.wig.gz
 
+# submission 175
     track wgEncodeBroadChipSeqPeaksNhekH3k4me2
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K4me2
@@ -1128,6 +1609,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me2 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=175 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me2 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me2.wig.gz
 
+# submission 174
     track wgEncodeBroadChipSeqPeaksNhekH3k4me3
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K4me3
@@ -1147,6 +1629,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K4me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=174 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k4me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k4me3.wig.gz
 
+# submission 179
     track wgEncodeBroadChipSeqPeaksNhekH3k9ac
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K9ac
@@ -1166,6 +1649,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=179 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9ac fileName=wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
 
+# submission 181
     track wgEncodeBroadChipSeqPeaksNhekH3k9me1
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K9me1
@@ -1185,6 +1669,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K9me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=181 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k9me1 fileName=wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
 
+# submission 180
     track wgEncodeBroadChipSeqPeaksNhekH3k27ac
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K27ac
@@ -1204,6 +1689,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K27ac view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=180 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k27ac fileName=wgEncodeBroadChipSeqSignalNhekH3k27ac.wig.gz
 
+# submission 177
     track wgEncodeBroadChipSeqPeaksNhekH3k27me3
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K27me3
@@ -1223,6 +1709,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K27me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=177 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k27me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k27me3.wig.gz
 
+# submission 178
     track wgEncodeBroadChipSeqPeaksNhekH3k36me3
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H3K36me3
@@ -1242,6 +1729,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H3K36me3 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=178 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH3k36me3 fileName=wgEncodeBroadChipSeqSignalNhekH3k36me3.wig.gz
 
+# submission 182
     track wgEncodeBroadChipSeqPeaksNhekH4k20me1
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK H4K20me1
@@ -1261,6 +1749,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=H4K20me1 view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=182 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekH4k20me1 fileName=wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
 
+# submission 184
     track wgEncodeBroadChipSeqPeaksNhekPol2b
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK Pol2(b)
@@ -1280,6 +1769,7 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=Pol2(b) view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=184 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekPol2b fileName=wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
 
+# submission 185
     track wgEncodeBroadChipSeqSignalNhekControl
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHEK control
@@ -1291,579 +1781,167 @@ dataVersion ENCODE Feb 2009 Freeze
     color 179,0,134
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHEK antibody=Input view=Signal dataVersion="ENCODE Feb 2009 Freeze" subId=185 dateSubmitted=2009-01-07 dateUnrestricted=2009-10-07 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhekControl fileName=wgEncodeBroadChipSeqSignalNhekControl.wig.gz
 
+# submission 577
+    track wgEncodeBroadChipSeqSignalNhlfH3k4me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K4me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in NHLF cells)
+    subGroups view=Signal factor=H3K04me1 cellType=NHLF
+    type wig 0.00 14639.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K04me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=577 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k4me1 fileName=wgEncodeBroadChipSeqSignalNhlfH3k4me1.wig.gz
 
-     track wgEncodeBroadChipSeqSignalHmecControl
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC Control Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in HMEC cells)
-     subGroups view=Signal factor=zCTRL cellType=HMEC
-     type wig 0.00 14364.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=558 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecControl fileName=wgEncodeBroadChipSeqSignalHmecControl.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k4me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K4me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in NHLF cells)
+    subGroups view=Peaks factor=H3K04me1 cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=577 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k4me1 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k4me1.broadPeak.gz
 
-     track wgEncodeBroadChipSeqSignalHepg2Control
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 Control Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in HepG2 cells)
-     subGroups view=Signal factor=zCTRL cellType=HepG2
-     type wig 0.00 10365.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=559 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Control fileName=wgEncodeBroadChipSeqSignalHepg2Control.wig.gz
+# submission 584
+    track wgEncodeBroadChipSeqSignalNhlfH3k4me2
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K4me2 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in NHLF cells)
+    subGroups view=Signal factor=H3K04me2 cellType=NHLF
+    type wig 0.00 12841.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=584 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k4me2 fileName=wgEncodeBroadChipSeqSignalNhlfH3k4me2.wig.gz
 
-     track wgEncodeBroadChipSeqSignalHmecCtcf
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC CTCF Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HMEC cells)
-     subGroups view=Signal factor=CTCF cellType=HMEC
-     type wig 0.00 14531.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=554 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-27 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecCtcf fileName=wgEncodeBroadChipSeqSignalHmecCtcf.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k4me2
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K4me2 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in NHLF cells)
+    subGroups view=Peaks factor=H3K04me2 cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=584 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k4me2 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k4me2.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksHmecCtcf
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC CTCF Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HMEC cells)
-     subGroups view=Peaks factor=CTCF cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=554 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-27 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecCtcf fileName=wgEncodeBroadChipSeqPeaksHmecCtcf.broadPeak.gz
+# submission 578
+    track wgEncodeBroadChipSeqSignalNhlfH3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K4me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in NHLF cells)
+    subGroups view=Signal factor=H3K04me3 cellType=NHLF
+    type wig 0.00 28587.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=578 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k4me3 fileName=wgEncodeBroadChipSeqSignalNhlfH3k4me3.wig.gz
 
-     track wgEncodeBroadChipSeqSignalHepg2H3k9ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K9ac Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HepG2 cells)
-     subGroups view=Signal factor=H3K9ac cellType=HepG2
-     type wig 0.00 11352.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k9ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k9ac.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k4me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K4me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in NHLF cells)
+    subGroups view=Peaks factor=H3K04me3 cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=578 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k4me3 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k4me3.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksHepg2H3k9ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K9ac Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HepG2 cells)
-     subGroups view=Peaks factor=H3K9ac cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac.broadPeak.gz
+# submission 575
+    track wgEncodeBroadChipSeqSignalNhlfH3k9ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K9ac Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in NHLF cells)
+    subGroups view=Signal factor=H3K09ac cellType=NHLF
+    type wig 0.00 10289.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=575 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k9ac fileName=wgEncodeBroadChipSeqSignalNhlfH3k9ac.wig.gz
 
-     track wgEncodeBroadChipSeqSignalHmecH3k27me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K27me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in HMEC cells)
-     subGroups view=Signal factor=H3K27me3 cellType=HMEC
-     type wig 0.00 11452.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=562 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k27me3 fileName=wgEncodeBroadChipSeqSignalHmecH3k27me3.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k9ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K9ac Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in NHLF cells)
+    subGroups view=Peaks factor=H3K09ac cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=575 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k9ac fileName=wgEncodeBroadChipSeqPeaksNhlfH3k9ac.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksHmecH3k27me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K27me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in HMEC cells)
-     subGroups view=Peaks factor=H3K27me3 cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=562 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k27me3 fileName=wgEncodeBroadChipSeqPeaksHmecH3k27me3.broadPeak.gz
+# submission 582
+    track wgEncodeBroadChipSeqSignalNhlfH3k27ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K27ac Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in NHLF cells)
+    subGroups view=Signal factor=H3K27ac cellType=NHLF
+    type wig 0.00 7319.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=582 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k27ac fileName=wgEncodeBroadChipSeqSignalNhlfH3k27ac.wig.gz
 
-     track wgEncodeBroadChipSeqSignalHepg2Ctcf
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 CTCF Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HepG2 cells)
-     subGroups view=Signal factor=CTCF cellType=HepG2
-     type wig 0.00 11113.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Ctcf fileName=wgEncodeBroadChipSeqSignalHepg2Ctcf.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k27ac
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K27ac Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in NHLF cells)
+    subGroups view=Peaks factor=H3K27ac cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=582 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k27ac fileName=wgEncodeBroadChipSeqPeaksNhlfH3k27ac.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksHepg2Ctcf
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 CTCF Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HepG2 cells)
-     subGroups view=Peaks factor=CTCF cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2Ctcf fileName=wgEncodeBroadChipSeqPeaksHepg2Ctcf.broadPeak.gz
+# submission 618
+    track wgEncodeBroadChipSeqSignalNhlfH3k27me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K27me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in NHLF cells)
+    subGroups view=Signal factor=H3K27me3 cellType=NHLF
+    type wig 0.00 10920.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=618 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k27me3 fileName=wgEncodeBroadChipSeqSignalNhlfH3k27me3.wig.gz
 
-     track wgEncodeBroadChipSeqSignalH1hescH3k27me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H3K27me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in H1-hESC cells)
-     subGroups view=Signal factor=H3K27me3 cellType=H1-hESC
-     type wig 0.00 13363.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K27me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=564 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH3k27me3 fileName=wgEncodeBroadChipSeqSignalH1hescH3k27me3.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k27me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K27me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in NHLF cells)
+    subGroups view=Peaks factor=H3K27me3 cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=618 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k27me3 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k27me3.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksH1hescH3k27me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H3K27me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in H1-hESC cells)
-     subGroups view=Peaks factor=H3K27me3 cellType=H1-hESC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K27me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=564 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH3k27me3 fileName=wgEncodeBroadChipSeqPeaksH1hescH3k27me3.broadPeak.gz
+# submission 583
+    track wgEncodeBroadChipSeqSignalNhlfH3k36me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K36me3 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in NHLF cells)
+    subGroups view=Signal factor=H3K36me3 cellType=NHLF
+    type wig 0.00 17454.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=583 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k36me3 fileName=wgEncodeBroadChipSeqSignalNhlfH3k36me3.wig.gz
 
-     track wgEncodeBroadChipSeqSignalHmecH3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K4me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HMEC cells)
-     subGroups view=Signal factor=H3K04me3 cellType=HMEC
-     type wig 0.00 15838.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=565 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k4me3 fileName=wgEncodeBroadChipSeqSignalHmecH3k4me3.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH3k36me3
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H3K36me3 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in NHLF cells)
+    subGroups view=Peaks factor=H3K36me3 cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=583 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k36me3 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k36me3.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksHmecH3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K4me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HMEC cells)
-     subGroups view=Peaks factor=H3K04me3 cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=565 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k4me3 fileName=wgEncodeBroadChipSeqPeaksHmecH3k4me3.broadPeak.gz
+# submission 579
+    track wgEncodeBroadChipSeqSignalNhlfH4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H4K20me1 Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in NHLF cells)
+    subGroups view=Signal factor=H4K20me1 cellType=NHLF
+    type wig 0.00 9120.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=579 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH4k20me1 fileName=wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
 
-     track wgEncodeBroadChipSeqSignalH1hescH3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H3K4me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in H1-hESC cells)
-     subGroups view=Signal factor=H3K04me3 cellType=H1-hESC
-     type wig 0.00 12434.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=566 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH3k4me3 fileName=wgEncodeBroadChipSeqSignalH1hescH3k4me3.wig.gz
+    track wgEncodeBroadChipSeqPeaksNhlfH4k20me1
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF H4K20me1 Pk
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in NHLF cells)
+    subGroups view=Peaks factor=H4K20me1 cellType=NHLF
+    type broadPeak
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=579 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH4k20me1 fileName=wgEncodeBroadChipSeqPeaksNhlfH4k20me1.broadPeak.gz
 
-     track wgEncodeBroadChipSeqPeaksH1hescH3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H3K4me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in H1-hESC cells)
-     subGroups view=Peaks factor=H3K04me3 cellType=H1-hESC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=566 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH3k4me3 fileName=wgEncodeBroadChipSeqPeaksH1hescH3k4me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHepg2H3k36me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K36me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HepG2 cells)
-     subGroups view=Signal factor=H3K36me3 cellType=HepG2
-     type wig 0.00 6447.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k36me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k36me3.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHepg2H3k36me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K36me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HepG2 cells)
-     subGroups view=Peaks factor=H3K36me3 cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHmecH3k36me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K36me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HMEC cells)
-     subGroups view=Signal factor=H3K36me3 cellType=HMEC
-     type wig 0.00 12398.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=568 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k36me3 fileName=wgEncodeBroadChipSeqSignalHmecH3k36me3.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHmecH3k36me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K36me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HMEC cells)
-     subGroups view=Peaks factor=H3K36me3 cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=568 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k36me3 fileName=wgEncodeBroadChipSeqPeaksHmecH3k36me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHmecH3k9ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K9ac Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HMEC cells)
-     subGroups view=Signal factor=H3K9ac cellType=HMEC
-     type wig 0.00 8649.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=569 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k9ac fileName=wgEncodeBroadChipSeqSignalHmecH3k9ac.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHmecH3k9ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K9ac Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HMEC cells)
-     subGroups view=Peaks factor=H3K9ac cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=569 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k9ac fileName=wgEncodeBroadChipSeqPeaksHmecH3k9ac.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalH1hescH3k4me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H3K4me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in H1-hESC cells)
-     subGroups view=Signal factor=H3K04me1 cellType=H1-hESC
-     type wig 0.00 12286.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K04me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=571 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH3k4me1 fileName=wgEncodeBroadChipSeqSignalH1hescH3k4me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksH1hescH3k4me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H3K4me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in H1-hESC cells)
-     subGroups view=Peaks factor=H3K04me1 cellType=H1-hESC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H3K04me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=571 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH3k4me1 fileName=wgEncodeBroadChipSeqPeaksH1hescH3k4me1.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHmecH3k27ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K27ac Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HMEC cells)
-     subGroups view=Signal factor=H3K27ac cellType=HMEC
-     type wig 0.00 8107.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=570 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k27ac fileName=wgEncodeBroadChipSeqSignalHmecH3k27ac.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHmecH3k27ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K27ac Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HMEC cells)
-     subGroups view=Peaks factor=H3K27ac cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=570 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k27ac fileName=wgEncodeBroadChipSeqPeaksHmecH3k27ac.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHepg2H3k4me2
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K4me2 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HepG2 cells)
-     subGroups view=Signal factor=H3K04me2 cellType=HepG2
-     type wig 0.00 5510.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me2 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me2.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHepg2H3k4me2
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K4me2 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HepG2 cells)
-     subGroups view=Peaks factor=H3K04me2 cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHmecH3k4me2
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K4me2 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HMEC cells)
-     subGroups view=Signal factor=H3K04me2 cellType=HMEC
-     type wig 0.00 10886.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=573 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k4me2 fileName=wgEncodeBroadChipSeqSignalHmecH3k4me2.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHmecH3k4me2
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K4me2 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HMEC cells)
-     subGroups view=Peaks factor=H3K04me2 cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=573 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k4me2 fileName=wgEncodeBroadChipSeqPeaksHmecH3k4me2.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHmecH3k4me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K4me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in HMEC cells)
-     subGroups view=Signal factor=H3K04me1 cellType=HMEC
-     type wig 0.00 13574.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K04me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=574 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH3k4me1 fileName=wgEncodeBroadChipSeqSignalHmecH3k4me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHmecH3k4me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H3K4me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in HMEC cells)
-     subGroups view=Peaks factor=H3K04me1 cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H3K04me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=574 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH3k4me1 fileName=wgEncodeBroadChipSeqPeaksHmecH3k4me1.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k9ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K9ac Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in NHLF cells)
-     subGroups view=Signal factor=H3K9ac cellType=NHLF
-     type wig 0.00 10289.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=575 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k9ac fileName=wgEncodeBroadChipSeqSignalNhlfH3k9ac.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k9ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K9ac Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in NHLF cells)
-     subGroups view=Peaks factor=H3K9ac cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=575 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k9ac fileName=wgEncodeBroadChipSeqPeaksNhlfH3k9ac.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHepg2H3k27ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K27ac Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HepG2 cells)
-     subGroups view=Signal factor=H3K27ac cellType=HepG2
-     type wig 0.00 2133.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k27ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k27ac.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHepg2H3k27ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K27ac Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HepG2 cells)
-     subGroups view=Peaks factor=H3K27ac cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k4me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K4me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in NHLF cells)
-     subGroups view=Signal factor=H3K04me1 cellType=NHLF
-     type wig 0.00 14639.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K04me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=577 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k4me1 fileName=wgEncodeBroadChipSeqSignalNhlfH3k4me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k4me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K4me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in NHLF cells)
-     subGroups view=Peaks factor=H3K04me1 cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=577 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k4me1 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k4me1.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K4me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in NHLF cells)
-     subGroups view=Signal factor=H3K04me3 cellType=NHLF
-     type wig 0.00 28587.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=578 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k4me3 fileName=wgEncodeBroadChipSeqSignalNhlfH3k4me3.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K4me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in NHLF cells)
-     subGroups view=Peaks factor=H3K04me3 cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=578 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k4me3 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k4me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H4K20me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in NHLF cells)
-     subGroups view=Signal factor=H4K20me1 cellType=NHLF
-     type wig 0.00 9120.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=579 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH4k20me1 fileName=wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H4K20me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in NHLF cells)
-     subGroups view=Peaks factor=H4K20me1 cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=579 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH4k20me1 fileName=wgEncodeBroadChipSeqPeaksNhlfH4k20me1.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHmecH4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H4K20me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HMEC cells)
-     subGroups view=Signal factor=H4K20me1 cellType=HMEC
-     type wig 0.00 20299.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=580 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecH4k20me1 fileName=wgEncodeBroadChipSeqSignalHmecH4k20me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHmecH4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HMEC H4K20me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HMEC cells)
-     subGroups view=Peaks factor=H4K20me1 cellType=HMEC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=580 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHmecH4k20me1 fileName=wgEncodeBroadChipSeqPeaksHmecH4k20me1.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHepg2H3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K4me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HepG2 cells)
-     subGroups view=Signal factor=H3K04me3 cellType=HepG2
-     type wig 0.00 4927.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me3.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHepg2H3k4me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H3K4me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HepG2 cells)
-     subGroups view=Peaks factor=H3K04me3 cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k27ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K27ac Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in NHLF cells)
-     subGroups view=Signal factor=H3K27ac cellType=NHLF
-     type wig 0.00 7319.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=582 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k27ac fileName=wgEncodeBroadChipSeqSignalNhlfH3k27ac.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k27ac
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K27ac Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in NHLF cells)
-     subGroups view=Peaks factor=H3K27ac cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=582 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k27ac fileName=wgEncodeBroadChipSeqPeaksNhlfH3k27ac.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k36me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K36me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in NHLF cells)
-     subGroups view=Signal factor=H3K36me3 cellType=NHLF
-     type wig 0.00 17454.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=583 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k36me3 fileName=wgEncodeBroadChipSeqSignalNhlfH3k36me3.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k36me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K36me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in NHLF cells)
-     subGroups view=Peaks factor=H3K36me3 cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=583 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k36me3 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k36me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k4me2
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K4me2 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in NHLF cells)
-     subGroups view=Signal factor=H3K04me2 cellType=NHLF
-     type wig 0.00 12841.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=584 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k4me2 fileName=wgEncodeBroadChipSeqSignalNhlfH3k4me2.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k4me2
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K4me2 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in NHLF cells)
-     subGroups view=Peaks factor=H3K04me2 cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=584 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k4me2 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k4me2.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalH1hescCtcf
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC CTCF Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in H1-hESC cells)
-     subGroups view=Signal factor=CTCF cellType=H1-hESC
-     type wig 0.00 25664.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=585 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescCtcf fileName=wgEncodeBroadChipSeqSignalH1hescCtcf.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksH1hescCtcf
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC CTCF Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in H1-hESC cells)
-     subGroups view=Peaks factor=CTCF cellType=H1-hESC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=585 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescCtcf fileName=wgEncodeBroadChipSeqPeaksH1hescCtcf.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalHepg2H4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H4K20me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HepG2 cells)
-     subGroups view=Signal factor=H4K20me1 cellType=HepG2
-     type wig 0.00 14061.00
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H4k20me1 fileName=wgEncodeBroadChipSeqSignalHepg2H4k20me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksHepg2H4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel HepG2 H4K20me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HepG2 cells)
-     subGroups view=Peaks factor=H4K20me1 cellType=HepG2
-     type broadPeak
-     color 189,0,157
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1 fileName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalH1hescControl
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC Control Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in H1-hESC cells)
-     subGroups view=Signal factor=zCTRL cellType=H1-hESC
-     type wig 0.00 11630.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=616 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescControl fileName=wgEncodeBroadChipSeqSignalH1hescControl.wig.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfControl
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF Control Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in NHLF cells)
-     subGroups view=Signal factor=zCTRL cellType=NHLF
-     type wig 0.00 15647.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=617 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfControl fileName=wgEncodeBroadChipSeqSignalNhlfControl.wig.gz
-
-     track wgEncodeBroadChipSeqSignalNhlfH3k27me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K27me3 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in NHLF cells)
-     subGroups view=Signal factor=H3K27me3 cellType=NHLF
-     type wig 0.00 10920.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=618 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfH3k27me3 fileName=wgEncodeBroadChipSeqSignalNhlfH3k27me3.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksNhlfH3k27me3
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel NHLF H3K27me3 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in NHLF cells)
-     subGroups view=Peaks factor=H3K27me3 cellType=NHLF
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=H3K27me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=618 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksNhlfH3k27me3 fileName=wgEncodeBroadChipSeqPeaksNhlfH3k27me3.broadPeak.gz
-
-     track wgEncodeBroadChipSeqSignalH1hescH4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H4K20me1 Sig
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in H1-hESC cells)
-     subGroups view=Signal factor=H4K20me1 cellType=H1-hESC
-     type wig 0.00 26060.00
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=619 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescH4k20me1 fileName=wgEncodeBroadChipSeqSignalH1hescH4k20me1.wig.gz
-
-     track wgEncodeBroadChipSeqPeaksH1hescH4k20me1
-     release alpha
-     subTrack wgEncodeBroadChipSeq off
-     shortLabel H1-hESC H4K20me1 Pk
-     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in H1-hESC cells)
-     subGroups view=Peaks factor=H4K20me1 cellType=H1-hESC
-     type broadPeak
-     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=619 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH4k20me1 fileName=wgEncodeBroadChipSeqPeaksH1hescH4k20me1.broadPeak.gz
+# submission 617
+    track wgEncodeBroadChipSeqSignalNhlfControl
+    release alpha
+    subTrack wgEncodeBroadChipSeq off
+    shortLabel NHLF Control Sig
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in NHLF cells)
+    subGroups view=Signal factor=zCTRL cellType=NHLF
+    type wig 0.00 15647.00
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=617 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfControl fileName=wgEncodeBroadChipSeqSignalNhlfControl.wig.gz
 
 
 # Duke/UT/UNC Chromatin Map (wrangler: tdreszer, Tracy)
