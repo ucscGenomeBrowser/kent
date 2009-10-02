@@ -871,5 +871,9 @@ else
     linkedFeaturesMethods(track);
     track->extraUiData = newBedUiData(track->mapName);
     track->loadItems = loadGappedBed;
+    if (trackDbSetting(tdb, "colorByStrand"))
+	{
+	track->itemColor = lfItemColorByStrand;
+	}
     }
 }
