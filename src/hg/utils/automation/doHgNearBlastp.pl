@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.10 2009/07/17 17:34:17 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.11 2009/10/02 05:14:15 kent Exp $
 
 use Getopt::Long;
 use warnings;
@@ -279,7 +279,7 @@ _EOF_
 
 # Make a matrix of clade-pair -e (max E-value) threshold:
 my ($mammal, $fish, $fly, $worm, $yeast) = (0..5);
-my %dbToClade = ( hg => $mammal, mm => $mammal, rn => $mammal,
+my %dbToClade = ( hg => $mammal, mm => $mammal, rn => $mammal, tmpFoo => $mammal,
 		  danRer => $fish,
 		  dm => $fly,
 		  ce => $worm,
