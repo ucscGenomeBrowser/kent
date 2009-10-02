@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.49 2009/09/28 23:25:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.50 2009/10/02 17:53:59 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -398,7 +398,7 @@ if (subjList != NULL)
     {
     printf("Use the \"configure\" button above to access additional data fields,");
     printf(" including infection date details, sequencing and ART date information,");
-    printf(" <BR>and immunogenicity data.");
+    printf(" and immunogenicity data.");
     
     bigTable(conn, colList,subjList);
     }
