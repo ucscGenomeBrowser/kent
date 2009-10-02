@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.555 2009/10/02 03:09:00 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.556 2009/10/02 03:15:22 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -1864,7 +1864,6 @@ dataVersion ENCODE Feb 2009 Freeze
      subGroups view=Peaks factor=H4K20me1 cellType=H1-hESC
      type broadPeak
      metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=619 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksH1hescH4k20me1 fileName=wgEncodeBroadChipSeqPeaksH1hescH4k20me1.broadPeak.gz
->
 
 
 # Duke/UT/UNC Chromatin Map (wrangler: tdreszer, Tracy)
@@ -3150,7 +3149,7 @@ wgEncode 1
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Input view=Signal labVersion="F-Seq 1.0" dataVersion="ENCODE Feb 2009 Freeze" subId=109 dateSubmitted=2008-12-05 dateUnrestricted=2009-08-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalK562Input fileName=wgEncodeUtaustinChIPseqSignalK562Input.wig.gz
 
 
-# Duke/UT/UNC Chromatin Map (wrangler: tdreszer)
+# Mapability - Cross lab special track (wrangler: tdreszer)
 
 track wgEncodeMapability
 compositeTrack on
@@ -5229,7 +5228,7 @@ dragAndDrop subTracks
 visibilityViewDefaults aPeaks=pack cHot=pack zRawSig=full
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:50,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
+settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
 #settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:50,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3 +
