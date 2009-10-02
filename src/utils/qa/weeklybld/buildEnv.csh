@@ -24,7 +24,7 @@ if ( "$HOST" == "$BOX32" ) then
     setenv BUILDDIR /scratch/releaseBuild
 endif
 if ( "$HOST" == "hgwbeta" ) then
-    setenv BUILDDIR /data/tmp/releaseBuild
+    setenv BUILDDIR /data/releaseBuild
 endif
 if ( "$HOST" == "hgwdev" ) then
     setenv CVS_REPORTS_WORKDIR /scratch/cvs-reports
