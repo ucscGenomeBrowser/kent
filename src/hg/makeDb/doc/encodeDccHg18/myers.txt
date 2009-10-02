@@ -342,3 +342,49 @@ releaseLogUrl = http://genome.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeH
 126 -> 004642
 
 all seven have been consolidated into: 004636
+
+2009-09-22 Tim is taking over!
+==============================
+select id,name,status,user_id from projects where user_id = 8;
++-----+----------------------------------------------------+-----------------+---------+
+| id  | name                                               | status          | user_id |
++-----+----------------------------------------------------+-----------------+---------+
+|   6 | HudsonAlpha PFSK-1/SK-N-MC Control                 | approved        |       8 | 
+|   7 | HudsonAlpha PFSK-1/SK-N-MC FOXP2                   | approved        |       8 | 
+|  51 | HudsonAlphaChip_Bg_GM12878_K562                    | released        |       8 | 
+|  52 | HudsonAlphaChip_RNAPol2_GM12878_K562               | released        |       8 | 
+|  67 | HudsonAlphaChip_GABP_GM12878_K562                  | released        |       8 | 
+|  70 | HudsonAlphaChip_NRSF_GM12878_K562                  | released        |       8 | 
+|  71 | HudsonAlphaChip_SRF_GM12878_K562                   | released        |       8 | 
+| 103 | HudsonAlpha_Genotype_K562_GM12878_HepG2            | validate failed |       8 | 
+| 125 | HudsonAlphaChip_TAF250_GM12878_Dec08               | released        |       8 | 
+| 126 | HudsonAlphaChip_TAF250_K562_Dec08                  | released        |       8 | 
+| 204 | HudsonAlpha_Methyl_Seq_Feb0909                     | approved        |       8 | 
+| 259 | HudsonAlpha_ChIPSeq_Sin3Ak-20_K562_GM12878_Feb2709 | displayed       |       8 | 
+| 260 | HudsonAlpha_ChIPSeq_Egr-1_K562_GM12878_Feb2709     | displayed       |       8 | 
+| 261 | HudsonAlpha_ChIPSeq_USF-1_K562_GM12878_Feb2709     | displayed       |       8 | 
+| 262 | HudsonAlpha_ChIPSeq_CONTROL_K562_GM12878_Feb2709   | displayed       |       8 | 
+| 268 | HudsonAlpha_ChIP-Seq-FEB09_FASTQ                   | loaded          |       8 | 
+| 387 | HudsonAlpha_MethylSeq_K562_GM12878_Mar09           | displayed       |       8 | 
+| 419 | HudsonAlpha_HepG2_Jul-09_FASTQ                     | validate failed |       8 | 
+| 422 | HudsonAlpha_GM12878_Jul-09                         | displayed       |       8 | 
+| 432 | HudsonAlpha_HepG2_Jul-09                           | displayed       |       8 | 
+| 433 | HudsonAlpha_HeLa_Jul-09                            | displayed       |       8 | 
+| 434 | HudsonAlpha_U87_Jul-09                             | displayed       |       8 | 
+| 435 | HudsonAlpha_PANC1_Jul-09                           | displayed       |       8 | 
+| 436 | HudsonAlpha_PFSK1_Jul-09                           | displayed       |       8 | 
+| 437 | HudsonAlpha_BE2C_Jul-09                            | displayed       |       8 | 
+| 438 | HudsonAlpha_HTB11_Jul-09                           | displayed       |       8 | 
++-----+----------------------------------------------------+-----------------+---------+
+26 rows in set (0.00 sec)
+
+Not to bad.  Why 2 validate failed?
+
+It appears that:
+1) no signals are provided.  
+2) We generate Raw Signals for ChIPseq
+3) fastq are provided separately for ChIPseq.
+4) Replicates go all the way up to the top: ChIPseq:peaks, MethylSeq:regions
+5) Only Regions are displayed in MethylSeq
+6) No Methyl27 submission.  Track seems to be hand loaded.
+7) Dir 103 is CNV which also seems to have been hand loaded and is owned by Brian.
