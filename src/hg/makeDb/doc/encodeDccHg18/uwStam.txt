@@ -1,0 +1,253 @@
+                                                                        validateFiles?
+| 300 | UwChIPSeq-GM12873-DS8948-CTCF-rep1 apr09    | validate failed | 
+| 396 | UwDnaseSeq-HeLa-S3-rep1 jun09               | loaded          | failed
+| 407 | UwChIPSeq-WERI-CTCF-bothReps                | loaded          | failed
+| 506 | UwDnaseSeq-H1-ES-rep1 sep09                 | loaded          | ok
+| 507 | UwDnaseSeq-HL-60-rep1 sep09                 | loaded          | ok
+| 515 | UwDnaseSeq-Jurkat-rep1(redo) sep09          | loaded          | ok
+| 509 | UwDnaseSeq-NB4-rep1 sep09                   | loaded          | ok
+| 510 | UwDnaseSeq-NHEK-rep1 sep09                  | loaded          | ok
+| 511 | UwDnaseSeq-PANC-1-rep2 sep09                | loaded          | ok
+| 512 | UwDnaseSeq-PANC-1-rep1 sep09                | loaded          | ok
+| 513 | UwDnaseSeq-SAEC-rep2 sep09                  | loaded          | ok
+| 514 | UwDnaseSeq-SAEC-rep1 sep09                  | loaded          | ok
+| 516 | UwChIPSeq-BJ-tert-rep2-CTCF sep09           | loaded          | ok
+| 517 | UwChIPSeq-BJ-tert-rep1-CTCF sep09           | loaded          | 
+| 518 | UwChIPSeq-Caco-2-rep2-CTCF sep09            | loaded          | 
+| 519 | UwChIPSeq-Caco-2-rep1-CTCF sep09            | loaded          | 
+| 520 | UwChIPSeq-GM06990-rep1-CTCF sep09           | loaded          | V2
+| 527 | UwChIPSeq-GM06990-rep2-CTCF (redo) sep09    | loaded          | V2
+| 528 | UwChIPSeq-GM12878-rep2-CTCF (redo) sep09    | loaded          | V2
+| 523 | UwChIPSeq-HRE-rep1-CTCF sep09               | loaded          | 
+| 525 | UwChIPSeq-K562-rep2-CTCF sep09              | validate failed | 
+| 526 | UwChIPSeq-NHEK-rep1-CTCF sep09              | loaded          | 
+| 532 | UwChIPSeq-HeLa-S3-rep2-CTCF (redo) sep09    | validate failed | 
+| 530 | UwExons-dataVersion2 (redo) sep09           | loaded          | V2
+| 533 | UwExons  sep09                              | validate failed | 
+
+/hive/groups/encode/dcc/pipeline/encpipeline_prod/396
+
+validateFiles -type=tagAlign -genome=/cluster/data/hg18/hg18.2bit -printFailLines -mismatches=2 -isSort -mmCheckOneInN=100 Hela-DS10011.uniques.36.hg18.bed.gz       
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=100]: sequence (GAGAAATCTCCAAGAAACAGAGTGCTATTCCGCATA) length (36) does not match genomic coords (1 / 1 - chr1 224955 224956)
+chr1    224955  224956  GAGAAATCTCCAAGAAACAGAGTGCTATTCCGCATA    1000    +
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=200]: sequence (TATGTTGTGTAGAGTTCAGGGGAGAGTGCGTTATAT) length (36) does not match genomic coords (1 / 1 - chr1 554492 554493)
+chr1    554492  554493  TATGTTGTGTAGAGTTCAGGGGAGAGTGCGTTATAT    1000    -
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=300]: sequence (ACCCAAGGCACCCCTCTGACATCCGGCCTGCTCCTT) length (36) does not match genomic coords (1 / 1 - chr1 555237 555238)
+chr1    555237  555238  ACCCAAGGCACCCCTCTGACATCCGGCCTGCTCCTT    1000    +
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=400]: sequence (TGGGTAATTGAGGAGTATGCTAAGATTTTGCGTAGT) length (36) does not match genomic coords (1 / 1 - chr1 555439 555440)
+chr1    555439  555440  TGGGTAATTGAGGAGTATGCTAAGATTTTGCGTAGT    1000    -
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=500]: sequence (CTCATCATCCCCACCATCATAGCCTTCATCCCCCTC) length (36) does not match genomic coords (1 / 1 - chr1 555708 555709)
+chr1    555708  555709  CTCATCATCCCCACCATCATAGCCTTCATCCCCCTC    1000    +
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=600]: sequence (GGAGTAGATTAGGCGCAGGTAGAAGTAGAGGTTAAG) length (36) does not match genomic coords (1 / 1 - chr1 555779 555780)
+chr1    555779  555780  GGAGTAGATTAGGCGCAGGTAGAAGTAGAGGTTAAG    1000    -
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=700]: sequence (GTGGGGAGGAATGGGGTGGGTTTTGTGTGTTCAAAC) length (36) does not match genomic coords (1 / 1 - chr1 555865 555866)
+chr1    555865  555866  GTGGGGAGGAATGGGGTGGGTTTTGTGTGTTCAAAC    1000    -
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=800]: sequence (AAGCCTCCTTATTCGAGCCGAACTGGGCCAGCCAGG) length (36) does not match genomic coords (1 / 1 - chr1 556415 556416)
+chr1    556415  556416  AAGCCTCCTTATTCGAGCCGAACTGGGCCAGCCAGG    1000    +
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=900]: sequence (CCCCGCATAAACAACATAAGCTTCTGACTCTTACCC) length (36) does not match genomic coords (1 / 1 - chr1 556599 556600)
+chr1    556599  556600  CCCCGCATAAACAACATAAGCTTCTGACTCTTACCC    1000    +
+Error [file=Hela-DS10011.uniques.36.hg18.bed.gz, line=1000]: sequence (CCCCGCATAAACAACATAAGCTTCTGACTCTTACCC) length (36) does not match genomic coords (1 / 1 - chr1 556599 556600)
+chr1    556599  556600  CCCCGCATAAACAACATAAGCTTCTGACTCTTACCC    1000    +
+Aborting .. found 10 errors
+
+
+/hive/groups/encode/dcc/pipeline/encpipeline_prod/407
+
+validateFiles -type=tagAlign -genome=/cluster/data/hg18/hg18.2bit -printFailLines -mismatches=2 -isSort -mmCheckOneInN=100 WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=100]: sequence (CCCACCCCGCATCCCCGGGCTCGGGTT) length (27) does not match genomic coords (1 / 1 - chr1 511456 511457)
+chr1    511456  511457  CCCACCCCGCATCCCCGGGCTCGGGTT     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=200]: sequence (TGCGATTTCTGATGACTAAAACCTGGC) length (27) does not match genomic coords (1 / 1 - chr1 576084 576085)
+chr1    576084  576085  TGCGATTTCTGATGACTAAAACCTGGC     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=300]: sequence (GGCAAATCCACAGAAGTAGAAAGTAGA) length (27) does not match genomic coords (1 / 1 - chr1 765490 765491)
+chr1    765490  765491  GGCAAATCCACAGAAGTAGAAAGTAGA     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=400]: sequence (ACCGAGGCGAGGGCAGGAGCAGGTGCA) length (27) does not match genomic coords (1 / 1 - chr1 795248 795249)
+chr1    795248  795249  ACCGAGGCGAGGGCAGGAGCAGGTGCA     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=500]: sequence (GGCCGCCTCCGAACGTGGCCGCCGCCT) length (27) does not match genomic coords (1 / 1 - chr1 829939 829940)
+chr1    829939  829940  GGCCGCCTCCGAACGTGGCCGCCGCCT     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=600]: sequence (CAGGCAGCAGAGCCTCGGGTCAACCGT) length (27) does not match genomic coords (1 / 1 - chr1 838190 838191)
+chr1    838190  838191  CAGGCAGCAGAGCCTCGGGTCAACCGT     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=700]: sequence (GTCTTGGTCTGGGACACCTGGGCCCCA) length (27) does not match genomic coords (1 / 1 - chr1 846698 846699)
+chr1    846698  846699  GTCTTGGTCTGGGACACCTGGGCCCCA     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=800]: sequence (AGGAACTCGGGTCCCCCAACTCCCTTG) length (27) does not match genomic coords (1 / 1 - chr1 857098 857099)
+chr1    857098  857099  AGGAACTCGGGTCCCCCAACTCCCTTG     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=900]: sequence (GGGGAAGGTGGTGCCTGGTCAAACCAA) length (27) does not match genomic coords (1 / 1 - chr1 863917 863918)
+chr1    863917  863918  GGGGAAGGTGGTGCCTGGTCAAACCAA     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=1000]: sequence (CCTGTGTGTACCTGTATGCATGCACAT) length (27) does not match genomic coords (1 / 1 - chr1 875726 875727)
+chr1    875726  875727  CCTGTGTGTACCTGTATGCATGCACAT     0       -
+Aborting .. found 10 errors
+
+validateFiles -type=tagAlign -genome=/cluster/data/hg18/hg18.2bit -printFailLines -mismatches=2 -isSort -mmCheckOneInN=100 WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=100]: sequence (CCCACCCCGCATCCCCGGGCTCGGGTT) length (27) does not match genomic coords (1 / 1 - chr1 511456 511457)
+chr1    511456  511457  CCCACCCCGCATCCCCGGGCTCGGGTT     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=200]: sequence (TGCGATTTCTGATGACTAAAACCTGGC) length (27) does not match genomic coords (1 / 1 - chr1 576084 576085)
+chr1    576084  576085  TGCGATTTCTGATGACTAAAACCTGGC     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=300]: sequence (GGCAAATCCACAGAAGTAGAAAGTAGA) length (27) does not match genomic coords (1 / 1 - chr1 765490 765491)
+chr1    765490  765491  GGCAAATCCACAGAAGTAGAAAGTAGA     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=400]: sequence (ACCGAGGCGAGGGCAGGAGCAGGTGCA) length (27) does not match genomic coords (1 / 1 - chr1 795248 795249)
+chr1    795248  795249  ACCGAGGCGAGGGCAGGAGCAGGTGCA     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=500]: sequence (GGCCGCCTCCGAACGTGGCCGCCGCCT) length (27) does not match genomic coords (1 / 1 - chr1 829939 829940)
+chr1    829939  829940  GGCCGCCTCCGAACGTGGCCGCCGCCT     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=600]: sequence (CAGGCAGCAGAGCCTCGGGTCAACCGT) length (27) does not match genomic coords (1 / 1 - chr1 838190 838191)
+chr1    838190  838191  CAGGCAGCAGAGCCTCGGGTCAACCGT     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=700]: sequence (GTCTTGGTCTGGGACACCTGGGCCCCA) length (27) does not match genomic coords (1 / 1 - chr1 846698 846699)
+chr1    846698  846699  GTCTTGGTCTGGGACACCTGGGCCCCA     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=800]: sequence (AGGAACTCGGGTCCCCCAACTCCCTTG) length (27) does not match genomic coords (1 / 1 - chr1 857098 857099)
+chr1    857098  857099  AGGAACTCGGGTCCCCCAACTCCCTTG     0       -
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=900]: sequence (GGGGAAGGTGGTGCCTGGTCAAACCAA) length (27) does not match genomic coords (1 / 1 - chr1 863917 863918)
+chr1    863917  863918  GGGGAAGGTGGTGCCTGGTCAAACCAA     0       +
+Error [file=WERI-DS10408-CTCF-rep1.uniques.hg18.bed.gz, line=1000]: sequence (CCTGTGTGTACCTGTATGCATGCACAT) length (27) does not match genomic coords (1 / 1 - chr1 875726 875727)
+chr1    875726  875727  CCTGTGTGTACCTGTATGCATGCACAT     0       -
+Aborting .. found 10 errors
+
+
+These are resubmissions of datasets not publicly released:
+| wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf  | 
+| wgEncodeUwChIPSeqPeaksHelas3Ctcf         | 
+| wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf |
+| wgEncodeUwChIPSeqHotspotsRep1K562Ctcf      | 
+| wgEncodeUwChIPSeqPeaksK562Ctcf             | 
+| wgEncodeUwChIPSeqRawSignalRep1K562Ctcf     | 
+drop table wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf;
+drop table wgEncodeUwChIPSeqPeaksHelas3Ctcf;
+drop table wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf;
+
+ 
+Ouch!!! The problem was not duplicate experiements but only duplicate Peaks
+The problem directories:
+| 520 | UwChIPSeq-GM06990-rep1-CTCF sep09           | loaded          | V2
+| 527 | UwChIPSeq-GM06990-rep2-CTCF (redo) sep09    | loaded          | V2
+| 528 | UwChIPSeq-GM12878-rep2-CTCF (redo) sep09    | loaded          | V2
+| 525 | UwChIPSeq-K562-rep2-CTCF sep09              | validate failed | 
+| 532 | UwChIPSeq-HeLa-S3-rep2-CTCF (redo) sep09    | validate failed | 
+| 530 | UwExons-dataVersion2 (redo) sep09           | loaded          | V2
+
+1) Unload all in pipeline
+
+304 track wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
+    track wgEncodeUwChIPSeqPeaksHelas3Ctcf
+    track wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf
+
+2) Edit 304 daf/ddf to just reload these three tables
+then submit for validation
+3) Edit each of the *.dafs
+4) Revalidate all the UwChipSeq tracks loaded this weekend.
+
+# DnaseSeq look fine.
+# Exon Affy look fine
+
+### What is uwDnase HL-60/Rep2 doing as V2?? 
+Unload, edit DAF, resubmit
+
+# Tracy Ballinger did a lot of the trackDb.wgEncode.ra for DNase and ChIP.  I did for ExonAffy
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 530 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 534 displayed
+# Tracy did the same for
+506,507,509,510,511,512,513,514,514,516,517,518,519,520,523,525,526,527,528,532 
+# And I redid for 304 which I had stepped on and had to reload
+
+2009-09-30 More for the freeze
+==============================
+# DNase first:
+| 592 | UwDnaseSeq-MCF7-7-rep1 sep09                | loaded          | 
+| 625 | UwDnaseSeq-HL-60-rep1 (redo) sep09          | loaded          | 
+| 627 | UwDnaseSeq-HMEC-rep1 (redo) sep09           | loaded          | 
+
+
+
+| 595 | UwChIPSeq-Caco-2-rep1-H3K4me3 sep09         | loaded          | 
+| 596 | UwChIPSeq-Caco-2-rep2-H3K4me3 sep09         | loaded          | 
+| 597 | UwChIPSeq-Caco-2-rep1-H3K4me1 sep09         | loaded          | 
+| 598 | UwChIPSeq-GM12878-rep1-CTCF sep09           | loaded          | 
+| 599 | UwChIPSeq-HEK293-rep2-CTCF sep09            | loaded          | 
+| 600 | UwChIPSeq-HMEC-rep1-H3K27me3 sep09          | loaded          | 
+| 601 | UwChIPSeq-HRE-rep2-CTCF sep09               | loaded          | 
+| 602 | UwChIPSeq-HRE-rep1-H3K4me1 sep09            | loaded          | 
+| 603 | UwChIPSeq-HUVEC-rep1-CTCF sep09             | loaded          | 
+| 604 | UwChIPSeq-HUVEC-rep1-H3K4me3 sep09          | loaded          | 
+| 605 | UwChIPSeq-HUVEC-rep1-H3K27me3 sep09         | loaded          | 
+| 606 | UwChIPSeq-HeLa-S3-rep1-CTCF sep09           | loaded          | 
+| 607 | UwChIPSeq-HeLa-S3-rep1-H3K4me1 sep09        | loaded          | 
+| 608 | UwChIPSeq-HepG2-rep2-CTCF sep09             | loaded          | 
+| 609 | UwChIPSeq-HepG2-rep2-H3K4me3 sep09          | loaded          | 
+| 610 | UwChIPSeq-HepG2-rep1-H3K4me3 sep09          | loaded          | 
+| 611 | UwChIPSeq-K562-rep1-H3K4me3 sep09           | loaded          | 
+| 612 | UwChIPSeq-NHEK-rep1-H3K4me3 sep09           | loaded          | 
+| 613 | UwChIPSeq-NHEK-rep2-H3K36me3 sep09          | loaded          | 
+| 622 | UwChIPSeq-HRE-rep1-H3K4me3 sep09            | loaded          | 
+| 623 | UwChIPSeq-NHEK-rep1-H3K36me3 sep09          | loaded          | 
+| 626 | UwChIPSeq-HEK293-rep1-CTCF sep09            | loaded          | 
+
+Set up tdb.ra for ChIP and Dnase
+
+#For DNase: Rearranged downloads dir to have release1
+cd {downloadsDir}
+mkdir release1
+mv *.gz release1
+# Because this is done post release: mv release1/*V2.*.gz .
+cp fileDb.ra release1
+cp index.html release1
+# hard link them all here
+ln release1/*.gz .
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/592/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/625/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/627/out/fileDb.ra | grep parentTable >> tmp.txt
+cp fileDb.ra fileDb.ra.2009-10-02
+# edit fileDb for 3 new submissions:
+   625 VERSIONING submission 311 (no change necessary)
+encodeDownloadsPage.pl index.html
+
+# Because this is done after release:
+saved actual RR index.html to release1
+compared lists of files in release1 to RR index.html list
+removed files from release1 which are NOT in RR index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 592 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 625 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 627 displayed
+
+# Now ChIP
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/595/out/fileDb.ra | grep parentTable > tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/596/out/fileDb.ra | grep parentTable >> tmp.txt
+...
+cp fileDb.ra fileDb.ra.2009-10-02
+# edit tmp.txt for replacing submissions: 
+  598 replacing 301
+  626 replaces 303
+  606 replaces 304
+  608 replaces partial 406
+  611 replaces 308
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+# Noticed that 603 was missing from tdb (because download file memtadata is incomplete)
+# edit tdb.ra
+# make alpha DBS=hg18
+encodeDownloadsPage.pl index.html
+# because peaks are submitted for rep2 but are not displayed in browser
+ls wgEncodeUwChIPSeqPeaksRep2*.narrowPeak.gz
+mv wgEncodeUwChIPSeqPeaksRep2*.narrowPeak.gz peakRep2/
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 595 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 596 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 597 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 598 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 599 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 600 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 601 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 602 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 603 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 604 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 605 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 606 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 607 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 608 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 609 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 610 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 611 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 612 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 613 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 622 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 623 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 626 displayed
