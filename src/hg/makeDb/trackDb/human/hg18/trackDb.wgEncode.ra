@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.558 2009/10/02 03:45:44 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.559 2009/10/02 18:00:11 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4883,6 +4883,37 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     subGroups view=cHot factor=H3K04me3 cellType=HRE rep=rep1
     type broadPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HRE antibody=H3K4me3 fragLength=350 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=622 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3 fileName=wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3.broadPeak.gz
+
+# submission 603
+    track wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HUVEC CTCF Raw 1
+    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HUVEC cells)
+    subGroups view=zRawSig factor=CTCF cellType=HUVEC rep=rep1
+    type wig 1.00 1666.00
+    color 224,75,0
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=CTCF fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=603 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf fileName=wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf.wig.gz
+
+    track wgEncodeUwChIPSeqPeaksRep1HuvecCtcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HUVEC CTCF Pk
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in HUVEC cells)
+    subGroups view=aPeaks factor=CTCF cellType=HUVEC rep=rep1
+    type narrowPeak
+    color 224,75,0
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=CTCF fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=603 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1HuvecCtcf fileName=wgEncodeUwChIPSeqPeaksRep1HuvecCtcf.narrowPeak.gz
+
+    track wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HUVEC CTCF HS 1
+    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in HUVEC cells)
+    subGroups view=cHot factor=CTCF cellType=HUVEC rep=rep1
+    type broadPeak
+    color 224,75,0
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=CTCF fragLength=350 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=603 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf fileName=wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf.broadPeak.gz
 
 # submission 604
     track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
