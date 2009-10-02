@@ -144,3 +144,20 @@ rename table wgEncodeNhgriNREEnhancerBlockersK562Ggamma_100 to wgEncodeNhgriNREE
 # moved old fils to "old" dir
 # moved new files to proper name and location
 rm -rf wgEncodeNhgriNRE
+
+# Oops, ElnitskiSilencerK562gamma_corrected.bed was not correctedf (a '-' was not actually a '-'!)...
+drop table wgEncodeNhgriNRESilencersK562Ggamma;
+rename table wgEncodeNhgriNRESilencersK562Ggamma_100 to wgEncodeNhgriNRESilencersK562Ggamma;
+drop table wgEncodeNhgriNREEnhancerBlockersK562Ggamma_100;
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 100 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 100 reviewing
+
+Released:
+=========
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 200 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 294 released
+
+2009-10-02 Finally get around to marking NREs as released
+=========================================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 100 released
