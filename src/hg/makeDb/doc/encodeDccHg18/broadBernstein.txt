@@ -647,3 +647,124 @@ encodeDownloadsPage.pl index.html
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 344 displayed
 
+
+# quicky for broad
+validateFiles -type=tagAlign -genome=/cluster/data/hg18/hg18.2bit -mismatches=3 -nMatch -matchFirst=25 -mmCheckOneInN=100 wgEncodeBroadChipSeqRel2AlignmentsRep2KeratinocytePol2b.tagAlign.gz
+Works!
+
+head -2 Broad_Raw_HMEC_CTCF_rep1_chr1.bed       
+chr1    13      48      TAACCCTAACCCTAACCCTAACCCTAACCCTAACNC    1000    +
+chr1    62      97      AACCCTAACCCTAACCCTAACCCTAACCCTAACCCT    1000    -
+head -2 Broad_Raw_HMEC_CTCF_rep1_chr1.bed | awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n",$1,$2 - 1,$3,$4,$5,$6;}' 
+chr1    12      48      TAACCCTAACCCTAACCCTAACCCTAACCCTAACNC    1000    +
+chr1    61      97      AACCCTAACCCTAACCCTAACCCTAACCCTAACCCT    1000    -
+/cluster/data/encode/pipeline/bin/doEncodeValidate.pl -quick -skipAutoCreation x ../551 
+
+head -2 Broad_Raw_HMEC_CTCF_rep1_chr1new2.bed | awk '{printf "%s\t%d\t%d\t%s\t%d\t+\n",$1,$2,$3,$4,$5;}' 
+
+
+2009-09-27 Noam Shoresh is loading up for Sept freeze
+=====================================================
+# First submissions failed on tagAligns
+1) Half open error
+2) Negative strand was double reversed:
+
+ERROR: failed validateTagAlign : Error [file=data/Broad_Raw_HMEC_CTCF_rep1_chr1new.bed, line=200]: too many mismatches (found 22
+/36, maximum is 3) (chr1 15955 15991 -)
+seq=[CTCCTCAGGCCAGCACTTTTCAGTGAGTTCCTCCTT]
+gen=[aaggaggaactcactgaaaagtgctggcctgaggag]
+
+These are all negative strand problems.  The tagAlign should have the actual sequence that the sequencer came up with.  The same one as found in the fastq (unaligned).  But it looks like you reversed the sequence in both senses of the word.  That is the sequence
+  char1 15955 15991 CTCCTCAGGCCAGCACTTTTCAGTGAGTTCCTCCTT -
+should have been
+  char1 15955 15991 AAGGAGGAACTCACTGAAAAGTGCTGGCCTGAGGAG -
+  
+Noam fixed these and is resubmitting.  His first one after this loads fine.
+
+Broad also has the outstanding sparse signal error:
+From the looks of the data, every *.wig file has a first line something like:
+   fixedStep chrom=chr3 start=1 step=25
+But should have a first line something like:
+   fixedStep chrom=chr3 start=1 step=25 span=25
+
+This means the first value will be set for positions 1-25 and the second will be set for 26-50.  
+What Broad is currently submitting will set a value at 1 then 26,....  It will leave positions 2-25 valueless!  
+This is not a problem and the Broad signal graphs are still interpretable.  But I believe Broad's intention is 
+to show continuous signal across the whole chromosome, but what they are showing is a discrete signal of 
+1 base in length at 25 base intervals.
+
+Response from Noam 9-28-2009:
+I forgot about the wig files... But it is, in fact, with gaps, that we usually look at these data, so this is intentional.
+In a way it might make a bit more sense to change it... but for consistency's sake, and to save me some hassle right now, let's keep it as is.
+-tim: Agreed.
+
+2009-10-02 Melissa got the tracks loaded int trackDb
+====================================================
+select id,name,status from projects where status = "loaded" and name like "Broad%";
+| 554 | BroadChipSeq_HMEC_CTCF_092709      | loaded | 
+| 558 | BroadChipSeq_HMEC_WCE_092809       | loaded | 
+| 559 | BroadChipSeq_HepG2_WCE_092809.tgz  | loaded | 
+| 561 | BroadChipSeq_HepG2_H3K9ac_092809   | loaded | 
+| 562 | BroadChipSeq_HMEC_H3K27me3_092809  | loaded | 
+| 563 | BroadChipSeq_HepG2_CTCF_092809     | loaded | 
+| 564 | BroadChipSeq_H1_H3K27me3_092809    | loaded | 
+| 565 | BroadChipSeq_HMEC_H3K4me3_092809   | loaded | 
+| 566 | BroadChipSeq_H1_H3K4me3_092809     | loaded | 
+| 567 | BroadChipSeq_HepG2_H3K36me3_092809 | loaded | 
+| 568 | BroadChipSeq_HMEC_H3K36me3_092809  | loaded | 
+| 569 | BroadChipSeq_HMEC_H3K9ac_092809    | loaded | 
+| 570 | BroadChipSeq_HMEC_H3K27ac_092809   | loaded | 
+| 571 | BroadChipSeq_H1_H3K4me1_092809     | loaded | 
+| 572 | BroadChipSeq_HepG2_H3K4me2_092809  | loaded | 
+| 573 | BroadChipSeq_HMEC_H3K4me2_092809   | loaded | 
+| 574 | BroadChipSeq_HMEC_H3K4me1_092809   | loaded | 
+| 575 | BroadChipSeq_NHLF_H3K9ac_092809    | loaded | 
+| 576 | BroadChipSeq_HepG2_H3K27ac_092809  | loaded | 
+| 577 | BroadChipSeq_NHLF_H3K4me1_092809   | loaded | 
+| 578 | BroadChipSeq_NHLF_H3K4me3_092809   | loaded | 
+| 579 | BroadChipSeq_NHLF_H4K20me1_092809  | loaded | 
+| 580 | BroadChipSeq_HMEC_H4K20me1_092809  | loaded | 
+| 581 | BroadChipSeq_HepG2_H3K4me3_092809  | loaded | 
+| 582 | BroadChipSeq_NHLF_H3K27ac_092809   | loaded | 
+| 583 | BroadChipSeq_NHLF_H3K36me3_092809  | loaded | 
+| 584 | BroadChipSeq_NHLF_H3K4me2_092809   | loaded | 
+| 585 | BroadChipSeq_H1_CTCF_092809        | loaded | 
+| 586 | BroadChipSeq_HepG2_H4K20me1_092809 | loaded | 
+| 616 | BroadChipSeq_H1_WCE_092809         | loaded | 
+| 617 | BroadChipSeq_NHLF_WCE_092809       | loaded | 
+| 618 | BroadChipSeq_NHLF_H3K27me3_092809  | loaded | 
+| 619 | BroadChipSeq_H1_H4K20me1_092809    | loaded | 
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 554 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 558 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 559 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 561 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 562 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 563 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 564 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 565 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 566 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 567 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 568 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 569 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 570 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 571 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 572 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 573 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 574 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 575 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 576 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 577 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 578 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 579 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 580 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 581 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 582 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 583 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 584 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 585 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 586 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 616 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 617 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 618 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 619 displayed
