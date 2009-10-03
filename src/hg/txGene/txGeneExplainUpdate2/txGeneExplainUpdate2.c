@@ -7,7 +7,10 @@
 #include "binRange.h"
 
 
-static char const rcsid[] = "$Id: txGeneExplainUpdate2.c,v 1.1 2008/08/25 18:18:22 kent Exp $";
+static char const rcsid[] = "$Id: txGeneExplainUpdate2.c,v 1.2 2009/10/03 02:15:22 kent Exp $";
+
+char *unmapped = NULL;
+char *oldAsm = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +20,14 @@ errAbort(
   "usage:\n"
   "   txGeneExplainUpdate2 oldKg.bed newKg.bed out.tab\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -unmapped=unmapped.bed - file containing beds from previous assembly that didn't map well\n"
+  "   -oldAsm=hg18 - name of old database where unmapped ones used to live.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"unmapped", OPTION_STRING},
+   {"oldAsm", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -178,11 +184,14 @@ return hash;
 void txGeneExplainUpdate2(char *oldKgFile, char *newKgFile, char *outFile)
 /* txGeneExplainUpdate2 - Make table explaining correspondence between versions of UCSC genes. */
 {
+struct bed *unmappedList = NULL;
 struct bed *oldBed, *oldList = bedLoadNAll(oldKgFile, 12);
 struct bed *bed, *newList = bedLoadNAll(newKgFile, 12);
 struct hash *newAccHash = makeAccHash(newList);
 struct hash *newAccVerHash = hashBedList(newList);
 struct hash *newKeeperHash = bedsIntoKeeperHash(newList);
+if (unmapped)
+    unmappedList = bedLoadNAll(unmapped, 12);
 FILE *f = mustOpen(outFile, "w");
 
 for (oldBed = oldList; oldBed != NULL; oldBed = oldBed->next)
@@ -198,6 +207,11 @@ for (oldBed = oldList; oldBed != NULL; oldBed = oldBed->next)
     else
         explainMissing(oldBed, "none", f);
     }
+for (oldBed = unmappedList; oldBed != NULL; oldBed = oldBed->next)
+    {
+    fprintf(f, "%s\t%s\t%d\t%d\t%s\tunmapped\tunmapped from %s\n", oldBed->name, oldBed->chrom,
+	    oldBed->chromStart, oldBed->chromEnd, "", oldAsm);
+    }
 carefulClose(&f);
 }
 
@@ -207,6 +221,13 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+unmapped = optionVal("unmapped", NULL);
+oldAsm = optionVal("oldAsm", NULL);
+if (unmapped != NULL)
+    {
+    if (oldAsm == NULL)
+        errAbort("You have to specify oldAsm option to say what database unmapped come from.");
+    }
 txGeneExplainUpdate2(argv[1], argv[2], argv[3]);
 return 0;
 }
