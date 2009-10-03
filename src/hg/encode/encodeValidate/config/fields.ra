@@ -141,3 +141,8 @@ file dafList
 type string
 required no
 
+field sql
+file dafList
+type string
+required no
+
