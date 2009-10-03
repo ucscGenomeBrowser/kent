@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.5 2009/10/01 08:43:50 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.6 2009/10/03 02:21:19 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -41,6 +41,7 @@ set snpTable = snp130
 # Public version number
 set lastVer = 4
 set curVer = 5
+set lastAsm = hg18
 
 # Database to rebuild visiGene text from.  Should include recent mouse and human
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
@@ -587,7 +588,8 @@ pslMap cdsToRna.psl rnaToGenome.psl cdsToGenome.psl
 # using.  Takes 4 seconds
 
 txGeneAccession $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
-	weeded.bed txToAcc.tab oldToNew.tab
+	weeded.bed txToAcc.tab oldToNewMapped.tab
+txGeneAddOldUnmapped oldToNewMapped.tab oldUnmapped.tab oldToNew.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
 subColumn 1 weeded.info txToAcc.tab ucscGenes.info
 weedLines weeds.lst pick.picks stdout | subColumn 1 stdin txToAcc.tab ucscGenes.picks
@@ -759,6 +761,9 @@ endif
 # Update links to visiGene and visiGene text inde.
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
+cd /usr/local/apache/cgi-bin/visiGeneData
+ixIxx visiGene.text visiGene.ix visiGene.ixx
+cd $dir
 
 
 # XXX TODO - none of these tables exist yet 2009-06-26
@@ -802,7 +807,7 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 # done 2009-06-29
 
 # Load self
-cd $di4/hgNearBlastp/run.$tempDb.$tempDb
+cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 loadPairwise.csh
 
 # Load mouse and rat
@@ -1023,13 +1028,9 @@ hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 cd $dir
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
-# Map old to new mapping
-# XXX TODO - haven't figured out how to do this when old genes were on old assembly
-cd $dir
-hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
-genePredToBed knownGeneOld.gp >knownGeneOld.bed
-txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.bed
-hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.bed
+# Generate tables that explain how old gene set relates to current gene set
+txGeneExplainUpdate2 oldUcscGenes.bed ucscGenes.bed kgOldToNew.tab -unmapped=oldUcscGenes.unmapped -oldAsm=hg18
+hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
