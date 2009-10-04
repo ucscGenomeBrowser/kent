@@ -214,6 +214,19 @@ otherDb oryLat1
 # track netAnoCar1
 # priority 275.6
 
+track chainHg18 override
+shortLabel $o_db Chain
+priority 274.1
+otherOrg hg18
+
+track netHg18 override
+shortLabel $o_db Net
+priority 274.2
+otherOrg hg18
+
+track chainNetHg19 override
+priority 274.3
+
 track humanChainNet override
 chainMinScore 5000
 chainLinearGap loose
