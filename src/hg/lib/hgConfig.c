@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.21 2009/08/27 23:09:51 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.22 2009/10/06 16:51:43 angie Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -46,13 +46,13 @@ return FALSE;
 #endif
 }
 
-static void checkConfigPerms(char *filename)
+static void checkConfigPerms(char *filename, int depth)
 /* get that we are either a CGI or that the config file is only readable by 
  * the user, or doesn't exist.  Specifying HGDB_CONF also disables perms
  * check to make debugging and having CGIs run loaders easier */
 {
 struct stat statBuf;
-if ((!isBrowserCgi()) && isEmpty(getenv("HGDB_CONF"))
+if ((!isBrowserCgi()) && isEmpty(getenv("HGDB_CONF")) && depth == 0
     && (stat(filename, &statBuf) == 0))
     {
     if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
@@ -158,7 +158,7 @@ else
 static void parseConfigFile(char *filename, int depth)
 /* open and parse a config file */
 {
-checkConfigPerms(filename);
+checkConfigPerms(filename, depth);
 struct lineFile *lf = lineFileOpen(filename, TRUE);
 char *line;
 while(lineFileNext(lf, &line, NULL))
