@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.567 2009/10/06 22:21:30 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.568 2009/10/06 22:49:30 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14156,8 +14156,8 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults  Transfrags=hide Alignments=hide
-settingsByView 1-Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 2-PlusRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 3-MinusRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+visibilityViewDefaults  1-Transfrags=dense 2-PlusRawSignal=dense 3-MinusRawSignal=dense 4-Alignments=dense 
+settingsByView 1-Transfrags:scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=100,minGrayLevel=4 2-PlusRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 3-MinusRawSignal:viewLimits=0:1000,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16 
 priority 0
 type bed 3
 wgEncode 1
@@ -14165,7 +14165,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto AL
     color 153,38,0
     colorByStrand 46,0,184 238,85,34
@@ -14176,7 +14176,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto TF
     color 153,38,0
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cytosol)
@@ -14228,7 +14228,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto AL
     color 46,0,184
     colorByStrand 46,0,184 238,85,34
@@ -14239,7 +14239,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto TF
     color 46,0,184
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cytosol)
@@ -14333,7 +14333,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell AL
     color 0,102,136
     colorByStrand 46,0,184 238,85,34
@@ -14344,7 +14344,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell TF
     color 0,102,136
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in prostate cell)
@@ -14354,7 +14354,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto +S
     color 46,0,184
     longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in K562 cytosol)
@@ -14364,7 +14364,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel K562 cyto -S
     color 46,0,184
     longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in K562 cytosol)
@@ -14414,7 +14414,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto +S
     color 153,38,0
     longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in GM12878 cytosol)
@@ -14424,7 +14424,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel GM12 cyto -S
     color 153,38,0
     longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in GM12878 cytosol)
@@ -14454,7 +14454,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell +S
     color 0,102,136
     longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in prostate cell)
@@ -14464,7 +14464,7 @@ noInherit on
 
     track wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
     release alpha
-    subTrack wgEncodeCshlShortRnaSeq off
+    subTrack wgEncodeCshlShortRnaSeq on
     shortLabel pros cell -S
     color 0,102,136
     longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in prostate cell)
