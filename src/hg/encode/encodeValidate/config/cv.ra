@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.133 2009/10/02 22:48:36 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.134 2009/10/06 18:12:24 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -201,7 +201,7 @@ vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
 protocol BG02ES_and_H9ES_Myers_protocols.pdf
 
-term BJ-tert
+term BJ
 type Cell Line
 description skin fibroblast
 vendorName ATCC
