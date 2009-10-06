@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.14 2009/04/06 05:31:18 galt Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.15 2009/10/06 00:47:48 galt Exp $";
 
 /* from hgTables.c */
 
@@ -1190,7 +1190,7 @@ return dyStringCannibalize(&dy);
 
 }
 
-char *makeCoverageCgFromBed(struct sqlConnection *conn)
+char *makeCoverageCgFromBed()
 /* create coverage chromGraph from bed data */
 {
 struct dyString *dy = dyStringNew(0);
@@ -1255,7 +1255,7 @@ return dyStringCannibalize(&dy);
 }
 
 
-char *makeDepthCgFromBed(struct sqlConnection *conn, boolean isBedGr)
+char *makeDepthCgFromBed(boolean isBedGr, boolean isCt)
 /* create depth chromGraph from bed, bedGraph, or Maf data */
 {
 struct dyString *dy = dyStringNew(0);
@@ -1281,10 +1281,8 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     
     chromSize = hChromSize(database, chrom);
 
-    //debug
-    //hPrintf("chrom %s size=%d numFeatures=%d<br>\n", chrom, chromSize, slCount(bedList)); fflush(stdout);
-    
     numWindows = ((chromSize+windowSize-1)/windowSize);
+
 
     if (numWindows>0)
 	depth = needMem(numWindows*sizeof(double));
@@ -1293,12 +1291,26 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	int i;
 	int start = bed->chromStart;
 	int end = bed->chromEnd;
+
 	for(i = start/windowSize; i*windowSize < end; ++i)
 	    {
+
 	    overlap = rangeIntersection(start, end, i*windowSize, (i+1)*windowSize);
+
 	    if (overlap > 0)
 		{
-		if (isBedGr)
+
+                // FINDING: just as in hgTables dump on bedGraph custom track,
+                //  the float value is being stored in the name field as a string.
+                //  However for a regular bedGraph, it is stored in expScores[0] 
+                //  probably just so that it can store it as a float. strange.
+
+		if (isBedGr && isCt)
+		    {
+		    float val = atof(bed->name);
+		    depth[i] += ((((double)overlap)/windowSize)*val);
+		    }
+		else if (isBedGr)
 		    depth[i] += ((((double)overlap)/windowSize)*bed->expScores[0]);
 		else
     		    depth[i] += ((double)overlap)/windowSize;
@@ -1323,7 +1335,7 @@ return dyStringCannibalize(&dy);
 }
 
 
-char *makeAverageCgFromWiggle(struct sqlConnection *conn)
+char *makeAverageCgFromWiggle()
 /* use averaging to create chromGraph from wig ascii data */
 {
 struct dyString *dy = dyStringNew(0);
@@ -1412,17 +1424,13 @@ void submitImport(struct sqlConnection *conn)
 /* Called when they've submitted from import page */
 {
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-        isChromGraphCt = FALSE;
+        isChromGraphCt = FALSE, isCt = FALSE;
 struct hTableInfo *hti = NULL;
 
 cartWebStart(cart, database, "Table Import in Progress ");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 
-
-//char *selGroup = cartString(cart, hggGroup);
-//char *selTrack = cartString(cart, hggTrack);
-//char *selTable = cartString(cart, hggTable);
 
 allJoiner = joinerRead("all.joiner");
 initGroupsTracksTables(conn);
@@ -1435,7 +1443,8 @@ if (strchr(curTable, '.') == NULL)  /* In same database */
 isWig = isWiggle(database, curTable);
 isMaf = isMafTable(database, curTrack, curTable);
 isBedGr = isBedGraph(curTable);
-if (isCustomTrack(curTable))
+isCt = isCustomTrack(curTable);
+if (isCt)
     {
     isChromGraphCt = isChromGraph(curTrack);
     }
@@ -1452,16 +1461,21 @@ if (curTrack == NULL)
     }
 
 /* debug info
+char *selGroup = cartString(cart, hggGroup);
+char *selTrack = cartString(cart, hggTrack);
+//char *selTable = cartString(cart, hggTable);
+
 hPrintf("Debug Info:<br>\n");
 hPrintf("----------------------------<br>\n");
 hPrintf("selected group: %s<br>\n",selGroup);
 hPrintf("selected track: %s<br>\n",selTrack);
-hPrintf("selected table: %s<br>\n",selTable);
+hPrintf("curTable: %s<br>\n",curTable);
 hPrintf("isWig: %d<br>\n", isWig);
 hPrintf("isPositional: %d<br>\n", isPositional);
 hPrintf("isMaf: %d<br>\n", isMaf);
 hPrintf("isBedGr: %d<br>\n", isBedGr);
 hPrintf("isChromGraphCt: %d<br>\n", isChromGraphCt);
+hPrintf("isCustomTrack: %d<br>\n", isCt);
 */
 
 
@@ -1472,9 +1486,9 @@ if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
     char *rawText = NULL;
     
     if (sameString(convertType,hggBedCoverage))
-	rawText = makeCoverageCgFromBed(conn);
+	rawText = makeCoverageCgFromBed();
     else
-	rawText = makeDepthCgFromBed(conn, isBedGr);
+	rawText = makeDepthCgFromBed(isBedGr, isCt);
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
@@ -1485,14 +1499,13 @@ if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
 else if (isPositional && !isWig && !isMaf && isBedGr && !isChromGraphCt)
     {  /* bedGraph */
     char *rawText = NULL;
-    
-    char *bedGraphField = getBedGraphField(curTable,curTrack->type);
 
-    //debug: remove:
-    hPrintf("bedGraphField = %s<br>\n",bedGraphField); fflush(stdout);
+    //debug: 
+    // this does not work for custom tracks
+    //char *bedGraphField = getBedGraphField(curTable,curTrack->type);
+    //hPrintf("bedGraphField = %s<br>\n",bedGraphField); fflush(stdout);
 
-
-    rawText = makeDepthCgFromBed(conn, isBedGr);
+    rawText = makeDepthCgFromBed(isBedGr, isCt);
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
@@ -1504,7 +1517,7 @@ else if (isPositional && !isWig && isMaf && !isBedGr && !isChromGraphCt)
     {  /* maf */
     char *rawText = NULL;
     
-    rawText = makeDepthCgFromBed(conn, isMaf);
+    rawText = makeDepthCgFromBed(isMaf, isCt);
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
@@ -1516,7 +1529,7 @@ else if (isPositional && isWig && !isMaf && !isBedGr && !isChromGraphCt)
     { /* wiggle */
     char *rawText = NULL;
     
-    rawText = makeAverageCgFromWiggle(conn);
+    rawText = makeAverageCgFromWiggle();
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
