@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.195 2009/10/02 22:39:46 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.196 2009/10/06 00:53:03 kate Exp $
 
 use warnings;
 use strict;
@@ -1626,6 +1626,7 @@ foreach my $ddfLine (@ddfLines) {
     my $diePrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     my $view = $ddfLine->{view};
     my $type = $daf->{TRACKS}{$view}{type} || die "Missing DAF entry for view '$view'\n";
+    my $sql = $daf->{TRACKS}{$view}{sql};
     my $metadata = "project=wgEncode grant=$daf->{grant} lab=$daf->{lab} dataType=$daf->{dataType}";
     $metadata .= " cell=$ddfLine->{cell}" if $ddfLine->{cell}; # force some order
     $metadata .= " antibody=$ddfLine->{antibody}" if $ddfLine->{antibody};
@@ -1849,6 +1850,9 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
     print LOADER_RA "type $type\n";
+    if($sql) {
+        print LOADER_RA "sql $sql\n";
+    }
     if($species) {
         print LOADER_RA "assembly $species\n";
     } else {

@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.70 2009/09/03 22:51:06 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.71 2009/10/06 00:52:26 kate Exp $
 
 # Usage:
 #
@@ -421,6 +421,7 @@ for my $key (keys %ra) {
     # temporary work-around (XXXX, galt why is this "temporary?").
     my $assembly = $h->{assembly};
     my $type = $h->{type};
+    my $sql = $h->{sql};
     my $files = $h->{files};
     my $downloadOnly = (defined($h->{downloadOnly}) and $h->{downloadOnly});  # Could also gzip and link files for displayed tracks!
     my @files = split(/\s+/, $files);
@@ -450,6 +451,9 @@ for my $key (keys %ra) {
         loadWig($assembly, $tablename, $files, $pushQ);
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
+        $hgdownload = @files;
+    } elsif ($type =~ /^bed/ and defined($sql)) {
+        loadBedFromSchema($assembly, $tablename, $files, $sql, $pushQ);
         $hgdownload = @files;
     } elsif ($bigBedTypes{$type}) {
         loadBigBed($assembly, $tablename, $files, $type, $pushQ, $configPath);
