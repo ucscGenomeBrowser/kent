@@ -717,7 +717,7 @@ danRer6.refseq.mrna.xeno.load  = yes
 #     (The htdocs/goldenPath/danRer6/*/README.txt "files" are just links to those.)
 
 ############################################################################
-# Make Self Chain (WORKING - 2008-07-23)
+# Make Self Chain (DONE - 2008-07-23)
 
     ssh hgwdev
 
