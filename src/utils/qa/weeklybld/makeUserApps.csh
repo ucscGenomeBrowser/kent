@@ -47,7 +47,7 @@ echo "Configuring settings on userApp sandbox $BRANCHNN $HOST [${0}: `date`]"
 $WEEKLYBLD/configureSandbox.csh . $WEEKLYBLD/downloadBuildSettings.mk
 
 cd kent/src 
-make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps
+make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
 ./utils/userApps/mkREADME.sh $DESTDIR/$BINDIR FOOTER
 cd ../..
 
