@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.35 2009/09/24 00:26:23 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.36 2009/10/07 22:05:48 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -121,16 +121,26 @@ function matSetMatrixCheckBoxes(state)
     if(state)
         CBs = $("input.matrixCB").not(":checked");
     else
-        CBs = $("input.matrixCB").filter(":checked");
+        CBs = $("input.matrixCB").filter(":checked").not(".dimZ");// uncheck should not touch dimZ
     for(var vIx=1;vIx<arguments.length;vIx++) {
-        CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+        CBs = $( CBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
     CBs.each( function (i) { this.checked = state;} )
     //CBs.each( function (i) { if(this.checked != state) this.click();} )
 
-    if(state)
+    if(state) {
         CBs = $("input.subtrackCB").not(":checked");
-    else
+        // need to weed out non-checked dimZ if there are any
+        var zCBs = $("input.matrixCB.dimZ").not(":checked");
+        if( $( zCBs ).length > 0) {
+            var classes = "";            // make string of classes
+            $(zCBs).each( function (i) {
+                var class =  $( this ).attr("class").replace("matrixCB dimZ ",".")
+                classes += class;
+            });
+            CBs = $( CBs ).not(classes); // weed CBs
+        }
+    } else
         CBs = $("input.subtrackCB").filter(":checked");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
