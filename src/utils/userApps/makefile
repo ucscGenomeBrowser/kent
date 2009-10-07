@@ -7,7 +7,7 @@ all::
 	@${MKDIR} "${DESTDIR}${BINDIR}"
 	@for P in ${CMD_LIST}; do \
 	    ( rm -f "${DESTDIR}${BINDIR}/$${P}" && \
-		cp -p $${P} "${DESTDIR}${BINDIR}" && \
+		cp $${P} "${DESTDIR}${BINDIR}" && \
 		chmod +x "${DESTDIR}${BINDIR}/$${P}" && \
 		echo "installed ${DESTDIR}${BINDIR}/$${P}" ) ; \
 	done
@@ -20,4 +20,4 @@ all::
 clean::
 	@echo "nothing to clean in userApps"
 
-# "$Id: makefile,v 1.4 2009/10/07 17:49:35 galt Exp $"
+# "$Id: makefile,v 1.5 2009/10/07 18:18:38 galt Exp $"
