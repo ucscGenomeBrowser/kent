@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.415 2009/09/28 19:00:34 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.416 2009/10/07 19:04:01 hiram Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2898,19 +2898,19 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     if (chrom != NULL)
 	{
 	safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
-	if (hTableExists(db, fullName))
+	if (sqlTableExists(conn, fullName))
 	    isSplit = TRUE;
 	}
     if (!isSplit)
         {
 	safef(fullName, sizeof(fullName), "%s", rootName);
-	if (!hTableExists(db, fullName))
+	if (!sqlTableExists(conn, fullName))
 	    {
 	    if (sameString(rootName, "mrna") || sameString(rootName, "est"))
 	        {
 		safef(fullName, sizeof(fullName), "all_%s", rootName);
 		rootName = fullName;
-		if (!hTableExists(db, rootName))
+		if (!sqlTableExists(conn, rootName))
 		    return NULL;
 		}
 	    else
