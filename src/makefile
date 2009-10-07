@@ -53,9 +53,11 @@ blatSuite: topLibs
 # all of these application makefiles have been updated to include use
 #	of DESTDIR and BINDIR
 
-UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed bigBedSummary bigBedToBed bigWigSummary \
-	bigWigToBedGraph bigWigInfo faCount faSize faFrag faRandomize faOneRecord \
-	faSomeRecords faToNib faToTwoBit gtfToGenePred htmlCheck nibFrag \
+UTILS_APPLIST = bedClip bedExtendRanges bedGraphToBigWig bedItemOverlapCount bedToBigBed \
+        bigBedSummary bigBedToBed \
+	bigWigInfo bigWigSummary bigWigToBedGraph \
+	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib faToTwoBit \
+	gtfToGenePred htmlCheck liftOver liftOverMerge nibFrag \
 	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
 
 HG_APPLIST = liftOver bedItemOverlapCount
