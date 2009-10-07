@@ -23,150 +23,154 @@ A) Untouched Tables:
     wgEncodeYaleChIPseqPeaksHepg2Srebp2
     count: 6
 A') Untouched Files:
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsGm12878Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsHct116Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsHek293Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsK562Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsNb4Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Gm12878Jund.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Gm12878Max.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hct116Tcf4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hek293Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Largefragment.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Mnase.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Nakeddna.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3ifngStat1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hepg2Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hepg2Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp1a.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Cjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Gata1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Jund.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Max.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Nfe2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Znf263.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Nb4Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Gm12878Jund.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Gm12878Max.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hct116Tcf4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hek293Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Largefragment.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Mnase.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Nakeddna.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3ifngStat1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hepg2Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hepg2Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp1a.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Cjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Gata1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Jund.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Max.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Nfe2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Znf263.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Nb4Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Gm12878Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Hek293Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Helas3Nakeddna.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Helas3Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Hepg2Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Hepg2Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp1a.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3K562Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3Nb4Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHepg2Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHepg2Srebp2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataGm12878Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataHct116Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataHek293Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataHelas3Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataK562Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataNb4Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Gm12878Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Gm12878Jund.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Gm12878Max.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hct116Tcf4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hek293Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Largefragment.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Mnase.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Nakeddna.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hepg2Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hepg2Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hepg2Srebp1a.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hepg2Srebp2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Cjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Cmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Gata1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Jund.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Max.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Nfe2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Znf263.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Nb4Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Gm12878Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Gm12878Jund.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Gm12878Max.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hct116Tcf4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hek293Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Largefragment.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Mnase.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Nakeddna.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hepg2Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hepg2Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hepg2Srebp1a.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hepg2Srebp2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Cjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Cmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Gata1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Jund.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Max.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Nfe2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Znf263.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Nb4Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Gm12878Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Hek293Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Helas3Nakeddna.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Helas3Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Hepg2Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Hepg2Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Hepg2Srebp1a.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Hepg2Srebp2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3K562Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3Nb4Pol2.fastq.gz
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/
+    on RR:
+      {...}/goldenPath/encodeDCC/wgEncodeYaleChIPseq/
+    wgEncodeYaleChIPseqAlignmentsGm12878Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsHct116Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsHek293Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsK562Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsNb4Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cfos.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Gm12878Jund.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Gm12878Max.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Hct116Tcf4.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Hek293Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Helas3Largefragment.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Helas3Mnase.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Helas3Nakeddna.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Helas3Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Helas3ifngStat1.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Hepg2Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Hepg2Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp1a.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Cfos.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Cjun.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Gata1.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Jund.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Max.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Nfe2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1K562Znf263.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep1Nb4Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cfos.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Gm12878Jund.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Gm12878Max.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Hct116Tcf4.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Hek293Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Helas3Largefragment.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Helas3Mnase.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Helas3Nakeddna.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Helas3Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Helas3ifngStat1.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Hepg2Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Hepg2Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp1a.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Cfos.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Cjun.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Gata1.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Jund.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Max.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Nfe2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2K562Znf263.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep2Nb4Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Gm12878Cfos.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Hek293Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Helas3Nakeddna.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Helas3Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Hepg2Input.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Hepg2Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp1a.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp2.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3K562Cfos.tagAlign.gz
+    wgEncodeYaleChIPseqAlignmentsRep3Nb4Pol2.tagAlign.gz
+    wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHepg2Pol2.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHepg2Srebp2.narrowPeak.gz
+    wgEncodeYaleChIPseqRawDataGm12878Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataHct116Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataHek293Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataHelas3Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz
+    wgEncodeYaleChIPseqRawDataK562Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataNb4Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Gm12878Cfos.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Gm12878Jund.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Gm12878Max.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Hct116Tcf4.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Hek293Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Helas3Largefragment.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Helas3Mnase.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Helas3Nakeddna.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Helas3Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Hepg2Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Hepg2Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Hepg2Srebp1a.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Hepg2Srebp2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Cfos.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Cjun.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Cmyc.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Gata1.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Jund.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Max.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Nfe2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1K562Znf263.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep1Nb4Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Gm12878Cfos.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Gm12878Jund.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Gm12878Max.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Hct116Tcf4.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Hek293Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Helas3Largefragment.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Helas3Mnase.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Helas3Nakeddna.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Helas3Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Hepg2Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Hepg2Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Hepg2Srebp1a.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Hepg2Srebp2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Cfos.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Cjun.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Cmyc.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Gata1.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Jund.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Max.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Nfe2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2K562Znf263.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep2Nb4Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Gm12878Cfos.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Hek293Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Helas3Nakeddna.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Helas3Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Hepg2Input.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Hepg2Pol2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Hepg2Srebp1a.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Hepg2Srebp2.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3K562Cfos.fastq.gz
+    wgEncodeYaleChIPseqRawDataRep3Nb4Pol2.fastq.gz
     count: 144
 
 B) Eliminated tables (not replaced):
@@ -244,9 +248,13 @@ These are Raw Signals which we will no longer provide for Yale
 
 B') Eliminated files (not replaced):
 These are actually going to be moved to a separate composite which is not ready for public release yet.  Thus they are "temporarily" eliminated from the RR.
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleRnaSeqPolyaRawDataK562.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleRNAseq/
+    on RR:
+      {...}/goldenPath/encodeDCC/wgEncodeYaleChIPseq/
+    wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz
+    wgEncodeYaleRnaSeqPolyaRawDataK562.fastq.gz
+    wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
     count: 3
 These are Raw Signals which we will no longer provide for Yale
     /gbdb/hg18/wib/wgEncodeYaleChIPseqRawSignalGm12878Input.wib
@@ -374,56 +382,60 @@ C) Replaced tables:
     count: 50
 
 C') Replaced files:
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878Jund.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878Max.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHek293Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Cfos.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Cjun.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Cmyc.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Gata1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Max.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Nfe2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Znf263.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksNb4Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalGm12878Max.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalGm12878Pol2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Cfos.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Cjun.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Cmyc.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Gata1.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Jund.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Max.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Pol2.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Znf263.wig.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalNb4Pol2.wig.gz
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release1/
+    on RR:
+      {...}/goldenPath/encodeDCC/wgEncodeYaleChIPseq/
+    wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksGm12878Jund.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksGm12878Max.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksGm12878Pol2.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHek293Pol2.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Cfos.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Cjun.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Cmyc.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Gata1.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Max.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Nfe2.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksK562Znf263.narrowPeak.gz
+    wgEncodeYaleChIPseqPeaksNb4Pol2.narrowPeak.gz
+    wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz
+    wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz
+    wgEncodeYaleChIPseqSignalGm12878Max.wig.gz
+    wgEncodeYaleChIPseqSignalGm12878Pol2.wig.gz
+    wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz
+    wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz
+    wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz
+    wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz
+    wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz
+    wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz
+    wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz
+    wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz
+    wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz
+    wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz
+    wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz
+    wgEncodeYaleChIPseqSignalK562Cfos.wig.gz
+    wgEncodeYaleChIPseqSignalK562Cjun.wig.gz
+    wgEncodeYaleChIPseqSignalK562Cmyc.wig.gz
+    wgEncodeYaleChIPseqSignalK562Gata1.wig.gz
+    wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalK562Jund.wig.gz
+    wgEncodeYaleChIPseqSignalK562Max.wig.gz
+    wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz
+    wgEncodeYaleChIPseqSignalK562Pol2.wig.gz
+    wgEncodeYaleChIPseqSignalK562Znf263.wig.gz
+    wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz
+    wgEncodeYaleChIPseqSignalNb4Pol2.wig.gz
     count: 50
 
 These wibs are for Signals that have been replaced by wibless bedGraphs
@@ -516,65 +528,71 @@ D) Versioned tables (what is being replacd in parens):
     count: 50
 
 D') Versioned files (what is being replacd in parens):
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878CfosV2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878JundV2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksGm12878Jund.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878MaxV2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksGm12878Max.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878Pol2V2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksGm12878Pol2.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHct116Tcf4V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHek293Pol2V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksHek293Pol2.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562CfosV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Cfos.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562CjunV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Cjun.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562CmycV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Cmyc.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562JundV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562MaxV2.narrowPeak.gz              (wgEncodeYaleChIPseqPeaksK562Max.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Nfe2V2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Nfe2.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Pol2V2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bGata1V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksK562Gata1.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bZnf263V2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksK562Znf263.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksNb4Pol2V2.narrowPeak.gz              (wgEncodeYaleChIPseqPeaksNb4Pol2.narrowPeak.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalGm12878Cfos.bedGraph4.gz        (wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalGm12878Input.bedGraph4.gz       (wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalGm12878Jund.bedGraph4.gz        (wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalGm12878Max.bedGraph4.gz         (wgEncodeYaleChIPseqSignalGm12878Max.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalGm12878Pol2.bedGraph4.gz        (wgEncodeYaleChIPseqSignalGm12878Pol2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHct116Input.bedGraph4.gz        (wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz        (wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHek293Pol2.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz        (wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz    (wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalHepg2Input.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Cfos.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Cfos.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Cjun.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Cjun.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Cmyc.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Cmyc.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Jund.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Jund.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Max.bedGraph4.gz            (wgEncodeYaleChIPseqSignalK562Max.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Nfe2.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562Pol2.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Pol2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz         (wgEncodeYaleChIPseqSignalK562Gata1.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz        (wgEncodeYaleChIPseqSignalK562Znf263.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalNb4Input.bedGraph4.gz           (wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2SignalNb4Pol2.bedGraph4.gz            (wgEncodeYaleChIPseqSignalNb4Pol2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3LargefragmentV2.bedGraph4.gz  (wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3MnaseV2.bedGraph4.gz          (wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3MouseiggV2.bedGraph4.gz       (wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3NakeddnaV2.bedGraph4.gz       (wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz      (wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2Pol2V2.bedGraph4.gz            (wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2Srebp1aV2.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2Srebp2V2.bedGraph4.gz          (wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz)
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalRep1K562InputV2.bedGraph4.gz        (wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz)
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/
+    NOT on RR:
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksGm12878CfosV2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksGm12878JundV2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksGm12878Jund.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksGm12878MaxV2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksGm12878Max.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksGm12878Pol2V2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksGm12878Pol2.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHct116Tcf4V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHek293Pol2V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksHek293Pol2.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562CfosV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Cfos.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562CjunV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Cjun.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562CmycV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Cmyc.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562JundV2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562MaxV2.narrowPeak.gz              (wgEncodeYaleChIPseqPeaksK562Max.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Nfe2V2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Nfe2.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Pol2V2.narrowPeak.gz             (wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bGata1V2.narrowPeak.gz           (wgEncodeYaleChIPseqPeaksK562Gata1.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bZnf263V2.narrowPeak.gz          (wgEncodeYaleChIPseqPeaksK562Znf263.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksNb4Pol2V2.narrowPeak.gz              (wgEncodeYaleChIPseqPeaksNb4Pol2.narrowPeak.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalGm12878Cfos.bedGraph4.gz        (wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalGm12878Input.bedGraph4.gz       (wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalGm12878Jund.bedGraph4.gz        (wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalGm12878Max.bedGraph4.gz         (wgEncodeYaleChIPseqSignalGm12878Max.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalGm12878Pol2.bedGraph4.gz        (wgEncodeYaleChIPseqSignalGm12878Pol2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHct116Input.bedGraph4.gz        (wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHct116Tcf4.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz        (wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHek293Pol2.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz        (wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHelas3Pol2.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz    (wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalHepg2Input.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Cfos.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Cfos.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Cjun.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Cjun.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Cmyc.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Cmyc.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Jund.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Jund.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Max.bedGraph4.gz            (wgEncodeYaleChIPseqSignalK562Max.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Nfe2.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562Pol2.bedGraph4.gz           (wgEncodeYaleChIPseqSignalK562Pol2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562bGata1.bedGraph4.gz         (wgEncodeYaleChIPseqSignalK562Gata1.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalK562bZnf263.bedGraph4.gz        (wgEncodeYaleChIPseqSignalK562Znf263.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalNb4Input.bedGraph4.gz           (wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2SignalNb4Pol2.bedGraph4.gz            (wgEncodeYaleChIPseqSignalNb4Pol2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3LargefragmentV2.bedGraph4.gz  (wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3MnaseV2.bedGraph4.gz          (wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3MouseiggV2.bedGraph4.gz       (wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3NakeddnaV2.bedGraph4.gz       (wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz      (wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHepg2Pol2V2.bedGraph4.gz            (wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHepg2Srebp1aV2.bedGraph4.gz         (wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHepg2Srebp2V2.bedGraph4.gz          (wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz)
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalRep1K562InputV2.bedGraph4.gz        (wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz)
     count: 50
 
 E) New tables:
+    wgEncodeYaleChIPseqPeaksGm12878NfkbTnfa
     wgEncodeYaleChIPseqPeaksGm12878Pol3
     wgEncodeYaleChIPseqPeaksHct116Pol2
     wgEncodeYaleChIPseqPeaksHelas3Ap2alpha
     wgEncodeYaleChIPseqPeaksHelas3Ap2gamma
     wgEncodeYaleChIPseqPeaksHelas3Cfos
     wgEncodeYaleChIPseqPeaksHelas3Cmyc
+    wgEncodeYaleChIPseqPeaksHelas3E2f4
+    wgEncodeYaleChIPseqPeaksHelas3Ha
     wgEncodeYaleChIPseqPeaksHelas3Max
     wgEncodeYaleChIPseqPeaksHelas3Tr4
     wgEncodeYaleChIPseqPeaksHelas3ifngStat1
@@ -594,6 +612,8 @@ E) New tables:
     wgEncodeYaleChIPseqPeaksK562Ifng6hCjun
     wgEncodeYaleChIPseqPeaksK562Ifng6hCmyc
     wgEncodeYaleChIPseqPeaksK562Ifng6hPol2
+    wgEncodeYaleChIPseqPeaksK562Nfya
+    wgEncodeYaleChIPseqPeaksK562Nfyb
     wgEncodeYaleChIPseqPeaksK562Rad21
     wgEncodeYaleChIPseqPeaksK562Rpc155
     wgEncodeYaleChIPseqPeaksK562Sirt6
@@ -606,12 +626,15 @@ E) New tables:
     wgEncodeYaleChIPseqPeaksK562bYy1
     wgEncodeYaleChIPseqPeaksNt2d1Suz12
     wgEncodeYaleChIPseqPeaksNt2d1Yy1
+    wgEncodeYaleChIPseqSignalGm12878NfkbTnfa
     wgEncodeYaleChIPseqSignalGm12878Pol3
     wgEncodeYaleChIPseqSignalHct116Pol2
     wgEncodeYaleChIPseqSignalHelas3Ap2alpha
     wgEncodeYaleChIPseqSignalHelas3Ap2gamma
     wgEncodeYaleChIPseqSignalHelas3Cfos
     wgEncodeYaleChIPseqSignalHelas3Cmyc
+    wgEncodeYaleChIPseqSignalHelas3E2f4
+    wgEncodeYaleChIPseqSignalHelas3Ha
     wgEncodeYaleChIPseqSignalHelas3Max
     wgEncodeYaleChIPseqSignalHelas3Tr4
     wgEncodeYaleChIPseqSignalHelas3ifngInput
@@ -637,6 +660,8 @@ E) New tables:
     wgEncodeYaleChIPseqSignalK562Ifng6hCmyc
     wgEncodeYaleChIPseqSignalK562Ifng6hInput
     wgEncodeYaleChIPseqSignalK562Ifng6hPol2
+    wgEncodeYaleChIPseqSignalK562Nfya
+    wgEncodeYaleChIPseqSignalK562Nfyb
     wgEncodeYaleChIPseqSignalK562Rad21
     wgEncodeYaleChIPseqSignalK562Rpc155
     wgEncodeYaleChIPseqSignalK562Sirt6
@@ -651,252 +676,289 @@ E) New tables:
     wgEncodeYaleChIPseqSignalNt2d1Input
     wgEncodeYaleChIPseqSignalNt2d1Suz12
     wgEncodeYaleChIPseqSignalNt2d1Yy1
-    count: 82
+    count: 92
 
 E') New files:
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsHepg2bInput.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsK562Ifna30Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsK562Ifna6hInput.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsK562Ifng30Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsK562Ifng6hInput.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsK562bInput.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsNt2d1Input.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol3.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hct116Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Ap2alpha.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Ap2gamma.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Max.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Helas3Tr4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Bdp1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Brf1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Cmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hPol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng30Cjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hPol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562InputV2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Rad21.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Rpc155.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Sirt6.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562Xrcc4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562bGata2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562bTr4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1K562bYy1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Suz12.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Yy1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol3.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hct116Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Ap2alpha.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Ap2gamma.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Cfos.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Max.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Helas3Tr4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Bdp1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Brf1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Cmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Pol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hPol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng30Cjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCjun.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCmyc.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hPol2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562InputV2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Rad21.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Rpc155.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Sirt6.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562Xrcc4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562bGata2.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562bTr4.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2K562bYy1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Suz12.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Yy1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3K562Bdp1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqAlignmentsRep3K562Brf1.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Ap2alpha.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Ap2gamma.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Cfos.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Cmyc.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Max.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHelas3Tr4.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksHepg2bTr4.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Bdp1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Brf1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna30Cmyc.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna30Pol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna30Stat1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna30Stat2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna6hCjun.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna6hCmyc.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna6hPol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna6hStat1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifna6hStat2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifng30Cjun.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifng6hCjun.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifng6hCmyc.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Ifng6hPol2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Sirt6.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562Xrcc4.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bE2f6.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bGata2.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksK562bYy1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksNt2d1Suz12.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqPeaksNt2d1Yy1.narrowPeak.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataHepg2bInput.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataK562Ifna30Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataK562Ifna6hInput.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataK562Ifng30Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataK562Ifng6hInput.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataK562bInput.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataNt2d1Input.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Gm12878Pol3.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hct116Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Ap2alpha.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Ap2gamma.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Cmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Max.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Helas3Tr4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Bdp1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Brf1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Cmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Stat1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Stat2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hCjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hCmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hPol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hStat1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hStat2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifng30Cjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifng6hCjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifng6hCmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Ifng6hPol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562InputV2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Rad21.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Rpc155.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Sirt6.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562Xrcc4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562bE2f4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562bE2f6.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562bGata2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562bTr4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1K562bYy1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Nt2d1Suz12.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep1Nt2d1Yy1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Gm12878Pol3.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hct116Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Ap2alpha.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Ap2gamma.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Cfos.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Cmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Max.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Helas3Tr4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Bdp1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Brf1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Cmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Pol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Stat1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Stat2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hCjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hCmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hPol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hStat1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hStat2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifng30Cjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifng6hCjun.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifng6hCmyc.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Ifng6hPol2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562InputV2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Rad21.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Rpc155.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Sirt6.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562Xrcc4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562bE2f4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562bE2f6.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562bGata2.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562bTr4.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2K562bYy1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Nt2d1Suz12.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep2Nt2d1Yy1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3K562Bdp1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRawDataRep3K562Brf1.fastq.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2AlignmentsRep1Helas3Largefragment.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqRel2AlignmentsRep2Helas3Largefragment.tagAlign.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalGm12878Pol3.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHct116Pol2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Ap2alpha.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Ap2gamma.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Cfos.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Cmyc.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Max.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHelas3Tr4.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2bInput.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalHepg2bTr4.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Bdp1.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Brf1.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna30Cmyc.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna30Input.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna30Pol2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna30Stat1.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna30Stat2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna6hCjun.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna6hCmyc.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna6hInput.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna6hPol2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna6hStat1.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifna6hStat2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifng30Cjun.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifng30Input.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifng6hCjun.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifng6hCmyc.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifng6hInput.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Ifng6hPol2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Rad21.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Rpc155.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Sirt6.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Xrcc4.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bE2f4.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bE2f6.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bGata2.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562bYy1.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalNt2d1Input.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalNt2d1Suz12.bedGraph4.gz
-    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalNt2d1Yy1.bedGraph4.gz
-    count: 245
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/
+    NOT on RR:
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsHepg2bInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsK562Ifna30Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsK562Ifna6hInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsK562Ifng30Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsK562Ifng6hInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsK562bInput.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsNt2d1Input.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Gm12878NfkbTnfa.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol3.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Hct116Pol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Ap2alpha.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Ap2gamma.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Cfos.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3E2f4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Ha.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Max.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Helas3Tr4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Bdp1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Brf1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Cmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Pol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna30Stat2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCjun.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hCmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hPol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifna6hStat2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng30Cjun.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCjun.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hCmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Ifng6hPol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562InputV2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Nfya.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Nfyb.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Rad21.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Rpc155.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Sirt6.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562Xrcc4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562bGata2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562bTr4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1K562bYy1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Suz12.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep1Nt2d1Yy1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Gm12878NfkbTnfa.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol3.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Hct116Pol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Ap2alpha.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Ap2gamma.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Cfos.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3E2f4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Ha.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Max.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Helas3Tr4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Bdp1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Brf1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Cmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Pol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna30Stat2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCjun.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hCmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hPol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifna6hStat2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng30Cjun.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCjun.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hCmyc.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Ifng6hPol2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562InputV2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Nfya.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Nfyb.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Rad21.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Rpc155.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Sirt6.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562Xrcc4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562bGata2.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562bTr4.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2K562bYy1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Suz12.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep2Nt2d1Yy1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep3Gm12878NfkbTnfa.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep3K562Bdp1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep3K562Brf1.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbTnfa.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksGm12878NfkbTnfa.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksGm12878Pol3.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHct116Pol2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Ap2alpha.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Ap2gamma.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Cfos.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Cmyc.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3E2f4.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Ha.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Max.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHelas3Tr4.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksHepg2bTr4.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Bdp1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Brf1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna30Cmyc.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna30Pol2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna30Stat1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna30Stat2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna6hCjun.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna6hCmyc.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna6hPol2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna6hStat1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifna6hStat2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifng30Cjun.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifng6hCjun.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifng6hCmyc.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Ifng6hPol2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Nfya.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Nfyb.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Sirt6.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562Xrcc4.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bE2f4.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bE2f6.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bGata2.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bSetdb1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bTr4.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksK562bYy1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksNt2d1Suz12.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqPeaksNt2d1Yy1.narrowPeak.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataHepg2bInput.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataK562Ifna30Input.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataK562Ifna6hInput.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataK562Ifng30Input.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataK562Ifng6hInput.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataK562bInput.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataNt2d1Input.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Gm12878NfkbTnfa.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Gm12878Pol3.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Hct116Pol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Ap2alpha.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Ap2gamma.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Cfos.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Cmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3E2f4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Ha.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Max.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Helas3Tr4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Bdp1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Brf1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Cmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Pol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Stat1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna30Stat2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hCjun.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hCmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hPol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hStat1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifna6hStat2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifng30Cjun.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifng6hCjun.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifng6hCmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Ifng6hPol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562InputV2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Nfya.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Nfyb.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Rad21.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Rpc155.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Sirt6.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562Xrcc4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562bE2f4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562bE2f6.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562bGata2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562bSetdb1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562bTr4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1K562bYy1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Nt2d1Suz12.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep1Nt2d1Yy1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Gm12878NfkbTnfa.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Gm12878Pol3.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Hct116Pol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Ap2alpha.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Ap2gamma.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Cfos.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Cmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3E2f4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Ha.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Max.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Helas3Tr4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Bdp1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Brf1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Cmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Pol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Stat1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna30Stat2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hCjun.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hCmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hPol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hStat1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifna6hStat2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifng30Cjun.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifng6hCjun.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifng6hCmyc.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Ifng6hPol2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562InputV2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Nfya.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Nfyb.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Rad21.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Rpc155.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Sirt6.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562Xrcc4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562bE2f4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562bE2f6.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562bGata2.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562bSetdb1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562bTr4.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2K562bYy1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Nt2d1Suz12.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep2Nt2d1Yy1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep3Gm12878NfkbTnfa.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep3K562Bdp1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep3K562Brf1.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRawDataRep4Gm12878NfkbTnfa.fastq.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2AlignmentsRep1Helas3Largefragment.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqRel2AlignmentsRep2Helas3Largefragment.tagAlign.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalGm12878NfkbTnfa.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalGm12878Pol3.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHct116Pol2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Ap2alpha.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Ap2gamma.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Cfos.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Cmyc.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3E2f4.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Ha.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Max.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHelas3Tr4.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHepg2bInput.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalHepg2bTr4.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Bdp1.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Brf1.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna30Cmyc.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna30Input.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna30Pol2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna30Stat1.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna30Stat2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna6hCjun.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna6hCmyc.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna6hInput.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna6hPol2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna6hStat1.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifna6hStat2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifng30Cjun.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifng30Input.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifng6hCjun.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifng6hCmyc.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifng6hInput.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Ifng6hPol2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Nfya.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Nfyb.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Rad21.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Rpc155.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Sirt6.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562Xrcc4.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bE2f4.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bE2f6.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bGata2.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bInput.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bSetdb1.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bTr4.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalK562bYy1.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalNt2d1Input.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalNt2d1Suz12.bedGraph4.gz
+    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/wgEncodeYaleChIPseqSignalNt2d1Yy1.bedGraph4.gz
+    count: 279
