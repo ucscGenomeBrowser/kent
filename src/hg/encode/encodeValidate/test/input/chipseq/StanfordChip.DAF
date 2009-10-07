@@ -2,13 +2,14 @@
 
 # Lab info		
 grant	Myers
-lab	HudsonAlpha
+lab	Test
 dataType	ChipSeq
 variables	cell, antibody
 assembly	hg18
 medianFragmentLength	225
 fragmentLengthRange	150-300
 dafVersion      1.1
+group regulation
 
 
 # Track/view definition
