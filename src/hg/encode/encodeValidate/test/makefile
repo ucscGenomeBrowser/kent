@@ -9,7 +9,7 @@ TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
 DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 
 # Put the working dataType's into DIRS
-DIRS = chipseq methylseq
+DIRS = chipseq
 BAD = badDaf badDdf
 FILES = load.ra trackDb.ra README.txt
 
@@ -32,10 +32,12 @@ test:
 	for dir in $(DIRS); do \
 		${PROG} -allowReloads -configDir=../config x input/$$dir && \
 		for file in $(FILES); do \
-			egrep -v '(priority|dateSubmitted|dateUnrestricted|dataVersion|data RESTRICTED)' input/$$dir/out/$$file > ${TMP_FILE_1} && \
-			egrep -v '(priority|dateSubmitted|dateUnrestricted|dataVersion|data RESTRICTED)' expected/$$dir/$$file > ${TMP_FILE_2} && \
-			diff -b ${TMP_FILE_2} ${TMP_FILE_1} && \
-			rm ${TMP_FILE_1} ${TMP_FILE_2}; \
+                        #echo $$dir/$$file && \
+			rm -f ${TMP_FILE_1} ${TMP_FILE_2}; \
+			egrep -v '(priority|dateSubmitted|dateUnrestricted|dataVersion|data RESTRICTED)' input/$$dir/out/$$file > ${TMP_FILE_1}; \
+			egrep -v '(priority|dateSubmitted|dateUnrestricted|dataVersion|data RESTRICTED)' expected/$$dir/$$file > ${TMP_FILE_2}; \
+			diff -b ${TMP_FILE_2} ${TMP_FILE_1}; \
+                        if [ $$? -ne 0 ]; then exit 1; fi; \
 		done \
         done
 	echo "All tests passed"

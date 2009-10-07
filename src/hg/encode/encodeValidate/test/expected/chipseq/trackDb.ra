@@ -1,51 +1,27 @@
     track wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel FOXP2 SK-N-MC Sig
+    shortLabel SK-N-MC FOXP2 Sig
     longLabel ENCODE HudsonAlpha ChIP-Seq Signal (FOXP2 in SK-N-MC cells)
     subGroups view=Signal factor=FOXP2 cellType=SK-N-MC
     type wig WGENCODEHUDSONALPHACHIPSEQSIGNALSKNMCFOXP2_MINMAXRANGE
-    dateSubmitted 2009-01-27
-    dateUnrestricted 2009-10-27
-    dataVersion ENCODE Feb 2009 Freeze
-    priority 102
-    noInherit on
-    spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    cell SK-N-MC
-    antibody FOXP2
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=FOXP2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" dateSubmitted=2008-09-18 dateUnrestricted=2009-06-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2 fileName=wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2.wig.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksSknmcFoxp2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel FOXP2 SK-N-MC Pk
+    shortLabel SK-N-MC FOXP2 Pk
     longLabel ENCODE HudsonAlpha ChIP-Seq Peaks (FOXP2 in SK-N-MC cells)
     subGroups view=Peaks factor=FOXP2 cellType=SK-N-MC
     type narrowPeak
-    dateSubmitted 2009-01-27
-    dateUnrestricted 2009-10-27
-    dataVersion ENCODE Feb 2009 Freeze
-    priority 101
-    noInherit on
-    cell SK-N-MC
-    antibody FOXP2
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=FOXP2 view=Peaks dataVersion="ENCODE Sep 2009 Freeze" dateSubmitted=2008-09-18 dateUnrestricted=2009-06-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksSknmcFoxp2 fileName=wgEncodeHudsonalphaChipSeqPeaksSknmcFoxp2.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel FOXP2 SK-N-MC Raw 1
+    shortLabel SK-N-MC FOXP2 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
     subGroups view=RawSignal factor=FOXP2 cellType=SK-N-MC
     type wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP1SKNMCFOXP2_MINMAXRANGE
-    dateSubmitted 2009-01-27
-    dateUnrestricted 2009-10-27
-    dataVersion ENCODE Feb 2009 Freeze
-    priority 103
-    noInherit on
-    spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    cell SK-N-MC
-    antibody FOXP2
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" dateSubmitted=2008-09-18 dateUnrestricted=2009-06-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2 fileName=wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2.wig.gz
 
