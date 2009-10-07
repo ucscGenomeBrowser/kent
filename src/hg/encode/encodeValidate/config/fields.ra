@@ -96,6 +96,11 @@ file dafHeader
 type in
 required no
 
+field group
+file dafHeader
+type string
+required no
+
 field longLabelPrefix
 file dafList
 type string

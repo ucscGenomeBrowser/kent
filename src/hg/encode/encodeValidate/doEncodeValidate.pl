@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.196 2009/10/06 00:53:03 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.197 2009/10/07 23:29:25 kate Exp $
 
 use warnings;
 use strict;
@@ -1042,7 +1042,11 @@ sub printCompositeTdbSettings {
     }
     print OUT_FILE "shortLabel " . $daf->{lab} . " " . $daf->{dataType} . "\n"; # Default to  lab datatype
     print OUT_FILE "longLabel ENCODE " . $daf->{lab} . " " . $daf->{grant} . " " . $daf->{dataType} . "\n";  # Default to lab grant datatype
-    print OUT_FILE "group regulation\n";   # This is just a guess.  Buyer beware
+    my $group =  "regulation"; # default (common case for ENCODE)
+    if (defined($daf->{group})) {
+        $group = $daf->{group};
+    }
+    print OUT_FILE "group $group\n";
     print OUT_FILE $setting . "\n"; # "subGroup1 view Views Peaks=Peaks Signal=Signal RawSignal=Raw_Signal\n";
 
     # Need to create N subgroups with M members each
