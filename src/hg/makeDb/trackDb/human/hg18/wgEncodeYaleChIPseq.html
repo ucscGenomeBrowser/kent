@@ -35,35 +35,23 @@ can be found in the
 <A HREF="hgTrackUi?g=wgEncodeChromatinMap">Yale Poly-A</A> tracks.
 </P>
 
-<H3> Notes </H3>
-The second public release of this data has a number of key changes.
-<table><tr><th align='left' valign='top' nowrap>tagAlign files</th>
-<td>Some errors have been noticed in the assigned loactions for some of the
-tags in the "tagAign" files. The errors represent off by 1 or possibly 2 bases.
-While this is inaccurate data, it represents a smallsubset of tags.  Further,
-signal detection and peak calling from these tags is not seriously affectedby
-these errors.  Typically, tags are extended to the mean length of DNA fragments
-used (200bp) in the ChIP-seqexperiment.  Then pile-ups of these extended,
-overlapping tags are used to build signals and call peaks. Errors of a couple
-of bases in a small percentage of tags cannot be expected to influence peak
-calling unless there were some systematic bias in a particular region or
-associated with a certain TFBS. But there isno evidence for such a bias.
-And even if this were so, the peaks meant to represent a 200-400 base region
-within which a TF is binding would be little affected by an off by 1 error.
-That said, the tagAlign files will be corrected and this note will be updated
-or removed when this occurs.
-</td></tr>
+<H3>Notes:</H3>
+<ul>
+<li>The second public release of this data has a number of key changes.
+<table><tr>
 <tr><th align='left' valign='top' nowrap>Raw Signals</th>
 <td>The previously available "Raw Signals" view of the data is no longer
-provided as their were deemed of little valie.
+provided as they were deemed of little value.
 </td></tr>
 <tr><th align='left' valign='top' nowrap>K562 v. K562b</th>
 <td>The Farnham lab is using a K562 cell line variant with enough differences
 from the one used in the Snyder and Struhl labs to be labelled as K562b.
+Experiments on K562b should be contrasted with <i>Input (UCDavis)</i>.
 </td></tr>
 <tr><th align='left' valign='top' nowrap>HepG2 v. HepG2b</th>
 <td>The Farnham lab is using a HepG2 cell line variant with enough differences
 from the one used in the Snyder and Struhl labs to be labelled as HepG2b.
+Experiments on HepG2b should be contrasted with <i>Input (UCDavis)</i>.
 </td></tr>
 <tr><th align='left' valign='top' nowrap>Versioned data</th>
 <td>A number of previously released datasets have been replaced by updated
@@ -89,6 +77,22 @@ versions:
     </tr></table>
 </td></tr>
 </table>
+<li>A small number of errors have been detected in the assigned locations for
+tags in many of the "tagAign" files available in
+<A TARGET=_BLANK HREF="../../goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/">Downloads</a>.
+The errors represent off by 1 or 2 bases.
+While this is inaccurate data, it represents a small subset of tags.  Further,
+signal detection and peak calling from these tags is not seriously affected.
+Typically, tags are extended to the mean length (200bp) of the DNA fragments
+used in the ChIP-seq experiment.  Then pile-ups of these overlapping extended
+tags are used to build signals and call peaks. Errors of a couple
+of bases in a small percentage of tags cannot be expected to influence peak
+calling unless there were some systematic bias. But there is no evidence for
+such a bias. And even if there were, the peaks meant to represent a 200-400
+base region within which a TF is binding would be little affected by an off by
+1 error. That said, the tagAlign files will be corrected and this note will be
+updated or removed when this occurs.
+</ul>
 
 <H2> Methods </H2>
 <P>
