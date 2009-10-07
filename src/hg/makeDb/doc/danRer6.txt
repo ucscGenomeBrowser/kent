@@ -866,3 +866,28 @@ otherDb danRer6
     #	147597031 bases of 1506896106 (9.795%) in intersection
 
 #######################################################################
+# Creating the pushQ entry (DONE - 2009-10-06 - Galt)
+    mkdir /hive/data/genomes/danRer6/pushQ
+    cd /hive/data/genomes/danRer6/pushQ
+    makePushQSql.pl danRer6 > danRer6.pushQ.sql
+    #WARNING: danRer6 does not have seq
+    #WARNING: danRer6 does not have extFile
+    #WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+    #supporting and genbank tables) which tracks to assign these tables to:
+    #  ensGtp
+    #  ensPep
+
+    ssh hgwbeta hgsql -h mysqlbeta qapushq < /hive/data/genomes/danRer6/pushQ/danRer6.pushQ.sql
+
+    # Then, look at file(s) named in each of the following
+    # wiggle tables and added these to the files section of qapushq.danRer6
+    # queue table:
+          hgsql danRer6 -e 'select distinct(file) from gc5Base'
+
+    # Inside the pushQ application, I manually added 
+    # ensGtp and ensPep to the ensGene track tables
+    # /gbdb/danRer6/wib/gc5Base.wib to gc5Base files
+
+    # added danRer6 to all.joiner both $gbd and $chainDest
+
+
