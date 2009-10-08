@@ -98,7 +98,7 @@ set kgDb $hg,$mm,$rn
 # Older format (KG 2)
 set kgDb2 hg16,hg17,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
-set kgDb3 hg18,mm9
+set kgDb3 hg18,hg19,mm9
 
 # Protein browser databases.
 set pbDb hg18,hg17,hg16,mm7,mm8,mm9,rn3
