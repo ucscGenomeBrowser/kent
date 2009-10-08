@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1577 2009/09/30 23:17:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1578 2009/10/08 06:38:25 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17939,6 +17939,10 @@ else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
 else if (sameWord(type, "bigBed"))
     bigBedCustomClick(ct->tdb);
+#ifdef USE_BAM
+else if (sameWord(type, "bam"))
+    doBamDetails(ct->tdb, itemName);
+#endif//def USE_BAM
 else if (ct->wiggle)
     {
     if (ct->dbTrack)

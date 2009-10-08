@@ -8,7 +8,7 @@
 #include "bamFile.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.10 2009/09/24 04:33:50 angie Exp $";
+static char const rcsid[] = "$Id: bamClick.c,v 1.11 2009/10/08 06:38:26 angie Exp $";
 
 #include "bamFile.h"
 
@@ -129,6 +129,8 @@ return 0;
 void doBamDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a BAM file. */
 {
+if (item == NULL)
+    errAbort("doBamDetails: NULL item name");
 int start = cartInt(cart, "o");
 // TODO: libify tdb settings table_pairEndsByName, stripPrefix and pairSearchRange
 
@@ -146,7 +148,15 @@ safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd)
 bamIgnoreStrand();
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
-char *fileName = bamFileNameFromTable(database, tdb->tableName, seqNameForBam);
+char *fileName;
+if (isCustomTrack(tdb->tableName))
+    {
+    fileName = trackDbSetting(tdb, "bigDataUrl");
+    if (fileName == NULL)
+	errAbort("doBamDetails: can't find bigDataUrl for custom track %s", tdb->tableName);
+    }
+else
+    fileName = bamFileNameFromTable(database, tdb->tableName, seqNameForBam);
 bamFetch(fileName, posForBam, oneBam, &btd);
 if (isPaired && hashNumEntries(pairHash) > 0)
     {

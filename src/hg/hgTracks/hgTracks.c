@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1600 2009/09/23 18:42:17 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1601 2009/10/08 06:38:23 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2960,6 +2960,19 @@ else if (sameString(type, "encodePeak"))
     tg->labelNextItemButtonable = TRUE;
     tg->customPt = ct;
     }
+#ifdef USE_BAM
+else if (sameString(type, "bam"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    bamMethods(tg);
+    tg->mapItemName = ctMapItemName;
+    hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
+    hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
+    hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+    hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
+    }
+#endif//def USE_BAM
 else
     {
     errAbort("Unrecognized custom track type %s", type);

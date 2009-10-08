@@ -17,6 +17,9 @@ char *bamFileNameFromTable(char *db, char *table, char *bamSeqName);
  * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
  * bam file might have '1' not 'chr1'). */
 
+boolean bamFileExists(char *bamFileName);
+/* Return TRUE if we can successfully open the bam file and its index file. */
+
 void bamFetch(char *bamFileName, char *position, bam_fetch_f callbackFunc, void *callbackData);
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData. 

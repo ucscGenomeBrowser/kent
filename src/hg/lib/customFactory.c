@@ -28,8 +28,11 @@
 #include "udc.h"
 #include "bigWig.h"
 #include "bigBed.h"
+#ifdef USE_BAM
+#include "bamFile.h"
+#endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.105 2009/10/08 03:33:26 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.106 2009/10/08 06:38:23 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1501,6 +1504,41 @@ static struct customFactory bigBedFactory =
     };
 
 
+#ifdef USE_BAM
+/*** BAM Factory - for client-side BAM alignment files ***/
+
+static boolean bamRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type, 
+			     struct customTrack *track)
+/* Return TRUE if looks like we're handling a bam track */
+{
+return (sameType(type, "bam"));
+}
+
+static struct customTrack *bamLoader(struct customFactory *fac, struct hash *chromHash,
+				     struct customPp *cpp, struct customTrack *track,
+				     boolean dbRequested)
+/* Process the bam track line. */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+if (bigDataUrl == NULL)
+    errAbort("Missing bigDataUrl setting from track of type=bam (%s)", track->tdb->shortLabel);
+if (!bamFileExists(bigDataUrl))
+    errAbort("Can't access %s's bigDataUrl %s", track->tdb->shortLabel, bigDataUrl);
+return track;
+}
+
+static struct customFactory bamFactory = 
+/* Factory for bam tracks */
+    {
+    NULL,
+    "bam",
+    bamRecognizer,
+    bamLoader,
+    };
+#endif//def USE_BAM
+
+
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
@@ -1526,6 +1564,9 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &microarrayFactory);
     slAddTail(&factoryList, &coloredExonFactory);
     slAddTail(&factoryList, &encodePeakFactory);
+#ifdef USE_BAM
+    slAddTail(&factoryList, &bamFactory);
+#endif//def USE_BAM
     }
 }
 

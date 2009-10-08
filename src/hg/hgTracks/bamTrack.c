@@ -12,7 +12,7 @@
 #include "hgTracks.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.9 2009/09/14 23:44:25 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.10 2009/10/08 06:38:23 angie Exp $";
 
 struct bamTrackData
     {
@@ -222,7 +222,15 @@ char cartVarName[512];
 safef(cartVarName, sizeof(cartVarName), "%s_minAliQual", tg->tdb->tableName);
 int minAliQual = cartUsualInt(cart, cartVarName, 0);
 struct bamTrackData btd = {tg, pairHash, minAliQual};
-char *fileName = bamFileNameFromTable(database, tg->mapName, seqNameForBam);
+char *fileName;
+if (tg->customPt)
+    {
+    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    if (fileName == NULL)
+	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->mapName);
+    }
+else
+    fileName = bamFileNameFromTable(database, tg->mapName, seqNameForBam);
 bamFetch(fileName, posForBam, (isPaired ? addBamPaired : addBam), &btd);
 if (isPaired)
     {

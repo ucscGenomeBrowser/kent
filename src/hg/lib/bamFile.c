@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.9 2009/09/24 04:33:50 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.10 2009/10/08 06:38:23 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -45,6 +45,21 @@ hFreeConn(&conn);
 return fileName;
 }
 
+boolean bamFileExists(char *bamFileName)
+/* Return TRUE if we can successfully open the bam file and its index file. */
+{
+samfile_t *fh = samopen(bamFileName, "rb", NULL);
+if (fh != NULL)
+    {
+    bam_index_t *idx = bam_index_load(bamFileName);
+    samclose(fh);
+    if (idx == NULL)
+	return FALSE;
+    return TRUE;
+    }
+return FALSE;
+}
+
 void bamFetch(char *bamFileName, char *position, bam_fetch_f callbackFunc, void *callbackData)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData. 
@@ -58,8 +73,8 @@ if (fh == NULL)
 int chromId, start, end;
 int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
 if (ret != 0)
-    errAbort("bam_parse_region(%s) failed (%d)", position, ret);
-//?? Could this happen if there is no data on some _random?  can avoid with tdb chromosomes...
+    // If the bam file does not cover the current chromosome, OK
+    return;
 
 bam_index_t *idx = bam_index_load(bamFileName);
 if (idx == NULL)
