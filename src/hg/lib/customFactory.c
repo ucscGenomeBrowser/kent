@@ -29,7 +29,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.104 2009/09/23 18:42:20 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.105 2009/10/08 03:33:26 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -65,44 +65,8 @@ void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *
  * just make sure it's a chromosome. */
 {
 if (!hgIsOfficialChromName(genomeDb, word))
-    lineFileAbort(lf, "%s not a chromosome (note: chrom names are case sensitive)", word);
-}
-
-static char *saveConf = NULL;
-
-static void saveCurrentEnv()
-/* while fiddling with environment for pipeline loaders, remember previous env
- */
-{
-char *val = NULL;
-freez(&saveConf);	/* clear these if previously used	*/
-val = getenv("HGDB_CONF");
-if (!isEmpty(val))
-    saveConf = cloneString(val);
-}
-
-static void restorePrevEnv()
-/* while fiddling with environment for pipeline loaders, restore environment */
-{
-/* can not eliminate the variables from the environment, but can make
- * them be empty strings.  This will be good enough for cfgOptionEnv()
- * in hdb.c and jksql.c
- */
-if (saveConf != NULL)
-    envUpdate("HGDB_HOST", saveConf);
-else
-    envUpdate("HGDB_HOST", "");
-freez(&saveConf);
-}
-
-char *customTrackTempDb()
-/* Get custom database.  If first time set up some
- * environment variables that the loaders will need. */
-{
-/* set environment for pipeline commands, but don't override if
- * already set for debugging. */
-saveCurrentEnv();
-return (CUSTOM_TRASH);
+    lineFileAbort(lf, "%s not a recognized sequence (note: sequence names are case sensitive)",
+		  word);
 }
 
 void customFactorySetupDbTrack(struct customTrack *track)
@@ -202,10 +166,9 @@ return bedRecognizer(fac, cpp, type, track) && (track->fieldCount >= 14);
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
 /* Set up pipeline that will load wig into database. */
 {
-char *db = customTrackTempDb();
 /* running the single command:
  *	hgLoadBed -customTrackLoader -tmpDir=/data/tmp
- *		-maxChromNameLength=${nameLength} db tableName stdin
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  * -customTrackLoader turns on options: -noNameIx -noHistory -ignoreEmpty
  *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
@@ -218,22 +181,19 @@ int index = 2;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
-	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 if(startsWithWord("bedGraph", track->dbTrackType))
     {
-    char buf[100];
     /* we currently assume that last field is the bedGraph field. */
-    safef(buf, sizeof(buf), "-bedGraph=%d", track->fieldCount);
-    cmd1[index++] = buf;
+    dyStringPrintf(tmpDy, "-bedGraph=%d", track->fieldCount);
+    cmd1[index++] = dyStringCannibalize(&tmpDy);
     }
-dyStringPrintf(tmpDy, "%s", db);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "%s", track->dbTableName);
-cmd1[index++] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
 cmd1[index++] = "stdin";
 assert(index <= ArraySize(cmd1));
 
@@ -321,7 +281,6 @@ if (dbRequested)
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
-    restorePrevEnv();			/* restore environment */
     }
 return track;
 }
@@ -587,11 +546,10 @@ return (pt != 0);
 static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
 /* Set up pipeline that will load the encodePeak into database. */
 {
-char *db = customTrackTempDb();
 /* running the single command:
  *	hgLoadBed -customTrackLoader -sqlTable=loader/encodePeak.sql -renameSqlTable 
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
- *		-maxChromNameLength=${nameLength} db tableName stdin
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
@@ -602,15 +560,13 @@ int index = 6;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
-	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "%s", db);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "%s", track->dbTableName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
 cmd1[index++] = "stdin";
 assert(index <= ArraySize(cmd1));
 
@@ -675,7 +631,6 @@ if(ferror(out) || pipelineWait(dataPipe))
     pipelineFailExit(track);	/* prints error and exits */
 unlink(track->dbStderrFile);	/* no errors, not used */
 pipelineFree(&dataPipe);
-restorePrevEnv();			/* restore environment */
 return track;
 }
 
@@ -1122,7 +1077,6 @@ static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
 {
 customFactorySetupDbTrack(track);
 
-char *ctDb = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", "-custom",  NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -1135,7 +1089,7 @@ trashDirFile(&tn, "ct", "ct", ".pos");
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
-	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
@@ -1146,7 +1100,7 @@ dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
 cmd1[7] = dyStringCannibalize(&tmpDy);
-cmd1[8] = ctDb;
+cmd1[8] = CUSTOM_TRASH;
 cmd1[9] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds, 
@@ -1156,7 +1110,6 @@ if(pipelineWait(dataPipe))
 
 pipelineFree(&dataPipe);
 unlink(track->dbStderrFile);	/* no errors, not used */
-restorePrevEnv();			/* restore environment */
 track->wigFile = NULL;
 
 struct lineFile *lf = lineFileOpen(tn.forCgi, TRUE);
@@ -1268,7 +1221,6 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
  *	    -pathPrefix=[.|/] ${db} ${table} stdin
  */
-char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000", 
 	"stdin", "stdout", NULL, NULL};
@@ -1282,13 +1234,13 @@ cmd1[5] = track->wibFile;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
-	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-chromInfoDb=%s", track->genomeDb);
-cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd2[5] = dyStringCannibalize(&tmpDy);
 /* a system could be using /trash/ absolute reference, and nothing to do with
  *	local references, so don't confuse it with ./ a double // will work
  */
@@ -1296,7 +1248,7 @@ if (startsWith("/", trashDir()))
     cmd2[6] = "-pathPrefix=/";
 else
     cmd2[6] = "-pathPrefix=.";
-cmd2[7] = db;
+cmd2[7] = CUSTOM_TRASH;
 cmd2[8] = track->dbTableName;
 /* the "/dev/null" file isn't actually used for anything, but it is used
  * in the pipeLineOpen to properly get a pipe started that isn't simply
@@ -1372,7 +1324,6 @@ if (dbRequested)
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
-    restorePrevEnv();			/* restore environment */
     track->wigFile = NULL;
 
     /* Figure out lower and upper limits with db query */
