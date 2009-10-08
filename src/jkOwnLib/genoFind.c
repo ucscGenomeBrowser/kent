@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.25 2008/03/20 17:39:43 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.26 2009/10/08 18:09:38 kent Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -2191,3 +2191,51 @@ reverseComplement(rPrimer, rPrimerSize);
 return clumpList;
 }
 
+int gfDefaultRepMatch(int tileSize, int stepSize, boolean protTiles)
+/* Figure out appropriate step repMatch value. */
+{
+int repMatch = 1024;
+if (protTiles)
+    {
+    if (tileSize == 3)
+	repMatch = 600000;
+    else if (tileSize == 4)
+	repMatch = 30000;
+    else if (tileSize == 5)
+	repMatch = 1500;
+    else if (tileSize == 6)
+	repMatch = 75;
+    else if (tileSize <= 7)
+	repMatch = 10;
+    else
+        internalErr();
+    }
+else
+    {
+    if (tileSize == 15)
+	repMatch = 16;
+    else if (tileSize == 14)
+	repMatch = 32;
+    else if (tileSize == 13)
+	repMatch = 128;
+    else if (tileSize == 12)
+	repMatch = 256;
+    else if (tileSize == 11)
+	repMatch = 4*256;
+    else if (tileSize == 10)
+	repMatch = 16*256;
+    else if (tileSize == 9)
+	repMatch = 64*256;
+    else if (tileSize == 8)
+	repMatch = 256*256;
+    else if (tileSize == 7)
+	repMatch = 1024*256;
+    else if (tileSize == 6)
+	repMatch = 4*1024*256;
+    else
+        internalErr();
+    }
+repMatch *= tileSize;
+repMatch /= stepSize;
+return repMatch;
+}

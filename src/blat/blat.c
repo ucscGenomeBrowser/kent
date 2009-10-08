@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.113 2009/02/10 21:58:55 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.114 2009/10/08 18:09:38 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -628,7 +628,7 @@ freeDnaSeqList(&dbSeqList);
 int main(int argc, char *argv[])
 /* Process command line into global variables and call blat. */
 {
-boolean dIsProtLike, qIsProtLike;
+boolean tIsProtLike, qIsProtLike;
 
 #ifdef DEBUG
 {
@@ -659,13 +659,13 @@ switch (tType)
     {
     case gftProt:
     case gftDnaX:
-        dIsProtLike = TRUE;
+        tIsProtLike = TRUE;
 	break;
     case gftDna:
-        dIsProtLike = FALSE;
+        tIsProtLike = FALSE;
 	break;
     default:
-	dIsProtLike = FALSE;
+	tIsProtLike = FALSE;
         errAbort("Illegal value for 't' parameter");
 	break;
     }
@@ -687,11 +687,11 @@ switch (qType)
         qIsProtLike = FALSE;
 	break;
     }
-if ((dIsProtLike ^ qIsProtLike) != 0)
+if ((tIsProtLike ^ qIsProtLike) != 0)
     errAbort("d and q must both be either protein or dna");
 
 /* Set default tile size for protein-based comparisons. */
-if (dIsProtLike)
+if (tIsProtLike)
     {
     tileSize = 5;
     minMatch = 1;
@@ -710,7 +710,7 @@ minScore = optionInt("minScore", minScore);
 maxGap = optionInt("maxGap", maxGap);
 minRepDivergence = optionFloat("minRepDivergence", minRepDivergence);
 minIdentity = optionFloat("minIdentity", minIdentity);
-gfCheckTileSize(tileSize, dIsProtLike);
+gfCheckTileSize(tileSize, tIsProtLike);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");
 if (maxGap > 100)
@@ -723,44 +723,7 @@ if (maxGap > 100)
 if (optionExists("repMatch"))
     repMatch = optionInt("repMatch", repMatch);
 else
-    {
-    if (dIsProtLike)
-	{
-	if (tileSize == 3)
-	    repMatch = 600000;
-	else if (tileSize == 4)
-	    repMatch = 30000;
-	else if (tileSize == 5)
-	    repMatch = 1500;
-	else if (tileSize == 6)
-	    repMatch = 75;
-	else if (tileSize <= 7)
-	    repMatch = 10;
-	}
-    else
-	{
-	if (tileSize == 15)
-	    repMatch = 16;
-	else if (tileSize == 14)
-	    repMatch = 32;
-	else if (tileSize == 13)
-	    repMatch = 128;
-	else if (tileSize == 12)
-	    repMatch = 256;
-	else if (tileSize == 11)
-	    repMatch = 4*256;
-	else if (tileSize == 10)
-	    repMatch = 16*256;
-	else if (tileSize == 9)
-	    repMatch = 64*256;
-	else if (tileSize == 8)
-	    repMatch = 256*256;
-	else if (tileSize == 7)
-	    repMatch = 1024*256;
-	else if (tileSize == 6)
-	    repMatch = 4*1024*256;
-	}
-    }
+    repMatch = gfDefaultRepMatch(tileSize, stepSize, tIsProtLike);
 
 /* Gather last few command line options. */
 noHead = optionExists("noHead");

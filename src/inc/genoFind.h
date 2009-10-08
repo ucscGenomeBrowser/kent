@@ -349,6 +349,9 @@ void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq,
 int gfConnect(char *hostName, char *portName);
 /* Set up our network connection to server. */
 
+int gfDefaultRepMatch(int tileSize, int stepSize, boolean protTiles);
+/* Figure out appropriate step repMatch value. */
+
 void gfMakeOoc(char *outName, char *files[], int fileCount, 
 	int tileSize, bits32 maxPat, enum gfType tType);
 /* Count occurences of tiles in seqList and make a .ooc file. */
@@ -374,7 +377,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
  * clump->tStart and clump->tEnd so that the coords are relative to that 
  * target sequence (not the collection of all target sequences). */
 
-#define gfVersion "34x4"	/* Current BLAT version number */
+#define gfVersion "34x5"	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

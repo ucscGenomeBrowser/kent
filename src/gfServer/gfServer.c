@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.55 2009/09/23 18:42:16 angie Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.56 2009/10/08 18:09:38 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"canStop", OPTION_BOOLEAN},
@@ -907,9 +907,11 @@ tileSize = optionInt("tileSize", tileSize);
 stepSize = optionInt("stepSize", stepSize);
 if (stepSize == 0)
     stepSize = tileSize;
-repMatch = round( (double)tileSize/(double)stepSize * repMatch);
+if (optionExists("repMatch"))
+    repMatch = optionInt("repMatch", 0);
+else
+    repMatch = gfDefaultRepMatch(tileSize, stepSize, doTrans);
 minMatch = optionInt("minMatch", minMatch);
-repMatch = optionInt("repMatch", repMatch);
 maxDnaHits = optionInt("maxDnaHits", maxDnaHits);
 maxTransHits = optionInt("maxTransHits", maxTransHits);
 maxNtSize = optionInt("maxNtSize", maxNtSize);

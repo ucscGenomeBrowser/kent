@@ -4,6 +4,8 @@
      o (in 34x2) Fixed -out=blast to use +/- instead of -/+ for non-translated.
      o (in 34x3) Fixed -minScore, filter was not working when over half query-size.
      o (in 34x4) Made it convert u's to t's for RNA sequence stuff.
+     o (in 34x5) Made gfServer calculate repMatch based on stepSize/tileSize combination the way blat does
+       rather than just being good for stepSize 11.
      
 
 34:
