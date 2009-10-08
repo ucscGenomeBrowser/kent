@@ -5,12 +5,6 @@ priority 139.1
 track netDanRer4
 priority 139.2
 
-track chainDanRer5
-priority 139.3
-
-track netDanRer5
-priority 139.4
-
 # lamprey
 track chainPetMar1
 priority 230
