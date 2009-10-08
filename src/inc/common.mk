@@ -44,6 +44,7 @@ ifeq (${USE_BAM},1)
         SAMLIB = ${SAMDIR}/libbam.a
     endif
     HG_INC += -I${SAMINC}
+    L+=${SAMLIB}
     HG_DEFS+=-DUSE_BAM
 endif
 
