@@ -86,7 +86,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track chainHg18
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 124.4
@@ -98,7 +98,7 @@ type chain hg18
 otherDb hg18
 
 track netHg18
-shortLabel $o_Organism Net
+shortLabel $o_db Net  
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.5
@@ -106,7 +106,6 @@ visibility full
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
-
 
 track blastzFr1
 shortLabel $o_Organism Blastz
@@ -203,10 +202,10 @@ type netAlign mm5 chainMm5
 otherDb mm5
 
 track chainNetHg19 override
+priority 124.6
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-priority 124.4
 
 track chainNetMm9 override
 chainMinScore 5000
