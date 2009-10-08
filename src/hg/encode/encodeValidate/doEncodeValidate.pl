@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.197 2009/10/07 23:29:25 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.198 2009/10/08 18:14:34 braney Exp $
 
 use warnings;
 use strict;
@@ -1143,7 +1143,10 @@ sub validationSettings {
                 }
             }
         }
+    } else  {
+        die "Must specify validationSettings in daf\n";
     }
+
     if( scalar(@_) > 1 ) {
 	return "";
     }
