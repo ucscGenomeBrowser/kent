@@ -52,6 +52,9 @@ module PipelineBackground
     # Try to avoid error "Lost connection to MySQL server during query"
     ActiveRecord::Base.verify_active_connections!
 
+    # get a fresh project instance so we don't overwrite changes by validator
+    project = Project.find(project_id)
+
     if exitCode == 0
       #old way:
       #new_status project, "validated"
@@ -86,6 +89,9 @@ module PipelineBackground
     exitCode = run_with_timeout(cmd, timeout)
     # Try to avoid error "Lost connection to MySQL server during query"
     ActiveRecord::Base.verify_active_connections!
+
+    # get a fresh project instance so we don't overwrite changes by loader
+    project = Project.find(project_id)
 
     if exitCode == 0
       project.status = "loaded"
