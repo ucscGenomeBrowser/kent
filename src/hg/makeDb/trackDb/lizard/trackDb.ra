@@ -1,8 +1,19 @@
-# track chainGalGal3
-# priority 255
+track chainGalGal3 override
+priority 255.1
 
-# track netGalGal3
-# priority 255.1
+track netGalGal3 override
+priority 255.2
+
+track chainHg18 override
+shortLabel $o_db Chain 
+otherOrg hg18
+
+track netHg18 override
+shortLabel $o_db Net
+otherOrg hg18 
+
+track chainNetHg19 override
+priority 250.3
 
 track humanChainNet override
 chainMinScore 5000
