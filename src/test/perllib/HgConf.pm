@@ -12,6 +12,33 @@ use Carp;
 @EXPORT_OK = qw( new lookup );
 $VERSION = '0.01';
 
+#
+# readConf: read an hg.conf file, which may include other files.
+#
+sub readConf {
+    my ($this, $filename, $depth) = (shift, shift, shift);
+    confess "Too many arguments" if (defined shift);
+    if ($depth > 10) {
+      die "Too many levels of included hg.conf files.";
+    }
+    open(HGCONF, "<$filename")
+      || die "Couldn't open $filename: $!\n";
+    while (<HGCONF>) {
+      next if (/^\s*#/ || /^\s*$/);
+      if (/^\s*include\s+(\S+)/) {
+	my $includeFile = $1;
+	my $cwd = `pwd`;
+	if ($filename =~ /^(.*\/)[^\/]+$/) {
+	  chdir $1;
+	}
+	readConf($this, $includeFile, $depth+1);
+	chdir $cwd;
+      } elsif (/([\w.]+)\s*=\s*(\S+)/) {
+	$this->{$1} = $2;
+      }
+    }
+    close(HGCONF);
+}
 
 #
 # new: create an HgConf object.
@@ -31,19 +58,12 @@ sub new {
 	}
       }
       if (! -e $filename) {
-	die "HgConf::new: Error: can't find .hg.conf or hg.conf, and no filename given.\n";
+	die "HgConf::new: Error: can't find .hg.conf or hg.conf, and no \$HGDB_CONF " .
+	    "or filename given.\n";
       }
     }
     my $this = {};
-    open(HGCONF, "<$filename")
-      || die "Couldn't open $filename: $!\n";
-    while (<HGCONF>) {
-      next if (/^\s*#/ || /^\s*$/);
-      if (/([\w.]+)\s*=\s*(\S+)/) {
-	$this->{$1} = $2;
-      }
-    }
-    close(HGCONF);
+      &readConf($this, $filename, 0);
     bless $this, $class;
 } # end new
 
