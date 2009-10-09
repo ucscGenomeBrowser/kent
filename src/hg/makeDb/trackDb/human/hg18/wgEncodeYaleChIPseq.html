@@ -29,42 +29,45 @@ fields for statistical significance, including FDR
 processed data.</DD>
 </DL>
 
-<H3>Notes:</H3>
+<H2>Notes:</H2>
 <ul>
 <li><em>Expression</em> data generated as confirmation of the TFBS data
-can be found in the
-<A HREF="hgTrackUi?g=wgEncodeChromatinMap">Yale Poly-A</A> tracks.
-<li>The second public release of this data has a number of key changes.
+can be found in the 
+<!-- <A HREF="hgTrackUi?g=wgEncodeYaleRNAseq">Yale Poly-A</A> -->
+Yale Poly-A tracks (coming soon).
+<li>The second public release (October 2009) of this data has a number of key 
+changes:
 <table><tr>
 <tr><th align='left' valign='top' nowrap>Raw Signals</th>
-<td>The previously available "Raw Signals" view of the data is no longer
-provided as they were deemed of little value.
+<td>The previously-available &quot;Raw Signals&quot; view of the data is no 
+longer provided as they were deemed to be of little value.
 </td></tr>
 <tr><th align='left' valign='top' nowrap>K562 v. K562b</th>
-<td>The Farnham lab is using a K562 cell line variant with enough differences
-from the one used in the Snyder and Struhl labs to be labelled as K562b.
+<td>The Farnham lab used a K562 cell line variant with enough differences
+from the one used in the Snyder and Struhl labs to be labeled: K562b.
 Experiments on K562b should be contrasted with <i>Input (UCDavis)</i>.
 </td></tr>
 <tr><th align='left' valign='top' nowrap>HepG2 v. HepG2b</th>
-<td>The Farnham lab is using a HepG2 cell line variant with enough differences
-from the one used in the Snyder and Struhl labs to be labelled as HepG2b.
+<td>The Farnham lab used a HepG2 cell line variant with enough differences
+from the one used in the Snyder and Struhl labs to be labeled: HepG2b.
 Experiments on HepG2b should be contrasted with <i>Input (UCDavis)</i>.
 </td></tr>
 <tr><th align='left' valign='top' nowrap>Versioned data</th>
 <td>A number of previously released datasets have been replaced by updated
-versions.  Older versions of these files are still available through ftp.
-   <table><tr><td><i>Peaks</i></td>
-   <td>All previously released "Peaks" datasets had an off by one start
+versions.  Older versions of these files are still available through the 
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/">ftp</A> site.
+   <table><tr><td align='left' valign='top'><i>Peaks</i></td>
+   <td>All previously released "Peaks" datasets had an off-by-one start
        location error and missing pValues and point peaks.  Now all Peaks
        files have these problems corrected.  Replaced files have been so
        marked with <i>submittedDataVersion=V2</i>.</td>
-    </tr><tr><td><i>Signals</i></td>
+    </tr><tr><td align='left' valign='top'><i>Signals</i></td>
     <td>Most previously released "Signal" (but not "Raw Signal") datasets
         contained a sparse representation of the signal.  Now all Signal
         datasets have been corrected to the continuous signal intended.
         Replaced files have been so marked with
         <i>submittedDataVersion=V2</i>.</td>
-    </tr><tr><td><i>K562 Input</i></td>
+    </tr><tr><td align='left' valign='top'><i>K562 Input</i></td>
     <td>The K562 Input previously released has been replaced by two
         differing versions marked K562 and K562b.  The K562 version used
         by Snyder and Struhl directly replaces the older version and
@@ -75,9 +78,9 @@ versions.  Older versions of these files are still available through ftp.
 </td></tr>
 </table>
 <li>A small number of errors have been detected in the assigned locations for
-tags in many of the "tagAign" files available in
-<A TARGET=_BLANK HREF="../../goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/">Downloads</a>.
-The errors represent off by 1 or 2 bases.
+tags in many of the "tagAign" files available from the 
+<A TARGET=_BLANK HREF="../../goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/">download</a> 
+server.  The errors represent off-by-one or -two bases.
 While this is inaccurate data, it represents a small subset of tags.  Further,
 signal detection and peak calling from these tags is not seriously affected.
 Typically, tags are extended to the mean length (200bp) of the DNA fragments
@@ -86,9 +89,9 @@ tags are used to build signals and call peaks. Errors of a couple
 of bases in a small percentage of tags cannot be expected to influence peak
 calling unless there were some systematic bias. But there is no evidence for
 such a bias. And even if there were, the peaks meant to represent a 200-400
-base region within which a TF is binding would be little affected by an off by
-1 error. That said, the tagAlign files will be corrected and this note will be
-updated or removed when this occurs.
+base region within which a transcription factor is binding would be little 
+affected by an off-by-one error. That said, the tagAlign files will be 
+corrected &mdash; this note will be updated or removed when this occurs.
 </ul>
 
 <H2> Methods </H2>
