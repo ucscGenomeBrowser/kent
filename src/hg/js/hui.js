@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.36 2009/10/07 22:05:48 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.37 2009/10/09 19:57:57 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -135,8 +135,7 @@ function matSetMatrixCheckBoxes(state)
         if( $( zCBs ).length > 0) {
             var classes = "";            // make string of classes
             $(zCBs).each( function (i) {
-                var class =  $( this ).attr("class").replace("matrixCB dimZ ",".")
-                classes += class;
+                classes += $( this ).attr("class").replace("matrixCB dimZ ",".");
             });
             CBs = $( CBs ).not(classes); // weed CBs
         }
@@ -791,8 +790,7 @@ function matChkBoxesNormalized()
         $(dimZCBs).each( function (i) {
             matChkBoxNormalize(this);
             if( $(this).is(':checked') == false ) {
-                var class =  $( this ).attr("class").replace("matrixCB dimZ ",".")
-                classes += class;
+                classes += $( this ).attr("class").replace("matrixCB dimZ ",".")
             }
         } );
         $("input.matrixCB").not("[name$='_dimZ_cb']").each( function (i) { matChkBoxNormalize(this,classes); } );
