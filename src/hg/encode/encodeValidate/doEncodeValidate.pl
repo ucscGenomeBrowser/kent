@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.198 2009/10/08 18:14:34 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.199 2009/10/09 20:27:21 kate Exp $
 
 use warnings;
 use strict;
@@ -1099,6 +1099,9 @@ sub validationSettings {
     my $chrom=1;
     my $align=1;
 
+    if($opt_metaDataOnly) {
+        return 0;
+    }
     if($daf->{validationSettings}) {
         my @set = split('\;', $daf->{validationSettings});
         if($type eq "validateFiles") {
