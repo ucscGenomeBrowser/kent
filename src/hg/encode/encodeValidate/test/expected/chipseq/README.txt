@@ -1,17 +1,17 @@
-file: wgEncodeTestChipSeqAlignmentsRep1SknmcFoxp2.tagAlign.gz
-cell: SK-N-MC
+file: wgEncodeTestChipSeqAlignmentsRep1K562Foxp2.tagAlign.gz
+cell: K562
 antibody: FOXP2
 replicate: 1
-data RESTRICTED UNTIL: 2009-06-17
+data RESTRICTED UNTIL: 2010-07-09
 
-file: wgEncodeTestChipSeqSignalSknmcFoxp2.wig.gz
-cell: SK-N-MC
+file: wgEncodeTestChipSeqSignalK562Foxp2.wig.gz
+cell: K562
 antibody: FOXP2
-data RESTRICTED UNTIL: 2009-06-17
+data RESTRICTED UNTIL: 2010-07-09
 
-file: wgEncodeTestChipSeqRawDataRep1SknmcFoxp2.fastq.gz
-cell: SK-N-MC
+file: wgEncodeTestChipSeqRawDataRep1K562Foxp2.fastq.gz
+cell: K562
 antibody: FOXP2
 replicate: 1
-data RESTRICTED UNTIL: 2009-06-17
+data RESTRICTED UNTIL: 2010-07-09
 
