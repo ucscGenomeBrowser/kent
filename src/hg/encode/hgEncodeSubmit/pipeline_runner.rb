@@ -192,7 +192,7 @@ while true
         myLoad = (`cat /proc/loadavg | gawk '{print $2}'`).to_f
         if (myLoad > maxServerLoad)
 	  # DO NOT FILL THE LOG WITH MSGS
-  	  unless old_timeHighLoad
+  	  unless defined?(old_timeHighLoad)
     	    old_timeHighLoad = Time.now
 	  end
 	  if Time.now - old_timeHighLoad > (5 * 60)
