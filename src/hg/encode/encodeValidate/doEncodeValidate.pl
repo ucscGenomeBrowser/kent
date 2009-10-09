@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.199 2009/10/09 20:27:21 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.200 2009/10/09 23:10:39 kate Exp $
 
 use warnings;
 use strict;
@@ -1918,6 +1918,13 @@ foreach my $ddfLine (@ddfLines) {
         # print TRACK_RA $additional;
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
+        }
+        # color track by color setting for cell type in cv.ra
+        if(defined($ddfLine->{cell})) {
+            if(defined($terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'})) {
+                print TRACK_RA sprintf("    color %s\n", 
+                        $terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'});
+            }
         }
         # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
         print TRACK_RA sprintf("    metadata %s\n", $metadata);
