@@ -153,7 +153,6 @@ groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 names sample00,sample01,sample02,sample03,sample04,sample05,sample06,sample07,sample08,sample09,sample10,sample11,sample12,sample13,sample14,sample15,sample16,sample17,sample18,sample19,sample20,sample21,sample22,sample23,sample24,sample25,sample26,sample27,sample28,sample29,sample30,sample31,sample32,sample33,sample34,sample35,sample36,sample37,sample38,sample39,sample40,sample41,sample42,sample43,sample44,sample45,sample46,sample47,sample48,sample49,sample50,sample51,sample52,sample53,sample54,sample55,sample56,sample57,sample58,sample59,sample60,sample61,sample62,sample63,sample64,sample65,sample66,sample67,sample68,sample69,sample70,sample71,sample72,sample73,sample74,sample75,sample76,sample77,sample78,sample79,sample80,sample81,sample82,sample83, 
 
 ### COSMIC mutation datasets #####
-
 name COSMICsummaryGroups
 type groupings
 all COSMICsummaryAll
@@ -164,6 +163,18 @@ description All Arrays
 expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37
 groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 names salivary_gland,breast,penis,peritoneum,parathyroid,liver,genital_tract,oesophagus,adrenal_gland,meninges,cervix,large_intestine,central_nervous_system,biliary_tract,paratesticular_tissues,ovary,pleura,vulva,bone,stomach,haematopoietic_and_lymphoid_tissue,kidney,urinary_tract,soft_tissue,pancreas,autonomic_ganglia,gastrointestinal_tract,pituitary,skin,prostate,lung,thyroid,upper_aerodigestive_tract,testis,thymus,eye,small_intestine,endometrium
+
+
+name COSMICcountsGroups
+type groupings
+all COSMICcountsAll
+
+name COSMICcountsAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+names salivary_gland,breast,penis,peritoneum,parathyroid,liver,oesophagus,genital_tract,adrenal_gland,cervix,meninges,large_intestine,central_nervous_system,biliary_tract,paratesticular_tissues,vulva,ovary,pleura,bone,haematopoietic_and_lymphoid_tissue,stomach,urinary_tract,kidney,soft_tissue,pancreas,autonomic_ganglia,gastrointestinal_tract,pituitary,skin,prostate,lung,thyroid,upper_aerodigestive_tract,testis,thymus,eye,small_intestine,endometrium,
 
 ## SESTAN BRAIN ARRAYS
 
