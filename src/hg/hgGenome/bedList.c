@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.3 2008/09/03 19:18:54 markd Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.4 2009/10/10 00:29:24 galt Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -59,8 +59,15 @@ char *typeLine = cloneString(type);
 int colCount = 0;
 char *bedGraphField = NULL;
 int bedGraphColumnNum = 0;
-struct sqlConnection *conn = sqlConnect(database);
-
+struct sqlConnection *conn = NULL;
+if (isCustomTrack(curTable))
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    struct customTrack *ct = lookupCt(table);
+    table = ct->dbTableName;
+    }
+else
+    conn = sqlConnect(database);
 wordCount = chopLine(typeLine,words);
 if (wordCount > 1)
     bedGraphColumnNum = sqlUnsigned(words[1]);
@@ -76,7 +83,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedGraphField = cloneString(row[0]);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+if (isCustomTrack(curTable))
+    hFreeConn(&conn);
+else
+    sqlDisconnect(&conn);
 return bedGraphField;
 }
 
