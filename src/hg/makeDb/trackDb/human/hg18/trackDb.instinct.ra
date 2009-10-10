@@ -47,8 +47,8 @@ groupings kotliarov2006Groups
 #groupings maserGBMGroups
 
 track COSMICsummary
-shortLabel COSMIC Data
-longLabel COSMIC Data
+shortLabel COSMIC Proportion Data
+longLabel COSMIC Proportion Data
 group x
 priority 45
 visibility hide
@@ -57,6 +57,18 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings COSMICsummaryGroups
+
+track COSMICcounts
+shortLabel COSMIC Count Data
+longLabel COSMIC Count Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICcountsGroups
 
 track cutler2007
 shortLabel Inbred Mice CGH
