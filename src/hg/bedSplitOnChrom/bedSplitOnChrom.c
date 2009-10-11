@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.4 2009/09/30 03:26:06 braney Exp $";
+static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.5 2009/10/11 00:27:06 braney Exp $";
 
 int maxChromCount = 256;
 boolean nfCheck;    /* check for number of fields consistency */
@@ -102,10 +102,10 @@ for (;;)
 	}
 
     /* Output line of bed file, starting with the three fields that are always there. */
-    fprintf(f, "%s %s %s", row[0], row[1], row[2]);
+    fprintf(f, "%s\t%s\t%s", row[0], row[1], row[2]);
     int i;
     for (i=3; i<numFields; ++i)
-	fprintf(f, " %s", row[i]);
+	fprintf(f, "\t%s", row[i]);
     fputc('\n', f);
     if (ferror(f))
 	{
