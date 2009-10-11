@@ -55,6 +55,7 @@ install:
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findBlatServer.csh      ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
+	cp -p --remove-destination findKgTableSet.csh      ${SCRIPTS}
 	cp -p --remove-destination findLevel.csh           ${SCRIPTS}
 	cp -p --remove-destination findMtNets.csh          ${SCRIPTS}
 	cp -p --remove-destination findNewTables.csh       ${SCRIPTS}
