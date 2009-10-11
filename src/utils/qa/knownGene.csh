@@ -4,6 +4,24 @@ source `which qaConfig.csh`
 # to do:  check that trackDb.hgGene is "on"
 # to do:  see that cgapBiocDesc has unique entries
 
+# --------------------------------------------
+#  run KGGeneCheck.java on dev:
+
+#### echo
+#### echo " --------------------------------------------"
+####
+#### echo "server hgwdev.cse.ucsc.edu /
+#### machine hgwdev.cse.ucsc.edu /
+#### quick false /
+#### dbSpec $db /
+#### table all /
+#### zoomCount 4" > $db.props
+###
+#### echo "run KGGeneCheck: \
+####   nohup nice HGGeneCheck $db.props > & $db.KGrobot.out & "
+#### echo
+echo " --------------------------------------------"
+
 ###############################################
 # 
 #  03-09-04
@@ -27,9 +45,9 @@ if ($#argv == 0 || $#argv > 2) then
   # no command line args
   echo
   echo "  runs test suite on Known Genes track."
-  echo "  expects files, {kg,fb,pb}Tables, up one directory."
+  echo "  suggest KG java run in Trackchecking first."
   echo
-  echo "    usage:  database, [oldDb] (if fresh assembly for existing organism)"
+  echo "    usage:  database [oldDb] (if fresh assembly for existing organism)"
   echo
   exit
 else
@@ -47,47 +65,28 @@ echo "using $db "
 echo "using $oldDb for beta db "
 set curr_dir=$cwd
 
+#  get sets of KG, GS, PB tables from master list:
+findKgTableSet.csh $db 
 
-# --------------------------------------------
-#  get sets of KG, FB(GS), PB tables:
-# also prints list and update times.
+# count items in list
+echo "found the following KG tables:"
+wc -l $db.{kg,gs,pb}Tables
+cat $db.{kg,gs,pb}Tables | sort -u > $db.allTables
+echo "will have some overlap. uniq tables = `cat $db.allTables | sort -u | wc -l`"
 
-#####  /cluster/home/kuhn/bin/findKgTableSet.csh $db 
-
+# find new tables: in pushQ but NOT in a kgTables list
 echo
-echo "the following tables are in the overall KG list, but not in this assembly:"
-comm -23 kgTables kgTables$db
-echo  
+echo "find new tables: in pushQ but NOT in a kgTables list"
+hgsql -h mysqlbeta -Ne "SELECT tbls FROM pushQ WHERE tbls LIKE '%knownGene%' \
+  AND dbs = '"$db"'" qapushq | sed "s/\\n/\n/g" | egrep -r . > $db.pushqKgList
+dos2unix $db.pushqKgList >& /dev/null
+commTrio.csh $db.allTables $db.pushqKgList 
 
+if ( `wc -l $db.allTables.Only | awk '{print $1}'` != 0 ) then
+  echo "these tables may be in separate tracks? ($db.allTables.Only) :"
+  cat $db.allTables.Only
+endif 
 echo
-echo "the following tables are in the overall GS list, but not in this assembly:"
-comm -23 fbTables fbTables$db
-echo  
-
-echo
-echo "the following tables are in the overall PB list, but not in this assembly:"
-comm -23 pbTables pbTables$db
-echo  
-
-
-# --------------------------------------------
-#  run KGGeneCheck.java on dev:
-
-#### echo
-#### echo " --------------------------------------------"
-####
-#### echo "server hgwdev.cse.ucsc.edu /
-#### machine hgwdev.cse.ucsc.edu /
-#### quick false /
-#### dbSpec $db /
-#### table all /
-#### zoomCount 4" > $db.props
-###
-#### echo "run KGGeneCheck: \
-####   nohup nice HGGeneCheck $db.props > & $db.KGrobot.out & "
-#### echo
-echo " --------------------------------------------"
-
 
 # --------------------------------------------
 
@@ -102,8 +101,9 @@ hgsql -N -e "SELECT name from knownGene" $db | sort | uniq > $db.KG.name.dev
 hgsql -N -h $sqlbeta -e "SELECT name from knownGene" $oldDb | sort |uniq > $oldDb.KG.name.beta.uniq
 comm -23 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $db.KG.name.devOnly
 comm -13 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $oldDb.KG.name.betaOnly
-comm -12 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $db.KG.name.commonOnly
-wc -l *Only | grep -v total
+comm -12 $db.KG.name.dev $oldDb.KG.name.beta.uniq > $db.KG.name.common
+wc -l  $db.KG.name.devOnly $oldDb.KG.name.betaOnly $db.KG.name.common | grep -v total 
+
 echo
 echo "check some new ones by hand:"
 head -20 $db.KG.name.devOnly | tail -3
@@ -111,6 +111,11 @@ echo
 echo "check some old ones by hand on beta:"
 head -20 $oldDb.KG.name.betaOnly | tail -3
 echo
+
+echo "strip version number and compare again:"
+awk -F. '{print $1}' $db.KG.name.devOnly     > $db.KG.name.devOnly.noVersion 
+awk -F. '{print $1}' $oldDb.KG.name.betaOnly > $oldDb.KG.name.betaOnly.noVersion
+commTrio.csh  $db.KG.name.devOnly.noVersion $oldDb.KG.name.betaOnly.noVersion
 
 # --------------------------------------------
 # check alignID for unique:
@@ -230,8 +235,9 @@ echo
 checkCoverage.csh $db $table
 
 echo
-runBits.csh $db $knownGene
+runBits.csh $db knownGene
 echo
+runJoiner.csh $db knownGene
 
 # -------------------------------------------------
 # check exon sizes:
@@ -286,8 +292,6 @@ echo
 
 
 # ------------------------------------
-
-
 
 # todo: get list of genes and their geneSymbol and count up how
 # many have the same name.  look at outliers.  what follows here doesn't
