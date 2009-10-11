@@ -176,21 +176,31 @@ priority 250.1
 track netPanTro2 override
 priority 250.2
 
+track chainNetHg19 override
+priority 255.3
+
 track chainBosTau4 override
-priority 10004.1
+priority 260.1
 
 track netBosTau4 override
-priority 10004.2
+priority 260.2
 
 track chainEquCab1 override
-priority 10006.1
+priority 265.1
+shortLabel $o_db Chain
+otherOrg equCab1
 
 track netEquCab1 override
-priority 10006.2
+priority 265.2
+shortLabel $o_db Net
+otherOrg equCab1
+
+track chainNetEquCab2 override
+priority 265.3
 
 track chainFelCat3 override
-priority 10008.1
+priority 270.1
 
 track netFelCat3 override
-priority 10008.2
+priority 270.2
 
