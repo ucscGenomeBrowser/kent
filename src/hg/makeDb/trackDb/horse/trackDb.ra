@@ -40,13 +40,17 @@ spectrum on
 type chain ornAna1
 otherDb ornAna1
 
+
+track chainNetHg19 override
+priority 240.1
+
 track chainCanFam2 override
-priority 260
+priority 260.1
 
 track netCanFam2 override
-priority 260.1
+priority 260.2
  
-# 
+
 # in visibility.ra
 # 
 # track refGene
