@@ -291,6 +291,16 @@ boolean isBedGraph(char *table);
 /* Return TRUE if table is specified as a bedGraph in the current database's
  * trackDb. */
 
+char *getBedGraphType(char *table);
+/* Return bedgraph track type if table is a bedGraph in the current database's
+ * trackDb. */
+ 
+char *getBedGraphField(char *table);
+/* get the bedGraph dataValue field name from the track type */
+
+int  getBedGraphColumnNum(char *table);
+/* get the bedGraph dataValue column num from the track type */
+
 void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
 /*	obtain wiggle data limits from trackDb or cart or settings */
 
@@ -324,9 +334,5 @@ boolean isMafTable(char *database, struct trackDb *track, char *table);
 
 boolean isChromGraph(struct trackDb *track);
 /* Return TRUE if it's a chromGraph track */
-
-char *getBedGraphField(char *table, char *type);
-/* get the bedGraph dataValue field name from the track type */
-
 
 #endif /* HGGENOME_H */

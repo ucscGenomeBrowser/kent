@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.4 2009/10/10 00:29:24 galt Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.5 2009/10/12 22:43:34 galt Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -31,34 +31,54 @@ return sameString("tStarts", hti->startsField);
 }
 
 
+char *getBedGraphType(char *table)
+/* Return bedgraph track type if table is a bedGraph in the current database's 
+ * trackDb. */
+{
+if (curTrack && sameString(curTrack->tableName, table))
+    {
+    if (startsWith("bedGraph", curTrack->type))
+	return curTrack->type;
+    }
+else
+    {
+    struct trackDb *tdb = hTrackDbForTrack(database, table);
+    if (tdb && startsWith("bedGraph", tdb->type))
+	return tdb->type;
+    }
+return NULL;
+}
+
 boolean isBedGraph(char *table)
 /* Return TRUE if table is specified as a bedGraph in the current database's 
  * trackDb. */
 {
-if (curTrack && sameString(curTrack->tableName, table))
-    return startsWith("bedGraph", curTrack->type);
-else
-    {
-    struct trackDb *tdb = hTrackDbForTrack(database, table);
-    return (tdb && startsWith("bedGraph", tdb->type));
-    }
-return FALSE;
+char *bgt = getBedGraphType(table);
+return (bgt && startsWith("bedGraph", bgt));
 }
 
 
+int  getBedGraphColumnNum(char *table)
+/* get the bedGraph dataValue column num from the track type */
+{
+char *typeLine = cloneString(getBedGraphType(table));
+int wordCount;
+char *words[8];
+wordCount = chopLine(typeLine,words);
+if (wordCount > 1)
+    return sqlUnsigned(words[1]);
+return 0;
+}
 
-char *getBedGraphField(char *table, char *type)
+char *getBedGraphField(char *table)
 /* get the bedGraph dataValue field name from the track type */
 {
 char query[256];
 struct sqlResult *sr;
 char **row;
-int wordCount;
-char *words[8];
-char *typeLine = cloneString(type);
 int colCount = 0;
 char *bedGraphField = NULL;
-int bedGraphColumnNum = 0;
+int bedGraphColumnNum = getBedGraphColumnNum(table);
 struct sqlConnection *conn = NULL;
 if (isCustomTrack(curTable))
     {
@@ -68,10 +88,7 @@ if (isCustomTrack(curTable))
     }
 else
     conn = sqlConnect(database);
-wordCount = chopLine(typeLine,words);
-if (wordCount > 1)
-    bedGraphColumnNum = sqlUnsigned(words[1]);
-freez(&typeLine);
+
 safef(query, ArraySize(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -119,7 +136,7 @@ if (curTrack) /* some tables from all tables list have no curTrack */
 	    safef(fullTableName,sizeof(fullTableName),"%s_%s", chrom, hti->rootName);
 	else
 	    safef(fullTableName,sizeof(fullTableName),"%s", hti->rootName);
-	char *bedGraphField = getBedGraphField(hti->rootName,curTrack->type);
+	char *bedGraphField = getBedGraphField(hti->rootName);
 	dyStringPrintf(fields, ",%s", bedGraphField);
 	}
     else if (isMafTable(database, curTrack, curTable))
@@ -153,8 +170,7 @@ bed->chromEnd = sqlUnsigned(row[1]);
 if (fieldCount < 4)
     return bed;
 /* for bedGraph */
-lmAllocVar(lm,bed->expScores);
-bed->expScores[0] = sqlFloat(row[2]);
+bed->name=lmCloneString(lm,row[2]);  /* for lack of a better place */
 return bed;
 }
 

@@ -27,7 +27,7 @@
 
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: import.c,v 1.15 2009/10/06 00:47:48 galt Exp $";
+static char const rcsid[] = "$Id: import.c,v 1.16 2009/10/12 22:43:34 galt Exp $";
 
 /* from hgTables.c */
 
@@ -1211,6 +1211,8 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
+    hPrintf(" "); fflush(stdout);  // browser keep-alive 
+
     if (!bedList)
 	continue;
     
@@ -1255,7 +1257,7 @@ return dyStringCannibalize(&dy);
 }
 
 
-char *makeDepthCgFromBed(boolean isBedGr, boolean isCt)
+char *makeDepthCgFromBed(boolean isBedGr)
 /* create depth chromGraph from bed, bedGraph, or Maf data */
 {
 struct dyString *dy = dyStringNew(0);
@@ -1276,6 +1278,8 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     chrom = chr->fullName;
     bedList = getBeds(chrom, lm, &fields);
 
+    hPrintf(" "); fflush(stdout);  // browser keep-alive 
+
     if (!bedList)
 	continue;
     
@@ -1294,24 +1298,14 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 
 	for(i = start/windowSize; i*windowSize < end; ++i)
 	    {
-
 	    overlap = rangeIntersection(start, end, i*windowSize, (i+1)*windowSize);
-
 	    if (overlap > 0)
 		{
-
-                // FINDING: just as in hgTables dump on bedGraph custom track,
-                //  the float value is being stored in the name field as a string.
-                //  However for a regular bedGraph, it is stored in expScores[0] 
-                //  probably just so that it can store it as a float. strange.
-
-		if (isBedGr && isCt)
+		if (isBedGr)
 		    {
 		    float val = atof(bed->name);
-		    depth[i] += ((((double)overlap)/windowSize)*val);
+		    depth[i] += (((double)overlap)/windowSize)*val;
 		    }
-		else if (isBedGr)
-		    depth[i] += ((((double)overlap)/windowSize)*bed->expScores[0]);
 		else
     		    depth[i] += ((double)overlap)/windowSize;
 		}
@@ -1354,6 +1348,8 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     chrom = chr->fullName;
     struct wiggleDataStream *wds = wigChromRawStats(chrom);
     struct wiggleStats *stats=NULL, *statsList = wds->stats;
+
+    hPrintf(" "); fflush(stdout);  // browser keep-alive 
 
     if (!wds->stats)
 	continue;
@@ -1440,6 +1436,12 @@ if (strchr(curTable, '.') == NULL)  /* In same database */
     hti = getHti(database, curTable);
     isPositional = htiIsPositional(hti);
     }
+
+if (!curTrack || !sameString(curTrack->tableName, curTable))
+    {
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    curTrack = tdb;
+    }
 isWig = isWiggle(database, curTable);
 isMaf = isMafTable(database, curTrack, curTable);
 isBedGr = isBedGraph(curTable);
@@ -1449,16 +1451,6 @@ if (isCt)
     isChromGraphCt = isChromGraph(curTrack);
     }
 
-if (curTrack == NULL)
-    {
-    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
-    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
-    if (cTdb)
-	curTrack = cTdb;
-    else
-	curTrack = tdb;
-    isMaf = isMafTable(database, curTrack, curTable);
-    }
 
 /* debug info
 char *selGroup = cartString(cart, hggGroup);
@@ -1470,6 +1462,8 @@ hPrintf("----------------------------<br>\n");
 hPrintf("selected group: %s<br>\n",selGroup);
 hPrintf("selected track: %s<br>\n",selTrack);
 hPrintf("curTable: %s<br>\n",curTable);
+hPrintf("curTrack->type: %s<br>\n", curTrack->type);
+hPrintf("curTrack->tableName: %s<br>\n", curTrack->tableName);
 hPrintf("isWig: %d<br>\n", isWig);
 hPrintf("isPositional: %d<br>\n", isPositional);
 hPrintf("isMaf: %d<br>\n", isMaf);
@@ -1488,7 +1482,7 @@ if (isPositional && !isWig && !isMaf && !isBedGr && !isChromGraphCt)
     if (sameString(convertType,hggBedCoverage))
 	rawText = makeCoverageCgFromBed();
     else
-	rawText = makeDepthCgFromBed(isBedGr, isCt);
+	rawText = makeDepthCgFromBed(isBedGr);
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
@@ -1501,11 +1495,10 @@ else if (isPositional && !isWig && !isMaf && isBedGr && !isChromGraphCt)
     char *rawText = NULL;
 
     //debug: 
-    // this does not work for custom tracks
-    //char *bedGraphField = getBedGraphField(curTable,curTrack->type);
-    //hPrintf("bedGraphField = %s<br>\n",bedGraphField); fflush(stdout);
+    char *bedGraphField = getBedGraphField(curTable);
+    hPrintf("bedGraphField = %s<br>\n",bedGraphField); fflush(stdout);
 
-    rawText = makeDepthCgFromBed(isBedGr, isCt);
+    rawText = makeDepthCgFromBed(isBedGr);
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
@@ -1517,7 +1510,7 @@ else if (isPositional && !isWig && isMaf && !isBedGr && !isChromGraphCt)
     {  /* maf */
     char *rawText = NULL;
     
-    rawText = makeDepthCgFromBed(isMaf, isCt);
+    rawText = makeDepthCgFromBed(isMaf);
 
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
@@ -1539,6 +1532,7 @@ else if (isPositional && isWig && !isMaf && !isBedGr && !isChromGraphCt)
     }
 
 
+hPrintf("\n");
 hPrintf("<CENTER>");
 cgiMakeButton("submit", "OK");
 hPrintf("</CENTER>");
