@@ -1,5 +1,5 @@
 # Data Agreement File for Weng Lab TFBS Predictions
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -13,6 +13,7 @@ lab               UMassHA
 dataType          TfbsAll
 assembly          hg18
 dafVersion        1.1
+validationSettings none
 
 # Track/view definition
 view             AllSites

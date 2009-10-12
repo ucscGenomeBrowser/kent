@@ -1,5 +1,5 @@
 # Data Agreement File for Weng Lab TFBS Validation
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -11,6 +11,7 @@ dataType          TfbsValid
 variables         cell
 assembly          hg18
 dafVersion        1.1
+validationSettings none
 
 # Track/view definition
 view             TestedSites
