@@ -14,5 +14,5 @@ CREATE TABLE pgSnp (
     alleleFreq varchar(255) not null,	# comma separated list of frequency of each allele
     alleleScores varchar(255) not null,	# comma separated list of quality scores
               #Indices
-    INDEX(bin)
+    INDEX(chrom,bin)
 );
