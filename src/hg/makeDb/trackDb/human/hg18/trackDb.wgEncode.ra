@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.572 2009/10/12 18:21:50 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.573 2009/10/12 21:56:24 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2396,6 +2396,36 @@ wgEncode 1
     viewLimits 0:0.4
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19238 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Sep 2009 Freeze" subId=646 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf fileName=wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf.wig.gz
 
+# submission 649
+    track wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel GM192391 BO
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19239 cells)
+    subGroups view=SIGBO EXP=DNase cellType=GM19239
+    type wig 0.00 132.00
+    viewLimits 0:100
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19239 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=649 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239.wig.gz
+
+    track wgEncodeDukeDNaseSeqPeaksRep1Gm19239
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel GM19239 Pk1
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19239 cells)
+    subGroups view=Peaks EXP=DNase cellType=GM19239
+    type narrowPeak
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19239 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=649 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksRep1Gm19239 fileName=wgEncodeDukeDNaseSeqPeaksRep1Gm19239.narrowPeak.gz
+
+    track wgEncodeDukeDNaseSeqSignalRep1Gm19239
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel GM19239 FD
+    longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19239 cells)
+    subGroups view=SIG EXP=DNase cellType=GM19239
+    type wig 0.00 2.29
+    viewLimits 0:0.4
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19239 view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Sep 2009 Freeze" subId=649 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalRep1Gm19239 fileName=wgEncodeDukeDNaseSeqSignalRep1Gm19239.wig.gz
+
 # submission 648
     track wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19239Ctcf
     release alpha
@@ -2425,6 +2455,36 @@ wgEncode 1
     type wig 0.00 9.72
     viewLimits 0:0.4
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19239 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_generic_male" dataVersion="ENCODE Sep 2009 Freeze" subId=648 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf fileName=wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf.wig.gz
+
+# submission 651
+    track wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel GM19240 BO
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19240 cells)
+    subGroups view=SIGBO EXP=DNase cellType=GM19240
+    type wig 0.00 976.00
+    viewLimits 0:100
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19240 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=651 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240.wig.gz
+
+    track wgEncodeDukeDNaseSeqPeaksRep1Gm19240
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel GM19240 Pk
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19240 cells)
+    subGroups view=Peaks EXP=DNase cellType=GM19240
+    type narrowPeak
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19240 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=651 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksRep1Gm19240 fileName=wgEncodeDukeDNaseSeqPeaksRep1Gm19240.narrowPeak.gz
+
+    track wgEncodeDukeDNaseSeqSignalRep1Gm19240
+    release alpha
+    subTrack wgEncodeChromatinMap off
+    shortLabel GM19240 FD
+    longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19240 cells)
+    subGroups view=SIG EXP=DNase cellType=GM19240
+    type wig 0.00 3.19
+    viewLimits 0:0.4
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19240 view=Signal labVersion="fseq v 1.82, iff_generic_female" dataVersion="ENCODE Sep 2009 Freeze" subId=651 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalRep1Gm19240 fileName=wgEncodeDukeDNaseSeqSignalRep1Gm19240.wig.gz
 
 # submission 650
     track wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19240Ctcf
@@ -2825,7 +2885,7 @@ wgEncode 1
     type wig 0.00 140.00
     viewLimits 0:20
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2
     release alpha
@@ -2835,7 +2895,7 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-cMyc cellType=2HELA
     type narrowPeak
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalRep1Helas3CmycV2
     release alpha
@@ -2846,9 +2906,9 @@ wgEncode 1
     type wig 0.00 0.77
     viewLimits 0:0.08
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz
 
-# submission 642 (versioned by 642)
+# submission 282 (versioned by 642)
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
     release beta
     subTrack wgEncodeChromatinMap off
