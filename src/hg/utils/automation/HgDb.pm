@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.6 2008/12/10 21:58:35 larrym Exp $
+# $Id: HgDb.pm,v 1.7 2009/10/12 06:50:48 larrym Exp $
 
 package HgDb;
 
@@ -58,6 +58,21 @@ sub new
     $ref->{DBH} = DBI->connect($dsn, $ref->{USER}, $ref->{PASSWORD}) or die "Couldn't connect to db: $ref->{DB}";
     bless $ref, 'HgDb';
     return $ref;
+}
+
+sub disconnect
+{
+    my ($db) = (@_);
+    $db->{DBH}->disconnect();
+    $db->{DBH} = undef;
+}
+
+sub DESTROY
+{
+    my ($db) = (@_);
+    if($db->{DBH}) {
+        $db->disconnect();
+    }
 }
 
 sub execute
@@ -119,6 +134,16 @@ sub getChromInfo
     my $sth = $db->execute("select chrom from chromInfo");
     while(my @row = $sth->fetchrow_array()) {
         $chromInfo->{$row[0]}++;
+    }
+}
+
+sub getChromSizes
+{
+# populate a chromInfo hash reference ({chr1 => 666, etc.}).
+    my ($db, $chromInfo) = @_;
+    my $sth = $db->execute("select chrom, size from chromInfo");
+    while(my @row = $sth->fetchrow_array()) {
+        $chromInfo->{$row[0]} = $row[1];
     }
 }
 
