@@ -418,7 +418,6 @@ int count = 0;
 
 verbose(1,"bac list read done.\n");
 
-hSetDb(db);  /* unfortunately this is required for hLoadChrom */
 for(bac=bacs;bac;bac=bac->next)
     {
     
@@ -426,7 +425,7 @@ for(bac=bacs;bac;bac=bac->next)
 	{
 	verbose(1,"switching to chrom %s\n",bac->chrom);
 	dnaSeqFree(&chromSeq); 
-	chromSeq = hLoadChrom(bac->chrom);
+	chromSeq = hLoadChrom(bac->chrom,db);
 	freez(&chrom);
 	chrom = cloneString(bac->chrom);
 	}
