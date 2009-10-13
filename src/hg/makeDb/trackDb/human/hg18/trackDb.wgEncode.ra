@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.577 2009/10/13 17:39:42 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.578 2009/10/13 18:06:16 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12873,7 +12873,7 @@ type bed 9
     cell GM12878
     color 153,38,0
     priority 1
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalGM12878 fileName=wgEncodeHudsonalphaCnvSignalGM12878.bedGraph4.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalGM12878 fileName=wgEncodeHudsonalphaCnvSignalGM12878.bedGraph4.gz  subId=449
 
     track wgEncodeHudsonalphaCnvRegionsGM12878
     subTrack wgEncodeHudsonalphaCnv
@@ -12882,7 +12882,7 @@ type bed 9
     subGroups cellType=GM12878 view=Regions
     cell GM12878
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsGM12878 fileName=wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsGM12878 fileName=wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz subId=449
     priority 2
 
     track wgEncodeHudsonalphaCnvSignalHepG2
@@ -12893,7 +12893,7 @@ type bed 9
     cell HepG2
     color 189,0,157
     type bedGraph 4
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalHepG2 fileName=wgEncodeHudsonalphaCnvSignalHepG2.bedGraph4.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalHepG2 fileName=wgEncodeHudsonalphaCnvSignalHepG2.bedGraph4.gz subId=449
     priority 3
 
     track wgEncodeHudsonalphaCnvRegionsHepG2
@@ -12902,7 +12902,7 @@ type bed 9
     subTrack wgEncodeHudsonalphaCnv
     subGroups cellType=HepG2 view=Regions
     cell HepG2
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsHepG2 fileName=wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsHepG2 fileName=wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz subId=449
     priority 4
 
     track wgEncodeHudsonalphaCnvSignalK562
@@ -12913,7 +12913,7 @@ type bed 9
     cell K562
     color 46,0,184
     type bedGraph 4
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalK562 fileName=wgEncodeHudsonalphaCnvSignalK562.bedGraph4.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalK562 fileName=wgEncodeHudsonalphaCnvSignalK562.bedGraph4.gz subId=449
     priority 5
 
     track wgEncodeHudsonalphaCnvRegionsK562
@@ -12922,7 +12922,7 @@ type bed 9
     subTrack wgEncodeHudsonalphaCnv
     subGroups cellType=K562 view=Regions
     cell K562
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsK562 fileName=wgEncodeHudsonalphaCnvRegionsK562.bed.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsK562 fileName=wgEncodeHudsonalphaCnvRegionsK562.bed.gz subId=449
     priority 6
 
 
