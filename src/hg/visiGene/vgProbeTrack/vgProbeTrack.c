@@ -1323,14 +1323,19 @@ char cmd[256];
 
 struct dyString *dy = dyStringNew(0);
 char path[256];
+char dnaPath[256];
 char toDb[12];
 
 safef(toDb,sizeof(toDb),"%s", db);
 toDb[0]=toupper(toDb[0]);
 
-safef(path,sizeof(path),"/cluster/data/%s/nib", db);
-if (!fileExists(path))
-    errAbort("unable to locate nib dir %s",path);
+safef(dnaPath,sizeof(dnaPath),"/cluster/data/%s/nib", db);
+if (!fileExists(dnaPath))
+    {
+    safef(dnaPath,sizeof(dnaPath),"/cluster/data/%s/%s.2bit", db, db);
+    if (!fileExists(dnaPath))
+	errAbort("unable to locate nib dir or .2bit for %s: %s", db, dnaPath);
+    }
     
 safef(path,sizeof(path),"/gbdb/%s/liftOver/%sTo%s.over.chain.gz", fromDb, fromDb, toDb);
 if (!fileExists(path))
@@ -1351,9 +1356,9 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
-"pslRecalcMatch unscoredNB.psl /cluster/data/%s/nib" 
+"pslRecalcMatch unscoredNB.psl %s" 
 " pslMap.fa nonBac.psl"
-,db);
+,dnaPath);
 verbose(1,"%s\n",cmd); system(cmd);
 
 /* bac */
@@ -1364,9 +1369,9 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
-"pslRecalcMatch unscoredB.psl /cluster/data/%s/nib" 
+"pslRecalcMatch unscoredB.psl %s" 
 " pslMap.fa bacTemp.psl"
-,db);
+,dnaPath);
 verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
