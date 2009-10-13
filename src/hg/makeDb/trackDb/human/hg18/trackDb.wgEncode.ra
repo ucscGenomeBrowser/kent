@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.581 2009/10/13 19:54:46 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.582 2009/10/13 20:17:31 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -9133,7 +9133,7 @@ wgEncode 1
     metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 
 
-# Yale ChIP-seq and RNA-seq (wrangler: tdreszer)
+# Yale RNA-seq (wrangler: tdreszer)
 track wgEncodeYaleRNAseq
 release alpha
 compositeTrack on
@@ -12164,7 +12164,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (July 2009)
     type genePred
     priority 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3 dateSubmitted=2009-09-03 dateUnrestricted=2010-06-03 composite=wgEncodeGencode parentTable=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeTrnasV3.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3 dateSubmitted=2009-09-03 dateUnrestricted=2010-06-03 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeTrnasV3.gtf.gz
 
 # NOTE: search specs should eventually replace the Rel2 version!  But is there a "release alpha" for these?
 searchName wgEncodeGencodeManualV3
