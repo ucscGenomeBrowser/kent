@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.43 2009/10/13 07:54:37 kent Exp $";
+#	"$Id: hg19.txt,v 1.44 2009/10/13 23:16:22 kent Exp $";
 
 #############################################################################
 
@@ -6329,7 +6329,7 @@ see doc/builds.txt for specific details.
     hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
 ##########################################################################
-# GNF ATLAS 2 (In progress - 2009-09-30 - Jim)
+# GNF ATLAS 2 (Done - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
     ssh swarm
     cd /cluster/data/hg19/bed
@@ -6461,3 +6461,90 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
    DROP TABLE grp;
    RENAME TABLE grpNew TO grp;
  
+#########################################################################
+# BUILD OMIM RELATED GENES TRACK (done 2009-10-13 jk)
+
+ssh hgwdev
+cd /hive/data/genomes/hg19/bed
+mkdir omimGene
+cd omimGene
+
+# download the file morbidmap and genemap from OMIM
+
+mkdir omim
+cd omim
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/morbidmap
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
+cat genemap|sed -e 's/|/\t/g' > genemap.tab
+autoSql ~/src/hg/lib/omimGeneMap.as x
+cat x.sql |sed -e 's/PRIMARY KEY(numbering)/KEY(omimId)/' >omimGeneMap.sql
+hgLoadSqlTab -warn hg19 omimGeneMap omimGeneMap.sql genemap.tab
+
+# got warning on 3 records, just ignore them
+# Warning: load of omimGeneMap did not go as planned: 12216 record(s), 0 row(s)
+
+rm x.c x.h
+cd ..
+cat omim/morbidmap|sed -e 's/|/\t/g' > mobidmap.tab
+autoSql ~/src/hg/lib/omimMorbidMap.as x 
+cat x.sql |sed -e 's/PRIMARY KEY(description)/KEY(omimId)/' >omimMorbidMap.sql
+hgLoadSqlTab -warn hg19 omimMorbidMap omimMorbidMap.sql mobidmap.tab
+
+# get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene 
+# that has a non-empty OMIM ID according to the refLink table.  And use OMIM ID as
+# the gene name for this new table.  Please note the alignId field still holds the KG ID.
+
+hgsql hg19 -N -e \
+'select omimId, kg.* from knownGene kg, knownToRefSeq kr, refLink l where omimId != 0 and mrnaAcc=kr.value and kg.name=kr.name ' \
+|cut -f 1,3-13 >o1.tab
+
+# collect more OMIM related genes via the MIM external DB links from UniProt
+
+hgsql hg19 -N -e \
+'select extAC, kg.* from knownGene kg, kgXref k, proteome.spXref2 p where spId=p.accession and extDB="MIM" and kg.name=kgId ' \
+|cut -f 1,3-13 >o2.tab
+
+# concatenate the above two gene sets and remove duplications.
+
+cat o1.tab o2.tab |sort -u >o3.tab
+
+# load the result into a temp table, fanO3
+hgLoadSqlTab hg19 fanO3 ~/src/hg/lib/knownGene.sql o3.tab
+
+# while holding onto the OMIM ID, get the canonical gene (via the knownGene, knowIsoforms, 
+# and knownCanonical tables) that represent a cluster which contains 
+# initial OMIM gene in the fanO3 table
+
+hgsql hg19 -N -e \
+'select f3.name, kg.* from fanO3 f3, knownGene kg, knownCanonical c, knownIsoforms i where f3.alignId=i.transcript and kg.name=c.transcript and c.clusterId=i.clusterId'\
+> o4.tab
+
+# first column is the OMIM ID
+cut -f 1 o4.tab >j1.tmp
+
+# col 3-13 is the gene structure of the canonical KG
+cut -f 3-13 o4.tab >j2.tmp
+
+# stitch them together and remove duplicates, load the result into fanO4 table
+paste j1.tmp j2.tmp |sort -u >fanO4.tab
+hgLoadSqlTab hg19 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
+
+# finally sort the table and create bed 4 file and load it as the omimGene table
+
+hgsql hg19 -N -e 'select chrom, txStart, txEnd, name from fanO4 order by chrom, txStart, txEnd' |sort -u >omimGene.bed
+hgLoadBed hg19 omimGene omimGene.bed
+
+# create and load the omimToKnownCanonical table.
+
+hgsql hg19 -N -e 'select name, alignId from fanO4 order by name'\
+> omimToKnownCanonical.tab
+
+hgLoadSqlTab hg19 omimToKnownCanonical  \
+~/src/hg/lib/omimToKnownCanonical.sql omimToKnownCanonical.tab
+
+# The following clean up could be done.
+# hgsql hg19 -e 'drop table fanO3'
+# hgsql hg19 -e 'drop table fanO4'
+# rm j*.tmp
+# rm o1.tab o2.tab o3.tab o4.tab
+
