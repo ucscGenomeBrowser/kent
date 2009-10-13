@@ -146,8 +146,8 @@ slReverse(&list);
 return list;
 }
 
-char *checkAndFetchNib(struct dnaSeq *chromSeq, struct bac *bac)
-/* fetch nib return string to be freed later. Reports if segment exceeds ends of chromosome. */
+char *checkAndFetchBacDna(struct dnaSeq *chromSeq, struct bac *bac)
+/* fetch bac dna return string to be freed later. Reports if segment exceeds ends of chromosome. */
 {
 if (bac->chromStart < 0)
     {
@@ -430,7 +430,7 @@ for(bac=bacs;bac;bac=bac->next)
 	chrom = cloneString(bac->chrom);
 	}
 
-    char *dna = checkAndFetchNib(chromSeq, bac);
+    char *dna = checkAndFetchBacDna(chromSeq, bac);
     if (sameString(bac->strand,"-"))
 	{
 	reverseComplement(dna,strlen(dna));
