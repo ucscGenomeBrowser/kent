@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.582 2009/10/13 20:17:31 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.583 2009/10/13 20:19:18 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6673,7 +6673,7 @@ noInherit on
 controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
 visibilityViewDefaults  Foorprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 RawSignal:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 RawSignal:viewLimits=1:100,viewLimitsMax=1.00:664293.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
 priority 0
 type bed 3
 wgEncode 1
