@@ -14,7 +14,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.13 2008/09/03 19:19:35 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.14 2009/10/13 21:24:49 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -86,7 +86,8 @@ if (md == NULL)
 else if (md->inSeq)
     {
     if (!md->inGbIndex)
-        gbError("%s: qName not in gbIndex as type %s: \"%s\"", pslDesc,
+        gbError("%s: qName not in gbIndex as type %s: \"%s\""
+                " (Note: this can be caused by GenBank entries that were changed from type mRNA to other RNA types)", pslDesc,
                 gbFmtSelect(typeFlags & GB_TYPE_MASK), psl->qName);
     else
         {
