@@ -1,0 +1,816 @@
+This is a REPLACEMENT for a currently released composite track!
+The composite track wgEncodeBroadChIPseq release beta is being replaced
+by this composite currently marked release alpha.
+
+Categories of tables and files('):
+A) Untouched - are on public browser and shall remain
+B) Elmininated - are currently on RR but will no longer be needed and
+   should not be referenced by the public site
+C) Replaced - are on public browser but will be replaced by something
+   with another name (nothing should be replace by something with the
+   same name)
+D) Versioned (replacing) - are only currently on test but will need to
+   be pushed to RR as replacements for existing datasets (with a
+   different name)
+E) New - are only currently on test but will need to be pushed to the RR.
+
+A) Untouched Tables:
+   +--------------------------------------------------+
+   | Tables_in_hg18                                   |
+   +--------------------------------------------------+
+   | wgEncodeBroadChipSeqPeaksGm12878Ctcf             | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k27ac          | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k27me3         | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k36me3         | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k4me1          | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k4me2          | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k4me3          | 
+   | wgEncodeBroadChipSeqPeaksGm12878H3k9ac           | 
+   | wgEncodeBroadChipSeqPeaksGm12878H4k20me1         | 
+   | wgEncodeBroadChipSeqPeaksHuvecCtcf               | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k27ac            | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k27me3           | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k36me3           | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k4me1            | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k4me2            | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k4me3            | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k9ac             | 
+   | wgEncodeBroadChipSeqPeaksHuvecH3k9me1            | 
+   | wgEncodeBroadChipSeqPeaksHuvecH4k20me1           | 
+   | wgEncodeBroadChipSeqPeaksHuvecPol2b              | 
+   | wgEncodeBroadChipSeqPeaksK562Ctcf                | 
+   | wgEncodeBroadChipSeqPeaksK562H3k27ac             | 
+   | wgEncodeBroadChipSeqPeaksK562H3k27me3            | 
+   | wgEncodeBroadChipSeqPeaksK562H3k36me3            | 
+   | wgEncodeBroadChipSeqPeaksK562H3k4me1             | 
+   | wgEncodeBroadChipSeqPeaksK562H3k4me2             | 
+   | wgEncodeBroadChipSeqPeaksK562H3k4me3             | 
+   | wgEncodeBroadChipSeqPeaksK562H3k9ac              | 
+   | wgEncodeBroadChipSeqPeaksK562H3k9me1             | 
+   | wgEncodeBroadChipSeqPeaksK562H4k20me1            | 
+   | wgEncodeBroadChipSeqPeaksK562Pol2b               | 
+   | wgEncodeBroadChipSeqPeaksNhekCtcf                | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k27ac             | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k27me3            | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k36me3            | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k4me1             | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k4me2             | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k4me3             | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k9ac              | 
+   | wgEncodeBroadChipSeqPeaksNhekH3k9me1             | 
+   | wgEncodeBroadChipSeqPeaksNhekH4k20me1            | 
+   | wgEncodeBroadChipSeqPeaksNhekPol2b               | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878Control  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf     | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3 | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3 | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac   | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1 | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecControl    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf       | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3   | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3   | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1   | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b      | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562Control     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562Ctcf        | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac      | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562Pol2b       | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekControl     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekCtcf        | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac      | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekPol2b       | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878Control  | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf     | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3 | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3 | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3  | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac   | 
+   | wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1 | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecControl    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf       | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3   | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3   | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1   | 
+   | wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b      | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562Control     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562Ctcf        | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac      | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1K562Pol2b       | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekControl     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekCtcf        | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac      | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep1NhekPol2b       | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878Control  | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf     | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac  | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3 | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3 | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1  | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2  | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3  | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac   | 
+   | wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1 | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecControl    | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf       | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac    | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3   | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3   | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2    | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1   | 
+   | wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b      | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562Control     | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562Ctcf        | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2     | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3     | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac      | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep2K562Pol2b       | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekControl     | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekCtcf        | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac     | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3    | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2     | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3     | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac      | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1     | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1    | 
+   | wgEncodeBroadChipSeqRawSignalRep2NhekPol2b       | 
+   | wgEncodeBroadChipSeqSignalGm12878Control         | 
+   | wgEncodeBroadChipSeqSignalGm12878Ctcf            | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k27ac         | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k27me3        | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k36me3        | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k4me1         | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k4me2         | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k4me3         | 
+   | wgEncodeBroadChipSeqSignalGm12878H3k9ac          | 
+   | wgEncodeBroadChipSeqSignalGm12878H4k20me1        | 
+   | wgEncodeBroadChipSeqSignalHuvecControl           | 
+   | wgEncodeBroadChipSeqSignalHuvecCtcf              | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k27ac           | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k27me3          | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k36me3          | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k4me1           | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k4me2           | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k4me3           | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k9ac            | 
+   | wgEncodeBroadChipSeqSignalHuvecH3k9me1           | 
+   | wgEncodeBroadChipSeqSignalHuvecH4k20me1          | 
+   | wgEncodeBroadChipSeqSignalHuvecPol2b             | 
+   | wgEncodeBroadChipSeqSignalK562Control            | 
+   | wgEncodeBroadChipSeqSignalK562Ctcf               | 
+   | wgEncodeBroadChipSeqSignalK562H3k27ac            | 
+   | wgEncodeBroadChipSeqSignalK562H3k27me3           | 
+   | wgEncodeBroadChipSeqSignalK562H3k36me3           | 
+   | wgEncodeBroadChipSeqSignalK562H3k4me1            | 
+   | wgEncodeBroadChipSeqSignalK562H3k4me2            | 
+   | wgEncodeBroadChipSeqSignalK562H3k4me3            | 
+   | wgEncodeBroadChipSeqSignalK562H3k9ac             | 
+   | wgEncodeBroadChipSeqSignalK562H3k9me1            | 
+   | wgEncodeBroadChipSeqSignalK562H4k20me1           | 
+   | wgEncodeBroadChipSeqSignalK562Pol2b              | 
+   | wgEncodeBroadChipSeqSignalNhekControl            | 
+   | wgEncodeBroadChipSeqSignalNhekCtcf               | 
+   | wgEncodeBroadChipSeqSignalNhekH3k27ac            | 
+   | wgEncodeBroadChipSeqSignalNhekH3k27me3           | 
+   | wgEncodeBroadChipSeqSignalNhekH3k36me3           | 
+   | wgEncodeBroadChipSeqSignalNhekH3k4me1            | 
+   | wgEncodeBroadChipSeqSignalNhekH3k4me2            | 
+   | wgEncodeBroadChipSeqSignalNhekH3k4me3            | 
+   | wgEncodeBroadChipSeqSignalNhekH3k9ac             | 
+   | wgEncodeBroadChipSeqSignalNhekH3k9me1            | 
+   | wgEncodeBroadChipSeqSignalNhekH4k20me1           | 
+   | wgEncodeBroadChipSeqSignalNhekPol2b              | 
+   +--------------------------------------------------+
+   180 rows in set (0.10 sec)
+   
+   
+A') Untouched Files:
+    current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/
+   on RR:
+     {...}/goldenPath/encodeDCC/wgEncodeBroadChipSeq/
+   wgEncodeBroadChipSeqPeaksGm12878Ctcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksGm12878H4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecCtcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH3k9me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecH4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHuvecPol2b.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562Ctcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H3k9me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562H4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksK562Pol2b.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekCtcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH3k9me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekH4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhekPol2b.broadPeak.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Gm12878H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecPol2b.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562Pol2b.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekPol2b.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HuvecPol2b.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1K562Pol2b.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhekPol2b.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Gm12878H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH3k9me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HuvecPol2b.fastq.gz
+   wgEncodeBroadChipSeqSignalK562Control.wig.gz
+   wgEncodeBroadChipSeqSignalK562Ctcf.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k27ac.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k27me3.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k36me3.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k4me1.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k4me2.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k4me3.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k9ac.wig.gz
+   wgEncodeBroadChipSeqSignalK562H3k9me1.wig.gz
+   wgEncodeBroadChipSeqSignalK562H4k20me1.wig.gz
+   wgEncodeBroadChipSeqSignalK562Pol2b.wig.gz
+   wgEncodeBroadChipSeqSignalNhekControl.wig.gz
+   wgEncodeBroadChipSeqSignalNhekCtcf.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k27ac.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k27me3.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k36me3.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k4me1.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k4me2.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k4me3.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k9ac.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH3k9me1.wig.gz
+   wgEncodeBroadChipSeqSignalNhekH4k20me1.wig.gz
+   wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
+   (180 files)
+
+B) Eliminated tables (not replaced): none
+
+B') Eliminated files (not replaced): none
+
+C) Replaced Tables: none
+
+C') Replaced Files: none
+
+D) Versioned tables: none
+
+D') Versioned files (what is being replacd in parens):
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878CtcfV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1Gm12878Ctcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27acV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k36me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me2V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k9acV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecControlV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecControl.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecCtcfV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecCtcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k36me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me2V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecH4k20me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1HuvecH4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1HuvecPol2bV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1HuvecPol2b.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562Control.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562CtcfV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562Ctcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k27acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k27me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k36me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k9acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1K562Pol2bV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep1K562Pol2b.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteControlV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteControl.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteCtcfV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteCtcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27acV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k36me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9acV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878Control.tagAlign.)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27ac.tagAlign.)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.	(wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9ac.tagAlign.)
+   wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign		(wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecControl.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcfV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.g		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3.tagAlign.g)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.g		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1.tagAlign.g)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3.tagAlign)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2HuvecPol2bV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2HuvecPol2b.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562Control.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562CtcfV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562Ctcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k27acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k27me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k36me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me2V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me3V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k9acV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H3k9me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H3k9me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562H4k20me1V2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562H4k20me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2K562Pol2bV2.tagAlign.gz		(wgEncodeBroadChipSeqAlignmentsRep2K562Pol2b.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteControlV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteControl.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteCtcfV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteCtcf.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27acV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k36me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k36me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me1.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me2V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me2.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9acV2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9ac.tagAlign.gz)
+   wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1V2.tagAlign.gz	(wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1.tagAlign.gz)
+   (85 files)
+
+E) New Tables
+   +------------------------------------------+
+   | wgEncodeBroadChipSeqPeaksH1hescCtcf      | 
+   | wgEncodeBroadChipSeqPeaksH1hescH3k27me3  | 
+   | wgEncodeBroadChipSeqPeaksH1hescH3k4me1   | 
+   | wgEncodeBroadChipSeqPeaksH1hescH3k4me3   | 
+   | wgEncodeBroadChipSeqPeaksH1hescH4k20me1  | 
+   | wgEncodeBroadChipSeqPeaksHepg2Ctcf       | 
+   | wgEncodeBroadChipSeqPeaksHepg2H3k27ac    | 
+   | wgEncodeBroadChipSeqPeaksHepg2H3k36me3   | 
+   | wgEncodeBroadChipSeqPeaksHepg2H3k4me2    | 
+   | wgEncodeBroadChipSeqPeaksHepg2H3k4me3    | 
+   | wgEncodeBroadChipSeqPeaksHepg2H3k9ac     | 
+   | wgEncodeBroadChipSeqPeaksHepg2H4k20me1   | 
+   | wgEncodeBroadChipSeqPeaksHmecCtcf        | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k27ac     | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k27me3    | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k36me3    | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k4me1     | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k4me2     | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k4me3     | 
+   | wgEncodeBroadChipSeqPeaksHmecH3k9ac      | 
+   | wgEncodeBroadChipSeqPeaksHmecH4k20me1    | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k27ac     | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k27me3    | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k36me3    | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k4me1     | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k4me2     | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k4me3     | 
+   | wgEncodeBroadChipSeqPeaksNhlfH3k9ac      | 
+   | wgEncodeBroadChipSeqPeaksNhlfH4k20me1    | 
+   | wgEncodeBroadChipSeqSignalH1hescControl  | 
+   | wgEncodeBroadChipSeqSignalH1hescCtcf     | 
+   | wgEncodeBroadChipSeqSignalH1hescH3k27me3 | 
+   | wgEncodeBroadChipSeqSignalH1hescH3k4me1  | 
+   | wgEncodeBroadChipSeqSignalH1hescH3k4me3  | 
+   | wgEncodeBroadChipSeqSignalH1hescH4k20me1 | 
+   | wgEncodeBroadChipSeqSignalHepg2Control   | 
+   | wgEncodeBroadChipSeqSignalHepg2Ctcf      | 
+   | wgEncodeBroadChipSeqSignalHepg2H3k27ac   | 
+   | wgEncodeBroadChipSeqSignalHepg2H3k36me3  | 
+   | wgEncodeBroadChipSeqSignalHepg2H3k4me2   | 
+   | wgEncodeBroadChipSeqSignalHepg2H3k4me3   | 
+   | wgEncodeBroadChipSeqSignalHepg2H3k9ac    | 
+   | wgEncodeBroadChipSeqSignalHepg2H4k20me1  | 
+   | wgEncodeBroadChipSeqSignalHmecControl    | 
+   | wgEncodeBroadChipSeqSignalHmecCtcf       | 
+   | wgEncodeBroadChipSeqSignalHmecH3k27ac    | 
+   | wgEncodeBroadChipSeqSignalHmecH3k27me3   | 
+   | wgEncodeBroadChipSeqSignalHmecH3k36me3   | 
+   | wgEncodeBroadChipSeqSignalHmecH3k4me1    | 
+   | wgEncodeBroadChipSeqSignalHmecH3k4me2    | 
+   | wgEncodeBroadChipSeqSignalHmecH3k4me3    | 
+   | wgEncodeBroadChipSeqSignalHmecH3k9ac     | 
+   | wgEncodeBroadChipSeqSignalHmecH4k20me1   | 
+   | wgEncodeBroadChipSeqSignalNhlfControl    | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k27ac    | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k27me3   | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k36me3   | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k4me1    | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k4me2    | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k4me3    | 
+   | wgEncodeBroadChipSeqSignalNhlfH3k9ac     | 
+   | wgEncodeBroadChipSeqSignalNhlfH4k20me1   | 
+   +------------------------------------------+
+   62 rows in set (0.10 sec)
+
+E') New Files 
+   current location on alpha:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeBroadChIPseq/release2/
+   NOT on RR:
+   wgEncodeBroadChipSeqAlignmentsRep1H1hescControl.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1H1hescCtcf.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k27me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1H1hescH4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2Control.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k27ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k36me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k4me2.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1Hepg2H4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecControl.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecCtcf.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k27ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k27me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k36me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me2.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1HmecH4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfControl.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k27ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k27me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k36me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me2.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep1NhlfH4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2H1hescControl.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2H1hescCtcf.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k27me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2H1hescH4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2Control.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k27ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k36me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k4me2.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2Hepg2H4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecControl.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecCtcf.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k27ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k27me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k36me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me2.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2HmecH4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfControl.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k27ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k27me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k36me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me1.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me2.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me3.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k9ac.tagAlign.gz
+   wgEncodeBroadChipSeqAlignmentsRep2NhlfH4k20me1.tagAlign.gz
+   wgEncodeBroadChipSeqPeaksH1hescCtcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksH1hescH3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksH1hescH3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksH1hescH3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksH1hescH4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2Ctcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2H3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2H3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2H3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2H3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2H3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHepg2H4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecCtcf.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksHmecH4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k27ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k27me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k36me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k4me1.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k4me2.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k4me3.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH3k9ac.broadPeak.gz
+   wgEncodeBroadChipSeqPeaksNhlfH4k20me1.broadPeak.gz
+   wgEncodeBroadChipSeqRawDataRep1H1hescControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1H1hescCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1H1hescH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1H1hescH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1Hepg2H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1HmecH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep1NhlfH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2H1hescControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2H1hescCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2H1hescH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2H1hescH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2Control.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2Ctcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2H3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2H3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2H3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2H3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2H3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2Hepg2H4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecCtcf.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfControl.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k27ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k27me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k36me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me1.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me2.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me3.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH3k9ac.fastq.gz
+   wgEncodeBroadChipSeqRawDataRep2NhlfH4k20me1.fastq.gz
+   wgEncodeBroadChipSeqSignalH1hescControl.wig.gz
+   wgEncodeBroadChipSeqSignalH1hescCtcf.wig.gz
+   wgEncodeBroadChipSeqSignalH1hescH3k27me3.wig.gz
+   wgEncodeBroadChipSeqSignalH1hescH3k4me1.wig.gz
+   wgEncodeBroadChipSeqSignalH1hescH3k4me3.wig.gz
+   wgEncodeBroadChipSeqSignalH1hescH4k20me1.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2Control.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2Ctcf.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2H3k27ac.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2H3k36me3.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2H3k4me2.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2H3k4me3.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2H3k9ac.wig.gz
+   wgEncodeBroadChipSeqSignalHepg2H4k20me1.wig.gz
+   wgEncodeBroadChipSeqSignalHmecControl.wig.gz
+   wgEncodeBroadChipSeqSignalHmecCtcf.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k27ac.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k27me3.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k36me3.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k4me1.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k4me2.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k4me3.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH3k9ac.wig.gz
+   wgEncodeBroadChipSeqSignalHmecH4k20me1.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfControl.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k27ac.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k27me3.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k36me3.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k4me1.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k4me2.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k4me3.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH3k9ac.wig.gz
+   wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
+   (194 files)
+
+   
+      
+         
+      
+      
+      
+   
+   
+   
+   
+   
+   
+   
+   
+   
