@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.44 2009/10/13 23:16:22 kent Exp $";
+#	"$Id: hg19.txt,v 1.45 2009/10/14 15:29:11 kent Exp $";
 
 #############################################################################
 
@@ -6548,3 +6548,63 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # rm j*.tmp
 # rm o1.tab o2.tab o3.tab o4.tab
 
+#########################################################################
+# BUILD HPRD DATA FOR KNOWN GENE DETAILS PAGE LINKS (in progress 2009-10-14 jk)
+
+# Make the directory to work in
+   cd /hive/data/genomes/hg19/bed
+   mkdir hprd
+   cd hprd
+
+# Download HPRD_XML_070609.tar.gz from www.hprd.org. Unfortunately this
+# requires registration, so can't just wget it.
+
+    zcat HPRD_XML_070609.tar.gz | tar -xv
+
+# This will create 20000 or more  xxxx.xml files under HPRD_XML_070609
+
+# Create hprdToCdna table
+    echo HPRD_XML_070609/*.xml | xargs grep entry_cdna  > j.cdna
+    cat j.cdna| sed -e 's/\//\t/' | sed -e 's/.xml/\t/' |\
+	sed -e 's/<entry_cdna>/\t/' | sed -e 's/<\//\t/'| sed -e 's/\./\t/'| cut -f 2,4|\
+	grep -v None >hprdToCdna.tab
+
+    hgsql hg19 <~/src/hg/lib/hprdToCdna.sql
+    hgsql hg19 -e 'load data local infile "hprdToCdna.tab" into table hprdToCdna'
+
+# Create hprdToUniProt table
+
+    echo 'fgrep -H Swiss  HPRD_XML_070609/$1.xml' >do1
+
+    ls HPRD_XML_070609 >j
+    cat j |sed -e 's/.xml/\tdo1/g' >jj
+    cut -f 1 jj >j.2
+    cut -f 2 jj >j.1
+    paste j.1 j.2 >doall
+    chmod +x do*
+
+    ./doall >j.out
+    cat j.out|grep SwissProt | sed -e 's/\//\t/' | sed -e 's/.xml/\t/' | \
+    sed -e 's/Prot>/\t/' | sed -e 's/<\//\t/'| cut -f 2,4|grep -v None >hprdToUniProt.tab
+
+    hgsql hg19 <~/src/hg/lib/hprdToUniProt.sql
+    hgsql hg19 -e 'load data local infile "hprdToUniProt.tab" into table hprdToUniProt'
+
+# build knownToHprd table
+
+    hgsql hg19 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=kgId' >j.kg1
+    hgsql hg19 -N -e 'select kgId,hprdId from hprdToUniProt, kgXref where uniProtId=spId' >j.kg2
+
+    cat j.kg1 j.kg2 |sort -u >knownToHprd.tab
+    wc knownToHprd.tab
+
+    hgsql hg19 <~/src/hg/lib/knownToHprd.sql
+
+    hgsql hg19 -e 'load data local infile "knownToHprd.tab" into table knownToHprd'
+    hgsql hg19 -e 'select count(*) from knownToHprd'
+
+# 21,516 records created
+
+# remove temporary files.
+
+    rm j*

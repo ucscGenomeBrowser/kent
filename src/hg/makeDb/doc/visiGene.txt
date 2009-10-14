@@ -229,17 +229,18 @@ make alpha
 
 ############################
 
-# REBUILD WITH NEW vgProbeTrack PROGRAM - AFTER ADDING ALLEN BRAIN (DONE galt 2006-03-15)
+# REBUILD WITH NEW vgProbeTrack PROGRAM - AFTER ADDING ALLEN BRAIN (DONE galt 2009-10-12)
 
 # (make a backup of visiGene db and these tables: {mm6,mm7,...}.vgProbes and {hg17,hg18,...}.vgAllProbes
-cd /san/sanvol1/visiGene/dump
+cd /hive/data/inside/visiGene/dump
 # (this backup shown is really an example template for the next person who needs to do this)
-mkdir visiGene20060315
-cd visiGene20060315
+mkdir visiGene.20060315
+cd visiGene.20060315
 hgsqldump visiGene -T .
 mkdir mm6; hgsqldump mm6 vgProbes -T mm6
 mkdir mm7; hgsqldump mm7 vgProbes -T mm7
 mkdir mm8; hgsqldump mm8 vgProbes -T mm8
+mkdir mm9; hgsqldump mm9 vgProbes -T mm9
 mkdir hg17; hgsqldump hg17 vgAllProbes -T hg17
 mkdir hg18; hgsqldump hg18 vgAllProbes -T hg18
 #(do any others needed that might not be listed here)

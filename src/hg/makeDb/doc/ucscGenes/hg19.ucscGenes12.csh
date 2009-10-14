@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.6 2009/10/03 02:21:19 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.7 2009/10/14 15:29:11 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -548,7 +548,7 @@ txCdsCluster pick.bed pick.cluster
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
 # Map CDS to gene set.  Takes 10 seconds.  Might want to reconsider using
 # txCdsWeed here.
-txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
+txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info 
 txCdsWeed pick.tce pick.info weededCds.tce weededCds.info
 txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
@@ -592,8 +592,7 @@ txGeneAccession $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
 txGeneAddOldUnmapped oldToNewMapped.tab oldUnmapped.tab oldToNew.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
 subColumn 1 weeded.info txToAcc.tab ucscGenes.info
-weedLines weeds.lst pick.picks stdout | subColumn 1 stdin txToAcc.tab ucscGenes.picks
-weedLines weeds.lst pick.nice stdout | subColumn 2 stdin txToAcc.tab ucscGenes.nice
+weedLines weeds.lst pick.picks stdout | subColumn 1 stdin txToAcc.tab ucscBadUniprot.picks
 subColumn 4 coding.bed txToAcc.tab ucscCoding.bed
 subColumn 4 nearCoding.bed txToAcc.tab ucscNearCoding.bed
 subColumn 4 antisense.bed txToAcc.tab ucscAntisense.bed
@@ -606,6 +605,64 @@ cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.t
 # Load these sequences into database. Takes 17 seconds.
 txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
     refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
+
+# Generate ucscGene/uniprot blat run.
+mkdir -p $dir/blat/uniprotVsUcsc
+cd $dir/blat/uniprotVsUcsc
+mkdir raw
+mkdir ucscFaaSplit
+faSplit sequence ../../ucscGenes.faa 100 ucscFaaSplit/uc
+ls -1 ucscFaaSplit/uc*.fa > toDoList
+
+echo '#LOOP' > template
+echo './runBlats $(path1) '"$db"' $(root1) {check out line+ raw/uni_$(root1).psl}' >> template
+echo '#ENDLOOP' >> template
+
+cat << '_EOF_' > runBlats
+#!/bin/csh -ef
+set out1 = uni_$3.psl
+set tmpDir = /scratch/tmp/$2/ucscGenes/uniprotVsUcsc
+set workDir = $tmpDir/$3
+mkdir -p $tmpDir
+mkdir $workDir
+blat -prot -minIdentity=90 $1 ../../uniProt.fa $workDir/$out1
+mv $workDir/$out1 raw/$out1
+rmdir $workDir
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    #	<< happy emacs
+chmod +x runBlats
+
+gensub2 toDoList single template jobList
+
+# Run protein/transcript blat job on cluster
+ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para make jobList"
+ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
+
+cat run.time
+#Completed: 97 of 97 jobs
+#CPU time in finished jobs:       1920s      31.99m     0.53h    0.02d  0.000 y
+#IO & Wait Time:                   314s       5.24m     0.09h    0.00d  0.000 y
+#Average job time:                  23s       0.38m     0.01h    0.00d
+#Longest finished job:             209s       3.48m     0.06h    0.00d
+#Submission to last job:           214s       3.57m     0.06h    0.00d
+
+pslCat raw/*.psl > ../../ucscVsUniprot.psl
+rm -r raw
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
+# Fixup UniProt links in picks file.  This is a little circuitious.  In the future may
+# avoid using the picks file for the protein link, and rely on protein/protein blat
+# to do the assignment.  The current use of the uniProt protein/ucscGenes mrna alignments
+# and the whole trip through evidence and picks files is largely historical from when
+# there was a different CDS selection process.
+cd $dir
+txCdsRedoUniprotPicks ucscBadUniprot.picks ucscVsUniprot.psl uniCurated.tab ucscGenes.picks
 
 # Cluster the coding and the uncoding sets, and make up canonical and
 # isoforms tables. Takes 3 seconds.
@@ -954,9 +1011,6 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 #Longest finished job:            2813s      46.88m     0.78h    0.03d
 #Submission to last job:          6603s     110.05m     1.83h    0.08d
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
-
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cd $dir
 cat << '_EOF_' > makePfamRa.awk
@@ -979,9 +1033,6 @@ cut -f 1,4 ucscPfam.tab | subColumn 2 stdin pfam/sub.tab knownToPfam.tab
 rm -f pfam/sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1157,7 +1208,7 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
 
 # Save old known genes and kgXref tables
 sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kxXrefOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 
 # Create backup database
 hgsqladmin create ${db}Backup
