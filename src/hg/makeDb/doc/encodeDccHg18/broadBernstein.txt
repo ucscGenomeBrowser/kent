@@ -768,3 +768,51 @@ select id,name,status from projects where status = "loaded" and name like "Broad
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 617 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 618 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 619 displayed
+
+2009-10-07 Noam realized the peaks were wrong
+=============================================
+Had him submit them all to 1 new dir.
+Expected and got validation failed because old tables were in the way
+validated the new data only touches unreleased data
+modified daf with "allowReloads"
+revalidated... loaded fine
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 668 displayed
+remodified daf to remove "allowReloads" to avoid future accidents
+
+2009-10-09 Aproval
+==================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 558 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 332 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 559 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 554 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 561 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 562 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 563 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 564 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 565 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 566 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 567 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 568 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 569 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 571 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 570 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 572 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 573 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 574 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 575 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 576 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 577 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 578 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 579 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 580 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 581 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 582 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 583 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 584 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 585 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 586 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 616 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 617 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 618 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 619 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 668 approved

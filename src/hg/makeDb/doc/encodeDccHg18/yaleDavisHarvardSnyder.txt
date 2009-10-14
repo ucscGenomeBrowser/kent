@@ -2364,3 +2364,695 @@ mv wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz old
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 441 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 442 displayed
 
+2009-09-01 A couple more NEW submissions
+========================================
+Added validationSettings to DAF:
+ validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=2
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 460 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 467 displayed
+
+Also split RNA-seq PolyA out to its own composite: wgEncodeYaleRNAseq and located it under Expression group
+
+2009-09-24 Three new submissions for Farnham
+============================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 536 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 537 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 538 displayed
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 539 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 540 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 541 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 542 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 543 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 276 displayed
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 536 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 537 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 538 approved
+
+2009-10-02 Setting up release1 diectory so that release2 push goes okay
+=======================================================================
+# Setting up release1 diectory under downloads directory
+cd {downloadsDir for Yale ChIP}
+mkdir release1
+cd release1
+# Save RR downloads index.html source as file
+# Use it to create master list of downloadable files
+# hard link to them from .., ../old or whereever they are found
+ln ../wgEncodeYaleChIPseqAlignmentsGm12878Input.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsHct116Input.tagAlign.gz  .
+ln ../wgEncodeYaleChIPseqAlignmentsHek293Input.tagAlign.gz  .
+ln ../wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz  .
+ln ../wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsK562Input.tagAlign.gz       .
+ln ../wgEncodeYaleChIPseqAlignmentsNb4Input.tagAlign.gz        .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Gm12878Cfos.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Gm12878Jund.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Gm12878Max.tagAlign.gz  .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Gm12878Pol2.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Hct116Tcf4.tagAlign.gz  .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Hek293Pol2.tagAlign.gz  .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Helas3Largefragment.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Helas3Mnase.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Helas3Mouseigg.tagAlign.gz      .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Helas3Nakeddna.tagAlign.gz      .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Helas3Pol2.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Helas3ifngStat1.tagAlign.gz     .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Hepg2Input.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Hepg2Pol2.tagAlign.gz           .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp1a.tagAlign.gz        .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Hepg2Srebp2.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Cfos.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Cjun.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Gata1.tagAlign.gz           .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Jund.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Max.tagAlign.gz             .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Nfe2.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Pol2.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562Znf263.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep1Nb4Pol2.tagAlign.gz             .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Gm12878Cfos.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Gm12878Jund.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Gm12878Max.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Gm12878Pol2.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Hct116Tcf4.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Hek293Pol2.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Helas3Largefragment.tagAlign.gz .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Helas3Mnase.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Helas3Mouseigg.tagAlign.gz      .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Helas3Nakeddna.tagAlign.gz      .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Helas3Pol2.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Helas3ifngStat1.tagAlign.gz     .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Hepg2Input.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Hepg2Pol2.tagAlign.gz           .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp1a.tagAlign.gz        .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Hepg2Srebp2.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Cfos.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Cjun.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Gata1.tagAlign.gz           .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Jund.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Max.tagAlign.gz             .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Nfe2.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Pol2.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562Znf263.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep2Nb4Pol2.tagAlign.gz             .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Gm12878Cfos.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Hek293Pol2.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Helas3Nakeddna.tagAlign.gz      .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Helas3Pol2.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Hepg2Input.tagAlign.gz          .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Hepg2Pol2.tagAlign.gz           .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp1a.tagAlign.gz        .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Hepg2Srebp2.tagAlign.gz         .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3K562Cfos.tagAlign.gz            .
+ln ../wgEncodeYaleChIPseqAlignmentsRep3Nb4Pol2.tagAlign.gz             .
+ln ../wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz                .
+ln ../wgEncodeYaleChIPseqPeaksGm12878Jund.narrowPeak.gz                .
+ln ../wgEncodeYaleChIPseqPeaksGm12878Max.narrowPeak.gz                 .
+ln ../wgEncodeYaleChIPseqPeaksGm12878Pol2.narrowPeak.gz                .
+ln ../wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz                 .
+ln ../wgEncodeYaleChIPseqPeaksHek293Pol2.narrowPeak.gz                 .
+ln ../wgEncodeYaleChIPseqPeaksHelas3Largefragment.narrowPeak.gz        .
+ln ../wgEncodeYaleChIPseqPeaksHelas3Mouseigg.narrowPeak.gz             .
+ln ../wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz                 .
+ln ../wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz            .
+ln ../wgEncodeYaleChIPseqPeaksHepg2Pol2.narrowPeak.gz                  .
+ln ../wgEncodeYaleChIPseqPeaksHepg2Srebp1a.narrowPeak.gz               .
+ln ../wgEncodeYaleChIPseqPeaksHepg2Srebp2.narrowPeak.gz                .
+ln ../wgEncodeYaleChIPseqPeaksK562Cfos.narrowPeak.gz                   .
+ln ../wgEncodeYaleChIPseqPeaksK562Cjun.narrowPeak.gz                   .
+ln ../wgEncodeYaleChIPseqPeaksK562Cmyc.narrowPeak.gz                   .
+ln ../wgEncodeYaleChIPseqPeaksK562Gata1.narrowPeak.gz                  .
+ln ../wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz                   .
+ln ../wgEncodeYaleChIPseqPeaksK562Max.narrowPeak.gz                    .
+ln ../wgEncodeYaleChIPseqPeaksK562Nfe2.narrowPeak.gz                   .
+ln ../wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz                   .
+ln ../wgEncodeYaleChIPseqPeaksK562Znf263.narrowPeak.gz                 .
+ln ../wgEncodeYaleChIPseqPeaksNb4Pol2.narrowPeak.gz                    .
+ln ../wgEncodeYaleChIPseqRawDataGm12878Input.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataHct116Input.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataHek293Input.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataHelas3Input.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataK562Input.fastq.gz                     .
+ln ../wgEncodeYaleChIPseqRawDataNb4Input.fastq.gz                      .
+ln ../wgEncodeYaleChIPseqRawDataRep1Gm12878Cfos.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep1Gm12878Jund.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep1Gm12878Max.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep1Gm12878Pol2.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep1Hct116Tcf4.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep1Hek293Pol2.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep1Helas3Largefragment.fastq.gz       .
+ln ../wgEncodeYaleChIPseqRawDataRep1Helas3Mnase.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep1Helas3Mouseigg.fastq.gz            .
+ln ../wgEncodeYaleChIPseqRawDataRep1Helas3Nakeddna.fastq.gz            .
+ln ../wgEncodeYaleChIPseqRawDataRep1Helas3Pol2.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz           .
+ln ../wgEncodeYaleChIPseqRawDataRep1Hepg2Input.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep1Hepg2Pol2.fastq.gz                 .
+ln ../wgEncodeYaleChIPseqRawDataRep1Hepg2Srebp1a.fastq.gz              .
+ln ../wgEncodeYaleChIPseqRawDataRep1Hepg2Srebp2.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Cfos.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Cjun.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Cmyc.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Gata1.fastq.gz                 .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Jund.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Max.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Nfe2.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Pol2.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep1K562Znf263.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep1Nb4Pol2.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataRep2Gm12878Cfos.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep2Gm12878Jund.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep2Gm12878Max.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep2Gm12878Pol2.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep2Hct116Tcf4.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep2Hek293Pol2.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep2Helas3Largefragment.fastq.gz       .
+ln ../wgEncodeYaleChIPseqRawDataRep2Helas3Mnase.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep2Helas3Mouseigg.fastq.gz            .
+ln ../wgEncodeYaleChIPseqRawDataRep2Helas3Nakeddna.fastq.gz            .
+ln ../wgEncodeYaleChIPseqRawDataRep2Helas3Pol2.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz           .
+ln ../wgEncodeYaleChIPseqRawDataRep2Hepg2Input.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep2Hepg2Pol2.fastq.gz                 .
+ln ../wgEncodeYaleChIPseqRawDataRep2Hepg2Srebp1a.fastq.gz              .
+ln ../wgEncodeYaleChIPseqRawDataRep2Hepg2Srebp2.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Cfos.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Cjun.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Cmyc.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Gata1.fastq.gz                 .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Jund.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Max.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Nfe2.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Pol2.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep2K562Znf263.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep2Nb4Pol2.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqRawDataRep3Gm12878Cfos.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep3Hek293Pol2.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep3Helas3Nakeddna.fastq.gz            .
+ln ../wgEncodeYaleChIPseqRawDataRep3Helas3Pol2.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep3Hepg2Input.fastq.gz                .
+ln ../wgEncodeYaleChIPseqRawDataRep3Hepg2Pol2.fastq.gz                 .
+ln ../wgEncodeYaleChIPseqRawDataRep3Hepg2Srebp1a.fastq.gz              .
+ln ../wgEncodeYaleChIPseqRawDataRep3Hepg2Srebp2.fastq.gz               .
+ln ../wgEncodeYaleChIPseqRawDataRep3K562Cfos.fastq.gz                  .
+ln ../wgEncodeYaleChIPseqRawDataRep3Nb4Pol2.fastq.gz                   .
+ln ../wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz                      .
+ln ../wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz             .
+ln ../wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz                      .
+ln ../wgEncodeYaleChIPseqSignalGm12878Max.wig.gz                       .
+ln ../wgEncodeYaleChIPseqSignalGm12878Pol2.wig.gz                      .
+ln ../wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz              .
+ln ../wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz                       .
+ln ../wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz              .
+ln ../wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz                       .
+ln ../wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz              .
+ln ../wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz              .
+ln ../wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz                      .
+ln ../wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz                   .
+ln ../wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz                   .
+ln ../wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz                       .
+ln ../wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz          .
+ln ../wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz                  .
+ln ../wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz               .
+ln ../wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz                        .
+ln ../wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz                     .
+ln ../wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz                      .
+ln ../wgEncodeYaleChIPseqSignalK562Cfos.wig.gz                         .
+ln ../wgEncodeYaleChIPseqSignalK562Cjun.wig.gz                         .
+ln ../wgEncodeYaleChIPseqSignalK562Cmyc.wig.gz                         .
+ln ../wgEncodeYaleChIPseqSignalK562Gata1.wig.gz                        .
+ln ../wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz                .
+ln ../wgEncodeYaleChIPseqSignalK562Jund.wig.gz                         .
+ln ../wgEncodeYaleChIPseqSignalK562Max.wig.gz                          .
+ln ../wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz                         .
+ln ../wgEncodeYaleChIPseqSignalK562Pol2.wig.gz                         .
+ln ../wgEncodeYaleChIPseqSignalK562Znf263.wig.gz                       .
+ln ../wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz                 .
+ln ../wgEncodeYaleChIPseqSignalNb4Pol2.wig.gz                          .
+ln ../wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz                .
+ln ../wgEncodeYaleRnaSeqPolyaRawDataK562.fastq.gz                      .
+ln ../wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz                   .
+
+# Some misses so:
+mv ../old/wgEncodeYaleChIPseqPeaksGm12878Cfos.narrowPeak.gz .
+mv ../old/wgEncodeYaleChIPseqPeaksGm12878Jund.narrowPeak.gz .
+mv ../old/wgEncodeYaleChIPseqPeaksGm12878Max.narrowPeak.gz  .
+mv ../old/wgEncodeYaleChIPseqPeaksGm12878Pol2.narrowPeak.gz .
+mv ../old/wgEncodeYaleChIPseqPeaksHct116Tcf4.narrowPeak.gz  .
+mv ../old/wgEncodeYaleChIPseqPeaksHek293Pol2.narrowPeak.gz  .
+mv ../old/wgEncodeYaleChIPseqPeaksHelas3Pol2.narrowPeak.gz  .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Cfos.narrowPeak.gz    .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Cjun.narrowPeak.gz    .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Cmyc.narrowPeak.gz    .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Gata1.narrowPeak.gz   .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Jund.narrowPeak.gz    .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Max.narrowPeak.gz     .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Nfe2.narrowPeak.gz    .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Pol2.narrowPeak.gz    .
+mv ../old/wgEncodeYaleChIPseqPeaksK562Znf263.narrowPeak.gz  .
+mv ../old/wgEncodeYaleChIPseqPeaksNb4Pol2.narrowPeak.gz     .
+mv ../old/wgEncodeYaleChIPseqSignalGm12878Cfos.wig.gz       .
+mv ../old/wgEncodeYaleChIPseqSignalGm12878Jund.wig.gz       .
+mv ../old/wgEncodeYaleChIPseqSignalGm12878Max.wig.gz        .
+mv ../old/wgEncodeYaleChIPseqSignalGm12878Pol2.wig.gz       .
+mv ../old/wgEncodeYaleChIPseqSignalHct116Tcf4.wig.gz        .
+mv ../old/wgEncodeYaleChIPseqSignalHek293Pol2.wig.gz        .
+mv ../old/wgEncodeYaleChIPseqSignalHelas3Largefragment.wig.gz .
+mv ../old/wgEncodeYaleChIPseqSignalHelas3Mnase.wig.gz         .
+mv ../old/wgEncodeYaleChIPseqSignalHelas3Mouseigg.wig.gz      .
+mv ../old/wgEncodeYaleChIPseqSignalHelas3Nakeddna.wig.gz      .
+mv ../old/wgEncodeYaleChIPseqSignalHelas3Pol2.wig.gz          .
+mv ../old/wgEncodeYaleChIPseqSignalHelas3ifngStat1.wig.gz     .
+mv ../old/wgEncodeYaleChIPseqSignalHepg2Pol2.wig.gz           .
+mv ../old/wgEncodeYaleChIPseqSignalHepg2Srebp1a.wig.gz        .
+mv ../old/wgEncodeYaleChIPseqSignalHepg2Srebp2.wig.gz         .
+mv ../old/wgEncodeYaleChIPseqSignalK562Cfos.wig.gz            .
+mv ../old/wgEncodeYaleChIPseqSignalK562Cjun.wig.gz            .
+mv ../old/wgEncodeYaleChIPseqSignalK562Cmyc.wig.gz            .
+mv ../old/wgEncodeYaleChIPseqSignalK562Gata1.wig.gz           .
+mv ../old/wgEncodeYaleChIPseqSignalK562Jund.wig.gz            .
+mv ../old/wgEncodeYaleChIPseqSignalK562Max.wig.gz             .
+mv ../old/wgEncodeYaleChIPseqSignalK562Nfe2.wig.gz            .
+mv ../old/wgEncodeYaleChIPseqSignalK562Pol2.wig.gz            .
+mv ../old/wgEncodeYaleChIPseqSignalK562Znf263.wig.gz          .
+mv ../old/wgEncodeYaleChIPseqSignalNb4Pol2.wig.gz             .
+
+# PolyA is a special case
+ls ../../wgEncodeYaleRNAseq/wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz
+ls ../../wgEncodeYaleRNAseq/wgEncodeYaleRnaSeqPolyaRawDataK562.fastq.gz
+ls ../../wgEncodeYaleRNAseq/wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
+ln ../../wgEncodeYaleRNAseq/wgEncodeYaleRnaSeqPolyaAlignmentsK562.tagAlign.gz .
+ln ../../wgEncodeYaleRNAseq/wgEncodeYaleRnaSeqPolyaRawDataK562.fastq.gz       .
+ln ../../wgEncodeYaleRNAseq/wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz    .
+
+
+# Still some misses so investigate
+ls ../wgEncodeYaleChIPseqRel2SignalGm12878Input.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqRel2SignalHct116Input.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqRel2SignalHepg2Input.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqSignalRep1K562InputV2.bedGraph4.gz
+ls ../wgEncodeYaleChIPseqRel2SignalNb4Input.bedGraph4.gz
+
+ln ../wgEncodeYaleChIPseqRel2SignalGm12878Input.bedGraph4.gz     wgEncodeYaleChIPseqSignalGm12878InputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqRel2SignalHct116Input.bedGraph4.gz      wgEncodeYaleChIPseqSignalHct116InputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqRel2SignalHek293Input.bedGraph4.gz      wgEncodeYaleChIPseqSignalHek293InputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz      wgEncodeYaleChIPseqSignalHelas3InputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz  wgEncodeYaleChIPseqSignalHelas3ifngInputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqRel2SignalHepg2Input.bedGraph4.gz       wgEncodeYaleChIPseqSignalHepg2InputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqSignalRep1K562InputV2.bedGraph4.gz      wgEncodeYaleChIPseqSignalK562InputBg.bedGraph4.gz
+ln ../wgEncodeYaleChIPseqRel2SignalNb4Input.bedGraph4.gz         wgEncodeYaleChIPseqSignalNb4InputBg.bedGraph4.gz
+
+# Still some misses so investigate more
+ls ../wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz
+ls ../wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263.tagAlign.gz
+ls ../wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz
+ls ../wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263.tagAlign.gz
+ls ../wgEncodeYaleChIPseqRawDataRep1K562bGata1.fastq.gz
+ls ../wgEncodeYaleChIPseqRawDataRep1K562bZnf263.fastq.gz
+ls ../wgEncodeYaleChIPseqRawDataRep2K562bGata1.fastq.gz
+ls ../wgEncodeYaleChIPseqRawDataRep2K562bZnf263.fastq.gz
+
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562bGata1.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep1K562Gata1.tagAlign.gz
+ln ../wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep1K562Znf263.tagAlign.gz
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562bGata1.tagAlign.gz  wgEncodeYaleChIPseqAlignmentsRep2K562Gata1.tagAlign.gz
+ln ../wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263.tagAlign.gz wgEncodeYaleChIPseqAlignmentsRep2K562Znf263.tagAlign.gz
+ln ../wgEncodeYaleChIPseqRawDataRep1K562bGata1.fastq.gz        wgEncodeYaleChIPseqRawDataRep1K562Gata1.fastq.gz
+ln ../wgEncodeYaleChIPseqRawDataRep1K562bZnf263.fastq.gz       wgEncodeYaleChIPseqRawDataRep1K562Znf263.fastq.gz
+ln ../wgEncodeYaleChIPseqRawDataRep2K562bGata1.fastq.gz        wgEncodeYaleChIPseqRawDataRep2K562Gata1.fastq.gz
+ln ../wgEncodeYaleChIPseqRawDataRep2K562bZnf263.fastq.gz       wgEncodeYaleChIPseqRawDataRep2K562Znf263.fastq.gz
+
+# All done
+
+2009-10-02 Finishing up Sept 2009 freeze dirs
+=============================================
+| 553 | YDH_HeLa-S3_HA                     | loaded          | 
+| 587 | YDH_HeLa-S3_E2F4                   | loaded          | 
+| 614 | YDH_K562_NFYA                      | loaded          | 
+| 615 | YDH_K562_NFYB                      | loaded          | 
+| 620 | YDH_GM12878_NFKB                   | loaded          | 
+| 633 | YDH_tagAlign_update_v2             | validate failed | 
+| 634 | YDH_tagAlign_update                | validate failed | 
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 553 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 587 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 614 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 615 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 620 displayed
+
+2009-10-07 Addressing chrom overrun issues raised by Ann
+========================================================
+select * from wgEncodeYaleChIPseqPeaksHelas3Pol2V2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;  
+chrM  |       7691 |    16659 
+# Circlular chrM again!!!
+select count(*) from wgEncodeYaleChIPseqPeaksHelas3Pol2V2 where chrom = "chrM" and chromEnd = 16659;|        1
+delete from wgEncodeYaleChIPseqPeaksHelas3Pol2V2 where chrom = "chrM" and chromEnd = 16659;
+Query OK, 1 row affected (0.00 sec)
+cd {downloads}/release2
+zcat wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz | grep chrM | grep 16659
+chrM    7691    16659   .       1000    .       -0.30729        231.30394       233.5181        8474
+zcat wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz | grep -v chrM > wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak
+zcat wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz | grep chrM | grep -v 16659 >> wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak   
+mv wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz tmp.wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+gzip wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak   
+ll wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+-rw-rw-r-- 1 tdreszer protein 365615 Oct  7 10:38 wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+ll tmp.wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+-rw-rw-r-- 2 qateam protein 365615 Jun 30 09:48 tmp.wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+cd ..
+rm wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+ln release2/wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz .
+ll wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+-rw-rw-r-- 2 tdreszer protein 365615 Oct  7 10:38 wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+rm release2/tmp.wgEncodeYaleChIPseqPeaksHelas3Pol2V2.narrowPeak.gz
+
+select y.chrom,y.chromStart,y.chromEnd from wgEncodeYaleChIPseqRel2SignalGm12878Input y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr18 |   76117088 | 76117288 |
+select y.chrom,y.chromStart,y.chromEnd from wgEncodeYaleChIPseqRel2SignalHct116Input y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374689 | 135374848 | 
+| chr15 |  100338745 | 100338933 | 
+select y.chrom,y.chromStart,y.chromEnd from wgEncodeYaleChIPseqRel2SignalHek293Input y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr21 |   46944293 |  46944346 | 
+| chr7  |  158821373 | 158821462 | 
+select y.chrom,y.chromStart,y.chromEnd from wgEncodeYaleChIPseqRel2SignalHelas3ifngInput y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr21 |   46944205 | 46944345 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqRel2SignalHepg2Input y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr15 |  100338748 | 100338948 | 100338915 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3LargefragmentV2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374603 | 135374803 | 135374737 | 
+| chr18 |   76117011 |  76117211 |  76117153 | 
+| chr21 |   46944168 |  46944341 |  46944323 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3MnaseV2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr21 |   46944292 | 46944378 | 46944323 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3MouseiggV2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr7  |  158821295 | 158821493 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3NakeddnaV2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr18 |   76116971 | 76117171 | 76117153 | 
+| chr21 |   46944298 | 46944346 | 46944323 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3ifngStat1V2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374635 | 135374801 | 135374737 | 
+| chr21 |   46944272 |  46944358 |  46944323 | 
+| chr7  |  158821403 | 158821504 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHepg2Pol2V2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374659 | 135374859 | 135374737 | 
+| chr21 |   46944180 |  46944350 |  46944323 | 
+| chr7  |  158821338 | 158821458 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHepg2Srebp2V2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr15 |  100338749 | 100338949 | 100338915 | 
+| chr21 |   46944293 |  46944365 |  46944323 | 
+| chr7  |  158821363 | 158821465 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalRep1K562InputV2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374725 | 135374834 | 135374737 | 
+| chr18 |   76117110 |  76117170 |  76117153 | 
+| chr21 |   46944309 |  46944357 |  46944323 | 
+| chr8  |  146274642 | 146274842 | 146274826 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3Ap2gamma y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr18 |   76117110 | 76117310 | 76117153 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3Tr4 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374719 | 135374830 | 135374737 | 
+| chr18 |   76117014 |  76117167 |  76117153 | 
+| chr21 |   46944290 |  46944373 |  46944323 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Bdp1 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374658 | 135374858 | 135374737 | 
+| chr7  |  158821339 | 158821512 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Brf1 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374636 | 135374836 | 135374737 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Rpc155 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374686 | 135374806 | 135374737 | 
+| chr18 |   76116997 |  76117197 |  76117153 |
+| chr20 |   62435792 |  62435992 |  62435964 | 
+| chr21 |   46944315 |  46944364 |  46944323 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Sirt6 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr15 |  100338808 | 100338936 | 100338915 | 
+| chr21 |   46944311 |  46944343 |  46944323 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562bGata2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374699 | 135374798 | 135374737 | 
+| chr18 |   76117107 |  76117278 |  76117153 | 
+| chr21 |   46944184 |  46944384 |  46944323 | 
+| chr7  |  158821407 | 158821445 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562bTr4 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374727 | 135374855 | 135374737 | 
+| chr15 |  100338814 | 100338925 | 100338915 | 
+| chr8  |  146274629 | 146274829 | 146274826 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562bYy1 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374719 | 135374848 | 135374737 | 
+| chr18 |   76117069 |  76117159 |  76117153 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalNt2d1Suz12 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374657 | 135374857 | 135374737 | 
+| chr7  |  158821351 | 158821502 | 158821424 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalNt2d1Yy1 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr7  |  158821340 | 158821487 | 158821424 | 
+
+
+delete from wgEncodeYaleChIPseqRel2SignalGm12878Input where chrom = "chr18" and chromEnd = 76117288;
+delete from wgEncodeYaleChIPseqRel2SignalHct116Input where chrom = "chr10" and chromEnd = 135374848;
+delete from wgEncodeYaleChIPseqRel2SignalHct116Input where chrom = "chr15" and chromEnd = 100338933;
+delete from wgEncodeYaleChIPseqRel2SignalHek293Input where chrom = "chr21" and chromEnd = 46944346;
+delete from wgEncodeYaleChIPseqRel2SignalHek293Input where chrom = "chr7" and chromEnd = 158821462;
+
+delete from wgEncodeYaleChIPseqRel2SignalHelas3ifngInput where chrom = "chr21" and chromEnd = 46944345;
+delete from wgEncodeYaleChIPseqRel2SignalHepg2Input where chrom = "chr15" and chromEnd > 100338915;
+delete from wgEncodeYaleChIPseqSignalHelas3LargefragmentV2 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalHelas3LargefragmentV2 where chrom = "chr18" and chromEnd >  76117153;
+delete from wgEncodeYaleChIPseqSignalHelas3LargefragmentV2 where chrom = "chr21" and chromEnd >  46944323;
+delete from wgEncodeYaleChIPseqSignalHelas3MnaseV2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalHelas3MouseiggV2 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalHelas3NakeddnaV2 where chrom = "chr18" and chromEnd > 76117153;
+delete from wgEncodeYaleChIPseqSignalHelas3NakeddnaV2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalHelas3ifngStat1V2 where chrom = "chr10" and chromEnd > 135374737;
+
+delete from wgEncodeYaleChIPseqSignalHelas3ifngStat1V2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalHelas3ifngStat1V2 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalHepg2Pol2V2 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalHepg2Pol2V2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalHepg2Pol2V2 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalHepg2Srebp2V2 where chrom = "chr15" and chromEnd > 100338915;
+delete from wgEncodeYaleChIPseqSignalHepg2Srebp2V2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalHepg2Srebp2V2 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalRep1K562InputV2 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalRep1K562InputV2 where chrom = "chr18" and chromEnd > 76117153;
+delete from wgEncodeYaleChIPseqSignalRep1K562InputV2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalRep1K562InputV2 where chrom = "chr8" and chromEnd > 146274826;
+delete from wgEncodeYaleChIPseqSignalHelas3Ap2gamma where chrom = "chr18" and chromEnd > 76117153;
+delete from wgEncodeYaleChIPseqSignalHelas3Tr4 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalHelas3Tr4 where chrom = "chr18" and chromEnd > 76117153;
+
+delete from wgEncodeYaleChIPseqSignalHelas3Tr4 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalK562Bdp1 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalK562Bdp1 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalK562Brf1 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalK562Rpc155 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalK562Rpc155 where chrom = "chr18" and chromEnd > 76117153;
+delete from wgEncodeYaleChIPseqSignalK562Rpc155 where chrom = "chr20" and chromEnd > 62435964;
+delete from wgEncodeYaleChIPseqSignalK562Rpc155 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalK562Sirt6 where chrom = "chr15" and chromEnd > 100338915;
+delete from wgEncodeYaleChIPseqSignalK562Sirt6 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalK562bGata2 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalK562bGata2 where chrom = "chr18" and chromEnd > 76117153;
+delete from wgEncodeYaleChIPseqSignalK562bGata2 where chrom = "chr21" and chromEnd > 46944323;
+delete from wgEncodeYaleChIPseqSignalK562bGata2 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalK562bTr4 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalK562bTr4 where chrom = "chr15" and chromEnd > 100338915;
+delete from wgEncodeYaleChIPseqSignalK562bTr4 where chrom = "chr8" and chromEnd > 146274826;
+delete from wgEncodeYaleChIPseqSignalK562bYy1 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalK562bYy1 where chrom = "chr18" and chromEnd > 76117153;
+delete from wgEncodeYaleChIPseqSignalNt2d1Suz12 where chrom = "chr10" and chromEnd > 135374737;
+delete from wgEncodeYaleChIPseqSignalNt2d1Suz12 where chrom = "chr7" and chromEnd > 158821424;
+delete from wgEncodeYaleChIPseqSignalNt2d1Yy1 where chrom = "chr7" and chromEnd > 158821424;
+
+# Note: should have updated those rows to end at chrom size.  Oh well, that is not a big problem as we are talking extreme telemere here.
+
+# additional ones:
+hg18.wgEncodeYaleChIPseqRel2SignalHelas3Input has 2 records with end > chromSize.
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqRel2SignalHelas3Input y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr18 |   76117124 | 76117324 | 76117153 | 
+| chr21 |   46944169 | 46944343 | 46944323 |
+update wgEncodeYaleChIPseqRel2SignalHelas3Input set chromEnd = 76117153 where chrom = "chr18" and chromEnd > 76117153;
+update wgEncodeYaleChIPseqRel2SignalHelas3Input set chromEnd = 46944323 where chrom = "chr21" and chromEnd > 46944323;
+
+hg18.wgEncodeYaleChIPseqSignalGm12878NfkbTnfa has 4 records with end > chromSize.
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalGm12878NfkbTnfa y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374723 | 135374857 | 135374737 | 
+| chr15 |  100338748 | 100338948 | 100338915 | 
+| chr18 |   76117093 |  76117291 |  76117153 | 
+| chr20 |   62435767 |  62435967 |  62435964 | 
+update wgEncodeYaleChIPseqSignalGm12878NfkbTnfa set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalGm12878NfkbTnfa set chromEnd = 100338915 where chrom = "chr15" and chromEnd > 100338915;
+update wgEncodeYaleChIPseqSignalGm12878NfkbTnfa set chromEnd = 76117153  where chrom = "chr18" and chromEnd > 76117153;
+update wgEncodeYaleChIPseqSignalGm12878NfkbTnfa set chromEnd = 62435964  where chrom = "chr20" and chromEnd > 62435964;
+
+hg18.wgEncodeYaleChIPseqSignalHelas3E2f4 has 4 records with end > chromSize.
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3E2f4 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374630 | 135374830 | 135374737 | 
+| chr18 |   76117005 |  76117160 |  76117153 | 
+| chr21 |   46944197 |  46944335 |  46944323 | 
+| chr7  |  158821414 | 158821471 | 158821424 | 
+update wgEncodeYaleChIPseqSignalHelas3E2f4 set chromEnd = 158821424 where chrom = "chr7"  and chromEnd > 158821424;
+update wgEncodeYaleChIPseqSignalHelas3E2f4 set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalHelas3E2f4 set chromEnd = 76117153  where chrom = "chr18" and chromEnd > 76117153;
+update wgEncodeYaleChIPseqSignalHelas3E2f4 set chromEnd = 46944323  where chrom = "chr21" and chromEnd > 46944323;
+hg18.wgEncodeYaleChIPseqSignalHelas3Ha has 3 records with end > chromSize.
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3Ha y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374662 | 135374833 | 135374737 | 
+| chr18 |   76117082 |  76117282 |  76117153 | 
+| chr7  |  158821417 | 158821447 | 158821424 | 
+update wgEncodeYaleChIPseqSignalHelas3Ha set chromEnd = 158821424 where chrom = "chr7"  and chromEnd > 158821424;
+update wgEncodeYaleChIPseqSignalHelas3Ha set chromEnd = 135374737 where chrom = "chr10" and chromEnd > 135374737;
+update wgEncodeYaleChIPseqSignalHelas3Ha set chromEnd = 76117153  where chrom = "chr18" and chromEnd > 76117153;
+
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Nfyb y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr7  |  158821281 | 158821466 | 158821424 | 
+update wgEncodeYaleChIPseqSignalK562Nfyb set chromEnd = 158821424 where chrom = "chr7"  and chromEnd > 158821424;
+
+2009-10-13 Past due update status
+=================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 276 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 279 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 315 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 316 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 317 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 318 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 319 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 320 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 323 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 324 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 329 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 330 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 331 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 333 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 334 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 335 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 343 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 346 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 347 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 348 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 349 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 351 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 354 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 358 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 359 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 360 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 361 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 362 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 363 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 364 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 365 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 366 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 367 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 368 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 369 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 370 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 371 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 372 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 373 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 374 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 377 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 380 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 383 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 384 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 385 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 386 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 390 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 404 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 405 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 439 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 440 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 441 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 442 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 460 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 467 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 539 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 540 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 541 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 542 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 543 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 553 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 587 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 614 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 615 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 620 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 276 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 279 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 315 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 316 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 317 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 318 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 319 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 320 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 323 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 324 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 329 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 330 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 331 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 333 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 334 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 335 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 343 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 346 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 347 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 348 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 349 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 351 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 354 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 358 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 359 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 360 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 361 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 362 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 363 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 364 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 365 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 366 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 367 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 368 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 369 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 370 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 371 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 372 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 373 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 374 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 377 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 380 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 383 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 384 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 385 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 386 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 390 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 404 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 405 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 439 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 440 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 441 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 442 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 460 reviewing
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 467 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 536 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 537 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 538 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 539 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 540 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 541 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 542 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 543 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 553 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 587 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 614 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 615 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 620 reviewing
+
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 539 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 540 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 541 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 542 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl -force 543 displayed
