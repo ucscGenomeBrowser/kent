@@ -90,8 +90,10 @@
 #include "alignInfo.h"
 #include "loweutils.h"
 #include "cddDesc.h"
+#include "arCOGs.h"
+#include "arcogdesc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.38 2009/10/14 07:08:13 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.39 2009/10/14 20:26:28 holmes Exp $";
 
 extern char *uniprotFormat;
 
@@ -371,7 +373,41 @@ if (hTableExists(database, "COG"))
             }
          }
      }
+            sqlFreeResult(&sr);
+            //hFreeConn(&conn2);
     }
+if (hTableExists(database, "arCOGs"))
+{
+    struct arCOGs *infoload = NULL;
+    struct arcogdesc *description = NULL;
+    int rowOffset = hOffsetPastBin(database, seqName, "arCOGs");
+    //infoload = arCOGsLoad(row);
+
+    row = NULL;
+    sprintf(query, "select * from arCOGs where gene = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    conn2 = hAllocConn(database);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        infoload = arCOGsLoad(row+rowOffset);
+        if(infoload!=NULL)
+        {
+            sprintf(query2, "select * from mgCommonDb.arcogdesc where name = '%s'",infoload->name );
+            sr2 = sqlGetResult(conn2, query2);
+            while ((row2 = sqlNextRow(sr2)) != NULL)
+            {
+                description=arcogdescLoad(row2);
+                if(description!=NULL)
+                {
+                    printf("<B>arCOG:</B> %s Code %s",infoload->name, description->code);
+                    printf("  %s<BR/><BR/>\n", description->description);
+                }
+            }
+            sqlFreeResult(&sr2);
+            hFreeConn(&conn2);
+         }
+     }
+}
 /* interpro domains */
 list = spExtDbAcc1List(spConn, spAcc, "InterPro");
 if (list != NULL)
@@ -2912,6 +2948,68 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
 
   hFreeConn(&conn);
 }
+
+void doarCOGs(struct trackDb *tdb, char *itemName)
+{
+  char *track = tdb->tableName;
+  char query[512];
+  struct sqlConnection *conn = hAllocConn(database);
+  struct sqlResult *sr;
+  char *dupe, *words[16];
+  char **row;
+  int wordCount;
+  int rowOffset;
+  struct arCOGs *infoload;
+  int start = cartInt(cart, "o");
+  int end = cartInt(cart, "t");
+
+
+    sprintf(query, "select * from mgCommonDb.arcogdesc where name = '%s'", itemName);
+    //sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
+    struct sqlResult *srarcogdesc = sqlGetResult(conn, query);
+
+
+    struct arcogdesc *description = NULL;
+    while ((row = sqlNextRow(srarcogdesc)) != NULL)
+    {
+        struct arcogdesc *element;
+        element = arcogdescLoad(row);
+        slAddTail(&description, element);
+    }
+    sqlFreeResult(&srarcogdesc);
+
+
+  genericHeader(tdb,itemName);
+  dupe = cloneString(tdb->type);
+  wordCount = chopLine(dupe, words);
+
+  rowOffset = hOffsetPastBin(database,seqName, track);
+
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
+    {
+        infoload = arCOGsLoad(row+rowOffset);
+    printf("<B>Name:</B> %s<BR>\n", infoload->name);
+    printf("<B>Description:</B> %s<BR>\n", description->description);
+    printf("<B>Code:</B> %s<BR>\n", description->code);
+    printf("<B>Gene:</B> %s<BR>\n", infoload->gene);
+
+          printf("<B>Position:</B> "
+                 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                 hgTracksPathAndSettings(), database, infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
+          printf("%s:%d-%d</A><BR>\n", infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
+          printf("<B>Strand:</B> %s<BR>\n", infoload->strand);
+          printf("<B>Genomic size: </B> %d nt<BR>\n", (infoload->chromEnd - infoload->chromStart));
+          if (infoload->next != NULL)
+            printf("<hr>\n");
+    }
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  arCOGsFree(&infoload);
+  printTrackHtml(tdb);
+}
+
 void doCddInfo(struct trackDb *tdb, char *itemName)
 {
   char *track = tdb->tableName;
@@ -3129,6 +3227,10 @@ else if (sameWord(track,"cddInfo"))
 else if (sameWord(track,"alignInfo"))
   {
     doAlignInfo(tdb, item);
+  }
+else if (sameWord(track,"arCOGs"))
+  {
+    doarCOGs(tdb, item);
   }
 else
     return FALSE;
