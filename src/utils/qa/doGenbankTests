@@ -107,9 +107,12 @@ do
   tableExists $db $table && getShortLabel $db $table
 done
 # intronEst is a special case; it may exist only in split form
-if ! tableExists $db intronEst # table is split, but not in trackDb
+if ! tableExists $db intronEst # table is split, but not in trackDb (or not there)
 then
-  getShortLabel $db intronEst
+  if [ -n "$intronEstTables" ] # split tables exist
+  then
+    getShortLabel $db intronEst
+  fi
 fi
 echo
 
