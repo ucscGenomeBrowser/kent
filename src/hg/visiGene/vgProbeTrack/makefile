@@ -13,6 +13,7 @@ vgProbeTrack: $O ${MYLIBS}
 autoSql:
 	autoSql vgPrb.as vgPrb -dbLink
 	sed -i -e 's/    id int not null/    id int auto_increment not null/' vgPrb.sql
+	sed -i -e 's/seq longblob/seq longtext/' vgPrb.sql
 	autoSql vgPrbMap.as vgPrbMap -dbLink
 	sed -i -e 's/PRIMARY KEY(probe)//' vgPrbMap.sql
 	sed -i -e 's/\,	\# ID of vgPrb//' vgPrbMap.sql
