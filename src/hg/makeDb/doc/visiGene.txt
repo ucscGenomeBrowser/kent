@@ -1449,3 +1449,8 @@ mv /san/SanVol1/visiGene /hive/data/inside/visiGene
 ln -s /hive/data/inside/visiGene /gbdb/visiGene
 # note /usr/local/apache/htdocs/visiGene is still a symlink to /gbdb/visiGene
 
+################### (galt 2009-10-14)
+# adjustments for mysql5 blob string comparisons 
+ssh hgwdev
+hgsql visiGene -e 'ALTER table vgPrb modify seq longtext'
+
