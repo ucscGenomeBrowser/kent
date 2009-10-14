@@ -472,6 +472,7 @@ echo
 echo
 echo  "-------------------------------------------------"
 echo "check all tables for null + zero entries:"
+cat kgTables gsTables pbTables | sort -u > kgTablesAll
 foreach table (`cat kgTablesAll`)
   hgsql -N -e "DESC $table" $db | gawk '{print $1}' > ${table}Cols
   echo $table
