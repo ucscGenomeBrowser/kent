@@ -332,7 +332,7 @@ select count(*) from humanVidalP2P v, humanWankerP2P w where v.query=w.query and
 #  if any given in the input for self-self interactions.
 # Fan Hsu first downloaded the "single" xml to /cluster/store12/hprd/060906/
 !! TODO !!
-# I have also deposited copies of the .tab files used in /cluster/data/$db/p2p/hprd,
+# I have also deposited copies of the .tab files used in /cluster/data/$db/p2p/hprd/working,
 # and I also put the source code for hprdRun there.
 # added entries to hgNearData/Human/{orderDb,columbDb}.ra
 # added hgNearData/Human/hprdP2p.html
