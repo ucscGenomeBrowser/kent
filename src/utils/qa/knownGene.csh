@@ -860,14 +860,15 @@ echo
 # 
 echo
 echo " -------------------------------------------------"
-echo "    notify  Tim Strom (TimStrom@gsf.de)"
+echo "    When the gene set is stable, notify  Tim Strom (TimStrom@gsf.de)"
 echo "    so he can change his ExonPrimer - if a human or mouse assembly"
 echo " -------------------------------------------------"
 echo
 
 echo
 echo " -------------------------------------------------"
-echo "    check to see if .../htdocs/knownGeneLists.html has been updated"
+echo "    Once the new UCSC Genes is released on RR, 
+          update .../htdocs/knownGeneLists.html"
 echo " -------------------------------------------------"
 echo "\n here are files for /usr/local/apache/htdocs/knownGeneList/$db"
 echo
