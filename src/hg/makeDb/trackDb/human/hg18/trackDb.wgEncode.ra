@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.587 2009/10/15 22:05:06 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.588 2009/10/15 22:08:21 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -9341,7 +9341,7 @@ wgEncode 1
     subGroups view=Signal factor=HAE2F1 cellType=t2HeLa
     type bedGraph 4
     color 0,119,158
-    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=HA view=Signal labVersion="HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=553 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Ha fileName=wgEncodeYaleChIPseqSignalHelas3Ha.bedGraph4.gz
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=HA-E2F1 view=Signal labVersion="HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=553 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3Ha fileName=wgEncodeYaleChIPseqSignalHelas3Ha.bedGraph4.gz
 
     track wgEncodeYaleChIPseqPeaksHelas3Ha
     subTrack wgEncodeYaleChIPseq off
