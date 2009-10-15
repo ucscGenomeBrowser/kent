@@ -1139,9 +1139,9 @@ priority 103.29
     longLabel Multiz Alignments of 46 Vertebrates
     subGroups view=align 
     noInherit on
-    # irows on
+    irows on
     summary multiz46waySummary
-    # frames multiz46wayFrames
+    frames multiz46wayFrames
     group compGeno
     color 0, 10, 100
     altColor 0,90,10
@@ -1279,7 +1279,7 @@ priority 103.29
     longLabel Vertebrate Conservation by PhastCons
     noInherit on
     configurable on
-    type wig 0 1
+    type bigWig 0 1
     maxHeightPixels 100:40:11
     autoScale off
     spanList 1
