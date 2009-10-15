@@ -1448,9 +1448,48 @@ ssh hgwdev
 mv /san/SanVol1/visiGene /hive/data/inside/visiGene
 ln -s /hive/data/inside/visiGene /gbdb/visiGene
 # note /usr/local/apache/htdocs/visiGene is still a symlink to /gbdb/visiGene
-
+#
 ################### (galt 2009-10-14)
 # adjustments for mysql5 blob string comparisons 
 ssh hgwdev
 hgsql visiGene -e 'ALTER table vgPrb modify seq longtext'
+# also changed vgProbeTrack.c to make vgRemapTemp.seq be longtext.
 
+################### (galt 2009-10-15)
+# Initial vgProbeTrack run for hg19
+ssh hgwdev
+cd /hive/data/inside/visiGene/dump
+mkdir visiGene.20091015
+hgsqldump visiGene -T visiGene.20091015
+cd ~/kent/src/hg/visiGene/vgProbeTrack
+make
+
+vgProbeTrack PSLMAP working hg19 mm9 -sqlPath=.. >& hg19VgptPslmap.log&
+# takes a few minutes
+#-----------------------------
+#Count of nonBac Psls found for pslMap: 24924
+#Count of bac Psls found for pslMap: 0
+#rc = 24647 = count of sequences for pslMap for taxon 10090
+# updates vgPrbAliAll and hg19.vgAllProbes
+#mysql> select count(*) from vgPrbAliAll where db='hg19';
+#    24886 
+
+vgProbeTrack REMAP working hg19 nibb nibbImageProbes \
+  /gbdb/hg19/nibbImageProbes.fa >& hg19VgptRemap.log&
+#Count of Psls found for reMap: 1441
+
+vgProbeTrack EXTALL working hg19 >& hg19VgptExtall.log&
+#rc = 24539 = count of sequences for vgPrbExt.fa, to use with hg19 track vgAllProbes
+#creates /gbdb/hg19/visiGene/vgPrbExt_SJMFAO.fa
+#hgLoadSeq hg19 /gbdb/hg19/visiGene/vgPrbExt_SJMFAO.fa
+#Warning: load of seq did not go as planned: 24539 record(s), 0 row(s) skipped,
+# (these are due to NULL in unused field gb_date, harmless)
+# someone will probably add show warnings to hgLoadSeq soon.
+#mysql> select count(*) from hg19.vgAllProbes;
+#    25931 
+
+cd ~/kent/src/hg/visiGene/knownToVisiGene
+make
+knownToVisiGene hg19
+
+#######################################

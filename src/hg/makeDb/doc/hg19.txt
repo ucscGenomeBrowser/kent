@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.46 2009/10/15 20:14:11 kent Exp $";
+#	"$Id: hg19.txt,v 1.47 2009/10/15 22:36:03 galt Exp $";
 
 #############################################################################
 
@@ -6436,6 +6436,14 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
     hgLoadSeq hg19 /gbdb/hg19/nibbImageProbes.fa
     hgLoadPsl hg19 nibbImageProbes.psl
 
+##########################################################################
+# Initial vgProbeTrack run for hg19 (galt 2009-10-15)
+# see visiGene.txt make doc
+# uses nibbImageProbes and vgProbeTrack utility
+# creates vgAllProbes and knownToVisiGene
+#    25931 
+# updates visiGene.vgPrbAliAll.
+# creates and runs hgLoadSeq on /gbdb/hg19/visiGene/*.fa
 
 ##########################################################################
 # make new grp table to match hg18 (DONE  2009-10-01 kuhn)
