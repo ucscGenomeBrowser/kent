@@ -60,7 +60,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
 	faToTwoBit gtfToGenePred htmlCheck nibFrag \
 	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
 
-HG_APPLIST = liftOver utils/bedExtendRanges bedItemOverlapCount liftOver
+HG_APPLIST = liftOver bedItemOverlapCount
 
 HG_UTILS_APPLIST = bedExtendRanges
 
