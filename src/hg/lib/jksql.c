@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.136 2009/09/23 18:42:21 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.137 2009/10/15 23:52:38 galt Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1192,6 +1192,25 @@ majorVerBuf[len] = '\0';
 return (sqlUnsigned(majorVerBuf) >= 4);
 }
 
+void sqlWarnings(struct sqlConnection *conn, int numberOfWarnings)
+/* Show the number of warnings requested. New feature in mysql5. */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct dyString *dy = dyStringNew(0);
+safef(query,sizeof(query),"show warnings limit 0, %d", numberOfWarnings);
+sr = sqlGetResult(conn, query);
+dyStringPrintf(dy, "Level Code Message\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    dyStringPrintf(dy, "%s %s %s\n", row[0], row[1], row[2]);
+    }
+sqlFreeResult(&sr);
+warn("%s", dy->string);
+dyStringFree(&dy);
+}
+
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors.
@@ -1282,7 +1301,10 @@ if ((numSkipped > 0) || (numWarnings > 0))
     else if ((numWarnings > 0) &&
              (options & (SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN)))
         doAbort = FALSE;  /* don't abort on warnings */
-
+    if (numWarnings > 0)
+	{
+	sqlWarnings(conn, 10);  /* show the first 10 warnings */
+	}
     if (doAbort)
         errAbort("load of %s did not go as planned: %d record(s), "
                  "%d row(s) skipped, %d warning(s) loading %s",

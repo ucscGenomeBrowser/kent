@@ -507,4 +507,7 @@ boolean sqlIsRemote(struct sqlConnection *conn);
 /* test if the conn appears to be to a remote system.
  * Current only tests for a TCP/IP connection */
 
+void sqlWarnings(struct sqlConnection *conn, int numberOfWarnings);
+/* Show the number of warnings requested. New feature in mysql5. */
+
 #endif /* JKSQL_H */
