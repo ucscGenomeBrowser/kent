@@ -57,10 +57,11 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
         bigBedSummary bigBedToBed \
 	bigWigInfo bigWigSummary bigWigToBedGraph \
 	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib \
-	faToTwoBit gtfToGenePred htmlCheck nibFrag \
+	faToTwoBit gtfToGenePred htmlCheck nibFrag stringify \
 	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
 
-HG_APPLIST = liftOver bedItemOverlapCount
+HG_APPLIST = liftOver bedItemOverlapCount encode/validateFiles \
+	ratStuff/mafsInRegion pslCDnaFilter
 
 HG_UTILS_APPLIST = bedExtendRanges
 
