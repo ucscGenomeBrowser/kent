@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.134 2009/10/06 18:12:24 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.135 2009/10/15 21:47:58 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -983,10 +983,10 @@ vendorId 612044
 lab Farnham
 targetLink GeneCard GC10M126666|http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
 
-term E2F1
+term H1-E2F1
 type Antibody
-targetDescription The E2F1 protein is a member of the E2F family of transcription factors.  The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses.  The E2F proteins contain several evolutionary conserved domains found in most members of the family.  These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain.
-antibodyDescription mouse monoclonal - The E2F1 monoclonal antibody is a mixture of clones KH20 and KH95.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.
+targetDescription The HA-E2F1 protein is a derivative of E2F1, a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses. The E2F proteins contain several evolutionary conserved domains found in most members of the family. These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. This version of E2F1 includes an N terminal HA tag and a modified ER ligand binding domain to allow regulated translocation to the nucleus.
+antibodyDescription Mouse monoclonal - HA.11 clone 16B12 is a mouse monoclonal antibody raised against the twelve amino acids peptide CYPYDVPDYASL. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
 vendorName Millipore
 vendorId 05-379
 orderUrl http://www.millipore.com/catalogue/item/05-379
@@ -1021,7 +1021,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-110
 orderUrl http://www.scbt.com/product.php?datasheet=110
 lab Farnham
-targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
+targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1&search=Egr-1
 
 term FOXP2
 type Antibody
