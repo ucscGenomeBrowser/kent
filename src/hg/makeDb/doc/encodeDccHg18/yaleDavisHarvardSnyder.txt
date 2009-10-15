@@ -3056,3 +3056,77 @@ update wgEncodeYaleChIPseqSignalK562Nfyb set chromEnd = 158821424 where chrom = 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl -force 541 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl -force 542 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl -force 543 displayed
+
+2009-10-14 Release 2 out the door !!!
+=====================================
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 276 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 279 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 315 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 316 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 317 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 318 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 319 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 320 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 323 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 324 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 329 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 330 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 331 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 333 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 334 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 335 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 343 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 346 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 347 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 348 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 349 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 351 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 354 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 358 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 359 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 360 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 361 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 362 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 363 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 364 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 365 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 366 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 367 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 368 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 369 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 370 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 371 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 372 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 373 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 374 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 377 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 380 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 383 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 384 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 385 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 386 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 390 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 404 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 405 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 439 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 440 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 441 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 442 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 460 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 467 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 536 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 537 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 538 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 553 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 587 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 614 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 615 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 620 released
+
+# Seth Frietz feedback:
+# > I want to inform you about one correction needed for a specific dataset. 
+# > The dataset ‘HA’ should actually say HA E2F1. This data was generated 
+# > with an HA tagged version of E2F1. This is important because down the 
+# > road we and others will be using HA tagged versions of several different proteins.
+### Oh well.  I thought it was perfect for a moment.
+
