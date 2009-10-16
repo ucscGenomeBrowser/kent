@@ -126,7 +126,7 @@ type string
 #(not in main table gsidSubjInfo)
 name artSeq
 shortLabel ART at Sequencing?
-longLabel ART Sequencing?
+longLabel ART at Sequencing?
 priority 20
 visibility on
 type string
