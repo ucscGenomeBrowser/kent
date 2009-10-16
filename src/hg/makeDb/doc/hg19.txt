@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.47 2009/10/15 22:36:03 galt Exp $";
+#	"$Id: hg19.txt,v 1.48 2009/10/16 17:17:44 kent Exp $";
 
 #############################################################################
 
@@ -6600,7 +6600,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 # build knownToHprd table
 
-    hgsql hg19 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=kgId' >j.kg1
+    hgsql hg19 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=refseq' >j.kg1
     hgsql hg19 -N -e 'select kgId,hprdId from hprdToUniProt, kgXref where uniProtId=spId' >j.kg2
 
     cat j.kg1 j.kg2 | sed 's/_.//' | sort -u >knownToHprd.tab
