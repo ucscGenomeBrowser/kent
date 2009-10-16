@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.592 2009/10/16 18:45:44 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.593 2009/10/16 19:04:23 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6503,8 +6503,9 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
 
 track wgEncodeUwDGF
 compositeTrack on
+release alpha
 shortLabel Uw DGF
-longLabel ENCODE Uw Stam DGF
+longLabel ENCODE Digital DNase Genomic Footprinting by Univ. Washington
 group regulation
 subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
 subGroup2 cellType Cell_Line  HepG2=HepG2_<i>Tier2</i> SK-N-SH_RA=SK-N-SH_RA Th1=Th1
@@ -6513,7 +6514,7 @@ sortOrder cellType=+ view=+
 noInherit on
 controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
-visibilityViewDefaults  Foorprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
+visibilityViewDefaults  Footprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,viewLimitsMax=1:118408,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum RawSignal:viewLimits=1:250,viewLimitsMax=1.00:751561.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
 priority 0
 type bed 3
