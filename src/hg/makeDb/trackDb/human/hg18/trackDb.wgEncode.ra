@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.590 2009/10/16 15:54:46 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.591 2009/10/16 17:09:30 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6514,7 +6514,7 @@ noInherit on
 controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
 visibilityViewDefaults  Foorprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
-settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 RawSignal:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
+settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,viewLimitsMax=1:118408,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum RawSignal:viewLimits=1:250,viewLimitsMax=1.00:751561.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
 priority 0
 type bed 3
 wgEncode 1
@@ -6557,7 +6557,7 @@ wgEncode 1
     color 189,0,157
     longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in HepG2 cells)
     subGroups view=Signal cellType=HepG2
-    type bedGraph 4
+    type bedGraph 4 1 118408
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalHepg2 fileName=wgEncodeUwDGFSignalHepg2.bedGraph4.gz
 
     track wgEncodeUwDGFFootprintsHepg2
@@ -6604,7 +6604,7 @@ wgEncode 1
     shortLabel SK-N-SH_RA Sig
     longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in SK-N-SH_RA cells)
     subGroups view=Signal cellType=SK-N-SH_RA
-    type bedGraph 4
+    type bedGraph 4 1 42739
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalSknshra fileName=wgEncodeUwDGFSignalSknshra.bedGraph4.gz
 
     track wgEncodeUwDGFFootprintsSknshra
@@ -6650,7 +6650,7 @@ wgEncode 1
     shortLabel Th1 Sig
     longLabel ENCODE UW Digital Genomic Footprinting - Per-base acc signal (in Th1 cells)
     subGroups view=Signal cellType=Th1
-    type bedGraph 4
+    type bedGraph 4 1 66388
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=Th1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=637 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalTh1 fileName=wgEncodeUwDGFSignalTh1.bedGraph4.gz
 
     track wgEncodeUwDGFFootprintsTh1
