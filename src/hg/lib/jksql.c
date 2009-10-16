@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.137 2009/10/15 23:52:38 galt Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.138 2009/10/16 00:06:02 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -930,7 +930,6 @@ char query[256];
                                                                                 
 safef(query, sizeof(query), "select release_lock('%s')", name);
 sqlUpdate(sc, query);
-printf("Advisory lock has been released\n");
 }
 
 void sqlHardUnlockAll(struct sqlConnection *sc)
