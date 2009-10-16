@@ -5,7 +5,7 @@ priority 10
 
 name vaccine
 shortLabel Vaccine
-longLabel Vaccine and HIV Status
+longLabel Vaccine, HIV and ART Status
 priority 20
 
 name clinical
