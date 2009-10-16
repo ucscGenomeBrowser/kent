@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.588 2009/10/15 22:08:21 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.589 2009/10/16 05:47:27 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -3399,7 +3399,7 @@ wgEncode 1
     color 224,75,0
     type wig 0.00 1.45
     viewLimits 0:0.1
-    metadata project=wgEncode grant=Crawford lab=UT dataType=ChIPseq cell=HUVEC antibody=Input view=Signal labVersion="fseq v 1.82, iff_HUVEC" dataVersion="ENCODE Sep 2009 Freeze" subId=544 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHuvecInput fileName=wgEncodeUtaustinChIPseqSignalHuvecInput.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=Input view=Signal labVersion="fseq v 1.82, iff_HUVEC" dataVersion="ENCODE Sep 2009 Freeze" subId=544 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaustinChIPseqSignalHuvecInput fileName=wgEncodeUtaustinChIPseqSignalHuvecInput.wig.gz
 
 # submission 480 (versioning 235,277,116)
     track wgEncodeDukeDNaseSeqPeaksK562V2
