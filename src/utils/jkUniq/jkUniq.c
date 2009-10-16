@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: jkUniq.c,v 1.3 2003/06/10 17:19:33 kent Exp $";
+static char const rcsid[] = "$Id: jkUniq.c,v 1.4 2009/10/16 22:17:04 markd Exp $";
 
 void usage()
 /* Explain usage and exit */
@@ -12,6 +12,9 @@ void usage()
 errAbort(
 "jkUniq - remove duplicate lines from file.  Lines need not\n"
 "be next to each other (plain Unix uniq works for that)\n"
+"\n"
+"WARNING: this overwrites the input files\n"
+"\n"
 "usage:\n"
 "    jkUniq file(s)");
 }
@@ -58,7 +61,7 @@ if (argc < 2)
 for (i=1; i<argc; ++i)
     {
     char *fileName = argv[i];
-    printf("Uniqing %s (%d of %d)\n", fileName, i, argc);
+    printf("Uniqing %s (%d of %d)\n", fileName, i, argc-1);
     jkUniq(fileName);
     }
 return 0;
