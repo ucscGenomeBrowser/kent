@@ -908,6 +908,17 @@ char *refGeneMapName(struct track *tg, void *item);
 int linkedFeaturesSeriesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 
+void lfDrawSpecialGaps(struct linkedFeatures *lf,
+		       int intronGap, boolean chainLines, int gapFactor,
+		       struct track *tg, struct hvGfx *hvg, int xOff, int y,
+		       double scale, Color color, Color bColor,
+		       enum trackVisibility vis);
+/* If applicable, draw something special for the gap following this block.
+ * If intronGap has been specified, draw exon arrows only if the target gap
+ * length is at least intronGap.
+ * If chainLines, draw a double-line gap if both target and query have a gap
+ * (mismatching sequence). */
+
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis);

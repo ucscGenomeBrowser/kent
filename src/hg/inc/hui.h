@@ -554,6 +554,29 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*** BAM alignment track coloring code: ***/
+// tdbSettings / cart var suffixes and default values:
+#define BAM_PAIR_ENDS_BY_NAME "pairEndsByName"
+#define BAM_MIN_ALI_QUAL "minAliQual"
+#define BAM_MIN_ALI_QUAL_DEFAULT "0"
+
+#define BAM_COLOR_MODE "bamColorMode"
+#define BAM_COLOR_MODE_GRAY "gray"
+#define BAM_COLOR_MODE_STRAND "strand"
+#define BAM_COLOR_MODE_TAG "tag"
+#define BAM_COLOR_MODE_OFF "off"
+#define BAM_COLOR_MODE_DEFAULT BAM_COLOR_MODE_STRAND
+
+#define BAM_GRAY_MODE "bamGrayMode"
+#define BAM_GRAY_MODE_ALI_QUAL "aliQual"
+#define BAM_GRAY_MODE_BASE_QUAL "baseQual"
+#define BAM_GRAY_MODE_UNPAIRED "unpaired"
+#define BAM_GRAY_MODE_DEFAULT BAM_GRAY_MODE_ALI_QUAL
+
+#define BAM_COLOR_TAG "bamColorTag"
+#define BAM_COLOR_TAG_DEFAULT "YC"
+
+
 /*** Control of base/codon coloring code: ***/
 
 /* Drawing modes: values <= baseColorDrawOff don't render at base or codon

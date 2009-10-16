@@ -10,15 +10,20 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.10 2009/10/08 06:38:23 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.11 2009/10/16 00:34:31 angie Exp $";
 
 struct bamTrackData
     {
     struct track *tg;
     struct hash *pairHash;
     int minAliQual;
+    char *colorMode;
+    char *grayMode;
+    boolean grayUnpaired;
+    char *userTag;
     };
 
 struct simpleFeature *sfFromNumericCigar(const bam1_t *bam, int *retLength)
@@ -69,6 +74,7 @@ return sfList;
 struct linkedFeatures *bamToLf(const bam1_t *bam, void *data)
 /* Translate a BAM record into a linkedFeatures item. */
 {
+struct bamTrackData *btd = (struct bamTrackData *)data;
 const bam1_core_t *core = &bam->core;
 struct linkedFeatures *lf;
 AllocVar(lf);
@@ -80,7 +86,21 @@ lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
 lf->extra = bamGetQuerySequence(bam);
-lf->grayIx = maxShade;
+if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
+    sameString(btd->grayMode, BAM_GRAY_MODE_ALI_QUAL))
+    {
+    // hardcode transform coefficients for now; if user demand, make into tdb/cart vars.
+    int min = 0, max = 99;
+    int minShade = 2;
+    int ix = minShade + (maxShade - minShade) * ((double)(core->qual - min) / (double)(max-min));
+    if (ix > maxShade)
+	ix = maxShade;
+    if (ix < minShade)
+	ix = minShade;
+    lf->grayIx = ix;
+    }
+else
+    lf->grayIx = maxShade;
 return lf;
 }
 
@@ -183,9 +203,9 @@ else
 		}
 	    lf->next = stub;
 	    }
-	else
+	else if (btd->grayUnpaired)
 	    // not properly paired: make it a lighter shade.
-	    lf->grayIx -= 2;
+	    lf->grayIx -= 3;
 	hashAdd(btd->pairHash, lf->name, lf);
 	}
     else
@@ -206,6 +226,17 @@ static void dontMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 {
 }
 
+static int linkedFeaturesCmpOri(const void *va, const void *vb)
+/* Help sort linkedFeatures by strand, then by starting pos. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+int ret = a->orientation - b->orientation;
+if (ret == 0)
+    ret = a->start - b->start;
+return ret;
+}
+
 void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
@@ -218,10 +249,22 @@ char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", seqNameForBam, winStart, winEnd);
 
 struct hash *pairHash = isPaired ? hashNew(18) : NULL;
-char cartVarName[512];
-safef(cartVarName, sizeof(cartVarName), "%s_minAliQual", tg->tdb->tableName);
-int minAliQual = cartUsualInt(cart, cartVarName, 0);
-struct bamTrackData btd = {tg, pairHash, minAliQual};
+char cartVarName[1024];
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_MIN_ALI_QUAL, tg->tdb->tableName);
+int minAliQual = cartUsualInt(cart, cartVarName,
+	       atoi(trackDbSettingOrDefault(tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)));
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_MODE, tg->tdb->tableName);
+char *colorMode = cartUsualString(cart, cartVarName,
+		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_GRAY_MODE, tg->tdb->tableName);
+char *grayMode = cartUsualString(cart, cartVarName,
+		         trackDbSettingOrDefault(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
+boolean grayUnpaired = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
+			sameString(grayMode, BAM_GRAY_MODE_UNPAIRED));
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_TAG, tg->tdb->tableName);
+char *userTag = cartUsualString(cart, cartVarName,
+		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
+struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, grayUnpaired, userTag};
 char *fileName;
 if (tg->customPt)
     {
@@ -247,7 +290,12 @@ if (isPaired)
 if (tg->visibility != tvDense)
     {
     slReverse(&(tg->items));
-    slSort(&(tg->items), isPaired ? linkedFeaturesSeriesCmp : linkedFeaturesCmpStart);
+    if (isPaired)
+	slSort(&(tg->items), linkedFeaturesSeriesCmp);
+    else if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
+	slSort(&(tg->items), linkedFeaturesCmpOri);
+    else
+	slSort(&(tg->items), linkedFeaturesCmpStart);
     if (slCount(tg->items) > MAX_ITEMS_FOR_MAPBOX)
 	tg->mapItem = dontMapItem;
     }
@@ -267,23 +315,142 @@ void bamPairedLoadItems(struct track *tg)
 bamLoadItemsCore(tg, TRUE);
 }
 
+void bamDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single bam linkedFeatures item.  Borrows a lot from linkedFeaturesDrawAt,
+ * but cuts a lot of unneeded features (like coding region) and adds a couple
+ * additional sources of color. */
+{
+struct linkedFeatures *lf = item;
+struct simpleFeature *sf;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+int w = x2-x1;
+int midY = y + (heightPer>>1);
+char *exonArrowsDense = trackDbSetting(tg->tdb, "exonArrowsDense");
+boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
+				   !sameWord(exonArrowsDense, "off"));
+boolean exonArrows = (tg->exonArrows &&
+		      (vis != tvDense || exonArrowsEvenWhenDense));
+struct dnaSeq *mrnaSeq = NULL;
+enum baseColorDrawOpt drawOpt = baseColorDrawOff;
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
+struct psl *psl = NULL;
+if (vis != tvDense)
+    {
+    drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
+    if (drawOpt > baseColorDrawOff)
+	exonArrows = FALSE;
+    }
+
+char cartVarName[1024];
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_MODE, tg->tdb->tableName);
+char *colorMode = cartUsualString(cart, cartVarName,
+		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
+static Color darkBlueColor = 0;
+static Color darkRedColor = 0;
+if (darkRedColor == 0)
+    {
+    darkRedColor = hvGfxFindColorIx(hvg, 100,0,0);
+    darkBlueColor = hvGfxFindColorIx(hvg, 0,0,100);
+    }
+if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
+    color = (lf->orientation < 0) ? darkRedColor : darkBlueColor;
+else if (lf->filterColor > 0)
+    color = lf->filterColor;
+else if (tg->colorShades)
+    color = tg->colorShades[lf->grayIx];
+
+
+indelEnabled(cart, tg->tdb, basesPerPixel, &indelShowDoubleInsert, &indelShowQueryInsert,
+	     &indelShowPolyA);
+if (!indelShowDoubleInsert)
+    innerLine(hvg, x1, midY, w, color);
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    int s = sf->start,  e = sf->end;
+    baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
+		      zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart, color);
+    if (tg->exonArrowsAlways ||
+	(exonArrows &&
+	 (sf->start <= winStart || sf->start == lf->start) &&
+	 (sf->end >= winEnd || sf->end == lf->end)))
+	{
+	Color barbColor = hvGfxContrastingColor(hvg, color);
+	x1 = round((double)((int)s-winStart)*scale) + xOff;
+	x2 = round((double)((int)e-winStart)*scale) + xOff;
+	w = x2-x1;
+	clippedBarbs(hvg, x1+1, midY, x2-x1-2, tl.barbHeight, tl.barbSpacing, lf->orientation,
+		     barbColor, TRUE);
+	}
+    }
+if (indelShowDoubleInsert)
+    {
+    int intronGap = 0;
+    if (vis != tvDense)
+	intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
+    lfDrawSpecialGaps(lf, intronGap, TRUE, 0, tg, hvg, xOff, y, scale, color, color, vis);
+    }
+if (vis != tvDense)
+    {
+    /* If highlighting differences between aligned sequence and genome when
+     * zoomed way out, this must be done in a separate pass after exons are
+     * drawn so that exons sharing the pixel don't overdraw differences. */
+    if (indelShowQueryInsert || indelShowPolyA)
+	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart,
+				 drawOpt, indelShowQueryInsert, indelShowPolyA);
+    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart, drawOpt);
+    baseColorDrawCleanup(lf, &mrnaSeq, &psl);
+    }
+}
+
+void bamPairedDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+		     double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a bam linked features series item at position. (like linkedFeaturesSeriesDrawAt,
+ * but calls bamDrawAt instead of linkedFeaturesDrawAt) */
+{
+struct linkedFeaturesSeries *lfs = item;
+struct linkedFeatures *lf;
+int midY = y + (tg->heightPer>>1);
+int prevEnd = lfs->start;
+
+if ((lf = lfs->features) == NULL)
+    return;
+for (lf = lfs->features; lf != NULL; lf = lf->next)
+    {
+
+    int x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+    int x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
+    int w = x2-x1;
+    if (w > 0)
+	hvGfxLine(hvg, x1, midY, x2, midY, color);
+    bamDrawAt(tg, lf, hvg, xOff, y, scale, font, color, vis);
+    prevEnd = lf->end;
+    }
+}
+
+
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
 track->canPack = TRUE;
 char varName[1024];
-safef(varName, sizeof(varName), "%s_pairEndsByName", track->mapName);
+safef(varName, sizeof(varName), "%s_" BAM_PAIR_ENDS_BY_NAME, track->mapName);
 boolean isPaired = cartUsualBoolean(cart, varName,
-				    (trackDbSetting(track->tdb, "pairEndsByName") != NULL));
+				    (trackDbSetting(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
 if (isPaired)
     {
     linkedFeaturesSeriesMethods(track);
     track->loadItems = bamPairedLoadItems;
+    track->drawItemAt = bamPairedDrawAt;
     }
 else
     {
     linkedFeaturesMethods(track);
     track->loadItems = bamLoadItems;
+    track->drawItemAt = bamDrawAt;
     }
 track->labelNextItemButtonable = track->nextItemButtonable = FALSE;
 track->labelNextPrevItem = NULL;
