@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.73 2009/09/25 00:21:40 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.74 2009/10/19 21:15:07 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -996,8 +996,16 @@ while(TRUE)
     while (TRUE)
 	{
 	nread = read(sd, &c, 1);  /* one char at a time, but http headers are small */
-	if (nread < 0)
+	if (nread != 1)
+	    {
+	    if (nread == -1)
+    		warn("Error (%s) reading http header on %s\n", strerror(errno), url);
+	    else if (nread == 0)
+    		warn("Error unexpected end of input reading http header on %s\n", url);
+	    else
+    		warn("Error reading http header on %s\n", url);
 	    return FALSE;  /* err reading descriptor */
+	    }
 	if (c == 10)
 	    break;
 	if (c != 13)
