@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.593 2009/10/16 19:04:23 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.594 2009/10/19 18:29:53 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6507,14 +6507,16 @@ release alpha
 shortLabel Uw DGF
 longLabel ENCODE Digital DNase Genomic Footprinting by Univ. Washington
 group regulation
-subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
+#subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
+subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=RawSignal
 subGroup2 cellType Cell_Line  HepG2=HepG2_<i>Tier2</i> SK-N-SH_RA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 noInherit on
 controlledVocabulary encode/cv.ra cellType
 dragAndDrop subTracks
-visibilityViewDefaults  Footprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
+#visibilityViewDefaults  Footprints=pack Hotspots=pack Peaks=dense Signal=full RawSignal=hide
+visibilityViewDefaults  Hotspots=pack Peaks=dense Signal=full RawSignal=hide
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 Signal:viewLimits=2:30,viewLimitsMax=1:118408,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum RawSignal:viewLimits=1:250,viewLimitsMax=1.00:751561.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
 priority 0
 type bed 3
@@ -6562,15 +6564,15 @@ wgEncode 1
     #viewLimitsMax 1:118408
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalHepg2 fileName=wgEncodeUwDGFSignalHepg2.bedGraph4.gz
 
-    track wgEncodeUwDGFFootprintsHepg2
-    release alpha
-    subTrack wgEncodeUwDGF on
-    shortLabel HepG2 Foot
-    color 189,0,157
-    longLabel ENCODE UW Digital Genomic Footprinting - Footprints (in HepG2 cells)
-    subGroups view=Footprints cellType=HepG2
-    type bed 3
-    metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Footprints labVersion=fp-v0.1 dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFFootprintsHepg2 fileName=wgEncodeUwDGFFootprintsHepg2.bed3.gz
+#    track wgEncodeUwDGFFootprintsHepg2
+#    release alpha
+#    subTrack wgEncodeUwDGF on
+#    shortLabel HepG2 Foot
+#    color 189,0,157
+#    longLabel ENCODE UW Digital Genomic Footprinting - Footprints (in HepG2 cells)
+#    subGroups view=Footprints cellType=HepG2
+#    type bed 3
+#    metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=HepG2 view=Footprints labVersion=fp-v0.1 dataVersion="ENCODE Sep 2009 Freeze" subId=632 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFFootprintsHepg2 fileName=wgEncodeUwDGFFootprintsHepg2.bed3.gz
 
 #   Submission 631
     track wgEncodeUwDGFRawSignalSknshra
@@ -6610,14 +6612,14 @@ wgEncode 1
     #viewLimitsMax 1:42739
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalSknshra fileName=wgEncodeUwDGFSignalSknshra.bedGraph4.gz
 
-    track wgEncodeUwDGFFootprintsSknshra
-    release alpha
-    subTrack wgEncodeUwDGF off
-    shortLabel SK-N-SH_RA Foot
-    longLabel ENCODE UW Digital Genomic Footprinting - Footprints (in SK-N-SH_RA cells)
-    subGroups view=Footprints cellType=SK-N-SH_RA
-    type bed 3
-    metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Footprints labVersion=fp-v0.1 dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFFootprintsSknshra fileName=wgEncodeUwDGFFootprintsSknshra.bed3.gz
+#    track wgEncodeUwDGFFootprintsSknshra
+#    release alpha
+#    subTrack wgEncodeUwDGF off
+#    shortLabel SK-N-SH_RA Foot
+#    longLabel ENCODE UW Digital Genomic Footprinting - Footprints (in SK-N-SH_RA cells)
+#    subGroups view=Footprints cellType=SK-N-SH_RA
+#    type bed 3
+#    metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=SK-N-SH_RA view=Footprints labVersion=fp-v0.1 dataVersion="ENCODE Sep 2009 Freeze" subId=631 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFFootprintsSknshra fileName=wgEncodeUwDGFFootprintsSknshra.bed3.gz
 
 #   Submission 637
     track wgEncodeUwDGFRawSignalTh1
@@ -6657,14 +6659,14 @@ wgEncode 1
     #viewLimitsMax 1:66388
     metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=Th1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=637 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFSignalTh1 fileName=wgEncodeUwDGFSignalTh1.bedGraph4.gz
 
-    track wgEncodeUwDGFFootprintsTh1
-    release alpha
-    subTrack wgEncodeUwDGF off
-    shortLabel Th1 Foot
-    longLabel ENCODE UW Digital Genomic Footprinting - Footprints (in Th1 cells)
-    subGroups view=Footprints cellType=Th1
-    type bed 3
-    metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=Th1 view=Footprints labVersion=fp-v0.1 dataVersion="ENCODE Sep 2009 Freeze" subId=637 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFFootprintsTh1 fileName=wgEncodeUwDGFFootprintsTh1.bed3.gz
+#    track wgEncodeUwDGFFootprintsTh1
+#    release alpha
+#    subTrack wgEncodeUwDGF off
+#    shortLabel Th1 Foot
+#    longLabel ENCODE UW Digital Genomic Footprinting - Footprints (in Th1 cells)
+#    subGroups view=Footprints cellType=Th1
+#    type bed 3
+#    metadata project=wgEncode grant=Stam lab=Uw dataType=DGF cell=Th1 view=Footprints labVersion=fp-v0.1 dataVersion="ENCODE Sep 2009 Freeze" subId=637 dateSubmitted=2009-10-05 dateUnrestricted=2010-07-05 composite=wgEncodeUwDGF tableName=wgEncodeUwDGFFootprintsTh1 fileName=wgEncodeUwDGFFootprintsTh1.bed3.gz
 
 
 
