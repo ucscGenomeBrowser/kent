@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.504 2009/10/16 00:34:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.505 2009/10/19 22:50:07 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2146,7 +2146,7 @@ hFreeConn(&conn);
 #ifdef USE_BAM
 static char *grayLabels[] =
     { "alignment quality",
-      "NOT IMPL'D: base qualities",
+      "base qualities",
       "unpaired ends",
     };
 static char *grayValues[] =
@@ -2205,7 +2205,7 @@ safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
 cgiMakeDropListFull(cartVarName2, grayLabels, grayValues, grayMenuSize, sel2, onChange);
 printf("<BR>\n");
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_TAG, sameString(selected, BAM_COLOR_MODE_TAG));
-printf("NOT IMPL'D: Use R,G,B colors specified in user-defined tag ");
+printf("Use R,G,B colors specified in user-defined tag ");
 safef(cartVarName2, sizeof(cartVarName2), "%s_" BAM_COLOR_TAG, tdb->tableName);
 sel2 = cartUsualString(cart, cartVarName2,
 		       trackDbSettingOrDefault(tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));

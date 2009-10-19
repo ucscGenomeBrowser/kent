@@ -3,10 +3,11 @@
 #ifdef USE_BAM
 
 #include "common.h"
+#include "htmshell.h"
 #include "hdb.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.10 2009/10/08 06:38:23 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.11 2009/10/19 22:50:07 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -341,6 +342,55 @@ while (s < bam->data + bam->data_len)
 	}
     }
 putc('\n', stdout);
+}
+
+char *bamGetTagString(const bam1_t *bam, char *tag, char *buf, size_t bufSize)
+/* If bam's tags include the given 2-character tag, place the value into 
+ * buf (zero-terminated, trunc'd if nec) and return a pointer to buf,
+ * or NULL if tag is not present. */
+{
+if (tag == NULL)
+    errAbort("NULL tag passed to bamGetTagString");
+if (! (isalpha(tag[0]) && isalnum(tag[1]) && tag[2] == '\0'))
+    errAbort("bamGetTagString: invalid tag '%s'", htmlEncode(tag));
+char *val = NULL;
+// adapted from part of bam.c bam_format1:
+uint8_t *s = bam1_aux(bam);
+while (s < bam->data + bam->data_len)
+    {
+    uint8_t type, key[2];
+    key[0] = s[0]; key[1] = s[1];
+    s += 2; type = *s; ++s;
+    if (key[0] == tag[0] && key[1] == tag[1])
+	{
+	if (type == 'A') { snprintf(buf, bufSize, "%c", *s);}
+	else if (type == 'C') { snprintf(buf, bufSize, "%u", *s); }
+	else if (type == 'c') { snprintf(buf, bufSize, "%d", *s); }
+	else if (type == 'S') { snprintf(buf, bufSize, "%u", *(uint16_t*)s); }
+	else if (type == 's') { snprintf(buf, bufSize, "%d", *(int16_t*)s); }
+	else if (type == 'I') { snprintf(buf, bufSize, "%u", *(uint32_t*)s); }
+	else if (type == 'i') { snprintf(buf, bufSize, "%d", *(int32_t*)s); }
+	else if (type == 'f') { snprintf(buf, bufSize, "%g", *(float*)s); }
+	else if (type == 'd') { snprintf(buf, bufSize, "%lg", *(double*)s); }
+	else if (type == 'Z' || type == 'H') strncpy(buf, (char *)s, bufSize);
+	else buf[0] = '\0';
+	buf[bufSize-1] = '\0'; // TODO: is this nec?? see man pages
+	val = buf;
+	break;
+	}
+    else
+	{
+	if (type == 'A' || type == 'C' || type == 'c') { ++s; }
+	else if (type == 'S' || type == 's') { s += 2; }
+	else if (type == 'I' || type == 'i' || type == 'f') { s += 4; }
+	else if (type == 'd') { s += 8; }
+	else if (type == 'Z' || type == 'H')
+	    {
+	    while (*s++);
+	    }
+	}
+    }
+return val;
 }
 
 #endif//def USE_BAM

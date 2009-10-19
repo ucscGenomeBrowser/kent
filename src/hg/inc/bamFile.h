@@ -78,4 +78,9 @@ bam1_t *bamClone(const bam1_t *bam);
 void bamShowTags(const bam1_t *bam);
 /* Print out tags in HTML: bold key, no type indicator for brevity. */
 
+char *bamGetTagString(const bam1_t *bam, char *tag, char *buf, size_t bufSize);
+/* If bam's tags include the given 2-character tag, place the value into 
+ * buf (zero-terminated, trunc'd if nec) and return a pointer to buf,
+ * or NULL if tag is not present. */
+
 #endif//ndef BAMFILE_H

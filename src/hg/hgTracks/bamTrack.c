@@ -7,13 +7,14 @@
 #include "hCommon.h"
 #include "hash.h"
 #include "linefile.h"
+#include "htmshell.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.11 2009/10/16 00:34:31 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.12 2009/10/19 22:50:08 angie Exp $";
 
 struct bamTrackData
     {
@@ -22,7 +23,6 @@ struct bamTrackData
     int minAliQual;
     char *colorMode;
     char *grayMode;
-    boolean grayUnpaired;
     char *userTag;
     };
 
@@ -71,6 +71,59 @@ if (retLength != NULL)
 return sfList;
 }
 
+INLINE int shadeTransform(int min, int max, int score)
+/* Linearly transform score's place between min and max into a visible shade. */
+{
+int minShade = 2;
+int ix = minShade + (maxShade - minShade) * ((double)(score - min) / (double)(max-min));
+if (ix > maxShade)
+    ix = maxShade;
+if (ix < minShade)
+    ix = minShade;
+return ix;
+}
+
+static struct simpleFeature *expandSfQuals(struct simpleFeature *blocksIn, UBYTE *quals,
+					   int orientation, int qLen)
+/* Chop up blocksIn into one sf per query base, with sf->grayIx set according to
+ * base quality score. */
+{
+struct simpleFeature *sf, *blocksOut = NULL;
+for (sf = blocksIn;  sf != NULL;  sf = sf->next)
+    {
+    struct simpleFeature *newSf;
+    int i;
+    for (i = sf->qStart;  i < sf->qEnd;  i++)
+	{
+	AllocVar(newSf);
+	newSf->start = sf->start + (i - sf->qStart);
+	newSf->end = newSf->start + 1;
+	newSf->qStart = i;
+	newSf->qEnd = i + 1;
+	int offset = (orientation < 0) ? (qLen - i - 1) : i;
+	// hardcode min & max for now; if user demand, make into tdb/cart vars.
+	newSf->grayIx = shadeTransform(0, 40, quals[offset]);
+	slAddHead(&blocksOut, newSf);
+	}
+    }
+slReverse(&blocksOut);
+return blocksOut;
+}
+
+// similar but not identical to customFactory.c's parseRgb:
+static boolean parseRgb(char *s, unsigned char *retR, unsigned char *retG, unsigned char *retB)
+/* Turn comma separated list to RGB vals; return FALSE if input is not as expected. */
+{
+char *row[4];
+int wordCount = chopString(s, ",", row, ArraySize(row));
+if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(row[2][0])))
+    return FALSE;
+*retR = atoi(row[0]);
+*retG = atoi(row[1]);
+*retB = atoi(row[2]);
+return TRUE;
+}
+
 struct linkedFeatures *bamToLf(const bam1_t *bam, void *data)
 /* Translate a BAM record into a linkedFeatures item. */
 {
@@ -89,15 +142,42 @@ lf->extra = bamGetQuerySequence(bam);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
     sameString(btd->grayMode, BAM_GRAY_MODE_ALI_QUAL))
     {
-    // hardcode transform coefficients for now; if user demand, make into tdb/cart vars.
-    int min = 0, max = 99;
-    int minShade = 2;
-    int ix = minShade + (maxShade - minShade) * ((double)(core->qual - min) / (double)(max-min));
-    if (ix > maxShade)
-	ix = maxShade;
-    if (ix < minShade)
-	ix = minShade;
-    lf->grayIx = ix;
+    // hardcode min & max for now; if user demand, make into tdb/cart vars.
+    lf->grayIx = shadeTransform(0, 99, core->qual);
+    }
+else if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
+	 sameString(btd->grayMode, BAM_GRAY_MODE_BASE_QUAL))
+    {
+    UBYTE *quals = bamGetQueryQuals(bam);
+    lf->components = expandSfQuals(lf->components, quals, lf->orientation, core->l_qseq);
+    lf->grayIx = maxShade - 3;
+    }
+else if (sameString(btd->colorMode, BAM_COLOR_MODE_TAG) && isNotEmpty(btd->userTag))
+    {
+    char buf[16];
+    char *rgb = bamGetTagString(bam, btd->userTag, buf, sizeof(buf));
+    if (rgb != NULL)
+	{
+	// We don't have access to hvg at loadtime, so can't allocate color here.
+	// Instead, pack RGB values into lf->filterColor which fortunately is an int.
+	unsigned char r, g, b;
+	if (parseRgb(rgb, &r, &g, &b))
+	    lf->filterColor = ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+	else
+	    {
+	    static boolean already = FALSE;
+	    if (! already)
+		{
+		warn("%s: At least one BAM tag value for %s (%s) is not in the expected "
+		     "RGB format: N,N,N where each N is from 0 to 255.",
+		     btd->tg->tdb->shortLabel, btd->userTag, htmlEncode(rgb));
+		already = TRUE;
+		btd->userTag = NULL;
+		}
+	    }
+	}
+    else
+	lf->grayIx = maxShade;
     }
 else
     lf->grayIx = maxShade;
@@ -203,7 +283,8 @@ else
 		}
 	    lf->next = stub;
 	    }
-	else if (btd->grayUnpaired)
+	else if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
+		 sameString(btd->grayMode, BAM_GRAY_MODE_UNPAIRED))
 	    // not properly paired: make it a lighter shade.
 	    lf->grayIx -= 3;
 	hashAdd(btd->pairHash, lf->name, lf);
@@ -259,12 +340,10 @@ char *colorMode = cartUsualString(cart, cartVarName,
 safef(cartVarName, sizeof(cartVarName), "%s_" BAM_GRAY_MODE, tg->tdb->tableName);
 char *grayMode = cartUsualString(cart, cartVarName,
 		         trackDbSettingOrDefault(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
-boolean grayUnpaired = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
-			sameString(grayMode, BAM_GRAY_MODE_UNPAIRED));
 safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_TAG, tg->tdb->tableName);
 char *userTag = cartUsualString(cart, cartVarName,
 		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
-struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, grayUnpaired, userTag};
+struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag};
 char *fileName;
 if (tg->customPt)
     {
@@ -338,6 +417,15 @@ struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 struct psl *psl = NULL;
+char cartVarName[1024];
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_MODE, tg->tdb->tableName);
+char *colorMode = cartUsualString(cart, cartVarName,
+		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
+safef(cartVarName, sizeof(cartVarName), "%s_" BAM_GRAY_MODE, tg->tdb->tableName);
+char *grayMode = cartUsualString(cart, cartVarName,
+		         trackDbSettingOrDefault(tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
+bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
+		     sameString(grayMode, BAM_GRAY_MODE_BASE_QUAL));
 if (vis != tvDense)
     {
     drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
@@ -345,10 +433,6 @@ if (vis != tvDense)
 	exonArrows = FALSE;
     }
 
-char cartVarName[1024];
-safef(cartVarName, sizeof(cartVarName), "%s_" BAM_COLOR_MODE, tg->tdb->tableName);
-char *colorMode = cartUsualString(cart, cartVarName,
-		         trackDbSettingOrDefault(tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
 static Color darkBlueColor = 0;
 static Color darkRedColor = 0;
 if (darkRedColor == 0)
@@ -359,7 +443,14 @@ if (darkRedColor == 0)
 if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
     color = (lf->orientation < 0) ? darkRedColor : darkBlueColor;
 else if (lf->filterColor > 0)
-    color = lf->filterColor;
+    {
+    // In bamTrack, lf->filterColor is a packed int.  Unpack:
+    int r, g, b;
+    r = (lf->filterColor >> 16) & 0xff;
+    g = (lf->filterColor >> 8) & 0xff;
+    b = lf->filterColor & 0xff;
+    color = hvGfxFindColorIx(hvg, r, g, b);
+    }
 else if (tg->colorShades)
     color = tg->colorShades[lf->grayIx];
 
@@ -371,6 +462,8 @@ if (!indelShowDoubleInsert)
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int s = sf->start,  e = sf->end;
+    if (baseQualMode)
+	color = tg->colorShades[sf->grayIx];
     baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
 		      zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart, color);
     if (tg->exonArrowsAlways ||
@@ -440,6 +533,23 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s_" BAM_PAIR_ENDS_BY_NAME, track->mapName);
 boolean isPaired = cartUsualBoolean(cart, varName,
 				    (trackDbSetting(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
+safef(varName, sizeof(varName), "%s_" BAM_COLOR_MODE, track->tdb->tableName);
+char *colorMode = cartUsualString(cart, varName,
+		      trackDbSettingOrDefault(track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
+safef(varName, sizeof(varName), "%s_" BAM_COLOR_TAG, track->tdb->tableName);
+char *userTag = cartUsualString(cart, varName,
+			trackDbSettingOrDefault(track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
+if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
+    {
+    if (! (isalpha(userTag[0]) && isalnum(userTag[1]) && userTag[2] == '\0'))
+	{
+	warn("%s: BAM tag '%s' is not valid -- must be a letter followed by a letter or number.",
+	     track->tdb->shortLabel, htmlEncode(userTag));
+	safef(varName, sizeof(varName), "%s_" BAM_COLOR_TAG, track->tdb->tableName);
+	cartRemove(cart, varName);
+	}
+    }
+
 if (isPaired)
     {
     linkedFeaturesSeriesMethods(track);
