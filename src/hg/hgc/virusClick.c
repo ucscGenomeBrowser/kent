@@ -13,12 +13,12 @@
 #include "trashDir.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: virusClick.c,v 1.7 2009/06/15 23:56:50 markd Exp $";
+static char const rcsid[] = "$Id: virusClick.c,v 1.8 2009/10/20 22:36:36 galt Exp $";
 
 static void h1n1DownloadPdb(char *item, char *pdbUrl, struct tempName *tmpPdb)
 /* uncompress PDB to trash */
 {
-int inFd = netOpenHttpExt(pdbUrl, "GET", TRUE);
+int inFd = netOpenHttpExt(pdbUrl, "GET", NULL);
 int inFdRedir = 0;
 char *pdbUrlRedir = NULL;
 if (!netSkipHttpHeaderLinesHandlingRedirect(inFd, pdbUrl, &inFdRedir, &pdbUrlRedir))

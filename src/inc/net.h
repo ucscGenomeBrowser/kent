@@ -157,19 +157,18 @@ void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
 		boolean keepAlive);
 /* Send a GET request, possibly with Keep-Alive. */
 
-int netOpenHttpExt(char *url, char *method, boolean end);
-/* Return a file handle that will read the url.  If end is not
- * set then can send cookies and other info to returned file  */
+int netOpenHttpExt(char *url, char *method, char *optionalHeader);
+/* Return a file handle that will read the url.  optionalHeader
+ * may by NULL or may contain cookies and other info. */
 
-int netHttpConnect(char *url, char *method, char *protocol, char *agent);
+int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader);
 /* Parse URL, connect to associated server on port,
  * and send most of the request to the server.  If
  * specified in the url send user name and password
- * too.  This does not send the final \r\n to finish
- * off the request, so that you can send cookies. 
- * Typically the "method" will be "GET" or "POST"
+ * too.  Typically the "method" will be "GET" or "POST"
  * and the agent will be the name of your program or
- * library.  Protocol is usually HTTP/1.0. */
+ * library. optionalHeader may be NULL or contain
+ * additional header lines such as cookie info. */
 
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
 		       void (*responseCB)(void *userData, char *req,
