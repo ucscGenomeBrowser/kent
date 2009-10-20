@@ -1,14 +1,7 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.37 2009/10/09 19:57:57 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.38 2009/10/20 23:24:43 tdreszer Exp $
 
-var debugLevel = 0;
-var viewDDtoSubCB = true;
-var viewDDtoSubCBhide = false;
 var compositeName = "";
-//var viewDDtoMatCB = true; //true;
-//var matCBwithViewDD = true;
-//var subCBtoMatCB = true;
-//var matCBtoSubCB = true; // Always
 //var now = new Date();
 //var start = now.getTime();
 //$(window).load(function () {
@@ -23,59 +16,44 @@ var compositeName = "";
 
 function matSelectViewForSubTracks(obj,view)
 {
-// Handle any necessary changes to subtrack checkboxes when the view changes
+// viewDD:onchange Handle any necessary changes to subtrack checkboxes when the view changes
 // views are "select" drop downs on a subtrack configuration page
     if( obj.selectedIndex == 0) { // hide
-        if(viewDDtoSubCBhide) {
-            matSetSubtrackCheckBoxes(false,view);
-            //if(viewDDtoMatCB)
-            //    $("input.matrixCB").filter(":checked").each( function (i) { matChkBoxNormalize(this); } );
-        }
-        matEnableSubtrackCheckBoxes(false,view);
+        matSubCBsEnable(false,view);
         hideConfigControls(view);
-        //enableViewCfgLink(false,view);  // Could "disable" view cfg when hidden!
     } else {
-        //enableViewCfgLink(true,view);   // Would need to reeanble view cfg when visible
-
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
         exposeComposite(compositeName);
         // if matrix used then: essentially reclick all 'checked' matrix checkboxes
-        if(viewDDtoSubCB) {
-            var CBs = $("input.matrixCB").filter(":checked");
-            if(CBs.length > 0) {
-                var classSets = new Array();
-                CBs.each( function (i) { classSets.push( $(this).attr("class") ); } );
-                if(classSets.length > 0) {
-                    // Now it would be good to create a list of all subtrack CBs that match view,unchecked, and a class set (pair or triplet!)
-                    CBs = $("input.subtrackCB").filter("."+view).not(":checked");
-                    if(CBs.length > 0) {
-                        while(classSets.length > 0) {
-                            var OneOrMoreClasses = classSets.pop();
-                            var JustTheseCBs = CBs;
-                            if(OneOrMoreClasses.length > 0) {
-                                OneOrMoreClasses = OneOrMoreClasses.replace("matrixCB ",""); // "matrixCB K562 CTCF" to "K562 CTCF"
-                                var classes = OneOrMoreClasses.split(" ");
-                                while(classes.length > 0) {
-                                    JustTheseCBs = JustTheseCBs.filter("."+classes.pop());
-                                }
-                                JustTheseCBs.each( function (i) {
-                                    this.checked = true;
-                                    setCheckBoxShadow(this);
-                                    hideOrShowSubtrack(this);
-                                });
+        var CBs = $("input.matCB").filter(":checked");
+        if(CBs.length > 0) {
+            var classSets = new Array();
+            CBs.each( function (i) { classSets.push( $(this).attr("class") ); } );
+            if(classSets.length > 0) {
+                // Now it would be good to create a list of all subtrack CBs that match view,unchecked, and a class set (pair or triplet!)
+                CBs = $("input.subCB").filter("."+view).not(":checked");
+                if(CBs.length > 0) {
+                    while(classSets.length > 0) {
+                        var OneOrMoreClasses = classSets.pop();
+                        var JustTheseCBs = CBs;
+                        if(OneOrMoreClasses.length > 0) {
+                            OneOrMoreClasses = OneOrMoreClasses.replace("matCB ",""); // "matCB K562 CTCF" to "K562 CTCF"
+                            var classes = OneOrMoreClasses.split(" ");
+                            while(classes.length > 0) {
+                                JustTheseCBs = JustTheseCBs.filter("."+classes.pop());
                             }
+                            JustTheseCBs.each( function (i) {
+                                this.checked = true;
+                                matSubCBsetShadow(this);
+                                hideOrShowSubtrack(this);
+                            });
                         }
                     }
                 }
             }
-        } else {
-            matSetSubtrackCheckBoxes(true,view);
         }
-        //if(viewDDtoMatCB)
-        //    matChkBoxesNormalized();
-        //    //$("input.matrixCB").not(":checked").each( function (i) { matChkBoxNormalize(this); } );
-        matEnableSubtrackCheckBoxes(true,view);
+        matSubCBsEnable(true,view);
     }
 }
 
@@ -89,167 +67,364 @@ function exposeComposite(compositeName)
     }
 }
 
-// Obsolete because matCBwithViewDD is not true
-//function getViewNamesSelected(on)
-//{
-//// Returns an array of all views that are on or off (hide)
-//// views are "select" drop downs containing 'hide','dense',...
-//// To be clear, an array of strings with the view name is returned.
-//    var views = new Array();
-//    var list = $(".viewDd");
-//    if(on)
-//        list = $(list).filter("[selectedIndex!=0]")
-//    else
-//        list = $(list).filter("[selectedIndex=0]")
-//    $(list).each( function (i) {
-//        views.push(this.name.substring(this.name.indexOf('.') + 1, this.name.lastIndexOf('.')));
-//    });
-//   return( views );
-//}
-
-function checkBoxSet(CB,state)
+function matSubCbClick(subCB)
 {
-    CB.checked = state;
-    setCheckBoxShadow(CB);
-    hideOrShowSubtrack(CB);
+// subCB:onclick  When a subtrack checkbox is clicked, it may result in
+// Clicking/unclicking the corresponding matrix CB.  Also the
+// subtrack may be hidden as a result.
+    matSubCBsetShadow(subCB);
+    hideOrShowSubtrack(subCB);
+    // When subCBs are clicked, 3-state matCBs may need to be set
+    var classes = matViewClasses('hidden');
+    classes = classes.concat( matZeeCBclasses('unchecked') );
+    var matCB = matCbFindFromSubCb( subCB );
+    if( matCB != undefined ) {
+        matChkBoxNormalize( matCB, classes );
+    }
+    //var zeeCB = matZeeCbFindFromSubCb( subCB );
+    //if( zeeCB != undefined ) {
+    //    matChkBoxNormalize( zeeCB, classes );
+    //}
+}
+
+function matCbClick(matCB)
+{
+// matCB:onclick  When a matrix CB is clicked, the set of subtracks checked may change
+// Also called indirectly by matButton:onclick via matSetMatrixCheckBoxes
+
+    matCbComplete(matCB,true); // No longer partially checked
+    var classes =  $( matCB ).attr("class");
+    var isZee = (classes.indexOf("dimZ") > 0);
+    classes = classes.replace("matCB ","");
+    if(isZee)
+        classes = classes.replace("dimZ ","");
+    else
+        classes = classes.replace("halfVis","");
+    var classList = new Array;
+    if(classes.length > 0)
+        classList = classes.split(" ");
+    if(classList.length == 0 )
+       matSubCBsCheck(matCB.checked);
+    else if(classList.length == 1 )
+       matSubCBsCheck(matCB.checked,classList[0]);
+    else if(classList.length == 2 )
+       matSubCBsCheck(matCB.checked,classList[0],classList[1]);
+    else if(classList.length == 3 )
+       matSubCBsCheck(matCB.checked,classList[0],classList[1],classList[2]); // I don't think it will ever go beyond 4
+    else
+       matSubCBsCheck(matCB.checked,classList[0],classList[1],classList[2],classList[3]);
+
+    if(isZee) {  // if dimZ then we may have just made indeterminate X and Ys determinate
+        if(matCB.checked == false) { // checking new dimZs cannot change indeterminate state.
+            var matCBs = matCBsWhichAreComplete(false);
+            if($("input.matCB.dimZ:checked").length == 0)
+                $( matCBs ).each( function (i) { matCbComplete( this, true ); });
+            else {
+                var classes = matViewClasses('hidden');
+                classes = classes.concat( matZeeCBclasses('unchecked') );
+                $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
+            }
+        }
+    }
 }
 
 function matSetMatrixCheckBoxes(state)
 {
-// Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    var CBs;
-    if(state)
-        CBs = $("input.matrixCB").not(":checked");
-    else
-        CBs = $("input.matrixCB").filter(":checked").not(".dimZ");// uncheck should not touch dimZ
+// matButtons:onclick Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
+    var matCBs = $("input.matCB").not(".dimZ");
     for(var vIx=1;vIx<arguments.length;vIx++) {
-        CBs = $( CBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+        matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
-    CBs.each( function (i) { this.checked = state;} )
-    //CBs.each( function (i) { if(this.checked != state) this.click();} )
+    $( matCBs ).each( function (i) {
+        this.checked = state;
+        matCbComplete(this,true);
+        matCbClick(this);  // If this is inefficient, then replace it with subCB iteration logic below
+    });
 
-    if(state) {
-        CBs = $("input.subtrackCB").not(":checked");
-        // need to weed out non-checked dimZ if there are any
-        var zCBs = $("input.matrixCB.dimZ").not(":checked");
-        if( $( zCBs ).length > 0) {
-            var classes = "";            // make string of classes
-            $(zCBs).each( function (i) {
-                classes += $( this ).attr("class").replace("matrixCB dimZ ",".");
-            });
-            CBs = $( CBs ).not(classes); // weed CBs
-        }
-    } else
-        CBs = $("input.subtrackCB").filter(":checked");
-    for(var vIx=1;vIx<arguments.length;vIx++) {
-        CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
-    }
-    CBs.each( function (i) { checkBoxSet(this,state); });
+    //var subCBs;
+    //if(state) {
+    //    subCBs = $("input.subCB").not(":checked");
+    //    var classes = matZeeCBclasses('unchecked');    // need to weed out non-checked dimZ if there are any
+    //    subCBs = objsFilterByClasses(subCBs,false,classes);
+    //} else
+    //    subCBs = $("input.subCB").filter(":checked");
+
+    //for(var vIx=1;vIx<arguments.length;vIx++) {
+    //    subCBs = $( subCBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+    //}
+    //$( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
 
     return true;
 }
 
-function subtrackCBsSetAll(state)
+///////////// CB support routines ///////////////
+// Terms:
+// viewDD - view drop-down control
+// matButton: the [+][-] button controls associated with the matrix
+// matCB - matrix dimX and dimY CB controls (in some cases this set contains zeeCBs as well because they are part of the matrix)
+// zeeCB - matrix dimZ CB controls
+// subCB - subtrack CB controls
+// What does work
+// 1) 4 state subCBs: checked/unchecked enabled/disabled (which is visible/hidden)
+// 2) 3 state matCBs for dimX and Y but not for Z (checked,unchecked,indeterminate (incomplete set of subCBs for this matCB))
+// 3) cart vars for viewDD, zeeCBs and subCBs but matCBs set by the state of those 3
+// What is awkward or does not work
+// A) Awkward: matCB could be 5 state (all,none,subset,superset,excusive non-matching set)
+function matSubCBsCheck(state)
 {
 // Set all subtrack checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    var CBs;
-    if(state)
-        CBs = $("input.subtrackCB").not(":checked");
-    else
-        CBs = $("input.subtrackCB").filter(":checked");
+// called by matCB clicks (matCbClick()) !
+    var subCBs = $("input.subCB");
     for(var vIx=1;vIx<arguments.length;vIx++) {
-        CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+        subCBs = subCBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
-    CBs.each( function (i) { checkBoxSet(this,state); });
 
-    return true;
-}
-
-function matSetSubtrackCheckBoxes(state)
-{
-// Set all subtrack checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    var CBs = $("input.subtrackCB");
-    for(var vIx=1;vIx<arguments.length;vIx++) {
-        CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
-    }
-    // This next block of code is needed to make dimZ work with dimsX&Y
-    if(state) {
-        var dimZ = $("input.matrixCB.dimZ");
-        if(dimZ.length > 0) {
-            if(arguments.length == 3) { // Requested dimX&Y
-                dimZ = dimZ.filter(":checked");
-                for(var dIx=0;dIx<dimZ.length;dIx++) {
-                    var classes = $(dimZ[dIx]).attr("class");
-                    classes = classes.replace("matrixCB ","");
-                    classes = classes.replace("dimZ","");
-                    classes = classes.replace(/ /g,".");
-                    CBs.filter(classes).each( function (i) { checkBoxSet(this,state); });
-                }
-            // Okay, that works for including dimZ when dimX&Y is clicked.  What about including dimX&Y when dimZ is clicked?
-            } if(arguments.length == 2) { // Requested dimZ
-                var dimsXY = $("input.matrixCB").not(".dimZ");
-                dimsXY = dimsXY.filter(":checked");
-                for(var dIx=0;dIx<dimsXY.length;dIx++) {
-                    var classes = $(dimsXY[dIx]).attr("class");
-                    classes = classes.replace("matrixCB","");
-                    classes = classes.replace(/ /g,".");
-                    CBs.filter(classes).each( function (i) { checkBoxSet(this,state); });
-                }
+    if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
+        if(arguments.length == 3) { // Requested dimX&Y: check dimZ state
+            var classes = matZeeCBclasses('unchecked');
+            subCBs = objsFilterByClasses(subCBs,false,classes);
+            $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
+        } else {//if(arguments.length == 2) { // Requested dimZ (or only 1 dimension so this code is harmless)
+            var matXY = $("input.matCB").not(".dimZ");  // check X&Y state
+            matXY = $( matXY ).filter(":checked");
+            for(var mIx=0;mIx<matXY.length;mIx++) {
+                var classes = $(matXY[mIx]).attr("class");
+                classes = classes.replace("matCB","");
+                classes = classes.replace("halfVis","");
+                classes = '.' + classes.split(' ').join(".");
+                $( subCBs ).filter(classes).each( function (i) { matSubCBcheckOne(this,state); });
             }
-            return true;  // Notice if dimZ exists (regardless of checked state) then need to return
         }
-    }
-    // state uncheck or dimZ doesn't exist
-    CBs.each( function (i) { checkBoxSet(this,state); });
+    } else  // state not checked so no filtering by other matCBs needed
+        subCBs.each( function (i) { matSubCBcheckOne(this,state); });
 
     return true;
 }
 
-function setCheckBoxShadow(CB)
-{
-// Since CBs only get into cart when enabled/checked, the shadow control enables cart to know other states
-    var shadowState = 0;
-    if(CB.checked)
-        shadowState = 1;
-    if(CB.disabled)
-        shadowState -= 2;
-    $("input[name='boolshad."+CB.name+"']").val(shadowState);
-}
-
-function matEnableSubtrackCheckBoxes(state)
+function matSubCBsEnable(state)
 {
 // Enables/Disables subtracks checkboxes.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    var CBs = $("input.subtrackCB");
+    var subCBs = $("input.subCB");
     for(var vIx=1;vIx<arguments.length;vIx++) {
-        CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
+        if(arguments[vIx].length > 0)
+            subCBs = subCBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
-    //if(matCBwithViewDD) {
-    //    if(state) { // further filter by view
-    //        views = getViewNamesSelected(false); // get views (strings) that are off
-    //        for(var vIx=0;vIx<views.length;vIx++) {
-    //            CBs = CBs.filter(":not(."+views[vIx]+")");  // Successively limit list by additional classes.
-    //        }
-    //    }
-    //}
-    CBs.each( function (i) {
+    subCBs.each( function (i) {
+        if(state) {
+            $(this).parent().attr('title','');
+            $(this).parent().attr('cursor','pointer');
+        } else {
+            $(this).parent().attr('title','view is hidden');
+            $(this).parent().attr('cursor','pointer');
+        }
         this.disabled = !state;
-        setCheckBoxShadow(this);
+        matSubCBsetShadow(this);
         hideOrShowSubtrack(this);
     });
 
     return true;
 }
 
-function matSubtrackCbClick(subCb)
+function matSubCBcheckOne(subCB,state)
 {
-// When a subrtrack checkbox is clicked, it may result in
-// Clicking/unclicking the corresponding matrix CB.  Also the
-// subtrack may be hidden as a result.
-    //if(subCBtoMatCB)
-    //    matChkBoxNormalizeMatching(subCb);
-    setCheckBoxShadow(subCb);
-    hideOrShowSubtrack(subCb);
+// setting a single subCB may cause it to appear/disappear
+    subCB.checked = state;
+    matSubCBsetShadow(subCB);
+    hideOrShowSubtrack(subCB);
 }
+
+function matSubCBsetShadow(subCB)
+{
+// Since CBs only get into cart when enabled/checked, the shadow control enables cart to know other states
+    var shadowState = 0;
+    if(subCB.checked)
+        shadowState = 1;
+    if(subCB.disabled)
+        shadowState -= 2;
+    $("input[name='boolshad."+subCB.name+"']").val(shadowState);
+}
+
+function matChkBoxNormalize(matCB)
+{
+// Makes sure matCBs are in one of 3 states (checked,unchecked,indeterminate) based on matching set of subCBs
+    var classes =  $( matCB ).attr("class");
+    var isZee = (classes.indexOf("dimZ") > 0);
+    classes = classes.replace("matCB "," ");
+    if(isZee)
+        classes = classes.replace("dimZ ","");
+    else
+        classes = classes.replace("halfVis","");
+    classes = '.' + classes.split(' ').join(".");// created string filter of classes converting "matCB K562 H3K4me1" as ".K562.H3K4me1" (or "matCB rep1 dimZ" to "rep1")
+    var subCBs = $("input.subCB").filter(classes); // All subtrack CBs that match matrix CB
+    if(arguments.length > 1 && arguments[1].length > 0) { // dimZ NOT classes
+        subCBs = objsFilterByClasses(subCBs,false,arguments[1]);
+    }
+    if(subCBs.length > 0) {
+        var CBsChecked = subCBs.filter(":checked");
+        //if(isZee) {
+        //    // dimZ CBs are indeterminate if checked and none are or not checked and some are
+        //    if(($(matCB).is(':checked') && CBsChecked.length == 0)
+        //    || ($(matCB).is(':checked') == false && CBsChecked.length > 0))
+        //        matCbComplete(matCB,false);
+        //    else
+        //        matCbComplete(matCB,true);
+        //} else {
+        if(!isZee) {
+            if(CBsChecked.length == subCBs.length) {
+                matCbComplete(matCB,true);
+                $(matCB).attr('checked',true);
+            } else if(CBsChecked.length == 0) {
+                matCbComplete(matCB,true);
+                $(matCB).attr('checked',false);
+            } else {
+                matCbComplete(matCB,false);
+                $(matCB).attr('checked',true);
+            }
+        }
+    }
+}
+
+function matChkBoxesNormalizeAll()
+{
+// document:load  Makes sure all matCBs are in one of 3 states (checked,unchecked,indeterminate) based on matching set of subCBs
+    var matCBs = $("input.matCB").not(".dimZ");
+    var zeeCBs = $("input.matCB.dimZ");
+    var classes = matViewClasses('hidden');
+    if( $(zeeCBs).length > 0) {
+        // Should do dimZ first, then go back and do non-dimZ with extra restrictions!
+        $(zeeCBs).each( function (i) {
+            // do not normaize dimZ.  These are set only by cart variables
+            matChkBoxNormalize(this,classes);                                              // checks dimZ matCBs which have any subtracks checked.
+            if( $(this).is(':checked') == false ) {
+                classes.push( $( this ).attr("class").replace("matCB ","").replace("dimZ ","") );   // builds classes string filter like ".rep2.rep3" which are those mat cbs that are not checed.
+            }
+        } );
+    }
+    $(matCBs).each( function (i) { matChkBoxNormalize(this,classes); } );
+
+    // For each viewDD not selected, disable associated subtracks
+    $('select.viewDD').not("[selectedIndex]").each( function (i) {
+        var viewClass = this.name.substring(this.name.indexOf(".") + 1,this.name.lastIndexOf("."));
+        matSubCBsEnable(false,viewClass);
+    });
+}
+
+function matCbComplete(matCB,complete)
+{
+// Makes aore removes the 3rd (indeterminate) matCB state
+    // Too many options:
+    // 1) addClass()/removeClass() (which does not directly support title)
+    // 2) wrap div which could contain border, color, content.  content is not on one line: size is difficult
+    // 3) wrap font which could contain border, color, content.  content is on one line: size is difficult
+    // 4) *[ ]* ?[ ]?  *[ ]*  No text seems right;  borders? colors? opacity? Yes, minimum
+    if(complete) {
+        $(matCB).css('opacity', '1');  // For some reason IE accepts direct change but isn't happy with simply adding class!
+        $(matCB).removeClass('halfVis');
+        $(matCB).parent().attr("title","");
+    } else {
+        $(matCB).css('opacity', '0.5');
+        $(matCB).addClass('halfVis');
+        $(matCB).parent().attr("title","Not all associated subtracks have been selected");
+    }
+}
+
+function matCBsWhichAreComplete(complete)
+{
+// Returns a list of currently indeterminate matCBs.  This is encapsulated to keep consistent with matCbComplete()
+    if(complete)
+        return $("input.matCB").not(".halfVis");
+    else
+        return $("input.matCB.halfVis");
+}
+
+function matCbFindFromSubCb(subCB)
+{
+// returns the one matCB associated with a subCB (or undefined)
+    var classes =  $( subCB ).attr("class");
+    classes = classes.replace("subCB ","");
+    // How to deal with dimZ and view?  Assume view is at end and dimZ is penultimate
+    var classList = classes.split(" ");
+    var end=classList.length - 1; // Avoid last one
+    var zeeCBs = $("input.matCB.dimZ");
+    if( zeeCBs.length > 0 )
+        end--;
+    classes ='.' + classList.slice(0,end).join('.');
+    // At this point classes has been converted from "subCB 1GM12878 CTCF rep1 cHot" to ".1GM12878.CTCF"
+    var matCB = $("input.matCB"+classes); // NOte, this works for filtering multiple classes because we want AND
+    if(matCB.length == 1)
+        return matCB;
+    else
+        return undefined;
+}
+
+function matZeeCBfindFromSubCb(subCB)
+{
+// returns the one zeeCB associated with a subCB (or undefined)
+    var zeeCBs = $("input.matCB.dimZ");
+    if( zeeCBs.length > 0 ) {
+        var classes =  $( subCB ).attr("class");
+        // How to deal with d1mZ and view?  Assume view is at end and dimZ is penultimate
+        var classList = classes.split(" ");
+        var zIx=classList.length - 2;
+        if(zIx >= 0) {
+            zeeCB = $(zeeCBs).filter('.'+classList[zIx]);
+            if(zeeCB.length == 1)
+                return zeeCB;
+        }
+    }
+    return undefined;
+}
+
+function objsFilterByClasses(objs,keep,classes)
+{
+// Accepts an obj list and an array of classes, then filters successively by that list
+    if( classes != undefined && classes.length > 0 ) {
+        if(keep) {
+            objs = $( objs ).filter( '.' + classes.join('.') ); // filter('class1.class2') is same as filter('.class1').filter('.class2')
+        } else {
+            for(var cIx=classes.length-1;cIx>-1;cIx--) {
+                objs = $( objs ).not( '.' + classes[cIx] );   // not('class1.class2') is different from not('.class1').not('.class2')
+            }
+        }
+    }
+    return objs;
+}
+
+function matViewClasses(limitTo)
+{
+// returns an array of classes from the ViewDd: converts "viewDD normalText SIG"[]s to "SIG","zRAW"
+    var classes = new Array;
+    var viewDDs = $("select.viewDD");//.filter("[selectedIndex='0']");
+    if(limitTo == 'hidden') {
+        viewDDs = $(viewDDs).not("[selectedIndex]");
+    } else if(limitTo == 'visible') {
+        viewDDs = $(viewDDs).filter("[selectedIndex]");
+    }
+    $(viewDDs).each( function (i) {
+        classes.push( $( this ).attr("class").replace("viewDD ","").replace("normalText ","") );
+    });
+    return classes;
+}
+
+function matZeeCBclasses(limitTo)
+{
+// returns an array of classes from the dimZ CB classes: converts "matCB dimZ rep1"[]s to "rep1","rep2"
+    var classes = new Array;
+    var zeeCBs = $("input.matCB.dimZ");
+    if(zeeCBs.length > 0) {
+        if(limitTo == 'unchecked') {
+            zeeCBs = zeeCBs.not(":checked");
+        } else if(limitTo == 'checked') {
+            zeeCBs = zeeCBs.filter(":checked");
+        }
+        $(zeeCBs).each( function (i) {
+            classes.push( $( this ).attr("class").replace("matCB ","").replace("dimZ ","") );
+        });
+    }
+    return classes;
+}
+
+/////////////////// subtrack configuration support ////////////////
 
 function compositeCfgUpdateSubtrackCfgs(inp)
 {
@@ -348,7 +523,7 @@ function enableViewCfgLink(enable,view)
 
 function enableAllViewCfgLinks()
 {
-    $( ".viewDd").each( function (i) {
+    $( ".viewDD").each( function (i) {
         var view = this.name.substring(this.name.indexOf(".") + 1,lastIndexOf(".vis"));
         enableViewCfgLink((this.selectedIndex > 0),view);
     });
@@ -365,7 +540,7 @@ function showConfigControls(name)
 {
 // Will show configuration controls for name= {tableName}.{view}
 // Config controls not matching name will be hidden
-    //if($( ".viewDd[name$='" + name + ".vis']").attr("selectedIndex") == 0) {
+    //if($( ".viewDD[name$='" + name + ".vis']").attr("selectedIndex") == 0) {
     //    $("input[name$='.showCfg']").val("off");
     //    $("tr[id^='tr_cfg_']").css('display','none');  // hide cfg controls when view is hide
     //    return true;
@@ -421,8 +596,6 @@ function trAlternateColors(table,cellIx)
             }
             table.rows[trIx].bgColor = curColor;
         }
-    } else if(debugLevel>2) {
-        alert("trAlternateColors is unimplemented for this browser)");
     }
 }
 
@@ -493,8 +666,6 @@ function tableSortByColumns(table,sortColumns)
         if(sortColumns.tags.length>1)
             trAlternateColors(table,sortColumns.cellIxs[sortColumns.tags.length-2]);
 
-    } else if(debugLevel>2) {
-        alert("tableSortByColumns is unimplemented for this browser)");
     }
 }
 
@@ -581,15 +752,6 @@ function tableSortUsingSortColumns(table)
     var columns = new sortColumnsGetFromTable(table);
     tbody = table.getElementsByTagName("tbody")[0];
     tableSortByColumns(tbody,columns);
-}
-
-function hintOverSortableColumnHeader(th)
-{// Upodates the sortColumns struct and sorts the table when a column headder has been pressed
-    if(debugLevel>0) {
-        var tr=th.parentNode;
-        th.title = "Current Sort Order: " + sortOrderFromTr(tr);
-        var sortColumns = new sortColumnsGetFromTr(tr);
-    }
 }
 
 function tableSortAtButtonPress(anchor,tagId)
@@ -695,13 +857,6 @@ function trFindPosition(tr)
     return "unknown";
 }
 
-function hintForDraggableRow(tr)
-{
-    if(debugLevel>0) {
-        tr.title='Position:'+trFindPosition(tr)
-    }
-}
-
 function trComparePriority(tr1,tr2)
 {
 // Compare routine for sorting by *.priority
@@ -757,54 +912,6 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
     }
 }
 
-function matChkBoxNormalize(matCb)
-{
-    var classes =  $( matCb ).attr("class");
-    var dimZ = (classes.indexOf("dimZ") > 0);
-    classes = classes.replace("dimZ ","");
-    classes = classes.replace("matrixCB "," ");
-    classes = classes.replace(/ /g,".");
-    var CBs = $("input.subtrackCB").filter(classes); // All subtrack CBs that match matrix CB
-    if(arguments.length > 1) { // dimZ NOT classes
-        CBs = $( CBs ).not(arguments[1]); // Removes the dimZ associated classes that are not checked
-    }
-    if(CBs.length > 0) {
-        var CBsChecked = CBs.filter(":checked");
-        if(CBsChecked.length == CBs.length)
-            matCb.checked=true;
-        else if(CBsChecked.length == 0)
-            matCb.checked=false;
-        else if(dimZ)
-            matCb.checked=true; // Some are checked and this is dimZ.  This is a best guess
-    }
-}
-
-function matChkBoxesNormalized()
-{
-// check/unchecks matrix checkboxes based upon subtrack checkboxes
-    var matCBs = $("input.matrixCB");
-    var dimZCBs = $("input.matrixCB[name$='_dimZ_cb']");
-    if( $(dimZCBs).length > 0) {
-        // Should do dimZ first, then go back and do non-dimZ with extra restrictions!
-        var classes = "";
-        $(dimZCBs).each( function (i) {
-            matChkBoxNormalize(this);
-            if( $(this).is(':checked') == false ) {
-                classes += $( this ).attr("class").replace("matrixCB dimZ ",".")
-            }
-        } );
-        $("input.matrixCB").not("[name$='_dimZ_cb']").each( function (i) { matChkBoxNormalize(this,classes); } );
-    } else {
-        $("input.matrixCB").each( function (i) { matChkBoxNormalize(this); } );
-    }
-
-    // For each viewDD not selected, disable associated subtracks
-    $('select.viewDd').not("[selectedIndex]").each( function (i) {
-        var viewClass = this.name.substring(this.name.indexOf(".") + 1,this.name.lastIndexOf("."));
-        matEnableSubtrackCheckBoxes(false,viewClass);
-    });
-}
-
 function showOrHideSelectedSubtracks(inp)
 {
 // Show or Hide subtracks based upon radio toggle
@@ -839,14 +946,10 @@ function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
     if (document.getElementsByTagName) {
-        matChkBoxesNormalized();  // Note that this needs to be done when the page is first displayed.  But ideally only on clean cart!
+        matChkBoxesNormalizeAll();  // Note that this needs to be done when the page is first displayed.  But ideally only on clean cart!
         showOrHideSelectedSubtracks();
         //enableAllViewCfgLinks();
     }
-    else if(debugLevel>2) {
-        alert("matInitializeMatrix is unimplemented for this browser)");
-    }
-   // alert("Time stamped ");
 }
 
 function multiSelectLoad(div,sizeWhenOpen)
