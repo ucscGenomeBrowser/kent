@@ -27,11 +27,12 @@ ENCODE tracks typically contain one or more of the following views:
 fields for statistical significance.</DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
 processed data.</DD>
-<DT><I>Raw Signal</I></DT><DD>Density graph (wiggle) of signal from raw data
+<!--<DT><I>Raw Signal</I></DT><DD>Density graph (wiggle) of signal from raw data
 (single replicates, no control). For high-throughput sequencing data,
 this reflects the aligned read density.</DD>
 <DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome.</DD>
 </DL>
+-->
 </P>
 <P>
 <EM>Peaks</EM> for this track include a signalValue and pValue.
@@ -40,12 +41,12 @@ length of the interval, relative to random expectation.
 The pValue reflects the likelihood of observing an interval of the given
 length and signalValue at random. A long interval with a moderate signalValue
 and a short interval with a high signalValue can therefore have the same pValue.
-<P>
+<!--<P>
 The <EM>Raw Signal</EM> for this track was generated at UCSC, by extending reads in
 the appropriate direction to the median fragment size (300 bp)
 and then counting overlapping tags at each base using the UCSC
 <TT>bedItemOverlapCount</TT> utility.
-</P>
+</P>-->
 
 <h2>Methods</h2>
 
@@ -70,26 +71,29 @@ background signal.</P>
 This is Release 2 (Oct 2009) of this track, which includes new experimental
 data as well as
 the changes described below.
-</P>
-<P> New data has been released for the H1-hESC, HepG2, HMEC, and NHLF cell lines.
-</P>
-<P>
-A number of previously released datasets have been replaced by updated versions.
-The affected database tables and files include 'V2' 
-in the name, and metadata is marked with "submittedDataVersion=V2",
-followed by the reason for replacement.
-Specific changes are:
 <TABLE>
-<tr><th align='left' valign='top' nowrap> <i>TagAligns</i></th>
+<tr><th align='left' valign='top' nowrap> <i>New Data</i></th>
 <td>
-The previously released "TagAligns" datasets had an off-by-one error.
-All TagAligns data now have these problems corrected.
+New data has been released for the H1-hESC, HepG2, HMEC, and NHLF cell lines.
 </td></tr>
-</TABLE>
-Previous versions of files are available for download from the
+
+<tr><th align='left' valign='top' nowrap ><i>Raw Signal</i></th>
+<td>
+The previously-available "Raw Signal" view of the data is no longer provided as
+the 'Signals' view provides a better measure of enrichment, and algorithms for
+the Raw Signal are in flux.
+</td></tr>
+<tr><th align='left' valign='top' nowrap ><i>Aligned Tags</i></th>
+<td>
+The previously released "TagAligns" files had an off-by-one error on the end
+position of tags.  This error had no significant affect on higher level analysis
+but the tag files have been replaced nevertheless.  The corrected files include
+'V2' in the name, and metadata is marked with "submittedDataVersion=V2".
+Previous versions of these files are available for download from the
 <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/"
  TARGET=_BLANK>FTP site</A>
-
+</td></tr>
+</TABLE>
 
 <h2>Credits</h2>
 
