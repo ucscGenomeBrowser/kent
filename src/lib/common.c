@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.133 2009/09/24 22:20:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.134 2009/10/20 19:49:24 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -994,6 +994,39 @@ boolean startsWithWordByDelimiter(char *firstWord,char delimit, char *line)
 if(delimit == ' ')
     return startsWithWord(firstWord,line);
 return (startsWith(firstWord,line) && line[strlen(firstWord)] == delimit);
+}
+
+char * findWordByDelimiter(char *word,char delimit, char *line)
+/* Return pointer to first occurance of word in line broken by 'delimit' char
+   Comparison is case sensitive. Delimit of ' ' uses isspace() */
+{
+int ix;
+char *p=line;
+while(*p!='\0')
+    {
+    for (ix = 0;
+         word[ix] != '\0' && word[ix] == *p;
+         ix++,p++); // advance as long as they match
+    if(ix == strlen(word))
+        {
+        if(*p=='\0'
+        || *p==delimit
+        || (delimit == ' ' && isspace(*p)))
+            return p - ix; // matched and delimited
+        }
+        for(;    *p!='\0'
+              && *p!=delimit
+              && (delimit != ' ' || !isspace(*p));
+              p++); // advance to next delimit
+        if(*p!='\0')
+            {
+            p++;
+            continue;  // delimited so start again after delimit
+            }
+        else
+            break;
+    }
+return NULL;
 }
 
 char *rStringIn(char *needle, char *haystack)
