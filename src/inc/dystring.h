@@ -57,6 +57,9 @@ __attribute__((format(printf, 2, 3)))
 #endif
     ;
 
+struct dyString *dyStringCreate(char *format, ...);
+/*  Create a dyString with a printf style initial content */
+
 #define dyStringClear(ds) (ds->string[0] = ds->stringSize = 0)
 /* Clear string. */
 

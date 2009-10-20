@@ -1,4 +1,4 @@
-/* dystring - dynamically resizing string. 
+/* dystring - dynamically resizing string.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.23 2008/10/01 17:21:01 angie Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.24 2009/10/20 19:17:34 tdreszer Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -98,7 +98,7 @@ return c;
 }
 
 void dyStringAppendMultiC(struct dyString *ds, char c, int n)
-/* Append N copies of char to end of string. */ 
+/* Append N copies of char to end of string. */
 {
 int oldSize = ds->stringSize;
 int newSize = oldSize + n;
@@ -118,7 +118,7 @@ void dyStringAppend(struct dyString *ds, char *string)
 dyStringAppendN(ds, string, strlen(string));
 }
 
-void dyStringAppendEscapeQuotes(struct dyString *dy, char *string, 
+void dyStringAppendEscapeQuotes(struct dyString *dy, char *string,
 	char quot, char esc)
 /* Append escaped-for-quotation version of string to dy. */
 {
@@ -138,7 +138,7 @@ void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
 int avail, sz;
-while (TRUE) 
+while (TRUE)
     {
     va_list argscp;
     va_copy(argscp, args);
@@ -173,6 +173,18 @@ dyStringVaPrintf(ds, format, args);
 va_end(args);
 }
 
+struct dyString *dyStringCreate(char *format, ...)
+/*  Create a dyString with a printf style initial content */
+{
+int len = strlen(format) * 3;
+struct dyString *ds = newDyString(len);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(ds, format, args);
+va_end(args);
+return ds;
+}
+
 struct dyString * dyStringSub(char *orig, char *in, char *out)
 /* Make up a duplicate of orig with all occurences of in substituted
  * with out. */
@@ -185,7 +197,7 @@ if (orig == NULL) return NULL;
 for (s = orig; ;)
     {
     e = stringIn(in, s);
-    if (e == NULL) 
+    if (e == NULL)
 	{
         e = orig + origLen;
 	dyStringAppendN(dy, s, e - s);
