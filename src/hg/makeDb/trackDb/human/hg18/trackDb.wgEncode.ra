@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.598 2009/10/21 21:33:22 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.599 2009/10/21 21:38:56 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -7085,7 +7085,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeUwDnaseSeq off
     shortLabel HGF Pk 2
-    longLabel ENCODE UW Digital DNaseIq Peaks Replicate 2 (in HGF cells)
+    longLabel ENCODE UW Digital DNaseI Peaks Replicate 2 (in HGF cells)
     subGroups view=aPeaks cellType=HGF rep=rep2
     type narrowPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=HGF view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=736 dateSubmitted=2009-10-20 dateUnrestricted=2010-07-20 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Hgf fileName=wgEncodeUwDnaseSeqPeaksRep2Hgf.narrowPeak.gz
