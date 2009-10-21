@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.596 2009/10/21 16:44:43 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.597 2009/10/21 21:29:41 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -740,7 +740,7 @@ dataVersion ENCODE Feb 2009 Freeze
     release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel H1-hESC Control Sig
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in H1-hESC cells)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H1-hESC control)
     subGroups view=Signal factor=zCTRL cellType=H1
     type wig 0.00 11630.00
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=H1-hESC antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=616 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalH1hescControl fileName=wgEncodeBroadChipSeqSignalH1hescControl.wig.gz
@@ -897,7 +897,7 @@ dataVersion ENCODE Feb 2009 Freeze
     release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HepG2 Control Sig
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in HepG2 cells)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (HepG2 control)
     subGroups view=Signal factor=zCTRL cellType=HEPG2
     type wig 0.00 10365.00
     color 189,0,157
@@ -1079,7 +1079,7 @@ dataVersion ENCODE Feb 2009 Freeze
     release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel HMEC Control Sig
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in HMEC cells)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (HMEC control)
     subGroups view=Signal factor=zCTRL cellType=HMEC
     type wig 0.00 14364.00
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HMEC antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=558 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHmecControl fileName=wgEncodeBroadChipSeqSignalHmecControl.wig.gz
@@ -1938,7 +1938,7 @@ dataVersion ENCODE Feb 2009 Freeze
     release alpha
     subTrack wgEncodeBroadChipSeq off
     shortLabel NHLF Control Sig
-    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control in NHLF cells)
+    longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (NHLF control)
     subGroups view=Signal factor=zCTRL cellType=NHLF
     type wig 0.00 15647.00
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=NHLF antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=617 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalNhlfControl fileName=wgEncodeBroadChipSeqSignalNhlfControl.wig.gz
