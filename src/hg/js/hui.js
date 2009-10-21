@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.38 2009/10/20 23:24:43 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.39 2009/10/21 15:48:50 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -822,6 +822,12 @@ function tableSortAtStartup()
     }
 }
 
+function hintOverSortableColumnHeader(th)
+{// Upodates the sortColumns struct and sorts the table when a column headder has been pressed
+    //th.title = "Click to make this the primary sort column, or toggle direction";
+    //var tr=th.parentNode;
+    //th.title = "Current Sort Order: " + sortOrderFromTr(tr);
+}
 
 ///// Following functions are for Sorting by priority
 function tableSetPositions(table)
