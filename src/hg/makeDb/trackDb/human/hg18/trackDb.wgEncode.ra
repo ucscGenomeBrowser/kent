@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.595 2009/10/20 19:46:28 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.596 2009/10/21 16:44:43 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -9341,6 +9341,27 @@ wgEncode 1
     type narrowPeak
     color 0,119,158
     metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=E2F4 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=587 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3E2f4 fileName=wgEncodeYaleChIPseqPeaksHelas3E2f4.narrowPeak.gz
+
+# submission 739
+    track wgEncodeYaleChIPseqSignalHelas3E2f6
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 E2F6 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in HeLa-S3 cells)
+    subGroups view=Signal factor=E2F6 cellType=t2HeLa
+    type bedGraph 4
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=E2F6 view=Signal labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=739 dateSubmitted=2009-10-21 dateUnrestricted=2010-07-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqSignalHelas3E2f6 fileName=wgEncodeYaleChIPseqSignalHelas3E2f6.bedGraph4.gz
+
+    track wgEncodeYaleChIPseqPeaksHelas3E2f6
+    release alpha
+    subTrack wgEncodeYaleChIPseq off
+    shortLabel HeLa-S3 E2F6 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in HeLa-S3 cells)
+    subGroups view=Peaks factor=E2F6 cellType=t2HeLa
+    type narrowPeak
+    color 0,119,158
+    metadata project=wgEncode grant=Snyder lab=UCD(Farnham) dataType=ChIPseq cell=HeLa-S3 antibody=E2F6 view=Peaks labVersion="Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)" dataVersion="ENCODE Sep 2009 Freeze" subId=739 dateSubmitted=2009-10-21 dateUnrestricted=2010-07-20 composite=wgEncodeYaleChIPseq tableName=wgEncodeYaleChIPseqPeaksHelas3E2f6 fileName=wgEncodeYaleChIPseqPeaksHelas3E2f6.narrowPeak.gz
 
 # submission 553
     track wgEncodeYaleChIPseqSignalHelas3Ha
