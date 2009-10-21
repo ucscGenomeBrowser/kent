@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.39 2009/10/21 15:48:50 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.40 2009/10/21 19:14:52 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -21,6 +21,18 @@ function matSelectViewForSubTracks(obj,view)
     if( obj.selectedIndex == 0) { // hide
         matSubCBsEnable(false,view);
         hideConfigControls(view);
+
+        // fix 3-way matCBs if necessary
+        var matCBs = matCBsWhichAreComplete(false);
+        if(matCBs.length > 0) {
+            if($("select.viewDD[selectedIndex]").length == 0) {// No views visible so nothing is inconsistent
+                $( matCBs ).each( function (i) { matCbComplete( this, true ); });
+            } else {
+                var classes = matViewClasses('hidden');
+                classes = classes.concat( matZeeCBclasses('unchecked') );
+                $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
+            }
+        }
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
@@ -106,23 +118,23 @@ function matCbClick(matCB)
     if(classList.length == 0 )
        matSubCBsCheck(matCB.checked);
     else if(classList.length == 1 )
-       matSubCBsCheck(matCB.checked,classList[0]);
+       matSubCBsCheck(matCB.checked,classList[0]);               // dimX or dimY or dimZ
     else if(classList.length == 2 )
-       matSubCBsCheck(matCB.checked,classList[0],classList[1]);
-    else if(classList.length == 3 )
-       matSubCBsCheck(matCB.checked,classList[0],classList[1],classList[2]); // I don't think it will ever go beyond 4
+       matSubCBsCheck(matCB.checked,classList[0],classList[1]);  // dimX and dimY
     else
-       matSubCBsCheck(matCB.checked,classList[0],classList[1],classList[2],classList[3]);
+        alert("ASSERT in matCbClick(): There should be no more than 2 entries in list:"+classList)
 
     if(isZee) {  // if dimZ then we may have just made indeterminate X and Ys determinate
         if(matCB.checked == false) { // checking new dimZs cannot change indeterminate state.
             var matCBs = matCBsWhichAreComplete(false);
-            if($("input.matCB.dimZ:checked").length == 0)
-                $( matCBs ).each( function (i) { matCbComplete( this, true ); });
-            else {
-                var classes = matViewClasses('hidden');
-                classes = classes.concat( matZeeCBclasses('unchecked') );
-                $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
+            if(matCBs.length > 0) {
+                if($("input.matCB.dimZ:checked").length == 0)
+                    $( matCBs ).each( function (i) { matCbComplete( this, true ); });
+                else {
+                    var classes = matViewClasses('hidden');
+                    classes = classes.concat( matZeeCBclasses('unchecked') );
+                    $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
+                }
             }
         }
     }
@@ -302,10 +314,10 @@ function matChkBoxesNormalizeAll()
     }
     $(matCBs).each( function (i) { matChkBoxNormalize(this,classes); } );
 
-    // For each viewDD not selected, disable associated subtracks
-    $('select.viewDD').not("[selectedIndex]").each( function (i) {
+    // For each viewDD, enable/disable associated subtracks
+    $('select.viewDD').each( function (i) {
         var viewClass = this.name.substring(this.name.indexOf(".") + 1,this.name.lastIndexOf("."));
-        matSubCBsEnable(false,viewClass);
+        matSubCBsEnable((this.selectedIndex > 0),viewClass);
     });
 }
 
