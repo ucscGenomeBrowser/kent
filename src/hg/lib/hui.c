@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.241 2009/10/20 23:23:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.242 2009/10/21 15:51:47 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3074,7 +3074,7 @@ if (!primarySubtrack)
         int sIx=0;
         for(sIx=0;sIx<sortOrder->count;sIx++)
             {
-            printf ("<TH id='%s.%s.sortTh' abbr='%c' onMouseOver=\"hintOverSortableColumnHeader(this)\" nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
+            printf ("<TH id='%s.%s.sortTh' abbr='%c' nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
                 parentTdb->tableName,sortOrder->column[sIx],(sortOrder->forward[sIx]?'-':'+'),sortOrder->column[sIx],sortOrder->title[sIx],(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
             if (sortOrder->count > 1)
                 printf ("%d",sortOrder->order[sIx]);
