@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.49 2009/10/21 18:34:58 hiram Exp $";
+#	"$Id: hg19.txt,v 1.50 2009/10/21 19:15:36 hiram Exp $";
 
 #############################################################################
 
@@ -5253,34 +5253,41 @@ XXX - ready to go here - 2009-07-06
 
     # split 46way mafs into 10M chunks and generate sufficient statistics 
     # files for # phastCons
-    ssh memk
+    ssh swarm
     mkdir -p /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split
     cd /hive/data/genomes/hg19/bed/multiz46way/mafSplit
     ./splitRegions.pl mafSplit.bed > \
 	/hive/data/genomes/hg19/bed/multiz46way/cons/msa.split/region.list
     mkdir /hive/data/genomes/hg19/bed/multiz46way/cons/ss
-    cd /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split
+    mkdir -p /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split/2009-10-19
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split/2009-10-19
 
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set c = $1
 set MAF = /hive/data/genomes/hg19/bed/multiz46way/splitRun/maf/hg19_$c.maf
-set WINDOWS = /hive/data/genomes/hg19/bed/multiz46way/cons/ss/$c
+set WINDOWS = /hive/data/genomes/hg19/bed/multiz46way/cons/msa.split/2009-10-19/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
 rm -fr $WINDOWS
-# set seq = `egrep "${c}"'$' region.list | awk '{printf "-seq=%s -start=%d
-# -end=%d", $1, $2, $3}'`
-set seq = `egrep "${c}"'$' region.list | awk '{printf "-seq=%s", $1}'`
 mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
-twoBitToFa ${seq} /hive/data/genomes/hg19/hg19.2bit hg19.$c.fa
-set empty = `faSize hg19.$c.fa | egrep " 0 real 0 upper 0 lower|masked total" | wc -l`
-if ( $empty != 2 ) then
-    /cluster/bin/phast/$MACHTYPE/msa_split $MAF -i MAF \
-        -M hg19.$c.fa -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
-rm -f hg19.$c.fa
 popd > /dev/null
 date >> $2
+rm -f $2.running
 '_EOF_'
     # << happy emacs
     chmod +x doSplit.csh
@@ -5293,11 +5300,20 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
     # << happy emacs
 
     #	do the easy ones first to see some immediate results
-    ls -1S -r ../../splitRun/maf | sed -e "s/.maf//; s/hg19_//" > maf.list
+    ls -1S -r ../../../splitRun/maf | sed -e "s/.maf//; s/hg19_//" > maf.list
 
     gensub2 maf.list single template jobList
     para -ram=32g create jobList
     para try ... check ... etc
+# Completed: 503 of 504 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      14171s     236.18m     3.94h    0.16d  0.000 y
+# IO & Wait Time:                188193s    3136.55m    52.28h    2.18d  0.006 y
+# Average job time:                 402s       6.71m     0.11h    0.00d
+# Longest finished job:            1597s      26.62m     0.44h    0.02d
+# Submission to last job:          2586s      43.10m     0.72h    0.03d
+    #	the one crashed job is hg19_chr18_gl000207_random.00.maf
+
     #	XXX - this did not work
     #	this takes a really long time.  memk was down to 2 usable
     #	machines - got it finished manually on a combination of hgwdevnew CPUs
@@ -6849,9 +6865,7 @@ do
 done | sort -k1,1 -k2,2n > multiz46wayFrames.bed
 
     featureBits -countGaps hg19 multiz46wayFrames.bed
-    #	62315198 bases of 3107677273 (2.005%) in intersection
-    featureBits -countGaps hg19 multiz28wayFrames
-    #	48236360 bases of 3107677273 (1.552%) in intersection
+    #	57146632 bases of 3137161264 (1.822%) in intersection
 
     #	enable the trackDb entries:
 # frames multiz46wayFrames
