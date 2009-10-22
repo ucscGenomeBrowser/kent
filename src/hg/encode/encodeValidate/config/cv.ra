@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.137 2009/10/15 21:55:28 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.138 2009/10/22 17:02:23 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -900,6 +900,16 @@ orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
 targetLink GeneCard GC20P054637|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C&search=TFAP2C_id=GC20P054637
 
+term BAFT
+type Antibody
+antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Recommended for detection of B-ATF of m, r and h origin by WB, IP and ELISA
+targetDescription The protein encoded by this gene is a nuclear basic leucine zipper protein that belongs to the AP-1/ATF superfamily of transcription factors. The leucine zipper of this protein mediates dimerization with members of the Jun family of proteins. This protein is thought to be a negative regulator of AP-1/ATF transcriptional events.
+vendorName Santa Cruz Biotech
+vendorId sc-100974
+orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
+lab Myers
+targetLink GeneCard GC14P075058|http://www.genecards.org/cgi-bin/carddisp.pl?gene=BATF
+
 term BDP1
 type Antibody
 antibodyDescription Rabbit polyclonal - Antiserum 2663 was raised by immunizing rabbits with synthetic peptide CSDRYRIYKAQKLRE (human Bdp1 residues 139?153) coupled to KLH.
@@ -1002,6 +1012,16 @@ vendorId sc-22823
 orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
 lab Farnham
 targetLink GeneCard GC02M011536|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M011536
+
+term EBF
+type Antibody
+antibodyDescription Mouse monoclonal IgG2a, 200µg/ml. Raised against amino acids 1-300 mapping at the N-terminus of EBF of human origin. Recommended for detection of EBF1-4 of m, r and h origin by WB, IP, IF and ELISA
+targetDescription Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity)
+vendorName Santa Cruz Biotech
+vendorId sc-137065
+orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
+lab Myers
+targetLink GeneCard GC05M158059|http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 
 term Egr-1
 type Antibody
@@ -1204,6 +1224,26 @@ targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gen
 #lab Farnham
 #targetLink GeneCard GC20M031727|http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
 
+term HEY1
+type Antibody
+antibodyDescription HRT1 (C-20) Goat polyclonal IgG, 200 µg/ml. Epitope mapping near the C-terminus of HRT1 of human origin
+targetDescription This gene encodes a nuclear protein belonging to the hairy and enhancer of split-related (HESR) family of basic helix-loop-helix (bHLH)-type transcriptional repressors. Expression of this gene is induced by the Notch and c-Jun signal transduction pathways. Two similar and redundant genes in mouse are required for embryonic cardiovascular development, and are also implicated in neurogenesis and somitogenesis. Alternative splicing results in multiple transcript variants.
+vendorName Santa Cruz Biotech
+vendorId sc-16424
+orderUrl http://www.scbt.com/datasheet-16424-hrt1-c-20-antibody.html
+lab Myers
+targetLink GeneCard GC08M080838|http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
+
+term IRF4
+type Antibody
+antibodyDescription IRF-4 (M-17) Goat polyclonal IgG, 200 µg/ml. Epitope mapping at the C-terminus of IRF-4 of mouse origin. Recommended for detection of IRF-4 of m, r and h origin by WB, IP, IF and ELISA
+targetDescription Transcriptional activator. Binds to the interferon-stimulated response element (ISRE) of the MHC class I promoter. Binds the immunoglobulin lambda light chain enhancer, together with PU.1. Probably plays a role in ISRE-targeted signal transduction mechanisms specific to lymphoid cells
+vendorName Santa Cruz Biotech
+vendorId sc-6059
+orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
+lab Myers
+targetLink GeneCard GC06P000336|http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
+
 term JunD
 type Antibody
 antibodyDescription rabbit polyclonal IgG
@@ -1285,6 +1325,26 @@ orderUrl
 lab Myers / Wold
 lots 20070905JV
 
+term PAX5-C20
+type Antibody
+antibodyDescription Goat polyclonal IgG, 200 µg/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
+targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
+vendorName Santa Cruz Biotech
+vendorId sc-1974
+orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
+lab Myers
+targetLink GeneCard GC09M036828|http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+
+term PAX5-N19
+type Antibody
+antibodyDescription Goat polyclonal IgG, 200 µg/ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
+targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
+vendorName Santa Cruz Biotech
+vendorId sc-1975
+orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
+lab Myers
+targetLink GeneCard GC09M036828|http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+
 term Pol2
 type Antibody
 targetDescription RNA Polymerase II
@@ -1304,6 +1364,16 @@ vendorName Covance
 vendorId MMS-128P
 lab Bernstein
 lots 147337002
+
+term Pol2-4H8
+type Antibody
+antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade
+targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
+vendorName Abcam
+vendorId ab5408
+orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
+lab Myers
+targetLink GeneCard GC17P007329|http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 
 term Pol3
 type Antibody
@@ -1362,6 +1432,16 @@ vendorId ab48192
 orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 lab Struhl
 targetLink GeneCard GC19M004125|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M004125
+
+term SIX5
+type Antibody
+antibodyDescription Six5 (K-20) Goat polyclonal IgG, 200µg/ml. Epitope mapping near the C-terminus of Six5 of human origin. Recommended for detection of Six5 of human origin by WB, IF and ELISA
+targetDescription The protein encoded by this gene is a homeodomain-containing transcription factor that appears to function in the regulation of organogenesis. This gene is located downstream of the dystrophia myotonica-protein kinase gene. Mutations in this gene are a cause of branchiootorenal syndrome type 2.
+vendorName Santa Cruz Biotech
+vendorId sc-55706
+orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
+lab Myers
+targetLink GeneCard GC19M050959|http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
 
 term SREBP1A
 type Antibody
@@ -1444,6 +1524,26 @@ lots K0905 F2706
 #lab Myers / Wold
 #lots K0905 F2706
 
+term TCF12
+type Antibody
+antibodyDescription HEB (A-20) Rabbit polyclonal IgG, 200 µg/ml. Epitope mapping within the C-terminus of HEB of human origin
+targetDescription The protein encoded by this gene is a member of the basic helix-loop-helix (bHLH) E-protein family that recognizes the consensus binding site (E-box) CANNTG. This encoded protein is expressed in many tissues, among them skeletal muscle, thymus, B- and T-cells, and may participate in regulating lineage-specific gene expression through the formation of heterodimers with other bHLH E-proteins. Several alternatively spliced transcript variants of this gene have been described, but the full-length nature of some of these variants has not been determined.
+vendorName Santa Cruz Biotech
+vendorId sc-357
+orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
+lab Myers
+targetLink GeneCard GC15P054998|http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
+
+term TCF4
+type Antibody
+antibodyDescription Rabbit monoclonal
+targetDescription TCF4 is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+vendorName Cell Signaling Technology
+vendorId 2569S
+orderUrl http://www.cellsignal.com/products/2569.html
+lab Farnham/Myers
+targetLink GeneCard GC18M051045|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC18M051045
+
 term TCF7L2
 type Antibody
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
@@ -1491,6 +1591,16 @@ vendorId sc-1703X
 orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetLink GeneCard GC14P099774|http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
+
+term ZBTB33
+type Antibody
+antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1; 200 µg/ml. Raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA
+targetDescription KAISO is a transcriptional regulator that binds, via its zinc fingers, to DNA sequences containing methylated CGCG or to the consensus KAISO-binding site (KBS) TCCTGCNA
+vendorName Santa Cruz Biotech
+vendorId sc-23871
+orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
+lab Myers
+targetLink GeneCard GC0XP119268|http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
 
 term ZNF263
 type Antibody
