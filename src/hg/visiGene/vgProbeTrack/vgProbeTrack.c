@@ -1436,9 +1436,9 @@ safef(cmd,sizeof(cmd),
 ,database,fasta);
 verbose(1,"%s\n",cmd); system(cmd);
 
-sqlUpdate(conn, "create index seq on vgRemapTemp(seq(40));");
 /* required for mysql 5 longtext for case-insensitive comparisons of blobs */
 sqlUpdate(conn, "ALTER table vgRemapTemp modify seq longtext;");
+sqlUpdate(conn, "create index seq on vgRemapTemp(seq(40));");
 
 /* get remapped psl probes not yet aligned */
 dyStringClear(dy);
