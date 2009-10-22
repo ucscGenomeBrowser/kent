@@ -1,3 +1,39 @@
+track etemadmoghadam2009_CGH
+shortLabel Ovarian Cancer CGH
+longLabel Ovarian Cancer CGH
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings etemadmoghadam2009_CGHGroups
+
+track etemadmoghadam2009_exp
+shortLabel Ovarian Cancer Expression
+longLabel Ovarian Cancer Expression
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings etemadmoghadam2009_expGroups
+
+track miller2005
+shortLabel Breast Expression
+longLabel Breast Cancer Expression
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings miller2005Groups
+
 track TARGETcnv
 shortLabel Leukemia CGH
 longLabel Leukemia CGH
