@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.599 2009/10/21 21:38:56 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.600 2009/10/22 16:12:44 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -7705,8 +7705,37 @@ wgEncode 1
     type broadPeak
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Hotspots replicate=1 labVersion=Hotspot-v5.0 dataVersion="ENCODE July 2009 Freeze" subId=50 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep1Sknshra fileName=wgEncodeUwDnaseSeqHotspotsRep1Sknshra.broadPeak.gz
 
-# submission 402
+# submission 737 VERSIONING 402
+    track wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
+    release alpha
+    subTrack wgEncodeUwDnaseSeq off
+    shortLabel SK-N-SH_RA Raw 2
+    longLabel ENCODE UW Digital DNaseI Raw Signal Replicate 2 (in SK-N-SH_RA cells)
+    subGroups view=zRawSig cellType=SKNSHRA rep=rep2
+    type wig 1.00 62564.00
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=737 submittedDataVersion=V2 dateResubmitted=2009-10-22 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2SknshraV2 fileName=wgEncodeUwDnaseSeqRawSignalRep2SknshraV2.wig.gz
+
+    track wgEncodeUwDnaseSeqPeaksRep2SknshraV2
+    release alpha
+    subTrack wgEncodeUwDnaseSeq off
+    shortLabel SK-N-SH_RA Pk 2
+    longLabel ENCODE UW Digital DNaseI Peaks Replicate 2 (in SK-N-SH_RA cells)
+    subGroups view=aPeaks cellType=SKNSHRA rep=rep2
+    type narrowPeak
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=737 submittedDataVersion=V2 dateResubmitted=2009-10-22 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2SknshraV2 fileName=wgEncodeUwDnaseSeqPeaksRep2SknshraV2.narrowPeak.gz
+
+    track wgEncodeUwDnaseSeqHotspotsRep2SknshraV2
+    release alpha
+    subTrack wgEncodeUwDnaseSeq off
+    shortLabel SK-N-SH_RA Hspot 2
+    longLabel ENCODE UW Digital DNaseI Hotspots Replicate 2 (in SK-N-SH_RA cells)
+    subGroups view=cHot cellType=SKNSHRA rep=rep2
+    type broadPeak
+    metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=737 submittedDataVersion=V2 dateResubmitted=2009-10-22 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqHotspotsRep2SknshraV2 fileName=wgEncodeUwDnaseSeqHotspotsRep2SknshraV2.broadPeak.gz
+
+# submission 402 VERSIONED by 737
     track wgEncodeUwDnaseSeqRawSignalRep2Sknshra
+    release beta
     subTrack wgEncodeUwDnaseSeq off
     shortLabel SK-N-SH_RA Raw 2
     longLabel ENCODE UW Digital DNaseI Raw Signal Replicate 2 (in SK-N-SH_RA cells)
@@ -7715,6 +7744,7 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=RawSignal replicate=2 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=402 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqRawSignalRep2Sknshra fileName=wgEncodeUwDnaseSeqRawSignalRep2Sknshra.wig.gz
 
     track wgEncodeUwDnaseSeqPeaksRep2Sknshra
+    release beta
     subTrack wgEncodeUwDnaseSeq off
     shortLabel SK-N-SH_RA Pk 2
     longLabel ENCODE UW Digital DNaseI Peaks Replicate 2 (in SK-N-SH_RA cells)
@@ -7723,6 +7753,7 @@ wgEncode 1
     metadata project=wgEncode grant=Stam lab=Uw dataType=DnaseSeq cell=SK-N-SH_RA view=Peaks replicate=2 labVersion=lmax-v1.0 dataVersion="ENCODE July 2009 Freeze" subId=402 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeUwDnaseSeq tableName=wgEncodeUwDnaseSeqPeaksRep2Sknshra fileName=wgEncodeUwDnaseSeqPeaksRep2Sknshra.narrowPeak.gz
 
     track wgEncodeUwDnaseSeqHotspotsRep2Sknshra
+    release beta
     subTrack wgEncodeUwDnaseSeq off
     shortLabel SK-N-SH_RAHspot2
     longLabel ENCODE UW Digital DNaseI Hotspots Replicate 2 (in SK-N-SH_RA cells)
