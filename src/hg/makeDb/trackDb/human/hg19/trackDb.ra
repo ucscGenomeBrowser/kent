@@ -1247,7 +1247,7 @@ priority 103.29
     longLabel Primate Conservation by PhastCons
     noInherit on
     configurable on
-    type wig 0 1
+    type bigWig 0 1
     maxHeightPixels 100:40:11
     autoScale off
     spanList 1
@@ -1263,7 +1263,7 @@ priority 103.29
     longLabel Placental Mammal Conservation by PhastCons
     noInherit on
     configurable on
-    type wig 0 1
+    type bigWig 0 1
     maxHeightPixels 100:40:11
     autoScale off
     spanList 1
