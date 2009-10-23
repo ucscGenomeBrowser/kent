@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.601 2009/10/22 19:23:11 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.602 2009/10/23 01:03:44 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4012,7 +4012,7 @@ wgEncode 1
     metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=NRE cell=K562 promoter=SV40 view=Enhancer_Blockers dataVersion="ENCODE Nov 2008 Freeze" subId=100 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeNhgriNRE tableName=wgEncodeNhgriNREEnhancerBlockersK562Sv40 fileName=wgEncodeNhgriNREEnhancerBlockersK562Sv40.bed6.gz
 
 
-# Riken CAGE (wrangler: mikep)
+# Riken CAGE (wrangler: braney)
 track wgEncodeRikenCage
 compositeTrack on
 shortLabel RIKEN CAGE Loc
@@ -9012,7 +9012,7 @@ wgEncode 1
 
 
 
-# SUNY Albany genechp (wrangler: mikep)
+# SUNY Albany genechp (wrangler: braney)
 
 track wgEncodeSunyalbanyRnaGeneChip
 compositeTrack on
@@ -13880,7 +13880,7 @@ wgEncode 1
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=5k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=254 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128785k fileName=wgEncodeGisDnaPetAlignmentsGm128785k.pairedTagAlign.gz
 
 
-# Helicos RNA-seq (wrangler: mikep)
+# Helicos RNA-seq (wrangler: braney)
 
 track wgEncodeHelicosRnaSeq
 compositeTrack on
@@ -14324,3 +14324,33 @@ noInherit on
     subGroups view=3-MinusRawSignal cellType=K562 localization=60-nucleolus
     type bigWig 0 1076632
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort.bedGraph.gz
+
+# UMass Weng Lab TFBS Validation (wrangler: kate)
+
+track wgEncodeUmasshaTfbsValid
+compositeTrack on
+shortLabel UMA/HA TFBS Val
+longLabel ENCODE TFBS Validation from Univ. Mass. (Weng Lab) and HudsonAlpha
+group regulation
+subGroup1 view Views TestedSites=Tested_Sites
+subGroup2 cellType Cell_Line K562=K562
+dimensions dimensionX=cellType
+sortOrder cellType=+ view=+
+controlledVocabulary encode/cv.ra cellType
+dragAndDrop subTracks
+visibilityViewDefaults TestedSites=pack
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeUmasshaTfbsValidTestedSitesK562
+    release alpha
+    subTrack wgEncodeUmasshaTfbsValid on
+    shortLabel K562
+    longLabel ENCODE TFBS Validation from Univ. Mass. (Weng Lab) and HudsonAlpha (in K562 cells)
+    subGroups view=TestedSites cellType=K562
+    type bed 6 +
+    color 46,0,184
+    metadata project=wgEncode grant=Weng lab=UMassHA dataType=TfbsValid cell=K562 view=TestedSites dataVersion="ENCODE Sep 2009 Freeze" subId=689 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeUmasshaTfbsValid tableName=wgEncodeUmasshaTfbsValidTestedSitesK562 fileName=wgEncodeUmasshaTfbsValidTestedSitesK562.bed6+.gz
+
+
