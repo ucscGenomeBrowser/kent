@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.139 2009/10/22 17:21:49 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.140 2009/10/23 16:56:37 tdreszer Exp $
 # Cell types
 term GM12878
 type Cell Line
@@ -1111,11 +1111,14 @@ term H3K4me3
 type Antibody
 antibodyDescription rabbit polyclonal
 targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or poised to be activated.
-orderUrl http://www.abcam.com/index.html?datasheet=8580
-vendorName Abcam
-vendorId ab8580
+vendorName Millipore
+vendorId 07-473
+orderUrl http://www.millipore.com/catalogue/item/07-473
+#vendorName Abcam
+#vendorId ab8580
+#orderUrl http://www.abcam.com/index.html?datasheet=8580
 lab Bernstein
-lots 498616,331024
+lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetLink GeneCard GC01M148078|http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 
 term H3K9ac
