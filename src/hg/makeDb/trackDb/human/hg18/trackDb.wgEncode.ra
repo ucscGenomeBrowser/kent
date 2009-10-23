@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.603 2009/10/23 02:07:41 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.604 2009/10/23 20:11:21 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -227,6 +227,7 @@ type bed 3
 wgEncode 1
 noInherit on
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100,signalValueFilter0.0,signalValueLimits=0:45000 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 dataVersion ENCODE Feb 2009 Freeze
 
 # submission 148
@@ -1962,6 +1963,7 @@ controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 configurable on
 settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 SIG:viewLimits=0:0.4,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SIGBO:viewLimits=0:100,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16
+#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:16,signalValueFilter=0.0,signalValueFilterLimits=0:16,scoreFilter=100,scoreFilterLimits=100:1000,scoreMin=600 SIG:viewLimits=0:0.4,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16 SIGBO:viewLimits=0:100,viewLimitsMax=0:8719,autoScale=off,windowingFunction=maximum,maxHeightPixels=100:32:16
 useScore 0
 priority 0
 type bed 3
@@ -1976,7 +1978,7 @@ wgEncode 1
     subGroups view=Peaks EXP=DNase cellType=1GM12878
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Peaks labVersion="DNaseHS, p-value cutoff: 0.5" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion=V2 dateResubmitted=2009-09-02 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksGm12878V2 fileName=wgEncodeDukeDNaseSeqPeaksGm12878V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Peaks labVersion="DNaseHS, p-value cutoff: 0.5" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-02 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksGm12878V2 fileName=wgEncodeDukeDNaseSeqPeaksGm12878V2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalGm12878V2
     release alpha
@@ -1987,7 +1989,7 @@ wgEncode 1
     type wig 0.00 1.26
     viewLimits 0:0.15
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Signal labVersion="DNaseHS, fseq v 1.82, iff_GM12878" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion=V2 dateResubmitted=2009-09-02 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalGm12878V2 fileName=wgEncodeDukeDNaseSeqSignalGm12878V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Signal labVersion="DNaseHS, fseq v 1.82, iff_GM12878" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-02 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalGm12878V2 fileName=wgEncodeDukeDNaseSeqSignalGm12878V2.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2
     release alpha
@@ -1998,7 +2000,7 @@ wgEncode 1
     type wig 0.00 576.00
     viewLimits 0:25
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="DNaseHS, baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion=V2 dateResubmitted=2009-09-02 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="DNaseHS, baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-02 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2.wig.gz
 
 # submission 277 (versioned by 461)
     track wgEncodeDukeDNaseSeqPeaksGm12878
@@ -2044,7 +2046,7 @@ wgEncode 1
     subGroups view=Peaks EXP=FAIRE cellType=1GM12878
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878V2 fileName=wgEncodeUncFAIREseqPeaksGm12878V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksGm12878V2 fileName=wgEncodeUncFAIREseqPeaksGm12878V2.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalGm12878V2
     release alpha
@@ -2055,7 +2057,7 @@ wgEncode 1
     type wig 0.00 0.81
     viewLimits 0.0005:0.04
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Signal labVersion="fseq v 1.82, iff_GM12878" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalGm12878V2 fileName=wgEncodeUncFAIREseqSignalGm12878V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Signal labVersion="fseq v 1.82, iff_GM12878" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalGm12878V2 fileName=wgEncodeUncFAIREseqSignalGm12878V2.wig.gz
 
     track wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2
     release alpha
@@ -2066,7 +2068,7 @@ wgEncode 1
     type wig 0.00 6246.00
     viewLimits 4:20
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2.wig.gz
 
 # submission 287 (versioned by 471)
     track wgEncodeUncFAIREseqPeaksGm12878
@@ -2112,7 +2114,7 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-CTCF cellType=1GM12878
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion=V2 dateResubmitted=2009-09-04 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksGm12878CtcfV2 fileName=wgEncodeUtaChIPseqPeaksGm12878CtcfV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-04 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksGm12878CtcfV2 fileName=wgEncodeUtaChIPseqPeaksGm12878CtcfV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalGm12878CtcfV2
     release alpha
@@ -2123,7 +2125,7 @@ wgEncode 1
     type wig 0.00 8.78
     viewLimits 0:0.4
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_GM12878" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion=V2 dateResubmitted=2009-09-04 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalGm12878CtcfV2 fileName=wgEncodeUtaChIPseqSignalGm12878CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_GM12878" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-04 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalGm12878CtcfV2 fileName=wgEncodeUtaChIPseqSignalGm12878CtcfV2.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2
     release alpha
@@ -2134,7 +2136,7 @@ wgEncode 1
     type wig 0.00 1951.00
     viewLimits 0:100
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion=V2 dateResubmitted=2009-09-04 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-04 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2.wig.gz
 
 # submission 278 (versioned by 468)
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
@@ -2644,7 +2646,7 @@ wgEncode 1
     subGroups view=Peaks EXP=DNase cellType=2HELA
     type narrowPeak
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHelas3V2 fileName=wgEncodeDukeDNaseSeqPeaksHelas3V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHelas3V2 fileName=wgEncodeDukeDNaseSeqPeaksHelas3V2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHelas3V2
     release alpha
@@ -2655,7 +2657,7 @@ wgEncode 1
     type wig 0.00 1.50
     viewLimits 0:0.15
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqSignalHelas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqSignalHelas3V2.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2
     release alpha
@@ -2666,7 +2668,7 @@ wgEncode 1
     type wig 0.00 277.00
     viewLimits 0:25
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
 
 # submission 280 (versioned by 495)
     track wgEncodeDukeDNaseSeqPeaksHelas3
@@ -2713,7 +2715,7 @@ wgEncode 1
     type wig 0.00 3249.00
     viewLimits 4:20
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion=V2 dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2.wig.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=494 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksRep1Helas3V2
@@ -2724,7 +2726,7 @@ wgEncode 1
     subGroups view=Peaks EXP=FAIRE cellType=2HELA
     type narrowPeak
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion=V2 dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksRep1Helas3V2 fileName=wgEncodeUncFAIREseqPeaksRep1Helas3V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksRep1Helas3V2 fileName=wgEncodeUncFAIREseqPeaksRep1Helas3V2.narrowPeak.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=494 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHelas3V2 fileName=wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalRep1Helas3V2
@@ -2736,7 +2738,7 @@ wgEncode 1
     type wig 0.00 0.47
     viewLimits 0.0005:0.04
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion=V2 dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalRep1Helas3V2 fileName=wgEncodeUncFAIREseqSignalRep1Helas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalRep1Helas3V2 fileName=wgEncodeUncFAIREseqSignalRep1Helas3V2.wig.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=494 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHelas3V2 fileName=wgEncodeUncFAIREseqSignalHelas3V2.wig.gz
 
 # submission 336 (versioned by 639)
@@ -2783,7 +2785,7 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-CTCF cellType=2HELA
     type narrowPeak
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHelas3CtcfV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHelas3CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHelas3CtcfV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHelas3CtcfV2
     release alpha
@@ -2794,7 +2796,7 @@ wgEncode 1
     type wig 0.00 8.59
     viewLimits 0:0.4
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3CtcfV2 fileName=wgEncodeUtaChIPseqSignalHelas3CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHelas3CtcfV2 fileName=wgEncodeUtaChIPseqSignalHelas3CtcfV2.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2
     release alpha
@@ -2805,7 +2807,7 @@ wgEncode 1
     type wig 0.00 1920.00
     viewLimits 0:100
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2.wig.gz
 
 # submission 281 (versioned by 493)
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
@@ -2852,7 +2854,7 @@ wgEncode 1
     type wig 0.00 140.00
     viewLimits 0:20
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2
     release alpha
@@ -2862,7 +2864,7 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-cMyc cellType=2HELA
     type narrowPeak
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalRep1Helas3CmycV2
     release alpha
@@ -2873,7 +2875,7 @@ wgEncode 1
     type wig 0.00 0.77
     viewLimits 0:0.08
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion=V2 dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HelaS3" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2 fileName=wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz
 
 # submission 282 (versioned by 642)
     track wgEncodeUtaChIPseqPeaksHelas3Cmyc
@@ -2931,7 +2933,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=2HEPG2
     type wig 0.00 177.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2V2
     release alpha
@@ -2940,7 +2942,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=DNase cellType=2HEPG2
     type narrowPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHepg2V2 fileName=wgEncodeDukeDNaseSeqPeaksHepg2V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksHepg2V2 fileName=wgEncodeDukeDNaseSeqPeaksHepg2V2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalHepg2V2
     release alpha
@@ -2950,7 +2952,7 @@ wgEncode 1
     subGroups view=SIG EXP=DNase cellType=2HEPG2
     type wig 0.00 2.57
     viewLimits 0:0.15
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqSignalHepg2V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqSignalHepg2V2.wig.gz
 
 # submission 277 (versioned by 556)
     track wgEncodeDukeDNaseSeqPeaksHepg2
@@ -2996,7 +2998,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=2HEPG2
     type wig 0.00 1773.00
     viewLimts 4:20
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHepg2V2
     release alpha
@@ -3005,7 +3007,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in HepG2 cells)
     subGroups view=Peaks EXP=FAIRE cellType=2HEPG2
     type narrowPeak
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2V2 fileName=wgEncodeUncFAIREseqPeaksHepg2V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksHepg2V2 fileName=wgEncodeUncFAIREseqPeaksHepg2V2.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalHepg2V2
     release alpha
@@ -3015,7 +3017,7 @@ wgEncode 1
     subGroups view=SIG EXP=FAIRE cellType=2HEPG2
     type wig 0.00 0.27
     viewLimits 0.0005:0.04
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2V2 fileName=wgEncodeUncFAIREseqSignalHepg2V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalHepg2V2 fileName=wgEncodeUncFAIREseqSignalHepg2V2.wig.gz
 
 # submission 286 (versioned by 557)
     track wgEncodeUncFAIREseqPeaksHepg2
@@ -3061,7 +3063,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=2HEPG2
     type wig 0.00 555.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2CtcfV2
     release alpha
@@ -3070,7 +3072,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HepG2 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=2HEPG2
     type narrowPeak
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CtcfV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2CtcfV2
     release alpha
@@ -3080,7 +3082,7 @@ wgEncode 1
     subGroups view=SIG EXP=IP-CTCF cellType=2HEPG2
     type wig 0.00 8.20
     viewLimits 0:0.4
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion=V2 dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqSignalHepg2CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqSignalHepg2CtcfV2.wig.gz
 
 # submission 283 (versioned by 555)
     track wgEncodeUtaChIPseqPeaksHepg2Ctcf
@@ -3126,7 +3128,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-cMyc cellType=2HEPG2
     type wig 0.00 513.00
     viewLimits 0:20
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion=V2 dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2CmycV2
     release alpha
@@ -3135,7 +3137,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HepG2 cells)
     subGroups view=Peaks EXP=IP-cMyc cellType=2HEPG2
     type narrowPeak
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion=V2 dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CmycV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CmycV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksHepg2CmycV2 fileName=wgEncodeUtaChIPseqPeaksHepg2CmycV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalHepg2CmycV2
     release alpha
@@ -3145,7 +3147,7 @@ wgEncode 1
     subGroups view=SIG EXP=IP-cMyc cellType=2HEPG2
     type wig 0.00 1.75
     viewLimits 0:0.08
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion=V2 dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqSignalHepg2CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_HepG2" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqSignalHepg2CmycV2.wig.gz
 
 # submission 284 (versioned by 593)
     track wgEncodeUtaChIPseqPeaksHepg2Cmyc
@@ -3410,7 +3412,7 @@ wgEncode 1
     subGroups view=Peaks EXP=DNase cellType=1K562
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksK562V2 fileName=wgEncodeDukeDNaseSeqPeaksK562V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqPeaksK562V2 fileName=wgEncodeDukeDNaseSeqPeaksK562V2.narrowPeak.gz
 
     track wgEncodeDukeDNaseSeqSignalK562V2
     release alpha
@@ -3421,7 +3423,7 @@ wgEncode 1
     type wig 0.00 1.92
     viewLimits 0:0.15
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalK562V2 fileName=wgEncodeDukeDNaseSeqSignalK562V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqSignalK562V2 fileName=wgEncodeDukeDNaseSeqSignalK562V2.wig.gz
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2
     release alpha
@@ -3432,7 +3434,7 @@ wgEncode 1
     type wig 0.00 374.00
     viewLimits 0:25
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2.wig.gz
 
 # submission 277 235 116 (versioned by 480)
     track wgEncodeDukeDNaseSeqPeaksK562
@@ -3479,7 +3481,7 @@ wgEncode 1
     type wig 0.00 6846.00
     viewLimits 4:20
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion=V2 dateResubmitted=2009-10-02 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-02 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2.wig.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=483 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksRep1K562V2
@@ -3490,7 +3492,7 @@ wgEncode 1
     subGroups view=Peaks EXP=FAIRE cellType=1K562
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion=V2 dateResubmitted=2009-10-02 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksRep1K562V2 fileName=wgEncodeUncFAIREseqPeaksRep1K562V2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-10-02 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksRep1K562V2 fileName=wgEncodeUncFAIREseqPeaksRep1K562V2.narrowPeak.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=483 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqPeaksK562V2 fileName=wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz
 
     track wgEncodeUncFAIREseqSignalRep1K562V2
@@ -3502,7 +3504,7 @@ wgEncode 1
     type wig 0.00 0.54
     viewLimits 0.0005:0.04
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion=V2 dateResubmitted=2009-10-02 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalRep1K562V2 fileName=wgEncodeUncFAIREseqSignalRep1K562V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-02 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalRep1K562V2 fileName=wgEncodeUncFAIREseqSignalRep1K562V2.wig.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=483 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-26 dateUnrestricted=2009-11-26 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqSignalK562V2 fileName=wgEncodeUncFAIREseqSignalK562V2.wig.gz
 
 # submission 287 (versioned by 640)
@@ -3549,7 +3551,7 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-CTCF cellType=1K562
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562CtcfV2 fileName=wgEncodeUtaChIPseqPeaksK562CtcfV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Peaks labVersion="p-value cutoff: 0.05" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562CtcfV2 fileName=wgEncodeUtaChIPseqPeaksK562CtcfV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalK562CtcfV2
     release alpha
@@ -3560,7 +3562,7 @@ wgEncode 1
     type wig 0.00 6.78
     viewLimits 0:0.4
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562CtcfV2 fileName=wgEncodeUtaChIPseqSignalK562CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562CtcfV2 fileName=wgEncodeUtaChIPseqSignalK562CtcfV2.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2
     release alpha
@@ -3571,7 +3573,7 @@ wgEncode 1
     type wig 0.00 3339.00
     viewLimits 0:100
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2.wig.gz
 
 # submission 278 244 (versioned by 481)
     track wgEncodeUtaChIPseqPeaksK562Ctcf
@@ -3617,7 +3619,7 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-cMyc cellType=1K562
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562CmycV2 fileName=wgEncodeUtaChIPseqPeaksK562CmycV2.narrowPeak.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Peaks labVersion="p-value cutoff: 0.01" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion="V2 - update calling algorithm" dateResubmitted=2009-09-08 dateSubmitted=2009-03-20 dateUnrestricted=2009-12-20 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqPeaksK562CmycV2 fileName=wgEncodeUtaChIPseqPeaksK562CmycV2.narrowPeak.gz
 
     track wgEncodeUtaChIPseqSignalK562CmycV2
     release alpha
@@ -3628,7 +3630,7 @@ wgEncode 1
     type wig 0.00 1.97
     viewLimits 0:0.08
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562CmycV2 fileName=wgEncodeUtaChIPseqSignalK562CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Signal labVersion="fseq v 1.82, iff_K562" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqSignalK562CmycV2 fileName=wgEncodeUtaChIPseqSignalK562CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2
     release alpha
@@ -3639,7 +3641,7 @@ wgEncode 1
     type wig 0.00 1925.00
     viewLimits 0:20
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2.wig.gz
 
 # submission 278 245 (versioned by 482)
     track wgEncodeUtaChIPseqPeaksK562Cmyc
