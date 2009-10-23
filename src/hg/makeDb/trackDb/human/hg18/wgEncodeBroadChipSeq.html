@@ -24,29 +24,25 @@ ENCODE tracks typically contain one or more of the following views:
 <DL>
 <DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
 (usually normalized data from pooled replicates). ENCODE Peaks tables contain
-fields for statistical significance.</DD>
-<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
-processed data.</DD>
-<!--<DT><I>Raw Signal</I></DT><DD>Density graph (wiggle) of signal from raw data
-(single replicates, no control). For high-throughput sequencing data,
-this reflects the aligned read density.</DD>
-<DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome.</DD>
-</DL>
--->
-</P>
-<P>
-<EM>Peaks</EM> for this track include a signalValue and pValue.
+fields for statistical significance.
+Peaks for this track include a signalValue and pValue.
 The signalValue represents the fold enrichment of reads across the
 length of the interval, relative to random expectation.
 The pValue reflects the likelihood of observing an interval of the given
 length and signalValue at random. A long interval with a moderate signalValue
 and a short interval with a high signalValue can therefore have the same pValue.
-<!--<P>
-The <EM>Raw Signal</EM> for this track was generated at UCSC, by extending reads in
-the appropriate direction to the median fragment size (300 bp)
-and then counting overlapping tags at each base using the UCSC
-<TT>bedItemOverlapCount</TT> utility.
-</P>-->
+</DD>
+<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
+processed data.</DD>
+</DL>
+Additional data that were used to generate these tracks
+are located in the ENCODE <A HREF="hgTrackUi?g=wgEncodeMapability">Mapability</A> track:
+<DL>
+<DT><I>Alignability</I></DT><DD>
+The <EM>Broad alignability</EM> track displays whether a region is made up of
+mostly unique or mostly non-unique sequence. </DD>
+</DL>
+</P>
 
 <h2>Methods</h2>
 
