@@ -1,0 +1,8 @@
+CSHL Long RNA-Seq for Tier I cell lines K562 and GM12878 2 biological replicates of each
+ 
+ Contact:  Carrie A Davis   davisc@cshl.edu
+ Credits: Carrie A. Davis, Jorg Drenkow, Huaien Wang, Alex Dobin and Tom Gingeras
+  
+  Library preparation:  Standard Illumina Pair-end kit with the sole exception that a .tagged. random hexamer was used to prime the 1st strand synthesis: 5.ACTGTAGGN6-3..  The addition of this tag is what permits us to make strand assignments for the reads. The sequence of the tag is reported in the 5' end of the read.  Asymmetric PCR can place the tag on either the 1st or 2nd read depending on which strand it used as a template. Strand assignments are made by looking for the tag at the 5' end of either read 1 or read 2. Read 1 is physically linked to read 2. Therefore, if a tag is present on one end strand assignments are made for both ends.  We noted during analysis that the tags are generally 5' truncated.  We only "strand" reads that contain ACTGTAGG, CTGTAGG, TGTAGG, GTAGG. Between 63-68% of reads could be stranded in these libraries. It is possible to cull additional stranded reads that contain non-templated TAGG, AGG, GG, or G sequences at their 5' end. The peak in insert size distribution is between 200-250 n'tds.
+   
+   Mapping:   The tags were removed from the 5. ends of the reads in accordance to their lengths and strand assignments made.  Subsequently, the reads were trimmed from their 3. ends to a final length of 50 nucleotides and were mapped using NextAlign, a program developed by Timo Lassman, RIKEN.   We allowed up to 2 mismatches across the entire length and only report reads that mapped to a single/unique locus in the assembled hg18 genome.
