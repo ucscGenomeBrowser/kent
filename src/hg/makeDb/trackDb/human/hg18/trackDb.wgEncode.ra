@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.608 2009/10/26 17:45:36 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.609 2009/10/26 20:01:34 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15524,7 +15524,7 @@ noInherit on
     shortLabel GM12 cell to -S1
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (total in GM12878 cell)
     subGroups view=MinusRawSig cellType=GM12878 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 2199965
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=MinusRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal.bigWig.gz
 
@@ -15534,7 +15534,7 @@ noInherit on
     shortLabel GM12 cell to -S2
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (total in GM12878 cell)
     subGroups view=MinusRawSig cellType=GM12878 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig  0 3756424
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=MinusRawSig replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal.bigWig.gz
 
@@ -15544,7 +15544,7 @@ noInherit on
     shortLabel K562 cell to -S1
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (total in K562 cell)
     subGroups view=MinusRawSig cellType=K562 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 2180073
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=MinusRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal fileName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal.bigWig.gz
 
@@ -15554,7 +15554,7 @@ noInherit on
     shortLabel K562 cell to -S2
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (total in K562 cell)
     subGroups view=MinusRawSig cellType=K562 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 1769868
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=MinusRawSig replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal fileName=wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal.bigWig.gz
 
@@ -15564,7 +15564,7 @@ noInherit on
     shortLabel K562 cyto A+ -S1
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=MinusRawSig cellType=K562 localization=cytosol rnaExtract=longPolyA
-    type bigWig
+    type bigWig 0 318978
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolya fileName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolya.bigWig.gz
 
@@ -15574,7 +15574,7 @@ noInherit on
     shortLabel GM12 cell to +S1
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (total in GM12878 cell)
     subGroups view=PlusRawSig cellType=GM12878 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 580871
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=PlusRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal.bigWig.gz
 
@@ -15584,7 +15584,7 @@ noInherit on
     shortLabel GM12 cell to +S2
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (total in GM12878 cell)
     subGroups view=PlusRawSig cellType=GM12878 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 898990
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=PlusRawSig replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal.bigWig.gz
 
@@ -15594,7 +15594,7 @@ noInherit on
     shortLabel K562 cell to +S1
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (total in K562 cell)
     subGroups view=PlusRawSig cellType=K562 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 384266
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=PlusRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal fileName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal.bigWig.gz
 
@@ -15604,7 +15604,7 @@ noInherit on
     shortLabel K562 cell to +S2
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (total in K562 cell)
     subGroups view=PlusRawSig cellType=K562 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 421850
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=PlusRawSig replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal fileName=wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal.bigWig.gz
 
@@ -15614,7 +15614,7 @@ noInherit on
     shortLabel K562 cyto A+ +S1
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=PlusRawSig cellType=K562 localization=cytosol rnaExtract=longPolyA
-    type bigWig
+    type bigWig 0 118018
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolya fileName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolya.bigWig.gz
 
@@ -15624,7 +15624,7 @@ noInherit on
     shortLabel GM12 cell to AS1
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 1 (total in GM12878 cell)
     subGroups view=AllRawSig cellType=GM12878 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 2689207
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=AllRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal.bigWig.gz
 
@@ -15634,7 +15634,7 @@ noInherit on
     shortLabel GM12 cell to AS2
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 2 (total in GM12878 cell)
     subGroups view=AllRawSig cellType=GM12878 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 4860029
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=AllRawSig replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal.bigWig.gz
 
@@ -15644,7 +15644,7 @@ noInherit on
     shortLabel K562 cell to AS1
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 1 (total in K562 cell)
     subGroups view=AllRawSig cellType=K562 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 3032883
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=AllRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal fileName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal.bigWig.gz
 
@@ -15654,7 +15654,7 @@ noInherit on
     shortLabel K562 cell to AS2
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 2 (total in K562 cell)
     subGroups view=AllRawSig cellType=K562 localization=cell rnaExtract=total
-    type bigWig
+    type bigWig 0 2411797
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=AllRawSig replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal fileName=wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal.bigWig.gz
 
@@ -15664,7 +15664,7 @@ noInherit on
     shortLabel K562 cyto A+ AS1
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=AllRawSig cellType=K562 localization=cytosol rnaExtract=longPolyA
-    type bigWig
+    type bigWig 0 318978
     color 46,0,184
     metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSig replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolya fileName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolya.bigWig.gz
 
