@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.606 2009/10/23 23:21:17 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.607 2009/10/26 17:22:03 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14127,66 +14127,6 @@ type bed 9
     cell K562
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsK562 fileName=wgEncodeHudsonalphaCnvRegionsK562.bed.gz subId=449
     priority 6
-
-
-# CSHL Long RNA-seq (wrangler: braney )
-
-track wgEncodeCshlLoRnaSeq
-compositeTrack on
-shortLabel CSHL Long RNA-seq
-longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
-group expression
-subGroup1 view Views 1-PlusRawSig=Plus_Raw_Signal 2-MinusRawSig=Minus_Raw_Signal 3-Alignments=Alignments
-#subGroup2 cellType Cell_Line K562=K562
-#subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
-#subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
-#dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
-#sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
-dragAndDrop subTracks
-visibilityViewDefaults 1-PlusRawSig=full 2-MinusRawSig=full 3-Alignments=pack
-settingsByView 1-PlusRawSig:maxHeightPixels=100:24:16,viewLimits=1:20,viewLimitsMax=1:65290,autoScale=off,windowingFunction=mean 2-MinusRawSig:maxHeightPixels=100:24:16,viewLimits=1:20,viewLimitsMax=1:65290,autoScale=off,windowingFunction=mean
-priority 0
-type bed 3
-noInherit on
-wgEncode 1
-
-    track wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya
-    subTrack wgEncodeCshlLoRnaSeq
-    shortLabel K562 cyt pA+
-    longLabel ENCODE CSHL Long RNA-Seq Alignments (PolyA+ RNA in K562 cytosol)
-    subGroups view=3-Alignments
-    #subGroups view=3-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-    #type tagAlign
-    type bigBed 6
-    baseColorDefault diffBases
-    baseColorUseSequence nameIsSequence
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
-    configurable on
-    color 46,0,184
-    colorByStrand 46,0,184 238,85,34
-    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq tableName=wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
-
-    track wgEncodeCshlLoRnaSeqPlusRawSigK562CytosolLongpolya
-    subTrack wgEncodeCshlLoRnaSeq
-    shortLabel K562 cyt pA+ +
-    longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal (PolyA+ RNA in K562 cytosol)
-    subGroups view=1-PlusRawSig
-    #subGroups view=1-PlusRawSig cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-    type wig 1.00 65219.00
-    color 46,0,184
-    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSig dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq tableName=wgEncodeCshlLoRnaSeqPlusRawSignalK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqPlusRawSigK562CytosolLongpolya.bedGraph.gz
-
-    track wgEncodeCshlLoRnaSeqMinusRawSigK562CytosolLongpolya
-    subTrack wgEncodeCshlLoRnaSeq
-    shortLabel K562 cyt pA+ -
-    longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal (PolyA+ RNA in K562 cytosol)
-    subGroups view=2-MinusRawSig
-    #subGroups view=2-MinusRawSig cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-    type wig 1.00 65290.00
-    color 238,85,34
-    metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LoRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSig dataVersion="ENCODE July 2009 Freeze" subId=414 dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLoRnaSeq tableName=wgEncodeCshlLoRnaSeqMinusRawSignalK562CytosolLongpolya fileName=wgEncodeCshlLoRnaSeqMinusRawSigK562CytosolLongpolya.bedGraph.gz
 
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
