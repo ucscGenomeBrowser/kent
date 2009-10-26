@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.607 2009/10/26 17:22:03 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.608 2009/10/26 17:45:36 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15450,8 +15450,8 @@ noInherit on
 # CSHL long rna-seq (wrangler: braney)
 track wgEncodeCshlLongRnaSeq
 compositeTrack on
-shortLabel Cshl LongRnaSeq
-longLabel ENCODE Cshl Gingeras LongRnaSeq
+shortLabel CSHL Long RNA-seq
+longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
 group expression
 subGroup1 view Views AllRawSig=AllRawSig PlusRawSig=PlusRawSig MinusRawSig=MinusRawSig Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 
@@ -15461,7 +15461,8 @@ dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults  PlusRawSig=hide MinusRawSig=hide Alignments=hide AllRawSig=hide
+visibilityViewDefaults  PlusRawSig=dense MinusRawSig=dense Alignments=dense AllRawSig=hide
+dimensionZchecked longNonPolyA,longPolyA,total 
 priority 0
 type bed 3
 wgEncode 1
@@ -15469,8 +15470,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel GM12 cell to AL1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (total in GM12878 cell)
     subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=total
     type bigBed 12
@@ -15480,7 +15481,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 2
+    shortLabel GM12 cell to AL2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (total in GM12878 cell)
     subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=total
     type bigBed 12
@@ -15489,8 +15490,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel K562 cell to AL1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (total in K562 cell)
     subGroups view=Alignments cellType=K562 localization=cell rnaExtract=total
     type bigBed 12
@@ -15500,7 +15501,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 2
+    shortLabel K562 cell to AL2
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 2 (total in K562 cell)
     subGroups view=Alignments cellType=K562 localization=cell rnaExtract=total
     type bigBed 12
@@ -15509,8 +15510,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolya
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cytosol longPolyA 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel K562 cyto A+ AL1
     longLabel ENCODE CSHL Long RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bigBed 12
@@ -15519,8 +15520,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel GM12 cell to -S1
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (total in GM12878 cell)
     subGroups view=MinusRawSig cellType=GM12878 localization=cell rnaExtract=total
     type bigWig
@@ -15530,7 +15531,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 2
+    shortLabel GM12 cell to -S2
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (total in GM12878 cell)
     subGroups view=MinusRawSig cellType=GM12878 localization=cell rnaExtract=total
     type bigWig
@@ -15539,8 +15540,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel K562 cell to -S1
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (total in K562 cell)
     subGroups view=MinusRawSig cellType=K562 localization=cell rnaExtract=total
     type bigWig
@@ -15550,7 +15551,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 2
+    shortLabel K562 cell to -S2
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 2 (total in K562 cell)
     subGroups view=MinusRawSig cellType=K562 localization=cell rnaExtract=total
     type bigWig
@@ -15559,8 +15560,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolya
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cytosol longPolyA 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel K562 cyto A+ -S1
     longLabel ENCODE CSHL Long RNA-Seq Minus Strand Raw Signal Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=MinusRawSig cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bigWig
@@ -15569,8 +15570,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel GM12 cell to +S1
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (total in GM12878 cell)
     subGroups view=PlusRawSig cellType=GM12878 localization=cell rnaExtract=total
     type bigWig
@@ -15580,7 +15581,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 2
+    shortLabel GM12 cell to +S2
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (total in GM12878 cell)
     subGroups view=PlusRawSig cellType=GM12878 localization=cell rnaExtract=total
     type bigWig
@@ -15589,8 +15590,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel K562 cell to +S1
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (total in K562 cell)
     subGroups view=PlusRawSig cellType=K562 localization=cell rnaExtract=total
     type bigWig
@@ -15600,7 +15601,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 2
+    shortLabel K562 cell to +S2
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 2 (total in K562 cell)
     subGroups view=PlusRawSig cellType=K562 localization=cell rnaExtract=total
     type bigWig
@@ -15609,8 +15610,8 @@ noInherit on
 
     track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolya
     release alpha
-    subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cytosol longPolyA 1
+    subTrack wgEncodeCshlLongRnaSeq on
+    shortLabel K562 cyto A+ +S1
     longLabel ENCODE CSHL Long RNA-Seq Plus Strand Raw Signal Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=PlusRawSig cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bigWig
@@ -15620,7 +15621,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 1
+    shortLabel GM12 cell to AS1
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 1 (total in GM12878 cell)
     subGroups view=AllRawSig cellType=GM12878 localization=cell rnaExtract=total
     type bigWig
@@ -15630,7 +15631,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel GM12878 cell total 2
+    shortLabel GM12 cell to AS2
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 2 (total in GM12878 cell)
     subGroups view=AllRawSig cellType=GM12878 localization=cell rnaExtract=total
     type bigWig
@@ -15640,7 +15641,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 1
+    shortLabel K562 cell to AS1
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 1 (total in K562 cell)
     subGroups view=AllRawSig cellType=K562 localization=cell rnaExtract=total
     type bigWig
@@ -15650,7 +15651,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cell total 2
+    shortLabel K562 cell to AS2
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 2 (total in K562 cell)
     subGroups view=AllRawSig cellType=K562 localization=cell rnaExtract=total
     type bigWig
@@ -15660,7 +15661,7 @@ noInherit on
     track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeCshlLongRnaSeq off
-    shortLabel K562 cytosol longPolyA 1
+    shortLabel K562 cyto A+ AS1
     longLabel ENCODE CSHL Long RNA-Seq All Alignments Raw Signal Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=AllRawSig cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bigWig
