@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.50 2009/10/21 19:15:36 hiram Exp $";
+#	"$Id: hg19.txt,v 1.51 2009/10/26 17:04:20 hiram Exp $";
 
 #############################################################################
 
@@ -5360,7 +5360,7 @@ done
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast/x86_64
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
 set c = $1
 set f = $2
 set len = $3
@@ -5374,11 +5374,9 @@ set ssSrc = $cons
 if (-s $cons/$grp/$grp.non-inf) then
   ln -s $cons/$grp/$grp.mod $tmp
   ln -s $cons/$grp/$grp.non-inf $tmp
-  ln -s $ssSrc/ss/$c/$f.ss $tmp
-  ln -s $cons/$grp/$grp.mod $tmp
-  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/msa.split/2009-10-21/ss/$c/$f.ss $tmp
 else
-  ln -s $ssSrc/ss/$c/$f.ss $tmp
+  ln -s $ssSrc/msa.split/2009-10-21/ss/$c/$f.ss $tmp
   ln -s $cons/$grp/$grp.mod $tmp
 endif
 pushd $tmp > /dev/null
@@ -5409,10 +5407,12 @@ rm -fr $tmp
     #	root1 == chrom name, file1 == ss file name without .ss suffix
     cat << '_EOF_' > template
 #LOOP
-../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ bed/$(root1)/$(file1).bed}
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
+
+    ls -1S ../msa.split/2009-10-21/ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -5754,13 +5754,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	real    0m58.367s
     # verify coverage
     featureBits hg19 phastConsElements46wayPlacental
-    #	146457699 bases of 2897316137 (5.055%) in intersection
-    #	119635433 bases of 2881515245 (4.152%) in intersection
+    #	148816247 bases of 2897316137 (5.136%) in intersection
 
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg19 -enrichment refGene:cds phastConsElements46wayPlacental
-    #	refGene:cds 1.186%, phastConsElements46wayPlacental 5.055%,
-    #	both 0.847%, cover 71.42%, enrich 14.13x
+    #	refGene:cds 1.186%, phastConsElements46wayPlacental 5.136%, 
+    #	both 0.864%, cover 72.85%, enrich 14.18x
     featureBits hg19 -enrichment knownGene:cds phastConsElements46wayPlacental
     #	knownGene:cds 1.252%, phastConsElements46wayPlacental 5.055%,
     #	both 0.865%, cover 69.10%, enrich 13.67x
@@ -5862,6 +5861,68 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+#########################################################################
+# phyloP conservation for 46-way (WORKING - 2009-10-21 - Hiram)
+#
+# Vertebrate, Placental, Primates
+#
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    ssh swarm
+    mkdir /hive/data/genomes/hg19/bed/multiz46way/consPhyloP
+    cd /hive/data/genomes/hg19/bed/multiz46way/consPhyloP
+    mkdir ss run.split
+    cd run.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/hg19/bed/multiz46way/splitRun/maf/hg19_$c.maf
+set WINDOWS = /hive/data/genomes/hg19/bed/multiz46way/consPhyloP/run.split/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'EOF'
+# << happy emacs
+
+    ls -1S -r ../../splitRun/maf | sed -e "s/.maf//; s/hg19_//" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(path1) {check out exists+ done/$(path1).done}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    mkdir ss done
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+# Completed: 504 of 504 jobs
+# CPU time in finished jobs:      14486s     241.43m     4.02h    0.17d  0.000 y
+# IO & Wait Time:                306280s    5104.67m    85.08h    3.54d  0.010 y
+# Average job time:                 636s      10.61m     0.18h    0.01d
+# Longest finished job:            1635s      27.25m     0.45h    0.02d
+# Submission to last job:          2965s      49.42m     0.82h    0.03d
 
 
 #########################################################################
@@ -6756,6 +6817,8 @@ echo "    | gzip > multiz46way.mafFrames.gz) > frames.log 2>&1"
     # << happy emacs
     chmod +x ./mkCmd.sh
 
+    #	this doesn't work on any 32 Gb computer, requires much more memory
+    #	turn it into a kluster job, see below
     time (cat ../maf/*.maf | nice -n +19 genePredToMafFrames hg19 stdin stdout \
 mm9 genes/mm9.gp.gz rn4 genes/rn4.gp.gz \
 panTro2 genes/panTro2.gp.gz gorGor1 genes/gorGor1.gp.gz ponAbe2 genes/ponAbe2.gp.gz rheMac2 genes/rheMac2.gp.gz tarSyr1 genes/tarSyr1.gp.gz micMur1 genes/micMur1.gp.gz otoGar1 genes/otoGar1.gp.gz tupBel1 genes/tupBel1.gp.gz dipOrd1 genes/dipOrd1.gp.gz cavPor3 genes/cavPor3.gp.gz speTri1 genes/speTri1.gp.gz ochPri2 genes/ochPri2.gp.gz vicPac1 genes/vicPac1.gp.gz turTru1 genes/turTru1.gp.gz bosTau4 genes/bosTau4.gp.gz equCab2 genes/equCab2.gp.gz felCat3 genes/felCat3.gp.gz canFam2 genes/canFam2.gp.gz myoLuc1 genes/myoLuc1.gp.gz pteVam1 genes/pteVam1.gp.gz eriEur1 genes/eriEur1.gp.gz sorAra1 genes/sorAra1.gp.gz proCap1 genes/proCap1.gp.gz echTel1 genes/echTel1.gp.gz dasNov2 genes/dasNov2.gp.gz choHof1 genes/choHof1.gp.gz monDom5 genes/monDom5.gp.gz ornAna1 genes/ornAna1.gp.gz galGal3 genes/galGal3.gp.gz taeGut1 genes/taeGut1.gp.gz anoCar1 genes/anoCar1.gp.gz xenTro2 genes/xenTro2.gp.gz tetNig2 genes/tetNig2.gp.gz fr2 genes/fr2.gp.gz gasAcu1 genes/gasAcu1.gp.gz oryLat2 genes/oryLat2.gp.gz danRer6 genes/danRer6.gp.gz \
@@ -6856,13 +6919,9 @@ done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
     find ./parts -type f | while read F
 do
     zcat ${F}
-done | sort -k1,1 -k2,2n | hgLoadMafFrames hg19 multiz46wayFrames stdin
-    #	real    5m47.840s
-
-    find ./parts -type f | while read F
-do
-    zcat ${F}
 done | sort -k1,1 -k2,2n > multiz46wayFrames.bed
+
+    hgLoadMafFrames hg19 multiz46wayFrames stdin
 
     featureBits -countGaps hg19 multiz46wayFrames.bed
     #	57146632 bases of 3137161264 (1.822%) in intersection
