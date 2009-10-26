@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.242 2009/10/21 15:51:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.243 2009/10/26 22:14:40 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -5052,7 +5052,7 @@ else if(!dimensionX && dimensionY)
 else if(dimensionX && dimensionY && !dimensionZ)
     safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->title,dimensionY->title);
 else //if(dimensionX && dimensionY && dimensionZ)
-    safef(javascript, sizeof(javascript), "%s, %s and %s:</B>",dimensionX->title,dimensionY->title,dimensionZ->title);
+    safef(javascript, sizeof(javascript), "%s, %s and %s:</B>",dimensionZ->title,dimensionX->title,dimensionY->title);
 puts(strLower(javascript));
 
 if(!subgroupingExists(parentTdb,"view"))
@@ -5060,7 +5060,31 @@ if(!subgroupingExists(parentTdb,"view"))
 
 puts("<BR>\n");
 
-printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
+if(dimensionZ)
+    {
+    printf("<BR><TABLE>\n");
+    printf("<TR><TH valign=top align=left colspan=2 rowspan=20>&nbsp;&nbsp;<B><EM>%s</EM></B>:",dimensionZ->title);
+    char *dimZdefaults = trackDbSettingOrDefault(parentTdb,"dimensionZchecked","");
+    boolean alreadySet=FALSE;
+    for(ixZ=0;ixZ<sizeOfZ;ixZ++)
+        {
+        if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
+            {
+            printf("<TH align=left nowrap>");
+            safef(objName, sizeof(objName), "%s.mat_%s_dimZ_cb",parentTdb->tableName,dimensionZ->names[ixZ]);
+            alreadySet=(NULL!=findWordByDelimiter(dimensionZ->names[ixZ],',',dimZdefaults));
+            alreadySet=cartUsualBoolean(cart,objName,alreadySet);
+            struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
+            dyStringPrintf(dyJS, " class=\"matCB dimZ %s\"",dimensionZ->names[ixZ]);
+            cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));// dimZ is set by cart variable, while X and Y are set by subtrack sets
+            printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
+            puts("</TH>");
+            }
+        }
+    puts("</TD></TR></TABLE>");
+    }
+
+printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
 matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,TRUE);
 
@@ -5121,36 +5145,6 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
 if(dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
     matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,FALSE);
 
-if(dimensionZ)
-    {
-    printf("<TR align='center' valign='bottom' BGCOLOR='%s''>",COLOR_BG_ALTDEFAULT);
-    printf("<TH class='greenRoof' STYLE='font-size: 2' colspan=50>&nbsp;</TH>");
-    printf("<TR BGCOLOR='%s'><TH valign=top align=left colspan=2 rowspan=20><B><EM>%s</EM></B>:",
-            COLOR_BG_ALTDEFAULT,dimensionZ->title);
-    int cntZ=0;
-    char *dimZdefaults = trackDbSettingOrDefault(parentTdb,"dimensionZchecked","");
-    boolean alreadySet=FALSE;
-    for(ixZ=0;ixZ<sizeOfZ;ixZ++)
-        {
-        if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
-            {
-            if(cntZ > 0 && (cntZ % cntX) == 0)
-                printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-            printf("<TH align=left nowrap>");
-            safef(objName, sizeof(objName), "%s.mat_%s_dimZ_cb",parentTdb->tableName,dimensionZ->names[ixZ]);
-            alreadySet=(NULL!=findWordByDelimiter(dimensionZ->names[ixZ],',',dimZdefaults));
-            alreadySet=cartUsualBoolean(cart,objName,alreadySet);
-            struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
-            dyStringPrintf(dyJS, " class=\"matCB dimZ %s\"",dimensionZ->names[ixZ]);
-            cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));// dimZ is set by cart variable, while X and Y are set by subtrack sets
-            printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
-            puts("</TH>");
-            cntZ++;
-            }
-        }
-    if((cntZ % cntX) > 0)
-        printf("<TH colspan=%d>&nbsp;</TH>",cntX);
-    }
 puts("</TD></TR></TABLE>");
 
 subgroupMembersFree(&dimensionX);
