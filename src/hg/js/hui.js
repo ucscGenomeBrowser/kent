@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.40 2009/10/21 19:14:52 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.41 2009/10/26 23:05:47 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -67,6 +67,7 @@ function matSelectViewForSubTracks(obj,view)
         }
         matSubCBsEnable(true,view);
     }
+    matSubCBsSelected();
 }
 
 function exposeComposite(compositeName)
@@ -97,6 +98,7 @@ function matSubCbClick(subCB)
     //if( zeeCB != undefined ) {
     //    matChkBoxNormalize( zeeCB, classes );
     //}
+    matSubCBsSelected();
 }
 
 function matCbClick(matCB)
@@ -138,6 +140,7 @@ function matCbClick(matCB)
             }
         }
     }
+    matSubCBsSelected();
 }
 
 function matSetMatrixCheckBoxes(state)
@@ -153,19 +156,7 @@ function matSetMatrixCheckBoxes(state)
         matCbClick(this);  // If this is inefficient, then replace it with subCB iteration logic below
     });
 
-    //var subCBs;
-    //if(state) {
-    //    subCBs = $("input.subCB").not(":checked");
-    //    var classes = matZeeCBclasses('unchecked');    // need to weed out non-checked dimZ if there are any
-    //    subCBs = objsFilterByClasses(subCBs,false,classes);
-    //} else
-    //    subCBs = $("input.subCB").filter(":checked");
-
-    //for(var vIx=1;vIx<arguments.length;vIx++) {
-    //    subCBs = $( subCBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
-    //}
-    //$( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
-
+    //matSubCBsSelected(); // this would be a redudnant call if matCbClick() is called
     return true;
 }
 
@@ -319,6 +310,7 @@ function matChkBoxesNormalizeAll()
         var viewClass = this.name.substring(this.name.indexOf(".") + 1,this.name.lastIndexOf("."));
         matSubCBsEnable((this.selectedIndex > 0),viewClass);
     });
+    matSubCBsSelected();
 }
 
 function matCbComplete(matCB,complete)
@@ -434,6 +426,16 @@ function matZeeCBclasses(limitTo)
         });
     }
     return classes;
+}
+
+function matSubCBsSelected()
+{
+// Displays visible and checked track count
+    var counter = $('#subCBcount');
+    if(counter != undefined) {
+        var subCBs =  $("input.subCB");
+        $(counter).text($(subCBs).filter(":enabled:checked").length + " of " +$(subCBs).length+ " selected");
+    }
 }
 
 /////////////////// subtrack configuration support ////////////////

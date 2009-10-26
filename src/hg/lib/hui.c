@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.243 2009/10/26 22:14:40 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.244 2009/10/26 23:06:11 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3256,6 +3256,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
+if(slCount(parentTdb->subtracks) > 5)
+    puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT id='subCBcount'></font>");
 puts("<P>");
 //if (!preSorted && sortOrder != NULL)  // No longer need to do this since hgTrackDb should sort composites with sortOrder and set priorities
 //    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
