@@ -3130,3 +3130,22 @@ update wgEncodeYaleChIPseqSignalK562Nfyb set chromEnd = 158821424 where chrom = 
 # > road we and others will be using HA tagged versions of several different proteins.
 ### Oh well.  I thought it was perfect for a moment.
 
+2009-10-21 More submissions
+===========================
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/739/out/fileDb.ra | grep parentTable > tmp.txt
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 739 displayed
+
+hg18.wgEncodeYaleChIPseqSignalHelas3E2f6 has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalK562Nfyb has 1 records with end > chromSize.
+hg18.wgEncodeYaleChIPseqSignalGm12878NfkbTnfa has 1 records with end > chromSize.
+
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalHelas3E2f6 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chr10 |  135374721 | 135374829 | 135374737 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalK562Nfyb y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+Empty set (7.85 sec)
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeYaleChIPseqSignalGm12878NfkbTnfa y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+Empty set (5 min 50.55 sec)
+
+update wgEncodeYaleChIPseqSignalHelas3E2f6 set chromEnd = 135374737  where chrom = "chr10" and chromEnd > 135374737;
+Query OK, 1 row affected (3 min 1.25 sec)
