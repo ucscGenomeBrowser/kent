@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.19 2009/08/26 00:37:21 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.20 2009/10/27 18:40:34 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -411,7 +411,7 @@ for my $line (@fileList) {
                     unshift @vals, $metaData{type};
                 }
                 my %remove; # Don't display these metadata values
-                $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = 1;
+                $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
                 ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
                 ( $tagRef, $valRef ) = metadataArraysMoveValuesToFront($tagRef, $valRef,\@sortFields);
                 @tags = @{$tagRef};
