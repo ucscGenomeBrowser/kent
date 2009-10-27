@@ -1206,3 +1206,77 @@ mv fileDb.ra.new fileDb.ra
 # Add a note to the preamble.html to describe the correction on the older tagAligns, and declare this as a "release 2".
 encodeDownloadsPage.pl index.html
 
+#Filter ranges:
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878Ctcf    ; 
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k27ac ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k27me3;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k36me3;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k4me1 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k4me2 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k4me3 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H3k9ac  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksGm12878H4k20me1;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksH1hescCtcf     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksH1hescH3k27me3 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksH1hescH3k4me1  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksH1hescH3k4me3  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksH1hescH4k20me1 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2Ctcf      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2H3k27ac   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2H3k36me3  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2H3k4me2   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2H3k4me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2H3k9ac    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHepg2H4k20me1  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecCtcf       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k27ac    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k27me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k36me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k4me1    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k4me2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k4me3    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH3k9ac     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHmecH4k20me1   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecCtcf      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k27ac   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k27me3  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k36me3  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k4me1   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k4me2   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k4me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k9ac    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH3k9me1   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecH4k20me1  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksHuvecPol2b     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562Ctcf       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k27ac    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k27me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k36me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k4me1    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k4me2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k4me3    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k9ac     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H3k9me1    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562H4k20me1   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksK562Pol2b      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekCtcf       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k27ac    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k27me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k36me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k4me1    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k4me2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k4me3    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k9ac     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH3k9me1    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekH4k20me1   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhekPol2b      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k27ac    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k27me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k36me3   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k4me1    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k4me2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k4me3    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH3k9ac     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH4k20me1   ;
+# Result score 1000:1000, signalValue 0:45000 (but too variable to be useful) pValue 0:100, qValue -1:-1
+
