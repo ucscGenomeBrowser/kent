@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.51 2009/10/26 17:04:20 hiram Exp $";
+#	"$Id: hg19.txt,v 1.52 2009/10/27 21:35:59 hiram Exp $";
 
 #############################################################################
 
@@ -5160,7 +5160,257 @@ nscanGene (2009-06-22 markd)
    hgc-sql -Ne 'select name from nscanGene' hg19 | egrep -v -e '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |wc -l
 
 #########################################################################
+# Phylogenetic tree from 46-way for chrX  (DONE - 2009-10-26 - Hiram)
+# 	We need two trees, one for chrX only, and a second for all other chroms
+    mkdir /hive/data/genomes/hg19/bed/multiz46way/4dX
+    cd /hive/data/genomes/hg19/bed/multiz46way/4dX
+
+    hgsql hg19 -Ne \
+    "select * from refGene,refSeqStatus where refGene.name=refSeqStatus.mrnaAcc and refSeqStatus.status='Reviewed' and mol='mRNA' and refGene.chrom='chrX'" \
+	| cut -f 2-20 > refSeqReviewed.gp
+    wc -l refSeqReviewed.gp
+    # 727 refSeqReviewed.gp
+    genePredSingleCover refSeqReviewed.gp stdout | sort > refSeqReviewedNR.gp
+    wc -l refSeqReviewedNR.gp
+    # 401 refSeqReviewed.gp
+
+    ssh memk
+    mkdir /hive/data/genomes/hg19/bed/multiz46way/4dX/run
+    cd /hive/data/genomes/hg19/bed/multiz46way/4dX/run
+    mkdir ../mfa
+
+# whole chrom mafs version, using new version of 
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+#	mjhubisz at gmail.com
+
+    cat << '_EOF_' > 4dX.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set r = "/hive/data/genomes/hg19/bed/multiz46way"
+set c = $1
+set infile = $r/maf/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4dX/refSeqReviewedNR.gp > $c.gp
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+$PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+$PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4dX/$outfile
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4dX.csh
+
+    ls -1S /hive/data/genomes/hg19/bed/multiz46way/maf/chrX.maf | \
+        egrep -E -v "chrM|chrUn|random|_hap" | sed -e "s#.*multiz46way/maf/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4dX.csh $(root1) $(path1) {check out line+ mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template stdout | tac > jobList
+    #	run this one job on hgwdev, takes a few minutes:
+    ./4dX.csh chrX chrX.maf mfa/chrX.mfa
+    #	not sure what these warnings are about:
+# WARNING: ignoring out-of-range feature
+# chrX    genepred        CDS     1       -1      .       +       2       transcript_id "NM_000475"
+# WARNING: ignoring out-of-range feature
+# chrX    genepred        CDS     1       -1      .       +       2       transcript_id "NM_005365.2"
+
+    # combine mfa files
+    cd ..
+    sed -e "s/ /,/g" ../species.list > species.lst
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate `cat species.lst` mfa/*.mfa | sed s/"> "/">"/ > 4dX.chrX.mfa
+
+    sed -e 's/,macEug1.*//' species.lst > placentals.lst
+    awk '
+BEGIN { good = 1 }
+{
+    if (match($0, "^> macEug1")) { good = 0 }
+    if (good) {print}
+}
+' mfa/*.mfa > placentals.mfa
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate `cat placentals.lst` placentals.mfa | sed s/"> "/">"/ \
+	> 4dX.placentals.mfa
+
+    sed -e 's/,tupBel1.*//' species.lst > primates.lst
+    awk '
+BEGIN { good = 1 }
+{
+    if (match($0, "^> tupBel1")) { good = 0 }
+    if (good) {print}
+}
+' mfa/*.mfa > primates.mfa
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate `cat primates.lst` primates.mfa | sed -e "s/> />/" \
+	> 4dX.primates.mfa
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree ../tree-commas.nh 4dX.chrX.mfa
+    #	real    0.54.139s
+    mv phyloFit.mod phyloFit.chrX.mod
+
+    grep TREE phyloFit.chrX.mod | sed 's/TREE\:\ //' > tree_4d.chrX.46way.nh
+
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/tree_doctor \
+        --no-branchlen --prune-all-but=`cat primates.lst` ../tree-commas.nh \
+                > tree_commas.primates.nh
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/tree_doctor \
+        --no-branchlen --prune-all-but=`cat placentals.lst` ../tree-commas.nh \
+                > tree_commas.placentals.nh
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree tree_commas.primates.nh 4dX.primates.mfa
+    mv phyloFit.mod phyloFit.chrX.primates.mod
+    grep TREE phyloFit.chrX.primates.mod | sed 's/TREE\:\ //' \
+	> tree_4d.chrX.primates.46way.nh
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree tree_commas.placentals.nh 4dX.placentals.mfa
+    mv phyloFit.mod phyloFit.chrX.placentals.mod
+    grep TREE phyloFit.chrX.placentals.mod | sed 's/TREE\:\ //' \
+	> tree_4d.chrX.placentals.46way.nh
+
+#########################################################################
+# Phylogenetic tree from 46-way for non-chrX  (DONE - 2009-10-27 - Hiram)
+# 	We need two trees, one for chrX only, and a second for all other chroms
+    mkdir /hive/data/genomes/hg19/bed/multiz46way/4dNoX
+    cd /hive/data/genomes/hg19/bed/multiz46way/4dNoX
+
+    hgsql hg19 -Ne \
+    "select * from refGene,refSeqStatus where refGene.name=refSeqStatus.mrnaAcc and refSeqStatus.status='Reviewed' and mol='mRNA'" \
+	| cut -f 2-20 | egrep -E -v "chrM|chrUn|random|_hap|chrX" \
+	> refSeqReviewed.gp
+    wc -l refSeqReviewed.gp
+    # 12977 refSeqReviewed.gp
+    genePredSingleCover refSeqReviewed.gp stdout | sort > refSeqReviewedNR.gp
+    wc -l refSeqReviewedNR.gp
+    # 7252 refSeqReviewed.gp
+
+    ssh memk
+    mkdir /hive/data/genomes/hg19/bed/multiz46way/4dNoX/run
+    cd /hive/data/genomes/hg19/bed/multiz46way/4dNoX/run
+    mkdir ../mfa
+
+# whole chrom mafs version, using new version of 
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+#	mjhubisz at gmail.com
+
+    cat << '_EOF_' > 4dNoX.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set r = "/hive/data/genomes/hg19/bed/multiz46way"
+set c = $1
+set infile = $r/maf/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4dNoX/refSeqReviewedNR.gp > $c.gp
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+$PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+$PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4dNoX/$outfile
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4dNoX.csh
+
+    ls -1S /hive/data/genomes/hg19/bed/multiz46way/maf/chr*.maf | \
+        egrep -E -v "chrM|chrUn|random|_hap|chrX" \
+	| sed -e "s#.*multiz46way/maf/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4dNoX.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template stdout | tac > jobList
+    para try ... check ... push ... etc
+    para time
+# Completed: 23 of 23 jobs
+# CPU time in finished jobs:       9032s     150.53m     2.51h    0.10d  0.000 y
+# IO & Wait Time:                   672s      11.21m     0.19h    0.01d  0.000 y
+# Average job time:                 422s       7.03m     0.12h    0.00d
+# Longest finished job:             860s      14.33m     0.24h    0.01d
+# Submission to last job:          1210s      20.17m     0.34h    0.01d
+
+    # combine mfa files
+    cd ..
+    sed -e "s/ /,/g" ../species.list > species.lst
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate `cat species.lst` mfa/*.mfa | sed s/"> "/">"/ \
+	> 4dNoX.all.mfa
+
+    sed -e 's/,macEug1.*//' species.lst > placentals.lst
+    awk '
+BEGIN { good = 1 }
+{
+    if (match($0, "^> macEug1")) { good = 0 }
+    if (good) {print}
+}
+' mfa/*.mfa > placentals.mfa
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate `cat placentals.lst` placentals.mfa | sed s/"> "/">"/ \
+	> 4dNoX.placentals.mfa
+
+    sed -e 's/,tupBel1.*//' species.lst > primates.lst
+    awk '
+BEGIN { good = 1 }
+{
+    if (match($0, "^> tupBel1")) { good = 0 }
+    if (good) {print}
+}
+' mfa/*.mfa > primates.mfa
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+	--aggregate `cat primates.lst` primates.mfa | sed -e "s/> />/" \
+	> 4dNoX.primates.mfa
+
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree ../tree-commas.nh 4dNoX.all.mfa
+XXX - running Tue Oct 27 13:21:49 PDT 2009
+    #	about 40 minutes
+    mv phyloFit.mod phyloFit.NoChrX.mod
+
+    grep TREE phyloFit.chrX.mod | sed 's/TREE\:\ //' > tree_4d.chrX.46way.nh
+
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/tree_doctor \
+        --no-branchlen --prune-all-but=`cat primates.lst` ../tree-commas.nh \
+                > tree_commas.primates.nh
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/tree_doctor \
+        --no-branchlen --prune-all-but=`cat placentals.lst` ../tree-commas.nh \
+                > tree_commas.placentals.nh
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree tree_commas.primates.nh 4dNoX.primates.mfa
+    mv phyloFit.mod phyloFit.NoChrX.primates.mod
+    grep TREE phyloFit.NoChrX.primates.mod | sed 's/TREE\:\ //' \
+	> tree_4d.NoChrX.primates.46way.nh
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA --subst-mod REV \
+	--tree tree_commas.placentals.nh 4dNoX.placentals.mfa
+    mv phyloFit.mod phyloFit.NoChrX.placentals.mod
+    grep TREE phyloFit.NoChrX.placentals.mod | sed 's/TREE\:\ //' \
+	> tree_4d.NoChrX.placentals.46way.nh
+
+#########################################################################
 # Phylogenetic tree from 46-way  (DONE - 2009-06-25,07-07 - Hiram)
+#	This was an early first time experiment.  All this was redone
+#	above for chrX only and non-chrX trees
 
     # Extract 4-fold degenerate sites based on 
     # of RefSeq Reviewed, coding
@@ -5182,7 +5432,8 @@ nscanGene (2009-06-22 markd)
     mkdir ../mfa
 
 # whole chrom mafs version, using new version of 
-# uses memory-efficient version of phast, from Melissa Hubisz at Cornell (mjhubisz@gmail.com)
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+#	mjhubisz at gmail.com
     cat << '_EOF_' > 4d.csh
 #!/bin/csh -fe
 set r = "/hive/data/genomes/hg19/bed/multiz46way"
@@ -5924,6 +6175,155 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
 # Longest finished job:            1635s      27.25m     0.45h    0.02d
 # Submission to last job:          2965s      49.42m     0.82h    0.03d
 
+
+    # run phyloP with score=LRT 
+    ssh swarm
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP
+    mkdir run.phyloP
+    cd run.phyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of whole-genome
+
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.539
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
+	../../4d/phyloFit.all.mod 0.539 > ../../4d/46way.all.mod
+
+    # repeat for chrX only tree
+    cd /cluster/data/hg18/bed/multiz46way/4d
+    $PHASTBIN/modFreqs 4d.chrX.mod $gc > 46way.chrX.mod
+    ln -s `pwd`/46way.chrX.mod /usr/local/apache/golenPath/hg18/phastCons46way
+
+cat > doPhyloP.csh << 'EOF'
+    set f = $1
+    set out = $2
+    set c = $f:r:r
+    set n = $f:r:e
+    set tmp = /scratch/tmp/$f
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp -p /cluster/data/hg18/bed/multiz46way/consPhyloP/ss/$c/$n/$f.ss $tmp
+    cp -p tree.mod $tmp
+    pushd $tmp > /dev/null
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $c \
+                -i SS tree.mod $f.ss > $f.wig
+    popd > /dev/null
+    mkdir -p $out:h
+    mv $tmp/$f.wig $out
+    rm -fr $tmp
+'EOF'
+
+    # Create list of chunks
+    pushd /cluster/data/hg18/bed/multiz46way/consPhyloP/ss
+    ls chr*/*/chr*.*.ss | sed -e 's/.ss$//' -e 's/^\.\///' > \
+        /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/in.list
+    popd > /dev/null
+
+    # need to fill in chr8, neglected in main run
+    pushd /cluster/data/hg18/bed/multiz46way/consPhyloP/ss
+    ls chr8/*/chr*.*.ss | sed -e 's/.ss$//' -e 's/^\.\///' > \
+        /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/in.chr8.list
+    popd > /dev/null
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat > template << 'EOF'
+#LOOP
+csh ../doPhyloP.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig}
+#ENDLOOP
+'EOF'
+    # setup run for all species
+    mkdir all
+    cd all
+    cp ../../../4d/46way.all.mod tree.mod
+    rm -fr wig
+    mkdir wig
+
+    # << happy emacs
+    gensub2 ../in.list single ../template jobList
+    # 2823 jobs
+    para create jobList
+    para try
+    para check
+    para push
+
+    para time
+    #Completed: 2823 of 2823 jobs
+    #CPU time in finished jobs:    4691641s   78194.02m  1303.23h   54.30d  0.149 y
+    #IO & Wait Time:                171343s    2855.71m    47.60h    1.98d  0.005 y
+    #Average job time:                1723s      28.71m     0.48h    0.02d
+    #Longest finished job:            2451s      40.85m     0.68h    0.03d
+    #Submission to last job:          6055s     100.92m     1.68h    0.07d
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP
+# check for clean dir here -- chr* will match garbage if it's there
+cat > listWig.csh << 'EOF'
+    foreach c (`ls -d chr*`)
+        foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
+            ls -1 $d/*.wig | sort -n -t\. -k3
+        end
+    end
+'EOF'
+
+    cd all/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP46wayAll.wig phyloP46wayAll.wib
+    # Reloaded to include chr8 (2008-01-15 kate)
+    #Converted stdin, upper limit 7.13, lower limit -15.41
+    # Load gbdb and database with wiggle.
+    ln -s  \
+        /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/all/wig/phyloP46wayAll.wib \
+        /gbdb/hg18/multiz46way/phyloP46wayAll.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz46way hg18 phyloP46wayAll phyloP46wayAll.wig
+
+    # placental-only: exclude all but these: 
+    cd /cluster/data/hg18/bed/multiz46way/4d
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/tree_doctor 46way.all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,\
+          micMur1,otoGar1,tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2,\
+          vicPac1,turTru1,bosTau4,equCab2,felCat3,canFam2,myoLuc1,pteVam1,eriEur1,\
+          sorAra1,loxAfr2,proCap1,echTel1,dasNov2,choHof1 \
+	> 46way.placental.mod
+    cd ../consPhyloP/run.phyloP
+    mkdir placental
+    cd placental
+    cp ../../../4d/46way.placental.mod tree.mod
+    mkdir wig
+    gensub2 ../in.list single ../template jobList
+    # 2823 jobs
+    para create jobList
+    para try
+    para check
+    para push
+
+    para time
+    #Completed: 2823 of 2823 jobs
+    #CPU time in finished jobs:    3358003s   55966.71m   932.78h   38.87d  0.106 y
+    #IO & Wait Time:                142664s    2377.74m    39.63h    1.65d  0.005 y
+    #Average job time:                1240s      20.67m     0.34h    0.01d
+    #Longest finished job:            1781s      29.68m     0.49h    0.02d
+    #Submission to last job:          4383s      73.05m     1.22h    0.05d
+
+    # load wiggle
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/placental/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP46wayPlacMammal.wig phyloP46wayPlacMammal.wib
+    #Converted stdin, upper limit 3.46, lower limit -14.42
+
+    # Load gbdb and database with wiggle.
+    ln -s  \
+        /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/placental/wig/phyloP46wayPlacMammal.wib \
+        /gbdb/hg18/multiz46way/phyloP46wayPlacMammal.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz46way hg18 phyloP46wayPlacMammal phyloP46wayPlacMammal.wig
+
+    cd /cluster/data/hg18/bed/multiz46way/4d
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/tree_doctor 46way.all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,micMur1,otoGar1,tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2 \
+	> 46way.euarchontoglires.mod
 
 #########################################################################
 # LASTZ Zebrafish DanRer6 (DONE - 2009-07-08,10 - Hiram)
