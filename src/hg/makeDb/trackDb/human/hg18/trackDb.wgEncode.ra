@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.612 2009/10/27 00:29:52 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.613 2009/10/27 01:01:52 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -6886,7 +6886,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 H3K36me3 Raw 1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HepG2 cells)
-    subGroups view=zRawSig factor=H3K36me3 cellType=2HepG2 rep=rep1
+    subGroups view=zRawSig factor=H3K36me3 cellType=2HEPG2 rep=rep1
     type wig 1.00 3871.00
     color 189,0,157
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=zRawSig replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3.wig.gz
@@ -6896,7 +6896,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 H3K36me3 Pk 1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HepG2 cells)
-    subGroups view=aPeaks factor=H3K36me3 cellType=2HepG2 rep=rep1
+    subGroups view=aPeaks factor=H3K36me3 cellType=2HEPG2 rep=rep1
     type narrowPeak
     color 189,0,157
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
@@ -6906,7 +6906,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     subTrack wgEncodeUwChIPSeq off
     shortLabel HepG2 H3K36me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in HepG2 cells)
-    subGroups view=cHot factor=H3K36me3 cellType=2HepG2 rep=rep1
+    subGroups view=cHot factor=H3K36me3 cellType=2HEPG2 rep=rep1
     type broadPeak
     color 189,0,157
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=cHot replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3.broadPeak.gz
