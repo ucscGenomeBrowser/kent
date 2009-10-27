@@ -6,6 +6,30 @@
 #
 
 ############################################################################
+# ensembl 56 update (WORKING - 2009-10-27 - Hiram)
+
+############################################################################
+#  rn4 - Rat - Ensembl Genes version 56  (DONE - 2009-10-27 - hiram)
+    ssh kkr14u08
+    cd /hive/data/genomes/rn4
+    cat << '_EOF_' > rn4.ensGene.ra
+# required db variable
+db rn4
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=56 rn4.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/rn4/bed/ensGene.56
+    featureBits rn4 ensGene
+    # 46518438 bases of 2571531505 (1.809%) in intersection
+
+############################################################################
 # ensembl 54 update (DONE - 2009-08-05 - Hiram)
     # hg18 needs to get to its last version
 ############################################################################
