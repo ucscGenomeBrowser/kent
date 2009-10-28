@@ -28,10 +28,11 @@ include ../../../inc/common.mk
 DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	venter1 \
 	panTro1 panTro2 \
-	gorGor1 \
+	gorGor1 gorGor2 \
 	ponAbe1 ponAbe2 \
 	rheMac2 \
 	papHam1 \
+	macEug1 \
 	calJac1 \
 	otoGar1 tupBel1\
 	canFam1 canFam2 canFamPoodle1 \
