@@ -44,14 +44,27 @@ resources.
 <H2>Display Conventions and Configuration</H2>
 
 <P>Positions of OMIM-associated canonical UCSC genes are displayed as solid
-bars. If the OMIM identifier is listed in the
-<A HREF="http://www.ncbi.nlm.nih.gov/Omim/omimfaq.html#morbid_map"
-TARGET=_blank>OMIM Morbid Map</A>, the item is colored red, and disease
-information from the Morbid Map &quot;disorder&quot; column is displayed on
-the details page for that item. 
+bars. The color of the bar depends on the classificatin assigned
+by OMIM.   
+
+<UL>
+  <LI>If the OMIM identifier is listed in the
+    <A HREF="http://www.ncbi.nlm.nih.gov/Omim/omimfaq.html#morbid_map"
+    TARGET=_blank>OMIM</A>
+    <B><FONT COLOR = "C00000"> Morbid Map</FONT></B>, 
+    the item is colored red.
+  </LI>
+  <LI>
+    If there is 
+    <B><FONT COLOR = "0000C0">no Morbid Map annotation </FONT></B>, 
+    the item is colored blue. 
+  </LI>
+</UL>
 </P>
 
-<P>If the canonical UCSC gene represents a cluster of more than one gene, the
+<P> Where relevant, disease information from the Morbid Map 
+&quot;disorder&quot; column is displayed on the details page for an item. 
+If the canonical UCSC gene represents a cluster of more than one gene, the
 other genes are listed on the track details page.
 </P>
 
