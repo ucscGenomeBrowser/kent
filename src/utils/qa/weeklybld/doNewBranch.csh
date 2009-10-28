@@ -83,6 +83,7 @@ echo
 echo
 echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
+rm -f doNewCvs.log
 #echo debug: disabled buildCvsReports
 ssh -n hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
 # note - we are now running it in the background on hgwdev
@@ -92,6 +93,7 @@ ssh -n hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
 echo
 echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL [${0}: `date`]"
 echo
+rm -f doNew32.log
 #echo debug: disabled parallel build 32bit utils on dev
 ssh -n $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
 
