@@ -528,6 +528,7 @@ track netCavPor3 override
 priority 10004.2
 
 track chainRn4 override
+matrix 16 56,-109,-45,-137,-109,100,-103,-45,-45,-103,100,-109,-137,-45,-109,56
 priority 10006.1
 
 track netRn4 override
