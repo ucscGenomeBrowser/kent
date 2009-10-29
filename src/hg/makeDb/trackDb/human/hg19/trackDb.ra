@@ -1188,14 +1188,14 @@ priority 103.29
     priority 23
 
     # PhyloP conservation
-    track phyloP46wayPrimate
+    track phyloP46wayPrimates
     subTrack cons46way off
     subGroups view=phyloP clade=primate
     shortLabel Primate Cons
     longLabel Primate Basewise Conservation by PhyloP
     noInherit on
     configurable on
-    type wig -8.17 .99
+    type bigWig -9.12 0.65
     maxHeightPixels 100:50:11
     viewLimits -.3:2
     autoScale off
@@ -1205,14 +1205,14 @@ priority 103.29
     altColor 70,10,10
     priority 1
 
-    track phyloP46wayPlacMammal
+    track phyloP46wayPlacental
     subTrack cons46way on
     subGroups view=phyloP clade=mammal
     shortLabel Mammal Cons
     longLabel Placental Mammal Basewise Conservation by PhyloP
     noInherit on
     configurable on
-    type wig -14.42 3.46
+    type bigWig -13.28 2.95
     maxHeightPixels 100:50:11
     viewLimits -.3:2
     autoScale off
@@ -1229,7 +1229,7 @@ priority 103.29
     longLabel Vertebrate Basewise Conservation by PhyloP
     noInherit on
     configurable on
-    type wig -15.41 7.13
+    type bigWig -13.27 6.39
     maxHeightPixels 100:50:11
     viewLimits -.3:2
     autoScale off
