@@ -1,0 +1,376 @@
+2009-10-26 Start keeping track of HudsonAlpha ChipSeq changes
+=============================================================
+# clean up Rami's broadPeak files with negative chromStart:
+# Sample:
+ERROR: failed validateBroadPeak : Error [file=data/SL985_Peaks.bed.broadPeak, line=46142]: chromStart field invalid unsigned number (-68) [chrM	-68	1086	peak46142	214	.	693.100	-1	-1]
+Aborting ... found 1 errors in total
+
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL646_Peaks.bed.broadPeak > SL646_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL673_Peaks.bed.broadPeak > SL673_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL705_Peaks.bed.broadPeak > SL705_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL839_Peaks.bed.broadPeak > SL839_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL842_Peaks.bed.broadPeak > SL842_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL949_Peaks.bed.broadPeak > SL949_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL985_Peaks.bed.broadPeak > SL985_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL986_Peaks.bed.broadPeak > SL986_Peaks.bed.broadPeak.ok
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL988_Peaks.bed.broadPeak > SL988_Peaks.bed.broadPeak.ok
+
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL646_Peaks.bed.broadPeak > SL646_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL673_Peaks.bed.broadPeak > SL673_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL705_Peaks.bed.broadPeak > SL705_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL839_Peaks.bed.broadPeak > SL839_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL842_Peaks.bed.broadPeak > SL842_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL949_Peaks.bed.broadPeak > SL949_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL985_Peaks.bed.broadPeak > SL985_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL986_Peaks.bed.broadPeak > SL986_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL988_Peaks.bed.broadPeak > SL988_Peaks.bed.broadPeak.err
+
+e *.err
+
+cat SL646_Peaks.bed.broadPeak.err >> SL646_Peaks.bed.broadPeak.ok
+cat SL673_Peaks.bed.broadPeak.err >> SL673_Peaks.bed.broadPeak.ok
+cat SL705_Peaks.bed.broadPeak.err >> SL705_Peaks.bed.broadPeak.ok
+cat SL839_Peaks.bed.broadPeak.err >> SL839_Peaks.bed.broadPeak.ok
+cat SL842_Peaks.bed.broadPeak.err >> SL842_Peaks.bed.broadPeak.ok
+cat SL949_Peaks.bed.broadPeak.err >> SL949_Peaks.bed.broadPeak.ok
+cat SL985_Peaks.bed.broadPeak.err >> SL985_Peaks.bed.broadPeak.ok
+cat SL986_Peaks.bed.broadPeak.err >> SL986_Peaks.bed.broadPeak.ok
+cat SL988_Peaks.bed.broadPeak.err >> SL988_Peaks.bed.broadPeak.ok
+
+mv SL646_Peaks.bed.broadPeak SL646_Peaks.bed.broadPeak.old
+mv SL673_Peaks.bed.broadPeak SL673_Peaks.bed.broadPeak.old
+mv SL705_Peaks.bed.broadPeak SL705_Peaks.bed.broadPeak.old
+mv SL839_Peaks.bed.broadPeak SL839_Peaks.bed.broadPeak.old
+mv SL842_Peaks.bed.broadPeak SL842_Peaks.bed.broadPeak.old
+mv SL949_Peaks.bed.broadPeak SL949_Peaks.bed.broadPeak.old
+mv SL985_Peaks.bed.broadPeak SL985_Peaks.bed.broadPeak.old
+mv SL986_Peaks.bed.broadPeak SL986_Peaks.bed.broadPeak.old
+mv SL988_Peaks.bed.broadPeak SL988_Peaks.bed.broadPeak.old
+
+mv SL646_Peaks.bed.broadPeak.ok SL646_Peaks.bed.broadPeak
+mv SL673_Peaks.bed.broadPeak.ok SL673_Peaks.bed.broadPeak
+mv SL705_Peaks.bed.broadPeak.ok SL705_Peaks.bed.broadPeak
+mv SL839_Peaks.bed.broadPeak.ok SL839_Peaks.bed.broadPeak
+mv SL842_Peaks.bed.broadPeak.ok SL842_Peaks.bed.broadPeak
+mv SL949_Peaks.bed.broadPeak.ok SL949_Peaks.bed.broadPeak
+mv SL985_Peaks.bed.broadPeak.ok SL985_Peaks.bed.broadPeak
+mv SL986_Peaks.bed.broadPeak.ok SL986_Peaks.bed.broadPeak
+mv SL988_Peaks.bed.broadPeak.ok SL988_Peaks.bed.broadPeak
+
+# edited DDF to for proper antibody names
+# edited DAF for nMatch (allow and ignore Ns in the sequence) and quick=100 (already validated so this shoud speed things up)
+# edited DDF to exclude GM12878/TCF12 since peaks were not submitted
+# restart validation 
+
+# new validation error.  Raw Signals must be built because HAIB provides no signals.  But Raw signal build turns up 12 tagAlign files with negative chromStarts!!! (all chrM)
+# exclude negative numbers
+grep -v ^chrM.*\-[0-9].*$ SL646.TagAlign >  SL646.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL705.TagAlign >  SL705.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL745.TagAlign >  SL745.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL839.TagAlign >  SL839.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL842.TagAlign >  SL842.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL845.TagAlign >  SL845.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL949.TagAlign >  SL949.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL950.TagAlign >  SL950.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL985.TagAlign >  SL985.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL986.TagAlign >  SL986.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL987.TagAlign >  SL987.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL988.TagAlign >  SL988.TagAlign.ok
+
+grep ^chr.*\-[0-9].*$ SL646.TagAlign > SL646.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL705.TagAlign > SL705.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL745.TagAlign > SL745.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL839.TagAlign > SL839.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL842.TagAlign > SL842.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL845.TagAlign > SL845.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL949.TagAlign > SL949.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL950.TagAlign > SL950.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL985.TagAlign > SL985.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL986.TagAlign > SL986.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL987.TagAlign > SL987.TagAlign.neg
+grep ^chr.*\-[0-9].*$ SL988.TagAlign > SL988.TagAlign.neg
+
+wl SL646.TagAlign*
+  6687019 SL646.TagAlign
+       10 SL646.TagAlign.neg
+  6687009 SL646.TagAlign.ok
+wl SL705.TagAlign*
+  6908754 SL705.TagAlign
+        6 SL705.TagAlign.neg
+  6908748 SL705.TagAlign.ok
+wl SL745.TagAlign*
+   9700070 SL745.TagAlign
+         7 SL745.TagAlign.neg
+   9700063 SL745.TagAlign.ok
+wl SL839.TagAlign*
+  15328082 SL839.TagAlign
+        11 SL839.TagAlign.neg
+  15328071 SL839.TagAlign.ok
+wl SL842.TagAlign*
+  14904855 SL842.TagAlign
+         8 SL842.TagAlign.neg
+  14904847 SL842.TagAlign.ok
+wl SL845.TagAlign*
+  15187957 SL845.TagAlign
+         5 SL845.TagAlign.neg
+  15187952 SL845.TagAlign.ok
+wl SL949.TagAlign*
+  17695757 SL949.TagAlign
+         2 SL949.TagAlign.neg
+  17695755 SL949.TagAlign.ok
+wl SL950.TagAlign*
+  16999702 SL950.TagAlign
+         1 SL950.TagAlign.neg
+  16999701 SL950.TagAlign.ok
+wl SL985.TagAlign*
+  16419103 SL985.TagAlign
+        10 SL985.TagAlign.neg
+  16419093 SL985.TagAlign.ok
+wl SL986.TagAlign*
+  14772569 SL986.TagAlign
+         8 SL986.TagAlign.neg
+  14772561 SL986.TagAlign.ok
+wl SL987.TagAlign*
+  15442480 SL987.TagAlign
+         9 SL987.TagAlign.neg
+  15442471 SL987.TagAlign.ok
+wl SL988.TagAlign*
+  14809751 SL988.TagAlign
+         5 SL988.TagAlign.neg
+  14809746 SL988.TagAlign.ok
+
+
+mv SL646.TagAlign.ok SL646.TagAlign
+mv SL705.TagAlign.ok SL705.TagAlign
+mv SL745.TagAlign.ok SL745.TagAlign
+mv SL839.TagAlign.ok SL839.TagAlign
+mv SL842.TagAlign.ok SL842.TagAlign
+mv SL845.TagAlign.ok SL845.TagAlign
+mv SL949.TagAlign.ok SL949.TagAlign
+mv SL950.TagAlign.ok SL950.TagAlign
+mv SL985.TagAlign.ok SL985.TagAlign
+mv SL986.TagAlign.ok SL986.TagAlign
+mv SL987.TagAlign.ok SL987.TagAlign
+mv SL988.TagAlign.ok SL988.TagAlign
+
+# Now go back and handle the members of the submission which were single replicates
+tar -cpzf haibNoReps.tgz DAF_HudsonAlphaChip.DAF DDF_HudsonAlpha_ChIP-seq-Oct09_A.noreps.DDF data/SL838.TagAlign data/SL838_Peaks.bed.broadPeak data/SL673.TagAlign data/SL673_Peaks.bed.broadPeak 
+
+grep -v ^chrM.*\-[0-9].*$ SL673.TagAlign >  SL673.TagAlign.ok
+grep ^chrM.*\-[0-9].*$ SL673.TagAlign >  SL673.TagAlign.neg
+wl SL673.TagAlign*
+  6284456 SL673.TagAlign
+        6 SL673.TagAlign.neg
+  6284450 SL673.TagAlign.ok
+grep -v ^chrM.*\-[0-9].*$ SL838.TagAlign >  SL838.TagAlign.ok
+grep ^chrM.*\-[0-9].*$ SL838.TagAlign >  SL838.TagAlign.neg
+wl SL838.TagAlign*
+  14852308 SL838.TagAlign
+        10 SL838.TagAlign.neg
+  14852298 SL838.TagAlign.ok
+
+mv SL673.TagAlign.ok SL673.TagAlign
+mv SL838.TagAlign.ok SL838.TagAlign
+
+### Problems:
+1) Missing 741/data/SL1019_Peaks.bed.broadPeak
+2) Missing SK-N-MC/Input (provisional)
+3) GM12878, K562 problem with 2 types of inputs, different PCR cycles??
+4) What is with rep3 and rep5?  Oct2, Pbx3, Pu.1, TAF-1 (3 reps?  No peaks on 2)
+5) What to do about provisional
+6) HepG2/Srf/Rep2 only; RawSignal/Rep2/Gm12878/Tafii only
+         Rep1Gm12878Irf4
+         Rep1Gm12878Tcf12
+         Rep1K562Tafii
+         Rep1Helas3Control
+         Rep2Hepg2Srf                                      2->1
+             SknmcControl Not found                        provisional-1
+         Rep3Gm12878Oct2 Rep5Gm12878Oct2                                 handled 3->1,5->2
+         Rep3Gm12878Pbx3 Rep5Gm12878Pbx3                                 handled 3->1,5->2
+         Rep3Gm12878Pu1  Rep5Gm12878Pu1                                  handled 3->1,5->2
+RawSignalRep2Gm12878Tafii Rep3Gm12878Tafii Rep5Gm12878Tafii              handled 2 dropped!! 3->2
+
+# What is up with Gm12878 and K562 Input??
++----------------------------------------------------------------------+----------+
+| wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control                   |  1862501 | 1.00 1734.00 stepped on beta 
+| wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1                  |  2059222 | 1.00 6252.00
+| wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control2                  |  2324260 | 1.00 3825.00
+| wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control                   |  1741188 | 1.00 1482.00 stepped on beta 
+| wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1                  |  1911410 | 1.00 3777.00
+| wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control2                  |  2500485 | 1.00 6656.00 
++----------------------------------------------------------------------+----------+
+| wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control                |  1328955 | 1.00 509.00  stepped on beta 
+| wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1               |  2325323 | 1.00 2399.00
+| wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control                |  1235707 | 1.00 472.00  stepped on beta 
+| wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1               |  2378799 | 1.00 2714.00
++----------------------------------------------------------------------+----------+
+### There is a alpha control that stepped on all 4 beta controls!!! 
+
+raToLines
+linesToRa
+
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2009-10-28
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/741/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/756/out/fileDb.ra | grep parentTable >> tmp.txt
+cat tmp.txt >> fileDb.ra
+
+# More missing
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/259/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/260/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/261/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/422/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/432/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/433/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/434/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/435/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/436/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/437/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/438/out/fileDb.ra | grep parentTable >> tmp.txt
+
+# Still...
+grep "wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Egr1\.fastq\.gz"  /hive/groups/encode/dcc/pipeline/encpipeline_prod/260/out/fileDb.ra
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/268/out/fileDb.ra | grep parentTable
+### Now the mystery of 268 is solved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 268 displayed
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/268/out/fileDb.ra | grep parentTable >> fileDb.ra
+
+mkdir saveForResolution
+mv *A549*.gz saveForResolution/
+mv *Control2.* saveForResolution/
+
+# edit fileDb.ra for duplicates and for replicate 3 and 5
+# Now we are finally ready to:
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 741 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 756 displayed
+
+### Resolution of GM12878/TAF
+submission 125 using SL288 is bad.
+submission 126 is bad.
+mv *Rep1Gm12878Taf* saveForResolution/
+mv *Rep1K562Taf* saveForResolution/
+# edit trackDb and fileDb
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html
+
+### Namme changes to close this issue!
+# peaks first (easiest):
+drop table wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii;
+drop table wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii;
+
+rename table wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Oct2      to wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Oct2 ;
+rename table wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Pbx3      to wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pbx3 ;
+rename table wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Pu1       to wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pu1  ;
+rename table wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Tafii     to wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii;
+rename table wgEncodeHudsonalphaChipSeqPeaksRep5Gm12878Oct2      to wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Oct2 ;
+rename table wgEncodeHudsonalphaChipSeqPeaksRep5Gm12878Pbx3      to wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pbx3 ;
+rename table wgEncodeHudsonalphaChipSeqPeaksRep5Gm12878Pu1       to wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pu1  ;
+cd {downloadsDir}
+mv wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Oct2.broadPeak.gz  wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Oct2.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Pbx3.broadPeak.gz  wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pbx3.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Pu1.broadPeak.gz   wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pu1.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep3Gm12878Tafii.broadPeak.gz wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep5Gm12878Oct2.broadPeak.gz  wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Oct2.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep5Gm12878Pbx3.broadPeak.gz  wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pbx3.broadPeak.gz
+mv wgEncodeHudsonalphaChipSeqPeaksRep5Gm12878Pu1.broadPeak.gz   wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pu1.broadPeak.gz
+
+# RawSignals (a pain):
+drop table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii;
+drop table wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii;
+rm /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib
+rm /gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii.wib
+
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Oct2  to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2 ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Pbx3  to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3 ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Pu1   to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1  ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Tafii to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep5Gm12878Oct2  to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2 ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep5Gm12878Pbx3  to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3 ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep5Gm12878Pu1   to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1  ;
+
+# wibs too?? Yes.
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2  set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3  set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1   set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2  set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3  set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1   set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1.wib";
+pushd /gbdb/hg18/wib/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Tafii.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Oct2.wib  wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Pbx3.wib  wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep3Gm12878Pu1.wib   wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep5Gm12878Oct2.wib  wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep5Gm12878Pbx3.wib  wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep5Gm12878Pu1.wib   wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1.wib
+pop 
+
+# tagAligns ad fastqs (only files)
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep3Gm12878Tafii.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Tafii.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep3Gm12878Pu1.tagAlign.gz   wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pu1.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep3Gm12878Oct2.tagAlign.gz  wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Oct2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep3Gm12878Pbx3.tagAlign.gz  wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pbx3.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep5Gm12878Pbx3.tagAlign.gz  wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pbx3.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep5Gm12878Oct2.tagAlign.gz  wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Oct2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep5Gm12878Pu1.tagAlign.gz   wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pu1.tagAlign.gz
+### No fastq for these!!!
+
+# edit trackDb edit fileDb.ra
+make alpha DBS=hg18
+encodeDownloadsPage.pl index.html
+
+### Should do this, but they are currently marked as "released" update projects set status = "revoked" where id in (125,126);
+
+# Before any more harm, should make release1 dir:
+mkdir release1
+cd release1/
+mv ../saveForResolution/*Tafii* .
+# vew source of downloads index.html on RR and save to /cse/staff/tdreszer/docs/ENCODE/haibTfbsRel1index.html
+cp /cse/staff/tdreszer/docs/ENCODE/haibTfbsRel1index.html index.html
+cp ../fileDb.ra.2009-10-28 fileDb.ra
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Control.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Control.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Gabp.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Gabp.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Gabp.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Gabp.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Nrsf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Nrsf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Nrsf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Nrsf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol2.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol2.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol2.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol2.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Srf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Srf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Srf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Srf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Control.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Control.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Gabp.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Gabp.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Gabp.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Gabp.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Nrsf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Nrsf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Nrsf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Nrsf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pol2.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol2.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep1K562Srf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Srf.tagAlign.gz .
+ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Srf.tagAlign.gz .
+### Note: I have stepped on GM12878/TAF1/Rep1 and K562/TAF1/Rep1 wib files.  Those currently on RR are different from those on hgwdev !!
