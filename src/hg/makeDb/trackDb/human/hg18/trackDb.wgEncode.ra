@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.623 2009/10/28 23:14:20 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.624 2009/10/29 16:10:17 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -216,7 +216,7 @@ longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
-subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 H3K9ac=H3K9ac Pol2b=Pol2(b) zCTRL=Input_Control
+subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Input_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
@@ -316,7 +316,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 141
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=GM12878
@@ -325,7 +325,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K4me2 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=141 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksGm12878H3k4me2 fileName=wgEncodeBroadChipSeqPeaksGm12878H3k4me2.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in GM12878 cells)
     subGroups view=Signal factor=H3K04me2 cellType=GM12878
@@ -400,7 +400,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 146
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in GM12878 cells)
     subGroups view=Peaks factor=H3K09ac cellType=GM12878
@@ -409,7 +409,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H3K9ac view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=146 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksGm12878H3k9ac fileName=wgEncodeBroadChipSeqPeaksGm12878H3k9ac.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalGm12878H3k9ac
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
     subGroups view=Signal factor=H3K09ac cellType=GM12878
@@ -442,7 +442,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 147
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in GM12878 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=GM12878
@@ -451,7 +451,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=GM12878 antibody=H4K20me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=147 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksGm12878H4k20me1 fileName=wgEncodeBroadChipSeqPeaksGm12878H4k20me1.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in GM12878 cells)
     subGroups view=Signal factor=H4K20me1 cellType=GM12878
@@ -610,7 +610,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 149
     track wgEncodeBroadChipSeqSignalGm12878Control
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel GM12878 Control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (GM12878 control)
     subGroups view=Signal factor=zCTRL cellType=GM12878
@@ -1361,7 +1361,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 151
     track wgEncodeBroadChipSeqPeaksK562H3k4me2
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in K562 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=K562
@@ -1370,7 +1370,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K4me2 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=151 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksK562H3k4me2 fileName=wgEncodeBroadChipSeqPeaksK562H3k4me2.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalK562H3k4me2
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in K562 cells)
     subGroups view=Signal factor=H3K04me2 cellType=K562
@@ -1401,7 +1401,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 155
     track wgEncodeBroadChipSeqPeaksK562H3k9ac
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in K562 cells)
     subGroups view=Peaks factor=H3K09ac cellType=K562
@@ -1410,7 +1410,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K9ac view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=155 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksK562H3k9ac fileName=wgEncodeBroadChipSeqPeaksK562H3k9ac.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalK562H3k9ac
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in K562 cells)
     subGroups view=Signal factor=H3K09ac cellType=K562
@@ -1421,7 +1421,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 158
     track wgEncodeBroadChipSeqPeaksK562H3k9me1
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in K562 cells)
     subGroups view=Peaks factor=H3K09me1 cellType=K562
@@ -1430,7 +1430,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H3K9me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=158 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksK562H3k9me1 fileName=wgEncodeBroadChipSeqPeaksK562H3k9me1.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalK562H3k9me1
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in K562 cells)
     subGroups view=Signal factor=H3K09me1 cellType=K562
@@ -1501,7 +1501,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 159
     track wgEncodeBroadChipSeqPeaksK562H4k20me1
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in K562 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=K562
@@ -1510,7 +1510,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=H4K20me1 view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=159 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksK562H4k20me1 fileName=wgEncodeBroadChipSeqPeaksK562H4k20me1.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalK562H4k20me1
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in K562 cells)
     subGroups view=Signal factor=H4K20me1 cellType=K562
@@ -1521,7 +1521,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 160
     track wgEncodeBroadChipSeqPeaksK562Pol2b
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in K562 cells)
     subGroups view=Peaks factor=Pol2b cellType=K562
@@ -1530,7 +1530,7 @@ dataVersion ENCODE Feb 2009 Freeze
     metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=K562 antibody=Pol2(b) view=Peaks softwareVersion=080608 dataVersion="ENCODE Feb 2009 Freeze" subId=160 dateSubmitted=2009-01-05 dateUnrestricted=2009-10-05 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksK562Pol2b fileName=wgEncodeBroadChipSeqPeaksK562Pol2b.broadPeak.gz
 
     track wgEncodeBroadChipSeqSignalK562Pol2b
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in K562 cells)
     subGroups view=Signal factor=Pol2b cellType=K562
@@ -1541,7 +1541,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
 # submission 161
     track wgEncodeBroadChipSeqSignalK562Control
-    subTrack wgEncodeBroadChipSeq
+    subTrack wgEncodeBroadChipSeq off
     shortLabel K562 Control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (K562 control)
     subGroups view=Signal factor=zCTRL cellType=K562
