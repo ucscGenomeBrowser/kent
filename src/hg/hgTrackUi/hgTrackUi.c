@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.505 2009/10/19 22:50:07 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.506 2009/10/29 04:19:08 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2113,13 +2113,14 @@ sr = sqlGetResult(conn, query);
 printf("<BR><B>Filter by publication reference:</B>\n");
 char cartVarName[256];
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tdb->tableName);
-boolean isExclude = sameString("exclude", cartUsualString(cart, cartVarName, "exclude"));
-cgiMakeRadioButton(cartVarName, "exclude", isExclude);
-printf("exclude\n");
-cgiMakeRadioButton(cartVarName, "include", !isExclude);
-printf("include<BR>\n");
+boolean isInclude = sameString("include", cartUsualString(cart, cartVarName, "include"));
+cgiMakeRadioButton(cartVarName, "include", isInclude);
+printf("include\n");
+cgiMakeRadioButton(cartVarName, "exclude", !isInclude);
+printf("exclude<BR>\n");
 safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->tableName);
 struct slName *checked = cartOptionalSlNameList(cart, cartVarName);
+boolean setAll = (checked == NULL && isInclude);
 #define MAX_DGV_REFS 128
 char *labelArr[MAX_DGV_REFS], *valueArr[MAX_DGV_REFS];
 int refCount = 0;
@@ -2135,6 +2136,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     valueArr[refCount++] = cloneString(pmId);
     if (refCount >= MAX_DGV_REFS)
 	errAbort("dgvUi: %s has too many references (max %d)", tdb->tableName, MAX_DGV_REFS);
+    if (setAll)
+	slAddHead(&checked, slNameNew(pmId));
     }
 sqlFreeResult(&sr);
 jsMakeCheckboxGroupSetClearButton(cartVarName, TRUE);
