@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.19 2009/10/01 04:50:06 braney Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.20 2009/10/30 21:03:23 braney Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
@@ -169,7 +169,7 @@ static void bedItemOverlapCount(char *database, int fileCount, char *fileList[])
 {
 unsigned maxChromSize = 0;
 int i;
-unitSize *counts = (unitSize)NULL;
+unitSize *counts = (unitSize *)NULL;
 
 if (chromSizes != NULL)
     {
