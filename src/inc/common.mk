@@ -5,6 +5,7 @@ ifeq (${COPT},)
 endif
 CFLAGS=
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
+HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
 #global external libraries 
 L=
@@ -23,11 +24,13 @@ ifeq (${USE_PNG},)
     USE_PNG=0
 endif
 ifeq (${USE_PNG},1)
-    L+=-lpng
-    HG_DEFS+=-DUSE_PNG
+ifeq (${PNGLIB},)
+    PNGLIB=-lpng
 endif
-
-HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
+    L+=${PNGLIB}
+    HG_DEFS+=-DUSE_PNG
+    HG_INC+=${PNGINCL}
+endif
 
 # libbam: disabled by default
 ifeq (${USE_BAM},)

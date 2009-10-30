@@ -3,9 +3,10 @@ include ../../inc/common.mk
 
 O =  cluster.o ../lib/cdnaAli.o
 
-L += ../../lib/$(MACHTYPE)/jkweb.a
+JKWEB=../../lib/$(MACHTYPE)/jkweb.a
+L += ${JKWEB}
 
-${BINDIR}/cluster: $(O)  $(L)
+${BINDIR}/cluster: $(O) $(JKWEB)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/cluster $O $(L)
 
 
