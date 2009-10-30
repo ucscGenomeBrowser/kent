@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.631 2009/10/30 23:16:50 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.632 2009/10/30 23:39:48 cline Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -253,7 +253,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 CTCF 1
+    shortLabel GM128 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 10017.00
@@ -264,7 +264,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 CTCF 2
+    shortLabel GM128 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 6886.00
@@ -317,7 +317,7 @@ dataVersion ENCODE Feb 2009 Freeze
 # submission 141
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
     subTrack wgEncodeBroadChipSeq off
-    shortLabel GM12878 H3K4me2
+    shortLabel GM128 H3K4me2 
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=GM12878
     type broadPeak
@@ -326,7 +326,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
     subTrack wgEncodeBroadChipSeq off
-    shortLabel GM12878 H3K4me2
+    shortLabel GM128 H3K4me2 
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in GM12878 cells)
     subGroups view=Signal factor=H3K04me2 cellType=GM12878
     type wig 0.00 15071.00
@@ -421,7 +421,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 H3K9ac 1
+    shortLabel GM128 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 5305.00
@@ -432,7 +432,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 H3K9ac 2
+    shortLabel GM128 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 4291.00
@@ -443,7 +443,7 @@ dataVersion ENCODE Feb 2009 Freeze
 # submission 147
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel GM12878 H4K20me1
+    shortLabel GM128 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in GM12878 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=GM12878
     type broadPeak
@@ -452,7 +452,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
     subTrack wgEncodeBroadChipSeq off
-    shortLabel GM12878 H4K20me1
+    shortLabel GM128 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in GM12878 cells)
     subGroups view=Signal factor=H4K20me1 cellType=GM12878
     type wig 0.00 10750.00
@@ -463,7 +463,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1 1
+    shortLabel G128 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in GM12878 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
     type wig 1.00 6918.00
@@ -474,7 +474,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1 2
+    shortLabel G128 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in GM12878 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
     type wig 1.00 5568.00
@@ -527,7 +527,7 @@ dataVersion ENCODE Feb 2009 Freeze
 # submission 144
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 H3K27me3
+    shortLabel GM128 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K27me3 cellType=GM12878
     type broadPeak
@@ -536,7 +536,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27me3
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 H3K27me3
+    shortLabel GM128 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
     subGroups view=Signal factor=H3K27me3 cellType=GM12878
     type wig 0.00 60338.25
@@ -547,7 +547,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3 1
+    shortLabel G128 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
     type wig 1.00 65374.00
@@ -558,7 +558,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3 2
+    shortLabel G128 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
     type wig 1.00 4241.00
@@ -569,7 +569,7 @@ dataVersion ENCODE Feb 2009 Freeze
 # submission 143
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 H3K36me3
+    shortLabel GM128 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K36me3 cellType=GM12878
     type broadPeak
@@ -578,7 +578,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqSignalGm12878H3k36me3
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM12878 H3K36me3
+    shortLabel GM128 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in GM12878 cells)
     subGroups view=Signal factor=H3K36me3 cellType=GM12878
     type wig 0.00 15797.75
@@ -589,7 +589,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3 1
+    shortLabel G128 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
     type wig 1.00 13112.00
@@ -600,7 +600,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
     release beta
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3 2
+    shortLabel G128 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
     type wig 1.00 5241.00
@@ -645,7 +645,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalH1hescCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC CTCF Sig
+    shortLabel H1ES CTCF Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in H1-hESC cells)
     subGroups view=Signal factor=CTCF cellType=H1
     type wig 0.00 25664.00
@@ -654,7 +654,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksH1hescCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC CTCF Pk
+    shortLabel H1ES CTCF Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in H1-hESC cells)
     subGroups view=Peaks factor=CTCF cellType=H1
     type broadPeak
@@ -664,7 +664,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalH1hescH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H3K4me1 Sig
+    shortLabel H1ES H3K4me1 Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in H1-hESC cells)
     subGroups view=Signal factor=H3K04me1 cellType=H1
     type wig 0.00 12286.00
@@ -673,7 +673,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksH1hescH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H3K4me1 Pk
+    shortLabel H1ES H3K4me1 Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in H1-hESC cells)
     subGroups view=Peaks factor=H3K04me1 cellType=H1
     type broadPeak
@@ -683,7 +683,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalH1hescH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H3K4me3 Sig
+    shortLabel H1ES H3K4me3 Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in H1-hESC cells)
     subGroups view=Signal factor=H3K04me3 cellType=H1
     type wig 0.00 12434.00
@@ -692,7 +692,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksH1hescH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H3K4me3 Pk
+    shortLabel H1ES H3K4me3 Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in H1-hESC cells)
     subGroups view=Peaks factor=H3K04me3 cellType=H1
     type broadPeak
@@ -702,7 +702,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalH1hescH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H3K27me3 Sig
+    shortLabel H1 H3K27me3 Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in H1-hESC cells)
     subGroups view=Signal factor=H3K27me3 cellType=H1
     type wig 0.00 13363.00
@@ -711,7 +711,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksH1hescH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H3K27me3 Pk
+    shortLabel H1 H3K27me3 Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in H1-hESC cells)
     subGroups view=Peaks factor=H3K27me3 cellType=H1
     type broadPeak
@@ -721,7 +721,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalH1hescH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H4K20me1 Sig
+    shortLabel H1 H4K20me1 Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in H1-hESC cells)
     subGroups view=Signal factor=H4K20me1 cellType=H1
     type wig 0.00 26060.00
@@ -730,7 +730,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksH1hescH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC H4K20me1 Pk
+    shortLabel H1 H4K20me1 Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in H1-hESC cells)
     subGroups view=Peaks factor=H4K20me1 cellType=H1
     type broadPeak
@@ -740,7 +740,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalH1hescControl
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel H1-hESC Control Sig
+    shortLabel H1 Control Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H1-hESC control)
     subGroups view=Signal factor=zCTRL cellType=H1
     type wig 0.00 11630.00
@@ -771,7 +771,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K4me2 Sig
+    shortLabel HepG2 H3K4me2 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HepG2 cells)
     subGroups view=Signal factor=H3K04me2 cellType=HEPG2
     type wig 0.00 5510.00
@@ -781,7 +781,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHepg2H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K4me2 Pk
+    shortLabel HepG2 H3K4me2 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HepG2 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=HEPG2
     type broadPeak
@@ -792,7 +792,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K4me3 Sig
+    shortLabel HepG2 H3K4me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HepG2 cells)
     subGroups view=Signal factor=H3K04me3 cellType=HEPG2
     type wig 0.00 4927.00
@@ -802,7 +802,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHepg2H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K4me3 Pk
+    shortLabel HepG2 H3K4me3 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HepG2 cells)
     subGroups view=Peaks factor=H3K04me3 cellType=HEPG2
     type broadPeak
@@ -813,7 +813,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K9ac Sig
+    shortLabel HepG2 H3K9ac Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HepG2 cells)
     subGroups view=Signal factor=H3K09ac cellType=HEPG2
     type wig 0.00 11352.00
@@ -834,7 +834,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K27ac Sig
+    shortLabel HepG2 H3K27ac S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HepG2 cells)
     subGroups view=Signal factor=H3K27ac cellType=HEPG2
     type wig 0.00 2133.00
@@ -844,7 +844,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHepg2H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K27ac Pk
+    shortLabel HepG2 H3K27ac P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HepG2 cells)
     subGroups view=Peaks factor=H3K27ac cellType=HEPG2
     type broadPeak
@@ -855,7 +855,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K36me3 Sig
+    shortLabel HpG2 H3K36me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HepG2 cells)
     subGroups view=Signal factor=H3K36me3 cellType=HEPG2
     type wig 0.00 6447.00
@@ -865,7 +865,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHepg2H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H3K36me3 Pk
+    shortLabel HpG2 H3K36me3 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HepG2 cells)
     subGroups view=Peaks factor=H3K36me3 cellType=HEPG2
     type broadPeak
@@ -876,7 +876,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H4K20me1 Sig
+    shortLabel HpG2 H4K20me1 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HepG2 cells)
     subGroups view=Signal factor=H4K20me1 cellType=HEPG2
     type wig 0.00 14061.00
@@ -886,7 +886,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHepg2H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 H4K20me1 Pk
+    shortLabel HpG2 H4K20me1 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HepG2 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=HEPG2
     type broadPeak
@@ -897,7 +897,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHepg2Control
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HepG2 Control Sig
+    shortLabel HepG2 Ctrl Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (HepG2 control)
     subGroups view=Signal factor=zCTRL cellType=HEPG2
     type wig 0.00 10365.00
@@ -927,7 +927,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K4me1 Sig
+    shortLabel HMEC H3K4me1 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in HMEC cells)
     subGroups view=Signal factor=H3K04me1 cellType=HMEC
     type wig 0.00 13574.00
@@ -946,7 +946,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K4me2 Sig
+    shortLabel HMEC H3K4me2 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HMEC cells)
     subGroups view=Signal factor=H3K04me2 cellType=HMEC
     type wig 0.00 10886.00
@@ -965,7 +965,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K4me3 Sig
+    shortLabel HMEC H3K4me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HMEC cells)
     subGroups view=Signal factor=H3K04me3 cellType=HMEC
     type wig 0.00 15838.00
@@ -1003,7 +1003,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K27ac Sig
+    shortLabel HMEC H3K27ac S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HMEC cells)
     subGroups view=Signal factor=H3K27ac cellType=HMEC
     type wig 0.00 8107.00
@@ -1022,7 +1022,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K27me3 Sig
+    shortLabel HMEC H3K27me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in HMEC cells)
     subGroups view=Signal factor=H3K27me3 cellType=HMEC
     type wig 0.00 11452.00
@@ -1031,7 +1031,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHmecH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K27me3 Pk
+    shortLabel HMEC H3K27me3 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in HMEC cells)
     subGroups view=Peaks factor=H3K27me3 cellType=HMEC
     type broadPeak
@@ -1041,7 +1041,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K36me3 Sig
+    shortLabel HMEC H3K36me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HMEC cells)
     subGroups view=Signal factor=H3K36me3 cellType=HMEC
     type wig 0.00 12398.00
@@ -1050,7 +1050,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHmecH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H3K36me3 Pk
+    shortLabel HMEC H3K36me3 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HMEC cells)
     subGroups view=Peaks factor=H3K36me3 cellType=HMEC
     type broadPeak
@@ -1060,7 +1060,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H4K20me1 Sig
+    shortLabel HMEC H4K20me1 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HMEC cells)
     subGroups view=Signal factor=H4K20me1 cellType=HMEC
     type wig 0.00 20299.00
@@ -1069,7 +1069,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksHmecH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC H4K20me1 Pk
+    shortLabel HMEC H4K20me1 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HMEC cells)
     subGroups view=Peaks factor=H4K20me1 cellType=HMEC
     type broadPeak
@@ -1079,7 +1079,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalHmecControl
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel HMEC Control Sig
+    shortLabel HMEC Ctrl Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (HMEC control)
     subGroups view=Signal factor=zCTRL cellType=HMEC
     type wig 0.00 14364.00
@@ -1786,7 +1786,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K4me1 Sig
+    shortLabel NHLF H3K4me1 Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in NHLF cells)
     subGroups view=Signal factor=H3K04me1 cellType=NHLF
     type wig 0.00 14639.00
@@ -1805,7 +1805,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K4me2 Sig
+    shortLabel NHLF H3K4me2 Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in NHLF cells)
     subGroups view=Signal factor=H3K04me2 cellType=NHLF
     type wig 0.00 12841.00
@@ -1824,7 +1824,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K4me3 Sig
+    shortLabel NHLF H3K4me3 Sg
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in NHLF cells)
     subGroups view=Signal factor=H3K04me3 cellType=NHLF
     type wig 0.00 28587.00
@@ -1862,7 +1862,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K27ac Sig
+    shortLabel NHLF H3K27ac S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in NHLF cells)
     subGroups view=Signal factor=H3K27ac cellType=NHLF
     type wig 0.00 7319.00
@@ -1881,7 +1881,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K27me3 Sig
+    shortLabel NHLF H3K27me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in NHLF cells)
     subGroups view=Signal factor=H3K27me3 cellType=NHLF
     type wig 0.00 10920.00
@@ -1890,7 +1890,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksNhlfH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K27me3 Pk
+    shortLabel NHLF H3K27me3 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in NHLF cells)
     subGroups view=Peaks factor=H3K27me3 cellType=NHLF
     type broadPeak
@@ -1900,7 +1900,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K36me3 Sig
+    shortLabel NHLF H3K36me3 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in NHLF cells)
     subGroups view=Signal factor=H3K36me3 cellType=NHLF
     type wig 0.00 17454.00
@@ -1909,7 +1909,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksNhlfH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H3K36me3 Pk
+    shortLabel NHLF H3K36me3 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in NHLF cells)
     subGroups view=Peaks factor=H3K36me3 cellType=NHLF
     type broadPeak
@@ -1919,7 +1919,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H4K20me1 Sig
+    shortLabel NHLF H4K20me1 S
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in NHLF cells)
     subGroups view=Signal factor=H4K20me1 cellType=NHLF
     type wig 0.00 9120.00
@@ -1928,7 +1928,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqPeaksNhlfH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF H4K20me1 Pk
+    shortLabel NHLF H4K20me1 P
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in NHLF cells)
     subGroups view=Peaks factor=H4K20me1 cellType=NHLF
     type broadPeak
@@ -1938,7 +1938,7 @@ dataVersion ENCODE Feb 2009 Freeze
     track wgEncodeBroadChipSeqSignalNhlfControl
     release alpha
     subTrack wgEncodeBroadChipSeq off
-    shortLabel NHLF Control Sig
+    shortLabel NHLF Ctrl Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (NHLF control)
     subGroups view=Signal factor=zCTRL cellType=NHLF
     type wig 0.00 15647.00
@@ -4807,7 +4807,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K4me3 Raw 1
+    shortLabel BJ H3K4me3 Rw 1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in BJ cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=BJ rep=rep1
     type wig 1.00 2466.00
@@ -4835,7 +4835,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K4me3 Raw 2
+    shortLabel BJ H3K4me3 Rw 2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in BJ cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=BJ rep=rep2
     type wig 1.00 2779.00
@@ -4863,7 +4863,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K27me3 Raw 1
+    shortLabel BJ H3K27me3 R 1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in BJ cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=BJ rep=rep1
     type wig 1.00 5615.00
@@ -4872,7 +4872,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1BjH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K27me3 Pk 1
+    shortLabel BJ H3K27me3 Pk1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in BJ cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=BJ rep=rep1
     type narrowPeak
@@ -4891,7 +4891,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K27me3 Raw 2
+    shortLabel BJ H3K27me3 Rw2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in BJ cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=BJ rep=rep2
     type wig 1.00 6969.00
@@ -4900,7 +4900,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2BjH3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel BJ H3K27me3 Pk 2
+    #shortLabel BJ H3K27me3 Pk2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in BJ cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=BJ rep=rep2
     #type narrowPeak
@@ -4919,7 +4919,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K36me3 Raw 1
+    shortLabel BJ H3K36me3 Rw1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in BJ cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=BJ rep=rep1
     type wig 1.00 8803.00
@@ -4928,7 +4928,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1BjH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K36me3 Pk 1
+    shortLabel BJ H3K36me3 Pk1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in BJ cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=BJ rep=rep1
     type narrowPeak
@@ -4948,7 +4948,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel BJ H3K36me3 Raw 2
+    shortLabel BJ H3K36me3 Rw2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in BJ cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=BJ rep=rep2
     type wig 1.00 9888.00
@@ -4957,7 +4957,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2BjH3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel BJ H3K36me3 Pk 2
+    #shortLabel BJ H3K36me3 Pk2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in BJ cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=BJ
     #type narrowPeak
@@ -4978,7 +4978,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 CTCF Raw 1
+    shortLabel Caco2 CTCF Rw 1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in Caco-2 cells)
     subGroups view=zRawSig factor=CTCF cellType=Caco2 rep=rep1
     type wig 1.00 8819.00
@@ -4996,7 +4996,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Caco2Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 CTCF HS 1
+    shortLabel Caco2 CTCF HS 1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in Caco-2 cells)
     subGroups view=cHot factor=CTCF cellType=Caco2 rep=rep1
     type broadPeak
@@ -5006,7 +5006,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 CTCF Raw 2
+    shortLabel Caco2 CTCF Rw 2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in Caco-2 cells)
     subGroups view=zRawSig factor=CTCF cellType=Caco2 rep=rep2
     type wig 1.00 11026.00
@@ -5015,7 +5015,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Caco2Ctcf
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 CTCF Pk 2
+    #shortLabel Caco2 CTCF Pk 2
     #longLabel ENCODE UW ChIP-seq Peaks (CTCF in Caco-2 cells)
     #subGroups view=aPeaks factor=CTCF cellType=Caco2 rep=rep2
     #type narrowPeak
@@ -5024,7 +5024,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Caco2Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 CTCF HS 2
+    shortLabel Caco2 CTCF HS 2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (CTCF in Caco-2 cells)
     subGroups view=cHot factor=CTCF cellType=Caco2 rep=rep2
     type broadPeak
@@ -5034,7 +5034,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 H3K4me1 Raw 1
+    #shortLabel Caco2 H3K4me1 1
     #longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me1 in Caco-2 cells)
     #subGroups view=zRawSig factor=H3K04me1 cellType=Caco2 rep=rep1
     #type wig 1.00 5258.00
@@ -5043,7 +5043,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 H3K4me1 Pk
+    #shortLabel Caco2 H3K4me1 P
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me1 in Caco-2 cells)
     #subGroups view=aPeaks factor=H3K04me1 cellType=Caco2 rep=rep1
     #type narrowPeak
@@ -5052,7 +5052,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 H3K4me1 HS 1
+    #shortLabel Cco2 H3K4me1 H1
     #longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me1 in Caco-2 cells)
     #subGroups view=cHot factor=H3K04me1 cellType=Caco2 rep=rep1
     #type broadPeak
@@ -5062,7 +5062,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K4me3 Raw 1
+    shortLabel Caco2 H3K4me3 1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in Caco-2 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=Caco2 rep=rep1
     type wig 1.00 1719.00
@@ -5071,7 +5071,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K4me3 Pk
+    shortLabel Caco2 H3K4me3 P
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in Caco-2 cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=Caco2 rep=rep1
     type narrowPeak
@@ -5080,7 +5080,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K4me3 HS 1
+    shortLabel Cco2 H3K4me3 H1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in Caco-2 cells)
     subGroups view=cHot factor=H3K04me3 cellType=Caco2 rep=rep1
     type broadPeak
@@ -5090,7 +5090,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K4me3 Raw 2
+    shortLabel Cco2 H3K4me3 R2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (H3K4me3 in Caco-2 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=Caco2 rep=rep2
     type wig 1.00 2151.00
@@ -5099,7 +5099,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Caco2H3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 H3K4me3 Pk 2
+    #shortLabel Cco2 H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in Caco-2 cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=Caco2 rep=rep2
     #type narrowPeak
@@ -5108,7 +5108,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Caco2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K4me3 HS 2
+    shortLabel Cco2 H3K4me3 H2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (H3K4me3 in Caco-2 cells)
     subGroups view=cHot factor=H3K04me3 cellType=Caco2 rep=rep2
     type broadPeak
@@ -5118,7 +5118,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K27me3 Raw 1
+    shortLabel Cco2H3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in Caco-2 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=Caco2 rep=rep1
     type wig 1.00 8014.00
@@ -5127,7 +5127,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Caco2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K27me3 Pk 1
+    shortLabel Cco2H3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in Caco-2 cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=Caco2 rep=rep1
     type narrowPeak
@@ -5136,7 +5136,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K27me3 1
+    shortLabel Caco2H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in Caco-2 cells)
     subGroups view=cHot factor=H3K27me3 cellType=Caco2 rep=rep1
     type broadPeak
@@ -5147,7 +5147,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K27me3 Raw 2
+    shortLabel Cco2H3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in Caco-2 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=Caco2 rep=rep2
     type wig 1.00 6788.00
@@ -5156,7 +5156,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Caco2H3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 H3K27me3 Pk 2
+    #shortLabel Cco2H3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in Caco-2 cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=Caco2 rep=rep2
     #type narrowPeak
@@ -5165,7 +5165,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Caco2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K27me3 2
+    shortLabel Cco2 H3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in Caco-2 cells)
     subGroups view=cHot factor=H3K27me3 cellType=Caco2 rep=rep2
     type broadPeak
@@ -5175,7 +5175,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K36me3 Raw 1
+    shortLabel Cco2H3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in Caco-2 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=Caco2 rep=rep1
     type wig 1.00 7494.00
@@ -5184,7 +5184,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Caco2H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K36me3 Pk 1
+    shortLabel Cco2H3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in Caco-2 cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=Caco2 rep=rep1
     type narrowPeak
@@ -5193,7 +5193,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K36me3 1
+    shortLabel Cco2 H3K36me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in Caco-2 cells)
     subGroups view=cHot factor=H3K36me3 cellType=Caco2 rep=rep1
     type broadPeak
@@ -5204,7 +5204,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K36me3 Raw 2
+    shortLabel Cco2H3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in Caco-2 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=Caco2 rep=rep2
     type wig 1.00 7220.00
@@ -5213,7 +5213,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Caco2H3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel Caco-2 H3K36me3 Pk 2
+    #shortLabel Cco2H3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in Caco-2 cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=Caco2 rep=rep2
     #type narrowPeak
@@ -5222,7 +5222,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Caco2H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel Caco-2 H3K36me3 2
+    shortLabel Cco2 H3K36me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in Caco-2 cells)
     subGroups view=cHot factor=H3K36me3 cellType=Caco2 rep=rep2
     type broadPeak
@@ -5233,7 +5233,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 CTCF Raw 1
+    shortLabel 06990CTCF Raw 1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in GM06990 cells)
     subGroups view=zRawSig factor=CTCF cellType=GM06990 rep=rep1
     type wig 1.00 7406.00
@@ -5253,7 +5253,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 CTCF HS 1
+    shortLabel 06990CTCF HS 1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in GM06990 cells)
     subGroups view=cHot factor=CTCF cellType=GM06990 rep=rep1
     type broadPeak
@@ -5264,7 +5264,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 CTCF Raw 2
+    shortLabel 06990CTCF Raw 2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in GM06990 cells)
     subGroups view=zRawSig factor=CTCF cellType=GM06990 rep=rep2
     type wig 1.00 9469.00
@@ -5273,7 +5273,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm06990Ctcf
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel GM06990 CTCF Pk 2
+    #shortLabel 06990CTCF Pk 2
     #longLabel ENCODE UW ChIP-seq Peaks (CTCF in GM06990 cells)
     #subGroups view=aPeaks factor=CTCF cellType=GM06990 rep=rep2
     #type narrowPeak
@@ -5282,7 +5282,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm06990Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 CTCF HS 2
+    shortLabel 06990CTCF HS 2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (CTCF in GM06990 cells)
     subGroups view=cHot factor=CTCF cellType=GM06990 rep=rep2
     type broadPeak
@@ -5292,7 +5292,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K4me3 Raw 1
+    shortLabel 06990H3K4me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in GM06990 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=GM06990 rep=rep1
     type wig 1.00 1467.00
@@ -5301,7 +5301,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm06990H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K4me3 Pk
+    shortLabel 06990H3K4me3 Pk
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in GM06990 cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=GM06990 rep=rep1
     type narrowPeak
@@ -5310,7 +5310,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K4me3 1
+    shortLabel 06990H3K4me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in GM06990 cells)
     subGroups view=cHot factor=H3K04me3 cellType=GM06990 rep=rep1
     type broadPeak
@@ -5320,7 +5320,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K4me3 Raw 2
+    shortLabel 06990H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in GM06990 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=GM06990 rep=rep2
     type wig 1.00 2237.00
@@ -5329,7 +5329,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm06990H3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel GM06990 H3K4me3 Pk 2
+    #shortLabel 06990H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in GM06990 cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=GM06990 rep=rep2
     #type narrowPeak
@@ -5338,7 +5338,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K4me3 HS 2
+    shortLabel GM06H3K4me3 HS2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K4me3 in GM06990 cells)
     subGroups view=cHot factor=H3K04me3 cellType=GM06990 rep=rep2
     type broadPeak
@@ -5348,7 +5348,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K27me3 Raw 1
+    shortLabel GM06H3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in GM06990 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=GM06990 rep=rep1
     type wig 1.00 3852.00
@@ -5357,7 +5357,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm06990H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K27me3 Pk 1
+    shortLabel GM06H3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in GM06990 cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=GM06990 rep=rep1
     type narrowPeak
@@ -5366,7 +5366,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K27me3 1
+    shortLabel 06990H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in GM06990 cells)
     subGroups view=cHot factor=H3K27me3 cellType=GM06990 rep=rep1
     type broadPeak
@@ -5376,7 +5376,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K27me3 Raw 2
+    shortLabel GM06H3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in GM06990 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=GM06990 rep=rep2
     type wig 1.00 3440.00
@@ -5385,7 +5385,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm06990H3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel GM06990 H3K27me3 Pk 2
+    #shortLabel GM06H3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in GM06990 cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=GM06990 rep=rep2
     #type narrowPeak
@@ -5394,7 +5394,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K27me3 2
+    shortLabel 06990H3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in GM06990 cells)
     subGroups view=cHot factor=H3K27me3 cellType=GM06990 rep=rep2
     type broadPeak
@@ -5404,7 +5404,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K36me3 Raw 1
+    shortLabel GM06H3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in GM06990 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=GM06990 rep=rep1
     type wig 1.00 4097.00
@@ -5413,7 +5413,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K36me3 Pk 1
+    shortLabel GM06H3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in GM06990 cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=GM06990 rep=rep1
     type narrowPeak
@@ -5422,7 +5422,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K36me3 1
+    shortLabel 06990H3K36me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in GM06990 cells)
     subGroups view=cHot factor=H3K36me3 cellType=GM06990 rep=rep1
     type broadPeak
@@ -5433,7 +5433,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K36me3 Raw 2
+    shortLabel GM06H3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in GM06990 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=GM06990 rep=rep2
     type wig 1.00 5143.00
@@ -5442,7 +5442,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm06990H3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel GM06990 H3K36me3 Pk 2
+    #shortLabel GM06H3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks Replicate 2 (H3K36me3 in GM06990 cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=GM06990
     #type narrowPeak
@@ -5451,7 +5451,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM06990 H3K36me3 2
+    shortLabel 06990H3K36me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in GM06990 cells)
     subGroups view=cHot factor=H3K36me3 cellType=GM06990 rep=rep2
     type broadPeak
@@ -5462,7 +5462,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM12801 CTCF Raw 1
+    shortLabel GM12801 CTCF R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in GM12801 cells)
     subGroups view=zRawSig factor=CTCF cellType=GM12801 rep=rep1
     type wig 1.00 1582.00
@@ -5480,7 +5480,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm12801Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel GM12801 CTCF HS 1
+    shortLabel G12801 CTCF HS1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in GM12801 cells)
     subGroups view=cHot factor=CTCF cellType=GM12801 rep=rep1
     type broadPeak
@@ -5490,7 +5490,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 CTCF Raw 1
+    shortLabel G12878 CTCF R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
     subGroups view=zRawSig factor=CTCF cellType=1GM12878 rep=rep1
     type wig 1.00 2948.00
@@ -5502,7 +5502,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm12878Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 CTCF Pk 1
+    shortLabel G12878 CTCF P1
     longLabel ENCODE UW ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=aPeaks factor=CTCF cellType=1GM12878 rep=rep1
     type narrowPeak
@@ -5527,7 +5527,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 CTCF Raw 2
+    shortLabel GM12878 CTCF R2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
     subGroups view=zRawSig factor=CTCF cellType=1GM12878 rep=rep2
     type wig 1.00 7533.00
@@ -5537,7 +5537,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm12878Ctcf
     #release alpha
     #subTrack wgEncodeUwChIPSeq
-    #shortLabel GM12878 CTCF Pk 2
+    #shortLabel G12878 CTCF Pk2
     #longLabel ENCODE UW ChIP-seq Peaks (CTCF in GM12878 cells)
     #subGroups view=aPeaks factor=CTCF cellType=1GM12878 rep=rep2
     #type narrowPeak
@@ -5547,7 +5547,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm12878Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 CTCF HS 2
+    shortLabel G12878 CTCF HS2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (CTCF in GM12878 cells)
     subGroups view=cHot factor=CTCF cellType=1GM12878 rep=rep2
     type broadPeak
@@ -5558,7 +5558,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K4me3 Raw 1
+    shortLabel G12878H3K4me3 1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in GM12878 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=1GM12878 rep=rep1
     type wig 1.00 2568.00
@@ -5569,7 +5569,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm12878H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K4me3 Pk 1
+    shortLabel G12878H3K4me3P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in GM12878 cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=1GM12878 rep=rep1
     type narrowPeak
@@ -5580,7 +5580,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K4me3 HS 1
+    shortLabel G12878H3K4me3H1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in GM12878 cells)
     subGroups view=cHot factor=H3K04me3 cellType=1GM12878 rep=rep1
     type broadPeak
@@ -5592,7 +5592,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K4me3 Raw 2
+    shortLabel G12878H3K4me3R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in GM12878 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=1GM12878 rep=rep2
     type wig 1.00 2005.00
@@ -5602,7 +5602,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm12878H3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq
-    #shortLabel GM12878 H3K4me3 Pk 2
+    #shortLabel G12878H3K4me3P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in GM12878 cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=1GM12878 rep=rep2
     #type narrowPeak
@@ -5612,7 +5612,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K4me3 HS 2
+    shortLabel G12878H3K4me3H2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K4me3 in GM12878 cells)
     subGroups view=cHot factor=H3K04me3 cellType=1GM12878 rep=rep2
     type broadPeak
@@ -5623,7 +5623,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K27me3 Raw 1
+    shortLabel 12878H3K27me3R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in GM12878 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=1GM12878 rep=rep1
     type wig 1.00 3181.00
@@ -5633,7 +5633,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm12878H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K27me3 Pk 1
+    shortLabel 12878H3K27me3P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in GM12878 cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=1GM12878 rep=rep1
     type narrowPeak
@@ -5643,7 +5643,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K27me3 1
+    shortLabel G12878H3K27me31
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in GM12878 cells)
     subGroups view=cHot factor=H3K27me3 cellType=1GM12878 rep=rep1
     type broadPeak
@@ -5654,7 +5654,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K27me3 Raw 2
+    shortLabel 12878H3K27me3R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in GM12878 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=1GM12878 rep=rep2
     type wig 1.00 4466.00
@@ -5664,7 +5664,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm12878H3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq
-    #shortLabel GM12878 H3K27me3 Pk 2
+    #shortLabel 12878H3K27me3P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in GM12878 cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=1GM12878 rep=rep2
     #type narrowPeak
@@ -5674,7 +5674,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K27me3 2
+    shortLabel 12878H3K27me32
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in GM12878 cells)
     subGroups view=cHot factor=H3K27me3 cellType=1GM12878 rep=rep2
     type broadPeak
@@ -5685,7 +5685,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K36me3 Raw 1
+    shortLabel 12878H3K36me3R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in GM12878 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=1GM12878 rep=rep1
     type wig 1.00 4307.00
@@ -5695,7 +5695,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K36me3 Pk 1
+    shortLabel 12878H3K36me3P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in GM12878 cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=1GM12878 rep=rep1
     type narrowPeak
@@ -5705,7 +5705,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K36me3 1
+    shortLabel G12878H3K36me31
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in GM12878 cells)
     subGroups view=cHot factor=H3K36me3 cellType=1GM12878 rep=rep1
     type broadPeak
@@ -5716,7 +5716,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K36me3 Raw 2
+    shortLabel 12878H3K36me3R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in GM12878 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=1GM12878 rep=rep2
     type wig 1.00 4547.00
@@ -5726,7 +5726,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Gm12878H3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq
-    #shortLabel GM12878 H3K36me3 Pk 2
+    #shortLabel 12878H3K36me3P2
     #longLabel ENCODE UW ChIP-seq Peaks Replicate 2 (H3K36me3 in GM12878 cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=1GM12878
     #type narrowPeak
@@ -5736,7 +5736,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel GM12878 H3K36me3 2
+    shortLabel G12878H3K36me32
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in GM12878 cells)
     subGroups view=cHot factor=H3K36me3 cellType=1GM12878 rep=rep2
     type broadPeak
@@ -5748,7 +5748,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HEK293 CTCF Raw 1
+    shortLabel HEK293 CTCF R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HEK293 cells)
     subGroups view=zRawSig factor=CTCF cellType=HEK293 rep=rep1
     type wig 1.00 5034.00
@@ -5770,7 +5770,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep1Hek293Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HEK293 CTCF HS 1
+    shortLabel HEK293 CTCF HS1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in HEK293 cells)
     subGroups view=cHot factor=CTCF cellType=HEK293 rep=rep1
     type broadPeak
@@ -5782,7 +5782,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HEK293 CTCF Raw 2
+    shortLabel HEK293 CTCF R2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in HEK293 cells)
     subGroups view=zRawSig factor=CTCF cellType=HEK293 rep=rep2
     type wig 1.00 10986.00
@@ -5792,7 +5792,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     #track wgEncodeUwChIPSeqPeaksRep2Hek293Ctcf
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HEK293 CTCF Pk 2
+    #shortLabel HEK293 CTCF Pk2
     #longLabel ENCODE UW ChIP-seq Peaks (CTCF in HEK293 cells)
     #subGroups view=aPeaks factor=CTCF cellType=HEK293 rep=rep2
     #type narrowPeak
@@ -5802,7 +5802,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqHotspotsRep2Hek293Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HEK293 CTCF HS 2
+    shortLabel HEK293 CTCF HS2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (CTCF in HEK293 cells)
     subGroups view=cHot factor=CTCF cellType=HEK293 rep=rep2
     type broadPeak
@@ -5813,7 +5813,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 CTCF Raw 1
+    shortLabel HeLaS3 CTCF R 1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HeLa-S3 cells)
     subGroups view=zRawSig factor=CTCF cellType=2HELA rep=rep1
     type wig 1.00 4445.00
@@ -5825,7 +5825,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     track wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 CTCF Pk 1
+    shortLabel HeLaS3 CTCF Pk1
     longLabel ENCODE UW ChIP-seq Peaks (CTCF in HeLa-S3 cells)
     subGroups view=aPeaks factor=CTCF cellType=2HELA rep=rep1
     type narrowPeak
@@ -5838,7 +5838,7 @@ itted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableNa
     track wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 CTCF 1
+    shortLabel HeLaS3 CTCF 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in HeLa-S3 cells)
     subGroups view=cHot factor=CTCF cellType=2HELA rep=rep1
     type broadPeak
@@ -5852,7 +5852,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 CTCF Raw 2
+    shortLabel HeLaS3 CTCF R 2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in HeLa-S3 cells)
     subGroups view=zRawSig factor=CTCF cellType=2HELA rep=rep2
     color 0,102,136
@@ -5862,7 +5862,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Helas3Ctcf
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 CTCF Pk 2
+    #shortLabel HeLaS3 CTCF Pk2
     #longLabel ENCODE UW ChIP-seq Peaks (CTCF in HeLa-S3 cells)
     #subGroups view=aPeaks factor=CTCF cellType=2HELA rep=rep2
     #color 0,102,136
@@ -5872,7 +5872,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Helas3Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 CTCF HS 2
+    shortLabel HeLaS3 CTCF HS2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (CTCF in HeLa-S3 cells)
     subGroups view=cHot factor=CTCF cellType=2HELA rep=rep2
     color 0,102,136
@@ -5883,7 +5883,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 H3K4me1 Raw 1
+    #shortLabel HLaS3 H3K4me1R1
     #longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me1 in HeLa-S3 cells)
     #subGroups view=zRawSig factor=H3K04me1 cellType=2HELA rep=rep1
     #type wig 1.00 5252.00
@@ -5893,7 +5893,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep1Helas3H3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 H3K4me1 Pk
+    #shortLabel HLaS3H3K4me1 Pk
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me1 in HeLa-S3 cells)
     #subGroups view=aPeaks factor=H3K04me1 cellType=2HELA rep=rep1
     #type narrowPeak
@@ -5903,7 +5903,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqHotspotsRep1Helas3H3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 H3K4me1 HS 1
+    #shortLabel HLaS3H3K4me1 H1
     #longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me1 in HeLa-S3 cells)
     #subGroups view=cHot factor=H3K04me1 cellType=2HELA rep=rep1
     #type broadPeak
@@ -5914,7 +5914,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K4me3 Raw 1
+    shortLabel HLaS3H3K4me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in HeLa-S3 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2HELA rep=rep1
     type wig 1.00 5208.00
@@ -5924,7 +5924,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1Helas3H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K4me3 Pk
+    shortLabel HLaS3H3K4me3 Pk
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HeLa-S3 cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=2HELA rep=rep1
     type narrowPeak
@@ -5934,7 +5934,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Helas3H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K4me3 1
+    shortLabel HLaS3 H3K4me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in HeLa-S3 cells)
     subGroups view=cHot factor=H3K04me3 cellType=2HELA rep=rep1
     type broadPeak
@@ -5945,7 +5945,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K4me3 Raw 2
+    shortLabel HLS3 H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in HeLa-S3 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2HELA rep=rep2
     type wig 1.00 3634.00
@@ -5955,7 +5955,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Helas3H3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 H3K4me3 Pk 2
+    #shortLabel HLS3 H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HeLa-S3 cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=2HELA rep=rep2
     #type narrowPeak
@@ -5965,7 +5965,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Helas3H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K4me3 2
+    shortLabel HLaS3 H3K4me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K4me3 in HeLa-S3 cells)
     subGroups view=cHot factor=H3K04me3 cellType=2HELA rep=rep2
     type broadPeak
@@ -5976,7 +5976,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K27me3 Raw 1
+    shortLabel HLS3H3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in HeLa-S3 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2HELA rep=rep1
     type wig 1.00 6700.00
@@ -5986,7 +5986,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1Helas3H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K27me3 Pk 1
+    shortLabel HLS3H3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HeLa-S3 cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=2HELA rep=rep1
     type narrowPeak
@@ -5996,7 +5996,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Helas3H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K27me3 1
+    shortLabel HLS3H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in HeLa-S3 cells)
     subGroups view=cHot factor=H3K27me3 cellType=2HELA rep=rep1
     type broadPeak
@@ -6007,7 +6007,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K27me3 Raw 2
+    shortLabel HLS3H3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in HeLa-S3 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2HELA rep=rep2
     type wig 1.00 7722.00
@@ -6017,7 +6017,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Helas3H3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 H3K27me3 Pk 2
+    #shortLabel HLS3H3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HeLa-S3 cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=2HELA rep=rep2
     #type narrowPeak
@@ -6027,7 +6027,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Helas3H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K27me3 2
+    shortLabel HLS3 H3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in HeLa-S3 cells)
     subGroups view=cHot factor=H3K27me3 cellType=2HELA rep=rep2
     type broadPeak
@@ -6039,7 +6039,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K36me3 Raw 1
+    shortLabel HLS3H3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HeLa-S3 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=2HELA rep=rep1
     type wig 1.00 8512.00
@@ -6049,7 +6049,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1Helas3H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K36me3 Pk 1
+    shortLabel HLS3H3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HeLa-S3 cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=2HELA rep=rep1
     type narrowPeak
@@ -6059,7 +6059,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Helas3H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K36me3 1
+    shortLabel HLS3 H3K36me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in HeLa-S3 cells)
     subGroups view=cHot factor=H3K36me3 cellType=2HELA rep=rep1
     type broadPeak
@@ -6070,7 +6070,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K36me3 Raw 2
+    shortLabel HLS3H3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in HeLa-S3 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=2HELA rep=rep2
     type wig 1.00 8755.00
@@ -6080,7 +6080,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Helas3H3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HeLa-S3 H3K36me3 Pk 2
+    #shortLabel HLS3H3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HeLa-S3 cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=2HELA rep=rep2
     #type narrowPeak
@@ -6090,7 +6090,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Helas3H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HeLa-S3 H3K36me3 2
+    shortLabel HLS3 H3K36me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in HeLa-S3 cells)
     subGroups view=cHot factor=H3K36me3 cellType=2HELA rep=rep2
     type broadPeak
@@ -6102,7 +6102,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 CTCF Raw 1
+    shortLabel HepG2 CTCF R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HepG2 cells)
     subGroups view=zRawSig factor=CTCF cellType=2HEPG2 rep=rep1
     color 189,0,157
@@ -6133,7 +6133,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 CTCF Raw 2
+    shortLabel HepG2 CTCF R2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in HepG2 cells)
     subGroups view=zRawSig factor=CTCF cellType=2HEPG2 rep=rep2
     type wig 1.00 6362.00
@@ -6166,7 +6166,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K4me3 Raw 1
+    shortLabel HepG2H3K4me3 R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in HepG2 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2HEPG2 rep=rep1
     type wig 1.00 1434.00
@@ -6176,7 +6176,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1Hepg2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K4me3 Pk
+    shortLabel HepG2H3K4me3 Pk
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HepG2 cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=2HEPG2 rep=rep1
     type narrowPeak
@@ -6186,7 +6186,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K4me3 HS 1
+    shortLabel HepG2H3K4me3HS1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in HepG2 cells)
     subGroups view=cHot factor=H3K04me3 cellType=2HEPG2 rep=rep1
     type broadPeak
@@ -6197,7 +6197,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K4me3 Raw 2
+    shortLabel HepG2H3K4me3 R2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (H3K4me3 in HepG2 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2HEPG2 rep=rep2
     type wig 1.00 1619.00
@@ -6207,7 +6207,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Hepg2H3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HepG2 H3K4me3 Pk 2
+    #shortLabel HepG2H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HepG2 cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=2HEPG2 rep=rep2
     #type narrowPeak
@@ -6217,7 +6217,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K4me3 HS 2
+    shortLabel HepG2H3K4me3 H2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (H3K4me3 in HepG2 cells)
     subGroups view=cHot factor=H3K04me3 cellType=2HEPG2 rep=rep2
     type broadPeak
@@ -6228,7 +6228,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K27me3 Raw 1
+    shortLabel HepG2H3K27me3R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in HepG2 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2HEPG2 rep=rep1
     type wig 1.00 2920.00
@@ -6238,7 +6238,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1Hepg2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K27me3 Pk 1
+    shortLabel HepG2H3K27me3P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HepG2 cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=2HEPG2 rep=rep1
     type narrowPeak
@@ -6248,7 +6248,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K27me3 1
+    shortLabel HepG2H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in HepG2 cells)
     subGroups view=cHot factor=H3K27me3 cellType=2HEPG2 rep=rep1
     type broadPeak
@@ -6259,7 +6259,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K27me3 Raw 2
+    shortLabel HepG2H3K27me3R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in HepG2 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2HEPG2 rep=rep2
     type wig 1.00 2880.00
@@ -6269,7 +6269,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Hepg2H3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HepG2 H3K27me3 Pk 2
+    #shortLabel HepG2H3K27me3P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HepG2 cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=2HEPG2 rep=rep2
     #type narrowPeak
@@ -6279,7 +6279,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K27me3 2
+    shortLabel HepG2H3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in HepG2 cells)
     subGroups view=cHot factor=H3K27me3 cellType=2HEPG2 rep=rep2
     type broadPeak
@@ -6287,11 +6287,45 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K27me3 fragLength=350 view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=705 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3 fileName=wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3.broadPeak.gz
 
 
+#submission 745
+    track wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HpG2H3K36me3 R1
+    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HepG2 cells)
+    subGroups view=zRawSig factor=H3K36me3 cellType=2HEPG2 rep=rep1
+    type wig 1.00 3871.00
+    color 189,0,157
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=zRawSig replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3.wig.gz
+
+    track wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HpG2 H3K36me3 P1
+    longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HepG2 cells)
+    subGroups view=aPeaks factor=H3K36me3 cellType=2HEPG2 rep=rep1
+    type narrowPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
+
+    track wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HpG2 H3K36me3 1
+    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in HepG2 cells)
+    subGroups view=cHot factor=H3K36me3 cellType=2HEPG2 rep=rep1
+    type broadPeak
+    color 189,0,157
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=cHot replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3.broadPeak.gz
+
+
+
+
 #submission 306
     track wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 CTCF Raw 1
+    shortLabel HL60 CTCF R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in HL-60 cells)
     subGroups view=zRawSig factor=CTCF cellType=HL60 rep=rep1
     type wig 1.00 2306.00
@@ -6300,7 +6334,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksHl60Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 CTCF Pk
+    shortLabel HL60 CTCF Pk
     longLabel ENCODE UW ChIP-seq Peaks (CTCF in HL-60 cells)
     subGroups view=aPeaks factor=CTCF cellType=HL60 rep=rep1
     type narrowPeak
@@ -6309,7 +6343,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Hl60Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 CTCF HS 1
+    shortLabel HL60 CTCF HS 1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in HL-60 cells)
     subGroups view=cHot factor=CTCF cellType=HL60 rep=rep1
     type broadPeak
@@ -6319,7 +6353,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 H3K4me3 Raw 1
+    shortLabel HL60 H3K4me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in HL-60 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=HL60 rep=rep1
     type wig 1.00 1509.00
@@ -6328,7 +6362,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1Hl60H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 H3K4me3 Pk
+    shortLabel HL60 H3K4me3 Pk
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HL-60 cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=HL60 rep=rep1
     type narrowPeak
@@ -6337,7 +6371,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Hl60H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 H3K4me3 HS 1
+    shortLabel HL60 H3K4me3 H1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in HL-60 cells)
     subGroups view=cHot factor=H3K04me3 cellType=HL60 rep=rep1
     type broadPeak
@@ -6347,7 +6381,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 H3K4me3 Raw 2
+    shortLabel HL60 H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in HL-60 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=HL60 rep=rep2
     type wig 1.00 1910.00
@@ -6356,7 +6390,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2Hl60H3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HL-60 H3K4me3 Pk 2
+    #shortLabel HL60 H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HL-60 cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=HL60 rep=rep2
     #type narrowPeak
@@ -6365,7 +6399,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Hl60H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HL-60 H3K4me3 HS 2
+    shortLabel HL60 H3K4me3 H2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K4me3 in HL-60 cells)
     subGroups view=cHot factor=H3K04me3 cellType=HL60 rep=rep2
     type broadPeak
@@ -6375,7 +6409,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HMEC CTCF Raw 1
+    shortLabel HMEC CTCF R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HMEC cells)
     subGroups view=zRawSig factor=CTCF cellType=HMEC rep=rep1
     type wig 1.00 5388.00
@@ -6403,7 +6437,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HMEC H3K27me3 Raw 1
+    shortLabel HMECH3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in HMEC cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=HMEC rep=rep1
     type wig 1.00 8339.00
@@ -6413,7 +6447,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1HmecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HMEC H3K27me3 Pk
+    shortLabel HMEC H3K27me3 P
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HMEC cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=HMEC rep=rep1
     type narrowPeak
@@ -6423,7 +6457,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1HmecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HMEC H3K27me3 HS 1
+    shortLabel HMECH3K27me3 H1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in HMEC cells)
     subGroups view=cHot factor=H3K27me3 cellType=HMEC rep=rep1
     type broadPeak
@@ -6490,7 +6524,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqRawSignalRep1HreH3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HRE H3K4me1 Raw 1
+    #shortLabel HRE H3K4me1 R1
     #longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me1 in HRE cells)
     #subGroups view=zRawSig factor=H3K04me1 cellType=HRE rep=rep1
     #type wig 1.00 2633.00
@@ -6508,7 +6542,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqHotspotsRep1HreH3k4me1
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HRE H3K4me1 HS 1
+    #shortLabel HRE H3K4me1 HS1
     #longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me1 in HRE cells)
     #subGroups view=cHot factor=H3K04me1 cellType=HRE rep=rep1
     #type broadPeak
@@ -6518,7 +6552,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K4me3 Raw 1
+    shortLabel HRE H3K4me3 R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in HRE cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=HRE rep=rep1
     type wig 1.00 1056.00
@@ -6536,7 +6570,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K4me3 HS 1
+    shortLabel HRE H3K4me3 H1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in HRE cells)
     subGroups view=cHot factor=H3K04me3 cellType=HRE rep=rep1
     type broadPeak
@@ -6546,7 +6580,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K4me3 Raw 2
+    shortLabel HRE H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in HRE cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=HRE rep=rep2
     type wig 1.00 1580.00
@@ -6555,7 +6589,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2HreH3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HRE H3K4me3 Pk 2
+    #shortLabel HRE H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HRE cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=HRE rep=rep2
     #type narrowPeak
@@ -6574,7 +6608,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K27me3 Raw 1
+    shortLabel HRE H3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in HRE cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=HRE rep=rep1
     type wig 1.00 4189.00
@@ -6584,7 +6618,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1HreH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K27me3 Pk 1
+    shortLabel HRE H3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HRE cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=HRE rep=rep1
     type narrowPeak
@@ -6606,7 +6640,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K27me3 Raw 2
+    shortLabel HRE H3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in HRE cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=HRE rep=rep2
     type wig 1.00 2699.00
@@ -6615,7 +6649,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2HreH3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HRE H3K27me3 Pk 2
+    #shortLabel HRE H3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HRE cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=HRE rep=rep2
     #type narrowPeak
@@ -6634,7 +6668,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K36me3 Raw 1
+    shortLabel HRE H3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HRE cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=HRE rep=rep1
     type wig 1.00 4118.00
@@ -6643,7 +6677,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1HreH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K36me3 Pk 1
+    shortLabel HRE H3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HRE cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=HRE rep=rep1
     type narrowPeak
@@ -6662,7 +6696,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HRE H3K36me3 Raw 2
+    shortLabel HRE H3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in HRE cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=HRE rep=rep2
     type wig 1.00 4560.00
@@ -6671,7 +6705,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2HreH3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HRE H3K36me3 Pk 2
+    #shortLabel HRE H3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HRE cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=HRE rep=rep2
     #type narrowPeak
@@ -6691,7 +6725,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC CTCF Raw 1
+    shortLabel HUVEC CTCF R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in HUVEC cells)
     subGroups view=zRawSig factor=CTCF cellType=2HUVEC rep=rep1
     type wig 1.00 3186.00
@@ -6725,7 +6759,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC CTCF Raw 2
+    shortLabel HUVEC CTCF R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (CTCF in HUVEC cells)
     subGroups view=zRawSig factor=CTCF cellType=2HUVEC rep=rep2
     type wig 1.00 2048.00
@@ -6757,7 +6791,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K4me3 Raw 1
+    shortLabel HUVECH3K4me3 R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in HUVEC cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2HUVEC rep=rep1
     type wig 1.00 3611.00
@@ -6767,7 +6801,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1HuvecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K4me3 Pk
+    shortLabel HUVECH3K4me3 P
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HUVEC cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=2HUVEC rep=rep1
     type narrowPeak
@@ -6777,7 +6811,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1HuvecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K4me3 HS 1
+    shortLabel HUVECH3K4me3 H1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in HUVEC cells)
     subGroups view=cHot factor=H3K04me3 cellType=2HUVEC rep=rep1
     type broadPeak
@@ -6788,7 +6822,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K4me3 Raw 2
+    shortLabel HUVECH3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in HUVEC cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2HUVEC rep=rep2
     type wig 1.00 2858.00
@@ -6798,7 +6832,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2HuvecH3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HUVEC H3K4me3 Pk 2
+    #shortLabel HUVECH3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in HUVEC cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=2HUVEC rep=rep2
     #type narrowPeak
@@ -6819,7 +6853,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K27me3 Raw 1
+    shortLabel HUVECH3K27me3R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in HUVEC cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2HUVEC rep=rep1
     type wig 1.00 3861.00
@@ -6830,7 +6864,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1HuvecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K27me3 Pk
+    shortLabel HUVECH3K27me3 P
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HUVEC cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=2HUVEC rep=rep1
     type narrowPeak
@@ -6841,7 +6875,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1HuvecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K27me3 HS 1
+    shortLabel HVEC H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in HUVEC cells)
     subGroups view=cHot factor=H3K27me3 cellType=2HUVEC rep=rep1
     type broadPeak
@@ -6853,7 +6887,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K27me3 Raw 2
+    shortLabel HVECH3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in HUVEC cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2HUVEC rep=rep2
     type wig 1.00 3857.00
@@ -6863,7 +6897,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2HuvecH3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HUVEC H3K27me3 Pk 2
+    #shortLabel HVECH3K27me3 2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in HUVEC cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=2HUVEC rep=rep2
     #type narrowPeak
@@ -6873,50 +6907,50 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K27me3 HS 2
+    shortLabel HUVECH3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in HUVEC cells)
     subGroups view=cHot factor=H3K27me3 cellType=2HUVEC rep=rep2
     type broadPeak
     color 224,75,0
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K27me3 fragLength=350 view=Hotspots replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=684 dateSubmitted=2009-10-12 dateUnrestricted=2010-07-12 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3 fileName=wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3.broadPeak.gz
 
-#submission 745
-    track wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
-    release alpha
-    subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K36me3 Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HepG2 cells)
-    subGroups view=zRawSig factor=H3K36me3 cellType=2HEPG2 rep=rep1
-    type wig 1.00 3871.00
-    color 189,0,157
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=zRawSig replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3.wig.gz
 
-    track wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3
+#submission 719
+    track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K36me3 Pk 1
-    longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HepG2 cells)
-    subGroups view=aPeaks factor=H3K36me3 cellType=2HEPG2 rep=rep1
+    shortLabel HVECH3K36me3 R1
+    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HUVEC cells)
+    subGroups view=zRawSig factor=H3K36me3 cellType=2HUVEC rep=rep1
+    type wig 1.00 5075.00
+    color 224,75,0
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=719 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3.wig.gz
+
+    track wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3
+    release alpha
+    subTrack wgEncodeUwChIPSeq off
+    shortLabel HVECH3K36me3 P1
+    longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HUVEC cells)
+    subGroups view=aPeaks factor=H3K36me3 cellType=2HUVEC rep=rep1
     type narrowPeak
-    color 189,0,157
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=aPeaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
+    color 224,75,0
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=719 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3.narrowPeak.gz
 
-    track wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3
+    track wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HepG2 H3K36me3 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in HepG2 cells)
-    subGroups view=cHot factor=H3K36me3 cellType=2HEPG2 rep=rep1
+    shortLabel HVEC H3K36me3 1
+    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in HUVEC cells)
+    subGroups view=cHot factor=H3K36me3 cellType=2HUVEC rep=rep1
     type broadPeak
-    color 189,0,157
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HepG2 antibody=H3K36me3 fragLength=350 view=cHot replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=745 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-21 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3 fileName=wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3.broadPeak.gz
-
+    color 224,75,0
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=719 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3 fileName=wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3.broadPeak.gz
 
 #submission 750
     track wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K36me3 Raw 2
+    shortLabel HVECH3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in HUVEC cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=2HUVEC rep=rep2
     type wig 1.00 5116.00
@@ -6926,7 +6960,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2HuvecH3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel HUVEC H3K36me3 Pk 2
+    #shortLabel HVECH3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks Replicate 2 (H3K36me3 in HUVEC cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=2HUVEC
     #type narrowPeak
@@ -6936,12 +6970,23 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K36me3 2
+    shortLabel HVEC H3K36me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in HUVEC cells)
     subGroups view=cHot factor=H3K36me3 cellType=2HUVEC rep=rep2
     type broadPeak
     color 224,75,0
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=cHot replicate=2 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=750 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3 fileName=wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3.broadPeak.gz
+
+    track wgEncodeUwChIPSeqPeaksRep1K562Ctcf
+    release alpha
+    subTrack wgEncodeUwChIPSeq
+    shortLabel K562 CTCF Pk
+    longLabel ENCODE UW ChIP-seq Peaks (CTCF in K562 cells)
+    subGroups view=aPeaks factor=CTCF cellType=1K562 rep=rep1
+    type narrowPeak
+    color 46,0,184
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=K562 antibody=CTCF fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=659 dateResubmitted=2009-10-13 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1K562Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1K562Ctcf.narrowPeak.gz
+   #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=K562 antibody=CTCF fragLength=350 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE July 2009 Freeze" subId=307 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksK562Ctcf fileName=wgEncodeUwChIPSeqPeaksK562Ctcf.narrowPeak.gz
 
 
 # submission 659 (replaces 307)
@@ -6955,49 +7000,6 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     color 46,0,184
     metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=K562 antibody=CTCF fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=659 dateResubmitted=2009-10-13 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1K562Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1K562Ctcf.wig.gz
    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=K562 antibody=CTCF fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE July 2009 Freeze" subId=307 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1K562Ctcf fileName=wgEncodeUwChIPSeqRawSignalRep1K562Ctcf.wig.gz
-
-#submission 719
-    track wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
-    release alpha
-    subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K36me3 Raw 1
-    longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HUVEC cells)
-    subGroups view=zRawSig factor=H3K36me3 cellType=2HUVEC rep=rep1
-    type wig 1.00 5075.00
-    color 224,75,0
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=RawSignal replicate=1 labVersion=WindowDensity-bin20-win+/-75 dataVersion="ENCODE Sep 2009 Freeze" subId=719 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3 fileName=wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3.wig.gz
-
-    track wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3
-    release alpha
-    subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K36me3 Pk 1
-    longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in HUVEC cells)
-    subGroups view=aPeaks factor=H3K36me3 cellType=2HUVEC rep=rep1
-    type narrowPeak
-    color 224,75,0
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=719 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3 fileName=wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3.narrowPeak.gz
-
-    track wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3
-    release alpha
-    subTrack wgEncodeUwChIPSeq off
-    shortLabel HUVEC H3K36me3 1
-    longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in HUVEC cells)
-    subGroups view=cHot factor=H3K36me3 cellType=2HUVEC rep=rep1
-    type broadPeak
-    color 224,75,0
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HUVEC antibody=H3K36me3 fragLength=350 view=Hotspots replicate=1 labVersion=Hotspot-v5.1 dataVersion="ENCODE Sep 2009 Freeze" subId=719 dateSubmitted=2009-10-19 dateUnrestricted=2010-07-19 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3 fileName=wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3.broadPeak.gz
-
-
-    track wgEncodeUwChIPSeqPeaksRep1K562Ctcf
-    release alpha
-    subTrack wgEncodeUwChIPSeq
-    shortLabel K562 CTCF Pk
-    longLabel ENCODE UW ChIP-seq Peaks (CTCF in K562 cells)
-    subGroups view=aPeaks factor=CTCF cellType=1K562 rep=rep1
-    type narrowPeak
-    color 46,0,184
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=K562 antibody=CTCF fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=659 dateResubmitted=2009-10-13 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1K562Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1K562Ctcf.narrowPeak.gz
-   #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=K562 antibody=CTCF fragLength=350 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE July 2009 Freeze" subId=307 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksK562Ctcf fileName=wgEncodeUwChIPSeqPeaksK562Ctcf.narrowPeak.gz
 
     track wgEncodeUwChIPSeqHotspotsRep1K562Ctcf
     release alpha
@@ -7045,7 +7047,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K4me3 Raw 1
+    shortLabel K562 H3K4me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=1K562 rep=rep1
     type wig 1.00 4959.00
@@ -7082,7 +7084,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K27me3 Raw 1
+    shortLabel 562 H3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=1K562 rep=rep1
     type wig 1.00 7009.00
@@ -7092,7 +7094,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1K562H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K27me3 Pk 1
+    shortLabel 562 H3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in K562 cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=1K562 rep=rep1
     type narrowPeak
@@ -7113,7 +7115,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K27me3 Raw 2
+    shortLabel 562 H3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=1K562 rep=rep2
     type wig 1.00 5885.00
@@ -7123,7 +7125,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2K562H3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq
-    #shortLabel K562 H3K27me3 Pk 2
+    #shortLabel 562 H3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in K562 cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=1K562 rep=rep2
     #type narrowPeak
@@ -7144,7 +7146,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K36me3 Raw 1
+    shortLabel 562 H3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=1K562 rep=rep1
     type wig 1.00 8452.00
@@ -7154,7 +7156,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1K562H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K36me3 Pk 1
+    shortLabel 562 H3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in K562 cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=1K562 rep=rep1
     type narrowPeak
@@ -7175,7 +7177,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq
-    shortLabel K562 H3K36me3 Raw 2
+    shortLabel 562 H3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=1K562 rep=rep2
     type wig 1.00 9718.00
@@ -7185,7 +7187,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2K562H3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq
-    #shortLabel K562 H3K36me3 Pk 2
+    #shortLabel 562 H3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in K562 cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=1K562 rep=rep2
     #type narrowPeak
@@ -7272,7 +7274,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K4me3 Raw 1
+    shortLabel NHEK H3K4me3 R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K4me3 in NHEK cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2NHEK rep=rep1
     type wig 1.00 1975.00
@@ -7292,7 +7294,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1NhekH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K4me3 HS 1
+    shortLabel NHEK H3K4me3 1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K4me3 in NHEK cells)
     subGroups view=cHot factor=H3K04me3 cellType=2NHEK rep=rep1
     type broadPeak
@@ -7303,7 +7305,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K4me3 Raw 2
+    shortLabel NHEK H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in NHEK cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=2NHEK rep=rep2
     type wig 1.00 2112.00
@@ -7313,7 +7315,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2NhekH3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel NHEK H3K4me3 Pk 2
+    #shortLabel NHEK H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in NHEK cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=2NHEK rep=rep2
     #type narrowPeak
@@ -7334,7 +7336,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K27me3 Raw 1
+    shortLabel NHEKH3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in NHEK cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2NHEK rep=rep1
     type wig 1.00 10372.00
@@ -7344,7 +7346,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1NhekH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K27me3 Pk 1
+    shortLabel NHEKH3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in NHEK cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=2NHEK rep=rep1
     type narrowPeak
@@ -7354,7 +7356,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1NhekH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K27me3 1
+    shortLabel NHEKH3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in NHEK cells)
     subGroups view=cHot factor=H3K27me3 cellType=2NHEK rep=rep1
     type broadPeak
@@ -7365,7 +7367,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K27me3 Raw 2
+    shortLabel NHEKH3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in NHEK cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=2NHEK rep=rep2
     type wig 1.00 3975.00
@@ -7375,7 +7377,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2NhekH3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel NHEK H3K27me3 Pk 2
+    #shortLabel NHEKH3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in NHEK cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=2NHEK rep=rep2
     #type narrowPeak
@@ -7385,7 +7387,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2NhekH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K27me3 2
+    shortLabel NHEKH3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in NHEK cells)
     subGroups view=cHot factor=H3K27me3 cellType=2NHEK rep=rep2
     type broadPeak
@@ -7397,7 +7399,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K36me3 Raw 1
+    shortLabel NHEKH3K36me3 R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (H3K36me3 in NHEK cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=2NHEK rep=rep1
     type wig 1.00 3957.00
@@ -7407,7 +7409,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1NhekH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K36me3 Pk
+    shortLabel NHEKH3K36me3 P
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in NHEK cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=2NHEK rep=rep1
     type narrowPeak
@@ -7417,7 +7419,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1NhekH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K36me3 HS 1
+    shortLabel NHEKH3K36me3 1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (H3K36me3 in NHEK cells)
     subGroups view=cHot factor=H3K36me3 cellType=2NHEK rep=rep1
     type broadPeak
@@ -7428,7 +7430,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K36me3 Raw 2
+    shortLabel NHEKH3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in NHEK cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=2NHEK rep=rep2
     type wig 1.00 3966.00
@@ -7439,7 +7441,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2NhekH3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel NHEK H3K36me3 Pk 2
+    #shortLabel NHEKH3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in NHEK cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=2NHEK rep=rep2
     #type narrowPeak
@@ -7450,7 +7452,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2NhekH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel NHEK H3K36me3 2
+    shortLabel NHEKH3K36me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in NHEK cells)
     subGroups view=cHot factor=H3K36me3 cellType=2NHEK rep=rep2
     type broadPeak
@@ -7518,7 +7520,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K4me3 Raw 1
+    shortLabel SAEC H3K4me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in SAEC cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=SAEC rep=rep1
     type wig 1.00 1459.00
@@ -7536,7 +7538,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1SaecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K4me3 HS 1
+    shortLabel SAEC H3K4me3 H1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in SAEC cells)
     subGroups view=cHot factor=H3K04me3 cellType=SAEC rep=rep1
     type broadPeak
@@ -7546,7 +7548,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K4me3 Raw 2
+    shortLabel SAEC H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in SAEC cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=SAEC rep=rep2
     type wig 1.00 1771.00
@@ -7555,7 +7557,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SaecH3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SAEC H3K4me3 Pk 2
+    #shortLabel SAEC H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in SAEC cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=SAEC rep=rep2
     #type narrowPeak
@@ -7564,7 +7566,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2SaecH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K4me3 HS 2
+    shortLabel SAEC H3K4me3 H2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K4me3 in SAEC cells)
     subGroups view=cHot factor=H3K04me3 cellType=SAEC rep=rep2
     type broadPeak
@@ -7574,7 +7576,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K27me3 Raw 1
+    shortLabel SAECH3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in SAEC cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=SAEC rep=rep1
     type wig 1.00 3724.00
@@ -7583,7 +7585,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1SaecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K27me3 Pk
+    shortLabel SAECH3K27me3 Pk
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in SAEC cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=SAEC rep=rep1
     type narrowPeak
@@ -7592,7 +7594,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1SaecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K27me3 HS 1
+    shortLabel SAEC H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in SAEC cells)
     subGroups view=cHot factor=H3K27me3 cellType=SAEC rep=rep1
     type broadPeak
@@ -7602,7 +7604,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K27me3 Raw 2
+    shortLabel SAECH3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in SAEC cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=SAEC rep=rep2
     type wig 1.00 4736.00
@@ -7611,7 +7613,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SaecH3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SAEC H3K27me3 Pk 2
+    #shortLabel SAECH3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in SAEC cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=SAEC rep=rep2
     #type narrowPeak
@@ -7630,7 +7632,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K36me3 Raw 1
+    shortLabel SAECH3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in SAEC cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=SAEC rep=rep1
     type wig 1.00 3815.00
@@ -7639,7 +7641,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1SaecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K36me3 Pk 1
+    shortLabel SAECH3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in SAEC cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=SAEC rep=rep1
     type narrowPeak
@@ -7658,7 +7660,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SAEC H3K36me3 Raw 2
+    shortLabel SAECH3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in SAEC cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=SAEC rep=rep2
     type wig 1.00 3587.00
@@ -7667,7 +7669,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SaecH3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SAEC H3K36me3 Pk 2
+    #shortLabel SAECH3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in SAEC cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=SAEC rep=rep2
     #type narrowPeak
@@ -7686,7 +7688,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA CTCF Raw 1
+    shortLabel SKNSHRA CTCF R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (CTCF in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=CTCF cellType=SKNSHRA rep=rep1
     type wig 1.00 3367.00
@@ -7695,7 +7697,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1SknshraCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA CTCF Pk 1
+    shortLabel SKNSHRA CTCF P1
     longLabel ENCODE UW ChIP-seq Peaks (CTCF in SK-N-SH_RA cells)
     subGroups view=aPeaks factor=CTCF cellType=SKNSHRA rep=rep1
     type narrowPeak
@@ -7704,7 +7706,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1SknshraCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA CTCF 1
+    shortLabel SKNSHRA CTCF 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (CTCF in SK-N-SH_RA cells)
     subGroups view=cHot factor=CTCF cellType=SKNSHRA rep=rep1
     type broadPeak
@@ -7714,7 +7716,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA CTCF Raw 2
+    shortLabel SKNSHRA CTCF R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (CTCF in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=CTCF cellType=SKNSHRA rep=rep2
     type wig 1.00 4118.00
@@ -7723,7 +7725,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SknshraCtcf
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SK-N-SH_RA CTCF Pk 2
+    #shortLabel SKNSHRA CTCF P2
     #longLabel ENCODE UW ChIP-seq Peaks Replicate 2 (CTCF in SK-N-SH_RA cells)
     #subGroups view=aPeaks factor=CTCF cellType=SKNSHRA
     #type narrowPeak
@@ -7732,7 +7734,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA CTCF 2
+    shortLabel SKNSHRA CTCF 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (CTCF in SK-N-SH_RA cells)
     subGroups view=cHot factor=CTCF cellType=SKNSHRA rep=rep2
     type broadPeak
@@ -7742,7 +7744,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K4me3 Raw 1
+    shortLabel SKN H3K4me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=SKNSHRA rep=rep1
     type wig 1.00 1477.00
@@ -7751,7 +7753,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1SknshraH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K4me3 Pk
+    shortLabel SKN H3K4me3 Pk
     longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in SK-N-SH_RA cells)
     subGroups view=aPeaks factor=H3K04me3 cellType=SKNSHRA rep=rep1
     type narrowPeak
@@ -7760,7 +7762,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1SknshraH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K4me3 HS 1
+    shortLabel SKN H3K4me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K4me3 in SK-N-SH_RA cells)
     subGroups view=cHot factor=H3K04me3 cellType=SKNSHRA rep=rep1
     type broadPeak
@@ -7770,7 +7772,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K4me3 Raw 2
+    shortLabel SKN H3K4me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=H3K04me3 cellType=SKNSHRA rep=rep2
     type wig 1.00 1472.00
@@ -7779,7 +7781,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SknshraH3k4me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SK-N-SH_RA H3K4me3 Pk 2
+    #shortLabel SKN H3K4me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K4me3 in SK-N-SH_RA cells)
     #subGroups view=aPeaks factor=H3K04me3 cellType=SKNSHRA rep=rep2
     #type narrowPeak
@@ -7788,7 +7790,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2SknshraH3k4me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K4me3 HS 2
+    shortLabel SKN H3K4me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K4me3 in SK-N-SH_RA cells)
     subGroups view=cHot factor=H3K04me3 cellType=SKNSHRA rep=rep2
     type broadPeak
@@ -7798,7 +7800,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K27me3 Raw 1
+    shortLabel SKN H3K27me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=SKNSHRA rep=rep1
     type wig 1.00 3276.00
@@ -7807,7 +7809,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1SknshraH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K27me3 Pk 1
+    shortLabel SKN H3K27me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in SK-N-SH_RA cells)
     subGroups view=aPeaks factor=H3K27me3 cellType=SKNSHRA rep=rep1
     type narrowPeak
@@ -7816,7 +7818,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1SknshraH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K27me3 1
+    shortLabel SKN H3K27me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K27me3 in SK-N-SH_RA cells)
     subGroups view=cHot factor=H3K27me3 cellType=SKNSHRA rep=rep1
     type broadPeak
@@ -7826,7 +7828,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K27me3 Raw 2
+    shortLabel SKN H3K27me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=H3K27me3 cellType=SKNSHRA rep=rep2
     type wig 1.00 5083.00
@@ -7835,7 +7837,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SknshraH3k27me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SK-N-SH_RA H3K27me3 Pk 2
+    #shortLabel SKN H3K27me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K27me3 in SK-N-SH_RA cells)
     #subGroups view=aPeaks factor=H3K27me3 cellType=SKNSHRA rep=rep2
     #type narrowPeak
@@ -7844,7 +7846,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K27me3 2
+    shortLabel SKN H3K27me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K27me3 in SK-N-SH_RA cells)
     subGroups view=cHot factor=H3K27me3 cellType=SKNSHRA rep=rep2
     type broadPeak
@@ -7855,7 +7857,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K36me3 Raw 1
+    shortLabel SKN H3K36me3 R1
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=SKNSHRA rep=rep1
     type wig 1.00 6400.00
@@ -7864,7 +7866,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksRep1SknshraH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K36me3 Pk 1
+    shortLabel SKN H3K36me3 P1
     longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in SK-N-SH_RA cells)
     subGroups view=aPeaks factor=H3K36me3 cellType=SKNSHRA rep=rep1
     type narrowPeak
@@ -7873,7 +7875,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1SknshraH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K36me3 1
+    shortLabel SKN H3K36me3 1
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 1 (H3K36me3 in SK-N-SH_RA cells)
     subGroups view=cHot factor=H3K36me3 cellType=SKNSHRA rep=rep1
     type broadPeak
@@ -7883,7 +7885,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K36me3 Raw 2
+    shortLabel SKN H3K36me3 R2
     longLabel ENCODE UW ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in SK-N-SH_RA cells)
     subGroups view=zRawSig factor=H3K36me3 cellType=SKNSHRA rep=rep2
     type wig 1.00 6508.00
@@ -7892,7 +7894,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     #track wgEncodeUwChIPSeqPeaksRep2SknshraH3k36me3
     #release alpha
     #subTrack wgEncodeUwChIPSeq off
-    #shortLabel SK-N-SH_RA H3K36me3 Pk 2
+    #shortLabel SKN H3K36me3 P2
     #longLabel ENCODE UW ChIP-seq Peaks (H3K36me3 in SK-N-SH_RA cells)
     #subGroups view=aPeaks factor=H3K36me3 cellType=SKNSHRA rep=rep2
     #type narrowPeak
@@ -7901,7 +7903,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2SknshraH3k36me3
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel SK-N-SH_RA H3K36me3 2
+    shortLabel SKN H3K36me3 2
     longLabel ENCODE UW ChIP-Seq Hotspots Replicate 2 (H3K36me3 in SK-N-SH_RA cells)
     subGroups view=cHot factor=H3K36me3 cellType=SKNSHRA rep=rep2
     type broadPeak
@@ -7912,7 +7914,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel WERI-Rb-1 CTCF Raw 1
+    shortLabel WERIRb1 CTCF R1
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 1 (CTCF in WERI-Rb-1 cells)
     subGroups view=zRawSig factor=CTCF cellType=WERIRb1 rep=rep1
     type wig 1.00 2847.00
@@ -7921,7 +7923,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqPeaksWerirb1Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel WERI-Rb-1 CTCF Pk
+    shortLabel WERIRb1 CTCF Pk
     longLabel ENCODE UW ChIP-seq Peaks (CTCF in WERI-Rb-1 cells)
     subGroups view=aPeaks factor=CTCF cellType=WERIRb1 rep=rep1
     type narrowPeak
@@ -7930,7 +7932,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel WERI-Rb-1 CTCF HS 1
+    shortLabel WERIRb1 CTCF 1
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 1 (CTCF in WERI-Rb-1 cells)
     subGroups view=cHot factor=CTCF cellType=WERIRb1 rep=rep1
     type broadPeak
@@ -7939,7 +7941,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel WERI-Rb-1 CTCF Raw 2
+    shortLabel WERIRb1 CTCF R2
     longLabel ENCODE UW ChIP-seq Raw Signal Replicate 2 (CTCF in WERI-Rb-1 cells)
     subGroups view=zRawSig factor=CTCF cellType=WERIRb1 rep=rep2
     type wig 1.00 3005.00
@@ -7948,7 +7950,7 @@ teSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq t
     track wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf
     release alpha
     subTrack wgEncodeUwChIPSeq off
-    shortLabel WERI-Rb-1 CTCF HS 2
+    shortLabel WERIRb1 CTCF 2
     longLabel ENCODE UW ChIP-seq Hotspots Replicate 2 (CTCF in WERI-Rb-1 cells)
     subGroups view=cHot factor=CTCF cellType=WERIRb1 rep=rep2
     type broadPeak
