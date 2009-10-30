@@ -153,5 +153,14 @@ make: *** [aliType.o] Error 1
     make and the conditional statements in src/inc/common.mk will
     include the -Wno-unused-variable option in the build.
 
+5.  The build fails with an error:
+    gifdecomp.c:274: error: call to function 'gif_out_line' without
+	a real prototype
+
+    This happens with newer versions of the gcc compiler.  To avoid the
+    build stopping at this point, eliminate the -Werror argument from the
+    src/inc/common.mk file.  We will fix this error as soon as we
+    get our hands on a newer version of the gcc compiler.
+
 ====================================================================
-This file last updated: $Date: 2009/08/05 19:40:15 $
+This file last updated: $Date: 2009/10/30 21:38:14 $
