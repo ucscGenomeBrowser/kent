@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1579 2009/10/26 15:32:52 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1580 2009/10/30 00:44:43 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21434,6 +21434,7 @@ char *item = cartOptionalString(cart, "i");
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
+
 if (hIsGisaidServer())
     {
     validateGisaidUser(cart);
@@ -21513,7 +21514,14 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
         cartRemove(cart, "parentWigMaf");	/* ONE TIME ONLY USE !!!	*/
         }
     else
+	{
         tdb = hashFindVal(trackHash, track);
+	if (tdb == NULL)
+	    {
+	    if (sameString(track, "mrna"))
+		tdb = hashFindVal(trackHash, "all_mrna");/* Oh what a tangled web we weave. */
+	    }
+	}
     }
 
 if (sameWord(track, "getDna"))
