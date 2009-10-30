@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.628 2009/10/30 20:40:33 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.629 2009/10/30 20:46:43 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15333,7 +15333,7 @@ subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
 dimensions dimensionX=cellType dimensionY=rep dimensionZ=rnaExtract
 dimensionZchecked longPolyA
-  sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+sortOrder cellType=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide
