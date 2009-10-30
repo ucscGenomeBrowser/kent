@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.41 2009/10/26 23:05:47 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.42 2009/10/30 17:11:10 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -127,10 +127,10 @@ function matCbClick(matCB)
         alert("ASSERT in matCbClick(): There should be no more than 2 entries in list:"+classList)
 
     if(isZee) {  // if dimZ then we may have just made indeterminate X and Ys determinate
-        if(matCB.checked == false) { // checking new dimZs cannot change indeterminate state.
+        if(matCB.checked == false) { // checking new dimZs cannot change indeterminate state.   IS THIS TRUE ?  So far.
             var matCBs = matCBsWhichAreComplete(false);
             if(matCBs.length > 0) {
-                if($("input.matCB.dimZ:checked").length == 0)
+                if($("input.matCB.dimZ:checked").length == 0) // No dimZ checked, so leave X&Y checked but determined
                     $( matCBs ).each( function (i) { matCbComplete( this, true ); });
                 else {
                     var classes = matViewClasses('hidden');
@@ -285,6 +285,8 @@ function matChkBoxNormalize(matCB)
             }
         }
     }
+    else
+        matCbComplete(matCB,true); // If no subs match then this is determined !
 }
 
 function matChkBoxesNormalizeAll()
