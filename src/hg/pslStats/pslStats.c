@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.8 2009/05/02 08:13:29 markd Exp $";
+static char const rcsid[] = "$Id: pslStats.c,v 1.9 2009/10/30 21:08:18 markd Exp $";
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
@@ -207,7 +207,7 @@ static float calcMeanQCover(struct sumStats *ss)
 if (ss->totalQSize == 0)
     return 0.0;
 else
-    return (float)(((double)ss->totalAlign)/((double)ss->totalQSize));
+    return (float)(((double)ss->totalAlign)/((double)(ss->alnCnt*ss->totalQSize)));
 }
 
 static float calcMeanRepMatch(struct sumStats *ss)
@@ -219,16 +219,16 @@ else
     return (float)(((double)ss->totalRepMatch)/((double)ss->totalAlign));
 }
 
-static void sumStatsAccumulate(struct sumStats *ss, struct psl *psl)
-/* accumulate stats from psl into sumStats object */
+static void sumStatsAccumulateQuery(struct sumStats *ss, struct psl *psl)
+/* accumulate stats from psl into sumStats object; must be for same query */
 {
 float ident = calcIdent(psl);
 float qCover = calcQCover(psl);
 float tCover = calcTCover(psl);
 float repMatch = calcRepMatch(psl);
-ss->totalQSize += psl->qSize;
 if (ss->alnCnt == 0)
     {
+    ss->totalQSize = psl->qSize;
     ss->minQSize = ss->maxQSize = psl->qSize;
     ss->minIdent = ss->maxIndent = ident;
     ss->minQCover = ss->maxQCover = qCover;
@@ -376,7 +376,7 @@ struct psl* psl;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     struct sumStats *ss = sumStatsGetForQuery(queryStatsTbl, psl->qName, psl->qSize);
-    sumStatsAccumulate(ss, psl);
+    sumStatsAccumulateQuery(ss, psl);
     pslFree(&psl);
     }
 lineFileClose(&pslLf);
