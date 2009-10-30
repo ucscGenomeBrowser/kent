@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.626 2009/10/30 00:29:05 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.627 2009/10/30 18:57:46 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -12147,7 +12147,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=EGR1 cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 view=Peaks replicate=1 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Egr1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 view=Peaks replicate=1 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Egr1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
     release alpha
@@ -12157,7 +12157,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=EGR1 cellType=1GM rep=rep1
     type wig 1.00 2621.00
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Egr1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Egr1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Egr1
     release alpha
@@ -12167,7 +12167,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=EGR1 cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 view=Peaks replicate=2 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Egr1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 view=Peaks replicate=2 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Egr1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1
     release alpha
@@ -12177,7 +12177,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=EGR1 cellType=1GM rep=rep2
     type wig 1.00 1711.00
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Egr1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Egr1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12186,7 +12186,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=GABP cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12196,7 +12196,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 6821.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Gabp.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Gabp.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12205,7 +12205,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=GABP cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12215,7 +12215,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 6113.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Gabp.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Gabp.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Irf4
     release alpha
@@ -12244,7 +12244,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=NRSF cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12254,7 +12254,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 19628.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Nrsf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Nrsf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12263,7 +12263,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=NRSF cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12273,7 +12273,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 16142.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Nrsf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Nrsf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Oct2
     release alpha
@@ -12362,7 +12362,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=POL2 cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12372,7 +12372,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 8689.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol2.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Pol2.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12381,7 +12381,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=POL2 cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12391,7 +12391,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 9957.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol2.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Pol2.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pu1
     release alpha
@@ -12441,7 +12441,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SIN3AK20 cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 view=Peaks replicate=1 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sin3ak20.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 view=Peaks replicate=1 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sin3ak20.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
     release alpha
@@ -12451,7 +12451,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=SIN3AK20 cellType=1GM rep=rep1
     type wig 1.00 10102.00
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sin3ak20.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Sin3ak20.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sin3ak20
     release alpha
@@ -12461,7 +12461,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SIN3AK20 cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 view=Peaks replicate=2 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sin3ak20.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 view=Peaks replicate=2 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sin3ak20.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20
     release alpha
@@ -12471,7 +12471,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=SIN3AK20 cellType=1GM rep=rep2
     type wig 1.00 11004.00
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sin3ak20.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Sin3ak20.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12480,7 +12480,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SRF cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12490,7 +12490,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 3711.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Srf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Srf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12499,7 +12499,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SRF cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12509,7 +12509,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 3169.00
     spanList 1
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Srf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Srf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii
     release alpha
@@ -12569,7 +12569,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=USF1 cellType=1GM rep=rep1
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 view=Peaks replicate=1 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 view=Peaks replicate=1 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
     release alpha
@@ -12579,7 +12579,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=USF1 cellType=1GM rep=rep1
     type wig 1.00 9791.00
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Usf1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Usf1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1
     release alpha
@@ -12589,7 +12589,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=USF1 cellType=1GM rep=rep2
     type narrowPeak
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 view=Peaks replicate=2 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 view=Peaks replicate=2 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1
     release alpha
@@ -12599,7 +12599,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=USF1 cellType=1GM rep=rep2
     type wig 1.00 4354.00
     color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Usf1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Usf1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
     release alpha
@@ -12671,7 +12671,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=EGR1 cellType=1K5 rep=rep1
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 view=Peaks replicate=1 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Egr1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 view=Peaks replicate=1 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Egr1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
     release alpha
@@ -12681,7 +12681,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=EGR1 cellType=1K5 rep=rep1
     type wig 1.00 2397.00
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Egr1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Egr1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Egr1
     release alpha
@@ -12691,7 +12691,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=EGR1 cellType=1K5 rep=rep2
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 view=Peaks replicate=2 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Egr1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 view=Peaks replicate=2 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Egr1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Egr1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1
     release alpha
@@ -12701,7 +12701,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=EGR1 cellType=1K5 rep=rep2
     type wig 1.00 2044.00
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Egr1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Egr-1 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=260 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Egr1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12710,7 +12710,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=GABP cellType=1K5 rep=rep1
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12720,7 +12720,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 15650.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Gabp.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Gabp.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12729,7 +12729,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=GABP cellType=1K5 rep=rep2
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12739,7 +12739,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 18479.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Gabp.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=GABP type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=67 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Gabp.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Hey1
     release alpha
@@ -12788,7 +12788,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=NRSF cellType=1K5 rep=rep1
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
     subTrack wgEncodeHudsonalphaChipSeq
@@ -12798,7 +12798,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 47957.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Nrsf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Nrsf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12807,7 +12807,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=NRSF cellType=1K5 rep=rep2
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -12817,7 +12817,45 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 29181.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Nrsf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=NRSF type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=70 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Nrsf.tagAlign.gz
+
+    track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
+    subTrack wgEncodeHudsonalphaChipSeq
+    shortLabel K562 Pol2 Pk 1
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in K562 cells)
+    subGroups view=Peaks factor=POL2 cellType=1K5 rep=rep1
+    type narrowPeak
+    color 46,0,184
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2.narrowPeak.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
+    subTrack wgEncodeHudsonalphaChipSeq
+    shortLabel K562 Pol2 Rw 1
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
+    subGroups view=zRaw factor=POL2 cellType=1K5 rep=rep1
+    type wig 1.00 14400.00
+    spanList 1
+    color 46,0,184
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pol2.tagAlign.gz
+
+    track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel K562 Pol2 Pk 2
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in K562 cells)
+    subGroups view=Peaks factor=POL2 cellType=1K5 rep=rep2
+    type narrowPeak
+    color 46,0,184
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2.narrowPeak.gz
+
+    track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
+    subTrack wgEncodeHudsonalphaChipSeq off
+    shortLabel K562 Pol2 Rw 2
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
+    subGroups view=zRaw factor=POL2 cellType=1K5 rep=rep2
+    type wig 1.00 10312.00
+    spanList 1
+    color 46,0,184
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol2.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol24h8
     release alpha
@@ -12858,44 +12896,6 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 20496.00
     color 46,0,184
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2-4H8 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=4 dataVersion="ENCODE Sep 2009 Freeze" subId=741 dateSubmitted=2009-10-26 dateUnrestricted=2010-07-26 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol24h8 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol24h8.tagAlign.gz
-
-    track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
-    subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 Pol2 Pk 1
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in K562 cells)
-    subGroups view=Peaks factor=POL2 cellType=1K5 rep=rep1
-    type narrowPeak
-    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2.narrowPeak.gz
-
-    track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
-    subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 Pol2 Rw 1
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
-    subGroups view=zRaw factor=POL2 cellType=1K5 rep=rep1
-    type wig 1.00 14400.00
-    spanList 1
-    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Pol2.tagAlign.gz
-
-    track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
-    subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 Pol2 Pk 2
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in K562 cells)
-    subGroups view=Peaks factor=POL2 cellType=1K5 rep=rep2
-    type narrowPeak
-    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2.narrowPeak.gz
-
-    track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
-    subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel K562 Pol2 Rw 2
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
-    subGroups view=zRaw factor=POL2 cellType=1K5 rep=rep2
-    type wig 1.00 10312.00
-    spanList 1
-    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Pol2 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=52 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Pol2.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pu1
     release alpha
@@ -12945,7 +12945,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SIN3AK20 cellType=1K5 rep=rep1
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 view=Peaks replicate=1 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Sin3ak20.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 view=Peaks replicate=1 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Sin3ak20.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
     release alpha
@@ -12955,7 +12955,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=SIN3AK20 cellType=1K5 rep=rep1
     type wig 1.00 8542.00
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Sin3ak20.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Sin3ak20.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Sin3ak20
     release alpha
@@ -12965,7 +12965,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SIN3AK20 cellType=1K5 rep=rep2
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 view=Peaks replicate=2 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Sin3ak20.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 view=Peaks replicate=2 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Sin3ak20.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20
     release alpha
@@ -12975,7 +12975,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=SIN3AK20 cellType=1K5 rep=rep2
     type wig 1.00 6837.00
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Sin3ak20.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=Sin3Ak-20 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=259 dateSubmitted=2009-07-01 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Sin3ak20.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Six5
     release alpha
@@ -13024,7 +13024,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SRF cellType=1K5 rep=rep1
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF view=Peaks replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF view=Peaks replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
     subTrack wgEncodeHudsonalphaChipSeq
@@ -13034,7 +13034,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 8435.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Srf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Srf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -13043,7 +13043,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=SRF cellType=1K5 rep=rep2
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF view=Peaks replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF view=Peaks replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
     subTrack wgEncodeHudsonalphaChipSeq off
@@ -13053,7 +13053,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     type wig 1.00 3612.00
     spanList 1
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Srf.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=SRF type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE Nov 2008 Freeze" subId=71 dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Srf.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1
     release alpha
@@ -13063,7 +13063,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=USF1 cellType=1K5 rep=rep1
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 view=Peaks replicate=1 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 view=Peaks replicate=1 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
     release alpha
@@ -13073,7 +13073,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=USF1 cellType=1K5 rep=rep1
     type wig 1.00 23205.00
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Usf1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=1 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Usf1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Usf1
     release alpha
@@ -13083,7 +13083,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=Peaks factor=USF1 cellType=1K5 rep=rep2
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 view=Peaks replicate=2 softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Usf1.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 view=Peaks replicate=2 labVersion=PCR2x softwareVersion="QuEST 0.3" dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Usf1 fileName=wgEncodeHudsonalphaChipSeqPeaksRep2K562Usf1.narrowPeak.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1
     release alpha
@@ -13093,7 +13093,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=USF1 cellType=1K5 rep=rep2
     type wig 1.00 4997.00
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Usf1.tagAlign.gz
+    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=K562 antibody=USF-1 type=wig fragLength=225 view=RawSignal replicate=2 labVersion=PCR2x dataVersion="ENCODE July 2009 Freeze" subId=261 dateSubmitted=2009-07-02 dateUnrestricted=2010-04-01 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1 fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Usf1.tagAlign.gz
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
     release alpha
