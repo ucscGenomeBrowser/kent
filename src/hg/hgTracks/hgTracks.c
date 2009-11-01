@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1602 2009/11/01 19:46:03 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1603 2009/11/01 21:24:15 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1263,9 +1263,12 @@ if (track->limitedVis != tvHide)
                         track->labelColor : track->ixColor);
     hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
                         labelColor, font, track->longLabel);
-    if (withNextItemArrows && track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
-	doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
-			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
+    if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
+	{
+	if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
+	    doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
+			   trackPastTabWidth, fontHeight, insideHeight, labelColor);
+	}
     else
 	mapBoxToggleVis(hvg, trackPastTabX, y+1,
 			trackPastTabWidth, insideHeight, parentTrack);

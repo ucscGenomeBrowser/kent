@@ -477,6 +477,9 @@ Some settings used by various tracks:
       than showCdsMaxZoom  to make this useful.
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
+      on - This will override the user's UI settings and display the next-item
+      button for a track even if the user has specified that next/prev-item 
+      navigation be disabled.
     o defaultLinkedTables table1,table2,... - in hgTables, when selecting
       output fields, display these all.joiner-linked tables by default.
     o bedFilter - If the hgTrackUi call is using bedUi to support it and bedFilter
