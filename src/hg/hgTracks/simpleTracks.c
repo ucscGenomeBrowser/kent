@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.108 2009/11/01 19:46:04 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.109 2009/11/01 20:35:58 aamp Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -1855,8 +1855,6 @@ if (items)
     safef(pos, sizeof(pos), "%s:%d-%d", chromName, winStart+1, winEnd);
     cartSetString(cart, "position", cloneString(pos));
     }
-else
-    warn("Sorry, no item found");
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
