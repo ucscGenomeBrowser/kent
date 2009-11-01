@@ -5,25 +5,22 @@
 
 #ifdef USE_PNG
 
+#include "png.h"   // MUST come before common.h, due to setjmp checking  in pngconf.h 
 #include "common.h"
 #include "memgfx.h"
-#ifdef _SETJMP_H
-//.!$ simulate syntax error like the distro /usr/include/pngconf.h does when setjmp.h has already been included.  currently common.h includes it.
-#endif//def _SETJMP_H
-#include "png.h"
 
-static char const rcsid[] = "$Id: pngwrite.c,v 1.2 2009/08/20 21:34:44 angie Exp $";
+static char const rcsid[] = "$Id: pngwrite.c,v 1.3 2009/11/01 01:11:13 markd Exp $";
 
 static void pngAbort(png_structp png, png_const_charp errorMessage)
 /* type png_error wrapper around errAbort */
 {
-errAbort((char *)errorMessage);
+errAbort("%s", (char *)errorMessage);
 }
 
 static void pngWarn(png_structp png, png_const_charp warningMessage)
 /* type png_error wrapper around warn */
 {
-warn((char *)warningMessage);
+warn("%s", (char *)warningMessage);
 }
 
 boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useTransparency)
@@ -34,8 +31,7 @@ boolean mgSaveToPng(FILE *png_file, struct memGfx *mg, boolean useTransparency)
 /* Reference: http://libpng.org/pub/png/libpng-1.2.5-manual.html */
 {
 if (!png_file || !mg)
-    errAbort("mgSaveToPng: called with a NULL: png_file=[%lld], mg=[%lld]",
-	     (long long int)png_file, (long long int)mg);
+    errAbort("mgSaveToPng: called with a NULL");
 png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING,
 					  NULL, // don't need pointer to data for err/warn handlers
 					  pngAbort, pngWarn);
