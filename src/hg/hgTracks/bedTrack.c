@@ -651,7 +651,7 @@ tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
 
@@ -827,7 +827,7 @@ track->bedSize = fieldCount;
 track->isBigBed = isBigBed;
 
 if (track->isBigBed)
-    track->labelNextItemButtonable = FALSE;
+    track->nextItemButtonable = FALSE;
 
 if (fieldCount < 8)
     {

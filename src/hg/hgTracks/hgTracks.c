@@ -46,7 +46,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1601 2009/10/08 06:38:23 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1602 2009/11/01 19:46:03 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1263,7 +1263,7 @@ if (track->limitedVis != tvHide)
                         track->labelColor : track->ixColor);
     hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
                         labelColor, font, track->longLabel);
-    if (withNextItemArrows && track->labelNextItemButtonable && track->labelNextPrevItem && !tdbIsComposite(track->tdb))
+    if (withNextItemArrows && track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
 	doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
 			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
     else
@@ -1917,9 +1917,9 @@ if (withLeftLabels)
                 if (isSubtrackVisible(subtrack))
                     y = doLeftLabels(subtrack, hvg, font, y);
                 //if (track->limitedVis == tvDense)
-                //track->labelNextItemButtonable = FALSE;
+                //track->nextItemButtonable = FALSE;
                 }
-            track->labelNextItemButtonable = FALSE; // Composites are not NextItemButtonable (but subtracks may be)
+            track->nextItemButtonable = FALSE; // Composites are not NextItemButtonable (but subtracks may be)
             }
         else
             y = doLeftLabels(track, hvg, font, y);
@@ -2850,7 +2850,7 @@ if (sameString(type, "maf"))
     mp->ct = ct;
 
     tg->customPt = mp;
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "wig"))
     {
@@ -2860,13 +2860,13 @@ else if (sameString(type, "wig"))
     else
 	tg->loadItems = ctWigLoadItems;
     tg->customPt = ct;
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "bigWig"))
     {
     tg = trackFromTrackDb(tdb);
     tg->bbiFileName = trackDbSetting(tdb, "bigDataUrl");
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "bigBed"))
     {
@@ -2885,7 +2885,7 @@ else if (sameString(type, "bigBed"))
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
     tg->bbiFileName = fileName;
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "bedGraph"))
     {
@@ -2894,7 +2894,7 @@ else if (sameString(type, "bedGraph"))
     tg->customPt = ct;
     ct->wigFile = ctFileName;
     tg->mapItemName = ctMapItemName;
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "bed"))
     {
@@ -2928,7 +2928,7 @@ else if (sameString(type, "bed"))
 	}
     tg->mapItemName = ctMapItemName;
     tg->canPack = TRUE;
-    tg->labelNextItemButtonable = TRUE;
+    tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "chromGraph"))
@@ -2936,28 +2936,28 @@ else if (sameString(type, "chromGraph"))
     tdb->type = NULL;	/* Swap out type for the moment. */
     tg = trackFromTrackDb(tdb);
     chromGraphMethodsCt(tg);
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
     tdb->type = typeOrig;
     }
 else if (sameString(type, "array"))
     {
     tg = trackFromTrackDb(tdb);
     expRatioMethodsFromCt(tg);
-    tg->labelNextItemButtonable = TRUE;
+    tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "coloredExon"))
     {
     tg = trackFromTrackDb(tdb);
     coloredExonMethodsFromCt(tg);
-    tg->labelNextItemButtonable = TRUE;
+    tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "encodePeak"))
     {
     tg = trackFromTrackDb(tdb);
     encodePeakMethodsCt(tg);
-    tg->labelNextItemButtonable = TRUE;
+    tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 #ifdef USE_BAM
@@ -2978,7 +2978,7 @@ else
     errAbort("Unrecognized custom track type %s", type);
     }
 if (!ct->dbTrack)
-    tg->labelNextItemButtonable = FALSE;
+    tg->nextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 freez(&typeDupe);
 return tg;
@@ -3765,8 +3765,8 @@ void doNextPrevItem(boolean goNext, char *trackName)
 /* position (i.e. winStart, winEnd, etc.) based on what track it was */
 {
 struct track *track = trackFindByName(trackList, trackName);
-if ((track != NULL) && (track->labelNextPrevItem != NULL))
-    track->labelNextPrevItem(track, goNext);
+if ((track != NULL) && (track->nextPrevItem != NULL))
+    track->nextPrevItem(track, goNext);
 }
 
 char *collapseGroupVar(char *name)

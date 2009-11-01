@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.12 2009/10/19 22:50:08 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.13 2009/11/01 19:46:02 aamp Exp $";
 
 struct bamTrackData
     {
@@ -562,9 +562,9 @@ else
     track->loadItems = bamLoadItems;
     track->drawItemAt = bamDrawAt;
     }
-track->labelNextItemButtonable = track->nextItemButtonable = FALSE;
-track->labelNextPrevItem = NULL;
+track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
+track->nextPrevExon = NULL;
 track->colorShades = shadesOfGray;
 }
 

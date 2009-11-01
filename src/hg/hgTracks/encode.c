@@ -10,7 +10,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.21 2009/04/01 23:45:00 angie Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.22 2009/11/01 19:46:03 aamp Exp $";
 
 #define SMALLBUF 128
 
@@ -270,7 +270,7 @@ void encodePeakMethods(struct track *tg)
 linkedFeaturesMethods(tg);
 tg->loadItems = encodePeakLoadItemsNormal;
 tg->drawItemAt = encodePeakDrawAt;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->itemName = encodePeakItemName;
 tg->canPack = TRUE;
 }

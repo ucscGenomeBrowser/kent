@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.107 2009/09/24 22:14:37 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.108 2009/11/01 19:46:04 aamp Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2702,7 +2702,7 @@ return width / (seqEnd - seqStart);
 boolean nextItemCompatible(struct track *tg)
 /* Check to see if we draw nextPrev item buttons on a track. */
 {
-return (withNextExonArrows && tg->nextItemButtonable && tg->nextPrevItem);
+return (withNextExonArrows && tg->nextExonButtonable && tg->nextPrevExon);
 }
 
 void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -2750,12 +2750,12 @@ if (vis == tvPack)
         {
         tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                 s, e, textX, y, insideX-textX, heightPer);
-        tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
         if (rButton)
             {
             tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                 s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
-            tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+            tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
             }
         else
             tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
@@ -2767,13 +2767,13 @@ if (vis == tvPack)
         {
         tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                 s, e, textX, y, x2 - buttonW - textX, heightPer);
-        tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+        tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
         }
     else if (rButton)
         {
         tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                 s, e, textX, y, w - buttonW, heightPer);
-        tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+        tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
         }
     else
         tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
@@ -2789,9 +2789,9 @@ else if (vis == tvFull)
         s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
     /* Make the button mapboxes. */
     if (lButton)
-        tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
     if (rButton)
-        tg->nextPrevItem(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+        tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
     /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
     if (lButton && rButton)
         {
@@ -3283,8 +3283,8 @@ tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
-tg->nextPrevItem = linkedFeaturesNextPrevItem;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextPrevExon = linkedFeaturesNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
@@ -9358,8 +9358,8 @@ tg->totalHeight = pgSnpHeight;
 tg->itemName = pgSnpName;
 tg->drawItemAt = pgSnpDrawAt;
 tg->mapItem = pgSnpMapItem;
-tg->labelNextItemButtonable = TRUE;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextItemButtonable = TRUE;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 void loadBlatz(struct track *tg)
@@ -10190,8 +10190,8 @@ tg->itemColor = gvColor;
 tg->itemNameColor = gvColor;
 tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
-tg->labelNextItemButtonable = TRUE;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextItemButtonable = TRUE;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 void protVarMethods (struct track *tg)
@@ -10200,8 +10200,8 @@ void protVarMethods (struct track *tg)
 tg->loadItems = loadProtVar;
 tg->itemName = protVarName;
 tg->mapItemName = protVarMapName;
-tg->labelNextItemButtonable = TRUE;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextItemButtonable = TRUE;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 void oregannoMethods (struct track *tg)
@@ -10210,8 +10210,8 @@ void oregannoMethods (struct track *tg)
 tg->loadItems = loadOreganno;
 tg->itemColor = oregannoColor;
 tg->itemNameColor = oregannoColor;
-tg->labelNextItemButtonable = TRUE;
-tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->nextItemButtonable = TRUE;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 char *omimGeneName(struct track *tg, void *item)
@@ -10961,10 +10961,10 @@ if (exonArrows == NULL)
        exonArrows = "on";
     }
 track->exonArrows = sameString(exonArrows, "on");
-track->nextItemButtonable = TRUE;
+track->nextExonButtonable = TRUE;
 if (nextItem && sameString(nextItem, "off"))
-    track->nextItemButtonable = FALSE;
-track->labelNextItemButtonable = track->nextItemButtonable;
+    track->nextExonButtonable = FALSE;
+track->nextItemButtonable = track->nextExonButtonable;
 #ifndef GBROWSE
 char *iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)

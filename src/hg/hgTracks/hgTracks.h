@@ -175,8 +175,8 @@ struct track
 
     boolean exonArrows;	/* Draw arrows on exons? */
     boolean exonArrowsAlways;	/* Draw arrows on exons even with introns showing? */
-    boolean nextItemButtonable; /* Use the next-exon buttons? */
-    boolean labelNextItemButtonable; /* Use the next-gene buttons? */
+    boolean nextExonButtonable; /* Use the next-exon buttons? */
+    boolean nextItemButtonable; /* Use the next-gene buttons? */
     struct itemAttrTbl *itemAttrTbl;  /* relational attributes for specific
                                          items (color) */
 
@@ -192,18 +192,18 @@ struct track
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
 
-    void (*nextPrevItem)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
+    void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */
     /* box to it as well, so that a click will move the browser window */
     /* to the next (or previous if next==FALSE) item. This is meant to */
     /* jump to parts of an item already partially in the window but is */
     /* hanging off the edge... e.g. the next exon in a gene. */
 
-    void (*labelNextPrevItem)(struct track *tg, boolean next);
+    void (*nextPrevItem)(struct track *tg, boolean next);
     /* If this function is given, it can dictate where the browser loads */
     /* up based on whether a next-item button on the longLabel line of */
     /* the track was pressed (as opposed to the next-item buttons on the */
-    /* track items themselves... see nextPrevItem() ). This is meant for */
+    /* track items themselves... see nextPrevExon() ). This is meant for */
     /* going to the next/previous item currently unseen in the browser, */
     /* e.g. the next gene. SO FAR THIS IS UNIMPLEMENTED. */
 
