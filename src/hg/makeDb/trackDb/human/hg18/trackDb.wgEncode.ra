@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.633 2009/10/31 01:09:46 cline Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.634 2009/11/02 19:19:25 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -317,7 +317,7 @@ dataVersion ENCODE Feb 2009 Freeze
 # submission 141
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
     subTrack wgEncodeBroadChipSeq off
-    shortLabel GM128 H3K4me2 
+    shortLabel GM128 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, GM12878)
     subGroups view=Peaks factor=H3K04me2 cellType=GM12878
     type broadPeak
@@ -326,7 +326,7 @@ dataVersion ENCODE Feb 2009 Freeze
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
     subTrack wgEncodeBroadChipSeq off
-    shortLabel GM128 H3K4me2 
+    shortLabel GM128 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, GM12878)
     subGroups view=Signal factor=H3K04me2 cellType=GM12878
     type wig 0.00 15071.00
@@ -13903,54 +13903,6 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
     subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2
     type wig 1.00 7552.00
     metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=U87 antibody=Control type=wig fragLength=225 view=RawSignal replicate=2 dataVersion="ENCODE July 2009 Freeze" subId=434 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control fileName=wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Control.tagAlign.gz
-
-
-track wgEncodeHudsonalphaChipSeqProv
-# testing PROVISIONAL release of subtracks.
-# these are subtracks that will be joined with above track at some point.
-compositeTrack on
-shortLabel HAIB TFBS
-# longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
-longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute - Provisional!
-group encodeProv
-subGroup1 view Views Peaks=Peaks zRaw=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
-subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF1=TAF1 zCTRL=Input
-dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view=+
-dragAndDrop subTracks
-visibilityViewDefaults Peaks=pack+ RawSignal=full
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody
-noInherit on
-settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 RawSignal:viewLimitsMax=1:19628,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
-type bed 3
-priority 0
-nextItemButton on
-wgEncode 1
-dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
-
-    #track wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
-    #release alpha
-    ## subTrack wgEncodeHudsonalphaChipSeq off
-    #subTrack wgEncodeHudsonalphaChipSeqProv off
-    #shortLabel SKNMC Input
-    ## longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in SK-N-MC cells)
-    #longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in SK-N-MC cells) - Provisional!
-    #subGroups view=zRaw factor=zCTRL cellType=SK-N-MC
-    #type wig 1.00 835.00
-    #metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=Control type=wig fragLength=225 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=6 dateSubmitted=2008-09-11 dateUnrestricted=2009-06-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalSknmcControl fileName=wgEncodeHudsonalphaChipSeqAlignmentsSknmcControl.tagAlign.gz
-
-    track wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
-    release alpha
-    # subTrack wgEncodeHudsonalphaChipSeq off
-    subTrack wgEncodeHudsonalphaChipSeqProv off
-    shortLabel PFSK1 Input
-    # longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in PFSK-1 cells)
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in PFSK-1 cells) - Provisional!
-    subGroups view=zRaw factor=zCTRL cellType=PFSK-1
-    type wig 1.00 4125.00
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=PFSK-1 antibody=Control type=wig fragLength=225 view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=6 dateSubmitted=2008-09-11 dateUnrestricted=2009-06-11 composite=wgEncodeHudsonalphaChipSeq tableName=wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control fileName=wgEncodeHudsonalphaChipSeqAlignmentsPfsk1Control.tagAlign.gz
-
 
 #  GENCODE genes (wrangler: tdreszer, soon Brian)
 
