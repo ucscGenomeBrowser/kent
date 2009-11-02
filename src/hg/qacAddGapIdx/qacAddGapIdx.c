@@ -46,13 +46,13 @@ while ((qa = qacReadNext(in_qac_f, isSwapped)) != NULL)
 			if (! agp->isFrag)
 				{
 				gap = (struct agpGap *) (agp->entry);
-				if (qa->size - gap->chromStart + 1 > gap->size)
+				if (qa->size - gap->chromStart + 1 >= gap->size)
 					{
 					memset(qa->qa + gap->chromStart - 1, FAKE_GAP_QUAL, gap->size);
 					}
 				else
 					{
-					errAbort("gap too big: chromStart = %d size = %d\n", gap->chromStart, gap->size);
+					errAbort("%s gap too big: qa.size %d - chromStart = %d size = %d\n", gap->chrom, qa->size, gap->chromStart, gap->size);
 					}
 				}
 			}
