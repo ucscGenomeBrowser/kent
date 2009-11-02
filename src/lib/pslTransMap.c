@@ -101,6 +101,20 @@ psl->tStarts[newIBlk] = blk->tStart;
 psl->blockSizes[newIBlk] = blk->qEnd - blk->qStart;
 /* lie about match counts. */
 psl->match += psl->blockSizes[newIBlk];
+/* count gaps */
+if (newIBlk > 0)
+    {
+    if (psl->qStarts[newIBlk] > pslQEnd(psl, newIBlk-1))
+        {
+        psl->qNumInsert++;
+        psl->qBaseInsert += psl->qStarts[newIBlk] - pslQEnd(psl, newIBlk-1);
+        }
+    if (psl->tStarts[newIBlk] > pslTEnd(psl, newIBlk-1))
+        {
+        psl->tNumInsert++;
+        psl->tBaseInsert += psl->tStarts[newIBlk] - pslTEnd(psl, newIBlk-1);
+        }
+    }
 psl->blockCount++;
 }
 
