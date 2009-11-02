@@ -374,3 +374,180 @@ ln ../wgEncodeHudsonalphaChipSeqRawDataRep2K562Srf.fastq.gz .
 ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Srf.tagAlign.gz .
 ln ../wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Srf.tagAlign.gz .
 ### Note: I have stepped on GM12878/TAF1/Rep1 and K562/TAF1/Rep1 wib files.  Those currently on RR are different from those on hgwdev !!
+
+### Cleanup validation_error 
+update projects set status = "superseded" where id = 103;
+
+### Outstanding problems:
+1) Fastqs missing for:
+GM12878/BATF both replicates
+GM12878/EBF both replicates
+GM12878/Egr-1 rep 1 only (have rep2)
+GM12878/IRF4 rep 1 only (no rep2)
+GM12878/Oct-2 both replicates
+GM12878/Pbx3 both replicates
+GM12878/PU.1 both replicates
+GM12878/TAF1 rep 1 only (rep2 incomplete anyway)
+GM12878/TAF12 rep 1 only (no rep2)
+K562/HEY1 both replicates
+K562/SIX5 both replicates
+HeLa-S3/Pol2 both replicates
+HeLa-S3/Input rep 1 only (no rep2)
+HepG2/JunD both replicates # all HepG2 (submission 419 validation failed)
+HepG2/NRSF both replicates
+HepG2/p300 both replicates
+HepG2/Pol2 both replicates
+HepG2/Sin3Ak-20 both replicates
+HepG2/SRF rep 2 only (no rep1)
+HepG2/U87 both replicates
+HepG2/Input both replicates
+BE2_C/NRSF both replicates
+BE2_C/Input both replicates
+PANC-1/NRSF both replicates
+PANC-1/Input both replicates
+PFSK-1/FOXP2 rep 1 (have rep2)
+PFSK-1/NRSF both replicates
+PFSK-1/Input both replicates
+SK-N-MC/FOXP2 rep 1 (have rep2)
+SK-N-SH_RA/NRSF both replicates
+SK-N-SH_RA/Input both replicates
+U87/NRSF both replicates
+U87/Input both replicates
+      
+2009-10-29 Completing the Sep freeze submissions??
+==================================================
+cd {pip}759
+mv ../741/data/SL1019.TagAlign data/ 
+grep ^chr.*\-[0-9].*$ SL1019.TagAlign > SL1019.TagAlign.neg
+grep -v ^chrM.*\-[0-9].*$ SL1019.TagAlign >  SL1019.TagAlign.ok
+grep ^chr.*\-[0-9].*$ SL951.TagAlign > SL951.TagAlign.neg
+grep -v ^chrM.*\-[0-9].*$ SL951.TagAlign >  SL951.TagAlign.ok
+mv SL1019.TagAlign.ok SL1019.TagAlign 
+mv SL951.TagAlign.ok SL951.TagAlign 
+
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL1019_Peaks.bed.broadPeak > SL1019_Peaks.bed.broadPeak.err
+validateFiles -type=broadPeak -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -printFailLines SL951_Peaks.bed.broadPeak > SL951_Peaks.bed.broadPeak.err
+ll *.err  none!
+# left out of the DDF submitted by Rami so do this one by hand:
+validateFiles -type=tagAlign -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit -mmCheckOneInN=100 -mismatches=2 -matchFirst=32 -nMatch SL1019.TagAlign
+
+grep ^chrM.*1657[1-9].*$ SL951.TagAlign > SL951.TagAlign.over
+grep -v ^chrM.*1657[1-9].*$ SL951.TagAlign > SL951.TagAlign.ok
+mv SL951.TagAlign.ok SL951.TagAlign
+grep ^chrM.*1657[1-9].*$ SL1019.TagAlign > SL1019.TagAlign.over
+grep -v ^chrM.*1657[1-9].*$ SL1019.TagAlign > SL1019.TagAlign.ok
+mv SL1019.TagAlign.ok SL1019.TagAlign
+
+# edit trackDb
+make alpha
+
+### round and round.  It is now clear that GM12878/TAF1 is a versioning of already released data and needs to be renamed as such!!!
+rename table wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii      to wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2 ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii  to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2 ;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii  to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2 ;
+
+mv wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii.broadPeak.gz     wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878TafiiV2.broadPeak.gz 
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Tafii.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878TafiiV2.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Tafii.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878TafiiV2.tagAlign.gz
+
+pushd /gbdb/hg18/wib/
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tafii.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib
+pop
+
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878TafiiV2.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2 set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878TafiiV2.wib";
+
+# edit tracDb, fileDb
+
+### Working through the GM12878 and K562 controls issue:
+# From Rami: 262 includes all datasets in 51, plus 2 more controls. So we can delete 51.
+# "Single PCR, 15 Cycles"  "Single PCR, 18 Cycles".  Which is which?  Brian says 18C was already released.
+# From Flo (helps alot):
+>> Tim, we've used 2 methods to generate control (and ChIP) libraries.  The first used two rounds of PCR.  
+>> The second uses one round of PCR.  When we were switching over to one round, we initially tried 18 cycles 
+>> and then settled on 15.  However, there were only a few 18 cycle experiments and we did not and will not 
+>> submit any data with 18 cycles.  When we pair ChIP and control libraries for Rami to submit, we make sure 
+>> that we pair the methods, so this was done on our side already.  However, it sounds like you need to know 
+>> what is what.  Correct?  I don't know if you get our SL numbers in our submission, but this may help:
+> Original protocol:
+> SL217 - GM12878 Rep.1, 2 rounds PCR
+> SL218 - GM12878 Rep.2, 2 rounds PCR
+> SL233 - K562 Rep.1, 2 rounds PCR
+> SL234 - K562 Rep.2, 2 rounds PCR
+>
+> New protocol:
+> SL516 - GM12878 Rep.1, 1 round PCR (15 cycles)
+> SL517 - GM12878 Rep.2, 1 round PCR (15 cycles)
+> SL518 - K562 Rep.1, 1 round PCR (15 cycles)
+> SL519 - K562 Rep.2, 1 round PCR (15 cycles)
+# Now the DDF from subId=262
+files   view    cell    replicate       antibody        softwareVersion labVersion
+ctrl_data/SL217_Bg_GM12878_Rep1_hg18.TagAlign   Alignments      GM12878 1       Control 1       1
+ctrl_data/SL218_Bg_GM12878_Rep2_hg18.TagAlign   Alignments      GM12878 2       Control 1       1
+ctrl_data/SL233_Bg_K562_Rep1_hg18.TagAlign      Alignments      K562    1       Control 1       1
+ctrl_data/SL234_Bg_K562_Rep2_hg18.TagAlign      Alignments      K562    2       Control 1       1
+ctrl_data/SL518_Bg_K562_Rep1_hg18.TagAlign      Alignments      K562    1       Control 1       2
+ctrl_data/SL519_Bg_K562_Rep2_hg18.TagAlign      Alignments      K562    2       Control 1       2
+### Conclusion? OLD VERSION is named as "Control1" and new version was "Control2" but has been superseded on hgwdev with "Control" (because Rami resubmits over and over). 
+
+# lost download files!
+save them from RR downloads
+mv /hive/groups/encode/dcc/pipeline/encpipeline_prod/262/save/*.gz {downloadsDir}/release1
+touch -t 200811202359 *Gm12878Control*.gz  # date on RR
+touch -t 200811202359 *K562Control*.gz
+# still, this is NOT what was submitted for Control1
+So back to first principles
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/262/ctrl_data/SL217_Bg_GM12878_Rep1_hg18.TagAlign > wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control1.tagAlign.gz
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/262/ctrl_data/SL218_Bg_GM12878_Rep2_hg18.TagAlign > wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control1.tagAlign.gz
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/262/ctrl_data/SL233_Bg_K562_Rep1_hg18.TagAlign > wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control1.tagAlign.gz
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/262/ctrl_data/SL234_Bg_K562_Rep2_hg18.TagAlign > wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control1.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control1.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlPcr2x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control1.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlPcr2x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control1.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr2x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control1.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlPcr2x.tagAlign.gz
+
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1 to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1    to wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1 to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1    to wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x; 
+
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x.wib";
+
+pushd /gbdb/hg18/wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1_262.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr2x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1_262.wib    wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr2x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1_262.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr2x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1_262.wib    wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr2x.wib
+pop
+touch -t 200902272359 *ControlPcr2x.*.gz  # date of subId=262
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/759/out/fileDb.ra | grep parentTable >> fileDb.ra
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 759 displayed
+
+################### To be done:
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlPcr1x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlPcr1x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr1x.tagAlign.gz
+mv wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlPcr1x.tagAlign.gz
+
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x;
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x; 
+rename table wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x; 
+
+update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x.wib";
+update wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x.wib";
+
+pushd /gbdb/hg18/wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr1x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr1x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr1x.wib
+mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr1x.wib
+pop

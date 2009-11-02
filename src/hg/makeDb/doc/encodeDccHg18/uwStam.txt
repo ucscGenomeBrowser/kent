@@ -352,4 +352,271 @@ encodeDownloadsPage.pl index.html
 update projects set status = "superceded" where id in (298,301,303,304,307,308,600,605,611); 
 update projects set status = "revoked" where id in (597,602,607); 
 
- 
+2009-10-20 Clean up some signals
+================================
+Nightly:
+hg18.wgEncodeUwDGFSignalHepg2 has 1 records with end > chromSize.
+hg18.wgEncodeUwDGFSignalSknshra has 1 records with end > chromSize.
+
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeUwDGFSignalHepg2 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chrM  |      16571 |    16572 | 16571 | 
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeUwDGFSignalSknshra y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chrM  |      16571 |    16572 | 16571 | 
+delete from wgEncodeUwDGFSignalHepg2 where chrom = "chrM" and chromEnd > 16571;
+delete from wgEncodeUwDGFSignalSknshra where chrom = "chrM" and chromEnd > 16571;
+
+# And now fix a tagAlign that overruns chr7
+cd /hive/groups/encode/dcc/pipeline/encpipeline_prod/695/tags
+gunzip NHEK-DS12396.uniques.36.hg18.bed.gz 
+grep 158821425 NHEK-DS12396.uniques.36.hg18.bed
+chr7    158821389       158821425       AGGGTTAGGGTTTAGGGTTAGGGTTAGGGTTAGGGG    1000    +
+chr7    158821389       158821425       AGGGTTAGGGTTTAGGGTTAGGGTTAGGGTTAGGGG    1000    +
+grep -v 158821425 NHEK-DS12396.uniques.36.hg18.bed > NHEK-DS12396.uniques.36.hg18.bed.new
+mv NHEK-DS12396.uniques.36.hg18.bed NHEK-DS12396.uniques.36.hg18.old.bed
+mv NHEK-DS12396.uniques.36.hg18.bed.new NHEK-DS12396.uniques.36.hg18.bed 
+ll
+gzip NHEK-DS12396.uniques.36.hg18.old.bed
+gzip NHEK-DS12396.uniques.36.hg18.bed 
+
+2009-10-21 More submissions
+===========================
+# ChIP: Melissa is handling
+| 690 | UwChIPSeq-GM12878-DS11510-CTCF rep1        | loaded | 
+| 691 | UwChIPSeq-HeLa-S3-DS11552-CTCF rep1        | loaded | 
+| 692 | UwChIPSeq-HUVEC-DS11457-CTCF rep2          | loaded | 
+| 693 | UwChIPSeq-HUVEC-DS12395-CTCF rep1          | loaded | 
+| 694 | UwChIPSeq-NHEK-DS11556-CTCF rep2           | loaded | 
+| 695 | UwChIPSeq-NHEK-DS12396-CTCF rep1           | loaded | 
+| 696 | UwChIPSeq-SAEC-DS12397-CTCF rep2           | loaded | 
+| 697 | UwChIPSeq-SAEC-DS12398-CTCF rep1           | loaded | 
+| 698 | UwChIPSeq-SK-N-SH_RA-DS12399-CTCF rep1     | loaded | 
+| 699 | UwChIPSeq-GM12878-DS11513-H3K4me3 rep1     | loaded | 
+| 700 | UwChIPSeq-BJ-DS12194-H3K27me3 rep1         | loaded | 
+| 701 | UwChIPSeq-Caco-2-DS12218-H3K27me3 rep2     | loaded | 
+| 702 | UwChIPSeq-GM06990-DS12188-H3K27me3 rep2    | loaded | 
+| 703 | UwChIPSeq-GM12878-DS12182-H3K27me3 rep1    | loaded | 
+| 704 | UwChIPSeq-HepG2-DS12076-H3K27me3 rep1      | loaded | 
+| 705 | UwChIPSeq-HepG2-DS12206-H3K27me3 rep2      | loaded | 
+| 706 | UwChIPSeq-HRE-DS12415-H3K27me3 rep2        | loaded | 
+| 707 | UwChIPSeq-K562-DS12066-H3K27me3 rep1       | loaded | 
+| 708 | UwChIPSeq-K562-DS12068-H3K27me3 rep2       | loaded | 
+| 709 | UwChIPSeq-NHEK-DS12078-H3K27me3 rep1       | loaded | 
+| 710 | UwChIPSeq-NHEK-DS12080-H3K27me3 rep2       | loaded | 
+| 711 | UwChIPSeq-SAEC-DS12245-H3K27me3 rep2       | loaded | 
+| 712 | UwChIPSeq-SK-N-SH_RA-DS12212-H3K27me3 rep1 | loaded | 
+| 713 | UwChIPSeq-Caco-2-DS12405-H3K36me3 rep2     | loaded | 
+| 714 | UwChIPSeq-Caco-2-DS12406-H3K36me3 rep1     | loaded | 
+| 715 | UwChIPSeq-HeLa-S3-DS12071-H3K36me3 rep1    | loaded | 
+| 716 | UwChIPSeq-HeLa-S3-DS12201-H3K36me3 rep2    | loaded | 
+| 717 | UwChIPSeq-HRE-DS12234-H3K36me3 rep1        | loaded | 
+| 718 | UwChIPSeq-HRE-DS12418-H3K36me3 rep2        | loaded | 
+| 719 | UwChIPSeq-HUVEC-DS12228-H3K36me3 rep1      | loaded | 
+| 720 | UwChIPSeq-K562-DS12067-H3K36me3 rep1       | loaded | 
+| 721 | UwChIPSeq-K562-DS12177-H3K36me3 rep2       | loaded | 
+| 722 | UwChIPSeq-NHEK-DS12240-H3K36me3 rep2       | loaded | 
+| 723 | UwChIPSeq-SAEC-DS12243-H3K36me3 rep1       | loaded | 
+| 724 | UwChIPSeq-SAEC-DS12246-H3K36me3 rep2       | loaded | 
+| 725 | UwChIPSeq-SK-N-SH_RA-DS12403-H3K36me3 rep2 | loaded | 
+| 726 | UwChIPSeq-SK-N-SH_RA-DS12404-H3K36me3 rep1 | loaded | 
+| 727 | UwChIPSeq-Caco-2-DS12221-H3K27me3 rep1     | loaded | 
+| 728 | UwChIPSeq-GM06990-DS12191-H3K27me3 rep1    | loaded | 
+| 729 | UwChIPSeq-GM12878-DS12185-H3K27me3 rep2    | loaded | 
+| 730 | UwChIPSeq-SK-N-SH_RA-DS12215-H3K27me3 rep2 | loaded | 
+| 731 | UwChIPSeq-HRE-DS12422-H3K27me3 rep1        | loaded | 
+| 732 | UwChIPSeq-HeLa-S3-DS12072-H3K27me3 rep1    | loaded | 
+| 733 | UwChIPSeq-HeLa-S3-DS12070-H3K27me3 rep2    | loaded | 
+| 734 | UwChIPSeq-BJ-DS12197-H3K27me3 rep2         | loaded | 
+
+# DNase: tim is handling.
+| 735 | UwDnaseSeq-HGF-DS11752-rep1 sep09          | loaded | 
+| 736 | UwDnaseSeq-HGF-DS11738-rep2 sep09          | loaded | 
+| 737 | UwDnaseSeq-SK-N-SH_RA-DS8476-rep2 sep09    | loaded | 
+| 738 | UwDnaseSeq-SKMC-DS11939-rep1 sep09         | loaded | 
+
+Note: 737 had empty DDF.  Richard is resubmitting
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2009-10-19
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/735/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/736/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/738/out/fileDb.ra | grep parentTable >> tmp.txt
+# Note: no editing requirted on metadata
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 735 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 736 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 738 displayed
+
+hg18.wgEncodeUwDGFSignalTh1 has 1 records with end > chromSize.
+
+select y.chrom,y.chromStart,y.chromEnd,c.size from wgEncodeUwDGFSignalTh1 y,chromInfo c where y.chrom = c.chrom and y.chromEnd > c.size;
+| chrM  |      16571 |    16572 | 16571 | 
+delete from wgEncodeUwDGFSignalTh1 where chrom = "chrM" and chromEnd > 16571;
+Query OK, 1 row affected (0.09 sec)
+
+cp fileDb.ra fileDb.ra.2009-10-22
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/737/out/fileDb.ra | grep parentTable >> tmp.txt
+# Note: no editing requirted on metadata
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 737 displayed
+
+2009-10-27 More submissions.  Is the freeze finally closed???
+=============================================================
+# DNASE: 
+# Added 754, 755 to trackDb
+make alpha DBS=hg18
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2009-10-27
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/754/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/755/out/fileDb.ra | grep parentTable >> tmp.txt
+# e tmp.txt
+cat tmp.txt >> fileDb.ra
+# Eliminated 2 duplicate fileNames in fileDb.ra 
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 754 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 755 displayed
+
+# ChipSeq: 
+# Melissa added 690-753 to trackDb
+make alpha DBS=hg18
+cd {downloadsDir}
+cp fileDb.ra fileDb.ra.2009-10-27
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/690/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/691/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/692/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/693/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/694/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/695/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/696/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/697/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/698/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/699/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/700/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/701/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/702/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/703/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/704/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/705/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/706/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/707/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/708/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/709/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/710/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/711/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/712/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/713/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/714/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/715/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/716/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/717/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/718/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/719/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/720/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/721/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/722/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/723/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/724/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/725/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/726/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/727/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/728/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/729/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/730/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/731/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/732/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/733/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/734/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/742/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/743/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/744/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/745/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/746/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/747/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/748/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/749/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/750/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/753/out/fileDb.ra | grep parentTable >> tmp.txt
+# e tmp.txt
+cat tmp.txt >> fileDb.ra
+# Eliminated 28 duplicate fileNames in fileDb.ra 
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 690 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 691 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 692 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 693 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 694 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 695 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 696 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 697 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 698 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 699 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 700 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 701 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 702 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 703 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 704 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 705 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 706 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 707 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 708 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 709 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 710 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 711 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 712 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 713 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 714 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 715 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 716 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 717 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 718 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 719 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 720 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 721 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 722 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 723 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 724 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 725 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 726 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 727 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 728 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 729 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 730 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 731 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 732 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 733 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 734 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 742 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 743 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 744 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 745 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 746 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 747 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 748 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 749 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 750 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 753 displayed
+
+
+
+
+Versioned:
+# submission 625 VERSIONING submission 311
+# submission 755 VERSIONING submission 313 and REPLACING 738  738 marked superseded
+# submission 737 VERSIONING 402
+# submission 737 VERSIONING 402
+### The versioned ones could be superseded when release2 goes public
+
+Replacing:
+#submission 520 replacing 298                298 marked superseded
+# submission 690 replacing 598 replacing 301 301 marked superseded
+#submission 699 replacing 302
+# submission 677 (replacing 600)             301 marked superseded
+# submission 693 replacing 603
+# submission 678 (replacing 605)             301 marked superseded 
+#submission 695 replacing 526
+# submission 722 replacing 613
+### Could be needing downloads dir update
