@@ -1001,8 +1001,11 @@ struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList);
 /* Returns a new list which is inList transformed to have adjacent blocks
  * merged.  Best to use this with a sorted list. */
 
+void maybeSystem(char *cmd);
+/* Execute cmd using "sh -c" or die.  (See man 3 system.) warning on errors */
+
 void mustSystem(char *cmd);
-/* Execute cmd using "sh -c" or die.  (See man 3 system.) */
+/* Execute cmd using "sh -c" or die.  (See man 3 system.) fail on errors */
 
 int roundingScale(int a, int p, int q);
 /* returns rounded a*p/q */

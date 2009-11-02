@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.134 2009/10/20 19:49:24 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.135 2009/11/02 21:27:48 hiram Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -2073,8 +2073,19 @@ slReverse(&newList);
 return newList;
 }
 
+void maybeSystem(char *cmd)
+/* Execute cmd using "sh -c" or die.  (See man 3 system.) warn on errors */
+{
+if (cmd == NULL) // don't allow (system() supports testing for shell this way)
+    errAbort("mustSystem: called with NULL command.");
+int status = system(cmd);
+if (status != 0)
+    warn("maybeSystem: system(%s) failed (exit status %d): %s",
+	     cmd, WEXITSTATUS(status), strerror(errno));
+}
+
 void mustSystem(char *cmd)
-/* Execute cmd using "sh -c" or die.  (See man 3 system.) */
+/* Execute cmd using "sh -c" or die.  (See man 3 system.) fail on errors */
 {
 if (cmd == NULL) // don't allow (system() supports testing for shell this way)
     errAbort("mustSystem: called with NULL command.");
