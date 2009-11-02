@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.20 2009/10/27 18:40:34 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.21 2009/11/02 19:48:55 braney Exp $
 
 use warnings;
 use strict;
@@ -291,7 +291,7 @@ my $downloadsDir = cwd();
 $downloadsDir = $ARGV[1] if (scalar(@ARGV) > 1);
 
 # Now find some files
-my @fileList = `ls -hog  --time-style=long-iso $downloadsDir/$fileMask 2> /dev/null`;
+my @fileList = `ls -hogL  --time-style=long-iso $downloadsDir/$fileMask 2> /dev/null`;
 # -rw-rw-r--  1 101M 2008-10-27 14:34 /usr/local/apache/htdocs/goldenPath/hg18/wgEncodeYaleChIPseq/wgEncodeYaleChIPseqSignalK562Pol2.wig.gz
 if(length(@fileList) == 0) {
     die ("ERROR; No files were found in \'$downloadsDir\' that match \'$fileMask\'.\n");
