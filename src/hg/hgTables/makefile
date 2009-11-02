@@ -33,6 +33,11 @@ beta::
 	chmod a+r ${CGI_BIN}-beta/all.joiner
 	chmod g+w ${CGI_BIN}-beta/all.joiner
 
+install::
+	rm -f ${DESTDIR}${CGI_BIN}/all.joiner
+	cp ../makeDb/schema/all.joiner ${DESTDIR}${CGI_BIN}
+	chmod a+r ${DESTDIR}${CGI_BIN}/all.joiner
+	chmod g+w ${DESTDIR}${CGI_BIN}/all.joiner
 
 compile: $O 
 	${CC} -g $O ${MYLIBS} ${L} 
