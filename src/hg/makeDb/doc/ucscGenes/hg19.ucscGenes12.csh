@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: hg19.ucscGenes12.csh,v 1.7 2009/10/14 15:29:11 kent Exp $"
+#	"$Id: hg19.ucscGenes12.csh,v 1.8 2009/11/02 16:17:21 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -1029,7 +1029,7 @@ catDir pfam/result | hmmPfamToTab -eValCol stdin ucscPfam.tab
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
 	pfamDesc.tab > pfam/sub.tab
-cut -f 1,4 ucscPfam.tab | subColumn 2 stdin pfam/sub.tab knownToPfam.tab
+cut -f 1,4 ucscPfam.tab | subColumn 2 stdin pfam/sub.tab stdout | sort -u > knownToPfam.tab
 rm -f pfam/sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
