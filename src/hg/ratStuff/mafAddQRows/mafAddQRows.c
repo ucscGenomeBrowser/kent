@@ -102,7 +102,7 @@ static struct slPair *buildSpeciesList(char *speciesFile)
 {
 struct slPair *speciesList = NULL;
 struct lineFile *lf = lineFileOpen(speciesFile, TRUE);
-char *row[1];
+char *row[2];
 
 while (lineFileNextRow(lf, row, 2))
     slPairAdd(&speciesList, row[0], (void *) cloneString(row[1]));
