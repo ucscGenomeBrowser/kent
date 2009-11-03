@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.635 2009/11/02 21:58:23 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.636 2009/11/03 00:31:08 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -13978,6 +13978,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
+    idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
@@ -13987,8 +13988,9 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (July 2009)
     type genePred
     priority 2
-    #url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=$$ ### can't do this because tRNAs do not have Ensembl ids
-    #urlLabel Ensembl Transcript:
+    #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
+    #urlLabel Vega Transcript:
+    #idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"     ### there are not OTT ids for level 3
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencode2WayV3
