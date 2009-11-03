@@ -26,9 +26,13 @@
 struct udcFile;
 /* Handle to a cached file.  Inside of structure mysterious unless you are udc.c. */
 
+struct udcFile *udcFileMayOpen(char *url, char *cacheDir);
+/* Open up a cached file. cacheDir may be null in which case udcDefaultDir() will be
+ * used.  Return NULL if file doesn't exist. */
+
 struct udcFile *udcFileOpen(char *url, char *cacheDir);
-/* Open up a cached file.  CacheDir may be null in which case udcDefaultDir() will be
- * used. */
+/* Open up a cached file.  cacheDir may be null in which case udcDefaultDir() will be
+ * used.  Abort if if file doesn't exist. */
 
 void udcFileClose(struct udcFile **pFile);
 /* Close down cached file. */
@@ -68,6 +72,11 @@ bits64 udcCleanup(char *cacheDir, double maxDays, boolean testOnly);
  * no clean up is done, but the size of the files that would be
  * cleaned up is still. */
 
+void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **retColon);
+/* Parse the URL into components that udc treats separately.
+ * *retAfterProtocol is Q-encoded to keep special chars out of filenames.  
+ * Free  *retProtocol and *retAfterProtocol but not *retColon when done. */
+
 char *udcDefaultDir();
 /* Get default directory for cache.  Use this for the udcFileOpen call if you
  * don't have anything better.... */
@@ -106,5 +115,13 @@ boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo);
 
 struct slName *udcFileCacheFiles(char *url, char *cacheDir);
 /* Return low-level list of files used in cache. */
+
+char *udcPathToUrl(const char *path, char *buf, size_t size, char *cacheDir);
+/* Translate path into an URL, store in buf, return pointer to buf if successful
+ * and NULL if not. */
+
+int udcSizeFromCache(char *url, char *cacheDir);
+/* Look up the file size from the local cache bitmap file, or -1 if there
+ * is no cache for url. */
 
 #endif /* UDC_H */

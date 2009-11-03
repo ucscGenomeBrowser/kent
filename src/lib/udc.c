@@ -265,12 +265,18 @@ if (status != 200) // && status != 302 && status != 301)
     return FALSE;
 char *sizeString = hashFindVal(hash, "Content-Length:");
 if (sizeString == NULL)
+    {
+    hashFree(&hash);
     errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+    }
 retInfo->size = atoll(sizeString);
 
 char *lastModString = hashFindVal(hash, "Last-Modified:");
 if (lastModString == NULL)
+    {
+    hashFree(&hash);
     errAbort("No Last-Modified: returned in header for %s, can't proceed, sorry", url);
+    }
 
 // Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
 // Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
@@ -282,6 +288,7 @@ time_t t;
 //  out there that might be encountered.
 if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
     { /* Handle error */;
+    hashFree(&hash);
     errAbort("unable to parse last-modified string [%s]", lastModString);
     }
 
@@ -298,6 +305,7 @@ tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
 t = mktime(&tm);
 if (t == -1)
     { /* Handle error */;
+    hashFree(&hash);
     errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
     }
 
@@ -399,7 +407,9 @@ writeOne(f, reserved64);
 writeOne(f, reserved64);
 writeOne(f, reserved64);
 writeOne(f, reserved64);
-assert(ftell(f) == udcBitmapHeaderSize);
+if (ftell(f) != udcBitmapHeaderSize)
+    errAbort("ftell(f=%s) is %lld, not expected udcBitmapHeaderSize %d",
+	     file->bitmapFileName, (long long)ftell(f), udcBitmapHeaderSize);
 
 /* Write out initial all-zero bitmap. */
 for (i=0; i<bitmapSize; ++i)
@@ -605,7 +615,9 @@ return output;
 }
 
 void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **retColon)
-/* handle url parsing */
+/* Parse the URL into components that udc treats separately.
+ * *retAfterProtocol is Q-encoded to keep special chars out of filenames.  
+ * Free  *retProtocol and *retAfterProtocol but not *retColon when done. */
 {
 char *protocol, *afterProtocol;
 char *colon = strchr(url, ':');
@@ -649,8 +661,11 @@ file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 }
 
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
-/* Open up a cached file.  Return NULL if file doesn't exist. */
+/* Open up a cached file. cacheDir may be null in which case udcDefaultDir() will be
+ * used.  Return NULL if file doesn't exist. */
 {
+if (cacheDir == NULL)
+    cacheDir = udcDefaultDir();
 verbose(2, "udcfileOpen(%s, %s)\n", url, cacheDir);
 /* Parse out protocol.  Make it "transparent" if none specified. */
 char *protocol, *afterProtocol, *colon;
@@ -658,7 +673,9 @@ boolean isTransparent = FALSE;
 udcParseUrl(url, &protocol, &afterProtocol, &colon);
 if (!colon)
     {
+    freeMem(protocol);
     protocol = cloneString("transparent");
+    freeMem(afterProtocol);
     afterProtocol = cloneString(url);
     isTransparent = TRUE;
     }
@@ -673,6 +690,8 @@ if (!isTransparent)
     if (!prot->fetchInfo(url, &info))
 	{
 	udcProtocolFree(&prot);
+	freeMem(protocol);
+	freeMem(afterProtocol);
 	return NULL;
 	}
     }
@@ -711,7 +730,8 @@ return file;
 }
 
 struct udcFile *udcFileOpen(char *url, char *cacheDir)
-/* Open up a cached file.  Abort if file doesn't exist. */
+/* Open up a cached file.  cacheDir may be null in which case udcDefaultDir() will be
+ * used.  Abort if if file doesn't exist. */
 {
 struct udcFile *udcFile = udcFileMayOpen(url, cacheDir);
 if (udcFile == NULL)
@@ -736,6 +756,8 @@ freeMem(file->cacheDir);
 freeMem(file->bitmapFileName);
 freeMem(file->sparseFileName);
 freeMem(file);
+freeMem(protocol);
+freeMem(afterProtocol);
 return list;
 }
 
@@ -754,6 +776,82 @@ if (file != NULL)
     carefulClose(&file->fSparse);
     }
 freez(pFile);
+}
+
+static void qDecode(const char *input, char *buf, size_t size)
+/* Reverse the qEncode performed on afterProcotol above into buf or abort. */
+{
+safecpy(buf, size, input);
+char c, *r = buf, *w = buf;
+while ((c = *r++) != '\0')
+    {
+    if (c == 'Q')
+	{
+	int q;
+	if (sscanf(r, "%02X", &q))
+	    {
+	    *w++ = (char)q;
+	    r += 2;
+	    }
+	else
+	    errAbort("qDecode: input \"%s\" does not appear to be properly formatted "
+		     "starting at \"%s\"", input, r);
+	}
+    else
+	*w++ = c;
+    }
+*w = '\0';
+}
+
+char *udcPathToUrl(const char *path, char *buf, size_t size, char *cacheDir)
+/* Translate path into an URL, store in buf, return pointer to buf if successful
+ * and NULL if not. */
+{
+if (cacheDir == NULL)
+    cacheDir = udcDefaultDir();
+int offset = 0;
+if (startsWith(cacheDir, (char *)path))
+    offset = strlen(cacheDir);
+if (path[offset] == '/')
+    offset++;
+char protocol[16];
+strncpy(protocol, path+offset, sizeof(protocol));
+protocol[ArraySize(protocol)-1] = '\0';
+char *p = strchr(protocol, '/');
+if (p == NULL)
+    {
+    errAbort("unable to parse protocol (first non-'%s' directory) out of path '%s'\n",
+	     cacheDir, path);
+    return NULL;
+    }
+*p++ = '\0';
+char afterProtocol[4096];
+qDecode(path+1+strlen(protocol)+1, afterProtocol, sizeof(afterProtocol));
+safef(buf, size, "%s://%s", protocol, afterProtocol);
+return buf;
+}
+
+int udcSizeFromCache(char *url, char *cacheDir)
+/* Look up the file size from the local cache bitmap file, or -1 if there
+ * is no cache for url. */
+{
+int ret = -1;
+if (cacheDir == NULL)
+    cacheDir = udcDefaultDir();
+struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
+for (sl = slList;  sl != NULL;  sl = sl->next)
+    if (endsWith(sl->name, bitmapName))
+	{
+	struct udcBitmap *bits = udcBitmapOpen(sl->name);
+	if (bits != NULL)
+	    ret = bits->fileSize;
+	else
+	    warn("Can't open bitmap file %s: %s\n", sl->name, strerror(errno));
+	udcBitmapClose(&bits);
+	}
+    else
+slNameFreeList(&slList);
+return ret;
 }
 
 static void readBitsIntoBuf(FILE *f, int headerSize, int bitStart, int bitEnd,
