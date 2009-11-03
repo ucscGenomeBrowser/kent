@@ -668,7 +668,7 @@ if (cacheDir == NULL)
     cacheDir = udcDefaultDir();
 verbose(2, "udcfileOpen(%s, %s)\n", url, cacheDir);
 /* Parse out protocol.  Make it "transparent" if none specified. */
-char *protocol, *afterProtocol, *colon;
+char *protocol = NULL, *afterProtocol = NULL, *colon;
 boolean isTransparent = FALSE;
 udcParseUrl(url, &protocol, &afterProtocol, &colon);
 if (!colon)
