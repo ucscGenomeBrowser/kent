@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.50 2009/10/02 17:53:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.51 2009/11/03 16:38:13 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -239,7 +239,7 @@ for (si = subjList; si != NULL; si = si->next)
 		{
 		special = FALSE;
 	        
-		if (sameWord(col->type, "integer"))
+		if (sameWord(col->type, "integer") || sameWord(col->type, "double"))
 		/* special processing for missing data */
 		if (sameWord(col->name, "SDayLastPTest") 	||
     		    sameWord(col->name, "SDayLastTrTest") 	||
@@ -248,6 +248,12 @@ for (si = subjList; si != NULL; si = si->next)
     		    sameWord(col->name, "seqDay")		||
     		    sameWord(col->name, "firstRNAPosDay")	||
     		    sameWord(col->name, "lastSeroNegDay")	||
+    		    sameWord(col->name, "LastTrVisit")		||
+    		    sameWord(col->name, "LastPVisit")		||
+    		    sameWord(col->name, "LastPCD4Blk")		||
+    		    sameWord(col->name, "LastTrCD4Blk")		||
+    		    sameWord(col->name, "LastPAntiGP120")	||
+    		    sameWord(col->name, "LastTrAntiGP120")	||
     		    sameWord(col->name, "LastTrMnNeutral")	
    		   )
     		    {
@@ -262,6 +268,11 @@ for (si = subjList; si != NULL; si = si->next)
 			special = TRUE;
 			}
     		    if (sameWord(val, "-3"))
+    			{
+    			hPrintf("&nbsp");
+			special = TRUE;
+			}
+    		    if (sameWord(val, "-3.000"))
     			{
     			hPrintf("&nbsp");
 			special = TRUE;
