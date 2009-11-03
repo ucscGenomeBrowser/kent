@@ -17,9 +17,11 @@
 #include "common.h"
 #include "errabort.h"
 #include "dystring.h"
+#include "hash.h"
+#include <pthread.h>
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: errCatch.c,v 1.3 2009/08/12 18:13:19 markd Exp $";
+static char const rcsid[] = "$Id: errCatch.c,v 1.4 2009/11/03 00:35:53 angie Exp $";
 
 
 struct errCatch *errCatchNew()
@@ -42,11 +44,28 @@ if (errCatch != NULL)
     }
 }
 
-static struct errCatch *errCatchStack = NULL;
+static struct errCatch **getStack()
+/* Return a pointer to the errCatch object stack for the current pthread. */
+{
+static struct hash *perThreadStacks = NULL;
+int pid = pthread_self();
+// A true integer has function would be nicer, but this will do.  
+// Don't safef, theoretically that could abort.
+char key[16];
+snprintf(key, sizeof(key), "%d", pid);
+key[ArraySize(key)-1] = '\0';
+if (perThreadStacks == NULL)
+    perThreadStacks = hashNew(0);
+struct hashEl *hel = hashLookup(perThreadStacks, key);
+if (hel == NULL)
+    hel = hashAdd(perThreadStacks, key, NULL);
+return (struct errCatch **)(&hel->val);
+}
 
 static void errCatchAbortHandler()
 /* semiAbort */
 {
+struct errCatch **pErrCatchStack = getStack(), *errCatchStack = *pErrCatchStack;
 errCatchStack->gotError = TRUE;
 longjmp(errCatchStack->jmpBuf, -1);
 }
@@ -54,6 +73,7 @@ longjmp(errCatchStack->jmpBuf, -1);
 static void errCatchWarnHandler(char *format, va_list args)
 /* Write an error to top of errCatchStack. */
 {
+struct errCatch **pErrCatchStack = getStack(), *errCatchStack = *pErrCatchStack;
 dyStringVaPrintf(errCatchStack->message, format, args);
 dyStringAppendC(errCatchStack->message, '\n');
 }
@@ -63,7 +83,8 @@ boolean errCatchPushHandlers(struct errCatch *errCatch)
 {
 pushAbortHandler(errCatchAbortHandler);
 pushWarnHandler(errCatchWarnHandler);
-slAddHead(&errCatchStack, errCatch);
+struct errCatch **pErrCatchStack = getStack();
+slAddHead(pErrCatchStack, errCatch);
 return TRUE;
 }
 
@@ -72,9 +93,10 @@ void errCatchEnd(struct errCatch *errCatch)
 {
 popWarnHandler();
 popAbortHandler();
+struct errCatch **pErrCatchStack = getStack(), *errCatchStack = *pErrCatchStack;
 if (errCatch != errCatchStack)
    errAbort("Mismatch betweene errCatch and errCatchStack");
-errCatchStack = errCatch->next;
+*pErrCatchStack = errCatch->next;
 }
 
 boolean errCatchFinish(struct errCatch **pErrCatch)
