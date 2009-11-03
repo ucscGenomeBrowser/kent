@@ -11,3 +11,6 @@ all:
 	    fi ;\
 	done
 
+alpha: all
+
+# clean would be redundant with top-level makefile's (find & rm .o's)
