@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.13 2009/11/01 19:46:02 aamp Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.14 2009/11/03 00:26:33 angie Exp $";
 
 struct bamTrackData
     {
@@ -286,7 +286,7 @@ else
 	else if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
 		 sameString(btd->grayMode, BAM_GRAY_MODE_UNPAIRED))
 	    // not properly paired: make it a lighter shade.
-	    lf->grayIx -= 3;
+	    lf->grayIx -= 4;
 	hashAdd(btd->pairHash, lf->name, lf);
 	}
     else
