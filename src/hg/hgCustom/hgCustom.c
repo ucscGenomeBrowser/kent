@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.132 2009/09/24 17:07:44 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.133 2009/11/03 00:25:43 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -980,6 +980,8 @@ char *initialDb = NULL;
 cart = theCart;
 initialDb = cloneString(cartString(cart, "db"));
 getDbAndGenome(cart, &database, &organism, oldVars);
+
+setUdcCacheDir();
 
 if (sameString(initialDb, "0"))
     {
