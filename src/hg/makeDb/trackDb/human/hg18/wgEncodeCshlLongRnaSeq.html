@@ -101,6 +101,14 @@ only the reads that could not be aligned continue to the next step.
 individual sequencing lanes (Illumina technology). 
 </P>
 
+<H2>Release Notes</H2>
+This is Release 2 (Nov 2009) of this track, which include data from additional experiments, and changes in formatting for the existing data described below.<P>
+The K562 Cytosol alignments are exactly the same data as included in Release 1, but the alignments are now in the bed14 format described below.
+These data have the string submittedDataVersion="V2 - file format change" in their metadata and the table names are appended with the string "V2".
+<P>
+The data format for the alignments in this track are delivered in bigBed format.  Each record is in bed 14 format with the first 12 fields described 
+<A TARGET=_BLANK HREF="http://genome.ucsc.edu/FAQ/FAQformat#format1">here.</A>
+The final two fields are the two paired sequences, or in the case of single alignments, the 13th field is the sequence and the 14th field is a single N.
 <H2>Credits</H2>
 
 <DT><i>K562 cytosol longPolyA</i><P>
