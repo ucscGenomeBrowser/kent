@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.637 2009/11/03 01:16:30 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.638 2009/11/03 20:04:15 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -13967,61 +13967,73 @@ gClass_2way_consensus_pseudogene 85,34,170
 #gClass_Ensembl_pseudogene 196,116,81
 #gClass_Ensembl_RNA 194,70,65
 ###################
-filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_non_coding,Havana_nonsense,Havana_polyA,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Ensembl_coding,Ensembl_non_coding,Ensembl_processed_pseudogene,Ensembl_unprocessed_pseudogene,Ensembl_pseudogene,Ensembl_RNA transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,IG_C_gene,IG_D_gene,IG_J_gene,IG_pseudogene,IG_V_gene,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,TR_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_non_coding,Havana_nonsense,Havana_polyA,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Ensembl_coding,Ensembl_non_coding,Ensembl_processed_pseudogene,Ensembl_unprocessed_pseudogene,Ensembl_pseudogene,Ensembl_RNA,2way_consensus_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,IG_C_gene,IG_D_gene,IG_J_gene,IG_pseudogene,IG_V_gene,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,TR_pseudogene,unitary_pseudogene,unprocessed_pseudogene
 
     track wgEncodeGencodeManualV3
     release alpha
     subTrack wgEncodeGencode
     shortLabel Gencode Manual
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (July 2009)
+    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct 2009)
     type genePred
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
     idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
     release alpha
     subTrack wgEncodeGencode
     shortLabel Gencode Auto
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (July 2009)
+    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct 2009)
     type genePred
     priority 2
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     #urlLabel Vega Transcript:
     #idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"     ### there are not OTT ids for level 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencode2WayV3
     release alpha
     subTrack wgEncodeGencode off
-    shortLabel Gencode Pseudo 2way
-    longLabel ENCODE Gencode 2-Way Consensus Pseudogenes Annotations (Yale & UCSC level 3) (July 2009)
+    shortLabel Gencode 2way Cons
+    longLabel ENCODE Gencode 2-Way Consensus Pseudogenes Annotations (Yale & UCSC level 3) (Oct 2009)
     type genePred
     priority 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencode2WayV3 fileName=wgEncodeGencode2wayV3.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencode2WayV3 fileName=wgEncodeGencode2wayV3.gtf.gz
 
     track wgEncodeGencodePolyaV3
     release alpha
     subTrack wgEncodeGencode off
     shortLabel Gencode PolyA
-    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (July 2009)
+    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
     type genePred
     priority 4
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE July 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
+    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
 
 # NOTE: search specs should eventually replace the Rel2 version!  But is there a "release alpha" for these?
 searchName wgEncodeGencodeManualV3
+release alpha
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
-termRegex (ENST[0-9]+|OTTHUMT[0-9]+)
-#termRegex ENST[0-9]+
+termRegex ENST[0-9]+
 #termRegex OTTHUMT[0-9]+
 searchPriority 2.2
 
+searchName wgEncodeGencodeManualV3Otter
+release alpha
+searchTable wgEncodeGencodeManualV3
+searchMethod exact
+searchType genePred
+termRegex OTTHUMT[0-9]+
+searchPriority 2.2
+#query select t1.chrom, t1.txStart, t1.txEnd, t2.ottTranscriptId from %s t1,wgEncodeGencodeClassesV3 t2 where t1.name = t2.name and t2.ottTranscriptId like '%s'
+xrefTable wgEncodeGencodeClassesV3
+xrefQuery select name,ottTranscriptId from %s where ottTranscriptId = '%s'
+
 searchName wgEncodeGencodeAutoV3
+release alpha
 searchTable wgEncodeGencodeAutoV3
 searchMethod exact
 searchType genePred
@@ -14029,6 +14041,7 @@ termRegex ENST[0-9]+
 searchPriority 2.3
 
 searchName wgEncodeGencodeManualV3Gene
+release alpha
 searchTable wgEncodeGencodeManualV3
 searchMethod exact
 searchType genePred
@@ -14037,6 +14050,7 @@ searchPriority 2.4
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeAutoV3Gene
+release alpha
 searchTable wgEncodeGencodeAutoV3
 searchMethod exact
 searchType genePred
@@ -14120,6 +14134,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
 # NOTE: Rel2 search specs should be replaced by the V3 version!  But is there a "release beta" for these?
 searchName wgEncodeGencodeManual
+release beta
 searchTable wgEncodeGencodeManualRel2
 searchMethod exact
 searchType genePred
@@ -14127,6 +14142,7 @@ termRegex OTTHUMT[0-9]+
 searchPriority 2.2
 
 searchName wgEncodeGencodeAuto
+release beta
 searchTable wgEncodeGencodeAutoRel2
 searchMethod exact
 searchType genePred
@@ -14134,6 +14150,7 @@ termRegex ENST[0-9]+
 searchPriority 2.3
 
 searchName wgEncodeGencodeManualGene
+release beta
 searchTable wgEncodeGencodeManualRel2
 searchMethod exact
 searchType genePred
@@ -14142,6 +14159,7 @@ searchPriority 2.4
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeAutoGene
+release beta
 searchTable wgEncodeGencodeAutoRel2
 searchMethod exact
 searchType genePred
