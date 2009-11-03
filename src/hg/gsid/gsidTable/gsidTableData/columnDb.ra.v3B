@@ -224,7 +224,7 @@ query select LastPVisit from hgFixed.immuno where subjId='%s';
 
 #(not in main table gsidSubjInfo)
 name LastPCD4Blk
-shortLabel Last Peak CD4 Block
+shortLabel Last Peak CD4 Blocking
 longLabel Last Peak CD4 Blocking
 priority 34
 visibility off
@@ -233,7 +233,7 @@ query select format(LastPCD4Blk,3) from hgFixed.immuno where subjId='%s';
 
 #(not in main table gsidSubjInfo)
 name LastPMNNeutral
-shortLabel Last Peak MN Neutral.
+shortLabel Last Peak MN Neut
 longLabel Last Peak MN Neutralization
 priority 35
 visibility off
@@ -278,7 +278,7 @@ query select format(LastTrCD4Blk, 3) from hgFixed.immuno where subjId='%s';
 
 #(not in main table gsidSubjInfo)
 name LastTrMnNeutral
-shortLabel Last Trough MN Neutral.
+shortLabel Last Trough MN Neut
 longLabel Last Trough MN Neutralization
 priority 40
 visibility off
