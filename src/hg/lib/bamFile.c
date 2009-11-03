@@ -5,9 +5,11 @@
 #include "common.h"
 #include "htmshell.h"
 #include "hdb.h"
+#include "hgConfig.h"
+#include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.11 2009/10/19 22:50:07 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.12 2009/11/03 00:33:45 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -46,27 +48,94 @@ hFreeConn(&conn);
 return fileName;
 }
 
-boolean bamFileExists(char *bamFileName)
+static char *samtoolsFileName(char *fileOrUrl)
+/* If udcFuse is configured, and we have a URL, convert it into a filename in
+ * the udcFuse filesystem for use by samtools.  Thus samtools will think it's
+ * working on a local file, but udcFuse will pass access requests to udc and
+ * we'll get the benefits of sparse-file local caching and https support.
+ * udcFuse needs us to open udc files before invoking udcFuse paths, so open
+ * both the .bam and .bai (index) URLs with udc here.  
+ * If udcFuse is not configured, or fileOrUrl is not an URL, just pass through fileOrUrl. */
+{
+char *udcFuseRoot = cfgOption("udcFuse.mountPoint");
+char *protocol = NULL, *afterProtocol = NULL, *colon = NULL;
+udcParseUrl(fileOrUrl, &protocol, &afterProtocol, &colon);
+if (udcFuseRoot != NULL && afterProtocol != NULL)
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringPrintf(dy, "%s/%s/%s", udcFuseRoot, protocol, afterProtocol);
+    char *bamFileName = dyStringCannibalize(&dy);
+    if (!fileExists(bamFileName))
+	{
+	struct udcFile *udcf = udcFileMayOpen(fileOrUrl, NULL);
+	if (udcf != NULL)
+	    {
+	    udcFileClose(&udcf);
+	    if (!fileExists(bamFileName))
+		{
+		warn("Cannot find %s -- remount udcFuse?", bamFileName);
+		freeMem(bamFileName);
+		return cloneString(fileOrUrl);
+		}
+	    // Look for index file: xxx.bam.bai or xxx.bai.
+	    int urlLen = strlen(fileOrUrl), fLen = strlen(bamFileName);
+	    char *indexUrl = needMem(urlLen+5), *indexFileName = needMem(fLen+5);
+	    safef(indexUrl, urlLen+5, "%s.bai", fileOrUrl);
+	    safef(indexFileName, fLen+5, "%s.bai", bamFileName);
+	    udcf = udcFileMayOpen(indexUrl, NULL);
+	    if (udcf == NULL)
+		{
+		if (endsWith(fileOrUrl, ".bam"))
+		    {
+		    strcpy(indexUrl+urlLen-1, "i");
+		    strcpy(indexFileName+fLen-1, "i");
+		    udcf = udcFileMayOpen(indexUrl, NULL);
+		    if (udcf == NULL)
+			errAbort("Cannot find BAM index file (%s.bai or %s)", fileOrUrl, indexUrl);
+		    udcFileClose(&udcf);
+		    }
+		else
+		    errAbort("Cannot find BAM index file for \"%s\"", fileOrUrl);
+		}
+	    freeMem(indexUrl);
+	    freeMem(indexFileName);
+	    }
+	else
+	    errAbort("Failed to read BAM file \"%s\"", fileOrUrl);
+	}
+    return bamFileName;
+    }
+return cloneString(fileOrUrl);
+}
+
+boolean bamFileExists(char *fileOrUrl)
 /* Return TRUE if we can successfully open the bam file and its index file. */
 {
+char *bamFileName = samtoolsFileName(fileOrUrl);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh != NULL)
     {
+    // When file is an URL, this caches the index file in addition to validating:
     bam_index_t *idx = bam_index_load(bamFileName);
     samclose(fh);
     if (idx == NULL)
+	{
+	warn("bamFileExists: failed to read index corresponding to %s", bamFileName);
 	return FALSE;
+	}
+    freeMem(idx);
     return TRUE;
     }
 return FALSE;
 }
 
-void bamFetch(char *bamFileName, char *position, bam_fetch_f callbackFunc, void *callbackData)
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData. 
  * Note: if sequences in .bam file don't begin with "chr" but cart position does, pass in 
  * cart position + strlen("chr") to match the .bam file sequence names. */
 {
+char *bamFileName = samtoolsFileName(fileOrUrl);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh == NULL)
     errAbort("samopen(%s, \"rb\") returned NULL", bamFileName);
