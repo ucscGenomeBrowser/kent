@@ -40,17 +40,16 @@ spectrum on
 type chain ornAna1
 otherDb ornAna1
 
-
 track chainNetHg19 override
-priority 240.1
+priority 260.1
 
 track chainCanFam2 override
-priority 260.1
+priority 240.1
 chainMinScore 3000
 chainLinearGap medium
 
 track netCanFam2 override
-priority 260.2
+priority 240.2
 
 track chainMm9 override
 priority 250.1
@@ -59,7 +58,6 @@ chainLinearGap medium
 
 track netMm9 override
 priority 250.2
- 
 
 # in visibility.ra
 # 
