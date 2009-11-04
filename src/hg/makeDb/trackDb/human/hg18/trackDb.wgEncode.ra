@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.638 2009/11/03 20:04:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.639 2009/11/04 19:45:06 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2000,7 +2000,7 @@ wgEncode 1
     type wig 0.00 576.00
     viewLimits 0:25
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="DNaseHS, baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=461 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-02 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12878 view=Base_Overlap_Signal labVersion="DNaseHS, baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=763 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878V2.wig.gz
 
 # submission 277 (versioned by 461)
     track wgEncodeDukeDNaseSeqPeaksGm12878
@@ -2068,7 +2068,7 @@ wgEncode 1
     type wig 0.00 6246.00
     viewLimits 4:20
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=471 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=GM12878 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=765 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-02 dateSubmitted=2009-02-25 dateUnrestricted=2009-11-25 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalGm12878V2.wig.gz
 
 # submission 287 (versioned by 471)
     track wgEncodeUncFAIREseqPeaksGm12878
@@ -2136,7 +2136,7 @@ wgEncode 1
     type wig 0.00 1951.00
     viewLimits 0:100
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=468 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-04 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-02-24 dateUnrestricted=2009-11-24 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878CtcfV2.wig.gz
 
 # submission 278 (versioned by 468)
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
@@ -2227,7 +2227,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=GM12891
     type wig 0.00 148.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12891 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=643 dateSubmitted=2009-10-03 dateUnrestricted=2010-07-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12891 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-10-03 dateUnrestricted=2010-07-03 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksGm12891
     release alpha
@@ -2257,7 +2257,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM12891
     type wig 0.00 1838.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12891 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=644 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12891 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm12891Ctcf
     release alpha
@@ -2287,7 +2287,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=GM12892
     type wig 0.00 1060.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12892 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=645 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM12892 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksGm12892
     release alpha
@@ -2317,7 +2317,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM12892
     type wig 0.00 1758.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12892 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=638 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12892 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm12892Ctcf
     release alpha
@@ -2347,7 +2347,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=GM19238
     type wig 0.00 772.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19238 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=647 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19238 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksGm19238
     release alpha
@@ -2377,7 +2377,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM19238
     type wig 0.00 1875.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19238 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=646 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19238 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm19238Ctcf
     release alpha
@@ -2407,7 +2407,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=GM19239
     type wig 0.00 132.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19239 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=649 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19239 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksGm19239
     release alpha
@@ -2437,7 +2437,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM19239
     type wig 0.00 1509.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19239 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=648 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19239 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm19239Ctcf
     release alpha
@@ -2467,7 +2467,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=GM19240
     type wig 0.00 976.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19240 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=651 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19240 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksGm19240
     release alpha
@@ -2497,7 +2497,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM19240
     type wig 0.00 3317.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19240 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=650 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM19240 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm19240Ctcf
     release alpha
@@ -2527,7 +2527,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=2H1
     type wig 0.00 168.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=H1-hESC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=628 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=H1-hESC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksH1hesc
     release alpha
@@ -2557,7 +2557,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=2H1
     type wig 0.00 601.00
     viewLimit 4:20
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=H1-hESC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=629 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalH1hesc fileName=wgEncodeUncFAIREseqBaseOverlapSignalH1hesc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=H1-hESC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalH1hesc fileName=wgEncodeUncFAIREseqBaseOverlapSignalH1hesc.wig.gz
 
     track wgEncodeUncFAIREseqPeaksH1hesc
     release alpha
@@ -2587,7 +2587,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=2H1
     type wig 0.00 742.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=636 dateSubmitted=2009-10-01 dateUnrestricted=2010-07-01 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescCtcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-01 dateUnrestricted=2010-07-01 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescCtcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksH1hescCtcf
     release alpha
@@ -2668,7 +2668,7 @@ wgEncode 1
     type wig 0.00 277.00
     viewLimits 0:25
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=495 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=763 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
 
 # submission 280 (versioned by 495)
     track wgEncodeDukeDNaseSeqPeaksHelas3
@@ -2715,7 +2715,7 @@ wgEncode 1
     type wig 0.00 3249.00
     viewLimits 4:20
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=639 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=765 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-02 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=494 submittedDataVersion=V2 dateResubmitted=2009-09-10 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHelas3V2
@@ -2807,7 +2807,7 @@ wgEncode 1
     type wig 0.00 1920.00
     viewLimits 0:100
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=493 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-10 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CtcfV2.wig.gz
 
 # submission 281 (versioned by 493)
     track wgEncodeUtaChIPseqPeaksHelas3Ctcf
@@ -2854,7 +2854,7 @@ wgEncode 1
     type wig 0.00 140.00
     viewLimits 0:20
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=642 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-05 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHelas3CmycV2
     release alpha
@@ -2933,7 +2933,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=2HEPG2
     type wig 0.00 177.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=556 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=763 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2V2.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHepg2V2
     release alpha
@@ -2998,7 +2998,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=2HEPG2
     type wig 0.00 1773.00
     viewLimts 4:20
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=557 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HepG2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=765 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-02 dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalHepg2V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHepg2V2
     release alpha
@@ -3063,7 +3063,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=2HEPG2
     type wig 0.00 555.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=555 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-28 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CtcfV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2CtcfV2
     release alpha
@@ -3128,7 +3128,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-cMyc cellType=2HEPG2
     type wig 0.00 513.00
     viewLimits 0:20
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=593 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-29 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2CmycV2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2CmycV2
     release alpha
@@ -3236,7 +3236,7 @@ wgEncode 1
     type wig 0.00 102.00
     viewLimits 0:25
     color 224,75,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HUVEC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=545 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HUVEC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksHuvec
     release alpha
@@ -3269,7 +3269,7 @@ wgEncode 1
     type wig 0.00 1177.00
     viewLimits 4:20
     color 224,75,0
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HUVEC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=546 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHuvec fileName=wgEncodeUncFAIREseqBaseOverlapSignalHuvec.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=HUVEC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalHuvec fileName=wgEncodeUncFAIREseqBaseOverlapSignalHuvec.wig.gz
 
     track wgEncodeUncFAIREseqPeaksHuvec
     release alpha
@@ -3302,7 +3302,7 @@ wgEncode 1
     type wig 0.00 1190.00
     color 224,75,0
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=548 dateSubmitted=2009-09-25 dateUnrestricted=2010-06-25 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCtcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-09-25 dateUnrestricted=2010-06-25 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCtcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHuvecCtcf
     release alpha
@@ -3434,7 +3434,7 @@ wgEncode 1
     type wig 0.00 374.00
     viewLimits 0:25
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=480 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=763 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalK562V2.wig.gz
 
 # submission 277 235 116 (versioned by 480)
     track wgEncodeDukeDNaseSeqPeaksK562
@@ -3481,7 +3481,7 @@ wgEncode 1
     type wig 0.00 6846.00
     viewLimits 4:20
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=640 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-10-02 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=765 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-02 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
    #metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=K562 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=483 submittedDataVersion=V2 dateResubmitted=2009-09-08 dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2 fileName=wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
 
     track wgEncodeUncFAIREseqPeaksK562V2
@@ -3573,7 +3573,7 @@ wgEncode 1
     type wig 0.00 3339.00
     viewLimits 0:100
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=481 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CtcfV2.wig.gz
 
 # submission 278 244 (versioned by 481)
     track wgEncodeUtaChIPseqPeaksK562Ctcf
@@ -3641,7 +3641,7 @@ wgEncode 1
     type wig 0.00 1925.00
     viewLimits 0:20
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=482 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-09-08 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-02-27 dateUnrestricted=2009-11-27 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562CmycV2.wig.gz
 
 # submission 278 245 (versioned by 482)
     track wgEncodeUtaChIPseqPeaksK562Cmyc
@@ -3732,7 +3732,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=DNase cellType=2NHEK
     type wig 0.00 550.00
     viewLimits 0:25
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=594 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalNhek fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalNhek.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=NHEK view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalNhek fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalNhek.wig.gz
 
     track wgEncodeDukeDNaseSeqPeaksNhek
     release alpha
@@ -3762,7 +3762,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=2NHEK
     type wig 0.00 1184.00
     viewLimits 4:20
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=630 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalNhek fileName=wgEncodeUncFAIREseqBaseOverlapSignalNhek.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=NHEK view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalNhek fileName=wgEncodeUncFAIREseqBaseOverlapSignalNhek.wig.gz
 
     track wgEncodeUncFAIREseqPeaksNhek
     release alpha
@@ -3792,7 +3792,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-CTCF cellType=2NHEK
     type wig 0.00 1792.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=NHEK antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=624 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=NHEK antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksNhekCtcf
     release alpha
@@ -3822,7 +3822,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=FAIRE cellType=PANI
     type wig 0.00 297.00
     viewLimits 4:20
-    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=PanIslets view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=686 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalPanislets fileName=wgEncodeUncFAIREseqBaseOverlapSignalPanislets.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=PanIslets view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalPanislets fileName=wgEncodeUncFAIREseqBaseOverlapSignalPanislets.wig.gz
 
     track wgEncodeUncFAIREseqPeaksPanislets
     release alpha
