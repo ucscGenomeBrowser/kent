@@ -46,10 +46,7 @@ frames multiz6wayFrames
 irows on
 summary multiz6waySummary
 speciesCodonDefault canFam2
-speciesGroups Primates Mammals Vertebrate
-sGroup_Primates hg18
-sGroup_Mammals canFam2 mm9 ornAna1
-sGroup_Vertebrate galGal3
+speciesOrder canFam2 mm9 hg18 ornAna1 galGal3
 itemFirstCharCase noChange
 treeImage phylo/equCab2_6way.gif
 
