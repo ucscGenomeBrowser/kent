@@ -42,7 +42,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.506 2009/10/29 04:19:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.507 2009/11/04 00:20:17 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1636,8 +1636,11 @@ void chainColorUi(struct trackDb *tdb)
 /* UI for the chain tracks */
 {
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
+boolean compositeTrack = tdbIsComposite(tdb);
 
-if (normScoreAvailable)
+if (compositeTrack)
+    return;	// configuration taken care of by hCompositeUi() later
+else if (normScoreAvailable)
     chainCfgUi(database, cart, tdb, tdb->tableName, NULL, FALSE, chromosome);
 else
     crossSpeciesUi(tdb);
