@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.54 2009/11/02 18:24:53 braney Exp $";
+#	"$Id: hg19.txt,v 1.55 2009/11/04 04:17:05 braney Exp $";
 
 #############################################################################
 
@@ -7713,8 +7713,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     rm j*
 
 #########################################################################
-# hgPal downloads (working braney
-#   FASTA from 44way for refGene, knownGene, knownCanonical 
+# hgPal downloads (DONE braney 2009-11-03)
+#   FASTA from 46way for refGene, knownGene, knownCanonical 
 
     ssh hgwdev
     screen
@@ -7745,11 +7745,11 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     sleep 1
     tail -f $gp.jobs.log
 
-# real    525m57.376s
-# user    25m36.072s
-# sys     7m41.565s
+# real    350m10.116s
+# user    38m38.731s
+# sys     7m22.106s
 
-    ssh kolossus
+
     mz=multiz46way
     gp=refGene
     db=hg19
@@ -7790,9 +7790,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    442m46.735s
-# user    43m3.060s
-# sys     10m45.635s
+# oops... missed the timing
 
 
     mz=multiz46way
@@ -7842,9 +7840,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    326m12.849s
-# user    17m40.850s
-# sys     3m59.648s
+# real    302m20.489s
+# user    27m31.179s
+# sys     5m30.071s
+
 
     rm *.known.bed
     mz=multiz46way
@@ -7864,3 +7863,5 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+######################
