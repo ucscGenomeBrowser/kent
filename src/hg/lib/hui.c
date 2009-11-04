@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.244 2009/10/26 23:06:11 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.245 2009/11/04 01:12:18 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -4815,6 +4815,18 @@ int count,ix;
 boolean found=FALSE;
 if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
+
+char labelRoot[128];
+safecpy(labelRoot,sizeof(labelRoot),label);
+char *extra=strstrNoCase(labelRoot,"&nbsp;"); // &nbsp; mean don't include the reset as part of the link
+if ((long)extra==-1)
+    extra=NULL;
+if (extra!=NULL)
+    {
+    *extra='\0';
+    extra+=6;
+    }
+
 for(ix=1;ix<count && !found;ix++)
     {
 #define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
@@ -4822,7 +4834,9 @@ for(ix=1;ix<count && !found;ix++)
         {
         int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
         char *link=needMem(sz);
-        safef(link,sz,VOCAB_LINK,words[0],words[ix],label,label);
+        safef(link,sz,VOCAB_LINK,words[0],words[ix],labelRoot,labelRoot);
+        if(extra)
+            safecat(link,sz,extra);
         freeMem(words[0]);
         return link;
         }
@@ -4835,10 +4849,12 @@ for(ix=1;ix<count && !found;ix++)
             char * cvTerm = metadataSettingFind(childTdb, cvSetting);
             if(cvTerm != NULL)
                 {
-		char *encodedTerm = cgiEncode(cvTerm);
+                char *encodedTerm = cgiEncode(cvTerm);
                 int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 2;
                 char *link=needMem(sz);
-                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,label,label);
+                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,cvTerm,labelRoot);
+                if(extra)
+                    safecat(link,sz,extra);
                 freeMem(words[0]);
                 freeMem(cvTerm);
                 freeMem(encodedTerm);
