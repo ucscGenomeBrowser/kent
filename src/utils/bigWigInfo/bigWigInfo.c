@@ -6,9 +6,10 @@
 #include "localmem.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "hmmstats.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.2 2009/09/08 19:50:24 kent Exp $";
+static char const rcsid[] = "$Id: bigWigInfo.c,v 1.3 2009/11/05 19:48:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,11 +20,13 @@ errAbort(
   "   bigWigInfo file.bw\n"
   "options:\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
+  "   -chroms - list all chromosomes and their sizes\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
+   {"chroms", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -39,8 +42,15 @@ for (zoom = bwf->levelList; zoom != NULL; zoom = zoom->next)
     printf("\t%d\n", zoom->reductionLevel);
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 printf("chromCount: %d\n", slCount(chromList));
-for (chrom=chromList; chrom != NULL; chrom = chrom->next)
-    printf("\t%s %d %d\n", chrom->name, chrom->id, chrom->size);
+if (optionExists("chroms"))
+    for (chrom=chromList; chrom != NULL; chrom = chrom->next)
+	printf("\t%s %d %d\n", chrom->name, chrom->id, chrom->size);
+struct bbiSummaryElement sum = bbiTotalSummary(bwf);
+printf("basesCovered: %lld\n", sum.validCount);
+printf("mean: %f\n", sum.sumData/sum.validCount);
+printf("min: %f\n", sum.minVal);
+printf("max: %f\n", sum.maxVal);
+printf("std: %f\n", calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount));
 }
 
 int main(int argc, char *argv[])
