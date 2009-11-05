@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.15 2009/09/10 01:49:38 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.16 2009/11/05 19:35:38 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -175,8 +175,8 @@ for (;;)
 assert(sectionIx == sectionCount);
 }
 
-struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
-	struct lineFile *lf, int initialReduction, int initialReductionCount, 
+static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
+	struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, 
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
@@ -192,6 +192,7 @@ boundsPt = AllocArray(boundsArray, initialReductionCount);
 boundsEnd = boundsPt + initialReductionCount;
 
 *retDataStart = ftell(f);
+writeOne(f, initialReductionCount);
 for (;;)
     {
     /* Get next line of input if any. */
@@ -253,7 +254,7 @@ for (;;)
 	if (sum->minVal > val) sum->minVal = val;
 	if (sum->maxVal < val) sum->maxVal = val;
 	sum->sumData += val * overlap;
-	sum->sumSquares += val * overlap;
+	sum->sumSquares += val*val * overlap;
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		&boundsPt, boundsEnd, usage->size, lm, f);
 
@@ -272,7 +273,7 @@ for (;;)
     if (sum->minVal > val) sum->minVal = val;
     if (sum->maxVal < val) sum->maxVal = val;
     sum->sumData += val * size;
-    sum->sumSquares += val * size;
+    sum->sumSquares += val*val * size;
     }
 
 /* Write out 1st zoom index. */
@@ -294,9 +295,10 @@ verboseTime(2, NULL);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
-int minDiff, i;
-double aveSize;
-struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSize);
+int minDiff = 0, i;
+double aveSize = 0;
+bits64 bedCount = 0;
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSize, &bedCount);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 
@@ -328,7 +330,8 @@ else
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
-bits32 sectionCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
+bits64 sectionCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
+writeOne(f, sectionCount);
 struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, sectionCount);
 lineFileRewind(lf);
@@ -408,7 +411,7 @@ if (minDiff > 0)
 /* Go back and rewrite header. */
 rewind(f);
 bits32 sig = bigWigSig;
-bits16 version = 1;
+bits16 version = bbiCurrentVersion;
 bits16 summaryCount = zoomLevels;
 bits32 reserved32 = 0;
 bits32 reserved64 = 0;
