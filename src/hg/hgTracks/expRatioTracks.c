@@ -1589,6 +1589,7 @@ double scale = scaleForWindow(width, seqStart, seqEnd);
 int lineHeight = tg->lineHeight;
 int y = yOff;
 struct slList *item;
+hvGfxSetClip(hvg, xOff, yOff, width, tg->height);
 for (item = tg->items; item != NULL; item = item->next)
     {
     if(tg->itemColor != NULL)
