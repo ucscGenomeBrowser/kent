@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.639 2009/11/04 19:45:06 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.640 2009/11/05 23:31:29 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -5830,8 +5830,7 @@ settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pV
     subGroups view=aPeaks factor=CTCF cellType=2HELA rep=rep1
     type narrowPeak
     color 0,119,158
-    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HeLa-S3 antibody=CTCF fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=691 dateResubmitted=2009-10-19 dateSubm\
-itted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf.narrowPeak.gz
+    metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HeLa-S3 antibody=CTCF fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=691 dateResubmitted=2009-10-19 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf.narrowPeak.gz
     #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HeLa-S3 antibody=CTCF fragLength=350 view=Peaks replicate=1 labVersion=lmax-v1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=606 dateResubmitted=2009-09-29 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf fileName=wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf.narrowPeak.gz
    #metadata project=wgEncode grant=Stam lab=Uw dataType=ChIPSeq cell=HeLa-S3 antibody=CTCF fragLength=350 view=Peaks labVersion=lmax-v1.0 dataVersion="ENCODE July 2009 Freeze" subId=304 dateSubmitted=2009-06-30 dateUnrestricted=2010-03-29 composite=wgEncodeUwChIPSeq tableName=wgEncodeUwChIPSeqPeaksHelas3Ctcf fileName=wgEncodeUwChIPSeqPeaksHelas3Ctcf.narrowPeak.gz
 
