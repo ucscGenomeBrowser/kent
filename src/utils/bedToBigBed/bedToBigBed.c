@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.12 2009/11/05 19:35:01 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.13 2009/11/05 20:00:23 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -313,7 +313,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    if (sum->minVal > val) sum->minVal = val;
 	    if (sum->maxVal < val) sum->maxVal = val;
 	    sum->sumData += val * overlap;
-	    sum->sumSquares += val * overlap;
+	    sum->sumSquares += val*val * overlap;
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		    &boundsPt, boundsEnd, usage->size, lm, f);
 
@@ -332,7 +332,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	if (sum->minVal > val) sum->minVal = val;
 	if (sum->maxVal < val) sum->maxVal = val;
 	sum->sumData += val * size;
-	sum->sumSquares += val * size;
+	sum->sumSquares += val*val * size;
 	}
     if (sum != NULL)
 	{
