@@ -32,7 +32,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.107 2009/11/03 00:29:08 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.108 2009/11/05 18:48:36 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1672,6 +1672,8 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
         track->htmlFile = cloneString(val);
         }
     }
+if ((val = hashFindVal(hash, "chromosomes")) != NULL)
+    sqlStringDynamicArray(val, &track->tdb->restrictList, &track->tdb->restrictCount);
 
 if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
     {
