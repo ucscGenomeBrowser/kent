@@ -2947,8 +2947,8 @@ tablesIgnored $gbd
     multiz%waySummary
     multiz%wayFrames
     phyloP%way%
-    phastCons%way
-    phastConsElements%way
+    phastCons%way%
+    phastConsElements%way%
     jaxQTL
     jaxQtl
     jaxQtlAsIs
