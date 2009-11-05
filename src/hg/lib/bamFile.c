@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.12 2009/11/03 00:33:45 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.13 2009/11/05 17:50:24 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -48,6 +48,15 @@ hFreeConn(&conn);
 return fileName;
 }
 
+static boolean isRegularFile(char *filename)
+/* File not only exists, but is also a file not a directory. */
+{
+struct stat mystat;
+if (stat(filename, &mystat) != 0)
+    return FALSE;
+return S_ISREG(mystat.st_mode);
+}
+
 static char *samtoolsFileName(char *fileOrUrl)
 /* If udcFuse is configured, and we have a URL, convert it into a filename in
  * the udcFuse filesystem for use by samtools.  Thus samtools will think it's
@@ -65,44 +74,64 @@ if (udcFuseRoot != NULL && afterProtocol != NULL)
     struct dyString *dy = dyStringNew(0);
     dyStringPrintf(dy, "%s/%s/%s", udcFuseRoot, protocol, afterProtocol);
     char *bamFileName = dyStringCannibalize(&dy);
-    if (!fileExists(bamFileName))
+    if (!isRegularFile(bamFileName))
 	{
+	verbose(2, "going to call udcFileMayOpen(%s).\n", fileOrUrl);
 	struct udcFile *udcf = udcFileMayOpen(fileOrUrl, NULL);
 	if (udcf != NULL)
 	    {
 	    udcFileClose(&udcf);
-	    if (!fileExists(bamFileName))
+	    verbose(2, "closed udcf. testing existence of %s.\n", bamFileName);
+	    if (!isRegularFile(bamFileName))
 		{
 		warn("Cannot find %s -- remount udcFuse?", bamFileName);
 		freeMem(bamFileName);
 		return cloneString(fileOrUrl);
 		}
-	    // Look for index file: xxx.bam.bai or xxx.bai.
-	    int urlLen = strlen(fileOrUrl), fLen = strlen(bamFileName);
-	    char *indexUrl = needMem(urlLen+5), *indexFileName = needMem(fLen+5);
-	    safef(indexUrl, urlLen+5, "%s.bai", fileOrUrl);
-	    safef(indexFileName, fLen+5, "%s.bai", bamFileName);
-	    udcf = udcFileMayOpen(indexUrl, NULL);
-	    if (udcf == NULL)
-		{
-		if (endsWith(fileOrUrl, ".bam"))
-		    {
-		    strcpy(indexUrl+urlLen-1, "i");
-		    strcpy(indexFileName+fLen-1, "i");
-		    udcf = udcFileMayOpen(indexUrl, NULL);
-		    if (udcf == NULL)
-			errAbort("Cannot find BAM index file (%s.bai or %s)", fileOrUrl, indexUrl);
-		    udcFileClose(&udcf);
-		    }
-		else
-		    errAbort("Cannot find BAM index file for \"%s\"", fileOrUrl);
-		}
-	    freeMem(indexUrl);
-	    freeMem(indexFileName);
 	    }
 	else
-	    errAbort("Failed to read BAM file \"%s\"", fileOrUrl);
+	    errAbort("Failed to open BAM URL \"%s\" with udc", fileOrUrl);
 	}
+    // Look for index file: xxx.bam.bai or xxx.bai.  Look for both in udcFuse,
+    // and only open the URL with udc if neither udcFuse file exists.
+    int urlLen = strlen(fileOrUrl), fLen = strlen(bamFileName);
+    char *indexFileName = needMem(fLen+5);
+    safef(indexFileName, fLen+5, "%s.bai", bamFileName);
+    if (!isRegularFile(indexFileName))
+	{
+	verbose(2, "%s does not already exist\n", indexFileName);
+	char *altIndexFileName = NULL;
+	if (endsWith(fileOrUrl, ".bam"))
+	    {
+	    altIndexFileName = cloneString(indexFileName);
+	    strcpy(altIndexFileName+fLen-1, "i");
+	    }
+	if (!(altIndexFileName && isRegularFile(altIndexFileName)))
+	    {
+	    char *indexUrl = needMem(urlLen+5);
+	    safef(indexUrl, urlLen+5, "%s.bai", fileOrUrl);
+	    verbose(2, "going to call udcFileMayOpen(%s).\n", indexUrl);
+	    struct udcFile *udcf = udcFileMayOpen(indexUrl, NULL);
+	    if (udcf != NULL)
+		udcFileClose(&udcf);
+	    else if (altIndexFileName != NULL)
+		{
+		char *altIndexUrl = cloneString(indexUrl);
+		strcpy(altIndexUrl+urlLen-1, "i");
+		verbose(2, "going to call udcFileMayOpen(%s).\n", altIndexUrl);
+		udcf = udcFileMayOpen(altIndexUrl, NULL);
+		if (udcf == NULL)
+		    errAbort("Cannot find BAM index file (%s or %s)", indexUrl, altIndexUrl);
+		udcFileClose(&udcf);
+		freeMem(altIndexUrl);
+		}
+	    else
+		errAbort("Cannot find BAM index file for \"%s\"", fileOrUrl);
+	    freeMem(indexUrl);
+	    }
+	freeMem(altIndexFileName);
+	}
+    freeMem(indexFileName);
     return bamFileName;
     }
 return cloneString(fileOrUrl);
