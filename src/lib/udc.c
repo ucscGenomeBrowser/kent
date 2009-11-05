@@ -1095,6 +1095,16 @@ if (isSwapped)
 return val;
 }
 
+float udcReadFloat(struct udcFile *file, boolean isSwapped)
+/* Read and optionally byte-swap floating point number. */
+{
+float val;
+udcMustRead(file, &val, sizeof(val));
+if (isSwapped)
+    val = byteSwapFloat(val);
+return val;
+}
+
 char *udcReadStringAndZero(struct udcFile *file)
 /* Read in zero terminated string from file.  Do a freeMem of result when done. */
 {

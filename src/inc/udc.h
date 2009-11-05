@@ -55,6 +55,9 @@ bits32 udcReadBits32(struct udcFile *file, boolean isSwapped);
 bits16 udcReadBits16(struct udcFile *file, boolean isSwapped);
 /* Read and optionally byte-swap 16 bit entity. */
 
+float udcReadFloat(struct udcFile *file, boolean isSwapped);
+/* Read and optionally byte-swap floating point number. */
+
 int udcGetChar(struct udcFile *file);
 /* Get next character from file or die trying. */
 
