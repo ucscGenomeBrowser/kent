@@ -23,8 +23,8 @@
  *	   reserved		4 bytes
  *	   dataOffset		8 bytes
  *         indexOffset          8 bytes
- *     autoSql string (zero terminated)
- *     totalSummary - summary of all data in file
+ *     autoSql string (zero terminated - only present if autoSqlOffset non-zero)
+ *     totalSummary - summary of all data in file - only present if totalSummaryOffset non-zero
  *         basesCovered        8 bytes
  *         minVal              8 bytes float (for bigBed minimum depth of coverage)
  *         maxVal              8 bytes float (for bigBed maximum depth of coverage)
@@ -237,6 +237,9 @@ boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 e
  * for regions without data in file.  (Generally you want the default value to either
  * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
+
+struct bbiSummaryElement bbiTotalSummary(struct bbiFile *bbi);
+/* Return summary of entire file! */
 
 /****** Write side of things - implemented in bbiWrite.c ********/
 

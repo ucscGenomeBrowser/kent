@@ -573,3 +573,73 @@ if (ret)
 freeMem(elements);
 return ret;
 }
+
+struct bbiSummaryElement bbiTotalSummary(struct bbiFile *bbi)
+/* Return summary of entire file! */
+{
+struct udcFile *udc = bbi->udc;
+boolean isSwapped = bbi->isSwapped;
+struct bbiSummaryElement res;
+ZeroVar(&res);
+
+if (bbi->totalSummaryOffset != 0)
+    {
+    udcSeek(udc, bbi->totalSummaryOffset);
+    res.validCount = udcReadBits64(udc, isSwapped);
+    res.minVal = udcReadDouble(udc, isSwapped);
+    res.maxVal = udcReadDouble(udc, isSwapped);
+    res.sumData = udcReadDouble(udc, isSwapped);
+    res.sumSquares = udcReadDouble(udc, isSwapped);
+    }
+else
+    {
+    /* Find most extreme zoom. */
+    struct bbiZoomLevel *bestZoom = NULL, *zoom;
+    bits32 bestReduction = 0;
+    for (zoom = bbi->levelList; zoom != NULL; zoom = zoom->next)
+	{
+	if (zoom->reductionLevel > bestReduction)
+	    {
+	    bestReduction = zoom->reductionLevel;
+	    bestZoom = zoom;
+	    }
+	}
+
+    if (bestZoom != NULL)
+	{
+	udcSeek(udc, bestZoom->dataOffset);
+	bits32 zoomSectionCount = udcReadBits32(udc, isSwapped);
+	bits32 i;
+	for (i=0; i<zoomSectionCount; ++i)
+	    {
+	    /* Read, but ignore, position. */
+	    bits32 chromId, chromStart, chromEnd;
+	    chromId = udcReadBits32(udc, isSwapped);
+	    chromStart = udcReadBits32(udc, isSwapped);
+	    chromEnd = udcReadBits32(udc, isSwapped);
+
+	    /* First time through set values, rest of time add to them. */
+	    if (i == 0)
+		{
+		res.validCount = udcReadBits32(udc, isSwapped);
+		res.minVal = udcReadFloat(udc, isSwapped);
+		res.maxVal = udcReadFloat(udc, isSwapped);
+		res.sumData = udcReadFloat(udc, isSwapped);
+		res.sumSquares = udcReadFloat(udc, isSwapped);
+		}
+	    else
+		{
+		res.validCount += udcReadBits32(udc, isSwapped);
+		float minVal = udcReadFloat(udc, isSwapped);
+		if (minVal < res.minVal) res.minVal = minVal;
+		float maxVal = udcReadFloat(udc, isSwapped);
+		if (maxVal > res.maxVal) res.maxVal = maxVal;
+		res.sumData += udcReadFloat(udc, isSwapped);
+		res.sumSquares += udcReadFloat(udc, isSwapped);
+		}
+	    }
+	}
+    }
+return res;
+}
+
