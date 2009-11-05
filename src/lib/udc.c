@@ -1105,6 +1105,16 @@ if (isSwapped)
 return val;
 }
 
+double udcReadDouble(struct udcFile *file, boolean isSwapped)
+/* Read and optionally byte-swap double-precision floating point number. */
+{
+double val;
+udcMustRead(file, &val, sizeof(val));
+if (isSwapped)
+    val = byteSwapDouble(val);
+return val;
+}
+
 char *udcReadStringAndZero(struct udcFile *file)
 /* Read in zero terminated string from file.  Do a freeMem of result when done. */
 {
