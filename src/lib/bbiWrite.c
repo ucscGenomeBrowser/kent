@@ -109,7 +109,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize)
+	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
 /* Go through bed file and collect chromosomes and statistics. */
 {
 char *row[3];
@@ -164,6 +164,7 @@ for (;;)
 slReverse(&usageList);
 *retMinDiff = minDiff;
 *retAveSize = (double)totalBases/bedCount;
+*retBedCount = bedCount;
 freeHash(&uniqHash);
 return usageList;
 }

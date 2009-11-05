@@ -13,19 +13,26 @@
  *         chromosomeTreeOffset	8 bytes
  *         fullDataOffset	8 bytes
  *	   fullIndexOffset	8 bytes
- *         fieldCount           2 bytes (bigBed only)
- *         definedFieldCount    2 bytes (bigBed only)
- *         autoSqlOffset             8 bytes (bigBed only)
- *         reserved            20 bytes
+ *         fieldCount           2 bytes (for bigWig 0)
+ *         definedFieldCount    2 bytes (for bigWig 0)
+ *         autoSqlOffset        8 bytes (for bigWig 0) (0 if no autoSql information)
+ *         totalSummaryOffset   8 bytes (0 in earlier versions of file lacking totalSummary)
+ *         reserved            12 bytes (0 for now)
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
  *	   dataOffset		8 bytes
  *         indexOffset          8 bytes
  *     autoSql string (zero terminated)
+ *     totalSummary - summary of all data in file
+ *         basesCovered        8 bytes
+ *         minVal              8 bytes float (for bigBed minimum depth of coverage)
+ *         maxVal              8 bytes float (for bigBed maximum depth of coverage)
+ *         sumData             8 bytes float (for bigBed sum of coverage)
+ *         sumSquared          8 bytes float (for bigBed sum of coverage squared)
  *     chromosome b+ tree       bPlusTree index
  *     full data
- *         sectionCount		4 bytes (item count for bigBeds)
+ *         sectionCount		8 bytes (item count for bigBeds)
  *         section data		section count sections, of three types (bed data for bigBeds)
  *     full index               cirTree index
  *     zoom info             one of these for each zoom level
@@ -46,6 +53,17 @@
 #ifndef CIRTREE_H
 #include "cirTree.h"
 #endif
+
+#define bbiCurrentVersion 2
+/* Version history (of file format, not utilities - corresponds to version field in header)
+ *    1 - Initial release
+ *    1 - Unfortunately when attempting a transparent change to encoders, made the sectionCount 
+ *        field inconsistent, sometimes not present, sometimes 32 bits.  Since offset positions
+ *        in index were still accurate this did not break most applications, but it did show
+ *        up in the summary section of the Table Browser.
+ *    2 - Made sectionCount consistently 64 bits. Also fixed missing zoomCount in first level of
+ *        zoom in files made by bedToBigBed and bedGraphToBigWig.  (The older wigToBigWig was fine.)
+ */
 
 struct bbiZoomLevel
 /* A zoom level in bigWig file. */
@@ -78,6 +96,7 @@ struct bbiFile
     bits16 fieldCount;		/* Number of columns in bed version. */
     bits16 definedFieldCount;   /* Number of columns using bed standard definitions. */
     bits64 asOffset;		/* Offset to embedded null-terminated AutoSQL file. */
+    bits64 totalSummaryOffset;	/* Offset to total summary information if any.  (On older files have to calculate) */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
     };
@@ -273,7 +292,7 @@ void bbiChromUsageFreeList(struct bbiChromUsage **pList);
 /* free a list of bbiChromUsage structures */
 
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize);
+	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount);
 /* Go through bed file and collect chromosomes and statistics. Free with bbiChromUsageFreeList */
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);

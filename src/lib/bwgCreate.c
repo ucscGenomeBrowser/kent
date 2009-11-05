@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.17 2009/09/29 23:19:08 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.18 2009/11/05 19:32:45 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -799,10 +799,10 @@ static void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash
 	int blockSize, int itemsPerSlot, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
-bits32 sectionCount = slCount(sectionList);
+bits64 sectionCount = slCount(sectionList);
 FILE *f = mustOpen(fileName, "wb");
 bits32 sig = bigWigSig;
-bits16 version = 1;
+bits16 version = bbiCurrentVersion;
 bits16 summaryCount = 0;
 bits32 reserved32 = 0;
 bits64 reserved64 = 0;

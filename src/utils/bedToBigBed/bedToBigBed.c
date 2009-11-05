@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.11 2009/09/28 18:20:28 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.12 2009/11/05 19:35:01 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -249,8 +249,8 @@ while (lineFileNextReal(lf, &line))
 return tree;
 }
 
-struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
-	int fieldCount, struct lineFile *lf, int initialReduction, int initialReductionCount, 
+static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
+	int fieldCount, struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, 
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
@@ -265,6 +265,7 @@ boundsPt = AllocArray(boundsArray, initialReductionCount);
 boundsEnd = boundsPt + initialReductionCount;
 
 *retDataStart = ftell(f);
+writeOne(f, initialReductionCount);
 
 /* This gets a little complicated I'm afraid.  The strategy is to:
  *   1) Build up a range tree that represents coverage depth on that chromosome
@@ -386,7 +387,8 @@ verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, 
 /* Do first pass, mostly just scanning file and counting hits per chromosome. */
 int minDiff = 0;
 double aveSpan = 0;
-struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan);
+bits64 bedCount = 0;
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan, &bedCount);
 verboseTime(1, "pass1 - making usageList");
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
 
@@ -429,6 +431,7 @@ for (resTry = 0; resTry < resTryCount; ++resTry)
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
+writeOne(f, bedCount);
 bits32 blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
 struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, blockCount);
@@ -510,7 +513,7 @@ if (aveSpan > 0)
 /* Go back and rewrite header. */
 rewind(f);
 bits32 sig = bigBedSig;
-bits16 version = 1;
+bits16 version = bbiCurrentVersion;
 bits16 summaryCount = zoomLevels;
 bits32 reserved32 = 0;
 bits32 reserved64 = 0;
