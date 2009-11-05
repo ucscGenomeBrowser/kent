@@ -750,15 +750,22 @@ return bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
 	summaryType, summarySize, summaryValues);
 }
 
+char *bigBedAutoSqlText(struct bbiFile *bbi)
+/* Get autoSql text if any associated with file.  Do a freeMem of this when done. */
+{
+if (bbi->asOffset == 0)
+    return NULL;
+struct udcFile *f = bbi->udc;
+udcSeek(f, bbi->asOffset);
+return udcReadStringAndZero(f);
+}
 
 struct asObject *bigBedAs(struct bbiFile *bbi)
 /* Get autoSql object definition if any associated with file. */
 {
 if (bbi->asOffset == 0)
     return NULL;
-struct udcFile *f = bbi->udc;
-udcSeek(f, bbi->asOffset);
-char *asText = udcReadStringAndZero(f);
+char *asText = bigBedAutoSqlText(bbi);
 struct asObject *as = asParseText(asText);
 freeMem(asText);
 return as;

@@ -60,6 +60,9 @@ boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 star
 bits64 bigBedItemCount(struct bbiFile *bbi);
 /* Return total items in file. */
 
+char *bigBedAutoSqlText(struct bbiFile *bbi);
+/* Get autoSql text if any associated with file.  Do a freeMem of this when done. */
+
 struct asObject *bigBedAs(struct bbiFile *bbi);
 /* Get autoSql object definition if any associated with file. */
 
