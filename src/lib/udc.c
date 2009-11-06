@@ -661,11 +661,11 @@ file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
 file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 }
 
-static int udcSizeFromBitmap(char *bitmapFileName)
+static long long int udcSizeFromBitmap(char *bitmapFileName)
 /* Look up the file size from the local cache bitmap file, or -1 if there
  * is no cache for url. */
 {
-int ret = -1;
+long long int ret = -1;
 struct udcBitmap *bits = udcBitmapOpen(bitmapFileName);
 if (bits != NULL)
     ret = bits->fileSize;
@@ -857,11 +857,11 @@ safef(buf, size, "%s://%s", protocol, afterProtocol);
 return buf;
 }
 
-int udcSizeFromCache(char *url, char *cacheDir)
+long long int udcSizeFromCache(char *url, char *cacheDir)
 /* Look up the file size from the local cache bitmap file, or -1 if there
  * is no cache for url. */
 {
-int ret = -1;
+long long int ret = -1;
 if (cacheDir == NULL)
     cacheDir = udcDefaultDir();
 struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);

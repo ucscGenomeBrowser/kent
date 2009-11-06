@@ -126,7 +126,7 @@ char *udcPathToUrl(const char *path, char *buf, size_t size, char *cacheDir);
 /* Translate path into an URL, store in buf, return pointer to buf if successful
  * and NULL if not. */
 
-int udcSizeFromCache(char *url, char *cacheDir);
+long long int udcSizeFromCache(char *url, char *cacheDir);
 /* Look up the file size from the local cache bitmap file, or -1 if there
  * is no cache for url. */
 
