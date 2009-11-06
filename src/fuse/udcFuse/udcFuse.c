@@ -12,7 +12,7 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.1 2009/11/03 01:04:20 angie Exp $";
+static char const rcsid[] = "$Id: udcFuse.c,v 1.2 2009/11/06 05:16:01 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -197,6 +197,8 @@ char buf[4096];
 char *url = udcPathToUrl(path, buf, sizeof(buf), NULL);
 if (url != NULL)
     {
+    if (udcCacheAge(url, NULL) < udcCacheTimeout())
+	fi->keep_cache = 1;
     udcf = udcFileMayOpen(url, NULL);
     fprintf(stderr, "...[%d] open -> udcFileMayOpen(%s) -> 0x%llx\n", pid, url, (long long)udcf);
     }
@@ -206,7 +208,7 @@ else
     ERR_CATCH_FREE();
     return -1;
     }
-ERR_CATCH_END("udcPathToUrl or udcFileMayOpen");
+ERR_CATCH_END("udcPathToUrl, udcCacheAge or udcFileMayOpen");
 if (udcf == NULL)
     {
     fprintf(stderr, "...[%d] open: Unable to open udcFile for %s!\n", pid, path);
@@ -293,6 +295,10 @@ if (argc == minArgc+1)
     // Fuse does not like getting an extra arg.
     argc--;
     }
+
+// Use kernel caching, and tell udc not to ping server, if cache files are 
+// less than an hour old.  (Should make this a command-line opt.)
+udcSetCacheTimeout(3600);
 
 #ifndef UDC_TEST
 
