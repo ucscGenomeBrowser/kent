@@ -4950,3 +4950,17 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# ADD LINK TO GENENETWORK (DONE. 11/06/09 Fan).
+
+# Received geneNetwork ID list file, GN_rat_RefSeq.txt, for rn4 from GeneNetwork, Zhou Xiaodong [xiaodong.zhou@gmail.com].
+
+    ssh hgwdev
+    mkdir -p /cluster/data/rn4/bed/geneNetwork
+    cd /cluster/data/rn4/bed/geneNetwork
+
+    hgsql rn4 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql rn4 -e \
+    'load data local infile "GN_rat_RefSeq.txt" into table geneNetworkId'
+
+#########################################################################
+
