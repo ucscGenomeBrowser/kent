@@ -56,6 +56,12 @@ priority 240.2
 track netMm9 override
 priority 250.2
 
+track chainGalGal3 override
+priority 280
+
+track netGalGal3 override
+priority 280.1
+
 # in visibility.ra
 # 
 # track refGene
