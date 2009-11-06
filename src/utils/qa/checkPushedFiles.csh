@@ -11,45 +11,43 @@ source `which qaConfig.csh`
 
 set fileList=''
 set files=''
-set machine='hgdownload.cse.ucsc.edu'
+set website=''
 
-if ( $#argv < 1 || $#argv > 2 ) then
+if ( $#argv != 2 ) then
   echo
-  echo "  checks to see if files are in place, after a push"
+  echo " checks to see if files are in place, after a push"
   echo
-  echo "    usage: filepath [machine]"
+  echo " usage: website files(s)"
   echo
-  echo " include full web filepath like: /goldenPath/hg19/liftOver/md5sum.txt"
-  echo "  accepts a single file or a file of filepaths\n"
-  echo " machine defaults to hgdownload (type 'rr' for the public website)\n"
-  echo " any output other than '200 OK' indicates an error.\n"
-  exit
+  echo " website should include the path of the directory where"
+  echo " the files reside, such as:"
+  echo "   http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/ "
+  echo
+  echo " file(s) is either a single name or a list of names, and can"
+  echo " include items with additional directory structure, like so:"
+  echo "   filename"
+  echo "   dir/filename"
+  echo "   dir/dir/dir/filename"
+  echo
+  echo " any output other than '200 OK' indicates an error."
+  echo
+  exit 1
 else
-  set fileList=$argv[1]
-  if ( 2 == $#argv ) then
-    set machine=$argv[2]
-  endif
-endif
-
-if ( "$HOST" != "hgwdev" ) then
- echo "\n error: you must run this script on dev!\n"
- exit 1
-endif
-
-if ( 'rr' == $machine || 'RR' == $machine ) then
-  set machine="genome.ucsc.edu"
+  set website=$argv[1]
+  set fileList=$argv[2]
 endif
 
 # check to see if it is a single filepath or a fileList
 file $fileList | egrep -q "ASCII"
 if (! $status) then
- set files=`cat $fileList`
+  set files=`cat $fileList`
 else
- set files=$fileList
+  set files=$fileList
 endif
 
 foreach file ( $files )
-  wget -nv --spider $machine$file
+  echo ${file}:
+  wget -nv --spider $website$file
 end
 
 exit 0
