@@ -28318,7 +28318,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.387 2009/11/06 00:26:04 kuhn Exp $
+# $Id: hg18.txt,v 1.388 2009/11/06 23:06:53 fanhsu Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28366,7 +28366,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.387 2009/11/06 00:26:04 kuhn Exp $
+# $Id: hg18.txt,v 1.388 2009/11/06 23:06:53 fanhsu Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 
@@ -28903,3 +28903,17 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# ADD LINK TO GENENETWORK (DONE. 11/06/09 Fan).
+
+# Received geneNetwork ID list file, GN_human_RefSeq.txt, for hg18 from GeneNetwork, Zhou Xiaodong [xiaodong.zhou@gmail.com].
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg18/bed/geneNetwork
+    cd /cluster/data/hg18/bed/geneNetwork
+
+    hgsql hg18 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql hg18 -e \
+    'load data local infile "GN_human_RefSeq.txt" into table geneNetworkId'
+
+#########################################################################
+
