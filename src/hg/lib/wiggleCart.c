@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.22 2009/09/18 20:05:10 braney Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.23 2009/11/06 22:25:42 braney Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -460,6 +460,31 @@ else
 	}
     }
 return(cloneString(ret));
+}
+
+/*	transformFunc - none by default **********************************/
+enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *theCart,
+    struct trackDb *tdb, char *name,char **optString)
+{
+boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char *transformFunc;
+enum wiggleTransformFuncEnum ret = wiggleTransformFuncNone;
+char * tdbDefault = trackDbSettingClosestToHome(tdb, TRANSFORMFUNC);
+
+transformFunc = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, TRANSFORMFUNC));
+
+if ((transformFunc == NULL) && (tdbDefault != NULL))
+    transformFunc = cloneString(tdbDefault);
+
+if (optString && transformFunc)
+    *optString = cloneString(transformFunc);
+
+if (transformFunc)
+    {
+    ret = wiggleTransformFuncToEnum(transformFunc);
+    freeMem(transformFunc);
+    }
+return(ret);
 }
 
 /*	alwaysZero - off by default **********************************/

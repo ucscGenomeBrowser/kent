@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.93 2009/09/18 20:05:16 braney Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.94 2009/11/06 22:27:12 braney Exp $";
 
 #define SMALLBUF 128
 
@@ -565,7 +565,8 @@ return preDraw;
 }
 
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
-	enum wiggleWindowingEnum windowingFunction)
+	enum wiggleWindowingEnum windowingFunction,
+	enum wiggleTransformFuncEnum transformFunc)
 /*	apply windowing function to the values in preDraw array	*/
 {
 int i;
@@ -598,6 +599,8 @@ for (i = 0; i < preDrawSize; ++i)
 		    dataValue = preDraw[i].max;
 		break;
 	}
+	if (transformFunc == wiggleTransformFuncLog)
+	    dataValue = log(1+dataValue);
 	preDraw[i].plotValue = dataValue;
 	preDraw[i].smooth = dataValue;
 	}
@@ -1049,7 +1052,8 @@ yLineMark = wigCart->yLineMark;
  *	pixelsPerBase - pixels per base
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
-preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction, 
+	wigCart->transformFunc);
 preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
 overallRange = preDrawLimits(preDraw, preDrawZero, width,
     &overallUpperLimit, &overallLowerLimit);
@@ -1425,6 +1429,7 @@ wigFetchYLineMarkValueWithCart(cart,tdb,tdb->tableName, &yLineMark);
 wigCart->yLineMark = yLineMark;
 wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 wigCart->alwaysZero = wigFetchAlwaysZeroWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->transformFunc = wigFetchTransformFuncWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;

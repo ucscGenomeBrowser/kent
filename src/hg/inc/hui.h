@@ -530,6 +530,15 @@ char *wiggleGraphEnumToString(enum wiggleGraphOptEnum x);
 void wiggleGraphDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	Wiggle track transform func*/
+enum wiggleTransformFuncEnum {
+   wiggleTransformFuncNone = 0,
+   wiggleTransformFuncLog = 1,
+};
+
+enum wiggleTransformFuncEnum wiggleTransformFuncToEnum(char *string);
+/* Convert from string to enum representation. */
+
 /*	Wiggle track always include zero */
 enum wiggleAlwaysZeroEnum {
    wiggleAlwaysZeroOff = 0,

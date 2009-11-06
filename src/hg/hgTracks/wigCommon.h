@@ -17,6 +17,7 @@ struct wigCartOptions
     enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
     enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
     enum wiggleAlwaysZeroEnum alwaysZero;	/*  OFF/ON	*/
+    enum wiggleTransformFuncEnum transformFunc;	/*  NONE/LOG	*/
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
     int maxHeight;	/*	maximum pixels height from trackDb	*/
@@ -60,7 +61,8 @@ struct preDrawElement * initPreDraw(int width, int *preDrawSize,
 /*	initialize a preDraw array of size width	*/
 
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
-	enum wiggleWindowingEnum windowingFunction);
+	enum wiggleWindowingEnum windowingFunction,
+	enum wiggleTransformFuncEnum transformFunc);
 /*	apply windowing function to the values in preDraw array	*/
 
 void preDrawSmoothing(struct preDrawElement *preDraw, int preDrawSize,

@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.245 2009/11/04 01:12:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.246 2009/11/06 22:25:42 braney Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1397,6 +1397,27 @@ void wiggleGraphDropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions),
 	curVal);
+}
+
+static char *wiggleTransformFuncOptions[] = {
+    "NONE",
+    "LOG"
+    };
+
+enum wiggleTransformFuncEnum wiggleTransformFuncToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleTransformFuncOptions);
+if (x < 0)
+   errAbort("hui::wiggleTransformFuncToEnum() - Unknown option %s", string);
+return x;
+}
+
+void wiggleTransformFuncDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleTransformFuncOptions,
+    ArraySize(wiggleTransformFuncOptions), curVal);
 }
 
 static char *wiggleAlwaysZeroOptions[] = {
@@ -3346,6 +3367,7 @@ double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
 int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
+char *transformFunc = NULL;    /* function to transform data points */
 char *alwaysZero = NULL;    /* Always include 0 in range */
 char *lineBar;  /*  Line or Bar graph */
 char *autoScale;    /*  Auto scaling on or off */
@@ -3365,6 +3387,7 @@ wordCount = chopLine(typeLine,words);
 wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 freeMem(typeLine);
 
+(void) wigFetchTransformFuncWithCart(cart,tdb,name, &transformFunc);
 (void) wigFetchAlwaysZeroWithCart(cart,tdb,name, &alwaysZero);
 (void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
 (void) wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
@@ -3410,6 +3433,11 @@ snprintf(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
 wiggleAlwaysZeroDropDown(option, alwaysZero);
 puts("</TD></TR>");
+
+printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
+snprintf(option, sizeof(option), "%s.%s", name, TRANSFORMFUNC);
+printf("Transform data points by:&nbsp");
+wiggleTransformFuncDropDown(option, transformFunc);
 
 printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
 snprintf(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
