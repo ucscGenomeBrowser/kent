@@ -24378,6 +24378,11 @@ See hg18.txt for details.
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
 #Loaded 23424 elements of size 15
 
+# 11-04-2009 color change from brown to magenta:
+# old color
+# 6553700	Inversion
+# new:
+# 13107400	Inversion
 
 ############################################################################
 # KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 6/10/08 angie)
