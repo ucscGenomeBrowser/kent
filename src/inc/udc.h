@@ -130,4 +130,16 @@ int udcSizeFromCache(char *url, char *cacheDir);
 /* Look up the file size from the local cache bitmap file, or -1 if there
  * is no cache for url. */
 
+unsigned long udcCacheAge(char *url, char *cacheDir);
+/* Return the age in seconds of the oldest cache file.  If a cache file is
+ * missing, return the current time (seconds since the epoch). */
+
+int udcCacheTimeout();
+/* Get cache timeout (if local cache files are newer than this many seconds,
+ * we won't ping the remote server to check the file size and update time). */
+
+void udcSetCacheTimeout(int timeout);
+/* Set cache timeout (if local cache files are newer than this many seconds,
+ * we won't ping the remote server to check the file size and update time). */
+
 #endif /* UDC_H */

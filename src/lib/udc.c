@@ -86,6 +86,7 @@ struct udcBitmap
 static char *bitmapName = "bitmap";
 static char *sparseDataName = "sparseData";
 #define udcBitmapHeaderSize (64)
+static int cacheTimeout = 0;
 
 /********* Section for local file protocol **********/
 
@@ -660,6 +661,20 @@ file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
 file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 }
 
+static int udcSizeFromBitmap(char *bitmapFileName)
+/* Look up the file size from the local cache bitmap file, or -1 if there
+ * is no cache for url. */
+{
+int ret = -1;
+struct udcBitmap *bits = udcBitmapOpen(bitmapFileName);
+if (bits != NULL)
+    ret = bits->fileSize;
+else
+    warn("Can't open bitmap file %s: %s\n", bitmapFileName, strerror(errno));
+udcBitmapClose(&bits);
+return ret;
+}
+
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 /* Open up a cached file. cacheDir may be null in which case udcDefaultDir() will be
  * used.  Return NULL if file doesn't exist. */
@@ -683,9 +698,10 @@ struct udcProtocol *prot;
 prot = udcProtocolNew(protocol);
 
 /* Figure out if anything exists. */
+boolean useCacheInfo = (udcCacheAge(url, cacheDir) < udcCacheTimeout());
 struct udcRemoteFileInfo info;
 ZeroVar(&info);
-if (!isTransparent)
+if (!isTransparent && !useCacheInfo)
     {
     if (!prot->fetchInfo(url, &info))
 	{
@@ -702,8 +718,6 @@ AllocVar(file);
 file->url = cloneString(url);
 file->protocol = protocol;
 file->prot = prot;
-file->updateTime = info.updateTime;
-file->size = info.size;
 if (isTransparent)
     {
     /* If transparent dummy up things so that the "sparse" file pointer is actually
@@ -717,6 +731,16 @@ if (isTransparent)
 else
     {
     udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
+    if (useCacheInfo)
+	{
+	file->updateTime = fileModTime(file->bitmapFileName);
+	file->size = udcSizeFromBitmap(file->bitmapFileName);
+	}
+    else
+	{
+	file->updateTime = info.updateTime;
+	file->size = info.size;
+	}
 
     /* Make directory. */
     makeDirsOnPath(file->cacheDir);
@@ -746,6 +770,8 @@ struct slName *udcFileCacheFiles(char *url, char *cacheDir)
 char *protocol, *afterProtocol, *colon;
 struct udcFile *file;
 udcParseUrl(url, &protocol, &afterProtocol, &colon);
+if (colon == NULL)
+    return NULL;
 AllocVar(file);
 udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
 struct slName *list = NULL;
@@ -842,15 +868,29 @@ struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
 for (sl = slList;  sl != NULL;  sl = sl->next)
     if (endsWith(sl->name, bitmapName))
 	{
-	struct udcBitmap *bits = udcBitmapOpen(sl->name);
-	if (bits != NULL)
-	    ret = bits->fileSize;
-	else
-	    warn("Can't open bitmap file %s: %s\n", sl->name, strerror(errno));
-	udcBitmapClose(&bits);
+	ret = udcSizeFromBitmap(sl->name);
+	break;
 	}
 slNameFreeList(&slList);
 return ret;
+}
+
+unsigned long udcCacheAge(char *url, char *cacheDir)
+/* Return the age in seconds of the oldest cache file.  If a cache file is
+ * missing, return the current time (seconds since the epoch). */
+{
+unsigned long now = clock1(), oldestTime = now;
+if (cacheDir == NULL)
+    cacheDir = udcDefaultDir();
+struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
+if (slList == NULL)
+    return now;
+for (sl = slList;  sl != NULL;  sl = sl->next)
+    if (fileExists(sl->name))
+	oldestTime = min(fileModTime(sl->name), oldestTime);
+    else
+	return now;
+return (now - oldestTime);
 }
 
 static void readBitsIntoBuf(FILE *f, int headerSize, int bitStart, int bitEnd,
@@ -1230,3 +1270,16 @@ defaultDir = path;
 }
 
 
+int udcCacheTimeout()
+/* Get cache timeout (if local cache files are newer than this many seconds,
+ * we won't ping the remote server to check the file size and update time). */
+{
+return cacheTimeout;
+}
+
+void udcSetCacheTimeout(int timeout)
+/* Set cache timeout (if local cache files are newer than this many seconds,
+ * we won't ping the remote server to check the file size and update time). */
+{
+cacheTimeout = timeout;
+}
