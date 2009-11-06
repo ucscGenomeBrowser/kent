@@ -67,6 +67,21 @@ To build the source tree.
 	The -lz requires a link to the libraries installed in the
 	zlib-devel rpm.
 
+4a. optional SSL support:
+	If you want the libraries to be able to use SSL,
+	for instance to support fetching HTTPS URLs,
+	install openssl.  We are currently using these packages: 
+	openssl-0.9.8b-10.el5
+	openssl-devel-0.9.8b-10.el5
+        Add the following as an environment variable to 
+        .bashrc or .tcshrc, OR alternatively add it as the first
+	line of your kent/src/inc/common.mk:
+	  USE_SSL=1
+        If you try to fetch an https url without this support
+	you will see an error message:
+	  No openssl available in netMustConnectHttps for <hostName> : <port>
+        SSL is also useful for accessing bigWig and bigBed over HTTPS.
+
 4.  In the source tree, perform the following:
 	$ cd kent/src
 	$ make libs
@@ -163,4 +178,4 @@ make: *** [aliType.o] Error 1
     get our hands on a newer version of the gcc compiler.
 
 ====================================================================
-This file last updated: $Date: 2009/10/30 21:38:14 $
+This file last updated: $Date: 2009/11/06 18:44:51 $
