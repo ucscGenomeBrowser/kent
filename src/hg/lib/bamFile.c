@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.13 2009/11/05 17:50:24 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.14 2009/11/06 18:09:55 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -152,7 +152,7 @@ if (fh != NULL)
 	warn("bamFileExists: failed to read index corresponding to %s", bamFileName);
 	return FALSE;
 	}
-    freeMem(idx);
+    free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
     return TRUE;
     }
 return FALSE;
@@ -181,6 +181,7 @@ if (idx == NULL)
 ret = bam_fetch(fh->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
 if (ret != 0)
     errAbort("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
 samclose(fh);
 }
 
