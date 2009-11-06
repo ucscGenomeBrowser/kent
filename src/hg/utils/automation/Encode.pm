@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.49 2009/11/02 17:51:22 kate Exp $
+# $Id: Encode.pm,v 1.50 2009/11/06 05:35:11 kate Exp $
 
 package Encode;
 
@@ -30,8 +30,8 @@ our $dafVersion = "1.1";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
-our $labsConfigFile = "labs.ra";
-our $piConfigFile = "pi.ra";    # for reporting purposes
+our $grantConfigFile = "labs.ra";
+our $labConfigFile = "pi.ra";    # for reporting purposes
 our $autoCreatedPrefix = "auto";
 
 our $restrictedMonths = 9;
@@ -175,23 +175,23 @@ sub getGrants
 # The grants are called "labs" in the labs.ra file (for historical reasons).
     my ($configPath) = @_;
     my %grants;
-    if(-e "$configPath/$labsConfigFile") {
+    if(-e "$configPath/$grantConfigFile") {
         # tolerate missing labs.ra in dev trees.
-        %grants = RAFile::readRaFile("$configPath/$labsConfigFile", "lab");
+        %grants = RAFile::readRaFile("$configPath/$grantConfigFile", "lab");
     }
     return \%grants;
 }
 
-sub getPIs
+sub getLabs
 {
-# file with pi/project/lab/grant -- used for reporting purposes
+# file with lab/pi/project/grant -- used for reporting purposes
 # Captures conventions in reporting spreadsheet and pipeline metadata
     my ($configPath) = @_;
-    my %piHash = ();
-    if(-e "$configPath/$piConfigFile") {
-        %piHash = RAFile::readRaFile("$configPath/$piConfigFile", "pi");
+    my %labs = ();
+    if(-e "$configPath/$labConfigFile") {
+        %labs = RAFile::readRaFile("$configPath/$labConfigFile", "lab");
     }
-    return \%piHash;
+    return \%labs;
 }
 
 sub getControlledVocab
