@@ -24336,6 +24336,7 @@ See hg18.txt for details.
 
 
 ############################################################################
+# DGV V8 (DATABASE OF GENOMIC VARIANTS) (changed color of inverted 11/05/09 kuhn)
 # DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 8/12/09 angie)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
