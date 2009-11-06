@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.13 2009/11/05 20:00:23 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.14 2009/11/06 19:44:28 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -22,7 +22,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedToBigBed - Convert bed file to bigBed.\n"
+  "bedToBigBed v. %d - Convert bed file to bigBed.\n"
   "usage:\n"
   "   bedToBigBed in.bed chrom.sizes out.bb\n"
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
@@ -35,9 +35,9 @@ errAbort(
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "   -bedFields=N - Number of fields that fit standard bed definition.  If undefined\n"
   "                  assumes all fields in bed are defined.\n"
-  "   -as=fields.as - If have non-standard fields, it's great to put a definition of\n"
-  "                   each field in a row in AutoSql format here.\n"
-  , blockSize, itemsPerSlot
+  "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
+  "                   of each field in a row in AutoSql format here.\n"
+  , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
 

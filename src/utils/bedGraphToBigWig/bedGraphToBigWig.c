@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.16 2009/11/05 19:35:38 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.17 2009/11/06 19:45:20 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -22,7 +22,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedGraphToBigWig - Convert a bedGraph program to bigWig.\n"
+  "bedGraphToBigWig v %d - Convert a bedGraph program to bigWig.\n"
   "usage:\n"
   "   bedGraphToBigWig in.bedGraph chrom.sizes out.bw\n"
   "where in.bedGraph is a four column file in the format:\n"
@@ -32,7 +32,7 @@ errAbort(
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
-  , blockSize, itemsPerSlot
+  , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
 
