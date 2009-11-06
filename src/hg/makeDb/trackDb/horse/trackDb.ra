@@ -62,6 +62,9 @@ priority 280
 track netGalGal3 override
 priority 280.1
 
+track chainNetMonDom5 override
+priority 270
+
 # in visibility.ra
 # 
 # track refGene
