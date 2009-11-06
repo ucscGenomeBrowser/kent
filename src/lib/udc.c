@@ -849,7 +849,6 @@ for (sl = slList;  sl != NULL;  sl = sl->next)
 	    warn("Can't open bitmap file %s: %s\n", sl->name, strerror(errno));
 	udcBitmapClose(&bits);
 	}
-    else
 slNameFreeList(&slList);
 return ret;
 }
