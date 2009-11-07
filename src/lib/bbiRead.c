@@ -73,9 +73,10 @@ bbi->unzoomedIndexOffset = udcReadBits64(udc, isSwapped);
 bbi->fieldCount = udcReadBits16(udc, isSwapped);
 bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 bbi->asOffset = udcReadBits64(udc, isSwapped);
+bbi->totalSummaryOffset = udcReadBits64(udc, isSwapped);
 
 /* Skip over reserved area. */
-udcSeek(udc, udcTell(udc) + 20);
+udcSeek(udc, 64);
 
 /* Read zoom headers. */
 int i;
@@ -581,6 +582,7 @@ struct udcFile *udc = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
 struct bbiSummaryElement res;
 ZeroVar(&res);
+
 
 if (bbi->totalSummaryOffset != 0)
     {
