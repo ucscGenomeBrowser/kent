@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.56 2009/11/05 00:33:06 hartera Exp $";
+#	"$Id: hg19.txt,v 1.57 2009/11/07 17:35:48 hartera Exp $";
 
 #############################################################################
 
@@ -7867,8 +7867,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 ######################
 ############################################################################
 # SEGMENTAL DUPLICATIONS (2009-10-31 and 2009-11-04, hartera, DONE)
-    # File emailed from Tin Louie <tinlouie at u.washington.edu>
-    # in Evan Eichler's lab. 
+# File emailed from Tin Louie <tinlouie at u.washington.edu>
+# in Evan Eichler's lab.
+# (2009-11-07, hartera, DONE) Re-loaded table after correcting some chromosome
+# names.  
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
     cd /hive/data/genomes/hg19/bed/genomicSuperDups
    
@@ -7891,4 +7893,42 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # Loading hg19
     # Updated details page with suggested text and an additional reference. 
     # src/hg/makeDb/trackDb/genomicSuperDups.html
+    # (2009-11-07, hartera)
+    # Fix incorrect chromosomes in data. 
+    # The script, runCheckTableCoordsDayOld, found this error in the table:
+    # hg19.genomicSuperDups has 28 records with chrom not described in
+    # chromInfo. 
+    awk '{print $1}' hg19genomicSuperDups | sort | uniq > chroms
+    awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChroms
+    # Found several cases where the last letter of random is missed off
+    # for the random contigs. These are not concatenated into a random chrom
+    # for hg19.  
+    hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq \
+          > chroms.chromInfo
+    # These are the contig names for random chroms that need to be corrected:
+    grep -v random chroms | grep rando | sort | uniq > chromsToCorrect
+    grep -v random otherChroms | grep rando | sort | uniq > otherChromsToCorrect
+    diff chromsToCorrect otherChromsToCorrect
+    # No difference so use chromsToCorrect file. 
+    cp hg19genomicSuperDups hg19genomicSuperDups.orig
+    foreach c (`cat chromsToCorrect`)
+       perl -pi.bak -e "s/${c}/${c}m/g" hg19genomicSuperDups
+    end
+    # Check chroms and otherChroms again. 
+    awk '{print $1}' hg19genomicSuperDups | sort | uniq > chromsNew
+    awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChromsNew
+    # These look good now. 
+    # Drop the old table and re-load the corrected data.
+    hgsql -e 'drop table hg19genomicSuperDups;' hg19
+    
+    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups \
+    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
+    | hgLoadBed hg19 genomicSuperDups stdin \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+# Reading stdin
+# Loaded 63463 elements of size 29
+# Sorted
+# Creating table definition for genomicSuperDups
+# Saving bed.tab
+# Loading hg19
 
