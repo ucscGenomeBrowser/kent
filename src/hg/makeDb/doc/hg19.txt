@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.57 2009/11/07 17:35:48 hartera Exp $";
+#	"$Id: hg19.txt,v 1.58 2009/11/07 17:41:04 hartera Exp $";
 
 #############################################################################
 
@@ -7931,4 +7931,5 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # Creating table definition for genomicSuperDups
 # Saving bed.tab
 # Loading hg19
-
+    # Cleanup
+    # Remove chroms* otherChroms* *.bak
