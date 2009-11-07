@@ -19,6 +19,16 @@ void bbiWriteDummyZooms(FILE *f)
 repeatCharOut(f, 0, bbiMaxZoomLevels * 24);
 }
 
+void bbiSummaryElementWrite(FILE *f, struct bbiSummaryElement *sum)
+/* Write out summary element to file. */
+{
+writeOne(f, sum->validCount);
+writeOne(f, sum->minVal);
+writeOne(f, sum->maxVal);
+writeOne(f, sum->sumData);
+writeOne(f, sum->sumSquares);
+}
+
 void bbiWriteChromInfo(struct bbiChromUsage *usageList, int blockSize, FILE *f)
 /* Write out information on chromosomes to file. */
 {

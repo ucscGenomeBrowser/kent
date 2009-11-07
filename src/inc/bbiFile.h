@@ -276,6 +276,9 @@ void bbiWriteDummyHeader(FILE *f);
 void bbiWriteDummyZooms(FILE *f);
 /* Write out zeroes to reserve space for ten zoom levels. */
 
+void bbiSummaryElementWrite(FILE *f, struct bbiSummaryElement *sum);
+/* Write out summary element to file. */
+
 void bbiWriteChromInfo(struct bbiChromUsage *usageList, int blockSize, FILE *f);
 /* Write out information on chromosomes to file. */
 
