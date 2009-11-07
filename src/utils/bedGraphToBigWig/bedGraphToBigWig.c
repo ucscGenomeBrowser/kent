@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.17 2009/11/06 19:45:20 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.18 2009/11/07 19:29:35 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -178,7 +178,8 @@ assert(sectionIx == sectionCount);
 static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, 
-	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
+	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
+	struct bbiSummaryElement *totalSum)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
  * next reduction level.  This is more work than some ways, but it keeps us from having to
  * keep the first reduction entirely in memory. */
@@ -193,6 +194,7 @@ boundsEnd = boundsPt + initialReductionCount;
 
 *retDataStart = ftell(f);
 writeOne(f, initialReductionCount);
+boolean firstRow = TRUE;
 for (;;)
     {
     /* Get next line of input if any. */
@@ -212,6 +214,25 @@ for (;;)
     bits32 start = sqlUnsigned(row[1]);
     bits32 end = sqlUnsigned(row[2]);
     float val = sqlFloat(row[3]);
+
+    /* Update total summary stuff. */
+    bits32 size = end-start;
+    if (firstRow)
+	{
+        totalSum->validCount = size;
+	totalSum->minVal = totalSum->maxVal = val;
+	totalSum->sumData = val*size;
+	totalSum->sumSquares = val*size*size;
+	firstRow = FALSE;
+	}
+    else
+        {
+	totalSum->validCount += size;
+	if (val < totalSum->minVal) totalSum->minVal = val;
+	if (val > totalSum->maxVal) totalSum->maxVal = val;
+	totalSum->sumData += val*size;
+	totalSum->sumSquares += val*size*size;
+	}
 
     /* If new chromosome output existing block. */
     if (differentString(chrom, usage->name))
@@ -257,6 +278,7 @@ for (;;)
 	sum->sumSquares += val*val * overlap;
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		&boundsPt, boundsEnd, usage->size, lm, f);
+	size -= overlap;
 
 	/* Move summary to next part. */
 	sum->start = start = sum->end;
@@ -268,7 +290,6 @@ for (;;)
 	}
 
     /* Add to summary. */
-    bits32 size = end - start;
     sum->validCount += size;
     if (sum->minVal > val) sum->minVal = val;
     if (sum->maxVal < val) sum->maxVal = val;
@@ -306,6 +327,12 @@ verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 FILE *f = mustOpen(outName, "wb");
 bbiWriteDummyHeader(f);
 bbiWriteDummyZooms(f);
+
+/* Write out dummy total summary. */
+struct bbiSummaryElement totalSum;
+ZeroVar(&totalSum);
+bits64 totalSummaryOffset = ftell(f);
+bbiSummaryElementWrite(f, &totalSum);
 
 /* Write out chromosome/size database. */
 bits64 chromTreeOffset = ftell(f);
@@ -381,7 +408,7 @@ if (minDiff > 0)
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
-		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
+		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
 	verboseTime(2, "writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
 	zoomLevels = 1;
@@ -413,8 +440,9 @@ rewind(f);
 bits32 sig = bigWigSig;
 bits16 version = bbiCurrentVersion;
 bits16 summaryCount = zoomLevels;
+bits32 reserved16 = 0;
 bits32 reserved32 = 0;
-bits32 reserved64 = 0;
+bits64 reserved64 = 0;
 
 /* Write fixed header */
 writeOne(f, sig);
@@ -423,7 +451,11 @@ writeOne(f, summaryCount);
 writeOne(f, chromTreeOffset);
 writeOne(f, dataOffset);
 writeOne(f, indexOffset);
-for (i=0; i<8; ++i)
+writeOne(f, reserved16);	// fieldCount
+writeOne(f, reserved16);	// definedFieldCount
+writeOne(f, reserved64);	// autoSqlOffset
+writeOne(f, totalSummaryOffset);
+for (i=0; i<3; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers with data. */
@@ -444,6 +476,10 @@ for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
     writeOne(f, reserved64);
     writeOne(f, reserved64);
     }
+
+/* Write total summary. */
+fseek(f, totalSummaryOffset, SEEK_SET);
+bbiSummaryElementWrite(f, &totalSum);
 
 lineFileClose(&lf);
 carefulClose(&f);

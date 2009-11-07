@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.18 2009/11/05 19:32:45 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.19 2009/11/07 19:27:02 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -804,11 +804,13 @@ FILE *f = mustOpen(fileName, "wb");
 bits32 sig = bigWigSig;
 bits16 version = bbiCurrentVersion;
 bits16 summaryCount = 0;
+bits16 reserved16 = 0;
 bits32 reserved32 = 0;
 bits64 reserved64 = 0;
 bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
+bits64 totalSummaryOffset = 0, totalSummaryOffsetPos;
 struct bbiSummary *reduceSummaries[10];
 bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
@@ -878,7 +880,12 @@ dataOffsetPos = ftell(f);
 writeOne(f, dataOffset);
 indexOffsetPos = ftell(f);
 writeOne(f, indexOffset);
-for (i=0; i<8; ++i)
+writeOne(f, reserved16);  /* fieldCount */
+writeOne(f, reserved16);  /* definedFieldCount */
+writeOne(f, reserved64);  /* autoSqlOffset. */
+totalSummaryOffsetPos = ftell(f);
+writeOne(f, totalSummaryOffset);
+for (i=0; i<3; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers */
@@ -890,6 +897,12 @@ for (i=0; i<summaryCount; ++i)
     writeOne(f, reserved64);	// Fill in with data offset later
     writeOne(f, reserved64);	// Fill in with index offset later
     }
+
+/* Write dummy summary */
+struct bbiSummaryElement totalSum;
+ZeroVar(&totalSum);
+totalSummaryOffset = ftell(f);
+bbiSummaryElementWrite(f, &totalSum);
 
 /* Write chromosome bPlusTree */
 chromTreeOffset = ftell(f);
@@ -927,6 +940,30 @@ for (i=0; i<summaryCount; ++i)
     verbose(3, "wrote %d of data, %d of index on level %d\n", (int)(reductionIndexOffsets[i] - reductionDataOffsets[i]), (int)(ftell(f) - reductionIndexOffsets[i]), i);
     }
 
+/* Calculate summary */
+struct bbiSummary *sum = firstSummaryList;
+if (sum != NULL)
+    {
+    totalSum.validCount = sum->validCount;
+    totalSum.minVal = sum->minVal;
+    totalSum.maxVal = sum->maxVal;
+    totalSum.sumData = sum->sumData;
+    totalSum.sumSquares = sum->sumSquares;
+    for (sum = sum->next; sum != NULL; sum = sum->next)
+	{
+	totalSum.validCount += sum->validCount;
+	if (sum->minVal < totalSum.minVal) totalSum.minVal = sum->minVal;
+	if (sum->maxVal > totalSum.maxVal) totalSum.maxVal = sum->maxVal;
+	totalSum.sumData += sum->sumData;
+	totalSum.sumSquares += sum->sumSquares;
+	}
+    /* Write real summary */
+    fseek(f, totalSummaryOffset, SEEK_SET);
+    bbiSummaryElementWrite(f, &totalSum);
+    }
+else
+    totalSummaryOffset = 0;	/* Edge case, no summary. */
+
 /* Go back and fill in offsets properly in header. */
 fseek(f, dataOffsetPos, SEEK_SET);
 writeOne(f, dataOffset);
@@ -934,6 +971,8 @@ fseek(f, indexOffsetPos, SEEK_SET);
 writeOne(f, indexOffset);
 fseek(f, chromTreeOffsetPos, SEEK_SET);
 writeOne(f, chromTreeOffset);
+fseek(f, totalSummaryOffsetPos, SEEK_SET);
+writeOne(f, totalSummaryOffset);
 
 /* Also fill in offsets in zoom headers. */
 for (i=0; i<summaryCount; ++i)

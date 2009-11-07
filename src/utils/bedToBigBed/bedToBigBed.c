@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.14 2009/11/06 19:44:28 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.15 2009/11/07 19:31:19 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;
@@ -252,7 +252,8 @@ return tree;
 static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	int fieldCount, struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, 
-	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart)
+	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
+	struct bbiSummaryElement *totalSum)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
  * next reduction level.  This is more work than some ways, but it keeps us from having to
  * keep the first reduction entirely in memory. */
@@ -273,6 +274,7 @@ writeOne(f, initialReductionCount);
  *   2) Stream through the range tree, outputting the initial summary level and
  *      further reducing. 
  */
+boolean firstTime = TRUE;
 for (usage = usageList; usage != NULL; usage = usage->next)
     {
     struct bbiSummary oneSummary, *sum = NULL;
@@ -280,9 +282,30 @@ for (usage = usageList; usage != NULL; usage = usage->next)
     struct range *range, *rangeList = rangeTreeList(rangeTree);
     for (range = rangeList; range != NULL; range = range->next)
         {
+	/* Grab values we want from range. */
 	double val = ptToInt(range->val);
 	int start = range->start;
 	int end = range->end;
+	bits32 size = end - start;
+
+	/* Add to total summary. */
+	if (firstTime)
+	    {
+	    totalSum->validCount = size;
+	    totalSum->minVal = totalSum->maxVal = val;
+	    totalSum->sumData = val*size;
+	    totalSum->sumSquares = val*size*size;
+	    firstTime = FALSE;
+	    }
+	else
+	    {
+	    totalSum->validCount += size;
+	    if (val < totalSum->minVal) totalSum->minVal = val;
+	    if (val > totalSum->maxVal) totalSum->maxVal = val;
+	    totalSum->sumData += val*size;
+	    totalSum->sumSquares += val*size*size;
+	    }
+
 	/* If start past existing block then output it. */
 	if (sum != NULL && sum->end <= start)
 	    {
@@ -306,9 +329,10 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	 * loop handles all but the final affected summary in that case. */
 	while (end > sum->end)
 	    {
-	    verbose(3, "Splitting size %d at %d\n", end - start, end);
 	    /* Fold in bits that overlap with existing summary and output. */
-	    bits32 overlap = rangeIntersection(start, end, sum->start, sum->end);
+	    int overlap = rangeIntersection(start, end, sum->start, sum->end);
+	    assert(overlap > 0);
+	    verbose(3, "Splitting size %d at %d, overlap %d\n", end - start, sum->end, overlap);
 	    sum->validCount += overlap;
 	    if (sum->minVal > val) sum->minVal = val;
 	    if (sum->maxVal < val) sum->maxVal = val;
@@ -316,6 +340,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    sum->sumSquares += val*val * overlap;
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		    &boundsPt, boundsEnd, usage->size, lm, f);
+	    size -= overlap;
 
 	    /* Move summary to next part. */
 	    sum->start = start = sum->end;
@@ -327,7 +352,6 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    }
 
 	/* Add to summary. */
-	bits32 size = end - start;
 	sum->validCount += size;
 	if (sum->minVal > val) sum->minVal = val;
 	if (sum->maxVal < val) sum->maxVal = val;
@@ -389,7 +413,7 @@ int minDiff = 0;
 double aveSpan = 0;
 bits64 bedCount = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan, &bedCount);
-verboseTime(1, "pass1 - making usageList");
+verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
 
 /* Open output file and write dummy header. */
@@ -409,6 +433,12 @@ if (asFileName != NULL)
     carefulClose(&asFile);
     verbose(2, "%s has %d columns\n", asFileName, colCount);
     }
+
+/* Write out dummy total summary. */
+struct bbiSummaryElement totalSum;
+ZeroVar(&totalSum);
+bits64 totalSummaryOffset = ftell(f);
+bbiSummaryElementWrite(f, &totalSum);
 
 /* Write out chromosome/size database. */
 bits64 chromTreeOffset = ftell(f);
@@ -439,7 +469,8 @@ lineFileRewind(lf);
 bits16 fieldCount=0;
 writeBlocks(usageList, lf, as, definedFieldCount, itemsPerSlot, boundsArray, blockCount, f,
 	resTryCount, resScales, resSizes, &fieldCount, &definedFieldCount);
-verboseTime(1, "pass2 - checking and writing primary data");
+verboseTime(1, "pass2 - checking and writing primary data (%lld records, %d fields)", 
+	(long long)bedCount, fieldCount);
 
 /* Write out primary data index. */
 bits64 indexOffset = ftell(f);
@@ -485,7 +516,7 @@ if (aveSpan > 0)
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		fieldCount, lf, initialReduction, initialReducedCount,
 		resIncrement, blockSize, itemsPerSlot, lm, 
-		f, &zoomDataOffsets[0], &zoomIndexOffsets[0]);
+		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
 	verboseTime(1, "pass3 - writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
 	zoomLevels = 1;
@@ -516,7 +547,7 @@ bits32 sig = bigBedSig;
 bits16 version = bbiCurrentVersion;
 bits16 summaryCount = zoomLevels;
 bits32 reserved32 = 0;
-bits32 reserved64 = 0;
+bits64 reserved64 = 0;
 
 /* Write fixed header */
 writeOne(f, sig);
@@ -528,8 +559,9 @@ writeOne(f, indexOffset);
 writeOne(f, fieldCount);
 writeOne(f, definedFieldCount);
 writeOne(f, asOffset);
+writeOne(f, totalSummaryOffset);
 int i;
-for (i=0; i<5; ++i)
+for (i=0; i<3; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers with data. */
@@ -550,6 +582,10 @@ for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
     writeOne(f, reserved64);
     writeOne(f, reserved64);
     }
+
+/* Write total summary. */
+fseek(f, totalSummaryOffset, SEEK_SET);
+bbiSummaryElementWrite(f, &totalSum);
 
 
 /* Clean up. */
