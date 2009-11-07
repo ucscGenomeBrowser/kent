@@ -16,7 +16,7 @@ struct customTrack *ct;
 struct mafPriv *getMafPriv(struct track *track);
 
 /* zoom level where summary file is used */
-#define MAF_SUMMARY_VIEW 50000
+#define MAF_SUMMARY_VIEW 1000000
 
 /* zoom level that displays synteny breaks and nesting brackets */
 #define MAF_DETAIL_VIEW 30000
