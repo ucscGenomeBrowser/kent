@@ -92,8 +92,11 @@
 #include "cddDesc.h"
 #include "arCOGs.h"
 #include "arcogdesc.h"
+#include "megablastInfo.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.39 2009/10/14 20:26:28 holmes Exp $";
+#define LISTUI
+
+static char const rcsid[] = "$Id: lowelab.c,v 1.40 2009/11/09 19:20:29 holmes Exp $";
 
 extern char *uniprotFormat;
 
@@ -277,7 +280,7 @@ if (startsWith("annotRev", table))
 else
 {
     strcpy(pepTableName, pepTable);
-    strcpy(extraTableName, extraTable);    
+    strcpy(extraTableName, extraTable);
 }
 
 spConn = sqlConnect( pdb);
@@ -2080,7 +2083,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 
             printf("<tr style=\"vertical-align: top;\">\n");
             printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
-            
+
             if (cladePortionCount == 1)
                 printf("<td>%s</td>\n", clades[0]);
             else if (cladePortionCount == 2)
@@ -2143,7 +2146,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
                     }
                     else
                         strcpy(product, "N/A");
-                        
+
                     sprintf(query, "select product from %s.%s where name = '%s'", blastpTarget[0], xraTable, blastpTarget[1]);
                     sr = sqlGetResult(conn, query);
                     if ((row = sqlNextRow(sr)) != NULL)
@@ -3009,7 +3012,54 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
   arCOGsFree(&infoload);
   printTrackHtml(tdb);
 }
+void doloweOrthologs(struct trackDb *tdb, char *itemName)
+{
+  char *track = tdb->tableName;
+  char query[512];
+  struct sqlConnection *conn = hAllocConn(database);
+  struct sqlResult *sr;
+  char *dupe, *words[16];
+  char **row;
+  int wordCount;
+  int rowOffset;
+  struct bed *infoload;
+  int bedSize = 0;
+  int start = cartInt(cart, "o");
+  int end = cartInt(cart, "t");
 
+    dupe = cloneString(tdb->type);
+    wordCount = chopLine(dupe, words);
+    if (wordCount > 1)
+        bedSize = atoi(words[1]);
+    if (bedSize < 3) bedSize = 3;
+
+  genericHeader(tdb,itemName);
+  dupe = cloneString(tdb->type);
+  wordCount = chopLine(dupe, words);
+
+  rowOffset = hOffsetPastBin(database,seqName, track);
+
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
+    {
+        infoload = bedLoadN(row+rowOffset, bedSize);
+    printf("<B>Name:</B> %s\n", infoload->name);
+    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgFrame?track=loweOrthologs&refseq=1&db=%s&name=%s\">List of Orthologs</A><BR>",database,infoload->name);
+    printf("<B>Position:</B> "
+                 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                 hgTracksPathAndSettings(), database, infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
+          printf("%s:%d-%d</A><BR>\n", infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
+      printf("<B>Strand:</B> %s<BR>\n", infoload->strand);
+      printf("<B>Genomic size: </B> %d nt<BR>\n", (infoload->chromEnd - infoload->chromStart));
+
+          if (infoload->next != NULL)
+            printf("<hr>\n");
+    }
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  printTrackHtml(tdb);
+}
 void doCddInfo(struct trackDb *tdb, char *itemName)
 {
   char *track = tdb->tableName;
@@ -3076,6 +3126,61 @@ void doCddInfo(struct trackDb *tdb, char *itemName)
   sqlFreeResult(&sr);
   hFreeConn(&conn);
   cddInfoFree(&infoload);
+  printTrackHtml(tdb);
+}
+void domegablastInfo(struct trackDb *tdb, char *itemName)
+{
+  char *track = tdb->tableName;
+  char query[512];
+  struct sqlConnection *conn = hAllocConn(database);
+  struct sqlResult *sr;
+  char *dupe, *words[16];
+  char **row;
+  int wordCount;
+  int rowOffset;
+  struct megablastInfo *infoload;
+  int start = cartInt(cart, "o");
+  int end = cartInt(cart, "t");
+
+
+  genericHeader(tdb,itemName);
+  dupe = cloneString(tdb->type);
+  wordCount = chopLine(dupe, words);
+
+  rowOffset = hOffsetPastBin(database,seqName, track);
+
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = '%d';", track, itemName,seqName,start, end);
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
+    {
+        infoload = megablastInfoLoad(row+rowOffset);
+    printf("<B>Name:</B> %s<BR>\n", infoload->name);
+    printf("<B>Accession:</B>  %s<A HREF=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" TARGET=_blank>",
+           infoload->name, infoload->name);
+    printf(" Link to NCBI Site</A> <BR>\n");
+    printf("<B>Description:</B> %s<BR>\n", infoload->fullname);
+    printf("<B>E-value:</B> %0.0e", infoload->evalue);
+    #ifdef LISTUI
+    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=evalue&db=%s\">Sort by E-value</A>",database);
+    #endif
+    printf("<BR>\n");
+    printf("<B>Protein Identity:</B> %u%%\n", infoload->percentident);
+    #ifdef LISTUI
+    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=percentident&db=%s\">Sort by Percent Identity</A>",database);
+    #endif
+    printf("<BR>\n");
+          printf("<B>Position:</B> "
+                 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                 hgTracksPathAndSettings(), database, infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
+          printf("%s:%d-%d</A><BR>\n", infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
+          printf("<B>Strand:</B> %s<BR>\n", infoload->strand);
+          printf("<B>Genomic size: </B> %d nt<BR>\n", (infoload->chromEnd - infoload->chromStart));
+          if (infoload->next != NULL)
+            printf("<hr>\n");
+    }
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  megablastInfoFree(&infoload);
   printTrackHtml(tdb);
 }
 void doAlignInfo(struct trackDb *tdb, char *itemName)
@@ -3231,6 +3336,14 @@ else if (sameWord(track,"alignInfo"))
 else if (sameWord(track,"arCOGs"))
   {
     doarCOGs(tdb, item);
+  }
+else if (sameWord(track,"megablastInfo") || sameWord(track,"vecScreenInfo"))
+  {
+    domegablastInfo(tdb, item);
+  }
+else if (sameWord(track,"loweOrthologs"))
+  {
+    doloweOrthologs(tdb, item);
   }
 else
     return FALSE;
