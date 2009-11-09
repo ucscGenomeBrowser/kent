@@ -1,4 +1,5 @@
 /* udcFuse - FUSE (Filesystem in USErspace) filesystem for lib/udc.c (Url Data Cache). */
+#ifdef USE_FUSE
 #include "common.h"
 #include "portable.h"
 #include "errCatch.h"
@@ -12,7 +13,7 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.2 2009/11/06 05:16:01 angie Exp $";
+static char const rcsid[] = "$Id: udcFuse.c,v 1.3 2009/11/09 18:41:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -110,7 +111,7 @@ if (stbuf->st_mode | S_IFDIR)
 	    // prevent callers from reading past that.  
 	    char buf[4096];
 	    char *url = NULL;
-	    int size = -1;
+	    long long size = -1;
 	    ERR_CATCH_START();
 	    url = udcPathToUrl(path, buf, sizeof(buf), NULL);
 	    size = udcSizeFromCache(url, NULL);
@@ -234,10 +235,8 @@ if (udcf == NULL)
     }
 ERR_CATCH_START();
 udcSeek(udcf, (bits64)offset);
-ERR_CATCH_END("udcSeek");
-ERR_CATCH_START();
 size = udcRead(udcf, buf, size);
-ERR_CATCH_END("udcRead");
+ERR_CATCH_END("udcSeek or udcRead");
 fprintf(stderr, "...[%d] read %lld bytes finish %ld\n", pid, (long long)size, clock1000());
 return size;
 }
@@ -394,3 +393,5 @@ checkRet(ret);
 return 0;
 #endif//def UDC_TEST
 }
+
+#endif//def USE_FUSE
