@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.58 2009/11/07 17:41:04 hartera Exp $";
+#	"$Id: hg19.txt,v 1.59 2009/11/09 19:06:29 hartera Exp $";
 
 #############################################################################
 
@@ -7898,6 +7898,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # The script, runCheckTableCoordsDayOld, found this error in the table:
     # hg19.genomicSuperDups has 28 records with chrom not described in
     # chromInfo. 
+    cd /hive/data/genomes/hg19/bed/genomicSuperDup
     awk '{print $1}' hg19genomicSuperDups | sort | uniq > chroms
     awk '{print $7}' hg19genomicSuperDups | sort | uniq > otherChroms
     # Found several cases where the last letter of random is missed off
