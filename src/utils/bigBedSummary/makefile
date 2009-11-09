@@ -5,9 +5,9 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkweb.a
 
 A = bigBedSummary
-O = bigBedSummary.o
+O = ${A}.o
 
-bigBedSummary: ${O} ${MYLIBS}
+$A: ${O} ${MYLIBS}
 	@${MKDIR} "${DESTDIR}${BINDIR}"
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}

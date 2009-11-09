@@ -1,14 +1,15 @@
 include ../../inc/common.mk
 
-L = -lm
+L += -lm ${SOCKETLIB}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ${MYLIBDIR}/jkweb.a
 
-O = bigBedInfo.o
+A = bigBedInfo
+O = ${A}.o
 
-bigBedInfo: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/bigBedInfo $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/bigBedInfo${EXE}
-
+$A: ${O} ${MYLIBS}
+	@${MKDIR} "${DESTDIR}${BINDIR}"
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 clean:
 	rm -f $O
