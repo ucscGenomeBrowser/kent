@@ -95,13 +95,15 @@ while ( $i <= $#files )
 	break
     endif
     # move the beta tag in cvs to track the change to this week's branch.
-    set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
-    echo $cmd
-    $cmd
-    if ( $status ) then 
-	echo "error moving cvs beta tag for $f"
-	set err=1
-	break
+    if (-e pushedToRR.flag ) then
+	set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
+	echo $cmd
+	$cmd
+	if ( $status ) then 
+	    echo "error moving cvs beta tag for $f"
+	    set err=1
+	    break
+	endif
     endif
     # update the file from cvs branch in branch sandbox.
     if ( -d $dir/$f:h ) then

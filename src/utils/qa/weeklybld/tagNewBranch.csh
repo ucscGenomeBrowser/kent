@@ -49,18 +49,9 @@ if ( $status ) then
 endif
 echo "new branch and tag v$BRANCHNN created. [${0}: `date`]"
 
-echo
-echo "moving tag beta... [${0}: `date`]"
-# new way (faster, but does it work? attic files ok?):
-cvs -d hgwdev:$CVSROOT rtag -Fa -rv${BRANCHNN}_branch beta kent >& /dev/null
-# old way (works but slower)
-#cvs -d hgwdev:$CVSROOT rtag -da beta kent >& /dev/null
-#cvs -d hgwdev:$CVSROOT rtag -rv${BRANCHNN}_branch beta kent >& /dev/null
-if ( $status ) then
- echo "cvs rtag failed for beta tag with new version# $BRANCHNN on $HOST [${0}: `date`]"
- exit 1
+if (-e pushedToRR.flag ) then
+    rm pushedToRR.flag
 endif
-echo "beta regular tag moved to the new branch v$BRANCHNN. [${0}: `date`]"
 
 exit 0
 
