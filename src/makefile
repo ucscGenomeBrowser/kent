@@ -54,7 +54,7 @@ blatSuite: topLibs
 #	of DESTDIR and BINDIR
 
 UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
-        bigBedSummary bigBedToBed \
+        bigBedInfo bigBedSummary bigBedToBed \
 	bigWigInfo bigWigSummary bigWigToBedGraph \
 	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib \
 	faToTwoBit gtfToGenePred htmlCheck nibFrag stringify \
