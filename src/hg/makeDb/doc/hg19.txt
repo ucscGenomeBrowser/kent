@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.59 2009/11/09 19:06:29 hartera Exp $";
+#	"$Id: hg19.txt,v 1.60 2009/11/09 19:17:24 hartera Exp $";
 
 #############################################################################
 
@@ -7871,6 +7871,11 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # in Evan Eichler's lab.
 # (2009-11-07, hartera, DONE) Re-loaded table after correcting some chromosome
 # names.  
+# NOTE: Received e-mail from Tin Louie suggesting that the otherSize 
+# column could be dropped. It is just the size of the otherChrom and it 
+# does not seem to be used for the track display or details page. It has the
+# correct description in the table schema so it is ok to keep it for now. 
+# In the future, this column could be dropped if it not useful.
     mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
     cd /hive/data/genomes/hg19/bed/genomicSuperDups
    
@@ -7910,7 +7915,15 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     grep -v random chroms | grep rando | sort | uniq > chromsToCorrect
     grep -v random otherChroms | grep rando | sort | uniq > otherChromsToCorrect
     diff chromsToCorrect otherChromsToCorrect
-    # No difference so use chromsToCorrect file. 
+    # No difference so use chromsToCorrect file. There are 7 chrom names that 
+    # need to be corrected and they are:
+#chr11_gl000202_rando
+#chr17_gl000203_rando
+#chr17_gl000204_rando
+#chr17_gl000205_rando
+#chr17_gl000206_rando
+#chr19_gl000209_rando
+#chr21_gl000210_rando 
     cp hg19genomicSuperDups hg19genomicSuperDups.orig
     foreach c (`cat chromsToCorrect`)
        perl -pi.bak -e "s/${c}/${c}m/g" hg19genomicSuperDups
