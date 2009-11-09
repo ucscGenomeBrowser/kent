@@ -137,6 +137,11 @@ void customTrackUpdateFromConfig(struct customTrack *ct, char *genomeDb,
 char *customTrackUserConfig(struct customTrack *ct);
 /* return user-defined track line and browser lines */
 
+void customFactoryEnableExtraChecking(boolean enable);
+/* Enable/disable extra checking of custom tracks in customFactoryParse.
+ * E.g. extra checking is great the first time we read in a custom track,
+ * but we don't need it for every hgTracks call. */
+
 #endif /* CUSTOMFACTORY_H */
 
 

@@ -32,7 +32,9 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.108 2009/11/05 18:48:36 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.109 2009/11/09 22:31:15 angie Exp $";
+
+static boolean doExtraChecking = FALSE;
 
 /*** Utility routines used by many factories. ***/
 
@@ -1523,9 +1525,12 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bam (%s)", track->tdb->shortLabel);
-if (!bamFileExists(bigDataUrl))
-    errAbort("Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
-	     track->tdb->shortLabel, bigDataUrl, bigDataUrl);
+if (doExtraChecking)
+    {
+    if (!bamFileExists(bigDataUrl))
+	errAbort("Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
+		 track->tdb->shortLabel, bigDataUrl, bigDataUrl);
+    }
 return track;
 }
 
@@ -2404,3 +2409,12 @@ char *ctOrigTrackLine(struct customTrack *ct)
 {
 return trackDbSetting(ct->tdb, "origTrackLine");
 }
+
+void customFactoryEnableExtraChecking(boolean enable)
+/* Enable/disable extra checking of custom tracks in customFactoryParse.
+ * E.g. extra checking is great the first time we read in a custom track,
+ * but we don't need it for every hgTracks call. */
+{
+doExtraChecking = enable;
+}
+
