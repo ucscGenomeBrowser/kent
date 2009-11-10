@@ -12,7 +12,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.31 2008/08/05 17:54:00 kuhn Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.32 2009/11/10 23:23:59 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -253,7 +253,7 @@ for (link = linkList; link != NULL; link = link->next)
 			{
 			if (depth > 1 && isLocal)
 			    {
-			    char *contentType = hashFindVal(headerHash, "Content-Type:");
+			    char *contentType = hashFindValUpperCase(headerHash, "Content-Type:");
 			    if (contentType != NULL && startsWith("text/html", contentType))
 				{
 				char *fullText = slurpUrl(url);

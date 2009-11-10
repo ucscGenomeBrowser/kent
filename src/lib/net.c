@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.75 2009/10/20 22:39:47 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.76 2009/11/10 23:23:58 angie Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -902,7 +902,8 @@ return netOpenHttpExt(url, "GET", NULL);
 int netUrlHead(char *url, struct hash *hash)
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
- * lines, including hopefully Content-Type: */
+ * lines with upper cased keywords for case-insensitive lookup, 
+ * including hopefully CONTENT-TYPE: . */
 {
 int sd = netOpenHttpExt(url, "HEAD", NULL);
 int status = EIO;
@@ -927,7 +928,7 @@ if (sd >= 0)
 			word = nextWord(&line);
 			if (word == NULL)
 			    break;
-			hashAdd(hash, word, cloneString(skipLeadingSpaces(line)));
+			hashAdd(hash, strUpper(word), cloneString(skipLeadingSpaces(line)));
 			}
 		    }
 		}

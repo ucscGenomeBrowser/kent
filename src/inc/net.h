@@ -133,7 +133,8 @@ struct hash;
 int netUrlHead(char *url, struct hash *hash);
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
- * lines, including hopefully Content-Type: */
+ * lines with upper cased keywords for case-insensitive lookup, 
+ * including hopefully CONTENT-TYPE: . */
 
 struct lineFile *netLineFileOpen(char *url);
 /* Return a lineFile attached to url.  This one

@@ -264,7 +264,7 @@ struct hash *hash = newHash(0);
 int status = netUrlHead(url, hash);
 if (status != 200) // && status != 302 && status != 301)
     return FALSE;
-char *sizeString = hashFindVal(hash, "Content-Length:");
+char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
     hashFree(&hash);
@@ -272,11 +272,17 @@ if (sizeString == NULL)
     }
 retInfo->size = atoll(sizeString);
 
-char *lastModString = hashFindVal(hash, "Last-Modified:");
+char *lastModString = hashFindValUpperCase(hash, "Last-Modified:");
 if (lastModString == NULL)
     {
-    hashFree(&hash);
-    errAbort("No Last-Modified: returned in header for %s, can't proceed, sorry", url);
+    // Date is a poor substitute!  It will always appear that the cache is stale.
+    // But at least we can read files from dropbox.com.
+    lastModString = hashFindValUpperCase(hash, "Date:");
+    if (lastModString == NULL)
+	{
+	hashFree(&hash);
+	errAbort("No Last-Modified: or Date: returned in header for %s, can't proceed, sorry", url);
+	}
     }
 
 // Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
