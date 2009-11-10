@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = validateFiles.o
 
 validateFiles: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/validateFiles $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/validateFiles${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/validateFiles $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/validateFiles${EXE}
 
 clean:
 	rm -f $O

@@ -3378,7 +3378,6 @@ spectrum on
 type netAlign bosTau1 chainBosTau1
 otherDb bosTau1
 
-# release alpha until equCab1 phased out
 track chainNetEquCab2
 compositeTrack on
 shortLabel Horse Chain/Net
@@ -3402,7 +3401,6 @@ chainMinScore 3000
 chainLinearGap medium
 spectrum on
 html chainNet
-release alpha
 
     track chainEquCab2
     subTrack chainNetEquCab2

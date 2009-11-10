@@ -6,10 +6,12 @@ MYLIBS = ${MYLIBDIR}/jkweb.a
 
 A = bedClip
 O = bedClip.o
+B = ${DESTDIR}${BINDIR}/${A}${EXE}
 
 bedClip: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	@${MKDIR} `dirname $B`
+	${CC} ${COPT} -o ${B} $O ${MYLIBS} $L
+	${STRIP} ${B}
 
 compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L

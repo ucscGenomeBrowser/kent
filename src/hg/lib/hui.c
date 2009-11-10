@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.240 2009/09/24 23:15:44 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.244 2009/10/26 23:06:11 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -31,11 +31,16 @@ static char const rcsid[] = "$Id: hui.c,v 1.240 2009/09/24 23:15:44 hiram Exp $"
 #define CLEAR_BUTTON_LABEL      "clear"
 #define JBUFSIZE 2048
 
-#define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-#define DEF_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); return (setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(anc),(anc),(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
-#define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
-#define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
+//#define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
+//#define DEF_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); return (setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
+//#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(anc),(anc),(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
+//#define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
+//#define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
+#define PM_BUTTON  "<IMG height=18 width=18 onclick=\"setCheckBoxesThatContain('%s',%s,true,'%s','','%s');\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
+#define DEF_BUTTON "<IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s');\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
+#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
+#define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
+#define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
@@ -1411,7 +1416,7 @@ return x;
 void wiggleAlwaysZeroDropDown(char *var, char *curVal)
 /* Make drop down of options. */
 {
-cgiMakeDropList(var, wiggleAlwaysZeroOptions, 
+cgiMakeDropList(var, wiggleAlwaysZeroOptions,
     ArraySize(wiggleAlwaysZeroOptions), curVal);
 }
 
@@ -3069,7 +3074,7 @@ if (!primarySubtrack)
         int sIx=0;
         for(sIx=0;sIx<sortOrder->count;sIx++)
             {
-            printf ("<TH id='%s.%s.sortTh' abbr='%c' onMouseOver=\"hintOverSortableColumnHeader(this)\" nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
+            printf ("<TH id='%s.%s.sortTh' abbr='%c' nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
                 parentTdb->tableName,sortOrder->column[sIx],(sortOrder->forward[sIx]?'-':'+'),sortOrder->column[sIx],sortOrder->title[sIx],(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
             if (sortOrder->count > 1)
                 printf ("%d",sortOrder->order[sIx]);
@@ -3166,7 +3171,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 
             printf(" id=\"tr_%s\" nowrap%s>\n<TD>",id,(selectedOnly?" style='display:none'":""));
             dyStringClear(dyHtml);
-            dyStringPrintf(dyHtml, "onclick='matSubtrackCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subtrackCB");
+            dyStringPrintf(dyHtml, "onclick='matSubCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subCB");
             for(di=0;di<dimMax;di++)
                 {
                 if(dimensions[di] && -1 != (ix = stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count)))
@@ -3251,6 +3256,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
+if(slCount(parentTdb->subtracks) > 5)
+    puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT id='subCBcount'></font>");
 puts("<P>");
 //if (!preSorted && sortOrder != NULL)  // No longer need to do this since hgTrackDb should sort composites with sortOrder and set priorities
 //    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
@@ -4686,6 +4693,7 @@ static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struc
 int ix;
 struct trackDb *subtrack;
 char objName[SMALLBUF];
+char classes[SMALLBUF];
 char javascript[JBUFSIZE];
 #define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A id='a_cfg_%s' HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
 #define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
@@ -4753,7 +4761,8 @@ for (ix = 0; ix < membersOfView->count; ix++)
         safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
 
         printf("<TD>");
-        hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,"viewDd normalText",javascript);
+        safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->names[ix]);
+        hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,classes,javascript);
         puts(" &nbsp; &nbsp; &nbsp;</TD>");
         // Until the cfg boxes are inserted here, this divorces the relationship
         //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
@@ -4842,16 +4851,16 @@ freeMem(words[0]);
 return cloneString(label);
 }
 
-#define PM_BUTTON_UC "<A NAME='%s'></A><A HREF='#%s'><IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'></A>"
+#define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'>"
 static void buttonsForAll()
 {
-printf(PM_BUTTON_UC, "plus_all", "plus_all", "true",  "", "", "", "", "",  "plus_all",    "add_sm.gif");
-printf(PM_BUTTON_UC,"minus_all","minus_all","false",  "", "", "", "", "", "minus_all", "remove_sm.gif");
+printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
+printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
 }
 static void buttonsForOne(char *name,char *class)
 {
-printf(PM_BUTTON_UC, name, name,  "true", ",'", class, "'", "", "", name,    "add_sm.gif");
-printf(PM_BUTTON_UC, name, name, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
+printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
+printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 }
 
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
@@ -4974,14 +4983,12 @@ else if (left && dimensionY && childTdb != NULL)
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
 }
 
-
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
 {
 //int ix;
 char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-boolean alreadySet = TRUE;
 struct trackDb *subtrack;
 
 if(!dimensionsExist(parentTdb))
@@ -5047,7 +5054,7 @@ else if(!dimensionX && dimensionY)
 else if(dimensionX && dimensionY && !dimensionZ)
     safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->title,dimensionY->title);
 else //if(dimensionX && dimensionY && dimensionZ)
-    safef(javascript, sizeof(javascript), "%s, %s and %s:</B>",dimensionX->title,dimensionY->title,dimensionZ->title);
+    safef(javascript, sizeof(javascript), "%s, %s and %s:</B>",dimensionZ->title,dimensionX->title,dimensionY->title);
 puts(strLower(javascript));
 
 if(!subgroupingExists(parentTdb,"view"))
@@ -5055,7 +5062,31 @@ if(!subgroupingExists(parentTdb,"view"))
 
 puts("<BR>\n");
 
-printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
+if(dimensionZ)
+    {
+    printf("<BR><TABLE>\n");
+    printf("<TR><TH valign=top align=left colspan=2 rowspan=20>&nbsp;&nbsp;<B><EM>%s</EM></B>:",dimensionZ->title);
+    char *dimZdefaults = trackDbSettingOrDefault(parentTdb,"dimensionZchecked","");
+    boolean alreadySet=FALSE;
+    for(ixZ=0;ixZ<sizeOfZ;ixZ++)
+        {
+        if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
+            {
+            printf("<TH align=left nowrap>");
+            safef(objName, sizeof(objName), "%s.mat_%s_dimZ_cb",parentTdb->tableName,dimensionZ->names[ixZ]);
+            alreadySet=(NULL!=findWordByDelimiter(dimensionZ->names[ixZ],',',dimZdefaults));
+            alreadySet=cartUsualBoolean(cart,objName,alreadySet);
+            struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
+            dyStringPrintf(dyJS, " class=\"matCB dimZ %s\"",dimensionZ->names[ixZ]);
+            cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));// dimZ is set by cart variable, while X and Y are set by subtrack sets
+            printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
+            puts("</TH>");
+            }
+        }
+    puts("</TD></TR></TABLE>");
+    }
+
+printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
 matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,TRUE);
 
@@ -5071,6 +5102,8 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
 
         matrixYheadings(parentTdb, dimensionX,dimensionY,ixY,tdbsY[ixY],TRUE);
 
+#define MAT_CB_SETUP "<INPUT TYPE=CHECKBOX NAME='%s' VALUE=on %s>"
+#define MAT_CB(name,js) printf(MAT_CB_SETUP,(name),(js));
         for (ixX = 0; ixX < sizeOfX; ixX++)
             {
             if(tdbsX[ixX] != NULL || dimensionX == NULL)
@@ -5083,29 +5116,23 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     break;
                 if(cells[ixX][ixY] > 0)
                     {
+                    struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
                     if(dimensionX && dimensionY)
                         {
                         safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
-                        safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\",\"%s\");'",
-                            dimensionX->names[ixX],dimensionY->names[ixY]);
                         }
                     else
                         {
                         safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                        safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
-                            (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
                         }
-                    alreadySet = cartUsualBoolean(cart, objName, FALSE);
                     puts("<TD>");
-                    struct dyString *dyJS = newDyString(100);
-                    dyStringAppend(dyJS, javascript);
-                    dyStringPrintf(dyJS, " class=\"matrixCB");
+                    dyStringPrintf(dyJS, " class=\"matCB");
                     if(dimensionX)
                         dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
                     if(dimensionY)
                         dyStringPrintf(dyJS, " %s",dimensionY->names[ixY]);
                     dyStringAppendC(dyJS,'"');
-                    cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
+                    MAT_CB(objName,dyStringCannibalize(&dyJS)); // X&Y are set by javascript page load
                     puts("</TD>");
                     }
                 else
@@ -5120,35 +5147,6 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
 if(dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
     matrixXheadings(parentTdb,dimensionX,dimensionY,tdbsX,FALSE);
 
-if(dimensionZ)
-    {
-    printf("<TR align='center' valign='bottom' BGCOLOR='%s''>",COLOR_BG_ALTDEFAULT);
-    printf("<TH class='greenRoof' STYLE='font-size: 2' colspan=50>&nbsp;</TH>");
-    printf("<TR BGCOLOR='%s'><TH valign=top align=left colspan=2 rowspan=20><B><EM>%s</EM></B>:",
-            COLOR_BG_ALTDEFAULT,dimensionZ->title);
-    int cntZ=0;
-    for(ixZ=0;ixZ<sizeOfZ;ixZ++)
-        {
-        if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
-            {
-            if(cntZ > 0 && (cntZ % cntX) == 0)
-                printf("</TR><TR BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-            printf("<TH align=left nowrap>");
-            safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
-            safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
-            alreadySet = cartUsualBoolean(cart, objName, FALSE);
-            struct dyString *dyJS = newDyString(100);
-            dyStringAppend(dyJS, javascript);
-            dyStringPrintf(dyJS, " class=\"matrixCB dimZ %s\"",dimensionZ->names[ixZ]);
-            cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
-            printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
-            puts("</TH>");
-            cntZ++;
-            }
-        }
-    if((cntZ % cntX) > 0)
-        printf("<TH colspan=%d>&nbsp;</TH>",cntX);
-    }
 puts("</TD></TR></TABLE>");
 
 subgroupMembersFree(&dimensionX);
@@ -5168,9 +5166,9 @@ if(slCount(parentTdb->subtracks) <= 1)
 if(dimensionsExist(parentTdb))
     return FALSE;
 
-#define PM_BUTTON_GLOBAL "<A NAME='%s'></A><A HREF='#%s'><IMG height=18 width=18 onclick=\"return (subtrackCBsSetAll(%s) == false);\" id='btn_%s' src='../images/%s'></A>"
-#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL, "plus_all", "plus_all", "true", "plus_all",   "add_sm.gif")
-#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"minus_all","minus_all","false","minus_all","remove_sm.gif")
+#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"subtrackCBsSetAll(%s);\" id='btn_%s' src='../images/%s'>"
+#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 printf("<P><B>Select subtracks:</B><P>All:&nbsp;");
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();

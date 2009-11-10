@@ -224,7 +224,7 @@
 #include "jsHelper.h"
 #include "virusClick.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1578 2009/10/08 06:38:25 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1579 2009/10/26 15:32:52 aamp Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3551,6 +3551,10 @@ if (wordCount > 0)
 	{
 	doEncodePeak(tdb, NULL);
 	}
+    else if (sameString(type, "encodeFiveC"))
+	{
+	doEncodeFiveC(conn, tdb);
+	}   
     else if (sameString(type, "chromGraph"))
 	{
 	doChromGraph(tdb);

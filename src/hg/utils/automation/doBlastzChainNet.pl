@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.29 2009/06/08 18:42:40 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.30 2009/10/26 20:54:43 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -1406,6 +1406,9 @@ already been performed).";
 rm -fr $outRoot/
 $rootCanal
 rm -fr $buildDir/axtChain/run/chain/
+rm -fr $buildDir/axtChain/run/err/
+rm -fr $buildDir/run.blastz/err/
+rm -fr $buildDir/run.cat/err/
 rm -f  $buildDir/axtChain/noClass.net
 rm -f  $buildDir/run.blastz/batch.bak
 rm -f  $buildDir/run.cat/batch.bak

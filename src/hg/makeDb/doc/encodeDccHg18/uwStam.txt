@@ -251,3 +251,105 @@ encodeDownloadsPage.pl index.html
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 622 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 623 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 626 displayed
+
+2009-10-12 Catch up with ChIPseq submissions
+============================================
+| 671 | UwChIPSeq-BJ-H3K4me3-rep2 sep09         | loaded |      21 | 
+| 672 | UwChIPSeq-GM06990-H3K4me3-rep2 sep09    | loaded |      21 | 
+| 673 | UwChIPSeq-GM12878-H3K4me3-rep2 sep09    | loaded |      21 | 
+| 674 | UwChIPSeq-HL-60-H3K4me3-rep1 sep09      | loaded |      21 | 
+| 675 | UwChIPSeq-HL-60-H3K4me3-rep2 sep09      | loaded |      21 | 
+| 676 | UwChIPSeq-HMEC-CTCF-rep1 sep09          | loaded |      21 | 
+| 677 | UwChIPSeq-HMEC-H3K27me3-rep1 sep09      | loaded |      21 | 
+| 678 | UwChIPSeq-HUVEC-H3K27me3-rep1 sep09     | loaded |      21 | 
+| 679 | UwChIPSeq-SAEC-H3K4me3-rep1 sep09       | loaded |      21 | 
+| 680 | UwChIPSeq-SAEC-H3K4me3-rep2 sep09       | loaded |      21 | 
+| 681 | UwChIPSeq-SAEC-H3K27me3.rep sep09       | loaded |      21 | 
+| 682 | UwChIPSeq-SK-N-SH_RA-H3K4me3-rep1 sep09 | loaded |      21 | 
+| 683 | UwChIPSeq-SK-N-SH_RA-H3K4me3-rep2 sep09 | loaded |      21 | 
+| 684 | UwChIPSeq-HUVEC-H3K27me3-rep2 sep09     | loaded |      21 | 
+# Loaded into trackDb 
+
+| 652 | UwChIPSeq-BJ-tert-H3K4me3-rep1 sep09    | loaded |      21 | 
+| 654 | UwChIPSeq-GM06990-H3K4me3-rep1 sep09    | loaded |      21 | 
+| 655 | UwChIPSeq-HeLa-S3-H3K4me3-rep1 sep09    | loaded |      21 | 
+| 656 | UwChIPSeq-HeLa-S3-H3K4me3-rep2 sep09    | loaded |      21 | 
+| 657 | UwChIPSeq-HRE-H3K4me3-rep2 sep09        | loaded |      21 | 
+| 658 | UwChIPSeq-HUVEC-H3K4me3-rep2 sep09      | loaded |      21 | 
+| 659 | UwChIPSeq-K562-CTCF-rep1 sep09          | loaded |      21 | 
+| 660 | UwChIPSeq-K562-H3K4me3-rep1 sep09       | loaded |      21 | 
+| 661 | UwChIPSeq-NHEK-H3K4me3-rep2 sep09       | loaded |      21 | 
+### Missing trackDb.ra???
+# All of the DDFs are empty.  Make ddfs and resubmit
+
+#edit trackDb.wgEncode.ra
+make alpha DBS=hg18
+
+cd {downloadsDir}
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/652/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/654/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/655/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/656/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/657/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/658/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/659/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/660/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/661/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/671/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/672/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/673/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/674/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/675/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/676/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/677/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/678/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/679/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/680/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/681/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/682/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/683/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/684/out/fileDb.ra | grep parentTable >> tmp.txt
+# edit tmp.txt
+cp fileDb.ra fileDb.ra.2009-10-13
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 652 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 654 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 655 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 656 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 657 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 658 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 659 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 660 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 661 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 671 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 672 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 673 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 674 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 675 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 676 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 677 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 678 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 679 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 680 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 681 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 682 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 683 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 684 displayed
+
+#submission 520 replacing 298
+# submission 598 replacing 301
+# submission 626 replaces 303
+# submission 606 replaces 304
+# submission 608 replaces partial 406
+# submission 677 (replacing 600)
+# submission 678 (replacing 605)
+# submission 659 (replaces 307)
+# submission 660 (replaces 611,308)
+
+update projects set status = "superceded" where id in (298,301,303,304,307,308,600,605,611); 
+update projects set status = "revoked" where id in (597,602,607); 
+
+ 

@@ -422,7 +422,7 @@ _pf_nil_check(agent);
 
 /* Do the real work of opening network connection and saving
  * result on return stack. */
-fd = netHttpConnect(url->s, method->s, agent->s, protocol->s);
+fd = netHttpConnect(url->s, method->s, agent->s, protocol->s, NULL);
 stack[0].v = fileFromFILE(mustFdopen(fd, url->s, "r+"), url);
 
 /* Clean up input, except for URL which got moved to file. */

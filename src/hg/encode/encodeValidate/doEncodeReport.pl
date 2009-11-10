@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.2 2009/11/06 05:33:22 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.1 2009/10/23 01:17:05 kate Exp $
 
 use warnings;
 use strict;
@@ -21,8 +21,8 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-#use lib "/cluster/home/kate/kent/src/hg/utils/automation";
+#use lib "/cluster/bin/scripts";
+use lib "/cluster/home/kate/kent/src/hg/utils/automation";
 use Encode;
 use HgAutomate;
 use HgDb;
@@ -82,13 +82,13 @@ HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 
 my %terms = Encode::getControlledVocab($configPath);
 # use pi.ra file to map pi/lab/institution/grant/project
-my $labRef = Encode::getLabs($configPath);
-my %labHash = %{$labRef};
+my $piRef = Encode::getPIs($configPath);
+my %piHash = %{$piRef};
 
 # parse all trackDb entries w/ metadata setting into hash of submissions, keyed
 my $dbh = HgDb->new(DB => $assembly);
 my $sth = $dbh->execute(
-        "select settings, tableName from trackDb where settings like \'\%metadata\%\'");
+        "select settings from trackDb where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
 printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
@@ -97,7 +97,6 @@ printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
         "Status", "Submission IDs");
 while (@row = $sth->fetchrow_array()) {
     my $settings = $row[0];
-    my $tableName = $row[1];
     # strip down to just tag=value in the metadata line
     $settings =~ tr/\n/|/;
     $settings =~ s/^.*metadata //;  
@@ -108,9 +107,9 @@ while (@row = $sth->fetchrow_array()) {
     $experiment{"project"} = "unknown";
     $experiment{"project"} = $metadata{"grant"};
     my $project;
-    foreach my $lab (keys %labHash) {
-        if ($labHash{$lab}->{"grant"} eq $metadata{"grant"}) {
-            $experiment{"project"} = $labHash{$lab}->{"project"};
+    foreach my $pi (keys %piHash) {
+        if ($piHash{$pi}->{"grant"} eq $metadata{"grant"}) {
+            $experiment{"project"} = $piHash{$pi}->{"project"};
             last;
         }
     }
@@ -121,8 +120,6 @@ while (@row = $sth->fetchrow_array()) {
     if (defined($metadata{"cell"})) {
         $experiment{"cell"} = $metadata{"cell"};
     }
-    #print STDERR "    tableName  " . $tableName . "\n";
-
     # determine term type for experiment parameters 
     my %vars = ();
     my @termTypes = (keys %terms);
@@ -144,6 +141,7 @@ while (@row = $sth->fetchrow_array()) {
         }
         chop $experiment{"vars"};
     }
+
     $experiment{"version"} = "V1";
     if (defined($metadata{"submittedDataVersion"})) {
         $experiment{"version"} = $metadata{"submittedDataVersion"};
@@ -167,15 +165,13 @@ while (@row = $sth->fetchrow_array()) {
     if (defined($metadata{"subId"})) {
         $experiment{"id"} = $metadata{"subId"};
     }
-    #print STDERR "    ID  " . $experiment{"id"} "\n";
-
+    #print "    ID  " . $experiment{"id"} . ":";
 
     die "undefined project" unless defined($experiment{"project"});
     die "undefined lab" unless defined($experiment{"lab"});
     die "undefined dataType" unless defined($experiment{"dataType"});
     die "undefined cell" unless defined($experiment{"cell"});
     die "undefined vars" unless defined($experiment{"vars"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined submitDate" unless defined($experiment{"submitDate"});
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
@@ -217,33 +213,29 @@ $dbh->{DBH}->disconnect;
 
 $dbh = HgDb->new(DB => $pipeline);
 $sth = $dbh->execute( 
-    "select lab, data_type, metadata, created_at, updated_at, status, id, name from projects order by id");
+    "select lab, data_type, metadata, created_at, updated_at, status, id from projects order by id");
 
 while (@row = $sth->fetchrow_array()) {
     my $lab = $row[0];
-    my $status = $row[5];
     my $id = $row[6];
-    my $name = $row[7];
     # lookup in pi hash to find project
-    my $project = "unknown";
-    if (defined($lab)) {
-        foreach my $lab (keys %labHash) {
-            if ($labHash{$lab}->{"lab"} eq $lab) {
-                $project = $labHash{$lab}->{"project"};
-                last;
-            }
+    my $project;
+    foreach my $pi (keys %piHash) {
+        if (!defined($lab)) {
+            warn "lab undefined, subId=" . $id . "\n";
+            next;
         }
-    } else {
-        warn "lab undefined, subId=" . $id . " " . $status . " " . $name . "\n";
-        next;
+        if ($piHash{$pi}->{"lab"} eq $lab) {
+            $project = $piHash{$pi}->{"project"};
+            last;
+        }
     }
-    if ($project eq "unknown") {
-        warn "     project unknown for lab " . $lab . " subId=" . $id . " " . $name . "\n";
-    }
+
     my $dataType = $row[1];
     # note: lcase the datatype before generating key (inconsistent in DAFs)
     my $created_at = $row[3];
     my $updated_at = $row[4];
+    my $status = $row[5];
     my $version = "V1";         # need this in project table
     my $cell = "none";
     my $varString = "none";
@@ -314,18 +306,6 @@ $dbh->{DBH}->disconnect;
 # print out results
 foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
-    #print STDERR "    id " . $experiment{"id"} . " " . $key . "\n";
-    die "undefined project" unless defined($experiment{"project"});
-    die "undefined lab" unless defined($experiment{"lab"});
-    die "undefined dataType" unless defined($experiment{"dataType"});
-    die "undefined cell" unless defined($experiment{"cell"});
-    die "undefined vars" unless defined($experiment{"vars"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
-    die "undefined submitDate" unless defined($experiment{"submitDate"});
-    die "undefined releaseDate" unless defined($experiment{"releaseDate"});
-    die "undefined status" unless defined($experiment{"status"});
-    die "undefined id" unless defined($experiment{"id"});
     printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"lab"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 

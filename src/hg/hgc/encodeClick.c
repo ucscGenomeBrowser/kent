@@ -85,3 +85,66 @@ if (row != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+int encodeFiveCInterCmp(const void *va, const void *vb)
+/* reverse sort on bed nine's reserved field which in this */
+/* case is the where the strength of the interaction is stored */ 
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+return b->itemRgb - a->itemRgb;
+}
+
+void doEncodeFiveC(struct sqlConnection *conn, struct trackDb *tdb)
+/* Print details for 5C track */
+{
+char *interTable = trackDbRequiredSetting(tdb, "interTable");
+char *interTableKind = trackDbRequiredSetting(tdb, "interTableKind");
+char **row;
+char *chrom = cgiString("c");
+int start = cgiInt("o");
+int end = cgiInt("t");
+int rowOffset;
+int outCount = 0;
+struct sqlResult *sr;
+struct bed *interList = NULL, *inter;
+genericHeader(tdb, NULL);
+sr = hOrderedRangeQuery(conn, interTable, chrom, start, end, NULL, &rowOffset);
+printf("<B>Position:</B> "
+       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+       hgTracksPathAndSettings(), database, chrom, start+1, end, chrom, start+1, end);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    inter = bedLoadN(row + rowOffset, 9);
+    slAddHead(&interList, inter);
+    }
+slSort(&interList, encodeFiveCInterCmp);
+webNewSection("Top %s interations", interTableKind);
+webPrintLinkTableStart();
+webPrintLabelCell("Position");
+webPrintLabelCell("5C signal");
+webPrintLabelCell("Distance");
+webPrintLinkTableNewRow();
+for (inter = interList; inter != NULL; inter = inter->next)
+    {
+    char s[1024];
+    int distance = 0;
+    safef(s, sizeof(s), "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
+       hgTracksPathAndSettings(), database, chrom, inter->thickStart+1, inter->thickEnd, chrom, inter->thickStart+1, inter->thickEnd);
+    webPrintLinkCell(s);
+    safef(s, sizeof(s), "%d", inter->itemRgb);
+    webPrintLinkCell(s);
+    if (start > inter->thickStart)
+	distance = inter->thickEnd - start;
+    else 
+	distance = inter->thickStart - end;
+    safef(s, sizeof(s), "%d", distance);
+    webPrintLinkCell(s);
+    if (++outCount == 50)
+	break;
+    if (inter->next != NULL)
+	webPrintLinkTableNewRow();
+    }
+webPrintLinkTableEnd();
+sqlFreeResult(&sr);
+}

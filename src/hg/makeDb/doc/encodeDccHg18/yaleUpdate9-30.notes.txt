@@ -595,7 +595,6 @@ E) New tables:
     wgEncodeYaleChIPseqPeaksHelas3Ha
     wgEncodeYaleChIPseqPeaksHelas3Max
     wgEncodeYaleChIPseqPeaksHelas3Tr4
-    wgEncodeYaleChIPseqPeaksHelas3ifngStat1
     wgEncodeYaleChIPseqPeaksHepg2bTr4
     wgEncodeYaleChIPseqPeaksK562Bdp1
     wgEncodeYaleChIPseqPeaksK562Brf1
@@ -637,8 +636,6 @@ E) New tables:
     wgEncodeYaleChIPseqSignalHelas3Ha
     wgEncodeYaleChIPseqSignalHelas3Max
     wgEncodeYaleChIPseqSignalHelas3Tr4
-    wgEncodeYaleChIPseqSignalHelas3ifngInput
-    wgEncodeYaleChIPseqSignalHelas3ifngStat1
     wgEncodeYaleChIPseqSignalHepg2bInput
     wgEncodeYaleChIPseqSignalHepg2bTr4
     wgEncodeYaleChIPseqSignalK562Bdp1
@@ -676,7 +673,7 @@ E) New tables:
     wgEncodeYaleChIPseqSignalNt2d1Input
     wgEncodeYaleChIPseqSignalNt2d1Suz12
     wgEncodeYaleChIPseqSignalNt2d1Yy1
-    count: 92
+    count: 89
 
 E') New files:
     current location on alpha:

@@ -29,71 +29,6 @@ fields for statistical significance, including FDR
 processed data.</DD>
 </DL>
 
-<H2>Release Notes</H2>
-<ul>
-<li><em>Expression</em> data generated as confirmation of the TFBS data
-can be found in the 
-<!-- <A HREF="hgTrackUi?g=wgEncodeYaleRNAseq">Yale Poly-A</A> -->
-Yale Poly-A tracks (coming soon).
-<li>The second public release (October 2009) of this data has a number of key 
-changes:
-<table><tr>
-<tr><th align='left' valign='top' nowrap>Raw Signals</th>
-<td>The previously-available &quot;Raw Signals&quot; view of the data is no 
-longer provided as they were deemed to be of little value.
-</td></tr>
-<tr><th align='left' valign='top' nowrap>K562 v. K562b</th>
-<td>The Farnham lab used a K562 cell line variant with enough differences
-from the one used in the Snyder and Struhl labs to be labeled: K562b.
-Experiments on K562b should be contrasted with <i>Input (UCDavis)</i>.
-</td></tr>
-<tr><th align='left' valign='top' nowrap>HepG2 v. HepG2b</th>
-<td>The Farnham lab used a HepG2 cell line variant with enough differences
-from the one used in the Snyder and Struhl labs to be labeled: HepG2b.
-Experiments on HepG2b should be contrasted with <i>Input (UCDavis)</i>.
-</td></tr>
-<tr><th align='left' valign='top' nowrap>Versioned data</th>
-<td>A number of previously released datasets have been replaced by updated
-versions.  Older versions of these files are still available through the 
-<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/">ftp</A> site.
-   <table><tr><td align='left' valign='top'><i>Peaks</i></td>
-   <td>All previously released "Peaks" datasets had an off-by-one start
-       location error and missing pValues and point peaks.  Now all Peaks
-       files have these problems corrected.  Replaced files have been so
-       marked with <i>submittedDataVersion=V2</i>.</td>
-    </tr><tr><td align='left' valign='top'><i>Signals</i></td>
-    <td>Most previously released "Signal" (but not "Raw Signal") datasets
-        contained a sparse representation of the signal.  Now all Signal
-        datasets have been corrected to the continuous signal intended.
-        Replaced files have been so marked with
-        <i>submittedDataVersion=V2</i>.</td>
-    </tr><tr><td align='left' valign='top'><i>K562 Input</i></td>
-    <td>The K562 Input previously released has been replaced by two
-        differing versions marked K562 and K562b.  The K562 version used
-        by Snyder and Struhl directly replaces the older version and
-        therefore is marked as <i>submittedDataVersion=V2</i>; while the
-        K562b version used by Farnham is simply treated as a new set marked
-        as K562b.</td>
-    </tr></table>
-</td></tr>
-</table>
-<li>A small number of errors have been detected in the assigned locations for
-tags in many of the "tagAign" files available from the 
-<A TARGET=_BLANK HREF="../../goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/">download</a> 
-server.  The errors represent off-by-one or -two bases.
-While this is inaccurate data, it represents a small subset of tags.  Further,
-signal detection and peak calling from these tags is not seriously affected.
-Typically, tags are extended to the mean length (200bp) of the DNA fragments
-used in the ChIP-seq experiment.  Then pile-ups of these overlapping extended
-tags are used to build signals and call peaks. Errors of a couple
-of bases in a small percentage of tags cannot be expected to influence peak
-calling unless there were some systematic bias. But there is no evidence for
-such a bias. And even if there were, the peaks meant to represent a 200-400
-base region within which a transcription factor is binding would be little 
-affected by an off-by-one error. That said, the tagAlign files will be 
-corrected &mdash; this note will be updated or removed when this occurs.
-</ul>
-
 <H2> Methods </H2>
 <P>
 Cells were grown according to the approved
@@ -124,7 +59,72 @@ counts
 in genomic 10 kb windows) number of mapped tags in the same region from an input DNA control.
 Using a binomial test, only regions that have a p-value &lt;= 0.05 are considered to be
 significantly enriched compared to the input DNA control.
+</P>
+<P>
+Expression data generated as confirmation of the TFBS data
+can be found in the 
+<!-- <A HREF="hgTrackUi?g=wgEncodeYaleRNAseq">Yale Poly-A</A> -->
+Yale Poly-A tracks (coming soon).
 </p>
+
+<H2>Release Notes</H2>
+<P>
+This is Release 2 (Oct 2009) of this track, which includes data from
+additional experiments, and the changes described below.
+</P>
+<P>
+A number of previously released datasets have been replaced by updated versions.
+The affected database tables and files include 'V2' (or alternatively, 'Rel2')
+in the name, and metadata is marked with "submittedDataVersion=V2", 
+followed by the reason for replacement.
+Specific changes are:
+<TABLE>
+<tr><th align='left' valign='top' nowrap> <i>Peaks</i></th>
+<td>
+The previously released "Peaks" datasets had an off-by-one start location error and did not include  
+pValues and point peaks. All Peaks data now have these problems corrected.
+</td></tr>
+
+<tr><th align='left' valign='top' nowrap ><i>Signal</i></th>
+<td>
+The majority of the previously released "Signal" datasets contained a 
+sparse representation of the signal. These have been corrected to be the continuous signal intended.
+</td></tr>
+
+<tr><th align='left' valign='top' nowrap ><i>Raw Signal</i></th>
+<td>
+The previously-available "Raw Signal" view of the data is no longer provided as 
+the 'Signals' view provides a better measure of enrichment, and algorithms for the Raw Signal are in flux.
+</td></tr>
+</TABLE>
+Previous versions of files are available for download from the 
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/" 
+ TARGET=_BLANK>FTP site</A>
+<TABLE>
+<P>
+This track contains experiments and data from several labs.  During review, it
+was noticed that the some cell cultures were different enough between the labs
+that they should be analyzed separately&mdash;using Input specific for the lab.
+Specifically:
+
+<TABLE>
+<tr><th align='left' valign='top' nowrap><i>K562 vs. K562b</i></th>
+<td>
+The Farnham lab (UC Davis) K562 cell line variant differs from the 
+Snyder (Yale) and Struhl (Harvard) labs and is now labeled: K562b. Experiments on K562b 
+should be contrasted with Input (<i>UCDavis</i>).
+The K562 Input previously released has been replaced by two versions 
+marked K562 and K562b. The K562 version used by the Snyder and Struhl groups
+directly replaces the previous version, and is versioned at V2. The K562b used by the Farnham group
+is now provided as K562b.
+</td></tr>
+
+<tr><th align='left' valign='top' nowrap><i>HepG2 vs. HepG2b</i></th>
+<td>
+The Farnham lab  HepG2 cell line is now labeled HepG2b. 
+Experiments on HepG2b should be contrasted with Input (<i>UCDavis</i>).
+</td></tr>
+</TABLE>
 
 <H2> Credits </H2>
 <P>These data were generated and analyzed by the labs of

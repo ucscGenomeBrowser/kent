@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.73 2009/09/25 00:21:40 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.75 2009/10/20 22:39:47 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -816,15 +816,15 @@ close(sdata);
 return pipefd[0];
 }
 
-int netHttpConnect(char *url, char *method, char *protocol, char *agent)
+
+int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
 /* Parse URL, connect to associated server on port,
  * and send most of the request to the server.  If
  * specified in the url send user name and password
- * too.  This does not send the final \r\n to finish
- * off the request, so that you can send cookies. 
- * Typically the "method" will be "GET" or "POST"
+ * too.  Typically the "method" will be "GET" or "POST"
  * and the agent will be the name of your program or
- * library. */
+ * library. optionalHeader may be NULL or contain
+ * additional header lines such as cookie info. */
 {
 struct netParsedUrl npu;
 struct dyString *dy = newDyString(512);
@@ -833,7 +833,9 @@ int sd;
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
 if (sameString(npu.protocol, "http"))
+    {
     sd = netMustConnect(npu.host, atoi(npu.port));
+    }
 else if (sameString(npu.protocol, "https"))
     {
     sd = netMustConnectHttps(npu.host, atoi(npu.port));
@@ -868,6 +870,13 @@ if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
 	, (long long) npu.byteRangeStart
 	, (long long) npu.byteRangeEnd);
     }
+
+if (optionalHeader)
+    dyStringAppend(dy, optionalHeader);
+
+/* finish off the header with final blank line */
+dyStringAppend(dy, "\r\n");
+
 mustWriteFd(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
@@ -877,21 +886,17 @@ return sd;
 
 
 
-int netOpenHttpExt(char *url, char *method, boolean end)
-/* Return a file handle that will read the url.  If end is not
- * set then can send cookies and other info to returned file 
- * handle before reading. */
+int netOpenHttpExt(char *url, char *method, char *optionalHeader)
+/* Return a file handle that will read the url.  optionalHeader
+ * may by NULL or may contain cookies and other info.  */
 {
-int sd =  netHttpConnect(url, method, "HTTP/1.0", "genome.ucsc.edu/net.c");
-if (end)
-    mustWriteFd(sd, "\r\n", 2);
-return sd;
+return netHttpConnect(url, method, "HTTP/1.0", "genome.ucsc.edu/net.c", optionalHeader);
 }
 
 static int netGetOpenHttp(char *url)
 /* Return a file handle that will read the url.  */
 {
-return netOpenHttpExt(url, "GET", TRUE);
+return netOpenHttpExt(url, "GET", NULL);
 }
 
 int netUrlHead(char *url, struct hash *hash)
@@ -899,7 +904,7 @@ int netUrlHead(char *url, struct hash *hash)
  * can't get head. If hash is non-null, fill it with header
  * lines, including hopefully Content-Type: */
 {
-int sd = netOpenHttpExt(url, "HEAD", TRUE);
+int sd = netOpenHttpExt(url, "HEAD", NULL);
 int status = EIO;
 if (sd >= 0)
     {
@@ -996,8 +1001,16 @@ while(TRUE)
     while (TRUE)
 	{
 	nread = read(sd, &c, 1);  /* one char at a time, but http headers are small */
-	if (nread < 0)
+	if (nread != 1)
+	    {
+	    if (nread == -1)
+    		warn("Error (%s) reading http header on %s\n", strerror(errno), url);
+	    else if (nread == 0)
+    		warn("Error unexpected end of input reading http header on %s\n", url);
+	    else
+    		warn("Error reading http header on %s\n", url);
 	    return FALSE;  /* err reading descriptor */
+	    }
 	if (c == 10)
 	    break;
 	if (c != 13)

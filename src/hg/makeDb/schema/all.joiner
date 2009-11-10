@@ -2076,7 +2076,7 @@ identifier omimGeneId
     $hg.omimGene.name dupeOk
     $hg.omimGeneMap.omimId minCheck=0.85
     $hg.refLink.omimId exclude=0 minCheck=0.98
-    $hg.omimMorbidMap.omimId minCheck=0.80
+    $hg.omimMorbidMap.omimId minCheck=0.75
     $hg.omimToKnownCanonical.omimId
 
 identifier unigeneId fuzzy

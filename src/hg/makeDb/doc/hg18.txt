@@ -7444,7 +7444,7 @@ blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
     #	end blat proteins
 
 ##########################################################################
-# BUILD NIBB IMAGE PROGES (DONE 2006-03-14 galt following Jim's hg17 example)
+# BUILD NIBB IMAGE PROBES (DONE 2006-03-14 galt following Jim's hg17 example)
 
 # Make directory on san for cluster job and copy in sequence
     ssh pk
@@ -27245,7 +27245,7 @@ phyloP44wayPrimate
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
-# BUILD OMIM RELATED GENES TRACK (complete rebuild, 2/24/09 Fan)
+# BUILD OMIM RELATED GENES TRACK (complete rebuild, 10/13/09 JK)
 
 ssh hgwdev
 cd /hive/data/genomes/gs.19/build36/bed
@@ -27264,7 +27264,7 @@ cat x.sql |sed -e 's/PRIMARY KEY(numbering)/KEY(omimId)/' >omimGeneMap.sql
 hgLoadSqlTab -warn hg18 omimGeneMap omimGeneMap.sql genemap.tab
 
 # got warning on 3 records, just ignore them
-Warning: load of omimGeneMap did not go as planned: 11750 record(s), 0 row(s) skipped, 3 warning(s) loading genemap.tab
+# Warning: load of omimGeneMap did not go as planned: 12216 record(s), 0 row(s)
 
 rm x.c x.h
 cd ..
@@ -27330,13 +27330,6 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 # hgsql hg18 -e 'drop table fanO4'
 # rm j*.tmp
 # rm o1.tab o2.tab o3.tab o4.tab
-
-# update one omimGene record to reflect a correction UniProt is 
-# going to make on their MIM external link (per 12/15/08 emails from Bob and 
-# Livia (apache@vital-it.ch ) from ExPASy.
-
-    hgsql hg18 -e 'update omimGene set name="611016" where name="608636"'
-    hgsql hg18 -e 'update omimToKnownCanonical set omimId="611016" where omimId="608636"'
 
 #############################################################################
 # fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
@@ -28319,7 +28312,7 @@ perl -e 'for ($i = 1;$i<= 25; $i++) {$x = $i; if ($i == 23) {$x = 'X';} if ($i =
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 # CNV_makereads.pl
-# $Id: hg18.txt,v 1.384 2009/09/28 22:07:49 angie Exp $
+# $Id: hg18.txt,v 1.385 2009/10/13 23:16:33 kent Exp $
 
 
 #use lib ('/home/castlej/perl/','/home/castlej/OSDTools/','/home/castlej/DTcode/');
@@ -28367,7 +28360,7 @@ for ($i = 0; $i <length($seq)-$oligo_length; $i++) {
 #             Rosetta Inpharmatics, Inc. is prohibited.
 #---------------------------------------------------------------------
 #
-# $Id: hg18.txt,v 1.384 2009/09/28 22:07:49 angie Exp $
+# $Id: hg18.txt,v 1.385 2009/10/13 23:16:33 kent Exp $
 #
 # finds selected sequences in FASTA by regex matching in defline or sequence
 

@@ -8,7 +8,7 @@
 
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.3 2007/11/04 01:50:44 fanhsu Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.6 2009/10/20 05:14:33 fanhsu Exp $";
 
 char *configVarName(struct column *col, char *varName)
 /* Return variable name for configuration. */
@@ -52,7 +52,6 @@ hPrintf("</TR>");
 for (col = colList; col != NULL; col = col->next)
     {
     hPrintf("<TR>");
-
     /* Do small label. */
     hPrintf("<TD>%s</TD>", col->shortLabel);
 

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: vaccine.c,v 1.3 2009/08/24 18:02:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: vaccine.c,v 1.4 2009/10/14 13:41:41 fanhsu Exp $";
 
 static boolean vaccineExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -169,8 +169,10 @@ printf("</TR>");
 
 printf("<TR>");
 printf("<TD>");
-vxprintf("<B>Study Day of Sequencing:</B> %s\n", 
-	   seqDay);
+if (sameWord(seqDay, "-1"))
+    printf("<B>Study Day of Sequencing:</B> N/A\n");
+else
+    vxprintf("<B>Study Day of Sequencing:</B> %s\n", seqDay);
 printf("</TD>");
 
 printf("<TD>");

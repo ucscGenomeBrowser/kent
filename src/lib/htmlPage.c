@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.38 2009/09/23 18:42:28 angie Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.39 2009/10/20 22:37:34 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -899,9 +899,7 @@ struct dyString *dyText;
 int sd;
 
 cookieOutput(dyHeader, cookies);
-dyStringAppend(dyHeader, "\r\n");
-sd = netOpenHttpExt(url, "GET", FALSE);
-mustWriteFd(sd, dyHeader->string, dyHeader->stringSize);
+sd = netOpenHttpExt(url, "GET", dyHeader->string);
 dyText = netSlurpFile(sd);
 close(sd);
 dyStringFree(&dyHeader);
@@ -1376,19 +1374,15 @@ if (sameWord(form->method, "GET"))
     dyStringAppend(dyUrl, "?");
     dyStringAppend(dyUrl, cgiVars);
     verbose(3, "GET %s\n", dyUrl->string);
-    sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
-    dyStringAppend(dyHeader, "\r\n");
-    mustWriteFd(sd, dyHeader->string, dyHeader->stringSize);
+    sd = netOpenHttpExt(dyUrl->string, form->method, dyHeader->string);
     }
 else if (sameWord(form->method, "POST"))
     {
     cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal, dyHeader);
     contentLength = strlen(cgiVars);
     verbose(3, "POST %s\n", dyUrl->string);
-    sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
-    dyStringAppend(dyHeader, "\r\n");
-    mustWriteFd(sd, dyHeader->string, dyHeader->stringSize);
+    sd = netOpenHttpExt(dyUrl->string, form->method, dyHeader->string);
     mustWriteFd(sd, cgiVars, contentLength);
     }
 dyText = netSlurpFile(sd);

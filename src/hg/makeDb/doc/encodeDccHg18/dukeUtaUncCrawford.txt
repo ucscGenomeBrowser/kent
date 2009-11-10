@@ -1,6 +1,7 @@
 ### dukeUtaUncCrawford.txt wrangler notes for all submissions
 
-select id,name,status from projects where name like "Duke%" or name like "UNC%" or name like "UTA%";
+select id,name,status, user_id from projects where name like "Duke%" or name like "UNC%" or name like "UTA%";
+select id,name,status, user_id from projects where user_id = 17;
 +-----+------------------------------------+------------+
 | id  | name                               | status     |
 +-----+------------------------------------+------------+
@@ -1425,3 +1426,766 @@ Not yet:
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 104 released
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 336 released
 
+New submissions 2009-09-01-07
+==========================
+select id,name,status, user_id from projects where user_id = 17 and status = "loaded";
++-----+-----------------------------------+--------+---------+
+| id  | name                              | status | user_id |
++-----+-----------------------------------+--------+---------+
+| 461 | DukeDnaseSeq GM12878 20090901     | loaded |      17 | 
+| 468 | UTA CTCF GM12878 20090903         | loaded |      17 | 
+| 471 | UNC FAIRE-Seq GM12878 20090906    | loaded |      17 | 
+| 472 | UTA c-Myc GM12878 20090906        | loaded |      17 | 
+| 482 | UTA ChIP-Seq c-Myc K562 20090906  | loaded |      17 | 
+| 480 | Duke DNase-Seq K562 20090906      | loaded |      17 | 
+| 481 | UTA ChIP-Seq CTCF K562 20090906   | loaded |      17 | 
+| 483 | UNC FAIRE-Seq K562 20090906       | loaded |      17 | 
+| 493 | UTA ChIP-Seq CTCF HelaS3 20090907 | loaded |      17 | 
+| 494 | UNC FAIRE-Seq HelaS3 20090907     | loaded |      17 | 
+| 495 | Duke DNase-Seq HelaS3 20090907    | loaded |      17 | 
++-----+-----------------------------------+--------+---------+
+After some DAF manipulation and training Terry to new methods, all submitted fine.
+I did some massaging if the trackDb and fileDb.ra recs.
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 461 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 468 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 471 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 472 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 480 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 481 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 482 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 483 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 493 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 494 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 495 displayed
+
+2009-10-02 Data trickling which is not quite part of the freeze
+===============================================================
+| 544 | DNCT UTA Input HUVEC 20090923                 | loaded        | 
+| 545 | DNCT Duke DNaseHS HUVEC 20090924              | loaded        | 
+| 546 | DNCT UNC FAIRE-Seq HUVEC 20090924             | loaded        | 
+| 548 | DNCT UTA CTCF HUVEC 20090924                  | loaded        | 
+| 552 | DNCT UTA PolII HUVEC 20090924                 | loaded        | 
+| 555 | DNCT UTA CTCF HepG2 20090928                  | loaded        | 
+| 556 | DNCT Duke DNaseHS HepG2 20090928              | loaded        | 
+| 557 | DNCT UNC FAIRE-Seq HepG2 20090928             | loaded        | 
+| 589 | DNCT UTA PolII HepG2 20090929                 | loaded        | 
+| 588 | DNCT UTA PolII K562 20090929                  | loaded        | 
+| 593 | DNCT UTA c-Myc HepG2 20090929                 | loaded        | 
+| 594 | DNCT Duke DNaseHS Keratinocyte 20090929       | loaded        | 
+| 624 | DNCT UTA CTCF NHEK 20090929                   | loaded        | 
+| 628 | DNCT Duke DNaseHS H1_hESC 20090930            | loaded        | 
+| 629 | DNCT UNC FAIRE-Seq H1-hESC 20090930           | loaded        | 
+| 630 | DNCT UNC FAIRE-Seq NHEK 20090930              | loaded        | 
+| 635 | DNCT UTA c-Myc HUVEC 20091001                 | loaded        | 
+| 636 | DNCT UTA CTCF H1_hESC 20091001                | loaded        | 
+| 638 | DNCT UTA CTCF GM12892 20091002                | loaded        | 
+| 639 | DNCT UNC FAIRE-Seq HelaS3 20091002            | loaded        | 
+| 640 | DNCT UNC FAIRE-Seq K562 20091002              | loaded        | 
+| 641 | DNCT UTA PolII H1_hESC 20091002               | loaded        | 
+
+Tracy Ballinger has been working tirelessly to put the trackDb.wgEncode.ra and downloads dir into shape.
+
+2009-10-12 Bring the trackDb.wgEncode/ra up-to-date
+===================================================
+make alpha DBS=hg18
+cd {downloadsDir}
+### First prepare old release1 directory:
+mkdir release1
+# save source of the RR index.html
+mv ../old/wgEncodeUtaChIPseqRawDataRep1Gm12878Ctcf.fastq.gz .
+mv ../old/wgEncodeUtaChIPseqRawDataRep2Gm12878Ctcf.fastq.gz .
+mv ../old/wgEncodeUtaChIPseqRawDataRep3Gm12878Ctcf.fastq.gz .
+mv ../old/wgEncodeUtaChIPseqPeaksGm12878Ctcf.narrowPeak.gz  .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep1Gm12878Ctcf.tagAlign.gz    .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep2Gm12878Ctcf.tagAlign.gz    .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep3Gm12878Ctcf.tagAlign.gz    .
+mv ../old/wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf.wig.gz      .
+mv ../old/wgEncodeUtaChIPseqSignalGm12878Ctcf.wig.gz                 .
+ln ../wgEncodeUtaustinChIPseqRawDataGm12878Input.fastq.gz        .
+ln ../wgEncodeUtaustinChIPseqAlignmentsGm12878Input.tagAlign.gz  .
+ln ../wgEncodeUtaustinChIPseqSignalGm12878Input.wig.gz           .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep1Gm12878.fastq.gz            .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep2Gm12878.fastq.gz            .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep3Gm12878.fastq.gz            .
+mv ../old/wgEncodeDukeDNaseSeqPeaksGm12878.narrowPeak.gz             .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878.tagAlign.gz      .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878.tagAlign.gz      .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878.tagAlign.gz      .
+mv ../old/wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878.wig.gz        .
+mv ../old/wgEncodeDukeDNaseSeqSignalGm12878.wig.gz                   .
+mv ../old/wgEncodeUncFAIREseqRawDataRep1Gm12878.fastq.gz             .
+mv ../old/wgEncodeUncFAIREseqRawDataRep2Gm12878.fastq.gz             .
+mv ../old/wgEncodeUncFAIREseqRawDataRep3Gm12878.fastq.gz             .
+mv ../old/wgEncodeUncFAIREseqPeaksGm12878.narrowPeak.gz              .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep1Gm12878.tagAlign.gz       .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep2Gm12878.tagAlign.gz       .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep3Gm12878.tagAlign.gz       .
+mv ../old/wgEncodeUncFAIREseqBaseOverlapSignalGm12878.wig.gz         .
+mv ../old/wgEncodeUncFAIREseqSignalGm12878.wig.gz                    .
+mv ../old/wgEncodeUtaChIPseqRawDataRep1Helas3Ctcf.fastq.gz           .
+mv ../old/wgEncodeUtaChIPseqRawDataRep2Helas3Ctcf.fastq.gz           .
+mv ../old/wgEncodeUtaChIPseqPeaksHelas3Ctcf.narrowPeak.gz            .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep1Helas3Ctcf.tagAlign.gz     .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep2Helas3Ctcf.tagAlign.gz     .
+mv ../old/wgEncodeUtaChIPseqBaseOverlapSignalHelas3Ctcf.wig.gz       .
+mv ../old/wgEncodeUtaChIPseqSignalHelas3Ctcf.wig.gz                  .
+ln ../wgEncodeUtaustinChIPseqRawDataHelas3Input.fastq.gz         .
+ln ../wgEncodeUtaustinChIPseqAlignmentsHelas3Input.tagAlign.gz   .
+ln ../wgEncodeUtaustinChIPseqSignalHelas3Input.wig.gz            .
+ln ../wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz           .
+ln ../wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz           .
+ln ../wgEncodeUtaChIPseqPeaksHelas3Cmyc.narrowPeak.gz            .
+ln ../wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz     .
+ln ../wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz     .
+ln ../wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc.wig.gz       .
+ln ../wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz                  .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep1Helas3.fastq.gz             .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep2Helas3.fastq.gz             .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep3Helas3.fastq.gz             .
+mv ../old/wgEncodeDukeDNaseSeqPeaksHelas3.narrowPeak.gz              .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep1Helas3.tagAlign.gz       .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep2Helas3.tagAlign.gz       .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep3Helas3.tagAlign.gz       .
+mv ../old/wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3.wig.gz         .
+mv ../old/wgEncodeDukeDNaseSeqSignalHelas3.wig.gz                    .
+mv ../old/wgEncodeUncFAIREseqRawDataRep1Helas3.fastq.gz              .
+mv ../old/wgEncodeUncFAIREseqRawDataRep2Helas3.fastq.gz              .
+mv ../old/wgEncodeUncFAIREseqRawDataRep3Helas3.fastq.gz              .
+mv ../old/wgEncodeUncFAIREseqPeaksHelas3.narrowPeak.gz               .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep1Helas3.tagAlign.gz        .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep2Helas3.tagAlign.gz        .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep3Helas3.tagAlign.gz        .
+mv ../old/wgEncodeUncFAIREseqBaseOverlapSignalHelas3.wig.gz          .
+mv ../old/wgEncodeUncFAIREseqSignalHelas3.wig.gz                     .
+mv ../old/wgEncodeUtaChIPseqRawDataRep1Hepg2Ctcf.fastq.gz            .
+mv ../old/wgEncodeUtaChIPseqRawDataRep2Hepg2Ctcf.fastq.gz            .
+mv ../old/wgEncodeUtaChIPseqPeaksHepg2Ctcf.narrowPeak.gz             .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep1Hepg2Ctcf.tagAlign.gz      .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep2Hepg2Ctcf.tagAlign.gz      .
+mv ../old/wgEncodeUtaChIPseqBaseOverlapSignalHepg2Ctcf.wig.gz        .
+mv ../old/wgEncodeUtaChIPseqSignalHepg2Ctcf.wig.gz                   .
+ln ../wgEncodeUtaustinChIPseqRawDataHepg2Input.fastq.gz          .
+ln ../wgEncodeUtaustinChIPseqAlignmentsHepg2Input.tagAlign.gz    .
+ln ../wgEncodeUtaustinChIPseqSignalHepg2Input.wig.gz             .
+mv ../old/wgEncodeUtaChIPseqRawDataRep1Hepg2Cmyc.fastq.gz            .
+mv ../old/wgEncodeUtaChIPseqRawDataRep2Hepg2Cmyc.fastq.gz            .
+mv ../old/wgEncodeUtaChIPseqRawDataRep3Hepg2Cmyc.fastq.gz            .
+mv ../old/wgEncodeUtaChIPseqPeaksHepg2Cmyc.narrowPeak.gz             .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep1Hepg2Cmyc.tagAlign.gz      .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep2Hepg2Cmyc.tagAlign.gz      .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep3Hepg2Cmyc.tagAlign.gz      .
+mv ../old/wgEncodeUtaChIPseqBaseOverlapSignalHepg2Cmyc.wig.gz        .
+mv ../old/wgEncodeUtaChIPseqSignalHepg2Cmyc.wig.gz                   .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep1Hepg2.fastq.gz              .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep2Hepg2.fastq.gz              .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep3Hepg2.fastq.gz              .
+mv ../old/wgEncodeDukeDNaseSeqPeaksHepg2.narrowPeak.gz               .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2.tagAlign.gz        .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2.tagAlign.gz        .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2.tagAlign.gz        .
+mv ../old/wgEncodeDukeDNaseSeqBaseOverlapSignalHepg2.wig.gz          .
+mv ../old/wgEncodeDukeDNaseSeqSignalHepg2.wig.gz                     .
+mv ../old/wgEncodeUncFAIREseqRawDataRep1Hepg2.fastq.gz               .
+mv ../old/wgEncodeUncFAIREseqRawDataRep2Hepg2.fastq.gz               .
+mv ../old/wgEncodeUncFAIREseqRawDataRep3Hepg2.fastq.gz               .
+mv ../old/wgEncodeUncFAIREseqPeaksHepg2.narrowPeak.gz                .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep1Hepg2.tagAlign.gz         .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep2Hepg2.tagAlign.gz         .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep3Hepg2.tagAlign.gz         .
+mv ../old/wgEncodeUncFAIREseqBaseOverlapSignalHepg2.wig.gz           .
+mv ../old/wgEncodeUncFAIREseqSignalHepg2.wig.gz                      .
+mv ../old/wgEncodeUtaChIPseqRawDataRep1K562Ctcf.fastq.gz             .
+mv ../old/wgEncodeUtaChIPseqRawDataRep2K562Ctcf.fastq.gz             .
+mv ../old/wgEncodeUtaChIPseqRawDataRep3K562Ctcf.fastq.gz             .
+mv ../old/wgEncodeUtaChIPseqPeaksK562Ctcf.narrowPeak.gz              .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep1K562Ctcf.tagAlign.gz       .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep2K562Ctcf.tagAlign.gz       .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep3K562Ctcf.tagAlign.gz       .
+mv ../old/wgEncodeUtaChIPseqBaseOverlapSignalK562Ctcf.wig.gz         .
+mv ../old/wgEncodeUtaChIPseqSignalK562Ctcf.wig.gz                    .
+ln ../wgEncodeUtaustinChIPseqRawDataK562Input.fastq.gz           .
+ln ../wgEncodeUtaustinChIPseqAlignmentsK562Input.tagAlign.gz     .
+ln ../wgEncodeUtaustinChIPseqSignalK562Input.wig.gz              .
+mv ../old/wgEncodeUtaChIPseqRawDataRep1K562Cmyc.fastq.gz             .
+mv ../old/wgEncodeUtaChIPseqRawDataRep2K562Cmyc.fastq.gz             .
+mv ../old/wgEncodeUtaChIPseqRawDataRep3K562Cmyc.fastq.gz             .
+mv ../old/wgEncodeUtaChIPseqPeaksK562Cmyc.narrowPeak.gz              .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz       .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz       .
+mv ../old/wgEncodeUtaChIPseqAlignmentsRep3K562Cmyc.tagAlign.gz       .
+mv ../old/wgEncodeUtaChIPseqBaseOverlapSignalK562Cmyc.wig.gz         .
+mv ../old/wgEncodeUtaChIPseqSignalK562Cmyc.wig.gz                    .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep1K562.fastq.gz               .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep2K562.fastq.gz               .
+mv ../old/wgEncodeDukeDNaseSeqRawDataRep3K562.fastq.gz               .
+mv ../old/wgEncodeDukeDNaseSeqPeaksK562.narrowPeak.gz                .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep1K562.tagAlign.gz         .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep2K562.tagAlign.gz         .
+mv ../old/wgEncodeDukeDNaseSeqAlignmentsRep3K562.tagAlign.gz         .
+mv ../old/wgEncodeDukeDNaseSeqBaseOverlapSignalK562.wig.gz           .
+mv ../old/wgEncodeDukeDNaseSeqSignalK562.wig.gz                      .
+mv ../old/wgEncodeUncFAIREseqRawDataRep1K562.fastq.gz                .
+mv ../old/wgEncodeUncFAIREseqRawDataRep2K562.fastq.gz                .
+mv ../old/wgEncodeUncFAIREseqRawDataRep3K562.fastq.gz                .
+mv ../old/wgEncodeUncFAIREseqPeaksK562.narrowPeak.gz                 .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep1K562.tagAlign.gz          .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep2K562.tagAlign.gz          .
+mv ../old/wgEncodeUncFAIREseqAlignmentsRep3K562.tagAlign.gz          .
+mv ../old/wgEncodeUncFAIREseqBaseOverlapSignalK562.wig.gz            .
+mv ../old/wgEncodeUncFAIREseqSignalK562.wig.gz                       .
+
+### Now move in all of the newly submitted files
+cd ..
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep1Gm12891.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep1Gm12892.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep1Gm19238.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep1Gm19239.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep1Gm19240.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep1H1hesc.tagAlign.gz    .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep2Gm12891.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep2Gm12892.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep2Gm19238.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep2Gm19239.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep2Gm19240.tagAlign.gz   .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqAlignmentsRep2H1hesc.tagAlign.gz    .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc.wig.gz      .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12891.wig.gz .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12892.wig.gz .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19238.wig.gz .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239.wig.gz .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240.wig.gz .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqPeaksH1hesc.narrowPeak.gz           .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqPeaksRep1Gm12891.narrowPeak.gz      .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqPeaksRep1Gm12892.narrowPeak.gz      .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqPeaksRep1Gm19238.narrowPeak.gz      .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqPeaksRep1Gm19239.narrowPeak.gz      .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqPeaksRep1Gm19240.narrowPeak.gz      .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep1Gm12891.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep1Gm12892.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep1Gm19238.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep1Gm19239.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep1Gm19240.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep1H1hesc.fastq.gz          .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep2Gm12891.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep2Gm12892.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep2Gm19238.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep2Gm19239.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep2Gm19240.fastq.gz         .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqRawDataRep2H1hesc.fastq.gz          .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqSignalH1hesc.wig.gz                 .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqSignalRep1Gm12891.wig.gz            .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqSignalRep1Gm12892.wig.gz            .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqSignalRep1Gm19238.wig.gz            .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqSignalRep1Gm19239.wig.gz            .
+mv -i ../wgEncodeDukeDNaseSeq/wgEncodeDukeDNaseSeqSignalRep1Gm19240.wig.gz            .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep1H1hesc.tagAlign.gz      .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep1Helas3V2.tagAlign.gz    .  y
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep1K562V2.tagAlign.gz      .  y
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep1Nhek.tagAlign.gz        .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep2H1hesc.tagAlign.gz      .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep2Helas3V2.tagAlign.gz    .  y
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep2K562V2.tagAlign.gz      .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqAlignmentsRep2Nhek.tagAlign.gz        .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqBaseOverlapSignalH1hesc.wig.gz        .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2.wig.gz  .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2.wig.gz    .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqBaseOverlapSignalRep1Nhek.wig.gz      .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqPeaksH1hesc.narrowPeak.gz             .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqPeaksRep1Helas3V2.narrowPeak.gz       .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqPeaksRep1K562V2.narrowPeak.gz         .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqPeaksRep1Nhek.narrowPeak.gz           .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep1H1hesc.fastq.gz            .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep1Helas3V2.fastq.gz          .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep1K562V2.fastq.gz            .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep1Nhek.fastq.gz              .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep2H1hesc.fastq.gz            .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep2Helas3V2.fastq.gz          .  y
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep2K562V2.fastq.gz            .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqRawDataRep2Nhek.fastq.gz              .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqSignalH1hesc.wig.gz                   .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqSignalRep1Helas3V2.wig.gz             .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqSignalRep1K562V2.wig.gz               .
+mv -i ../wgEncodeUncFAIREseq/wgEncodeUncFAIREseqSignalRep1Nhek.wig.gz                 .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsH1hescCtcf.tagAlign.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsH1hescPol2.tagAlign.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsHuvecCmyc.tagAlign.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1Gm12891Ctcf.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1Gm12892Ctcf.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1Gm19238Ctcf.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1Gm19239Ctcf.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1Gm19240Ctcf.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1Helas3CmycV2.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep1NhekCtcf.tagAlign.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2Gm12891Ctcf.tagAlign.gz    .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2Gm12892Ctcf.tagAlign.gz    .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2Gm19238Ctcf.tagAlign.gz    .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2Gm19239Ctcf.tagAlign.gz    .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2Gm19240Ctcf.tagAlign.gz    .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2Helas3CmycV2.tagAlign.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqAlignmentsRep2NhekCtcf.tagAlign.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalH1hescCtcf.wig.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalH1hescPol2.wig.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalHuvecCmyc.wig.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalNhekCtcf.wig.gz          .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12891Ctcf.wig.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12892Ctcf.wig.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19238Ctcf.wig.gz   .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19239Ctcf.wig.gz  .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19240Ctcf.wig.gz  .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksH1hescCtcf.narrowPeak.gz            .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksH1hescPol2.narrowPeak.gz            .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksHuvecCmyc.narrowPeak.gz             .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksNhekCtcf.narrowPeak.gz              .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksRep1Gm12891Ctcf.narrowPeak.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksRep1Gm12892Ctcf.narrowPeak.gz      .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksRep1Gm19238Ctcf.narrowPeak.gz      .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksRep1Gm19239Ctcf.narrowPeak.gz      .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksRep1Gm19240Ctcf.narrowPeak.gz      .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2.narrowPeak.gz     .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataH1hescCtcf.fastq.gz              .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataH1hescPol2.fastq.gz              .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataHuvecCmyc.fastq.gz               .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1Gm12891Ctcf.fastq.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1Gm12892Ctcf.fastq.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1Gm19238Ctcf.fastq.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1Gm19239Ctcf.fastq.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1Gm19240Ctcf.fastq.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1Helas3CmycV2.fastq.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep1NhekCtcf.fastq.gz           .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2Gm12891Ctcf.fastq.gz        .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2Gm12892Ctcf.fastq.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2Gm19238Ctcf.fastq.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2Gm19239Ctcf.fastq.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2Gm19240Ctcf.fastq.gz       .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2Helas3CmycV2.fastq.gz      .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqRawDataRep2NhekCtcf.fastq.gz          .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalH1hescCtcf.wig.gz               .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalH1hescPol2.wig.gz               .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalHuvecCmyc.wig.gz               .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalNhekCtcf.wig.gz                .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalRep1Gm12891Ctcf.wig.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalRep1Gm12892Ctcf.wig.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf.wig.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf.wig.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalRep1Gm19240Ctcf.wig.gz         .
+mv -i ../wgEncodeUt-aChIPseq/wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz        .
+
+### Next, get the download only file metadata set properly
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/544/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/545/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/546/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/548/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/552/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/555/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/556/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/557/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/589/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/588/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/593/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/594/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/624/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/628/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/629/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/630/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/635/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/636/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/638/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/639/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/640/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/641/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/642/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/643/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/644/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/645/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/646/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/647/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/648/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/650/out/fileDb.ra | grep parentTable >> tmp.txt
+
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/649/out/fileDb.ra | grep parentTable >> tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/651/out/fileDb.ra | grep parentTable >> tmp.txt
+
+# edit tmp.txt
+cp fileDb.ra fileDb.ra.2009-10-12
+cat tmp.txt >> fileDb.ra
+encodeDownloadsPage.pl index.html
+
+# fix some problems 
+# 1) noticed 649 and 651 had been left off the list
+# 2) superceding actions left behind files when names did not conflict! 
+mkdir superceded
+# Resubmit V2 with (Rep1 in name!)
+mv wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz  superceded/
+mv wgEncodeUncFAIREseqSignalHelas3V2.wig.gz             superceded/
+
+# Submit V2, but V1 was not released yet
+mv wgEncodeUtaChIPseqBaseOverlapSignalHelas3Cmyc.wig.gz superceded/
+mv wgEncodeUtaChIPseqPeaksHelas3Cmyc.narrowPeak.gz      superceded/
+mv wgEncodeUtaChIPseqSignalHelas3Cmyc.wig.gz            superceded/
+  
+# Resubmit V2 with (Rep1 in name!)
+mv wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz superceded/
+mv wgEncodeUncFAIREseqSignalK562V2.wig.gz            superceded/
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 544 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 545 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 546 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 548 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 552 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 555 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 556 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 557 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 589 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 588 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 593 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 594 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 624 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 628 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 629 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 630 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 635 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 636 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 638 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 639 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 640 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 641 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 642 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 643 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 644 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 645 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 646 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 647 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 648 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 649 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 650 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 651 displayed
+
+2009-10-14 One more
+===================
+rm tmp.txt
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/686/out/fileDb.ra | grep parentTable >> tmp.txt
+edit tmp.txt
+cp fileDb.ra fileDb.ra.2009-10-14
+cat tmp.txt >> fileDb..ra
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 686 displayed
+
+2009-10-23 Get ready for release 2
+==================================
+# edit wgEncodeChromatinMap.html to add release notes provided by Terry Furey
+# edit metadata in trackDb to give version reasons
+
+#Filter ranges:
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksGm12878     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksGm12878V2   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksH1hesc      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksHelas3      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksHelas3V2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksHepg2       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksHepg2V2     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksHuvec       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksK562        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksK562V2      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksNhek        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksRep1Gm12891 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksRep1Gm12892 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksRep1Gm19238 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksRep1Gm19239 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeDukeDNaseSeqPeaksRep1Gm19240 ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksGm12878Cmyc     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksGm12878Ctcf     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksGm12878CtcfV2   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksH1hescCtcf      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksH1hescPol2      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHelas3Cmyc      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHelas3Ctcf      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHelas3CtcfV2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHepg2Cmyc       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHepg2CmycV2     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHepg2Ctcf       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHepg2CtcfV2     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHepg2Pol2       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHuvecCmyc       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHuvecCtcf       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksHuvecPol2       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksK562Cmyc        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksK562CmycV2      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksK562Ctcf        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksK562CtcfV2      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksK562Pol2        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksNhekCtcf        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksRep1Gm12891Ctcf ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksRep1Gm12892Ctcf ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksRep1Gm19238Ctcf ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksRep1Gm19239Ctcf ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksRep1Gm19240Ctcf ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksGm12878     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksGm12878V2   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksH1hesc      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksHelas3      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksHelas3V2    ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksHepg2       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksHepg2V2     ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksHuvec       ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksK562        ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksK562V2      ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksPanislets   ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksRep1Helas3V2;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksRep1K562V2  ;
+select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeUncFAIREseqPeaksRep1Nhek    ;
+# Result score 100:1000, signalValue 0:16 (but too variable to be useful) pValue 0:100, qValue -1:-1
+
+# thus don't change filterBy settings in trackDb
+# check in trackDb.wgEncode.ra, wgEncodeChomatinMap.html
+make alpha DBS=hg18
+
+# updating versioning info in downloads index.html
+cd {downlodsDir}
+cp fileDb.ra fileDb.ra.2009-10-23
+grep parent fileDb.tmp.ra | sort | uniq > fileDb.ra
+grep V2 fileDb.ra | sort | uniq > fileV2.ra
+grep -v V2 fileDb.ra | sort | uniq > fileNV2.ra
+# edit fileV2.ra
+# do some massaging for duplicate lines or missing data
+cp fileNV2.ra fileDb.ra
+cat fileV2.ra >> fileDb.ra
+encodeDownloadsPage.pl index.html 
+
+# something missing
+grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/686/out/fileDb.ra | grep parentTable >> tmp.txt
+cat tmp.txt >> fileDb.ra
+sort < fileDb.ra > fileDbS.ra
+rm fileDb.ra
+mv fileDbS.ra fileDb.ra 
+encodeDownloadsPage.pl index.html 
+
+# Duplicates: versioned files with originals still in live dir (no no)
+ls wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz
+ls wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz
+ls wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
+ls wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
+ls release1/wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz
+ls release1/wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz
+ls release1/wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
+ls release1/wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
+rm wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz
+rm wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz
+rm wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
+rm wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
+encodeDownloadsPage.pl index.html 
+
+# edit preamble.html to add release note.
+encodeDownloadsPage.pl index.html
+
+cd {downloadsDir}
+mkdir release2
+cd release2 
+cp ../index.html .
+cp ../preamble.html .
+cp ../fileDb.ra .
+ls -1 ../*.gz | wl  318
+ln ../*.gz .   
+ls -1 *.gz | wl     318
+
+drop table wgEncodeUncFAIREseqPeaksHelas3V2;
+rename table wgEncodeUncFAIREseqPeaksRep1Helas3V2 to wgEncodeUncFAIREseqPeaksHelas3V2;
+rename table wgEncodeUncFAIREseqPeaksRep1Nhek to wgEncodeUncFAIREseqPeaksNhek;
+drop table wgEncodeUncFAIREseqPeaksK562V2;
+rename table wgEncodeUncFAIREseqPeaksRep1K562V2 to wgEncodeUncFAIREseqPeaksK562V2;
+ll wgEncodeUncFAIREseqPeaksRep1K562V2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksRep1Helas3V2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksRep1Nhek.narrowPeak.gz
+
+rm wgEncodeUncFAIREseqPeaksRep1K562V2.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksRep1Helas3V2.narrowPeak.gz
+rm wgEncodeUncFAIREseqPeaksRep1Nhek.narrowPeak.gz
+
+cd ..
+mv wgEncodeUncFAIREseqPeaksRep1K562V2.narrowPeak.gz wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz
+mv wgEncodeUncFAIREseqPeaksRep1Helas3V2.narrowPeak.gz wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz
+mv wgEncodeUncFAIREseqPeaksRep1Nhek.narrowPeak.gz wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz
+cd release2/
+ln ../wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz .
+ln ../wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz .
+ln ../wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz .
+ll wgEncodeUncFAIREseqPeaksK562V2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksHelas3V2.narrowPeak.gz
+ll wgEncodeUncFAIREseqPeaksNhek.narrowPeak.gz
+
+Problem names:
+| wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12891 | 
+| wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12892 | 
+| wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19238 | 
+| wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239 | 
+| wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240 | 
+| wgEncodeDukeDNaseSeqSignalRep1Gm12891            | 
+| wgEncodeDukeDNaseSeqSignalRep1Gm12892            | 
+| wgEncodeDukeDNaseSeqSignalRep1Gm19238            | 
+| wgEncodeDukeDNaseSeqSignalRep1Gm19239            | 
+| wgEncodeDukeDNaseSeqSignalRep1Gm19240            | 
+| wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12891Ctcf  | 
+| wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12892Ctcf  | 
+| wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19238Ctcf  | 
+| wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19239Ctcf  | 
+| wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19240Ctcf  | 
+| wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2 | 
+| wgEncodeUtaChIPseqSignalRep1Gm12891Ctcf             | 
+| wgEncodeUtaChIPseqSignalRep1Gm12892Ctcf             | 
+| wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf             | 
+| wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf             | 
+| wgEncodeUtaChIPseqSignalRep1Gm19240Ctcf             | 
+| wgEncodeUtaChIPseqSignalRep1Helas3CmycV2            | 
+| wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2 | 
+| wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2   | 
+| wgEncodeUncFAIREseqBaseOverlapSignalRep1Nhek     | 
+| wgEncodeUncFAIREseqSignalRep1Helas3V2            | 
+| wgEncodeUncFAIREseqSignalRep1K562V2              | 
+| wgEncodeUncFAIREseqSignalRep1Nhek                | 
+
+| wgEncodeDukeDNaseSeqPeaksRep1Gm12891             | 
+| wgEncodeDukeDNaseSeqPeaksRep1Gm12892             | 
+| wgEncodeDukeDNaseSeqPeaksRep1Gm19238             | 
+| wgEncodeDukeDNaseSeqPeaksRep1Gm19239             | 
+| wgEncodeDukeDNaseSeqPeaksRep1Gm19240             | 
+| wgEncodeUtaChIPseqPeaksRep1Gm12891Ctcf              | 
+| wgEncodeUtaChIPseqPeaksRep1Gm12892Ctcf              | 
+| wgEncodeUtaChIPseqPeaksRep1Gm19238Ctcf              | 
+| wgEncodeUtaChIPseqPeaksRep1Gm19239Ctcf              | 
+| wgEncodeUtaChIPseqPeaksRep1Gm19240Ctcf              | 
+| wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2             | 
+
+rename table wgEncodeDukeDNaseSeqPeaksRep1Gm12891    to wgEncodeDukeDNaseSeqPeaksGm12891;
+rename table wgEncodeDukeDNaseSeqPeaksRep1Gm12892    to wgEncodeDukeDNaseSeqPeaksGm12892;
+rename table wgEncodeDukeDNaseSeqPeaksRep1Gm19238    to wgEncodeDukeDNaseSeqPeaksGm19238;
+rename table wgEncodeDukeDNaseSeqPeaksRep1Gm19239    to wgEncodeDukeDNaseSeqPeaksGm19239;
+rename table wgEncodeDukeDNaseSeqPeaksRep1Gm19240    to wgEncodeDukeDNaseSeqPeaksGm19240;
+rename table wgEncodeUtaChIPseqPeaksRep1Gm12891Ctcf  to wgEncodeUtaChIPseqPeaksGm12891Ctcf;
+rename table wgEncodeUtaChIPseqPeaksRep1Gm12892Ctcf  to wgEncodeUtaChIPseqPeaksGm12892Ctcf;
+rename table wgEncodeUtaChIPseqPeaksRep1Gm19238Ctcf  to wgEncodeUtaChIPseqPeaksGm19238Ctcf;
+rename table wgEncodeUtaChIPseqPeaksRep1Gm19239Ctcf  to wgEncodeUtaChIPseqPeaksGm19239Ctcf;
+rename table wgEncodeUtaChIPseqPeaksRep1Gm19240Ctcf  to wgEncodeUtaChIPseqPeaksGm19240Ctcf;
+rename table wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2 to wgEncodeUtaChIPseqPeaksHelas3CmycV2;
+
+mv wgEncodeDukeDNaseSeqPeaksRep1Gm12891.narrowPeak.gz    wgEncodeDukeDNaseSeqPeaksGm12891.narrowPeak.gz
+mv wgEncodeDukeDNaseSeqPeaksRep1Gm12892.narrowPeak.gz    wgEncodeDukeDNaseSeqPeaksGm12892.narrowPeak.gz
+mv wgEncodeDukeDNaseSeqPeaksRep1Gm19238.narrowPeak.gz    wgEncodeDukeDNaseSeqPeaksGm19238.narrowPeak.gz
+mv wgEncodeDukeDNaseSeqPeaksRep1Gm19239.narrowPeak.gz    wgEncodeDukeDNaseSeqPeaksGm19239.narrowPeak.gz
+mv wgEncodeDukeDNaseSeqPeaksRep1Gm19240.narrowPeak.gz    wgEncodeDukeDNaseSeqPeaksGm19240.narrowPeak.gz
+mv wgEncodeUtaChIPseqPeaksRep1Gm12891Ctcf.narrowPeak.gz  wgEncodeUtaChIPseqPeaksGm12891Ctcf.narrowPeak.gz
+mv wgEncodeUtaChIPseqPeaksRep1Gm12892Ctcf.narrowPeak.gz  wgEncodeUtaChIPseqPeaksGm12892Ctcf.narrowPeak.gz
+mv wgEncodeUtaChIPseqPeaksRep1Gm19238Ctcf.narrowPeak.gz  wgEncodeUtaChIPseqPeaksGm19238Ctcf.narrowPeak.gz
+mv wgEncodeUtaChIPseqPeaksRep1Gm19239Ctcf.narrowPeak.gz  wgEncodeUtaChIPseqPeaksGm19239Ctcf.narrowPeak.gz
+mv wgEncodeUtaChIPseqPeaksRep1Gm19240Ctcf.narrowPeak.gz  wgEncodeUtaChIPseqPeaksGm19240Ctcf.narrowPeak.gz
+mv wgEncodeUtaChIPseqPeaksRep1Helas3CmycV2.narrowPeak.gz wgEncodeUtaChIPseqPeaksHelas3CmycV2.narrowPeak.gz
+
+drop table wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2;
+rm /gbdb/hg18/wib/wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wib
+drop table wgEncodeUncFAIREseqBaseOverlapSignalK562V2;
+rm /gbdb/hg18/wib/wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wib
+drop table wgEncodeUncFAIREseqSignalHelas3V2;
+rm /gbdb/hg18/wib/wgEncodeUncFAIREseqSignalHelas3V2.wib
+drop table wgEncodeUncFAIREseqSignalK562V2;
+rm /gbdb/hg18/wib/wgEncodeUncFAIREseqSignalK562V2.wib
+
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12891    to wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891   ;
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12892    to wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892   ;
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19238    to wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238   ;
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239    to wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239   ;
+rename table wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240    to wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240   ;
+rename table wgEncodeDukeDNaseSeqSignalRep1Gm12891               to wgEncodeDukeDNaseSeqSignalGm12891              ;
+rename table wgEncodeDukeDNaseSeqSignalRep1Gm12892               to wgEncodeDukeDNaseSeqSignalGm12892              ;
+rename table wgEncodeDukeDNaseSeqSignalRep1Gm19238               to wgEncodeDukeDNaseSeqSignalGm19238              ;
+rename table wgEncodeDukeDNaseSeqSignalRep1Gm19239               to wgEncodeDukeDNaseSeqSignalGm19239              ;
+rename table wgEncodeDukeDNaseSeqSignalRep1Gm19240               to wgEncodeDukeDNaseSeqSignalGm19240              ;
+rename table wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12891Ctcf  to wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf ;
+rename table wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12892Ctcf  to wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf ;
+rename table wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19238Ctcf  to wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf ;
+rename table wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19239Ctcf  to wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf ;
+rename table wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19240Ctcf  to wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf ;
+rename table wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2 to wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2;
+rename table wgEncodeUtaChIPseqSignalRep1Gm12891Ctcf             to wgEncodeUtaChIPseqSignalGm12891Ctcf            ;
+rename table wgEncodeUtaChIPseqSignalRep1Gm12892Ctcf             to wgEncodeUtaChIPseqSignalGm12892Ctcf            ;
+rename table wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf             to wgEncodeUtaChIPseqSignalGm19238Ctcf            ;
+rename table wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf             to wgEncodeUtaChIPseqSignalGm19239Ctcf            ;
+rename table wgEncodeUtaChIPseqSignalRep1Gm19240Ctcf             to wgEncodeUtaChIPseqSignalGm19240Ctcf            ;
+rename table wgEncodeUtaChIPseqSignalRep1Helas3CmycV2            to wgEncodeUtaChIPseqSignalHelas3CmycV2           ;
+rename table wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2    to wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2   ;
+rename table wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2      to wgEncodeUncFAIREseqBaseOverlapSignalK562V2     ;
+rename table wgEncodeUncFAIREseqBaseOverlapSignalRep1Nhek        to wgEncodeUncFAIREseqBaseOverlapSignalNhek       ;
+rename table wgEncodeUncFAIREseqSignalRep1Helas3V2               to wgEncodeUncFAIREseqSignalHelas3V2              ;
+rename table wgEncodeUncFAIREseqSignalRep1K562V2                 to wgEncodeUncFAIREseqSignalK562V2                ;
+rename table wgEncodeUncFAIREseqSignalRep1Nhek                   to wgEncodeUncFAIREseqSignalNhek                  ;
+
+cd {dowloadsDir}
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12891.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12892.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19238.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm12891.wig.gz               wgEncodeDukeDNaseSeqSignalGm12891.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm12892.wig.gz               wgEncodeDukeDNaseSeqSignalGm12892.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm19238.wig.gz               wgEncodeDukeDNaseSeqSignalGm19238.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm19239.wig.gz               wgEncodeDukeDNaseSeqSignalGm19239.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm19240.wig.gz               wgEncodeDukeDNaseSeqSignalGm19240.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12891Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12892Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19238Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19239Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19240Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm12891Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm12891Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm12892Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm12892Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm19238Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm19239Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm19240Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm19240Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz            wgEncodeUtaChIPseqSignalHelas3CmycV2.wig.gz
+mv wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2.wig.gz    wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
+mv wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2.wig.gz      wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
+mv wgEncodeUncFAIREseqBaseOverlapSignalRep1Nhek.wig.gz        wgEncodeUncFAIREseqBaseOverlapSignalNhek.wig.gz
+mv wgEncodeUncFAIREseqSignalRep1Helas3V2.wig.gz               wgEncodeUncFAIREseqSignalHelas3V2.wig.gz
+mv wgEncodeUncFAIREseqSignalRep1K562V2.wig.gz                 wgEncodeUncFAIREseqSignalK562V2.wig.gz
+mv wgEncodeUncFAIREseqSignalRep1Nhek.wig.gz                   wgEncodeUncFAIREseqSignalNhek.wig.gz
+
+cd release2/
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12891.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm12891.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm12892.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm12892.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19238.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm19238.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19239.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239.wig.gz
+mv wgEncodeDukeDNaseSeqBaseOverlapSignalRep1Gm19240.wig.gz    wgEncodeDukeDNaseSeqBaseOverlapSignalGm19240.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm12891.wig.gz               wgEncodeDukeDNaseSeqSignalGm12891.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm12892.wig.gz               wgEncodeDukeDNaseSeqSignalGm12892.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm19238.wig.gz               wgEncodeDukeDNaseSeqSignalGm19238.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm19239.wig.gz               wgEncodeDukeDNaseSeqSignalGm19239.wig.gz
+mv wgEncodeDukeDNaseSeqSignalRep1Gm19240.wig.gz               wgEncodeDukeDNaseSeqSignalGm19240.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12891Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm12891Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm12892Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19238Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm19238Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19239Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm19239Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Gm19240Ctcf.wig.gz  wgEncodeUtaChIPseqBaseOverlapSignalGm19240Ctcf.wig.gz
+mv wgEncodeUtaChIPseqBaseOverlapSignalRep1Helas3CmycV2.wig.gz wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm12891Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm12891Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm12892Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm12892Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm19238Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm19238Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm19239Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm19239Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Gm19240Ctcf.wig.gz             wgEncodeUtaChIPseqSignalGm19240Ctcf.wig.gz
+mv wgEncodeUtaChIPseqSignalRep1Helas3CmycV2.wig.gz            wgEncodeUtaChIPseqSignalHelas3CmycV2.wig.gz
+mv wgEncodeUncFAIREseqBaseOverlapSignalRep1Helas3V2.wig.gz    wgEncodeUncFAIREseqBaseOverlapSignalHelas3V2.wig.gz
+mv wgEncodeUncFAIREseqBaseOverlapSignalRep1K562V2.wig.gz      wgEncodeUncFAIREseqBaseOverlapSignalK562V2.wig.gz
+mv wgEncodeUncFAIREseqBaseOverlapSignalRep1Nhek.wig.gz        wgEncodeUncFAIREseqBaseOverlapSignalNhek.wig.gz
+mv wgEncodeUncFAIREseqSignalRep1Helas3V2.wig.gz               wgEncodeUncFAIREseqSignalHelas3V2.wig.gz
+mv wgEncodeUncFAIREseqSignalRep1K562V2.wig.gz                 wgEncodeUncFAIREseqSignalK562V2.wig.gz
+mv wgEncodeUncFAIREseqSignalRep1Nhek.wig.gz                   wgEncodeUncFAIREseqSignalNhek.wig.gz
+
+# edit trackDb.wgEncode.ra with table name 
+make alpha DBS=hg18
+
+# update downloads Dir
+cd {downloadsDir}
+encodeDownloadsPage.pl index.html
+cp index.html release2/
+
+### FINALLY put release2 into the pushQ

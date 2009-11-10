@@ -322,6 +322,9 @@ void customMafClick(struct sqlConnection *conn,
 void doEncodePeak(struct trackDb *tdb, struct customTrack *ct);
 /*  details for encodePeak type tracks.  */
 
+void doEncodeFiveC(struct sqlConnection *conn, struct trackDb *tdb);
+/* Print details for 5C track */
+
 void doHgdpGeo(struct trackDb *tdb, char *item);
 /* Show details page for HGDP SNP with population allele frequencies
  * plotted on a world map. */

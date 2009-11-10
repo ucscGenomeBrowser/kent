@@ -8,13 +8,14 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.15 2009/10/01 07:50:03 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.16 2009/10/16 00:07:04 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"abbr", OPTION_STRING},
     {"prefix", OPTION_STRING},
     {"replace", OPTION_BOOLEAN},
+    {"drop", OPTION_BOOLEAN},
     {"test", OPTION_BOOLEAN},
     {"seqTbl", OPTION_STRING},
     {"extFileTbl", OPTION_STRING},
@@ -28,6 +29,7 @@ char *abbr = NULL;
 char *prefix = NULL;
 boolean test = FALSE;
 boolean replace = FALSE;
+boolean drop = FALSE;
 
 char seqTableCreate[] =
 /* This keeps track of a sequence. */
@@ -115,7 +117,7 @@ faSize = (int)(faEndOffset - faOffset);
 seqId = hgNextId();
     
 /* note: sqlDate column is empty */
-fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
+fprintf(seqTab, "%u\t%s\t%d\t0000-00-00\t%u\t%lld\t%d\n",
         seqId, sqlEscapeTabFileString2(faAccBuf, faAcc),
         dnaSize, extFileId, (unsigned long long)faOffset, faSize);
 return TRUE;
@@ -155,6 +157,13 @@ if (!test)
     {
     conn = hgStartUpdate(database);
     char query[1024];
+    if (drop)
+        {
+        safef(query, sizeof(query), "drop table if exists %s", seqTbl);
+        sqlUpdate(conn, query);
+        safef(query, sizeof(query), "drop table if exists %s", extFileTbl);
+        sqlUpdate(conn, query);
+        }
     safef(query, sizeof(query), seqTableCreate, seqTbl);
     sqlMaybeMakeTable(conn, seqTbl, query);
     }
@@ -167,7 +176,7 @@ for (i=0; i<fileCount; ++i)
     }
 if (!test)
     {
-    unsigned opts = SQL_TAB_FILE_WARN_ON_ERROR;
+    unsigned opts = 0;
     if (replace)
         opts |= SQL_TAB_REPLACE;
     verbose(1, "Updating %s table\n", seqTbl);
@@ -194,6 +203,8 @@ errAbort(
   "  -seqTbl=tbl - use this table instead of seq\n"
   "  -extFileTbl=tbl - use this table instead of extFile\n"
   "  -test - do not load database table\n"
+  "  -drop - drop tables before loading, can only use if -seqTbl and -extFileTbl\n"
+  "   are specified. \n"
   );
 }
 
@@ -212,6 +223,9 @@ abbr = optionVal("abbr", NULL);
 prefix = optionVal("prefix", NULL);
 replace = optionExists("replace");
 test = optionExists("test");
+drop = optionExists("drop");
+if (drop && !optionExists("seqTbl"))
+    errAbort("can only specify -drop with -seqTbl and -extFileTbl");
 hgLoadSeq(argv[1], argc-2, argv+2);
 return 0;
 }

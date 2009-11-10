@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.18 2008/12/03 19:54:07 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.19 2009/10/27 21:26:00 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -401,20 +401,20 @@ sub doDownload {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensGtfUrl \\
 -O $ensGtfFile
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensPepUrl \\
 -O $ensPepFile
 _EOF_
   );
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensMySqlUrl/seq_region.txt.gz \\
 -O seq_region.txt.gz
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensMySqlUrl/assembly.txt.gz \\
 -O assembly.txt.gz
 _EOF_

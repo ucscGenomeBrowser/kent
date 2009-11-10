@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = stringify.o
 
 stringify: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/stringify $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/stringify${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/stringify $O $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/stringify${EXE}

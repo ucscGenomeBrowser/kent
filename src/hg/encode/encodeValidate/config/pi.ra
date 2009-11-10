@@ -1,95 +1,94 @@
-lab	Broad
-pi	Bernstein
-grant	Bernstein
-project Broad
-
-lab	Caltech
-pi      Wold
-grant   Myers
-project HudsonAlpha
-
-lab	Cshl
-pi      Gingeras
-grant   Gingeras
-project Transcriptome
-
-lab	Duke
-pi      Crawford
-grant   Crawford
-project Duke
-
-lab	Gis
-pi      Ruan
-grant   Gingeras
-project Transcriptome
-
-lab	Helicos
-pi      Kapranov
-grant   Gingeras
-project Transcriptome
-
-lab	HudsonAlpha
-pi      Myers
-grant   Myers
-project HudsonAlpha
-
-lab	NHGRI-Elnitski
-pi      Elnitski
-grant   Elnitski
-project NHGRI-Elnitski
-
-lab	NHGRI-Margulies
-pi      Margulies
-grant   Margulies
-project NHGRI-Margulies
-
-lab     Riken
-pi      Carninci
-grant   Gingeras
-project Transcriptome
-
-lab	Sanger
-pi      Hubbard
-grant   Hubbard
-project Gencode
-
-lab	SunyAlbany
-pi      Tenebaum
-grant   Tenenbaum
-project SUNY
-
-lab	UMass
-pi      Dekker
-grant   Dekker
-project 5C
-
-lab	UmassHA
-pi      Weng
-grant   Weng
-project UMass-Weng
-
-lab	UNC
-pi      Lieb
-grant   Crawford
-project Duke
-
-lab	UT-A
-pi      Iyer
-grant   Crawford
-project Duke
-
-lab     Uw
-pi      Stam
-grant   Stam
-project UW
-
-lab	Yale
-pi      Snyder
-grant   Snyder
-project Yale
-
-lab	Affy
 pi	Gingeras
+lab	Affy
 grant	Gingeras
 project	Transcriptome
 
+pi	Bernstein
+lab	Broad
+grant	Bernstein
+project Broad
+
+pi      Wold
+lab	Caltech
+grant   Myers
+project HudsonAlpha
+
+pi      Gingeras
+lab	Cshl
+grant   Gingeras
+project Transcriptome
+
+pi      Crawford
+lab	Duke
+grant   Crawford
+project Duke
+
+pi      Ruan
+lab	Gis
+grant   Gingeras
+project Transcriptome
+
+pi      Kapranov
+lab	Helicos
+grant   Gingeras
+project Transcriptome
+
+pi      Myers
+lab	HudsonAlpha
+grant   Myers
+project HudsonAlpha
+
+pi      Elnitski
+lab	NHGRI-Elnitski
+grant   Elnitski
+project NHGRI-Elnitski
+
+pi      Margulies
+lab	NHGRI-Margulies
+grant   Margulies
+project NHGRI-Margulies
+
+pi      Carninci
+lab     Riken
+grant   Gingeras
+project Transcriptome
+
+pi      Hubbard
+lab	Sanger
+grant   Hubbard
+project Gencode
+
+pi      Tenebaum
+lab	SunyAlbany
+grant   Tenenbaum
+project SUNY
+
+pi      Dekker
+lab	UMass
+grant   Dekker
+project 5C
+
+pi      Weng
+lab	UmassHA
+grant   Weng
+project UMass-Weng
+
+pi      Lieb
+lab	UNC
+grant   Crawford
+project Duke
+
+pi      Iyer
+lab	UT-Austin
+grant   Crawford
+project Duke
+
+pi      Stam
+lab     Uw
+grant   Stam
+project UW
+
+pi      Snyder
+lab	Yale
+grant   Snyder
+project Yale

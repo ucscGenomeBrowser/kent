@@ -696,6 +696,10 @@ char *stringBetween(char *start, char *end, char *haystack);
  * none found.  The first such instance is returned.
  * String must be freed by caller. */
 
+char * findWordByDelimiter(char *word,char delimit, char *line);
+/* Return pointer to first word in line matching 'word' and delimited
+   by 'delimit'. Comparison is case sensitive. Delimit of ' ' uses isspace() */
+
 boolean endsWith(char *string, char *end);
 /* Returns TRUE if string ends with end. */
 

@@ -13,7 +13,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.9 2008/02/28 22:59:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.10 2009/10/20 00:18:43 fanhsu Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -310,7 +310,10 @@ for (onOff = 1; onOff >= 0; --onOff)
             {
             if (col->filterControls && col->on == onOff)
                 {
-                hPrintf("<TR><TD>");
+                if (sameWord(col->name, "dnaSeqs") || 
+                    sameWord(col->name, "aaSeqs") ) continue;
+
+		hPrintf("<TR><TD>");
                 hPrintf("<TABLE>\n");
                 hPrintf("<TR><TD><B>%s - %s</B></TD></TR>\n",
                         col->shortLabel, col->longLabel);

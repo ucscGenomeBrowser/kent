@@ -104,7 +104,7 @@ else
 endif
 
 # location of stringify program
-STRINGIFY = ${BINDIR}/stringify
+STRINGIFY = ${DESTDIR}${BINDIR}/stringify
 
 #Lowelab defines
 #The lowelab specific code will be included in compilation if the following conditions are satistied

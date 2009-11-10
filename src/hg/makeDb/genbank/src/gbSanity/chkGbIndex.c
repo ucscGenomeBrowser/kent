@@ -13,7 +13,7 @@
 #include "gbFileOps.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: chkGbIndex.c,v 1.5 2009/04/23 00:35:41 markd Exp $";
+static char const rcsid[] = "$Id: chkGbIndex.c,v 1.7 2009/10/13 21:24:49 markd Exp $";
 
 static void chkProcessed(struct gbEntry* entry, struct gbProcessed* processed)
 /* check a single processed object */

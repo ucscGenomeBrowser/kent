@@ -1323,14 +1323,19 @@ char cmd[256];
 
 struct dyString *dy = dyStringNew(0);
 char path[256];
+char dnaPath[256];
 char toDb[12];
 
 safef(toDb,sizeof(toDb),"%s", db);
 toDb[0]=toupper(toDb[0]);
 
-safef(path,sizeof(path),"/cluster/data/%s/nib", db);
-if (!fileExists(path))
-    errAbort("unable to locate nib dir %s",path);
+safef(dnaPath,sizeof(dnaPath),"/cluster/data/%s/nib", db);
+if (!fileExists(dnaPath))
+    {
+    safef(dnaPath,sizeof(dnaPath),"/cluster/data/%s/%s.2bit", db, db);
+    if (!fileExists(dnaPath))
+	errAbort("unable to locate nib dir or .2bit for %s: %s", db, dnaPath);
+    }
     
 safef(path,sizeof(path),"/gbdb/%s/liftOver/%sTo%s.over.chain.gz", fromDb, fromDb, toDb);
 if (!fileExists(path))
@@ -1351,9 +1356,9 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
-"pslRecalcMatch unscoredNB.psl /cluster/data/%s/nib" 
+"pslRecalcMatch unscoredNB.psl %s" 
 " pslMap.fa nonBac.psl"
-,db);
+,dnaPath);
 verbose(1,"%s\n",cmd); system(cmd);
 
 /* bac */
@@ -1364,9 +1369,9 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
-"pslRecalcMatch unscoredB.psl /cluster/data/%s/nib" 
+"pslRecalcMatch unscoredB.psl %s" 
 " pslMap.fa bacTemp.psl"
-,db);
+,dnaPath);
 verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
@@ -1431,6 +1436,8 @@ safef(cmd,sizeof(cmd),
 ,database,fasta);
 verbose(1,"%s\n",cmd); system(cmd);
 
+/* required for mysql 5 longtext for case-insensitive comparisons of blobs */
+sqlUpdate(conn, "ALTER table vgRemapTemp modify seq longtext;");
 sqlUpdate(conn, "create index seq on vgRemapTemp(seq(40));");
 
 /* get remapped psl probes not yet aligned */
@@ -1442,11 +1449,12 @@ dyStringPrintf(dy,
     "m.blockSizes,m.qStarts,m.tStarts"    
     " from vgPrb e, vgPrbAliAll a, %s.%s m, vgRemapTemp n"
     " where e.id = a.vgPrb and a.db = '%s' and a.status='new'"
-    " and m.qName = n.name and n.seq = lower(e.seq)"
+    " and m.qName = n.name and n.seq = e.seq"
     " and e.taxon = %d and e.state='seq' and e.seq <> ''"
     " order by m.tName,m.tStart"
     ,db,track,db,fromTaxon);
 rc = 0;
+
 rc = sqlSaveQuery(conn, dy->string, "vgPrbReMap.psl", FALSE);
 verbose(1,"Count of Psls found for reMap: %d\n", rc);
 

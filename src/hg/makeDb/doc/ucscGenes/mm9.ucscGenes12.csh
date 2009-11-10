@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: mm9.ucscGenes12.csh,v 1.1 2009/09/29 06:40:00 kent Exp $"
+#	"$Id: mm9.ucscGenes12.csh,v 1.2 2009/10/14 15:29:12 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -14,7 +14,6 @@ set scratchDir = /hive/scratch
 
 # Databases
 set db = mm9
-set Db = Mm9
 set xdb = hg19
 set Xdb = Hg19
 set xBlastTab = hgBlastTab
@@ -33,8 +32,9 @@ set yeastDb = sacCer2
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
 set tempPrefix = "tmp"
-set tempDb = ${tempPrefix}${Db}
-set bioCycTempDb = tmpBioCyc$Db
+set tmpSuffix = "Foo12"
+set tempDb = ${tempPrefix}${tmpSuffix}
+set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
 # Table for SNPs
 set snpTable = snp130
@@ -70,8 +70,6 @@ set taxon = 9606
 
 # Previous gene set
 set oldGeneBed = $genomes/mm9/bed/ucsc.10/ucscGenes.bed
-# This was created with:
-# zcat /cluster/data/hg18/bed/liftOver/hg18ToHg19.over.chain.gz | liftOver /cluster/data/hg18/bed/ucsc.11/ucscGenes.bed stdin oldUcscGenes.bed oldUcscGenes.unmapped
 
 # Machines
 set dbHost = hgwdev
@@ -546,7 +544,7 @@ txCdsCluster pick.bed pick.cluster
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
 # Map CDS to gene set.  Takes 10 seconds.  Might want to reconsider using
 # txCdsWeed here.
-txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
+txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info 
 txCdsWeed pick.tce pick.info weededCds.tce weededCds.info
 txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
@@ -588,8 +586,7 @@ txGeneAccession $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
 	weeded.bed txToAcc.tab oldToNew.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
 subColumn 1 weeded.info txToAcc.tab ucscGenes.info
-weedLines weeds.lst pick.picks stdout | subColumn 1 stdin txToAcc.tab ucscGenes.picks
-weedLines weeds.lst pick.nice stdout | subColumn 2 stdin txToAcc.tab ucscGenes.nice
+weedLines weeds.lst pick.picks stdout | subColumn 1 stdin txToAcc.tab ucscBadUniprot.picks
 subColumn 4 coding.bed txToAcc.tab ucscCoding.bed
 subColumn 4 nearCoding.bed txToAcc.tab ucscNearCoding.bed
 subColumn 4 antisense.bed txToAcc.tab ucscAntisense.bed
@@ -602,6 +599,58 @@ cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.t
 # Load these sequences into database. Takes 17 seconds.
 txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
     refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
+
+# Generate ucscGene/uniprot blat run.
+mkdir -p $dir/blat/uniprotVsUcsc
+cd $dir/blat/uniprotVsUcsc
+mkdir raw
+mkdir ucscFaaSplit
+faSplit sequence ../../ucscGenes.faa 100 ucscFaaSplit/uc
+ls -1 ucscFaaSplit/uc*.fa > toDoList
+
+echo '#LOOP' > template
+echo './runBlats $(path1) '"$db"' $(root1) {check out line+ raw/uni_$(root1).psl}' >> template
+echo '#ENDLOOP' >> template
+
+cat << '_EOF_' > runBlats
+#!/bin/csh -ef
+set out1 = uni_$3.psl
+set tmpDir = /scratch/tmp/$2/ucscGenes/uniprotVsUcsc
+set workDir = $tmpDir/$3
+mkdir -p $tmpDir
+mkdir $workDir
+blat -prot -minIdentity=90 $1 ../../uniProt.fa $workDir/$out1
+mv $workDir/$out1 raw/$out1
+rmdir $workDir
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    #	<< happy emacs
+chmod +x runBlats
+
+gensub2 toDoList single template jobList
+
+# Run protein/transcript blat job on cluster
+ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para make jobList"
+ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
+
+cat run.time
+#Completed: 97 of 97 jobs
+#CPU time in finished jobs:       1150s      19.17m     0.32h    0.01d  0.000 y
+#IO & Wait Time:                   293s       4.88m     0.08h    0.00d  0.000 y
+#Average job time:                  15s       0.25m     0.00h    0.00d
+#Longest finished job:              59s       0.98m     0.02h    0.00d
+#Submission to last job:            71s       1.18m     0.02h    0.00d
+
+pslCat raw/*.psl > ../../ucscVsUniprot.psl
+rm -r raw
+
+# Fixup UniProt links in picks file.  This is a little circuitious.  In the future may
+# avoid using the picks file for the protein link, and rely on protein/protein blat
+# to do the assignment.  The current use of the uniProt protein/ucscGenes mrna alignments
+# and the whole trip through evidence and picks files is largely historical from when
+# there was a different CDS selection process.
+cd $dir
+txCdsRedoUniprotPicks ucscBadUniprot.picks ucscVsUniprot.psl uniCurated.tab ucscGenes.picks
 
 # Cluster the coding and the uncoding sets, and make up canonical and
 # isoforms tables. Takes 3 seconds.
@@ -616,10 +665,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 # table.
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
-
-
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 
 #####################################################################################
@@ -693,29 +738,25 @@ hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 cd $dir
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
-hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
+hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
-# XXX TODO - no allenBrain yet - 2009-06-26
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
-# XXX TODO - no ensGene yet - 2009-06-26
 
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
-# XXX TODO - not done 2009-06-26
+
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
 cd $dir
+hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
      
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-# XXX TODO - none of these tables exist yet 2009-06-26
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -727,7 +768,6 @@ if ($db =~ hg*) then
 endif
 
 
-# XXX TODO - none of these tables exist yet 2009-06-26
 if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
 	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
@@ -763,12 +803,14 @@ if ($db =~ mm*) then
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
 
-# XXX TODO - need allenBrain tables first.
+# Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
+cd /usr/local/apache/cgi-bin/visiGeneData
+ixIxx visiGene.text visiGene.ix visiGene.ixx
+cd $dir
 
 
-# XXX TODO - none of these tables exist yet 2009-06-26
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
@@ -792,7 +834,7 @@ targetGenesetPrefix known
 targetDb $tempDb
 queryDbs $xdb $ratDb $fishDb $flyDb $wormDb $yeastDb
 
-${db}Fa $tempFa
+${tempDb}Fa $tempFa
 ${xdb}Fa $xdbFa
 ${ratDb}Fa $ratFa
 ${fishDb}Fa $fishFa
@@ -809,16 +851,16 @@ doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -wo
 # done 2009-06-29
 
 # Load self
-cd $di4/hgNearBlastp/run.$tempDb.$tempDb
+cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 loadPairwise.csh
 
-# Load mouse and rat
+# Load human and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
 
-# Remove non-syntenic hits for mouse and rat
+# Remove non-syntenic hits for human and rat
 # Takes a few minutes
 mkdir -p /gbdb/$tempDb/liftOver
 ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
@@ -874,8 +916,8 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
-
 # Clean up
+cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
@@ -929,8 +971,8 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
-mkdir $genomes/hg19/bed/ucsc.12/pfam
-cd $genomes/hg19/bed/ucsc.12/pfam
+mkdir $dir/pfam
+cd $dir/pfam
 mkdir splitProt
 faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
 mkdir result
@@ -964,28 +1006,26 @@ cat << '_EOF_' > makePfamRa.awk
 /^ACC/ {print}
 /^DESC/ {print; printf("\n");}
 '_EOF_'
-awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam_fs > pfamDesc.ra
+awk -f makePfamRa.awk  /hive/data/outside/pfam/current/Pfam_fs > pfamDesc.ra
 raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
    awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
 
 # Convert output to tab-separated file. 
-cd $dir
-catDir pfam/result | hmmPfamToTab -eValCol stdin ucscPfam.tab
+cd $dir/pfam
+catDir result | hmmPfamToTab -eValCol stdin ucscPfam.tab
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
 	pfamDesc.tab > sub.tab
-XXX - ready for this after the cluster run finishes 2009-07-08
-cut -f 1,4 ucscPfam.tab | subColumn 2 stdin pfam/sub.tab knownToPfam.tab
+cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.tab knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
-mkdir /hive/data/genomes/hg19/bed/ucsc.12/scop
-
-cd /hive/data/genomes/hg19/bed/ucsc.12/scop
+mkdir $dir/scop
+cd $dir/scop
 mkdir result
 ls -1 ../pfam/splitProt > prot.list
 cat << '_EOF_' > doScop
@@ -1029,8 +1069,8 @@ hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
 # XXX TODO - haven't figured out how to do this when old genes were on old assembly
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
 genePredToBed knownGeneOld.gp >knownGeneOld.bed
-txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.bed
-hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.bed
+txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.tab
+hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
@@ -1069,13 +1109,8 @@ hgsql $spDb -N -e \
 hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
 # Build the pepPi table
-
-hgsql $spDb -e \
-    "select info.acc from info, accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > protAcc.lis
-
-hgsql $tempDb -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
-
-pbCalPi protAcc.lis $spDb pepPi.tab
+cd $dir/pb
+pbCalPi $spDb pepPi.tab
 hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
 
 # Calculate and load pep distributions
@@ -1151,6 +1186,12 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 			    
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....

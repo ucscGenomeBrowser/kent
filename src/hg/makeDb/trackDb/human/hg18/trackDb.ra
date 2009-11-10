@@ -3122,6 +3122,7 @@ subGroup2 FAC Factor H3=Histone-H3 NUC=Nucleosome POL2S=Pol-II_Serine-5 POL2U=Po
 subGroup3 ACT Activation ACTV=Active REST=Resting
 subGroup4 STRAND Strand DBL=Double FWD=Forward RWD=Reverse
 dimensions dimensionX=ACT dimensionY=FAC dimensionZ=STRAND
+dimensionZchecked DBL,FWD,RWD
 sortOrder FAC=+ ACT=+ STRAND=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults PK=pack SIG=full
