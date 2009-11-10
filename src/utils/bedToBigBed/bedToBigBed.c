@@ -11,10 +11,10 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.15 2009/11/07 19:31:19 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.16 2009/11/10 05:47:03 kent Exp $";
 
-int blockSize = 1024;
-int itemsPerSlot = 256;
+int blockSize = 256;
+int itemsPerSlot = 512;
 int bedFields = 0;
 char *as = NULL;
 
