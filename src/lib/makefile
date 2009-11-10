@@ -35,7 +35,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
     udc.o vGfx.o vGif.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
-    xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o
+    xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 	ar rcus $(MACHTYPE)/jkweb.a $(O)
