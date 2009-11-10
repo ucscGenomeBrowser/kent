@@ -13,7 +13,7 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.3 2009/11/09 18:41:18 angie Exp $";
+static char const rcsid[] = "$Id: udcFuse.c,v 1.4 2009/11/10 00:54:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -392,6 +392,14 @@ checkRet(ret);
 
 return 0;
 #endif//def UDC_TEST
+}
+
+#else // no USE_FUSE
+#include <stdio.h>
+int main(int argc, char *argv[])
+{
+printf("udcFuse requires the FUSE (filesystem in userspace) library -- make sure that is installed and add USE_FUSE=1 to your enviroment.\n");
+return 0;
 }
 
 #endif//def USE_FUSE
