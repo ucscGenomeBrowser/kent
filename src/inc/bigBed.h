@@ -32,6 +32,8 @@ struct ppBed
 struct bbiFile *bigBedFileOpen(char *fileName);
 /* Open up big bed file.   Free this up with bbiFileClose. */
 
+#define bigBedFileClose(a) bbiFileClose(a)
+
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
 	bits32 start, bits32 end, int maxItems, struct lm *lm);
 /* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum

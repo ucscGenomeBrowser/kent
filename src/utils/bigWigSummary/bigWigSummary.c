@@ -7,7 +7,7 @@
 #include "udc.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.11 2009/09/08 19:50:24 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.12 2009/11/10 05:46:36 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -40,6 +40,8 @@ static struct optionSpec options[] = {
 void bigWigSummary(char *bigWigFile, char *chrom, int start, int end, int dataPoints)
 /* bigWigSummary - Extract summary information from a bigWig file.. */
 {
+struct bbiFile *bwf = bigWigFileOpen(bigWigFile);
+
 /* Make up values array initialized to not-a-number. */
 double nan0 = strtod("NaN", NULL);
 double summaryValues[dataPoints];
@@ -47,7 +49,7 @@ int i;
 for (i=0; i<dataPoints; ++i)
     summaryValues[i] = nan0;
 
-if (bigWigSummaryArray(bigWigFile, chrom, start, end, bbiSummaryTypeFromString(summaryType), 
+if (bigWigSummaryArray(bwf, chrom, start, end, bbiSummaryTypeFromString(summaryType), 
       dataPoints, summaryValues))
     {
     for (i=0; i<dataPoints; ++i)
@@ -66,6 +68,7 @@ else
     {
     errAbort("no data in region %s:%d-%d in %s\n", chrom, start, end, bigWigFile);
     }
+bigWigFileClose(&bwf);
 }
 
 int main(int argc, char *argv[])

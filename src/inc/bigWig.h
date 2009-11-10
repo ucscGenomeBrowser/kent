@@ -37,6 +37,8 @@ void bigWigFileCreate(
 struct bbiFile *bigWigFileOpen(char *fileName);
 /* Open up big wig file.   Free this up with bbiFileClose */
 
+#define bigWigFileClose(a) bbiFileClose(a)
+
 struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	struct lm *lm);
 /* Get data for interval.  Return list allocated out of lm. */
@@ -46,7 +48,7 @@ int bigWigIntervalDump(struct bbiFile *bwf, char *chrom, bits32 start, bits32 en
 /* Print out info on bigWig parts that intersect chrom:start-end.   Set maxCount to 0 if you 
  * don't care how many are printed.  Returns number printed. */
 
-boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bigWigSummaryArray(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
@@ -54,12 +56,12 @@ boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * be 0.0 or nan(0) depending on the application.)  Returns FALSE if no data
  * at that position. */
 
-boolean bigWigSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bigWigSummaryArrayExtended(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	int summarySize, struct bbiSummaryElement *summary);
 /* Get extended summary information for summarySize evenely spaced elements into
  * the summary array. */
 
-double bigWigSingleSummary(char *fileName, char *chrom, int start, int end,
+double bigWigSingleSummary(struct bbiFile *bwf, char *chrom, int start, int end,
     enum bbiSummaryType summaryType, double defaultVal);
 /* Return the summarized single value for a range. */
 
