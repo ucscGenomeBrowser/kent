@@ -26,13 +26,14 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 #include "udc.h"
+#include "bbiFile.h"
 #include "bigWig.h"
 #include "bigBed.h"
 #ifdef USE_BAM
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.109 2009/11/09 22:31:15 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.110 2009/11/10 05:39:34 kent Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -1447,6 +1448,24 @@ static boolean bigWigRecognizer(struct customFactory *fac,
 return (sameType(type, "bigWig"));
 }
 
+void setBbiViewLimits(struct customTrack *track)
+/* If there are no viewLimits sets, set them from bbiFile info. */
+{
+struct hash *settings = track->tdb->settingsHash;
+if (hashLookup(settings, "viewLimits") == NULL)
+    {
+    struct bbiSummaryElement sum = bbiTotalSummary(track->bbiFile);
+    if (sum.minVal == sum.maxVal)
+	{
+	sum.minVal += 1;
+	sum.maxVal -= 1;
+	}
+    char text[32];
+    safef(text, sizeof(text), "%f:%f", sum.minVal, sum.maxVal);
+    hashAdd(settings, "viewLimits", cloneString(text));
+    }
+}
+
 static struct customTrack *bigWigLoader(struct customFactory *fac,  
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -1457,8 +1476,8 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigWig");
-struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);	// Just for error checking
-bbiFileClose(&bbi);
+track->bbiFile = bigWigFileOpen(bigDataUrl);
+setBbiViewLimits(track);
 return track;
 }
 
@@ -1491,8 +1510,8 @@ struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 if (bigDataUrl == NULL)
     errAbort("Missing bigDataUrl setting from track of type=bigBed");
-struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);	// Just for error checking
-bbiFileClose(&bbi);
+track->bbiFile = bigBedFileOpen(bigDataUrl);
+setBbiViewLimits(track);
 return track;
 }
 
