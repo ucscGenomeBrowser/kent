@@ -54,6 +54,7 @@ struct customTrack
     struct gffFile *gffHelper;	/* Used while processing GFF files. */
     int offset;			/* Base offset. */
     char *groupName;		/* Group name if any. */
+    struct bbiFile *bbiFile;	/* Handle for bigWig/bigBed file. */
     };
 
 /* cart/cgi variables */
