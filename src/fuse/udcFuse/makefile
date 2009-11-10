@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-L += -lm -lfuse
+L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
