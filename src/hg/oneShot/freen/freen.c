@@ -1,6 +1,6 @@
 /* freen - My Pet Freen. */
 #include "common.h"
-#include <zlib.h>
+#include "zlibFace.h"
 #include "memalloc.h"
 #include "dystring.h"
 #include "linefile.h"
@@ -8,7 +8,7 @@
 #include "obscure.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.90 2009/11/10 01:21:14 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.91 2009/11/10 20:52:58 kent Exp $";
 
 void usage()
 {
@@ -23,19 +23,17 @@ void freen(char *input, char *output, char *uncompressed)
 size_t uncompressedSize;
 char *uncompressedBuf;
 readInGulp(input, &uncompressedBuf, &uncompressedSize);
-uLongf maxSize = uncompressedSize * 1.001 + 13;
-uLongf compressedSize = maxSize;
-char *compressedBuf = needLargeMem(maxSize);
-int err = compress((Bytef*)compressedBuf, &compressedSize, (Bytef*)uncompressedBuf, uncompressedSize);
-printf("uncompressedSize %d, compressedSize %d, err %d\n", (int)uncompressedSize, (int)compressedSize, err);
+size_t compBufSize = zCompBufSize(uncompressedSize);
+char *compBuf = needLargeMem(compBufSize);
+size_t compressedSize = zCompress(uncompressedBuf, uncompressedSize, compBuf, compBufSize);
+printf("uncompressedSize %d, compressedSize %d\n", (int)uncompressedSize, (int)compressedSize);
 FILE *f = mustOpen(output, "wb");
-mustWrite(f, compressedBuf, compressedSize);
+mustWrite(f, compBuf, compressedSize);
 carefulClose(&f);
 f = mustOpen(uncompressed, "wb");
-uLongf uncSize = uncompressedSize;
 memset(uncompressedBuf, 0, uncompressedSize);
-err = uncompress((Bytef*)uncompressedBuf,  &uncSize, (Bytef*)compressedBuf, compressedSize);
-printf("uncompressedSize %d, err %d\n", (int)uncSize, err);
+size_t uncSize = zUncompress(compBuf, compressedSize, uncompressedBuf, uncompressedSize);
+printf("uncompressedSize %d\n", (int)uncSize);
 mustWrite(f, uncompressedBuf, uncSize);
 carefulClose(&f);
 }
