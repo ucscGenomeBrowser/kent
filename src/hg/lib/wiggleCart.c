@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.24 2009/11/10 05:41:56 kent Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.25 2009/11/10 07:53:58 kent Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -122,7 +122,7 @@ boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *minY_str = NULL;  /*	string from cart	*/
 char *maxY_str = NULL;  /*	string from cart	*/
 double minY, maxY;	/* Current min/max for view. */
-double absMinY, absMaxY;	/* Absolute min/max allowed. */
+double absMinY=0, absMaxY=0;	/* Absolute min/max allowed. */
 char * tdbDefault = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE"));
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
