@@ -7,8 +7,8 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.28 2009/09/30 21:40:00 braney Exp $";
-static char *version = "$Revision: 1.28 $";
+static char const rcsid[] = "$Id: validateFiles.c,v 1.29 2009/11/10 21:52:08 tdreszer Exp $";
+static char *version = "$Revision: 1.29 $";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -87,6 +87,7 @@ errAbort(
   "   -quick[=N]                   Just test the first N lines of each file (default 1000)\n"
   "   -printFailLines              Print lines which fail validation to stdout\n"
   "   -isSort                      input is sorted by chrom\n"
+//"   -acceptDot                   Accept '.' as 'N' in DNA sequence\n"
   "   -nMatch                      N's do not count as a mismatch\n"
   "   -version                     Print version\n"
   , MAX_ERRORS);
@@ -109,6 +110,7 @@ static struct optionSpec options[] = {
    {"mmCheckOneInN", OPTION_INT},
    {"quick", OPTION_INT},
    {"nMatch", OPTION_BOOLEAN},
+// {"acceptDot", OPTION_BOOLEAN},
    {"isSort", OPTION_BOOLEAN},
    {"version", OPTION_BOOLEAN},
    {NULL, 0},
@@ -608,7 +610,7 @@ if (strand == '-')
 
 if (g->size != strlen(seq) || g->size != chromEnd-chromStart)
     {
-    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d)", 
+    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d)",
          file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
 	 chrom, chromStart, chromEnd);
     return FALSE;
@@ -626,7 +628,7 @@ for (i=0 ; i < length; ++i)
     }
 if (mm > mismatches)
     {
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n", 
+    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n",
          file, line, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
     return FALSE;
     }
@@ -659,7 +661,7 @@ else
     }
 if (g1->size != len1 || g2->size != len2)
     {
-    warn("Error [file=%s, line=%d]: sequence lengths (%d, %d) do not match genomic ones (%d, %d)", 
+    warn("Error [file=%s, line=%d]: sequence lengths (%d, %d) do not match genomic ones (%d, %d)",
          file, line, len1, len2, g1->size, g2->size);
     return FALSE;
     }
@@ -681,7 +683,7 @@ if (mmPerPair)
     {
     if (mm1 > mismatches || mm2 > mismatches)
         {
-        warn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
+        warn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
              file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
@@ -690,7 +692,7 @@ else
     {
     if (mm1+mm2 > mismatches)
         {
-        warn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n", 
+        warn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
              file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
@@ -709,9 +711,6 @@ int line = 0;
 int errs = 0;
 unsigned chromSize;
 int size;
-// Dot in place of N for tagaligns from Larry's group. Maybe remove this later.
-int savedot = dnaChars[(int)'.'];
-dnaChars[(int)'.'] = 1;
 verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
 while (lineFileNext(lf, &row, &size))
     {
@@ -746,7 +745,6 @@ while (lineFileNext(lf, &row, &size))
 	    errAbort("Aborting .. found %d errors\n", errs);
 	}
     }
-dnaChars[(int)'.'] = savedot;
 return errs;
 }
 
@@ -1087,7 +1085,10 @@ isSort         = optionExists("isSort");
 mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
 quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
+
 initArrays();
+dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.
+
 // Get chromInfo from DB or file
 if ( (chromDb = optionVal("chromDb", NULL)) != NULL)
     {
