@@ -90,30 +90,12 @@ ssh -n hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
 
 #---------------------
 
-echo
-echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL [${0}: `date`]"
-echo
-rm -f doNew32.log
-#echo debug: disabled parallel build 32bit utils on dev
-ssh -n $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
-
 echo "Unpack the new branch on BUILDDIR for beta [${0}: `date`]"
 #unpack the new branch on BUILDDIR for beta
 #echo debug: disabled coBranch.csh
 ./coBranch.csh
 if ( $status ) then
     echo "Unpack the new branch on BUILDDIR for beta FAILED [${0}: `date`]"
-    echo "Waiting for any other processes to finish"
-    wait
-    exit 1
-endif
-
-echo "Build utils on beta [${0}: `date`]"
-echo
-#echo debug: disabled build utils on beta
-./buildUtils.csh
-if ( $status ) then
-    echo "Build utils on beta FAILED [${0}: `date`]"
     echo "Waiting for any other processes to finish"
     wait
     exit 1
@@ -136,10 +118,9 @@ echo "build on beta done for v$BRANCHNN [${0}: `date`]"
 echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER galt kent browser-qa
 
 echo
-echo "Waiting for the background beta:cvs-reports and ${BOX32}:doNewBranch32.csh to finish [${0}: `date`]"
+echo "Waiting for the background beta:cvs-reports to finish [${0}: `date`]"
 wait
 echo "Wait complete, checking results. [${0}: `date`]"
-
 if ( -e CvsReports.ok ) then
     echo "CVS Reports finished ok. [${0}: `date`]"
     echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
@@ -147,6 +128,32 @@ if ( -e CvsReports.ok ) then
 else
     echo "CVS Reports had some error, no ok file found. [${0}: `date`]"
 endif
+
+
+echo
+echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL [${0}: `date`]"
+echo
+rm -f doNew32.log
+#echo debug: disabled parallel build 32bit utils on dev
+ssh -n $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
+
+
+echo "Build utils on beta [${0}: `date`]"
+echo
+#echo debug: disabled build utils on beta
+./buildUtils.csh
+if ( $status ) then
+    echo "Build utils on beta FAILED [${0}: `date`]"
+    echo "Waiting for any other processes to finish"
+    wait
+    exit 1
+endif
+
+echo
+echo "Waiting for the background ${BOX32}:doNewBranch32.csh to finish [${0}: `date`]"
+wait
+echo "Wait complete, checking results. [${0}: `date`]"
+
 if (-e 32bitUtils.ok) then
     echo "32-bit utils build finished ok. [${0}: `date`]"
 else
