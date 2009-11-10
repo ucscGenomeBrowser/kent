@@ -1,11 +1,13 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.43 2009/09/16 19:52:52 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.44 2009/10/17 22:36:03 larrym Exp $
 
 var debug = false;
 var originalPosition;
 var originalSize;
 var originalCursor;
 var clickClipHeight;
+var revCmplDisp;
+var insideX;
 var startDragZoom = null;
 var newWinWidth;
 var imageV2 = false;
@@ -100,15 +102,19 @@ function checkPosition(img, selection)
     var imgHeight = jQuery(img).height();
     var imgOfs = jQuery(img).offset();
     var slop = 10;
-    return (selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
+
+    // We ignore clicks in the gray tab and track title column (we really should suppress all drag activity there,
+    // but I don't know how to do that with imgAreaSelect).
+    var leftX = revCmplDisp ? imgOfs.left - slop : imgOfs.left + insideX - slop;
+    var rightX = revCmplDisp ? imgOfs.left + imgWidth - insideX + slop : imgOfs.left + imgWidth + slop;
+    
+    return (selection.event.pageX >= leftX) && (selection.event.pageX < rightX)
         && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop));
 }
 
 function updatePosition(img, selection, singleClick)
 {
     // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
-    var insideX = parseInt(document.getElementById("hgt.insideX").value);
-    var revCmplDisp = parseInt(document.getElementById("hgt.revCmplDisp").value) == 0 ? false : true;
     var chromName = document.getElementById("hgt.chromName").value;
     var winStart = parseInt(document.getElementById("hgt.winStart").value);
     var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
@@ -168,8 +174,8 @@ function updatePosition(img, selection, singleClick)
 function selectChange(img, selection)
 {
     initVars();
-    updatePosition(img, selection, false);
     if(checkPosition(img, selection)) {
+        updatePosition(img, selection, false);
         jQuery('body').css('cursor', originalCursor);
     } else {
         jQuery('body').css('cursor', 'not-allowed');
@@ -271,6 +277,8 @@ function loadImgAreaSelect(firstTime)
 
         clickClipHeight = parseInt(rulerEle.value);
         newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
+        revCmplDisp = parseInt(document.getElementById("hgt.revCmplDisp").value) == 0 ? false : true;
+        insideX = parseInt(document.getElementById("hgt.insideX").value);
 
         imgAreaSelect = jQuery((trackImgTbl || trackImg).imgAreaSelect({ selectionColor: 'blue', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight,

@@ -1,0 +1,95 @@
+lab	Broad
+pi	Bernstein
+grant	Bernstein
+project Broad
+
+lab	Caltech
+pi      Wold
+grant   Myers
+project HudsonAlpha
+
+lab	Cshl
+pi      Gingeras
+grant   Gingeras
+project Transcriptome
+
+lab	Duke
+pi      Crawford
+grant   Crawford
+project Duke
+
+lab	Gis
+pi      Ruan
+grant   Gingeras
+project Transcriptome
+
+lab	Helicos
+pi      Kapranov
+grant   Gingeras
+project Transcriptome
+
+lab	HudsonAlpha
+pi      Myers
+grant   Myers
+project HudsonAlpha
+
+lab	NHGRI-Elnitski
+pi      Elnitski
+grant   Elnitski
+project NHGRI-Elnitski
+
+lab	NHGRI-Margulies
+pi      Margulies
+grant   Margulies
+project NHGRI-Margulies
+
+lab     Riken
+pi      Carninci
+grant   Gingeras
+project Transcriptome
+
+lab	Sanger
+pi      Hubbard
+grant   Hubbard
+project Gencode
+
+lab	SunyAlbany
+pi      Tenebaum
+grant   Tenenbaum
+project SUNY
+
+lab	UMass
+pi      Dekker
+grant   Dekker
+project 5C
+
+lab	UmassHA
+pi      Weng
+grant   Weng
+project UMass-Weng
+
+lab	UNC
+pi      Lieb
+grant   Crawford
+project Duke
+
+lab	UT-A
+pi      Iyer
+grant   Crawford
+project Duke
+
+lab     Uw
+pi      Stam
+grant   Stam
+project UW
+
+lab	Yale
+pi      Snyder
+grant   Snyder
+project Yale
+
+lab	Affy
+pi	Gingeras
+grant	Gingeras
+project	Transcriptome
+

@@ -1,0 +1,110 @@
+#Statistics on HPRD_SINGLE_PSIMI_070609.xml
+#Format is:
+#<tag name>  <tag count>
+#      <<text>> <max length> <type> <count> <unique count>
+#      <attribute name> <max length> <type> <count> <unique count>
+
+entrySet 1
+	<text>	0	none	0	0
+	level	1	int	1	1
+	version	1	int	1	1
+	xmlns	16	string	1	1
+	xmlns:xsi	41	string	1	1
+	xsi:schemaLocation	69	string	1	1
+
+entry 1
+	<text>	0	none	0	0
+
+source 1
+	<text>	0	none	0	0
+
+names 85097
+	<text>	0	none	0	0
+
+shortLabel 85097
+	<text>	146	string	85097	9780
+
+fullName 75324
+	<text>	32	string	75324	9
+
+alias 50240
+	<text>	156	string	50240	48818
+	type	9	string	50240	1
+	typeAc	7	string	50240	1
+
+bibref 55778
+	<text>	0	none	0	0
+
+xref 131101
+	<text>	0	none	0	0
+
+primaryRef 131101
+	<text>	0	none	0	0
+	db	6	string	131101	4
+	id	16	string	131101	26736
+	dbAc	7	string	131100	3
+	refType	17	string	121327	2
+	refTypeAc	7	string	121327	2
+
+secondaryRef 43989
+	<text>	0	none	0	0
+	db	10	string	43989	6
+	id	16	string	43989	24595
+	dbAc	7	string	43986	5
+	refType	17	string	15499	1
+	refTypeAc	7	string	15499	1
+
+availabilityList 1
+	<text>	0	none	0	0
+
+availability 1
+	<text>	298	string	1	1
+	id	1	int	1	1
+
+experimentList 40076
+	<text>	0	none	0	0
+
+experimentDescription 55777
+	<text>	0	none	0	0
+	id	5	int	55777	55777
+
+interactionDetectionMethod 55777
+	<text>	0	none	0	0
+
+experimentRef 55777
+	<text>	5	int	55777	55777
+
+interactorList 1
+	<text>	0	none	0	0
+
+interactor 9773
+	<text>	0	none	0	0
+	id	5	string	9773	9773
+
+interactorType 9773
+	<text>	0	none	0	0
+
+organism 9773
+	<text>	0	none	0	0
+	ncbiTaxId	5	int	9773	4
+
+sequence 9773
+	<text>	30164	string	9773	9755
+
+interactionList 1
+	<text>	0	none	0	0
+
+interaction 40075
+	<text>	0	none	0	0
+	id	5	int	40075	40075
+
+participantList 40075
+	<text>	0	none	0	0
+
+participant 83403
+	<text>	0	none	0	0
+	id	5	int	83403	83403
+
+interactorRef 83403
+	<text>	5	string	83403	9773
+
