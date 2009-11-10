@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.109 2009/11/01 20:35:58 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.110 2009/11/10 05:48:18 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -10839,7 +10839,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 	{
 	/* install parent's track handler */
 	subtrack = trackFromTrackDb(tdb);
-    subtrack->tdb = subTdb;
+	subtrack->tdb = subTdb;
 	handler = lookupTrackHandler(tdb->tableName);
 	}
     else
@@ -10947,6 +10947,15 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
+
+/* Handle remote database settings - just a JK experiment at the moment. */
+track->remoteSqlHost = trackDbSetting(tdb, "sqlHost");
+track->remoteSqlUser = trackDbSetting(tdb, "sqlUser");
+track->remoteSqlPassword = trackDbSetting(tdb, "sqlPassword");
+track->remoteSqlDatabase = trackDbSetting(tdb, "sqlDatabase");
+track->remoteSqlTable = trackDbSetting(tdb, "sqlTable");
+track->isRemoteSql =  (track->remoteSqlHost != NULL && track->remoteSqlUser != NULL
+			&& track->remoteSqlDatabase != NULL && track->remoteSqlTable !=NULL);
 
 exonArrows = trackDbSetting(tdb, "exonArrows");
 nextItem = trackDbSetting(tdb, "nextItemButton");

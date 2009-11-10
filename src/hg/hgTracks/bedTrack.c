@@ -27,12 +27,13 @@ struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct trac
 	char *chrom, int start, int end, struct lm *lm)
 /* Return list of intervals in range. */
 {
-char *fileName = track->bbiFileName;
-if (fileName == NULL)
-    track->bbiFileName = fileName = bbiNameFromTable(conn, track->mapName);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi = track->bbiFile;
+if (bbi == NULL)
+    {
+    char *fileName = bbiNameFromTable(conn, track->mapName);
+    bbi = track->bbiFile = bigBedFileOpen(fileName);
+    }
 struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-bbiFileClose(&bbi);
 return result;
 }
 

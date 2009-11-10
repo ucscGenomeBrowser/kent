@@ -148,10 +148,17 @@ struct track
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
 
-    char *bbiFileName;		/* File name for bigWig or bigBed. */
+    struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */
 
     int bedSize;		/* Number of fields if a bed file. */
     boolean isBigBed;		/* If a bed, is it a bigBed? */
+
+    boolean isRemoteSql;	/* Is using a remote mySQL connection. */
+    char *remoteSqlHost;	/* Host machine name for remote DB. */
+    char *remoteSqlUser;	/* User name for remote DB. */
+    char *remoteSqlPassword;	/* Password for remote DB. */
+    char *remoteSqlDatabase;	/* Database in remote DB. */
+    char *remoteSqlTable;	/* Table name in remote DB. */
 
     char *otherDb;		/* Other database for an axt track. */
 
@@ -415,6 +422,9 @@ void groupTrackListAddSuper(struct cart *cart, struct group *group);
 
 void removeTrackFromGroup(struct track *track);
 /* Remove track from group it is part of. */
+
+struct sqlConnection *remoteTrackConnection(struct track *tg);
+/* Get a connection to remote database as specified in remoteSql settings... */
 
 int orientFromChar(char c);
 /* Return 1 or -1 in place of + or - */

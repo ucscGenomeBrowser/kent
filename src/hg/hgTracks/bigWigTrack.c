@@ -14,7 +14,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.6 2009/06/24 18:48:00 angie Exp $";
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.7 2009/11/10 05:48:17 kent Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -28,8 +28,7 @@ struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
 int summarySize = width;
 struct bbiSummaryElement *summary;
 AllocArray(summary, summarySize);
-char *wigFileName = tg->bbiFileName;
-if (bigWigSummaryArrayExtended(wigFileName, chromName, winStart, winEnd, summarySize, summary))
+if (bigWigSummaryArrayExtended(tg->bbiFile, chromName, winStart, winEnd, summarySize, summary))
     {
     /* Convert format to predraw */
     int i;
@@ -56,11 +55,12 @@ freeMem(summary);
 static void bigWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
-if (tg->bbiFileName == NULL)
+if (tg->bbiFile == NULL)
     {
     /* Figure out bigWig file name. */
     struct sqlConnection *conn = hAllocConn(database);
-    tg->bbiFileName = bbiNameFromTable(conn, tg->mapName);
+    char *fileName = bbiNameFromTable(conn, tg->mapName);
+    tg->bbiFile = bigWigFileOpen(fileName);
     hFreeConn(&conn);
     }
 }

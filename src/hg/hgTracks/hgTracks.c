@@ -31,6 +31,7 @@
 #include "ctgPos.h"
 #include "bed.h"
 #include "bigBed.h"
+#include "bigWig.h"
 #include "bedCart.h"
 #include "customTrack.h"
 #include "cytoBand.h"
@@ -46,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1603 2009/11/01 21:24:15 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1604 2009/11/10 05:48:17 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2498,13 +2499,27 @@ for (hel = hels; hel != NULL; hel = hel->next)
 hashElFreeList(&hels);
 }
 
+struct sqlConnection *remoteTrackConnection(struct track *tg)
+/* Get a connection to remote database as specified in remoteSql settings... */
+{
+if (!tg->isRemoteSql)
+    {
+    internalErr();
+    return NULL;
+    }
+else
+    {
+    return sqlConnectRemote(tg->remoteSqlHost, tg->remoteSqlUser, tg->remoteSqlPassword, 
+    	tg->remoteSqlDatabase);
+    }
+}
+
 void loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
 {
 struct trackDb *tdb, *tdbList = NULL;
 struct track *track;
 TrackHandler handler;
-
 tdbList = hTrackDb(database, chromName);
 tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -2868,26 +2883,22 @@ else if (sameString(type, "wig"))
 else if (sameString(type, "bigWig"))
     {
     tg = trackFromTrackDb(tdb);
-    tg->bbiFileName = trackDbSetting(tdb, "bigDataUrl");
+    tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "bigBed"))
     {
-    /* Figure out file name from settings. */
-    char *fileName = trackDbSetting(tdb, "bigDataUrl");
+    struct bbiFile *bbi = ct->bbiFile;
 
-    /* Briefly open file to find field counts, and from that revise the
-     * tdb->type to be more complete. */
-    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    /* Find field counts, and from that revise the tdb->type to be more complete. */
     char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
     char typeBuf[64];
     safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
-    bbiFileClose(&bbi);
 
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
-    tg->bbiFileName = fileName;
+    tg->bbiFile = bbi;
     tg->nextItemButtonable = FALSE;
     }
 else if (sameString(type, "bedGraph"))
@@ -3760,6 +3771,8 @@ for (track = trackList; track != NULL; track = track->next)
 	    compositeTrackVis(track);
 	}
     }
+if (measureTiming)
+    uglyTime("getTrackList");
 return trackList;
 }
 
@@ -3977,8 +3990,10 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
+#ifdef SOON
 if (measureTiming)
     uglyTime("getTrackList");
+#endif /* SOON */
 
 /* Honor hideAll and visAll variables */
 if (hideAll || defaultTracks)
