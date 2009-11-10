@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.50 2009/04/30 19:31:50 mikep Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.51 2009/11/10 22:46:19 angie Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -284,6 +284,16 @@ if (hel == NULL)
     return usual;
 else
     return hel->val;
+}
+
+void *hashFindValUpperCase(struct hash *hash, char *name)
+/* Lookup upper cased name in hash and return val or return NULL if not found.
+ * (Assumes all elements of hash are themselves already in upper case.) */
+{
+struct hashEl *hel = hashLookupUpperCase(hash, name);
+if (hel == NULL)
+    return NULL;
+return hel->val;
 }
 
 char *hashMustFindName(struct hash *hash, char *name)

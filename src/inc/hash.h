@@ -156,6 +156,10 @@ void *hashFindVal(struct hash *hash, char *name);
 void *hashOptionalVal(struct hash *hash, char *name, void *usual);
 /* Look up name in hash and return val, or usual if not found. */
 
+void *hashFindValUpperCase(struct hash *hash, char *name);
+/* Lookup upper cased name in hash and return val or return NULL if not found.
+ * (Assumes all elements of hash are themselves already in upper case.) */
+
 struct hashEl *hashAddInt(struct hash *hash, char *name, int val);
 /* Store integer value in hash */
 
