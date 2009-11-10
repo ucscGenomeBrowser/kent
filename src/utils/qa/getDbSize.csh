@@ -25,23 +25,17 @@ set totIndexSize=0
 
 if ( $#argv < 1 || $#argv > 1 ) then
   echo
-  echo "  gets size of database from TABLE STATUS"
+  echo "  gets size of database and /gbdb files from TABLE STATUS"
   echo "    from beta only."
 #  echo "  optionally suppresses size of indices."
   echo
 #  echo "    usage:  database|all|filename [noIndex]"
   echo "    usage:  database|all|filename"
-  echo "         defaults to beta"
   echo '         "filename" refers to list of dbs'
   echo
   exit
 else
   set db=$argv[1]
-endif
-
-if ( "$HOST" != "hgwdev" ) then
- echo "\n error: you must run this script on dev!\n"
- exit 1
 endif
 
 if ( $#argv == 2 ) then
