@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.644 2009/11/09 18:09:05 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.645 2009/11/10 23:04:03 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -2204,7 +2204,7 @@ wgEncode 1
     type wig 0.00 307.00
     viewLimits 0:20
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=472 dateSubmitted=2009-09-08 dateUnrestricted=2010-06-08 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Cmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12878 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=770 dateResubmitted=2009-11-06 dateSubmitted=2009-09-08 dateUnrestricted=2010-06-08 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Cmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12878Cmyc.wig.gz
 
 # submission 34
     track wgEncodeUtaustinChIPseqSignalGm12878Input
@@ -2315,9 +2315,9 @@ wgEncode 1
     shortLabel GM12892 CTCF BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12892 cells)
     subGroups view=SIGBO EXP=IP-CTCF cellType=GM12892
-    type wig 0.00 1758.00
+    type wig 0.00 1903.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12892 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=766 dateResubmitted=2009-11-03 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=GM12892 antibody=CTCF view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=772 dateResubmitted=2009-11-07 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf fileName=wgEncodeUtaChIPseqBaseOverlapSignalGm12892Ctcf.wig.gz
 
     track wgEncodeUtaChIPseqPeaksGm12892Ctcf
     release alpha
@@ -2405,7 +2405,7 @@ wgEncode 1
     shortLabel GM192391 BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19239 cells)
     subGroups view=SIGBO EXP=DNase cellType=GM19239
-    type wig 0.00 132.00
+    type wig 0.00 163.00
     viewLimits 0:25
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=GM19239 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-10-06 dateUnrestricted=2010-07-06 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalGm19239.wig.gz
 
@@ -2525,7 +2525,7 @@ wgEncode 1
     shortLabel H1-hESC DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in H1-hESC cells)
     subGroups view=SIGBO EXP=DNase cellType=2H1
-    type wig 0.00 168.00
+    type wig 0.00 187.00
     viewLimits 0:25
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=H1-hESC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalH1hesc.wig.gz
 
@@ -2555,7 +2555,7 @@ wgEncode 1
     shortLabel H1-hESC FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in H1-hESC cells)
     subGroups view=SIGBO EXP=FAIRE cellType=2H1
-    type wig 0.00 601.00
+    type wig 0.00 670.00
     viewLimit 4:20
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=H1-hESC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalH1hesc fileName=wgEncodeUncFAIREseqBaseOverlapSignalH1hesc.wig.gz
 
@@ -2616,7 +2616,7 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in H1-hESC cells)
     subGroups view=SIGBO EXP=IP-pol2 cellType=2H1
     type wig 0.00 760.00
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=641 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescPol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescPol2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=H1-hESC antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=770 dateResubmitted=2009-11-06 dateSubmitted=2009-10-02 dateUnrestricted=2010-07-02 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescPol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalH1hescPol2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksH1hescPol2
     release alpha
@@ -2668,7 +2668,7 @@ wgEncode 1
     type wig 0.00 277.00
     viewLimits 0:25
     color 0,102,136
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=763 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HeLa-S3 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=771 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-07 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2 fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHelas3V2.wig.gz
 
 # submission 280 (versioned by 495)
     track wgEncodeDukeDNaseSeqPeaksHelas3
@@ -2851,7 +2851,7 @@ wgEncode 1
     shortLabel HeLa c-Myc BO
     longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
     subGroups view=SIGBO EXP=IP-cMyc cellType=2HELA
-    type wig 0.00 140.00
+    type wig 0.00 170.00
     viewLimits 0:20
     color 0,102,136
     metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HeLa-S3 antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=767 submittedDataVersion="V2 - improved background model" dateResubmitted=2009-11-03 dateSubmitted=2009-03-21 dateUnrestricted=2009-12-21 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHelas3CmycV2.wig.gz
@@ -3193,7 +3193,7 @@ wgEncode 1
     subGroups view=SIGBO EXP=IP-pol2 cellType=2HEPG2
     type wig 0.00 1276.00
     viewLimits 0:100
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=589 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HepG2 antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=773 dateResubmitted=2009-11-07 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHepg2Pol2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHepg2Pol2
     release alpha
@@ -3233,7 +3233,7 @@ wgEncode 1
     shortLabel HUVEC DNase BO
     longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HUVEC cells)
     subGroups view=SIGBO EXP=DNase cellType=2HUVEC
-    type wig 0.00 102.00
+    type wig 0.00 147.00
     viewLimits 0:25
     color 224,75,0
     metadata project=wgEncode grant=Crawford lab=Duke dataType=DNaseSeq cell=HUVEC view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=762 dateResubmitted=2009-11-02 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeChromatinMap tableName=wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec fileName=wgEncodeDukeDNaseSeqBaseOverlapSignalHuvec.wig.gz
@@ -3335,7 +3335,7 @@ wgEncode 1
     type wig 0.00 341.00
     viewLimits 0:20
     color 224,75,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=635 dateSubmitted=2009-10-01 dateUnrestricted=2010-07-01 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCmyc.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=c-Myc view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=770 dateResubmitted=2009-11-06 dateSubmitted=2009-10-01 dateUnrestricted=2010-07-01 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCmyc fileName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecCmyc.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHuvecCmyc
     release alpha
@@ -3368,7 +3368,7 @@ wgEncode 1
     type wig 0.00 1447.00
     viewLimits 0:100
     color 224,75,0
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=552 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecPol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecPol2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=HUVEC antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=770 dateResubmitted=2009-11-06 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecPol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalHuvecPol2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksHuvecPol2
     release alpha
@@ -3688,7 +3688,7 @@ wgEncode 1
     type wig 0.00 1655.00
     viewLimits 0:100
     color 46,0,184
-    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=588 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562Pol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562Pol2.wig.gz
+    metadata project=wgEncode grant=Crawford lab=UT-A dataType=ChIPseq cell=K562 antibody=Pol2 view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=770 dateResubmitted=2009-11-06 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 composite=wgEncodeChromatinMap tableName=wgEncodeUtaChIPseqBaseOverlapSignalK562Pol2 fileName=wgEncodeUtaChIPseqBaseOverlapSignalK562Pol2.wig.gz
 
     track wgEncodeUtaChIPseqPeaksK562Pol2
     release alpha
@@ -3820,7 +3820,7 @@ wgEncode 1
     shortLabel PanIslets FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in PanIslets cells)
     subGroups view=SIGBO EXP=FAIRE cellType=PANI
-    type wig 0.00 297.00
+    type wig 0.00 314.00
     viewLimits 4:20
     metadata project=wgEncode grant=Crawford lab=UNC dataType=FAIREseq cell=PanIslets view=Base_Overlap_Signal labVersion="baseAlignCounts.pl v 1" dataVersion="ENCODE Sep 2009 Freeze" subId=764 dateResubmitted=2009-11-02 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeChromatinMap tableName=wgEncodeUncFAIREseqBaseOverlapSignalPanislets fileName=wgEncodeUncFAIREseqBaseOverlapSignalPanislets.wig.gz
 
@@ -12232,7 +12232,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM12878 IRF4 Raw 1
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (IRF4 in GM12878 cells)
     subGroups view=zRaw factor=IRF4 cellType=1GM rep=rep1 prot=p2
@@ -12242,7 +12242,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Irf4
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM12878 IRF4 Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (IRF4 in GM12878 cells)
     subGroups view=Peaks factor=IRF4 cellType=1GM rep=rep2 prot=p2
@@ -12252,7 +12252,7 @@ dataVersion ENCODE Nov 2008 and Feb 2009 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM12878 IRF4 Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (IRF4 in GM12878 cells)
     subGroups view=zRaw factor=IRF4 cellType=1GM rep=rep2 prot=p2
