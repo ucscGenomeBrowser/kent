@@ -3149,3 +3149,15 @@ Empty set (5 min 50.55 sec)
 
 update wgEncodeYaleChIPseqSignalHelas3E2f6 set chromEnd = 135374737  where chrom = "chr10" and chromEnd > 135374737;
 Query OK, 1 row affected (3 min 1.25 sec)
+
+### Look for more problems with K562b renaming
+K562b/E2f4
+K562b/E2f6
+K562b/GATA-1 * Fine
+K562b/GATA-2
+K562b/SETDB1
+K562b/TR4
+K562b/YY1
+K562b/ZNF263 * fixed
+HepG2b/TR4
+
