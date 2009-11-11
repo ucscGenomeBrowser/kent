@@ -1280,3 +1280,42 @@ select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(p
 select min(score),max(score),min(signalValue),max(signalValue),min(pValue),max(pValue),min(qValue),max(qValue) from wgEncodeBroadChipSeqPeaksNhlfH4k20me1   ;
 # Result score 1000:1000, signalValue 0:45000 (but too variable to be useful) pValue 0:100, qValue -1:-1
 
+2009-11-05 In QA (some time ago actually)
+=========================================
+select id,name,status from projects where status not in ("displayed","released","revoked","superseded","reviewing"); | 81 |
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 558 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 332 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 559 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 554 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 561 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 562 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 563 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 564 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 565 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 566 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 567 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 568 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 569 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 571 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 570 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 572 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 573 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 574 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 575 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 576 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 577 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 578 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 579 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 580 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 581 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 582 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 583 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 584 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 585 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 586 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 616 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 617 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 618 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 619 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 668 reviewing
+select id,name,status from projects where status not in ("displayed","released","revoked","superseded","reviewing"); | 46 |
