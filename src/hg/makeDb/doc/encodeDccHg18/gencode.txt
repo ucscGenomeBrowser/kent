@@ -1130,7 +1130,461 @@ called wgEncodeGencode for this release 3.  The html will be moved immediately f
 # set up search specs for hgFindSpec
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 453 displayed
->>>>>>>>>>>>> to here
 
 ### 2009-10-02 
 Controversy remains for colors and for OTTER IDs vs. Ensembl Ids.  Need to resolve before pushing to QA or having Brian do hg19.
+
+2009-11-02 Release 3c 
+=====================
+cd pip 453
+mkdir v3c
+ftp://ftp.sanger.ac.uk/pub/gencode/gencode.v3c.for_DCC.tgz to v3c
+mkdir v3
+mv gencode.* v3
+cd v3c
+tar -tzf gencode.v3c.for_DCC.tgz
+tar -xzf gencode.v3c.for_DCC.tgz
+mv forDCC/* ..
+# edit DAF/DDF to try to include new 2-way track (polyAs, tRNAs and classes still go by hand)
+# unload 453 (since names are changed, all should be well.
+submit
+# 1) Needed dafVersion 1.1
+# 2) needed validationSettings (allowReload seems appropriate)
+# 3) No such luck on 2-way "no exons defined for Overlap1"
+loaded!
+
+#save first:
+rename table wgEncodeGencodeAutoV3   to wgEncodeGencodeAutoV3b;
+rename table wgEncodeGencodeManualV3 to wgEncodeGencodeManualV3b;
+# now put in place:
+rename table wgEncodeSangerGencodeGencodeAutoV3   to wgEncodeGencodeAutoV3;
+rename table wgEncodeSangerGencodeGencodeManualV3 to wgEncodeGencodeManualV3;
+
+rename table wgEncodeGencodePolyaV3 to wgEncodeGencodePolyaV3b;
+rename table wgEncodeGencodeClassesV3 to wgEncodeGencodeClassesV3b;
+rename table wgEncodeGencodeAutoV3_Trnas to wgEncodeGencodeAutoV3b_Trnas;
+rename table wgEncodeGencodeAutoV3_noTrnas to wgEncodeGencodeAutoV3b_noTrnas;
+ 
+show tables like "wgEncodeGencode%";
+| wgEncodeGencodeAutoRel1           |     old: v1
+| wgEncodeGencodeAutoRel2           |     old: v2
+| wgEncodeGencodeAutoV3             | <== New v3c (needs tRNAs)
+| wgEncodeGencodeAutoV3b            |     old: v3b
+| wgEncodeGencodeAutoV3b_Trnas      |     old: working on it
+| wgEncodeGencodeAutoV3b_noTrnas    |     old: working on it
+| wgEncodeGencodeClassesRel1        |     old: v1
+| wgEncodeGencodeClassesRel2        |     old: v2
+| wgEncodeGencodeClassesRel2_full   |     old: working on it
+| wgEncodeGencodeClassesRel2_unused |     old: working on it
+| wgEncodeGencodeClassesV3b         |     old: v3b
+| wgEncodeGencodeManualRel1         |     old: v1
+| wgEncodeGencodeManualRel2         |     old: v2
+| wgEncodeGencodeManualV3           | <== New v3c
+| wgEncodeGencodeManualV3b          |     old: v3b
+| wgEncodeGencodePolyaRel2          |     old: v2
+| wgEncodeGencodePolyaV3b           |     old: v3b
+
+!!! Once again: geneId is used as name2 by default but I need geneName!!!
+
+# Use my local version of ldHgGene, since I edited genePred.c but never did the plumbing to make it a full option
+#   because: geneId is used as name2 by default but I need geneName!!!
+
+# empty table!
+create table wgEncodeGencodeManualV3_old select * from wgEncodeGencodeManualV3;
+# Records: 87627  Duplicates: 0  Warnings: 0
+delete from wgEncodeGencodeManualV3;
+
+~/bin/x86_64/ldHgGene -gtf -genePredExt hg18 wgEncodeGencodeManualV3 gencode.v3c.annotation.NCBI36.level_1_2.gtf > reload_manual.out 2>&1 &
+Reading gencode.v3c.annotation.NCBI36.level_1_2.gtf
+Read 87627 transcripts in 1154766 lines in 1 files
+  87627 groups 24 seqs 1 sources 6 feature types
+87627 gene predictions
+| 585 | ENST00000450305 | chr1  | +      |    1872 |  3533 |     3533 |   3533 |         6 | 1872,2041,2475,2837,3083,3315, | 1920,2090,2560,2915,3237,3533, |     0 | RP11-34P13.1 | none         | none       | -1,-1,-1,-1,-1,-1, | 
+                                                                    ------------
+drop table wgEncodeGencodeManualV3_old;
+
+# empty table!
+create table wgEncodeGencodeAutoV3_noTrnas select * from wgEncodeGencodeAutoV3;
+# Records: 43889  Duplicates: 0  Warnings: 0
+delete from wgEncodeGencodeAutoV3_noTrnas;
+create table wgEncodeGencodeAutoV3_Trnas select * from wgEncodeGencodeAutoV3_noTrnas;
+# Records: 0  Duplicates: 0  Warnings: 0
+
+~/bin/x86_64/ldHgGene -gtf -genePredExt hg18 wgEncodeGencodeAutoV3_noTrnas gencode.v3c.annotation.NCBI36.level_3.gtf > reload_auto.out 2>&1 &
+Reading gencode.v3c.annotation.NCBI36.level_3.gtf
+Read 43889 transcripts in 867844 lines in 1 files
+  43889 groups 25 seqs 1 sources 6 feature types
+43889 gene predictions
+
+/cluster/bin/x86_64/ldHgGene -exon=tRNAscan -genePredExt -noncoding -oldTable hg18 wgEncodeGencodeAutoV3_Trnas gencode.v3.tRNAs.NCBI36.gtf > load_tRnas.out 2>&1 &
+Reading gencode.v3.tRNAs.NCBI36.gtf
+Read 621 transcripts in 621 lines in 1 files
+  621 groups 24 seqs 1 sources 1 feature types
+621 gene predictions
+
+drop table wgEncodeGencodeAutoV3;
+create table wgEncodeGencodeAutoV3 select * from wgEncodeGencodeAutoV3_noTrnas;
+insert into wgEncodeGencodeAutoV3 select * from wgEncodeGencodeAutoV3_Trnas;
+select count(*) from wgEncodeGencodeAutoV3;|    44510 | 
+| 585 | ENST00000456328 | chr1  | +      |    1736 |  4275 |     4021 |   4252 |         3 | 1736,2475,3083, | 2090,2584,4275, |     0 | RP11-34P13.1 | cmpl         | cmpl       | -1,-1,0,   | 
+                                                                         ------------
+drop table wgEncodeGencodeAutoV3_noTrnas_old;
+
+### Now the difficult part of loading polyAs, 2way and classes
+
+# determine if only 3 types of polyA:
+grep -v polyA_signal gencode.v3.polyAs.NCBI36.gtf | grep -v pseudo_polyA | grep -v polyA_site
+# Header only header
+grep -v polyA_signal gencode.v3.polyAs.NCBI36.gtf | grep -v pseudo_polyA | grep -v polyA_site > gencode.v3.polyAs.NCBI36.header.gtf
+cp gencode.v3.polyAs.NCBI36.header.gtf gencode.v3.polyAs.NCBI36.signal.gtf
+cp gencode.v3.polyAs.NCBI36.header.gtf gencode.v3.polyAs.NCBI36.pseudo.gtf
+cp gencode.v3.polyAs.NCBI36.header.gtf gencode.v3.polyAs.NCBI36.site.gtf
+grep polyA_signal gencode.v3.polyAs.NCBI36.gtf >> gencode.v3.polyAs.NCBI36.signal.gtf
+grep pseudo_polyA gencode.v3.polyAs.NCBI36.gtf >> gencode.v3.polyAs.NCBI36.pseudo.gtf
+grep polyA_site gencode.v3.polyAs.NCBI36.gtf >> gencode.v3.polyAs.NCBI36.site.gtf
+
+# So now the possible exon types are: polyA_signal,pseudo_polyA,polyA_site
+
+# empty table:
+create table wgEncodeGencodePolyaV3 select * from wgEncodeGencodePolyaV3b;
+delete from wgEncodeGencodePolyaV3;
+
+~/bin/x86_64/ldHgGene -exon=polyA_signal -genePredExt -noncoding -oldTable hg18 wgEncodeGencodePolyaV3 gencode.v3.polyAs.NCBI36.signal.gtf > load_polyA.out 2>&1
+/cluster/bin/x86_64/ldHgGene -exon=pseudo_polyA -genePredExt -noncoding -oldTable hg18 wgEncodeGencodePolyaV3 gencode.v3.polyAs.NCBI36.pseudo.gtf >> load_polyA.out 2>&1
+/cluster/bin/x86_64/ldHgGene -exon=polyA_site -genePredExt -noncoding -oldTable hg18 wgEncodeGencodePolyaV3 gencode.v3.polyAs.NCBI36.site.gtf >> load_polyA.out 2>&1
+Reading gencode.v3.polyAs.NCBI36.signal.gtf
+Read 21397 transcripts in 21397 lines in 1 files
+  21397 groups 24 seqs 1 sources 2 feature types
+21364 gene predictions
+Reading gencode.v3.polyAs.NCBI36.pseudo.gtf
+Read 1973 transcripts in 1973 lines in 1 files
+  1973 groups 24 seqs 1 sources 3 feature types
+1961 gene predictions
+Reading gencode.v3.polyAs.NCBI36.site.gtf
+Read 36 transcripts in 36 lines in 1 files
+  36 groups 6 seqs 1 sources 1 feature types
+36 gene predictions
+
+# Now 2way...
+create table wgEncodeGencode2WayV3 select * from wgEncodeGencodePolyaV3;
+delete from wgEncodeGencode2WayV3;
+
+~/bin/x86_64/ldHgGene -gtf -genePredExt hg18 wgEncodeGencode2WayV3 gencode.v3.2wayconspseudos.NCBI36.gtf  > load_2way.out 2>&1
+Reading gencode.v3.2wayconspseudos.NCBI36.gtf
+Read 9474 transcripts in 9474 lines in 1 files
+  9474 groups 24 seqs 1 sources 1 feature types
+0 gene predictions
+### Didn't work...
+
+grep Yale_UCSC gencode.v3.2wayconspseudos.NCBI36.gtf | wl    9474
+grep transcript gencode.v3.2wayconspseudos.NCBI36.gtf | wl   9474
+# so lets treat "transcript as the exon"
+~/bin/x86_64/ldHgGene -exon=transcript -genePredExt -noncoding -oldTable hg18 wgEncodeGencode2WayV3 gencode.v3.2wayconspseudos.NCBI36.gtf > load_2way.out 2>&1
+Reading gencode.v3.2wayconspseudos.NCBI36.gtf
+Read 9474 transcripts in 9474 lines in 1 files
+  9474 groups 24 seqs 1 sources 1 feature types
+9474 gene predictions
+| 585 | Overlap414 | chr1  | -      |  118891 | 123443 |        0 |      0 |         1 | 118891,    | 123443,  |     0 | Overlap414 | none         | none       | -1,        | 
+
+select count(*) from wgEncodeGencode2WayV3;|     9474 | 
+
+# Time to build the classes table
+ls -1 *.NCBI36*.classes
+gencode.v3.2wayconspseudos.NCBI36.classes
+gencode.v3.polyAs.NCBI36.classes
+gencode.v3.tRNAs.NCBI36.classes
+gencode.v3c.annotation.NCBI36.level_1_2.classes
+gencode.v3c.annotation.NCBI36.level_3.classes
+head -2 gencode.v3c.annotation.NCBI36.level_1_2.classes
+geneId          transcriptId    transcriptType          level   Class                           OTT TranscriptId          OTT GeneId
+ENSG00000223972 ENST00000450305 unprocessed_pseudogene  2       Havana_unprocessed_pseudogene   OTTHUMG00000000961        OTTHUMT00000002844
+ENSG00000227232 ENST00000488147 unprocessed_pseudogene  2       Havana_unprocessed_pseudogene   OTTHUMG00000000958        OTTHUMT00000002839
+head -1 gencode.v3c.annotation.NCBI36.level_3.classes
+ENSG00000223972 ENST00000456328 protein_coding  3       Ensembl_coding  .       .
+# Notice that OTTs are '.'
+
+head -2 gencode.v3.2wayconspseudos.NCBI36.classes
+Overlap1        Overlap1        pseudogene      3       2way_pseudogene
+Overlap2        Overlap2        pseudogene      3       2way_pseudogene
+head -1 gencode.v3.polyAs.NCBI36.classes
+440716  440716  polyA_signal    2       Havana_polyA
+head -1 gencode.v3.tRNAs.NCBI36.classes
+38172   38172   tRNAscan        3       Ensembl_RNA
+# Notice that there are not fields for OTT.
+
+What to do?  Load them then set all '.' OTTs to NULL
+
+E) Submit
+F) load uniq.tabs into hg18 temporarily.
+echo "CREATE TABLE wgEncodeGencodeClassesV3 (
+    geneId varchar(255) not null,
+    name varchar(255) not null,
+    transcriptType varchar(255) not null,
+    level integer,
+    class enum ('Undefined',
+      'Validated_coding','Validated_processed','Validated_processed_pseudogene','Validated_unprocessed_pseudogene','Validated_pseudogene',
+      'Havana_coding','Havana_non_coding','Havana_nonsense','Havana_polyA','Havana_processed_pseudogene','Havana_unprocessed_pseudogene','Havana_pseudogene','Havana_TEC',
+      'Ensembl_coding','Ensembl_non_coding','Ensembl_processed_pseudogene','Ensembl_unprocessed_pseudogene','Ensembl_pseudogene','Ensembl_RNA')
+     not null default 'Undefined',
+    ottTranscriptId varchar(255),
+    ottGeneId varchar(255),
+    # indexes
+    INDEX(transcriptType),
+    INDEX(level,class),
+    PRIMARY KEY(name));" | hgsql hg18
+echo "LOAD DATA LOCAL INFILE 'gencode.v3c.annotation.NCBI36.level_1_2.classes' into table wgEncodeGencodeClassesV3" | hgsql hg18
+echo "LOAD DATA LOCAL INFILE 'gencode.v3c.annotation.NCBI36.level_3.classes' into table wgEncodeGencodeClassesV3" | hgsql hg18
+echo "LOAD DATA LOCAL INFILE 'gencode.v3.tRNAs.NCBI36.classes' into table wgEncodeGencodeClassesV3" | hgsql hg18
+echo "LOAD DATA LOCAL INFILE 'gencode.v3.polyAs.NCBI36.classes' into table wgEncodeGencodeClassesV3" | hgsql hg18
+echo "LOAD DATA LOCAL INFILE 'gencode.v3.2wayconspseudos.NCBI36.classes' into table wgEncodeGencodeClassesV3" | hgsql hg18
+select count(*) from wgEncodeGencodeClassesV3;|   164972 | 
+select count(*) from wgEncodeGencodeAutoV3;   |    44510 | +
+select count(*) from wgEncodeGencodeManualV3; |    87627 | + 
+select count(*) from wgEncodeGencodePolyaV3;  |    23361 | +
+select count(*) from wgEncodeGencode2WayV3;   |     9474 | = 164972
+
+
+show tables like "wgEncodeGencode%V3%";
++--------------------------------------+
+| Tables_in_hg18 (wgEncodeGencode%V3%) |
++--------------------------------------+
+| wgEncodeGencode2WayV3                | <== New v3c
+| wgEncodeGencodeAutoV3                | <== New v3c
+| wgEncodeGencodeAutoV3_Trnas          | <== Save for building AutoV3 
+| wgEncodeGencodeAutoV3_noTrnas        | <== Save for building AutoV3  
+| wgEncodeGencodeAutoV3b               |     Old V3b
+| wgEncodeGencodeAutoV3b_Trnas         |     Old V3b for building AutoV3b
+| wgEncodeGencodeAutoV3b_noTrnas       |     Old V3b for building AutoV3b
+| wgEncodeGencodeClassesV3             | <== New v3c 
+| wgEncodeGencodeClassesV3b            |     Old V3b
+| wgEncodeGencodeManualV3              | <== New v3c 
+| wgEncodeGencodeManualV3b             |     Old V3b
+| wgEncodeGencodePolyaV3               | <== New v3c 
+| wgEncodeGencodePolyaV3b              |     Old V3b
++--------------------------------------+
+6 rows in set (0.09 sec)
+
+select count(*) from wgEncodeGencodeClassesV3 where class = "Undefined";                       |        0 |
+select count(*) from wgEncodeGencodeClassesV3 where class = "Validated_coding";                |        0 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Validated_processed";             |        0 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Validated_processed_pseudogene";  |     3028 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Validated_unprocessed_pseudogene";|       67 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Validated_pseudogene";            |       74 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_coding";                |    36639 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_non_coding";            |    37583 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_nonsense";              |     4688 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_polyA";                 |    23361 |
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_processed_pseudogene";  |     3261 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_unprocessed_pseudogene";|     1344 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_pseudogene";            |      895 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Havana_TEC";                   |       48 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Ensembl_coding";                |    32289 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Ensembl_non_coding";            |      395 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Ensembl_processed_pseudogene";  |      138 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Ensembl_unprocessed_pseudogene";|        9 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Ensembl_pseudogene";            |     1852 | 
+select count(*) from wgEncodeGencodeClassesV3 where class = "Ensembl_RNA";                   |     9825 | 
+
+select count(*) from wgEncodeGencodeClassesV3 where class = "";|     9476 | # Yipes.  However, this is a familiar number
+select distinct class,level,transcriptType from wgEncodeGencodeClassesV3 order by class,level,transcriptType;
+|                                  |     3 | non_coding                         | 
+|                                  |     3 | pseudogene                         | 
+
+select count(*) from wgEncodeGencodeClassesV3 where transcriptType = "non_coding" and class = "";  |        2 | 
+| ENSG00000225880 | ENST00000426669 | non_coding     |     3 |       | .               | .         | 
+| ENSG00000178796 | ENST00000431954 | non_coding     |     3 |       | .               | .         |
+update wgEncodeGencodeClassesV3 set class = "Ensembl_non_coding" where transcriptType = "non_coding" and class = ""; 
+
+### Note back to Felix:
+update wgEncodeGencodeClassesV3 set class = "Ensembl_non_coding" where transcriptType = "non_coding" and class = ""; 
+### Note back to Felix:
+select count(*) from wgEncodeGencodeClassesV3 where ottGeneId = '.';                          |    54613 | 
+select count(*) from wgEncodeGencodeClassesV3 where ottGeneId = '.' and ottTranscriptId = '.';|    54613 |  
+update wgEncodeGencodeClassesV3 set ottGeneId = NULL,ottTranscriptId = NULL where ottGeneId = '.' and ottTranscriptId = '.'; 
+# Rows matched: 54613  Changed: 54613  Warnings: 0
+
+
+select count(*) from wgEncodeGencodeClassesV3 where transcriptType = "pseudogene" and class = "";  |     9474 | # familiar number needs new class?
+select count(*) from wgEncodeGencodeClassesV3 where class = "";  |     9474 | # familiar number needs new class?
+update wgEncodeGencodeClassesV3 set class = "2way_consensus_pseudogene" where transcriptType = "pseudogene" and class = "";
+## Rows matched: 9474  Changed: 0  Warnings: 9474
+select count(*) from wgEncodeGencodeClassesV3 where class = "2way_consensus_pseudogene"; | 0 | # Must change class enum definition first!!!
+
+rename table wgEncodeGencodeClassesV3 to wgEncodeGencodeClassesV3_tmp;
+echo "CREATE TABLE wgEncodeGencodeClassesV3 (
+    geneId varchar(255) not null,
+    name varchar(255) not null,
+    transcriptType varchar(255) not null,
+    level integer,
+    class enum ('Undefined',
+      'Validated_coding','Validated_processed','Validated_processed_pseudogene',
+      'Validated_unprocessed_pseudogene','Validated_pseudogene',
+      'Havana_coding','Havana_non_coding','Havana_nonsense','Havana_polyA',
+      'Havana_processed_pseudogene','Havana_unprocessed_pseudogene',
+      'Havana_pseudogene','Havana_TEC',
+      'Ensembl_coding','Ensembl_non_coding','Ensembl_processed_pseudogene',
+      'Ensembl_unprocessed_pseudogene','Ensembl_pseudogene','Ensembl_RNA',
+      '2way_consensus_pseudogene')
+     not null default 'Undefined',
+    ottTranscriptId varchar(255),
+    ottGeneId varchar(255),
+    # indexes
+    INDEX(transcriptType),
+    INDEX(level,class),
+    PRIMARY KEY(name));" | hgsql hg18
+insert into wgEncodeGencodeClassesV3 select * from wgEncodeGencodeClassesV3_tmp;
+# Records: 164972  Duplicates: 0  Warnings: 0
+
+### Note back to Felix:
+update wgEncodeGencodeClassesV3 set class = "2way_consensus_pseudogene" where transcriptType = "pseudogene" and class = "";
+# Rows matched: 9474  Changed: 9474  Warnings: 0
+
+drop table wgEncodeGencodeClassesV3_tmp;
+ 
+select distinct class,level,transcriptType from wgEncodeGencodeClassesV3 order by class,level,transcriptType;
+| 2way_consensus_pseudogene        |     3 | pseudogene                         | 
+| Validated_processed_pseudogene   |     1 | processed_pseudogene               | 
+| Validated_processed_pseudogene   |     1 | transcribed_processed_pseudogene   | 
+| Validated_unprocessed_pseudogene |     1 | transcribed_unprocessed_pseudogene | 
+| Validated_unprocessed_pseudogene |     1 | unprocessed_pseudogene             | 
+| Validated_pseudogene             |     1 | IG_pseudogene                      | 
+| Validated_pseudogene             |     1 | pseudogene                         | 
+| Validated_pseudogene             |     1 | unitary_pseudogene                 | 
+| Havana_coding                    |     2 | IG_C_gene                          | 
+| Havana_coding                    |     2 | IG_D_gene                          | 
+| Havana_coding                    |     2 | IG_J_gene                          | 
+| Havana_coding                    |     2 | IG_V_gene                          | 
+| Havana_coding                    |     2 | protein_coding                     | 
+| Havana_non_coding                |     2 | ambiguous_orf                      | 
+| Havana_non_coding                |     2 | antisense                          | 
+| Havana_non_coding                |     2 | non_coding                         | 
+| Havana_non_coding                |     2 | processed_transcript               | 
+| Havana_non_coding                |     2 | retained_intron                    | 
+| Havana_nonsense                  |     2 | nonsense_mediated_decay            | 
+| Havana_polyA                     |     2 | polyA_signal                       | 
+| Havana_polyA                     |     2 | pseudo_polyA                       | 
+| Havana_processed_pseudogene      |     2 | processed_pseudogene               | 
+| Havana_processed_pseudogene      |     2 | transcribed_processed_pseudogene   | 
+| Havana_unprocessed_pseudogene    |     2 | transcribed_unprocessed_pseudogene | 
+| Havana_unprocessed_pseudogene    |     2 | unprocessed_pseudogene             | 
+| Havana_pseudogene                |     2 | IG_pseudogene                      | 
+| Havana_pseudogene                |     2 | polymorphic_pseudogene             | 
+| Havana_pseudogene                |     2 | pseudogene                         | 
+| Havana_pseudogene                |     2 | retrotransposed                    | 
+| Havana_pseudogene                |     2 | TR_pseudogene                      | 
+| Havana_pseudogene                |     2 | unitary_pseudogene                 | 
+| Havana_TEC                       |     2 | artifact                           | 
+| Havana_TEC                       |     2 | TEC                                | 
+| Ensembl_coding                   |     3 | IG_C_gene                          | 
+| Ensembl_coding                   |     3 | IG_D_gene                          | 
+| Ensembl_coding                   |     3 | IG_J_gene                          | 
+| Ensembl_coding                   |     3 | IG_V_gene                          | 
+| Ensembl_coding                   |     3 | protein_coding                     | 
+| Ensembl_non_coding               |     3 | antisense                          | 
+| Ensembl_non_coding               |     3 | non_coding                         | 
+| Ensembl_non_coding               |     3 | processed_transcript               | 
+| Ensembl_non_coding               |     3 | retained_intron                    | 
+| Ensembl_processed_pseudogene     |     3 | processed_pseudogene               | 
+| Ensembl_unprocessed_pseudogene   |     3 | unprocessed_pseudogene             | 
+| Ensembl_pseudogene               |     3 | IG_pseudogene                      | 
+| Ensembl_pseudogene               |     3 | miRNA_pseudogene                   | 
+| Ensembl_pseudogene               |     3 | misc_RNA_pseudogene                | 
+| Ensembl_pseudogene               |     3 | pseudogene                         | 
+| Ensembl_pseudogene               |     3 | retrotransposed                    | 
+| Ensembl_pseudogene               |     3 | unitary_pseudogene                 | 
+| Ensembl_RNA                      |     3 | miRNA                              | 
+| Ensembl_RNA                      |     3 | misc_RNA                           | 
+| Ensembl_RNA                      |     3 | Mt_rRNA                            | 
+| Ensembl_RNA                      |     3 | Mt_tRNA                            | 
+| Ensembl_RNA                      |     3 | Mt_tRNA_pseudogene                 | 
+| Ensembl_RNA                      |     3 | rRNA                               | 
+| Ensembl_RNA                      |     3 | rRNA_pseudogene                    | 
+| Ensembl_RNA                      |     3 | scRNA_pseudogene                   | 
+| Ensembl_RNA                      |     3 | snoRNA                             | 
+| Ensembl_RNA                      |     3 | snoRNA_pseudogene                  | 
+| Ensembl_RNA                      |     3 | snRNA                              | 
+| Ensembl_RNA                      |     3 | snRNA_pseudogene                   | 
+| Ensembl_RNA                      |     3 | tRNAscan                           | 
+| Ensembl_RNA                      |     3 | tRNA_pseudogene                    | 
+| 2way_consensus_pseudogene        |     3 | pseudogene                         | 
+
+select distinct class,level,transcriptType from wgEncodeGencode2WayV3 order by class,level,transcriptType;
+
+# Oops, ottTranscriptId and ottGeneId appear to be reversed!
+
+rename table wgEncodeGencodeClassesV3 to wgEncodeGencodeClassesV3_tmp;
+echo "CREATE TABLE wgEncodeGencodeClassesV3 (
+    geneId varchar(255) not null,
+    name varchar(255) not null,
+    transcriptType varchar(255) not null,
+    level integer,
+    class enum ('Undefined',
+      'Validated_coding','Validated_processed','Validated_processed_pseudogene',
+      'Validated_unprocessed_pseudogene','Validated_pseudogene',
+      'Havana_coding','Havana_non_coding','Havana_nonsense','Havana_polyA',
+      'Havana_processed_pseudogene','Havana_unprocessed_pseudogene',
+      'Havana_pseudogene','Havana_TEC',
+      'Ensembl_coding','Ensembl_non_coding','Ensembl_processed_pseudogene',
+      'Ensembl_unprocessed_pseudogene','Ensembl_pseudogene','Ensembl_RNA',
+      '2way_consensus_pseudogene')
+     not null default 'Undefined',
+    ottGeneId varchar(255),
+    ottTranscriptId varchar(255),
+    # indexes
+    INDEX(transcriptType),
+    INDEX(level,class),
+    PRIMARY KEY(name));" | hgsql hg18
+insert into wgEncodeGencodeClassesV3 select * from wgEncodeGencodeClassesV3_tmp;
+# Records: 164972  Duplicates: 0  Warnings: 0
+
+drop table wgEncodeGencodeClassesV3_tmp;
+
+## Now edit trackDb.wgEncode.ra making a new 2way subtrack
+
+# Spend time massaging metadata
+# set up search specs for hgFindSpec
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 453 displayed
+
+# change metadata to "Gencode October 2009 Freeze"
+
+# Search spec OTT ID??? 
+# in trackDb.wgEncode.ra...
+# (added Angie's hgFindSpec wiki entry) needed xrefQuery to wgEncodeGencode Classes
+
+# Need to get downloads dir in order
+cd {downloadsDir}
+mkdir release2/
+cp index.html release2/
+cp fileDb.ra release2/
+mv wgEncodeGencode*Rel2*.gz release2/
+
+# wgEncodeSangerGencodeGencode versions were made by pipeline
+mv wgEncodeSangerGencodeGencodeManualV3.gtf.gz wgEncodeGencodeManualV3.gtf.gz
+mv wgEncodeSangerGencodeGencodeAutoV3.gtf.gz wgEncodeGencodeAutoV3.gtf.gz 
+# manually make the reset
+
+pushd {pip}/453
+cat gencode.v3c.annotation.NCBI36.level_1_2.classes >> gencode.v3c.NCBI36.all.classes
+cat gencode.v3c.annotation.NCBI36.level_3.classes >> gencode.v3c.NCBI36.all.classes
+cat gencode.v3.tRNAs.NCBI36.classes >> gencode.v3c.NCBI36.all.classes
+cat gencode.v3.2wayconspseudos.NCBI36.classes >> gencode.v3c.NCBI36.all.classes
+cat gencode.v3.polyAs.NCBI36.classes >> gencode.v3c.NCBI36.all.classes
+wl gencode.v3c.NCBI36.all.classes 164972
+pop
+
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/453/gencode.v3.2wayconspseudos.NCBI36.gtf > wgEncodeGencode2wayV3.gtf.gz
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/453/gencode.v3.polyAs.NCBI36.gtf > wgEncodeGencodePolyaV3.gtf.gz
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/453/gencode.v3.tRNAs.NCBI36.gtf > wgEncodeGencodeTrnasV3.gtf.gz
+gzip --stdout /hive/groups/encode/dcc/pipeline/encpipeline_prod/453/gencode.v3c.NCBI36.all.classes > wgEncodeGencodeClassesV3.tab.gz
+
+#edit fileDb.ra
+encodeDownloadsPage.pl index.html
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 453 displayed
+
+
+# Rachel says that pseudogenes need links out to Yale.  Oh boy.  That will wait til another day!
+
+
+create table trackDb_qateam select * from trackDb_tdreszer;
+create table hgFindSpec_qateam select * from hgFindSpec_tdreszer;
