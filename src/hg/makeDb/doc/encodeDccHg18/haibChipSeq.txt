@@ -529,25 +529,46 @@ grep metadata /hive/groups/encode/dcc/pipeline/encpipeline_prod/759/out/fileDb.r
 encodeDownloadsPage.pl index.html
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 759 displayed
 
-################### To be done:
-mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlPcr1x.tagAlign.gz
-mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlPcr1x.tagAlign.gz
-mv wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr1x.tagAlign.gz
-mv wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlPcr1x.tagAlign.gz
+################### Not done:
+#mv wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878ControlPcr1x.tagAlign.gz
+#mv wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878ControlPcr1x.tagAlign.gz
+#mv wgEncodeHudsonalphaChipSeqAlignmentsRep1K562Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep1K562ControlPcr1x.tagAlign.gz
+#mv wgEncodeHudsonalphaChipSeqAlignmentsRep2K562Control.tagAlign.gz wgEncodeHudsonalphaChipSeqAlignmentsRep2K562ControlPcr1x.tagAlign.gz
+#
+#rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x;
+#rename table wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x; 
+#rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x; 
+#rename table wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x; 
+#
+#update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x.wib";
+#update wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x.wib";
+#update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x.wib";
+#update wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x.wib";
+#
+#pushd /gbdb/hg18/wib
+#mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr1x.wib
+#mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr1x.wib
+#mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr1x.wib
+#mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr1x.wib
+#pop
 
-rename table wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x;
-rename table wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x; 
-rename table wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control to wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x; 
-rename table wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control    to wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x; 
+2009-11-03 Back to the PCR2x controversy
+========================================
+# The PCR2x guilty:
+# GM12878 & K562: Erg-1 GABP NRSF Pol2 Sin3Ak-20 SRF USF-1
+# with exceptions: NRSF Pol2 Sin3Ak-20 SRF USF-1
 
-update wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr1x.wib";
-update wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr1x.wib";
-update wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr1x.wib";
-update wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x set file = "/gbdb/hg18/wib/wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr1x.wib";
+# mock up Flo's p1 idea but don't check it in.
+# the 'p1' idea is to have antibody names with superscript of the protocol used.  
+# p1 would be the first protocol (PCR2x) and p2 would be the more recent (PCR1x)
+# Unfortinately, since there are different protocols used for different antibodies, 
+# the superscript should be by the matrix CB not the antibody.  But this will require much bigger changes
 
-pushd /gbdb/hg18/wib
-mv wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control1Pcr1x.wib
-mv wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control.wib wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control1Pcr1x.wib
-mv wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control1Pcr1x.wib
-mv wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control.wib    wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control1Pcr1x.wib
-pop
+# Now haib would like the p1 idea by the matrix CB and they have declared 4 different protocols!
+# This will not be done at this time.
+
+# Now need to revert the mockup.  Of course I also added OpenChromatin changes, so I need to get the prior release.
+
+### NOTE: this old submission was released a long time ago!
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 204 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 204 released
