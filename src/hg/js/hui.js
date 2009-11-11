@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.42 2009/10/30 17:11:10 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.43 2009/11/11 22:06:42 tdreszer Exp $
 
 var compositeName = "";
 //var now = new Date();
@@ -29,7 +29,7 @@ function matSelectViewForSubTracks(obj,view)
                 $( matCBs ).each( function (i) { matCbComplete( this, true ); });
             } else {
                 var classes = matViewClasses('hidden');
-                classes = classes.concat( matZeeCBclasses('unchecked') );
+                classes = classes.concat( matAbcCBclasses('unchecked') );
                 $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
             }
         }
@@ -89,14 +89,14 @@ function matSubCbClick(subCB)
     hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
     var classes = matViewClasses('hidden');
-    classes = classes.concat( matZeeCBclasses('unchecked') );
+    classes = classes.concat( matAbcCBclasses('unchecked') );
     var matCB = matCbFindFromSubCb( subCB );
     if( matCB != undefined ) {
         matChkBoxNormalize( matCB, classes );
     }
-    //var zeeCB = matZeeCbFindFromSubCb( subCB );
-    //if( zeeCB != undefined ) {
-    //    matChkBoxNormalize( zeeCB, classes );
+    //var abcCB = matAbcCbFindFromSubCb( subCB );
+    //if( abcCB != undefined ) {
+    //    matChkBoxNormalize( abcCB, classes );
     //}
     matSubCBsSelected();
 }
@@ -106,35 +106,30 @@ function matCbClick(matCB)
 // matCB:onclick  When a matrix CB is clicked, the set of subtracks checked may change
 // Also called indirectly by matButton:onclick via matSetMatrixCheckBoxes
 
-    matCbComplete(matCB,true); // No longer partially checked
-    var classes =  $( matCB ).attr("class");
-    var isZee = (classes.indexOf("dimZ") > 0);
-    classes = classes.replace("matCB ","");
-    if(isZee)
-        classes = classes.replace("dimZ ","");
-    else
-        classes = classes.replace("halfVis","");
-    var classList = new Array;
-    if(classes.length > 0)
-        classList = classes.split(" ");
+    var classList = $( matCB ).attr("class").split(" ");
+    var isABC = (aryFind(classList,"abc") != -1);
+    classList = aryRemove(classList,"matCB","halfVis","abc");
     if(classList.length == 0 )
        matSubCBsCheck(matCB.checked);
     else if(classList.length == 1 )
-       matSubCBsCheck(matCB.checked,classList[0]);               // dimX or dimY or dimZ
+       matSubCBsCheck(matCB.checked,classList[0]);               // dimX or dimY or dim ABC
     else if(classList.length == 2 )
        matSubCBsCheck(matCB.checked,classList[0],classList[1]);  // dimX and dimY
     else
         alert("ASSERT in matCbClick(): There should be no more than 2 entries in list:"+classList)
 
-    if(isZee) {  // if dimZ then we may have just made indeterminate X and Ys determinate
-        if(matCB.checked == false) { // checking new dimZs cannot change indeterminate state.   IS THIS TRUE ?  So far.
+    if(!isABC)
+        matCbComplete(matCB,true); // No longer partially checked
+
+    if(isABC) {  // if dim ABC then we may have just made indeterminate X and Ys determinate
+        if(matCB.checked == false) { // checking new dim ABCs cannot change indeterminate state.   IS THIS TRUE ?  So far.
             var matCBs = matCBsWhichAreComplete(false);
             if(matCBs.length > 0) {
-                if($("input.matCB.dimZ:checked").length == 0) // No dimZ checked, so leave X&Y checked but determined
+                if($("input.matCB.abc:checked").length == 0) // No dim ABC checked, so leave X&Y checked but determined
                     $( matCBs ).each( function (i) { matCbComplete( this, true ); });
                 else {
                     var classes = matViewClasses('hidden');
-                    classes = classes.concat( matZeeCBclasses('unchecked') );
+                    classes = classes.concat( matAbcCBclasses('unchecked') );
                     $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
                 }
             }
@@ -146,7 +141,7 @@ function matCbClick(matCB)
 function matSetMatrixCheckBoxes(state)
 {
 // matButtons:onclick Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    var matCBs = $("input.matCB").not(".dimZ");
+    var matCBs = $("input.matCB").not(".abc");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         matCBs = $( matCBs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
@@ -164,13 +159,13 @@ function matSetMatrixCheckBoxes(state)
 // Terms:
 // viewDD - view drop-down control
 // matButton: the [+][-] button controls associated with the matrix
-// matCB - matrix dimX and dimY CB controls (in some cases this set contains zeeCBs as well because they are part of the matrix)
-// zeeCB - matrix dimZ CB controls
+// matCB - matrix dimX and dimY CB controls (in some cases this set contains abcCBs as well because they are part of the matrix)
+// abcCB - matrix dim (ABC) CB controls
 // subCB - subtrack CB controls
 // What does work
 // 1) 4 state subCBs: checked/unchecked enabled/disabled (which is visible/hidden)
 // 2) 3 state matCBs for dimX and Y but not for Z (checked,unchecked,indeterminate (incomplete set of subCBs for this matCB))
-// 3) cart vars for viewDD, zeeCBs and subCBs but matCBs set by the state of those 3
+// 3) cart vars for viewDD, abcCBs and subCBs but matCBs set by the state of those 3
 // What is awkward or does not work
 // A) Awkward: matCB could be 5 state (all,none,subset,superset,excusive non-matching set)
 function matSubCBsCheck(state)
@@ -183,19 +178,17 @@ function matSubCBsCheck(state)
     }
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
-        if(arguments.length == 3) { // Requested dimX&Y: check dimZ state
-            var classes = matZeeCBclasses('unchecked');
-            subCBs = objsFilterByClasses(subCBs,false,classes);
+        var classes = matAbcCBclasses('unchecked');
+        subCBs = objsFilterByClasses(subCBs,false,classes);  // remove unchecked abcCB classes
+        if(arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
-        } else {//if(arguments.length == 2) { // Requested dimZ (or only 1 dimension so this code is harmless)
-            var matXY = $("input.matCB").not(".dimZ");  // check X&Y state
+        } else {//if(arguments.length == 2) { // Requested dim ABC (or only 1 dimension so this code is harmless)
+            var matXY = $("input.matCB").not(".abc");  // check X&Y state
             matXY = $( matXY ).filter(":checked");
             for(var mIx=0;mIx<matXY.length;mIx++) {
-                var classes = $(matXY[mIx]).attr("class");
-                classes = classes.replace("matCB","");
-                classes = classes.replace("halfVis","");
-                classes = '.' + classes.split(' ').join(".");
-                $( subCBs ).filter(classes).each( function (i) { matSubCBcheckOne(this,state); });
+                var classes = $(matXY[mIx]).attr("class").split(' ');
+                classes = aryRemove(classes,"matCB","halfVis");
+                $( subCBs ).filter('.'+classes.join(".")).each( function (i) { matSubCBcheckOne(this,state); });
             }
         }
     } else  // state not checked so no filtering by other matCBs needed
@@ -250,29 +243,22 @@ function matSubCBsetShadow(subCB)
 function matChkBoxNormalize(matCB)
 {
 // Makes sure matCBs are in one of 3 states (checked,unchecked,indeterminate) based on matching set of subCBs
-    var classes =  $( matCB ).attr("class");
-    var isZee = (classes.indexOf("dimZ") > 0);
-    classes = classes.replace("matCB "," ");
-    if(isZee)
-        classes = classes.replace("dimZ ","");
-    else
-        classes = classes.replace("halfVis","");
-    classes = '.' + classes.split(' ').join(".");// created string filter of classes converting "matCB K562 H3K4me1" as ".K562.H3K4me1" (or "matCB rep1 dimZ" to "rep1")
+    var classList = $( matCB ).attr("class").split(" ");
+    var isABC = (aryFind(classList,"abc") != -1);
+    if(isABC)
+        alert("ASSERT: matChkBoxNormalize() called for dim ABC!");
+    classList = aryRemove(classList,"matCB","halfVis");
+
+    var classes = '.' + classList.join(".");// created string filter of classes converting "matCB K562 H3K4me1" as ".K562.H3K4me1"
     var subCBs = $("input.subCB").filter(classes); // All subtrack CBs that match matrix CB
-    if(arguments.length > 1 && arguments[1].length > 0) { // dimZ NOT classes
+
+    if(arguments.length > 1 && arguments[1].length > 0) { // dim ABC NOT classes
         subCBs = objsFilterByClasses(subCBs,false,arguments[1]);
     }
+
     if(subCBs.length > 0) {
         var CBsChecked = subCBs.filter(":checked");
-        //if(isZee) {
-        //    // dimZ CBs are indeterminate if checked and none are or not checked and some are
-        //    if(($(matCB).is(':checked') && CBsChecked.length == 0)
-        //    || ($(matCB).is(':checked') == false && CBsChecked.length > 0))
-        //        matCbComplete(matCB,false);
-        //    else
-        //        matCbComplete(matCB,true);
-        //} else {
-        if(!isZee) {
+        if(!isABC) {
             if(CBsChecked.length == subCBs.length) {
                 matCbComplete(matCB,true);
                 $(matCB).attr('checked',true);
@@ -292,16 +278,17 @@ function matChkBoxNormalize(matCB)
 function matChkBoxesNormalizeAll()
 {
 // document:load  Makes sure all matCBs are in one of 3 states (checked,unchecked,indeterminate) based on matching set of subCBs
-    var matCBs = $("input.matCB").not(".dimZ");
-    var zeeCBs = $("input.matCB.dimZ");
+    var matCBs = $("input.matCB").not(".abc");
+    var abcCBs = $("input.matCB.abc");
     var classes = matViewClasses('hidden');
-    if( $(zeeCBs).length > 0) {
-        // Should do dimZ first, then go back and do non-dimZ with extra restrictions!
-        $(zeeCBs).each( function (i) {
-            // do not normaize dimZ.  These are set only by cart variables
-            matChkBoxNormalize(this,classes);                                              // checks dimZ matCBs which have any subtracks checked.
+    if( $(abcCBs).length > 0) {
+        // Should do dim ABC first, then go back and do non-dim ABC with extra restrictions!
+        $(abcCBs).each( function (i) {
+            // do not normaize dim ABC.  These are set only by cart variables
             if( $(this).is(':checked') == false ) {
-                classes.push( $( this ).attr("class").replace("matCB ","").replace("dimZ ","") );   // builds classes string filter like ".rep2.rep3" which are those mat cbs that are not checed.
+                var classList = $( this ).attr("class").split(" ");
+                classList = aryRemove(classList,"matCB","abc");
+                classes.push( classList );   // builds classes string filter like ".rep2.rep3" which are those mat cbs that are not checked.
             }
         } );
     }
@@ -346,15 +333,8 @@ function matCBsWhichAreComplete(complete)
 function matCbFindFromSubCb(subCB)
 {
 // returns the one matCB associated with a subCB (or undefined)
-    var classes =  $( subCB ).attr("class");
-    classes = classes.replace("subCB ","");
-    // How to deal with dimZ and view?  Assume view is at end and dimZ is penultimate
-    var classList = classes.split(" ");
-    var end=classList.length - 1; // Avoid last one
-    var zeeCBs = $("input.matCB.dimZ");
-    if( zeeCBs.length > 0 )
-        end--;
-    classes ='.' + classList.slice(0,end).join('.');
+    var classList =  $( subCB ).attr("class").split(" ");
+    classes = '.' + classList.slice(1,3).join('.');   // How to get only X and Y classes?  Assume they are the first 2 ("subCB GM12878 H3K4me3 rep1 p1" we only want ".GM12878.H3K4me3")
     // At this point classes has been converted from "subCB 1GM12878 CTCF rep1 cHot" to ".1GM12878.CTCF"
     var matCB = $("input.matCB"+classes); // NOte, this works for filtering multiple classes because we want AND
     if(matCB.length == 1)
@@ -363,19 +343,20 @@ function matCbFindFromSubCb(subCB)
         return undefined;
 }
 
-function matZeeCBfindFromSubCb(subCB)
+function matAbcCBfindFromSubCb(subCB)
 {
-// returns the one zeeCB associated with a subCB (or undefined)
-    var zeeCBs = $("input.matCB.dimZ");
-    if( zeeCBs.length > 0 ) {
-        var classes =  $( subCB ).attr("class");
-        // How to deal with d1mZ and view?  Assume view is at end and dimZ is penultimate
-        var classList = classes.split(" ");
-        var zIx=classList.length - 2;
-        if(zIx >= 0) {
-            zeeCB = $(zeeCBs).filter('.'+classList[zIx]);
-            if(zeeCB.length == 1)
-                return zeeCB;
+// returns the abcCBs associated with a subCB (or undefined)
+    var abcCBs = $("input.matCB.abc");
+    if( abcCBs.length > 0 ) {
+        var classList =  $( subCB ).attr("class").split(" ");
+        classList = aryRemove(classList,"subCB");
+        classList.shift(); // Gets rid of X and Y associated classes (first 2 after subCB)
+        classList.shift();
+        classList.pop();   // gets rid of view associated class (at end)
+        if(classList.length >= 1) {
+            var abcCB = $(abcCBs).filter('.'+classList.join("."));
+            if(abcCB.length >= 1)
+                return abcCB;
         }
     }
     return undefined;
@@ -407,24 +388,27 @@ function matViewClasses(limitTo)
         viewDDs = $(viewDDs).filter("[selectedIndex]");
     }
     $(viewDDs).each( function (i) {
-        classes.push( $( this ).attr("class").replace("viewDD ","").replace("normalText ","") );
+        var classList = $( this ).attr("class").split(" ");
+        classList = aryRemove(classList,"viewDD","normalText");
+        classes.push( classList[0] );
     });
     return classes;
 }
 
-function matZeeCBclasses(limitTo)
-{
-// returns an array of classes from the dimZ CB classes: converts "matCB dimZ rep1"[]s to "rep1","rep2"
+function matAbcCBclasses(limitTo)
+{// returns an array of classes from the dim ABC CB classes: converts "matCB abc rep1"[]s to "rep1","rep2"
     var classes = new Array;
-    var zeeCBs = $("input.matCB.dimZ");
-    if(zeeCBs.length > 0) {
+    var abcCBs = $("input.matCB.abc");
+    if(abcCBs.length > 0) {
         if(limitTo == 'unchecked') {
-            zeeCBs = zeeCBs.not(":checked");
+            abcCBs = abcCBs.not(":checked");
         } else if(limitTo == 'checked') {
-            zeeCBs = zeeCBs.filter(":checked");
+            abcCBs = abcCBs.filter(":checked");
         }
-        $(zeeCBs).each( function (i) {
-            classes.push( $( this ).attr("class").replace("matCB ","").replace("dimZ ","") );
+        $(abcCBs).each( function (i) {
+            var classList = $( this ).attr("class").split(" ");
+            classList = aryRemove(classList,"matCB","abc");
+            classes.push( classList[0] );
         });
     }
     return classes;

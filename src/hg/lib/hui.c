@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.246 2009/11/06 22:25:42 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.247 2009/11/11 22:04:48 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1838,6 +1838,27 @@ return (sameString(type1, type2) ||
 	(startsWith("wig ", type1) && startsWith("wig ", type2)));
 }
 
+static char *labelRoot(char *label, char** suffix)
+/* Parses a label which may be split with a &nbsp; into root and suffix
+   Always free labelRoot.  suffix, which may be null does not need to be freed. */
+{
+char *root = cloneString(label);
+char *extra=strstrNoCase(root,"&nbsp;"); // &nbsp; mean don't include the reset as part of the link
+if ((long)(extra)==-1)
+    extra=NULL;
+if (extra!=NULL)
+    {
+    *extra='\0';
+    if(suffix != NULL)
+        {
+        extra+=5;
+        *extra=' '; // Converts the &nbsp; to ' ' and include the ' '
+        *suffix = extra;
+        }
+    }
+return root;
+}
+
 typedef struct _dividers {
     int count;
     char**subgroups;
@@ -2091,9 +2112,10 @@ if(dimensions!=NULL)
     {
     for(ix=0;ix<dimensions->count;ix++)
         {
-        if(startsWith("dimension",dimensions->names[ix])
-        && strlen(dimensions->names[ix]) == 10
-        && lastChar(dimensions->names[ix]) == dimension)
+        if(lastChar(dimensions->names[ix]) != dimension)
+            continue;
+        if((strlen(dimensions->names[ix]) == 10 && startsWith("dimension",dimensions->names[ix]))
+        || (strlen(dimensions->names[ix]) == 4  && startsWith("dim",dimensions->names[ix])))
             {
             members_t *members = subgroupMembersGet(parentTdb, dimensions->subgroups[ix]);
             dimensionsFree(&dimensions);
@@ -2733,45 +2755,34 @@ return;
 #define DIVIDING_LINE "<TR valign=\"CENTER\" line-height=\"1\" BGCOLOR=\"%s\"><TH colspan=\"5\" align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"
 #define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
 
-static char *checkBoxIdMakeForTrack(struct trackDb *tdb,char *tagX,char *tagY,char *tagZ,membership_t *membership)
+static char *checkBoxIdMakeForTrack(struct trackDb *tdb,members_t** dims,int dimMax,membership_t *membership)
 /* Creates an 'id' string for subtrack checkbox in style that matrix understand: "cb_dimX_dimY_view_cb" */
 {
 int ix;
 #define CHECKBOX_ID_SZ 128
-char *id = needMem(CHECKBOX_ID_SZ);
 // What is wanted: id="cb_ES_K4_SIG_cb"
-safef(id, CHECKBOX_ID_SZ, "cb_%s_", tdb->tableName);
-//safecpy(id,CHECKBOX_ID_SZ,"cb_");
-if(tagX != NULL)
+struct dyString *id = newDyString(CHECKBOX_ID_SZ);
+dyStringPrintf(id,"cb_%s_", tdb->tableName);
+int dimIx=1; // Skips over view dim for now
+for(;dimIx<dimMax;dimIx++)
     {
-    ix = stringArrayIx(tagX, membership->subgroups, membership->count);
-    if(ix >= 0)
-        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+    if(dims[dimIx] != NULL)
+        {
+        ix = stringArrayIx(dims[dimIx]->tag, membership->subgroups, membership->count);
+        if(ix >= 0)
+            dyStringPrintf(id,"%s_", membership->membership[ix]);
+        }
     }
-if(tagY != NULL)
-    {
-    ix = stringArrayIx(tagY, membership->subgroups, membership->count);
-    if(ix >= 0)
-        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
-    }
-if(tagZ != NULL)
-    {
-    ix = stringArrayIx(tagZ, membership->subgroups, membership->count);
-    if(ix >= 0)
-        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
-    }
-if(membership != NULL)
+if(dims[0] != NULL) // The view is saved for last
     {
     ix = stringArrayIx("view", membership->subgroups, membership->count);   // view is a known tagname
     if(ix >= 0)
-        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+        dyStringPrintf(id,"%s_", membership->membership[ix]);
     }
-safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
-// If all else fails:
-//if(strlen(id) <= 5)
-//    safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->tableName);
-return id;
+dyStringAppend(id,"cb");
+return dyStringCannibalize(&id);
 }
+
 static void checkBoxIdFree(char**id)
 /* Frees 'id' string */
 {
@@ -3020,16 +3031,32 @@ hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
 
 enum
 {
-    dimX=0,
-    dimY=1,
-    dimZ=2,
-    dimV=3,
-    dimMax=4
+    dimV=0, // View first
+    dimX=1, // X & Y next
+    dimY=2,
+    dimA=3, // dimA is start of first of the optional non-matrix, non-view dimensions
 };
-members_t* dimensions[dimMax];
-dimensions[dimX]=subgroupMembersGetByDimension(parentTdb,'X');
-dimensions[dimY]=subgroupMembersGetByDimension(parentTdb,'Y');
-dimensions[dimZ]=subgroupMembersGetByDimension(parentTdb,'Z');
+int dimMax=dimA;  // This can expand, depending upon ABC dimensions
+members_t* dimensions[27]; // Just pointers, so make a bunch!
+dimensions_t *dims = dimensionSettingsGet(parentTdb);
+if(dims != NULL)
+    {
+    int ix;
+    for(ix=0;ix<dims->count;ix++)
+        {
+        char letter = lastChar(dims->names[ix]);
+        if(letter != 'X' && letter != 'Y')
+            {
+            dimensions[dimMax]=subgroupMembersGet(parentTdb, dims->subgroups[ix]);
+            dimMax++;
+            }
+        else if(letter == 'X')
+            dimensions[dimX]=subgroupMembersGet(parentTdb, dims->subgroups[ix]);
+        else
+            dimensions[dimY]=subgroupMembersGet(parentTdb, dims->subgroups[ix]);
+        }
+    dimensionsFree(&dims);
+    }
 dimensions[dimV]=subgroupMembersGet(parentTdb,"view");
 int dimCount=0,di;
 for(di=0;di<dimMax;di++) { if(dimensions[di]) dimCount++; }
@@ -3182,10 +3209,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX : COLOR_BG_DEFAULT_IX);
                 }
 
-            char *id = checkBoxIdMakeForTrack(subtrack,
-                        (dimensions[dimX]?dimensions[dimX]->tag:NULL),
-                        (dimensions[dimY]?dimensions[dimY]->tag:NULL),
-                        (dimensions[dimZ]?dimensions[dimZ]->tag:NULL),membership); // view is known tag
+            char *id = checkBoxIdMakeForTrack(subtrack,dimensions,dimMax,membership); // view is known tag
             printf("<TR valign='top' BGCOLOR=\"%s\"",colors[colorIx]);
             if(useDragAndDrop)
                 printf(" class='trDraggable' title='Drag to Reorder'");
@@ -3193,11 +3217,14 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf(" id=\"tr_%s\" nowrap%s>\n<TD>",id,(selectedOnly?" style='display:none'":""));
             dyStringClear(dyHtml);
             dyStringPrintf(dyHtml, "onclick='matSubCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subCB");
-            for(di=0;di<dimMax;di++)
+            for(di=dimX;di<dimMax;di++)
                 {
                 if(dimensions[di] && -1 != (ix = stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count)))
                     dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
                 }
+            // Save view for last
+            if(dimensions[dimV] && -1 != (ix = stringArrayIx(dimensions[dimV]->tag, membership->subgroups, membership->count)))
+                dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
             dyStringAppendC(dyHtml,'"');
             cgiMakeCheckBox2BoolWithIdAndJS(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml));
             if(sortOrder != NULL || useDragAndDrop)
@@ -3215,14 +3242,17 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                     ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);                        // TODO: Sort needs to expand from subGroups to labels as well
                     if(ix >= 0)
                         {
+                        char *titleRoot=labelRoot(membership->titles[ix],NULL);
+
 #define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Subtrack Configuration'>%s</A>\n"
 #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
                         printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
-                            MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,membership->titles[ix]);  // FIXME: Currently configurable under sort only supported when multiview
+                            MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,titleRoot);  // FIXME: Currently configurable under sort only supported when multiview
                         else
-                            printf("%s\n",membership->titles[ix]);
+                            printf("%s\n",titleRoot);
                         puts ("</TD>");
+                        freeMem(titleRoot);
                         }
                     }
                 }
@@ -3286,7 +3316,7 @@ if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 if(dependentCfgsNeedBinding)
     cfgLinkToDependentCfgs(parentTdb,parentTdb->tableName);
-for(di=dimX;di<dimMax;di++)
+for(di=0;di<dimMax;di++)
     subgroupMembersFree(&dimensions[di]);
 dyStringFree(&dyHtml)
 sortOrderFree(&sortOrder);
@@ -4844,16 +4874,8 @@ boolean found=FALSE;
 if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 
-char labelRoot[128];
-safecpy(labelRoot,sizeof(labelRoot),label);
-char *extra=strstrNoCase(labelRoot,"&nbsp;"); // &nbsp; mean don't include the reset as part of the link
-if ((long)extra==-1)
-    extra=NULL;
-if (extra!=NULL)
-    {
-    *extra='\0';
-    extra+=6;
-    }
+char *suffix=NULL;
+char *rootLabel = labelRoot(label,&suffix);
 
 for(ix=1;ix<count && !found;ix++)
     {
@@ -4862,9 +4884,9 @@ for(ix=1;ix<count && !found;ix++)
         {
         int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
         char *link=needMem(sz);
-        safef(link,sz,VOCAB_LINK,words[0],words[ix],labelRoot,labelRoot);
-        if(extra)
-            safecat(link,sz,extra);
+        safef(link,sz,VOCAB_LINK,words[0],words[ix],rootLabel,rootLabel);
+        if(suffix)
+            safecat(link,sz,suffix);
         freeMem(words[0]);
         return link;
         }
@@ -4880,9 +4902,9 @@ for(ix=1;ix<count && !found;ix++)
                 char *encodedTerm = cgiEncode(cvTerm);
                 int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 2;
                 char *link=needMem(sz);
-                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,cvTerm,labelRoot);
-                if(extra)
-                    safecat(link,sz,extra);
+                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,cvTerm,rootLabel);
+                if(suffix)
+                    safecat(link,sz,suffix);
                 freeMem(words[0]);
                 freeMem(cvTerm);
                 freeMem(encodedTerm);
@@ -4892,6 +4914,7 @@ for(ix=1;ix<count && !found;ix++)
         }
     }
 freeMem(words[0]);
+freeMem(rootLabel);
 return cloneString(label);
 }
 
@@ -5027,6 +5050,80 @@ else if (left && dimensionY && childTdb != NULL)
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
 }
 
+static int displayNonXYdimensions(struct cart *cart, struct trackDb *parentTdb)
+/* This will walk through all declared nonX&Y dimensions (X and Y is the 2D matrix of CBs. */
+{
+int count=0,ix;
+for(ix=0;ix<26;ix++)
+    {
+    char dimLetter = 'A' + ix;
+    if(dimLetter == 'X' || dimLetter == 'Y')
+        continue;
+
+    members_t *dim = subgroupMembersGetByDimension(parentTdb,dimLetter);
+    if(dim==NULL)
+        continue;
+    if(dim->count<1)
+        {
+        subgroupMembersFree(&dim);
+        continue;
+        }
+    count++;
+    int cells[dim->count];         // The Z dimension is a separate 1D matrix
+    struct trackDb *tdbs[dim->count];
+    memset(cells, 0, sizeof(cells));
+    memset(tdbs,  0, sizeof(tdbs));
+
+    int aIx;
+    struct trackDb *subtrack;
+    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+        char *value;
+        if(subgroupFind(subtrack,dim->tag,&value))
+            {
+            aIx = stringArrayIx(value,dim->names,dim->count);
+            cells[aIx]++;
+            tdbs[aIx] = subtrack;
+            subgroupFree(&value);
+            }
+        }
+
+    if(count==1) // First time set up a table
+        puts("<BR><TABLE>");
+    printf("<TR><TH valign=top align='right'>&nbsp;&nbsp;<B><EM>%s</EM></B>:</TH>",dim->title);
+    char settingName[32];
+    safef(settingName,sizeof(settingName),"dimension%cchecked",dimLetter);
+    char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"");
+    boolean alreadySet=FALSE;
+    for(aIx=0;aIx<dim->count;aIx++)
+        {
+        if(tdbs[aIx] != NULL && cells[aIx]>0)
+            {
+            printf("<TH align=left nowrap>");
+            char objName[SMALLBUF];
+            char javascript[JBUFSIZE];
+            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->tableName,dim->names[aIx],dimLetter);
+            alreadySet=(NULL!=findWordByDelimiter(dim->names[aIx],',',dimCheckedDefaults));
+            alreadySet=cartUsualBoolean(cart,objName,alreadySet);
+            safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",dim->names[aIx]);
+            // TODO Set classes properly (if needed!!!)  The classes could be
+            // a) matCB to keep the list of all
+            // b) dimZ or some other designator but the current dimZ would work
+            // c) a new one (subgroup tag?) to break dimZs into subsets.  But how to recognize the subsets?  Will js need to pick by name?
+            cgiMakeCheckBoxJS(objName,alreadySet,javascript);
+            printf("%s",labelWithVocabLink(parentTdb,tdbs[aIx],dim->tag,dim->values[aIx]));
+            puts("</TH>");
+            }
+        }
+    puts("</TR>");
+    subgroupMembersFree(&dim);
+    }
+if(count>0)
+    puts("</TABLE>");
+return count;
+}
+
+
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
 {
@@ -5038,33 +5135,26 @@ struct trackDb *subtrack;
 if(!dimensionsExist(parentTdb))
     return FALSE;
 
-int ixX,ixY,ixZ;
+int ixX,ixY;
 members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
 members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
-members_t *dimensionZ = subgroupMembersGetByDimension(parentTdb,'Z');
-if(dimensionX == NULL && dimensionY == NULL && dimensionZ == NULL) // Must be an X, Y or Z dimension
+if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
 
 // use array of char determine all the cells (in X,Y,Z dimensions) that are actually populated
 char *value;
 int sizeOfX = dimensionX?dimensionX->count:1;
 int sizeOfY = dimensionY?dimensionY->count:1;
-int sizeOfZ = dimensionZ?dimensionZ->count:1;
 int cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
-int cellsZ[sizeOfX];         // The Z dimension is a separate 1D matrix
 struct trackDb *tdbsX[sizeOfX]; // Representative subtracks
 struct trackDb *tdbsY[sizeOfY];
-struct trackDb *tdbsZ[sizeOfZ];
 memset(cells, 0, sizeof(cells));
-memset(cellsZ, 0, sizeof(cellsZ));
 memset(tdbsX, 0, sizeof(tdbsX));
 memset(tdbsY, 0, sizeof(tdbsY));
-memset(tdbsZ, 0, sizeof(tdbsZ));
 for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     ixX = (dimensionX ? -1 : 0 );
     ixY = (dimensionY ? -1 : 0 );
-    ixZ = (dimensionZ ? -1 : 0 );
     if(dimensionX && subgroupFind(subtrack,dimensionX->tag,&value))
         {
         ixX = stringArrayIx(value,dimensionX->names,dimensionX->count);
@@ -5077,16 +5167,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         tdbsY[ixY] = subtrack;
         subgroupFree(&value);
         }
-    if(dimensionZ && subgroupFind(subtrack,dimensionZ->tag,&value))
-        {
-        ixZ = stringArrayIx(value,dimensionZ->names,dimensionZ->count);
-        tdbsZ[ixZ] = subtrack;
-        subgroupFree(&value);
-        }
     if(ixX > -1 && ixY > -1)
         cells[ixX][ixY]++;
-    if(ixZ > -1)
-        cellsZ[ixZ]++;
     }
 
 //puts("<B>Select subtracks by characterization:</B><BR>");
@@ -5095,10 +5177,8 @@ if(dimensionX && !dimensionY)
     safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->title);
 else if(!dimensionX && dimensionY)
     safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->title);
-else if(dimensionX && dimensionY && !dimensionZ)
-    safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->title,dimensionY->title);
-else //if(dimensionX && dimensionY && dimensionZ)
-    safef(javascript, sizeof(javascript), "%s, %s and %s:</B>",dimensionZ->title,dimensionX->title,dimensionY->title);
+else
+    safef(javascript, sizeof(javascript), "multiple variables:</B>");
 puts(strLower(javascript));
 
 if(!subgroupingExists(parentTdb,"view"))
@@ -5106,29 +5186,7 @@ if(!subgroupingExists(parentTdb,"view"))
 
 puts("<BR>\n");
 
-if(dimensionZ)
-    {
-    printf("<BR><TABLE>\n");
-    printf("<TR><TH valign=top align=left colspan=2 rowspan=20>&nbsp;&nbsp;<B><EM>%s</EM></B>:",dimensionZ->title);
-    char *dimZdefaults = trackDbSettingOrDefault(parentTdb,"dimensionZchecked","");
-    boolean alreadySet=FALSE;
-    for(ixZ=0;ixZ<sizeOfZ;ixZ++)
-        {
-        if(tdbsZ[ixZ] != NULL && cellsZ[ixZ]>0)
-            {
-            printf("<TH align=left nowrap>");
-            safef(objName, sizeof(objName), "%s.mat_%s_dimZ_cb",parentTdb->tableName,dimensionZ->names[ixZ]);
-            alreadySet=(NULL!=findWordByDelimiter(dimensionZ->names[ixZ],',',dimZdefaults));
-            alreadySet=cartUsualBoolean(cart,objName,alreadySet);
-            struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
-            dyStringPrintf(dyJS, " class=\"matCB dimZ %s\"",dimensionZ->names[ixZ]);
-            cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));// dimZ is set by cart variable, while X and Y are set by subtrack sets
-            printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
-            puts("</TH>");
-            }
-        }
-    puts("</TD></TR></TABLE>");
-    }
+displayNonXYdimensions(cart,parentTdb);
 
 printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
@@ -5195,7 +5253,6 @@ puts("</TD></TR></TABLE>");
 
 subgroupMembersFree(&dimensionX);
 subgroupMembersFree(&dimensionY);
-subgroupMembersFree(&dimensionZ);
 puts("<BR>\n");
 
 return TRUE;
