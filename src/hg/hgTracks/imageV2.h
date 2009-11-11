@@ -5,7 +5,7 @@
 //  and/or UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
 //        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
-//#define IMAGEv2_UI
+#define IMAGEv2_UI
 //#define IMAGEv2_DRAG_REORDER
 //#define IMAGEv2_DRAG_SCROLL
 //#define IMAGEv2_DRAG_SCROLL_SZ 3
