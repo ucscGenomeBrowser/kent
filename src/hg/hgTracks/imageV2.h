@@ -15,7 +15,7 @@
 #endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 
 // CURRENT PROBLEMS:
-// o some map items span both sideLabel and data!!
+// o FIXED: some map items span both sideLabel and data!!
 // o subrtacks should be dragReorderable!!!  Make them individual imgTracks
 // o centerlabel next feature '>>' arrows are scrolled off screen: fix when centerlabels are small and don't scroll
 // o subtrack center labels currently scroll with portal: fixed with subtracks being individual imgTracks
@@ -29,7 +29,7 @@ extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge r
 //extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
 extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
 //extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
-extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
+//extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
 
 #ifdef IMAGEv2_UI
@@ -92,8 +92,16 @@ struct mapSet *mapSetStart(char *name,struct image *img,char *linkRoot);
    Complete a map by adding items with mapItemAdd() */
 struct mapSet *mapSetUpdate(struct mapSet *map,char *name,struct image *img,char *linkRoot);
 /* Updates an existing map (aka mapSet) */
+struct mapItem *mapSetItemFind(struct mapSet *map,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+/* Find a single mapItem based upon coordinates (within a pixel) */
+struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+/* Update an already existing mapItem */
 struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
-/* Added a single mapItem to a growing mapSet */
+/* Add a single mapItem to a growing mapSet */
+struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+/* Update or add a single mapItem */
+struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
+/* Finds or adds the map item */
 void mapItemFree(struct mapItem **pItem);
 /* frees all memory assocated with a single mapItem */
 boolean mapItemConsistentWithImage(struct mapItem *item,struct image *img,boolean verbose);
@@ -159,7 +167,7 @@ char *sliceTypeToString(enum sliceType type);
 struct mapSet *sliceMapStart(struct imgSlice *slice,char *name,char *linkRoot);
 /* Adds a slice specific map to a slice of an image. Map items can then be added to the returned pointer with mapSetItemAdd()*/
 struct mapSet *sliceGetMap(struct imgSlice *slice,boolean sliceSpecific);
-/* Gets the map associate with a slice which male be sliceSpecific or it map belong to the slices' image.
+/* Gets the map associate with a slice which may be sliceSpecific or it may belong to the slices' image.
    Map items can then be added to the map returned with mapSetItemAdd() */
 struct mapSet *sliceMapFindOrStart(struct imgSlice *slice,char *name,char *linkRoot);
 /* Finds the slice specific map or starts it */
@@ -212,7 +220,8 @@ struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType typ
 int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
 /* Will add a map item it an imgTrack's appropriate slice's map
    Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
-   returns count of map items added, which could be 0, 1 or more than one if item spans slices */
+   returns count of map items added, which could be 0, 1 or more than one if item spans slices
+   NOTE: Precedence is given to first map item when adding items with same coordinates! */
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose);
 /* Tests the completeness and consistency of this imgTrack (not including slices) */
 void imgTrackFree(struct imgTrack **pImgTrack);
@@ -281,6 +290,20 @@ void sliceAndMapDraw(struct imgBox *imgBox,struct imgSlice *slice,char *name,boo
 /* writes a slice of an image and any assocated image map as HTML */
 void imageBoxDraw(struct imgBox *imgBox);
 /* writes a entire imgBox including all tracksas HTML */
-#endif//def IMAGEv2_UI
+
+#else//ifndef IMAGEv2_UI
+// Make some NO OP macros  See the ugle but effective (f?NULL:NULL)?  That eliminates an unreferenced variable warning
+#define imgBoxImageAdd(a,b,c,d,e,f)               NULL
+#define imgBoxTrackFindOrAdd(a,b,c,d,e,f)         NULL
+#define imgBoxTrackUpdateOrAdd(a,b,c,d,e,f)       (f?NULL:NULL)
+#define imgTrackSliceUpdateOrAdd(a,b,c,d,e,f,g,h) NULL
+#define sliceMapFindOrStart(a,b,c)                NULL
+#define imgTrackAddMapItem(a,b,c,d,e,f,g)
+#define imageBoxDraw(a)
+#define imgBoxFree(a)
+#define IMG_ANYORDER  0
+#define IMG_FIXEDPOS  0
+#define IMG_ORDER_VAR "?"
+#endif//ndef IMAGEv2_UI
 
 #endif//ndef IMAGEV2_H

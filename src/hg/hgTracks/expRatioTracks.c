@@ -174,8 +174,7 @@ void mapBoxHcTwoItems(struct hvGfx *hvg, int start, int end, int x, int y, int w
 char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
 x = hvGfxAdjXW(hvg, x, width);
-#ifdef IMAGEv2_UI
-if(theImgBox && curMap)
+if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s&i2=%s", // NOTE: winStart,winEnd removed due to portal
@@ -185,10 +184,8 @@ if(theImgBox && curMap)
             warn("mapBoxHcTwoItems(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, x+width, y+height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,statusLine,x, y, x+width, y+height);
-     //mapSetItemAdd(curMap,link,statusLine,x, y, x+width, y+height);
     }
 else
-#endif//def IMAGEv2_UI
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
     hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
@@ -1447,8 +1444,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     !(sameString(tg->mapName, "expRatioUCSFDemo") || sameString(tg->mapName, "cnvLungBroadv2")  || sameString(tg->mapName, "CGHBreastCancerUCSF")  || sameString(tg->mapName, "expBreastCancerUCSF")) )
     {
     int xOffRc = hvGfxAdjXW(hvg, xOff, insideWidth);
-    #ifdef IMAGEv2_UI
-    if(theImgBox && curMap)
+    if(theImgBox && curImgTrack)
         {
         char link[512];
         safef(link,sizeof(link),"%s&g=%s&i=zoomInMore",hgcNameAndSettings(), tg->mapName); // NOTE: winStart,winEnd removed due to portal
@@ -1457,10 +1453,8 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
                 warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->mapName,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
-        //mapSetItemAdd(curMap,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         }
     else
-    #endif//def IMAGEv2_UI
         {
         hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",

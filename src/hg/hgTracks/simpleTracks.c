@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.110 2009/11/10 05:48:18 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.111 2009/11/11 20:41:29 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -441,26 +441,24 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
  * track will be toggled in the string. */
 {
 struct dyString *dy = newDyString(512);
-struct track *tg;
 
 dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-//#define TOGGLE_SUBTRACKS
+#define TOGGLE_SUBTRACKS
 #ifdef TOGGLE_SUBTRACKS
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
-    tg = toggleGroup;
-    int vis = tg->visibility;
+    int vis = toggleGroup->visibility;
     // Find parent track
     struct track *tgParent = trackList;
     for (;tgParent != NULL; tgParent = tgParent->next)
         {
-        if(sameString(tgParent->mapName,tg->tdb->parent->tableName))
+        if(sameString(tgParent->mapName,toggleGroup->tdb->parent->tableName))
             break;
         }
     // should be assertable assert(tgParent!=NULL);
-    char *encodedTableName = cgiEncode(tg->tdb->parent->tableName);
+    char *encodedTableName = cgiEncode(toggleGroup->tdb->parent->tableName);
     char *view = NULL;
-    boolean setView = subgroupFind(tg->tdb,"view",&view);
+    boolean setView = subgroupFind(toggleGroup->tdb,"view",&view);
     if(tgParent!=NULL && tvCompare(tgParent->visibility,vis) > 0)
         {
         setView = FALSE; // Must open parent to see opened child
@@ -468,7 +466,7 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
         }
     if (vis == tvDense)
         {
-        if(!tg->canPack || view != NULL)
+        if(!toggleGroup->canPack || view != NULL)
             vis = tvFull;
         else
             vis = tvPack;
@@ -492,16 +490,13 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
 else
 #endif//def TOGGLE_SUBTRACKS
     {
-// This loop makes no sense.  What is it accomplishing?  AVOIDING subtracks?  AND subtracks do not point to their parents!
-for (tg = trackList; tg != NULL; tg = tg->next)
-    {
-    int vis = tg->visibility;
-    if (tg == toggleGroup)
+    if (toggleGroup != NULL)
         {
-        char *encodedMapName = cgiEncode(tg->mapName);
+        int vis = toggleGroup->visibility;
+        char *encodedMapName = cgiEncode(toggleGroup->mapName);
         if (vis == tvDense)
             {
-            if(!tg->canPack || (tdbIsComposite(tg->tdb) && subgroupingExists(tg->tdb,"view")))
+            if(!toggleGroup->canPack || (tdbIsComposite(toggleGroup->tdb) && subgroupingExists(toggleGroup->tdb,"view")))
                 vis = tvFull;
             else
                 vis = tvPack;
@@ -511,7 +506,6 @@ for (tg = trackList; tg != NULL; tg = tg->next)
         dyStringPrintf(dy, "&%s=%s", encodedMapName, hStringFromTv(vis));
         freeMem(encodedMapName);
         }
-    }
     }
 return dy;
 }
@@ -570,8 +564,7 @@ if (chrom == NULL)
     start = winStart;
     end = winEnd;
     }
-#ifdef IMAGEv2_UI
-if(theImgBox && curMap)
+if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",hgTracksName(), chrom, start+1, end, ui->string); // NOTE: position may need removing due to portal
@@ -580,10 +573,8 @@ if(theImgBox && curMap)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
-    //mapSetItemAdd(curMap,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height);
     }
 else
-#endif//def IMAGEv2_UI
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
     hPrintf("HREF=\"%s?position=%s:%d-%d",
@@ -602,9 +593,14 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
  * program with the current track expanded. */
 {
 char buf[256];
-safef(buf, sizeof(buf),
-	"Toggle the display density of %s", curGroup->shortLabel);
-mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
+if(curGroup->tdb->parent != NULL)
+    safef(buf, sizeof(buf),"Toggle the display density of %s and similar subtracks", curGroup->shortLabel);
+else if(curGroup->tdb->subtracks != NULL)
+    safef(buf, sizeof(buf),"Toggle the maximum display mode density for all %s subtracks", curGroup->shortLabel);
+else
+    safef(buf, sizeof(buf),"Toggle the display density of %s", curGroup->shortLabel);
+
+    mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
 }
 
 void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -646,8 +642,7 @@ if (x < xEnd)
     char *encodedItem = cgiEncode(item);
     char *encodedTrack = cgiEncode(track);
 
-    #ifdef IMAGEv2_UI
-    if(theImgBox && curMap)
+    if(theImgBox && curImgTrack)
         {
         char link[512];
         if (directUrl)
@@ -669,10 +664,8 @@ if (x < xEnd)
                 warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, xEnd, yEnd, link);
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
-        //mapSetItemAdd(curMap,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd);
         }
     else
-    #endif//def IMAGEv2_UI
         {
         hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
         if (directUrl)

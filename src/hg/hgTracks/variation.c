@@ -4,7 +4,7 @@
 #include "variation.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.144 2009/09/14 15:25:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.145 2009/11/11 20:41:30 tdreszer Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1229,8 +1229,7 @@ void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt,
 		  char *name, char *shortLabel, char *trackName)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
-#ifdef IMAGEv2_UI
-if(theImgBox && curMap)
+if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s", hgTrackUiName(),
@@ -1240,7 +1239,7 @@ if(theImgBox && curMap)
     // Add map item to currnent map (TODO: pass in map)
     // FIXME: What am I going to do about poly cords???
     // FIXME: What am I going to do about poly cords???
-    // FIXME: mapSetItemAdd(curMap,link,title,
+    // FIXME: imgTrackAddMapItem(curImgTrack,link,title,
     // FIXME:     hvGfxAdjX(hvg, xl), yl,
     // FIXME:     hvGfxAdjX(hvg, xt), yt,
     // FIXME:     hvGfxAdjX(hvg, xr), yr,
@@ -1250,7 +1249,6 @@ if(theImgBox && curMap)
     warn("Track named %s has called for a POLY map titled '%s controls', but imageV2 doesn't yet support this. No map item made.",trackName,shortLabel);
     }
 else
-#endif//def IMAGEv2_UI
     {
     hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ",
         hvGfxAdjX(hvg, xl), yl,
@@ -1270,8 +1268,7 @@ void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
 {
 xOff = hvGfxAdjXW(hvg, xOff, insideWidth);
 char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
-#ifdef IMAGEv2_UI
-if(theImgBox && curMap)
+if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s",hgTrackUiName(),
@@ -1284,10 +1281,8 @@ if(theImgBox && curMap)
             warn("mapTrackBackground(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->mapName,xOff, yOff, xOff+insideWidth, yOff+tg->height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
-    //mapSetItemAdd(curMap,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height);
     }
 else
-#endif//def IMAGEv2_UI
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
         xOff, yOff, xOff+insideWidth, yOff+tg->height);

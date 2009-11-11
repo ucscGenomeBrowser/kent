@@ -7,13 +7,13 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.11 2009/09/24 22:15:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.12 2009/11/11 20:41:29 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
 struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 //struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
-struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
+//struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 //struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
 //#define IMAGEv2_UI
@@ -56,8 +56,42 @@ if(linkRoot != NULL && differentStringNullOk(linkRoot,map->linkRoot))
 return map;
 }
 
+struct mapItem *mapSetItemFind(struct mapSet *map,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
+/* Find a single mapItem based upon coordinates (within a pixel) */
+{
+struct mapItem *item;
+for(item=map->items;item!=NULL;item=item->next)
+    {
+    if((abs(item->topLeftX     - topLeftX)     < 2)
+    && (abs(item->topLeftY     - topLeftY)     < 2)
+    && (abs(item->bottomRightX - bottomRightX) < 2)
+    && (abs(item->bottomRightY - bottomRightY) < 2)) // coordinates within a pixel is okay
+        return item;
+    }
+return NULL;
+}
+
+struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
+/* Update a single mapItem */
+{
+if(title != NULL)
+    item->title = cloneString(title);
+if(link != NULL)
+    {
+    if(map->linkRoot != NULL && startsWith(map->linkRoot,link))
+        item->linkVar = cloneString(link + strlen(map->linkRoot));
+    else
+        item->linkVar = cloneString(link);
+    }
+item->topLeftX     = topLeftX;
+item->topLeftY     = topLeftY;
+item->bottomRightX = bottomRightX;
+item->bottomRightY = bottomRightY;
+return item;
+}
+
 struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
-/* Added a single mapItem to a growing mapSet */
+/* Add a single mapItem to a growing mapSet */
 {
 struct mapItem *item;
 AllocVar(item);
@@ -77,6 +111,26 @@ item->bottomRightY = bottomRightY;
 slAddHead(&(map->items),item);
 //warn("Added map(%s) item '%s' count:%d",map->name,title,slCount(map->items));
 return map->items;
+}
+
+struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
+/* Update or add a single mapItem */
+{
+struct mapItem *item = mapSetItemFind(map,topLeftX,topLeftY,bottomRightX,bottomRightY);
+if(item != NULL)
+    return mapSetItemUpdate(map,item,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY);
+else
+    return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY);
+}
+
+struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
+/* Finds or adds the map item */
+{
+struct mapItem *item = mapSetItemFind(map,topLeftX,topLeftY,bottomRightX,bottomRightY);
+if(item != NULL)
+    return item;
+else
+    return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY);
 }
 
 void mapItemFree(struct mapItem **pItem)
@@ -516,7 +570,8 @@ return sliceGetMap(slice,FALSE); // Map could belong to image or could be slice 
 int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY)
 /* Will add a map item it an imgTrack's appropriate slice's map
    Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
-   returns count of map items added, which could be 0, 1 or more than one if item spans slices */
+   returns count of map items added, which could be 0, 1 or more than one if item spans slices
+   NOTE: Precedence is given to first map item when adding items with same coordinates! */
 {
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
@@ -538,8 +593,8 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
         {
         struct mapSet *map = sliceGetMap(slice,FALSE);
         if(map!=NULL)
-            {
-            mapSetItemAdd(map,link,title,max(topLeftX,slice->offsetX),max(topLeftY,slice->offsetY),min(bottomRightX,slice->offsetX + slice->width),min(bottomRightY,slice->offsetY + slice->height));
+        {          // NOTE: using find or add gives precedence to first of same coordinate map items added
+            mapSetItemFindOrAdd(map,link,title,max(topLeftX,slice->offsetX),max(topLeftY,slice->offsetY),min(bottomRightX,slice->offsetX + slice->width),min(bottomRightY,slice->offsetY + slice->height));
             count++;
             }
         }

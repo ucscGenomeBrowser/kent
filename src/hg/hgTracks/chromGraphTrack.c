@@ -180,8 +180,7 @@ else
 xOff = hvGfxAdjXW(hvg, xOff, width);
 
 char *encodedTrack = cgiEncode(tg->mapName);
-#ifdef IMAGEv2_UI
-if(theImgBox && curMap)
+if(theImgBox && curImgTrack)
     {
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
     safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
@@ -191,10 +190,8 @@ if(theImgBox && curMap)
             warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",encodedTrack,xOff, yOff, xOff+width, yOff+height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,NULL,xOff,yOff,xOff+width,yOff+height);
-    //mapSetItemAdd(curMap,link,NULL,xOff,yOff,xOff+width,yOff+height);
     }
 else
-#endif//def IMAGEv2_UI
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
         yOff+height);
