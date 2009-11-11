@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.60 2009/11/09 19:17:24 hartera Exp $";
+#	"$Id: hg19.txt,v 1.61 2009/11/11 01:07:36 hiram Exp $";
 
 #############################################################################
 
@@ -4429,7 +4429,7 @@ TMPDIR=/scratch/tmp
     #	real    811m27.965s
 
 ##############################################################################
-## 46-Way Multiz (WORKING - 2009-06-09 - Hiram)
+## 46-Way Multiz (DONE - 2009-06-09,2009-11-10 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/multiz46way
     cd /hive/data/genomes/hg19/bed/multiz46way
 
@@ -5498,7 +5498,7 @@ XXX - ready to go here - 2009-07-06
                 tree_4d.46way.nh > tree_4d.46way.placental.nh
 
 #############################################################################
-# phastCons 46-way (WORKING - 2009-09-21 - Hiram)
+# phastCons 46-way (DONE - 2009-09-21,2009-11-10 - Hiram)
     #	was unable to split the full chrom MAF files, now working on the
     #	maf files as they were split up during multiz
 
@@ -5684,24 +5684,12 @@ rm -fr $tmp
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
-
-# second run on swarm parasol:  the failed jobs have empty bed file results
-# Completed: 575 of 580 jobs
-# Crashed: 5 jobs
-# CPU time in finished jobs:      42049s     700.81m    11.68h    0.49d  0.001 y
-# IO & Wait Time:                 19735s     328.92m     5.48h    0.23d  0.001 y
-# Average job time:                 107s       1.79m     0.03h    0.00d
-# Longest finished job:             267s       4.45m     0.07h    0.00d
-# Submission to last job:           479s       7.98m     0.13h    0.01d
-
-# first run on hgwdev parasol:
-# Completed: 574 of 579 jobs
-# Crashed: 5 jobs
-# CPU time in finished jobs:      53050s     884.17m    14.74h    0.61d  0.002 y
-# IO & Wait Time:                  6633s     110.55m     1.84h    0.08d  0.000 y
-# Average job time:                 104s       1.73m     0.03h    0.00d
-# Longest finished job:             248s       4.13m     0.07h    0.00d
-# Submission to last job:          4121s      68.68m     1.14h    0.05d
+# Completed: 581 of 581 jobs
+# CPU time in finished jobs:      41877s     697.95m    11.63h    0.48d  0.001 y
+# IO & Wait Time:                 39172s     652.87m    10.88h    0.45d  0.001 y
+# Average job time:                 139s       2.32m     0.04h    0.00d
+# Longest finished job:             329s       5.48m     0.09h    0.00d
+# Submission to last job:          2240s      37.33m     0.62h    0.03d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
@@ -5718,14 +5706,14 @@ done > mostConserved.bed
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
     time nice -n +19 hgLoadBed hg19 phastConsElements46way mostConserved.bed
-    #	Loaded 6514710 elements of size 6
-    #	real     1m33.113s
+    #	Loaded 5163775 elements of size 6
+    #	real     1m44.439s
 
     # Try for 5% overall cov, and 70% CDS cov 
     featureBits hg19 -enrichment refGene:cds phastConsElements46way
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    #	refGene:cds 1.186%, phastConsElements46way 5.872%,
-    #	both 0.877%, cover 73.92%, enrich 12.59x
+    #	refGene:cds 1.187%, phastConsElements46way 5.065%,
+    #	both 0.884%, cover 74.46%, enrich 14.70x
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
@@ -5772,26 +5760,26 @@ ulimit -v $sizeG
 # -rw-rw-r--   1 21667535139 Oct 20 13:59 phastCons46way.bw
     mkdir /gbdb/hg19/bbi
     ln -s `pwd`/phastCons46way.bw /gbdb/hg19/bbi
-    #	loading bigWig table:
+    #	if you wanted to use the bigWig file, loading bigWig table:
     hgsql hg19 -e 'drop table if exists phastCons46way; \
             create table phastCons46way (fileName varchar(255) not null); \
             insert into phastCons46way values
 	("/gbdb/hg19/bbi/phastCons46way.bw");'
 
-    #	Using the bigWig file instead of this database table:
     # Load gbdb and database with wiggle.
-#    ssh hgwdev
-#    cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
-#    ln -s `pwd`/phastCons46way.wib /gbdb/hg19/multiz46way/phastCons46way.wib
-#    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
-#	phastCons46way phastCons46way.wig
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
+    ln -s `pwd`/phastCons46way.wib /gbdb/hg19/multiz46way/phastCons46way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phastCons46way phastCons46way.wig
+    #	real    1m45.381s
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/all
     time nice -n +19 hgWiggle -doHistogram -db=hg19 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
-	    pc46 > histogram.data 2>&1
+	    phastCons46way > histogram.data 2>&1
     #	real    7m37.212s
 
     #	create plot of histogram:
@@ -5836,22 +5824,24 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
-XXX - running Wed Oct 28 11:22:38 PDT 2009
-# Completed: 539 of 580 jobs
-# Crashed: 41 jobs
-# CPU time in finished jobs:      19518s     325.30m     5.42h    0.23d  0.001 y
-# IO & Wait Time:                 19782s     329.70m     5.50h    0.23d  0.001 y
-# Average job time:                  73s       1.22m     0.02h    0.00d
-# Longest finished job:             157s       2.62m     0.04h    0.00d
-# Submission to last job:          1989s      33.15m     0.55h    0.02d
-
-    # the 41 crashed jobs are due to empty bed file results.
-# bed/chrUn_gl000237.00/chrUn_gl000237.00.1-45866.bed is empty
-# ... etc
+# Completed: 581 of 581 jobs
+# CPU time in finished jobs:      17077s     284.62m     4.74h    0.20d  0.001 y
+# IO & Wait Time:                 73693s    1228.21m    20.47h    0.85d  0.002 y
+# Average job time:                 156s       2.60m     0.04h    0.00d
+# Longest finished job:             402s       6.70m     0.11h    0.00d
+# Submission to last job:          2322s      38.70m     0.65h    0.03d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/primates
-    ../all/bedCat.sh > mostConserved.bed
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | awk 'BEGIN{ ID=1 }{printf "%s\t%d\t%d\t%s.%d\t%d\t%s\n", "'${C}'", $2, $3, "'${C}'", ID, $5, $6; ++ID}'
+done > mostConserved.bed
+    #	~ 1 minute
+
     featureBits hg19 mostConserved.bed
     #	146285948 bases of 2897316137 (5.049%) in intersection
 
@@ -5860,7 +5850,7 @@ XXX - running Wed Oct 28 11:22:38 PDT 2009
     cd /hive/data/genomes/hg19/bed/multiz46way/cons/primates
     time nice -n +19 hgLoadBed hg19 phastConsElements46wayPrimates \
 	mostConserved.bed
-    #	Loaded 844990 elements of size 6
+    #	Loaded 725627 elements of size 6
     #	real    0m8.583s
     # verify coverage
     featureBits hg19 phastConsElements46wayPrimates
@@ -5869,7 +5859,7 @@ XXX - running Wed Oct 28 11:22:38 PDT 2009
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg19 -enrichment refGene:cds phastConsElements46wayPrimates
     #	refGene:cds 1.186%, phastConsElements46wayPrimates 4.031%,
-    #	both 0.730%, cover 61.55%, enrich 15.27x
+    #	both 0.730%, cover 61.54%, enrich 15.27x
 
     featureBits hg19 -enrichment knownGene:cds phastConsElements46wayPrimates
     #	knownGene:cds 1.252%, phastConsElements46wayPrimates 4.031%,
@@ -5918,7 +5908,7 @@ ulimit -v $sizeG
         | wigToBigWig stdin ../../../../chrom.sizes phastCons46wayPrimates.bw
 
     ln -s `pwd`/phastCons46wayPrimates.bw /gbdb/hg19/bbi
-    #	loading bigWig table:
+    #	if desired to use the bigWig file, loading bigWig table:
     hgsql hg19 -e 'drop table if exists phastCons46wayPrimates; \
             create table phastCons46wayPrimates \
 		(fileName varchar(255) not null); \
@@ -5926,20 +5916,17 @@ ulimit -v $sizeG
 	("/gbdb/hg19/bbi/phastCons46wayPrimates.bw");'
 
     ## load table with wiggle data
-    ## not done now, using the bigWig file instead
-#    ssh hgwdev
-#    cd /hive/data/genomes/hg19/bed/multiz46way/cons/primates
-#    ln -s `pwd`/phastCons46wayPrimates.wib \
-#	/gbdb/hg19/multiz46way/phastCons46wayPrimates.wib
-#    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
-#	phastCons46wayPrimates phastCons46wayPrimates.wig
-    #	Instead, temporary load into a table so we can do the histogram
-    hgLoadWiggle hg19 pc46 phastCons46wayPrimates.wig
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/primates
+    ln -s `pwd`/phastCons46wayPrimates.wib \
+	/gbdb/hg19/multiz46way/phastCons46wayPrimates.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phastCons46wayPrimates phastCons46wayPrimates.wig
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
-	    -db=hg19 pc46 > histogram.data 2>&1
+	    -db=hg19 phastCons46wayPrimates  > histogram.data 2>&1
     #	real    5m30.086s
 
     #	create plot of histogram:
@@ -5982,22 +5969,25 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         > placental.non-inf
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
-XXX - running Wed Oct 28 13:46:45 PDT 2009
     para -ram=8g create jobList
     para try ... check ... push ... etc.
-# Completed: 562 of 580 jobs
-# Crashed: 18 jobs
-# CPU time in finished jobs:      33874s     564.57m     9.41h    0.39d  0.001 y
-# IO & Wait Time:                 12493s     208.21m     3.47h    0.14d  0.000 y
-# Average job time:                  83s       1.38m     0.02h    0.00d
-# Longest finished job:             193s       3.22m     0.05h    0.00d
-# Submission to last job:         62872s    1047.87m    17.46h    0.73d
-
-    #	The crashed jobs produce zero length bed files: e.g.
-    #	bed/chrUn_gl000246.00/chrUn_gl000246.00.1-38144.bed is empty
+# Completed: 581 of 581 jobs
+# CPU time in finished jobs:      33942s     565.69m     9.43h    0.39d  0.001 y
+# IO & Wait Time:                 75536s    1258.94m    20.98h    0.87d  0.002 y
+# Average job time:                 188s       3.14m     0.05h    0.00d
+# Longest finished job:             417s       6.95m     0.12h    0.00d
+# Submission to last job:          1878s      31.30m     0.52h    0.02d
 
     # create Most Conserved track
     ../all/bedCat.sh > mostConserved.bed
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/${C}.[0-9][0-9] 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | awk 'BEGIN{ ID=1 }{printf "%s\t%d\t%d\t%s.%d\t%d\t%s\n", "'${C}'", $2, $3, "'${C}'", ID, $5, $6; ++ID}'
+done > mostConserved.bed
+    #	~ 1 minute
 
     # load into database
     ssh hgwdev
@@ -6008,15 +5998,15 @@ XXX - running Wed Oct 28 13:46:45 PDT 2009
     #	real    1m15.952s
     # verify coverage
     featureBits hg19 phastConsElements46wayPlacental
-    #	136987062 bases of 2897316137 (4.728%) in intersection
+    #	118211444 bases of 2897316137 (4.080%) in intersection
 
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg19 -enrichment refGene:cds phastConsElements46wayPlacental
-    #	refGene:cds 1.186%, phastConsElements46wayPlacental 4.728%,
-    #	both 0.855%, cover 72.06%, enrich 15.24x
+    #	refGene:cds 1.187%, phastConsElements46wayPlacental 4.080%,
+    #	both 0.861%, cover 72.59%, enrich 17.79x
     featureBits hg19 -enrichment knownGene:cds phastConsElements46wayPlacental
-    #	knownGene:cds 1.252%, phastConsElements46wayPlacental 4.728%,
-    #	both 0.873%, cover 69.70%, enrich 14.74x
+    #	knownGene:cds 1.252%, phastConsElements46wayPlacental 4.080%,
+    #	both 0.879%, cover 70.22%, enrich 17.21x
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
@@ -6069,15 +6059,13 @@ ulimit -v $sizeG
             insert into phastCons46wayPlacental values
 	("/gbdb/hg19/bbi/phastCons46wayPlacental.bw");'
 
-
     ## load table with wiggle data
-    ## no longer load this data, using the bigWig file instead
-#    ssh hgwdev
-#    cd /hive/data/genomes/hg19/bed/multiz46way/cons/placental
-#    ln -s `pwd`/phastCons46wayPlacental.wib \
-#	/gbdb/hg19/multiz46way/phastCons46wayPlacental.wib
-#    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
-#	phastCons46wayPlacental phastCons46wayPlacental.wig
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/multiz46way/cons/placental
+    ln -s `pwd`/phastCons46wayPlacental.wib \
+	/gbdb/hg19/multiz46way/phastCons46wayPlacental.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phastCons46wayPlacental phastCons46wayPlacental.wig
 
     #	Instead, temporary load into a table so we can do the histogram
     hgLoadWiggle hg19 pc46 phastCons46wayPlacental.wig
@@ -6085,10 +6073,8 @@ ulimit -v $sizeG
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
-	    -db=hg19 pc46 > histogram.data 2>&1
+	    -db=hg19 phastCons46wayPlacental > histogram.data 2>&1
     #	real    8m15.623s
-    hgsql -e "drop table pc46;" hg19
-    rm /gbdb/hg19/wib/pc46.wib
 
     #	create plot of histogram:
 
@@ -6114,7 +6100,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP conservation for 46-way (WORKING - 2009-10-21 - Hiram)
+# phyloP conservation for 46-way (DONE - 2009-10-21,2009-11-10 - Hiram)
 #
 # Vertebrate, Placental, Primates
 #
@@ -6277,11 +6263,11 @@ rm -fr $tmp
 
     para time
 # Completed: 3186 of 3186 jobs
-# CPU time in finished jobs:    2272522s   37875.36m   631.26h   26.30d  0.072 y
-# IO & Wait Time:                 27479s     457.99m     7.63h    0.32d  0.001 y
-# Average job time:                 722s      12.03m     0.20h    0.01d
-# Longest finished job:            1106s      18.43m     0.31h    0.01d
-# Submission to last job:         12603s     210.05m     3.50h    0.15d
+# CPU time in finished jobs:    1306874s   21781.23m   363.02h   15.13d  0.041 y
+# IO & Wait Time:                105488s    1758.14m    29.30h    1.22d  0.003 y
+# Average job time:                 443s       7.39m     0.12h    0.01d
+# Longest finished job:             678s      11.30m     0.19h    0.01d
+# Submission to last job:          7789s     129.82m     2.16h    0.09d
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz46way/consPhyloP/run.phyloP/all
@@ -6293,13 +6279,64 @@ rm -fr $tmp
     #	Converted stdin, upper limit 6.39, lower limit -13.27
     cat wigFile.list | xargs cat \
 	| wigToBigWig stdin ../../../../chrom.sizes phyloP46way.bw
-    #	loading bigWig table:
+    #	if you wanted to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phyloP46way.bw /gbdb/hg19/bbi
     hgsql hg19 -e 'drop table if exists phyloP46wayAll; \
             create table phyloP46wayAll \
 		(fileName varchar(255) not null); \
             insert into phyloP46wayAll values
 	("/gbdb/hg19/bbi/phyloP46way.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP46way.wib /gbdb/hg19/multiz46way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phyloP46wayAll phyloP46way.wig
+
+    #	create download files:
+    cat << '_EOF_' > mkDown.csh
+#!/bin/csh -fe
+foreach F (`cat wigFile.list`)
+    set C = $F:h:t:r
+    cat $F >> downloads/${C}.wigFix
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkDown.csh
+    mkdir downloads
+    time ./mkDown.csh
+    #	real    16m19.683s
+
+    time gzip downloads/chr*.wigFix
+    #	real    47m11.017s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg19 phyloP46wayAll > histogram.data 2>&1
+    #	real    8m15.623s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP46wayAll track"
+set xlabel " phyloP46wayAll score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
     ######################   Running the primates  #######################
     mkdir /hive/data/genomes/hg19/bed/multiz46way/consPhyloP/primates
@@ -6329,13 +6366,54 @@ rm -fr $tmp
     #	Converted stdin, upper limit 0.65, lower limit -9.12
     cat wigFile.list | xargs cat \
 	| wigToBigWig stdin ../../../../chrom.sizes phyloP46wayPrimates.bw
-    #	loading bigWig table:
+    #	if you wanted to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phyloP46wayPrimates.bw /gbdb/hg19/bbi
     hgsql hg19 -e 'drop table if exists phyloP46wayPrimates; \
             create table phyloP46wayPrimates \
 		(fileName varchar(255) not null); \
             insert into phyloP46wayPrimates values
 	("/gbdb/hg19/bbi/phyloP46wayPrimates.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP46wayPrimates.wib /gbdb/hg19/multiz46way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phyloP46wayPrimates phyloP46wayPrimates.wig
+
+    #	create download files:
+    mkdir downloads
+    time ../all/mkDown.csh
+    #	real    18m44.186s
+    time gzip downloads/chr*.wigFix
+    #	real    32m11.461s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg19 phyloP46wayPrimates > histogram.data 2>&1
+    #	real    8m15.623s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP46wayPrimates track"
+set xlabel " phyloP46wayPrimates score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
     ######################   Running the placentals  #######################
     mkdir /hive/data/genomes/hg19/bed/multiz46way/consPhyloP/placentals
@@ -6349,6 +6427,7 @@ rm -fr $tmp
     para time
 # Completed: 3186 of 3186 jobs
 # CPU time in finished jobs:    1582989s   26383.14m   439.72h   18.32d  0.050 y
+rY.phyloP46way.placental.wigFix.gz
 # IO & Wait Time:                 25577s     426.29m     7.10h    0.30d  0.001 y
 # Average job time:                 505s       8.41m     0.14h    0.01d
 # Longest finished job:             768s      12.80m     0.21h    0.01d
@@ -6372,6 +6451,48 @@ rm -fr $tmp
 		(fileName varchar(255) not null); \
             insert into phyloP46wayPlacental values
 	("/gbdb/hg19/bbi/phyloP46wayPlacental.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP46wayPlacental.wib /gbdb/hg19/multiz46way
+    time hgLoadWiggle
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg19/multiz46way hg19 \
+	phyloP46wayPlacental phyloP46wayPlacental.wig
+
+    #	create download files:
+    mkdir downloads
+    time ../all/mkDown.csh
+    #	real    18m52.778s
+    time gzip downloads/chr*.wigFix
+    #	real    46m55.550s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg19 phyloP46wayPlacental > histogram.data 2>&1
+    #	real    8m15.623s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP46wayPlacental track"
+set xlabel " phyloP46wayPlacental score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
 #########################################################################
 # LASTZ Zebrafish DanRer6 (DONE - 2009-07-08,10 - Hiram)
