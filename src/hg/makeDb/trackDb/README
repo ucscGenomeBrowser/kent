@@ -252,7 +252,7 @@ The format of the type fields:
     This uses a binary indexed file rather than a database table.  It is, other than
     substituting "bigWig" for "wig" in the type line, the same as the "type wig"
     explained above.
-     
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -320,8 +320,8 @@ may have the following variables, which will be substituted:
                chain or chainNet html page: 'Chains scoring below a minimum
                score of "$chainMinScore" were discarded'.
      $chainLinearGap - value for the -linearGap matrix used with axtChain
-               (e.g. loose, medium). Gets substituted into the chain or 
-               chainNet html page.  
+               (e.g. loose, medium). Gets substituted into the chain or
+               chainNet html page.
      $downloadsServer - the value of the hg.conf downloads.server variable, or
                          hgdownload.cse.ucsc.edu if not set.
 In addition, if there is an $otherDb field set in the .ra file, these
@@ -478,13 +478,13 @@ Some settings used by various tracks:
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
       on - This will override the user's UI settings and display the next-item
-      button for a track even if the user has specified that next/prev-item 
+      button for a track even if the user has specified that next/prev-item
       navigation be disabled.
     o defaultLinkedTables table1,table2,... - in hgTables, when selecting
       output fields, display these all.joiner-linked tables by default.
     o bedFilter - If the hgTrackUi call is using bedUi to support it and bedFilter
       is set then the bed names will be filtered based on the settings entered by
-      the user on the hgTrackUi page.	
+      the user on the hgTrackUi page.
 
 Specific, optional settings used only by snp125, snp126, and so on:
     o chimpMacaqueOrthoTable table - table contains orthologous
@@ -606,7 +606,7 @@ COMPOSITE SUBTRACK SELECTION - 4 ways
 2) Add All [+][-] buttons - To the composte track add the setting below.
    allButtonPair on
    Not compatible with either of the next two methods
-3) Matrix selection of subgroups.  A 2 or 3 "dimension" grid of subgroups.
+3) Matrix selection of subgroups.  A 2 "dimension" grid of subgroups.
    See MATRIX below.
 4) Subgroup buttons.  This happens if you have subgroups but no 'allButtonPair"
    or "dimensions" defined.
@@ -661,7 +661,19 @@ subgroups already defined. Example:
 This will result in a composite track configuration page with a matrix of
 check boxes with 'Cell Types' along the X axis and 'Factors' along the Y.  All
 individual subtracks will be displayed below, but the matix of check boxes will
-allow easy selection by subgrouping.
+allow easy selection by subgrouping.  The dimensions X&Y have no explicit defaults
+(checked or unchecked) declared.  This is becuase their state can be determined by
+default settings of the tracks that belong to them.
+
+NOTE: Additional dimensions 'A'-'W' and 'Z' (called 'ABC' dimensions) may be added.
+However any 'ABC' dimensions will not be part of the matrix, but appear above it as
+single rows of checkboxes.  Unlike X&Y, any 'ABC' dimensions must have explicit
+defaults set with the following:
+    dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=prot
+    dimensionAchecked rep1
+    dimensionBchecked protA,protB
+This setting says that replicate 1 and protocols A and B are checked by default but
+all other replicates and protocols are unchecked by default.
 
 VIEWS or MULTI-VIEW
 -------------------
@@ -803,6 +815,11 @@ will show "Estrogen and Progesterone" in the UI, but tie that to the specific tr
 term "estro-134/Pro-93a" in the controlled vocabulary file.  A more complete definition
 of what that term means, including a protocol, may be provided when the controlled
 vocab term is looked up and presented to the user.
+
+A special trick can be included in the label.  In the example label if
+"Estrogen_and_Progesterone" were replaced with "Estrogen&nbsp;and_Progesterone", then
+only the first part of the label (Estrogen) would be represented as a link to the controlled
+vocabulary.
 
 EXAMPLE of Composite Track with ADDITIONAL OPTIONS
 -------------------------------------------------
