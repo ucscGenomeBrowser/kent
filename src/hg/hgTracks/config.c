@@ -403,16 +403,16 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-hCheckBox("dragZooming", dragZoomingConfig(cart));
+hCheckBox("disableAdvancedJavascript", !advancedJavascriptFeaturesEnabled(cart));
 hPrintf("</TD><TD>");
-hPrintf("Enable drag-and-zoom");
+hPrintf("Disable advanced javascript features");
 hPrintf("</TD></TR>\n");
 
 
 hTableEnd();
 
 char buf[128];
-safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)", 
+safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)",
         organization, browserName, organism, hFreezeFromDb(database), database);
 webNewSection(buf);
 hPrintf("Tracks: ");
@@ -441,11 +441,11 @@ void configPage()
 configPageSetTrackVis(-2);
 }
 
-boolean dragZoomingConfig(struct cart *cart)
-// Returns TRUE if drag-and-zoom is currently on
+boolean advancedJavascriptFeaturesEnabled(struct cart *cart)
+// Returns TRUE if advanced javascript features are currently enabled
 {
 char *ua = cgiUserAgent();
-boolean defaultVal = TRUE;
+boolean defaultVal = FALSE;
 
 // dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
 // This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
@@ -460,8 +460,8 @@ if(ua != NULL)
         {
         int version = 0;
         sscanf(ptr + strlen(needle), "%d", &version);
-        defaultVal = version != 530;
+        defaultVal = (version == 530);
         }
     }
-return cartUsualBoolean(cart, "dragZooming", defaultVal);
+return (cartUsualBoolean(cart, "disableAdvancedJavascript", defaultVal) == FALSE); // Sorry about the double negative!
 }

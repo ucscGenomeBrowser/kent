@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1605 2009/11/11 20:41:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1606 2009/11/11 21:13:13 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3983,8 +3983,7 @@ else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
 #ifdef IMAGEv2_UI
-// TODO: Check a cart variable to avoid creating theImgBox
-if(!psOutput)
+if(advancedJavascriptFeaturesEnabled(cart) && !psOutput)
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -5039,7 +5038,7 @@ initTl();
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
-dragZooming = dragZoomingConfig(cart);
+dragZooming = advancedJavascriptFeaturesEnabled(cart);
 
 /* Do main display. */
 

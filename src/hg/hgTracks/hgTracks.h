@@ -768,7 +768,7 @@ void loadProteinPsl(struct track *tg);
 struct linkedFeatures *lfFromPslx(struct psl *psl,
 	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg);
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA,
- * sizeMul=3 for protein. 
+ * sizeMul=3 for protein.
  * Don't free psl afterwards!  (may be used by baseColor code) */
 
 
@@ -1128,7 +1128,7 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
 
-boolean dragZoomingConfig(struct cart *cart);
+boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
 // Returns TRUE if drag-and-zoom is currently on
 
 #define SMALLBUF 128
