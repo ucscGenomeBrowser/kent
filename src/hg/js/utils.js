@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.24 2009/08/23 20:38:06 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.25 2009/11/11 21:55:14 tdreszer Exp $
 
 var debug = false;
 
@@ -250,6 +250,26 @@ function setVarAndPostForm(aName,aValue,formName)
     return postTheForm(formName,window.location.href);
 }
 
+function aryFind(ary,val)
+{// returns the index of a value on the array or -1;
+    for(var ix=0;ix<ary.length;ix++) {
+        if(ary[ix] == val) {
+            return ix;
+        }
+    }
+    return -1;
+}
+
+function aryRemove(ary,val)
+{ // removes one or more variables that are found in the array
+    for(var vIx=1;vIx<arguments.length;vIx++) {
+        var ix = aryFind(ary,arguments[vIx]);
+        if(ix != -1)
+            ary.splice(ix,1);
+    }
+    return ary;
+}
+
 function isInteger(s)
 {
     return (!isNaN(parseInt(s)) && isFinite(s) && s.toString().indexOf('.') < 0);
@@ -415,7 +435,7 @@ function Rectangle()
 {
 // Rectangle object constructor:
 // calling syntax:
-// 
+//
 // new Rectangle(startX, endX, startY, endY)
 // new Rectangle(coords) <-- coordinate string from an area item
     if(arguments.length == 4) {
