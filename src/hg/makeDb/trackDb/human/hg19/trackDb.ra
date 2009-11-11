@@ -1195,7 +1195,7 @@ priority 103.29
     longLabel Primate Basewise Conservation by PhyloP
     noInherit on
     configurable on
-    type bigWig -9.12 0.65
+    type wig -9.06 0.66
     maxHeightPixels 100:50:11
     viewLimits -.3:2
     autoScale off
@@ -1212,7 +1212,7 @@ priority 103.29
     longLabel Placental Mammal Basewise Conservation by PhyloP
     noInherit on
     configurable on
-    type bigWig -13.28 2.95
+    type wig -13.80 2.94
     maxHeightPixels 100:50:11
     viewLimits -.3:2
     autoScale off
@@ -1229,7 +1229,7 @@ priority 103.29
     longLabel Vertebrate Basewise Conservation by PhyloP
     noInherit on
     configurable on
-    type bigWig -13.27 6.39
+    type wig -14.08 6.42
     maxHeightPixels 100:50:11
     viewLimits -.3:2
     autoScale off
@@ -1247,7 +1247,7 @@ priority 103.29
     longLabel Primate Conservation by PhastCons
     noInherit on
     configurable on
-    type bigWig 0 1
+    type wig 0 1
     maxHeightPixels 100:40:11
     autoScale off
     spanList 1
@@ -1263,7 +1263,7 @@ priority 103.29
     longLabel Placental Mammal Conservation by PhastCons
     noInherit on
     configurable on
-    type bigWig 0 1
+    type wig 0 1
     maxHeightPixels 100:40:11
     autoScale off
     spanList 1
@@ -1279,7 +1279,7 @@ priority 103.29
     longLabel Vertebrate Conservation by PhastCons
     noInherit on
     configurable on
-    type bigWig 0 1
+    type wig 0 1
     maxHeightPixels 100:40:11
     autoScale off
     spanList 1
@@ -1344,4 +1344,3 @@ shortCircuit 1
 termRegex HSCHR[0-9XYMUN]+(_RANDOM)?_CTG[0-9]+(_[0-9]+|_PAR)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
-
