@@ -1,4 +1,4 @@
-# Data Agreement File for Yale RNAseq PolyA as part of their TFBS project  $Revision: 1.1 $
+# Data Agreement File for Yale RNAseq PolyA as part of their TFBS project  $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -12,12 +12,12 @@
  dafVersion        1.1
  dataVersion       1
  medianFragmentLength 0
- validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch
+ validationSettings validateFiles.tagAlign:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=25
 
  # Track/view definition
  view             Signal
  longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-seq PolyA Signal
- type             bedGraph
+ type             bedGraph 4
  hasReplicates    no
  required         yes
 
