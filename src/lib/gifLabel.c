@@ -5,7 +5,7 @@
 #include "portable.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.10 2009/08/19 23:12:44 angie Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.11 2009/11/12 19:31:52 kent Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -103,6 +103,6 @@ static char *labels[] = {"cerebellum", "thymus", "breast", "heart",
 int size = gifLabelMaxWidth(labels, ArraySize(labels));
 int gifLabelMaxWidth(char **labels, int labelCount)
 gifLabelVerticalText("../trash/foo.gif", labels, ArraySize(labels), size);
-uglyf("<IMG SRC=\"../trash/foo.gif\">");
+printf("<IMG SRC=\"../trash/foo.gif\">");
 }
 #endif /* DEBUG */
