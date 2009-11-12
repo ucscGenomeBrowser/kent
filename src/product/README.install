@@ -54,11 +54,17 @@ The example mysql user here is: "browser" with a password of: "genome"
 	two directories to be next to each other in ${WEBROOT}
 	since referrals in html are often: "../cgi-bin"
 
-	Please note, at this time there are several hard-coded root
-	pathways in the browser CGI binaries that require them
-	to reside in Apache's WEBROOT hierarchy in order to function.
-	Until these path names are corrected, the browser will
-	only function in this location.
+	The browser should function even if WEBROOT is in a different
+	directory from the primary Apache web root.  In this case,
+	the three directories: html cgi-bin and trash should be
+	at the same level in this other WEBROOT.  For example:
+		/some/other/directory/path/html/
+		/some/other/directory/path/cgi-bin/
+		/some/other/directory/path/trash/
+	Symlinks to the trash directory should exist from the html
+	and cgi-bin directory.  As so:
+		/some/other/directory/path/html/trash -> ../trash
+		/some/other/directory/path/cgi-bin/trash -> ../trash
 
 5.  Create html, cgi-bin and trash directories:
 	mkdir ${WEBROOT}/html
@@ -246,4 +252,4 @@ done
 
 
 ====================================================================
-This file last updated: $Date: 2007/04/10 23:16:01 $
+This file last updated: $Date: 2009/11/12 19:36:21 $
