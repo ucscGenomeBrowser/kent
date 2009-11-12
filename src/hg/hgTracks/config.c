@@ -403,9 +403,9 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-hCheckBox("disableAdvancedJavascript", !advancedJavascriptFeaturesEnabled(cart));
+hCheckBox("enableAdvancedJavascript", advancedJavascriptFeaturesEnabled(cart));
 hPrintf("</TD><TD>");
-hPrintf("Disable advanced javascript features");
+hPrintf("Enable advanced javascript features");
 hPrintf("</TD></TR>\n");
 
 
@@ -445,7 +445,7 @@ boolean advancedJavascriptFeaturesEnabled(struct cart *cart)
 // Returns TRUE if advanced javascript features are currently enabled
 {
 char *ua = cgiUserAgent();
-boolean defaultVal = FALSE;
+boolean defaultVal = TRUE;
 
 // dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
 // This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
@@ -460,8 +460,8 @@ if(ua != NULL)
         {
         int version = 0;
         sscanf(ptr + strlen(needle), "%d", &version);
-        defaultVal = (version == 530);
+        defaultVal = (version != 530);
         }
     }
-return (cartUsualBoolean(cart, "disableAdvancedJavascript", defaultVal) == FALSE); // Sorry about the double negative!
+return cartUsualBoolean(cart, "enableAdvancedJavascript", defaultVal);
 }
