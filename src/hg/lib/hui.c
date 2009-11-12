@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.247 2009/11/11 22:04:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.248 2009/11/12 20:34:36 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3038,6 +3038,7 @@ enum
 };
 int dimMax=dimA;  // This can expand, depending upon ABC dimensions
 members_t* dimensions[27]; // Just pointers, so make a bunch!
+memset((char *)dimensions,0,sizeof(dimensions));
 dimensions_t *dims = dimensionSettingsGet(parentTdb);
 if(dims != NULL)
     {
@@ -5050,8 +5051,9 @@ else if (left && dimensionY && childTdb != NULL)
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,childTdb,dimensionY->tag,dimensionY->values[ixY]));
 }
 
-static int displayNonXYdimensions(struct cart *cart, struct trackDb *parentTdb)
-/* This will walk through all declared nonX&Y dimensions (X and Y is the 2D matrix of CBs. */
+static int displayABCdimensions(struct cart *cart, struct trackDb *parentTdb,int expected)
+/* This will walk through all declared nonX&Y dimensions (X and Y is the 2D matrix of CBs.
+   NOTE: ABC dims are only supported if there are X & Y both.  Also expected number should be passed in */
 {
 int count=0,ix;
 for(ix=0;ix<26;ix++)
@@ -5117,6 +5119,8 @@ for(ix=0;ix<26;ix++)
         }
     puts("</TR>");
     subgroupMembersFree(&dim);
+    if(count==expected)
+        break;
     }
 if(count>0)
     puts("</TABLE>");
@@ -5132,7 +5136,8 @@ char objName[SMALLBUF];
 char javascript[JBUFSIZE];
 struct trackDb *subtrack;
 
-if(!dimensionsExist(parentTdb))
+dimensions_t *dims = dimensionSettingsGet(parentTdb);
+if(dims == NULL)
     return FALSE;
 
 int ixX,ixY;
@@ -5177,6 +5182,8 @@ if(dimensionX && !dimensionY)
     safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->title);
 else if(!dimensionX && dimensionY)
     safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->title);
+else if(dims->count == 2)
+    safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->title,dimensionY->title);
 else
     safef(javascript, sizeof(javascript), "multiple variables:</B>");
 puts(strLower(javascript));
@@ -5186,7 +5193,9 @@ if(!subgroupingExists(parentTdb,"view"))
 
 puts("<BR>\n");
 
-displayNonXYdimensions(cart,parentTdb);
+if(dims->count > 2)
+    displayABCdimensions(cart,parentTdb,(dims->count - 2));  // No dimABCs without X & Y both
+dimensionsFree(&dims);
 
 printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
