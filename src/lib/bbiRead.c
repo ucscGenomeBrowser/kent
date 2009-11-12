@@ -6,6 +6,7 @@
 #include "hash.h"
 #include "obscure.h"
 #include "localmem.h"
+#include "zlibFace.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
 #include "udc.h"
@@ -74,6 +75,7 @@ bbi->fieldCount = udcReadBits16(udc, isSwapped);
 bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 bbi->asOffset = udcReadBits64(udc, isSwapped);
 bbi->totalSummaryOffset = udcReadBits64(udc, isSwapped);
+bbi->uncompressBufSize = udcReadBits32(udc, isSwapped);
 
 /* Skip over reserved area. */
 udcSeek(udc, 64);
@@ -289,40 +291,76 @@ struct bbiSummary *sumList = NULL, *sum;
 struct udcFile *udc = bbi->udc;
 udcSeek(udc, zoom->indexOffset);
 struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->udc);
-struct fileOffsetSize *fragList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
-struct fileOffsetSize *block, *blockList = fileOffsetSizeMerge(fragList);
-for (block = blockList; block != NULL; block = block->next)
-    {
-    /* Read info we need into memory. */
-    udcSeek(udc, block->offset);
-    char *blockBuf = needLargeMem(block->size);
-    udcRead(udc, blockBuf, block->size);
-    char *blockPt = blockBuf;
+struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
+struct fileOffsetSize *block, *beforeGap, *afterGap;
 
-    struct bbiSummaryOnDisk *dSum;
-    int itemSize = sizeof(*dSum);
-    assert(block->size % itemSize == 0);
-    int itemCount = block->size / itemSize;
-    int i;
-    for (i=0; i<itemCount; ++i)
-	{
-	dSum = (void *)blockPt;
-	blockPt += sizeof(*dSum);
-	if (dSum->chromId == chromId)
+/* Set up for uncompression optionally. */
+char *uncompressBuf = NULL;
+if (bbi->uncompressBufSize > 0)
+    uncompressBuf = needLargeMem(bbi->uncompressBufSize);
+
+
+/* This loop is a little complicated because we merge the read requests for efficiency, but we 
+ * have to then go back through the data one unmerged block at a time. */
+for (block = blockList; block != NULL; )
+    {
+    /* Find contigious blocks and read them into mergedBuf. */
+    fileOffsetSizeFindGap(block, &beforeGap, &afterGap);
+    bits64 mergedOffset = block->offset;
+    bits64 mergedSize = beforeGap->offset + beforeGap->size - mergedOffset;
+    udcSeek(udc, mergedOffset);
+    char *mergedBuf = needLargeMem(mergedSize);
+    udcMustRead(udc, mergedBuf, mergedSize);
+    char *blockBuf = mergedBuf;
+
+    /* Loop through individual blocks within merged section. */
+    for (;block != afterGap; block = block->next)
+        {
+	/* Uncompress if necessary. */
+	char *blockPt, *blockEnd;
+	if (uncompressBuf)
 	    {
-	    int s = max(dSum->start, start);
-	    int e = min(dSum->end, end);
-	    if (s < e)
+	    blockPt = uncompressBuf;
+	    int uncSize = zUncompress(blockBuf, block->size, uncompressBuf, bbi->uncompressBufSize);
+	    blockEnd = blockPt + uncSize;
+	    }
+	else
+	    {
+	    blockPt = blockBuf;
+	    blockEnd = blockPt + block->size;
+	    }
+
+	/* Figure out bounds and number of items in block. */
+	int blockSize = blockEnd - blockPt;
+	struct bbiSummaryOnDisk *dSum;
+	int itemSize = sizeof(*dSum);
+	assert(blockSize % itemSize == 0);
+	int itemCount = blockSize / itemSize;
+
+	/* Read in items and convert to memory list format. */
+	int i;
+	for (i=0; i<itemCount; ++i)
+	    {
+	    dSum = (void *)blockPt;
+	    blockPt += sizeof(*dSum);
+	    if (dSum->chromId == chromId)
 		{
-		sum = bbiSummaryFromOnDisk(dSum);
-		slAddHead(&sumList, sum);
+		int s = max(dSum->start, start);
+		int e = min(dSum->end, end);
+		if (s < e)
+		    {
+		    sum = bbiSummaryFromOnDisk(dSum);
+		    slAddHead(&sumList, sum);
+		    }
 		}
 	    }
-	}
-    freeMem(blockBuf);
+	assert(blockPt == blockEnd);
+	blockBuf += block->size;
+        }
+    freeMem(mergedBuf);
     }
+freeMem(uncompressBuf);
 slFreeList(&blockList);
-slFreeList(&fragList);
 cirTreeFileDetach(&ctf);
 slReverse(&sumList);
 return sumList;

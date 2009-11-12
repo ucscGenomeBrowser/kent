@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.16 2009/11/10 05:47:03 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.17 2009/11/12 23:15:52 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -531,7 +531,7 @@ if (aveSpan > 0)
 	    zoomCount = rezoomCount;
 	    zoomDataOffsets[zoomLevels] = ftell(f);
 	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, f);
+	    	blockSize, itemsPerSlot, FALSE, f);
 	    zoomAmounts[zoomLevels] = reduction;
 	    ++zoomLevels;
 	    reduction *= zoomIncrement;

@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 #include "localmem.h"
+#include "zlibFace.h"
 #include "cirTree.h"
 #include "bPlusTree.h"
 #include "bbiFile.h"
@@ -302,9 +303,69 @@ return res;
 }
 
 
-bits64 bbiWriteSummaryAndIndex(struct bbiSummary *summaryList, 
+static bits64 bbiWriteSummaryAndIndexComp(struct bbiSummary *summaryList, 
 	int blockSize, int itemsPerSlot, FILE *f)
-/* Write out summary and index to summary, returning start position of
+/* Write out summary and index to summary uncompressed, returning start position of
+ * summary index. */
+{
+bits32 i, count = slCount(summaryList);
+struct bbiSummary **summaryArray;
+AllocArray(summaryArray, count);
+writeOne(f, count);
+struct bbiSummary *summary = summaryList;
+
+/* Figure out max size of uncompressed and compressed blocks. */
+bits32 itemSize = sizeof(summary->chromId) + sizeof(summary->start) + sizeof(summary->end) + sizeof(summary->validCount) + 4*sizeof(float);
+int uncBufSize = itemSize * itemsPerSlot;
+char uncBuf[uncBufSize];
+int compBufSize = zCompBufSize(uncBufSize);
+char compBuf[compBufSize];
+
+/* Loop through compressing and writing one slot at a time. */
+bits32 itemsLeft = count;
+int sumIx = 0;
+while (itemsLeft > 0)
+    {
+    bits32 itemsInSlot = itemsLeft;
+    if (itemsInSlot > itemsPerSlot)
+         itemsInSlot = itemsPerSlot;
+    char *writePt = uncBuf;
+
+    bits64 filePos = ftell(f);
+    for (i=0; i<itemsInSlot; ++i)
+        {
+	summaryArray[sumIx++] = summary;
+	memWriteOne(&writePt, summary->chromId);
+	memWriteOne(&writePt, summary->start);
+	memWriteOne(&writePt, summary->end);
+	memWriteOne(&writePt, summary->validCount);
+	memWriteFloat(&writePt, summary->minVal);
+	memWriteFloat(&writePt, summary->maxVal);
+	memWriteFloat(&writePt, summary->sumData);
+	memWriteFloat(&writePt, summary->sumSquares);
+	summary->fileOffset = filePos;
+	summary = summary->next;
+	if (summary == NULL)
+	    break;
+	}
+
+    bits32 uncSize = writePt - uncBuf;
+    int compSize = zCompress(uncBuf, uncSize, compBuf, compBufSize);
+    mustWrite(f, compBuf, compSize);
+
+    itemsLeft -= itemsInSlot;
+    }
+bits64 indexOffset = ftell(f);
+cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
+    blockSize, itemsPerSlot, NULL, bbiSummaryFetchKey, bbiSummaryFetchOffset, 
+    indexOffset, f);
+freez(&summaryArray);
+return indexOffset;
+}
+
+static bits64 bbiWriteSummaryAndIndexUnc(struct bbiSummary *summaryList, 
+	int blockSize, int itemsPerSlot, FILE *f)
+/* Write out summary and index to summary compressed, returning start position of
  * summary index. */
 {
 bits32 i, count = slCount(summaryList);
@@ -331,6 +392,17 @@ cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
     indexOffset, f);
 freez(&summaryArray);
 return indexOffset;
+}
+
+bits64 bbiWriteSummaryAndIndex(struct bbiSummary *summaryList, 
+	int blockSize, int itemsPerSlot, boolean doCompress, FILE *f)
+/* Write out summary and index to summary, returning start position of
+ * summary index. */
+{
+if (doCompress)
+    return bbiWriteSummaryAndIndexComp(summaryList, blockSize, itemsPerSlot, f);
+else
+    return bbiWriteSummaryAndIndexUnc(summaryList, blockSize, itemsPerSlot, f);
 }
 
 struct cirTreeRange bbiBoundsArrayFetchKey(const void *va, void *context)

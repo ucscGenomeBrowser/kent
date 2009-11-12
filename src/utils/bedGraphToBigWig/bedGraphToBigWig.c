@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.18 2009/11/07 19:29:35 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.19 2009/11/12 23:15:52 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -423,7 +423,7 @@ if (minDiff > 0)
 	    zoomCount = rezoomCount;
 	    zoomDataOffsets[zoomLevels] = ftell(f);
 	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, f);
+	    	blockSize, itemsPerSlot, FALSE, f);
 	    zoomAmounts[zoomLevels] = reduction;
 	    ++zoomLevels;
 	    reduction *= zoomIncrement;

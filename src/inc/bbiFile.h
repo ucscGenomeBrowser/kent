@@ -17,7 +17,8 @@
  *         definedFieldCount    2 bytes (for bigWig 0)
  *         autoSqlOffset        8 bytes (for bigWig 0) (0 if no autoSql information)
  *         totalSummaryOffset   8 bytes (0 in earlier versions of file lacking totalSummary)
- *         reserved            12 bytes (0 for now)
+ *         uncompressBufSize    4 bytes (Size of uncompression buffer.  0 if uncompressed.)
+ *         reserved             8 bytes (0 for now)
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
@@ -54,7 +55,7 @@
 #include "cirTree.h"
 #endif
 
-#define bbiCurrentVersion 2
+#define bbiCurrentVersion 3
 /* Version history (of file format, not utilities - corresponds to version field in header)
  *    1 - Initial release
  *    1 - Unfortunately when attempting a transparent change to encoders, made the sectionCount 
@@ -63,6 +64,8 @@
  *        up in the summary section of the Table Browser.
  *    2 - Made sectionCount consistently 64 bits. Also fixed missing zoomCount in first level of
  *        zoom in files made by bedToBigBed and bedGraphToBigWig.  (The older wigToBigWig was fine.)
+ *        Added totalSummary section.
+ *    3 - Adding zlib compression.  Only active if uncompressBufSize is non-zero in header.
  */
 
 struct bbiZoomLevel
@@ -97,6 +100,7 @@ struct bbiFile
     bits16 definedFieldCount;   /* Number of columns using bed standard definitions. */
     bits64 asOffset;		/* Offset to embedded null-terminated AutoSQL file. */
     bits64 totalSummaryOffset;	/* Offset to total summary information if any.  (On older files have to calculate) */
+    bits32 uncompressBufSize;	/* Size of uncompression buffer, 0 if uncompressed */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
     };
@@ -320,7 +324,7 @@ struct bbiSummary *bbiReduceSummaryList(struct bbiSummary *inList,
 /* Reduce summary list to another summary list. */
 
 bits64 bbiWriteSummaryAndIndex(struct bbiSummary *summaryList, 
-	int blockSize, int itemsPerSlot, FILE *f);
+	int blockSize, int itemsPerSlot, boolean doCompress, FILE *f);
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 

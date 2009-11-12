@@ -9,7 +9,7 @@
 #include "hmmstats.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.4 2009/11/07 19:30:32 kent Exp $";
+static char const rcsid[] = "$Id: bigWigInfo.c,v 1.5 2009/11/12 23:15:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,13 +36,13 @@ void bigWigInfo(char *fileName)
 struct bbiFile *bwf = bigWigFileOpen(fileName);
 printf("version: %d\n", bwf->version);
 printf("isSwapped: %d\n", bwf->isSwapped);
-printf("zoomLevels: %d\n", bwf->zoomLevels);
 printf("primaryDataSize: %lld\n", (long long)(bwf->unzoomedIndexOffset -  bwf->unzoomedDataOffset));
 if (bwf->levelList != NULL)
     {
     long long indexEnd = bwf->levelList->dataOffset;
     printf("primaryIndexSize: %lld\n", indexEnd - bwf->unzoomedIndexOffset);
     }
+printf("zoomLevels: %d\n", bwf->zoomLevels);
 struct bbiZoomLevel *zoom;
 for (zoom = bwf->levelList; zoom != NULL; zoom = zoom->next)
     printf("\t%d\n", zoom->reductionLevel);

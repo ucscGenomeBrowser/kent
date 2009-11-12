@@ -6,12 +6,14 @@
 #include "options.h"
 #include "bigWig.h"
 #include "bwgInternal.h"
+#include "zlibFace.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.7 2009/11/06 19:46:54 kent Exp $";
+static char const rcsid[] = "$Id: wigToBigWig.c,v 1.8 2009/11/12 23:15:52 kent Exp $";
 
-int blockSize = 256;
-int itemsPerSlot = 1024;
-boolean clipDontDie = FALSE;
+static int blockSize = 256;
+static int itemsPerSlot = 1024;
+static boolean clipDontDie = FALSE;
+static boolean doCompress = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,7 +30,8 @@ errAbort(
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "   -clip - If set just issue warning messages rather than dying if wig\n"
-  "                  file contains items off end of chromosome."
+  "                  file contains items off end of chromosome.\n"
+  "   -compress - If set use zlib compression."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -37,6 +40,7 @@ static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
    {"clip", OPTION_BOOLEAN},
+   {"compress", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -44,7 +48,7 @@ void wigToBigWig(char *inName, char *chromSizes, char *outName)
 /* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format.. */
 {
-bigWigFileCreate(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, outName);
+bigWigFileCreate(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, doCompress, outName);
 }
 
 int main(int argc, char *argv[])
@@ -54,6 +58,7 @@ optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 clipDontDie = optionExists("clip");
+doCompress = optionExists("compress");
 if (argc != 4)
     usage();
 wigToBigWig(argv[1], argv[2], argv[3]);

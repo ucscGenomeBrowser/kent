@@ -8,13 +8,14 @@
 #include "errabort.h"
 #include "sqlNum.h"
 #include "sig.h"
+#include "zlibFace.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
 #include "bbiFile.h"
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.19 2009/11/07 19:27:02 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.20 2009/11/12 23:15:52 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -106,8 +107,8 @@ fprintf(f, "summary %d:%d-%d min=%f, max=%f, sum=%f, sumSquares=%f, validCount=%
      sum->sumSquares, sum->validCount, sum->sumData/sum->validCount);
 }
 
-static void bwgSectionWrite(struct bwgSection *section, FILE *f)
-/* Write out section to file, filling in section->fileOffset. */
+static int bwgSectionWriteUnc(struct bwgSection *section, FILE *f)
+/* Write out compressed section to file, filling in section->fileOffset. */
 {
 UBYTE type = section->type;
 UBYTE reserved8 = 0;
@@ -161,6 +162,105 @@ switch (section->type)
         internalErr();
 	break;
     }
+return 0;
+}
+
+static int bwgSectionWriteComp(struct bwgSection *section, FILE *f)
+/* Write out compressed section to file, filling in section->fileOffset. 
+ * Returns uncompressed size. */
+{
+UBYTE type = section->type;
+UBYTE reserved8 = 0;
+int itemSize;
+switch (section->type)
+    {
+    case bwgTypeBedGraph:
+        itemSize = 12;
+	break;
+    case bwgTypeVariableStep:
+        itemSize = 8;
+	break;
+    case bwgTypeFixedStep:
+        itemSize = 4;
+	break;
+    default:
+        itemSize = 0;  // Suppress compiler warning
+	internalErr();
+	break;
+    }
+int fixedSize = sizeof(section->chromId) + sizeof(section->start) + sizeof(section->end) + 
+     sizeof(section->itemStep) + sizeof(section->itemSpan) + sizeof(type) + sizeof(reserved8) +
+     sizeof(section->itemCount);
+int bufSize = section->itemCount * itemSize + fixedSize;
+char buf[bufSize];
+char *bufPt = buf;
+
+section->fileOffset = ftell(f);
+memWriteOne(&bufPt, section->chromId);
+memWriteOne(&bufPt, section->start);
+memWriteOne(&bufPt, section->end);
+memWriteOne(&bufPt, section->itemStep);
+memWriteOne(&bufPt, section->itemSpan);
+memWriteOne(&bufPt, type);
+memWriteOne(&bufPt, reserved8);
+memWriteOne(&bufPt, section->itemCount);
+
+int i;
+switch (section->type)
+    {
+    case bwgTypeBedGraph:
+	{
+	struct bwgBedGraphItem *item = section->items.bedGraphList;
+	for (item = section->items.bedGraphList; item != NULL; item = item->next)
+	    {
+	    memWriteOne(&bufPt, item->start);
+	    memWriteOne(&bufPt, item->end);
+	    memWriteOne(&bufPt, item->val);
+	    }
+	break;
+	}
+    case bwgTypeVariableStep:
+	{
+	struct bwgVariableStepPacked *items = section->items.variableStepPacked;
+	for (i=0; i<section->itemCount; ++i)
+	    {
+	    memWriteOne(&bufPt, items->start);
+	    memWriteOne(&bufPt, items->val);
+	    items += 1;
+	    }
+	break;
+	}
+    case bwgTypeFixedStep:
+	{
+	struct bwgFixedStepPacked *items = section->items.fixedStepPacked;
+	for (i=0; i<section->itemCount; ++i)
+	    {
+	    memWriteOne(&bufPt, items->val);
+	    items += 1;
+	    }
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
+assert(bufSize == (bufPt - buf) );
+
+size_t maxCompSize = zCompBufSize(bufSize);
+char compBuf[maxCompSize];
+int compSize = zCompress(buf, bufSize, compBuf, maxCompSize);
+mustWrite(f, compBuf, compSize);
+return bufSize;
+}
+
+
+static int bwgSectionWrite(struct bwgSection *section, boolean doCompress, FILE *f)
+/* Write out section to file, filling in section->fileOffset. */
+{
+if (doCompress)
+    return bwgSectionWriteComp(section, f);
+else
+    return bwgSectionWriteUnc(section, f);
 }
 
 
@@ -796,7 +896,7 @@ return outList;
 }
 
 static void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
-	int blockSize, int itemsPerSlot, char *fileName)
+	int blockSize, int itemsPerSlot, boolean doCompress, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
 bits64 sectionCount = slCount(sectionList);
@@ -811,6 +911,8 @@ bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
 bits64 totalSummaryOffset = 0, totalSummaryOffsetPos;
+bits32 uncompressBufSize = 0;
+bits64 uncompressBufSizePos;
 struct bbiSummary *reduceSummaries[10];
 bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
@@ -885,7 +987,9 @@ writeOne(f, reserved16);  /* definedFieldCount */
 writeOne(f, reserved64);  /* autoSqlOffset. */
 totalSummaryOffsetPos = ftell(f);
 writeOne(f, totalSummaryOffset);
-for (i=0; i<3; ++i)
+uncompressBufSizePos = ftell(f);
+writeOne(f, uncompressBufSize);
+for (i=0; i<2; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers */
@@ -917,7 +1021,11 @@ dataOffset = ftell(f);
 writeOne(f, sectionCount);
 struct bwgSection *section;
 for (section = sectionList; section != NULL; section = section->next)
-    bwgSectionWrite(section, f);
+    {
+    bits32 uncSizeOne = bwgSectionWrite(section, doCompress, f);
+    if (uncSizeOne > uncompressBufSize)
+         uncompressBufSize = uncSizeOne;
+    }
 
 /* Write out index - creating a temporary array rather than list representation of
  * sections in the process. */
@@ -936,7 +1044,7 @@ verbose(2, "bwgCreate writing %d summaries\n", summaryCount);
 for (i=0; i<summaryCount; ++i)
     {
     reductionDataOffsets[i] = ftell(f);
-    reductionIndexOffsets[i] = bbiWriteSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
+    reductionIndexOffsets[i] = bbiWriteSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, doCompress, f);
     verbose(3, "wrote %d of data, %d of index on level %d\n", (int)(reductionIndexOffsets[i] - reductionDataOffsets[i]), (int)(ftell(f) - reductionIndexOffsets[i]), i);
     }
 
@@ -973,6 +1081,15 @@ fseek(f, chromTreeOffsetPos, SEEK_SET);
 writeOne(f, chromTreeOffset);
 fseek(f, totalSummaryOffsetPos, SEEK_SET);
 writeOne(f, totalSummaryOffset);
+
+if (doCompress)
+    {
+    int maxZoomUncompSize = itemsPerSlot * sizeof(struct bbiSummaryOnDisk);
+    if (maxZoomUncompSize > uncompressBufSize)
+	uncompressBufSize = maxZoomUncompSize;
+    fseek(f, uncompressBufSizePos, SEEK_SET);
+    writeOne(f, uncompressBufSize);
+    }
 
 /* Also fill in offsets in zoom headers. */
 for (i=0; i<summaryCount; ++i)
@@ -1049,6 +1166,7 @@ void bigWigFileCreate(
 	int blockSize,		/* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot,	/* Number of items in lowest level of tree.  512 is good. */
 	boolean clipDontDie,	/* If TRUE then clip items off end of chrom rather than dying. */
+	boolean compress,	/* If TRUE then compress data. */
 	char *outName)
 /* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format. */
@@ -1064,7 +1182,7 @@ struct lm *lm = lmInit(0);
 struct bwgSection *sectionList = bwgParseWig(inName, clipDontDie, chromSizeHash, itemsPerSlot, lm);
 if (sectionList == NULL)
     errAbort("%s is empty of data", inName);
-bwgCreate(sectionList, chromSizeHash, blockSize, itemsPerSlot, outName);
+bwgCreate(sectionList, chromSizeHash, blockSize, itemsPerSlot, compress, outName);
 lmCleanup(&lm);
 }
 
