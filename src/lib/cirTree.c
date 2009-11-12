@@ -52,7 +52,6 @@ static bits64 rWriteIndexLevel(bits16 blockSize, int childNodeSize,
 /* Recursively write an index level, skipping levels below destLevel,
  * writing out destLevel. */
 {
-// uglyf("rWriteIndexLevel blockSize=%d, childNodeSize=%d, offsetOfFirstChild=%llu, curLevel=%d, destLevel=%d slCount(tree)=%d\n", blockSize, childNodeSize, offsetOfFirstChild, curLevel, destLevel, slCount(tree->children));
 struct rTree *el;
 bits64 offset = offsetOfFirstChild;
 if (curLevel == destLevel)
@@ -473,7 +472,6 @@ else
 static inline boolean cirTreeOverlaps(int qChrom, int qStart, int qEnd, 
 	int rStartChrom, int rStartBase, int rEndChrom, int rEndBase)
 {
-// uglyf("cirTreeOverlaps(query %d:%d-%d, range %d:%d - %d:%d)\n", qChrom, qStart, qEnd, rStartChrom, rStartBase, rEndChrom, rEndBase);
 return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&
        cmpTwoBits32(qChrom, qEnd, rStartChrom, rStartBase) < 0;
 }
@@ -553,7 +551,6 @@ struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crt,
  * in these blocks too. When done, use slListFree to dispose of the result. */
 {
 struct fileOffsetSize *blockList = NULL;
-// uglyf("cirTreeFindOverlappingBlocks(%p %u:%u-%u\n", crt, chromIx, start, end);
 rFindOverlappingBlocks(crt, 0, crt->rootOffset, chromIx, start, end, &blockList);
 slReverse(&blockList);
 return blockList;
