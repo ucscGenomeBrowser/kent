@@ -1,5 +1,6 @@
 /* freen - My Pet Freen. */
 #include "common.h"
+#include "options.h"
 #include "zlibFace.h"
 #include "memalloc.h"
 #include "dystring.h"
@@ -8,13 +9,17 @@
 #include "obscure.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.91 2009/11/10 20:52:58 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.92 2009/11/12 23:11:54 kent Exp $";
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen file\n");
 }
+
+static struct optionSpec options[] = {
+   {NULL, 0},
+};
 
 
 void freen(char *input, char *output, char *uncompressed)
@@ -41,8 +46,10 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+zSelfTest(100);
 freen(argv[1], argv[2], argv[3]);
 return 0;
 }
