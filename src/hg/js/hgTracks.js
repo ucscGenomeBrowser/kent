@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.44 2009/10/17 22:36:03 larrym Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.45 2009/11/12 23:38:41 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -107,7 +107,7 @@ function checkPosition(img, selection)
     // but I don't know how to do that with imgAreaSelect).
     var leftX = revCmplDisp ? imgOfs.left - slop : imgOfs.left + insideX - slop;
     var rightX = revCmplDisp ? imgOfs.left + imgWidth - insideX + slop : imgOfs.left + imgWidth + slop;
-    
+
     return (selection.event.pageX >= leftX) && (selection.event.pageX < rightX)
         && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop));
 }
@@ -827,13 +827,19 @@ this.each(function(){
                     var imgId = this.id.split("_");
                     var titlePx = 0;
                     var center = $("#img_center_"+imgId[2]);
-                    if(center.length > 0)
+                    if(center.length > 0) {
                         titlePx = $(center).parent().height();
+                        top += titlePx;
+                    }
                     var side = $("#img_side_"+imgId[2]);
                     if( side.length > 0) {
                         $(side).parent().height( span.bottom - span.top + titlePx);
-                        top += titlePx;
                         $(side).css( {'top': top.toString() + "px" });
+                    }
+                    var btn = $("#img_btn_"+imgId[2]);
+                    if( btn.length > 0) {
+                        $(btn).parent().height( span.bottom - span.top + titlePx);
+                        $(btn).css( {'top': top.toString() + "px" });
                     }
 
                 }
@@ -906,8 +912,16 @@ $(document).ready(function()
             $('img#chrom').chromDrag();
         }
     }
-
 });
+
+////////// Attempts to get back button to work with us
+//window.onload = function () {
+//    // Requires "Signed Scripts" and "UniversalBrowserRead" http://www.mozilla.org/projects/security/components/signed-scripts.html
+//    if(window.history.next != undefined && window.history.next.length > 10) {
+//	alert("Not at the end of time.");
+//    } else
+//	alert("At the end of time.");
+//}
 
 function rulerModeToggle (ele)
 {
