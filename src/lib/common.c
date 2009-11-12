@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.135 2009/11/02 21:27:48 hiram Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.136 2009/11/12 19:33:54 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -2073,6 +2073,25 @@ slReverse(&newList);
 return newList;
 }
 
+void fileOffsetSizeFindGap(struct fileOffsetSize *list, 
+	struct fileOffsetSize **pBeforeGap, struct fileOffsetSize **pAfterGap)
+/* Starting at list, find all items that don't have a gap between them and the previous item.  
+ * Return at gap, or at end of list, returning pointers to the items before and after the gap. */
+{
+struct fileOffsetSize *pt, *next;
+for (pt = list; ; pt = next)
+    {
+    next = pt->next;
+    if (next == NULL || next->offset != pt->offset + pt->size)
+	{
+	*pBeforeGap = pt;
+	*pAfterGap = next;
+	return;
+	}
+    }
+}
+
+
 void maybeSystem(char *cmd)
 /* Execute cmd using "sh -c" or die.  (See man 3 system.) warn on errors */
 {
@@ -2135,10 +2154,23 @@ return ret;
 }
 
 void memRead(char **pPt, void *buf, int size)
-/* Copy memory from *pPt to buf, and advance *pPt by size */
+/* Copy memory from *pPt to buf, and advance *pPt by size. */
 {
 memcpy(buf, *pPt, size);
 *pPt += size;
+}
+
+void memWrite(char **pPt, void *buf, int size)
+/* Copy memory from buf to *pPt and advance *pPt by size. */
+{
+memcpy(*pPt, buf, size);
+*pPt += size;
+}
+
+void memWriteFloat(char **pPt, float val)
+/* Write out floating point val to file.  Mostly to convert from double... */
+{
+memWriteOne(pPt, val);
 }
 
 bits64 byteSwap64(bits64 a)

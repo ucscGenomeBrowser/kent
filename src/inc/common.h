@@ -1001,6 +1001,11 @@ struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList);
 /* Returns a new list which is inList transformed to have adjacent blocks
  * merged.  Best to use this with a sorted list. */
 
+void fileOffsetSizeFindGap(struct fileOffsetSize *list, 
+	struct fileOffsetSize **pBeforeGap, struct fileOffsetSize **pAfterGap);
+/* Starting at list, find all items that don't have a gap between them and the previous item.  
+ * Return at gap, or at end of list, returning pointers to the items before and after the gap. */
+
 void maybeSystem(char *cmd);
 /* Execute cmd using "sh -c" or die.  (See man 3 system.) warning on errors */
 
@@ -1041,7 +1046,16 @@ int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
  * intersection. */
 
 void memRead(char **pPt, void *buf, int size);
-/* Copy memory from *pPt to buf, and advance *pPt by size */
+/* Copy memory from *pPt to buf, and advance *pPt by size. */
+
+void memWrite(char **pPt, void *buf, int size);
+/* Copy memory from buf to *pPt and advance *pPt by size. */
+
+#define memWriteOne(pPt, var) memWrite((pPt), &(var), sizeof(var))
+/* Write out one variable to memory stream. */
+
+void memWriteFloat(char **pPt, float val);
+/* Write out floating point val to file.  Mostly to convert from double... */
 
 bits64 byteSwap64(bits64 a);
 /* Swap from intel to sparc order of a 64 bit quantity. */
