@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.652 2009/11/13 21:22:57 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.653 2009/11/13 23:25:03 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16054,7 +16054,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HepG2 cytosol longPolyA 1
+    shortLabel HepG cyto AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HepG2 cytosol)
     subGroups view=2-Alignments cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16072,7 +16072,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HepG2 nucleus longPolyA 1
+    shortLabel HepG nucl AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HepG2 nucleus)
     subGroups view=2-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16090,7 +16090,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1K562ChromatinLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 chromatin longPolyA 1
+    shortLabel K562 chrm AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 chromatin)
     subGroups view=2-Alignments cellType=K562 localization=50-chromatin rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16108,7 +16108,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1K562NucleolusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleolus longPolyA 1
+    shortLabel K562 nlos AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 nucleolus)
     subGroups view=2-Alignments cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16126,7 +16126,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1K562NucleoplasmLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleoplasm longPolyA 1
+    shortLabel K562 npls AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 nucleoplasm)
     subGroups view=2-Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16144,7 +16144,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleus longPolyA 1
+    shortLabel K562 nucl AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 nucleus)
     subGroups view=2-Alignments cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16162,7 +16162,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 polysome longPolyA 1
+    shortLabel K562 psom AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 polysome)
     subGroups view=2-Alignments cellType=K562 localization=10-polysome rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16180,7 +16180,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 cytosol longPolyA 2
+    shortLabel K562 cyto AL2
     longLabel ENCODE GIS PET Alignments Replicate 2 (longPolyA in K562 cytosol)
     subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16198,7 +16198,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel prostate cell longPolyA 1
+    shortLabel pros cell AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in prostate cell)
     subGroups view=2-Alignments cellType=prostate localization=0-cell rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16215,7 +16215,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 nucleus longPolyA 1
+    shortLabel GM12 nucl AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in GM12878 nucleus)
     subGroups view=2-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16233,7 +16233,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 cytosol longPolyA 1
+    shortLabel GM12 cyto AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in GM12878 cytosol)
     subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16251,7 +16251,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 cytosol longPolyA 2
+    shortLabel GM12 cyto AL2
     longLabel ENCODE GIS PET Alignments Replicate 2 (longPolyA in GM12878 cytosol)
     subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16269,7 +16269,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel NHEK cytosol longPolyA 1
+    shortLabel NHEK cyto AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in NHEK cytosol)
     subGroups view=2-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16287,7 +16287,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel NHEK nucleus longPolyA 1
+    shortLabel NHEK nucl AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in NHEK nucleus)
     subGroups view=2-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16305,7 +16305,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HUVEC nucleus longPolyA 1
+    shortLabel HUVE nucl AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HUVEC nucleus)
     subGroups view=2-Alignments cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16323,7 +16323,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel H1-hESC cytosol longPolyA 1
+    shortLabel hESC cyto AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in H1-hESC cytosol)
     subGroups view=2-Alignments cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16340,7 +16340,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 cytosol longPolyA 1
+    shortLabel K562 cyto AL1
     longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
@@ -16359,7 +16359,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 cytosol longPolyA 1
+    shortLabel GM12 cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in GM12878 cytosol)
     subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16369,7 +16369,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 nucleus longPolyA 1
+    shortLabel GM12 nucl +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in GM12878 nucleus)
     subGroups view=0-PlusRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16379,7 +16379,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel H1-hESC cytosol longPolyA 1
+    shortLabel hESC cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in H1-hESC cytosol)
     subGroups view=0-PlusRawSignal cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16388,7 +16388,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HepG2 cytosol longPolyA 1
+    shortLabel HepG cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HepG2 cytosol)
     subGroups view=0-PlusRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16398,7 +16398,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HepG2 nucleus longPolyA 1
+    shortLabel HepG nucl +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HepG2 nucleus)
     subGroups view=0-PlusRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16408,7 +16408,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HUVEC nucleus longPolyA 1
+    shortLabel HUVE nucl +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HUVEC nucleus)
     subGroups view=0-PlusRawSignal cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16418,7 +16418,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1K562ChromatinLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 chromatin longPolyA 1
+    shortLabel K562 chrm +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 chromatin)
     subGroups view=0-PlusRawSignal cellType=K562 localization=50-chromatin rnaExtract=longPolyA
     type bedGraph 4
@@ -16428,7 +16428,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 cytosol longPolyA 1
+    shortLabel K562 cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=0-PlusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16438,7 +16438,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1K562NucleolusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleolus longPolyA 1
+    shortLabel K562 nlos +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 nucleolus)
     subGroups view=0-PlusRawSignal cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
     type bedGraph 4
@@ -16448,7 +16448,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1K562NucleoplasmLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleoplasm longPolyA 1
+    shortLabel K562 npls +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 nucleoplasm)
     subGroups view=0-PlusRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
     type bedGraph 4
@@ -16458,7 +16458,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleus longPolyA 1
+    shortLabel K562 nucl +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 nucleus)
     subGroups view=0-PlusRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16468,7 +16468,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 polysome longPolyA 1
+    shortLabel K562 psom +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 polysome)
     subGroups view=0-PlusRawSignal cellType=K562 localization=10-polysome rnaExtract=longPolyA
     type bedGraph 4
@@ -16478,7 +16478,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel NHEK cytosol longPolyA 1
+    shortLabel NHEK cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in NHEK cytosol)
     subGroups view=0-PlusRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16488,7 +16488,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel NHEK nucleus longPolyA 1
+    shortLabel NHEK nucl +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in NHEK nucleus)
     subGroups view=0-PlusRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16498,7 +16498,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel prostate cytosol longPolyA 1
+    shortLabel pros cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in prostate cytosol)
     subGroups view=0-PlusRawSignal cellType=prostate localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16507,7 +16507,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 cytosol longPolyA 2
+    shortLabel GM12 cyto +S2
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 2 (longPolyA in GM12878 cytosol)
     subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16517,7 +16517,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 cytosol longPolyA 2
+    shortLabel K562 cyto +S2
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 2 (longPolyA in K562 cytosol)
     subGroups view=0-PlusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16527,7 +16527,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 cytosol longPolyA 1
+    shortLabel GM12 cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in GM12878 cytosol)
     subGroups view=1-MinusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16537,7 +16537,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 nucleus longPolyA 1
+    shortLabel GM12 nucl -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in GM12878 nucleus)
     subGroups view=1-MinusRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16547,7 +16547,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel H1-hESC cytosol longPolyA 1
+    shortLabel hESC cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in H1-hESC cytosol)
     subGroups view=1-MinusRawSignal cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16556,7 +16556,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HepG2 cytosol longPolyA 1
+    shortLabel HepG cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HepG2 cytosol)
     subGroups view=1-MinusRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16566,7 +16566,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HepG2 nucleus longPolyA 1
+    shortLabel HepG nucl -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HepG2 nucleus)
     subGroups view=1-MinusRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16576,7 +16576,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel HUVEC nucleus longPolyA 1
+    shortLabel HUVE nucl -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HUVEC nucleus)
     subGroups view=1-MinusRawSignal cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16586,7 +16586,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1K562ChromatinLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 chromatin longPolyA 1
+    shortLabel K562 chrm -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 chromatin)
     subGroups view=1-MinusRawSignal cellType=K562 localization=50-chromatin rnaExtract=longPolyA
     type bedGraph 4
@@ -16596,7 +16596,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 cytosol longPolyA 1
+    shortLabel K562 cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 cytosol)
     subGroups view=1-MinusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16606,7 +16606,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1K562NucleolusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleolus longPolyA 1
+    shortLabel K562 nlos -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 nucleolus)
     subGroups view=1-MinusRawSignal cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
     type bedGraph 4
@@ -16616,7 +16616,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1K562NucleoplasmLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleoplasm longPolyA 1
+    shortLabel K562 npls -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 nucleoplasm)
     subGroups view=1-MinusRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
     type bedGraph 4
@@ -16626,7 +16626,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 nucleus longPolyA 1
+    shortLabel K562 nucl -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 nucleus)
     subGroups view=1-MinusRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16636,7 +16636,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 polysome longPolyA 1
+    shortLabel K562 psom -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 polysome)
     subGroups view=1-MinusRawSignal cellType=K562 localization=10-polysome rnaExtract=longPolyA
     type bedGraph 4
@@ -16646,7 +16646,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel NHEK cytosol longPolyA 1
+    shortLabel NHEK cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in NHEK cytosol)
     subGroups view=1-MinusRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16656,7 +16656,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel NHEK nucleus longPolyA 1
+    shortLabel NHEK nucl -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in NHEK nucleus)
     subGroups view=1-MinusRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
     type bedGraph 4
@@ -16666,7 +16666,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel prostate cytosol longPolyA 1
+    shortLabel pros cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in prostate cytosol)
     subGroups view=1-MinusRawSignal cellType=prostate localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16675,7 +16675,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel GM12878 cytosol longPolyA 2
+    shortLabel GM12 cyto -S2
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 2 (longPolyA in GM12878 cytosol)
     subGroups view=1-MinusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
@@ -16685,7 +16685,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet off
-    shortLabel K562 cytosol longPolyA 2
+    shortLabel K562 cyto -S2
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 2 (longPolyA in K562 cytosol)
     subGroups view=1-MinusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     type bedGraph 4
