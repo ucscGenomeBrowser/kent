@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.649 2009/11/12 17:36:06 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.650 2009/11/13 01:14:42 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15360,7 +15360,7 @@ dimensionZchecked longPolyA
 sortOrder cellType=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults 4-Alignments=hide
+visibilityViewDefaults 1-PlusRawSignal=dense 2-MinusRawSignal=dense 3-AllRawSignal=hide 4-Alignments=hide 5-SplitAlign=hide
 priority 0
 type bed 3
 noInherit on
@@ -15368,9 +15368,9 @@ wgEncode 1
 
     track wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
     release alpha
-    subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
-    shortLabel K562 cyto PS1
+    subTrack wgEncodeGisRnaSeq on
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+    shortLabel K562 cyto +S1
     subGroups view=1-PlusRawSignal cellType=K562 rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 175406
@@ -15380,9 +15380,9 @@ wgEncode 1
 
     track wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
     release alpha
-    subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
-    shortLabel K562 cyto MS1
+    subTrack wgEncodeGisRnaSeq on
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+    shortLabel K562 cyto -S1
     subGroups view=2-MinusRawSignal cellType=K562 rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig  0 56250
@@ -15393,7 +15393,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
+    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
     shortLabel K562 cyto AS1
     subGroups view=3-AllRawSignal cellType=K562 rnaExtract=longPolyA
     type bedGraph 4
@@ -15406,7 +15406,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel K562 cyto AL1
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
+    longLabel ENCODE GIS RNA-Seq Tags Rep 1 (PolyA+ in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 rep=rep1 rnaExtract=longPolyA
     type bigBed 6
     colorByStrand 46,0,184 238,85,34
@@ -15417,7 +15417,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel K562 cyto SA1
-    longLabel ENCODE GIS RNA-Seq Split Tags Replicate 1 (longPolyA in K562 cytosol)
+    longLabel ENCODE GIS RNA-Seq Split Tags Rep 1 (PolyA+ in K562 cytosol)
     subGroups view=5-SplitAlign cellType=K562 rep=rep1 rnaExtract=longPolyA
 #    type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
@@ -15434,8 +15434,8 @@ wgEncode 1
     track wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
-    shortLabel K562 cyto PS2
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 2 (PolyA+ in K562 cytosol)
+    shortLabel K562 cyto +S2
     subGroups view=1-PlusRawSignal cellType=K562 rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 13556
@@ -15446,8 +15446,8 @@ wgEncode 1
     track wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
-    shortLabel K562 cyto MS2
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 2 (PolyA+ in K562 cytosol)
+    shortLabel K562 cyto -S2
     subGroups view=2-MinusRawSignal cellType=K562 rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 10333
@@ -15458,7 +15458,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in K562 cytosol)
+    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 2 (PolyA+ in K562 cytosol)
     shortLabel K562 cyto AS2
     subGroups view=3-AllRawSignal cellType=K562 rnaExtract=longPolyA
     type bedGraph 4
@@ -15471,7 +15471,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel K562 cyto AL2
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 2 (longPolyA in K562 cytosol)
+    longLabel ENCODE GIS RNA-Seq Tags Replicate 2 (PolyA+ in K562 cytosol)
     subGroups view=4-Alignments cellType=K562 rep=rep2 rnaExtract=longPolyA
     type bigBed 6
     colorByStrand 46,0,184 238,85,34
@@ -15480,9 +15480,9 @@ wgEncode 1
 
     track wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
     release alpha
-    subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in Gm12878 cytosol)
-    shortLabel Gm12878 cyto PS2
+    subTrack wgEncodeGisRnaSeq on
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ in GM12878 cytosol)
+    shortLabel Gm12878 cyto +S2
     subGroups view=1-PlusRawSignal cellType=GM12878 rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 20925
@@ -15492,9 +15492,9 @@ wgEncode 1
 
     track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
     release alpha
-    subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in Gm12878 cytosol)
-    shortLabel Gm12878 cyto MS2
+    subTrack wgEncodeGisRnaSeq on
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ in GM12878 cytosol)
+    shortLabel Gm12878 cyto -S2
     subGroups view=2-MinusRawSignal cellType=GM12878 rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 13935
@@ -15505,7 +15505,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in Gm12878 cytosol)
+    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 1 (PolyA+ in GM12878 cytosol)
     shortLabel Gm12878 cyto AS2
     subGroups view=3-AllRawSignal cellType=GM12878 rnaExtract=longPolyA
     type bedGraph 4
@@ -15518,7 +15518,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel GM12878 cyto AL1
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in GM12878 cytosol)
+    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (PolyA+ in GM12878 cytosol)
     subGroups view=4-Alignments cellType=GM12878 rep=rep1 rnaExtract=longPolyA
     type bigBed 6
     colorByStrand 46,0,184 238,85,34
@@ -15527,9 +15527,9 @@ wgEncode 1
 
     track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCytosolLongpolya
     release alpha
-    subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in H1hesc cytosol)
-    shortLabel H1-hESC cyto PS1
+    subTrack wgEncodeGisRnaSeq on
+    longLabel ENCODE GIS RNA-Seq Plus Strand Raw Signal Rep 1 (PolyA+ in H1hesc cytosol)
+    shortLabel H1-hESC cyto +S1
     subGroups view=1-PlusRawSignal cellType=H1hESC rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 45103
@@ -15538,9 +15538,9 @@ wgEncode 1
 
     track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCytosolLongpolya
     release alpha
-    subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in H1hesc cytosol)
-    shortLabel H1-hESC cyto MS1
+    subTrack wgEncodeGisRnaSeq on
+    longLabel ENCODE GIS RNA-Seq Minus Strand Raw Signal Rep 1 (PolyA+ in H1hesc cytosol)
+    shortLabel H1-hESC cyto -S1
     subGroups view=2-MinusRawSignal cellType=H1hESC rnaExtract=longPolyA
     type bedGraph 4
     #type bigWig 0 48723
@@ -15550,7 +15550,7 @@ wgEncode 1
     track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCytosolLongpolya
     release alpha
     subTrack wgEncodeGisRnaSeq off
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in H1hesc cytosol)
+    longLabel ENCODE GIS RNA-Seq All Strand Raw Signal Rep 1 (PolyA+ in H1hesc cytosol)
     shortLabel H1-hESC cyto AS1
     subGroups view=3-AllRawSignal cellType=H1hESC rnaExtract=longPolyA
     type bedGraph 4
@@ -15562,7 +15562,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel H1-hESC cyto SA1
-    longLabel ENCODE GIS RNA-Seq Split Tags Replicate 1 (longPolyA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-Seq Split Tags Rep 1 (PolyA+ in H1-hESC cytosol)
     subGroups view=5-SplitAlign cellType=H1hESC rep=rep1 rnaExtract=longPolyA
 #    type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
@@ -15579,7 +15579,7 @@ wgEncode 1
     release alpha
     subTrack wgEncodeGisRnaSeq off
     shortLabel H1-hESC cyto AL1
-    longLabel ENCODE GIS RNA-Seq Tags Replicate 1 (longPolyA in H1-hESC cytosol)
+    longLabel ENCODE GIS RNA-Seq Tags Rep 1 (PolyA+ in H1-hESC cytosol)
     subGroups view=4-Alignments cellType=H1hESC rep=rep1 rnaExtract=longPolyA
     colorByStrand 46,0,184 238,85,34
     type bigBed 6
