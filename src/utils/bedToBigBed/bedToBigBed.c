@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.18 2009/11/13 19:02:38 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.19 2009/11/13 23:47:02 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -316,7 +316,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    totalSum->validCount = size;
 	    totalSum->minVal = totalSum->maxVal = val;
 	    totalSum->sumData = val*size;
-	    totalSum->sumSquares = val*size*size;
+	    totalSum->sumSquares = val*val*size;
 	    firstTime = FALSE;
 	    }
 	else
@@ -325,7 +325,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    if (val < totalSum->minVal) totalSum->minVal = val;
 	    if (val > totalSum->maxVal) totalSum->maxVal = val;
 	    totalSum->sumData += val*size;
-	    totalSum->sumSquares += val*size*size;
+	    totalSum->sumSquares += val*val*size;
 	    }
 
 	/* If start past existing block then output it. */
