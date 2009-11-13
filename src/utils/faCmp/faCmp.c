@@ -7,7 +7,7 @@
 #include "options.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: faCmp.c,v 1.7 2008/01/30 23:11:27 angie Exp $";
+static char const rcsid[] = "$Id: faCmp.c,v 1.8 2009/11/13 21:33:25 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,12 @@ errAbort(
   "default:\n"
   "    no masking information is used during compare.  It is as if both\n"
   "    sequences were not masked.\n"
+  "\n"
+  "Exit codes:\n"
+  "   - 0 if files are the same\n"
+  "   - 1 if files differ\n"
+  "   - 255 on an error\n"
+  "\n"
   );
 }
 /* command line options and values */
@@ -82,7 +88,10 @@ if ( optionExists("sortName") )
     }
 
 if (aCount != bCount)
-   errAbort("%d sequences in %s, %d in %s", aCount, aFile, bCount, bFile);
+    {
+    fprintf(stderr, "%d sequences in %s, %d in %s\n", aCount, aFile, bCount, bFile);
+    exit(1);
+    }
 for (a = aList, b = bList; a != NULL && b != NULL; a = a->next, b = b->next)
     {
     verbose(2, "comparing %s to %s\n",a->name, b->name);
@@ -110,7 +119,10 @@ for (a = aList, b = bList; a != NULL && b != NULL; a = a->next, b = b->next)
 if (errCount == 0)
     fprintf(stderr, "%s and %s are the same\n", aFile, bFile);
 else
-    errAbort("%s and %s have %d sequences that differ", aFile, bFile, errCount);
+    {
+    fprintf(stderr, "%s and %s have %d sequences that differ\n", aFile, bFile, errCount);
+    exit(1);
+    }
 }
 
 int main(int argc, char *argv[])
