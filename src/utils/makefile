@@ -55,6 +55,7 @@ DIRS = \
 	bigWigInfo \
 	bigWigSummary \
 	bigWigToBedGraph \
+	bigWigToWig \
 	calc \
 	catDir \
 	catUncomment \
