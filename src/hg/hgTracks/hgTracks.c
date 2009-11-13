@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1606 2009/11/11 21:13:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1607 2009/11/13 00:17:58 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1582,24 +1582,13 @@ struct image    *theOneImg   = NULL; // No need to be global, only the map needs
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 // Set up imgBox dimensions
-int sideSliceWidth  = 0;   // Just being explicit
-int dataSliceWidth  = 0;
-int sideSliceOffsetX = 0;
-int dataSliceOffsetX = 0;
-int sliceHeight  = 0;
-int sliceOffsetY = 0;
+int sliceWidth[isMaxSliceTypes]; // Just being explicit
+int sliceOffsetX[isMaxSliceTypes];
+int sliceHeight        = 0;
+int sliceOffsetY       = 0;
 char *rulerTtl = NULL;
-// theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started prior to this in doTrackForm()
-//theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,pixWidth);
-if(theImgBox)
+if(theImgBox)  // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started prior to this in doTrackForm()
     {
-    if (withLeftLabels)
-        {
-        sideSliceWidth   = leftLabelWidth + 2;
-        sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
-        }
-    dataSliceOffsetX = (revCmplDisp?0:sideSliceWidth);
-
     rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");//"click or drag mouse in base position track to zoom in" : NULL);
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
@@ -1613,11 +1602,19 @@ if(theImgBox)
         pixWidth = tl.picWidth;
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
-        if (withLeftLabels)
-            sideSliceOffsetX = (revCmplDisp?(tl.picWidth - sideSliceWidth): 0);
         }
     #endif//def IMAGEv2_DRAG_SCROLL
-    dataSliceWidth   = tl.picWidth - sideSliceWidth;
+    memset((char *)sliceWidth,  0,sizeof(sliceWidth));
+    memset((char *)sliceOffsetX,0,sizeof(sliceOffsetX));
+    if (withLeftLabels)
+        {
+        sliceWidth[isButton]   = trackTabWidth + 1;
+        sliceWidth[isSide]     = leftLabelWidth - sliceWidth[isButton] + 2;
+        sliceOffsetX[isSide]   = (revCmplDisp? (tl.picWidth - sliceWidth[isSide] - sliceWidth[isButton]) : sliceWidth[isButton]);
+        sliceOffsetX[isButton] = (revCmplDisp? (tl.picWidth - sliceWidth[isButton]) : 0);
+        }
+    sliceOffsetX[isData] = (revCmplDisp?0:sliceWidth[isSide] + sliceWidth[isButton]);
+    sliceWidth[isData]   = tl.picWidth - (sliceWidth[isSide] + sliceWidth[isButton]);
     }
 
 if (rulerMode != tvFull)
@@ -1673,13 +1670,13 @@ for (track = trackList; track != NULL; track = track->next)
     hashAddUnique(trackHash, track->mapName, track);
     limitVisibility(track);
     if (!safeHeight)
-	{
-	track->limitedVis = tvHide;
-	track->limitedVisSet = TRUE;
-	continue;
-	}
+        {
+        track->limitedVis = tvHide;
+        track->limitedVisSet = TRUE;
+        continue;
+        }
     if (track->limitedVis != tvHide)
-	{
+        {
         if (tdbIsComposite(track->tdb))
             {
             struct track *subtrack;
@@ -1705,20 +1702,20 @@ for (track = trackList; track != NULL; track = track->next)
                     }
                 }
             }
-	if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
-	    {
-	    char numBuf[SMALLBUF];
-	    sprintLongWithCommas(numBuf, maxSafeHeight);
-	    printf("warning: image is over %s pixels high at "
-		"track '%s',<BR>remaining tracks set to hide "
-		"for this view.<BR>\n", numBuf, track->tdb->shortLabel);
-	    safeHeight = FALSE;
-	    track->limitedVis = tvHide;
-	    track->limitedVisSet = TRUE;
-	    }
-	else
-	    pixHeight += trackPlusLabelHeight(track, fontHeight);
-	}
+        if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
+            {
+            char numBuf[SMALLBUF];
+            sprintLongWithCommas(numBuf, maxSafeHeight);
+            printf("warning: image is over %s pixels high at "
+                "track '%s',<BR>remaining tracks set to hide "
+                "for this view.<BR>\n", numBuf, track->tdb->shortLabel);
+            safeHeight = FALSE;
+            track->limitedVis = tvHide;
+            track->limitedVisSet = TRUE;
+            }
+        else
+            pixHeight += trackPlusLabelHeight(track, fontHeight);
+        }
     }
 
 imagePixelHeight = pixHeight;
@@ -1748,6 +1745,9 @@ hPrintf("<MAP id='map' Name=%s>\n", mapName);
 /* Find colors to draw in. */
 findTrackColors(hvg, trackList);
 
+// TODO: Prior to image, make all imgTracks, including one for each visible subtrack
+//       Then dragReorder can work per subtrack!!!
+
 /* Draw mini-buttons. */
 if (withLeftLabels && psOutput == NULL)
     {
@@ -1767,7 +1767,7 @@ if (withLeftLabels && psOutput == NULL)
             sliceHeight      = height + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel, not reorderable
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isButton,theOneImg,NULL,sliceWidth[isButton],sliceHeight,sliceOffsetX[isButton],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         drawGrayButtonBox(hvg, trackTabX, y, trackTabWidth, height, TRUE);
@@ -1802,7 +1802,7 @@ if (withLeftLabels && psOutput == NULL)
                     sliceHeight      = h;
                     sliceOffsetY     = yStart;
                     curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-                    curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+                    curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isButton,theOneImg,NULL,sliceWidth[isButton],sliceHeight,sliceOffsetX[isButton],sliceOffsetY);
                     curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
                     }
                 mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h,
@@ -1830,7 +1830,7 @@ if (withLeftLabels)
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel,not reorderable
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sliceWidth[isSide],sliceHeight,sliceOffsetX[isSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         if (baseTitle)
@@ -1899,7 +1899,7 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sliceWidth[isSide],sliceHeight,sliceOffsetX[isSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
@@ -1956,7 +1956,7 @@ if (rulerMode != tvHide)
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
         sliceOffsetY     = 0;
         curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel,not reorderable
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,rulerTtl,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,rulerTtl,sliceWidth[isData],sliceHeight,sliceOffsetX[isData],sliceOffsetY);
         curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
         }
     struct dnaSeq *seq = NULL;
@@ -2186,7 +2186,7 @@ if (withCenterLabels)
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isCenter,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isCenter,theOneImg,NULL,sliceWidth[isData],sliceHeight,sliceOffsetX[isData],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
@@ -2200,7 +2200,7 @@ if (withCenterLabels)
                 // When subtracks are carved up into individual imgTracks, then this will not be necessary
                 sliceHeight      = trackPlusLabelHeight(track, fontHeight) - fontHeight;
                 sliceOffsetY     = y;
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,sliceWidth[isData],sliceHeight,sliceOffsetX[isData],sliceOffsetY);
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
                 }
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -2244,7 +2244,7 @@ if (withCenterLabels)
             curImgTrack = imgBoxTrackUpdateOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),order);
             if(sliceHeight > 0)
                 {
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,dataSliceWidth,sliceHeight,dataSliceOffsetX,sliceOffsetY);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isData,theOneImg,NULL,sliceWidth[isData],sliceHeight,sliceOffsetX[isData],sliceOffsetY);
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
                 }
             }
@@ -2270,44 +2270,41 @@ if (withLeftLabels)
     {
     y = yAfterRuler;
     for (track = trackList; track != NULL; track = track->next)
-	{
-	if (track->limitedVis == tvHide)
-            continue;
-    if(theImgBox)
         {
-        // side label slice of tracks
-        // FIXME: Notice I am treating all subtracks as indivisible from their composite
-        // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
-        // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
-        sliceHeight      = trackPlusLabelHeight(track, fontHeight);
-        sliceOffsetY     = y;
-        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
-        curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
-        }
-    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-	    {
-	    struct track *subtrack;
-	    if (isWithCenterLabels(track))
-		y += fontHeight;
-	    for (subtrack = track->subtracks; subtrack != NULL;
-		 subtrack = subtrack->next)
-		if (isSubtrackVisible(subtrack))
-		    {
-		    if (subtrack->drawLeftLabels != NULL)
-			y = doOwnLeftLabels(subtrack, hvg, font, y);
-		    else
-			y += trackPlusLabelHeight(subtrack, fontHeight);
-		    }
-	    }
-        else if (track->drawLeftLabels != NULL)
-	    {
-	    y = doOwnLeftLabels(track, hvg, font, y);
-	    }
-        else
+        if (track->limitedVis == tvHide)
+                continue;
+        if(theImgBox)
             {
-	    y += trackPlusLabelHeight(track, fontHeight);
+            // side label slice of tracks
+            // FIXME: Notice I am treating all subtracks as indivisible from their composite
+            // This will need to change to allow drag and drop.  Until then the subtrack center labels will drag scroll while the composte will not.
+            // But as soon as subtracks are individual image tracks: problems with buttons, left labels, center labels, drag and drop, etc.
+            sliceHeight      = trackPlusLabelHeight(track, fontHeight);
+            sliceOffsetY     = y;
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sliceWidth[isSide],sliceHeight,sliceOffsetX[isSide],sliceOffsetY);
+            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
             }
+        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+            {
+            struct track *subtrack;
+            if (isWithCenterLabels(track))
+                y += fontHeight;
+            for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
+                {
+                if (isSubtrackVisible(subtrack))
+                    {
+                    if (subtrack->drawLeftLabels != NULL)
+                        y = doOwnLeftLabels(subtrack, hvg, font, y);
+                    else
+                        y += trackPlusLabelHeight(subtrack, fontHeight);
+                    }
+                }
+            }
+            else if (track->drawLeftLabels != NULL)
+                y = doOwnLeftLabels(track, hvg, font, y);
+            else
+                y += trackPlusLabelHeight(track, fontHeight);
         }
     }
 
@@ -2320,12 +2317,13 @@ for (track = trackList; track != NULL; track = track->next)
         {
         if(theImgBox)
             {
-            // Seems there are some left over side labels which need to be added here!
+            // Set imgTrack in case any map items will be set
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sideSliceWidth,sliceHeight,sideSliceOffsetX,sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
+            // It is possible that some side label heights need adjusting (but I doubt it)...
+            //if (withLeftLabels)
+            //    curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isSide,theOneImg,NULL,sliceWidth[isSide],sliceHeight,sliceOffsetX[isSide],sliceOffsetY);
             }
         y = doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
         }

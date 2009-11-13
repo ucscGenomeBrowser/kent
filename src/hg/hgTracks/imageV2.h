@@ -141,8 +141,9 @@ enum sliceType // IMAGEv2: currently just the 3
     isUnknown=0,              // Invalid
     isData=1,                 // Data or track slice of an image
     isCenter=2,               // Top or centerLabel slice of an image
-    isSide=3,                 // Side or leftLabel slice of an image
-    isInvalid=4               // Invalid
+    isButton=3,               // Config button (by separating from side label, could have separate image which is swapped or colored by javascript)
+    isSide=4,                 // Side or leftLabel slice of an image
+    isInvalid=5               // Invalid
     };
 #define isMaxSliceTypes isInvalid
 struct imgSlice // IMAGEv2: the portion of an image that is displayable for one track
@@ -208,9 +209,9 @@ struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,ch
 int imgTrackOrderCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
-/* Adds slices to an image track.  Expected are types: isData, isSide and isCenter */
+/* Adds slices to an image track.  Expected are types: isData, isButton, isSide and isCenter */
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type);
-/* Gets a specific slice already added to an image track.  Expected are types: isData, isSide and isCenter */
+/* Gets a specific slice already added to an image track.  Expected are types: isData, isButton, isSide and isCenter */
 struct imgSlice *imgTrackSliceFindOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Find the slice or adds it */
 struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
@@ -304,6 +305,11 @@ void imageBoxDraw(struct imgBox *imgBox);
 #define IMG_ANYORDER  0
 #define IMG_FIXEDPOS  0
 #define IMG_ORDER_VAR "?"
+#define isData   0
+#define isCenter 2
+#define isSide   3
+#define isButton 4
+#define isMaxSliceTypes 1
 #endif//ndef IMAGEv2_UI
 
 #endif//ndef IMAGEV2_H

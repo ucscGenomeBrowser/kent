@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.12 2009/11/11 20:41:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.13 2009/11/13 00:17:59 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -317,6 +317,7 @@ switch(type)
     case isData:   return "data";
     case isSide:   return "side";
     case isCenter: return "center";
+    case isButton: return "button";
     default:       return "unknown";
     }
 }
@@ -521,7 +522,7 @@ return (a->order - b->order);
 }
 
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY)
-/* Adds slices to an image track.  Expected are types: isData, isSide and isCenter */
+/* Adds slices to an image track.  Expected are types: isData, isButton, isSide and isCenter */
 {
 struct imgSlice *slice = sliceCreate(type,img,title,width,height,offsetX,offsetY);
 slAddHead(&(imgTrack->slices),slice);
@@ -529,7 +530,7 @@ return imgTrack->slices;
 }
 
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type)
-/* Gets a specific slice already added to an image track.  Expected are types: isData, isSide and isCenter */
+/* Gets a specific slice already added to an image track.  Expected are types: isData, isButton, isSide and isCenter */
 {
 struct imgSlice *slice;
 for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
@@ -1117,7 +1118,6 @@ if(imgBox->showPortal && imgBox->basesPerPixel > 0
     offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
     width=imgBox->portalWidth;
     }
-
 hPrintf(" <div style='width:%dpx; height:%dpx; overflow:hidden;'",width,slice->height);
 #ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal && slice->type==isData)
@@ -1143,6 +1143,8 @@ if(slice->type==isSide)
     hPrintf(" class='sideLab'");
 else if(slice->type==isCenter)
     hPrintf(" class='centerLab'");
+else if(slice->type==isButton)
+    hPrintf(" class='button'");
 #ifdef IMAGEv2_DRAG_SCROLL
 else if(slice->type==isData && imgBox->showPortal)
     hPrintf(" class='panImg' ondrag='{return false;}'");
@@ -1192,7 +1194,7 @@ if(imgBox->showPortal)
     }
 #endif//def IMAGEv2_DRAG_SCROLL
 
-hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0");
+hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'","#AA0000"); //"white");// RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
 #ifdef IMAGEv2_DRAG_REORDER
 hPrintf(" class='tableWithDragAndDrop'");
@@ -1206,15 +1208,22 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->tableName );
     hPrintf("<TR id='tr_%s'%s>\n",trackName,
         (imgTrack->reorderable?" class='trDraggable'":" class='nodrop nodrag'"));
-    // leftLabel
+
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
+        // button
+        safef(name, sizeof(name), "btn_%s", trackName);
+        hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable?" class='dragHandle'":""));
+        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isButton), name,FALSE);
+        hPrintf(" </TD>");
+        // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
-        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide),   name,FALSE);
         hPrintf(" </TD>");
         }
+
     // Main/Data image region
     hPrintf(" <TD id='td_data_%s' width=%d>\n", trackName, imgBox->width);
     hPrintf("  <input TYPE=HIDDEN name='%s_%s' value='%d'>\n",trackName,IMG_ORDER_VAR,imgTrack->order);
@@ -1230,14 +1239,19 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isData), name,(imgTrack->order>0));
     hPrintf(" </TD>");
 
-    // rightLabel
     if(imgBox->showSideLabel && !imgTrack->plusStrand)
         {
+        // rightLabel
         safef(name, sizeof(name), "side_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n", name,
             (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
         sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isSide), name,FALSE);
         hPrintf(" </TD>\n");
+        // button
+        safef(name, sizeof(name), "btn_%s", trackName);
+        hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable?" class='dragHandle'":""));
+        sliceAndMapDraw(imgBox,imgTrackSliceGetByType(imgTrack,isButton), name,FALSE);
+        hPrintf(" </TD>");
         }
     hPrintf("</TR>\n");
     }
