@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 all:  raToLines linesToRa
 
