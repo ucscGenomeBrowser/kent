@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 L += 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 INSTALLDIR = ${BINDIR}
 
@@ -11,7 +11,7 @@ PROG = scaffoldFaToAgp
 O = ${PROG}.o 
 
 ${PROG}: ${O}
-	${CC} ${COPT} ${CFLAGS} -o ${INSTALLDIR}/${PROG} $O ../../lib/${MACHTYPE}/jkhgap.a ../../lib/${MACHTYPE}/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ${INSTALLDIR}/${PROG} $O ${MYLIBS}
 
 test: ${INSTALLDIR}/${PROG}
 	cd test && csh runtest

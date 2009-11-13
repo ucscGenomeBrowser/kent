@@ -5,17 +5,20 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
+#include "dystring.h"
 #include "cirTree.h"
 #include "sig.h"
+#include "zlibFace.h"
 #include "bPlusTree.h"
 #include "bbiFile.h"
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.19 2009/11/12 23:15:52 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.20 2009/11/13 19:02:38 kent Exp $";
 
-int blockSize = 256;
-int itemsPerSlot = 1024;
+static int blockSize = 256;
+static int itemsPerSlot = 1024;
+static boolean doCompress = FALSE;
 
 
 void usage()
@@ -32,6 +35,7 @@ errAbort(
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
+  "   -compress - If set use zlib compression."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -39,6 +43,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
+   {"compress", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -51,10 +56,12 @@ struct sectionItem
 
 void writeSections(struct bbiChromUsage *usageList, struct lineFile *lf, 
 	int itemsPerSlot, struct bbiBoundsArray *bounds, int sectionCount, FILE *f,
-	int resTryCount, int resScales[], int resSizes[])
+	int resTryCount, int resScales[], int resSizes[], 
+	boolean doCompress, bits32 *retMaxSectionSize)
 /* Read through lf, chunking it into sections that get written to f.  Save info
  * about sections in bounds. */
 {
+int maxSectionSize = 0;
 struct bbiChromUsage *usage = usageList;
 int itemIx = 0, sectionIx = 0;
 bits32 reserved32 = 0;
@@ -65,6 +72,8 @@ bits32 resEnds[resTryCount];
 int resTry;
 for (resTry = 0; resTry < resTryCount; ++resTry)
     resEnds[resTry] = 0;
+struct dyString *stream = dyStringNew(0);
+
 for (;;)
     {
     /* Get next line of input if any. */
@@ -90,27 +99,42 @@ for (;;)
 	section->range.start = sectionStart;
 	section->range.end = sectionEnd;
 
-	/* Output section header to file. */
+	/* Output section header to stream. */
+	dyStringClear(stream);
 	UBYTE type = bwgTypeBedGraph;
 	bits16 itemCount = itemIx;
-	writeOne(f, chromId);			// chromId
-	writeOne(f, sectionStart);		// start
-	writeOne(f, sectionEnd);	// end
-	writeOne(f, reserved32);		// itemStep
-	writeOne(f, reserved32);		// itemSpan
-	writeOne(f, type);			// type
-	writeOne(f, reserved8);			// reserved
-	writeOne(f, itemCount);			// itemCount
+	dyStringWriteOne(stream, chromId);			// chromId
+	dyStringWriteOne(stream, sectionStart);		// start
+	dyStringWriteOne(stream, sectionEnd);	// end
+	dyStringWriteOne(stream, reserved32);		// itemStep
+	dyStringWriteOne(stream, reserved32);		// itemSpan
+	dyStringWriteOne(stream, type);			// type
+	dyStringWriteOne(stream, reserved8);			// reserved
+	dyStringWriteOne(stream, itemCount);			// itemCount
 
-	/* Output each item in section to file. */
+	/* Output each item in section to stream. */
 	int i;
 	for (i=0; i<itemIx; ++i)
 	    {
 	    struct sectionItem *item = &items[i];
-	    writeOne(f, item->start);
-	    writeOne(f, item->end);
-	    writeOne(f, item->val);
+	    dyStringWriteOne(stream, item->start);
+	    dyStringWriteOne(stream, item->end);
+	    dyStringWriteOne(stream, item->val);
 	    }
+
+	/* Save stream to file, compressing if need be. */
+	if (stream->stringSize > maxSectionSize)
+	    maxSectionSize = stream->stringSize;
+	if (doCompress)
+	    {
+	    size_t maxCompSize = zCompBufSize(stream->stringSize);
+	    char compBuf[maxCompSize];
+	    int compSize = zCompress(stream->string, stream->stringSize, compBuf, maxCompSize);
+	    mustWrite(f, compBuf, compSize);
+	    }
+	else
+	    mustWrite(f, stream->string, stream->stringSize);
+
 
 	/* If at end of input we are done. */
 	if (rowSize == 0)
@@ -173,11 +197,13 @@ for (;;)
     itemIx += 1;
     }
 assert(sectionIx == sectionCount);
+
+*retMaxSectionSize = maxSectionSize;
 }
 
 static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
-	int zoomIncrement, int blockSize, int itemsPerSlot, 
+	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
 	struct bbiSummaryElement *totalSum)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
@@ -195,6 +221,8 @@ boundsEnd = boundsPt + initialReductionCount;
 *retDataStart = ftell(f);
 writeOne(f, initialReductionCount);
 boolean firstRow = TRUE;
+
+struct bbiSumOutStream *stream = bbiSumOutStreamOpen(itemsPerSlot, f, doCompress);
 for (;;)
     {
     /* Get next line of input if any. */
@@ -205,7 +233,7 @@ for (;;)
     if (rowSize == 0 && sum != NULL)
 	{
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, f);
+		&boundsPt, boundsEnd, usage->size, lm, stream);
 	break;
 	}
 
@@ -239,7 +267,7 @@ for (;;)
         {
 	usage = usage->next;
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize,
-		&boundsPt, boundsEnd, usage->size, lm, f);
+		&boundsPt, boundsEnd, usage->size, lm, stream);
 	sum = NULL;
 	}
 
@@ -247,7 +275,7 @@ for (;;)
     else if (sum != NULL && sum->end <= start)
 	{
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, f);
+		&boundsPt, boundsEnd, usage->size, lm, stream);
 	sum = NULL;
 	}
 
@@ -277,7 +305,7 @@ for (;;)
 	sum->sumData += val * overlap;
 	sum->sumSquares += val*val * overlap;
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, f);
+		&boundsPt, boundsEnd, usage->size, lm, stream);
 	size -= overlap;
 
 	/* Move summary to next part. */
@@ -296,6 +324,7 @@ for (;;)
     sum->sumData += val * size;
     sum->sumSquares += val*val * size;
     }
+bbiSumOutStreamClose(&stream);
 
 /* Write out 1st zoom index. */
 int indexOffset = *retIndexStart = ftell(f);
@@ -319,6 +348,7 @@ verbose(2, "%d chroms in %s\n", chromSizesHash->elCount, chromSizes);
 int minDiff = 0, i;
 double aveSize = 0;
 bits64 bedCount = 0;
+bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSize, &bedCount);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
@@ -362,8 +392,9 @@ writeOne(f, sectionCount);
 struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, sectionCount);
 lineFileRewind(lf);
+bits32 maxSectionSize = 0;
 writeSections(usageList, lf, itemsPerSlot, boundsArray, sectionCount, f,
-	resTryCount, resScales, resSizes);
+	resTryCount, resScales, resSizes, doCompress, &maxSectionSize);
 verboseTime(2, "pass2");
 
 /* Write out primary data index. */
@@ -390,6 +421,8 @@ if (minDiff > 0)
     for (resTry = 0; resTry < resTryCount; ++resTry)
 	{
 	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
+	if (doCompress)
+	    reducedSize /= 2;	// Estimate!
 	if (reducedSize <= maxReducedSize)
 	    {
 	    initialReduction = resScales[resTry];
@@ -407,7 +440,7 @@ if (minDiff > 0)
 	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		lf, initialReduction, initialReducedCount,
-		resIncrement, blockSize, itemsPerSlot, lm, 
+		resIncrement, blockSize, itemsPerSlot, doCompress, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
 	verboseTime(2, "writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
@@ -423,7 +456,7 @@ if (minDiff > 0)
 	    zoomCount = rezoomCount;
 	    zoomDataOffsets[zoomLevels] = ftell(f);
 	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, FALSE, f);
+	    	blockSize, itemsPerSlot, doCompress, f);
 	    zoomAmounts[zoomLevels] = reduction;
 	    ++zoomLevels;
 	    reduction *= zoomIncrement;
@@ -435,12 +468,19 @@ if (minDiff > 0)
 
     }
 
+/* Figure out buffer size needed for uncompression if need be. */
+if (doCompress)
+    {
+    int maxZoomUncompSize = itemsPerSlot * sizeof(struct bbiSummaryOnDisk);
+    uncompressBufSize = max(maxSectionSize, maxZoomUncompSize);
+    }
+
 /* Go back and rewrite header. */
 rewind(f);
 bits32 sig = bigWigSig;
 bits16 version = bbiCurrentVersion;
 bits16 summaryCount = zoomLevels;
-bits32 reserved16 = 0;
+bits16 reserved16 = 0;
 bits32 reserved32 = 0;
 bits64 reserved64 = 0;
 
@@ -455,8 +495,10 @@ writeOne(f, reserved16);	// fieldCount
 writeOne(f, reserved16);	// definedFieldCount
 writeOne(f, reserved64);	// autoSqlOffset
 writeOne(f, totalSummaryOffset);
-for (i=0; i<3; ++i)
+writeOne(f, uncompressBufSize);
+for (i=0; i<2; ++i)
     writeOne(f, reserved32);
+assert(ftell(f) == 64);
 
 /* Write summary headers with data. */
 verbose(2, "Writing %d levels of zoom\n", zoomLevels);
@@ -491,6 +533,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
+doCompress = optionExists("compress");
 if (argc != 4)
     usage();
 bedGraphToBigWig(argv[1], argv[2], argv[3]);

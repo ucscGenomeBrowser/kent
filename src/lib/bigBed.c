@@ -12,6 +12,7 @@
 #include "bPlusTree.h"
 #include "basicBed.h"
 #include "asParse.h"
+#include "zlibFace.h"
 #include "sig.h"
 #include "udc.h"
 #include "bbiFile.h"
@@ -626,47 +627,82 @@ struct bigBedInterval *el, *list = NULL;
 bits32 chromId;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir, 
 	chrom, start, end, &chromId);
-struct fileOffsetSize *block;
-struct udcFile *f = bbi->udc;
+struct fileOffsetSize *block, *beforeGap, *afterGap;
+struct udcFile *udc = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
 struct dyString *dy = dyStringNew(32);
-for (block = blockList; block != NULL; block = block->next)
+
+/* Set up for uncompression optionally. */
+char *uncompressBuf = NULL;
+if (bbi->uncompressBufSize > 0)
+    uncompressBuf = needLargeMem(bbi->uncompressBufSize);
+
+for (block = blockList; block != NULL; )
     {
-    bits64 endPos = block->offset + block->size;
-    udcSeek(f, block->offset);
-    while (udcTell(f) < endPos)
+    /* Find contigious blocks and read them into mergedBuf. */
+    fileOffsetSizeFindGap(block, &beforeGap, &afterGap);
+    bits64 mergedOffset = block->offset;
+    bits64 mergedSize = beforeGap->offset + beforeGap->size - mergedOffset;
+    udcSeek(udc, mergedOffset);
+    char *mergedBuf = needLargeMem(mergedSize);
+    udcMustRead(udc, mergedBuf, mergedSize);
+    char *blockBuf = mergedBuf;
+
+    /* Loop through individual blocks within merged section. */
+    for (;block != afterGap; block = block->next)
         {
-	++itemCount;
+	/* Uncompress if necessary. */
+	char *blockPt, *blockEnd;
+	if (uncompressBuf)
+	    {
+	    blockPt = uncompressBuf;
+	    int uncSize = zUncompress(blockBuf, block->size, uncompressBuf, bbi->uncompressBufSize);
+	    blockEnd = blockPt + uncSize;
+	    }
+	else
+	    {
+	    blockPt = blockBuf;
+	    blockEnd = blockPt + block->size;
+	    }
+
+	while (blockPt < blockEnd)
+	    {
+	    ++itemCount;
+	    if (maxItems > 0 && itemCount > maxItems)
+		break;
+
+	    /* Read next record into local variables. */
+	    bits32 chr = memReadBits32(&blockPt, isSwapped);	// Read and discard chromId
+	    bits32 s = memReadBits32(&blockPt, isSwapped);
+	    bits32 e = memReadBits32(&blockPt, isSwapped);
+	    int c;
+	    dyStringClear(dy);
+	    while ((c = *blockPt++) >= 0)
+		{
+		if (c == 0)
+		    break;
+		dyStringAppendC(dy, c);
+		}
+
+	    /* If we're actually in range then copy it into a new  element and add to list. */
+	    if (chr == chromId && rangeIntersection(s, e, start, end) > 0)
+		{
+		lmAllocVar(lm, el);
+		el->start = s;
+		el->end = e;
+		if (dy->stringSize > 0)
+		    el->rest = lmCloneString(lm, dy->string);
+		slAddHead(&list, el);
+		}
+	    }
 	if (maxItems > 0 && itemCount > maxItems)
 	    break;
-
-	/* Read next record into local variables. */
-	bits32 chr = udcReadBits32(f, isSwapped);	// Read and discard chromId
-	bits32 s = udcReadBits32(f, isSwapped);
-	bits32 e = udcReadBits32(f, isSwapped);
-	int c;
-	dyStringClear(dy);
-	while ((c = udcGetChar(f)) >= 0)
-	    {
-	    if (c == 0)
-	        break;
-	    dyStringAppendC(dy, c);
-	    }
-
-	/* If we're actually in range then copy it into a new  element and add to list. */
-	if (chr == chromId && rangeIntersection(s, e, start, end) > 0)
-	    {
-	    lmAllocVar(lm, el);
-	    el->start = s;
-	    el->end = e;
-	    if (dy->stringSize > 0)
-		el->rest = lmCloneString(lm, dy->string);
-	    slAddHead(&list, el);
-	    }
-	}
+	blockBuf += block->size;
+        }
     if (maxItems > 0 && itemCount > maxItems)
         break;
     }
+freeMem(uncompressBuf);
 slFreeList(&blockList);
 slReverse(&list);
 return list;

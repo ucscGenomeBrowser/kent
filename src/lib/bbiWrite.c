@@ -419,10 +419,75 @@ const struct bbiBoundsArray *a = ((struct bbiBoundsArray *)va);
 return a->offset;
 }
 
+struct bbiSumOutStream *bbiSumOutStreamOpen(int allocCount, FILE *f, boolean doCompress)
+/* Allocate new bbiSumOutStream. */
+{
+struct bbiSumOutStream *stream;
+AllocVar(stream);
+AllocArray(stream->array, allocCount);
+stream->allocCount = allocCount;
+stream->f = f;
+stream->doCompress = doCompress;
+return stream;
+}
+
+void bbiSumOutStreamFlush(struct bbiSumOutStream *stream)
+/* Flush out any pending input. */
+{
+if (stream->elCount != 0)
+    {
+    int uncSize = stream->elCount * sizeof(stream->array[0]);
+    if (stream->doCompress)
+        {
+	int compBufSize = zCompBufSize(uncSize);
+	char compBuf[compBufSize];
+	int compSize = zCompress(stream->array, uncSize, compBuf, compBufSize);
+	mustWrite(stream->f, compBuf, compSize);
+	}
+    else
+        {
+	mustWrite(stream->f, stream->array, uncSize);
+	}
+    stream->elCount = 0;
+    }
+}
+
+void bbiSumOutStreamClose(struct bbiSumOutStream **pStream)
+/* Free up bbiSumOutStream */
+{
+struct bbiSumOutStream *stream = *pStream;
+if (stream != NULL)
+    {
+    bbiSumOutStreamFlush(stream);
+    freeMem(stream->array);
+    freez(pStream);
+    }
+}
+
+void bbiSumOutStreamWrite(struct bbiSumOutStream *stream, struct bbiSummary *sum)
+/* Write out next one to stream. */
+{
+int elCount = stream->elCount;
+struct bbiSummaryOnDisk *a = &stream->array[elCount];
+a->chromId = sum->chromId;
+a->start = sum->start;
+a->end = sum->end;
+a->validCount = sum->validCount;
+a->minVal = sum->minVal;
+a->maxVal = sum->maxVal;
+a->sumData = sum->sumData;
+a->sumSquares = sum->sumSquares;
+elCount += 1;
+stream->elCount = elCount;
+if (elCount >= stream->allocCount)
+    bbiSumOutStreamFlush(stream);    
+}
+
 void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
 	struct bbiSummary **pTwiceReducedList, 
 	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
-	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, FILE *f)
+	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, 
+	struct bbiSumOutStream *stream)
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */
 {
@@ -432,20 +497,13 @@ assert(bounds < boundsEnd);
 *pBoundsPt += 1;
 
 /* Fill in bounds info. */
-bounds->offset = ftell(f);
+bounds->offset = ftell(stream->f);
 bounds->range.chromIx = sum->chromId;
 bounds->range.start = sum->start;
 bounds->range.end = sum->end;
 
 /* Write out summary info. */
-writeOne(f, sum->chromId);
-writeOne(f, sum->start);
-writeOne(f, sum->end);
-writeOne(f, sum->validCount);
-bbiWriteFloat(f, sum->minVal);
-bbiWriteFloat(f, sum->maxVal);
-bbiWriteFloat(f, sum->sumData);
-bbiWriteFloat(f, sum->sumSquares);
+bbiSumOutStreamWrite(stream, sum);
 
 /* Fold summary info into pTwiceReducedList. */
 struct bbiSummary *twiceReduced = *pTwiceReducedList;

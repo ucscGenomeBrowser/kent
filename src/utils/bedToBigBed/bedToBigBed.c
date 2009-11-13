@@ -3,20 +3,23 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "obscure.h"
 #include "asParse.h"
 #include "basicBed.h"
 #include "sig.h"
 #include "rangeTree.h"
+#include "zlibFace.h"
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.17 2009/11/12 23:15:52 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.18 2009/11/13 19:02:38 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
 int bedFields = 0;
 char *as = NULL;
+static boolean doCompress = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -37,6 +40,7 @@ errAbort(
   "                  assumes all fields in bed are defined.\n"
   "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
   "                   of each field in a row in AutoSql format here.\n"
+  "   -compress - If set use zlib compression."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -46,16 +50,19 @@ static struct optionSpec options[] = {
    {"itemsPerSlot", OPTION_INT},
    {"bedFields", OPTION_INT},
    {"as", OPTION_STRING},
+   {"compress", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 void writeBlocks(struct bbiChromUsage *usageList, struct lineFile *lf, struct asObject *as, 
 	bits16 definedFieldCount, int itemsPerSlot, struct bbiBoundsArray *bounds, 
-	int sectionCount, FILE *f, int resTryCount, int resScales[], int resSizes[],
-	bits16 *retFieldCount, bits16 *retDefinedFieldCount)
+	int sectionCount, boolean doCompress, FILE *f, 
+	int resTryCount, int resScales[], int resSizes[],
+	bits16 *retFieldCount, bits16 *retDefinedFieldCount, bits32 *retMaxBlockSize)
 /* Read through lf, writing it in f.  Save starting points of blocks (every itemsPerSlot)
  * to boundsArray */
 {
+int maxBlockSize = 0;
 struct bbiChromUsage *usage = usageList;
 char *line, **row = NULL;
 int fieldCount = 0, fieldAlloc=0, lastField = 0;
@@ -64,6 +71,7 @@ bits64 blockOffset = 0;
 int startPos = 0, endPos = 0;
 bits32 chromId = 0;
 boolean allocedAs = FALSE;
+struct dyString *stream = dyStringNew(0);
 
 /* Will keep track of some things that help us determine how much to reduce. */
 bits32 resEnds[resTryCount];
@@ -143,6 +151,20 @@ for (;;)
     /* Check conditions that would end block and save block info and advance to next if need be. */
     if (atEnd || !sameChrom || itemIx >= itemsPerSlot)
         {
+	/* Save stream to file, compressing if need be. */
+	if (stream->stringSize > maxBlockSize)
+	    maxBlockSize = stream->stringSize;
+	if (doCompress)
+	    {
+	    size_t maxCompSize = zCompBufSize(stream->stringSize);
+	    char compBuf[maxCompSize];
+	    int compSize = zCompress(stream->string, stream->stringSize, compBuf, maxCompSize);
+	    mustWrite(f, compBuf, compSize);
+	    }
+	else
+	    mustWrite(f, stream->string, stream->stringSize);
+	dyStringClear(stream);
+
 	/* Save info on existing block. */
 	struct bbiBoundsArray *b = &bounds[sectionIx];
 	b->offset = blockOffset;
@@ -182,9 +204,9 @@ for (;;)
 	}
 
     /* Write out data. */
-    writeOne(f, chromId);
-    writeOne(f, start);
-    writeOne(f, end);
+    dyStringWriteOne(stream, chromId);
+    dyStringWriteOne(stream, start);
+    dyStringWriteOne(stream, end);
     if (fieldCount > 3)
         {
 	int i;
@@ -192,16 +214,14 @@ for (;;)
 	for (i=3; i<lastField; ++i)
 	    {
 	    char *s = row[i];
-	    int len = strlen(s);
-	    mustWrite(f, s, len);
-	    fputc('\t', f);
+	    dyStringAppend(stream, s);
+	    dyStringAppendC(stream, '\t');
 	    }
 	/* Write last field and terminal zero */
 	char *s = row[lastField];
-	int len = strlen(s);
-	mustWrite(f, s, len);
+	dyStringAppend(stream, s);
 	}
-    fputc(0, f);
+    dyStringAppendC(stream, 0);
 
     itemIx += 1;
 
@@ -225,6 +245,7 @@ assert(sectionIx == sectionCount);
 freez(&row);
 if (allocedAs)
     asObjectFreeList(&as);
+*retMaxBlockSize = maxBlockSize;
 }
 
 struct rbTree *rangeTreeForBedChrom(struct lineFile *lf, char *chrom)
@@ -251,7 +272,7 @@ return tree;
 
 static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	int fieldCount, struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
-	int zoomIncrement, int blockSize, int itemsPerSlot, 
+	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
 	struct bbiSummaryElement *totalSum)
 /* Write out data reduced by factor of initialReduction.  Also calculate and keep in memory
@@ -275,6 +296,7 @@ writeOne(f, initialReductionCount);
  *      further reducing. 
  */
 boolean firstTime = TRUE;
+struct bbiSumOutStream *stream = bbiSumOutStreamOpen(itemsPerSlot, f, doCompress);
 for (usage = usageList; usage != NULL; usage = usage->next)
     {
     struct bbiSummary oneSummary, *sum = NULL;
@@ -310,7 +332,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	if (sum != NULL && sum->end <= start)
 	    {
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, f);
+		&boundsPt, boundsEnd, usage->size, lm, stream);
 	    sum = NULL;
 	    }
 	/* If don't have a summary we're working on now, make one. */
@@ -339,7 +361,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    sum->sumData += val * overlap;
 	    sum->sumSquares += val*val * overlap;
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		    &boundsPt, boundsEnd, usage->size, lm, f);
+		    &boundsPt, boundsEnd, usage->size, lm, stream);
 	    size -= overlap;
 
 	    /* Move summary to next part. */
@@ -361,10 +383,11 @@ for (usage = usageList; usage != NULL; usage = usage->next)
     if (sum != NULL)
 	{
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-	    &boundsPt, boundsEnd, usage->size, lm, f);
+	    &boundsPt, boundsEnd, usage->size, lm, stream);
 	}
     rangeTreeFree(&rangeTree);
     }
+bbiSumOutStreamClose(&stream);
 
 /* Write out 1st zoom index. */
 int indexOffset = *retIndexStart = ftell(f);
@@ -387,6 +410,7 @@ void bbFileCreate(
 	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
 				    * are the defined bed ones. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
+	boolean doCompress, /* If TRUE then compress data. */
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
@@ -412,6 +436,7 @@ verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, 
 int minDiff = 0;
 double aveSpan = 0;
 bits64 bedCount = 0;
+bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan, &bedCount);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
@@ -467,8 +492,9 @@ struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, blockCount);
 lineFileRewind(lf);
 bits16 fieldCount=0;
-writeBlocks(usageList, lf, as, definedFieldCount, itemsPerSlot, boundsArray, blockCount, f,
-	resTryCount, resScales, resSizes, &fieldCount, &definedFieldCount);
+bits32 maxBlockSize = 0;
+writeBlocks(usageList, lf, as, definedFieldCount, itemsPerSlot, boundsArray, blockCount, doCompress,
+	f, resTryCount, resScales, resSizes, &fieldCount, &definedFieldCount, &maxBlockSize);
 verboseTime(1, "pass2 - checking and writing primary data (%lld records, %d fields)", 
 	(long long)bedCount, fieldCount);
 
@@ -497,6 +523,8 @@ if (aveSpan > 0)
     for (resTry = 0; resTry < resTryCount; ++resTry)
 	{
 	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
+	if (doCompress)
+	    reducedSize /= 2;	// Estimate!
 	if (reducedSize <= maxReducedSize)
 	    {
 	    initialReduction = resScales[resTry];
@@ -514,8 +542,8 @@ if (aveSpan > 0)
 	int zoomIncrement = 4;
 	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
-		fieldCount, lf, initialReduction, initialReducedCount,
-		resIncrement, blockSize, itemsPerSlot, lm, 
+		fieldCount, lf, initialReduction, initialReducedCount, 
+		resIncrement, blockSize, itemsPerSlot, doCompress, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
 	verboseTime(1, "pass3 - writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;
@@ -531,7 +559,7 @@ if (aveSpan > 0)
 	    zoomCount = rezoomCount;
 	    zoomDataOffsets[zoomLevels] = ftell(f);
 	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, FALSE, f);
+	    	blockSize, itemsPerSlot, doCompress, f);
 	    zoomAmounts[zoomLevels] = reduction;
 	    ++zoomLevels;
 	    reduction *= zoomIncrement;
@@ -541,6 +569,14 @@ if (aveSpan > 0)
 	verboseTime(1, "further reductions");
 	}
     }
+
+/* Figure out buffer size needed for uncompression if need be. */
+if (doCompress)
+    {
+    int maxZoomUncompSize = itemsPerSlot * sizeof(struct bbiSummaryOnDisk);
+    uncompressBufSize = max(maxBlockSize, maxZoomUncompSize);
+    }
+
 /* Go back and rewrite header. */
 rewind(f);
 bits32 sig = bigBedSig;
@@ -560,8 +596,9 @@ writeOne(f, fieldCount);
 writeOne(f, definedFieldCount);
 writeOne(f, asOffset);
 writeOne(f, totalSummaryOffset);
+writeOne(f, uncompressBufSize);
 int i;
-for (i=0; i<3; ++i)
+for (i=0; i<2; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers with data. */
@@ -600,7 +637,7 @@ void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
 bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, as, 
-	outName);
+	doCompress, outName);
 }
 
 int main(int argc, char *argv[])
@@ -611,6 +648,7 @@ blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 bedFields = optionInt("bedFields", bedFields);
 as = optionVal("as", as);
+doCompress = optionExists("compress");
 if (argc != 4)
     usage();
 bedToBigBed(argv[1], argv[2], argv[3]);

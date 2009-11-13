@@ -261,10 +261,30 @@ struct cirTreeRange bbiBoundsArrayFetchKey(const void *va, void *context);
 bits64 bbiBoundsArrayFetchOffset(const void *va, void *context);
 /* Fetch bbiBoundsArray file offset for r-tree */
 
+struct bbiSumOutStream
+/* Buffer output to file so have a chance to compress. */
+    {
+    struct bbiSummaryOnDisk *array;
+    int elCount;
+    int allocCount;
+    FILE *f;
+    boolean doCompress;
+    };
+
+struct bbiSumOutStream *bbiSumOutStreamOpen(int allocCount, FILE *f, boolean doCompress);
+/* Open new bbiSumOutStream. */
+
+void bbiSumOutStreamClose(struct bbiSumOutStream **pStream);
+/* Free up bbiSumOutStream */
+
+void bbiSumOutStreamWrite(struct bbiSumOutStream *stream, struct bbiSummary *sum);
+/* Write out next one to stream. */
+
 void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
 	struct bbiSummary **pTwiceReducedList, 
 	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
-	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, FILE *f);
+	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, 
+	struct bbiSumOutStream *stream);
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */
 

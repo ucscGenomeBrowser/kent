@@ -6,10 +6,11 @@
 #include "localmem.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "obscure.h"
 #include "hmmstats.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.5 2009/11/12 23:15:52 kent Exp $";
+static char const rcsid[] = "$Id: bigWigInfo.c,v 1.6 2009/11/13 19:02:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,38 +22,52 @@ errAbort(
   "options:\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "   -chroms - list all chromosomes and their sizes\n"
+  "   -zooms - list all zoom levels and theier sizes\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"chroms", OPTION_BOOLEAN},
+   {"zooms", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+void printLabelAndLongNumber(char *label, long long l)
+/* Print label: 1,234,567 format number */
+{
+printf("%s: ", label);
+printLongWithCommas(stdout, l);
+printf("\n");
+}
 
 void bigWigInfo(char *fileName)
 /* bigWigInfo - Print out information about bigWig file.. */
 {
 struct bbiFile *bwf = bigWigFileOpen(fileName);
 printf("version: %d\n", bwf->version);
+printf("isCompressed: %s\n", (bwf->uncompressBufSize > 0 ? "yes" : "no"));
 printf("isSwapped: %d\n", bwf->isSwapped);
-printf("primaryDataSize: %lld\n", (long long)(bwf->unzoomedIndexOffset -  bwf->unzoomedDataOffset));
+printLabelAndLongNumber("primaryDataSize", bwf->unzoomedIndexOffset - bwf->unzoomedDataOffset);
 if (bwf->levelList != NULL)
     {
     long long indexEnd = bwf->levelList->dataOffset;
-    printf("primaryIndexSize: %lld\n", indexEnd - bwf->unzoomedIndexOffset);
+    printLabelAndLongNumber("primaryIndexSize", indexEnd - bwf->unzoomedIndexOffset);
     }
 printf("zoomLevels: %d\n", bwf->zoomLevels);
-struct bbiZoomLevel *zoom;
-for (zoom = bwf->levelList; zoom != NULL; zoom = zoom->next)
-    printf("\t%d\n", zoom->reductionLevel);
+if (optionExists("zooms"))
+    {
+    struct bbiZoomLevel *zoom;
+    for (zoom = bwf->levelList; zoom != NULL; zoom = zoom->next)
+	printf("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
+    }
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 printf("chromCount: %d\n", slCount(chromList));
 if (optionExists("chroms"))
     for (chrom=chromList; chrom != NULL; chrom = chrom->next)
 	printf("\t%s %d %d\n", chrom->name, chrom->id, chrom->size);
 struct bbiSummaryElement sum = bbiTotalSummary(bwf);
-printf("basesCovered: %lld\n", sum.validCount);
+printLabelAndLongNumber("basesCovered", sum.validCount);
 printf("mean: %f\n", sum.sumData/sum.validCount);
 printf("min: %f\n", sum.minVal);
 printf("max: %f\n", sum.maxVal);
