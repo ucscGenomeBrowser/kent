@@ -47,6 +47,10 @@ void dyStringAppendEscapeQuotes(struct dyString *dy, char *string,
 	char quot, char esc);
 /* Append escaped-for-quotation version of string to dy. */
 
+#define dyStringWriteOne(dy, var) dyStringAppendN(dy, (char *)(&var), sizeof(var))
+/* Write one variable (binary!) to dyString - for cases when want to treat string like
+ * a file stream. */
+
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString. */
 
