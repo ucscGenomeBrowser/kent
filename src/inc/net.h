@@ -125,8 +125,14 @@ void netParseUrl(char *url, struct netParsedUrl *parsed);
  */
 
 int netUrlOpen(char *url);
-/* Return unix low-level file handle for url. 
+/* Return socket descriptor (low-level file handle) for read()ing url data. 
  * Just close(result) when done. */
+
+int netUrlOpenSockets(char *url, int *retCtrlSocket);
+/* Return socket descriptor (low-level file handle) for read()ing url data. 
+ * If retCtrlSocket is non-NULL and url is FTP, set *retCtrlSocket
+ * to the FTP control socket which is left open for a persistent connection.
+ * close(result) (and close(*retCtrlSocket) if applicable) when done. */
 
 struct hash;
 

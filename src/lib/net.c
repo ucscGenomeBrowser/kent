@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "https.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.76 2009/11/10 23:23:58 angie Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.77 2009/11/13 06:35:45 angie Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -269,7 +269,7 @@ else
     {
     *s = 0;
     tolowers(url);
-    strncpy(parsed->protocol, url, sizeof(parsed->protocol));
+    safecpy(parsed->protocol, sizeof(parsed->protocol), url);
     s += 3;
     }
 
@@ -295,14 +295,15 @@ else
 		*x = 0;
 		// TODO: use something better than atol() ?
 		parsed->byteRangeStart = atoll(y); 
-		parsed->byteRangeEnd = atoll(z);
+		if (z[0] != '\0')
+		    parsed->byteRangeEnd = atoll(z);
 	    	}    
 	    }
 	}
 
     /* need to encode spaces, but not ! other characters */
     char *t=replaceChars(u," ","%20");
-    strncpy(parsed->file, t, sizeof(parsed->file));
+    safecpy(parsed->file, sizeof(parsed->file), t);
     freeMem(t);
     *u = 0;
     }
@@ -331,14 +332,14 @@ else
     w = strchr(s, ':');
     if (w == NULL)
 	{
-	strncpy(parsed->user, s, sizeof(parsed->user));
+	safecpy(parsed->user, sizeof(parsed->user), s);
 	strcpy(parsed->password, "");
 	}
     else
 	{
 	*w = 0;
-	strncpy(parsed->user, s, sizeof(parsed->user));
-	strncpy(parsed->password, w+1, sizeof(parsed->password));
+	safecpy(parsed->user, sizeof(parsed->user), s);
+	safecpy(parsed->password, sizeof(parsed->password), w+1);
 	}
     
     cgiDecode(parsed->user,parsed->user,strlen(parsed->user));
@@ -363,11 +364,11 @@ else
     *t++ = 0;
     if (!isdigit(t[0]))
 	errAbort("Non-numeric port name %s", t);
-    strncpy(parsed->port, t, sizeof(parsed->port));
+    safecpy(parsed->port, sizeof(parsed->port), t);
     }
 
 /* What's left is the host. */
-strncpy(parsed->host, s, sizeof(parsed->host));
+safecpy(parsed->host, sizeof(parsed->host), s);
 }
 
 /* this was cloned from rudp.c - move it later for sharing */
@@ -414,6 +415,7 @@ void sendFtpCommandOnly(int sd, char *cmd)
 mustWriteFd(sd, cmd, strlen(cmd));
 }
 
+#define NET_FTP_TIMEOUT 1000000
 
 struct dyString *receiveFtpReply(int sd, char *cmd, boolean seeResult)
 /* send command to ftp server and check resulting reply code, 
@@ -424,17 +426,14 @@ int reply = 0;
 char buf[4*1024];
 int readSize;
 char *startLastLine = NULL;
-long timeOut = 1000000; /* wait in microsec */
 
 rs = newDyString(4*1024);
 while (1)
     {
     while (1)
 	{
-	if (!readReadyWait(sd, timeOut))
-	    {
-	    errAbort("ftp server response timed out > %ld microsec",timeOut);
-	    }
+	if (!readReadyWait(sd, NET_FTP_TIMEOUT))
+	    errAbort("ftp server response timed out > %d microsec", NET_FTP_TIMEOUT);
 	if ((readSize = read(sd, buf, sizeof(buf))) == 0)
 	    break;
 
@@ -519,40 +518,19 @@ time_t parseFtpMDTM(char *rs)
 /* parse reply to MDTM and return it
  * 200 YYYYMMDDhhmmss */
 {
-char spread[] = "YYYY MM DD hh mm ss";
-char *to = spread;
-char *from = NULL;
 char *words[3];
-int wordCount;
-char *rsStart = rs;
-int len = strlen(rs);
-if (len == 0) 
-    return FALSE;
-char *rsLast = rs + len - 1;
-if (*rsLast == '\n')
-    {
-    *rsLast = 0;
-    --rsLast;
-    --len;
-    if (len == 0) 
-	return FALSE;
-    }
-if (*rsLast == '\r')
-    {
-    *rsLast = 0;
-    --rsLast;
-    --len;
-    if (len == 0) 
-	return FALSE;
-    }
-wordCount = chopString(rsStart, " ", words, ArraySize(words));
+int wordCount = chopString(rs, " ", words, ArraySize(words));
 if (wordCount != 2)
-    errAbort("MDTM reply does not parse correctly");
-
-//printf("MDTM parse string [%s], length=%lld\n", words[1], (long long) strlen(words[1]));
-
-from = words[1];
-
+    errAbort("MDTM reply should have 2 words but has %d", wordCount);
+#define EXPECTED_MDTM_FORMAT "YYYYmmddHHMMSS"
+if (strlen(words[1]) < strlen(EXPECTED_MDTM_FORMAT))
+    errAbort("MDTM reply word [%s] shorter than " EXPECTED_MDTM_FORMAT, words[1]);
+// man strptime ->
+// "There should be whitespace or other alphanumeric characters between any two field descriptors."
+// There are no separators in the MDTM timestamp, so make a spread-out version for strptime:
+char spread[] = "YYYY mm dd HH MM SS";
+char *from = words[1];
+char *to = spread;
 *to++ = *from++;
 *to++ = *from++;
 *to++ = *from++;
@@ -573,57 +551,50 @@ from = words[1];
 *to++ = *from++;
 *to++ = *from++;
 *to++ = 0;
-
-// printf("MDTM to [%s], length=%lld\n", spread, (long long) strlen(spread));
-
 struct tm tm;
-time_t t;
-
 if (strptime(spread, "%Y-%m-%d %H:%M:%S", &tm) == NULL)
-    { /* Handle error */;
     errAbort("unable to parse MDTM string [%s]", spread);
-    }
-
-//printf("year: %d; month: %d; day: %d;\n",
-//        tm.tm_year, tm.tm_mon, tm.tm_mday);
-//printf("hour: %d; minute: %d; second: %d\n",
-//        tm.tm_hour, tm.tm_min, tm.tm_sec);
-//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
-
-
-tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
-                          to determine whether daylight saving time
-                          is in effect */
-t = mktime(&tm);
+// Not set by strptime(); tells mktime() to determine whether daylight saving time is in effect:
+tm.tm_isdst = -1;
+time_t t = mktime(&tm);
 if (t == -1)
-    { /* Handle error */;
-    errAbort("mktime failed while parsing last-modified string [%s]", words[1]);
-    }
-
-//printf("seconds since the Epoch: %lld\n", (long long) t);"
-
+    errAbort("mktime failed while parsing strptime'd MDTM string [%s]", words[1]);
 return t;
 }    
 
 
+static int openFtpControlSocket(char *host, int port, char *user, char *password)
+/* Open a socket to host,port; authenticate anonymous ftp; set type to I; return socket desc. */
+{
+int sd = netMustConnect(host, port);
+
+/* First read the welcome msg */
+if (readReadyWait(sd, NET_FTP_TIMEOUT))
+    sendFtpCommand(sd, "", FALSE);
+
+char cmd[256];
+safef(cmd,sizeof(cmd),"USER %s\r\n", user);
+sendFtpCommand(sd, cmd, FALSE);
+
+safef(cmd,sizeof(cmd),"PASS %s\r\n", password);
+sendFtpCommand(sd, cmd, FALSE);
+
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);
+/* 200 Type set to I */
+/* (send the data as binary, so can support compressed files) */
+return sd;
+}
 
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime)
 /* Return date and size of ftp url file */
 {
+/* Parse the URL and connect. */
 struct netParsedUrl npu;
-struct dyString *rs = NULL;
-int sd;
-long timeOut = 1000000; /* wait in microsec */
-char cmd[256];
+netParseUrl(url, &npu);
+if (!sameString(npu.protocol, "ftp"))
+    errAbort("netGetFtpInfo: url (%s) is not for ftp.", url);
 
 // TODO maybe remove this workaround where udc cache wants info on URL "/" ?
-
-/* Parse the URL and connect. */
-netParseUrl(url, &npu);
-
-if (!sameString(npu.protocol, "ftp"))
-    errAbort("Sorry, can only netOpen ftp's currently");
-
 if (sameString(npu.file,"/"))
     {
     *retSize = 0;
@@ -631,81 +602,87 @@ if (sameString(npu.file,"/"))
     return TRUE;
     }
 
-sd = netMustConnect(npu.host, atoi(npu.port));
-
-/* Ask remote ftp server for file info. */
-
-/* don't send a command, just read the welcome msg */
-if (readReadyWait(sd, timeOut))
-    sendFtpCommand(sd, "", FALSE);
-
-safef(cmd,sizeof(cmd),"USER %s\r\n", npu.user);
-sendFtpCommand(sd, cmd, FALSE);
-
-safef(cmd,sizeof(cmd),"PASS %s\r\n", npu.password);
-sendFtpCommand(sd, cmd, FALSE);
-
-sendFtpCommand(sd, "TYPE I\r\n", FALSE);  // Not sure this is required for just size/date
-/* 200 Type set to I */
-/* (send the data as binary, so can support compressed files) */
-
+int sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+char cmd[256];
 safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
-rs = sendFtpCommand(sd, cmd, TRUE);
+struct dyString *rs = sendFtpCommand(sd, cmd, TRUE);
 *retSize = parseFtpSIZE(rs->string);
 /* 200 12345 */
-
-/* Clean up and return handle. */
 dyStringFree(&rs);
 
 safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
 rs = sendFtpCommand(sd, cmd, TRUE);
 *retTime = parseFtpMDTM(rs->string);
 /* 200 YYYYMMDDhhmmss */
-
-/* Clean up and return handle. */
 dyStringFree(&rs);
-
 close(sd);   
-
 return TRUE;
 }
 
-
-int netGetOpenFtp(char *url)
-/* Return a file handle that will read the url. */
+static void sendFtpDataToPipe(int pipefd[2], int sd, int sdata, struct netParsedUrl npu)
+/* This is to be executed by the child process after the fork in netGetOpenFtpSockets.
+ * It keeps the ftp control socket alive while reading from the ftp data socket
+ * and writing to the pipe to the parent process, which closes the ftp sockets
+ * and reads from the pipe. */
 {
-struct netParsedUrl npu;
-struct dyString *rs = NULL;
-int sd, sdata;
-long timeOut = 1000000; /* wait in microsec */
+fclose(stdin);
+fclose(stdout);
+close(pipefd[0]);  /* close unused half of pipe */
+/* close other file descriptors */
+int fd=0;
+for (fd = STDERR_FILENO+1; fd < 64; fd++)
+    if (fd != pipefd[1] && fd != sdata && fd != sd)
+  	close(fd);
+
+char buf[32768];
+int rd = 0;
+long long dataPos = 0; 
+if (npu.byteRangeStart != -1)
+    dataPos = npu.byteRangeStart;
+while((rd = read(sdata, buf, 32768)) > 0) 
+    {
+    if (npu.byteRangeEnd != -1 && (dataPos + rd) > npu.byteRangeEnd)
+	rd = npu.byteRangeEnd - dataPos + 1;
+    int wt = write(pipefd[1], buf, rd);
+    if (wt == -1 && npu.byteRangeEnd != -1)
+	{
+	// errAbort in child process is messy; let reader complain if
+	// trouble.  If byterange was open-ended, we will hit this point
+	// when the parent stops reading and closes the pipe.
+	errnoWarn("error writing ftp data to pipe");
+	break;
+	}
+    dataPos += rd;
+    if (npu.byteRangeEnd != -1 && dataPos >= npu.byteRangeEnd)
+	break;	    
+    }
+if (rd == -1)
+    // Again, avoid abort in child process.
+    errnoWarn("error reading ftp socket");
+close(pipefd[1]);  /* we are done with it */
+close(sd);
+close(sdata);
+}
+
+int netGetOpenFtpSockets(char *url, int *retCtrlSd)
+/* Return a socket descriptor for url data (url can end in ";byterange:start-end".
+ * If retCtrlSd is non-null, keep the control socket alive and set *retCtrlSd.
+ * Otherwise, create a pipe and fork to keep control socket alive in the child 
+ * process until we are done fetching data. */
+{
 char cmd[256];
 
 /* Parse the URL and connect. */
+struct netParsedUrl npu;
 netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "ftp"))
-    errAbort("Sorry, can only netOpen ftp's currently");
-sd = netMustConnect(npu.host, atoi(npu.port));
+    errAbort("netGetOpenFtpSockets: url (%s) is not for ftp.", url);
+int sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
 
-/* Ask remote ftp server for a file. */
-
-/* don't send a command, just read the welcome msg */
-if (readReadyWait(sd, timeOut))
-    sendFtpCommand(sd, "", FALSE);
-
-safef(cmd,sizeof(cmd),"USER %s\r\n",npu.user);
-sendFtpCommand(sd, cmd, FALSE);
-
-safef(cmd,sizeof(cmd),"PASS %s\r\n",npu.password);
-sendFtpCommand(sd, cmd, FALSE);
-
-sendFtpCommand(sd, "TYPE I\r\n", FALSE);
-/* 200 Type set to I */
-/* (send the data as binary, so can support compressed files) */
-
-rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
+struct dyString *rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
-if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+if (npu.byteRangeStart != -1)
     {
     safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
     sendFtpCommand(sd, cmd, FALSE);
@@ -714,108 +691,63 @@ if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
 safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
 sendFtpCommandOnly(sd, cmd);  
 
-sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
-
-/* Because some FTP servers will kill the data connection
- * as soon as the control connection closes,
- * we have to develop a workaround using a partner process. */
-
-/* see which comes first, an error message on the control conn
- * or data on the data conn */
+int sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
 
 int secondsWaited = 0;
 while (TRUE)
     {
     if (secondsWaited >= 10)
-	{
-	errAbort("ftp server error on cmd=[%s] timed-out waiting for data or error\n",cmd);
-	}
-    timeOut = 1000000; /* wait in microsec */
-    if (readReadyWait(sdata, timeOut))
-	{
+	errAbort("ftp server error on cmd=[%s] timed-out waiting for data or error\n", cmd);
+    if (readReadyWait(sdata, NET_FTP_TIMEOUT))
 	break;   // we have some data
-	}
     if (readReadyWait(sd, 0)) /* wait in microsec */
-	{
 	receiveFtpReply(sd, cmd, FALSE);  // this can see an error like bad filename
-	}
     ++secondsWaited;
     }
-    
-
-/* Clean up and return handle. */
 dyStringFree(&rs);
 
-
-fflush(stdin);
-fflush(stdout);
-fflush(stderr);
-
-int pipefd[2];
-
-/* make a pipe (fds go in pipefd[0] and pipefd[1])  */
-if (pipe(pipefd) != 0)
-    errAbort("netGetOpenFtp: failed to create pipe: %s", strerror(errno));
-
-int pid = fork();
-
-if (pid < 0)
-    errnoAbort("can't fork in netGetOpenFtp");
-if (pid == 0)
+if (retCtrlSd != NULL)
     {
-    /* child */
-
-    fclose(stdin);
-    fclose(stdout);
-
-    close(pipefd[0]);  /* close unused half of pipe */
-
-    /* close other file descriptors */
-    int fd=0;
-    for (fd = STDERR_FILENO+1; fd < 64; fd++)
-      if (fd != pipefd[1] && fd != sdata && fd != sd)
-  	close(fd);
-
-    char buf[32768];
-    int rd = 0;
-    long long dataPos = 0; 
-    if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
-	dataPos = npu.byteRangeStart;
-    while((rd = read(sdata, buf, 32768)) > 0) 
-	{
-	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
-	    if ((dataPos + rd) > npu.byteRangeEnd)
-		rd = npu.byteRangeEnd - dataPos + 1;
-	int wt = write(pipefd[1], buf, rd);
-	if (wt == -1)
-	    errnoAbort("error writing ftp data to pipe");
-	dataPos += rd;
-	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
-	    if (dataPos >= npu.byteRangeEnd)
-		break;	    
-	}
-    if (rd == -1)
-	errnoAbort("error reading ftp socket");
-    close(pipefd[1]);  /* we are done with it */
-    close(sd);
-    close(sdata);
-
-    exit(0);
-
-    /* child will never get to here */
+    *retCtrlSd = sd;
+    return sdata;
     }
+else
+    {
+    /* Because some FTP servers will kill the data connection
+     * as soon as the control connection closes,
+     * we have to develop a workaround using a partner process. */
+    fflush(stdin);
+    fflush(stdout);
+    fflush(stderr);
+    /* make a pipe (fds go in pipefd[0] and pipefd[1])  */
+    int pipefd[2];
+    if (pipe(pipefd) != 0)
+	errAbort("netGetOpenFtp: failed to create pipe: %s", strerror(errno));
+    int pid = fork();
+    if (pid < 0)
+	errnoAbort("can't fork in netGetOpenFtp");
+    if (pid == 0)
+	{
+	/* child */
+	sendFtpDataToPipe(pipefd, sd, sdata, npu);
+	exit(0);
+	/* child will never get to here */
+	}
 
-/* parent */
-
-close(pipefd[1]);  /* close unused unput half of pipe */
-
-/* although the parent closes these, the child has them open still */
-close(sd);   
-close(sdata);
-
-return pipefd[0];
+    /* parent */
+    close(pipefd[1]);  /* close unused unput half of pipe */
+    /* although the parent closes these, the child has them open still */
+    close(sd);   
+    close(sdata);
+    return pipefd[0];
+    }
 }
 
+int netGetOpenFtp(char *url)
+/* Return a socket descriptor for url data (url can end in ";byterange:start-end". */
+{
+return netGetOpenFtpSockets(url, NULL);
+}
 
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
 /* Parse URL, connect to associated server on port,
@@ -842,7 +774,7 @@ else if (sameString(npu.protocol, "https"))
     }
 else
     {
-    errAbort("Sorry, can only netOpen http's currently");
+    errAbort("netHttpConnect: url (%s) is not for http.", url);
     return -1;  /* never gets here, fixes compiler complaint */
     }
 
@@ -864,11 +796,15 @@ if (!sameString(npu.user,""))
     freez(&b64up);
     }
 dyStringAppend(dy, "Accept: */*\r\n");
-if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+if (npu.byteRangeStart != -1)
     {
-    dyStringPrintf(dy, "Range: bytes=%lld-%lld\r\n"
-	, (long long) npu.byteRangeStart
-	, (long long) npu.byteRangeEnd);
+    if (npu.byteRangeEnd != -1)
+	dyStringPrintf(dy, "Range: bytes=%lld-%lld\r\n"
+		       , (long long)npu.byteRangeStart
+		       , (long long)npu.byteRangeEnd);
+    else
+	dyStringPrintf(dy, "Range: bytes=%lld-\r\n"
+		       , (long long)npu.byteRangeStart);
     }
 
 if (optionalHeader)
@@ -941,17 +877,26 @@ else
 return status;
 }
 
-int netUrlOpen(char *url)
-/* Return unix low-level file handle for url. 
- * Just close(result) when done. */
+int netUrlOpenSockets(char *url, int *retCtrlSocket)
+/* Return socket descriptor (low-level file handle) for read()ing url data. 
+ * If retCtrlSocket is non-NULL and url is FTP, set *retCtrlSocket
+ * to the FTP control socket which is left open for a persistent connection.
+ * close(result) (and close(*retCtrlSocket) if applicable) when done. */
 {
 if (startsWith("http://",url) || startsWith("https://",url) || (stringIn("://", url) == NULL))
     return netGetOpenHttp(url);
 else if (startsWith("ftp://",url))
-    return netGetOpenFtp(url);
+    return netGetOpenFtpSockets(url, retCtrlSocket);
 else    
-    errAbort("Sorry, can only netOpen http and ftp currently");
+    errAbort("Sorry, can only netUrlOpen http, https and ftp currently, not '%s'", url);
 return -1;    
+}
+
+int netUrlOpen(char *url)
+/* Return socket descriptor (low-level file handle) for read()ing url data. 
+ * Just close(result) when done. */
+{
+return netUrlOpenSockets(url, NULL);
 }
 
 struct dyString *netSlurpFile(int sd)
@@ -1409,7 +1354,7 @@ struct lineFile *lf;
 AllocVar(*npu);
 netParseUrl(url, *npu);
 if (!sameString((*npu)->protocol, "http"))
-    errAbort("Sorry, can only netOpen http's currently");
+    errAbort("netHttpLineFileMayOpen: url (%s) is not for http.", url);
 sd = netConnect((*npu)->host, atoi((*npu)->port));
 if (sd < 0)
     return NULL;
