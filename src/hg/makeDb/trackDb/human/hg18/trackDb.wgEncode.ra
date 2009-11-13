@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.651 2009/11/13 09:34:43 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.652 2009/11/13 21:22:57 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16028,3 +16028,667 @@ wgEncode 1
     type bed 6 +
     color 46,0,184
     metadata project=wgEncode grant=Weng lab=UMassHA dataType=TfbsValid cell=K562 view=TestedSites dataVersion="ENCODE Sep 2009 Freeze" subId=689 dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14 composite=wgEncodeUmasshaTfbsValid tableName=wgEncodeUmasshaTfbsValidTestedSitesK562 fileName=wgEncodeUmasshaTfbsValidTestedSitesK562.bed6+.gz
+
+# GIS PET (wrangler: braney)
+
+track wgEncodeGisPet
+compositeTrack on
+shortLabel GIS PET Loc
+longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
+group expression
+subGroup1 view Views 0-PlusRawSignal=PlusRawSig 1-MinusRawSignal=MinusRawSig 2-Alignments=Alignments 
+subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878 prostate=Prostate HepG2=HepG2 NHEK=NHEK HUVEC=HUVEC H1-hESC=H1-hESC
+subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
+subGroup4 rnaExtract RNA_Extract longPolyA=long_PolyA+ total=Total
+dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+dimensionZchecked longPolyA,total
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
+dragAndDrop subTracks
+visibilityViewDefaults Alignments=pack
+noInherit on
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HepG2 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HepG2 cytosol)
+    subGroups view=2-Alignments cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HepG2 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HepG2 nucleus)
+    subGroups view=2-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=30-nucleus view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1K562ChromatinLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 chromatin longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 chromatin)
+    subGroups view=2-Alignments cellType=K562 localization=50-chromatin rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=50-chromatin view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562ChromatinLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562ChromatinLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1K562NucleolusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleolus longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 nucleolus)
+    subGroups view=2-Alignments cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=60-nucleolus view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562NucleolusLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562NucleolusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1K562NucleoplasmLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleoplasm longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 nucleoplasm)
+    subGroups view=2-Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=40-nucleoplasm view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562NucleoplasmLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562NucleoplasmLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 nucleus)
+    subGroups view=2-Alignments cellType=K562 localization=30-nucleus rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=30-nucleus view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 polysome longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 polysome)
+    subGroups view=2-Alignments cellType=K562 localization=10-polysome rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=10-polysome view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 cytosol longPolyA 2
+    longLabel ENCODE GIS PET Alignments Replicate 2 (longPolyA in K562 cytosol)
+    subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel prostate cell longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in prostate cell)
+    subGroups view=2-Alignments cellType=prostate localization=0-cell rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=0-cell view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya fileName=wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in GM12878 nucleus)
+    subGroups view=2-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=30-nucleus view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in GM12878 cytosol)
+    subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 cytosol longPolyA 2
+    longLabel ENCODE GIS PET Alignments Replicate 2 (longPolyA in GM12878 cytosol)
+    subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK cytosol longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in NHEK cytosol)
+    subGroups view=2-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 179,0,134
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK nucleus longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in NHEK nucleus)
+    subGroups view=2-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 179,0,134
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HUVEC nucleus longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in HUVEC nucleus)
+    subGroups view=2-Alignments cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 224,75,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=30-nucleus view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel H1-hESC cytosol longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in H1-hESC cytosol)
+    subGroups view=2-Alignments cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya.pairedTagAlign.gz
+
+    track wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Alignments Replicate 1 (longPolyA in K562 cytosol)
+    subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    #type pairedTagAlign
+    colorByStrand 46,0,184 238,85,34
+    type bed 6
+    baseColorDefault diffBases
+    baseColorUseSequence seq1Seq2
+    baseColorTickColor lighterShade
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    configurable on
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=20-cytosol view=2-Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya fileName=wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya.pairedTagAlign.gz
+
+
+    track wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in GM12878 cytosol)
+    subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in GM12878 nucleus)
+    subGroups view=0-PlusRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=30-nucleus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel H1-hESC cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in H1-hESC cytosol)
+    subGroups view=0-PlusRawSignal cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1H1hescCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HepG2 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HepG2 cytosol)
+    subGroups view=0-PlusRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HepG2 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HepG2 nucleus)
+    subGroups view=0-PlusRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=30-nucleus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HUVEC nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in HUVEC nucleus)
+    subGroups view=0-PlusRawSignal cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 224,75,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=30-nucleus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1K562ChromatinLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 chromatin longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 chromatin)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=50-chromatin rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=50-chromatin view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562ChromatinLongpolya fileName=wgEncodeGisPetPlusRawSigRep1K562ChromatinLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 cytosol)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1K562NucleolusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleolus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 nucleolus)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=60-nucleolus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleolusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1K562NucleolusLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1K562NucleoplasmLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleoplasm longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 nucleoplasm)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=40-nucleoplasm view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleoplasmLongpolya fileName=wgEncodeGisPetPlusRawSigRep1K562NucleoplasmLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 nucleus)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=30-nucleus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 polysome longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in K562 polysome)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=10-polysome rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=10-polysome view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya fileName=wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in NHEK cytosol)
+    subGroups view=0-PlusRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 179,0,134
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in NHEK nucleus)
+    subGroups view=0-PlusRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 179,0,134
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel prostate cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in prostate cytosol)
+    subGroups view=0-PlusRawSignal cellType=prostate localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 cytosol longPolyA 2
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 2 (longPolyA in GM12878 cytosol)
+    subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 cytosol longPolyA 2
+    longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 2 (longPolyA in K562 cytosol)
+    subGroups view=0-PlusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in GM12878 cytosol)
+    subGroups view=1-MinusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in GM12878 nucleus)
+    subGroups view=1-MinusRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=30-nucleus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel H1-hESC cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in H1-hESC cytosol)
+    subGroups view=1-MinusRawSignal cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=H1-hESC rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1H1hescCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HepG2 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HepG2 cytosol)
+    subGroups view=1-MinusRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HepG2 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HepG2 nucleus)
+    subGroups view=1-MinusRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 189,0,157
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HepG2 rnaExtract=longPolyA localization=30-nucleus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel HUVEC nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in HUVEC nucleus)
+    subGroups view=1-MinusRawSignal cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 224,75,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=30-nucleus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1K562ChromatinLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 chromatin longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 chromatin)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=50-chromatin rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=50-chromatin view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562ChromatinLongpolya fileName=wgEncodeGisPetMinusRawSigRep1K562ChromatinLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 cytosol)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1K562NucleolusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleolus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 nucleolus)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=60-nucleolus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleolusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1K562NucleolusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1K562NucleoplasmLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleoplasm longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 nucleoplasm)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=40-nucleoplasm view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleoplasmLongpolya fileName=wgEncodeGisPetMinusRawSigRep1K562NucleoplasmLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 nucleus)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=30-nucleus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 polysome longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in K562 polysome)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=10-polysome rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=10-polysome view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya fileName=wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in NHEK cytosol)
+    subGroups view=1-MinusRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 179,0,134
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel NHEK nucleus longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in NHEK nucleus)
+    subGroups view=1-MinusRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    color 179,0,134
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel prostate cytosol longPolyA 1
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in prostate cytosol)
+    subGroups view=1-MinusRawSignal cellType=prostate localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12878 cytosol longPolyA 2
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 2 (longPolyA in GM12878 cytosol)
+    subGroups view=1-MinusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel K562 cytosol longPolyA 2
+    longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 2 (longPolyA in K562 cytosol)
+    subGroups view=1-MinusRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    color 46,0,184
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=K562 rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya.wig.gz
+
