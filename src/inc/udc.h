@@ -95,30 +95,6 @@ void udcSetDefaultDir(char *path);
  * followed by the local path name or a url, so in common practice you see things like:
  *     udc:http://genome.ucsc.edu/goldenPath/hg18/tracks/someTrack.bb */
 
-struct udcRemoteFileInfo
-/* Information about a remote file. */
-    {
-    bits64 updateTime;	/* Last update in seconds since 1970 */
-    bits64 size;	/* Remote file size */
-    };
-
-boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo);
-/* Gets size and last modified time of URL
- * and returns status of HEAD GET. */
-
-int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer);
-/* Fetch a block of data of given size into buffer using the http: protocol.
- * Returns number of bytes actually read.  Does an errAbort on
- * error.  Typically will be called with size in the 8k - 64k range. */
-
-int udcDataViaFtp(char *url, bits64 offset, int size, void *buffer);
-/* Fetch a block of data of given size into buffer using the ftp: protocol.
- * Returns number of bytes actually read.  Does an errAbort on
- * error.  Typically will be called with size in the 8k - 64k range. */
-
-boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo);
-/* Gets size and last modified time of FTP URL */
-
 struct slName *udcFileCacheFiles(char *url, char *cacheDir);
 /* Return low-level list of files used in cache. */
 

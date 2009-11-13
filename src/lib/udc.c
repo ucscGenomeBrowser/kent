@@ -37,8 +37,25 @@
 #define udcMaxBytesPerRemoteFetch (udcBlockSize * 32)
 /* Very large remote reads are broken down into chunks this size. */
 
-typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer);
+struct connInfo
+/* Socket descriptor and associated info, for keeping net connections open. */
+    {
+    int socket;                 /* Socket descriptor for data connection (or 0). */
+    bits64 offset;		/* Current file offset of socket. */
+    int ctrlSocket;             /* (FTP only) Control socket descriptor or 0. */
+    };
+
+typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer,
+			       struct connInfo *ci);
 /* Type for callback function that fetches file data. */
+
+struct udcRemoteFileInfo
+/* Information about a remote file. */
+    {
+    bits64 updateTime;	/* Last update in seconds since 1970 */
+    bits64 size;	/* Remote file size */
+    struct connInfo ci; /* Connection info for open net connection */
+    };
 
 typedef boolean (*UdcInfoCallback)(char *url, struct udcRemoteFileInfo *retInfo);
 /* Type for callback function that fetches file timestamp and size. */
@@ -68,6 +85,7 @@ struct udcFile
     bits64 startData;		/* Start of area in file we know to have data. */
     bits64 endData;		/* End of area in file we know to have data. */
     bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
+    struct connInfo connInfo;   /* Connection info for open net connection. */
     };
 
 struct udcBitmap
@@ -88,6 +106,56 @@ static char *sparseDataName = "sparseData";
 #define udcBitmapHeaderSize (64)
 static int cacheTimeout = 0;
 
+static int connInfoGetSocket(struct connInfo *ci, char *url, bits64 offset, int size)
+/* If ci has an open socket and the given offset matches ci's current offset,
+ * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci. */
+{
+if (ci != NULL && ci->socket != 0 && ci->offset != offset)
+    {
+    verbose(2, "Offset mismatch (ci %lld != new %lld), reopening.\n", ci->offset, offset);
+    close(ci->socket);
+    if (ci->ctrlSocket != 0)
+	close(ci->ctrlSocket);
+    ZeroVar(ci);
+    }
+int sd;
+if (ci == NULL || ci->socket == 0)
+    {
+    char rangeUrl[2048];
+    if (ci == NULL)
+	{
+	safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld",
+	      url, offset, (offset + size - 1));
+	sd = netUrlOpen(rangeUrl);
+	}
+    else
+	{
+	safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-", url, offset);
+	sd = ci->socket = netUrlOpenSockets(rangeUrl, &(ci->ctrlSocket));
+	ci->offset = 0;
+	}
+    if (startsWith("http", url))
+	{
+	char *newUrl = NULL;
+	int newSd = 0;
+	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+	if (newUrl)  // not sure redirection will work with byte ranges as it is now
+	    {
+	    freeMem(newUrl); 
+	    sd = newSd;
+	    if (ci != NULL)
+		ci->socket = newSd;
+	    }
+	}
+    }
+else
+    sd = ci->socket;
+if (sd < 0)
+    errnoAbort("Couldn't open %s", url);   // do we really want errAbort here?
+return sd;
+}
+
 /********* Section for local file protocol **********/
 
 static char *assertLocalUrl(char *url)
@@ -105,7 +173,7 @@ if (stringIn("..", url) || stringIn("~", url) || stringIn("//", url) ||
 return url;
 }
 
-static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer)
+static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
@@ -142,7 +210,8 @@ return TRUE;
 
 /********* Section for transparent file protocol **********/
 
-static int udcDataViaTransparent(char *url, bits64 offset, int size, void *buffer)
+static int udcDataViaTransparent(char *url, bits64 offset, int size, void *buffer,
+				 struct connInfo *ci)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
@@ -161,7 +230,7 @@ return FALSE;
 
 /********* Section for slow local file protocol - simulates network... **********/
 
-static int udcDataViaSlow(char *url, bits64 offset, int size, void *buffer)
+static int udcDataViaSlow(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
@@ -212,34 +281,18 @@ return TRUE;
 
 /********* Section for http protocol **********/
 
-int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer)
-/* Fetch a block of data of given size into buffer using the http: protocol.
- * Returns number of bytes actually read.  Does an errAbort on
- * error.  Typically will be called with size in the 8k - 64k range. */
+int udcDataViaHttpOrFtp(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
+/* Fetch a block of data of given size into buffer using url's protocol,
+ * which must be http, https or ftp.  Returns number of bytes actually read.
+ * Does an errAbort on error.
+ * Typically will be called with size in the 8k-64k range. */
 {
-verbose(2, "reading http data - %d bytes at %lld - on %s\n", size, offset, url);
-char rangeUrl[1024];
-if (!(startsWith("http://",url) || startsWith("https://",url)))
-    errAbort("Invalid protocol in url [%s] in udcDataViaHttp, only http supported", url); 
-safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
-  , url
-  , (long long) offset
-  , (long long) offset + size - 1);
-int sd = netUrlOpen(rangeUrl);
-if (sd < 0)
-    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
-
-char *newUrl = NULL;
-int newSd = 0;
-if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
-    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
-
-if (newUrl)  // not sure redirection will work with byte ranges as it is now
-    {
-    freeMem(newUrl); 
-    sd = newSd;
-    }
-
+if (startsWith("http://",url) || startsWith("https://",url) || startsWith("ftp://",url))
+    verbose(2, "reading http/https/ftp data - %d bytes at %lld - on %s\n", size, offset, url);
+else
+    errAbort("Invalid protocol in url [%s] in udcDataViaFtp, only http, https, or ftp supported",
+	     url); 
+int sd = connInfoGetSocket(ci, url, offset, size);
 int rd = 0, total = 0, remaining = size;
 char *buf = (char *)buffer;
 while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
@@ -249,9 +302,11 @@ while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
     remaining -= rd;
     }
 if (rd == -1)
-    errnoAbort("error reading socket");
-close(sd);  
-
+    errnoAbort("udcDataViaHttpOrFtp: error reading socket");
+if (ci == NULL)
+    close(sd);
+else
+    ci->offset += total;
 return total;
 }
 
@@ -284,13 +339,9 @@ if (lastModString == NULL)
 	errAbort("No Last-Modified: or Date: returned in header for %s, can't proceed, sorry", url);
 	}
     }
-
-// Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
-// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
-
 struct tm tm;
 time_t t;
-
+// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
 // TODO: it's very likely that there are other date string patterns
 //  out there that might be encountered.
 if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
@@ -298,26 +349,14 @@ if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
     hashFree(&hash);
     errAbort("unable to parse last-modified string [%s]", lastModString);
     }
-
-//printf("year: %d; month: %d; day: %d;\n",
-//        tm.tm_year, tm.tm_mon, tm.tm_mday);
-//printf("hour: %d; minute: %d; second: %d\n",
-//        tm.tm_hour, tm.tm_min, tm.tm_sec);
-//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
-
-
-tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
-                          to determine whether daylight saving time
-                          is in effect */
+// Not set by strptime(); tells mktime() to determine whether daylight saving time is in effect:
+tm.tm_isdst = -1;
 t = mktime(&tm);
 if (t == -1)
     { /* Handle error */;
     hashFree(&hash);
     errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
     }
-
-//printf("seconds since the Epoch: %lld\n", (long long) t);"
-
 retInfo->updateTime = t;
 
 hashFree(&hash);
@@ -327,37 +366,7 @@ return status;
 
 /********* Section for ftp protocol **********/
 
-int udcDataViaFtp(char *url, bits64 offset, int size, void *buffer)
-/* Fetch a block of data of given size into buffer using the ftp: protocol.
- * Returns number of bytes actually read.  Does an errAbort on
- * error.  Typically will be called with size in the 8k - 64k range. */
-{
-verbose(2, "reading ftp data - %d bytes at %lld - on %s\n", size, offset, url);
-char rangeUrl[1024];
-if (!startsWith("ftp://",url))
-    errAbort("Invalid protocol in url [%s] in udcDataViaFtp, only ftp supported", url); 
-safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
-  , url
-  , (long long) offset
-  , (long long) offset + size - 1);
-int sd = netUrlOpen(rangeUrl);
-if (sd < 0)
-    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
-
-int rd = 0, total = 0, remaining = size;
-char *buf = (char *)buffer;
-while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
-    {
-    total += rd;
-    buf += rd;
-    remaining -= rd;
-    }
-if (rd == -1)
-    errnoAbort("error reading socket");
-close(sd);  
-
-return total;
-}
+// fetchData method: See udcDataViaHttpOrFtp above.
 
 boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Gets size and last modified time of FTP URL */
@@ -365,6 +374,8 @@ boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo)
 verbose(2, "checking ftp remote info on %s\n", url);
 long long size = 0;
 time_t t;
+// TODO: would be nice to add int *retCtrlSocket to netGetFtpInfo so we can stash 
+// in retInfo->connInfo and keep socket open.
 boolean ok = netGetFtpInfo(url, &size, &t);
 if (!ok)
     return FALSE;
@@ -505,12 +516,12 @@ else if (sameString(upToColon, "slow"))
     }
 else if (sameString(upToColon, "http") || sameString(upToColon, "https"))
     {
-    prot->fetchData = udcDataViaHttp;
+    prot->fetchData = udcDataViaHttpOrFtp;
     prot->fetchInfo = udcInfoViaHttp;
     }
 else if (sameString(upToColon, "ftp"))
     {
-    prot->fetchData = udcDataViaFtp;
+    prot->fetchData = udcDataViaHttpOrFtp;
     prot->fetchInfo = udcInfoViaFtp;
     }
 else if (sameString(upToColon, "transparent"))
@@ -746,6 +757,7 @@ else
 	{
 	file->updateTime = info.updateTime;
 	file->size = info.size;
+	memcpy(&(file->connInfo), &(info.ci), sizeof(struct connInfo));
 	}
 
     /* Make directory. */
@@ -934,7 +946,7 @@ return allSet;
 
 static void fetchMissingBlocks(struct udcFile *file, struct udcBitmap *bits, 
 	int startBlock, int blockCount, int blockSize)
-/* Fetch missing blocks from remote and put them into file. */
+/* Fetch missing blocks from remote and put them into file.  errAbort if trouble. */
 {
 bits64 startPos = (bits64)startBlock * blockSize;
 bits64 endPos = startPos + (bits64)blockCount * blockSize;
@@ -944,7 +956,10 @@ if (endPos > startPos)
     {
     bits64 readSize = endPos - startPos;
     void *buf = needLargeMem(readSize);
-    file->prot->fetchData(file->url, startPos, readSize, buf);
+    int actualSize = file->prot->fetchData(file->url, startPos, readSize, buf, &(file->connInfo));
+    if (actualSize != readSize)
+	errAbort("unable to fetch %lld bytes from %s @%lld (got %d bytes)",
+		 readSize, file->url, startPos, actualSize);
     fseek(file->fSparse, startPos, SEEK_SET);
     mustWrite(file->fSparse, buf, readSize);
     freez(&buf);
