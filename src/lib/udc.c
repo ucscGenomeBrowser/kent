@@ -132,7 +132,7 @@ if (ci == NULL || ci->socket == 0)
 	{
 	safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-", url, offset);
 	sd = ci->socket = netUrlOpenSockets(rangeUrl, &(ci->ctrlSocket));
-	ci->offset = 0;
+	ci->offset = offset;
 	}
     if (startsWith("http", url))
 	{
