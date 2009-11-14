@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.653 2009/11/13 23:25:03 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.654 2009/11/14 01:50:19 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16495,21 +16495,21 @@ wgEncode 1
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya fileName=wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya.wig.gz
 
-    track wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
+    track wgEncodeGisPetPlusRawSigRep1ProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
     shortLabel pros cyto +S1
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 1 (longPolyA in prostate cytosol)
-    subGroups view=0-PlusRawSignal cellType=prostate localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=0-PlusRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya.wig.gz
 
-    track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
+    track wgEncodeGisPetPlusRawSigRep2Gm12878CellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
     shortLabel GM12 cyto +S2
     longLabel ENCODE GIS PET Raw Signal (plus strand) Replicate 2 (longPolyA in GM12878 cytosol)
-    subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=0-PlusRawSignal cellType=GM12878 localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
     color 153,38,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=0-PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya.wig.gz
@@ -16663,12 +16663,12 @@ wgEncode 1
     color 179,0,134
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=NHEK rnaExtract=longPolyA localization=30-nucleus view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya fileName=wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya.wig.gz
 
-    track wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya
+    track wgEncodeGisPetMinusRawSigRep1ProstateCellLongpolya
     release alpha
     subTrack wgEncodeGisPet off
     shortLabel pros cyto -S1
     longLabel ENCODE GIS PET Raw Signal (minus strand) Replicate 1 (longPolyA in prostate cytosol)
-    subGroups view=1-MinusRawSignal cellType=prostate localization=20-cytosol rnaExtract=longPolyA
+    subGroups view=1-MinusRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
     type bedGraph 4
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=20-cytosol view=1-MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya.wig.gz
 
