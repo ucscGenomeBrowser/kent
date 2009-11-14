@@ -621,7 +621,6 @@ boolean isSwapped = bbi->isSwapped;
 struct bbiSummaryElement res;
 ZeroVar(&res);
 
-
 if (bbi->totalSummaryOffset != 0)
     {
     udcSeek(udc, bbi->totalSummaryOffset);
@@ -631,7 +630,9 @@ if (bbi->totalSummaryOffset != 0)
     res.sumData = udcReadDouble(udc, isSwapped);
     res.sumSquares = udcReadDouble(udc, isSwapped);
     }
-else
+else if (bbi->version == 1)
+    /* Require version 1 so as not to have to deal with compression.  Should not happen
+     * to have NULL totalSummaryOffset for non-empty version 2+ file anyway. */
     {
     /* Find most extreme zoom. */
     struct bbiZoomLevel *bestZoom = NULL, *zoom;
