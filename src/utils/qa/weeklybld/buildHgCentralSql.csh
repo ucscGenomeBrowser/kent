@@ -14,6 +14,10 @@ hgsqldump --all -c -h genome-centdb hgcentral \
 defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb | \
 sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
 
+
+# TODO --skip-extended-insert 
+#   is supposed to make it dump rows as separate insert statements
+#
 # get rid of some mysql5 trash in the output we don't want.
 # also need to break data values at rows so the diff and cvs 
 # which are line-oriented work better.
