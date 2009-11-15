@@ -1991,7 +1991,7 @@ shortLabel Burge RNA-seq GEM Mapper
 longLabel Burge lab RNA-seq aligned by GEM Mapper to genome and Gencode Rel. 2b (mapped by CRG)
 group expression
 priority 0
-visibility dense
+visibility hide
 type genePred
 	
     track burgeRnaSeqGemMapperAlignBrain
