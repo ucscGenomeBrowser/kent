@@ -1423,6 +1423,16 @@ priority 450
 track chainNetPoodle override
 priority 451
 
+track knownAlt
+shortLabel Alt Events
+longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
+group genes
+priority 34.2
+visibility hide
+color 90,0,150
+noScoreFilter .
+type bed 6 .
+
 
 searchTable nscanGene
 searchType genePred
