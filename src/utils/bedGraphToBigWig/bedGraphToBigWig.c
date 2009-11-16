@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.18 2009/11/07 19:29:35 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.18.6.1 2009/11/16 18:41:24 galt Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -222,7 +222,7 @@ for (;;)
         totalSum->validCount = size;
 	totalSum->minVal = totalSum->maxVal = val;
 	totalSum->sumData = val*size;
-	totalSum->sumSquares = val*size*size;
+	totalSum->sumSquares = val*val*size;
 	firstRow = FALSE;
 	}
     else
@@ -231,7 +231,7 @@ for (;;)
 	if (val < totalSum->minVal) totalSum->minVal = val;
 	if (val > totalSum->maxVal) totalSum->maxVal = val;
 	totalSum->sumData += val*size;
-	totalSum->sumSquares += val*size*size;
+	totalSum->sumSquares += val*val*size;
 	}
 
     /* If new chromosome output existing block. */
