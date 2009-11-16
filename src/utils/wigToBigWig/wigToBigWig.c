@@ -8,7 +8,7 @@
 #include "bwgInternal.h"
 #include "zlibFace.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.8 2009/11/12 23:15:52 kent Exp $";
+static char const rcsid[] = "$Id: wigToBigWig.c,v 1.9 2009/11/16 18:12:04 kent Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -31,7 +31,7 @@ errAbort(
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "   -clip - If set just issue warning messages rather than dying if wig\n"
   "                  file contains items off end of chromosome.\n"
-  "   -compress - If set use zlib compression."
+  "   -unc - If set, do not use compression."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -40,7 +40,7 @@ static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
    {"clip", OPTION_BOOLEAN},
-   {"compress", OPTION_BOOLEAN},
+   {"unc", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -58,7 +58,7 @@ optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 clipDontDie = optionExists("clip");
-doCompress = optionExists("compress");
+doCompress = !optionExists("unc");
 if (argc != 4)
     usage();
 wigToBigWig(argv[1], argv[2], argv[3]);

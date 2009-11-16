@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.21 2009/11/13 23:46:50 kent Exp $";
+static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.22 2009/11/16 18:12:04 kent Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -35,7 +35,7 @@ errAbort(
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
-  "   -compress - If set use zlib compression."
+  "   -unc - If set, do not use compression."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -43,7 +43,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
-   {"compress", OPTION_BOOLEAN},
+   {"unc", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -533,7 +533,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-doCompress = optionExists("compress");
+doCompress = !optionExists("unc");
 if (argc != 4)
     usage();
 bedGraphToBigWig(argv[1], argv[2], argv[3]);

@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.19 2009/11/13 23:47:02 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.20 2009/11/16 18:12:04 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -40,7 +40,7 @@ errAbort(
   "                  assumes all fields in bed are defined.\n"
   "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
   "                   of each field in a row in AutoSql format here.\n"
-  "   -compress - If set use zlib compression."
+  "   -unc - If set, do not use compression."
   , bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -50,7 +50,7 @@ static struct optionSpec options[] = {
    {"itemsPerSlot", OPTION_INT},
    {"bedFields", OPTION_INT},
    {"as", OPTION_STRING},
-   {"compress", OPTION_BOOLEAN},
+   {"unc", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -648,7 +648,7 @@ blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 bedFields = optionInt("bedFields", bedFields);
 as = optionVal("as", as);
-doCompress = optionExists("compress");
+doCompress = !optionExists("unc");
 if (argc != 4)
     usage();
 bedToBigBed(argv[1], argv[2], argv[3]);
