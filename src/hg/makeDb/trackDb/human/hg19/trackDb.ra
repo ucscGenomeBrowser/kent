@@ -324,7 +324,7 @@ subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aPanTro=Chimp bGorGor=Gorilla cPonAbe=Orangutan dRheMac=Rhesus ePapHam=Baboon fCalJac=Marmoset gTarSyr=Tarsier hOtoGar=Bushbaby iMicMur=Mouse_lemur
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
-visibility full
+visibility hide
 visibilityViewDefaults chain=pack net=dense
 group compGeno
 noInherit on
