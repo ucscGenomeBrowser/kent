@@ -1,0 +1,197 @@
+# for emacs: -*- mode: sh; -*-
+
+# Sus scrofa - SGSC Sscrofa8 NCBI project 10718, CM000812
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2009-10-14 - Hiram)
+    mkdir /hive/data/genomes/susScr1
+    cd /hive/data/genomes/susScr1
+    mkdir sanger
+    cd sanger
+for F in README Sus_scrofa.Sscrofa9.53.dna.chromosome.fa.bz2 \
+        Sus_scrofa.Sscrofa9.53_repeat_coords.txt.bz2 \
+        Sus_scrofa9.agp Sus_scrofa9.pgp
+do
+    wget --timestamping \
+"ftp://ftp.sanger.ac.uk/pub/S_scrofa/assemblies/Ensembl_Sscrofa9/${F}"
+done
+
+    bunzip *.bz2
+    gzip Sus_scrofa.Sscrofa9.53.dna.chromosome.fa \
+	Sus_scrofa.Sscrofa9.53_repeat_coords.txt
+    grep -v "^#" Sus_scrofa9.agp > susScr1.agp
+    zcat Sus_scrofa.Sscrofa9.53.dna.chromosome.fa.gz \
+        | sed -e "s/^>/>chr/" | gzip > susScr1.fa.gz
+
+#########################################################################
+# Initial makeGenomeDb.pl (DONE - 2009-11-06 - Hiram)
+    cd /hive/data/genomes/susScr1
+    cat << '_EOF_' > susScr1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db susScr1
+clade mammal
+genomeCladePriority 35
+scientificName Sus scrofa
+commonName Pig
+assemblyDate Apr. 2009
+assemblyLabel SGSC Sscrofa8 (NCBI project 10718, CM000812)
+orderKey 235
+mitoAcc NC_012095
+fastaFiles /hive/data/genomes/susScr1/sanger/susScr1.fa.gz
+agpFiles /hive/data/genomes/susScr1/sanger/susScr1.agp
+# qualFiles none
+dbDbSpeciesDir pig
+taxId 9823
+'_EOF_'
+
+    makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev susScr1.config.ra \
+	> makeGenomeDb.log 2>&1
+
+    #	add the trackDb entries to the source tree
+    ln -s `pwd`/susScr1.unmasked.2bit /gbdb/susScr1/susScr1.2bit
+    #	browser should function now
+
+#########################################################################
+# RepeatMasker (DONE - 2009-11-06 - Hiram)
+    mkdir /hive/data/genomes/susScr1/bed/repeatMasker
+    cd /hive/data/genomes/susScr1/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=`pwd` -workhorse=hgwdev -bigClusterHub=pk \
+	-noSplit susScr1 > do.log 2>&1
+    #	about 7.5 hours
+    cat faSize.rmsk.txt
+    # 2262596571 bases (31264552 N's 2231332019 real 1286238193 upper
+    #	945093826 lower) in 20 sequences in 1 files
+    # %41.77 masked total, %42.36 masked real
+
+#########################################################################
+# simpleRepeats (DONE - 2009-11-06 - Hiram)
+    mkdir /hive/data/genomes/susScr1/bed/simpleRepeat
+    cd /hive/data/genomes/susScr1/bed/simpleRepeat
+    doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev -bigClusterHub=pk \
+	-smallClusterHub=pk susScr1 > do.log 2>&1
+    cat fb.simpleRepeat 
+    #	26577444 bases of 2231496571 (1.191%) in intersection
+
+    #	add to the repeatMasker
+    cd /hive/data/genomes/susScr1
+    twoBitMask susScr1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed susScr1.2bit
+    twoBitToFa susScr1.2bit stdout | faSize stdin > susScr1.2bit.faSize.txt
+    cat susScr1.2bit.faSize.txt
+    #	2262596571 bases (31264552 N's 2231332019 real 1285077160 upper
+    #	946254859 lower) in 20 sequences in 1 files
+    #	%41.82 masked total, %42.41 masked real
+
+########################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2009-11-09 - Hiram)
+    mkdir /hive/data/genomes/susScr1/bed/allGaps
+    cd /hive/data/genomes/susScr1/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../susScr1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m12.153s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits susScr1 -not gap -bed=notGap.bed
+    featureBits susScr1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	what is the last index in the existing gap table:
+    hgsql -N -e "select ix from gap;" susScr1 | sort -n | tail -1
+    #	27297
+    cat << '_EOF_' > mkGap.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" susScr1 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.gap
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad susScr1 otherGap other.gap
+    #	Loaded 96565
+    #	adding this many:
+    wc -l bed.tab
+    #	96565
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" susScr1
+    #	100202
+    hgsql susScr1 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" susScr1
+    #	196767
+    # == 100202 + 96565
+
+########################################################################
+# Create kluster run files (DONE - 2009-11-09 - Hiram)
+    cd /hive/data/genomes/susScr1
+    blat susScr1.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/susScr1.11.ooc \
+	-repMatch=800
+    #	Wrote 28011 overused 11-mers to jkStuff/susScr1.11.ooc
+    mkdir /hive/data/staging/data/susScr1
+    cp -p susScr1.2bit jkStuff/susScr1.11.ooc /hive/data/staging/data/susScr1
+    cp -p chrom.sizes /hive/data/staging/data/susScr1
+    gapToLift susScr1 jkStuff/nonBridged.lft -bedFile=jkStuff/nonBridged.bed
+    cp -p jkStuff/nonBridged.lft \
+	/hive/data/staging/data/susScr1/susScr1.nonBridged.lft
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2009-11-09 - Hiram)
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add susScr1 just before tetNig1
+
+# susScr1 (Tetraodon)
+susScr1.serverGenome = /hive/data/genomes/susScr1/susScr1.2bit
+susScr1.clusterGenome = /scratch/data/susScr1/susScr1.2bit
+susScr1.ooc = /scratch/data/susScr1/susScr1.11.ooc
+susScr1.lift = /scratch/data/susScr1/susScr1.contigs.lift
+susScr1.align.unplacedChroms = chr*_random
+susScr1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+susScr1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}  
+susScr1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+susScr1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+susScr1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+susScr1.downloadDir = susScr1
+susScr1.genbank.mrna.xeno.loadDesc = yes
+susScr1.refseq.mrna.native.load = no
+
+    cvs ci -m "Added susScr1" etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial susScr1 &
+    #	logFile: var/build/logs/2009.08.10-16:42:06.susScr1.initalign.log
+    #	real    578m42.777s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad susScr1
+    #	logFile: var/dbload/hgwdev/logs/2009.08.11-09:22:29.dbload.log
+    #	real    31m29.282s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add susScr1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added susScr1 - Tetraodon Nigirividis" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
