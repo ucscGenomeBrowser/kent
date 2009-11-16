@@ -15,7 +15,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.20 2009/11/12 23:15:52 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.21 2009/11/16 11:01:22 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -925,22 +925,35 @@ struct bbiChromInfo *chromInfoArray;
 int chromCount, maxChromNameSize;
 bwgMakeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 
-/* Figure out initial summary level - starting with a summary 10 times the amount
- * of the smallest item.  See if summarized data is smaller than input data, if
+/* Figure out initial summary level - starting with a summary 20 times the amount
+ * of the smallest item.  See if summarized data is smaller than half input data, if
  * not bump up reduction by a factor of 2 until it is, or until further summarying
  * yeilds no size reduction. */
 int  minRes = bwgAverageResolution(sectionList);
-int initialReduction = minRes*10;
+int initialReduction = minRes*20;
 bits64 fullSize = bwgTotalSectionSize(sectionList);
+bits64 maxReducedSize = fullSize/2;
 struct bbiSummary *firstSummaryList = NULL, *summaryList = NULL;
 bits64 lastSummarySize = 0, summarySize;
 for (;;)
     {
     summaryList = bwgReduceSectionList(sectionList, chromInfoArray, initialReduction);
     bits64 summarySize = bbiTotalSummarySize(summaryList);
-    if (summarySize >= fullSize && summarySize != lastSummarySize)
+    if (doCompress)
+	{
+        summarySize *= 4;	// Compensate for summary not compressing as well as primary data
+	initialReduction *= 4;
+	}
+    if (summarySize >= maxReducedSize && summarySize != lastSummarySize)
         {
-	initialReduction *= 2;
+	/* Need to do more reduction.  First scale reduction by amount that it missed
+	 * being small enough last time, with an extra 10% for good measure.  Then
+	 * just to keep from spinning through loop two many times, make sure this is
+	 * at least 2x the previous reduction. */
+	int nextReduction = 1.1 * initialReduction * summarySize / maxReducedSize;
+	if (nextReduction < initialReduction*2)
+	    nextReduction = initialReduction*2;
+	initialReduction = nextReduction;
 	bbiSummaryFreeList(&summaryList);
 	lastSummarySize = summarySize;
 	}
@@ -955,7 +968,7 @@ reductionAmounts[0] = initialReduction;
 bits64 reduction = initialReduction;
 for (i=0; i<ArraySize(reduceSummaries)-1; i++)
     {
-    reduction *= 10;
+    reduction *= 4;
     if (reduction > 1000000000)
         break;
     summaryList = bbiReduceSummaryList(reduceSummaries[summaryCount-1], chromInfoArray, 
