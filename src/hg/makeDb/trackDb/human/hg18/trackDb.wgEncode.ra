@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.655 2009/11/16 22:08:09 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.656 2009/11/16 22:19:21 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -14662,7 +14662,7 @@ wgEncode 1
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14671,7 +14671,7 @@ wgEncode 1
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14680,7 +14680,7 @@ wgEncode 1
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14689,7 +14689,7 @@ wgEncode 1
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14698,7 +14698,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using BB1)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14707,7 +14707,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using blat34)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=2 labVersion=erange3.0.1/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14718,7 +14718,7 @@ wgEncode 1
     type wig 0.00 1497.62
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75.wig.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14729,7 +14729,7 @@ wgEncode 1
     type wig 0.00 1625.83
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=2 labVersion=erange3.0.1/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=236 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75.wig.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14738,7 +14738,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Tags Replicate 1 (PolyA+ RNA in K562 using bow098)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14747,7 +14747,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Tags Replicate 2 (PolyA+ RNA in K562 using bow098)
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14756,7 +14756,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using bow098)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14765,7 +14765,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in K562 using bow098)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14776,7 +14776,7 @@ wgEncode 1
     type wig 0.00 5020.76
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32.wig.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14786,7 +14786,7 @@ wgEncode 1
     type wig 0.00 2584.96
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32.wig.gz
 
     track wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
@@ -14795,7 +14795,7 @@ wgEncode 1
     subGroups view=zAligns cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
     itemRgb on
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
@@ -14804,7 +14804,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using BB1)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14813,7 +14813,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in K562 using blat34)
     subGroups view=Splices cellType=K562 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
@@ -14824,7 +14824,7 @@ wgEncode 1
     type wig 0.00 2716.04
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=K562 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=267 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75.wig.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14833,7 +14833,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Tags Replicate 1 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14842,7 +14842,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Tags Replicate 2 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Aligns replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14851,7 +14851,7 @@ wgEncode 1
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     itemRgb on
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=1 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14860,7 +14860,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 2 (PolyA+ RNA in GM12878 using bow098)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=bow098 readType=1x32 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=bow098 localization=cell view=Splices replicate=2 labVersion=erange3.0beta/bowtie0.981 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32 fileName=wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14870,7 +14870,7 @@ wgEncode 1
     type wig 0.00 1163.85
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=1 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32.wig.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32
     subTrack wgEncodeCaltechRnaSeq off
@@ -14880,7 +14880,7 @@ wgEncode 1
     type wig 0.00 841.06
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=1x32 mapAlgorithm=erng3b localization=cell view=RawSignal replicate=2 labVersion=erange3.0beta dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32 fileName=wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32.wig.gz
 
     track wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
@@ -14889,7 +14889,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Paired Tags Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=zAligns cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Paired replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
@@ -14898,7 +14898,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using BB1)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blowBlat readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=Splices replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75
     subTrack wgEncodeCaltechRnaSeq off
@@ -14907,7 +14907,7 @@ wgEncode 1
     longLabel ENCODE Caltech RNA-Seq Splice Sites Replicate 1 (PolyA+ RNA in GM12878 using blat34)
     subGroups view=Splices cellType=GM12878 localization=0-cell mapAlgorithm=blat34 readType=2x75 rnaExtract=longPolyA
     type bed 12
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=blat34 localization=cell view=Splices replicate=1 labVersion=erange3.0/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75 fileName=wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
 
     track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
     subTrack wgEncodeCaltechRnaSeq
@@ -14917,7 +14917,7 @@ wgEncode 1
     type wig 0.00 2446.53
     configurable on
     spanList first
-    metadata project=wgEncode grant=Myers lab=Caltech(Wold) dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75.wig.gz
+    metadata project=wgEncode grant=Myers lab=Caltech dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA readType=2x75 mapAlgorithm=BB1 localization=cell view=RawSignal replicate=1 labVersion=erange3.0/bowtie0.981/blat34 dataVersion="ENCODE Feb 2009 Freeze" subId=266 dateSubmitted=2009-03-06 dateUnrestricted=2009-12-06 composite=wgEncodeCaltechRnaSeq tableName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75 fileName=wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75.wig.gz
 
 
 # GIS RNA-seq (wrangler: braney)
