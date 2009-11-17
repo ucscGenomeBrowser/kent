@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.25 2009/11/10 07:53:58 kent Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.26 2009/11/17 06:37:58 angie Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -74,252 +74,177 @@ wigDebugPrint("wigFetch");
 
 #endif
 
-static void wigMaxLimitsCompositeOverride(struct trackDb *tdb,char *name,double *min, double *max,double *tDbMin, double *tDbMax)
+static void parseColonRange(char *setting, double *retMin, double *retMax)
+/* Parse setting's two colon-separated numbers into ret{Min,Max}, unless setting
+ * is NULL or empty or retMin/retMax is NULL.  errAbort if invalid format. */
+{
+if (isNotEmpty(setting))
+    {
+    char tmp[64]; // Intentionally small -- should be only 2 floating point #s + ':'
+    safecpy(tmp, sizeof(tmp), setting);
+    char *words[3];
+    if (chopByChar(tmp, ':', words, ArraySize(words)) == 2)
+        {
+	double low = sqlDouble(words[0]);
+        double high = sqlDouble(words[1]);
+        correctOrder(low, high);
+	if (retMin)
+	    *retMin = low;
+	if (retMax)
+	    *retMax = high;
+        }
+    else
+	errAbort("Can't parse colon range '%s'", setting);
+    }
+}
+
+static void viewLimitsCompositeOverride(struct trackDb *tdb, char *name,
+			  double *retMin, double *retMax, double *retAbsMin, double *retAbsMax)
 /* If aquiring min/max for composite level wig cfg, look for trackDb.ra "settingsByView" */
 {
 if(isNameAtCompositeLevel(tdb,name))
     {
     char *setting = trackDbSettingByView(tdb,VIEWLIMITSMAX);
-    if(setting != NULL)
-        {
-        char *word = strSwapChar(setting,':',' ');
-        if(tDbMin != NULL && word[0] != 0)
-            *tDbMin = sqlDouble(nextWord(&word));
-        if(tDbMax != NULL && word[0] != 0)
-            *tDbMax = sqlDouble(word);
-        if(tDbMin != NULL && tDbMax != NULL)
-            correctOrder(*tDbMin,*tDbMax);
-        freez(&setting);
-        }
+    parseColonRange(setting, retAbsMin, retAbsMax);
+    freez(&setting);
     setting = trackDbSettingByView(tdb,VIEWLIMITS);
-    if(setting != NULL)
-        {
-        char *word = strSwapChar(setting,':',' ');
-        assert(min != NULL && max != NULL);
-        *min = sqlDouble(nextWord(&word));
-        if(word[0] != 0)
-            *max = sqlDouble(word);
-        correctOrder(*min,*max);
-        freez(&setting);
-        }
+    parseColonRange(setting, retMin, retMax);
+    freez(&setting);
     }
 }
 
 /*****************************************************************************
  *	Min, Max Y viewing limits
- *	Absolute limits are defined on the trackDb type line
+ *	Absolute limits are defined on the trackDb type line for wiggle,
+ *	or MIN_LIMIT / MAX_LIMIT trackDb settings for bedGraph
  *	User requested limits are defined in the cart
  *	Default opening display limits are optionally defined with the
- *		defaultViewLimits declaration from trackDb
- *		or viewLimits from custom tracks
- *		(both identifiers work from either custom or trackDb)
- * [JK Comment - this is a horrible, horrible routine!  Should be maybe 10 lines, not 200, no?]
+ *		defaultViewLimits or viewLimits declaration from trackDb
  *****************************************************************************/
 void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
-    double *min, double *max, double *absMax, double *absMin, int wordCount, char **words)
+			     double *retMin, double *retMax, double *retAbsMin, double *retAbsMax,
+			     int wordCount, char **words)
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
-char *minY_str = NULL;  /*	string from cart	*/
-char *maxY_str = NULL;  /*	string from cart	*/
-double minY, maxY;	/* Current min/max for view. */
-double absMinY=0, absMaxY=0;	/* Absolute min/max allowed. */
-char * tdbDefault = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE"));
-double defaultViewMinY = 0.0;	/* optional default viewing window	*/
-double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
-char * viewLimits = (char *)NULL;
-char * settingsMin = (char *)NULL;
-char * settingsMax = (char *)NULL;
 boolean isBedGraph = (wordCount == 0 || sameString(words[0],"bedGraph"));
-
-/*	Allow the word "viewLimits" to be recognized too */
-if (sameWord("NONE",tdbDefault))
+// Determine absolute min and max.  Someday hgTrackDb will enforce inclusion of data
+// range settings, but until then, there is some circular logic where either one
+// can provide a default for the other if the other is missing.
+int absMax = 0.0, absMin = 0.0;
+boolean missingAbsMin = FALSE, missingAbsMax = FALSE;
+if (isBedGraph)
     {
-    freeMem(tdbDefault);
-    tdbDefault = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, "NONE"));
-    }
-
-/*	And check for either viewLimits in custom track settings */
-if ((tdb->settings != (char *)NULL) &&
-    (tdb->settingsHash != (struct hash *)NULL))
-    {
-    struct hashEl *hel;
-    if ((hel = hashLookup(tdb->settingsHash, VIEWLIMITS)) != NULL)
-	viewLimits = cloneString((char *)hel->val);
-    else if ((hel = hashLookup(tdb->settingsHash, DEFAULTVIEWLIMITS)) != NULL)
-	viewLimits = cloneString((char *)hel->val);
-    if(isBedGraph)
-        {
-        if ((hel = hashLookup(tdb->settingsHash, MIN_LIMIT)) != NULL)
-        settingsMin = cloneString((char *)hel->val);
-        if ((hel = hashLookup(tdb->settingsHash, MAX_LIMIT)) != NULL)
-        settingsMax = cloneString((char *)hel->val);
-        }
-    }
-
-/*	If no viewLimits from trackDb, if in settings, use them.  */
-if (sameWord("NONE",tdbDefault) && (viewLimits != (char *)NULL))
-    {
-    freeMem(tdbDefault);
-    tdbDefault = cloneString(viewLimits);
-    }
-
-/*	Assume last resort defaults, these should never be used
- *	The only case they would be used is if trackDb settings are not
- *	there or can not be parsed properly
- *	A trackDb wiggle track entry should read with three words:
- *	type wig min max
- *	where min and max are floating point numbers (integers OK)
- */
-if(isBedGraph)
-    {
-    *min = minY = DEFAULT_MIN_BED_GRAPH;
-    *max = maxY = DEFAULT_MAX_BED_GRAPH;
+    char *tdbMin = trackDbSettingClosestToHomeOrDefault(tdb, MIN_LIMIT, NULL);
+    char *tdbMax = trackDbSettingClosestToHomeOrDefault(tdb, MAX_LIMIT, NULL);
+    if (tdbMin == NULL)
+	missingAbsMin = TRUE;
+    else
+	absMin = sqlDouble(tdbMin);
+    if (tdbMax == NULL)
+	missingAbsMax = TRUE;
+    else
+	absMax = sqlDouble(tdbMax);
     }
 else
     {
-    *min = minY = DEFAULT_MIN_Yv;
-    *max = maxY = DEFAULT_MAX_Yv;
-    }
-
-/*	Check to see if custom track viewLimits will override the
- *	track type wig limits.  When viewLimits are greater than the
- *	type wig limits, use the viewLimits.  This is necessary because
- *	the custom track type wig limits are exactly at the limits of
- *	the data input and thus it is better if viewLimits are set
- *	outside the limits of the data so it will look better in the
- *	graph.
- */
-if (viewLimits)
-    {
-    char *words[2];
-    char *sep = ":";
-    int wordCount = chopString(viewLimits,sep,words,ArraySize(words));
-    double viewMin;
-    double viewMax;
-    if (wordCount == 2)
-        {
-        viewMin = atof(words[0]);
-        viewMax = atof(words[1]);
-        /*	make sure they are in order	*/
-        correctOrder(viewMin,viewMax);
-
-        /*	and they had better be different	*/
-        if (! ((viewMax - viewMin) > 0.0))
-            {
-            viewMax = viewMin = 0.0;	/* failed the test */
-            }
-        else
-            {
-            minY = viewMin;
-            maxY = viewMax;
-            }
-        }
-    }
-
-*min = minY;
-*max = maxY;
-
-/*	See if a default viewing window is specified in the trackDb.ra file
- *	Yes, it is true, this parsing is paranoid and verifies that the
- *	input values are valid in order to be used.  If they are no
- *	good, they are as good as not there and the result is a pair of
- *	zeros and they are not used.
- */
-if (differentWord("NONE",tdbDefault))
-    {
-    char *words[2];
-    char *sep = ":";
-    int wordCount = chopString(tdbDefault,sep,words,ArraySize(words));
-    if (wordCount == 2)
-        {
-        defaultViewMinY = atof(words[0]);
-        defaultViewMaxY = atof(words[1]);
-        /*	make sure they are in order	*/
-        correctOrder(defaultViewMinY,defaultViewMaxY);
-
-        /*	and they had better be different	*/
-        if (! ((defaultViewMaxY - defaultViewMinY) > 0.0))
-            {
-            defaultViewMaxY = defaultViewMinY = 0.0;	/* failed the test */
-            }
-        else
-            {
-            *min = defaultViewMinY;
-            *max = defaultViewMaxY;
-            }
-        }
-    }
-
-/* Calculate absolute min/max */
-if(isBedGraph)
-    {
-    char * tdbMin = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, MIN_LIMIT, "NONE"));
-    char * tdbMax = cloneString(trackDbSettingClosestToHomeOrDefault(tdb, MAX_LIMIT, "NONE"));
-    if (sameWord("NONE",tdbMin))
-        {
-        if (settingsMin != (char *)NULL)
-            absMinY = sqlDouble(settingsMin);
-        }
+    // Wiggle: get min and max from type setting, which has been chopped into words and wordCount:
+    // type wig <min> <max>
+    if (wordCount >= 3)
+	absMax = atof(words[2]);
     else
-        absMinY = sqlDouble(tdbMin);
+	{
+	missingAbsMax = TRUE;
+	if (wordCount == 2)
+	    absMin = atof(words[1]);
+	else
+	    missingAbsMin = TRUE;
+	}
+    }
+correctOrder(absMin, absMax);
 
-    if (sameWord("NONE",tdbMax))
-        {
-        if (settingsMax != (char *)NULL)
-            absMaxY = sqlDouble(settingsMax);
-        }
+// Determine current minY,maxY.
+// Precedence:  1. cart;  2. defaultViewLimits;  3. viewLimits;
+//              4. absolute [which may need to default to #2 or #3!]
+boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
+char *cartMinStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MIN_Y);
+char *cartMaxStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MAX_Y);
+double cartMin = 0.0, cartMax = 0.0;
+if (cartMinStr && cartMaxStr)
+    {
+    *retMin = atof(cartMinStr);
+    *retMax = atof(cartMaxStr);
+    correctOrder(*retMin, *retMax);
+    // If it weren't for the expansion of absM* to viewLimits bounds,
+    // and the allowance for missing data range values, 
+    // we could set retAbs* and be done here.
+    cartMin = *retMin;
+    cartMax = *retMax;
+    }
+
+// Get trackDb defaults, and resolve missing wiggle data range if necessary.
+char *defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, NULL);
+char *viewLimits = trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, NULL);
+if (defaultViewLimits == NULL)
+    defaultViewLimits = viewLimits;
+if (defaultViewLimits != NULL)
+    {
+    double viewLimitMin = 0.0, viewLimitMax = 0.0;
+    parseColonRange(defaultViewLimits, &viewLimitMin, &viewLimitMax);
+    *retMin = viewLimitMin;
+    *retMax = viewLimitMax;
+    if (missingAbsMax)
+	absMax = viewLimitMax;
+    if (missingAbsMin)
+	absMin = viewLimitMin;
+    // If viewLimits (not defaultViewLimits) extends beyond data value range, 
+    // tweak absMin and absMax to show the union:
+    if (viewLimits != NULL)
+	{
+	parseColonRange(viewLimits, &viewLimitMin, &viewLimitMax);
+	absMin = min(absMin, viewLimitMin);
+	absMax = max(absMax, viewLimitMax);
+	}
+    }
+else if (missingAbsMin || missingAbsMax)
+    {
+    // I would like to make this an errAbort, but too many tracks are afflicted
+    // to do that until hgTrackDb helps to enforce:
+    warn("trackDb %s, and no default view limits are specified for track %s",
+	     (isBedGraph ? MIN_LIMIT " and/or " MAX_LIMIT " is not specified" :
+			   "'type wig' line is missing min and/or max data value"),
+	     tdb->tableName);
+    // When that becomes an errAbort, remove these defines from wiggle.h:
+    if (isBedGraph)
+	{
+	absMin = DEFAULT_MIN_BED_GRAPH;
+	absMax = DEFAULT_MAX_BED_GRAPH;
+	}
     else
-        absMaxY = sqlDouble(tdbMax);
-    freeMem(tdbMax);
-    freeMem(tdbMin);
-    freeMem(settingsMax);
-    freeMem(settingsMin);
+	{
+	absMin = DEFAULT_MIN_Yv;
+	absMax = DEFAULT_MAX_Yv;
+	}
+    *retMin = absMin;
+    *retMax = absMax;
     }
 else
     {
-    /*	Let's see what trackDb has to say about these things,
-    *	these words come from the trackDb.ra type wig line:
-    *	type wig <min> <max>
-    */
-    double diff = abs(maxY - minY);
-    absMinY = minY - diff*0.10;
-    absMaxY = maxY + diff*0.10;
-    switch (wordCount)
-        {
-        case 3:
-            absMaxY = atof(words[2]);
-	    // Fall through
-        case 2:
-            absMinY = atof(words[1]);
-            break;
-        default:
-            break;
-        }
+    *retMin = absMin;
+    *retMax = absMax;
     }
-correctOrder(absMinY,absMaxY);
-/*	return absolut min/max if OK to do that	*/
-if (absMin)
-    *absMin = absMinY;
-if (absMax)
-    *absMax = absMaxY;
 
-
-// One more step: If we are loading settings for a composite view, then look for overrides
-wigMaxLimitsCompositeOverride(tdb,name,min,max,absMin,absMax);
-
-/*	And finally, let's see if values are available in the cart */
-minY_str = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MIN_Y);
-maxY_str = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MAX_Y);
-
-if (minY_str && maxY_str)	/*	if specified in the cart */
+if (retAbsMin)
+    *retAbsMin = absMin;
+if (retAbsMax)
+    *retAbsMax = absMax;
+// After the dust settles from tdb's trackDb settings, now see if composite view 
+// settings from tdb's parents override that stuff anyway:
+viewLimitsCompositeOverride(tdb, name, retMin, retMax, retAbsMin, retAbsMax);
+// And as the final word after composite override, reset retMin and retMax if from cart:
+if (cartMinStr && cartMaxStr)
     {
-    *min = max( minY, atof(minY_str));
-    *max = min( maxY, atof(maxY_str));
-    correctOrder(*min,*max);
+    *retMin = max(absMin, cartMin);
+    *retMax = min(absMax, cartMax);
     }
-
-freeMem(tdbDefault);
-freeMem(viewLimits);
 }	/*	void wigFetchMinMaxYWithCart()	*/
 
 /*	Min, Max, Default Pixel height of track
