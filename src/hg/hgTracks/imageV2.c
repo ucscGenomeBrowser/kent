@@ -7,7 +7,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.13 2009/11/13 00:17:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: imageV2.c,v 1.14 2009/11/17 21:12:56 tdreszer Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -1194,7 +1194,7 @@ if(imgBox->showPortal)
     }
 #endif//def IMAGEv2_DRAG_SCROLL
 
-hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'","#AA0000"); //"white");// RED to help find bugs
+hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'","white");//"#AA0000"); // RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
 #ifdef IMAGEv2_DRAG_REORDER
 hPrintf(" class='tableWithDragAndDrop'");
