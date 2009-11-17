@@ -196,7 +196,7 @@ susScr1.refseq.mrna.native.load = no
     make etc-update
 
 ##########################################################################
-# HUMAN (hg18) PROTEINS TRACK (Working...
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2009-11-17)
     # bash  if not using bash shell already
 
     cd /cluster/data/susScr1
@@ -326,13 +326,15 @@ chainOne $(path1)
     para create chainSpec
     para try, check, push, check etc.
 
-# Completed: 64 of 64 jobs
-# CPU time in finished jobs:      29478s     491.30m     8.19h    0.34d  0.001 y
-# IO & Wait Time:                 19822s     330.37m     5.51h    0.23d  0.001 y
-# Average job time:                 770s      12.84m     0.21h    0.01d
-# Longest finished job:            2868s      47.80m     0.80h    0.03d
-# Submission to last job:          2882s      48.03m     0.80h    0.03d
+# Completed: 69 of 69 jobs
+# CPU time in finished jobs:    1275820s   21263.66m   354.39h   14.77d  0.040 y
+# IO & Wait Time:                106286s    1771.44m    29.52h    1.23d  0.003 y
+# Average job time:               20031s     333.84m     5.56h    0.23d
+# Longest finished job:           69022s    1150.37m    19.17h    0.80d
+# Submission to last job:         69037s    1150.62m    19.18h    0.80d
 
+
+    ssh hgwdev
     cd /cluster/data/susScr1/bed/tblastn.hg18KG/blastOut
     for i in kg??
     do
@@ -344,7 +346,7 @@ chainOne $(path1)
     sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
     cd ..
     pslCheck blastHg18KG.psl
-# checked: 43305 failed: 0 errors: 0
+# checked: 77865 failed: 0 errors: 0
 
     # load table 
     ssh hgwdev
@@ -353,9 +355,9 @@ chainOne $(path1)
 
     # check coverage
     featureBits susScr1 blastHg18KG 
-# 42480830 bases of 3118565340 (1.362%) in intersection
+# 32676867 bases of 2231332019 (1.464%) in intersection
 
-    featureBits susScr1 blastHg18KG xenoRefGene  -enrichment
+  #  featureBits susScr1 blastHg18KG xenoRefGene  -enrichment
 # blastHg18KG 1.362%, xenoRefGene 1.615%, both 0.695%, cover 51.03%, enrich 31.60x
     rm -rf blastOut
 #end tblastn
