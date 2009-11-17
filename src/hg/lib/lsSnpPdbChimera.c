@@ -87,8 +87,6 @@ if (sqlTableExists(conn, "lsSnpPdb"))
                            "SELECT * FROM lsSnpPdb WHERE %s", where);
 for (pdbSnp = pdbSnps; pdbSnp != NULL; pdbSnp = pdbSnp->next)
     prSnp(xfh, pdbSnp, primarySnpId);
-if (pdbSnps == NULL)
-    fprintf(xfh, ",");  // no table or none selected
 lsSnpPdbFreeList(&pdbSnps);
 
 fprintf(xfh, "))\n");
