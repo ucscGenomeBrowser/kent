@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.14 2009/11/03 00:26:33 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.15 2009/11/17 18:03:55 angie Exp $";
 
 struct bamTrackData
     {
@@ -462,6 +462,8 @@ if (!indelShowDoubleInsert)
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int s = sf->start,  e = sf->end;
+    if (e <= s || e < winStart || s > winEnd)
+	continue;
     if (baseQualMode)
 	color = tg->colorShades[sf->grayIx];
     baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
