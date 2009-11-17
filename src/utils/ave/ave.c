@@ -3,12 +3,16 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "sqlNum.h"
+#include "hmmstats.h"
 #include <float.h>
 
-static char const rcsid[] = "$Id: ave.c,v 1.8 2007/03/31 19:38:16 markd Exp $";
+static char const rcsid[] = "$Id: ave.c,v 1.9 2009/11/17 23:39:26 hiram Exp $";
 
-int col = 1;
-bool tableOut = FALSE;
+static int col = 1;
+static bool tableOut = FALSE;
+static bool noQuartiles = FALSE;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +24,8 @@ errAbort(
   "options:\n"
   "   -col=N Which column to use.  Default 1\n"
   "   -tableOut - output by columns (default output in rows)\n"
+  "   -noQuartiles - only calculate min,max,mean,standard deviation\n"
+  "                - for large data sets that will not fit in memory."
   );
 }
 
@@ -102,10 +108,56 @@ else
     }
 }
 
+void aveNoQuartiles(char *fileName)
+/* aveNoQuartiles - Compute only min,max,mean,stdDev no quartiles */
+{
+bits64 count = 0;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[128], *word;
+int wordCount;
+int wordIx = col-1;
+double sumData = 0.0, sumSquares = 0.0;
+double minVal = DBL_MAX, maxVal = -DBL_MAX;
+
+while ((wordCount = lineFileChop(lf, words)) > 0)
+    {
+    word = words[wordIx];
+    if (word[0] == '-' || isdigit(word[0]))
+        {
+	double val = sqlDouble(word);
+	if (minVal > val) minVal = val;
+	if (maxVal < val) maxVal = val;
+	sumData += val;
+	sumSquares += val * val;
+	++count;
+	}
+    }
+if (count == 0)
+    errAbort("No numerical data column %d of %s", col, fileName);
+double average = sumData/count;
+double stdDev = calcStdFromSums(sumData, sumSquares, count);
+if (tableOut)
+    {
+    printf("# min max mean N sum stddev\n");
+    printf("%g %g %g %llu %g %g\n",
+	minVal, maxVal, average, count, sumData, stdDev);
+    }
+else
+    {
+    printf("average %f\n", average);
+    printf("min %f\n", minVal);
+    printf("max %f\n", maxVal);
+    printf("count %llu\n", count);
+    printf("total %f\n", sumData);
+    printf("standard deviation %f\n", stdDev);
+    }
+}
+
 void ave(char *fileName)
 /* ave - Compute average and basic stats. */
 {
-int count = 0, alloc = 1024;
+int count = 0;
+size_t alloc = 1024;
 double *array;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[128], *word;
@@ -140,6 +192,11 @@ if (argc != 2)
     usage();
 col = optionInt("col", col);
 tableOut = optionExists("tableOut");
-ave(argv[1]);
+noQuartiles = optionExists("noQuartiles");
+if (noQuartiles)
+    aveNoQuartiles(argv[1]);
+else
+    ave(argv[1]);
+
 return 0;
 }
