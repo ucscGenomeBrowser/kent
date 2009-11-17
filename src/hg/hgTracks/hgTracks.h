@@ -654,6 +654,12 @@ void linkedFeaturesAverageDense(struct track *tg,
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw dense linked features items. */
 
+void linkedFeaturesAverageDenseOrientEst(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis);
+/* Draw dense linked features items. */
+
 void linkedFeaturesMethods(struct track *tg);
 /* Fill in track group methods for linked features.
  * Many other methods routines will call this first

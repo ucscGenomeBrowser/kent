@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.111 2009/11/11 20:41:29 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.112 2009/11/17 20:17:57 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3015,7 +3015,7 @@ void genericDrawItems(struct track *tg,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense)
+if (vis != tvDense && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 if (vis == tvPack || vis == tvSquish)
     genericDrawItemsPackSquish(tg, seqStart, seqEnd, hvg, xOff, yOff, width,

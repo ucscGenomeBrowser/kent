@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.103 2009/07/06 23:59:37 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.104 2009/11/17 20:17:57 angie Exp $";
 
 Color lighterShade(struct hvGfx *hvg, Color color, double percentLess);
 /* Find a color which is a percentless 'lighter' shade of color */
@@ -160,19 +160,34 @@ static struct dnaSeq *cachedGenoDna = NULL;
 static int cachedGenoStart = 0;
 static int cachedGenoEnd = 0;
 
-static void getLinkedFeaturesSpan(struct linkedFeatures *lfList, int *retStart, int *retEnd)
+static void getLinkedFeaturesSpan(struct linkedFeatures *lfList, int *retStart, int *retEnd,
+				  boolean isSeries)
 /* Find the overall lowest and highest coords in lfList.  If any items hang off the
  * edge of the window, we will end up with coords <winStart and/or >winEnd which is
  * what we want. */
 {
 int start = winStart, end = winEnd;
-struct linkedFeatures *lf;
-for (lf = lfList;  lf != NULL;  lf = lf->next)
+if (isSeries)
     {
-    if (lf->start < start)
-	start = lf->start;
-    if (lf->end > end)
-	end = lf->end;
+    struct linkedFeaturesSeries *lfs, *lfsList = (struct linkedFeaturesSeries *)lfList;
+    for (lfs = lfsList;  lfs != NULL;  lfs = lfs->next)
+	{
+	if (lfs->start < start)
+	    start = lfs->start;
+	if (lfs->end > end)
+	    end = lfs->end;
+	}
+    }
+else
+    {
+    struct linkedFeatures *lf;
+    for (lf = lfList;  lf != NULL;  lf = lf->next)
+	{
+	if (lf->start < start)
+	    start = lf->start;
+	if (lf->end > end)
+	    end = lf->end;
+	}
     }
 if (retStart)
     *retStart = start;
@@ -1340,17 +1355,15 @@ if(mrnaS >= 0)
     else if (drawOpt == baseColorDrawDiffBases)
 	{
 	char *diffStr = NULL;
-	struct dnaSeq *genoSeq = hDnaFromSeq(database, chromName, s, e, dnaUpper);
+	char *genoDna = getCachedDna(s, e);
 	diffStr = needMem(sizeof(char) * (e - s + 1));
-	maskDiffString(diffStr, dyMrnaSeq->string, (char *)genoSeq->dna,
-		       ' ');
+	maskDiffString(diffStr, dyMrnaSeq->string, genoDna, ' ');
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
 				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
 	freeMem(diffStr);
-	dnaSeqFree(&genoSeq);
 	}
     else if (drawOpt == baseColorDrawDiffCodons)
 	{
@@ -1656,12 +1669,21 @@ if (indelShowQInsert)
 void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
 /* Set up base coloring state (e.g. cache genomic sequence) for tg.
  * This must be called by tg->drawItems if baseColorDrawSetup is used 
- * in tg->drawItemAt.  Assumes tg->items is linkedFeatures. */
+ * in tg->drawItemAt.  Uses tg->drawItems method to determine whether
+ * tg is linkedFeatures or linkedFeaturesSeries (currently the only
+ * two supported track types -- bed, psl etc. are subclasses of these). */
 {
 if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
     {
     int overallStart, overallEnd;
-    getLinkedFeaturesSpan((struct linkedFeatures *)tg->items, &overallStart, &overallEnd);
+    boolean isSeries = FALSE;
+    if (tg->drawItems == linkedFeaturesSeriesDraw)
+	isSeries = TRUE;
+    else if (!baseColorCanDraw(tg))
+	errAbort("baseColorInitTrack: track %s has a type not recognized by baseColorCanDraw.",
+		 tg->mapName);
+    getLinkedFeaturesSpan((struct linkedFeatures *)tg->items, &overallStart, &overallEnd,
+			  isSeries);
     if (overallStart < cachedGenoStart || overallEnd > cachedGenoEnd)
 	{
 	// leak mem to save time (don't bother freeing old cached dna)
@@ -1684,7 +1706,8 @@ static void checkTrackInited(struct track *tg, char *what)
 /* Die if baseColorInitTrack has not been called (most recently) for this track. */
 {
 if (initedTrack == NULL || differentString(tg->mapName, initedTrack))
-    errAbort("Error: Track %s should have been baseColorInitTrack'd before %s.",
+    errAbort("Error: Track %s should have been baseColorInitTrack'd before %s.  "
+	     "(tg->drawItems may be unrecognized by baseColorCanDraw)",
 	     tg->mapName, what);
 }
 

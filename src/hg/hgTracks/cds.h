@@ -107,10 +107,23 @@ struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf,
  * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 
 
+INLINE boolean baseColorCanDraw(struct track *tg)
+/* baseColor uses tg->drawItems as a proxy for type of tg->items, which must be 
+ * linkedFeatures or linkedFeaturesSeries.  Return TRUE if tg->drawItems
+ * implies that tg->items is linkedFeatures or linkedFeaturesSeries, and from
+ * a subtype supported by the baseColor code. */
+{
+return (tg->drawItems == linkedFeaturesDraw || tg->drawItems == linkedFeaturesAverageDense ||
+	tg->drawItems == linkedFeaturesAverageDenseOrientEst ||
+	tg->drawItems == linkedFeaturesSeriesDraw);
+
+}
+
 void baseColorInitTrack(struct hvGfx *hvg, struct track *tg);
 /* Set up base coloring state (e.g. cache genomic sequence) for tg.
  * This must be called by tg->drawItems if baseColorDrawSetup is used 
- * in tg->drawItemAt.  Assumes tg->items is linkedFeatures. */
+ * in tg->drawItemAt, but note that this should be called only if
+ * baseColorCanDraw(tg) (above). */
 
 enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
