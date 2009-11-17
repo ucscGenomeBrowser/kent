@@ -1,3 +1,17 @@
+#include microarrayGroups.private.ra
+
+name albertsonCGHGroups
+type groupings
+all albertsonCGH_All
+
+name albertsonCGH_All
+type all
+description EGAN Export
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names GainLoss.dysplasia,X0149,X5653,X5681,X5707,X5724,X5749,X5769,X5779,X5806,X5807,X5809,X5823,X5824,X5905,X5914,X5922,X5952,X6044,X6162,X6201,X6367,X6390,X6402,X6418,X6419,X6427,X6463,X6464,X6475,X6486,X6686,X6689,X6690,X6695,X6756,X6889,X7453,X7618,X7646,X7678,X7694,X8292,X8417,X8444,
+
+
 ####### Ovarian Studies ###############
 name etemadmoghadam2009_expGroups
 type groupings
