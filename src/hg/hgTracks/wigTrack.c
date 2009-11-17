@@ -17,7 +17,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.95 2009/11/17 20:47:50 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.96 2009/11/17 22:41:59 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -793,8 +793,9 @@ void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
 int x1;
 int h = tg->lineHeight;	/*	the height of our drawing window */
 double scaleFactor = h/graphRange;
-Color mediumColor = shadesOfGray[grayInRange(30, 0, 100)];
-Color lightColor = shadesOfGray[grayInRange(15, 0, 100)];
+Color oldDrawColor = colorArray[0] + 1;	/* Just to be different from 1st drawColor. */
+Color mediumColor = MG_BLACK;	// Will be overriden
+Color lightColor = MG_BLACK;	// Will be overriden
 Color clipColor = MG_MAGENTA;
 enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowWhiskers);
@@ -807,9 +808,16 @@ boolean whiskers = (wigCart->windowingFunction == wiggleWindowWhiskers);
  */
 for (x1 = 0; x1 < width; ++x1)
     {
-    Color drawColor = colorArray[x1];
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
+
+    Color drawColor = colorArray[x1];
+    if (drawColor != oldDrawColor)
+        {
+	mediumColor = lighterColor(hvg, drawColor);
+	lightColor = lighterColor(hvg, mediumColor);
+	oldDrawColor = drawColor;
+        }
 
     /*	count is non-zero meaning valid data exists here	*/
     if (p->count)
@@ -857,8 +865,6 @@ for (x1 = 0; x1 < width; ++x1)
 			int boxHeight = scaledVal - zeroPos;
 			if (boxHeight < 1) boxHeight = 1;
 			hvGfxBox(hvg, x1+xOff, zeroPos, 1, boxHeight, drawColor);
-#ifdef SOON
-#endif /* SOON */
 			}
 		    else
 		        {
