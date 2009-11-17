@@ -10,20 +10,19 @@ hgsqldump --all -d -c -h genome-centdb hgcentral \
 sessionDb userDb | sed -e "s/genome-centdb/localhost/" > \
 /tmp/hgcentraltemp.sql
 
-hgsqldump --all -c -h genome-centdb hgcentral \
+# --skip-extended-insert 
+#   to make it dump rows as separate insert statements
+hgsqldump --all --skip-extended-insert -c -h genome-centdb hgcentral \
 defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb | \
 sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
 
 
-# TODO --skip-extended-insert 
-#   is supposed to make it dump rows as separate insert statements
-#
 # get rid of some mysql5 trash in the output we don't want.
 # also need to break data values at rows so the diff and cvs 
 # which are line-oriented work better.
 grep -v "Dump completed on" /tmp/hgcentraltemp.sql | \
-sed -e "s/AUTO_INCREMENT=[0-9]* //" \
- | sed -e 's/),(/),\n(/g'  > /tmp/hgcentral.sql
+sed -e "s/AUTO_INCREMENT=[0-9]* //" > \
+/tmp/hgcentral.sql
 
 echo
 echo "*** Diffing old new ***"
