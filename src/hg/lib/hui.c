@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.248 2009/11/12 20:34:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.249 2009/11/17 20:47:49 kent Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1256,9 +1256,10 @@ cgiMakeDropList(var, chainColorOptions, ArraySize(chainColorOptions), curVal);
 /****** Options for the wiggle track Windowing *******/
 
 static char *wiggleWindowingOptions[] = {
+    "mean+whiskers",
     "maximum",
     "mean",
-    "minimum"
+    "minimum",
     };
 
 enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string)
@@ -1374,7 +1375,7 @@ cgiMakeDropList(var, wiggleScaleOptions, ArraySize(wiggleScaleOptions),
 
 static char *wiggleGraphOptions[] = {
     "points",
-    "bar"
+    "bar",
     };
 
 enum wiggleGraphOptEnum wiggleGraphStringToEnum(char *string)

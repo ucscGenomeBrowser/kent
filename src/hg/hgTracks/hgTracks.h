@@ -506,6 +506,9 @@ Color grayIndex();
 Color lightGrayIndex();
 /* Return index of light gray. */
 
+Color veryLightGrayIndex();
+/* Return index of very light gray. */
+
 int grayInRange(int val, int minVal, int maxVal);
 /* Return gray shade corresponding to a number from minVal - maxVal */
 

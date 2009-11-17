@@ -10,13 +10,14 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "wiggle.h"
+#include "hmmstats.h"
 #include "scoredRef.h"
 #ifndef GBROWSE
 #include "customTrack.h"
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.94 2009/11/06 22:27:12 braney Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.95 2009/11/17 20:47:50 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -587,6 +588,7 @@ for (i = 0; i < preDrawSize; ++i)
 		    dataValue = preDraw[i].max;
 		break;
 	case (wiggleWindowingMean):
+	case (wiggleWindowWhiskers):
 		dataValue =
 		    preDraw[i].sumData / preDraw[i].count;
 		break;
@@ -731,10 +733,12 @@ graphRange = *graphUpperLimit - *graphLowerLimit;
 return(graphRange);
 }
 
-Color * allocColorArray(struct preDrawElement *preDraw, int width,
-    int preDrawZero, char *colorTrack, struct track *tg, struct hvGfx *hvg)
+static Color * makeColorArray(struct preDrawElement *preDraw, int width,
+    int preDrawZero, struct wigCartOptions *wigCart, struct track *tg, struct hvGfx *hvg)
 /*	allocate and fill in a coloring array based on another track */
 {
+char *colorTrack = wigCart->colorTrack;
+boolean whiskers = (wigCart->windowingFunction == wiggleWindowWhiskers);
 int x1;
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 
@@ -752,10 +756,17 @@ for(x1 = 0; x1 < width; ++x1)
 
 	dataValue = preDraw[preDrawIndex].smooth;
 	/*	negative data is the alternate color	*/
-	if (dataValue < 0.0)
-	    colorArray[x1] = tg->ixAltColor;
-	else
+	if (whiskers)
+	    {
 	    colorArray[x1] = tg->ixColor;
+	    }
+	else
+	    {
+	    if (dataValue < 0.0)
+		colorArray[x1] = tg->ixAltColor;
+	    else
+		colorArray[x1] = tg->ixColor;
+	    }
 	}
     }
 
@@ -770,16 +781,25 @@ if(colorTrack != NULL)
 return colorArray;
 }
 
+double uglyFoo;
+
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
-    enum wiggleGraphOptEnum lineBar)
+    struct wigCartOptions *wigCart)
 /*	graph the preDraw array */
 {
 int x1;
-int lastRealX = -1;
-int lastRealY = -1;
+int h = tg->lineHeight;	/*	the height of our drawing window */
+double scaleFactor = h/graphRange;
+Color mediumColor = shadesOfGray[grayInRange(30, 0, 100)];
+Color lightColor = shadesOfGray[grayInRange(15, 0, 100)];
+Color clipColor = MG_MAGENTA;
+enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
+boolean whiskers = (wigCart->windowingFunction == wiggleWindowWhiskers);
+
+/* Return gray shade corresponding to a number from 50 - 100 */
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
@@ -787,19 +807,17 @@ int lastRealY = -1;
  */
 for (x1 = 0; x1 < width; ++x1)
     {
-    Color drawColor = hvGfxFindColorIx(hvg, 0, 0, 0);
+    Color drawColor = colorArray[x1];
     int preDrawIndex = x1 + preDrawZero;
+    struct preDrawElement *p = &preDraw[preDrawIndex];
 
     /*	count is non-zero meaning valid data exists here	*/
-    if (preDraw[preDrawIndex].count)
+    if (p->count)
 	{
-	int h = tg->lineHeight;	/*	the height of our drawing window */
-	int boxHeight;		/*	the size of our box to draw	*/
-	int boxTop;		/*	box top starts here	*/
-	int y1;			/*	y coordinate of data point */
-	int y0;			/*	y coordinate of data = 0.0 */
-	int yPointGraph;	/*	y coordinate of data for point style */
-	double dataValue;	/*	the data value in data space	*/
+	/*	data value has been picked by previous scanning.
+	 *	Could be smoothed, maybe not.
+	 */
+	double dataValue = p->smooth;
 
 	/*	The graphing coordinate conversion situation is:
 	 *	graph coordinate y = 0 is graphUpperLimit data space
@@ -817,70 +835,98 @@ for (x1 = 0; x1 < width; ++x1)
 	 *	clipping will be taken care of by the vgBox() function.
 	 */
 
-	/*	data value has been picked by previous scanning.
-	 *	Could be smoothed, maybe not.
-	 */
-	dataValue = preDraw[preDrawIndex].smooth;
-
-	y1 = h * ((graphUpperLimit - dataValue)/graphRange);
-	yPointGraph = yOff + y1 - 1;
-	y0 = h * ((graphUpperLimit)/graphRange);
-	boxHeight = abs(y1 - y0);
-	boxTop = min(y1,y0);
-	/*	special case where dataValue is on the zero line, it
- 	 *	needs to have a boxHeight of 1, otherwise it disappears into
- 	 *	zero nothingness
-	 */
-	if (fabs(dataValue) < epsilon)
-	    {
-	    boxHeight = 1;
-	    }
-	/*	Last pixel (bottom) is a special case of a closed interval */
-	if ((boxTop == h) && (boxHeight == 0))
-	    {
-	    boxTop = h - 1;
-	    boxHeight = 1;
-	    }
-	/*	Special case data value on upper limit line	*/
-	if ((boxTop+boxHeight) == 0)
-	    boxHeight += 1;
-	/*	Special case data value is below the lower view limit,
- 	 *	should still show a 1 pixel wide line at the bottom */
-	if ((graphLowerLimit >= 0.0) && (dataValue < graphLowerLimit))
-	    {
-	    boxTop = h - 1;
-	    boxHeight = 1;
-	    }
-	/*	Special case data value is above the upper view limit,
- 	 *	should still show a 1 pixel wide line at the top */
-	if ((graphUpperLimit <= 0.0) && (dataValue > graphUpperLimit))
-	    {
-	    boxTop = 0;
-	    boxHeight = 1;
-	    }
-
-
-	drawColor = colorArray[x1];
-/* 	/\*	negative data is the alternate color	*\/ */
-/* 	if (dataValue < 0.0) */
-/* 	    drawColor = tg->ixAltColor; */
-/* 	else */
-/* 	    drawColor = tg->ixColor; */
-
-	/*	vgBox will take care of clipping.  No need to worry
-	 *	about coordinates or height of line to draw.
-	 *	We are actually drawing single pixel wide lines here.
-	 */
 	if (vis == tvFull || vis == tvPack)
 	    {
+#define scaleHeightToPixels(val) (scaleFactor * (graphUpperLimit - (val)) + yOff)
 	    if (lineBar == wiggleGraphBar)
 		{
-		hvGfxBox(hvg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
+		if (whiskers)
+		    {
+		    int zeroPos = scaleHeightToPixels(0);
+		    int scaledVal = scaleHeightToPixels(dataValue);
+		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
+		    if (dataValue < 0)
+		        {
+			int scaledMin = scaleHeightToPixels(p->min);
+			hvGfxBox(hvg, x1+xOff, zeroPos, 1, scaledMin-zeroPos, lightColor);
+			if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
+			    {
+			    int scaledMinus = scaleHeightToPixels(dataValue-std);
+			    hvGfxBox(hvg, x1+xOff, zeroPos, 1, scaledMinus-zeroPos, mediumColor);
+			    }
+			int boxHeight = scaledVal - zeroPos;
+			if (boxHeight < 1) boxHeight = 1;
+			hvGfxBox(hvg, x1+xOff, zeroPos, 1, boxHeight, drawColor);
+#ifdef SOON
+#endif /* SOON */
+			}
+		    else
+		        {
+			int scaledMax = scaleHeightToPixels(p->max);
+			hvGfxBox(hvg, x1+xOff, scaledMax, 1, zeroPos-scaledMax, lightColor);
+			if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
+			    {
+			    int scaledPlus = scaleHeightToPixels(dataValue+std);
+			    hvGfxBox(hvg, x1+xOff, scaledPlus, 1, zeroPos-scaledPlus, mediumColor);
+			    }
+			int boxHeight = zeroPos - scaledVal;
+			if (boxHeight < 1) boxHeight = 1;
+			hvGfxBox(hvg, x1+xOff, scaledVal, 1, boxHeight, drawColor);
+			}
+		    }
+		else
+		    {
+		    int y0 = graphUpperLimit * scaleFactor;
+		    int y1 = (graphUpperLimit - dataValue)*scaleFactor;
+
+		    int boxHeight = abs(y1 - y0);
+		    int boxTop = min(y1,y0);
+		    /*	special case where dataValue is on the zero line, it
+		     *	needs to have a boxHeight of 1, otherwise it disappears into
+		     *	zero nothingness
+		     */
+		    if (boxHeight < 1)
+			boxHeight = 1;
+
+		    /*	Last pixel (bottom) is a special case of a closed interval */
+		    if ((boxTop == h) && (boxHeight == 1))
+			{
+			boxTop = h - 1;
+			boxHeight = 1;
+			}
+
+		    hvGfxBox(hvg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
+		    }
 		}
 	    else
 		{	/*	draw a 3 pixel height box	*/
-		hvGfxBox(hvg, x1+xOff, yPointGraph, 1, 3, drawColor);
+		if (whiskers)
+		    {
+		    int scaledMin = scaleHeightToPixels(p->min);
+		    int scaledMax = scaleHeightToPixels(p->max);
+		    hvGfxBox(hvg, x1+xOff, scaledMax, 1, scaledMin - scaledMax, lightColor);
+		    int scaledMean = scaleHeightToPixels(dataValue);
+		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
+		    if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
+			{
+			int scaledMeanPlus = scaleHeightToPixels(dataValue+std);
+			int scaledMeanMinus = scaleHeightToPixels(dataValue-std);
+			hvGfxBox(hvg, x1+xOff, scaledMeanPlus, 1, 
+				scaledMeanMinus - scaledMeanPlus, mediumColor);
+			}
+		    hvGfxBox(hvg, x1+xOff, scaledMean, 1, 1, drawColor);
+		    }
+		else
+		    {
+		    int yPointGraph = scaleHeightToPixels(dataValue) - 1;
+		    hvGfxBox(hvg, x1+xOff, yPointGraph, 1, 3, drawColor);
+		    }
 		}
+	    if (dataValue > graphUpperLimit)
+		hvGfxBox(hvg, x1+xOff, yOff, 1, 2, clipColor);
+	    else if (dataValue < graphLowerLimit)
+		hvGfxBox(hvg, x1+xOff, yOff + h - 1, 1, 2, clipColor);
+#undef scaleHeightToPixels	/* No longer use this symbol */
 	    }	/*	vis == tvFull || vis == tvPack */
 	else if (vis == tvDense || vis == tvSquish)
 	    {
@@ -893,13 +939,9 @@ for (x1 = 0; x1 < width; ++x1)
 
 	    drawColor =
 		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
-
-	    boxHeight = tg->lineHeight;
 	    hvGfxBox(hvg, x1+xOff, yOff, 1,
-		boxHeight, drawColor);
+		tg->lineHeight, drawColor);
 	    }	/*	vis == tvDense || vis == tvSquish	*/
-	lastRealX = xOff + x1;
-	lastRealY = yOff + y1;
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 }	/*	graphPreDraw()	*/
@@ -1065,12 +1107,12 @@ graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
     wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
 
 
-colorArray = allocColorArray(preDraw, width, preDrawZero,
-    wigCart->colorTrack, tg, hvg);
+colorArray = makeColorArray(preDraw, width, preDrawZero,
+    wigCart, tg, hvg);
 
 graphPreDraw(preDraw, preDrawZero, width,
     tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-    epsilon, colorArray, vis, wigCart->lineBar);
+    epsilon, colorArray, vis, wigCart);
 
 drawZeroLine(vis, wigCart->horizontalGrid,
     graphUpperLimit, graphLowerLimit,

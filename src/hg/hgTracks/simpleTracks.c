@@ -127,7 +127,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.112 2009/11/17 20:17:57 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.113 2009/11/17 20:47:49 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -2007,6 +2007,13 @@ Color lightGrayIndex()
 {
 return shadesOfGray[3];
 }
+
+Color veryLightGrayIndex()
+/* Return index of very light gray. */
+{
+return shadesOfGray[2];
+}
+
 
 void makeGrayShades(struct hvGfx *hvg)
 /* Make eight shades of gray in display. */

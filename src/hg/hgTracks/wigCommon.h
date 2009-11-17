@@ -81,15 +81,11 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero);
 /*	if autoScaling, scan preDraw array and determine limits */
 
-Color * allocColorArray(struct preDrawElement *preDraw, int width,
-    int preDrawZero, char *colorTrack, struct track *tg, struct hvGfx *hvg);
-/*	allocate and fill in a coloring array based on another track */
-
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
-    enum wiggleGraphOptEnum lineBar);
+    struct wigCartOptions *wigCart);
 /*	graph the preDraw array */
 
 void drawZeroLine(enum trackVisibility vis,
