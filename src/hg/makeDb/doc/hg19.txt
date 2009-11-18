@@ -5,7 +5,7 @@
 #	GRCh37 - Genome Reference Consortium Human Reference 37
 #	Assembly Accession: GCA_000001405.1
 
-#	"$Id: hg19.txt,v 1.61 2009/11/11 01:07:36 hiram Exp $";
+#	"$Id: hg19.txt,v 1.62 2009/11/18 21:12:55 kent Exp $";
 
 #############################################################################
 
@@ -7258,6 +7258,21 @@ see doc/builds.txt for specific details.
 
 # Make mapping between known genes and allenBrain
    hgMapToGene hg19 allenBrainAli -type=psl knownGene knownToAllenBrain
+
+#############################################################################
+# ADD ALLEN BRAIN CORTEXT LINK (DONE, 11/18/09 kent)
+
+# Copy over version from hg18 since we don't have new data from Allen Brain
+# Inst.
+    cd /cluster/data/hg19/bed/allenBrain
+    cp /cluster/data/hg18/bed/allenBrain/allenBrainGene.tab .
+
+# Load it into database.
+
+    hgsql hg19 < ~/src/hg/lib/allenBrainGene.sql
+    hgsql hg19 -e \
+    'load data local infile "allenBrainGene.tab" into table allenBrainGene'
+
 
 ############################################################################
 ## Annotate 46-way multiple alignment with gene annotations
