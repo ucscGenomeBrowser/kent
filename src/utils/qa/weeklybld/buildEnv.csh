@@ -1,8 +1,8 @@
 setenv BRANCHNN 219
 setenv TODAY 2009-11-10     # v219 final
 setenv LASTWEEK 2009-10-27     # v218 final
-setenv REVIEWDAY 2009-11-03    # v219 preview
-setenv LASTREVIEWDAY 2009-10-20  # v218 preview
+setenv REVIEWDAY 2009-11-17    # v220 preview
+setenv LASTREVIEWDAY 2009-11-03  # v219 preview
 
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 titan
