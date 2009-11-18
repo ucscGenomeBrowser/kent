@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.2 2009/11/06 05:33:22 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.3 2009/11/18 07:55:12 kate Exp $
 
 use warnings;
 use strict;
@@ -21,8 +21,8 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-#use lib "/cluster/home/kate/kent/src/hg/utils/automation";
+#use lib "/cluster/bin/scripts";
+use lib "/cluster/home/kate/kent/src/hg/utils/automation";
 use Encode;
 use HgAutomate;
 use HgDb;
@@ -83,18 +83,21 @@ HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 my %terms = Encode::getControlledVocab($configPath);
 # use pi.ra file to map pi/lab/institution/grant/project
 my $labRef = Encode::getLabs($configPath);
-my %labHash = %{$labRef};
+my %labs = %{$labRef};
 
-# parse all trackDb entries w/ metadata setting into hash of submissions, keyed
+# parse all trackDb entries w/ metadata setting into hash of submissions
+#   key is lab+dataType+cell+vars+version
+#   key is lab+dataType+cell+vars
+
 my $dbh = HgDb->new(DB => $assembly);
 my $sth = $dbh->execute(
         "select settings, tableName from trackDb where settings like \'\%metadata\%\'");
 my @row;
 my %experiments = ();
 printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-        "Project", "Lab", "Data Type", "Cell Type", "Experiment Parameters",
-        "Version", "Freeze", "Submit Date", "Release Date", 
-        "Status", "Submission IDs");
+        "Project", "Lab", "Data_Type", "Cell_Type", "Experiment_Parameters",
+        "Version", "Freeze", "Submit_Date", "Release_Date", 
+        "Status", "Submission_IDs");
 while (@row = $sth->fetchrow_array()) {
     my $settings = $row[0];
     my $tableName = $row[1];
@@ -105,16 +108,16 @@ while (@row = $sth->fetchrow_array()) {
     my $ref = Encode::metadataLineToHash($settings);
     my %metadata =  %{$ref};
     my %experiment = ();
-    $experiment{"project"} = "unknown";
-    $experiment{"project"} = $metadata{"grant"};
-    my $project;
-    foreach my $lab (keys %labHash) {
-        if ($labHash{$lab}->{"grant"} eq $metadata{"grant"}) {
-            $experiment{"project"} = $labHash{$lab}->{"project"};
+    $experiment{"project"} = defined($metadata{"grant"}) ? $metadata{"grant"} : "unknown";
+    foreach my $lab (keys %labs) {
+        if ($labs{$lab}->{"grant"} eq $metadata{"grant"}) {
+            $experiment{"project"} = $labs{$lab}->{"project"};
             last;
         }
     }
     $experiment{"lab"} = $metadata{"lab"};
+    # strip off PI name in parens
+    $experiment{"lab"} =~ s/\(\w+\)//;
     $experiment{"dataType"} = lc($metadata{"dataType"});
 
     $experiment{"cell"} = "none";
@@ -122,6 +125,7 @@ while (@row = $sth->fetchrow_array()) {
         $experiment{"cell"} = $metadata{"cell"};
     }
     #print STDERR "    tableName  " . $tableName . "\n";
+    print STDERR "    tableName  " . $tableName . "\n";
 
     # determine term type for experiment parameters 
     my %vars = ();
@@ -156,64 +160,64 @@ while (@row = $sth->fetchrow_array()) {
     if (defined($metadata{"dateSubmitted"})) {
         $experiment{"submitDate"} = $metadata{"dateSubmitted"};
     }
-
     $experiment{"releaseDate"} = "unknown";
+
+    # note that this was found in trackDb (not just in pipeline, below)
+    $experiment{"trackDb"} = 1;
 
     # get release date from 'lastUpdated' field of submission dir
     $experiment{"status"} = "unknown";
 
     # a few tracks are missing the subId
-    $experiment{"id"} = 0;
-    if (defined($metadata{"subId"})) {
-        $experiment{"id"} = $metadata{"subId"};
-    }
-    #print STDERR "    ID  " . $experiment{"id"} "\n";
+    my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
 
-
-    die "undefined project" unless defined($experiment{"project"});
-    die "undefined lab" unless defined($experiment{"lab"});
-    die "undefined dataType" unless defined($experiment{"dataType"});
-    die "undefined cell" unless defined($experiment{"cell"});
-    die "undefined vars" unless defined($experiment{"vars"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
-    die "undefined freeze" unless defined($experiment{"freeze"});
-    die "undefined submitDate" unless defined($experiment{"submitDate"});
-    die "undefined releaseDate" unless defined($experiment{"releaseDate"});
-    die "undefined status" unless defined($experiment{"status"});
-    die "undefined id" unless defined($experiment{"id"});
+    #print STDERR "    ID  " . $subId "\n";
+    #die "undefined project" unless defined($experiment{"project"});
+    #die "undefined lab" unless defined($experiment{"lab"});
+    #die "undefined dataType" unless defined($experiment{"dataType"});
+    #die "undefined cell" unless defined($experiment{"cell"});
+    #die "undefined vars" unless defined($experiment{"vars"});
+    #die "undefined freeze" unless defined($experiment{"freeze"});
+    #die "undefined freeze" unless defined($experiment{"freeze"});
+    #die "undefined submitDate" unless defined($experiment{"submitDate"});
+    #die "undefined releaseDate" unless defined($experiment{"releaseDate"});
+    #die "undefined status" unless defined($experiment{"status"});
 
     # create key for experiment: lab+dataType+cell+vars+version
+    # create key for experiment: lab+dataType+cell+vars
     my $expKey = $experiment{"lab"} . "+" . $experiment{"dataType"} . "+" . 
                                 $experiment{"cell"} . "+" . 
-                                $experiment{"vars"} . "+" .  
-                                $experiment{"version"};
+                                $experiment{"vars"};
+                                #$experiment{"vars"} . "+" .  $experiment{"version"};
 
-    #print $expKey . "\n";
-    # save  in a hash of experiments, 
-    #   keyed by lab+dataType+cell+vars+version 
+    print STDERR "KEY: " . $expKey . "\n";
+
+    # save in a hash of experiments, 
+    #   keyed by lab+dataType+cell+vars
+    # (may need to add version to key)
     # subId -- lookup, add to list if exists
-
     if (defined($experiments{$expKey})) {
-        my ($id) = split (" ", $experiments{$expKey}->{"id"});
-        if ($id > $experiment{"id"}) {
-            $experiments{$expKey}->{"id"} = 
-                $experiments{$expKey}->{"id"} . " " . $experiment{"id"};
-        } else {
-            $experiments{$expKey}->{"id"} = 
-                $experiment{"id"} . " " . $experiments{$expKey}->{"id"};
+        my %ids = %{$experiments{$expKey}->{"ids"}};
+        print STDERR "CHECKING: " . $expKey . " new ID: " . $subId . " IDs: " . join(",", keys %ids) . "\n";
+        if (!defined($experiment{$expKey}->{"ids"}->{$subId})) {
+            $experiments{$expKey}->{"ids"}->{$subId} = $subId;
+            %ids = %{$experiments{$expKey}->{"ids"}};
+            print STDERR "MERGED: " . $expKey . " IDs: " . join(",", keys %ids) . "\n";
         }
-        #print "MERGING: " . $expKey . " IDS: " . $experiments{$expKey}->{"id"} . "\n";
     } else {
+        my %ids = ();
+        $ids{$subId} = $subId;
+        $experiment{"ids"} = \%ids;
         $experiments{$expKey} = \%experiment;
-        #print "ADDING: " . $expKey . " ID: " . $experiments{$expKey}->{"id"} . "\n";
+        print STDERR "ADDING: " . $expKey . " ID: " . $subId . "\n";
     }
 
 }
 $sth->finish;
 $dbh->{DBH}->disconnect;
 
-
 # merge in submissions from pipeline projects table
+# use status in projects table to assign statuses to submissions already found in trackDb
 
 $dbh = HgDb->new(DB => $pipeline);
 $sth = $dbh->execute( 
@@ -224,15 +228,10 @@ while (@row = $sth->fetchrow_array()) {
     my $status = $row[5];
     my $id = $row[6];
     my $name = $row[7];
-    # lookup in pi hash to find project
+    # lookup in lab from hash to find project
     my $project = "unknown";
-    if (defined($lab)) {
-        foreach my $lab (keys %labHash) {
-            if ($labHash{$lab}->{"lab"} eq $lab) {
-                $project = $labHash{$lab}->{"project"};
-                last;
-            }
-        }
+    if (defined($lab) && defined($labs{$lab})) {
+        $project = $labs{$lab}->{"project"};
     } else {
         warn "lab undefined, subId=" . $id . " " . $status . " " . $name . "\n";
         next;
@@ -241,23 +240,23 @@ while (@row = $sth->fetchrow_array()) {
         warn "     project unknown for lab " . $lab . " subId=" . $id . " " . $name . "\n";
     }
     my $dataType = $row[1];
-    # note: lcase the datatype before generating key (inconsistent in DAFs)
+# note: lcase the datatype before generating key (inconsistent in DAFs)
     my $created_at = $row[3];
     my $updated_at = $row[4];
     my $version = "V1";         # need this in project table
-    my $cell = "none";
+        my $cell = "none";
     my $varString = "none";
 
-    # get cell type and experimental vars
+# get cell type and experimental vars
     if (defined($row[2])) {
         my @metadata = split("; ", $row[2]);
         foreach my $expVars (@metadata) {
-            # one experiment
+# one experiment
             my @vars = split(", ", $expVars);
 
             my $termType;
-            # extract cell type, order other vars by term type alpha order
-            # determine term type for experiment parameters 
+# extract cell type, order other vars by term type alpha order
+# determine term type for experiment parameters 
             my %varHash = ();
             my @termTypes = (keys %terms);
             foreach my $var (@vars) {
@@ -282,11 +281,45 @@ while (@row = $sth->fetchrow_array()) {
                 chop $varString;
             }
             my $expKey = $lab . "+" . lc($dataType) .  "+" .
-                                $cell . "+" .  $varString . "+" . $version;
-            #print $expKey . "|" . $status . "|" . $id . "\n";
+                                $cell . "+" .  $varString;
+                                #$cell . "+" .  $varString . "+" . $version;
+            print STDERR "KEY+STATUS+ID: " . $expKey . "|" . $status . "|" . $id . "\n";
             if (defined($experiments{$expKey})) {
-                $experiments{$expKey}->{"status"} = $status;
-                #print "Setting status: " . $expKey . " IDS: " . $experiments{$expKey}->{"id"} . "\n";
+                my %experiment = %{$experiments{$expKey}};
+                if (defined($experiment{"trackDb"})) {
+                    if (defined $experiment{"ids"}->{$id}) {
+                        # this id is in trackDb
+                        if (!defined $experiment{"statusId"} || $id gt $experiment{"statusId"}) {
+                            # need to change status
+                            $experiment{"statusId"} = $id;
+                            if ($experiment{"status"} ne $status && 
+                                        $experiment{"status"} ne "unknown") {
+                                warn("STATUS change for KEY: " . $expKey . 
+                                        " OLD: " . $experiment{"status"} . 
+                                                " from ID: " . $experiment{"statusId"} . 
+                                        " NEW: " . $status . " from ID " . $id . "\n");
+                            }
+                            $experiment{"status"} = $status;
+                            print STDERR "    Setting status: " . $expKey . 
+                                " from ID: " . $id . " to " . $status . "\n";
+                        }
+                    }
+                } else {
+                    # not in trackDb but already added to hash, update tempStatus if id is bigger
+                    if ($id gt $experiment{"tempStatusId"}) {
+                        # need to change status
+                        if ($experiment{"tempStatus"} ne $status) {
+                            warn("Temp STATUS change for non-trackDb KEY: " . $expKey . 
+                                    " OLD: " . $experiment{"tempStatus"} . 
+                                            " from ID: " . $experiment{"tempStatusId"} . 
+                                    " NEW: " . $status . " from ID " . $id . "\n");
+                        }
+                        $experiment{"tempStatus"} = $status;
+                        $experiment{"tempStatusId"} = $id;
+                        print STDERR "    Setting temp status of KEY: " . $expKey . 
+                                " from ID: " . $id . " to " . $status . "\n";
+                    }
+                }
             } else {
                 my %experiment = ();
                 $experiment{"project"} = $project;
@@ -294,16 +327,22 @@ while (@row = $sth->fetchrow_array()) {
                 $experiment{"dataType"} = lc $dataType;
                 $experiment{"cell"} = $cell;
                 $experiment{"version"} = $version;
-                # todo: add list of ID's
-                $experiment{"id"} = $id;
-                $experiment{"status"} = $status;
+                my %ids = ();
+                $ids{$id} = $id;
+                $experiment{"ids"} = \%ids;
+                $experiment{"tempStatus"} = $status;
+                $experiment{"tempStatusId"} = $id;
                 $experiment{"vars"} = $varString;
                 $experiment{"submitDate"} = $created_at;
+                # trim off time
+                $experiment{"submitDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiment{"releaseDate"} = 
                         ($status eq "released" ? $updated_at : "none");
+                $experiment{"releaseDate"} =~ s/ \d\d:\d\d:\d\d//;
                 $experiment{"freeze"} = "unknown";
                 $experiments{$expKey} = \%experiment;
-                #print "ADDING: " . $expKey . " ID: " . $experiments{$expKey}->{"id"} . " PROJ: " . $project . "\n";
+                print STDERR "ADDING2: " . $expKey . " IDs: " . 
+                        join(",", keys %ids) . " PROJ: " . $project . "\n";
             }
         }
     }
@@ -314,7 +353,8 @@ $dbh->{DBH}->disconnect;
 # print out results
 foreach my $key (keys %experiments) {
     my %experiment = %{$experiments{$key}};
-    #print STDERR "    id " . $experiment{"id"} . " " . $key . "\n";
+    my %ids = %{$experiment{"ids"}};
+    print STDERR "    IDs: " . join(",", keys %ids) . " KEY:  " . $key . "\n";
     die "undefined project" unless defined($experiment{"project"});
     die "undefined lab" unless defined($experiment{"lab"});
     die "undefined dataType" unless defined($experiment{"dataType"});
@@ -324,15 +364,17 @@ foreach my $key (keys %experiments) {
     die "undefined freeze" unless defined($experiment{"freeze"});
     die "undefined submitDate" unless defined($experiment{"submitDate"});
     die "undefined releaseDate" unless defined($experiment{"releaseDate"});
+    if (!defined $experiment{"status"}) {
+        $experiment{"status"} = $experiment{"tempStatus"};
+    }
     die "undefined status" unless defined($experiment{"status"});
-    die "undefined id" unless defined($experiment{"id"});
     printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"lab"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
                 $experiment{"vars"}, $experiment{"version"}, 
                 $experiment{"freeze"}, $experiment{"submitDate"}, 
                 $experiment{"releaseDate"}, $experiment{"status"}, 
-                $experiment{"id"});
+                join(",", keys %ids));
 }
 
 exit 0;
