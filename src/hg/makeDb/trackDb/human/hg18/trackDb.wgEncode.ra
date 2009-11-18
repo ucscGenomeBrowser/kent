@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.664 2009/11/18 02:00:03 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.665 2009/11/18 19:30:02 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -755,7 +755,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=CTCF cellType=HEPG2
     type wig 0.00 11113.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Ctcf fileName=wgEncodeBroadChipSeqSignalHepg2Ctcf.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=CTCF view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Ctcf fileName=wgEncodeBroadChipSeqSignalHepg2Ctcf.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2Ctcf
     release alpha
@@ -765,7 +765,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=CTCF cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2Ctcf fileName=wgEncodeBroadChipSeqPeaksHepg2Ctcf.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=CTCF view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=563 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2Ctcf fileName=wgEncodeBroadChipSeqPeaksHepg2Ctcf.broadPeak.gz
 
 # submission 572
     track wgEncodeBroadChipSeqSignalHepg2H3k4me2
@@ -776,7 +776,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=H3K04me2 cellType=HEPG2
     type wig 0.00 5510.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me2 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me2.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me2 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me2.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2H3k4me2
     release alpha
@@ -786,7 +786,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=H3K04me2 cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me2 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=572 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me2.broadPeak.gz
 
 # submission 581
     track wgEncodeBroadChipSeqSignalHepg2H3k4me3
@@ -797,7 +797,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=H3K04me3 cellType=HEPG2
     type wig 0.00 4927.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k4me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k4me3.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2H3k4me3
     release alpha
@@ -807,7 +807,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=H3K04me3 cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K4me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=581 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k4me3.broadPeak.gz
 
 # submission 561
     track wgEncodeBroadChipSeqSignalHepg2H3k9ac
@@ -818,7 +818,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=H3K09ac cellType=HEPG2
     type wig 0.00 11352.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k9ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k9ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K9ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k9ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k9ac.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2H3k9ac
     release alpha
@@ -828,7 +828,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=H3K09ac cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K9ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=561 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k9ac.broadPeak.gz
 
 # submission 576
     track wgEncodeBroadChipSeqSignalHepg2H3k27ac
@@ -839,7 +839,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=H3K27ac cellType=HEPG2
     type wig 0.00 2133.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k27ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k27ac.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K27ac view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k27ac fileName=wgEncodeBroadChipSeqSignalHepg2H3k27ac.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2H3k27ac
     release alpha
@@ -849,7 +849,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=H3K27ac cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K27ac view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=576 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac fileName=wgEncodeBroadChipSeqPeaksHepg2H3k27ac.broadPeak.gz
 
 # submission 567
     track wgEncodeBroadChipSeqSignalHepg2H3k36me3
@@ -860,7 +860,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=H3K36me3 cellType=HEPG2
     type wig 0.00 6447.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k36me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k36me3.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K36me3 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H3k36me3 fileName=wgEncodeBroadChipSeqSignalHepg2H3k36me3.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2H3k36me3
     release alpha
@@ -870,7 +870,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=H3K36me3 cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H3K36me3 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=567 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3 fileName=wgEncodeBroadChipSeqPeaksHepg2H3k36me3.broadPeak.gz
 
 # submission 586
     track wgEncodeBroadChipSeqSignalHepg2H4k20me1
@@ -881,7 +881,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=H4K20me1 cellType=HEPG2
     type wig 0.00 14061.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H4k20me1 fileName=wgEncodeBroadChipSeqSignalHepg2H4k20me1.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H4K20me1 view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2H4k20me1 fileName=wgEncodeBroadChipSeqSignalHepg2H4k20me1.wig.gz
 
     track wgEncodeBroadChipSeqPeaksHepg2H4k20me1
     release alpha
@@ -891,7 +891,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Peaks factor=H4K20me1 cellType=HEPG2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1 fileName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1.broadPeak.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=H4K20me1 view=Peaks softwareVersion=Fixed092109 dataVersion="ENCODE Sep 2009 Freeze" subId=586 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1 fileName=wgEncodeBroadChipSeqPeaksHepg2H4k20me1.broadPeak.gz
 
 # submission 559
     track wgEncodeBroadChipSeqSignalHepg2Control
@@ -902,7 +902,7 @@ dataVersion ENCODE Feb 2009 Freeze
     subGroups view=Signal factor=zCTRL cellType=HEPG2
     type wig 0.00 10365.00
     color 189,0,157
-    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HEPG2 antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=559 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Control fileName=wgEncodeBroadChipSeqSignalHepg2Control.wig.gz
+    metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=HepG2 antibody=Control view=Signal dataVersion="ENCODE Sep 2009 Freeze" subId=559 dateSubmitted=2009-09-28 dateUnrestricted=2010-06-28 composite=wgEncodeBroadChipSeq tableName=wgEncodeBroadChipSeqSignalHepg2Control fileName=wgEncodeBroadChipSeqSignalHepg2Control.wig.gz
 
 # submission 554
     track wgEncodeBroadChipSeqSignalHmecCtcf
