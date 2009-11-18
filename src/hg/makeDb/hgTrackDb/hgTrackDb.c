@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.53 2009/06/19 23:53:39 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.54 2009/11/18 17:41:23 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +40,8 @@ errAbort(
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n"
   "  -release=alpha|beta - Include trackDb entries with this release only.\n"
+  "  -settings - for trackDb scanning, output table name, type line,\n"
+  "            -  and settings hash to stderr while loading everything\n"
   );
 }
 
@@ -50,11 +52,13 @@ static struct optionSpec optionSpecs[] = {
     {"strict", OPTION_BOOLEAN},
     {"hideFirst", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
+    {"settings", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
 static char *raName = "trackDb.ra";
 static char *release = "alpha";
+static bool showSettings = FALSE;
 
 static boolean hasNonAsciiChars(char *text)
 /* check if text has any non-printing or non-ascii characters */
@@ -665,6 +669,18 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 	    char *settings = settingsFromHash(td->settingsHash);
 	    updateBigTextField(conn, trackDbName, "tableName", td->tableName,
 	    	"settings", settings);
+	    if (showSettings)
+		{
+		verbose(1, "%s: type='%s';", td->tableName, td->type);
+		if (isNotEmpty(settings))
+		    {
+		    char *oneLine = replaceChars(settings, "\n", "; ");
+		    eraseTrailingSpaces(oneLine);
+		    verbose(1, " %s", oneLine);
+		    freeMem(oneLine);
+		    }
+		verbose(1, "\n");
+		}
 	    freeMem(settings);
 	    }
 	}
@@ -681,6 +697,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
+showSettings = optionExists("settings");
 if (strchr(raName, '/') != NULL)
     errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
