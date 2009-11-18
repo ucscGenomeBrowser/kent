@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.662 2009/11/18 00:48:14 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.663 2009/11/18 01:44:33 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15202,33 +15202,29 @@ dimensions dimensionX=cellType dimensionY=fragSize
 sortOrder cellType=+ fragSize=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
-visibilityViewDefaults Alignments=hide
+visibilityViewDefaults Alignments=dense
 priority 0
 type bed 3
 noInherit on
 wgEncode 1
-# MJP: Change 'type bed 6' back to 'type pairedTagAlign' once the
-# display code is done
 
     track wgEncodeGisDnaPetAlignmentsGm1287810k
     release alpha
-    subTrack wgEncodeGisDnaPet
+    subTrack wgEncodeGisDnaPet on
     shortLabel GM12878 10k
     longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=10k
-    #type pairedTagAlign
     type bed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-#    configurable on
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=255 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm1287810k fileName=wgEncodeGisDnaPetAlignmentsGm1287810k.pairedTagAlign.gz
 
     track wgEncodeGisDnaPetAlignmentsK5621k
     release alpha
-    subTrack wgEncodeGisDnaPet
+    subTrack wgEncodeGisDnaPet on
     shortLabel K562 1k
     longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
     subGroups view=Alignments cellType=K562 fragSize=1k
@@ -15244,7 +15240,7 @@ wgEncode 1
 
     track wgEncodeGisDnaPetAlignmentsK56210k
     release alpha
-    subTrack wgEncodeGisDnaPet
+    subTrack wgEncodeGisDnaPet on
     shortLabel K562 10k
     longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
     subGroups view=Alignments cellType=K562 fragSize=10k
@@ -15260,7 +15256,7 @@ wgEncode 1
 
     track wgEncodeGisDnaPetAlignmentsGm128781k
     release alpha
-    subTrack wgEncodeGisDnaPet
+    subTrack wgEncodeGisDnaPet on
     shortLabel GM12878 1k
     longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=1k
@@ -15276,7 +15272,7 @@ wgEncode 1
 
     track wgEncodeGisDnaPetAlignmentsGm128785k
     release alpha
-    subTrack wgEncodeGisDnaPet
+    subTrack wgEncodeGisDnaPet on
     shortLabel GM12878 5k
     longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=5k
