@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.13 2006/08/02 23:59:42 kate Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.14 2009/11/18 05:23:33 markd Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -110,7 +110,7 @@ static int prevRefStart = 0, prevRefEnd = 0;
 int refStart = maf->components->start;
 int refEnd = refStart + maf->components->size;
 
-if (needComp && (mafMayFindCompPrefix(maf, needComp, "." ) == NULL))
+if (needComp && (mafMayFindCompSpecies(maf, needComp, '.') == NULL))
     {
     verbose(3, "%s:%d needComp\n", 
             maf->components->src, maf->components->start);
