@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.27 2009/11/18 05:11:31 angie Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.28 2009/11/18 05:45:06 angie Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -151,13 +151,11 @@ else
     if (wordCount >= 3)
 	absMax = atof(words[2]);
     else
-	{
 	missingAbsMax = TRUE;
-	if (wordCount == 2)
-	    absMin = atof(words[1]);
-	else
-	    missingAbsMin = TRUE;
-	}
+    if (wordCount >= 2)
+	absMin = atof(words[1]);
+    else
+	missingAbsMin = TRUE;
     }
 correctOrder(absMin, absMax);
 
