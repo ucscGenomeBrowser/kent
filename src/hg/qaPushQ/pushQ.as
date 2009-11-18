@@ -38,7 +38,7 @@ table pushQ
 table users
 "PushQ Users"
     (
-    char[8]  user;        "User"
+    char[16]  user;        "User"
     char[34] password;    "Password" 
     char[8]  role;        "Role=admin,dev,qa"
     lstring  contents;    "pushq-cart contents"

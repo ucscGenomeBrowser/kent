@@ -118,7 +118,7 @@ struct users
 /* PushQ Users */
     {
     struct users *next;  /* Next in singly linked list. */
-    char user[9];	/* User */
+    char user[17];	/* User */
     char password[35];	/* Password */
     char role[9];	/* Role=admin,dev,qa */
     char *contents;	/* pushq-cart contents */

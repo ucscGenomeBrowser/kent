@@ -43,7 +43,7 @@ CREATE TABLE pushQ (
 
 #PushQ Users
 CREATE TABLE users (
-    user char(8) not null,	# User
+    user char(16) not null,	# User
     password char(34) not null,	# Password
     role char(8) not null,	# Role=admin,dev,qa
     contents longblob not null,	# pushq-cart contents
