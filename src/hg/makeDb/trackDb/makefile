@@ -1,5 +1,7 @@
 # Make your private trackDb with 
 #	make update
+# Your private trackDb with additional options, for example:
+#       make EXTRA="-strict -settings" update
 # Make it for genome-test with
 #	make alpha
 # Make your private trackDb on local host (if defined as localDB.XXX=XXX in .hg.conf) with
@@ -21,7 +23,6 @@
 # have only chromInfo table on hgwbeta and RR.  make will not rebuild
 # trackDb on hgwdev unless the db is specified explicitly on the 
 # command line.
-
 
 include ../../../inc/common.mk
 
@@ -108,7 +109,7 @@ ARCHIVED_DBS = \
 	danRer2
 
 update: #clean
-	./loadTracks trackDb_${USER} hgFindSpec_${USER} ${DBS}
+	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
 
 alpha: clean
 	${CVS} -q up -d -P .

@@ -12,6 +12,7 @@ options:
 UNAME_N=`uname -n`
 UNAME_N=${UNAME_N/.cse.ucsc.edu/}
 release=''
+settings=''
 strict=''
 raName=''
 grpSql=''
@@ -22,6 +23,8 @@ while [[ $1 == -* ]] ; do
             release=$(echo $1 | sed 's/-release=//') ;;
         -strict)
             strict=yes;;
+        -settings)
+            settings="yes";;
         -local)
             local=yes;;
         -raName=*)
@@ -84,6 +87,9 @@ loadDbTracks() {
     if [ -n "$strict" ] ; then
         topts="$topts -strict"
         fopts="$fopts -strict"
+    fi
+    if [ -n "$settings" ] ; then
+        topts="$topts -settings"
     fi
     if [ -n "$local" ] ; then
         topts="$topts -local"
