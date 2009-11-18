@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.26 2009/11/17 06:37:58 angie Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.27 2009/11/18 05:11:31 angie Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -129,7 +129,7 @@ boolean isBedGraph = (wordCount == 0 || sameString(words[0],"bedGraph"));
 // Determine absolute min and max.  Someday hgTrackDb will enforce inclusion of data
 // range settings, but until then, there is some circular logic where either one
 // can provide a default for the other if the other is missing.
-int absMax = 0.0, absMin = 0.0;
+double absMax = 0.0, absMin = 0.0;
 boolean missingAbsMin = FALSE, missingAbsMax = FALSE;
 if (isBedGraph)
     {
