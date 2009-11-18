@@ -7,7 +7,7 @@
 #include "hmmstats.h"
 #include <float.h>
 
-static char const rcsid[] = "$Id: ave.c,v 1.9 2009/11/17 23:39:26 hiram Exp $";
+static char const rcsid[] = "$Id: ave.c,v 1.10 2009/11/18 20:07:23 hiram Exp $";
 
 static int col = 1;
 static bool tableOut = FALSE;
@@ -88,11 +88,15 @@ for (i=0; i<count; ++i)
     totalVar += oneVar*oneVar;
     }
 
+    double var = totalVar;
+    if (count > 1)
+	var /= count-1;
+    double stdDev = sqrt(var);
 if (tableOut)
     {
     printf("# min Q1 median Q3 max mean N sum stddev\n");
     printf("%g %g %g %g %g %g %d %g %g\n", minVal, q1, array[count/2],
-	q3, maxVal, average, count, total, sqrt(totalVar/count));
+	q3, maxVal, average, count, total, stdDev);
     }
 else
     {
@@ -104,7 +108,7 @@ else
     printf("max %f\n", maxVal);
     printf("count %d\n", count);
     printf("total %f\n", total);
-    printf("standard deviation %f\n", sqrt(totalVar/count));
+    printf("standard deviation %f\n", stdDev);
     }
 }
 
