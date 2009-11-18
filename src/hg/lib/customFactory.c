@@ -33,7 +33,7 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.110 2009/11/10 05:39:34 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.111 2009/11/18 00:16:26 galt Exp $";
 
 static boolean doExtraChecking = FALSE;
 
@@ -2211,31 +2211,9 @@ hashElFreeList(&fileSettings);
 return isLive;
 }
 
-// TODO: remove touchOldUdcSettings very soon 
-//  after the rollout of the next code, i.e. on 2009-08-24.
-static void touchOldUdcSettings(struct trackDb *tdb)
-/* Touch existing local udcCache bitmap and sparse files.  */
-{
-char *url = trackDbSetting(tdb, "dataUrl");
-if (url)
-    {
-    struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
-    for (el = list; el; el = el->next)
-	{
-	if (fileExists(el->name))
-	    {
-	    readAndIgnore(el->name);
-	    verbose(4, "setting dataUrl: %s\n", el->name);
-	    }
-	}
-    slFreeList(&list);
-    }
-}
-
 static void touchUdcSettings(struct trackDb *tdb)
 /* Touch existing local udcCache bitmap and sparse files.  */
 {
-touchOldUdcSettings(tdb);  // remove this line after 2009-08-24, see above.
 char *url = trackDbSetting(tdb, "bigDataUrl");
 if (url)
     {
