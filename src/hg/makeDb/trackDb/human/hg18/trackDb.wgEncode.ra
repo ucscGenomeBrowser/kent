@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.666 2009/11/18 19:50:53 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.667 2009/11/18 19:55:18 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15818,6 +15818,7 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 visibilityViewDefaults 1-PlusRawSignal=full 2-MinusRawSignal=full 3-AllRawSignal=hide 4-Alignments=pack
 dimensionZchecked longNonPolyA,longPolyA,total
+settingsByView 1-PlusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimitsMax=0:898990 2-MinusRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimitsMax=0:3756424 3-AllRawSignal:maxHeightPixels=100:24:16,windowingFunction=maximum,transformFunc=LOG,autoScale=on,viewLimitsMax=0:4860029
 priority 0
 type bed 3
 wgEncode 1
