@@ -11,6 +11,26 @@ by phenol-chloroform-isoamyl alcohol extraction and ethanol precipitation.
 20-50 ng of ChIP DNA was end-repaired, followed by the addition of adenine,
 ligated to Illumina adapters and made in to Solexa library for sequencing. 
 
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+<P>
+For each cell type, this track contains the following views:
+<DL>
+<DT><I>HotSpots</I>
+<DD> DNaseI hypersensitive zones identified using the HotSpot algorithm.
+<DT><I>Peaks</I>
+<DD> DNaseI hypersensitive sites (DHSs) identified as signal peaks within 
+FDR 0.5% hypersensitive zones.
+<DT><I>Raw Signal</I>
+<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+</DL>
+<P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
+cleavage sites across the genome mapped using the Digital DNaseI methodology 
+(see below).  Data have been normalized to 25 million reads per cell type.  
 <H2>Methods</H2>
 
 <P>
