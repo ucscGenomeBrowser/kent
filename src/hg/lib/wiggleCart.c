@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.28 2009/11/18 05:45:06 angie Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.29 2009/11/19 18:54:51 angie Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -99,15 +99,12 @@ if (isNotEmpty(setting))
 }
 
 static void viewLimitsCompositeOverride(struct trackDb *tdb, char *name,
-			  double *retMin, double *retMax, double *retAbsMin, double *retAbsMax)
+					double *retMin, double *retMax)
 /* If aquiring min/max for composite level wig cfg, look for trackDb.ra "settingsByView" */
 {
 if(isNameAtCompositeLevel(tdb,name))
     {
-    char *setting = trackDbSettingByView(tdb,VIEWLIMITSMAX);
-    parseColonRange(setting, retAbsMin, retAbsMax);
-    freez(&setting);
-    setting = trackDbSettingByView(tdb,VIEWLIMITS);
+    char *setting = trackDbSettingByView(tdb, VIEWLIMITS);
     parseColonRange(setting, retMin, retMax);
     freez(&setting);
     }
@@ -171,8 +168,7 @@ if (cartMinStr && cartMaxStr)
     *retMin = atof(cartMinStr);
     *retMax = atof(cartMaxStr);
     correctOrder(*retMin, *retMax);
-    // If it weren't for the expansion of absM* to viewLimits bounds,
-    // and the allowance for missing data range values, 
+    // If it weren't for the the allowance for missing data range values, 
     // we could set retAbs* and be done here.
     cartMin = *retMin;
     cartMax = *retMax;
@@ -180,9 +176,8 @@ if (cartMinStr && cartMaxStr)
 
 // Get trackDb defaults, and resolve missing wiggle data range if necessary.
 char *defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, DEFAULTVIEWLIMITS, NULL);
-char *viewLimits = trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, NULL);
 if (defaultViewLimits == NULL)
-    defaultViewLimits = viewLimits;
+    defaultViewLimits = trackDbSettingClosestToHomeOrDefault(tdb, VIEWLIMITS, NULL);
 if (defaultViewLimits != NULL)
     {
     double viewLimitMin = 0.0, viewLimitMax = 0.0;
@@ -193,14 +188,6 @@ if (defaultViewLimits != NULL)
 	absMax = viewLimitMax;
     if (missingAbsMin)
 	absMin = viewLimitMin;
-    // If viewLimits (not defaultViewLimits) extends beyond data value range, 
-    // tweak absMin and absMax to show the union:
-    if (viewLimits != NULL)
-	{
-	parseColonRange(viewLimits, &viewLimitMin, &viewLimitMax);
-	absMin = min(absMin, viewLimitMin);
-	absMax = max(absMax, viewLimitMax);
-	}
     }
 else if (missingAbsMin || missingAbsMax)
     {
@@ -236,12 +223,12 @@ if (retAbsMax)
     *retAbsMax = absMax;
 // After the dust settles from tdb's trackDb settings, now see if composite view 
 // settings from tdb's parents override that stuff anyway:
-viewLimitsCompositeOverride(tdb, name, retMin, retMax, retAbsMin, retAbsMax);
+viewLimitsCompositeOverride(tdb, name, retMin, retMax);
 // And as the final word after composite override, reset retMin and retMax if from cart:
 if (cartMinStr && cartMaxStr)
     {
-    *retMin = max(absMin, cartMin);
-    *retMax = min(absMax, cartMax);
+    *retMin = cartMin;
+    *retMax = cartMax;
     }
 }	/*	void wigFetchMinMaxYWithCart()	*/
 
