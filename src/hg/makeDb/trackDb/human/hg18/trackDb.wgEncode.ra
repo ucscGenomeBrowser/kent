@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.672 2009/11/19 20:25:13 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.673 2009/11/19 21:21:16 tdreszer Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4745,7 +4745,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pValueFilterLimits=0:100 Signal:viewLimits=1:20,viewLimitsMax=-1:11000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRawSig:viewLimits=1:20,viewLimitsMax=-1:16000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
+settingsByView cHot:pValueFilter=0.0,qValueFilter=0.0 aPeaks:pValueFilter=0.0,pValueFilterLimits=0:100 zRawSig:viewLimits=1:10,viewLimitsMax=-1:16000.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean
 
 #submission 517
     track wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
@@ -8145,7 +8145,7 @@ visibilityViewDefaults aPeaks=pack cHot=pack zRawSig=full
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
 settingsByView aPeaks:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 cHot:pValueFilter=0.0,pValueFilterLimits=1:324,scoreFilter=500,scoreFilterLimits=500:1000 zRawSig:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:48:16,windowingFunction=maximum
-#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:50,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
+#settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=1:324 Hotspots:pValueFilter=0.0,pValueFilterLimits=1:324 RawSignal:viewLimits=1:100,viewLimitsMax=1.00:127303.00,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=maximum
 priority 0
 type bed 3 +
 wgEncode 1
@@ -12055,7 +12055,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=pack+ RawSignal=full
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 RawSignal:viewLimitsMax=1:47957.00,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:scoreFilter=0,scoreFilterLimits=0:1000,minScore=0 zRaw:viewLimitsMax=1:47957.00,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 type bed 3
 priority 0
 nextItemButton on
@@ -16100,7 +16100,7 @@ compositeTrack on
 shortLabel GIS PET Loc
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
 group expression
-subGroup1 view Views 0-PlusRawSignal=PlusRawSig 1-MinusRawSignal=MinusRawSig 2-Alignments=Alignments 
+subGroup1 view Views 0-PlusRawSignal=PlusRawSig 1-MinusRawSignal=MinusRawSig 2-Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878 prostate=Prostate HepG2=HepG2 NHEK=NHEK HUVEC=HUVEC H1-hESC=H1-hESC
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=long_PolyA+ total=Total
