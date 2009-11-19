@@ -13,7 +13,7 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.4 2009/11/10 00:54:26 angie Exp $";
+static char const rcsid[] = "$Id: udcFuse.c,v 1.5 2009/11/19 19:07:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -117,8 +117,7 @@ if (stbuf->st_mode | S_IFDIR)
 	    size = udcSizeFromCache(url, NULL);
 	    ERR_CATCH_END("udcPathToUrl or udcSizeFromCache");
 	    if (size < 0)
-		fprintf(stderr, "...[%d] getattr: failed to open udc on %s -- "
-			"can't set proper size\n", pid, url);
+		fprintf(stderr, "...[%d] getattr: failed to get udc cache size for %s", pid, url);
 	    else
 		stbuf->st_size = size;
 	    }
@@ -140,7 +139,6 @@ static int udcfs_getattr(const char *path, struct stat *stbuf)
  * getattr itself.  Give stat of corresponding udc cache file (but make it read-only). */
 {
 unsigned int pid = pthread_self();
-fprintf(stderr, "...[%d] getattr(%s) start %ld\n", pid, path, clock1000());
 char udcCachePath[4096];
 ERR_CATCH_START();
 safef(udcCachePath, sizeof(udcCachePath), "%s%s", udcDefaultDir(), path);
@@ -154,7 +152,7 @@ if (res != 0)
 // Force read-only permissions:
 stbuf->st_mode &= ~(S_IWUSR | S_IWGRP | S_IWOTH);
 int ret = checkForFile(path, udcCachePath, stbuf, pid);
-//fprintf(stderr, "...[%d] getattr finish %ld\n", pid, clock1000());
+fprintf(stderr, "...[%d] getattr %s finish %ld\n", pid, path, clock1000());
 return ret;
 }
 
@@ -163,7 +161,6 @@ static int udcfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 /* Read the corresponding udc cache directory. */
 {
 unsigned int pid = pthread_self();
-fprintf(stderr, "...[%d] readdir(%s) start %ld\n", pid, path, clock1000());
 char *udcCacheRoot = udcDefaultDir();
 char udcCachePath[4096];
 ERR_CATCH_START();
@@ -181,7 +178,7 @@ while ((dirInfo = readdir(dirHandle)) != NULL)
     if (filler(buf, dirInfo->d_name, NULL, 0))
 	break;
 int ret = closedir(dirHandle);
-fprintf(stderr, "...[%d] readdir finish %ld\n", pid, clock1000());
+fprintf(stderr, "...[%d] readdir %s finish %ld\n", pid, path, clock1000());
 return ret;
 }
 
@@ -216,7 +213,7 @@ if (udcf == NULL)
     return -1;
     }
 fi->fh = (uint64_t)udcf;
-fprintf(stderr, "...[%d] open finish %ld\n", pid, clock1000());
+fprintf(stderr, "...[%d] open fh=0x%llx finish %ld\n", pid, (long long)(fi->fh), clock1000());
 return 0;
 }
 
@@ -245,12 +242,10 @@ static int udcfs_release(const char *path, struct fuse_file_info *fi)
 // Close the udcFile stored as fi->fh.
 {
 unsigned int pid = pthread_self();
-fprintf(stderr, "...[%d] release(%s, 0x%llx) start %ld\n",
-	pid, path, (long long)(fi->fh), clock1000());
+fprintf(stderr, "...[%d] release %s (0x%llx) %ld\n", pid, path, (long long)(fi->fh), clock1000());
 ERR_CATCH_START();
 udcFileClose((struct udcFile **)&(fi->fh));
 ERR_CATCH_END("udcFileClose");
-fprintf(stderr, "...[%d] release finish %ld\n", pid, clock1000());
 return 0;
 }
 
