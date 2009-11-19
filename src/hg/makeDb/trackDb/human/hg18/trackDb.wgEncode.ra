@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.671 2009/11/19 20:14:31 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.672 2009/11/19 20:25:13 kate Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -4040,7 +4040,7 @@ wgEncode 1
     subTrack wgEncodeRikenCage
     shortLabel K562 cyto pA-
     longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 cytosol)
-    subGroups view=5-Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+    subGroups view=5-Alignments cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
     type bed 6
     # leave out until code translates from colorspace to base space
     #baseColorDefault diffBases
@@ -15080,7 +15080,7 @@ wgEncode 1
     maxLimit 20925
     transformFunc LOG
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=Gm12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
 
     track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
     release alpha
@@ -15094,7 +15094,7 @@ wgEncode 1
     maxLimit 13935
     transformFunc LOG
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=Gm12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
 
     track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
     release alpha
@@ -15108,7 +15108,7 @@ wgEncode 1
     maxLimit 20925
     transformFunc LOG
     color 153,38,0
-    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=Gm12878 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
 
     track wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
     release alpha
