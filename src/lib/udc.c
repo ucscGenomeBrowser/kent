@@ -811,6 +811,10 @@ void udcFileClose(struct udcFile **pFile)
 struct udcFile *file = *pFile;
 if (file != NULL)
     {
+    if (file->connInfo.socket != 0)
+	close(file->connInfo.socket);
+    if (file->connInfo.ctrlSocket != 0)
+	close(file->connInfo.ctrlSocket);
     freeMem(file->url);
     freeMem(file->protocol);
     udcProtocolFree(&file->prot);
