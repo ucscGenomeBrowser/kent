@@ -7,7 +7,9 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.3 2009/11/18 07:55:12 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.4 2009/11/19 19:23:17 kate Exp $
+
+# TODO: warn if variable not found in cv.ra
 
 use warnings;
 use strict;
@@ -142,6 +144,7 @@ while (@row = $sth->fetchrow_array()) {
      $experiment{"vars"} = "none";
     if (scalar(keys %vars) > 0) {
         # alphasort vars by term type, to assure consistency
+        # TODO: define explicit ordering for term type in cv.ra
         $experiment{"vars"} = "";
         foreach my $termType (sort keys %vars) {
             $experiment{"vars"} = $experiment{"vars"} .  $vars{$termType} . ";";
@@ -320,7 +323,10 @@ while (@row = $sth->fetchrow_array()) {
                                 " from ID: " . $id . " to " . $status . "\n";
                     }
                 }
+                # save updated experiment to hash
+                $experiments{$expKey} = \%experiment;
             } else {
+                # not in trackDb or found yet in projects table
                 my %experiment = ();
                 $experiment{"project"} = $project;
                 $experiment{"lab"} = $lab;
