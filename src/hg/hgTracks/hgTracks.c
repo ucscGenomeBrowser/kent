@@ -47,7 +47,7 @@
 #include "imageV2.h"
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1607 2009/11/13 00:17:58 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1608 2009/11/19 18:05:09 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1794,15 +1794,18 @@ if (withLeftLabels && psOutput == NULL)
             else
                 drawBlueButtonBox(hvg, trackTabX, yStart, trackTabWidth,
                             h, track->hasUi);
+            if(theImgBox)
+                {
+                // Mini-buttons (side label slice) for tracks
+                sliceHeight      = h;
+                sliceOffsetY     = yStart;
+                curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isButton,theOneImg,NULL,sliceWidth[isButton],sliceHeight,sliceOffsetX[isButton],sliceOffsetY);
+                }
             if (track->hasUi)
                 {
                 if(theImgBox)
                     {
-                    // Mini-buttons (side label slice) for tracks
-                    sliceHeight      = h;
-                    sliceOffsetY     = yStart;
-                    curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),IMG_ANYORDER);
-                    curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,isButton,theOneImg,NULL,sliceWidth[isButton],sliceHeight,sliceOffsetX[isButton],sliceOffsetY);
                     curMap      = sliceMapFindOrStart(curSlice,track->tdb->tableName,NULL); // No common linkRoot
                     }
                 mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h,
