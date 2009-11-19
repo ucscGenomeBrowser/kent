@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# $Id: scanSettings.pl,v 1.1 2009/11/19 21:05:53 hiram Exp $
+# $Id: scanSettings.pl,v 1.2 2009/11/19 22:04:02 hiram Exp $
 
 use strict;
 use warnings;
@@ -11,7 +11,12 @@ if ($argc < 1) {
     printf STDERR "scanSettings.pl - scan output of hgTrackDb -settings,
     implement ClosestToHome API to indicate applicable settings for each table.
 
-usage: scanSettings.pl hg18.settings.txt
+usage: scanSettings.pl [options] hg18.settings.txt
+options:
+  -type=trackType - show only tracks of 'trackType'
+	where trackType is the first word of type line
+  -noParents - do not show parent composite container tracks
+  -show=comma,separated,list - of settings to display
 
   where hg18.settings.txt is from this in trackDb directory:
   make EXTRA='-strict -settings' DBS=hg18 > hg18.settings.txt 2>&1
@@ -21,8 +26,31 @@ The input file can also be 'stdin', thus:
     exit 255;
 }
 
+my $noParents = 0;	# 1 indicates do not show parents
+my $trackType = "";	# first word of track type line
+my %showList;		# key is setting name to show
+my $listOnly = 0;	# 1 means to check the showList
+
 my %tableList;	# key is table name, value is hash of settings
-my $file = shift;
+my $file = "noFileSpecified";
+while (my $arg = shift) {
+    if ($arg =~ m/-noParents/) {
+	$noParents = 1;
+	printf STDERR "# not showing composite parents\n";
+    } elsif ($arg =~ m/-type/) {
+	(my $dummy, $trackType) = split('=', $arg);
+	printf STDERR "# showing only track type '$trackType'\n";
+    } elsif ($arg =~ m/-show/) {
+	(my $dummy, my $list) = split('=', $arg);
+	my @show = split(',', $list);
+	for (my $i = 0; $i < scalar(@show); ++$i) {
+	    $showList{$show[$i]} = 1;
+	}
+	$listOnly = 1 if (scalar(@show) > 0);
+    } else {
+	$file = $arg;
+    }
+}
 
 if ($file =~ m/stdin/) {
     open (FH, "</dev/stdin") or die "can not read stdin";
@@ -149,23 +177,34 @@ foreach my $table (keys %tableList) {
 foreach my $table (keys %tableList) {
     my $hashRef = $tableList{$table};
     my $type = $hashRef->{'type'};
-    if ( 1 == 1 || $type =~ m/^wig|^bedGraph/ || exists($hashRef->{'compositeTrack'})) {
+    printf STDERR "no track type for '$table'\n" if (length($type) < 1);
+    next if (length($type) < 1);
+    my @typeWords = split('\s+', $type);
+    next if ($noParents == 1 && exists($hashRef->{'compositeTrack'}));
+    next if ( (length($trackType) > 0) && ($typeWords[0] ne $trackType) );
 #	printf "%s: type='%s'", $table, $hashRef->{'type'};
-	printf "%s:", $table;
-	foreach my $setting (sort keys %$hashRef) {
-	    if ( 1 == 1 || $setting !~ m/type/) {
-		printf " %s='%s'", $setting, $hashRef->{$setting};
-		if ($setting =~ m/^view$/) {
-		    my $viewKey = "$table.$hashRef->{$setting}";
-		    die "can not find viewKey $viewKey"
-			if (!exists($viewSettings{$viewKey}));
-		    my $viewHash = $viewSettings{$viewKey};
-		    foreach my $viewName (keys %$viewHash) {
-			printf " %s='%s'", $viewName, $viewHash->{$viewName};
-		    }
+    printf "%s:", $table;
+    foreach my $setting (sort keys %$hashRef) {
+	if ($listOnly) {
+	    printf " %s='%s'", $setting, $hashRef->{$setting}
+		if exists($showList{$setting});
+	} else {
+	    printf " %s='%s'", $setting, $hashRef->{$setting};
+	}
+	if ($setting =~ m/^view$/) {
+	    my $viewKey = "$table.$hashRef->{$setting}";
+	    die "can not find viewKey $viewKey"
+		if (!exists($viewSettings{$viewKey}));
+	    my $viewHash = $viewSettings{$viewKey};
+	    foreach my $viewName (keys %$viewHash) {
+		if ($listOnly) {
+		    printf " %s='%s'", $viewName, $viewHash->{$viewName}
+			if exists($showList{$viewName});
+		} else {
+		    printf " %s='%s'", $viewName, $viewHash->{$viewName};
 		}
 	    }
-	}
-	printf "\n";
     }
+    }
+    printf "\n";
 }
