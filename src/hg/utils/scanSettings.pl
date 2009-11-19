@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# $Id: scanSettings.pl,v 1.2 2009/11/19 22:04:02 hiram Exp $
+# $Id: scanSettings.pl,v 1.3 2009/11/19 23:35:31 hiram Exp $
 
 use strict;
 use warnings;
@@ -129,6 +129,7 @@ foreach my $table (keys %tableList) {
     my $hashRef = $tableList{$table};
     if (exists($hashRef->{'subTrack'})) {
 	my $parent = $hashRef->{'subTrack'};
+	$parent =~ s/\s+.*//;
 	# first priority are subGroup viewSettings coming in from the parent
 	if (exists($hashRef->{'subGroups'})) {
 	    my @b = split('\s+', $hashRef->{'subGroups'});
