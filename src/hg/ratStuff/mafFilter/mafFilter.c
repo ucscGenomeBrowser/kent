@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.14 2009/11/18 05:23:33 markd Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.15 2009/11/19 05:31:21 markd Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -30,7 +30,8 @@ errAbort(
   "   -reject=filename - Save rejected blocks in filename\n"
   "   -needComp=species - all alignments must have species as one of the component\n"
   "   -overlap - Reject overlapping blocks in reference (assumes ordered blocks)\n"
-  "   -componentFilter=filename - Filter out blocks without a component listed in filename \n",
+  "   -componentFilter=filename - Filter out blocks without a component listed in filename \n"
+  "   -speciesFilter=filename - Filter out blocks without a species listed in filename \n",
         DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_FACTOR
   );
 }
@@ -44,6 +45,7 @@ static struct optionSpec options[] = {
    {"minFactor", OPTION_INT},
    {"reject", OPTION_STRING},
    {"componentFilter", OPTION_STRING},
+   {"speciesFilter", OPTION_STRING},
    {"needComp", OPTION_STRING},
    {"overlap", OPTION_BOOLEAN},
    {NULL, 0},
@@ -56,6 +58,7 @@ int rejectMinScore = 0;
 int rejectMinFactor = 0;
 int rejectNeedComp = 0;
 int rejectComponentFilter = 0;
+int rejectSpeciesFilter = 0;
 int rejectOverlap = 0;
 
 int minCol = DEFAULT_MIN_COL;
@@ -65,7 +68,9 @@ double minScore;
 boolean gotMinFactor = FALSE;
 int minFactor = DEFAULT_FACTOR;
 char *componentFile = NULL;
-struct hash *cHash = NULL;
+char *speciesFile = NULL;
+struct hash *componentHash = NULL;
+struct hash *speciesHash = NULL;
 char *rejectFile = NULL;
 char *needComp = NULL;
 
@@ -118,11 +123,19 @@ if (needComp && (mafMayFindCompSpecies(maf, needComp, '.') == NULL))
     return FALSE;
     }
 
-if (componentFile != NULL && (mafMayFindComponentInHash(maf, cHash) == NULL))
+if (componentFile != NULL && (mafMayFindComponentInHash(maf, componentHash) == NULL))
     {
     verbose(3, "%s:%d componentFilter\n", 
                 maf->components->src, maf->components->start);
     rejectComponentFilter++;
+    return FALSE;
+    }
+
+if (speciesFile != NULL && (mafMayFindSpeciesInHash(maf, speciesHash, '.') == NULL))
+    {
+    verbose(3, "%s:%d speciesFilter\n", 
+                maf->components->src, maf->components->start);
+    rejectSpeciesFilter++;
     return FALSE;
     }
 if (nrow < minRow)
@@ -237,6 +250,8 @@ if (rejectNeedComp)
     fprintf(stderr, "rejected needComp: %d\n", rejectNeedComp);
 if (rejectComponentFilter)
     fprintf(stderr, "rejected componentFilter: %d\n", rejectComponentFilter);
+if (rejectSpeciesFilter)
+    fprintf(stderr, "rejected speciesFilter: %d\n", rejectSpeciesFilter);
 if ( rejectOverlap)
     fprintf(stderr, "rejected overlap: %d\n", rejectOverlap);
 categorizedRejects = rejectMinCol + rejectMinRow + rejectMinScore +
@@ -269,7 +284,10 @@ minCol = optionInt("minCol", DEFAULT_MIN_COL);
 minRow = optionInt("minRow", DEFAULT_MIN_ROW);
 componentFile = optionVal("componentFilter", NULL);
 if (componentFile != NULL)
-    cHash = hashComponentList(componentFile);
+    componentHash = hashComponentList(componentFile);
+speciesFile = optionVal("speciesFilter", NULL);
+if (speciesFile != NULL)
+    speciesHash = hashComponentList(speciesFile);
 rejectFile = optionVal("reject", NULL);
 needComp = optionVal("needComp", NULL);
 verbose(3, "minCol=%d, minRow=%d, gotMinScore=%d, minScore=%f, gotMinFactor=%d, minFactor=%d\n", 

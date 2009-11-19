@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.40 2009/07/22 18:00:27 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.41 2009/11/19 05:31:21 markd Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -548,7 +548,7 @@ return mc;
 }
 
 struct mafComp *mafMayFindComponentInHash(struct mafAli *maf, struct hash *cHash) 
-/* Find component of given source that starts matches any string in the cHash.
+/* Find arbitrary component of given source that matches any string in the cHash.
    Return NULL if not found. */
 {
 struct mafComp *mc;
@@ -556,6 +556,26 @@ struct mafComp *mc;
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     if (hashFindVal(cHash, mc->src))
+        return mc;
+    }
+return NULL;
+}
+
+struct mafComp *mafMayFindSpeciesInHash(struct mafAli *maf, struct hash *cHash, char sepChar) 
+/* Find arbitrary component of given who's source prefix (ended by sep)
+   matches matches any string in the cHash.  Return NULL if not found. */
+{
+struct mafComp *mc;
+
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    char *sep = strchr(mc->src, sepChar);
+    if (sep != NULL)
+        *sep = '\0';
+    boolean hit = hashFindVal(cHash, mc->src) != NULL;
+    if (sep != NULL)
+        *sep = sepChar;
+    if (hit)
         return mc;
     }
 return NULL;

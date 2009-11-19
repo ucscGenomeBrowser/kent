@@ -160,8 +160,12 @@ boolean mafMayFindAllComponents(struct mafAli *maf, struct hash *cHash);
 /* Check to see if all components in hash are in maf block.  Return FALSE if not found. */
 
 struct mafComp *mafMayFindComponentInHash(struct mafAli *maf, struct hash *cHash);
-/* Find component of given source that starts matches any string in the cHash.
+/* Find arbitrary component of given source that matches any string in the cHash.
    Return NULL if not found. */
+
+struct mafComp *mafMayFindSpeciesInHash(struct mafAli *maf, struct hash *cHash, char sepChar);
+/* Find arbitrary component of given who's source prefix (ended by sep)
+   matches matches any string in the cHash.  Return NULL if not found. */
 
 void mafMoveComponentToTop(struct mafAli *maf, char *componentSource);
 /* Move given component to head of component list. */
