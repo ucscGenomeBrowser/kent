@@ -392,10 +392,31 @@ if (tok != NULL)
 return p;
 }
 
+static struct rqlParse *rqlParseNot(struct tokenizer *tkz)
+/* parse out a logical not. */
+{
+char *tok = tokenizerNext(tkz);
+if (sameString(tok, "not"))
+    {
+    struct rqlParse *p = rqlParseCoerce(rqlParseCmp(tkz), rqlTypeBoolean);
+    struct rqlParse *n;
+    AllocVar(n);
+    n->op = rqlOpNot;
+    n->type = rqlTypeBoolean;
+    n->children = p;
+    return n;
+    }
+else
+    {
+    tokenizerReuse(tkz);
+    return rqlParseCmp(tkz);
+    }
+}
+
 static struct rqlParse *rqlParseAnd(struct tokenizer *tkz)
 /* Parse out and or or. */
 {
-struct rqlParse *l = rqlParseCoerce(rqlParseCmp(tkz), rqlTypeBoolean);
+struct rqlParse *l = rqlParseCoerce(rqlParseNot(tkz), rqlTypeBoolean);
 struct rqlParse *parent = NULL;
 struct rqlParse *p = l;
 for (;;)
@@ -416,7 +437,7 @@ for (;;)
 	    parent->children = p;
 	    p = parent;
 	    }
-	struct rqlParse *r = rqlParseCoerce(rqlParseCmp(tkz), rqlTypeBoolean);
+	struct rqlParse *r = rqlParseCoerce(rqlParseNot(tkz), rqlTypeBoolean);
 	slAddTail(&parent->children, r);
 	}
     }
