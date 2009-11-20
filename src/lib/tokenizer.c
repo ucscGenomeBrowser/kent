@@ -8,7 +8,7 @@
 #include "linefile.h"
 #include "tokenizer.h"
 
-static char const rcsid[] = "$Id: tokenizer.c,v 1.3 2004/07/14 05:47:14 kent Exp $";
+static char const rcsid[] = "$Id: tokenizer.c,v 1.4 2009/11/20 08:08:53 kent Exp $";
 
 struct tokenizer *tokenizerOnLineFile(struct lineFile *lf)
 /* Create a new tokenizer on open lineFile. */
@@ -43,7 +43,8 @@ if ((tkz = *pTkz) != NULL)
 void tokenizerReuse(struct tokenizer *tkz)
 /* Reuse token. */
 {
-tkz->reuse = TRUE;
+if (!tkz->eof)
+    tkz->reuse = TRUE;
 }
 
 int tokenizerLineCount(struct tokenizer *tkz)
@@ -70,10 +71,12 @@ if (tkz->reuse)
     tkz->reuse = FALSE;
     return tkz->string;
     }
+tkz->leadingSpaces = 0;
 for (;;)	/* Skip over white space and comments. */
     {
     int lineSize;
     s = start = skipLeadingSpaces(tkz->linePt);
+    tkz->leadingSpaces += s - tkz->linePt;
     if ((c = start[0]) != 0)
 	{
 	if (tkz->uncommentC && c == '/')
@@ -110,6 +113,7 @@ for (;;)	/* Skip over white space and comments. */
 	tkz->eof = TRUE;
 	return NULL;
 	}
+    tkz->leadingSpaces += 1;
     tkz->linePt = tkz->curLine;
     }
 if (isalnum(c) || (c == '_'))
@@ -189,11 +193,13 @@ if (tkz->eof)
     errAbort("Unexpected end of file");
 }
 
-void tokenizerMustHaveNext(struct tokenizer *tkz)
+char *tokenizerMustHaveNext(struct tokenizer *tkz)
 /* Get next token, which must be there. */
 {
-if (tokenizerNext(tkz) == NULL)
+char *s = tokenizerNext(tkz);
+if (s == NULL)
     errAbort("Unexpected end of file");
+return s;
 }
 
 void tokenizerMustMatch(struct tokenizer *tkz, char *string)

@@ -11,6 +11,7 @@ struct tokenizer
     {
     bool reuse;	         /* True if want to reuse this token. */
     bool eof;            /* True at end of file. */
+    int leadingSpaces;	 /* Number of leading spaces before token. */
     struct lineFile *lf; /* Underlying file. */
     char *curLine;       /* Current line of text. */
     char *linePt;        /* Start position within current line. */
@@ -44,7 +45,8 @@ char *tokenizerFileName(struct tokenizer *tkz);
 
 char *tokenizerNext(struct tokenizer *tkz);
 /* Return token's next string (also available as tkz->string) or
- * NULL at EOF. */
+ * NULL at EOF. This string will be overwritten with the next call
+ * to tokenizerNext, so cloneString if you need to save it. */
 
 void tokenizerErrAbort(struct tokenizer *tkz, char *format, ...);
 /* Print error message followed by file and line number and
@@ -53,7 +55,7 @@ void tokenizerErrAbort(struct tokenizer *tkz, char *format, ...);
 void tokenizerNotEnd(struct tokenizer *tkz);
 /* Squawk if at end. */
 
-void tokenizerMustHaveNext(struct tokenizer *tkz);
+char *tokenizerMustHaveNext(struct tokenizer *tkz);
 /* Get next token, which must be there. */
 
 void tokenizerMustMatch(struct tokenizer *tkz, char *string);
