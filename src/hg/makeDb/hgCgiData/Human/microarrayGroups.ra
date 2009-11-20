@@ -1,4 +1,32 @@
 
+############ Gray/Collisson Ovarian Cell Line Data ###########################
+
+name gray2009_OVcellLinesExpGroups
+type groupings
+all gray2009_OVcellLinesExpAll
+
+name gray2009_OVcellLinesExpAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names A2780,CAOV3,CAOV4,DOV13,ES2,HEY,OC314,OC315,OC316,OCC1,OV90,OVCA420,OVCA429,OVCA432,OVCA433,OVCAR3,OVCAR5,OVCAR8,PA1,SKOV3,SW626,TOV112D,TOV21G,IOSE29,EFO27,OAW28,OAW42,PEO1,UPN251
+
+
+name gray2009_OVcellLinesCGHGroups
+type groupings
+all gray2009_OVcellLinesCGHAll
+
+name gray2009_OVcellLinesCGHAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names 59M,A2780,CAOV3,CAOV4,DOV13,EFO27,ES2,HEY,IOSE29,OAW28,OAW42,OC314,OC315,OC316,OCC1,OV90,OVCA420,OVCA429,OVCA432,OVCA433,OVCAR3,OVCAR5,OVCAR8,PA1,PEO1,SKOV3,SW626,TOV112D,TOV21G,UPN251
+
+
+#########################################
+
 name albertsonCGHGroups
 type groupings
 all albertsonCGH_All
