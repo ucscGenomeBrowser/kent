@@ -286,8 +286,8 @@ E) New tables:
 
 E') New files:
     current location on alpha:
-      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/release2/
-    NOT on RR:
+      /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/
+    NOT yet on RR: (but to be put in htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/)
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/index.html
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1BjH3k27me3.tagAlign.gz
    /usr/local/apache/htdocs/goldenPath/hg18/encodeDCC/wgEncodeUwChIPSeq/release1/wgEncodeUwChIPSeqAlignmentsRep1BjH3k36me3.tagAlign.gz
