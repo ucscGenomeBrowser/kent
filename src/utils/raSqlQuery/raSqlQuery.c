@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "options.h"
 #include "obscure.h"
 #include "ra.h"
@@ -9,7 +10,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.4 2009/11/20 01:52:43 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.5 2009/11/20 04:39:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -468,6 +469,45 @@ struct rqlParse *rqlParseClause(struct tokenizer *tkz)
 return rqlParseCmp(tkz);
 }
 
+char *rqlParseFieldSpec(struct tokenizer *tkz, struct dyString *buf)
+/* Return a field spec, which may contain * and ?. Put results in buf, and 
+ * return buf->string. */
+{
+boolean firstTime = TRUE;
+dyStringClear(buf);
+for (;;)
+   {
+   char *tok = tokenizerNext(tkz);
+   if (tok == NULL)
+       break;
+   char c = *tok;
+   if (c == '?' || c == '*' || isalpha(c) || c == '_')
+       {
+       if (firstTime)
+	   dyStringAppend(buf, tok);
+       else
+           {
+	   if (tkz->leadingSpaces == 0)
+	       dyStringAppend(buf, tok);
+	   else
+	       {
+	       tokenizerReuse(tkz);
+	       break;
+	       }
+	   }
+       }
+   else
+       {
+       tokenizerReuse(tkz);
+       break;
+       }
+    firstTime = FALSE;
+    }
+if (buf->stringSize == 0)
+    errAbort("Expecting field name line %d of %s", tkz->lf->lineIx, tkz->lf->fileName);
+return buf->string;
+}
+
 void rqlStatementDump(struct rqlStatement *rql, FILE *f)
 /* Print out statement to file. */
 {
@@ -722,8 +762,9 @@ AllocVar(rql);
 rql->command = cloneString(tokenizerMustHaveNext(tkz));
 if (sameString(rql->command, "select"))
     {
+    struct dyString *buf = dyStringNew(0);
     struct slName *list = NULL;
-    char *tok = tokenizerMustHaveNext(tkz);
+    char *tok = rqlParseFieldSpec(tkz, buf);
     list = slNameNew(tok);
     for (;;)
 	{
@@ -734,10 +775,11 @@ if (sameString(rql->command, "select"))
 	    tokenizerReuse(tkz);
 	    break;
 	    }
-	struct slName *field = slNameAddHead(&list, tokenizerMustHaveNext(tkz));
+	struct slName *field = slNameAddHead(&list, rqlParseFieldSpec(tkz, buf));
 	}
     slReverse(&list);
     rql->fieldList = list;
+    dyStringFree(&buf);
     }
 else if (sameString(rql->command, "count"))
     {
