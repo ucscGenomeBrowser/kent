@@ -9,7 +9,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.3 2009/11/20 01:35:37 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.4 2009/11/20 01:52:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -83,6 +83,11 @@ enum rqlParseOp
 
     rqlParseUnaryMinusDouble,
 
+    rqlParseGt,  /* Greater than comparison. */
+    rqlParseLt,  /* Less than comparison. */
+    rqlParseGe,  /* Greater than or equals comparison. */
+    rqlParseLe,  /* Less than or equals comparison. */
+
     rqlParseAnd,     /* An and */
     rqlParseOr,      /* An or */
     };
@@ -120,6 +125,16 @@ switch (op)
 
     case rqlParseUnaryMinusDouble:
         return "rqlParseUnaryMinusDouble";
+
+    case rqlParseGt:
+        return "rqlParseGt";
+    case rqlParseLt:
+        return "rqlParseLt";
+    case rqlParseGe:
+        return "rqlParseGe";
+    case rqlParseLe:
+        return "rqlParseLe";
+
     default:
 	return "rqlParseUnknown";
     }
@@ -380,6 +395,19 @@ else
     }
 }
 
+boolean eatMatchingTok(struct tokenizer *tkz, char *s)
+/* If next token matches s then eat it and return TRUE */
+{
+char *tok = tokenizerNext(tkz);
+if (tok != NULL && sameString(tok, s))
+    return TRUE;
+else
+    {
+    tokenizerReuse(tkz);
+    return FALSE;
+    }
+}
+
 struct rqlParse *rqlParseCmp(struct tokenizer *tkz)
 /* Parse out comparison. */
 {
@@ -397,6 +425,20 @@ if (tok != NULL)
         {
 	op = rqlParseNe;
 	skipOverRequired(tkz, "=");
+	}
+    else if (sameString(tok, ">"))
+        {
+	if (eatMatchingTok(tkz, "="))
+	    op = rqlParseGe;
+	else
+	    op = rqlParseGt;
+	}
+    else if (sameString(tok, "<"))
+        {
+	if (eatMatchingTok(tkz, "="))
+	    op = rqlParseGe;
+	else
+	    op = rqlParseLe;
 	}
     else
         {
@@ -493,8 +535,6 @@ struct rqlParse *lp = p->children;
 struct rqlParse *rp = lp->next;
 struct rqlEval lv = rqlEvalOnRecord(lp, ra);
 struct rqlEval rv = rqlEvalOnRecord(rp, ra);
-if (lv.type != rv.type)
-    errAbort("Mixed types in rqlParseEquals");
 struct rqlEval res;
 res.type = rqlTypeBoolean;
 switch (lv.type)
@@ -512,8 +552,71 @@ switch (lv.type)
 	res.val.b = (lv.val.x == rv.val.x);
 	break;
     default:
-        errAbort("Unknown type %d", lv.type);
+	internalErr();
 	res.val.b = FALSE;
+	break;
+    }
+return res;
+}
+
+struct rqlEval rqlEvalLt(struct rqlParse *p, struct raRecord *ra)
+/* Return true if r < l . */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlEvalOnRecord(lp, ra);
+struct rqlEval rv = rqlEvalOnRecord(rp, ra);
+struct rqlEval res;
+res.type = rqlTypeBoolean;
+switch (lv.type)
+    {
+    case rqlTypeBoolean:
+        res.val.b = (lv.val.b < rv.val.b);
+	break;
+    case rqlTypeString:
+	res.val.b = strcmp(lv.val.s, rv.val.s) < 0;
+	break;
+    case rqlTypeInt:
+	res.val.b = (lv.val.i < rv.val.i);
+	break;
+    case rqlTypeDouble:
+	res.val.b = (lv.val.x < rv.val.x);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+return res;
+}
+
+struct rqlEval rqlEvalGt(struct rqlParse *p, struct raRecord *ra)
+/* Return true if r > l . */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlEvalOnRecord(lp, ra);
+struct rqlEval rv = rqlEvalOnRecord(rp, ra);
+struct rqlEval res;
+res.type = rqlTypeBoolean;
+switch (lv.type)
+    {
+    case rqlTypeBoolean:
+        res.val.b = (lv.val.b > rv.val.b);
+	break;
+    case rqlTypeString:
+	res.val.b = strcmp(lv.val.s, rv.val.s) > 0;
+	break;
+    case rqlTypeInt:
+	res.val.b = (lv.val.i > rv.val.i);
+	break;
+    case rqlTypeDouble:
+	res.val.b = (lv.val.x > rv.val.x);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
     }
 return res;
 }
@@ -541,6 +644,22 @@ switch (p->op)
 	break;
     case rqlParseNe:
 	res = rqlEvalEq(p, ra);
+	res.val.b = !res.val.b;
+	break;
+
+    /* Inequalities. */
+    case rqlParseLt:
+        res = rqlEvalLt(p, ra);
+	break;
+    case rqlParseGt:
+        res = rqlEvalGt(p, ra);
+	break;
+    case rqlParseLe:
+        res = rqlEvalGt(p, ra);
+	res.val.b = !res.val.b;
+	break;
+    case rqlParseGe:
+        res = rqlEvalLt(p, ra);
 	res.val.b = !res.val.b;
 	break;
 
@@ -757,9 +876,10 @@ void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, char *merg
 /* raSqlQuery - Do a SQL-like query on a RA file.. */
 {
 struct raRecord *raList = readRaRecords(inCount, inNames, mergeField, lm);
-uglyf("Got %d ra records\n", slCount(raList));
 struct rqlStatement *rql = rqlStatementParse(query);
-rqlStatementDump(rql, uglyOut);
+verbose(2, "Got %d records in raFiles\n", slCount(raList));
+if (verboseLevel() > 1)
+    rqlStatementDump(rql, stderr);
 struct raRecord *ra;
 int matchCount = 0;
 boolean doSelect = sameString(rql->command, "select");
