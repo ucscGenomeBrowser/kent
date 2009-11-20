@@ -12,7 +12,15 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.10 2009/11/20 07:41:56 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.11 2009/11/20 09:59:30 kent Exp $";
+
+static char *clQueryFile = NULL;
+static char *clQuery = NULL;
+static char *clKey = "track";
+static char *clParentField = "subTrack";
+static char *clNoInheritField = "noInherit";
+static boolean clMerge = FALSE;
+static boolean clParent = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -32,24 +40,26 @@ errAbort(
   "exists it can contain expressions involving fields, numbers, strings, arithmetic, 'and'\n"
   "'or' and so forth.  Unlike SQL there is no 'from' claus.\n"
   "Other options:\n"
-  "   -merge=keyField - If there are multiple raFiles, records with the same keyField will be\n"
+  "   -key=keyField - Use the as the key field for merges and parenting. Default %s\n"
+  "   -parent - Merge together inheriting on parentField\n"
+  "   -parentField=field - Use field as the one that tells us who is our parent. Default %s\n"
+  "   -noInheritField=field - If field is present don't inherit fields from parent\n"
+  "   -merge - If there are multiple raFiles, records with the same keyField will be\n"
   "          merged together with fields in later files overriding fields in earlier files\n"
-  "   -skipMissing - If merging, skip records without keyfield rather than abort\n"
   "The output will be to stdout, in the form of a .ra file if the select command is used\n"
   "and just a simple number if the count command is used\n"
+  , clKey, clParentField
   );
 }
-
-static char *clQueryFile = NULL;
-static char *clQuery = NULL;
-static char *clMerge = NULL;
-static boolean clSkipMissing = FALSE;
 
 static struct optionSpec options[] = {
    {"queryFile", OPTION_STRING},
    {"query", OPTION_STRING},
-   {"merge", OPTION_STRING},
-   {"skipMissing", OPTION_BOOLEAN},
+   {"merge", OPTION_BOOLEAN},
+   {"key", OPTION_STRING},
+   {"parent", OPTION_BOOLEAN},
+   {"parentField", OPTION_STRING},
+   {"noInheritField", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -75,7 +85,26 @@ for (field = record->fieldList; field != NULL; field = field->next)
     }
 }
 
-static struct raRecord *readRaRecords(int inCount, char *inNames[], char *mergeField, struct lm *lm)
+static void mergeParentRecord(struct raRecord *record, struct raRecord *parent, struct lm *lm)
+/* Merge in parent record.  This only updates fields that are in parent but not record. */
+{
+struct raField *parentField;
+for (parentField= parent->fieldList; parentField!= NULL; parentField= parentField->next)
+    {
+    struct raField *oldField = raRecordField(record, parentField->name);
+    if (oldField == NULL)
+        {
+	struct raField *newField;
+	lmAllocVar(lm, newField);
+	newField->name = parentField->name;
+	newField->val = parentField->val;
+	slAddTail(&record->fieldList, newField);
+	}
+    }
+}
+
+static struct raRecord *readRaRecords(int inCount, char *inNames[], 
+	char *mergeField, struct lm *lm)
 /* Scan through files, merging records on mergeField if it is non-NULL. */
 {
 if (inCount <= 0)
@@ -169,11 +198,75 @@ for (field = fieldList; field != NULL; field = field->next)
 fprintf(out, "\n");
 }
 
-void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, char *mergeField, struct lm *lm,
-	FILE *out)
+static void addMissingKeys(struct raRecord *list, char *keyField)
+/* Add key to all raRecords that don't already have it. */
+{
+struct raRecord *rec;
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    if (rec->key == NULL)
+        rec->key = raRecordField(rec, keyField);
+    }
+}
+
+static struct raRecord *findParent(struct raRecord *rec, 
+	char *parentFieldName, char *noInheritFieldName, struct hash *hash)
+/* Find parent field if possible. */
+{
+struct raField *noInheritField = raRecordField(rec, noInheritFieldName);
+if (noInheritField != NULL)
+    return NULL;
+struct raField *parentField = raRecordField(rec, parentFieldName);
+if (parentField == NULL)
+    return NULL;
+char *parentLine = parentField->val;
+int len = strlen(parentLine);
+char buf[len+1];
+strcpy(buf, parentLine);
+char *parentName = firstWordInLine(buf);
+struct raRecord *parent = hashFindVal(hash, parentName);
+if (parent == NULL)
+     warn("%s is a subTrack of %s, but %s doesn't exist", rec->key->val,
+     	parentField->val, parentField->val);
+return parent;
+}
+
+static void inheritFromParents(struct raRecord *list, char *parentField, char *noInheritField,
+	struct lm *lm)
+/* Go through list.  If an element has a parent field, then fill in non-existent fields from
+ * parent. */
+{
+/* Build up hash of records indexed by key field. */
+struct hash *hash = hashNew(0);
+struct raRecord *rec;
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    if (rec->key != NULL)
+	hashAdd(hash, rec->key->val, rec);
+    }
+
+/* Scan through doing inheritance. */
+for (rec = list; rec != NULL; rec = rec->next)
+    {
+    struct raRecord *parent;
+    for (parent = findParent(rec, parentField, noInheritField, hash); parent != NULL;
+    	parent = findParent(parent, parentField, noInheritField, hash) )
+	{
+	mergeParentRecord(rec, parent, lm);
+	}
+    }
+}
+
+void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, char *mergeField, 
+	char *parentField, char *noInheritField, struct lm *lm, FILE *out)
 /* raSqlQuery - Do a SQL-like query on a RA file.. */
 {
 struct raRecord *raList = readRaRecords(inCount, inNames, mergeField, lm);
+if (parentField != NULL)
+    {
+    addMissingKeys(raList, clKey);
+    inheritFromParents(raList, parentField, noInheritField, lm);
+    }
 struct rqlStatement *rql = rqlStatementParse(query);
 verbose(2, "Got %d records in raFiles\n", slCount(raList));
 if (verboseLevel() > 1)
@@ -202,10 +295,13 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
-clMerge = optionVal("merge", NULL);
-clSkipMissing = optionExists("skipMissing");
+clMerge = optionExists("merge");
+clParent = optionExists("parent");
+clParentField = optionVal("parentField", clParentField);
+clKey = optionVal("key", clKey);
 clQueryFile = optionVal("queryFile", NULL);
 clQuery = optionVal("query", NULL);
+clNoInheritField = optionVal("noInheritField", clNoInheritField);
 if (clQueryFile == NULL && clQuery == NULL)
     errAbort("Please specify either the query or queryFile option.");
 if (clQueryFile != NULL && clQuery != NULL)
@@ -216,6 +312,8 @@ if (clQuery)
 else
     query = lineFileOpen(clQueryFile, TRUE);
 struct lm *lm = lmInit(0);
-raSqlQuery(argc-1, argv+1, query, clMerge, lm, stdout);
+char *mergeField = (clMerge ? clKey : NULL);
+char *parentField = (clParent ? clParentField : NULL);
+raSqlQuery(argc-1, argv+1, query, mergeField, parentField, clNoInheritField, lm, stdout);
 return 0;
 }
