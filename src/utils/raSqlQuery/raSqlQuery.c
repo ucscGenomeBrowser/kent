@@ -12,7 +12,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.13 2009/11/20 20:04:45 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.14 2009/11/20 20:25:54 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -104,6 +104,29 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
     }
 }
 
+struct raField *makeKeyField(struct raRecord *record, char *key, struct lm *lm)
+/* Make up key field if possible from field with name of key.  If not possible then
+ * return NULL.  May have to munge keyField to just include first word. */
+{
+/* See if can find key at all. */
+struct raField *fullKey = raRecordField(record, key);
+if (fullKey == NULL)
+    return NULL;
+
+/* See if it has more than one word by looking for spaces. */
+char *fullKeyVal = fullKey->val;
+char *endFirstWord = skipToSpaces(fullKeyVal);
+if (endFirstWord == NULL)
+    return fullKey;
+
+/* If it does have more than one word, make up a new key. */
+struct raField *shortKey;
+lmAllocVar(lm, shortKey);
+shortKey->name = fullKey->name;
+shortKey->val = lmCloneStringZ(lm, fullKeyVal, endFirstWord - fullKeyVal);
+return shortKey;
+}
+
 static struct raRecord *readRaRecords(int inCount, char *inNames[], 
 	char *mergeField, boolean addFile, struct lm *lm)
 /* Scan through files, merging records on mergeField if it is non-NULL. */
@@ -124,7 +147,7 @@ if (mergeField)
 	    {
 	    if (addFile)
 	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
-	    struct raField *keyField = raRecordField(record, mergeField);
+	    struct raField *keyField = makeKeyField(record, mergeField, lm);
 	    if (keyField != NULL)
 		{
 		struct raRecord *oldRecord = hashFindVal(recordHash, keyField->val);
@@ -215,14 +238,14 @@ if (addFileField != NULL)
 fprintf(out, "\n");
 }
 
-static void addMissingKeys(struct raRecord *list, char *keyField)
+static void addMissingKeys(struct raRecord *list, char *keyField, struct lm *lm)
 /* Add key to all raRecords that don't already have it. */
 {
 struct raRecord *rec;
 for (rec = list; rec != NULL; rec = rec->next)
     {
     if (rec->key == NULL)
-        rec->key = raRecordField(rec, keyField);
+        rec->key = makeKeyField(rec, keyField, lm);
     }
 }
 
@@ -281,7 +304,7 @@ void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, char *merg
 struct raRecord *raList = readRaRecords(inCount, inNames, mergeField, clAddFile, lm);
 if (parentField != NULL)
     {
-    addMissingKeys(raList, clKey);
+    addMissingKeys(raList, clKey, lm);
     inheritFromParents(raList, parentField, noInheritField, lm);
     }
 struct rqlStatement *rql = rqlStatementParse(query);
