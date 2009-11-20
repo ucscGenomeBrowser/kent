@@ -108,6 +108,7 @@ DIRS = \
 	pslToPslx \
 	pslToXa \
 	randomLines \
+	raSqlQuery \
 	raToTab \
 	raToLines \
 	rmFaDups \
