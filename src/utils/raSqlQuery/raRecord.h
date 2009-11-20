@@ -1,4 +1,12 @@
 
+struct raFilePos
+/* Position in file. */
+    {
+    struct raFilePos *next;	/* Next in list. */
+    char *fileName;		/* Name of file, not allocated here. */
+    int lineIx;			/* File line. */
+    };
+
 struct raField
 /* A single field. */
     {
@@ -13,7 +21,11 @@ struct raRecord
     struct raRecord *next;	/* Next in list. */
     struct raField *key;		/* Key field if any. */
     struct raField *fieldList;	/* List of fields. */
+    struct raFilePos *posList;	/* Position of file. */
     };
+
+struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx);
+/* Create new raFilePos record. */
 
 struct raField *raRecordField(struct raRecord *ra, char *fieldName);
 /* Return named field if it exists, otherwise NULL */

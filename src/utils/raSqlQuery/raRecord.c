@@ -3,6 +3,16 @@
 #include "linefile.h"
 #include "raRecord.h"
 
+struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
+/* Create new raFilePos record. */
+{
+struct raFilePos *fp;
+lmAllocVar(lm, fp);
+fp->fileName = fileName;
+fp->lineIx = lineIx;
+return fp;
+}
+
 struct raField *raRecordField(struct raRecord *ra, char *fieldName)
 /* Return named field if it exists, otherwise NULL */
 {

@@ -12,7 +12,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.11 2009/11/20 09:59:30 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.12 2009/11/20 20:00:23 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -21,6 +21,7 @@ static char *clParentField = "subTrack";
 static char *clNoInheritField = "noInherit";
 static boolean clMerge = FALSE;
 static boolean clParent = FALSE;
+static boolean clAddFile = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -46,6 +47,7 @@ errAbort(
   "   -noInheritField=field - If field is present don't inherit fields from parent\n"
   "   -merge - If there are multiple raFiles, records with the same keyField will be\n"
   "          merged together with fields in later files overriding fields in earlier files\n"
+  "   -addFile - Add 'file' field to say where record is defined\n"
   "The output will be to stdout, in the form of a .ra file if the select command is used\n"
   "and just a simple number if the count command is used\n"
   , clKey, clParentField
@@ -60,11 +62,9 @@ static struct optionSpec options[] = {
    {"parent", OPTION_BOOLEAN},
    {"parentField", OPTION_STRING},
    {"noInheritField", OPTION_STRING},
+   {"addFile", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-struct rqlEval rqlEvalOnRecord(struct rqlParse *p, struct raRecord *ra);
-/* Evaluate self on ra. */
 
 static void mergeRecords(struct raRecord *old, struct raRecord *record, struct lm *lm)
 /* Merge record into old,  updating any old fields with new record values. */
@@ -83,6 +83,7 @@ for (field = record->fieldList; field != NULL; field = field->next)
 	slAddTail(&old->fieldList, oldField);
 	}
     }
+old->posList = slCat(old->posList, record->posList);
 }
 
 static void mergeParentRecord(struct raRecord *record, struct raRecord *parent, struct lm *lm)
@@ -104,7 +105,7 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
 }
 
 static struct raRecord *readRaRecords(int inCount, char *inNames[], 
-	char *mergeField, struct lm *lm)
+	char *mergeField, boolean addFile, struct lm *lm)
 /* Scan through files, merging records on mergeField if it is non-NULL. */
 {
 if (inCount <= 0)
@@ -121,6 +122,8 @@ if (mergeField)
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while ((record = raRecordReadOne(lf, lm)) != NULL)
 	    {
+	    if (addFile)
+	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
 	    struct raField *keyField = raRecordField(record, mergeField);
 	    if (keyField != NULL)
 		{
@@ -153,6 +156,8 @@ else
 	struct raRecord *record;
 	while ((record = raRecordReadOne(lf, lm)) != NULL)
 	    {
+	    if (addFile)
+	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
 	    slAddHead(&recordList, record);
 	    }
 	lineFileClose(&lf);
@@ -176,8 +181,10 @@ else
     }
 }
 
-void rqlStatementOutput(struct rqlStatement *rql, struct raRecord *ra, FILE *out)
-/* Output fields  from ra to file. */
+void rqlStatementOutput(struct rqlStatement *rql, struct raRecord *ra, 
+	char *addFileField, FILE *out)
+/* Output fields  from ra to file.  If addFileField is non-null add a new
+ * field with this name at end of output. */
 {
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
@@ -193,6 +200,16 @@ for (field = fieldList; field != NULL; field = field->next)
 	    match = (strcmp(field->name, r->name) == 0);
 	if (match)
 	    fprintf(out, "%s %s\n", r->name, r->val);
+	}
+    if (addFileField != NULL)
+        {
+	fprintf(out, "%s", addFileField);
+	struct raFilePos *fp;
+	for (fp = ra->posList; fp != NULL; fp = fp->next)
+	    {
+	    fprintf(out, " %s %d", fp->fileName, fp->lineIx);
+	    }
+	fprintf(out, "\n");
 	}
     }
 fprintf(out, "\n");
@@ -261,7 +278,7 @@ void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, char *merg
 	char *parentField, char *noInheritField, struct lm *lm, FILE *out)
 /* raSqlQuery - Do a SQL-like query on a RA file.. */
 {
-struct raRecord *raList = readRaRecords(inCount, inNames, mergeField, lm);
+struct raRecord *raList = readRaRecords(inCount, inNames, mergeField, clAddFile, lm);
 if (parentField != NULL)
     {
     addMissingKeys(raList, clKey);
@@ -281,7 +298,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	matchCount += 1;
 	if (doSelect)
 	    {
-	    rqlStatementOutput(rql, ra, out);
+	    rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), out);
 	    }
 	}
     }
@@ -302,6 +319,7 @@ clKey = optionVal("key", clKey);
 clQueryFile = optionVal("queryFile", NULL);
 clQuery = optionVal("query", NULL);
 clNoInheritField = optionVal("noInheritField", clNoInheritField);
+clAddFile = optionExists("addFile");
 if (clQueryFile == NULL && clQuery == NULL)
     errAbort("Please specify either the query or queryFile option.");
 if (clQueryFile != NULL && clQuery != NULL)
