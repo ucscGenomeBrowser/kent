@@ -1,0 +1,23 @@
+track gray2009_OVcellLinesExp
+shortLabel Gray OV Cell exp
+longLabel Gray Ovarian Cell-line expression
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings gray2009_OVcellLinesExpGroups
+
+track gray2009_OVcellLinesCGH
+shortLabel Gray OV Cell CGH
+longLabel Gray Ovarian Cell-line CGH
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings gray2009_OVcellLinesCGHGroups
