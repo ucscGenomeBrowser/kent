@@ -1,0 +1,11 @@
+name one
+val 1
+
+name minusOne
+val -1
+
+name minusHalf
+val -0.5
+
+name twoOrThree
+val 2
