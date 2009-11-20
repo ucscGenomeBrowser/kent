@@ -8,6 +8,7 @@
 #include "localmem.h"
 #include "zlibFace.h"
 #include "bPlusTree.h"
+#include "hmmstats.h"
 #include "cirTree.h"
 #include "udc.h"
 #include "bbiFile.h"
@@ -224,6 +225,8 @@ else if (sameWord(string, "min") || sameWord(string, "minimum"))
     return bbiSumMin;
 else if (sameWord(string, "coverage") || sameWord(string, "dataCoverage"))
     return bbiSumCoverage;
+else if (sameWord(string, "std"))
+    return bbiSumStandardDeviation;
 else
     {
     errAbort("Unknown bbiSummaryType %s", string);
@@ -244,6 +247,8 @@ switch (type)
         return "min";
     case bbiSumCoverage:
         return "coverage";
+    case bbiSumStandardDeviation:
+        return "std";
     default:
 	errAbort("Unknown bbiSummaryType %d", (int)type);
 	return NULL;
@@ -599,6 +604,9 @@ if (ret)
 		    break;
 		case bbiSumCoverage:
 		    val = covFactor*el->validCount;
+		    break;
+		case bbiSumStandardDeviation:
+		    val = calcStdFromSums(el->sumData, el->sumSquares, el->validCount);
 		    break;
 		default:
 		    internalErr();

@@ -7,7 +7,7 @@
 #include "udc.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.12 2009/11/10 05:46:36 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.13 2009/11/20 17:12:17 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -26,6 +26,7 @@ errAbort(
   "         mean - average value in region (default)\n"
   "         min - minimum value in region\n"
   "         max - maximum value in region\n"
+  "         std - standard deviation in region\n"
   "         coverage - %% of region that is covered\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
