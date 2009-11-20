@@ -543,7 +543,7 @@ if (sameString(rql->command, "select"))
 	    tokenizerReuse(tkz);
 	    break;
 	    }
-	struct slName *field = slNameAddHead(&list, rqlParseFieldSpec(tkz, buf));
+	slNameAddHead(&list, rqlParseFieldSpec(tkz, buf));
 	}
     slReverse(&list);
     rql->fieldList = list;

@@ -1,6 +1,6 @@
 #include "common.h"
 #include "localmem.h"
-#include "lineFile.h"
+#include "linefile.h"
 #include "raRecord.h"
 
 struct raField *raRecordField(struct raRecord *ra, char *fieldName)
@@ -34,7 +34,7 @@ struct raRecord *raRecordReadOne(struct lineFile *lf, struct lm *lm)
 /* Read next record from file. Returns NULL at end of file. */
 {
 struct raField *field, *fieldList = NULL;
-char *line, *word;
+char *line;
 
 /* Read first line and start fieldList on it. */
 if (!lineFileNextReal(lf, &line))
