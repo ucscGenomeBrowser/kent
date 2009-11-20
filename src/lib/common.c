@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.136 2009/11/12 19:33:54 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.137 2009/11/20 17:44:45 angie Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -959,7 +959,7 @@ else
     return strcmp(a,b) != 0;
 }
 
-boolean startsWith(char *start,char *string)
+boolean startsWith(const char *start, const char *string)
 /* Returns TRUE if string begins with start. */
 {
 char c;

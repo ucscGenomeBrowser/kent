@@ -673,7 +673,7 @@ int cmpStringsWithEmbeddedNumbers(char *a, char *b);
 int cmpWordsWithEmbeddedNumbers(char *a, char *b);
 /* Case insensitive version of cmpStringsWithEmbeddedNumbers. */
 
-boolean startsWith(char *start,char *string);
+boolean startsWith(const char *start, const char *string);
 /* Returns TRUE if string begins with start. */
 
 boolean startsWithWord(char *firstWord, char *line);
