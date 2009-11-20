@@ -10,7 +10,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.6 2009/11/20 04:57:14 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.7 2009/11/20 06:00:29 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -76,6 +76,8 @@ enum rqlParseOp
     rqlParseNe,	/* A not equals comparison */
 
     rqlParseStringToBoolean,
+    rqlParseIntToBoolean,
+    rqlParseDoubleToBoolean,
     rqlParseStringToInt,
     rqlParseStringToDouble,
     rqlParseBooleanToInt,
@@ -114,6 +116,10 @@ switch (op)
     
     case rqlParseStringToBoolean:
         return "rqlParseStringToBoolean";
+    case rqlParseIntToBoolean:
+        return "rqlParseIntToBoolean";
+    case rqlParseDoubleToBoolean:
+        return "rqlParseDoubleToBoolean";
     case rqlParseStringToInt:
         return "rqlParseStringToInt";
     case rqlParseStringToDouble:
@@ -308,6 +314,10 @@ switch (oldType)
     {
     case rqlTypeString:
         return rqlParseStringToBoolean;
+    case rqlTypeInt:
+        return rqlParseIntToBoolean;
+    case rqlTypeDouble:
+        return rqlParseDoubleToBoolean;
     default:
         internalErr();
 	return rqlParseUnknown;
@@ -483,10 +493,70 @@ if (tok != NULL)
 return p;
 }
 
+struct rqlParse *rqlParseAndLoop(struct tokenizer *tkz)
+/* Parse out and or or. */
+{
+struct rqlParse *l = rqlParseCoerce(rqlParseCmp(tkz), rqlTypeBoolean);
+struct rqlParse *parent = NULL;
+struct rqlParse *p = l;
+for (;;)
+    {
+    char *tok = tokenizerNext(tkz);
+    if (tok == NULL || !sameString(tok, "and"))
+        {
+	tokenizerReuse(tkz);
+	return p;
+	}
+    else
+        {
+	if (parent == NULL)
+	    {
+	    AllocVar(parent);
+	    parent->op = rqlParseAnd;
+	    parent->type = rqlTypeBoolean;
+	    parent->children = p;
+	    p = parent;
+	    }
+	struct rqlParse *r = rqlParseCoerce(rqlParseCmp(tkz), rqlTypeBoolean);
+	slAddTail(&parent->children, r);
+	}
+    }
+}
+
+struct rqlParse *rqlParseOrLoop(struct tokenizer *tkz)
+/* Parse out and or or. */
+{
+struct rqlParse *l = rqlParseCoerce(rqlParseAndLoop(tkz), rqlTypeBoolean);
+struct rqlParse *parent = NULL;
+struct rqlParse *p = l;
+for (;;)
+    {
+    char *tok = tokenizerNext(tkz);
+    if (tok == NULL || !sameString(tok, "or"))
+        {
+	tokenizerReuse(tkz);
+	return p;
+	}
+    else
+        {
+	if (parent == NULL)
+	    {
+	    AllocVar(parent);
+	    parent->op = rqlParseOr;
+	    parent->type = rqlTypeBoolean;
+	    parent->children = p;
+	    p = parent;
+	    }
+	struct rqlParse *r = rqlParseCoerce(rqlParseAndLoop(tkz), rqlTypeBoolean);
+	slAddTail(&parent->children, r);
+	}
+    }
+}
+
 struct rqlParse *rqlParseClause(struct tokenizer *tkz)
 /* Parse out a clause, usually a where clause. */
 {
-return rqlParseCmp(tkz);
+return rqlParseOrLoop(tkz);
 }
 
 char *rqlParseFieldSpec(struct tokenizer *tkz, struct dyString *buf)
@@ -741,11 +811,55 @@ switch (p->op)
         res = rqlEvalLike(p,ra);
 	break;
 
+    /* Logical ops. */
+    case rqlParseAnd:
+	{
+        res.type = rqlTypeBoolean;
+	res.val.b = TRUE;
+	struct rqlParse *c;
+	for (c = p->children; c != NULL; c= c->next)
+	    {
+	    struct rqlEval e = rqlEvalOnRecord(c, ra);
+	    if (!e.val.b)
+		{
+	        res.val.b = FALSE;
+		break;
+		}
+	    }
+	break;
+	}
+    case rqlParseOr:
+	{
+        res.type = rqlTypeBoolean;
+	res.val.b = FALSE;
+	struct rqlParse *c;
+	for (c = p->children; c != NULL; c= c->next)
+	    {
+	    struct rqlEval e = rqlEvalOnRecord(c, ra);
+	    if (e.val.b)
+		{
+	        res.val.b = TRUE;
+		break;
+		}
+	    }
+	break;
+	}
+
     /* Type casts. */
     case rqlParseStringToBoolean:
 	res = rqlEvalOnRecord(p->children, ra);
 	res.type = rqlTypeBoolean;
 	res.val.b = (res.val.s[0] != 0);
+	break;
+    case rqlParseIntToBoolean:
+        res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeBoolean;
+	res.val.b = (res.val.i != 0);
+	break;
+    case rqlParseDoubleToBoolean:
+        res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeBoolean;
+	res.val.b = (res.val.x != 0.0);
 	break;
     case rqlParseStringToInt:
 	res = rqlEvalOnRecord(p->children, ra);
