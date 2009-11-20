@@ -78,10 +78,11 @@ bits64 udcCleanup(char *cacheDir, double maxDays, boolean testOnly);
  * no clean up is done, but the size of the files that would be
  * cleaned up is still. */
 
-void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **retColon);
+void udcParseUrlFull(char *url, char **retProtocol, char **retAfterProtocol, char **retColon,
+		     char **retAuth);
 /* Parse the URL into components that udc treats separately.
  * *retAfterProtocol is Q-encoded to keep special chars out of filenames.  
- * Free  *retProtocol and *retAfterProtocol but not *retColon when done. */
+ * Free all *ret's except *retColon when done. */
 
 char *udcDefaultDir();
 /* Get default directory for cache.  Use this for the udcFileOpen call if you

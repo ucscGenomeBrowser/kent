@@ -31,7 +31,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.29 2009/11/19 19:11:18 angie Exp $";
+static char const rcsid[] = "$Id: udc.c,v 1.30 2009/11/20 17:45:32 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -634,10 +634,11 @@ while ((c = *s++) != 0)
 return output;
 }
 
-void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **retColon)
+void udcParseUrlFull(char *url, char **retProtocol, char **retAfterProtocol, char **retColon,
+		     char **retAuth)
 /* Parse the URL into components that udc treats separately.
  * *retAfterProtocol is Q-encoded to keep special chars out of filenames.  
- * Free  *retProtocol and *retAfterProtocol but not *retColon when done. */
+ * Free all *ret's except *retColon when done. */
 {
 char *protocol, *afterProtocol;
 char *colon = strchr(url, ':');
@@ -654,6 +655,12 @@ while (afterProtocol[0] == '/')
 char *userPwd = strchr(afterProtocol, '@');
 if (userPwd)
     {
+    if (retAuth)
+	{
+	char auth[1024];
+	safencpy(auth, sizeof(auth), afterProtocol, userPwd+1-afterProtocol);
+	*retAuth = qEncode(auth);
+	}
     char *afterHost = strchr(afterProtocol, '/');
     if (!afterHost)
 	{
@@ -662,10 +669,20 @@ if (userPwd)
     if (userPwd < afterHost)
 	afterProtocol = userPwd + 1;
     }
+else if (retAuth)
+    *retAuth = NULL;
 afterProtocol = qEncode(afterProtocol);
 *retProtocol = protocol;
 *retAfterProtocol = afterProtocol;
 *retColon = colon;
+}
+
+void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **retColon)
+/* Parse the URL into components that udc treats separately.
+ * *retAfterProtocol is Q-encoded to keep special chars out of filenames.  
+ * Free  *retProtocol and *retAfterProtocol but not *retColon when done. */
+{
+udcParseUrlFull(url, retProtocol, retAfterProtocol, retColon, NULL);
 }
 
 void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, char *afterProtocol)
