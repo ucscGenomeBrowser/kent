@@ -10,7 +10,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.8 2009/11/20 06:10:04 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.9 2009/11/20 06:12:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,7 +28,7 @@ errAbort(
   "'select' or 'count'.  Select is followed by a field list, or '*' for all fields\n"
   "Count is not followed by anything.  The 'where' clause is optional, and if it\n"
   "exists it can contain expressions involving fields, numbers, strings, arithmetic, 'and'\n"
-  "'or' and so forth.\n"
+  "'or' and so forth.  Unlike SQL there is no 'from' claus.\n"
   "Other options:\n"
   "   -merge=keyField - If there are multiple raFiles, records with the same keyField will be\n"
   "          merged together with fields in later files overriding fields in earlier files\n"
