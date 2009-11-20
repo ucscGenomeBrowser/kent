@@ -706,7 +706,7 @@ boolean endsWith(char *string, char *end);
 char lastChar(char *s);
 /* Return last character in string. */
 
-boolean wildMatch(char *wildCard, char *string);
+boolean wildMatch(const char *wildCard, const char *string);
 /* does a case insensitive wild card match with a string.
  * * matches any string or no character.
  * ? matches any single character.
@@ -715,7 +715,7 @@ boolean wildMatch(char *wildCard, char *string);
 boolean sqlMatchLike(char *wildCard, char *string);
 /* Match using % and _ wildcards. */
 
-boolean anyWild(char *string);
+boolean anyWild(const char *string);
 /* Return TRUE if any wild card characters in string. */
 
 char *memMatch(char *needle, int nLen, char *haystack, int hLen);

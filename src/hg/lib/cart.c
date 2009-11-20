@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.112 2009/08/28 00:54:54 galt Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.113 2009/11/20 19:11:16 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1098,7 +1098,7 @@ return name;
 }
 
 static struct hashEl *cartFindSome(struct cart *cart, char *pattern,
-	boolean (*match)(char *a, char *b))
+	boolean (*match)(const char *a, const char *b))
 /* Return list of name/val pairs from cart where name matches
  * pattern.  Free when done with hashElFreeList. */
 {

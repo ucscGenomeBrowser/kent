@@ -5,9 +5,9 @@
 
 #include "common.h"
 
-static char const rcsid[] = "$Id: wildcmp.c,v 1.6 2009/11/20 08:08:26 kent Exp $";
+static char const rcsid[] = "$Id: wildcmp.c,v 1.7 2009/11/20 19:11:16 angie Exp $";
 
-static int subMatch(char *str, char *wild, char single, char multi)
+static int subMatch(const char *str, const char *wild, char single, char multi)
 /* Returns number of characters that match between str and wild up
  * to the next wildcard in wild (or up to end of string.). */
 {
@@ -24,7 +24,7 @@ for(;;)
     }
 }
 
-boolean anyWild(char *string)
+boolean anyWild(const char *string)
 /* Return TRUE if any wild card characters in string. */
 {
 char c;
@@ -36,7 +36,7 @@ while ((c = *string++) != 0)
 return FALSE;
 }
 
-static boolean globMatch(char *wildCard, char *string, char single, char multi)
+static boolean globMatch(const char *wildCard, const char *string, char single, char multi)
 /* does a case sensitive wild card match with a string.
  * * matches any string or no character.
  * ? matches any single character.
@@ -104,7 +104,7 @@ NEXT_WILD:
     }
 }
 
-boolean wildMatch(char *wildCard, char *string)
+boolean wildMatch(const char *wildCard, const char *string)
 /* Match using * and ? wildcards. */
 {
 return globMatch(wildCard, string, '?', '*');
