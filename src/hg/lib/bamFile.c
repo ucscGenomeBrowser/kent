@@ -9,7 +9,7 @@
 #include "udc.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamFile.c,v 1.14 2009/11/06 18:09:55 angie Exp $";
+static char const rcsid[] = "$Id: bamFile.c,v 1.15 2009/11/20 17:51:56 angie Exp $";
 
 static boolean ignoreStrand = FALSE;
 
@@ -67,12 +67,14 @@ static char *samtoolsFileName(char *fileOrUrl)
  * If udcFuse is not configured, or fileOrUrl is not an URL, just pass through fileOrUrl. */
 {
 char *udcFuseRoot = cfgOption("udcFuse.mountPoint");
-char *protocol = NULL, *afterProtocol = NULL, *colon = NULL;
-udcParseUrl(fileOrUrl, &protocol, &afterProtocol, &colon);
+char *protocol = NULL, *afterProtocol = NULL, *colon = NULL, *auth = NULL;
+udcParseUrlFull(fileOrUrl, &protocol, &afterProtocol, &colon, &auth);
 if (udcFuseRoot != NULL && afterProtocol != NULL)
     {
     struct dyString *dy = dyStringNew(0);
-    dyStringPrintf(dy, "%s/%s/%s", udcFuseRoot, protocol, afterProtocol);
+    if (auth == NULL)
+	auth = "";
+    dyStringPrintf(dy, "%s/%s/%s%s", udcFuseRoot, protocol, auth, afterProtocol);
     char *bamFileName = dyStringCannibalize(&dy);
     if (!isRegularFile(bamFileName))
 	{
