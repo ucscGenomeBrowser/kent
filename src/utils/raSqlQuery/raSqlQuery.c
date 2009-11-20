@@ -12,7 +12,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.12 2009/11/20 20:00:23 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.13 2009/11/20 20:04:45 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -201,16 +201,16 @@ for (field = fieldList; field != NULL; field = field->next)
 	if (match)
 	    fprintf(out, "%s %s\n", r->name, r->val);
 	}
-    if (addFileField != NULL)
-        {
-	fprintf(out, "%s", addFileField);
-	struct raFilePos *fp;
-	for (fp = ra->posList; fp != NULL; fp = fp->next)
-	    {
-	    fprintf(out, " %s %d", fp->fileName, fp->lineIx);
-	    }
-	fprintf(out, "\n");
+    }
+if (addFileField != NULL)
+    {
+    fprintf(out, "%s", addFileField);
+    struct raFilePos *fp;
+    for (fp = ra->posList; fp != NULL; fp = fp->next)
+	{
+	fprintf(out, " %s %d", fp->fileName, fp->lineIx);
 	}
+    fprintf(out, "\n");
     }
 fprintf(out, "\n");
 }
