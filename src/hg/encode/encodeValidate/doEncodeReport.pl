@@ -7,7 +7,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.4 2009/11/19 19:23:17 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeReport.pl,v 1.5 2009/11/20 02:30:03 kate Exp $
 
 # TODO: warn if variable not found in cv.ra
 
@@ -120,6 +120,11 @@ while (@row = $sth->fetchrow_array()) {
     $experiment{"lab"} = $metadata{"lab"};
     # strip off PI name in parens
     $experiment{"lab"} =~ s/\(\w+\)//;
+
+    # for now, force all Yale projects to be Yale lab (until metadata in projects table can match)
+    if ($metadata{"grant"} eq "Snyder") {
+        $experiment{"lab"} = "Yale";
+    }
     $experiment{"dataType"} = lc($metadata{"dataType"});
 
     $experiment{"cell"} = "none";
