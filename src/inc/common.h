@@ -712,6 +712,12 @@ boolean wildMatch(char *wildCard, char *string);
  * ? matches any single character.
  * anything else etc must match the character exactly. */
 
+boolean sqlMatchLike(char *wildCard, char *string);
+/* Match using % and _ wildcards. */
+
+boolean anyWild(char *string);
+/* Return TRUE if any wild card characters in string. */
+
 char *memMatch(char *needle, int nLen, char *haystack, int hLen);
 /* Returns first place where needle (of nLen chars) matches
  * haystack (of hLen chars) */
