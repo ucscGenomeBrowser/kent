@@ -9,7 +9,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.2 2009/11/20 01:18:09 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.3 2009/11/20 01:35:37 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -81,6 +81,8 @@ enum rqlParseOp
     rqlParseBooleanToDouble,
     rqlParseIntToDouble,
 
+    rqlParseUnaryMinusDouble,
+
     rqlParseAnd,     /* An and */
     rqlParseOr,      /* An or */
     };
@@ -116,6 +118,8 @@ switch (op)
     case rqlParseIntToDouble:
         return "rqlParseIntToDouble";
 
+    case rqlParseUnaryMinusDouble:
+        return "rqlParseUnaryMinusDouble";
     default:
 	return "rqlParseUnknown";
     }
@@ -354,10 +358,32 @@ else
     }
 }
 
+struct rqlParse *rqlParseUnaryMinus(struct tokenizer *tkz)
+/* Return unary minus sort of parse tree if there's a leading '-' */
+{
+char *tok = tokenizerMustHaveNext(tkz);
+if (tok[0] == '-')
+    {
+    struct rqlParse *c = rqlParseAtom(tkz);
+    c = rqlParseCoerce(c, rqlTypeDouble);
+    struct rqlParse *p;
+    AllocVar(p);
+    p->op = rqlParseUnaryMinusDouble;
+    p->type = rqlTypeDouble;
+    p->children = c;
+    return p;
+    }
+else
+    {
+    tokenizerReuse(tkz);
+    return rqlParseAtom(tkz);
+    }
+}
+
 struct rqlParse *rqlParseCmp(struct tokenizer *tkz)
 /* Parse out comparison. */
 {
-struct rqlParse *l = rqlParseAtom(tkz);
+struct rqlParse *l = rqlParseUnaryMinus(tkz);
 struct rqlParse *p = l;
 char *tok = tokenizerNext(tkz);
 if (tok != NULL)
@@ -377,7 +403,7 @@ if (tok != NULL)
 	tokenizerReuse(tkz);
 	return p;
 	}
-    struct rqlParse *r = rqlParseAtom(tkz);
+    struct rqlParse *r = rqlParseUnaryMinus(tkz);
     AllocVar(p);
     p->op = op;
     p->type = rqlTypeBoolean;
@@ -548,6 +574,12 @@ switch (p->op)
 	res = rqlEvalOnRecord(p->children, ra);
 	res.type = rqlTypeDouble;
 	res.val.x = res.val.b;
+	break;
+
+    case rqlParseUnaryMinusDouble:
+        res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeDouble;
+	res.val.x = -res.val.x;
 	break;
 
     default:
