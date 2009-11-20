@@ -1,5 +1,5 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.25 2009/11/11 21:55:14 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.26 2009/11/20 23:51:17 tdreszer Exp $
 
 var debug = false;
 
@@ -414,6 +414,17 @@ function metadataShowHide(tableName)
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
+}
+
+function warn(msg)
+{ // adds warnings to the warnBox
+    var warnList = $('#warnList'); // warnBox contains warnList
+    if( $(warnList).length == 0 )
+        alert(msg);
+    else {
+        $( warnList ).append('<li>'+msg+'</li>');
+        showWarnBox();
+    }
 }
 
 function getHgsid()
