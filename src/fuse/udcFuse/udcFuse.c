@@ -13,7 +13,7 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.5 2009/11/19 19:07:58 angie Exp $";
+static char const rcsid[] = "$Id: udcFuse.c,v 1.6 2009/11/20 17:56:35 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -133,6 +133,38 @@ if (stbuf->st_mode | S_IFDIR)
 return 0;
 }
 
+#define HTTP_PATH_PREFIX "/http/"
+#define QENCODED_AT_SIGN "Q40"
+
+static int fusePathToUdcPath(const char *path, char *udcPath, size_t udcPathSize)
+/* The udc cache path is almost always just udcDefaultDir() + fuse path,
+ * except when the fuse path includes qEncoded http auth info -- necessary for 
+ * reconstructing the URL, but not included in the udc cache path. 
+ * Return -1 for problem, 0 for OK. */
+{
+char *httpHost = NULL;
+if (startsWith(HTTP_PATH_PREFIX, path))
+    httpHost = (char *)path + strlen(HTTP_PATH_PREFIX);
+if (httpHost)
+    {
+    char *atSign = strstr(httpHost, QENCODED_AT_SIGN);
+    char *nextSlash = strchr(httpHost, '/');
+    if (atSign != NULL &&
+	(nextSlash == NULL || atSign < nextSlash))
+	{
+	ERR_CATCH_START();
+	safef(udcPath, udcPathSize, "%s" HTTP_PATH_PREFIX "%s",
+	      udcDefaultDir(), atSign+strlen(QENCODED_AT_SIGN));
+	ERR_CATCH_END("safef udcPath (skipping auth)");
+	return 0;
+	}
+    }
+ERR_CATCH_START();
+safef(udcPath, udcPathSize, "%s%s", udcDefaultDir(), path);
+ERR_CATCH_END("safef udcPath");
+return 0;
+}
+
 static int udcfs_getattr(const char *path, struct stat *stbuf)
 /* According to http://sourceforge.net/apps/mediawiki/fuse/index.php?title=FuseInvariants ,
  * getattr() is called to test existence before every other command except read, write and
@@ -140,9 +172,8 @@ static int udcfs_getattr(const char *path, struct stat *stbuf)
 {
 unsigned int pid = pthread_self();
 char udcCachePath[4096];
-ERR_CATCH_START();
-safef(udcCachePath, sizeof(udcCachePath), "%s%s", udcDefaultDir(), path);
-ERR_CATCH_END("getattr safef udcCachePath");
+if (fusePathToUdcPath(path, udcCachePath, sizeof(udcCachePath)) < 0)
+    return -1;
 int res = stat(udcCachePath, stbuf);
 if (res != 0)
     {
@@ -161,11 +192,9 @@ static int udcfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 /* Read the corresponding udc cache directory. */
 {
 unsigned int pid = pthread_self();
-char *udcCacheRoot = udcDefaultDir();
 char udcCachePath[4096];
-ERR_CATCH_START();
-safef(udcCachePath, sizeof(udcCachePath), "%s%s", udcCacheRoot, path);
-ERR_CATCH_END("readdir safef udcCachePath");
+if (fusePathToUdcPath(path, udcCachePath, sizeof(udcCachePath)) < 0)
+    return -1;
 DIR *dirHandle = opendir(udcCachePath);
 if (dirHandle == NULL)
     {
