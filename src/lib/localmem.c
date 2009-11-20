@@ -11,7 +11,7 @@
 #include "common.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: localmem.c,v 1.10 2005/04/11 07:20:03 markd Exp $";
+static char const rcsid[] = "$Id: localmem.c,v 1.11 2009/11/20 20:26:27 kent Exp $";
 
 struct lm
     {
@@ -98,18 +98,26 @@ memcpy(d, pt, size);
 return d;
 }
 
-char *lmCloneString(struct lm *lm, char *string)
+char *lmCloneStringZ(struct lm *lm, char *string, int size)
 /* Return local mem copy of string. */
 {
 if (string == NULL)
     return NULL;
 else
     {
-    int size = strlen(string)+1;
-    char *s = lmAlloc(lm, size);
+    char *s = lmAlloc(lm, size+1);
     memcpy(s, string, size);
     return s;
     }
+}
+
+char *lmCloneString(struct lm *lm, char *string)
+/* Return local mem copy of string. */
+{
+if (string == NULL)
+    return NULL;
+else
+    return lmCloneStringZ(lm, string, strlen(string));
 }
 
 struct slName *lmSlName(struct lm *lm, char *name)
