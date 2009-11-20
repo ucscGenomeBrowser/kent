@@ -10,7 +10,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.7 2009/11/20 06:00:29 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.8 2009/11/20 06:10:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -226,6 +226,25 @@ for (child = p->children; child != NULL; child= child->next)
     rqlParseDump(child, depth+1, f);
 }
 
+static void expectingGot(struct tokenizer *tkz, char *expecting, char *got)
+/* Print out error message about unexpected input. */
+{
+errAbort("Expecting %s, got %s, line %d of %s", expecting, got, tkz->lf->lineIx,
+	tkz->lf->fileName);
+}
+
+static void skipOverRequired(struct tokenizer *tkz, char *expecting)
+/* Make sure that next token is tok, and skip over it. */
+{
+tokenizerMustHaveNext(tkz);
+if (!sameString(tkz->string, expecting))
+    expectingGot(tkz, expecting, tkz->string);
+}
+
+
+struct rqlParse *rqlParseExpression(struct tokenizer *tkz);
+/* Parse out a clause, usually a where clause. */
+
 struct rqlParse *rqlParseAtom(struct tokenizer *tkz)
 /* Return low level (symbol or literal) */
 {
@@ -265,26 +284,16 @@ else if (isdigit(c))
 	    tokenizerReuse(tkz);
 	}
     }
+else if (c == '(')
+    {
+    p = rqlParseExpression(tkz);
+    skipOverRequired(tkz, ")");
+    }
 else
     {
     errAbort("Unexpected %s line %d of %s", tok, tkz->lf->lineIx, tkz->lf->fileName);
     }
 return p;
-}
-
-static void expectingGot(struct tokenizer *tkz, char *expecting, char *got)
-/* Print out error message about unexpected input. */
-{
-errAbort("Expecting %s, got %s, line %d of %s", expecting, got, tkz->lf->lineIx,
-	tkz->lf->fileName);
-}
-
-static void skipOverRequired(struct tokenizer *tkz, char *expecting)
-/* Make sure that next token is tok, and skip over it. */
-{
-tokenizerMustHaveNext(tkz);
-if (!sameString(tkz->string, expecting))
-    expectingGot(tkz, expecting, tkz->string);
 }
 
 enum rqlType commonTypeForBop(enum rqlType left, enum rqlType right)
@@ -553,7 +562,7 @@ for (;;)
     }
 }
 
-struct rqlParse *rqlParseClause(struct tokenizer *tkz)
+struct rqlParse *rqlParseExpression(struct tokenizer *tkz)
 /* Parse out a clause, usually a where clause. */
 {
 return rqlParseOrLoop(tkz);
@@ -945,7 +954,7 @@ if (where != NULL)
     {
     if (!sameString(where, "where"))
         errAbort("Unknown clause '%s' line %d of %s", where, lf->lineIx, lf->fileName);
-    rql->whereClause = rqlParseClause(tkz);
+    rql->whereClause = rqlParseExpression(tkz);
     }
 
 char *extra = tokenizerNext(tkz);
