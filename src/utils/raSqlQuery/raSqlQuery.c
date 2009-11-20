@@ -9,7 +9,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.1 2009/11/20 00:24:55 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.2 2009/11/20 01:18:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,7 +73,15 @@ enum rqlParseOp
     rqlParseSymbol,	/* A symbol name. */
     rqlParseEq,	/* An equals comparison */
     rqlParseNe,	/* A not equals comparison */
-    rqlParseAnd,	/* An and */
+
+    rqlParseStringToBoolean,
+    rqlParseStringToInt,
+    rqlParseStringToDouble,
+    rqlParseBooleanToInt,
+    rqlParseBooleanToDouble,
+    rqlParseIntToDouble,
+
+    rqlParseAnd,     /* An and */
     rqlParseOr,      /* An or */
     };
 
@@ -94,6 +102,20 @@ switch (op)
 	return "rqlParseAnd";
     case rqlParseOr:
 	return "rqlParseOr";
+    
+    case rqlParseStringToBoolean:
+        return "rqlParseStringToBoolean";
+    case rqlParseStringToInt:
+        return "rqlParseStringToInt";
+    case rqlParseStringToDouble:
+        return "rqlParseStringToDouble";
+    case rqlParseBooleanToInt:
+        return "rqlParseBooleanToInt";
+    case rqlParseBooleanToDouble:
+        return "rqlParseBooleanToDouble";
+    case rqlParseIntToDouble:
+        return "rqlParseIntToDouble";
+
     default:
 	return "rqlParseUnknown";
     }
@@ -198,16 +220,21 @@ else if (isalpha(c) || c == '_')
 else if (isdigit(c))
     {
     p->op = rqlParseLiteral;
-    if (strchr(tok, '.'))
-       {
-       p->type = rqlTypeDouble;
-       p->val.x = sqlDouble(tok);
-       }
-    else
-       {
-       p->type = rqlTypeInt;
-       p->val.i = sqlUnsigned(tok);
-       }
+    p->type = rqlTypeInt;
+    p->val.i = sqlUnsigned(tok);
+    if ((tok = tokenizerNext(tkz)) != NULL)
+	{
+	if (tok[0] == '.')
+	    {
+	    char buf[32];
+	    tok = tokenizerMustHaveNext(tkz);
+	    safef(buf, sizeof(buf), "%d.%s", p->val.i, tok);
+	    p->type = rqlTypeDouble;
+	    p->val.x = sqlDouble(buf);
+	    }
+	else
+	    tokenizerReuse(tkz);
+	}
     }
 else
     {
@@ -229,6 +256,102 @@ static void skipOverRequired(struct tokenizer *tkz, char *expecting)
 tokenizerMustHaveNext(tkz);
 if (!sameString(tkz->string, expecting))
     expectingGot(tkz, expecting, tkz->string);
+}
+
+enum rqlType commonTypeForBop(enum rqlType left, enum rqlType right)
+/* Return type that will work for a binary operation. */
+{
+if (left == right)
+    return left;
+else if (left == rqlTypeDouble || right == rqlTypeDouble)
+    return rqlTypeDouble;
+else if (left == rqlTypeInt || right == rqlTypeInt)
+    return rqlTypeInt;
+else if (left == rqlTypeBoolean || right == rqlTypeBoolean)
+    return rqlTypeBoolean;
+else if (left == rqlTypeString || right == rqlTypeString)
+    return rqlTypeString;
+else
+    {
+    errAbort("Can't find commonTypeForBop");
+    return rqlTypeInt;
+    }
+}
+
+enum rqlParseOp booleanCastOp(enum rqlType oldType)
+/* Return op to convert oldType to boolean. */
+{
+switch (oldType)
+    {
+    case rqlTypeString:
+        return rqlParseStringToBoolean;
+    default:
+        internalErr();
+	return rqlParseUnknown;
+    }
+}
+
+enum rqlParseOp intCastOp(enum rqlType oldType)
+/* Return op to convert oldType to int. */
+{
+switch (oldType)
+    {
+    case rqlTypeString:
+        return rqlParseStringToInt;
+    case rqlTypeBoolean:
+        return rqlParseBooleanToInt;
+    default:
+        internalErr();
+	return rqlParseUnknown;
+    }
+}
+
+enum rqlParseOp doubleCastOp(enum rqlType oldType)
+/* Return op to convert oldType to double. */
+{
+switch (oldType)
+    {
+    case rqlTypeString:
+        return rqlParseStringToDouble;
+    case rqlTypeBoolean:
+        return rqlParseBooleanToDouble;
+    case rqlTypeInt:
+        return rqlParseIntToDouble;
+    default:
+        internalErr();
+	return rqlParseUnknown;
+    }
+}
+
+
+struct rqlParse *rqlParseCoerce(struct rqlParse *p, enum rqlType type)
+/* If p is not of correct type, wrap type conversion node around it. */
+{
+if (p->type == type)
+    return p;
+else
+    {
+    struct rqlParse *cast;
+    AllocVar(cast);
+    cast->children = p;
+    cast->type = type;
+    switch (type)
+        {
+	case rqlTypeBoolean:
+	    cast->op = booleanCastOp(p->type);
+	    break;
+	case rqlTypeInt:
+	    cast->op = intCastOp(p->type);
+	    break;
+	case rqlTypeDouble:
+	    cast->op = doubleCastOp(p->type);
+	    break;
+	default:
+	    internalErr();
+	    break;
+	}
+    return cast;
+    }
 }
 
 struct rqlParse *rqlParseCmp(struct tokenizer *tkz)
@@ -258,6 +381,13 @@ if (tok != NULL)
     AllocVar(p);
     p->op = op;
     p->type = rqlTypeBoolean;
+
+    /* Now force children to be the same type, inserting casts if need be. */
+    enum rqlType childType = commonTypeForBop(l->type, r->type);
+    l = rqlParseCoerce(l, childType);
+    r = rqlParseCoerce(r, childType);
+
+    /* Now hang children onto node. */
     p->children = l;
     l->next = r;
     }
@@ -310,61 +440,11 @@ switch (r.type)
         r.val.b = (r.val.x != 0.0);
 	break;
     default:
-        errAbort("Unknown type %d", r.type);
+	internalErr();
 	r.val.b = FALSE;
 	break;
     }
 r.type = rqlTypeBoolean;
-return r;
-}
-
-struct rqlEval rqlEvalCoerceToInt(struct rqlEval r)
-/* Return TRUE if it's a nonempty string or a non-zero number. */
-{
-switch (r.type)
-    {
-    case rqlTypeBoolean:
-        r.val.i = r.val.b;
-	break;
-    case rqlTypeInt:
-        break;	/* It's already done. */
-    case rqlTypeDouble:
-        r.val.i = r.val.x;
-	break;
-    case rqlTypeString:
-        r.val.i = atoi(r.val.s);
-	break;
-    default:
-        errAbort("Unknown type %d", r.type);
-	r.val.i = 0;
-	break;
-    }
-r.type = rqlTypeInt;
-return r;
-}
-
-struct rqlEval rqlEvalCoerceToFloat(struct rqlEval r)
-/* Convert to floating point. */
-{
-switch (r.type)
-    {
-    case rqlTypeBoolean:
-        r.val.x = r.val.b;
-	break;
-    case rqlTypeInt:
-        r.val.x = r.val.i;
-	break;
-    case rqlTypeDouble:
-        break;	/* It's already done. */
-    case rqlTypeString:
-        r.val.x = atof(r.val.s);
-	break;
-    default:
-        errAbort("Unknown type %d", r.type);
-	r.val.x = 0;
-	break;
-    }
-r.type = rqlTypeDouble;
 return r;
 }
 
@@ -437,6 +517,39 @@ switch (p->op)
 	res = rqlEvalEq(p, ra);
 	res.val.b = !res.val.b;
 	break;
+
+    /* Type casts. */
+    case rqlParseStringToBoolean:
+	res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeBoolean;
+	res.val.b = (res.val.s[0] != 0);
+	break;
+    case rqlParseStringToInt:
+	res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeInt;
+	res.val.i = atoi(res.val.s);
+	break;
+    case rqlParseStringToDouble:
+	res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeDouble;
+	res.val.x = atof(res.val.s);
+	break;
+    case rqlParseBooleanToInt:
+	res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeInt;
+	res.val.i = res.val.b;
+	break;
+    case rqlParseBooleanToDouble:
+	res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeDouble;
+	res.val.x = res.val.b;
+	break;
+    case rqlParseIntToDouble:
+	res = rqlEvalOnRecord(p->children, ra);
+	res.type = rqlTypeDouble;
+	res.val.x = res.val.b;
+	break;
+
     default:
         errAbort("Unknown op %s\n", rqlParseOpToString(p->op));
 	res.type = rqlTypeInt;	// Keep compiler from complaining.
