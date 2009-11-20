@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.184 2009/02/10 22:26:34 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.185 2009/11/20 19:17:35 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -89,12 +89,6 @@ else
     {
     return strcmp(a->protein, b->protein);
     }
-}
-
-boolean anyWild(char *s)
-/* Return TRUE if there are '?' or '*' characters in s. */
-{
-return strchr(s, '?') != NULL || strchr(s, '*') != NULL;
 }
 
 boolean wildMatchAny(char *word, struct slName *wildList)

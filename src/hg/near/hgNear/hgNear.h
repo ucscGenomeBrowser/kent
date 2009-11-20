@@ -323,9 +323,6 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
 
-boolean anyWild(char *s);
-/* Return TRUE if there are '?' or '*' characters in s. */
-
 boolean wildMatchAny(char *word, struct slName *wildList);
 /* Return TRUE if word matches any thing in wildList. */
 
