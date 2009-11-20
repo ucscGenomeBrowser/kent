@@ -4,8 +4,11 @@
  * Copyright (c) Denis Howlett <denish@isocra.com>
  * Licensed like jQuery, see http://docs.jquery.com/License.
  *
+ * NOTE for Browser staff: Tim Dreszer has modified this from original:
+ *      dragStartIndex is returned as third param in onDrop() callback.
+ *
  * Configuration options:
- * 
+ *
  * onDragStyle
  *     This is the style that is assigned to the row during drag. There are limitations to the styles that can be
  *     associated with a row (such as you can't assign a border--well you can, but it won't be
@@ -23,12 +26,12 @@
  * onDrop
  *     Pass a function that will be called when the row is dropped. The function takes 2 parameters: the table
  *     and the row that was dropped. You can work out the new order of the rows by using
- *     table.rows.
+ *     table.rows.  NOTE: function now returns a third param: dragStartIndex (of row that was dragged)
  * onDragStart
  *     Pass a function that will be called when the user starts dragging. The function takes 2 parameters: the
  *     table and the row which the user has started to drag.
  * onAllowDrop
- *     Pass a function that will be called as a row is over another row. If the function returns true, allow 
+ *     Pass a function that will be called as a row is over another row. If the function returns true, allow
  *     dropping on that row, otherwise not. The function takes 2 parameters: the dragged row and the row under
  *     the cursor. It returns a boolean: true allows the drop, false doesn't allow it.
  * scrollAmount
@@ -40,7 +43,7 @@
  *     specify this class, then you are responsible for setting cursor: move in the CSS and only these cells
  *     will have the drag behaviour. If you do not specify a dragHandle, then you get the old behaviour where
  *     the whole row is draggable.
- * 
+ *
  * Other ways to control behaviour:
  *
  * Add class="nodrop" to any rows for which you don't want to allow dropping, and class="nodrag" to any rows
@@ -52,7 +55,7 @@
  *
  * Other methods:
  *
- * $("...").tableDnDUpdate() 
+ * $("...").tableDnDUpdate()
  * Will update all the matching tables, that is it will reapply the mousedown method to the rows (or handle cells).
  * This is useful if you have updated the table rows using Ajax and you want to make the table draggable again.
  * The table maintains the original configuration (so you don't have to specify it again).
@@ -63,7 +66,7 @@
  *
  * Known problems:
  * - Auto-scoll has some problems with IE7  (it scrolls even when it shouldn't), work-around: set scrollAmount to 0
- * 
+ *
  * Version 0.2: 2008-02-20 First public version
  * Version 0.3: 2008-02-07 Added onDragStart option
  *                         Made the scroll amount configurable (default is 5 as before)
@@ -102,7 +105,8 @@ jQuery.tableDnD = {
                 scrollAmount: 5,
 				serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
 				serializeParamName: null, // If you want to specify another parameter name instead of the table ID
-                dragHandle: null // If you give the name of a class here, then only Cells with this class will be draggable
+                dragHandle: null, // If you give the name of a class here, then only Cells with this class will be draggable
+                dragStartIndex : 0
             }, options || {});
             // Now make the rows draggable
             jQuery.tableDnD.makeDraggable(this);
@@ -130,6 +134,7 @@ jQuery.tableDnD = {
                     jQuery.tableDnD.dragObject = this.parentNode;
                     jQuery.tableDnD.currentTable = table;
                     jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
+                    config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
                         config.onDragStart(table, this);
@@ -149,6 +154,7 @@ jQuery.tableDnD = {
 	                        jQuery.tableDnD.dragObject = this;
 	                        jQuery.tableDnD.currentTable = table;
 	                        jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
+                            config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
 	                        if (config.onDragStart) {
 	                            // Call the onDrop method if there is one
 	                            config.onDragStart(table, this);
@@ -241,7 +247,7 @@ jQuery.tableDnD = {
 	        }
 
 	    }
-		    
+
 		if (mousePos.y-yOffset < config.scrollAmount) {
 	    	window.scrollBy(0, -config.scrollAmount);
 	    } else {
@@ -332,7 +338,7 @@ jQuery.tableDnD = {
             jQuery.tableDnD.dragObject   = null;
             if (config.onDrop) {
                 // Call the onDrop method if there is one
-                config.onDrop(jQuery.tableDnD.currentTable, droppedRow);
+                config.onDrop(jQuery.tableDnD.currentTable, droppedRow, config.dragStartIndex);
             }
             jQuery.tableDnD.currentTable = null; // let go of the table too
         }
