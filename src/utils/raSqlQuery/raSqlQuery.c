@@ -10,7 +10,7 @@
 #include "tokenizer.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.5 2009/11/20 04:39:16 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.6 2009/11/20 04:57:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -88,6 +88,7 @@ enum rqlParseOp
     rqlParseLt,  /* Less than comparison. */
     rqlParseGe,  /* Greater than or equals comparison. */
     rqlParseLe,  /* Less than or equals comparison. */
+    rqlParseLike, /* SQL wildcard compare. */
 
     rqlParseAnd,     /* An and */
     rqlParseOr,      /* An or */
@@ -135,6 +136,8 @@ switch (op)
         return "rqlParseGe";
     case rqlParseLe:
         return "rqlParseLe";
+    case rqlParseLike:
+	return "rqlParseLike";
 
     default:
 	return "rqlParseUnknown";
@@ -415,6 +418,7 @@ struct rqlParse *rqlParseCmp(struct tokenizer *tkz)
 struct rqlParse *l = rqlParseUnaryMinus(tkz);
 struct rqlParse *p = l;
 char *tok = tokenizerNext(tkz);
+boolean forceString = FALSE;
 if (tok != NULL)
     {
     enum rqlParseOp op = rqlParseUnknown;
@@ -441,6 +445,11 @@ if (tok != NULL)
 	else
 	    op = rqlParseLe;
 	}
+    else if (sameString(tok, "like"))
+        {
+	forceString = TRUE;
+	op = rqlParseLike;
+	}
     else
         {
 	tokenizerReuse(tkz);
@@ -452,9 +461,20 @@ if (tok != NULL)
     p->type = rqlTypeBoolean;
 
     /* Now force children to be the same type, inserting casts if need be. */
-    enum rqlType childType = commonTypeForBop(l->type, r->type);
-    l = rqlParseCoerce(l, childType);
-    r = rqlParseCoerce(r, childType);
+    if (forceString)
+	{
+	if (l->type != rqlTypeString || r->type != rqlTypeString)
+	    {
+	    errAbort("Expecting string type around comparison line %d of %s",
+	    	tkz->lf->lineIx, tkz->lf->fileName);
+	    }
+	}
+    else
+	{
+	enum rqlType childType = commonTypeForBop(l->type, r->type);
+	l = rqlParseCoerce(l, childType);
+	r = rqlParseCoerce(r, childType);
+	}
 
     /* Now hang children onto node. */
     p->children = l;
@@ -661,6 +681,21 @@ switch (lv.type)
 return res;
 }
 
+struct rqlEval rqlEvalLike(struct rqlParse *p, struct raRecord *ra)
+/* Return true if r like l . */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlEvalOnRecord(lp, ra);
+struct rqlEval rv = rqlEvalOnRecord(rp, ra);
+struct rqlEval res;
+res.type = rqlTypeBoolean;
+assert(rv.type == rqlTypeString);
+assert(rv.type == lv.type);
+res.val.b = sqlMatchLike(rv.val.s, lv.val.s);
+return res;
+}
+
 struct rqlEval rqlEvalOnRecord(struct rqlParse *p, struct raRecord *ra)
 /* Evaluate self on ra. */
 {
@@ -701,6 +736,9 @@ switch (p->op)
     case rqlParseGe:
         res = rqlEvalLt(p, ra);
 	res.val.b = !res.val.b;
+	break;
+    case rqlParseLike:
+        res = rqlEvalLike(p,ra);
 	break;
 
     /* Type casts. */
