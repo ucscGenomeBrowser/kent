@@ -14,7 +14,7 @@
 #include "cds.h"
 #include "bamFile.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.15 2009/11/17 18:03:55 angie Exp $";
+static char const rcsid[] = "$Id: bamTrack.c,v 1.16 2009/11/20 20:45:54 angie Exp $";
 
 struct bamTrackData
     {
@@ -239,7 +239,7 @@ if (lf->next != NULL)
     slSort(&lf, linkedFeaturesCmpStart);
 lfs->orientation = 0;
 lfs->start = lf->start;
-lfs->end = lf->next ? lf->next->end : lf->end;
+lfs->end = lf->next ? max(lf->next->end, lf->end) : lf->end;
 lfs->features = lf;
 return lfs;
 }
@@ -273,7 +273,11 @@ else
 	    struct linkedFeatures *stub;
 	    if (core->mpos < 0)
 		{
-		int offscreen = (lf->orientation > 0) ? winEnd + 10 : winStart - 10;
+		int offscreen;
+		if (lf->orientation > 0)
+		    offscreen = max(winEnd, lf->end) + 10;
+		else
+		    offscreen = min(winStart, lf->start) - 10;
 		if (offscreen < 0) offscreen = 0;
 		stub = lfStub(offscreen, -lf->orientation);
 		}
