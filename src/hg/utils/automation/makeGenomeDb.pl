@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.24 2009/08/07 21:13:12 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.25 2009/11/20 00:06:49 galt Exp $
 
 use Getopt::Long;
 use warnings;
@@ -156,6 +156,11 @@ qualFiles [/path/to/downloaded.qual | /path/to/qacAgpLift-ed.qac]
 mitoSize N
   - to override the internal default of max size for mitochondrial
     sequence of $maxMitoSize e.g. for yeast: mitoSize 90000
+    
+subsetLittleIds Y      
+  - ok if agp little ids (col6) are a subset of fasta sequences
+    rather than requiring an exact match 
+
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -180,7 +185,7 @@ my ($db, $scientificName, $assemblyDate, $assemblyLabel, $orderKey,
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
     $clade, $genomeCladePriority);
 # Optional config parameters:
-my ($commonName, $agpFiles, $qualFiles, $mitoSize);
+my ($commonName, $agpFiles, $qualFiles, $mitoSize, $subsetLittleIds);
 # Other globals:
 my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -259,6 +264,7 @@ sub parseConfig {
   $agpFiles = &optionalVar('agpFiles', \%config);
   $qualFiles = &optionalVar('qualFiles', \%config);
   $mitoSize = &optionalVar('mitoSize', \%config);
+  $subsetLittleIds = &optionalVar('subsetLittleIds', \%config);
   # Make sure no unrecognized variables were given.
   my @stragglers = sort keys %config;
   if (scalar(@stragglers) > 0) {
@@ -383,6 +389,10 @@ sub makeUnmasked2bit {
 
   my $acat = "cat";
   my $fcat = "cat";
+  my $sli = "";
+  if ($subsetLittleIds eq "Y") {
+    $sli = "-1 ";  
+  }
   foreach my $file (`ls $fastaFiles 2> /dev/null`) {
     if ($file =~ m/\.gz$/) {
       $fcat = "zcat";
@@ -407,15 +417,15 @@ set agpBigIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
 $acat $agpFiles | awk '{print \$1;}' | sort -u \\
   > \$agpBigIds
 set agpLittleIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
-$acat $agpFiles | awk '\$5 != "N" {print \$6;}' | sort -u \\
+$acat $agpFiles | awk '((\$5 != "N") && (\$5 != "U")) {print \$6;}' | sort -u \\
   > \$agpLittleIds
 
 # Compare fasta IDs to first and sixth columns of AGP:
 set diffBigCount = `comm -3 \$fastaIds \$agpBigIds | wc -l`
-set diffLittleCount = `comm -3 \$fastaIds \$agpLittleIds | wc -l`
+set diffLittleCount = `comm $sli-3 \$fastaIds \$agpLittleIds | wc -l`
 
 # If AGP "big" IDs match sequence IDs, use sequence as-is.
-# If AGP "little" IDs match sequence IDs, assemble sequence with agpToFa.
+# If AGP "little" IDs match sequence IDs, or are a subset, assemble sequence with agpToFa.
 if (\$diffLittleCount == 0) then
   set agpTmp = `mktemp -p /tmp makeGenomeDb.agp.XXXXXX`
   $acat $agpFiles > \$agpTmp
