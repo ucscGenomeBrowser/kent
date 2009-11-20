@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.674 2009/11/19 22:43:12 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.675 2009/11/20 19:56:00 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -16271,7 +16271,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16288,7 +16288,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16305,7 +16305,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=50-chromatin rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16322,7 +16322,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=60-nucleolus rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16339,7 +16339,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16356,7 +16356,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16373,7 +16373,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=10-polysome rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16390,7 +16390,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16407,7 +16407,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=prostate localization=0-cell rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16423,7 +16423,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16440,7 +16440,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16457,7 +16457,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16474,7 +16474,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16491,7 +16491,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16508,7 +16508,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=HUVEC localization=30-nucleus rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16516,6 +16516,7 @@ wgEncode 1
     showDiffBasesMaxZoom 10000.0
     color 224,75,0
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=HUVEC rnaExtract=longPolyA localization=nucleus view=Alignments replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=775 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya fileName=wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya.pairedTagAlign.gz
+
 
     track wgEncodeGisPetAlignmentsRep1H1hescCytosolLongpolya
     release alpha
@@ -16525,7 +16526,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=H1-hESC localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16541,7 +16542,7 @@ wgEncode 1
     subGroups view=2-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
     #type pairedTagAlign
     colorByStrand 46,0,184 238,85,34
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -16929,6 +16930,18 @@ wgEncode 1
     minLimit 0
     maxLimit 80851
     metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=prostate rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya fileName=wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya.wig.gz
+
+    track wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet off
+    shortLabel GM12 cyto -S2
+    longLabel ENCODE GIS PET Plus Strand Raw Signal Replicate 2 (longPolyA RNA in GM12878 cytosol)
+    subGroups view=0-PlusRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    minLimit 0
+    maxLimit 13366
+    color 153,38,0
+    metadata project=wgEncode grant=Gingeras lab=Gis dataType=Pet cell=GM12878 rnaExtract=longPolyA localization=20-cytosol view=1-PlusRawSignal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=777 dateSubmitted=2009-11-13 dateUnrestricted=2010-08-13 composite=wgEncodeGisPet tableName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya fileName=wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya.wig.gz
 
     track wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
     release alpha
