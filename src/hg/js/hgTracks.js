@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.45 2009/11/12 23:38:41 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.46 2009/11/20 23:36:32 tdreszer Exp $
 
 var debug = false;
 var originalPosition;
@@ -174,11 +174,13 @@ function updatePosition(img, selection, singleClick)
 function selectChange(img, selection)
 {
     initVars();
-    if(checkPosition(img, selection)) {
-        updatePosition(img, selection, false);
-        jQuery('body').css('cursor', originalCursor);
-    } else {
-        jQuery('body').css('cursor', 'not-allowed');
+    if(selection.x1 != selection.x2) { // TODO: Larry could you examine this?
+        if(checkPosition(img, selection)) {
+            updatePosition(img, selection, false);
+            jQuery('body').css('cursor', originalCursor);
+        } else {
+            jQuery('body').css('cursor', 'not-allowed');
+        }
     }
     return true;
 }
