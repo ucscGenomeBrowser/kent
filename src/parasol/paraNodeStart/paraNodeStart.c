@@ -13,6 +13,7 @@ static struct optionSpec optionSpecs[] = {
     {"umask", OPTION_INT},
     {"userPath", OPTION_STRING},
     {"sysPath", OPTION_STRING},
+    {"env", OPTION_STRING|OPTION_MULTI},
     {"randomDelay", OPTION_INT},
     {"exe", OPTION_STRING},
     {"rsh", OPTION_STRING},
@@ -41,6 +42,7 @@ errAbort(
  "    -randomDelay=N  Set random start delay in milliseconds - default 5000.\n"
  "    -userPath=bin:bin/i386  User dirs to add to path.\n"
  "    -sysPath=/sbin:/local/bin  System dirs to add to path.\n"
+ "    -env=name=value - add environment variable to jobs.  Maybe repeated.\n"
  "    -hub=machineHostingParaHub  Nodes will ignore messages from elsewhere.\n"
  "    -rsh=/path/to/rsh/like/command.\n"
  , version
@@ -53,6 +55,15 @@ void carryOption(char *option, struct dyString *dy)
 char *val = optionVal(option, NULL);
 if (val != NULL)
    dyStringPrintf(dy, " %s=%s", option, val);
+}
+
+void carryMultiOption(char *option, struct dyString *dy)
+/* Carry multi-valued option from our command line to paraNode's. Do
+ * naive quoting */
+{
+struct slName *val;
+for (val = optionMultiVal(option, NULL); val != NULL; val = val->next)
+    dyStringPrintf(dy, " %s='%s'", option, val->name);
 }
 
 void paraNodeStart(char *machineList)
@@ -79,6 +90,7 @@ while (lineFileRow(lf, row))
     carryOption("umask", dy);
     carryOption("sysPath", dy);
     carryOption("userPath", dy);
+    carryMultiOption("env", dy);
     carryOption("randomDelay", dy);
     printf("%s\n", dy->string);
     system(dy->string);

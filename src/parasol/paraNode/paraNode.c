@@ -27,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {"umask", OPTION_INT},
     {"userPath", OPTION_STRING},
     {"sysPath", OPTION_STRING},
+    {"env", OPTION_STRING|OPTION_MULTI},
     {"randomDelay", OPTION_INT},
     {"cpu", OPTION_INT},
     {"localhost", OPTION_STRING},
@@ -50,6 +51,7 @@ errAbort("paraNode - version %s\n"
 	 "    -umask=000  Set umask to run under - default 002.\n"
 	 "    -userPath=bin:bin/i386  User dirs to add to path.\n"
 	 "    -sysPath=/sbin:/local/bin  System dirs to add to path.\n"
+         "    -env=name=value - add environment variable to jobs.  Maybe repeated.\n"
 	 "    -randomDelay=N  Up to this many milliseconds of random delay before\n"
 	 "        starting a job.  This is mostly to avoid swamping NFS with\n"
 	 "        file opens when loading up an idle cluster.  Also it limits\n"
@@ -59,7 +61,7 @@ errAbort("paraNode - version %s\n"
 	);
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.81 2008/06/07 09:59:56 galt Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.82 2009/11/21 01:07:58 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -67,6 +69,7 @@ int umaskVal = 0002;		/* File creation mask. */
 int maxProcs = 1;		/* Number of processers allowed to use. */
 char *userPath = "";		/* User stuff to add to path. */
 char *sysPath = "";		/* System stuff to add to path. */
+struct slName *envExtra = NULL; /* Add to environment */ 
 int randomDelay = 5000;		/* How much to delay job startup. */
 
 /* Other globals. */
@@ -288,6 +291,25 @@ freez(&userPath);
 dyStringFree(&dy);
 }
 
+void addEnvExtra(struct hash *hash, char *nameVal)
+/* parse and add one of the environment extra entries */
+{
+char *eq = strchr(nameVal, '=');
+if (eq == NULL)
+    errAbort("invalid -env argument, expected -env=name=value, got -env=%s", nameVal);
+*eq = '\0';
+hashUpdate(hash, nameVal, eq+1);
+*eq = '=';
+}
+
+void addEnvExtras(struct hash *hash)
+/* add environment extras */
+{
+struct slName *nameVal;
+for (nameVal = envExtra; nameVal != NULL; nameVal = nameVal->next)
+    addEnvExtra(hash, nameVal->name);
+}
+
 void getTicksToHundreths()
 /* Return number of hundreths of seconds per system tick.
  * It used to be CLK_TCK would work for this, but
@@ -368,6 +390,7 @@ if ((grandChildId = forkOrDie()) == 0)
 	hashUpdate(hash, "HOST", hostName);
 	hashUpdate(hash, "PARASOL", "7");
 	updatePath(hash, userPath, homeDir, sysPath);
+        addEnvExtras(hash);
 	environ = hashToEnviron(hash);
 	freeHashAndVals(&hash);
 	}
@@ -840,6 +863,7 @@ maxProcs = optionInt("cpu", 1);
 umaskVal = optionInt("umask", 0002);
 userPath = optionVal("userPath", userPath);
 sysPath = optionVal("sysPath", sysPath);
+envExtra = optionMultiVal("env", NULL);
 randomDelay = optionInt("randomDelay", randomDelay);
 
 /* Look up IP addresses. */
