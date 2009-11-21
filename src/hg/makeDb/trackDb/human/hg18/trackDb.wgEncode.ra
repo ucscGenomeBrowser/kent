@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.675 2009/11/20 19:56:00 braney Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.wgEncode.ra,v 1.676 2009/11/21 16:08:19 braney Exp $
 
 # Genome-wide ENCODE tracks
 # GIS RNA and Chip-PET
@@ -15361,7 +15361,7 @@ wgEncode 1
     shortLabel GM12878 10k
     longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=10k
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -15376,7 +15376,7 @@ wgEncode 1
     longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
     subGroups view=Alignments cellType=K562 fragSize=1k
     #type pairedTagAlign
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -15392,7 +15392,7 @@ wgEncode 1
     longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
     subGroups view=Alignments cellType=K562 fragSize=10k
     #type pairedTagAlign
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -15408,7 +15408,7 @@ wgEncode 1
     longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=1k
     #type pairedTagAlign
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
@@ -15424,7 +15424,7 @@ wgEncode 1
     longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
     subGroups view=Alignments cellType=GM12878 fragSize=5k
     #type pairedTagAlign
-    type bed 6
+    type bigBed 6
     baseColorDefault diffBases
     baseColorUseSequence seq1Seq2
     baseColorTickColor lighterShade
