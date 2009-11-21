@@ -75,3 +75,27 @@ expScale 3.0
 expStep 0.2
 groupings jhuUscIllMethyl2BetaGroups
 priority 6.0
+
+track tcgaOVIntegratedCGH
+shortLabel TCGA OV Integrated CGH
+longLabel TCGA OV Integrated Copy Number
+group tcga ovarian
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings tcgaOVIntegratedCGHGroups
+priority 1.0
+
+track tcgaOVIntegratedGeneExp
+shortLabel TCGA OV Integrated Expression (versus normal)
+longLabel TCGA OV Integrated Gene Expression (versus normal)
+group tcga ovarian
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings tcgaOVIntegratedGeneExpGroups
+priority 2.0

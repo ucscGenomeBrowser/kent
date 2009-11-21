@@ -297,19 +297,6 @@ expStep 0.2
 groupings broadGBMexp_affyGroups
 maxItems 2000
 
-track jhuUscIllMethyl2Beta
-shortLabel TCGA JHU-USC GBM Methyl. Array Avg Beta
-longLabel TCGA JHU-USC GBM Methylation Array Avg Beta OMA002
-group cancerGenomics
-priority 44
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings jhuUscIllMethyl2BetaGroups
-maxItems 2000
-
 track uncHmiRNA
 shortLabel TCGA UNC GBM H-miRNA Array
 longLabel TCGA UNC GBM H-miRNA Array
