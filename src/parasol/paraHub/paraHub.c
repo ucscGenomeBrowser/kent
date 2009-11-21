@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.131 2009/08/05 23:19:39 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.132 2009/11/21 01:07:12 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -109,8 +109,15 @@ void usage()
 errAbort("paraHub - parasol hub server version %s\n"
          "usage:\n"
 	 "    paraHub machineList\n"
-	 "Where machine list is a file with machine names in the\n"
-	 "first column, and number of CPUs in the second column.\n"
+	 "Where machine list is a file with the following columns:\n"
+         "    name - Network name\n"
+         "    cpus - Number of CPUs we can use\n"
+         "    ramSize - Megabytes of memory\n"
+         "    tempDir - Location of (local) temp dir\n"
+         "    localDir - Location of local data dir\n"
+         "    localSize - Megabytes of local disk\n"
+         "    switchName - Name of switch this is on\n"
+	 "\n"
 	 "options:\n"
 	 "   -spokes=N  Number of processes that feed jobs to nodes - default %d.\n"
 	 "   -jobCheckPeriod=N  Minutes between checking on job - default %d.\n"
