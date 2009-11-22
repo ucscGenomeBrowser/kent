@@ -12,9 +12,9 @@
 #include "raRecord.h"
 #include "rql.h"
 #include "portable.h"
-#include "../../hg/inc/hdb.h"
+#include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.19 2009/11/22 02:06:06 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.20 2009/11/22 02:10:20 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -38,7 +38,6 @@ void usage()
 {
 errAbort(
   "raSqlQuery - Do a SQL-like query on a RA file.\n"
-  "usage:\n"
   "   raSqlQuery raFile(s) query-options\n"
   "or\n"
   "   raSqlQuery -db=dbName query-options\n"
@@ -46,14 +45,16 @@ errAbort(
   "One of the following query-options must be specified\n"
   "   -queryFile=fileName\n"
   "   \"-query=select list,of,fields where field='this'\"\n"
-  "The queryFile just has a query in it in the same form as the query option, but\n"
-  "without needing the quotes necessarily.\n"
-  "  The syntax of a query statement is very SQL-like.  It must begin with either\n"
+  "The queryFile just has a query in it in the same form as the query option.\n"
+  "The syntax of a query statement is very SQL-like.  It must begin with either\n"
   "'select' or 'count'.  Select is followed by a field list, or '*' for all fields\n"
   "Count is not followed by anything.  The 'where' clause is optional, and if it\n"
   "exists it can contain expressions involving fields, numbers, strings, arithmetic, 'and'\n"
-  "'or' and so forth.  Unlike SQL there is no 'from' claus.\n"
+  "'or' and so forth.  Unlike SQL there is no 'from' clause.\n"
   "Other options:\n"
+  "   -addFile - Add 'file' field to say where record is defined\n"
+  "   -addDb - Add 'db' field to say where record is defined\n"
+  "   -strict - Used only with db option.  Only report tracks that exist in db\n"
   "   -key=keyField - Use the as the key field for merges and parenting. Default %s\n"
   "   -parent - Merge together inheriting on parentField\n"
   "   -parentField=field - Use field as the one that tells us who is our parent. Default %s\n"
@@ -63,15 +64,12 @@ errAbort(
   "   -noInheritField=field - If field is present don't inherit fields from parent\n"
   "   -merge - If there are multiple raFiles, records with the same keyField will be\n"
   "          merged together with fields in later files overriding fields in earlier files\n"
-  "   -addFile - Add 'file' field to say where record is defined\n"
-  "   -addDb - Add 'db' field to say where record is defined\n"
   "   -restrict=keyListFile - restrict output to only ones with keys in file.\n"
-  "   -strict - Used only with db option.  Only report tracks that exist in db\n"
   "   -db=hg19 - Acts on trackDb files for the given database.  Sets up list of files\n"
   "              appropriately and sets parent, merge, and override all.\n"
   "              Use db=all for all databases\n"
   "The output will be to stdout, in the form of a .ra file if the select command is used\n"
-  "and just a simple number if the count command is used\n"
+  "and just a simple number if the count command is used.\n"
   , clKey, clParentField
   );
 }
