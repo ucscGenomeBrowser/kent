@@ -8,6 +8,8 @@
 #include "raRecord.h"
 #include "rql.h"
 
+static char const rcsid[] = "$Id: rqlEval.c,v 1.2 2009/11/22 02:11:09 kent Exp $";
+
 struct rqlEval rqlEvalCoerceToBoolean(struct rqlEval r)
 /* Return TRUE if it's a nonempty string or a non-zero number. */
 {

@@ -8,6 +8,8 @@
 #include "raRecord.h"
 #include "rql.h"
 
+static char const rcsid[] = "$Id: rqlParse.c,v 1.4 2009/11/22 02:11:09 kent Exp $";
+
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
 {

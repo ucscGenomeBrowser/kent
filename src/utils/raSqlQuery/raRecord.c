@@ -3,6 +3,8 @@
 #include "linefile.h"
 #include "raRecord.h"
 
+static char const rcsid[] = "$Id: raRecord.c,v 1.6 2009/11/22 02:11:09 kent Exp $";
+
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new raFilePos record. */
 {
