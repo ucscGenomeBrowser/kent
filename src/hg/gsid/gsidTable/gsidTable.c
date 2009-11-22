@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.51 2009/11/03 16:38:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.52 2009/11/22 18:02:07 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -435,13 +435,6 @@ return val;
 
 
 /* ---- Some helper routines for column methods. ---- */
-
-
-boolean anyWild(char *s)
-/* Return TRUE if there are '?' or '*' characters in s. */
-{
-return strchr(s, '?') != NULL || strchr(s, '*') != NULL;
-}
 
 boolean wildMatchAny(char *word, struct slName *wildList)
 /* Return TRUE if word matches any thing in wildList. */
