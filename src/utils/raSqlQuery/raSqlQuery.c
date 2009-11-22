@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.17 2009/11/22 02:01:30 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.18 2009/11/22 02:04:06 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -476,6 +476,8 @@ if (clQueryFile == NULL && clQuery == NULL)
 if (clQueryFile != NULL && clQuery != NULL)
     errAbort("Please specify just one of the query or queryFile options.");
 struct lm *lm = lmInit(0);
+if (clStrict && clDb == NULL)
+    errAbort("Only can use -strict with -db.");
 
 if (clDb != NULL)
     {
