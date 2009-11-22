@@ -11,17 +11,24 @@
 #include "sqlNum.h"
 #include "raRecord.h"
 #include "rql.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.14 2009/11/20 20:25:54 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.15 2009/11/22 00:25:26 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
-static char *clKey = "track";
+static char *clKey = "name";
 static char *clParentField = "subTrack";
 static char *clNoInheritField = "noInherit";
 static boolean clMerge = FALSE;
 static boolean clParent = FALSE;
 static boolean clAddFile = FALSE;
+static char *clRestrict = NULL;
+static char *clDb = NULL;
+static boolean clOverrideNeeded = FALSE;
+
+static char *clTrackDbRootDir = "~/kent/src/hg/makeDb/trackDb";
+static char *clTrackDbRelPath = "../../trackDb*.ra ../trackDb*.ra trackDb*.ra"; 
 
 void usage()
 /* Explain usage and exit. */
@@ -44,15 +51,22 @@ errAbort(
   "   -key=keyField - Use the as the key field for merges and parenting. Default %s\n"
   "   -parent - Merge together inheriting on parentField\n"
   "   -parentField=field - Use field as the one that tells us who is our parent. Default %s\n"
+  "   -overrideNeeded - If set records are only overridden field-by-field by later records\n"
+  "               if 'override' follows the track name. Otherwiser later record replaces\n"
+  "               earlier record completely.  If not set all records overridden field by field\n"
   "   -noInheritField=field - If field is present don't inherit fields from parent\n"
   "   -merge - If there are multiple raFiles, records with the same keyField will be\n"
   "          merged together with fields in later files overriding fields in earlier files\n"
   "   -addFile - Add 'file' field to say where record is defined\n"
+  "   -restrict=keyListFile - restrict output to only ones with keys in file, which\n"
+  "   -db=hg19 - Acts on trackDb files for the given database.  Sets up list of files\n"
+  "              appropriately and sets parent, merge, and override all.\n"
   "The output will be to stdout, in the form of a .ra file if the select command is used\n"
   "and just a simple number if the count command is used\n"
   , clKey, clParentField
   );
 }
+
 
 static struct optionSpec options[] = {
    {"queryFile", OPTION_STRING},
@@ -63,30 +77,98 @@ static struct optionSpec options[] = {
    {"parentField", OPTION_STRING},
    {"noInheritField", OPTION_STRING},
    {"addFile", OPTION_BOOLEAN},
+   {"restrict", OPTION_STRING},
+   {"db", OPTION_STRING},
+   {"overrideNeeded", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-static void mergeRecords(struct raRecord *old, struct raRecord *record, struct lm *lm)
+
+struct dbPath
+    {
+    char *db;
+    char *dir;
+    };
+
+struct dbPath dbPath[] = {
+    {"hg19", "human/hg19"},
+    {"hg18", "human/hg18"},
+    {"hg17", "human/hg17"},
+    {"mm9", "mouse/mm9"},
+    {"mm8", "mouse/mm8"},
+};
+
+static struct slName *dbPathToFiles(struct dbPath *p)
+/* Convert dbPath to a list of files. */
+{
+struct slName *pathList = NULL;
+char dbDir[PATH_LEN];
+safef(dbDir, sizeof(dbDir), "%s/%s", clTrackDbRootDir, p->dir);
+char *buf = cloneString(clTrackDbRelPath);
+char *line = buf, *word;
+while ((word = nextWord(&line)) != NULL)
+    {
+    char relDir[PATH_LEN], relFile[PATH_LEN], relSuffix[PATH_LEN];
+    splitPath(word, relDir, relFile, relSuffix);
+    char dir[PATH_LEN];
+    safef(dir, sizeof(dir), "%s/%s", dbDir, relDir);
+    char *path = simplifyPathToDir(dir);
+    char pattern[PATH_LEN];
+    safef(pattern, sizeof(pattern), "%s%s", relFile, relSuffix);
+    struct fileInfo *fi, *fiList = listDirX(path, pattern, TRUE);
+    for (fi = fiList; fi != NULL; fi = fi->next)
+	slNameAddHead(&pathList, fi->name);
+    freeMem(path);
+    slFreeList(&fiList);
+    }
+freeMem(buf);
+slReverse(&pathList);
+return pathList;
+}
+
+static struct slName *dbToTrackDbFiles(char *db)
+/* Given a database, figure out list of trackDb files. */
+{
+int i;
+for (i=0; i<ArraySize(dbPath); ++i)
+    {
+    struct dbPath *p = &dbPath[i];
+    if (sameString(p->db, db))
+        {
+	return dbPathToFiles(p);
+	}
+    }
+errAbort("Couldn't find db %s", db);
+return NULL;
+}
+
+
+
+static void mergeRecords(struct raRecord *old, struct raRecord *record, char *key, struct lm *lm)
 /* Merge record into old,  updating any old fields with new record values. */
 {
 struct raField *field;
 for (field = record->fieldList; field != NULL; field = field->next)
     {
-    struct raField *oldField = raRecordField(old, field->name);
-    if (oldField != NULL)
-        oldField->val = field->val;
-    else
-        {
-	lmAllocVar(lm, oldField);
-	oldField->name = field->name;
-	oldField->val = field->val;
-	slAddTail(&old->fieldList, oldField);
+    if (!sameString(field->name, key))
+	{
+	struct raField *oldField = raRecordField(old, field->name);
+	if (oldField != NULL)
+	    oldField->val = field->val;
+	else
+	    {
+	    lmAllocVar(lm, oldField);
+	    oldField->name = field->name;
+	    oldField->val = field->val;
+	    slAddTail(&old->fieldList, oldField);
+	    }
 	}
     }
 old->posList = slCat(old->posList, record->posList);
 }
 
-static void mergeParentRecord(struct raRecord *record, struct raRecord *parent, struct lm *lm)
+static void mergeParentRecord(struct raRecord *record, struct raRecord *parent, 
+	struct lm *lm)
 /* Merge in parent record.  This only updates fields that are in parent but not record. */
 {
 struct raField *parentField;
@@ -104,62 +186,43 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
     }
 }
 
-struct raField *makeKeyField(struct raRecord *record, char *key, struct lm *lm)
-/* Make up key field if possible from field with name of key.  If not possible then
- * return NULL.  May have to munge keyField to just include first word. */
-{
-/* See if can find key at all. */
-struct raField *fullKey = raRecordField(record, key);
-if (fullKey == NULL)
-    return NULL;
-
-/* See if it has more than one word by looking for spaces. */
-char *fullKeyVal = fullKey->val;
-char *endFirstWord = skipToSpaces(fullKeyVal);
-if (endFirstWord == NULL)
-    return fullKey;
-
-/* If it does have more than one word, make up a new key. */
-struct raField *shortKey;
-lmAllocVar(lm, shortKey);
-shortKey->name = fullKey->name;
-shortKey->val = lmCloneStringZ(lm, fullKeyVal, endFirstWord - fullKeyVal);
-return shortKey;
-}
-
-static struct raRecord *readRaRecords(int inCount, char *inNames[], 
-	char *mergeField, boolean addFile, struct lm *lm)
-/* Scan through files, merging records on mergeField if it is non-NULL. */
+static struct raRecord *readRaRecords(int inCount, char *inNames[], char *keyField,
+	boolean doMerge, boolean addFile, boolean overrideNeeded, struct lm *lm)
+/* Scan through files, merging records on key if doMerge. */
 {
 if (inCount <= 0)
     return NULL;
-if (mergeField)
+if (doMerge)
     {
     struct raRecord *recordList = NULL, *record;
     struct hash *recordHash = hashNew(0);
-    slReverse(&recordList);
     int i;
     for (i=0; i<inCount; ++i)
         {
 	char *fileName = inNames[i];
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
-	while ((record = raRecordReadOne(lf, lm)) != NULL)
+	while ((record = raRecordReadOne(lf, keyField, lm)) != NULL)
 	    {
 	    if (addFile)
 	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
-	    struct raField *keyField = makeKeyField(record, mergeField, lm);
-	    if (keyField != NULL)
+	    char *key = record->key;
+	    if (key != NULL)
 		{
-		struct raRecord *oldRecord = hashFindVal(recordHash, keyField->val);
+		struct raRecord *oldRecord = hashFindVal(recordHash, key);
 		if (oldRecord != NULL)
 		    {
-		    mergeRecords(oldRecord, record, lm);
+		    if (overrideNeeded && !record->override)
+		        {
+			oldRecord->fieldList = record->fieldList;
+			oldRecord->posList = record->posList;
+			}
+		    else
+			mergeRecords(oldRecord, record, keyField, lm);
 		    }
 		else
 		    {
-		    record->key = keyField;
 		    slAddHead(&recordList, record);
-		    hashAdd(recordHash, keyField->val, record);
+		    hashAdd(recordHash, key, record);
 		    }
 		}
 	    }
@@ -177,7 +240,7 @@ else
 	char *fileName = inNames[i];
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	struct raRecord *record;
-	while ((record = raRecordReadOne(lf, lm)) != NULL)
+	while ((record = raRecordReadOne(lf, keyField, lm)) != NULL)
 	    {
 	    if (addFile)
 	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
@@ -238,16 +301,21 @@ if (addFileField != NULL)
 fprintf(out, "\n");
 }
 
-static void addMissingKeys(struct raRecord *list, char *keyField, struct lm *lm)
-/* Add key to all raRecords that don't already have it. */
+struct hash *hashAllWordsInFile(char *fileName)
+/* Make a hash of all space or line delimited words in file. */
 {
-struct raRecord *rec;
-for (rec = list; rec != NULL; rec = rec->next)
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+while (lineFileNext(lf, &line, NULL))
     {
-    if (rec->key == NULL)
-        rec->key = makeKeyField(rec, keyField, lm);
+    while ((word = nextWord(&line)) != NULL)
+        hashAdd(hash, word, NULL);
     }
+lineFileClose(&lf);
+return hash;
 }
+
 
 static struct raRecord *findParent(struct raRecord *rec, 
 	char *parentFieldName, char *noInheritFieldName, struct hash *hash)
@@ -266,7 +334,7 @@ strcpy(buf, parentLine);
 char *parentName = firstWordInLine(buf);
 struct raRecord *parent = hashFindVal(hash, parentName);
 if (parent == NULL)
-     warn("%s is a subTrack of %s, but %s doesn't exist", rec->key->val,
+     warn("%s is a subTrack of %s, but %s doesn't exist", rec->key,
      	parentField->val, parentField->val);
 return parent;
 }
@@ -282,7 +350,7 @@ struct raRecord *rec;
 for (rec = list; rec != NULL; rec = rec->next)
     {
     if (rec->key != NULL)
-	hashAdd(hash, rec->key->val, rec);
+	hashAdd(hash, rec->key, rec);
     }
 
 /* Scan through doing inheritance. */
@@ -297,15 +365,32 @@ for (rec = list; rec != NULL; rec = rec->next)
     }
 }
 
-void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, char *mergeField, 
+void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, boolean doMerge, 
 	char *parentField, char *noInheritField, struct lm *lm, FILE *out)
 /* raSqlQuery - Do a SQL-like query on a RA file.. */
 {
-struct raRecord *raList = readRaRecords(inCount, inNames, mergeField, clAddFile, lm);
+struct raRecord *raList = readRaRecords(inCount, inNames, clKey, 
+	doMerge, clAddFile, clOverrideNeeded, lm);
 if (parentField != NULL)
     {
-    addMissingKeys(raList, clKey, lm);
     inheritFromParents(raList, parentField, noInheritField, lm);
+    }
+if (clRestrict)
+    {
+    struct hash *restrictHash = hashAllWordsInFile(clRestrict);
+    restrictHash = hashAllWordsInFile(clRestrict);
+    struct raRecord *newList = NULL, *next, *rec;
+    for (rec = raList; rec != NULL; rec = next)
+        {
+	next = rec->next;
+	if (rec->key && hashLookup(restrictHash, rec->key))
+	    {
+	    slAddHead(&newList, rec);
+	    }
+	}
+    slReverse(&newList);
+    raList = newList;
+    hashFree(&restrictHash);
     }
 struct rqlStatement *rql = rqlStatementParse(query);
 verbose(2, "Got %d records in raFiles\n", slCount(raList));
@@ -333,8 +418,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc < 2)
-    usage();
 clMerge = optionExists("merge");
 clParent = optionExists("parent");
 clParentField = optionVal("parentField", clParentField);
@@ -343,6 +426,11 @@ clQueryFile = optionVal("queryFile", NULL);
 clQuery = optionVal("query", NULL);
 clNoInheritField = optionVal("noInheritField", clNoInheritField);
 clAddFile = optionExists("addFile");
+clRestrict = optionVal("restrict", NULL);
+clOverrideNeeded = optionExists("overrideNeeded");
+clDb = optionVal("db", NULL);
+if (argc < 2 && !clDb)
+    usage();
 if (clQueryFile == NULL && clQuery == NULL)
     errAbort("Please specify either the query or queryFile option.");
 if (clQueryFile != NULL && clQuery != NULL)
@@ -353,8 +441,37 @@ if (clQuery)
 else
     query = lineFileOpen(clQueryFile, TRUE);
 struct lm *lm = lmInit(0);
-char *mergeField = (clMerge ? clKey : NULL);
+
+if (clDb != NULL)
+    {
+    clMerge = TRUE;
+    clParent = TRUE;
+    clOverrideNeeded = TRUE;
+    clKey = "track";
+    }
+char **fileNames;
+int fileCount;
+if (clDb)
+    {
+    if (argc != 1)
+         usage();
+    struct slName *path, *pathList = dbToTrackDbFiles(clDb);
+    fileCount = slCount(pathList);
+    if (fileCount == 0)
+        errAbort("No paths returned by dbToTrackDbFiles(%s)", clDb);
+    AllocArray(fileNames, fileCount);
+    int i;
+    for (i=0, path = pathList; path != NULL; path = path->next, ++i)
+	{
+	fileNames[i] = path->name;
+	}
+    }
+else
+    {
+    fileNames = argv+1;
+    fileCount = argc-1;
+    }
 char *parentField = (clParent ? clParentField : NULL);
-raSqlQuery(argc-1, argv+1, query, mergeField, parentField, clNoInheritField, lm, stdout);
+raSqlQuery(fileCount, fileNames, query, clMerge, parentField, clNoInheritField, lm, stdout);
 return 0;
 }

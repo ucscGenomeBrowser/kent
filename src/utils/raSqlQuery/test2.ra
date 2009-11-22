@@ -7,6 +7,10 @@ val 4
 name one
 primary true
 
+name minusOne override
+val -1.00
+float on
+
 name onePrime
 subTrack one
 val 1'

@@ -19,9 +19,10 @@ struct raRecord
 /* A single RA record. */
     {
     struct raRecord *next;	/* Next in list. */
-    struct raField *key;		/* Key field if any. */
+    char *key;			/* First word of value of key field. */
     struct raField *fieldList;	/* List of fields. */
     struct raFilePos *posList;	/* Position of file. */
+    boolean override;		/* Override is in key. */
     };
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx);
@@ -34,6 +35,6 @@ struct raField *raFieldFromLine(char *line, struct lm *lm);
 /* Parse out line and convert it to a raField.  Will return NULL on empty lines. 
  * Will insert some zeroes into the input line as well. */
 
-struct raRecord *raRecordReadOne(struct lineFile *lf, struct lm *lm);
+struct raRecord *raRecordReadOne(struct lineFile *lf, char *key, struct lm *lm);
 /* Read next record from file. Returns NULL at end of file. */
 

@@ -40,32 +40,68 @@ field->val = lmCloneString(lm, val);
 return field;
 }
 
-struct raRecord *raRecordReadOne(struct lineFile *lf, struct lm *lm)
+char *lmCloneFirstWord(struct lm *lm, char *line)
+/* Clone first word in line */
+{
+char *startFirstWord = skipLeadingSpaces(line);
+if (startFirstWord == NULL)
+    return NULL;
+char *endFirstWord = skipToSpaces(startFirstWord);
+if (endFirstWord == NULL)
+    return lmCloneString(lm, startFirstWord);
+else
+    return lmCloneStringZ(lm, startFirstWord, endFirstWord - startFirstWord);
+}
+    
+struct raRecord *raRecordReadOne(struct lineFile *lf, char *key, struct lm *lm)
 /* Read next record from file. Returns NULL at end of file. */
 {
 struct raField *field, *fieldList = NULL;
 char *line;
+char *keyVal = NULL;
+boolean override = FALSE;
 
-/* Read first line and start fieldList on it. */
-if (!lineFileNextReal(lf, &line))
-    return NULL;
-fieldList = raFieldFromLine(line, lm);
+/* Skip over blank initial lines. */
+for (;;)
+    {
+    if (!lineFileNext(lf, &line, NULL))
+        return NULL;
+    line = skipLeadingSpaces(line);
+    if (line != NULL && (line[0] != 0 && line[0] != '#'))
+         {
+	 lineFileReuse(lf);
+	 break;
+	 }
+    }
 
 /* Keep going until get a blank line. */
 for (;;)
     {
     if (!lineFileNext(lf, &line, NULL))
         break;
+    line = skipLeadingSpaces(line);
+    if (line[0] == '#')
+        continue;
     field = raFieldFromLine(line, lm);
     if (field == NULL)
         break;
+    if (sameString(field->name, key))
+	{
+	keyVal = lmCloneFirstWord(lm, field->val);
+	if (endsWith(field->val, "override") && !sameString("override", field->val))
+	    override = TRUE;
+	}
     slAddHead(&fieldList, field);
     }
 
+if (fieldList == NULL)
+    return NULL;
 slReverse(&fieldList);
 struct raRecord *record;
 lmAllocVar(lm, record);
 record->fieldList = fieldList;
+record->key = keyVal;
+record->override = override;
 return record;
 }
 
