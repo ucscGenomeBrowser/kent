@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.18 2009/11/22 02:04:06 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.19 2009/11/22 02:06:06 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -494,7 +494,7 @@ int fileCount;
 if (clDb)
     {
     if (argc != 1)
-         usage();
+	 errAbort("You can't specify any input files with the -db option.");
     struct dbPath *db, *dbList = getDbPathList(clTrackDbRootDir);
     boolean gotAny = FALSE;
     for (db = dbList; db != NULL; db = db->next)
