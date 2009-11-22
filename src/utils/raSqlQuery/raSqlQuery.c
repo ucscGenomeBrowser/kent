@@ -12,8 +12,9 @@
 #include "raRecord.h"
 #include "rql.h"
 #include "portable.h"
+#include "../../hg/inc/hdb.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.16 2009/11/22 01:37:41 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.17 2009/11/22 02:01:30 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -25,6 +26,7 @@ static boolean clParent = FALSE;
 static boolean clAddFile = FALSE;
 static boolean clAddDb = FALSE;
 static char *clRestrict = NULL;
+static boolean clStrict = FALSE;
 static char *clDb = NULL;
 static boolean clOverrideNeeded = FALSE;
 
@@ -38,6 +40,9 @@ errAbort(
   "raSqlQuery - Do a SQL-like query on a RA file.\n"
   "usage:\n"
   "   raSqlQuery raFile(s) query-options\n"
+  "or\n"
+  "   raSqlQuery -db=dbName query-options\n"
+  "Where dbName is a UCSC Genome database like hg18, sacCer1, etc.\n"
   "One of the following query-options must be specified\n"
   "   -queryFile=fileName\n"
   "   \"-query=select list,of,fields where field='this'\"\n"
@@ -60,7 +65,8 @@ errAbort(
   "          merged together with fields in later files overriding fields in earlier files\n"
   "   -addFile - Add 'file' field to say where record is defined\n"
   "   -addDb - Add 'db' field to say where record is defined\n"
-  "   -restrict=keyListFile - restrict output to only ones with keys in file, which\n"
+  "   -restrict=keyListFile - restrict output to only ones with keys in file.\n"
+  "   -strict - Used only with db option.  Only report tracks that exist in db\n"
   "   -db=hg19 - Acts on trackDb files for the given database.  Sets up list of files\n"
   "              appropriately and sets parent, merge, and override all.\n"
   "              Use db=all for all databases\n"
@@ -82,6 +88,7 @@ static struct optionSpec options[] = {
    {"addFile", OPTION_BOOLEAN},
    {"addDb", OPTION_BOOLEAN},
    {"restrict", OPTION_STRING},
+   {"strict", OPTION_BOOLEAN},
    {"db", OPTION_STRING},
    {"overrideNeeded", OPTION_BOOLEAN},
    {NULL, 0},
@@ -431,10 +438,13 @@ for (ra = raList; ra != NULL; ra = ra->next)
     {
     if (rqlStatementMatch(rql, ra))
         {
-	matchCount += 1;
-	if (doSelect)
+	if (!clStrict || (ra->key && hTableOrSplitExists(db, ra->key)))
 	    {
-	    rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), clAddDb, out);
+	    matchCount += 1;
+	    if (doSelect)
+		{
+		rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), clAddDb, out);
+		}
 	    }
 	}
     }
@@ -456,6 +466,7 @@ clNoInheritField = optionVal("noInheritField", clNoInheritField);
 clAddFile = optionExists("addFile");
 clAddDb = optionExists("addDb");
 clRestrict = optionVal("restrict", NULL);
+clStrict = optionExists("strict");
 clOverrideNeeded = optionExists("overrideNeeded");
 clDb = optionVal("db", NULL);
 if (argc < 2 && !clDb)
