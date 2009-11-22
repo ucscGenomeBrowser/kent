@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.20 2009/11/22 02:10:20 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.21 2009/11/22 05:28:52 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -46,12 +46,13 @@ errAbort(
   "   -queryFile=fileName\n"
   "   \"-query=select list,of,fields where field='this'\"\n"
   "The queryFile just has a query in it in the same form as the query option.\n"
-  "The syntax of a query statement is very SQL-like.  It must begin with either\n"
-  "'select' or 'count'.  Select is followed by a field list, or '*' for all fields\n"
-  "Count is not followed by anything.  The 'where' clause is optional, and if it\n"
-  "exists it can contain expressions involving fields, numbers, strings, arithmetic, 'and'\n"
-  "'or' and so forth.  Unlike SQL there is no 'from' clause.\n"
-  "Other options:\n"
+  "The syntax of a query statement is very SQL-like. The most common commands are:\n"
+  "    select tag1,tag2,tag3 where tag1 like 'prefix%%'\n"
+  "where the %% is a SQL wildcard.  Sorry to mix wildcards. Another command query is\n"
+  "    select count(*) where tag = 'val\n"
+  "The from list is optional.  If it exists it is a list of raFile names\n"
+  "    select track,type from *Encode* where type like 'bigWig%%'\n"
+  "Other command line options:\n"
   "   -addFile - Add 'file' field to say where record is defined\n"
   "   -addDb - Add 'db' field to say where record is defined\n"
   "   -strict - Used only with db option.  Only report tracks that exist in db\n"
@@ -68,8 +69,6 @@ errAbort(
   "   -db=hg19 - Acts on trackDb files for the given database.  Sets up list of files\n"
   "              appropriately and sets parent, merge, and override all.\n"
   "              Use db=all for all databases\n"
-  "The output will be to stdout, in the form of a .ra file if the select command is used\n"
-  "and just a simple number if the count command is used.\n"
   , clKey, clParentField
   );
 }
@@ -210,7 +209,7 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
 }
 
 static struct raRecord *readRaRecords(int inCount, char *inNames[], char *keyField,
-	boolean doMerge, boolean addFile, char *db, boolean addDb,
+	boolean doMerge, char *db, boolean addDb,
 	boolean overrideNeeded, struct lm *lm)
 /* Scan through files, merging records on key if doMerge. */
 {
@@ -227,8 +226,7 @@ if (doMerge)
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while ((record = raRecordReadOne(lf, keyField, lm)) != NULL)
 	    {
-	    if (addFile)
-	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
+	    record->posList = raFilePosNew(lm, fileName, lf->lineIx);
 	    if (addDb)
 		record->db = db;
 	    char *key = record->key;
@@ -268,8 +266,7 @@ else
 	struct raRecord *record;
 	while ((record = raRecordReadOne(lf, keyField, lm)) != NULL)
 	    {
-	    if (addFile)
-	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
+	    record->posList = raFilePosNew(lm, fileName, lf->lineIx);
 	    slAddHead(&recordList, record);
 	    }
 	lineFileClose(&lf);
@@ -294,12 +291,33 @@ else
 }
 
 void rqlStatementOutput(struct rqlStatement *rql, struct raRecord *ra, 
-	char *addFileField, boolean addDb, FILE *out)
+	char *addFileField, char *addDbField, FILE *out)
 /* Output fields  from ra to file.  If addFileField is non-null add a new
  * field with this name at end of output. */
 {
-if (addDb)
-    fprintf(out, "db %s\n", ra->db);
+if (rql->tableList != NULL)
+    {
+    boolean gotMatch = FALSE;
+    struct slName *table;
+    for (table = rql->tableList; table != NULL; table = table->next)
+        {
+	struct raFilePos *fp;
+	for (fp = ra->posList; fp != NULL; fp = fp->next)
+	    {
+	    if (wildMatch(table->name, fp->fileName))
+	         {
+		 gotMatch = TRUE;
+		 break;
+		 }
+	    }
+	if (gotMatch)
+	    break;
+	}
+    if (!gotMatch)
+        return;
+    }
+if (addDbField)
+    fprintf(out, "%s %s\n", addDbField, ra->db);
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
     {
@@ -403,7 +421,7 @@ if (clQuery)
 else
     query = lineFileOpen(clQueryFile, TRUE);
 struct raRecord *raList = readRaRecords(inCount, inNames, clKey, 
-	clMerge, clAddFile, db, clAddDb, clOverrideNeeded, lm);
+	clMerge, db, clAddDb, clOverrideNeeded, lm);
 if (parentField != NULL)
     {
     inheritFromParents(raList, parentField, clNoInheritField, lm);
@@ -441,7 +459,8 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    matchCount += 1;
 	    if (doSelect)
 		{
-		rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), clAddDb, out);
+		rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), 
+			(clAddDb ? "db" : NULL), out);
 		}
 	    }
 	}

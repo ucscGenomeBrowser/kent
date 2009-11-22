@@ -8,7 +8,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.7 2009/11/22 03:38:59 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.8 2009/11/22 05:28:52 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -493,7 +493,7 @@ for (;;)
    if (tok == NULL)
        break;
    char c = *tok;
-   if (c == '?' || c == '*' || isalpha(c) || c == '_')
+   if (c == '?' || c == '*' || isalpha(c) || c == '_' || c == '/' || c == '.')
        {
        if (firstTime)
 	   dyStringAppend(buf, tok);
@@ -589,14 +589,18 @@ if (from != NULL)
         {
 	for (;;)
 	    {
-	    char *table = tokenizerNext(tkz);
+	    struct dyString *buf = dyStringNew(0);
+	    char *table = rqlParseFieldSpec(tkz, buf);
 	    slNameAddTail(&rql->tableList, table);
 	    char *comma = tokenizerNext(tkz);
+	    if (comma == NULL)
+	        break;
 	    if (comma[0] != ',')
 	        {
 		tokenizerReuse(tkz);
 		break;
 		}
+	    dyStringFree(&buf);
 	    }
 	}
     else
