@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.21 2009/11/22 05:28:52 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.22 2009/11/22 05:58:13 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -277,23 +277,7 @@ else
 }
 
 boolean rqlStatementMatch(struct rqlStatement *rql, struct raRecord *ra)
-/* Return TRUE if where clause in statement evaluates true for ra. */
-{
-struct rqlParse *whereClause = rql->whereClause;
-if (whereClause == NULL)
-    return TRUE;
-else
-    {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, ra);
-    res = rqlEvalCoerceToBoolean(res);
-    return res.val.b;
-    }
-}
-
-void rqlStatementOutput(struct rqlStatement *rql, struct raRecord *ra, 
-	char *addFileField, char *addDbField, FILE *out)
-/* Output fields  from ra to file.  If addFileField is non-null add a new
- * field with this name at end of output. */
+/* Return TRUE if where clause and tableList in statement evaluates true for ra. */
 {
 if (rql->tableList != NULL)
     {
@@ -314,8 +298,24 @@ if (rql->tableList != NULL)
 	    break;
 	}
     if (!gotMatch)
-        return;
+        return FALSE;
     }
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, ra);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+void rqlStatementOutput(struct rqlStatement *rql, struct raRecord *ra, 
+	char *addFileField, char *addDbField, FILE *out)
+/* Output fields  from ra to file.  If addFileField is non-null add a new
+ * field with this name at end of output. */
+{
 if (addDbField)
     fprintf(out, "%s %s\n", addDbField, ra->db);
 struct slName *fieldList = rql->fieldList, *field;
@@ -411,15 +411,10 @@ for (rec = list; rec != NULL; rec = rec->next)
     }
 }
 
-void raSqlQuery(int inCount, char *inNames[], 
+int raSqlQuery(struct rqlStatement *rql, int inCount, char *inNames[], 
 	char *db, char *parentField, struct lm *lm, FILE *out)
 /* raSqlQuery - Do a SQL-like query on a RA file.. */
 {
-struct lineFile *query;
-if (clQuery)
-    query = lineFileOnString("query", TRUE, cloneString(clQuery));
-else
-    query = lineFileOpen(clQueryFile, TRUE);
 struct raRecord *raList = readRaRecords(inCount, inNames, clKey, 
 	clMerge, db, clAddDb, clOverrideNeeded, lm);
 if (parentField != NULL)
@@ -443,7 +438,6 @@ if (clRestrict)
     raList = newList;
     hashFree(&restrictHash);
     }
-struct rqlStatement *rql = rqlStatementParse(query);
 verbose(2, "Got %d records in raFiles\n", slCount(raList));
 if (verboseLevel() > 1)
     rqlStatementDump(rql, stderr);
@@ -465,8 +459,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    }
 	}
     }
-if (!doSelect)
-    printf("%d\n", matchCount);
+return matchCount;
 }
 
 int main(int argc, char *argv[])
@@ -505,9 +498,18 @@ if (clDb != NULL)
     if (sameString(clDb, "all"))
         clAddDb = TRUE;
     }
+/* Parse query */
+struct lineFile *query;
+if (clQuery)
+    query = lineFileOnString("query", TRUE, cloneString(clQuery));
+else
+    query = lineFileOpen(clQueryFile, TRUE);
+struct rqlStatement *rql = rqlStatementParse(query);
+
 char *parentField = (clParent ? clParentField : NULL);
 char **fileNames;
 int fileCount;
+int matchCount = 0;
 if (clDb)
     {
     if (argc != 1)
@@ -528,7 +530,7 @@ if (clDb)
 		{
 		fileNames[i] = path->name;
 		}
-	    raSqlQuery(fileCount, fileNames, db->db, parentField, lm, stdout);
+	    matchCount += raSqlQuery(rql, fileCount, fileNames, db->db, parentField, lm, stdout);
 	    gotAny = TRUE;
 	    }
 	}
@@ -539,7 +541,9 @@ else
     {
     fileNames = argv+1;
     fileCount = argc-1;
-    raSqlQuery(fileCount, fileNames, "n/a", parentField, lm, stdout);
+    matchCount += raSqlQuery(rql, fileCount, fileNames, "n/a", parentField, lm, stdout);
     }
+if (sameString(rql->command, "count"))
+    printf("%d\n", matchCount);
 return 0;
 }
