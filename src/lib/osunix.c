@@ -15,7 +15,7 @@
 #include <regex.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.43 2009/07/10 01:52:27 markd Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.44 2009/11/22 00:18:04 kent Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -347,6 +347,146 @@ for (i=0;;++i)
     }
 return fileName;
 }
+
+static void eatSlashSlashInPath(char *path)
+/* Convert multiple // to single // */
+{
+char *s, *d;
+s = d = path;
+char c, lastC = 0;
+while ((c = *s++) != 0)
+    {
+    if (c == '/' && lastC == c)
+        continue;
+    *d++ = c;
+    lastC = c;
+    }
+*d = 0;
+}
+
+static void eatExcessDotDotInPath(char *path)
+/* If there's a /.. in path take it out.  Turns 
+ *      'this/long/../dir/file' to 'this/dir/file
+ * and
+ *      'this/../file' to 'file'  
+ *
+ * and
+ *      'this/long/..' to 'this'
+ * and
+ *      'this/..' to  ''   
+ * and
+ *       /this/..' to '/' */
+{
+/* Take out each /../ individually */
+for (;;)
+    {
+    /* Find first bit that needs to be taken out. */
+    char *excess= strstr(path, "/../");
+    char *excessEnd = excess+4;
+    if (excess == NULL || excess == path)
+        break;
+
+    /* Look for a '/' before this */
+    char *excessStart = matchingCharBeforeInLimits(path, excess, '/');
+    if (excessStart == NULL) /* Preceding '/' not found */
+         excessStart = path;
+    else 
+         excessStart += 1;
+    strcpy(excessStart, excessEnd);
+    }
+
+/* Take out final /.. if any */
+if (endsWith(path, "/.."))
+    {
+    if (!sameString(path, "/.."))  /* We don't want to turn this to blank. */
+	{
+	int len = strlen(path);
+	char *excessStart = matchingCharBeforeInLimits(path, path+len-3, '/');
+	if (excessStart == NULL) /* Preceding '/' not found */
+	     excessStart = path;
+	else 
+	     excessStart += 1;
+	*excessStart = 0;
+	}
+    }
+}
+
+char *simplifyPathToDir(char *path)
+/* Return path with ~ and .. taken out.  Also any // or trailing /.   
+ * freeMem result when done. */
+{
+/* Expand ~ if any with result in newPath */
+char newPath[PATH_LEN];
+int newLen = 0;
+char *s = path;
+if (*s == '~')
+    {
+    char *homeDir = getenv("HOME");
+    if (homeDir == NULL)
+        errAbort("No HOME environment var defined after ~ in simplifyPathToDir");
+    ++s;
+    if (*s == '/')  /*    ~/something      */
+        {
+	++s;
+	safef(newPath, sizeof(newPath), "%s/", homeDir);
+	}
+    else            /*   ~something        */
+	{
+	safef(newPath, sizeof(newPath), "%s/../", homeDir);
+	}
+    newLen = strlen(newPath);
+    }
+int remainingLen  = strlen(s);
+if (newLen + remainingLen >= sizeof(newPath))
+    errAbort("path too big in simplifyPathToDir");
+strcpy(newPath+newLen, s);
+
+/* Remove //, .. and trailing / */
+eatSlashSlashInPath(newPath);
+eatExcessDotDotInPath(newPath);
+int lastPos = strlen(newPath)-1;
+if (lastPos > 0 && newPath[lastPos] == '/')
+    newPath[lastPos] = 0;
+
+return cloneString(newPath);
+}
+
+#ifdef DEBUG
+void simplifyPathToDirSelfTest()
+{
+/* First test some cases which should remain the same. */
+assert(sameString(simplifyPathToDir(""),""));
+assert(sameString(simplifyPathToDir("a"),"a"));
+assert(sameString(simplifyPathToDir("a/b"),"a/b"));
+assert(sameString(simplifyPathToDir("/"),"/"));
+assert(sameString(simplifyPathToDir("/.."),"/.."));
+assert(sameString(simplifyPathToDir("/../a"),"/../a"));
+
+/* Now test removing trailing slash. */
+assert(sameString(simplifyPathToDir("a/"),"a"));
+assert(sameString(simplifyPathToDir("a/b/"),"a/b"));
+
+/* Test .. removal. */
+assert(sameString(simplifyPathToDir("a/.."),""));
+assert(sameString(simplifyPathToDir("a/../"),""));
+assert(sameString(simplifyPathToDir("a/../b"),"b"));
+assert(sameString(simplifyPathToDir("/a/.."),"/"));
+assert(sameString(simplifyPathToDir("/a/../"),"/"));
+assert(sameString(simplifyPathToDir("/a/../b"),"/b"));
+assert(sameString(simplifyPathToDir("a/b/.."),"a"));
+assert(sameString(simplifyPathToDir("a/b/../"),"a"));
+assert(sameString(simplifyPathToDir("a/b/../c"),"a/c"));
+assert(sameString(simplifyPathToDir("a/../b/../c"),"c"));
+assert(sameString(simplifyPathToDir("a/../b/../c/.."),""));
+assert(sameString(simplifyPathToDir("/a/../b/../c/.."),"/"));
+
+/* Test // removal */
+assert(sameString(simplifyPathToDir("//"),"/"));
+assert(sameString(simplifyPathToDir("//../"),"/.."));
+assert(sameString(simplifyPathToDir("a//b///c"),"a/b/c"));
+assert(sameString(simplifyPathToDir("a/b///"),"a/b"));
+}
+#endif /* DEBUG */
 
 char *getUser()
 /* Get user name */

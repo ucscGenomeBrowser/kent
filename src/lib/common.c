@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.137 2009/11/20 17:44:45 angie Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.138 2009/11/22 00:18:03 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1081,6 +1081,16 @@ char lastChar(char *s)
 if (s == NULL || s[0] == 0)
     return 0;
 return s[strlen(s)-1];
+}
+
+char *matchingCharBeforeInLimits(char *limit, char *s, char c)
+/* Look for character c sometime before s, but going no further than limit.
+ * Return NULL if not found. */
+{
+while (--s >= limit)
+    if (*s == c)
+        return s;
+return NULL;
 }
 
 char *memMatch(char *needle, int nLen, char *haystack, int hLen)

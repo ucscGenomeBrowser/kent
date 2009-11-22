@@ -68,6 +68,9 @@ void makeDirsOnPath(char *pathName);
  * (It's not considered a problem for the directory to already
  * exist. ) */
 
+char *simplifyPathToDir(char *path);
+/* Return path with ~ (for home) and .. taken out.   freeMem result when done. */
+
 long clock1000();
 /* 1000 hz clock */
 

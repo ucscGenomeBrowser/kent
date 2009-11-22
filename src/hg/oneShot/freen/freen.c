@@ -8,8 +8,9 @@
 #include "hash.h"
 #include "obscure.h"
 
+char *simplifyPathToDir(char *path);
 
-static char const rcsid[] = "$Id: freen.c,v 1.92 2009/11/12 23:11:54 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.93 2009/11/22 00:18:05 kent Exp $";
 
 void usage()
 {
@@ -22,34 +23,20 @@ static struct optionSpec options[] = {
 };
 
 
-void freen(char *input, char *output, char *uncompressed)
+void freen(char *input)
 /* Test some hair-brained thing. */
 {
-size_t uncompressedSize;
-char *uncompressedBuf;
-readInGulp(input, &uncompressedBuf, &uncompressedSize);
-size_t compBufSize = zCompBufSize(uncompressedSize);
-char *compBuf = needLargeMem(compBufSize);
-size_t compressedSize = zCompress(uncompressedBuf, uncompressedSize, compBuf, compBufSize);
-printf("uncompressedSize %d, compressedSize %d\n", (int)uncompressedSize, (int)compressedSize);
-FILE *f = mustOpen(output, "wb");
-mustWrite(f, compBuf, compressedSize);
-carefulClose(&f);
-f = mustOpen(uncompressed, "wb");
-memset(uncompressedBuf, 0, uncompressedSize);
-size_t uncSize = zUncompress(compBuf, compressedSize, uncompressedBuf, uncompressedSize);
-printf("uncompressedSize %d\n", (int)uncSize);
-mustWrite(f, uncompressedBuf, uncSize);
-carefulClose(&f);
+extern void simplifyPathToDirSelfTest();
+simplifyPathToDirSelfTest();
+printf("%s\n", simplifyPathToDir(input));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 2)
     usage();
-zSelfTest(100);
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1]);
 return 0;
 }
