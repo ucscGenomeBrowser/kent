@@ -13,7 +13,7 @@
 #include "rql.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.15 2009/11/22 00:25:26 kent Exp $";
+static char const rcsid[] = "$Id: raSqlQuery.c,v 1.16 2009/11/22 01:37:41 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;
@@ -23,6 +23,7 @@ static char *clNoInheritField = "noInherit";
 static boolean clMerge = FALSE;
 static boolean clParent = FALSE;
 static boolean clAddFile = FALSE;
+static boolean clAddDb = FALSE;
 static char *clRestrict = NULL;
 static char *clDb = NULL;
 static boolean clOverrideNeeded = FALSE;
@@ -58,9 +59,11 @@ errAbort(
   "   -merge - If there are multiple raFiles, records with the same keyField will be\n"
   "          merged together with fields in later files overriding fields in earlier files\n"
   "   -addFile - Add 'file' field to say where record is defined\n"
+  "   -addDb - Add 'db' field to say where record is defined\n"
   "   -restrict=keyListFile - restrict output to only ones with keys in file, which\n"
   "   -db=hg19 - Acts on trackDb files for the given database.  Sets up list of files\n"
   "              appropriately and sets parent, merge, and override all.\n"
+  "              Use db=all for all databases\n"
   "The output will be to stdout, in the form of a .ra file if the select command is used\n"
   "and just a simple number if the count command is used\n"
   , clKey, clParentField
@@ -77,6 +80,7 @@ static struct optionSpec options[] = {
    {"parentField", OPTION_STRING},
    {"noInheritField", OPTION_STRING},
    {"addFile", OPTION_BOOLEAN},
+   {"addDb", OPTION_BOOLEAN},
    {"restrict", OPTION_STRING},
    {"db", OPTION_STRING},
    {"overrideNeeded", OPTION_BOOLEAN},
@@ -85,25 +89,55 @@ static struct optionSpec options[] = {
 
 
 struct dbPath
+/* A database directory and path. */
     {
+    struct dbPath *next;
     char *db;
     char *dir;
     };
 
-struct dbPath dbPath[] = {
-    {"hg19", "human/hg19"},
-    {"hg18", "human/hg18"},
-    {"hg17", "human/hg17"},
-    {"mm9", "mouse/mm9"},
-    {"mm8", "mouse/mm8"},
-};
+static struct dbPath *getDbPathList(char *rootDir)
+/* Get list of all "database" directories with any trackDb.ra files two under us. */
+{
+char *root = simplifyPathToDir(rootDir);
+struct dbPath *pathList = NULL, *path;
+struct fileInfo *org, *orgList = listDirX(root, "*", TRUE);
+for (org = orgList; org != NULL; org = org->next)
+    {
+    if (org->isDir)
+        {
+	struct fileInfo *db, *dbList = listDirX(org->name, "*", TRUE);
+	for (db = dbList; db != NULL; db = db->next)
+	    {
+	    if (db->isDir)
+	        {
+		char trackDbPath[PATH_LEN];
+		safef(trackDbPath, sizeof(trackDbPath), "%s/trackDb.ra", db->name);
+		if (fileExists(trackDbPath))
+		    {
+		    AllocVar(path);
+		    path->dir = cloneString(db->name);
+		    char *s = strrchr(db->name, '/');
+		    assert(s != NULL);
+		    path->db = cloneString(s+1);
+		    slAddHead(&pathList, path);
+		    }
+		}
+	    }
+	slFreeList(&dbList);
+	}
+    }
+slFreeList(&orgList);
+slReverse(&pathList);
+freez(&root);
+return pathList;
+}
 
 static struct slName *dbPathToFiles(struct dbPath *p)
 /* Convert dbPath to a list of files. */
 {
 struct slName *pathList = NULL;
-char dbDir[PATH_LEN];
-safef(dbDir, sizeof(dbDir), "%s/%s", clTrackDbRootDir, p->dir);
+char *dbDir = p->dir;
 char *buf = cloneString(clTrackDbRelPath);
 char *line = buf, *word;
 while ((word = nextWord(&line)) != NULL)
@@ -124,22 +158,6 @@ while ((word = nextWord(&line)) != NULL)
 freeMem(buf);
 slReverse(&pathList);
 return pathList;
-}
-
-static struct slName *dbToTrackDbFiles(char *db)
-/* Given a database, figure out list of trackDb files. */
-{
-int i;
-for (i=0; i<ArraySize(dbPath); ++i)
-    {
-    struct dbPath *p = &dbPath[i];
-    if (sameString(p->db, db))
-        {
-	return dbPathToFiles(p);
-	}
-    }
-errAbort("Couldn't find db %s", db);
-return NULL;
 }
 
 
@@ -187,7 +205,8 @@ for (parentField= parent->fieldList; parentField!= NULL; parentField= parentFiel
 }
 
 static struct raRecord *readRaRecords(int inCount, char *inNames[], char *keyField,
-	boolean doMerge, boolean addFile, boolean overrideNeeded, struct lm *lm)
+	boolean doMerge, boolean addFile, char *db, boolean addDb,
+	boolean overrideNeeded, struct lm *lm)
 /* Scan through files, merging records on key if doMerge. */
 {
 if (inCount <= 0)
@@ -205,6 +224,8 @@ if (doMerge)
 	    {
 	    if (addFile)
 	        record->posList = raFilePosNew(lm, fileName, lf->lineIx);
+	    if (addDb)
+		record->db = db;
 	    char *key = record->key;
 	    if (key != NULL)
 		{
@@ -268,10 +289,12 @@ else
 }
 
 void rqlStatementOutput(struct rqlStatement *rql, struct raRecord *ra, 
-	char *addFileField, FILE *out)
+	char *addFileField, boolean addDb, FILE *out)
 /* Output fields  from ra to file.  If addFileField is non-null add a new
  * field with this name at end of output. */
 {
+if (addDb)
+    fprintf(out, "db %s\n", ra->db);
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
     {
@@ -365,15 +388,20 @@ for (rec = list; rec != NULL; rec = rec->next)
     }
 }
 
-void raSqlQuery(int inCount, char *inNames[], struct lineFile *query, boolean doMerge, 
-	char *parentField, char *noInheritField, struct lm *lm, FILE *out)
+void raSqlQuery(int inCount, char *inNames[], 
+	char *db, char *parentField, struct lm *lm, FILE *out)
 /* raSqlQuery - Do a SQL-like query on a RA file.. */
 {
+struct lineFile *query;
+if (clQuery)
+    query = lineFileOnString("query", TRUE, cloneString(clQuery));
+else
+    query = lineFileOpen(clQueryFile, TRUE);
 struct raRecord *raList = readRaRecords(inCount, inNames, clKey, 
-	doMerge, clAddFile, clOverrideNeeded, lm);
+	clMerge, clAddFile, db, clAddDb, clOverrideNeeded, lm);
 if (parentField != NULL)
     {
-    inheritFromParents(raList, parentField, noInheritField, lm);
+    inheritFromParents(raList, parentField, clNoInheritField, lm);
     }
 if (clRestrict)
     {
@@ -406,7 +434,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	matchCount += 1;
 	if (doSelect)
 	    {
-	    rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), out);
+	    rqlStatementOutput(rql, ra, (clAddFile ? "file" : NULL), clAddDb, out);
 	    }
 	}
     }
@@ -426,6 +454,7 @@ clQueryFile = optionVal("queryFile", NULL);
 clQuery = optionVal("query", NULL);
 clNoInheritField = optionVal("noInheritField", clNoInheritField);
 clAddFile = optionExists("addFile");
+clAddDb = optionExists("addDb");
 clRestrict = optionVal("restrict", NULL);
 clOverrideNeeded = optionExists("overrideNeeded");
 clDb = optionVal("db", NULL);
@@ -435,11 +464,6 @@ if (clQueryFile == NULL && clQuery == NULL)
     errAbort("Please specify either the query or queryFile option.");
 if (clQueryFile != NULL && clQuery != NULL)
     errAbort("Please specify just one of the query or queryFile options.");
-struct lineFile *query = NULL;
-if (clQuery)
-    query = lineFileOnString("query", TRUE, cloneString(clQuery));
-else
-    query = lineFileOpen(clQueryFile, TRUE);
 struct lm *lm = lmInit(0);
 
 if (clDb != NULL)
@@ -448,30 +472,44 @@ if (clDb != NULL)
     clParent = TRUE;
     clOverrideNeeded = TRUE;
     clKey = "track";
+    if (sameString(clDb, "all"))
+        clAddDb = TRUE;
     }
+char *parentField = (clParent ? clParentField : NULL);
 char **fileNames;
 int fileCount;
 if (clDb)
     {
     if (argc != 1)
          usage();
-    struct slName *path, *pathList = dbToTrackDbFiles(clDb);
-    fileCount = slCount(pathList);
-    if (fileCount == 0)
-        errAbort("No paths returned by dbToTrackDbFiles(%s)", clDb);
-    AllocArray(fileNames, fileCount);
-    int i;
-    for (i=0, path = pathList; path != NULL; path = path->next, ++i)
+    struct dbPath *db, *dbList = getDbPathList(clTrackDbRootDir);
+    boolean gotAny = FALSE;
+    for (db = dbList; db != NULL; db = db->next)
 	{
-	fileNames[i] = path->name;
+	if (sameString(clDb, "all") || sameString(clDb, db->db))
+	    {
+	    struct slName *path, *pathList = dbPathToFiles(db);
+	    fileCount = slCount(pathList);
+	    if (fileCount == 0)
+		errAbort("No paths returned by dbToTrackDbFiles(%s)", clDb);
+	    AllocArray(fileNames, fileCount);
+	    int i;
+	    for (i=0, path = pathList; path != NULL; path = path->next, ++i)
+		{
+		fileNames[i] = path->name;
+		}
+	    raSqlQuery(fileCount, fileNames, db->db, parentField, lm, stdout);
+	    gotAny = TRUE;
+	    }
 	}
+    if (!gotAny)
+        errAbort("No database named %s found off %s\n", clDb, clTrackDbRootDir);
     }
 else
     {
     fileNames = argv+1;
     fileCount = argc-1;
+    raSqlQuery(fileCount, fileNames, "n/a", parentField, lm, stdout);
     }
-char *parentField = (clParent ? clParentField : NULL);
-raSqlQuery(fileCount, fileNames, query, clMerge, parentField, clNoInheritField, lm, stdout);
 return 0;
 }

@@ -25,6 +25,17 @@ for (field = ra->fieldList; field != NULL; field = field->next)
 return NULL;
 }
 
+struct raField *raFieldNew(char *name, char *val, struct lm *lm)
+/* Return new raField. */
+{
+struct raField *field;
+lmAllocVar(lm, field);
+field->name = lmCloneString(lm, name);
+val = emptyForNull(skipLeadingSpaces(val));
+field->val = lmCloneString(lm, val);
+return field;
+}
+
 struct raField *raFieldFromLine(char *line, struct lm *lm)
 /* Parse out line and convert it to a raField.  Will return NULL on empty lines. 
  * Will insert some zeroes into the input line as well. */
@@ -32,12 +43,7 @@ struct raField *raFieldFromLine(char *line, struct lm *lm)
 char *word = nextWord(&line);
 if (word == NULL)
     return NULL;
-struct raField *field;
-lmAllocVar(lm, field);
-field->name = lmCloneString(lm, word);
-char *val = emptyForNull(skipLeadingSpaces(line));
-field->val = lmCloneString(lm, val);
-return field;
+return raFieldNew(word, line, lm);
 }
 
 char *lmCloneFirstWord(struct lm *lm, char *line)

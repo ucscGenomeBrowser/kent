@@ -22,11 +22,15 @@ struct raRecord
     char *key;			/* First word of value of key field. */
     struct raField *fieldList;	/* List of fields. */
     struct raFilePos *posList;	/* Position of file. */
+    char *db;			/* Database if any. */
     boolean override;		/* Override is in key. */
     };
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx);
 /* Create new raFilePos record. */
+
+struct raField *raFieldNew(char *name, char *val, struct lm *lm);
+/* Return new raField. */
 
 struct raField *raRecordField(struct raRecord *ra, char *fieldName);
 /* Return named field if it exists, otherwise NULL */
