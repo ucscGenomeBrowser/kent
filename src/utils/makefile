@@ -48,6 +48,7 @@ DIRS = \
 	addCols \
 	ave \
 	aveCols \
+	bedClip \
 	bedGraphToBigWig \
 	bedToBigBed \
 	bigBedSummary \
