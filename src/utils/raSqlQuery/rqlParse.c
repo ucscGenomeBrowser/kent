@@ -8,7 +8,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.4 2009/11/22 02:11:09 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.5 2009/11/22 02:45:33 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -535,20 +535,41 @@ if (sameString(rql->command, "select"))
     struct dyString *buf = dyStringNew(0);
     struct slName *list = NULL;
     char *tok = rqlParseFieldSpec(tkz, buf);
-    list = slNameNew(tok);
-    for (;;)
-	{
-	/* Parse out comma-separated field list. */
-	char *comma = tokenizerNext(tkz);
-	if (comma == NULL || comma[0] != ',')
+    /* Look for count(*) as special case. */
+    boolean countOnly = FALSE;
+    if (sameString(tok, "count"))
+        {
+	char *paren = tokenizerNext(tkz);
+	if (paren[0] == '(')
+	    {
+	    skipOverRequired(tkz, "*");
+	    skipOverRequired(tkz, ")");
+	    countOnly = TRUE;
+	    freez(&rql->command);
+	    rql->command = cloneString("count");
+	    }
+	else
 	    {
 	    tokenizerReuse(tkz);
-	    break;
 	    }
-	slNameAddHead(&list, rqlParseFieldSpec(tkz, buf));
 	}
-    slReverse(&list);
-    rql->fieldList = list;
+    if (!countOnly)
+	{
+	list = slNameNew(tok);
+	for (;;)
+	    {
+	    /* Parse out comma-separated field list. */
+	    char *comma = tokenizerNext(tkz);
+	    if (comma == NULL || comma[0] != ',')
+		{
+		tokenizerReuse(tkz);
+		break;
+		}
+	    slNameAddHead(&list, rqlParseFieldSpec(tkz, buf));
+	    }
+	slReverse(&list);
+	rql->fieldList = list;
+	}
     dyStringFree(&buf);
     }
 else if (sameString(rql->command, "count"))
