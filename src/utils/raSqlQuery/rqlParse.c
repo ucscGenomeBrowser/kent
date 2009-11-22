@@ -8,7 +8,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.5 2009/11/22 02:45:33 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.6 2009/11/22 02:54:37 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -579,6 +579,26 @@ else if (sameString(rql->command, "count"))
 else
     errAbort("Unknown RQL command '%s line %d of %s\n", rql->command, lf->lineIx, lf->fileName);
     
+char *from = tokenizerNext(tkz);
+if (from != NULL)
+    {
+    if (sameString(from, "from"))
+        {
+	for (;;)
+	    {
+	    char *table = tokenizerNext(tkz);
+	    slNameAddTail(&rql->tableList, table);
+	    char *comma = tokenizerNext(tkz);
+	    if (comma[0] != ',')
+	        {
+		tokenizerReuse(tkz);
+		break;
+		}
+	    }
+	}
+    else
+        tokenizerReuse(tkz);
+    }
 char *where = tokenizerNext(tkz);
 if (where != NULL)
     {
