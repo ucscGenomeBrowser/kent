@@ -3451,7 +3451,7 @@ chromosomes chr1
     shortLabel density Resting Unphosphor PolII
     longLabel Density graph, resting Unphosphorylated Pol II
     subGroups FAC=POL2U STRAND=DBL ACT=REST view=SIG
-    type bedGraph
+    type bedGraph 4
     defaultViewLimits 0:10520
     minLimit 0
     maxLimit 10520
