@@ -8,7 +8,7 @@
 #include "raRecord.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.6 2009/11/22 02:54:37 kent Exp $";
+static char const rcsid[] = "$Id: rqlParse.c,v 1.7 2009/11/22 03:38:59 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */
@@ -542,8 +542,11 @@ if (sameString(rql->command, "select"))
 	char *paren = tokenizerNext(tkz);
 	if (paren[0] == '(')
 	    {
-	    skipOverRequired(tkz, "*");
-	    skipOverRequired(tkz, ")");
+	    while ((paren = tokenizerMustHaveNext(tkz)) != NULL)
+	        {
+		if (paren[0] == ')')
+		    break;
+		}
 	    countOnly = TRUE;
 	    freez(&rql->command);
 	    rql->command = cloneString("count");

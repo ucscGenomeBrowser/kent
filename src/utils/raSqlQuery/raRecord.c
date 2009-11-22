@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "raRecord.h"
 
-static char const rcsid[] = "$Id: raRecord.c,v 1.6 2009/11/22 02:11:09 kent Exp $";
+static char const rcsid[] = "$Id: raRecord.c,v 1.7 2009/11/22 03:38:59 kent Exp $";
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new raFilePos record. */
@@ -45,6 +45,7 @@ struct raField *raFieldFromLine(char *line, struct lm *lm)
 char *word = nextWord(&line);
 if (word == NULL)
     return NULL;
+trimSpaces(line);
 return raFieldNew(word, line, lm);
 }
 
