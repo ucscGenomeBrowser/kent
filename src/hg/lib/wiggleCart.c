@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.29 2009/11/19 18:54:51 angie Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.30 2009/11/23 23:04:22 angie Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -193,7 +193,8 @@ else if (missingAbsMin || missingAbsMax)
     {
     // I would like to make this an errAbort, but too many tracks are afflicted
     // to do that until hgTrackDb helps to enforce:
-    warn("trackDb %s, and no default view limits are specified for track %s",
+    if (hIsPrivateHost())
+	warn("trackDb %s, and no default view limits are specified for track %s",
 	     (isBedGraph ? MIN_LIMIT " and/or " MAX_LIMIT " is not specified" :
 			   "'type wig' line is missing min and/or max data value"),
 	     tdb->tableName);
