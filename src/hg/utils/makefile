@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.16 2009/10/06 17:39:16 angie Exp $
+# 	$Id: makefile,v 1.17 2009/11/23 02:56:19 markd Exp $
 
 include ../../inc/common.mk
 
@@ -26,10 +26,12 @@ DIRS = \
 	twoBitMask \
 	gff3ToGenePred \
 	automation \
-	refreshNamedSessionCustomTracks
+	refreshNamedSessionCustomTracks \
+	refSeqGet
 
 TEST_DIRS = \
-	gff3ToGenePred
+	gff3ToGenePred \
+	refSeqGet
 
 
 all:: utils
