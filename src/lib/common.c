@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.138 2009/11/22 00:18:03 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.139 2009/11/23 18:02:16 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1002,7 +1002,7 @@ char * findWordByDelimiter(char *word,char delimit, char *line)
 {
 int ix;
 char *p=line;
-while(*p!='\0')
+while(p!=NULL && *p!='\0')
     {
     for (ix = 0;
          word[ix] != '\0' && word[ix] == *p;
@@ -1014,17 +1014,15 @@ while(*p!='\0')
         || (delimit == ' ' && isspace(*p)))
             return p - ix; // matched and delimited
         }
-        for(;    *p!='\0'
-              && *p!=delimit
-              && (delimit != ' ' || !isspace(*p));
-              p++); // advance to next delimit
-        if(*p!='\0')
-            {
-            p++;
-            continue;  // delimited so start again after delimit
-            }
-        else
-            break;
+    for(;   *p!='\0'
+         && *p!=delimit
+         && (delimit != ' ' || !isspace(*p));
+            p++); // advance to next delimit
+    if(*p!='\0')
+        {
+        p++;
+        continue;  // delimited so start again after delimit
+        }
     }
 return NULL;
 }
