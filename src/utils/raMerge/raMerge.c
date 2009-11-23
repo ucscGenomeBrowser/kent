@@ -6,9 +6,9 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: raMerge.c,v 1.2 2007/03/13 01:41:20 kent Exp $";
+static char const rcsid[] = "$Id: raMerge.c,v 1.3 2009/11/23 07:38:17 kent Exp $";
 
-boolean dupeOk = FALSE, uniqDupeOk = FALSE;
+boolean dupeOk = FALSE, firstOnly = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,11 +20,13 @@ errAbort(
   "   raMerge keyField file1.ra file2.ra ... fileN.ra\n"
   "options:\n"
   "   -dupeOk - will pass through multiple instances of fields with same name.\n"
+  "   -firstOnly - only keep records that are started in the first file\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"dupeOk", OPTION_BOOLEAN},
+   {"firstOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -34,6 +36,7 @@ void raMerge(char *keyField, int raCount, char *raFiles[])
 {
 struct hash *outerHash = hashNew(20);
 int i;
+boolean isFirstFile = TRUE;
 for (i=0; i<raCount; ++i)
     {
     struct lineFile *lf = lineFileOpen(raFiles[i], TRUE);
@@ -46,7 +49,10 @@ for (i=0; i<raCount; ++i)
 		    lf->lineIx, lf->fileName);
 	struct hash *oldRa = hashFindVal(outerHash, id);
 	if (oldRa == NULL)
-	    hashAdd(outerHash, id, newRa);
+	    {
+	    if (isFirstFile || !firstOnly)
+		hashAdd(outerHash, id, newRa);
+	    }
 	else
 	    {
 	    struct hashCookie cookie = hashFirst(newRa);
@@ -64,6 +70,7 @@ for (i=0; i<raCount; ++i)
 	    }
 	}
     lineFileClose(&lf);
+    isFirstFile = FALSE;
     }
 
 struct hashEl *outerHel, *outerList = hashElListHash(outerHash);
@@ -93,6 +100,7 @@ optionInit(&argc, argv, options);
 if (argc < 3)
     usage();
 dupeOk = optionExists("dupeOk");
+firstOnly = optionExists("firstOnly");
 raMerge(argv[1], argc-2, argv+2);
 return 0;
 }
