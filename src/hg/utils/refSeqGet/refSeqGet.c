@@ -12,7 +12,7 @@
 #include "genbank.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: refSeqGet.c,v 1.1 2009/11/23 02:56:20 markd Exp $";
+static char const rcsid[] = "$Id: refSeqGet.c,v 1.2 2009/11/23 17:45:19 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -191,9 +191,18 @@ else
     }
 }
 
+static char *getCds(struct sqlConnection *conn, char *acc)
+/* get CDS for an NM, results should be freed */
+{
+char query[128];
+safef(query, sizeof(query), "SELECT cds.name FROM gbCdnaInfo,cds WHERE (gbCdnaInfo.acc = \"%s\") AND (gbCdnaInfo.cds = cds.id)", acc);
+return sqlNeedQuickString(conn, query);
+}
+
 static void processMetaData(FILE *fh, struct sqlConnection *conn, struct sqlConnection *conn2, struct refSeqVerInfo *rsvi)
 /* get meta data for an accession */
 {
+boolean isCoding = genbankIsRefSeqCodingMRnaAcc(rsvi->acc);
 char query[128];
 safef(query, sizeof(query), "SELECT name,product,protAcc,locusLinkId FROM refLink WHERE mrnaAcc = \"%s\"", rsvi->acc);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -202,15 +211,18 @@ if (row == NULL)
     errAbort("no RefLink entry for %s", rsvi->acc);
 char buf[32];
 char *protAccVer = getProtAccVerIf(conn2, rsvi->acc, row[2], buf, sizeof(buf));
-fprintf(fh, "%s.%d\t%s\t%s\t%s\t%s\n", rsvi->acc, rsvi->ver, protAccVer, row[0], row[3], row[1]);
+char *cds = isCoding ? getCds(conn2, rsvi->acc) : "";
+fprintf(fh, "%s.%d\t%s\t%s\t%s\t%s\t%s\n", rsvi->acc, rsvi->ver, protAccVer, row[0], row[3], cds, row[1]);
 sqlFreeResult(&sr);
+if (isCoding)
+    freeMem(cds);
 }
 
 static void getMetaData(struct sqlConnection *conn, struct hash *refSeqVerInfoTbl, char *outFile)
 /* get request prot sequences from database */
 {
 struct sqlConnection *conn2 = sqlConnect(sqlGetDatabase(conn));
-static char *hdr = "#mrnaAcc\t" "protAcc\t" "geneName\t" "ncbiGeneId\t" "product\n";
+static char *hdr = "#mrnaAcc\t" "protAcc\t" "geneName\t" "ncbiGeneId\t" "cds\t" "product\n";
 FILE *fh = mustOpen(outFile, "w");
 fputs(hdr, fh);
 struct hashCookie cookie = hashFirst(refSeqVerInfoTbl);
