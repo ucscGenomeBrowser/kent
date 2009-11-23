@@ -177,7 +177,8 @@ priority 130
     superTrack uwFootprints full
     shortLabel Tag Counts
     longLabel UW Footprints Tag Counts
-    type wig
+    type wig 1 13798
+    viewLimits 1:146
     color 25,25,150
     group regulation
     priority 1

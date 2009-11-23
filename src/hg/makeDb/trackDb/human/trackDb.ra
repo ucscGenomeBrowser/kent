@@ -1470,7 +1470,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 5251.55
+viewLimits 0:272
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy A375CytosolicPolyAPlusTnFg
@@ -1501,7 +1502,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 5451.35
+viewLimits 0:287
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy FHs738LuCytosolicPolyAPlusTnFg
@@ -1532,7 +1534,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 6183.74
+viewLimits 0:282
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2CytosolicPolyAPlusTnFg
@@ -1563,7 +1566,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 4206.84
+viewLimits 0:214
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2NuclearPolyAPlusTnFg
@@ -1594,7 +1598,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 3571.88
+viewLimits 0:85
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2CytosolicPolyAMinusTnFg
@@ -1625,7 +1630,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 2656.57
+viewLimits 0:94
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy HepG2NuclearPolyAMinusTnFg
@@ -1656,7 +1662,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 5203.76
+viewLimits=0:253
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy JurkatCytosolicPolyAPlusTnFg
@@ -1687,7 +1694,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 6320.77
+viewLimits 0:308
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy NCCITCytosolicPolyAPlusTnFg
@@ -1718,7 +1726,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 2993.96
+viewLimits 0:198
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy PC3CytosolicPolyAPlusTnFg
@@ -1749,7 +1758,8 @@ altColor 255,128,0
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 4395.02
+viewLimits 0:224
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy SKNASCytosolicPolyAPlusTnFg
@@ -1782,7 +1792,8 @@ maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig
+type wig 0 5939.33
+viewLimits 0:221
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy U87CytosolicPolyAPlusTnFg
