@@ -183,15 +183,6 @@ speciesGroups mammal
 sGroup_mammal rn4 hg18 canFam2
 treeImage phylo/mm9_4way.gif
 
-track knownAlt
-shortLabel Alt Events
-longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
-group genes
-priority 34.2
-visibility hide
-color 90,0,150
-type bed 6 .
-
 track exoniphy
 shortLabel Exoniphy
 longLabel Exoniphy Mouse/Rat/Human/Dog

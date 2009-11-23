@@ -494,24 +494,11 @@ type bedGraph 4
     altColor 0,100,200
     priority 6
 
-track knownGene override
-priority 10
-
-track knownAlt
-shortLabel Alt Events
-longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
-group genes
-priority 10.2
-visibility hide
-color 90,0,150
-noScoreFilter .
-type bed 6 .
-
 track knownGeneOld3
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
-priority 10.1
+priority 34.1
 visibility hide
 color 82,82,160
 type genePred
