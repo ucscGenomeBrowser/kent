@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.46 2009/11/20 23:36:32 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.47 2009/11/23 07:56:56 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -13,7 +13,6 @@ var newWinWidth;
 var imageV2 = false;
 var imgBoxPortal = false;
 var blockUseMap = false;
-var mapHtml;
 var mapItems;
 var trackImg;               // jQuery element for the track image
 var trackImgTbl;            // jQuery element used for image table under imageV2
@@ -227,12 +226,12 @@ $(window).load(function () {
 
     // Don't load contextMenu if jquery.contextmenu.js hasn't been loaded
     if(trackImg && jQuery.fn.contextMenu) {
+        $('#hgTrackUiDialog').hide();
         if(imageV2) {
             $("map[name!=ideoMap]").each( function(t) { parseMap($(this,false));});
         } else {
             // XXXX still under debate whether we have to remove the map
             parseMap($('#map'),true);
-            mapHtml = $('#map').html();
             $('#map').empty();
         }
 
@@ -942,6 +941,7 @@ function findMapItem(e)
         // XXXX still trying to figure this out.
         var pos = $(e.target).position();
         if(e.target.tagName == "IMG") {
+            // msie
             // alert("img: x: " + x + ", y:" + y);
             // alert("pageX: " + e.pageX + "; offsetLeft: " + pos.left);
             x = e.pageX - pos.left;
@@ -962,20 +962,23 @@ function findMapItem(e)
     for(var i=0;i<mapItems.length;i++)
     {
         if(mapItems[i].obj && e.target === mapItems[i].obj) {
+            // e.target is AREA tag under FF and Safari;
             // This never occurs under IE
             // console.log("Found match by objects comparison");
             retval = i;
             break;
         } else if (!imageV2 || browser == "msie") {
-            //
+            // Under IE, target is the IMG tag for the map's img and y is relative to the top of that,
+            // so we must use the target's src to make sure we are looking at the right map.
             // We start falling through to here under safari under imageV2 once something has been modified
-            if(mapItems[i].r.contains(x, y)) {
+            // (that's a bug I still haven't figured out how to fix).
+            if(mapItems[i].r.contains(x, y) && mapItems[i].src == $(e.target).attr('src')) {
                 retval = i;
                 break;
             }
         }
     }
-    // showWarning(x + " " + y + " " + retval + " " + $(e.target).attr('src'));
+    // showWarning(x + " " + y + " " + retval + " " + e.target.tagName + " " + $(e.target).attr('src'));
     // console.log("findMapItem:", e.clientX, e.clientY, x, y, pos.left, pos.top, retval, mapItems.length, e.target.tagName);
     // console.log(e.clientX, pos);
     return retval;
@@ -1122,7 +1125,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             // though if you look in the DOM the changes are there); so we have to do a full form submission when the
             // user changes visibility settings.
             jQuery('body').css('cursor', 'wait');
-            document.TrackForm.submit();
+            document.TrackHeaderForm.submit();
         } else {
             var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();
             if(imageV2) {
@@ -1252,12 +1255,15 @@ function parseMap(ele, reset)
         }
         if(ele) {
                 var i = mapItems.length;
+                // src is necessary under msie
+                var src = ele.next().attr('src');
                 ele.children().each(function() {
                                       mapItems[i++] = {
                                           r : new Rectangle(this.coords),
                                           href : this.href,
                                           title : this.title,
                                           id : this.id,
+                                          src : src,
                                           obj : this
                                       };
                                   });
@@ -1293,7 +1299,7 @@ function handleTrackUi(response, status)
                                },
                                resizable: true,
                                bgiframe: true,
-                               height: 450,
+                               height: 600,
                                width: 600,
                                modal: true,
                                closeOnEscape: true,
@@ -1346,6 +1352,7 @@ function handleUpdateTrackMap(response, status)
                loadImgAreaSelect(false);
                // Do NOT reload context menu (otherwise we get the "context menu sticks" problem).
                // loadContextMenu($('#tr_' + id));
+               trackImgTbl.tableDnDUpdate();
           } else {
                showWarning("Couldn't parse out new image");
           }
@@ -1387,8 +1394,8 @@ function handleUpdateTrackMap(response, status)
                        // After much debugging, I found the best way to have imgAreaSelect continue to work
                        // was to reload it:
                        loadImgAreaSelect(false);
-                       // XXX this doesn't work (i.e. does't make the re-sized row draggable).
-                       jQuery.tableDnD.updateTables();
+                       // XXX this doesn't work (i.e. does't make the re-sized row draggable under safari).
+                       trackImgTbl.tableDnD();
                    }
             } else {
                 showWarning("Couldn't parse out new image");
