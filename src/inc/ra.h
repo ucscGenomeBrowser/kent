@@ -15,6 +15,18 @@ struct hash *raNextRecord(struct lineFile *lf);
  * keys and values as well, so you'll have to
  * cloneMem them if you want them for later. */
 
+struct slPair *raNextRecordAsSlPairList(struct lineFile *lf);
+/* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order. 
+ * Do a slPairFreeValsAndList on result when done. */
+
+boolean raSkipLeadingEmptyLines(struct lineFile *lf);
+/* Skip leading empty lines and comments.  Returns FALSE at end of file. 
+ * Together with raNextTagVal you can construct your own raNextRecord.... */
+
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal);
+/* Read next line.  Return FALSE at end of file or blank line.  Otherwise
+ * fill in *retTag and *retVal and return TRUE */
+
 struct hash *raFromString(char *string);
 /* Return hash of key/value pairs from string.
  * As above freeHash this when done. */

@@ -12,23 +12,17 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.13 2009/02/02 23:52:07 kate Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.14 2009/11/23 07:33:44 kent Exp $";
 
-struct hash *raNextRecord(struct lineFile *lf)
-/* Return a hash containing next record.   
- * Returns NULL at end of file.  freeHash this
- * when done.  Note this will free the hash
- * keys and values as well, so you'll have to
- * cloneMem them if you want them for later. */
+boolean raSkipLeadingEmptyLines(struct lineFile *lf)
+/* Skip leading empty lines and comments.  Returns FALSE at end of file. */
 {
-struct hash *hash = NULL;
-char *line, *key, *val;
-
+char *line;
 /* Skip leading empty lines and comments. */
 for (;;)
    {
    if (!lineFileNext(lf, &line, NULL))
-       return NULL;
+       return FALSE;
    line = skipLeadingSpaces(line);
    if (line[0] != 0 )
        {
@@ -39,30 +33,69 @@ for (;;)
        }
    }
 lineFileReuse(lf);
+return TRUE;
+}
+
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal)
+/* Read next line.  Return FALSE at end of file or blank line.  Otherwise
+ * fill in *retTag and *retVal and return TRUE */
+{
+char *line;
 for (;;)
-   {
-   if (!lineFileNext(lf, &line, NULL))
-       break;
-   line = skipLeadingSpaces(line);
-   if (line[0] == 0)
-       break;
-   if (line[0] == '#')
+    {
+    if (!lineFileNext(lf, &line, NULL))
+       return FALSE;
+    line = skipLeadingSpaces(line);
+    if (line[0] == 0)
+       return FALSE;;
+    if (line[0] == '#')
        {
        if (startsWith("#EOF", line))
-           return NULL;
+	   return FALSE;
        else
 	   continue;
        }
-   if (hash == NULL)
-       hash = newHash(7);
-   key = nextWord(&line);
-   val = trimSpaces(line);
-   if (line == NULL)
-       line = "";
-   val = lmCloneString(hash->lm, val);
-   hashAdd(hash, key, val);
-   }
+    break;
+    }
+*retTag = nextWord(&line);
+*retVal = trimSpaces(line);
+return TRUE;
+}
+
+struct hash *raNextRecord(struct lineFile *lf)
+/* Return a hash containing next record.   
+ * Returns NULL at end of file.  freeHash this
+ * when done.  Note this will free the hash
+ * keys and values as well, so you'll have to
+ * cloneMem them if you want them for later. */
+{
+struct hash *hash = NULL;
+char *key, *val;
+
+if (!raSkipLeadingEmptyLines(lf))
+    return NULL;
+while (raNextTagVal(lf, &key, &val))
+    {
+    if (hash == NULL)
+	hash = newHash(7);
+    val = lmCloneString(hash->lm, val);
+    hashAdd(hash, key, val);
+    }
 return hash;
+}
+
+struct slPair *raNextRecordAsSlPairList(struct lineFile *lf)
+/* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order. 
+ * Do a slPairFreeValsAndList on result when done. */
+{
+struct slPair *list = NULL;
+char *key, *val;
+if (!raSkipLeadingEmptyLines(lf))
+    return NULL;
+while (raNextTagVal(lf, &key, &val))
+    slPairAdd(&list, key, cloneString(val));
+slReverse(&list);
+return list;
 }
 
 struct hash *raFromString(char *string)
@@ -203,3 +236,4 @@ while ((hash = raNextRecord(lf)) != NULL)
 lineFileClose(&lf);
 return bigHash;
 }
+
