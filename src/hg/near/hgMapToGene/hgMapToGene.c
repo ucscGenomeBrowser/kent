@@ -11,7 +11,7 @@
 #include "hgConfig.h"
 
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.15 2008/09/03 19:20:41 markd Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.16 2009/11/23 23:39:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,6 +41,7 @@ errAbort(
   "   -noLoad - Don't load database, just create mapTable.tab file\n"
   "   -verbose=N - Print intermediate status info if N > 0\n"
   "   -intronsToo - Include introns\n"
+  "   -ignoreStrand - ignore strand when determining overlaps\n"
   "   -createOnly - Just create mapTable, don't populate it\n"
   "   -tempDb - Database to look for genes track and where to put result\n"
   "   -lookup=lookup.txt - Lookup.txt is a 2 column file\n"
@@ -50,6 +51,7 @@ errAbort(
 }
 
 boolean cdsOnly = FALSE;
+boolean ignoreStrand = FALSE;
 boolean intronsToo = FALSE;
 boolean createOnly = FALSE;
 char *prefix = NULL;
@@ -61,6 +63,7 @@ static struct optionSpec options[] = {
    {"prefix", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"intronsToo", OPTION_BOOLEAN},
+   {"ignoreStrand", OPTION_BOOLEAN},
    {"noLoad", OPTION_BOOLEAN},
    {"createOnly", OPTION_BOOLEAN},
    {"lookup", OPTION_STRING},
@@ -194,7 +197,7 @@ if (startsWith("bed", otherType))
     {
     char *numString = otherType + 3;
     bedNum = atoi(numString);
-    if (bedNum < 6)	/* Just one strand in bed. */
+    if (bedNum < 6 || ignoreStrand)	/* Just one strand in bed. */
         {
 	if (strand == '-')
 	    {
@@ -222,8 +225,11 @@ else if (startsWith("genePred", otherType))
     {
     struct genePred *gp;
     bedNum = 12;
-    safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
-    extra = extraBuf;
+    if (!ignoreStrand)
+	{
+	safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
+	extra = extraBuf;
+	}
     sr = hChromQuery(conn, otherTable, chrom, extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -241,8 +247,11 @@ else if (startsWith("psl", otherType))
     {
     struct psl *psl;
     bedNum = 12;
-    safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
-    extra = extraBuf;
+    if (!ignoreStrand)
+	{
+	safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
+	extra = extraBuf;
+	}
     sr = hChromQuery(conn, otherTable, chrom, extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -279,6 +288,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	gp = genePredLoad(row+rowOffset);
     name = gp->name;
+
     if (!hashLookup(dupeHash, name))	/* Only take first occurrence. */
 	{
 	if (doAll)
@@ -426,6 +436,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 cdsOnly = optionExists("cds");
 intronsToo = optionExists("intronsToo");
+ignoreStrand = optionExists("ignoreStrand");
 createOnly = optionExists("createOnly");
 prefix = optionVal("prefix", NULL);
 trackDb = cfgOption("db.trackDb");
