@@ -150,5 +150,6 @@ void spaceToUnderbar(char *s);
 
 void rangeRoundUp(double start, double end, double *retStart, double *retEnd);
 /* Round start and end so that they cover a slightly bigger range, but with more round
+ * numbers.  For instance 0.23:9.89 becomes 0:10 */
 
 #endif /* OBSCURE_H */
