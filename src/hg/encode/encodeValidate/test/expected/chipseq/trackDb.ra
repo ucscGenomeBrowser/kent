@@ -23,7 +23,7 @@ wgEncode 1
     subGroups view=Signal factor=FOXP2 cellType=K562
     type wig WGENCODETESTCHIPSEQSIGNALK562FOXP2_MINMAXRANGE
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 view=Signal dataVersion="ENCODE Sep 2009 Freeze" dateSubmitted=2009-10-09 dateUnrestricted=2010-07-09 composite=wgEncodeTestChipSeq tableName=wgEncodeTestChipSeqSignalK562Foxp2 fileName=wgEncodeTestChipSeqSignalK562Foxp2.wig.gz
+    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 view=Signal dataVersion="ENCODE Jan 2010 Freeze" dateSubmitted=2009-10-10 dateUnrestricted=2010-07-10 composite=wgEncodeTestChipSeq tableName=wgEncodeTestChipSeqSignalK562Foxp2 fileName=wgEncodeTestChipSeqSignalK562Foxp2.wig.gz
 
     track wgEncodeTestChipSeqPeaksK562Foxp2
     release alpha
@@ -33,7 +33,7 @@ wgEncode 1
     subGroups view=Peaks factor=FOXP2 cellType=K562
     type narrowPeak
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 view=Peaks dataVersion="ENCODE Sep 2009 Freeze" dateSubmitted=2009-10-09 dateUnrestricted=2010-07-09 composite=wgEncodeTestChipSeq tableName=wgEncodeTestChipSeqPeaksK562Foxp2 fileName=wgEncodeTestChipSeqPeaksK562Foxp2.narrowPeak.gz
+    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 view=Peaks dataVersion="ENCODE Jan 2010 Freeze" dateSubmitted=2009-10-10 dateUnrestricted=2010-07-10 composite=wgEncodeTestChipSeq tableName=wgEncodeTestChipSeqPeaksK562Foxp2 fileName=wgEncodeTestChipSeqPeaksK562Foxp2.narrowPeak.gz
 
     track wgEncodeTestChipSeqRawSignalRep1K562Foxp2
     release alpha
@@ -43,5 +43,5 @@ wgEncode 1
     subGroups view=RawSignal factor=FOXP2 cellType=K562
     type wig WGENCODETESTCHIPSEQRAWSIGNALREP1K562FOXP2_MINMAXRANGE
     color 46,0,184
-    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" dateSubmitted=2009-10-09 dateUnrestricted=2010-07-09 composite=wgEncodeTestChipSeq tableName=wgEncodeTestChipSeqRawSignalRep1K562Foxp2 fileName=wgEncodeTestChipSeqRawSignalRep1K562Foxp2.wig.gz
+    metadata project=wgEncode grant=Myers lab=Test dataType=ChipSeq cell=K562 antibody=FOXP2 type=wig fragLength=225 view=RawSignal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" dateSubmitted=2009-10-10 dateUnrestricted=2010-07-10 composite=wgEncodeTestChipSeq tableName=wgEncodeTestChipSeqRawSignalRep1K562Foxp2 fileName=wgEncodeTestChipSeqRawSignalRep1K562Foxp2.wig.gz
 
