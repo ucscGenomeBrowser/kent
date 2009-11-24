@@ -11,7 +11,7 @@
 #include "verbose.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaFind.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
+static char const rcsid[] = "$Id: itsaFind.c,v 1.5 2009/11/24 15:50:23 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 0;
@@ -70,7 +70,7 @@ void itsaFindWithin(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray,
 /* Search the part of the suffix array between searchStart and searchEnd for a match.
  * The searchStart/searchEnd and cursor position must agree. */
 {
-uglyf("itsaFindWithin(qDna=%s cursor=%d searchStart=%d searchEnd=%d\n", qDna, cursor, searchStart, searchEnd);
+// uglyf("itsaFindWithin(qDna=%s cursor=%d searchStart=%d searchEnd=%d\n", qDna, cursor, searchStart, searchEnd);
 bits32 arrayPos = searchStart;
 /* We step through each base of the query */
 for (; cursor<qSize; ++cursor)
@@ -132,7 +132,7 @@ bits32 searchStart = itsa->index13[slot];
 if (searchStart != 0)
     {
     searchStart -= 1;	/* Pesky thing to keep 0 meaning no data in slot. */
-    uglyf("Going to look within.  Cursor slot %d\n", itsa->cursors13[slot]);
+    // uglyf("Going to look within.  Cursor slot %d\n", itsa->cursors13[slot]);
     itsaFindWithin(itsa->allDna, itsa->array, itsa->traverse, qDna, qSize,
     	itsa->cursors13[slot], searchStart, searchStart + itsa->traverse[searchStart], pHitList);
     }
