@@ -10,7 +10,7 @@ medianFragmentLength	225
 fragmentLengthRange	150-300
 dafVersion      1.1
 group regulation
-
+validationSettings allowReloads;validateFiles.tagAlign:mismatches=3
 
 # Track/view definition
 view             Peaks
