@@ -5,7 +5,7 @@
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
 
-#	"$Id: mm9.ucscGenes12.csh,v 1.3 2009/11/02 16:20:02 kent Exp $"
+#	"$Id: mm9.ucscGenes12.csh,v 1.4 2009/11/24 00:18:43 kent Exp $"
 
 # Directories
 set genomes = /hive/data/genomes
@@ -763,7 +763,7 @@ if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
     hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
-    hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds
+    hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds -ignoreStrand
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
 

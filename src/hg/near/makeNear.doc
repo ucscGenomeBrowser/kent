@@ -112,7 +112,7 @@ hgMapViaSwissProt $db knownGene name proteinID Pfam knownToPfam
 hgMapToGene $db HInvGeneMrna knownGene knownToHInv
 hgMapToGene $db allenBrainAli -type=psl knownGene knownToAllenBrain 
 hgMapToGene $db ensGene knownGene knownToEnsembl
-hgMapToGene $db snp129 knownGene knownToCdsSnp -all -cds
+hgMapToGene $db snp130 knownGene knownToCdsSnp -all -cds -ignoreStrand
 
 
 ########################################################################
