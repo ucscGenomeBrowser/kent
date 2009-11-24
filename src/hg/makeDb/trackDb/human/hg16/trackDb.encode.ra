@@ -296,7 +296,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale Placenta RNA Transcript Map
     priority 12
     color 50,50,150
-    subGroups celltype=plac
+    subGroups celltype=plac samples=samples
 
     track encodeYaleAffyNB4RARNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -304,7 +304,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
     priority 13
     color 150,50,50
-    subGroups celltype=nb4
+    subGroups celltype=nb4 samples=samples
 
     track encodeYaleAffyNB4TPARNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -312,7 +312,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 14
     color 120,50,50
-    subGroups celltype=nb4
+    subGroups celltype=nb4 samples=samples
 
     track encodeYaleAffyNB4UntrRNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -320,7 +320,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale NB4 RNA Transcript Map, Untreated
     priority 15
     color 90,50,50
-    subGroups celltype=nb4
+    subGroups celltype=nb4 samples=samples
 
 track encodeYaleAffyRNATars
 compositeTrack on
@@ -429,7 +429,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale Placenta RNA Transcriptionally Active Region
     priority 12
     color 50,50,150
-    subGroups celltype=plac
+    subGroups celltype=plac samples=samples
 
     track encodeYaleAffyNB4RARNATars
     subTrack encodeYaleAffyRNATars
@@ -437,7 +437,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale NB4 RNA, TAR, Treated with Retinoic Acid
     priority 13
     color 150,50,50
-    subGroups celltype=nb4
+    subGroups celltype=nb4 samples=samples
 
     track encodeYaleAffyNB4TPARNATars
     subTrack encodeYaleAffyRNATars
@@ -445,7 +445,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 14
     color 120,50,50
-    subGroups celltype=nb4
+    subGroups celltype=nb4 samples=samples
 
     track encodeYaleAffyNB4UntrRNATars
     subTrack encodeYaleAffyRNATars
@@ -453,7 +453,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Yale NB4 RNA, TAR, Untreated
     priority 15
     color 90,50,50
-    subGroups celltype=nb4
+    subGroups celltype=nb4 samples=samples
 
 track encodeAffyChIpHl60Pval
 compositeTrack on
