@@ -94,9 +94,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	choHof1 \
 	sacCer1 sacCer2 \
 	sc1 \
-	h1n1 \
-	gliRes13 homIni13 homIni14 priMat13 canHg12 borEut13 \
-	rodEnt13 euaGli13 catArr1 homPan20 homIni20
+	h1n1 
 
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004
