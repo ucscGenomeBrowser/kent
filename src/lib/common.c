@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.139 2009/11/23 18:02:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.140 2009/11/24 15:36:59 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -2159,26 +2159,6 @@ int ret = rangeIntersection(start1,end1,start2,end2);
 if (ret < 0)
     ret = 0;
 return ret;
-}
-
-void memRead(char **pPt, void *buf, int size)
-/* Copy memory from *pPt to buf, and advance *pPt by size. */
-{
-memcpy(buf, *pPt, size);
-*pPt += size;
-}
-
-void memWrite(char **pPt, void *buf, int size)
-/* Copy memory from buf to *pPt and advance *pPt by size. */
-{
-memcpy(*pPt, buf, size);
-*pPt += size;
-}
-
-void memWriteFloat(char **pPt, float val)
-/* Write out floating point val to file.  Mostly to convert from double... */
-{
-memWriteOne(pPt, val);
 }
 
 bits64 byteSwap64(bits64 a)

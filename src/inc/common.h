@@ -1055,17 +1055,28 @@ int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
 
-void memRead(char **pPt, void *buf, int size);
+INLINE void memRead(char **pPt, void *buf, int size)
 /* Copy memory from *pPt to buf, and advance *pPt by size. */
+{
+memcpy(buf, *pPt, size);
+*pPt += size;
+}
 
-void memWrite(char **pPt, void *buf, int size);
+INLINE void memWrite(char **pPt, void *buf, int size)
 /* Copy memory from buf to *pPt and advance *pPt by size. */
+{
+memcpy(*pPt, buf, size);
+*pPt += size;
+}
 
 #define memWriteOne(pPt, var) memWrite((pPt), &(var), sizeof(var))
 /* Write out one variable to memory stream. */
 
-void memWriteFloat(char **pPt, float val);
+INLINE void memWriteFloat(char **pPt, float val)
 /* Write out floating point val to file.  Mostly to convert from double... */
+{
+memWriteOne(pPt, val);
+}
 
 bits64 byteSwap64(bits64 a);
 /* Swap from intel to sparc order of a 64 bit quantity. */
