@@ -1,3 +1,9 @@
+track stsMap override
+visibility hide
+
+track gap override
+visibility hide
+
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
 shortLabel $Organism mRNAs
