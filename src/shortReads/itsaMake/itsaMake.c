@@ -12,7 +12,7 @@
 #include "itsa.h"
 
 
-static char const rcsid[] = "$Id: itsaMake.c,v 1.4 2008/11/14 21:56:41 kent Exp $";
+static char const rcsid[] = "$Id: itsaMake.c,v 1.5 2009/11/24 15:51:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,8 +58,9 @@ while (--count >= 0)
 
 static void indexChromPass1(struct chromInfo *chrom, DNA *allDna,  
 	bits32 *offsetArray, bits32 *listArray, bits32 *index13)
-/* Create a itsaOneBaseListy for each base in seq, and hang it in appropriate slot
- * in listyIndex. */
+/* Do crude sorting of suffexes in allDna into lists formed by listArray 
+ * (for next) pointers, and offsetArray (for data - positions in genome).
+ * Each list will be in a bucket in index13. */
 {
 bits32 baseIx;
 bits32 seqSize = chrom->size;
