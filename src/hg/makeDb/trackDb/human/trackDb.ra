@@ -1663,7 +1663,7 @@ graphTypeDefault Bar
 gridDefault OFF
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 0 5203.76
-viewLimits=0:253
+viewLimits 0:253
 subTrack affyTxnPhase2
 noInherit on
 wigColorBy JurkatCytosolicPolyAPlusTnFg
