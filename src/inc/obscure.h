@@ -148,4 +148,7 @@ void dotForUser();
 void spaceToUnderbar(char *s);
 /* Convert white space to underbar. */
 
+void rangeRoundUp(double start, double end, double *retStart, double *retEnd);
+/* Round start and end so that they cover a slightly bigger range, but with more round
+
 #endif /* OBSCURE_H */
