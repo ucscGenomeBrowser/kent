@@ -6,7 +6,7 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bwtMake.c,v 1.3 2008/11/07 23:54:52 kent Exp $";
+static char const rcsid[] = "$Id: bwtMake.c,v 1.4 2009/11/24 15:49:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -57,8 +57,9 @@ void bwtMake(char *in, char *out)
 {
 size_t inSize;
 readInGulp(in, &inBuf, &inSize);
-if (inSize >= 1LL<<32LL)
-   errAbort("%s is too big, (%zd bytes), can only handle up to %lld",  in, inSize, (1LL<<32LL));
+long long longSize = inSize;
+if (longSize >= (1LL << 32LL))
+    errAbort("In is too big, can only handle up to 4 Gig");
 bits32 *offsets;
 bits32 i, size=inSize+1;
 AllocArray(offsets, size);
