@@ -1118,6 +1118,15 @@ priority 1
 visibility hide
 type bed 4 +
 
+track exoniphy
+shortLabel Exoniphy
+longLabel Exoniphy Human/Mouse/Rat/Dog
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 track burgeRnaSeqGemMapperAlign
 compositeTrack on
 shortLabel Burge RNA-seq GEM Mapper
