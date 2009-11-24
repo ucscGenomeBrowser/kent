@@ -3883,7 +3883,7 @@ track multiz44way
 subTrack cons44way on
 shortLabel Multiz Align
 longLabel Multiz Alignments of 44 Vertebrates
-subGroups view=align 
+subGroups view=align clade=vert 
 noInherit on
 irows on
 summary multiz44waySummary
