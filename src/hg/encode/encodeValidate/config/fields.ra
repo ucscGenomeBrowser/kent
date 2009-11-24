@@ -78,7 +78,7 @@ required no
 
 field medianFragmentLength
 file dafHeader
-type in
+type int
 required no
 
 field dataVersion
@@ -88,13 +88,13 @@ required no
 
 field fragmentLengthRange
 file dafHeader
-type in
+type int
 required no
 
 field validationSettings
 file dafHeader
-type in
-required no
+type string
+required yes
 
 field group
 file dafHeader
@@ -128,7 +128,7 @@ required yes
 
 field order
 file dafList
-type in
+type int
 required no
 
 field noAutoCreate
