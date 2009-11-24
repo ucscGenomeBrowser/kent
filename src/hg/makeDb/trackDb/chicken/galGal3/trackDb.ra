@@ -91,6 +91,21 @@ priority 250.2
 track chainNetHg19 override
 priority 250.3
 
+track caCondor454
+shortLabel Condor 454 
+longLabel California Condor 454 
+group rna
+type psl
+priority 100
+color 0,50,100
+visibility hide
+baseColorDefault diffBases
+baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes hgFixed.transMapExtFileUcscGenes
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+
 searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)\.[0-9]+(\.[0-9a-z]+)?

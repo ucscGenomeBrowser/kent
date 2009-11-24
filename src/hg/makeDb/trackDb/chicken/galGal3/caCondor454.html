@@ -1,0 +1,88 @@
+<H2>Description</H2>
+<P>
+This track displays the alignment of California Condor (Gymnogyps californianus) transcripts
+sequenced using 454 high-throughput DNA sequencing.
+</P>
+<H2>Methods</H2>
+<P>
+  <ol>
+    <li> 454 read sequences were obtained the NCBI Trace Archive
+      (CENTER_NAME = WUGSC, CENTER_PROJECT = U_FC-MATT_TECHD2). Mean read size is 110 bases.
+    <li> Align condor reads to a set of predicted transcripts sequences and
+      project the read to transcript alignments to the genome using the
+      predicted transcript alignments.  This process improves alignments
+      across splice sites.
+      <ul>
+        <li> build a set of predicted transcripts sequences using PASA cluster of Chicken mRNA and EST BLAT alignments 
+          and N-SCAN gene predictions.
+        <li> align condor reads to transcripts using LASTZ
+        <li> project alignments to the genome
+        <li> filter alignments to remove duplicate alignments and small fragments, keep
+          those that score withing one 1% of the best alignment for a given read.
+      </ul>
+    <li> Align reads that could not be mapped via the predicted transcript directly to the
+      genome using LASTZ, and filter using the above criteria.
+  </ol>
+</P>
+
+The resulting number of sequences and alignments of those sequences are
+summarized in this table:
+<table class="transMap">
+  <tr><th>          <th>sequences<th>alignments</tr>
+  <tr><th>454 reads <td>   419240<td>          </tr>
+  <tr><th>projected <td>   139392<td>    146325</tr>
+  <tr><th>direct    <td>    87870<td>     89812</tr>
+  <tr><th>combined  <td>   227262<td>    236137</tr>
+</table>
+
+<H2>References</H2>
+<H3>454 Sequencing:</H3>
+<P>
+Margulies M, Egholm M, Altman WE, Attiya S, Bader JS, Bemben LA, Berka J,
+Braverman MS, Chen YJ, Chen Z, Dewell SB, Du L, Fierro JM, Gomes XV, Godwin
+BC, He W, Helgesen S, Ho CH, Irzyk GP, Jando SC, Alenquer ML, Jarvie TP,
+Jirage KB, Kim JB, Knight JR, Lanza JR, Leamon JH, Lefkowitz SM, Lei M, Li J,
+Lohman KL, Lu H, Makhijani VB, McDade KE, McKenna MP, Myers EW, Nickerson E,
+Nobile JR, Plant R, Puc BP, Ronan MT, Roth GT, Sarkis GJ, Simons JF, Simpson
+JW, Srinivasan M, Tartaro KR, Tomasz A, Vogt KA, Volkmer GA, Wang SH, Wang Y,
+Weiner MP, Yu P, Begley RF, Rothberg JM.
+<A HREF="http://www.nature.com/nature/journal/v437/n7057/full/nature03959.html" TARGET=_blank>
+Genome sequencing in microfabricated high-density picolitre reactors.</A>
+<em>Nature</em>. 2005 Sep 15;437(7057):376-80.
+</P>
+
+<H3>PASA:</H3>
+<P>
+Haas, B.J., Delcher, A.L., Mount, S.M., Wortman, J.R., Smith Jr, R.K., Jr.,
+Hannick, L.I., Maiti, R., Ronning, C.M., Rusch, D.B., Town, C.D. et al. (2003)
+<A HREF="http://nar.oupjournals.org/cgi/content/full/31/19/5654" TARGET=_blank>
+Improving the Arabidopsis genome annotation using maximal transcript alignment
+assemblies.</A> <em>Nucleic Acids Res</em> 2003 Oct 1;31(19):5654-66.
+</P>
+
+<H3>N-SCAN:</H3>
+<P>
+Gross SS, Brent MR.
+<A HREF="http://www.liebertonline.com/doi/abs/10.1089/cmb.2006.13.379" TARGET=_blank>Using
+multiple alignments to improve gene prediction</A>. In
+<em>Proc. 9th Int'l Conf. on Research in Computational Molecular Biology</em>
+(RECOMB '05):374-388 and <em>J Comput Biol</em>. 2006 Mar;13(2):379-93.
+</P>
+
+
+<H3>BLASTZ/LASTZ:</H3>
+<P>
+Chiaromonte F, Yap VB, Miller W.
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract"
+TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
+<EM>Pac Symp Biocomput</EM>. 2002;:115-26.
+</P>
+
+<H2>Credits</H2>
+<ul>
+  <li> 454 sequences were produced by the Washington University Genome Sequencing Center.
+  <li> PASA clusters and N-SCAN gene predictions were provided by Jeltje van Baren of Brent Lab at
+    Washington University Saint Louis.
+  <li> Alignments an tracks were produced by Mark Diekhans of the UCSC Genome Bioinformatics group.
+</ul>
+
