@@ -4,7 +4,7 @@ shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank
 group rna
 priority 54
-visibility pack
+visibility dense
 spectrum on
 type psl .
 baseColorUseCds genbank
@@ -1242,7 +1242,7 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility hide
+visibility full
 visibilityViewDefaults align=pack+ phastcons=hide phyloP=full elements=hide
 settingsByView phyloP:viewLimits=-.3:2,viewLimitsMax=-15.41:7.13
 type bed 4
@@ -1262,7 +1262,7 @@ priority 103.29
     color 0, 10, 100
     altColor 0,90,10
     type wigMaf 0.0 1.0
-    speciesCodonDefault hg18
+    speciesCodonDefault hg19
     speciesGroups Primate Placental_Mammal Vertebrate
     sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 papHam1 calJac1 tarSyr1 micMur1 otoGar1
     sGroup_Placental_Mammal equCab2 tupBel1 turTru1 speTri1 vicPac1 choHof1 pteVam1 loxAfr3 felCat3 canFam2 dasNov2 oryCun2 myoLuc1 bosTau4 cavPor3 proCap1 dipOrd1 ochPri2 eriEur1 echTel1 mm9 rn4 sorAra1
