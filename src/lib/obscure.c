@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.49 2009/11/24 00:59:18 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.50 2009/11/24 03:58:25 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -704,12 +704,14 @@ while (scaledSize >= 100)
     exponent *= 10;
     }
 /* At this point have a number between 10 and 100 */
-if (scaledSize < 10)
+if (scaledSize < 12)
     increment = 1;
 else if (scaledSize < 20)
     increment = 2;
-else 
+else if (scaledSize < 75)
     increment = 5;
+else
+    increment = 10;
 increment *= exponent;
 
 int startInIncrements = floor(start/increment);
