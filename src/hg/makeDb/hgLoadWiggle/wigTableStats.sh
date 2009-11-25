@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#	$Id: wigTableStats.sh,v 1.3 2009/11/25 19:10:44 hiram Exp $
+#	$Id: wigTableStats.sh,v 1.4 2009/11/25 19:55:25 hiram Exp $
 
 DB=$1
 T=$2
@@ -8,8 +8,8 @@ T=$2
 if [ "x${DB}y" = "xy" -o "x${T}y" = "xy" ]; then
     echo "wigTableStats.sh - compute overall statistics for a wiggle table"
     echo
-    echo "usage: wigTableStats.sh <db> <table>"
-    echo "expected table is a wiggle table"
+    echo "usage: wigTableStats.sh <db> <table> [other tables]"
+    echo "expected tables are wiggle tables"
     echo "output is a summary of min, max, average, count, sumData, stdDev, viewLimits"
     echo "the recommended viewLimits are: mean +- 5*stdDev limited by min,max"
     echo "you will want to round those numbers to reasonable nearby values."
@@ -17,7 +17,10 @@ if [ "x${DB}y" = "xy" -o "x${T}y" = "xy" ]; then
 fi
 
 echo -e "# db.table\tmin max mean count sumData stdDev viewLimits"
+shift		# eliminate the database argument
 
+for T in $*
+do
 echo -e -n "${DB}.${T}\t"
 
 hgsql -N ${DB} \
@@ -63,3 +66,5 @@ printf "empty data set\n"
 }
 }
 '
+
+done
