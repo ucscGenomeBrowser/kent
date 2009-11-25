@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.54 2009/11/18 17:41:23 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.55 2009/11/25 00:58:02 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -350,14 +350,11 @@ else
 struct subGroupData
 /* composite group definitions */
 {
-int numSubGroups;        /* count of subGroups */
 struct hash *nameHash;   /* hash of subGroup names */
-struct hash *values[10]; /* array of value hash pointers in order */
 struct trackDb *compositeTdb;  /* tdb of composite parent */
 };
 
-static void checkSubGroups(struct trackDb *tdList)
-/* check integrity of subGroup clauses */
+static struct hash *buildCompositeHash(struct trackDb *tdList)
 {
 struct hash *compositeHash = newHash(8);
 
@@ -368,16 +365,16 @@ for (td = tdList; td != NULL; td = tdNext)
     tdNext = td->next;
     if (trackDbSetting(td, "compositeTrack"))
 	{
-	int i = 0;
+	int i;
 	struct subGroupData *sgd;
         char subGroupName[256];
         AllocVar(sgd);
-	sgd->nameHash = newHash(3);
 	sgd->compositeTdb = td;
 	tdbMarkAsComposite(td);
-	while(i<10)
+
+	for(i=1; ; i++)
 	    {
-	    safef(subGroupName, sizeof(subGroupName), "subGroup%d", i+1);
+	    safef(subGroupName, sizeof(subGroupName), "subGroup%d", i);
 	    char *sgSetting = trackDbSetting(td, subGroupName);
 	    if (!sgSetting)
 		break;
@@ -385,33 +382,82 @@ for (td = tdList; td != NULL; td = tdNext)
 	    char *sgWord = sgSetting;
 	    char *sgName = nextWord(&sgWord);
 	    nextWord(&sgWord);  /* skip word not used */
-	    hashAddInt(sgd->nameHash, sgName, i);
-	    sgd->values[i] = newHash(3);
+	    struct hash *subGroupHash = newHash(3);
 	    struct slPair *slPair, *slPairList = slPairFromString(sgWord);
             for (slPair = slPairList; slPair; slPair = slPair->next)
 		{
-		hashAdd(sgd->values[i], slPair->name, slPair->val);
+		hashAdd(subGroupHash, slPair->name, slPair->val);
 		}
-	    ++i;
-	    if (i > 10)
-		{
-		verbose(1,"composite parent %s has more than 10 subGroup clauses, unexpected error\n", td->tableName);
-		break;
-		}
-	    }
-	sgd->numSubGroups = i;
-	hashAdd(compositeHash, td->tableName, sgd);
 
+	    if (sgd->nameHash == NULL)
+		sgd->nameHash = newHash(3);
+	    hashAdd(sgd->nameHash, sgName, subGroupHash);
+	    }
+
+	hashAdd(compositeHash, td->tableName, sgd);
 	}
     }
 
-struct hash *removeSubTracks = newHash(8);
+return compositeHash;
+}
 
-/* now verify subtracks */
-for (td = tdList; td != NULL; td = tdNext)
+static void checkOneSubGroups(char *compositeName, 
+    struct trackDb *td, struct subGroupData *sgd)
+{
+char *subGroups = trackDbSetting(td, "subGroups");
+
+if (subGroups && (sgd->nameHash == NULL))
     {
+    errAbort("subTrack %s has groups not defined in parent %s\n",
+	     td->tableName, compositeName);
+    }
+else if (!subGroups && (sgd->nameHash != NULL))
+    {
+    errAbort("subtrack %s is missing subGroups defined in parent %s\n",  
+	td->tableName, compositeName);
+    }
 
-    tdNext = td->next;
+if (!subGroups && (sgd->nameHash == NULL))
+    return; /* nothing to do */
+
+assert(sgd->nameHash != NULL);
+
+struct slPair *slPair, *slPairList = slPairFromString(subGroups);
+struct hash *foundHash = newHash(3);
+for (slPair = slPairList; slPair; slPair = slPair->next)
+    {
+    struct hashEl *hel = hashLookup( sgd->nameHash, slPair->name);
+    if (hel == NULL)
+	errAbort("subtrack %s has subGroup (%s) not found in parent\n", 
+	    td->tableName, slPair->name);
+
+    struct hash *subHash = hel->val;
+    hashStore(foundHash, slPair->name);
+
+    if (hashLookup(subHash, slPair->val) == NULL)
+	{
+	errAbort("subtrack %s has subGroup (%s) with value (%s) not found in parent\n", 
+	    td->tableName, slPair->name, (char *)slPair->val);
+	}
+    }
+
+struct hashCookie cookie = hashFirst(sgd->nameHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (hashLookup(foundHash, hel->name) == NULL)
+	errAbort("subtrack %s is missing required subGroup %s\n", 
+	    td->tableName, hel->name);
+    }
+
+}
+
+static void verifySubTracks(struct trackDb **tdList, struct hash *compositeHash)
+{
+/* now verify and prune subtracks */
+struct trackDb *td, *tdPrev = NULL;
+for (td = *tdList; td != NULL; td = td->next)
+    {
     if (!trackDbSetting(td, "compositeTrack")
      && !sameOk("on", trackDbSetting(td, "superTrack")))
 	{
@@ -422,79 +468,41 @@ for (td = tdList; td != NULL; td = tdNext)
 	    chopLine(cloneString(trackName), words);
 	    trackName = words[0];
 
-
 	    struct subGroupData *sgd = hashFindVal(compositeHash, trackName);
 	    if ( sgd )
 		{
 		td->parent = sgd->compositeTdb;
 		tdbMarkAsCompositeChild(td);
+		checkOneSubGroups(trackName, td, sgd);
+		tdPrev = td;
 		}
 	    else
 		{
-		if ((prunedTracks != NULL) && hashFindVal(prunedTracks, trackName))
+		if ((prunedTracks != NULL) && 
+		    hashFindVal(prunedTracks, trackName))
 		    {	/* parent was pruned, get rid of subTrack too */
-		    hashAdd(removeSubTracks, td->tableName, td);
+		    if (tdPrev == NULL)
+			*tdList = td->next;
+		    else
+		    	tdPrev->next = td->next;
 		    }
 		else
 		    {
-		    verbose(1,"parent %s missing for subtrack %s\n",
+		    errAbort("parent %s missing for subtrack %s\n",
 			trackName, td->tableName);
 		    }
-		continue;
 		}
-	    char *subGroups = trackDbSetting(td, "subGroups");
-	    if (subGroups && (sgd->numSubGroups == 0))
-		{
-		verbose(1,"parent %s missing subGroups for subtrack %s subGroups=[%s]\n",
-			trackName, td->tableName, subGroups);
-		continue;
-		}
-	    if (!subGroups && (sgd->numSubGroups > 0))
-		{
-		verbose(1,"parent %s : subtrack %s is missing subGroups\n", trackName, td->tableName);
-		continue;
-		}
-	    if (!subGroups && (sgd->numSubGroups == 0))
-		{
-		continue; /* nothing to do */
-		}
-	    int i = 0, lastI = -1, numSubGroups = 0;
-	    boolean inOrder = TRUE;
-	    struct slPair *slPair, *slPairList = slPairFromString(subGroups);
-            for (slPair = slPairList; slPair; slPair = slPair->next)
-		{
-		i = hashIntValDefault(sgd->nameHash, slPair->name, -1);
-		if (i == -1)
-		    {
-		    verbose(1,"%s: subGroup name not found: %s\n", td->tableName, (char *)slPair->name);
-		    }
-		else if (sgd->values[i] && !hashLookup(sgd->values[i], slPair->val))
-		    {
-		    verbose(1,"%s: value not found in parent composite : %s=%s\n", td->tableName, slPair->name, (char *)slPair->val);
-		    }
-		++numSubGroups;
-		if (i < lastI)
-		    inOrder = FALSE;
-		lastI = i;
-		}
-	    if (numSubGroups != sgd->numSubGroups)
-		{
-		verbose(2,"%s: found %d values but parent composite has %d\n", td->tableName, numSubGroups, sgd->numSubGroups);
-		}
-	    if (!inOrder)
-		{
-		verbose(2,"%s: found groups in a different order than the parent composite\n", td->tableName);
-		}
-
 	    }
 	}
     }
-/* clean up subTracks that had parents disappear */
-struct hashCookie cookie = hashFirst(removeSubTracks);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    slRemoveEl(&tdList, (struct trackDb*)hel->val);
+}
 
+static void checkSubGroups(struct trackDb *tdList)
+/* check integrity of subGroup clauses */
+{
+struct hash *compositeHash = buildCompositeHash(tdList);
+
+verifySubTracks(&tdList, compositeHash);
 }
 
 static void prioritizeContainerItems(struct trackDb *tdbList)
