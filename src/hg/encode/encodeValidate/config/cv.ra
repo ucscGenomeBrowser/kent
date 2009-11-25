@@ -1,6 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.142 2009/11/25 01:17:12 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.143 2009/11/25 21:17:41 kate Exp $
 # Cell types
 term GM12878
 tag GM12878
@@ -148,6 +148,7 @@ lineage embryonic stem cells
 karyotype normal
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
+color 0,107,27 
 tier 2
 protocol H1_ES_protocol.pdf
 
