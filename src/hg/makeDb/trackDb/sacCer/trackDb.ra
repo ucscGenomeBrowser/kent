@@ -167,40 +167,48 @@ searchType bed
 searchPriority 20
 
 track uwFootprints
-superTrack on
+compositeTrack on
 shortLabel UW Footprints
 longLabel UW Protein/DNA Interaction Footprints
 group regulation
 priority 130
+type bed 3
+noInherit on
+configurable on
+subGroup1 view Views Counts=Tag_Counts Map=Mappability Print=Footprints
+visibilityViewDefaults Counts=full Map=dense Print=pack ALN=hide
 
-    track uwFootprintsTagCounts
-    superTrack uwFootprints full
-    shortLabel Tag Counts
-    longLabel UW Footprints Tag Counts
-    type wig 1 13798
-    viewLimits 1:146
-    color 25,25,150
-    group regulation
-    priority 1
-    html uwFootprints
+     track uwFootprintsTagCounts
+     subTrack uwFootprints
+     subGroups view=Counts
+     shortLabel Tag Counts
+     longLabel UW Footprints Tag Counts
+     type wig 1 13798
+     viewLimits 1:146
+     autoScale Off
+     color 25,25,150
+     group regulation
+     priority 1
+     html uwFootprints
 
-    track uwFootprintsMappability
-    superTrack uwFootprints dense
-    shortLabel Mappability
-    longLabel UW Footprints Mappability
-    type bed 3
-    color 25,25,150
-    group regulation
-    priority 2
-    html uwFootprints
+     track uwFootprintsMappability
+     subTrack uwFootprints
+     subGroups view=Map
+     shortLabel Mappability
+     longLabel UW Footprints Mappability
+     type bed 3
+     color 25,25,150
+     group regulation
+     priority 2
+     html uwFootprints
 
-    track uwFootprintsPrints
-    superTrack uwFootprints pack
-    shortLabel Footprints
-    longLabel UW Protein-binding Footprints
-    type bed 4
-    color 25,25,150
-    group regulation
-    priority 3
-    html uwFootprints
-
+     track uwFootprintsPrints
+     subTrack uwFootprints
+     subGroups view=Print
+     shortLabel Footprints
+     longLabel UW Protein-binding Footprints
+     type bed 4
+     color 25,25,150
+     group regulation
+     priority 3
+     html uwFootprints
