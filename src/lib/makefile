@@ -22,7 +22,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o mgCircle.o \
     mgHugeFont.o mgLargeFont.o mgMediumFont.o mgPolygon.o mgSmallFont.o \
     mgTinyFont.o mime.o \
-    net.o nib.o nibTwo.o nt4.o \
+    net.o nib.o nibTwo.o nt4.o numObscure.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o \
     pairHmm.o phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
